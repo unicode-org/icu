@@ -255,9 +255,12 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_EXPANSION 0xF1000000
 #define UCOL_CONTRACTION 0xF2000000
 #define UCOL_THAI 0xF3000000
+#define UCOL_UNMARKED 0x03
+#define UCOL_NEW_TERTIARYORDERMASK 0x0000003f     
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
-#define isContinuation(CE) isSpecial((CE))
+#define isContinuation(CE) ((CE) & 0XC0) == 0x80
+#define isLongPrimary(CE) ((CE) & 0xC0) == 0xC0
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
 #define isContraction(CE) (isSpecial((CE)) && (getCETag((CE)) == CONTRACTION_TAG))
 #define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
@@ -266,6 +269,12 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define getExpansionCount(CE) ((CE)&0xF)
 #define UCA_DATA_TYPE "dat"
 #define UCA_DATA_NAME "UCATable"
+#define UCOL_CASE_BIT_MASK 0x40
+
+#define UCOL_COMMON_MAX2 0x3
+#define UCOL_COMMON_MAX3 0x3
+#define UCOL_COMMON2 0x3
+#define UCOL_COMMON3 0x3
 
 typedef enum {
     NOT_FOUND_TAG = 0,
