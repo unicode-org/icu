@@ -1812,8 +1812,35 @@ static void TestDirectAccess(void) {
   UResourceBundle *t = NULL, *t2 = NULL;
 
   t = ures_findResource("en/zoneStrings/3/2", t, &status);
-  t = ures_findResource("en/timeZones/3", t, &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
+  t = ures_findResource("en/zoneStrings/3", t, &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
   t = ures_findResource("sh/CollationElements/Sequence", t, &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
   t2 = ures_open(NULL, "sh", &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't open 'sh' resource bundle, error %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
   t = ures_findSubResource(t2, "CollationElements/Sequence", t, &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
+  ures_close(t);
+  ures_close(t2);
 }
