@@ -637,7 +637,7 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // name; this in no way represents an actual locale.
 
         char *ch;
-        ch = new char[entry->stringArg.size() + 1];
+        ch = new char[entry->stringArg.length() + 1];
         ch[entry->stringArg.extract(0, 0x7fffffff, ch, "")] = 0;
         Locale fakeLocale(ch);
         delete [] ch;
