@@ -8787,6 +8787,11 @@ ucol_equal(        const    UCollator        *coll,
 /* returns the locale name the collation data comes from */
 U_CAPI const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) {
+  return ucol_getLocaleByType(coll, type, status);
+}
+
+U_CAPI const char * U_EXPORT2
+ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) {
   const char *result = NULL;
   if(status == NULL || U_FAILURE(*status)) {
     return NULL;

@@ -786,11 +786,28 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
- * @stable ICU 2.1
+ * @deprecated ICU 2.8 Use ucol_getLocaleByType instead
  */
 U_CAPI const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
+
+/**
+ * gets the locale name of the collator. If the collator
+ * is instantiated from the rules, then this function returns
+ * NULL.
+ * @param coll The UCollator for which the locale is needed
+ * @param type You can choose between requested, valid and actual
+ *             locale. For description see the definition of
+ *             ULocDataLocaleType in uloc.h
+ * @param status error code of the operation
+ * @return real locale name from which the collation data comes. 
+ *         If the collator was instantiated from rules, returns
+ *         NULL.
+ * @draft ICU 2.8
+ */
+U_CAPI const char * U_EXPORT2
+ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
 /**
  * Get an Unicode set that contains all the characters and sequences tailored in 
