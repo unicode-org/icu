@@ -94,22 +94,27 @@ ubrk_openRules(  const UChar        *rules,
                        UParseError  *parseErr,
                        UErrorCode   *status)  {
 
-    BreakIterator *result = 0;
+    if (status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
 
+    BreakIterator *result = 0;
     UnicodeString ruleString(rules, rulesLength);
     result = RBBIRuleBuilder::createRuleBasedBreakIterator(ruleString, *parseErr, *status);
     if(U_FAILURE(*status)) {
         return 0;
     }
 
-    UCharCharacterIterator *iter = 0;
-    iter = new UCharCharacterIterator(text, textLength);
-    if(iter == 0) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        delete result;
-        return 0;
+    if (text != NULL) {
+        UCharCharacterIterator *iter = 0;
+        iter = new UCharCharacterIterator(text, textLength);
+        if(iter == 0) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            delete result;
+            return 0;
+        }
+        result->adoptText(iter);
     }
-    result->adoptText(iter);
     return (UBreakIterator *)result;
 }
 
@@ -243,7 +248,7 @@ ubrk_countAvailable()
 }
 
 
-U_CAPI  UBool U_EXPORT2 
+U_CAPI  UBool U_EXPORT2
 ubrk_isBoundary(UBreakIterator *bi, int32_t offset)
 {
     return ((BreakIterator *)bi)->isBoundary(offset);
