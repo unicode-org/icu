@@ -37,6 +37,9 @@ TestNormCoverage(void);
 static void
 TestConcatenate(void);
 
+static void
+TestNextPrevious(void);
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -108,6 +111,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
     addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
     addTest(root, &TestConcatenate, "tscoll/cnormtst/TestConcatenate");
+    addTest(root, &TestNextPrevious, "tscoll/cnormtst/TestNextPrevious");
 }
 
 void TestDecomp() 
@@ -967,5 +971,304 @@ TestConcatenate(void) {
     length=unorm_concatenate(left, 2, right, -1, NULL, 100, UNORM_NFC, 0, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("error: unorm_concatenate(buffer=NULL)=%ld failed with %s\n", length, u_errorName(errorCode));
+    }
+}
+
+enum {
+    _PLUS=0x2b
+};
+
+static const char *const _modeString[UNORM_MODE_COUNT]={
+    "0", "NONE", "NFD", "NFKD", "NFC", "NFKC", "FCD"
+};
+
+static void
+_testIter(const UChar *src, int32_t srcLength,
+          UCharIterator *iter, UNormalizationMode mode, UBool forward,
+          const UChar *out, int32_t outLength,
+          const int32_t *srcIndexes, int32_t srcIndexesLength) {
+    UChar buffer[4];
+    const UChar *expect, *outLimit, *in;
+    int32_t length, i, expectLength, expectIndex, prevIndex, index, inLength;
+    UErrorCode errorCode;
+    UBool neededToNormalize, expectNeeded;
+
+    errorCode=U_ZERO_ERROR;
+    outLimit=out+outLength;
+    if(forward) {
+        expect=out;
+        i=index=0;
+    } else {
+        expect=outLimit;
+        i=srcIndexesLength-2;
+        index=srcLength;
+    }
+
+    for(;;) {
+        prevIndex=index;
+        if(forward) {
+            if(!iter->hasNext(iter)) {
+                return;
+            }
+            length=unorm_next(iter,
+                              buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                              mode, 0,
+                              (UBool)(out!=NULL), &neededToNormalize,
+                              &errorCode);
+            expectIndex=srcIndexes[i+1];
+            in=src+prevIndex;
+            inLength=expectIndex-prevIndex;
+
+            if(out!=NULL) {
+                /* get output piece from between plus signs */
+                expectLength=0;
+                while((expect+expectLength)!=outLimit && expect[expectLength]!=_PLUS) {
+                    ++expectLength;
+                }
+                expectNeeded=(UBool)(0!=u_memcmp(buffer, in, inLength));
+            } else {
+                expect=in;
+                expectLength=inLength;
+                expectNeeded=FALSE;
+            }
+        } else {
+            if(!iter->hasPrevious(iter)) {
+                return;
+            }
+            length=unorm_previous(iter,
+                                  buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                                  mode, 0,
+                                  (UBool)(out!=NULL), &neededToNormalize,
+                                  &errorCode);
+            expectIndex=srcIndexes[i];
+            in=src+expectIndex;
+            inLength=prevIndex-expectIndex;
+
+            if(out!=NULL) {
+                /* get output piece from between plus signs */
+                expectLength=0;
+                while(expect!=out && expect[-1]!=_PLUS) {
+                    ++expectLength;
+                    --expect;
+                }
+                expectNeeded=(UBool)(0!=u_memcmp(buffer, in, inLength));
+            } else {
+                expect=in;
+                expectLength=inLength;
+                expectNeeded=FALSE;
+            }
+        }
+        index=iter->move(iter, 0, UITER_CURRENT);
+
+        if(U_FAILURE(errorCode)) {
+            log_err("error unorm iteration (next/previous %d %s)[%d]: %s\n",
+                    forward, _modeString[mode], i, u_errorName(errorCode));
+            return;
+        }
+        if(expectIndex!=index) {
+            log_err("error unorm iteration (next/previous %d %s): index[%d] wrong, got %d expected %d\n",
+                    forward, _modeString[mode], i, index, expectIndex);
+            return;
+        }
+        if(expectLength!=length) {
+            log_err("error unorm iteration (next/previous %d %s): length[%d] wrong, got %d expected %d\n",
+                    forward, _modeString[mode], i, length, expectLength);
+            return;
+        }
+        if(0!=u_memcmp(expect, buffer, length)) {
+            log_err("error unorm iteration (next/previous %d %s): output string[%d] wrong\n",
+                    forward, _modeString[mode], i);
+            return;
+        }
+        if(neededToNormalize!=expectNeeded) {
+        }
+
+        if(forward) {
+            expect+=expectLength+1; /* go after the + */
+            ++i;
+        } else {
+            --expect; /* go before the + */
+            --i;
+        }
+    }
+}
+
+static void
+TestNextPrevious() {
+    static const UChar
+    src[]={ /* input string */
+        0xa0, 0xe4, 0x63, 0x302, 0x327, 0xac00, 0x3133
+    },
+    nfd[]={ /* + separates expected output pieces */
+        0xa0, _PLUS, 0x61, 0x308, _PLUS, 0x63, 0x327, 0x302, _PLUS, 0x1100, 0x1161, _PLUS, 0x3133
+    },
+    nfkd[]={
+        0x20, _PLUS, 0x61, 0x308, _PLUS, 0x63, 0x327, 0x302, _PLUS, 0x1100, 0x1161, _PLUS, 0x11aa
+    },
+    nfc[]={
+        0xa0, _PLUS, 0xe4, _PLUS, 0xe7, 0x302, _PLUS, 0xac00, _PLUS, 0x3133
+    },
+    nfkc[]={
+        0x20, _PLUS, 0xe4, _PLUS, 0xe7, 0x302, _PLUS, 0xac03
+    },
+    fcd[]={
+        0xa0, _PLUS, 0xe4, _PLUS, 0x63, 0x327, 0x302, _PLUS, 0xac00, _PLUS, 0x3133
+    };
+
+    /* expected iterator indexes in the source string for each iteration piece */
+    static const int32_t
+    nfdIndexes[]={
+        0, 1, 2, 5, 6, 7
+    },
+    nfkdIndexes[]={
+        0, 1, 2, 5, 6, 7
+    },
+    nfcIndexes[]={
+        0, 1, 2, 5, 6, 7
+    },
+    nfkcIndexes[]={
+        0, 1, 2, 5, 7
+    },
+    fcdIndexes[]={
+        0, 1, 2, 5, 6, 7
+    };
+
+    UCharIterator iter;
+
+    UChar buffer[4];
+    int32_t length;
+
+    UBool neededToNormalize;
+    UErrorCode errorCode;
+
+    uiter_setString(&iter, src, sizeof(src)/U_SIZEOF_UCHAR);
+
+    /* test iteration with doNormalize */
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFD, TRUE, nfd, sizeof(nfd)/U_SIZEOF_UCHAR, nfdIndexes, sizeof(nfdIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKD, TRUE, nfkd, sizeof(nfkd)/U_SIZEOF_UCHAR, nfkdIndexes, sizeof(nfkdIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFC, TRUE, nfc, sizeof(nfc)/U_SIZEOF_UCHAR, nfcIndexes, sizeof(nfcIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKC, TRUE, nfkc, sizeof(nfkc)/U_SIZEOF_UCHAR, nfkcIndexes, sizeof(nfkcIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_FCD, TRUE, fcd, sizeof(fcd)/U_SIZEOF_UCHAR, fcdIndexes, sizeof(fcdIndexes)/4);
+
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFD, FALSE, nfd, sizeof(nfd)/U_SIZEOF_UCHAR, nfdIndexes, sizeof(nfdIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKD, FALSE, nfkd, sizeof(nfkd)/U_SIZEOF_UCHAR, nfkdIndexes, sizeof(nfkdIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFC, FALSE, nfc, sizeof(nfc)/U_SIZEOF_UCHAR, nfcIndexes, sizeof(nfcIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKC, FALSE, nfkc, sizeof(nfkc)/U_SIZEOF_UCHAR, nfkcIndexes, sizeof(nfkcIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_FCD, FALSE, fcd, sizeof(fcd)/U_SIZEOF_UCHAR, fcdIndexes, sizeof(fcdIndexes)/4);
+
+    /* test iteration without doNormalize */
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFD, TRUE, NULL, 0, nfdIndexes, sizeof(nfdIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKD, TRUE, NULL, 0, nfkdIndexes, sizeof(nfkdIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFC, TRUE, NULL, 0, nfcIndexes, sizeof(nfcIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKC, TRUE, NULL, 0, nfkcIndexes, sizeof(nfkcIndexes)/4);
+    iter.index=0;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_FCD, TRUE, NULL, 0, fcdIndexes, sizeof(fcdIndexes)/4);
+
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFD, FALSE, NULL, 0, nfdIndexes, sizeof(nfdIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKD, FALSE, NULL, 0, nfkdIndexes, sizeof(nfkdIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFC, FALSE, NULL, 0, nfcIndexes, sizeof(nfcIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_NFKC, FALSE, NULL, 0, nfkcIndexes, sizeof(nfkcIndexes)/4);
+    iter.index=iter.length;
+    _testIter(src, sizeof(src)/U_SIZEOF_UCHAR, &iter, UNORM_FCD, FALSE, NULL, 0, fcdIndexes, sizeof(fcdIndexes)/4);
+
+    /* try without neededToNormalize */
+    errorCode=U_ZERO_ERROR;
+    buffer[0]=5;
+    iter.index=1;
+    length=unorm_next(&iter, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                      UNORM_NFD, 0, TRUE, NULL,
+                      &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || buffer[0]!=nfd[2] || buffer[1]!=nfd[3]) {
+        log_err("error unorm_next(without needed) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* preflight */
+    neededToNormalize=9;
+    iter.index=1;
+    length=unorm_next(&iter, NULL, 0,
+                      UNORM_NFD, 0, TRUE, &neededToNormalize,
+                      &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || neededToNormalize!=FALSE || length!=2) {
+        log_err("error unorm_next(pure preflighting) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    buffer[0]=buffer[1]=5;
+    neededToNormalize=9;
+    iter.index=1;
+    length=unorm_next(&iter, buffer, 1,
+                      UNORM_NFD, 0, TRUE, &neededToNormalize,
+                      &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || neededToNormalize!=FALSE || length!=2 || buffer[1]!=5) {
+        log_err("error unorm_next(preflighting) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* no iterator */
+    errorCode=U_ZERO_ERROR;
+    buffer[0]=buffer[1]=5;
+    neededToNormalize=9;
+    iter.index=1;
+    length=unorm_next(NULL, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                      UNORM_NFD, 0, TRUE, &neededToNormalize,
+                      &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error unorm_next(no iterator) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* illegal mode */
+    buffer[0]=buffer[1]=5;
+    neededToNormalize=9;
+    iter.index=1;
+    length=unorm_next(&iter, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                      (UNormalizationMode)0, 0, TRUE, &neededToNormalize,
+                      &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error unorm_next(illegal mode) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* error coming in */
+    errorCode=U_MISPLACED_QUANTIFIER;
+    buffer[0]=5;
+    iter.index=1;
+    length=unorm_next(&iter, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                      UNORM_NFD, 0, TRUE, NULL,
+                      &errorCode);
+    if(errorCode!=U_MISPLACED_QUANTIFIER) {
+        log_err("error unorm_next(U_MISPLACED_QUANTIFIER) %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* missing pErrorCode */
+    buffer[0]=5;
+    iter.index=1;
+    length=unorm_next(&iter, buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                      UNORM_NFD, 0, TRUE, NULL,
+                      NULL);
+    if(iter.index!=1 || buffer[0]!=5) {
+        log_err("error unorm_next(pErrorCode==NULL) %s\n", u_errorName(errorCode));
+        return;
     }
 }
