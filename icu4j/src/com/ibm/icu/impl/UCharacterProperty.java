@@ -538,7 +538,12 @@ public final class UCharacterProperty implements Trie.DataManipulate
        new BinaryProperties(  1, (  1 << XID_START_PROPERTY_) ), 
        new BinaryProperties( -1, (  1 << CASE_SENSITIVE_SHIFT_) ), 
        new BinaryProperties(  2, (  1 << V2_S_TERM_PROPERTY_) ),
-       new BinaryProperties(  2, (  1 << V2_VARIATION_SELECTOR_PROPERTY_) )
+       new BinaryProperties(  2, (  1 << V2_VARIATION_SELECTOR_PROPERTY_) ),
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFD_INERT */
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFKD_INERT */
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFC_INERT */
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFKC_INERT */
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_SEGMENT_STARTER */
    }; 
 
 
@@ -573,12 +578,32 @@ public final class UCharacterProperty implements Trie.DataManipulate
 		 if(property <UProperty.BINARY_START || UProperty.BINARY_LIMIT<=property) {
 	        // not a known binary property 
 	        return false;
-	    } else if(property == UProperty.FULL_COMPOSITION_EXCLUSION) {
-	        return NormalizerImpl.isFullCompositionExclusion(codepoint);
-	    } else {
-	        // systematic, directly stored properties 
-	        return ((UNSIGNED_INT_MASK & getAdditional(codepoint, binProps[property].column)) & binProps[property].mask)!=0;
+        } else {
+            long mask=binProps[property].mask;
+            if(mask!=0) {
+                // systematic, directly stored properties 
+                return ((UNSIGNED_INT_MASK & getAdditional(codepoint, binProps[property].column)) & mask)!=0;
+            } else {
+                /* normalization properties from unorm.icu */
+                switch(property) {
+                case UProperty.FULL_COMPOSITION_EXCLUSION:
+                    return NormalizerImpl.isFullCompositionExclusion(codepoint);
+                case UProperty.NFD_INERT:
+                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFD);
+                case UProperty.NFKD_INERT:
+                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFKD);
+                case UProperty.NFC_INERT:
+                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFC);
+                case UProperty.NFKC_INERT:
+                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFKC);
+                case UProperty.SEGMENT_STARTER:
+                    return NormalizerImpl.isCanonSafeStart(codepoint);
+                default:
+                    break;
+                }
+            }
 	    }
+        return false;
 	}
 	
 	/**
