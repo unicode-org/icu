@@ -1116,7 +1116,11 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* produce canonical closure */
     UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
 
-    enumStruct context = { t, tempColl, colEl, status };
+    enumStruct context;
+    context.t = t;
+    context.tempColl = tempColl;
+    context.colEl = colEl;
+    context.status = status;
     u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
 
     ucol_closeElements(colEl);
