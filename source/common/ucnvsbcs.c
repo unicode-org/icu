@@ -88,7 +88,7 @@ U_CFUNC void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
             }
           else
             {
-              if ((args->converter->useFallback == TRUE) &&
+              if (UCNV_TO_U_USE_FALLBACK(args->converter) &&
                   (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
               {
                   /* Look up in the fallback table first */
@@ -185,7 +185,7 @@ U_CFUNC void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
               /*writes the char to the output stream */
               myTarget[myTargetIndex++] = targetChar;
             }
-          else if ((args->converter->useFallback == TRUE) &&
+          else if (UCNV_FROM_U_USE_FALLBACK(args->converter, mySource[mySourceIndex-1]) &&
                   (args->converter->sharedData->staticData->hasFromUnicodeFallback == TRUE))
           {
               /* Look up in the fallback table first */
@@ -301,7 +301,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_SBCS(UConverterToUnicodeArgs* args,
       UConverterCallbackReason reason;
 
       /* Do the fallback stuff */
-      if ((args->converter->useFallback == TRUE)&&
+      if (UCNV_TO_U_USE_FALLBACK(args->converter) &&
           (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
       {
           UChar fallbackUChar = args->converter->sharedData->table->sbcs.toUnicodeFallback[ (unsigned char)*(args->source-1)];
@@ -450,7 +450,7 @@ U_CFUNC void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
                   /*writes the UniChar to the output stream */
                   myTarget[myTargetIndex++] = targetUniChar;
                 }
-              else if ((args->converter->useFallback == TRUE) &&
+              else if (UCNV_TO_U_USE_FALLBACK(args->converter) &&
                   (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
               {
                   UChar fallbackUniChar = (UChar) ucmp16_getu(myToUnicodeFallback, mySourceChar);
@@ -570,7 +570,7 @@ U_CFUNC void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
                   *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
-          else if ((args->converter->useFallback == TRUE) &&
+          else if (UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                   (args->converter->sharedData->staticData->hasFromUnicodeFallback == TRUE))
           {
 
@@ -708,7 +708,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
       UConverterCallbackReason reason;
 
       /* Do the fallback stuff */
-      if ((args->converter->useFallback == TRUE) &&
+      if (UCNV_TO_U_USE_FALLBACK(args->converter) &&
           (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
       {
           UChar fallbackUChar = ucmp16_getu((&args->converter->sharedData->table->dbcs.toUnicodeFallback),

@@ -1195,7 +1195,7 @@ getTrail:
                                 /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
                                  * safely ignore the codepaths below
                                  */
-                                /*if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                /*if ((targetUniChar==0) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
                                 } */
@@ -1214,7 +1214,7 @@ getTrail:
                                  * safely ignore the codepaths below
                                  */
                                 /*
-                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback== TRUE) &&
+                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
                                 } */
@@ -1505,7 +1505,7 @@ getTrail:
                                 /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
                                  * safely ignore the codepaths below
                                  */
-                                /*if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                /*if ((targetUniChar==0) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
                                 } */
@@ -1524,7 +1524,7 @@ getTrail:
                                  * safely ignore the codepaths below
                                  */
                                 /*
-                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback== TRUE) &&
+                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
                                 }
@@ -1965,7 +1965,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
                         if(targetUniChar> 0xfffe){
-                            if((args->converter->useFallback == TRUE) && 
+                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
@@ -1994,7 +1994,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     
                         targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
                         if(targetUniChar> 0xfffe){
-                            if((args->converter->useFallback == TRUE) && 
+                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
@@ -2191,7 +2191,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
                         if(targetUniChar> 0xfffe){
-                            if((args->converter->useFallback == TRUE) && 
+                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
@@ -2220,7 +2220,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     
                         targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
                         if(targetUniChar> 0xfffe){
-                            if((args->converter->useFallback == TRUE) && 
+                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
@@ -3371,7 +3371,7 @@ getTrail:
                                  * safely ignore the codepaths below
                                  */
                                 /*
-                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
+                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
                                 } */
@@ -3674,7 +3674,7 @@ getTrail:
                                 /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
                                  * safely ignore the codepaths below
                                  */
-                                /*if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
+                                /*if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
                                 } */
@@ -4233,7 +4233,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                          * safely ignore the codepaths below
                          */
                         /*if(targetUniChar> 0xfffe){
-                            if((args->converter->useFallback == TRUE) && 
+                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
@@ -4478,7 +4478,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                      */
                     /*
                     if(targetUniChar> 0xfffe){
-                        if((args->converter->useFallback == TRUE) && 
+                        if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                             (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                             targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
