@@ -537,47 +537,37 @@ static void PrintMarkDavis( )
   }
 }
 
-static void CollationLocaleTest( ) {
-/*
-  UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *rb = ures_open(NULL, "fr_FR_you_ll_never_find_this_locale", &status);
-  const char *rbLocale = ures_getLocale(rb, &status);
-
-
-  UResourceBundle *coll = ures_getByKey(rb, "CollationElements", NULL, &status);
-  const char *locale = ures_getLocale(coll, &status);
-*/
+static void BillFairmanTest( ) {
 /*
 ** check for actual locale via ICU resource bundles
 **
 ** lp points to the original locale ("fr_FR_....")
 */
 
-UResourceBundle *lr,*cr;
-UErrorCode              lec = U_ZERO_ERROR;
-const char *lp = "fr_FR_you_ll_never_find_this_locale";
+  UResourceBundle *lr,*cr;
+  UErrorCode              lec = U_ZERO_ERROR;
+  const char *lp = "fr_FR_you_ll_never_find_this_locale";
 
-if ((lr = ures_open(NULL,lp,&lec))) {
-         if ((cr = ures_getByKey(lr,"CollationElements",0,&lec))) {
-                 if ((lp = ures_getLocale(cr,&lec))) {
-                         if (U_SUCCESS(lec)) {
-                         /* copy the fallback locale into the definition */                     
-                                 /*cpynbuf(pkdef->kseg_desc,lp,ctKSEGDLEN);*/
-                         }
-                 }
-                 ures_close(cr);
-         }
-         ures_close(lr);
-}
+  if ((lr = ures_open(NULL,lp,&lec))) {
+    if ((cr = ures_getByKey(lr,"CollationElements",0,&lec))) {
+      if ((lp = ures_getLocale(cr,&lec))) {
+        if (U_SUCCESS(lec)) {
+          if(strcmp(lp, "fr") != 0) {
+            log_err("Wrong locale for French Collation Data, expected \"fr\" got %s", lp);
+          }
+        }
+      }
+      ures_close(cr);
+    }
+    ures_close(lr);
+  }
 
 }
 
 void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
-    UChar temp[2] = {'\0'};
-    unsigned char utfSource[256] = {'\0'};
-    unsigned char utfTarget[256] = {'\0'};
+
     doTest(col, p, q, UCOL_LESS);
 /*
     UCollationResult result = ucol_strcoll(col,p,u_strlen(p),q,u_strlen(q));
@@ -594,12 +584,7 @@ void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     u_strcpy(target+1,q);
     doTest(col, source, target, UCOL_LESS);
 /*
-    result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
-    if(result!=UCOL_LESS){
-       aescstrdup(source,utfSource,256);
-       aescstrdup(target,utfTarget,256);
-       fprintf(file,"Primary swamps 2nd failed  source: %s target: %s \n", utfSource,utfTarget);
-    }
+    fprintf(file,"Primary swamps 2nd failed  source: %s target: %s \n", utfSource,utfTarget);
 */
 }
    
@@ -609,13 +594,7 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
 
     doTest(col, p, q, UCOL_LESS);
 /*
-    UCollationResult result= ucol_strcoll(col,p,u_strlen(p),q,u_strlen(q));
-    
-    if(result!=UCOL_LESS){
-       aescstrdup(p,utfSource,256);
-       aescstrdup(q,utfTarget,256);
-       fprintf(file,"secondary failed  source: %s target: %s \n", utfSource,utfTarget);
-    }
+    fprintf(file,"secondary failed  source: %s target: %s \n", utfSource,utfTarget);
 */
     source[0] = 0x0053;
     u_strcpy(source+1,p);
@@ -624,12 +603,7 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
 
     doTest(col, source, target, UCOL_LESS);
 /*
-    result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
-    if(result!=UCOL_LESS){
-       aescstrdup(source,utfSource,256);
-       aescstrdup(target,utfTarget,256);
-       fprintf(file,"secondary swamps 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
-    }
+    fprintf(file,"secondary swamps 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
 */
 
 
@@ -645,29 +619,17 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     doTest(col, source, target, UCOL_GREATER);
 
 /*
-    result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
-    if(result!=UCOL_GREATER){
-       aescstrdup(source,utfSource,256);
-       aescstrdup(target,utfTarget,256);
-       fprintf(file,"secondary is swamped by 1  failed  source: %s target: %s \n",utfSource,utfTarget);
-    }
+    fprintf(file,"secondary is swamped by 1  failed  source: %s target: %s \n",utfSource,utfTarget);
 */
 }
 
 void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
-    UChar temp[2] = {'\0'};
-    unsigned char utfSource[256] = {'\0'};
-    unsigned char utfTarget[256] = {'\0'};
+
     doTest(col, p, q, UCOL_LESS);
 /*
-    UCollationResult result= ucol_strcoll(col,p,u_strlen(p),q,u_strlen(q));
-    if(result!=UCOL_LESS){
-       aescstrdup(p,utfSource,256);
-       aescstrdup(q,utfTarget,256);
-       fprintf(file,"Tertiary failed  source: %s target: %s \n",utfSource,utfTarget);
-    }
+    fprintf(file,"Tertiary failed  source: %s target: %s \n",utfSource,utfTarget);
 */
     source[0] = 0x0020;
     u_strcpy(source+1,p);
@@ -676,12 +638,7 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
 
     doTest(col, source, target, UCOL_LESS);
 /*
-    result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
-    if(result!=UCOL_LESS){
-       aescstrdup(source,utfSource,256);
-       aescstrdup(target,utfTarget,256);
-       fprintf(file,"Tertiary swamps 4th failed  source: %s target: %s \n", utfSource,utfTarget);
-    }
+    fprintf(file,"Tertiary swamps 4th failed  source: %s target: %s \n", utfSource,utfTarget);
 */
 
     u_strcpy(source,p);
@@ -695,56 +652,85 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     doTest(col, source, target, UCOL_GREATER);
 
 /*
-    result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
-    if(result!=UCOL_GREATER){
-       aescstrdup(source,utfSource,256);
-       aescstrdup(target,utfTarget,256);
-       fprintf(file,"Tertiary is swamped by 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
-    }
+    fprintf(file,"Tertiary is swamped by 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
 */
 }
 void testEquality(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
-    UChar temp[2] = {'\0'};
-    unsigned char utfSource[256] = {'\0'};
-    unsigned char utfTarget[256] = {'\0'};
+
     doTest(col, p, q, UCOL_EQUAL);
 /*
-    UCollationResult result = ucol_strcoll(col,p,u_strlen(p),q,u_strlen(q));
-
-    if(result!=UCOL_EQUAL){
-       aescstrdup(p,utfSource,256);
-       aescstrdup(q,utfTarget,256);
-       fprintf(file,"Primary failed  source: %s target: %s \n", utfSource,utfTarget);
-    }
+    fprintf(file,"Primary failed  source: %s target: %s \n", utfSource,utfTarget);
 */
 }
 
-void testCollator(UCollator* col, const UChar* p,const UChar* q, uint32_t strength){
-    UChar source[256] = { '\0'};
-    UChar target[256] = { '\0'};
-    UChar temp[2] = {'\0'};
-    unsigned char utfSource[256] = {'\0'};
-    unsigned char utfTarget[256] = {'\0'};
-    UCollationResult result=0;
-    switch(strength){
-    case UCOL_IDENTICAL:
-        testEquality(col,p,q);
-        break;
+void testCollator(UCollator *coll, UErrorCode *status) {
+  const UChar *rules = NULL, *current = NULL;
+  uint32_t ruleLen = 0;
+  uint32_t strength = 0;
+  uint32_t chOffset = 0; uint32_t chLen = 0;
+  uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t rExpsLen = 0;
+  uint32_t firstLen = 0;
+  UBool varT = FALSE; UBool top_ = TRUE;
+  UBool startOfRules = TRUE;
+  UColTokenParser src;
+  UCATableHeader img;
 
-    case UCOL_PRIMARY:
-        testPrimary(col,p,q);
-        break;
-    case UCOL_SECONDARY:
-       testSecondary(col,p,q);
-       break;
-    case UCOL_TERTIARY:
-       testTertiary(col,p,q);
-       break;
-    default:
-        break;
+  UChar first[256];
+  UChar second[256];
+  UChar *rulesCopy = NULL;
+
+  src.image = &img;
+
+  rules = ucol_getRules(coll, &ruleLen);
+  if(U_SUCCESS(*status) && ruleLen > 0) {
+    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
+    src.source = src.current = rulesCopy;
+    src.end = rulesCopy+ruleLen;
+    src.extraCurrent = src.end;
+    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+    *first = *second = 0;
+
+    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+                      &chOffset, &chLen, &exOffset, &exLen,
+                      &varT, &top_, startOfRules, status)) != NULL) {
+      startOfRules = FALSE;
+
+      u_strncpy(second,rulesCopy+chOffset, chLen);
+      second[chLen] = 0;
+
+      if(exLen > 0) {
+        u_strncat(first, rulesCopy+exOffset, exLen);
+        first[firstLen+exLen] = 0;
+      } 
+
+      switch(strength){
+      case UCOL_IDENTICAL:
+          testEquality(coll,first,second);
+          break;
+      case UCOL_PRIMARY:
+          testPrimary(coll,first,second);
+          break;
+      case UCOL_SECONDARY:
+         testSecondary(coll,first,second);
+         break;
+      case UCOL_TERTIARY:
+         testTertiary(coll,first,second);
+         break;
+      case UCOL_TOK_RESET:
+      default:
+          break;
+      }
+
+      firstLen = chLen;
+      u_strcpy(first, second);
+
     }
+    uprv_free(rulesCopy);
+  }
 }
 
 static char* localesToTest[] = {
@@ -759,86 +745,40 @@ static char* localesToTest[] = {
 "vi", "zh", "zh_TW"
 };
 
+static char* rulesToTest[] = {
+  "& Z < p, P",
+    "& abe < d < b < e",
+    "& a < d/be < b < e"
+};
+
 static void RamsRulesTest( ) {
   UErrorCode status = U_ZERO_ERROR;
   uint32_t i = 0;
   UCollator *coll = NULL;
-  const UChar *rules = NULL, *current = NULL;
-  uint32_t ruleLen = 0;
-  uint32_t strength = 0;
-  uint32_t chOffset = 0; uint32_t chLen = 0;
-  uint32_t exOffset = 0; uint32_t exLen = 0;
-  uint32_t rExpsLen = 0;
-  UBool varT = FALSE; UBool top_ = TRUE;
-  UBool startOfRules = TRUE;
-  UColTokenParser src;
-  UCATableHeader img;
-
-  UChar first[256];
-  UChar second[256];
-  UChar *rulesCopy = NULL;
-
-  src.image = &img;
-
-
-
+  UChar rule[2048];
+  uint32_t ruleLen;
+ 
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
-    /*fprintf(stderr, "%s\n", localesToTest[i]);*/
-    rules = ucol_getRules(coll, &ruleLen);
-    if(U_SUCCESS(status) && ruleLen > 0) {
-      rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-      uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
-      src.source = src.current = rulesCopy;
-      src.end = rulesCopy+ruleLen;
-      src.extraCurrent = src.end;
-      src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
-      *first = *second = 0;
-
-      while ((current = ucol_tok_parseNextToken(&src, &strength, 
-                        &chOffset, &chLen, &exOffset, &exLen,
-                        &varT, &top_, startOfRules, &status)) != NULL) {
-        startOfRules = FALSE;
-
-        u_strncpy(second,rulesCopy+chOffset, chLen);
-        second[chLen] = 0;
-
-        if(exLen > 0) {
-          u_strncat(second+chLen, rulesCopy+exOffset, exLen);
-          second[chLen+exLen] = 0;
-        } 
-/*      
-       else if (exLen == 0 && rExpsLen > 0) {
-          u_strcat(second+chLen, rExps);
-          *rExps = 0;
-          rExpsLen = 0;
-        } else if (exLen > 0 && rExpsLen > 0) {
-          fprintf(stderr, "Bad rule - both reset and explicit expansion\n");
-        }
-*/
-        if(strength != UCOL_TOK_RESET) {
-          testCollator(coll,first,second,strength);
-        } else {
-/*
-          if(chLen > 1) {
-            rExpsLen = chLen-1;
-            second[0] = *(rulesCopy+chOffset);
-            second[1] = 0;
-            u_strncpy(rExps, rulesCopy+chOffset+1, rExpsLen);
-            rExps[rExpsLen] = 0;
-          } else {
-            *rExps = 0;
-            rExpsLen = 0;
-          }
-*/
-        }
-        u_strcpy(first, second);
-
-      }
-      uprv_free(rulesCopy);
+    log_verbose("Testing locale: %s\n", localesToTest[i]);
+    if(U_SUCCESS(status)) {
+      testCollator(coll, &status);
+      ucol_close(coll);
     }
-    ucol_close(coll);
   }
+
+  for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
+    log_verbose("Testing rule: %s\n", rulesToTest[i]);
+    u_uastrcpy(rule, rulesToTest[i]);
+    ruleLen = u_strlen(rule);
+    coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+    if(U_SUCCESS(status)) {
+      testCollator(coll, &status);
+      ucol_close(coll);
+    }
+  }
+
+
 }
 
 void addMiscCollTest(TestNode** root)
@@ -847,7 +787,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
-    addTest(root, &CollationLocaleTest, "tscoll/cmsccoll/CollationLocaleTest");
+    addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
     addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
 }
