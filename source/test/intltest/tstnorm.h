@@ -36,12 +36,14 @@ public:
     void TestNormalizerAPI(void);
     void TestConcatenate(void);
     void TestCompare(void);
+    void FindFoldFCDExceptions();
 
 private:
     UnicodeString canonTests[24][3];
     UnicodeString compatTests[11][3];
     UnicodeString hangulCanon[2][3];
 
+    int32_t countFoldFCDExceptions(uint32_t foldingOptions);
 
     //------------------------------------------------------------------------
     // Internal utilities
