@@ -1,11 +1,10 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
 <!-- 
 Copyright (c) 2001-2003 International Business Machines
 Corporation and others. All Rights Reserved.
 -->
-
-<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
   <meta http-equiv="Content-Type"
  content="text/html; charset=iso-8859-1">
   <meta name="Author" content="Eric Mader">
@@ -38,7 +37,8 @@ the gnome-libs-devel and freetype-devel packages, which should be part
 of your Linux distribution. The demo uses the FreeType 1 library, and
 the make files assume that the FreeType header files are in
 /usr/include/freetype1, and that the freetype library is
-/usr/lib/libttf.so. This is how RedHat Linux 7.2 installs FreeType 1. If
+/usr/lib/libttf.so. This is how RedHat Linux 7.2 installs FreeType 1.
+If
 your system is different, you may need to add sym links to where the
 files are stored on your system, or&nbsp; modify
 &lt;top-src-dir&gt;/samples/layout/Makefile.in to reference the files
@@ -49,16 +49,11 @@ Before you can run the demo, you'll need to get the fonts it uses. For
 legal reasons, we can't include these fonts with ICU, but you can
 download them from the web. To do this, you'll need access to a
 computer running Windows. Here's how to get the fonts:
-<p>Download the 1.3 version of the JDK from the<a
- href="http://www.ibm.com/java"> IBM developerWorks Java technology zone</a>
-page. From this page, follow the "Tools and products" link on the left
-hand side, and then the link for the "IBM Developer Kit for Linux", or
-the "IBM Developer Kit for Windows(R), Release 1.3.0". You'll need to
-register with them if you haven't downloaded before. Download and
-install the "Runtime Environment Package." You'll need one font from
-this package. If you've let the installer use it's defaults, the fonts
-will be in C:\Program Files\IBM\Java13\jre\lib\fonts. The file you want
-is "Thonburi.ttf" On Windows, copy this font file to your Fonts folder,
+<p>First, download the Thai font. Go to <a
+ href="http://www.into-asia.com/thai_language/thaifont/">into-asia.com</a>
+and click on the link for the Angsana font. This will download a .ZIP
+file. Extract the font file, angsd___.ttf On Windows, copy this font
+file to your Fonts folder,
 on Linux, copy this font file to the directory from which you'll run
 the layout demo.</p>
 <p>Next is the Hindi font. Go to the&nbsp; NCST site and download&nbsp;<a
@@ -85,14 +80,16 @@ C++, or "./gnomelayout" in Linux) </p>
 <h2> How can I customize the layout demo?</h2>
 The text that the layout demo displays is read from the file
 "Sample.txt." You can change the text by editing this file using a
-Unicode-aware text editor. (it is in UTF8 format with a BOM as the first
+Unicode-aware text editor. (it is in UTF8 format with a BOM as the
+first
 character; the demo can also read UTF16 and UTF32 format files)
 Remember that the text will be displayed in a single paragraph; you can
 include CR and LF characters in the text, but they will be ignored.
 <p>If you add scripts to the text other than Arabic, Devanagari, Latin
 or Thai, you'll need to find a font which contains the characters in
 that script, and add an entry to the FontMap file ("FontMap.GDI" on
-Windows, "FontMap.Gnome" on Linux) This file contains a single entry per
+Windows, "FontMap.Gnome" on Linux) This file contains a single entry
+per
 line. Each entry contains a script name followed by a colon, and then a
 font name. </p>
 <p>Here is the list of legal script names: </p>

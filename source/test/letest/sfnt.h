@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 1998-2002, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************/
@@ -207,6 +207,68 @@ struct HMTXTable
 {
     LongHorMetric hMetrics[ANY_NUMBER];        // ANY_NUMBER = numOfLongHorMetrics from hhea table
 //  le_int16        leftSideBearing[ANY_NUMBER]; // ANY_NUMBER = numGlyphs - numOfLongHorMetrics
+};
+
+enum PlatformID
+{
+    PLATFORM_UNICODE = 0,
+    PLATFORM_MACINTOSH = 1,
+    PLATFORM_ISO       = 2,
+    PLATFORM_MICROSOFT = 3,
+    PLATFORM_CUSTOM    = 4
+};
+
+enum MacintoshEncodingID
+{
+    MACINTOSH_ROMAN = 0
+};
+
+enum MacintoshLanguageID
+{
+    MACINTOSH_ENGLISH = 0
+};
+
+enum NameID
+{
+    NAME_COPYRIGHT_NOTICE     = 0,
+    NAME_FONT_FAMILY          = 1,
+    NAME_FONT_SUB_FAMILY      = 2,
+    NAME_UNIQUE_FONT_ID       = 3,
+    NAME_FULL_FONT_NAME       = 4,
+    NAME_VERSION_STRING       = 5,
+    NAME_POSTSCRIPT_NAME      = 6,
+    NAME_TRADEMARK            = 7,
+    NAME_MANUFACTURER         = 8,
+    NAME_DESIGNER             = 9,
+    NAME_DESCRIPTION          = 10,
+    NAME_VENDOR_URL           = 11,
+    NAME_DESIGNER_URL         = 12,
+    NAME_LICENSE_DESCRIPTION  = 13,
+    NAME_LICENSE_URL          = 14,
+    NAME_RESERVED             = 15,
+    NAME_PREFERRED_FAMILY     = 16,
+    NAME_PREFERRED_SUB_FAMILY = 17,
+    NAME_COMPATIBLE_FULL      = 18,
+    NAME_SAMPLE_TEXT          = 19,
+    NAME_POSTSCRIPT_CID       = 20
+};
+
+struct NameRecord
+{
+    le_uint16 platformID;
+    le_uint16 encodingID;
+    le_uint16 languageID;
+    le_uint16 nameID;
+    le_uint16 length;
+    le_uint16 offset;
+};
+
+struct NAMETable
+{
+    le_uint16 version;
+    le_uint16 count;
+    le_uint16 stringOffset;
+    NameRecord nameRecords[ANY_NUMBER];
 };
 
 #endif

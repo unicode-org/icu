@@ -2,7 +2,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -30,11 +30,12 @@ class PortableFontInstance : public LEFontInstance, protected FontTableCache
 private:
     FILE *fFile;
 
-    float    fPointSize;
-    le_int32 fUnitsPerEM;
-    le_int32 fAscent;
-    le_int32 fDescent;
-    le_int32 fLeading;
+    float     fPointSize;
+    le_int32  fUnitsPerEM;
+    le_uint32 fFontChecksum;
+    le_int32  fAscent;
+    le_int32  fDescent;
+    le_int32  fLeading;
 
     const SFNTDirectory *fDirectory;
     le_uint16 fDirPower;
@@ -42,6 +43,10 @@ private:
 
     float fDeviceScaleX;
     float fDeviceScaleY;
+
+    const NAMETable *fNAMETable;
+    le_uint16 fNameCount;
+    le_uint16 fNameStringOffset;
 
     CMAPMapper *fCMAPMapper;
 
@@ -68,10 +73,19 @@ public:
 
     virtual const void *getFontTable(LETag tableTag) const;
 
+    virtual const char *getNameString(le_uint16 nameID, le_uint16 platform, le_uint16 encoding, le_uint16 language) const;
+
+    virtual void deleteNameString(const char *name) const;
+
     virtual le_int32 getUnitsPerEM() const
     {
         return fUnitsPerEM;
     };
+
+    virtual le_uint32 getFontChecksum() const
+    {
+        return fFontChecksum;
+    }
 
     virtual le_int32 getAscent() const
     {
