@@ -10,8 +10,6 @@
 
 #include "LETypes.h"
 
-#include <string.h>
-
 U_NAMESPACE_BEGIN
 
 class LEFontInstance;
