@@ -201,6 +201,7 @@ icu4c/source/tools/genccode/Debug
 icu4c/source/tools/genccode/Makefile
 icu4c/source/tools/genccode/Release
 icu4c/source/tools/genccode/genccode
+icu4c/source/tools/genccode/genccode.8
 icu4c/source/tools/genccode/tmp
 icu4c/source/tools/gencmn/*.d
 icu4c/source/tools/gencmn/*.pdb
@@ -232,6 +233,7 @@ icu4c/source/tools/gennames/Debug
 icu4c/source/tools/gennames/Makefile
 icu4c/source/tools/gennames/Release
 icu4c/source/tools/gennames/gennames
+icu4c/source/tools/gennames/gennames.8
 icu4c/source/tools/gennames/tmp
 icu4c/source/tools/gennorm/*.d
 icu4c/source/tools/gennorm/*.pdb
