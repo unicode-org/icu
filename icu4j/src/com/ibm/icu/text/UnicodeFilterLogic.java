@@ -5,12 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeFilterLogic.java,v $ 
- * $Date: 2002/02/16 03:06:21 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/08/28 16:29:26 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
+
+// Disable coverage analysis for this file
+///CLOVER:OFF
 
 /**
  * <code>UnicodeFilterLogic</code> provides logical operators on
@@ -19,15 +22,32 @@ package com.ibm.icu.text;
  * filter objects that perform logical inversion (<tt>not</tt>),
  * intersection (<tt>and</tt>), or union (<tt>or</tt>) of the given
  * filter objects.
+ *
+ * @deprecated in ICU 2.4 2002-08-28.  Instead, use methods on
+ * UnicodeSet.
  */
 public final class UnicodeFilterLogic {
+
+    /**
+     * UnicodeFilter subclass that stubs out methods we don't implement.
+     */
+    private static abstract class _UF extends UnicodeFilter {
+        public abstract boolean contains(int c); // redeclare
+        public String toPattern(boolean escapeUnprintable) {
+            return "";
+        }
+        public boolean matchesIndexValue(int v) {
+            return false;
+        }
+        public void addMatchSetTo(UnicodeSet toUnionTo) {}
+    }
 
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements the inverse of
      * the given filter.
      */
     public static UnicodeFilter not(final UnicodeFilter f) {
-        return new UnicodeFilter() {
+        return new _UF() {
             public boolean contains(int c) {
                 return !f.contains(c);
             }
@@ -50,7 +70,7 @@ public final class UnicodeFilterLogic {
         if (g == null) {
             return f;
         }
-        return new UnicodeFilter() {
+        return new _UF() {
             public boolean contains(int c) {
                 return f.contains(c) && g.contains(c);
             }
@@ -65,7 +85,7 @@ public final class UnicodeFilterLogic {
      * <tt>contains()</tt> returns <tt>false</tt>.
      */
     public static UnicodeFilter and(final UnicodeFilter[] f) {
-        return new UnicodeFilter() {
+        return new _UF() {
             public boolean contains(int c) {
                 for (int i=0; i<f.length; ++i) {
                     if (!f[i].contains(c)) {
@@ -93,7 +113,7 @@ public final class UnicodeFilterLogic {
         if (g == null) {
             return f;
         }
-        return new UnicodeFilter() {
+        return new _UF() {
             public boolean contains(int c) {
                 return f.contains(c) || g.contains(c);
             }
@@ -108,7 +128,7 @@ public final class UnicodeFilterLogic {
      * <tt>contains()</tt> returns <tt>true</tt>.
      */
     public static UnicodeFilter or(final UnicodeFilter[] f) {
-        return new UnicodeFilter() {
+        return new _UF() {
             public boolean contains(int c) {
                 for (int i=0; i<f.length; ++i) {
                     if (f[i].contains(c)) {
@@ -119,6 +139,4 @@ public final class UnicodeFilterLogic {
             }
         };
     }
-
-    // TODO: Add nand() & nor() for convenience, if needed.
 }
