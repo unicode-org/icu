@@ -579,7 +579,9 @@ enum UBlockCode {
     U_LOW_SURROGATES=77,
 
     /** @draft ICU 2.0 */
-    UBLOCK_PRIVATE_USE_AREA =78,
+    UBLOCK_PRIVATE_USE = 78,
+    /** @deprecated  Use UBLOCK_PRIVATE_USE. Remove after Aug, 2002 */
+    UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_PRIVATE_USE_AREA=78,
 
@@ -647,11 +649,9 @@ enum UBlockCode {
     /** @draft ICU 2.0 */
     UBLOCK_TAGS = 96 ,
     /** @draft ICU 2.0 */
-    UBLOCK_PRIVATE_USE = 97 ,
-    /** @draft ICU 2.0 */
-    UBLOCK_COUNT=98,
+    UBLOCK_COUNT=97,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SCRIPT_COUNT=98,
+    U_SCRIPT_COUNT=UBLOCK_COUNT,
 
     /** @draft ICU 2.0 */
     UBLOCK_INVALID_CODE=-1,
@@ -660,7 +660,6 @@ enum UBlockCode {
     U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_NO_SCRIPT = UBLOCK_COUNT
-
 };
 
 /** @draft ICU 2.0 */
