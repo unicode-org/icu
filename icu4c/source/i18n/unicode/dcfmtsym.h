@@ -66,13 +66,12 @@
  * This class only handles localized digits where the 10 digits are
  * contiguous in Unicode, from 0 to 9. Other digits sets (such as
  * superscripts) would need a different subclass.
- * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
  */
 class U_I18N_API DecimalFormatSymbols {
 public:
     /**
      * Constants for specifying a number format symbol.
-     * @draft
+     * @stable
      */
     enum ENumberFormatSymbol {
         /** The decimal separator */
@@ -100,7 +99,7 @@ public:
         /** The exponential symbol */
         kExponentialSymbol,
         /** Per mill symbol */
-        kPermillSymbol,
+        kPerMillSymbol,
         /** Escape padding character */
         kPadEscapeSymbol,
         /** Infinity symbol */
@@ -179,18 +178,19 @@ public:
      */
     void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
 
+#ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
     /**
      * character used for zero. Different for Arabic, etc.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getZeroDigit(void) const;
     /**
      * character used for zero. Different for Arabic, etc.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setZeroDigit(UChar zeroDigit);
 
@@ -198,14 +198,14 @@ public:
      * character used for thousands separator. Different for French, etc.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getGroupingSeparator(void) const;
     /**
      * character used for thousands separator. Different for French, etc.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setGroupingSeparator(UChar groupingSeparator);
 
@@ -213,14 +213,14 @@ public:
      * character used for decimal sign. Different for French, etc.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getDecimalSeparator(void) const;
     /**
      * character used for decimal sign. Different for French, etc.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setDecimalSeparator(UChar decimalSeparator);
 
@@ -228,14 +228,14 @@ public:
      * character used for per mill sign. Different for Arabic, etc.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getPerMill(void) const;
     /**
      * character used for per mill sign. Different for Arabic, etc.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setPerMill(UChar permill);
 
@@ -243,14 +243,14 @@ public:
      * character used for percent sign. Different for Arabic, etc.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getPercent(void) const;
     /**
      * character used for percent sign. Different for Arabic, etc.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setPercent(UChar percent);
 
@@ -258,14 +258,14 @@ public:
      * character used for a digit in a pattern.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getDigit(void) const;
     /**
      * character used for a digit in a pattern.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setDigit(UChar digit);
 
@@ -274,7 +274,7 @@ public:
      * in a pattern.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getPatternSeparator(void) const;
     /**
@@ -282,47 +282,47 @@ public:
      * in a pattern.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setPatternSeparator(UChar patternSeparator);
 
     /**
      * character used to represent infinity. Almost always left
      * unchanged.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UnicodeString& getInfinity(UnicodeString& result) const;
     /**
      * character used to represent infinity. Almost always left
      * unchanged.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setInfinity(const UnicodeString& infinity);
     /**
      * Checks to see if text at offset represents the inifinity string.
      * @return the number of characters used to represent infinity when 
      *      text starts with the inifinity string, otherwise it returns 0.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     int32_t compareInfinity(const UnicodeString& text, UTextOffset offset) const;
 
     /**
      * character used to represent NaN (Not A Number). Almost always left
      * unchanged.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UnicodeString& getNaN(UnicodeString& result) const;
     /**
      * character used to represent NaN. Almost always left
      * unchanged.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setNaN(const UnicodeString& NaN);
     /**
      * Checks to see if text at offset represents the NaN string.
      * @return the number of characters used to represent NaN when 
      *      text starts with the NaN string, otherwise it returns 0.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     int32_t compareNaN(const UnicodeString& text, UTextOffset offset) const;
 
@@ -330,14 +330,14 @@ public:
      * character used to represent plus sign
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getPlusSign(void) const;
     /**
      * character used to represent plus sign
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setPlusSign(UChar minusSign);
 
@@ -347,7 +347,7 @@ public:
      * minusSign to the positive format.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getMinusSign(void) const;
     /**
@@ -356,7 +356,7 @@ public:
      * minusSign to the positive format.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setMinusSign(UChar minusSign);
  
@@ -365,7 +365,7 @@ public:
      * unchanged.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getExponentialSymbol(void) const;
     /**
@@ -373,18 +373,18 @@ public:
      * unchanged.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setExponentialSymbol(UChar exponential);
 
     /**
      * The string denoting the local currency.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UnicodeString& getCurrencySymbol(UnicodeString& result) const;
     /**
      * The string denoting the local currency.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setCurrencySymbol(const UnicodeString& currency);
     /**
@@ -392,18 +392,18 @@ public:
      * @return the number of characters used to represent Currency Symbol when
      *      text starts with the Currency Symbol string, otherwise it returns
      *      0.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     int32_t compareCurrencySymbol(const UnicodeString& text, UTextOffset offset) const;
 
     /**
      * The international string denoting the local currency.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UnicodeString& getInternationalCurrencySymbol(UnicodeString& result) const;
     /**
      * The international string denoting the local currency.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setInternationalCurrencySymbol(const UnicodeString& currency);
     /**
@@ -412,7 +412,7 @@ public:
      * @return the number of characters used to represent International
      *      Currency Symbol when text starts with the International Currency
      *      Symbol string, otherwise it returns 0.
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     int32_t compareInternationalCurrencySymbol(const UnicodeString& text, UTextOffset offset) const;
 
@@ -420,14 +420,14 @@ public:
      * The monetary decimal separator.
      * This function returns only the first code unit of the symbol string,
      * unlike getSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getMonetaryDecimalSeparator(void) const;
     /**
      * The monetary decimal separator.
      * This function can set only a one-code unit symbol,
      * unlike setSymbol().
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setMonetaryDecimalSeparator(UChar sep);
 
@@ -443,7 +443,7 @@ public:
      * @see DecimalFormat#getFormatWidth
      * @see DecimalFormat#getPadPosition
      * @see DecimalFormat#getPadCharacter
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and getSymbol() for a replacement.
      */
     UChar getPadEscape(void) const;
 
@@ -458,10 +458,10 @@ public:
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
      * @see DecimalFormat#setPadCharacter
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and setSymbol() for a replacement.
      */
     void setPadEscape(UChar c);
-
+#endif
 private:
     /**
      * Initializes the symbols from the LocaleElements resource bundle.
@@ -505,6 +505,7 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value)
     }
 }
 
+#ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
 // -------------------------------------
 
 inline UChar
@@ -811,6 +812,6 @@ inline UChar DecimalFormatSymbols::getPadEscape(void) const {
 inline void DecimalFormatSymbols::setPadEscape(UChar c) {
     fSymbols[kPadEscapeSymbol] = c;
 }
-
+#endif /* ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES */
 #endif // _DCFMTSYM
 //eof

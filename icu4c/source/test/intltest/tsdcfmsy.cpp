@@ -32,13 +32,13 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    DecimalFormatSymbols fr(Locale::FRENCH, status);
+    DecimalFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create French DecimalFormatSymbols");
     }
 
     status = U_ZERO_ERROR;
-    DecimalFormatSymbols en(Locale::ENGLISH, status);
+    DecimalFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create English DecimalFormatSymbols");
     }
@@ -49,75 +49,71 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 
     // just do some VERY basic tests to make sure that get/set work
 
-    UChar zero = en.getZeroDigit();
-    fr.setZeroDigit(zero);
-    if(fr.getZeroDigit() != en.getZeroDigit()) {
+    UnicodeString zero = en.getSymbol(DecimalFormatSymbols::kZeroDigitSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, zero);
+    if(fr.getSymbol(DecimalFormatSymbols::kZeroDigitSymbol) != en.getSymbol(DecimalFormatSymbols::kZeroDigitSymbol)) {
         errln("ERROR: get/set ZeroDigit failed");
     }
 
-    UChar group = en.getGroupingSeparator();
-    fr.setGroupingSeparator(group);
-    if(fr.getGroupingSeparator() != en.getGroupingSeparator()) {
+    UnicodeString group = en.getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, group);
+    if(fr.getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol) != en.getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol)) {
         errln("ERROR: get/set GroupingSeparator failed");
     }
 
-    UChar decimal = en.getDecimalSeparator();
-    fr.setDecimalSeparator(decimal);
-    if(fr.getDecimalSeparator() != en.getDecimalSeparator()) {
+    UnicodeString decimal = en.getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, decimal);
+    if(fr.getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol) != en.getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol)) {
         errln("ERROR: get/set DecimalSeparator failed");
     }
 
-    UChar perMill = en.getPerMill();
-    fr.setPerMill(perMill);
-    if(fr.getPerMill() != en.getPerMill()) {
+    UnicodeString perMill = en.getSymbol(DecimalFormatSymbols::kPerMillSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kPerMillSymbol, perMill);
+    if(fr.getSymbol(DecimalFormatSymbols::kPerMillSymbol) != en.getSymbol(DecimalFormatSymbols::kPerMillSymbol)) {
         errln("ERROR: get/set PerMill failed");
     }
 
-    UChar percent = en.getPercent();
-    fr.setPercent(percent);
-    if(fr.getPercent() != en.getPercent()) {
+    UnicodeString percent = en.getSymbol(DecimalFormatSymbols::kPercentSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kPercentSymbol, percent);
+    if(fr.getSymbol(DecimalFormatSymbols::kPercentSymbol) != en.getSymbol(DecimalFormatSymbols::kPercentSymbol)) {
         errln("ERROR: get/set Percent failed");
     }
 
-    UChar digit = en.getDigit();
-    fr.setDigit(digit);
-    if(fr.getPercent() != en.getPercent()) {
+    UnicodeString digit(en.getSymbol(DecimalFormatSymbols::kDigitSymbol));
+    fr.setSymbol(DecimalFormatSymbols::kDigitSymbol, digit);
+    if(fr.getSymbol(DecimalFormatSymbols::kDigitSymbol) != en.getSymbol(DecimalFormatSymbols::kDigitSymbol)) {
         errln("ERROR: get/set Percent failed");
     }
 
-    UChar patternSeparator = en.getPatternSeparator();
-    fr.setPatternSeparator(patternSeparator);
-    if(fr.getPatternSeparator() != en.getPatternSeparator()) {
+    UnicodeString patternSeparator = en.getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol, patternSeparator);
+    if(fr.getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol) != en.getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol)) {
         errln("ERROR: get/set PatternSeparator failed");
     }
 
-    UnicodeString infinity;
-    infinity = en.getInfinity(infinity);
-    fr.setInfinity(infinity);
-    UnicodeString infinity2;
-    infinity2 = fr.getInfinity(infinity2);
+    UnicodeString infinity(en.getSymbol(DecimalFormatSymbols::kInfinitySymbol));
+    fr.setSymbol(DecimalFormatSymbols::kInfinitySymbol, infinity);
+    UnicodeString infinity2(fr.getSymbol(DecimalFormatSymbols::kInfinitySymbol));
     if(infinity != infinity2) {
         errln("ERROR: get/set Infinity failed");
     }
 
-    UnicodeString nan;
-    nan = en.getNaN(infinity);
-    fr.setNaN(nan);
-    UnicodeString nan2;
-    nan2 = fr.getNaN(nan2);
+    UnicodeString nan(en.getSymbol(DecimalFormatSymbols::kNaNSymbol));
+    fr.setSymbol(DecimalFormatSymbols::kNaNSymbol, nan);
+    UnicodeString nan2(fr.getSymbol(DecimalFormatSymbols::kNaNSymbol));
     if(nan != nan2) {
         errln("ERROR: get/set NaN failed");
     }
 
-    UChar minusSign = en.getMinusSign();
-    fr.setMinusSign(minusSign);
-    if(fr.getMinusSign() != en.getMinusSign()) {
+    UnicodeString minusSign = en.getSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+    fr.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, minusSign);
+    if(fr.getSymbol(DecimalFormatSymbols::kMinusSignSymbol) != en.getSymbol(DecimalFormatSymbols::kMinusSignSymbol)) {
         errln("ERROR: get/set MinusSign failed");
     }
  
-    UChar exponential = en.getExponentialSymbol();
-    fr.setExponentialSymbol(exponential);
-    if(fr.getExponentialSymbol() != en.getExponentialSymbol()) {
+    UnicodeString exponential(en.getSymbol(DecimalFormatSymbols::kExponentialSymbol));
+    fr.setSymbol(DecimalFormatSymbols::kExponentialSymbol, exponential);
+    if(fr.getSymbol(DecimalFormatSymbols::kExponentialSymbol) != en.getSymbol(DecimalFormatSymbols::kExponentialSymbol)) {
         errln("ERROR: get/set Exponential failed");
     }
 
@@ -152,7 +148,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     }
    
    
-    DecimalFormatSymbols sym(Locale::US, status);
+    DecimalFormatSymbols sym(Locale::getUS(), status);
 
     UnicodeString customDecSeperator("S");
     Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34.50");
@@ -166,6 +162,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
     
 }
+
 void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected){
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(pattern, sym, status);
@@ -176,7 +173,7 @@ void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pat
     FieldPosition pos(FieldPosition::DONT_CARE);
     buffer = df->format(value, buffer, pos);
     if(buffer != expected){
-        errln((UnicodeString)"ERROR: format failed after setSymbols()\n Expected" + 
+        errln((UnicodeString)"ERROR: format failed after setSymbols()\n Expected " + 
             expected + ", Got " + buffer);
     }
     delete df;

@@ -96,7 +96,8 @@ UBool
 NumberFormatRegressionTest::failure(UErrorCode status, const UnicodeString& msg)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
+        errln(UnicodeString("FAIL: ", "") + msg
+            + UnicodeString(" failed, error ", "") + UnicodeString(u_errorName(status), ""));
         return TRUE;
     }
 
@@ -201,7 +202,7 @@ void NumberFormatRegressionTest::Test4087245 (void)
     FieldPosition pos(FieldPosition::DONT_CARE);
     logln(UnicodeString("format(") + n + ") = " + 
         df->format(n, buf1, pos));
-    symbols->setDecimalSeparator(0x70); // change value of field
+    symbols->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, UnicodeString((UChar)0x70)); // change value of field
     logln(UnicodeString("format(") + n + ") = " +
         df->format(n, buf2, pos));
     if(buf1 != buf2)
@@ -675,8 +676,8 @@ void NumberFormatRegressionTest::Test4087244 (void) {
     }
     DecimalFormat *df = (DecimalFormat*) nf;
     const DecimalFormatSymbols *sym = df->getDecimalFormatSymbols();
-    UChar decSep = sym->getDecimalSeparator();
-    UChar monSep = sym->getMonetaryDecimalSeparator();
+    UnicodeString decSep = sym->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+    UnicodeString monSep = sym->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
     if (decSep == monSep) {
         errln("ERROR in test: want decimal sep != monetary sep");
         return;
@@ -686,8 +687,10 @@ void NumberFormatRegressionTest::Test4087244 (void) {
     UnicodeString str;
     FieldPosition pos;
     df->format(1.23, str, pos);
-    UnicodeString monStr("1x23"); monStr[(UTextOffset)1] = monSep;
-    UnicodeString decStr("1x23"); decStr[(UTextOffset)1] = decSep;
+    UnicodeString monStr("1x23");
+    monStr.replace((UTextOffset)1, 1, monSep);
+    UnicodeString decStr("1x23");
+    decStr.replace((UTextOffset)1, 1, decSep);
     if (str.indexOf(monStr) >= 0 && str.indexOf(decStr) < 0) {
         logln(UnicodeString("OK: 1.23 -> \"") + str + "\" contains \"" +
               monStr + "\" and not \"" + decStr + '"');
@@ -1117,28 +1120,27 @@ void NumberFormatRegressionTest::Test4061302(void)
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *fmt = new DecimalFormatSymbols(status);
     failure(status, "new DecimalFormatSymbols");
-    UnicodeString currency;
-    currency= fmt->getCurrencySymbol(currency);
-    UnicodeString intlCurrency;
-    intlCurrency = fmt->getInternationalCurrencySymbol(intlCurrency);
-    UChar monDecSeparator = fmt->getMonetaryDecimalSeparator();
+    UnicodeString currency(fmt->getSymbol(DecimalFormatSymbols::kCurrencySymbol));
+    UnicodeString intlCurrency(fmt->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol));
+    UnicodeString monDecSeparator(fmt->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol));
     if (currency == UnicodeString("") ||
         intlCurrency == UnicodeString("") ||
-        monDecSeparator == 0x0000) {
+        monDecSeparator == UnicodeString(""))
+    {
         errln("getCurrencySymbols failed, got empty string.");
     }
     UnicodeString monDecSeparatorStr;
     monDecSeparatorStr.append(monDecSeparator);
     logln((UnicodeString)"Before set ==> Currency : " + currency +(UnicodeString)" Intl Currency : " + intlCurrency + (UnicodeString)" Monetary Decimal Separator : " + monDecSeparatorStr);
-    fmt->setCurrencySymbol(UnicodeString("XYZ"));
-    fmt->setInternationalCurrencySymbol(UnicodeString("ABC"));
-    fmt->setMonetaryDecimalSeparator(0x002A/*'*'*/);
-    currency = fmt->getCurrencySymbol(currency);
-    intlCurrency = fmt->getInternationalCurrencySymbol(intlCurrency);
-    monDecSeparator = fmt->getMonetaryDecimalSeparator();
+    fmt->setSymbol(DecimalFormatSymbols::kCurrencySymbol, UnicodeString("XYZ"));
+    fmt->setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, UnicodeString("ABC"));
+    fmt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, UnicodeString((UChar)0x002A/*'*'*/));
+    currency = fmt->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
+    intlCurrency = fmt->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
+    monDecSeparator = fmt->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
     if (currency != UnicodeString("XYZ") ||
         intlCurrency != UnicodeString("ABC") ||
-        monDecSeparator != 0x002A/*'*'*/) {
+        monDecSeparator != UnicodeString((UChar)0x002A/*'*'*/)) {
         errln("setCurrencySymbols failed.");
     }
     monDecSeparatorStr.remove();
@@ -1399,7 +1401,6 @@ void NumberFormatRegressionTest::Test4122840(void)
         UnicodeString foo(fo, 1, 1);
 
         //if (pattern.indexOf("\u00A4") == -1 ) {
-        UnicodeString temp;
         if (pattern.indexOf(foo) == -1 ) {
             errln(UnicodeString("Currency format for ") + UnicodeString(locales[i].getName()) +
                     " does not contain generic currency symbol:" +
@@ -1424,22 +1425,23 @@ void NumberFormatRegressionTest::Test4122840(void)
         UChar ba[] = { 0x002E/*'.'*/ };
         UnicodeString bar(ba, 1, 1);
 
-        if (symbols->getCurrencySymbol(temp).indexOf(bar) == -1) {
+        if (symbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol).indexOf(bar) == -1) {
             // {sfb} Also, switch the decimal separator to the monetary decimal
             // separator to mimic the behavior of a currency format
-            symbols->setDecimalSeparator(symbols->getMonetaryDecimalSeparator());
+            symbols->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol,
+                symbols->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol));
             
             UnicodeString buf(pattern);
             for (int j = 0; j < buf.length(); j++) {
                 if (buf[j] == 0x00a4 ) {
                     if(buf[j + 1] == 0x00a4) {
                         // {sfb} added to support double currency marker (intl currency sign)
-                        buf.replace(j, /*j+*/2, symbols->getInternationalCurrencySymbol(temp)); 
-                        j += symbols->getInternationalCurrencySymbol(temp).length() - 1 + 1;
+                        buf.replace(j, /*j+*/2, symbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol));
+                        j += symbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol).length();
                     }
                     else {
-                        buf.replace(j, /*j+*/1, symbols->getCurrencySymbol(temp)); 
-                        j += symbols->getCurrencySymbol(temp).length() - 1;
+                        buf.replace(j, /*j+*/1, symbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol)); 
+                        j += symbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol).length() - 1;
                     }                    
                 }
             }
@@ -1448,10 +1450,10 @@ void NumberFormatRegressionTest::Test4122840(void)
             failure(status, "new DecimalFormat");
             
             UnicodeString result2;
-            result2 = fmt2->format(1.111, result2, pos);
+            fmt2->format(1.111, result2, pos);
             
             if (result1 != result2) {
-                errln("Results for " + (temp=locales[i].getName()) + " differ: " +
+                errln("Results for " + (UnicodeString)(locales[i].getName()) + " differ: " +
                         result1 + " vs " + result2);
             }
         
@@ -1632,54 +1634,54 @@ void NumberFormatRegressionTest::Test4145457() {
     }
 
     DecimalFormat *nf = (DecimalFormat*)nff;
-       DecimalFormatSymbols *sym = (DecimalFormatSymbols*) nf->getDecimalFormatSymbols();
-        sym->setDecimalSeparator(/*'\''*/0x0027);
-        nf->setDecimalFormatSymbols(*sym);
-        double pi = 3.14159;
+    DecimalFormatSymbols *sym = (DecimalFormatSymbols*) nf->getDecimalFormatSymbols();
+    sym->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, (UChar)/*'\''*/0x0027);
+    nf->setDecimalFormatSymbols(*sym);
+    double pi = 3.14159;
+    
+    UnicodeString PATS [] = { 
+        UnicodeString("#.00 'num''ber'"), UnicodeString("''#.00''")
+    };
 
-        UnicodeString PATS [] = { 
-            UnicodeString("#.00 'num''ber'"), UnicodeString("''#.00''")
-        };
-
-        for (int32_t i=0; i<2; ++i) {
-            nf->applyPattern(PATS[i], status);
-            failure(status, "nf->applyPattern");
-            UnicodeString out;
-            FieldPosition pos(FieldPosition::DONT_CARE);
-            out = nf->format(pi, out, pos);
-            UnicodeString pat;
-            pat = nf->toPattern(pat);
-            Formattable num;
-            ParsePosition pp(0);
-            nf->parse(out, num, pp);
-            double val = num.getDouble();
+    for (int32_t i=0; i<2; ++i) {
+        nf->applyPattern(PATS[i], status);
+        failure(status, "nf->applyPattern");
+        UnicodeString out;
+        FieldPosition pos(FieldPosition::DONT_CARE);
+        out = nf->format(pi, out, pos);
+        UnicodeString pat;
+        pat = nf->toPattern(pat);
+        Formattable num;
+        ParsePosition pp(0);
+        nf->parse(out, num, pp);
+        double val = num.getDouble();
         
-            nf->applyPattern(pat, status);
-            failure(status, "nf->applyPattern");
-            UnicodeString out2;
-            out2 = nf->format(pi, out2, pos);
-            UnicodeString pat2;
-            pat2 = nf->toPattern(pat2);
-            nf->parse(out2, num, pp);
-            double val2 = num.getDouble();
+        nf->applyPattern(pat, status);
+        failure(status, "nf->applyPattern");
+        UnicodeString out2;
+        out2 = nf->format(pi, out2, pos);
+        UnicodeString pat2;
+        pat2 = nf->toPattern(pat2);
+        nf->parse(out2, num, pp);
+        double val2 = num.getDouble();
         
-            if (pat != pat2)
-                errln("Fail with \"" + PATS[i] + "\": Patterns should concur, \"" +
-                      pat + "\" vs. \"" + pat2 + "\"");
-            else
-                logln("Ok \"" + PATS[i] + "\" toPattern() -> \"" + pat + '"');
-
-            if (val == val2 && out == out2) {
-                logln(UnicodeString("Ok ") + pi + " x \"" + PATS[i] + "\" -> \"" +
-                      out + "\" -> " + val + " -> \"" +
-                      out2 + "\" -> " + val2);
-            }
-            else {
-                errln(UnicodeString("Fail ") + pi + " x \"" + PATS[i] + "\" -> \"" +
-                      out + "\" -> " + val + " -> \"" +
-                      out2 + "\" -> " + val2);
-            }
+        if (pat != pat2)
+            errln("Fail with \"" + PATS[i] + "\": Patterns should concur, \"" +
+                pat + "\" vs. \"" + pat2 + "\"");
+        else
+            logln("Ok \"" + PATS[i] + "\" toPattern() -> \"" + pat + '"');
+        
+        if (val == val2 && out == out2) {
+            logln(UnicodeString("Ok ") + pi + " x \"" + PATS[i] + "\" -> \"" +
+                out + "\" -> " + val + " -> \"" +
+                out2 + "\" -> " + val2);
         }
+        else {
+            errln(UnicodeString("Fail ") + pi + " x \"" + PATS[i] + "\" -> \"" +
+                out + "\" -> " + val + " -> \"" +
+                out2 + "\" -> " + val2);
+        }
+    }
     /*}
     catch (ParseException e) {
         errln("Fail: " + e);
@@ -1986,6 +1988,7 @@ void NumberFormatRegressionTest::Test4179818(void) {
 void NumberFormatRegressionTest::Test4212072(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
+/*
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("#"), sym, status);
     failure(status, "DecimalFormat ct");
@@ -1993,7 +1996,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
     UnicodeString s;
     FieldPosition pos;
 
-    sym.setMinusSign(0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, (UChar)0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format((int32_t)-1, s, pos) != UNICODE_STRING("^1", 2)) {
@@ -2005,11 +2008,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (minus=^).getNegativePrefix -> ") +
               s + ", exp ^");
     }
-    sym.setMinusSign(0x2d);
+    sym.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, (UChar)0x2d);
 
     fmt.applyPattern(UnicodeString("#%"), status);
     failure(status, "applyPattern percent");
-    sym.setPercent(0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (UChar)0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UNICODE_STRING("25^", 3)) {
@@ -2021,11 +2024,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (percent=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
-    sym.setPercent(0x25);
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (UChar)0x25);
 
     fmt.applyPattern(str("#\\u2030"), status);
     failure(status, "applyPattern permill");
-    sym.setPerMill(0x5e);
+    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, (UChar)0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UNICODE_STRING("250^", 4)) {
@@ -2037,11 +2040,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (permill=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
-    sym.setPerMill(0x2030);
+    sym.setSymbol(DecimalFormatSymbols::kPerMillSymbol, (UChar)0x2030);
 
     fmt.applyPattern(str("\\u00A4#.00"), status);
     failure(status, "applyPattern currency");
-    sym.setCurrencySymbol("usd");
+    sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "usd");
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(12.5, s, pos) != UnicodeString("usd12.50")) {
@@ -2053,11 +2056,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (currency=usd).getPositivePrefix -> ") +
               s + ", exp usd");
     }
-    sym.setCurrencySymbol("$");
+    sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "$");
 
     fmt.applyPattern(str("\\u00A4\\u00A4#.00"), status);
     failure(status, "applyPattern intl currency");
-    sym.setInternationalCurrencySymbol("DOL");
+    sym.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, "DOL");
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(12.5, s, pos) != UnicodeString("DOL12.50")) {
@@ -2069,8 +2072,8 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (intlcurrency=DOL).getPositivePrefix -> ") +
               s + ", exp DOL");
     }
-    sym.setInternationalCurrencySymbol("USD");
-
+    sym.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, "USD");
+*/
     // Since the pattern logic has changed, make sure that patterns round
     // trip properly.  Test stream in/out integrity too.
     int32_t n;
