@@ -93,17 +93,6 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1} // MILLISECONDS_IN_DAY
 };
 
-// These numbers are 2^52 - 1, the largest allowable mantissa in a 64-bit double
-// with a 0 exponent.  These are the absolute largest numbers for millis that
-// this calendar will handle reliably.  It will work for larger values, however.
-// The problem is that, once the exponent is not 0, the calendar will jump.
-// When translated into a year, LATEST_SUPPORTED_MILLIS corresponds to 144,683 AD 
-// and EARLIEST_SUPPORTED_MILLIS corresponds to 140,742 BC
-static const UDate EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
-static const UDate LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
-
-static const int32_t kGregorianShift = 10;// days  (TODO: make this handle non-1582 cutover)
-static const int32_t kGregorianWeekShift = 2;// weeks
 /*
  * <pre>
  *                            Greatest       Least 
@@ -333,7 +322,7 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
     // normalized cutover is in pure date milliseconds; it contains no time
     // of day or timezone component, and it used to compare against other
     // pure date values.
-    int32_t cutoverDay = (int32_t)Math::floorDivide(fGregorianCutover, kOneDay);
+    int32_t cutoverDay = (int32_t)Math::floorDivide(fGregorianCutover, (double)kOneDay);
     fNormalizedGregorianCutover = cutoverDay * kOneDay;
 
     // Handle the rare case of numeric overflow.  If the user specifies a
@@ -427,8 +416,7 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
   // [j81] if we are after the cutover in its year, shift the day of the year
   if((eyear == fGregorianCutoverYear) && (julianDay >= fCutoverJulianDay)) {
     //from handleComputeMonthStart
-    int32_t y = eyear-1;
-    int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+    int32_t gregShift = Grego::gregorianShift(eyear);
 #if defined (U_DEBUG_CAL)
     fprintf(stderr, "%s:%d:  gregorian shift %d :::  doy%d => %d [cut=%d]\n",
             __FILE__, __LINE__,gregShift, dayOfYear, dayOfYear+gregShift, fCutoverJulianDay);
@@ -510,8 +498,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)
   }
   
   if(fIsGregorian && (internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear)) {
-    int32_t y = internalGet(UCAL_EXTENDED_YEAR)-1;
-    int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+    int32_t gregShift = Grego::gregorianShift(internalGet(UCAL_EXTENDED_YEAR));
     if (bestField == UCAL_DAY_OF_YEAR) {
 #if defined (U_DEBUG_CAL)
       fprintf(stderr, "%s:%d: [DOY%d] gregorian shift of JD %d += %d\n", 
@@ -544,7 +531,7 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     }
 
     UBool isLeap = eyear%4 == 0;
-    int32_t y = eyear - 1;
+    int32_t y = eyear-1;
     int32_t julianDay = 365*y + Math::floorDivide(y, 4) + (kJan1_1JulianDay - 3);
 
     nonConstThis->fIsGregorian = (eyear >= fGregorianCutoverYear);
@@ -559,7 +546,7 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
         isLeap = isLeap && ((eyear%100 != 0) || (eyear%400 == 0));
         // Add 2 because Gregorian calendar starts 2 days after
         // Julian calendar
-        int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+        int32_t gregShift = Grego::gregorianShift(eyear);
 #if defined (U_DEBUG_CAL)
         fprintf(stderr, "%s:%d: (hcms%d/%d) gregorian shift of %d += %d\n", 
                 __FILE__, __LINE__, eyear, month, julianDay, gregShift);
@@ -719,7 +706,7 @@ double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
     if (isGregorian) {
         isLeap = isLeap && ((year%100 != 0) || (year%400 == 0));
         // Add 2 because Gregorian calendar starts 2 days after Julian calendar
-        julianDay += Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+        julianDay += Grego::gregorianShift(year);
     }
 
     return julianDay;
@@ -783,7 +770,7 @@ double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
 double 
 GregorianCalendar::millisToJulianDay(UDate millis)
 {
-    return (double)kEpochStartAsJulianDay + Math::floorDivide(millis, kOneDay);
+    return (double)kEpochStartAsJulianDay + Math::floorDivide(millis, (double)kOneDay);
 }
 
 // -------------------------------------
@@ -1066,15 +1053,13 @@ int32_t GregorianCalendar::getActualMinimum(UCalendarDateFields field) const
 
 // ------------------------------------
 
-
-
 /**
   * Old year limits were least max 292269054, max 292278994.
   */
 
 /**
-    * @stable ICU 2.0
-    */
+ * @stable ICU 2.0
+ */
 int32_t GregorianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
     return kGregorianCalendarLimits[field][limitType];
 }
