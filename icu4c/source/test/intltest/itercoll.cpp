@@ -4,6 +4,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "cmemory.h"
+
 #ifndef _COLL
 #include "unicode/coll.h"
 #endif
@@ -501,7 +503,7 @@ int32_t *CollationIteratorTest::getOrders(CollationElementIterator &iter, int32_
             maxSize *= 2;
             int32_t *temp = new int32_t[maxSize];
 
-            memcpy(temp, orders, size * sizeof(int32_t));
+            uprv_memcpy(temp, orders, size * sizeof(int32_t));
             delete[] orders;
             orders = temp;
         }

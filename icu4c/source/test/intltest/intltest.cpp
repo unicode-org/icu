@@ -12,7 +12,6 @@
 
 
 #include <limits.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -451,7 +450,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
 const char*
 IntlTest::getTestDirectory()
 {
-       if (_testDirectory == NULL) 
+    if (_testDirectory == NULL) 
     {
 #if defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
       setTestDirectory("source|test|testdata|");
@@ -468,8 +467,8 @@ IntlTest::setTestDirectory(const char* newDir)
     char newTestDir[256];
     IntlTest::pathnameInContext(newTestDir, sizeof(newTestDir), newDir); 
     if(_testDirectory != NULL)
-        free(_testDirectory);
-    _testDirectory = (char*) malloc(sizeof(char) * (strlen(newTestDir) + 1));
+        delete _testDirectory;
+    _testDirectory = new char[strlen(newTestDir) + 1];
     strcpy(_testDirectory, newTestDir);
 }
 
