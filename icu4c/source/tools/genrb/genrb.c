@@ -284,7 +284,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName), status);
     }
     if (U_FAILURE(*status)) {
-        fprintf(stderr, "couldn't write bundle %s\n", outputFileName);
+        fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName,u_errorName(*status));
     }
     bundle_close(data, status);
 
