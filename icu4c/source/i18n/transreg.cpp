@@ -499,6 +499,7 @@ void TransliteratorRegistry::remove(const UnicodeString& ID) {
 //----------------------------------------------------------------------
 
 /**
+ * == OBSOLETE - remove in ICU 3.4 ==
  * Return the number of IDs currently registered with the system.
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
@@ -508,6 +509,7 @@ int32_t TransliteratorRegistry::countAvailableIDs(void) {
 }
 
 /**
+ * == OBSOLETE - remove in ICU 3.4 ==
  * Return the index-th available ID.  index must be between 0
  * and countAvailableIDs() - 1, inclusive.  If index is out of
  * range, the result of getAvailableID(0) is returned.
@@ -517,6 +519,10 @@ const UnicodeString& TransliteratorRegistry::getAvailableID(int32_t index) {
         index = 0;
     }
     return *(const UnicodeString*) availableIDs[index];
+}
+
+StringEnumeration* TransliteratorRegistry::getAvailableIDs() {
+    return new Enumeration(*this);
 }
 
 int32_t TransliteratorRegistry::countAvailableSources(void) {
@@ -603,6 +609,54 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
     }
     return result;
 }
+
+//----------------------------------------------------------------------
+// class TransliteratorRegistry::Enumeration
+//----------------------------------------------------------------------
+
+TransliteratorRegistry::Enumeration::Enumeration(TransliteratorRegistry& _reg) :
+    reg(_reg), index(0) {
+}
+
+TransliteratorRegistry::Enumeration::~Enumeration() {
+}
+
+int32_t TransliteratorRegistry::Enumeration::count(UErrorCode& status) const {
+    return reg.availableIDs.size();
+}
+
+const UnicodeString* TransliteratorRegistry::Enumeration::snext(UErrorCode& status) {
+    // This is sloppy but safe -- if we get out of sync with the underlying
+    // registry, we will still return legal strings, but they might not
+    // correspond to the snapshot at construction time.  So there could be
+    // duplicate IDs or omitted IDs if insertions or deletions occur in one
+    // thread while another is iterating.  To be more rigorous, add a timestamp,
+    // which is incremented with any modification, and validate this iterator
+    // against the timestamp at construction time.  This probably isn't worth
+    // doing as long as there is some possibility of removing this code in favor
+    // of some new code based on Doug's service framework.
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    int32_t n = reg.availableIDs.size();
+    if (index > n) {
+        status = U_ENUM_OUT_OF_SYNC_ERROR;
+    }
+    // index == n is okay -- this means we've reached the end
+    if (index < n) {
+        // Copy the string! This avoids lifetime problems.
+        unistr = *(const UnicodeString*)reg.availableIDs[index++];
+        return &unistr;
+    } else {
+        return NULL;
+    }
+}
+
+void TransliteratorRegistry::Enumeration::reset(UErrorCode& status) {
+    index = 0;
+}
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TransliteratorRegistry::Enumeration)
 
 //----------------------------------------------------------------------
 // class TransliteratorRegistry: internal
