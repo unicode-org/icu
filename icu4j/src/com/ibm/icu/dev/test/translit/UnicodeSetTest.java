@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -834,8 +834,8 @@ public class UnicodeSetTest extends TestFmwk {
             "x",
 
             "[:math=false:]",
-            "q",
-            "(*+)",
+            "q)*(", // )(and * were removed from math in Unicode 4.0.1
+            "+<>^",
 
             // JB#1767 \N{}, \p{ASCII}
             "[:Ascii:]",

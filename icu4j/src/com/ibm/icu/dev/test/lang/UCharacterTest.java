@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -40,7 +40,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.0.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.0.1.0");
 
     // constructor ===================================================
 
@@ -572,6 +572,9 @@ public final class UCharacterTest extends TestFmwk
             while (ch != LASTUNICODECHAR)
             {
                 String s = input.readLine();
+                if(s.length()<4 || s.startsWith("#")) {
+                    continue;
+                }
                 // geting the unicode character, its type and its direction
                 ch = Integer.parseInt(s.substring(0, 4), 16);
                 index = s.indexOf(';', 5);
@@ -1280,6 +1283,7 @@ public final class UCharacterTest extends TestFmwk
     {
         int limit     = 0;
         int prevtype  = -1;
+        int shouldBeDir;
         int test[][]={{0x41, UCharacterCategory.UPPERCASE_LETTER},
                         {0x308, UCharacterCategory.NON_SPACING_MARK},
                         {0xfffe, UCharacterCategory.GENERAL_OTHER_TYPES},
@@ -1359,8 +1363,20 @@ public final class UCharacterTest extends TestFmwk
 
             /*
              * Verify default Bidi classes.
+             * For recent Unicode versions, see UCD.html.
+             *
+             * For older Unicode versions:
              * See table 3-7 "Bidirectional Character Types" in UAX #9.
              * http://www.unicode.org/reports/tr9/
+             *
+             * See also DerivedBidiClass.txt for Cn code points!
+             *
+             * Unicode 4.0.1/Public Review Issue #28 (http://www.unicode.org/review/resolved-pri.html)
+             * changed some default values.
+             * In particular, non-characters and unassigned Default Ignorable Code Points
+             * change from L to BN.
+             *
+             * UCD.html version 4.0.1 does not yet reflect these changes.
              */
             if (result.value == UCharacterCategory.UNASSIGNED
                 || result.value == UCharacterCategory.PRIVATE_USE) {
@@ -1369,14 +1385,21 @@ public final class UCharacterTest extends TestFmwk
                      ++ i) {
                     if (c < defaultBidi[i][0]) {
                         while (c < result.limit && c < defaultBidi[i][0]) {
-                            if (UCharacter.getDirection(c) != defaultBidi[i][1]
+                            // TODO change to public UCharacter.isNonCharacter(c) once it's available
+                            if(com.ibm.icu.impl.UCharacterUtility.isNonCharacter(c) || UCharacter.hasBinaryProperty(c, UProperty.DEFAULT_IGNORABLE_CODE_POINT)) {
+                                shouldBeDir=UCharacter.BOUNDARY_NEUTRAL;
+                            } else {
+                                shouldBeDir=defaultBidi[i][1];
+                            }
+
+                            if (UCharacter.getDirection(c) != shouldBeDir
                                 || UCharacter.getIntPropertyValue(c,
                                                           UProperty.BIDI_CLASS)
-                                   != defaultBidi[i][1]) {
+                                   != shouldBeDir) {
                                 errln("error: getDirection(unassigned/PUA "
                                       + Integer.toHexString(c)
                                       + ") should be "
-                                      + defaultBidi[i][1]);
+                                      + shouldBeDir);
                             }
                             ++ c;
                         }
@@ -1514,7 +1537,7 @@ public final class UCharacterTest extends TestFmwk
 	         * The following properties are only supported starting with the
 	         * Unicode version indicated in the second field.
 	         */
-	        { -1, 0x32, 0 },
+	        { -1, 0x320, 0 },
 	
 	        { 0x180c, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 1 },
 	        { 0xfe02, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 1 },
@@ -1552,6 +1575,16 @@ public final class UCharacterTest extends TestFmwk
 	        { 0xfa11, UProperty.UNIFIED_IDEOGRAPH, 1 },
 	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH, 0 },
 	
+            { -1, 0x401, 0 },
+
+            { 0x002e, UProperty.S_TERM, 1 },
+            { 0x0061, UProperty.S_TERM, 0 },
+
+            { 0x180c, UProperty.VARIATION_SELECTOR, 1 },
+            { 0xfe03, UProperty.VARIATION_SELECTOR, 1 },
+            { 0xe01ef, UProperty.VARIATION_SELECTOR, 1 },
+            { 0xe0200, UProperty.VARIATION_SELECTOR, 0 },
+
 	        /* enum/integer type properties */
 	        /* test default Bidi classes for unassigned code points */
             { 0x0590, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
@@ -1731,9 +1764,10 @@ public final class UCharacterTest extends TestFmwk
         // test hasBinaryProperty()
         for (int i = 0; i < props.length; ++ i) {
             if (props[i][0] < 0) {
-                if (version.compareTo(VersionInfo.getInstance(props[i][1] >> 4,
+                if (version.compareTo(VersionInfo.getInstance(props[i][1] >> 8,
+                                                          (props[i][1] >> 4) & 0xF,
                                                           props[i][1] & 0xF,
-                                                          0, 0)) < 0) {
+                                                          0)) < 0) {
                     break;
                 }
                 continue;

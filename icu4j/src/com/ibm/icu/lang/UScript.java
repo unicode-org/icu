@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2003, International Business Machines Corporation and         *
+* Copyright (C) 2001-2004, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -316,12 +316,17 @@ public final class UScript {
      * @draft ICU 2.6 
      * */ 
    	public static final int UGARITIC	 = 53;  /* Ugar */ 
+    /**
+     * New script code in Unicode 4.0.1
+     * @draft ICU 3.0
+     */
+    public static final int KATAKANA_OR_HIRAGANA = 54;  /*Hrkt */
 
     /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 54;
+    public static final int CODE_LIMIT   = 55;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
