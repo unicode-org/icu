@@ -461,7 +461,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
-     * <em> Empties the set passed before applying the pattern.<em>
+     * <em> Empties the set passed before applying the pattern.</em>
      * @return a reference to this
      * @stable ICU 2.0
      */
@@ -479,7 +479,7 @@ public:
      * values and stand-ins to UnicodeSets; may be NULL
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
-     *<em> Empties the set passed before applying the pattern.<em>
+     *<em> Empties the set passed before applying the pattern.</em>
      * @return a reference to this
      * @internal
      */
@@ -498,7 +498,7 @@ public:
      * following the closing ']', and a StringBuffer containing a
      * pairs list for the parsed pattern is returned.  This method calls
      * itself recursively to parse embedded subpatterns.
-     *<em> Empties the set passed before applying the pattern.<em>
+     *<em> Empties the set passed before applying the pattern.</em>
      *
      * @param pattern the string containing the pattern to be parsed.
      * The portion of the string from pos.getIndex(), which must be a

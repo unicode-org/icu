@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2003}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
 *                                                                              *
 ********************************************************************************
 *
@@ -265,25 +265,26 @@ public:
      * allowing various types of rules to be constructed, as follows:<ul>
      *   <li>If both dayOfWeekInMonth and dayOfWeek are positive, they specify the
      *       day of week in the month (e.g., (2, WEDNESDAY) is the second Wednesday
-     *       of the month).
+     *       of the month).</li>
      *   <li>If dayOfWeek is positive and dayOfWeekInMonth is negative, they specify
      *       the day of week in the month counting backward from the end of the month.
-     *       (e.g., (-1, MONDAY) is the last Monday in the month)
+     *       (e.g., (-1, MONDAY) is the last Monday in the month)</li>
      *   <li>If dayOfWeek is zero and dayOfWeekInMonth is positive, dayOfWeekInMonth
      *       specifies the day of the month, regardless of what day of the week it is.
-     *       (e.g., (10, 0) is the tenth day of the month)
+     *       (e.g., (10, 0) is the tenth day of the month)</li>
      *   <li>If dayOfWeek is zero and dayOfWeekInMonth is negative, dayOfWeekInMonth
      *       specifies the day of the month counting backward from the end of the
      *       month, regardless of what day of the week it is (e.g., (-2, 0) is the
-     *       next-to-last day of the month).
+     *       next-to-last day of the month).</li>
      *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they specify the
      *       first specified day of the week on or after the specfied day of the month.
      *       (e.g., (15, -SUNDAY) is the first Sunday after the 15th of the month
-     *       [or the 15th itself if the 15th is a Sunday].)
+     *       [or the 15th itself if the 15th is a Sunday].)</li>
      *   <li>If dayOfWeek and DayOfWeekInMonth are both negative, they specify the
      *       last specified day of the week on or before the specified day of the month.
      *       (e.g., (-20, -TUESDAY) is the last Tuesday before the 20th of the month
-     *       [or the 20th itself if the 20th is a Tuesday].)</ul>
+     *       [or the 20th itself if the 20th is a Tuesday].)</li>
+     *   </ul>
      * @param month the daylight savings starting month. Month is 0-based.
      * eg, 0 for January.
      * @param dayOfWeekInMonth the daylight savings starting
@@ -307,25 +308,26 @@ public:
      * allowing various types of rules to be constructed, as follows:<ul>
      *   <li>If both dayOfWeekInMonth and dayOfWeek are positive, they specify the
      *       day of week in the month (e.g., (2, WEDNESDAY) is the second Wednesday
-     *       of the month).
+     *       of the month).</li>
      *   <li>If dayOfWeek is positive and dayOfWeekInMonth is negative, they specify
      *       the day of week in the month counting backward from the end of the month.
-     *       (e.g., (-1, MONDAY) is the last Monday in the month)
+     *       (e.g., (-1, MONDAY) is the last Monday in the month)</li>
      *   <li>If dayOfWeek is zero and dayOfWeekInMonth is positive, dayOfWeekInMonth
      *       specifies the day of the month, regardless of what day of the week it is.
-     *       (e.g., (10, 0) is the tenth day of the month)
+     *       (e.g., (10, 0) is the tenth day of the month)</li>
      *   <li>If dayOfWeek is zero and dayOfWeekInMonth is negative, dayOfWeekInMonth
      *       specifies the day of the month counting backward from the end of the
      *       month, regardless of what day of the week it is (e.g., (-2, 0) is the
-     *       next-to-last day of the month).
+     *       next-to-last day of the month).</li>
      *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they specify the
      *       first specified day of the week on or after the specfied day of the month.
      *       (e.g., (15, -SUNDAY) is the first Sunday after the 15th of the month
-     *       [or the 15th itself if the 15th is a Sunday].)
+     *       [or the 15th itself if the 15th is a Sunday].)</li>
      *   <li>If dayOfWeek and DayOfWeekInMonth are both negative, they specify the
      *       last specified day of the week on or before the specified day of the month.
      *       (e.g., (-20, -TUESDAY) is the last Tuesday before the 20th of the month
-     *       [or the 20th itself if the 20th is a Tuesday].)</ul>
+     *       [or the 20th itself if the 20th is a Tuesday].)</li>
+     *   </ul>
      * @param month the daylight savings starting month. Month is 0-based.
      * eg, 0 for January.
      * @param dayOfWeekInMonth the daylight savings starting
