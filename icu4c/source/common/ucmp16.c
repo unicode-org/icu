@@ -317,12 +317,20 @@ void ucmp16_expand(CompactShortArray* this_obj)
     {
       int32_t i;
       int16_t *tempArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
-      
+
+
       if (tempArray == NULL)
-    {
-      this_obj->fBogus = TRUE;
-      return;
-    }
+      {
+       this_obj->fBogus = TRUE;
+        return;
+      }
+
+      this_obj->fHashes =(int32_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(int32_t));
+      if (this_obj->fHashes == NULL)
+      {
+         this_obj->fBogus = TRUE;
+         return;
+      }
       
       for (i = 0; i < UCMP16_kUnicodeCount; i += 1)
     {
