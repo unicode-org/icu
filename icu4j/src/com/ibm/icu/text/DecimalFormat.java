@@ -1183,9 +1183,8 @@ public class DecimalFormat extends NumberFormat {
 
             // Determine whether or not there are any printable fractional
             // digits.  If we've used up the digits we know there aren't.
-            boolean fractionPresent = (getMinimumFractionDigits() > 0) ||
-                (!isInteger && digitIndex < digitList.count) ||
-                sigCount < minSigDig;
+            boolean fractionPresent = (!isInteger && digitIndex < digitList.count) ||
+                (useSigDig ? (sigCount < minSigDig) : (getMinimumFractionDigits() > 0));
 
             // If there is no fraction present, and we haven't printed any
             // integer digits, then print a zero.  Otherwise we won't print
