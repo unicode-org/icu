@@ -23,7 +23,7 @@
 #include "ucmndata.h"
 
 struct UDataMemory {
-    commonDataFuncs  *vFuncs;      /* Function Pointers for accessing TOC             */
+    const commonDataFuncs  *vFuncs;      /* Function Pointers for accessing TOC             */
 
     const DataHeader *pHeader;     /* Header of the memory being described by this    */
 								   /*   UDataMemory object.                           */
@@ -48,6 +48,6 @@ UBool            UDataMemory_isLoaded(UDataMemory *This);
 void             UDataMemory_setData (UDataMemory *This, const void *dataAddr);
 
 
-const DataHeader *normalizeDataPointer(const void *p);
+const DataHeader *UDataMemory_normalizeDataPointer(const void *p);
 #endif
 
