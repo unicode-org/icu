@@ -64,6 +64,7 @@ typedef struct {
 typedef const DataHeader *
 (* LookupFn)(const UDataMemory *pData,
              const char *tocEntryName,
+             int32_t *pLength,
              UErrorCode *pErrorCode);
 
 typedef uint32_t
