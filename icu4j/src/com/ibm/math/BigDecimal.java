@@ -1,4 +1,4 @@
-/* Generated from 'BigDecimal.nrx' 27 Mar 2000 22:38:05 [v1.162] */
+/* Generated from 'BigDecimal.nrx' 8 Sep 2000 11:10:50 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.math;
 import java.math.BigInteger;
@@ -99,6 +99,7 @@ import java.math.BigInteger;
 /* 1999.11.05 1.05 fix problem in intValueExact [e.g., 5555555555]    */
 /* 1999.12.22 1.06 remove multiply fastpath, and improve performance  */
 /* 2000.01.01      copyright update [Y2K has arrived]                 */
+/* 2000.06.18 1.08 no longer deprecate BigDecimal(double)             */
 /* ------------------------------------------------------------------ */
 
 
@@ -251,7 +252,7 @@ import java.math.BigInteger;
  * and <code>java.math.BigDecimal</code> in Java 1.1 and Java 1.2.
  *
  * @see     MathContext
- * @version 1.06 2000.01.01
+ * @version 1.08 2000.06.18
  * @author  Mike Cowlishaw
  */
 
@@ -792,29 +793,29 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * Constructs a <code>BigDecimal</code> object directly from a
   * <code>double</code>.
   * <p>
-  * Constructs a <code>BigDecimal</code> which is a decimal
+  * Constructs a <code>BigDecimal</code> which is the exact decimal
   * representation of the 64-bit signed binary floating point
   * parameter.
   * <p>
-  * This constructor is deprecated as it does not give the same result
-  * as converting <code>num</code> to a <code>String</code> using the
-  * <code>Double.toString()</code> method and then using the
-  * {@link #BigDecimal(java.lang.String)} constructor.
-  * <p>
-  * <i>Recommendation:</i> Use the static {@link #valueOf(double)}
+  * Note that this constructor it an exact conversion; it does not give
+  * the same result as converting <code>num</code> to a
+  * <code>String</code> using the <code>Double.toString()</code> method
+  * and then using the {@link #BigDecimal(java.lang.String)}
+  * constructor.
+  * To get that result, use the static {@link #valueOf(double)}
   * method to construct a <code>BigDecimal</code> from a
   * <code>double</code>.
   *
   * @param num The <code>double</code> to be converted.
   * @throws NumberFormatException if the parameter is infinite or
   *            not a number.
-  * @deprecated
   */
  
  public BigDecimal(double num){
   // 1999.03.06: use exactly the old algorithm
   // 2000.01.01: note that this constructor does give an exact result,
   //             so perhaps it should not be deprecated
+  // 2000.06.18: no longer deprecated
   this((new java.math.BigDecimal(num)).toString());
   return;}
 
@@ -2509,7 +2510,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // checking the rounding mode is done by trying to construct a
   // MathContext object with that mode; it will fail if bad
   if (exround!=ROUND_HALF_UP) 
-   try{ // if non-default...
+   {try{ // if non-default...
     if (exround==(-1)) 
      exround=ROUND_HALF_UP;
     else 
@@ -2517,7 +2518,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    }
    catch (java.lang.IllegalArgumentException $10){
     badarg("format",6,java.lang.String.valueOf(exround));
-   }
+   }}
   
   num=clone(this); // make private copy
   

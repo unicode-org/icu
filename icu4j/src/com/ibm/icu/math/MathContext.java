@@ -1,4 +1,4 @@
-/* Generated from 'MathContext.nrx' 27 Mar 2000 22:37:33 [v1.162] */
+/* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.math;
 
@@ -73,7 +73,7 @@ package com.ibm.math;
  * <code>BigDecimal</code>.
  *
  * @see     BigDecimal
- * @version 1.06 2000.01.01
+ * @version 1.08 2000.06.18
  * @author  Mike Cowlishaw
  */
 
