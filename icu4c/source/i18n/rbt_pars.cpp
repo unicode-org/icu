@@ -180,8 +180,7 @@ public:
      * the END_OF_RULE character, or an operator.  Return
      * the pos of the terminating character (or limit).
      */
-    int32_t parse(const UnicodeString& rule, int32_t pos, int32_t limit,
-                  TransliterationRuleParser& parser);
+    int32_t parse(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
      * Remove context.
@@ -205,6 +204,18 @@ private:
     RuleHalf& operator=(const RuleHalf&);
 };
 
+// Store int32_t as a void* in a UVector.  DO NOT ASSUME sizeof(void*)
+// is 32.  Assume sizeof(void*) >= 32.
+inline void* _int32_to_voidPtr(int32_t x) {
+    void* a = 0; // May be > 32 bits
+    *(int32_t*)&a = x; // Careful here...
+    return a;
+}
+inline int32_t _voidPtr_to_int32(void* x) {
+    void* a = x; // Copy to stack (portability)
+    return *(int32_t*)&a; // Careful here...
+}
+
 const UnicodeString RuleHalf::gOperators = OPERATORS;
 
 RuleHalf::RuleHalf(TransliterationRuleParser& p) : parser(p) {
@@ -226,8 +237,7 @@ RuleHalf::~RuleHalf() {
  * the END_OF_RULE character, or an operator.  Return
  * the pos of the terminating character (or limit).
  */
-int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
-              TransliterationRuleParser& parser) {
+int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     int32_t start = pos;
     UnicodeString& buf = text;
     ParsePosition pp;
@@ -316,7 +326,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
                 return syntaxError(RuleBasedTransliterator::MISMATCHED_SEGMENT_DELIMITERS,
                                    rule, start);
             }
-            segments->addElement((void*) buf.length());
+            segments->addElement(_int32_to_voidPtr(buf.length()));
             break;
         case END_OF_RULE:
             --pos; // Backup to point to END_OF_RULE
@@ -464,7 +474,7 @@ int32_t* RuleHalf::createSegments() const {
     int32_t len = segments->size();
     int32_t* result = new int32_t[len + 1];
     for (int32_t i=0; i<len; ++i) {
-        result[i] = (int32_t) segments->elementAt(i);
+        result[i] = _voidPtr_to_int32(segments->elementAt(i));
     }
     result[len] = -1; // end marker
     return result;
@@ -598,7 +608,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     RuleHalf* right = &_right;
 
     undefinedVariableName.remove();
-    pos = left->parse(rule, pos, limit, *this);
+    pos = left->parse(rule, pos, limit);
     if (U_FAILURE(status)) {
         return start;
     }
@@ -615,7 +625,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
         op = FWDREV_RULE_OP;
     }
 
-    pos = right->parse(rule, pos, limit, *this);
+    pos = right->parse(rule, pos, limit);
     if (U_FAILURE(status)) {
         return start;
     }
