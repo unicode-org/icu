@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Jamo.java,v $ 
- * $Date: 2000/04/27 22:17:47 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/04/27 22:28:47 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -30,14 +30,16 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
               // following line used to read "..$medial$final]"
               // assume this was a typo - liu
   + "$consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ$initial$final];"
-  + "$ye=[yeYE];"
-  + "$ywe=[yweYWE];"
-  + "$yw=[ywYW];"
-  + "$nl=[nlNL];"
-  + "$gnl=[gnlGNL];"
-  + "$lsgb=[lsgbLSGB];"
-  + "$ywao=[ywaoYWAO];"
-  + "$bl=[blBL];"
+  + "$_ye=[yeYE];"
+  + "$_ywe=[yweYWE];"
+  + "$_yw=[ywYW];"
+  + "$_nl=[nlNL];"
+  + "$_gnl=[gnlGNL];"
+  + "$_lsgb=[lsgbLSGB];"
+  + "$_ywao=[ywaoYWAO];"
+  + "$_bl=[blBL];"
+
+              + "$ieung = \u110b;"
 
   // RULES
 
@@ -62,8 +64,8 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
 
   // special insertion for funny sequences of vowels, and for empty consonant
 
-  + "'' < $consonant{\u110B;" // insert a break between any consonant and the empty consonant.
-  + "$medial{}$vowel<>\u110B;"  // HANGUL CHOSEONG IEUNG
+  + "'' < $consonant{$ieung;" // insert a break between any consonant and the empty consonant.
+  + "$medial{}$vowel<>$ieung;"  // HANGUL CHOSEONG IEUNG
   
   // Below, insert an empty consonant in front of a vowel, if there is no Initial in front.
   
@@ -79,7 +81,7 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   // We don't have to add titlecase, since that will be picked up
   // since the first letter is converted, then revisited. E.g.
   // |Gg => |gg => {sang kiyeok}
-  // We do have to have all caps, since otherwise we could get:
+  // We do have to list multiple char strings explicitly, since otherwise we could get:
   // |GG => |gG => {kiyeok}|G => {kiyeok}|g => {kiyeok}{kiyeok}
 
   + "Z > |z;"
@@ -147,35 +149,35 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   // LAST of a digraph (or multigraph) AND first of an initial
 
   + "'' < l{ }\u11c0;"      // hangul jongseong thieuth
-  + "'' < $lsgb{}\u11ba;" // hangul jongseong sios
+  + "'' < $_lsgb{}\u11ba;" // hangul jongseong sios
   + "'' < l{ }\u11c1;"      // hangul jongseong phieuph
   + "'' < l{ }\u11b7;"      // hangul jongseong mieum
   + "'' < n{ }\u11bd;"      // hangul jongseong cieuc
-  + "'' < $nl{}\u11c2;"   // hangul jongseong hieuh
-  + "'' < $gnl{}\u11a9;"  // hangul jongseong ssangkiyeok
-  + "'' < $bl{}\u11b8;"   // hangul jongseong pieup
+  + "'' < $_nl{}\u11c2;"   // hangul jongseong hieuh
+  + "'' < $_gnl{}\u11a9;"  // hangul jongseong ssangkiyeok
+  + "'' < $_bl{}\u11b8;"   // hangul jongseong pieup
   + "'' < d{ }\u11ae;"      // hangul jongseong tikeut
   
-  + "'' < $ye{}\u116e;"   // hangul jungseong u
-  + "'' < $ywe{}\u1169;"  // hangul jungseong o
-  + "'' < $yw{}\u1175;"   // hangul jungseong i
-  + "'' < $ywao{}\u1166;" // hangul jungseong e
-  + "'' < $yw{}\u1161;"   // hangul jungseong a
+  + "'' < $_ye{}\u116e;"   // hangul jungseong u
+  + "'' < $_ywe{}\u1169;"  // hangul jungseong o
+  + "'' < $_yw{}\u1175;"   // hangul jungseong i
+  + "'' < $_ywao{}\u1166;" // hangul jungseong e
+  + "'' < $_yw{}\u1161;"   // hangul jungseong a
   
   + "'' < l{ }\u1110;"      // hangul choseong thieuth
-  + "'' < $lsgb{}\u110a;" // hangul choseong ssangsios
-  + "'' < $lsgb{}\u1109;" // hangul choseong sios
+  + "'' < $_lsgb{}\u110a;" // hangul choseong ssangsios
+  + "'' < $_lsgb{}\u1109;" // hangul choseong sios
   + "'' < l{ }\u1111;"      // hangul choseong phieuph
   + "'' < l{ }\u1106;"      // hangul choseong mieum
   + "'' < n{ }\u110c;"      // hangul choseong cieuc
   + "'' < n{ }\u110d;"
-  + "'' < $nl{}\u1112;"   // hangul choseong hieuh
-  + "'' < $gnl{}\u1101;"  // hangul choseong ssangkiyeok
-  + "'' < $gnl{}\u1100;"  // hangul choseong kiyeok
+  + "'' < $_nl{}\u1112;"   // hangul choseong hieuh
+  + "'' < $_gnl{}\u1101;"  // hangul choseong ssangkiyeok
+  + "'' < $_gnl{}\u1100;"  // hangul choseong kiyeok
   + "'' < d{ }\u1103;"      // hangul choseong tikeut
   + "'' < d{ }\u1104;"
-  + "'' < $bl{}\u1107;"   // hangul choseong pieup
-  + "'' < $bl{}\u1108;"
+  + "'' < $_bl{}\u1107;"   // hangul choseong pieup
+  + "'' < $_bl{}\u1108;"
 
   // INITIALS
 
@@ -253,27 +255,27 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   
   // MEDIALS (vowels) not after INITIALs
   
-  + "yu > \u110B\u1172;"   // hangul jungseong yu
-  + "yo > \u110B\u116d;"   // hangul jungseong yo
-  + "yi > \u110B\u1174;"   // hangul jungseong yi
-  + "yeo > \u110B\u1167;"  // hangul jungseong yeo
-  + "ye > \u110B\u1168;"   // hangul jungseong ye
-  + "yae > \u110B\u1164;"  // hangul jungseong yae
-  + "ya > \u110B\u1163;"   // hangul jungseong ya
-  + "wi > \u110B\u1171;"   // hangul jungseong wi
-  + "weo > \u110B\u116f;"  // hangul jungseong weo
-  + "we > \u110B\u1170;"   // hangul jungseong we
-  + "wae > \u110B\u116b;"  // hangul jungseong wae
-  + "wa > \u110B\u116a;"   // hangul jungseong wa
-  + "u > \u110B\u116e;"    // hangul jungseong u
-  + "oe > \u110B\u116c;"   // hangul jungseong oe
-  + "o > \u110B\u1169;"    // hangul jungseong o
-  + "i > \u110B\u1175;"    // hangul jungseong i
-  + "eu > \u110B\u1173;"   // hangul jungseong eu
-  + "eo > \u110B\u1165;"   // hangul jungseong eo
-  + "e > \u110B\u1166;"    // hangul jungseong e
-  + "ae > \u110B\u1162;"   // hangul jungseong ae
-  + "a > \u110B\u1161;"    // hangul jungseong a
+  + "yu > $ieung \u1172;"   // hangul jungseong yu
+  + "yo > $ieung \u116d;"   // hangul jungseong yo
+  + "yi > $ieung \u1174;"   // hangul jungseong yi
+  + "yeo > $ieung \u1167;"  // hangul jungseong yeo
+  + "ye > $ieung \u1168;"   // hangul jungseong ye
+  + "yae > $ieung \u1164;"  // hangul jungseong yae
+  + "ya > $ieung \u1163;"   // hangul jungseong ya
+  + "wi > $ieung \u1171;"   // hangul jungseong wi
+  + "weo > $ieung \u116f;"  // hangul jungseong weo
+  + "we > $ieung \u1170;"   // hangul jungseong we
+  + "wae > $ieung \u116b;"  // hangul jungseong wae
+  + "wa > $ieung \u116a;"   // hangul jungseong wa
+  + "u > $ieung \u116e;"    // hangul jungseong u
+  + "oe > $ieung \u116c;"   // hangul jungseong oe
+  + "o > $ieung \u1169;"    // hangul jungseong o
+  + "i > $ieung \u1175;"    // hangul jungseong i
+  + "eu > $ieung \u1173;"   // hangul jungseong eu
+  + "eo > $ieung \u1165;"   // hangul jungseong eo
+  + "e > $ieung \u1166;"    // hangul jungseong e
+  + "ae > $ieung \u1162;"   // hangul jungseong ae
+  + "a > $ieung \u1161;"    // hangul jungseong a
   
 
   // FINALS
