@@ -1,0 +1,76 @@
+Source: icu
+Section: libs
+Priority: optional
+Maintainer: Yves Arrouye <yves@debian.org>
+Standards-Version: 3.1.1
+
+Package: libicu-dev
+Section: devel
+Architecture: any
+Depends: libicu${major} (= ${Source-Version}), libc6-dev
+Suggests: icu-docs
+Description: International Components for Unicode (development files)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ support. This package contains the development files for ICU.
+ 
+Package: libicu16
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: icu
+Description: International Components for Unicode (libraries)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ support. This package contains the runtime libraries for ICU. It does
+ not contain any of the data files needed at runtime and present in the
+ `icu' and `icu-locales` packages.
+
+Package: icu
+Section: admin
+Architecture: any
+Depends: libicu${major} (>= ${Source-Version})
+Recommends: icu-locales
+Description: International Components for Unicode (locale data)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ support. The library provides calendar support, character set conversions,
+ language-sensitive collation, date and time formatting, support for more
+ than 140 locales, message catalogs and resources, message formatting,
+ normalization, number and currency formatting, time zones support,
+ transliteration, word, line and sentence breaking, etc....
+ .
+ This package contains the Unicode data, converters and aliases data,
+ and timezone data. It also contains the tools needed to manipulate
+ these data.
+
+Package: icu-locales
+Section: admin
+Architecture: any
+Depends: libicu${major} (>= ${Source-Version})
+Description: Locale data for ICU
+ The locale data are used by ICU to provide localization (l10n) and
+ internationalization (i18n) support to ICU applications. This package
+ also contains break data for various languages, and transliteration data.
+
+Package: icu-data
+Priority: extra
+Section: admin
+Architecture: all
+Depends: icu
+Description: Data for ICU (source files)
+ These data describe the Unicode data (normative and informative), and
+ also all the table-based converters provided in the ICU distribution.
+ .
+ This package contains uncompiled source data. Precompiled data are in the
+ `libicu1' package.
+
+Package: icu-i18ndata
+Priority: extra
+Section: admin
+Architecture: all
+Depends: icu
+Description: Locale data for ICU (source files)
+ The locale data are used by ICU to provide localization (l10n) and
+ internationalization (i18n) support to ICU applications. This package
+ also contains break data for various languages, and transliteration data.
+ .
+ This package contains uncompiled source data. Precompiled data are in the
+ `icu-locales' package.
