@@ -27,7 +27,9 @@ void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
         uint32_t *newData = (uint32_t *)realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
         UChar *newCPs = (UChar *)realloc(tbl->codePoints, 2*tbl->size*sizeof(UChar));
         if(newData == NULL || newCPs == NULL) {
+#ifdef UCOL_DEBUG
             fprintf(stderr, "out of memory for contractions\n");
+#endif
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -86,7 +88,9 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
         table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));
         uprv_memset(table->elements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
         if(table->elements == NULL) {
+#ifdef UCOL_DEBUG
           fprintf(stderr, "out of memory for contraction parts\n");
+#endif
           *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
           table->capacity *= 2;
