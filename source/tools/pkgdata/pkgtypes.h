@@ -61,6 +61,18 @@ CharList *pkg_prependToList(CharList *l, const char *str);
  */
 CharList *pkg_appendToList(CharList *l, CharList** end, const char *str);
 
+/* 
+ * strAlias is an alias to a full or relative path to a FILE.  This function
+ * will search strAlias for the directory name (with strrchr). Then, it will 
+ * determine if that directory is already in list l.  If not, it will add it
+ * with strdup(strAlias). 
+ * @param l list to append to , or NULL
+ * @param end end pointer-to-pointer.  Can point to null, or be null.  
+ * @param strAlias alias to full path string
+ * @return new list
+ */
+CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *strAlias);
+
 /*
  * does list contain string?  Returns: t/f
  */

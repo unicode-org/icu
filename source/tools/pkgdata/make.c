@@ -57,6 +57,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     "MAKEFILE=%s\n"
                     "ENTRYPOINT=%s\n"
                     "TARGET_VERSION=%s\n"
+                    "MKINSTALLDIRS=mkdir\n"
                     "\n\n\n",
                     o->shortName,
                     (appendVersion ? appendVersion : ""),
