@@ -24,7 +24,6 @@
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "unicode/ucoleitr.h"
-#include "unicode/utrace.h"
 #include "cintltst.h"
 #include "capitst.h"
 #include "ccolltst.h"
@@ -533,9 +532,6 @@ void TestRuleBasedColl()
         log_err("Rule \"z < a\" fails");
     }    
     ucol_close(col1);
-
-    /* Turn off tracing for tests that follow   */
-    utrace_setFunctions(NULL, NULL, NULL, NULL, UTRACE_VERBOSE, &status);
 }
 
 void TestCompare()
