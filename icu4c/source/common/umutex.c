@@ -73,7 +73,9 @@
 
 /* the global mutex. Use it proudly and wash it often. */
 static UMTX    gGlobalMutex = NULL;
+# ifdef _DEBUG
 static int32_t gRecursionCount;       /* Detect Recursive entries.  For debugging only. */
+# endif
 
 #if defined(WIN32)
 static CRITICAL_SECTION gPlatformMutex;
