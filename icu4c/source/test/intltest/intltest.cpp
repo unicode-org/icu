@@ -911,8 +911,12 @@ main(int argc, char* argv[])
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure";
+    UDate startTime, endTime;
+    int32_t diffTime;
 
     U_MAIN_INIT_ARGS(argc, argv);
+
+    startTime = Calendar::getNow();
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -1138,6 +1142,13 @@ main(int argc, char* argv[])
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
+    endTime = Calendar::getNow();
+    diffTime = (int32_t)(endTime - startTime);
+    printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
+        ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
+        ((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
+        ((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
+        (diffTime%U_MILLIS_PER_SECOND));
     return major.getErrors();
 }
 
