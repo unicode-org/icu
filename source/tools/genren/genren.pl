@@ -83,7 +83,7 @@ print HEADER <<"EndOfHeaderComment";
 
 /* Uncomment the following line to disable renaming on platforms
    that do not use Autoconf. */
-/* #define U_DISABLE_RENAMING 1 /**/
+/* #define U_DISABLE_RENAMING 1 */
 
 #if !U_DISABLE_RENAMING
 EndOfHeaderComment
