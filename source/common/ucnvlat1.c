@@ -23,6 +23,27 @@
 #define LATIN1_UNROLL_FROM_UNICODE 1
 #define ASCII_UNROLL_TO_UNICODE 1
 
+/* Prototypes --------------------------------------------------------------- */
+
+/* Keep these here to make finicky compilers happy */
+
+U_CFUNC void
+_Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode);
+U_CFUNC UChar32
+_Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                    UErrorCode *pErrorCode);
+U_CFUNC void
+_Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                              UErrorCode *pErrorCode);
+U_CFUNC void
+_ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                           UErrorCode *pErrorCode);
+U_CFUNC UChar32
+_ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
+                   UErrorCode *pErrorCode);
+
+
 /* ISO 8859-1 --------------------------------------------------------------- */
 
 /* This is a table-less and callback-less version of _MBCSSingleToBMPWithOffsets(). */
