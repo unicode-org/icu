@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/06 19:28:32 $
- * $Revision: 1.57 $
+ * $Date: 2002/03/07 00:39:35 $
+ * $Revision: 1.58 $
  *
  *****************************************************************************************
  */
@@ -208,7 +208,7 @@ import java.util.Iterator;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.57 $ $Date: 2002/03/06 19:28:32 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.58 $ $Date: 2002/03/07 00:39:35 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -433,6 +433,17 @@ public class UnicodeSet extends UnicodeFilter {
      * Append the <code>toPattern()</code> representation of a
      * character to the given <code>StringBuffer</code>.
      */
+    private static void _appendToPat(StringBuffer buf, String s, boolean useHexEscape) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+            _appendToPat(buf, cp = UTF16.charAt(s, i), useHexEscape);
+        }
+    }
+
+    /**
+     * Append the <code>toPattern()</code> representation of a
+     * character to the given <code>StringBuffer</code>.
+     */
     private static void _appendToPat(StringBuffer buf, int c, boolean useHexEscape) {
         if (useHexEscape) {
             // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
@@ -482,6 +493,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     private StringBuffer _toPattern(StringBuffer result,
                                     boolean escapeUnprintable) {
+        // TODO: fix how pat deals with strings, maybe here, maybe when parsing.
         if (pat != null) {
             int i;
             int backslashCount = 0;
@@ -568,6 +580,14 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
 
+        if (strings.size() > 0) {
+            Iterator it = strings.iterator();
+            while (it.hasNext()) {
+                result.append('{');
+                _appendToPat(result, (String) it.next(), escapeUnprintable);
+                result.append('}');
+            }
+        }
         return result.append(']');
     }
 
@@ -592,7 +612,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @return <tt>true</tt> if this set contains no elements.
      */
     public boolean isEmpty() {
-        return len == 1; // TODO: optimize this
+        return len == 1 && strings.size() == 0;
     }
 
     /**
@@ -654,6 +674,14 @@ public class UnicodeSet extends UnicodeFilter {
                        int[] offset,
                        int limit,
                        boolean incremental) {
+        
+        // TODO: find out from Alan what to do!!
+        // Issues: what to do with nullstring
+        // whether to change offset
+         
+        if (true) throw new IllegalArgumentException();
+            
+        // TODO: probably have to change this part too, just in case strings contains ""??
         if (offset[0] == limit) {
             if (contains(TransliterationRule.ETHER)) {
                 return incremental ? U_PARTIAL_MATCH : U_MATCH;
@@ -661,10 +689,89 @@ public class UnicodeSet extends UnicodeFilter {
                 return U_MISMATCH;
             }
         } else {
+            if (strings.size() != 0) { // try strings first
+            
+                // might separate forward and backward loops later
+                // for now they are combined
+            
+                Iterator it = strings.iterator();
+                boolean forward = offset[0] < limit;
+                char firstChar = text.charAt(forward ? offset[0] : offset[0] - 1);
+                
+                while (it.hasNext()) {
+                    String trial = (String) it.next();
+                    if (trial.length() == 0) {
+                        return U_MATCH; // null-string always matches
+                    }
+                    char c = trial.charAt(forward ? 0 : trial.length() - 1);
+                    
+                    // find the first string >= current character
+            
+                    if (c < firstChar) continue;
+                    if (c > firstChar) break; // stop if we pass it up
+                    
+                    // Now check the strings with that first character
+                    // do it in an inside loop, with a break-test further down
+                    // so we get the first string too
+                    
+                    int highWaterLength = 0;
+                    int maxLen = forward ? limit - offset[0] : offset[0] - limit;
+                    while (true) {
+                        int len = matchRest(text, offset[0], limit, trial);
+                        if (len > highWaterLength) {
+                            if (len == maxLen) {
+                                if (!incremental) {
+                                    offset[0] = limit;
+                                    return U_MATCH;
+                                }
+                                if (trial.length() > maxLen) {
+                                    offset[0] = limit;
+                                    return U_PARTIAL_MATCH;
+                                }
+                            }
+                            highWaterLength = len;
+                        } else if (len < highWaterLength) { // bail if we get smaller, since they are sorted
+                            break;
+                        }
+                        if (!it.hasNext()) break;
+                        trial = (String) it.next();
+                    }
+                    if (highWaterLength > 0) { // got a match
+                        offset[0] += forward ? highWaterLength : -highWaterLength;
+                    }
+                    
+                }
+            }
             return super.matches(text, offset, limit, incremental);
         }
-        // TODO: fix this for strings!
     }
+    
+    /**
+     * Returns the longest match for s in text.
+     * if limit < start, go backwards
+     * If s matches up to the end, return |limit - start|
+     * If there is a mismatch between some character of s and text, return 0
+     * We know the first character matches before this method is called, so skip it
+     */
+    private static int matchRest (Replaceable text, int start, int limit, String s) {
+        int maxLen;
+        if (start < limit) {
+            maxLen = limit - start;
+            if (maxLen > s.length()) maxLen = s.length();
+            for (int i = 1; i < maxLen; ++i) {
+                if (text.charAt(start + i) != s.charAt(i)) return 0;
+            }
+        } else {
+            maxLen = start - limit;
+            if (maxLen > s.length()) maxLen = s.length();
+            for (int i = maxLen - 2; i >= 0 ; --i) {
+                if (text.charAt(limit + i) != s.charAt(i)) return 0;
+            }
+            return maxLen;
+        }
+        return maxLen;
+    }
+        
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
@@ -792,7 +899,7 @@ public class UnicodeSet extends UnicodeFilter {
      * If this set already any particular character, it has no effect on that character.
      * @param string to add
      */
-    public final UnicodeSet addEach(String s) {
+    public final UnicodeSet addAll(String s) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
@@ -805,8 +912,8 @@ public class UnicodeSet extends UnicodeFilter {
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
      * @param string to add
      */
-    public static UnicodeSet fromEach(String s) {
-        return new UnicodeSet().addEach(s);
+    public static UnicodeSet fromAll(String s) {
+        return new UnicodeSet().addAll(s);
     }
 
     /**
@@ -818,10 +925,13 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public final UnicodeSet add(String s) {
         if (s.length() < 0) return this;
-        // this is slightly odd; the reason is to avoid UTF16.countCodePoint(s)
+        
+        // WARNING: the code below is slightly odd; 
+        // the reason is to avoid UTF16.countCodePoint(s)
         // when we don't really need to iterate through the whole string
+        
         int cp = UTF16.charAt(s, 0);
-        if (UTF16.getCharCount(cp) == 1) {
+        if (UTF16.getCharCount(cp) == s.length()) {
             add(cp, cp);
         } else {
            strings.add(s);
@@ -833,7 +943,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
      * @param string to add
      */
-    public static UnicodeSet fromMultiple(String s) {
+    public static UnicodeSet from(String s) {
         return new UnicodeSet().add(s);
     }
 
@@ -1058,6 +1168,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet addAll(UnicodeSet c) {
         add(c.list, c.len, 0);
+        strings.addAll(c.strings);
         return this;
     }
 
@@ -1072,6 +1183,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet retainAll(UnicodeSet c) {
         retain(c.list, c.len, 0);
+        strings.retainAll(c.strings);
         return this;
     }
 
@@ -1086,6 +1198,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet removeAll(UnicodeSet c) {
         retain(c.list, c.len, 2);
+        strings.removeAll(c.strings);
         return this;
     }
 
@@ -1099,6 +1212,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet complementAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
+        doOperation(strings, COMPLEMENTALL, c.strings);
         return this;
     }
 
@@ -1259,6 +1373,8 @@ public class UnicodeSet extends UnicodeFilter {
         StringBuffer newPat = new StringBuffer("[");
         int nestedPatStart = -1; // see below for usage
         boolean nestedPatDone = false; // see below for usage
+        StringBuffer multiCharBuffer = new StringBuffer();
+        
 
         boolean invert = false;
         clear();
@@ -1486,30 +1602,30 @@ public class UnicodeSet extends UnicodeFilter {
                     nestedSet._applyPattern(pattern, pos, symbols, newPat, ignoreWhitespace);
                     nestedPatDone = true;
                     i = pos.getIndex();
-                }
-                /*else if (!isLiteral && c == '{') {
+                } else if (!isLiteral && c == '{') {
                     // start of a string. find the rest.
+                    multiCharBuffer.setLength(0);
                     try {
-                        StringBuffer result = new StringBuffer();
                         while (i < pattern.length()) {
-                            // don't need to worry about surrogates, since
-                            // the only significant characters are } and \\.
+                            
+                            // TODO: fix for surrogates!
+                            
                             char ch = pattern.charAt(i++);
                             if (ch == '}') {
                                 break;
                             } else if (ch == '\\') {
-                                result.append(pattern.charAt(i++)); // TODO, handle \\n, \\uXXXX etc.
+                                multiCharBuffer.append(pattern.charAt(i++)); // TODO, handle \\n, \\uXXXX etc.
                             } else {
-                                result.append(ch);
+                                multiCharBuffer.append(ch);
                             }
                         }
                         // We have new string. Add it to set and continue;
-                    } catch (Exception e) {
-                        throw new Exception("foo");
+                        strings.add(multiCharBuffer.toString());
+                    } catch (StringIndexOutOfBoundsException e) {
+                        throw new IllegalArgumentException("Multicharacter string syntax error: {" + multiCharBuffer);
                     }
-                    
+                    continue; // we don't need to drop through to the further processing
                 }
-                */
             }
 
             /* At this point we have either a character c, or a nested set.  If
@@ -1943,11 +2059,20 @@ public class UnicodeSet extends UnicodeFilter {
        NO_B =           A_NOT_B,                            // A setDiff B,     removeAll
        EQUALS =                     A_AND_B,                // A intersect B,   retainAll
        NO_A =                                   B_NOT_A,    // B setDiff A,     removeAll
-       NONE =           0;                                  // null             (unnecessary)
+       NONE =           0,                                  // null             (unnecessary)
+       
+       ADDALL = ANY,                // union,           addAll
+       A = CONTAINS,                // A                (unnecessary)
+       COMPLEMENTALL = DISJOINT,    // A xor B,         missing Java function
+       B = ISCONTAINED,             // B                (unnecessary)
+       REMOVEALL = NO_B,            // A setDiff B,     removeAll
+       RETAINALL = EQUALS,          // A intersect B,   retainAll
+       B_REMOVEALL = NO_A;          // B setDiff A,     removeAll
+       
   
     /**
      * Utility that could be on SortedSet. Faster implementation than
-     * what is in Java.
+     * what is in Java for doing contains, equals, etc.
      * @param a first set
      * @param allow filter, using ANY, CONTAINS, etc.
      * @param b second set
@@ -1955,6 +2080,10 @@ public class UnicodeSet extends UnicodeFilter {
      */
     
     public static boolean hasRelation(SortedSet a, int allow, SortedSet b) {
+        if (allow < NONE || allow > ANY) {
+            throw new IllegalArgumentException("Relation " + allow + " out of range");
+        }
+        
         // extract filter conditions
         // these are the ALLOWED conditions Set
         
@@ -2012,4 +2141,53 @@ public class UnicodeSet extends UnicodeFilter {
         }
     }
     
+    /**
+     * Utility that could be on SortedSet. Allows faster implementation than
+     * what is in Java for doing addAll, removeAll, retainAll, (complementAll).
+     * @param a first set
+     * @param allow filter, using ANY, CONTAINS, etc.
+     * @param b second set
+     * @return whether the filter relationship is true or not.
+     */
+    
+    public static SortedSet doOperation(SortedSet a, int relation, SortedSet b) {
+        // TODO: optimize this as above
+        TreeSet temp;
+        switch (relation) {
+            case ADDALL:
+                a.addAll(b); 
+                return a;
+            case A:
+                return a; // no action
+            case B:
+                a.clear(); 
+                a.addAll(b); 
+                return a;
+            case REMOVEALL: 
+                a.removeAll(b);
+                return a;
+            case RETAINALL: 
+                a.retainAll(b);
+                return a;
+            // the following is the only case not really supported by Java
+            // although all could be optimized
+            case COMPLEMENTALL:
+                temp = new TreeSet(b);
+                temp.removeAll(a);
+                a.removeAll(b);
+                a.addAll(temp);
+                return a;
+            case B_REMOVEALL:
+                temp = new TreeSet(b);
+                temp.removeAll(a);
+                a.clear();
+                a.addAll(temp);
+                return a;
+            case NONE:
+                a.clear();
+                return a;
+            default: 
+                throw new IllegalArgumentException("Relation " + relation + " out of range");
+        }
+    }    
 }

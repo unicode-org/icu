@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/03/06 19:28:32 $ 
- * $Revision: 1.23 $
+ * $Date: 2002/03/07 00:39:36 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -448,18 +448,25 @@ public class UnicodeSetTest extends TestFmwk {
         } 
     }
     
-    public void TestChaining() {
+    public void TestStrings() {
         Object[][] testList = {
-            {I_EQUALS, UnicodeSet.fromEach("abc"),      new UnicodeSet("[a-c]")},
-            {I_EQUALS, UnicodeSet.fromMultiple("abc"),  new UnicodeSet("[{abc}]")},
-            {I_EQUALS, new UnicodeSet('a','z').add('A', 'Z').retain('M','m').complement('X'), 
-                new UnicodeSet("[[a-zA-Z]&[M-m]-[X]]")},
+            {I_EQUALS,  UnicodeSet.fromAll("abc"),
+                        new UnicodeSet("[a-c]")},
+                        
+            {I_EQUALS,  UnicodeSet.from("ch").add('a','z').add("ll"),
+                        new UnicodeSet("[{ll}{ch}a-z]")},
+                        
+            {I_EQUALS,  UnicodeSet.from("ab}c"),  
+                        new UnicodeSet("[{ab\\}c}]")},
+                        
+            {I_EQUALS,  new UnicodeSet('a','z').add('A', 'Z').retain('M','m').complement('X'), 
+                        new UnicodeSet("[[a-zA-Z]&[M-m]-[X]]")},
         };
         
         for (int i = 0; i < testList.length; ++i) {
             expectRelation(testList[i][0], testList[i][1], testList[i][2], "(" + i + ")");
         }        
-    } 
+    }
     
     static final Integer 
        I_ANY = new Integer(UnicodeSet.ANY),
@@ -471,10 +478,9 @@ public class UnicodeSetTest extends TestFmwk {
        I_NO_A = new Integer(UnicodeSet.NO_A),
        I_NONE = new Integer(UnicodeSet.NONE);
     
-    
     public void TestSetRelation() {
 
-        String[] choices = {"a", "b", "c"};
+        String[] choices = {"a", "b", "cd", "ef"};
         int limit = 1 << choices.length;
         
         SortedSet iset = new TreeSet();
@@ -490,12 +496,15 @@ public class UnicodeSetTest extends TestFmwk {
     }
     
     public void TestSetSpeed() {
-        TestSetSpeed2(100);
-        TestSetSpeed2(1000);
-        TestSetSpeed2(10000);
+        // skip unless verbose
+        if (!isVerbose()) return;
+        
+        SetSpeed2(100);
+        SetSpeed2(1000);
+        SetSpeed2(10000);
     }
     
-    public void TestSetSpeed2(int size) {
+    public void SetSpeed2(int size) {
         
         SortedSet iset = new TreeSet();
         SortedSet jset = new TreeSet();
@@ -600,17 +609,16 @@ public class UnicodeSetTest extends TestFmwk {
         "any", };
         
     boolean dumbHasRelation(Collection A, int filter, Collection B) {
-        Collection a_b = new TreeSet(A);
-        a_b.removeAll(B);
-        if (a_b.size() > 0 && (filter & UnicodeSet.A_NOT_B) == 0) return false; 
-        
-        Collection b_a = new TreeSet(B);
-        b_a.removeAll(A);
-        if (b_a.size() > 0 && (filter & UnicodeSet.B_NOT_A) == 0) return false; 
-
         Collection ab = new TreeSet(A);
         ab.retainAll(B);
         if (ab.size() > 0 && (filter & UnicodeSet.A_AND_B) == 0) return false; 
+        
+        // A - B size == A.size - A&B.size
+        if (A.size() > ab.size() && (filter & UnicodeSet.A_NOT_B) == 0) return false; 
+        
+        // B - A size == B.size - A&B.size
+        if (B.size() > ab.size() && (filter & UnicodeSet.B_NOT_A) == 0) return false; 
+
         
         return true;
     }    
@@ -857,7 +865,7 @@ public class UnicodeSetTest extends TestFmwk {
      */
      
     void expectRelation(Object relationObj, Object set1Obj, Object set2Obj, String message) {
-        byte relation = ((Byte) relationObj).byteValue();
+        int relation = ((Integer) relationObj).intValue();
         UnicodeSet set1 = (UnicodeSet) set1Obj;
         UnicodeSet set2 = (UnicodeSet) set2Obj;
         
@@ -903,8 +911,11 @@ public class UnicodeSetTest extends TestFmwk {
         
         if (status != relation) {
             errln("FAIL relation incorrect" + message
-              + ": desired= " + RELATION_NAME[relation]
-              + ": found= " + RELATION_NAME[status]);
+              + "; desired = " + RELATION_NAME[relation]
+              + "; found = " + RELATION_NAME[status]
+              + "; set1 = " + set1.toPattern(true)
+              + "; set2 = " + set2.toPattern(true)
+              );
         }
     }
     
