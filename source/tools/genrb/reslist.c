@@ -916,7 +916,7 @@ uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *stat
         return (uint16_t) - 1;
     }
 
-    keypos = bundle->fKeyPoint;
+    keypos = (uint16_t)bundle->fKeyPoint;
 
     bundle->fKeyPoint += (uint16_t) (uprv_strlen(tag) + 1);
 

@@ -34,7 +34,7 @@ U_CDECL_BEGIN
 /* Resource bundle root table */
 struct SRBRoot {
   char *fLocale;
-  uint16_t fKeyPoint;
+  uint32_t fKeyPoint;
   char *fKeys;
   int32_t fCount;
   struct SResource *fRoot; 

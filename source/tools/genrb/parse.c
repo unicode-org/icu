@@ -499,13 +499,14 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
         doesn't survive expect either) */
 
         result = string_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, status);
+        if(U_SUCCESS(*status) && result) {
+          expect(TOK_CLOSE_BRACE, NULL, NULL, status);
 
-        expect(TOK_CLOSE_BRACE, NULL, NULL, status);
-
-        if (U_FAILURE(*status))
-        {
-            string_close(result, status);
-            return NULL;
+          if (U_FAILURE(*status))
+          {
+              string_close(result, status);
+              return NULL;
+          }
         }
     }
 
@@ -1535,8 +1536,6 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
 
     if (U_FAILURE(*status))
     {
-        /* realParseTable has already closed the table */
-        bundle->fRoot = NULL;
         bundle_close(bundle, status);
         return NULL;
     }
