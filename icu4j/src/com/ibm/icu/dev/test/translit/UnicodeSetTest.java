@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/03/07 00:39:36 $ 
- * $Revision: 1.24 $
+ * $Date: 2002/03/12 23:10:57 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -23,6 +23,8 @@ import java.util.*;
  * @summary General test of UnicodeSet
  */
 public class UnicodeSetTest extends TestFmwk {
+
+    static final String NOT = "%%%%";
 
     public static void main(String[] args) throws Exception {
         new UnicodeSetTest().run(args);
@@ -468,6 +470,29 @@ public class UnicodeSetTest extends TestFmwk {
         }        
     }
     
+    /**
+     * Test pattern behavior of multicharacter strings.
+     */
+    public void TestStringPatterns() {
+        UnicodeSet s = new UnicodeSet("[a-z {aa} {ab}]");
+        expectToPattern(s, "[a-z{aa}{ab}]",
+                        new String[] {"aa", "ab", NOT, "ac"});
+        s.add("ac");
+        expectToPattern(s, "[a-z{aa}{ab}{ac}]",
+                        new String[] {"aa", "ab", "ac", NOT, "xy"});
+
+        s.applyPattern("[a-z {\\{l} {r\\}}]");
+        expectToPattern(s, "[a-z{\\{l}{r\\}}]",
+                        new String[] {"{l", "r}", NOT, "xy"});
+        s.add("[]");
+        expectToPattern(s, "[a-z{\\[\\]}{r\\}}{\\{l}]",
+                        new String[] {"{l", "r}", "[]", NOT, "xy"});
+
+        s.applyPattern("[a-z {\u4E01\u4E02}{\\n\\r}]");
+        expectToPattern(s, "[a-z{\\u4E01\\u4E02}{\\n\\r}]",
+                        new String[] {"\u4E01\u4E02", "\n\r"});
+    }
+
     static final Integer 
        I_ANY = new Integer(UnicodeSet.ANY),
        I_CONTAINS = new Integer(UnicodeSet.CONTAINS),
@@ -970,6 +995,26 @@ public class UnicodeSetTest extends TestFmwk {
             logln("Ok:   applyPattern(\"" + pattern +
                   "\") => pairs \"" +
                   Utility.escape(getPairs(set)) + "\"");
+        }
+    }
+
+    void expectToPattern(UnicodeSet set,
+                         String expPat,
+                         String[] expStrings) {
+        String pat = set.toPattern(true);
+        if (pat.equals(expPat)) {
+            logln("Ok:   toPattern() => \"" + pat + "\"");
+        } else {
+            errln("FAIL: toPattern() => \"" + pat + "\", expected \"" + expPat + "\"");
+            return;
+        }
+        boolean in = true;
+        for (int i=0; i<expStrings.length; ++i) {
+            if (expStrings[i] == NOT) { // sic; pointer comparison
+                in = false;
+                continue;
+            }
+            // TODO
         }
     }
 

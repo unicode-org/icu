@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/10 19:40:16 $
- * $Revision: 1.59 $
+ * $Date: 2002/03/12 23:10:39 $
+ * $Revision: 1.60 $
  *
  *****************************************************************************************
  */
@@ -208,7 +208,7 @@ import java.util.Iterator;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.59 $ $Date: 2002/03/10 19:40:16 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.60 $ $Date: 2002/03/12 23:10:39 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -493,7 +493,6 @@ public class UnicodeSet extends UnicodeFilter {
      */
     private StringBuffer _toPattern(StringBuffer result,
                                     boolean escapeUnprintable) {
-        // TODO: fix how pat deals with strings, maybe here, maybe when parsing.
         if (pat != null) {
             int i;
             int backslashCount = 0;
@@ -678,8 +677,6 @@ public class UnicodeSet extends UnicodeFilter {
         // TODO: find out from Alan what to do!!
         // Issues: what to do with nullstring
         // whether to change offset
-         
-		//        if (true) throw new IllegalArgumentException();
             
         // TODO: probably have to change this part too, just in case strings contains ""??
         if (offset[0] == limit) {
@@ -935,6 +932,7 @@ public class UnicodeSet extends UnicodeFilter {
             add(cp, cp);
         } else {
            strings.add(s);
+           pat = null;
         }
         return this;
     }
@@ -1604,27 +1602,41 @@ public class UnicodeSet extends UnicodeFilter {
                     i = pos.getIndex();
                 } else if (!isLiteral && c == '{') {
                     // start of a string. find the rest.
+                    int length = 0;
+                    int st = i;
                     multiCharBuffer.setLength(0);
-                    try {
-                        while (i < pattern.length()) {
-                            
-                            // TODO: fix for surrogates!
-                            
-                            char ch = pattern.charAt(i++);
-                            if (ch == '}') {
-                                break;
-                            } else if (ch == '\\') {
-                                multiCharBuffer.append(pattern.charAt(i++)); // TODO, handle \\n, \\uXXXX etc.
-                            } else {
-                                multiCharBuffer.append(ch);
+                    while (i < pattern.length()) {
+                        int ch = UTF16.charAt(pattern, i);
+                        i += UTF16.getCharCount(ch); 
+                        if (ch == '}') {
+                            length = -length; // signal that we saw '}'
+                            break;
+                        } else if (ch == '\\') {
+                            int[] offset = new int[] { i };
+                            ch = Utility.unescapeAt(pattern, offset);
+                            if (ch == -1) {
+                                int sta = Math.max(i - 8, 0);
+                                int lim = Math.min(i + 16, pattern.length());
+                                throw new IllegalArgumentException("Invalid escape sequence " +
+                                                                   pattern.substring(sta, i-1) +
+                                                                   "|" +
+                                                                   pattern.substring(i-1, lim));
                             }
+                            i = offset[0];
                         }
-                        // We have new string. Add it to set and continue;
-                        strings.add(multiCharBuffer.toString());
-                    } catch (StringIndexOutOfBoundsException e) {
-                        throw new IllegalArgumentException("Multicharacter string syntax error: {" + multiCharBuffer);
+                        --length; // sic; see above
+                        UTF16.append(multiCharBuffer, ch);
                     }
-                    continue; // we don't need to drop through to the further processing
+                    if (length < 2) {
+                        throw new IllegalArgumentException("Invalid multicharacter string");
+                    }
+                    // We have new string. Add it to set and continue;
+                    // we don't need to drop through to the further
+                    // processing
+                    strings.add(multiCharBuffer.toString());
+                    newPat.append('{').append(pattern.substring(st, i));
+                    rebuildPattern = true;
+                    continue;
                 }
             }
 
