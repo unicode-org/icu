@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -74,7 +74,7 @@ private:
         DATE_TIME
     };
 public:
-    virtual ~IntlTestDateFormat() {}
+    virtual ~IntlTestDateFormat();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
