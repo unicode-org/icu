@@ -209,7 +209,7 @@ void test_Formattable( void )
     {
         Formattable( 1.0, Formattable::kIsDate ),
         2.0,
-        T_INT32(3),
+        (int32_t)3,
         ucs,
         ucs_ptr
     };
@@ -218,7 +218,7 @@ void test_Formattable( void )
     UnicodeString temp;
     if ((ft_arr[0].getType() == Formattable::kDate)   && (ft_arr[0].getDate()   == 1.0)
      && (ft_arr[1].getType() == Formattable::kDouble) && (ft_arr[1].getDouble() == 2.0)
-     && (ft_arr[2].getType() == Formattable::kLong)   && (ft_arr[2].getLong()   == T_INT32(3))
+     && (ft_arr[2].getType() == Formattable::kLong)   && (ft_arr[2].getLong()   == (int32_t)3)
      && (ft_arr[3].getType() == Formattable::kString) && (ft_arr[3].getString(temp) == ucs)
      && (ft_arr[4].getType() == Formattable::kString) && (ft_arr[4].getString(temp) == *ucs_ptr) ) {
         it_out << "FT constr. for date, double, long, ustring, ustring* and array tested" << endl;
@@ -245,14 +245,14 @@ void test_Formattable( void )
         it_errln("*** FT getArray count");
     }
 
-    const Formattable ftarr1[] = { Formattable( T_INT32(1) ), Formattable( T_INT32(2) ) };
-    const Formattable ftarr2[] = { Formattable( T_INT32(3) ), Formattable( T_INT32(4) ) };
+    const Formattable ftarr1[] = { Formattable( (int32_t)1 ), Formattable( (int32_t)2 ) };
+    const Formattable ftarr2[] = { Formattable( (int32_t)3 ), Formattable( (int32_t)4 ) };
 
     const int32_t ftarr1_cnt = sizeof(ftarr1) / sizeof(Formattable);
     const int32_t ftarr2_cnt = sizeof(ftarr2) / sizeof(Formattable);
 
     ft_arr.setArray( ftarr1, ftarr1_cnt );
-    if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == T_INT32(1))) {
+    if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)1)) {
         it_out << "FT setArray tested" << endl;
     }else{
         it_errln("*** FT setArray");
@@ -262,16 +262,16 @@ void test_Formattable( void )
     for (int32_t i = 0; i < ftarr2_cnt; i++ ) {
         ft_dynarr[i] = ftarr2[i];
     }
-    if ((ft_dynarr[0].getType() == Formattable::kLong) && (ft_dynarr[0].getLong() == T_INT32(3))
-     && (ft_dynarr[1].getType() == Formattable::kLong) && (ft_dynarr[1].getLong() == T_INT32(4))) {
+    if ((ft_dynarr[0].getType() == Formattable::kLong) && (ft_dynarr[0].getLong() == (int32_t)3)
+     && (ft_dynarr[1].getType() == Formattable::kLong) && (ft_dynarr[1].getLong() == (int32_t)4)) {
         it_out << "FT operator= and array operations tested" << endl;
     }else{
         it_errln("*** FT operator= or array operations");
     }
 
     ft_arr.adoptArray( ft_dynarr, ftarr2_cnt );
-    if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == T_INT32(3))
-     && (ft_arr[1].getType() == Formattable::kLong) && (ft_arr[1].getLong() == T_INT32(4))) {
+    if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)3)
+     && (ft_arr[1].getType() == Formattable::kLong) && (ft_arr[1].getLong() == (int32_t)4)) {
         it_out << "FT adoptArray tested" << endl;
     }else{
         it_errln("*** FT adoptArray or operator[]");

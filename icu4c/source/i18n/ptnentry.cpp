@@ -178,7 +178,7 @@ void PatternEntry::addToBuffer(UnicodeString& toAddTo,
 // Append a string to a pattern buffer, adding quotes if necessary
 void PatternEntry::appendQuoted(const UnicodeString& chars, UnicodeString& toAddTo) {
   UBool inQuote = FALSE;
-  UChar ch = chars[T_INT32(0)];
+  UChar ch = chars[0];
   if (Unicode::isSpaceChar(ch)) {
     inQuote = TRUE;
     toAddTo += (UChar)0x0027/*'\''*/;

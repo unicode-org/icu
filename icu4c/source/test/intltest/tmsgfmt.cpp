@@ -26,7 +26,7 @@
 
 Formattable TestMessageFormat::testArgs[] = {
     Formattable(double(1)), Formattable(double(3456)),
-        Formattable("Disk"), Formattable(UDate(T_INT32(1000000000)), Formattable::kIsDate)
+        Formattable("Disk"), Formattable(UDate((int32_t)1000000000L), Formattable::kIsDate)
 };
 
 UnicodeString TestMessageFormat::testCases[] = {
@@ -160,7 +160,7 @@ void TestMessageFormat::testBug1()
     ChoiceFormat *cf = new ChoiceFormat(limit, formats, 3);
     FieldPosition status(0);
     UnicodeString toAppendTo;
-    cf->format(T_INT32(1.0), toAppendTo, status);
+    cf->format((int32_t)1, toAppendTo, status);
     if (toAppendTo != "1.0<=Arg<2.0") {
         it_errln("ChoiceFormat cmp in testBug1");
     }
@@ -346,7 +346,7 @@ void TestMessageFormat::testStaticFormat(char* parm)
     UErrorCode err = U_ZERO_ERROR;
     GregorianCalendar cal(err);   
     Formattable arguments[] = {
-        T_INT32(7),
+        (int32_t)7,
         Formattable(UDate(8.71068e+011), Formattable::kIsDate),
         "a disturbance in the Force"
         };
@@ -381,9 +381,9 @@ void TestMessageFormat::testSimpleFormat(char* parm)
 
     UErrorCode err = U_ZERO_ERROR;
 
-    Formattable testArgs1[] = {T_INT32(0), "MyDisk"};
-    Formattable testArgs2[] = {T_INT32(1), "MyDisk"};
-    Formattable testArgs3[] = {T_INT32(12), "MyDisk"};
+    Formattable testArgs1[] = {(int32_t)0, "MyDisk"};
+    Formattable testArgs2[] = {(int32_t)1, "MyDisk"};
+    Formattable testArgs3[] = {(int32_t)12, "MyDisk"};
    
     MessageFormat* form = new MessageFormat(
         "The disk \"{1}\" contains {0} file(s).", err);
@@ -428,7 +428,7 @@ void TestMessageFormat::testMsgFormatChoice(char* parm)
 
     FieldPosition ignore(FieldPosition::DONT_CARE);
     UnicodeString string;
-    Formattable testArgs1[] = {T_INT32(0), "MyDisk"};    
+    Formattable testArgs1[] = {(int32_t)0, "MyDisk"};    
     form->format(testArgs1, 2, string, ignore, err);
     if (string != "The disk \"MyDisk\" contains no files.") {
         errln("TestMessageFormat::testMsgFormatChoice failed on test #1");
@@ -436,7 +436,7 @@ void TestMessageFormat::testMsgFormatChoice(char* parm)
  
     ignore.setField(FieldPosition::DONT_CARE);
     string.remove();
-    Formattable testArgs2[] = {T_INT32(1), "MyDisk"};    
+    Formattable testArgs2[] = {(int32_t)1, "MyDisk"};    
     form->format(testArgs2, 2, string, ignore, err);
     if (string != "The disk \"MyDisk\" contains one file.") {
         errln("TestMessageFormat::testMsgFormatChoice failed on test #2");
@@ -444,7 +444,7 @@ void TestMessageFormat::testMsgFormatChoice(char* parm)
 
     ignore.setField(FieldPosition::DONT_CARE);
     string.remove();
-    Formattable testArgs3[] = {T_INT32(1273), "MyDisk"};    
+    Formattable testArgs3[] = {(int32_t)1273, "MyDisk"};    
     form->format(testArgs3, 2, string, ignore, err);
     if (string != "The disk \"MyDisk\" contains 1,273 files.") {
         errln("TestMessageFormat::testMsgFormatChoice failed on test #3");
