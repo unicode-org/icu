@@ -338,11 +338,6 @@ el {
         "Grek"  // ISO 15924 Name 
     }
     ExemplarCharacters{"[\u0390\u03ac-\u03ce]"}
-
-    TransliterateLATIN {
-        "UNGEGN",
-        "::Greek-Latin/UNGEGN;"
-    }
     calendar{
         gregorian{
             AmPmMarkers{
