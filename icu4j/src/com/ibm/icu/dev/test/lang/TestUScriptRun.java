@@ -52,6 +52,8 @@ public class TestUScriptRun extends TestFmwk
         }
     };
     
+    private static final String padding = "This string is used for padding...";
+    
     private void CheckScriptRuns(UScriptRun scriptRun, int[] runStarts, RunTestData[] testData)
     {
         int run, runStart, runLimit;
@@ -338,7 +340,7 @@ public class TestUScriptRun extends TestFmwk
                 scriptRun.reset(testString, 0, testString.length());
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
-                errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+                errln("scriptRun.reset(testString, 0, testString.length) produced an IllegalArgumentException!");
             }
 
             try {
@@ -346,6 +348,28 @@ public class TestUScriptRun extends TestFmwk
                 CheckScriptRuns(scriptRun, runStarts, test);
             } catch (IllegalArgumentException iae) {
                 errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+            }
+
+            String paddedTestString = padding + testString + padding;
+            int startOffset = padding.length();
+            int count = testString.length();
+            
+            for (int run = 0; run < runStarts.length; run += 1) {
+                runStarts[run] += startOffset;
+            }
+            
+            try {
+                scriptRun.reset(paddedTestString, startOffset, count);
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset(paddedTestString, startOffset, count) produced an IllegalArgumentException!");
+            }
+
+            try {
+                scriptRun.reset(paddedTestString.toCharArray(), startOffset, count);
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset(paddedTestString.toCharArray(), startOffset, count) produced an IllegalArgumentException!");
             }
         }
     }
