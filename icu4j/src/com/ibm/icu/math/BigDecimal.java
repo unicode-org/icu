@@ -2197,7 +2197,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * The {@link #compareTo(BigDecimal, MathContext)} method should be
   * used when a <code>MathContext</code> is needed for the comparison.
   *
-  * @param  rhs The <code>Object</code> for the right hand side of
+  * @param  rhsobj The <code>Object</code> for the right hand side of
   *             the comparison.
   * @return     An <code>int</code> whose value is -1, 0, or 1 as
   *             <code>this</code> is numerically less than, equal to,
@@ -2250,7 +2250,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * <p>
   * The {@link #compareTo(BigDecimal, MathContext)} method should be
   * used for more general comparisons.
-  * @param  rhs The <code>Object</code> for the right hand side of
+  * @param  obj The <code>Object</code> for the right hand side of
   *             the comparison.
   * @return     A <code>boolean</code> whose value <i>true</i> if and
   *             only if the operands have identical string representations.
@@ -2479,7 +2479,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *                  Use 0 to force exponential notation.
   *                  Use -1 to force plain notation (no exponential
   *                  notation).
-  * @param  exform   The <code>int</code> specifying the form of
+  * @param  exformint   The <code>int</code> specifying the form of
   *                  exponential notation to be used
   *                  ({@link MathContext#SCIENTIFIC} or
   *                  {@link MathContext#ENGINEERING}).

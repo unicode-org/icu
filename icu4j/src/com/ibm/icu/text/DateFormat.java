@@ -96,7 +96,7 @@ import java.util.MissingResourceException;
  * format instances for each thread. If multiple threads access a format 
  * concurrently, it must be synchronized externally. 
  *
- * @see          Format
+ * @see          UFormat
  * @see          NumberFormat
  * @see          SimpleDateFormat
  * @see          com.ibm.icu.util.Calendar

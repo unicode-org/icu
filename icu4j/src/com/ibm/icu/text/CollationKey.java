@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/11/18 17:53:53 $ 
-* $Revision: 1.20 $
+* $Date: 2003/12/01 23:39:13 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -433,12 +433,12 @@ public final class CollationKey implements Comparable
      * <p>
      * Collation keys produced may be compared using the <TT>compare</TT> API.
      * </p>
-     * @param bound Mode of bound required. It can be BoundMode.LOWER, which 
+     * @param boundType Mode of bound required. It can be BoundMode.LOWER, which 
      *              produces a lower inclusive bound, BoundMode.UPPER, that 
      *              produces upper bound that matches strings of the same 
      *              length or BoundMode.UPPER_LONG that matches strings that 
      *              have the same starting substring as the source string.
-     * @param strength Strength levels required in the resulting bound 
+     * @param noOfLevels Strength levels required in the resulting bound 
      *                 (for most uses, the recommended value is PRIMARY). This
      *                 strength should be less than the maximum strength of 
      *                 this CollationKey.

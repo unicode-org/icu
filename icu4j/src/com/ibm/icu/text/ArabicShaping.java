@@ -123,8 +123,8 @@ public final class ArabicShaping {
     /**
      * Convert a string, returning the new string.
      *
-     * @param source The string to convert.
-     * @return The converted string.
+     * @param text the string to convert
+     * @return the converted string
      * @throws ArabicShapingException if the string cannot be converted according to the options.
      * @stable ICU 2.0
      */
