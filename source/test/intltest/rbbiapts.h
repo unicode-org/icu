@@ -78,6 +78,8 @@ public:
 
     void TestBug2190();
 
+    void TestBoilerPlate();
+
     void TestRegistration();
 
     /**

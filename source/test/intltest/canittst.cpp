@@ -299,7 +299,11 @@ void CanonicalIteratorTest::TestAPI() {
   if(next != afterReset) {
     errln("Next after instantiation ("+next+") is different from next after reset ("+afterReset+").");
   }
-
+  
+  logln("Testing getStaticClassID and getDynamicClassID");
+  if(can.getDynamicClassID() != CanonicalIterator::getStaticClassID()){
+      errln("RTTI failed for CanonicalIterator getDynamicClassID != getStaticClassID");
+  }
 }
 
 
