@@ -207,6 +207,7 @@ void CollationRegressionTest::Test4054736(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
 
+    c->setStrength(Collator::SECONDARY);
     c->setDecomposition(Normalizer::DECOMP_COMPAT);
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
@@ -837,6 +838,7 @@ void CollationRegressionTest::Test4132736(/* char* par */)
     Collator *c = NULL;
     
     c = Collator::createInstance(Locale::FRANCE, status);
+    c->setStrength(Collator::TERTIARY);
     
     if (c == NULL || U_FAILURE(status))
     {
