@@ -115,6 +115,17 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->varTop = NULL;
   src->UCA = UCA;
   src->invUCA = ucol_initInverseUCA(status);
+  src->parsedToken.charsLen = 0;
+  src->parsedToken.charsOffset = 0;
+  src->parsedToken.extensionLen = 0;
+  src->parsedToken.extensionOffset = 0;
+  src->parsedToken.prefixLen = 0;
+  src->parsedToken.prefixOffset = 0;
+  src->parsedToken.flags = 0;
+  src->parsedToken.strength = UCOL_TOK_UNSET;
+
+
+
   if(U_FAILURE(*status)) {
     return;
   }
@@ -392,11 +403,6 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
 
 U_CAPI const UChar* U_EXPORT2
 ucol_tok_parseNextToken(UColTokenParser *src, 
-                        uint32_t *strength, 
-                        uint32_t *chOffset, uint32_t *chLen, 
-                        uint32_t *exOffset, uint32_t *exLen,
-                        uint32_t *prefixOffset, uint32_t *prefixLen,
-                        uint8_t *specs,
                         UBool startOfRules,
                         UParseError *parseError,
                         UErrorCode *status) { 
@@ -414,7 +420,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
-  *prefixOffset = 0; *prefixLen = 0;
+  src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
 
   while (src->current < src->end) {
       UChar ch = *(src->current);
@@ -644,8 +650,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
           // that case we would have to complicate the token hasher, which I do not 
           // intend to play with. Instead, we will do prefixes when prefixes are due
           // (before adding the elements).
-          *prefixOffset = charsOffset;
-          *prefixLen = newCharsLen;
+          src->parsedToken.prefixOffset = charsOffset;
+          src->parsedToken.prefixLen = newCharsLen;
 
           if(inChars) { /* we're doing characters */
             if(wasInQuote == FALSE) {
@@ -736,19 +742,89 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     return NULL;
   }
 
-  *strength = newStrength; 
-
-  *chOffset = charsOffset;
-  *chLen = newCharsLen;
-  *exOffset = extensionOffset;
-  *exLen = newExtensionLen;
-  *specs = (UCOL_TOK_VARIABLE_TOP * (variableTop?1:0)) | (UCOL_TOK_TOP * (top?1:0)) | before;
+  src->parsedToken.strength = newStrength; 
+  src->parsedToken.charsOffset = charsOffset;
+  src->parsedToken.charsLen = newCharsLen;
+  src->parsedToken.extensionOffset = extensionOffset;
+  src->parsedToken.extensionLen = newExtensionLen;
+  src->parsedToken.flags = (UCOL_TOK_VARIABLE_TOP * (variableTop?1:0)) | (UCOL_TOK_TOP * (top?1:0)) | before;
 
   return src->current;
 }
 
+/*
+Processing Description
+  1 Build a ListList. Each list has a header, which contains two lists (positive 
+  and negative), a reset token, a baseCE, nextCE, and previousCE. The lists and 
+  reset may be null. 
+  2 As you process, you keep a LAST pointer that points to the last token you 
+  handled. 
+*/
+
+static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint32_t *expandNext,
+                                      UParseError *parseError, UErrorCode *status) {
+  /* do the reset thing */
+  UColToken *sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
+  sourceToken->rulesToParse = src->source;
+  sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
+  sourceToken->expansion = src->parsedToken.extensionLen << 24 | src->parsedToken.extensionOffset;
+
+  sourceToken->debugSource = *(src->source + src->parsedToken.charsOffset);
+  sourceToken->debugExpansion = *(src->source + src->parsedToken.extensionOffset);
+
+  if(src->parsedToken.prefixOffset != 0) {
+    // this is a syntax error 
+    *status = U_INVALID_FORMAT_ERROR;
+    syntaxError(src->source,src->parsedToken.charsOffset-1,src->parsedToken.charsOffset+src->parsedToken.charsLen,parseError);
+    return 0;
+  } else {
+    sourceToken->prefix = 0;
+  }
+
+  sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
+  sourceToken->strength = UCOL_TOK_RESET;
+  sourceToken->next = NULL;
+  sourceToken->previous = NULL;
+  sourceToken->noOfCEs = 0;
+  sourceToken->noOfExpCEs = 0;
+  sourceToken->listHeader = &src->lh[src->resultLen];
+
+  src->lh[src->resultLen].first = NULL;
+  src->lh[src->resultLen].last = NULL;
+  src->lh[src->resultLen].first = NULL;
+  src->lh[src->resultLen].last = NULL;
+
+  src->lh[src->resultLen].reset = sourceToken;
+
+  /*
+    3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
+      First convert all expansions into normal form. Examples: 
+        If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
+        d * ... into &x * c/y * d * ... 
+        Note: reset values can never have expansions, although they can cause the 
+        very next item to have one. They may be contractions, if they are found 
+        earlier in the list. 
+  */
+  if(expand != NULL) {
+    /* check to see if there is an expansion */
+    if(src->parsedToken.charsLen > 1) {
+      uint32_t resetCharsOffset;
+      resetCharsOffset = expand - src->source;
+      sourceToken->source = ((resetCharsOffset - src->parsedToken.charsOffset ) << 24) | src->parsedToken.charsOffset;
+      *expandNext = ((src->parsedToken.charsLen + src->parsedToken.charsOffset - resetCharsOffset)<<24) | (resetCharsOffset);
+    } else {
+      *expandNext = 0;
+    }
+  }
+
+  src->resultLen++;
+  uhash_put(src->tailored, sourceToken, sourceToken, status);
+
+  return sourceToken;
+}
+
 static
-inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32_t strength, uint32_t *charsOffset, uint32_t *newCharsLen, UErrorCode *status) {
+inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint8_t strength, UParseError *parseError, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return NULL;
   }
@@ -760,7 +836,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   if(sourceToken != NULL) {
     init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s); 
   } else {
-    init_collIterate(src->UCA, src->source+*charsOffset, 1, &s); 
+    init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset /**charsOffset*/, 1, &s); 
   }
 
   baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
@@ -780,8 +856,8 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     ch = conts[offset];
   }      
   *src->extraCurrent++ = (UChar)ch;        
-  *charsOffset = src->extraCurrent - src->source - 1;
-  *newCharsLen = 1;
+  src->parsedToken.charsOffset = src->extraCurrent - src->source - 1;
+  src->parsedToken.charsLen = 1;
 
   // We got an UCA before. However, this might have been tailored.
   // example:
@@ -791,32 +867,36 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   
   // uint32_t key = (*newCharsLen << 24) | *charsOffset;
   UColToken key;
-  key.source = (*newCharsLen << 24) | *charsOffset;
+  uint32_t expandNext = 0;
+  key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
   key.rulesToParse = src->source;
 
   //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
   sourceToken = (UColToken *)uhash_get(src->tailored, &key);
-  return sourceToken;
   
-  // if we found a tailored thing, we have to get one further down the line
-  //if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
-    //src->extraCurrent--;
-    //getVirginBefore(src, sourceToken, strength, charsOffset, newCharsLen, status);
-  //}
+  // if we found a tailored thing, we have to use the UCA value and construct 
+  // a new reset token with constructed name
+  if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
+    // character to which we want to anchor is already tailored. 
+    // We need to construct a new token which will be the anchor
+    // point
+    *src->extraCurrent++ = 0x0000;
+    *src->extraCurrent++ = 0x0000;
+    src->parsedToken.charsLen+=2;
+    src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
+    if(isContinuation(SecondCE)) {
+      src->lh[src->resultLen].baseContCE = SecondCE;
+    } else {
+      src->lh[src->resultLen].baseContCE = 0;
+    }
+    sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
+  }
 
+  return sourceToken;
 
 }
 
-/*
-Processing Description
-  1 Build a ListList. Each list has a header, which contains two lists (positive 
-  and negative), a reset token, a baseCE, nextCE, and previousCE. The lists and 
-  reset may be null. 
-  2 As you process, you keep a LAST pointer that points to the last token you 
-  handled. 
-*/
-
-uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseError,UErrorCode *status) {
+uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseError, UErrorCode *status) {
   UColToken *lastToken = NULL;
   const UChar *parseEnd = NULL;
   uint32_t expandNext = 0;
@@ -826,26 +906,20 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
 
   UColTokListHeader *ListList = NULL;
 
-  uint32_t newCharsLen = 0, charsOffset = 0;
-  uint32_t newExtensionsLen = 0, extensionOffset = 0;
-  uint32_t prefixLen = 0, prefixOffset = 0;
-  uint32_t newStrength = UCOL_TOK_UNSET; 
+  src->parsedToken.strength = UCOL_TOK_UNSET; 
 
-  UHashtable *uchars2tokens = src->tailored;
   ListList = src->lh;
 
   while(src->current < src->end) {
-    prefixOffset = 0; prefixLen = 0;
+    src->parsedToken.prefixOffset = 0;
   
     parseEnd = ucol_tok_parseNextToken(src, 
-                        &newStrength, 
-                        &charsOffset, &newCharsLen, 
-                        &extensionOffset, &newExtensionsLen,
-                        &prefixOffset, &prefixLen,
-                        &specs,
                         (UBool)(lastToken == NULL),
                         parseError,
                         status);
+
+    specs = src->parsedToken.flags;
+
 
     variableTop = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
     top = ((specs & UCOL_TOK_TOP) != 0);
@@ -861,14 +935,13 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
 
       //key = newCharsLen << 24 | charsOffset;
       UColToken key;
-      key.source = newCharsLen << 24 | charsOffset;
+      key.source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
       key.rulesToParse = src->source;
 
       /*  4 Lookup each source in the CharsToToken map, and find a sourceToken */
-      //sourceToken = (UColToken *)uhash_iget(uchars2tokens, (int32_t)key);
-      sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
+      sourceToken = (UColToken *)uhash_get(src->tailored, &key);
 
-      if(newStrength != UCOL_TOK_RESET) {
+      if(src->parsedToken.strength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
           *status = U_INVALID_FORMAT_ERROR;
           syntaxError(src->source,0,(src->end-src->source),parseError);
@@ -879,20 +952,19 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           /* If sourceToken is null, create new one, */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->rulesToParse = src->source;
-          sourceToken->source = newCharsLen << 24 | charsOffset;
+          sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
 
-          sourceToken->debugSource = *(src->source + charsOffset);
+          sourceToken->debugSource = *(src->source + src->parsedToken.charsOffset);
 
-          sourceToken->prefix = prefixLen << 24 | prefixOffset;
-          sourceToken->debugPrefix = *(src->source + prefixOffset);
+          sourceToken->prefix = src->parsedToken.prefixLen << 24 | src->parsedToken.prefixOffset;
+          sourceToken->debugPrefix = *(src->source + src->parsedToken.prefixOffset);
 
           sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
           sourceToken->noOfCEs = 0;
           sourceToken->noOfExpCEs = 0;
-          //uhash_iput(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
-          uhash_put(uchars2tokens, sourceToken, sourceToken, status);
+          uhash_put(src->tailored, sourceToken, sourceToken, status);
         } else {
           /* we could have fished out a reset here */
           if(sourceToken->strength != UCOL_TOK_RESET && lastToken != sourceToken) {
@@ -916,7 +988,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           }
         }
 
-        sourceToken->strength = newStrength;
+        sourceToken->strength = src->parsedToken.strength;
         sourceToken->listHeader = lastToken->listHeader;
 
         /*
@@ -1003,7 +1075,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
        // (&abc * d * e <=> &ab * d / c * e / c) 
        // if both of them are in effect for a token, they are combined.
 
-        sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
+        sourceToken->expansion = src->parsedToken.extensionLen << 24 | src->parsedToken.extensionOffset;
 
         if(expandNext != 0) {
           if(sourceToken->strength == UCOL_PRIMARY) { /* primary strength kills off the implicit expansion */
@@ -1012,37 +1084,33 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             sourceToken->expansion = expandNext;
           } else { /* there is both explicit and implicit expansion. We need to make a combination */
             memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
-            memcpy(src->extraCurrent+(expandNext >> 24), src->source + extensionOffset, newExtensionsLen*sizeof(UChar));
-            sourceToken->expansion = ((expandNext >> 24) + newExtensionsLen)<<24 | (src->extraCurrent - src->source);
-            src->extraCurrent += (expandNext >> 24) + newExtensionsLen;
+            memcpy(src->extraCurrent+(expandNext >> 24), src->source + src->parsedToken.extensionOffset, src->parsedToken.extensionLen*sizeof(UChar));
+            sourceToken->expansion = ((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (src->extraCurrent - src->source);
+            src->extraCurrent += (expandNext >> 24) + src->parsedToken.extensionLen;
           }
         }
 
         // This is just for debugging purposes
         if(sourceToken->expansion != 0) {
-          sourceToken->debugExpansion = *(src->source + extensionOffset);
+          sourceToken->debugExpansion = *(src->source + src->parsedToken.extensionOffset);
         } else {
           sourceToken->debugExpansion = 0;
         }
       } else {
         if(sourceToken == NULL) { /* this is a reset, but it might still be somewhere in the tailoring, in shorter form */
-          uint32_t searchCharsLen = newCharsLen;
+          uint32_t searchCharsLen = src->parsedToken.charsLen;
           while(searchCharsLen > 1 && sourceToken == NULL) {
             searchCharsLen--;
             //key = searchCharsLen << 24 | charsOffset;
-            //sourceToken = (UColToken *)uhash_iget(uchars2tokens, (int32_t)key);
             UColToken key;
-            key.source = searchCharsLen << 24 | charsOffset;
+            key.source = searchCharsLen << 24 | src->parsedToken.charsOffset;
             key.rulesToParse = src->source;
-            sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
+            sourceToken = (UColToken *)uhash_get(src->tailored, &key);
           }
           if(sourceToken != NULL) {
-            expandNext = (newCharsLen - searchCharsLen) << 24 | (charsOffset + searchCharsLen);
+            expandNext = (src->parsedToken.charsLen - searchCharsLen) << 24 | (src->parsedToken.charsOffset + searchCharsLen);
           }
         }
-
-        uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
-        collIterate s;
 
         if((specs & UCOL_TOK_BEFORE) != 0) { /* we're doing before */
           uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
@@ -1061,11 +1129,11 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             } else { /* we hit NULL */
               /* we should be doing the else part */
               sourceToken = sourceToken->listHeader->reset;
-              sourceToken = getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+              sourceToken = getVirginBefore(src, sourceToken, strength, parseError, status);
               //sourceToken = NULL;
             }
           } else {
-            sourceToken = getVirginBefore(src, sourceToken, strength, &charsOffset, &newCharsLen, status);
+            sourceToken = getVirginBefore(src, sourceToken, strength, parseError, status);
             //sourceToken = NULL;
           }
         }
@@ -1085,33 +1153,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             Create new list, create new sourceToken, make the baseCE from source, put 
             the sourceToken in ListHeader of the new list */
         if(sourceToken == NULL) {
-
-          /* do the reset thing */
-          sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
-          sourceToken->rulesToParse = src->source;
-          sourceToken->source = newCharsLen << 24 | charsOffset;
-          sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
-          
-          sourceToken->debugSource = *(src->source + charsOffset);
-          sourceToken->debugExpansion = *(src->source + extensionOffset);
-
-          if(prefixOffset != 0) {
-            // this is a syntax error 
-            *status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,charsOffset-1,charsOffset+newCharsLen,parseError);
-            return 0;
-          } else {
-            sourceToken->prefix = 0;
-          }
-
-
-          sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
-          sourceToken->strength = UCOL_TOK_RESET;
-          sourceToken->next = NULL;
-          sourceToken->previous = NULL;
-          sourceToken->noOfCEs = 0;
-          sourceToken->noOfExpCEs = 0;
-          sourceToken->listHeader = &ListList[src->resultLen];
           /*
             3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
               First convert all expansions into normal form. Examples: 
@@ -1122,44 +1163,28 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                 earlier in the list. 
           */
           if(top == FALSE) {
-            uint32_t resetCharsOffset;
+            collIterate s;
+            uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
-            init_collIterate(src->UCA, src->source+charsOffset, newCharsLen, &s);
+            init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset, src->parsedToken.charsLen, &s);
 
             CE = ucol_getNextCE(src->UCA, &s, status);
-            resetCharsOffset = s.pos - src->source;
-
+            UChar *expand = s.pos;
             SecondCE = ucol_getNextCE(src->UCA, &s, status);
-    
+
             ListList[src->resultLen].baseCE = CE & 0xFFFFFF3F;
             if(isContinuation(SecondCE)) {
               ListList[src->resultLen].baseContCE = SecondCE;
             } else {
               ListList[src->resultLen].baseContCE = 0;
             }
-            if(newCharsLen > 1) {
-              sourceToken->source = ((resetCharsOffset - charsOffset ) << 24) | charsOffset;
-              expandNext = ((newCharsLen + charsOffset - resetCharsOffset)<<24) | (resetCharsOffset);
-            } else {
-              expandNext = 0;
-            }
+            sourceToken = ucol_tok_initAReset(src, expand, &expandNext, parseError, status);
           } else { /* top == TRUE */
             top = FALSE;
             ListList[src->resultLen].baseCE = UCOL_RESET_TOP_VALUE;
             ListList[src->resultLen].baseContCE = 0;
+            sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);
           }
-
-
-          ListList[src->resultLen].first = NULL;
-          ListList[src->resultLen].last = NULL;
-          ListList[src->resultLen].first = NULL;
-          ListList[src->resultLen].last = NULL;
-
-          ListList[src->resultLen].reset = sourceToken;
-
-          src->resultLen++;
-          //uhash_iput(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
-          uhash_put(uchars2tokens, sourceToken, sourceToken, status);
         } else { /* reset to something already in rules */
           top = FALSE;
         }
