@@ -204,17 +204,30 @@ static void  U_EXPORT2 U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
  *     Lazy create it if it doesn't yet exist.
  */
 static UHashtable *udata_getHashTable() {
-    UErrorCode err = U_ZERO_ERROR;
+    UErrorCode   err = U_ZERO_ERROR;
+    UBool        cacheIsInitialized;
+    UHashtable  *tHT = NULL;
 
-    if (gCommonDataCache != NULL) {
+    umtx_lock(NULL);
+    cacheIsInitialized = (gCommonDataCache != NULL);
+    umtx_unlock(NULL);
+
+    if (cacheIsInitialized) {
         return gCommonDataCache;
     }
+
+    tHT = uhash_open(uhash_hashChars, uhash_compareChars, &err);
+    uhash_setValueDeleter(tHT, DataCacheElement_deleter);
+
     umtx_lock(NULL);
     if (gCommonDataCache == NULL) {
-        gCommonDataCache = uhash_open(uhash_hashChars, uhash_compareChars, &err);
-        uhash_setValueDeleter(gCommonDataCache, DataCacheElement_deleter);
+        gCommonDataCache = tHT;
+        tHT = NULL;
     }
     umtx_unlock(NULL);
+    if (tHT != NULL) {
+        uhash_close(tHT);
+    }
 
     if (U_FAILURE(err)) {
         return NULL;      /* TODO:  handle this error better.  */
