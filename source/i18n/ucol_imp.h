@@ -549,6 +549,7 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
 uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
+U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
 
 #endif
 

@@ -117,6 +117,13 @@ int32_t uhash_hashTokens(const void *k);
 UBool uhash_compareTokens(const void *key1, const void *key2);
 void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status);
 uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
+U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src, 
+                        uint32_t *strength, 
+                        uint32_t *chOffset, uint32_t *chLen, 
+                        uint32_t *exOffset, uint32_t *exLen,
+                        UBool *varT, UBool *top_,
+                        UBool startOfRules,
+                        UErrorCode *status);
 
 #endif
 

@@ -1431,7 +1431,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t *frenchEndPtr = NULL;
     uint32_t caseShift = 0;
 
-    sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (compareQuad?0:1) + (compareIdent?1:0));
+    sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (qShifted?1:0)/*(compareQuad?0:1)*/ + (compareIdent?1:0));
 
     collIterate s;
     init_collIterate(coll, (UChar *)source, len, &s, FALSE);
@@ -1780,7 +1780,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         if(sortKeySize <= resultLength) {
           uprv_memcpy(primaries, terStart, tersize);
           primaries += tersize;
-          if(compareQuad == 0) {
+          if(/*compareQuad == 0*/qShifted == TRUE) {
               if(count4 > 0) {
                 while (count4 >= UCOL_BOT_COUNT4) {
                   *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
@@ -2196,6 +2196,65 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
 
     return sortKeySize;
+}
+
+/* this function makes a string with representation of a sortkey */
+U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
+  uint32_t strength = UCOL_PRIMARY;
+  uint32_t res_size = 0;
+  UBool doneCase = FALSE;
+
+  char *current = buffer;
+  const uint8_t *currentSk = sortkey;
+
+  sprintf(current, "[");
+  current++;
+
+  while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
+    if(strength > UCOL_PRIMARY) {
+      sprintf(current, " . ");
+      current += 3;
+    }
+    while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
+      sprintf(current, "%02X ", *currentSk++);
+      current+=3;
+    }
+    if(coll->caseLevel == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
+        doneCase = TRUE;
+    } else if(coll->caseLevel == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
+      strength ++;
+    } 
+    sprintf(current, "%02X", *(currentSk++)); /* This should print '01' */
+    current +=2;
+    if(strength == UCOL_QUATERNARY && coll->alternateHandling == UCOL_NON_IGNORABLE) {
+      break;
+    }
+  }
+
+  if(coll->strength == UCOL_IDENTICAL) {
+    sprintf(current, " . ");
+    current += 3;
+    while(*currentSk != 0) {
+      if(*currentSk == 0x01) {
+        sprintf(current, "%02X", *(currentSk++));
+        current +=2;
+      } 
+
+      sprintf(current, "%02X%02X ", *currentSk, *(currentSk+1));
+      current +=5;
+      currentSk+=2;
+    }
+
+  sprintf(current, "%02X", *(currentSk++)); /* This should print '00' */
+  current += 2;
+
+  }
+  sprintf(current, "]");
+  current += 3;
+
+  return buffer;
+
+        
 }
 
 /* This is a trick string compare function that goes in and uses sortkeys to compare */
