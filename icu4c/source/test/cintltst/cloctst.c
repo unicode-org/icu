@@ -854,7 +854,7 @@ static void TestISOFunctions()
     res = ures_open(NULL, "root", &status);
     ures_getByKey(res, "Languages", res, &status);
     if (U_FAILURE(status)) {
-        log_err("There is an error in ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
+        log_err("There is an error in root's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     }
 
