@@ -402,7 +402,9 @@
 
     <target name="check" depends="tests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
+        <jvmarg value="-ea"/>  <!-- enable assertion checks -->
         <arg value="-w"/>
+        <arg value="-n"/>
         <classpath>
                 <pathelement path="${java.class.path}/"/>
                 <pathelement location="clover.jar"/>
