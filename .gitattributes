@@ -57,7 +57,6 @@ icu4c/data/line_thLE.brk -text
 icu4c/data/sentBE.brk -text
 icu4c/data/sentLE.brk -text
 icu4c/data/thaidict.brk -text
-icu4c/data/unidata/Draft-TestSuite.txt -text
 icu4c/data/wordBE.brk -text
 icu4c/data/wordLE.brk -text
 icu4c/data/word_thBE.brk -text
