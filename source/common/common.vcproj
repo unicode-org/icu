@@ -1513,6 +1513,9 @@
 				RelativePath=".\uset.cpp">
 			</File>
 			<File
+				RelativePath=".\uset_props.cpp">
+			</File>
+			<File
 				RelativePath=".\unicode\uset.h">
 				<FileConfiguration
 					Name="Release|Win32">
