@@ -23,6 +23,7 @@ void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
 void addMemoryStreamTest(TestNode** root);
 void addTrieTest(TestNode** root);
+void addEnumerationTest(TestNode** root);
 
 void addUtility(TestNode** root);
 
@@ -37,4 +38,5 @@ void addUtility(TestNode** root)
     addHashtableTest(root);
     addCStringTest(root);
     addMemoryStreamTest(root);
+    addEnumerationTest(root);
 }
