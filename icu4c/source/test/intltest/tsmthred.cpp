@@ -4,6 +4,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <unicode/umachine.h>
+
 #if !defined(WIN32) && !defined(XP_MAC)
 #define POSIX 1
 #endif
@@ -12,8 +14,19 @@
 #define HAVE_IMP
 
 #include <pthread.h>
-#include <unistd.h>
 #include <signal.h>
+
+/* Define _XPG4_2 for Solaris and friends. */
+#ifndef _XPG4_2
+#define _XPG4_2
+#endif
+
+/* Define __USE_XOPEN_EXTENDED for Linux and glibc. */
+#ifndef __USE_XOPEN_EXTENDED
+#define __USE_XOPEN_EXTENDED
+#endif
+
+#include <unistd.h>
 
 #endif
 /* HPUX */
