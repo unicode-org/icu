@@ -9,7 +9,7 @@
 #define __LOENGINE_H
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uscript.h"
 #include "unicode/unistr.h"
 
 #include "layout/LETypes.h"
@@ -47,22 +47,22 @@ class U_LAYOUT_API ICULayoutEngine
 {
 private:
 	/**
-	 * This is the table used to translate EUnicodeScript
+	 * This is the table used to translate UScriptCode
 	 * values to the script codes defined in LEScripts.h.
 	 */
 	static int32_t le_scriptCodes[];
 
 	/**
-	 * This method converts an EUnicodeScript value to
+	 * This method converts an UScriptCode value to
 	 * a LayoutEngine script code as defined in LEScripts.
 	 *
-	 * @param script - the EUnicodeScript value
+	 * @param script - the UScriptCode value
 	 *
 	 * @return the LayoutEngine script code.
 	 *
 	 * @see LEScripts.h
 	 */
-	static int32_t le_scriptCode(Unicode::EUnicodeScript script);
+	static int32_t le_scriptCode(UScriptCode script);
 
 	/**
 	 * This holds the instance of LayoutEngine that does all
@@ -234,7 +234,7 @@ public:
 	 * @see LEFontInstance
 	 */
     static ICULayoutEngine *createInstance(const LEFontInstance *fontInstance,
-										   Unicode::EUnicodeScript script, Locale &locale,
+										   UScriptCode script, Locale &locale,
 										   UErrorCode &success);
 };
 
@@ -333,7 +333,7 @@ inline void ICULayoutEngine::getGlyphPosition(int32_t glyphIndex, float &x, floa
 }
 
 inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fontInstance,
-														Unicode::EUnicodeScript script,
+														UScriptCode script,
 														Locale &locale, UErrorCode &success)
 {
 	LayoutEngine *engine = LayoutEngine::layoutEngineFactory(fontInstance,
@@ -344,9 +344,9 @@ inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fo
 	return new ICULayoutEngine(engine);
 }
 
-inline int32_t ICULayoutEngine::le_scriptCode(Unicode::EUnicodeScript script)
+inline int32_t ICULayoutEngine::le_scriptCode(UScriptCode script)
 {
-	if (script < 0 || script >= Unicode::kScriptCount) {
+	if (script < 0 || script >= USCRIPT_CODE_LIMIT) {
 		return 0;
 	}
 
