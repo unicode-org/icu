@@ -161,6 +161,9 @@ typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 * @param pattern A pattern specifying the format to use.
 * @param patternLength The number of characters in the pattern, or -1 if null-terminated.
 * @param locale The locale specifying the formatting conventions
+* @param parseErr a pointer to a UParseError struct to receive the
+* details of any parsing errors. This parameter may be NULL if no
+* parsing error details are desired.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
@@ -204,7 +207,7 @@ unum_clone(const UNumberFormat *fmt,
 * @param number The number to format.
 * @param result A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param position A pointer to a UFieldPosition.  On input, position->field
+* @param pos    A pointer to a UFieldPosition.  On input, position->field
 * is read.  On output, position->beginIndex and position->endIndex indicate
 * the beginning and ending indices of field number position->field, if such
 * a field exists.  This parameter may be NULL, in which case no field
@@ -231,7 +234,7 @@ unum_format(    const    UNumberFormat*    fmt,
 * @param number The number to format.
 * @param result A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param position A pointer to a UFieldPosition.  On input, position->field
+* @param pos    A pointer to a UFieldPosition.  On input, position->field
 * is read.  On output, position->beginIndex and position->endIndex indicate
 * the beginning and ending indices of field number position->field, if such
 * a field exists.  This parameter may be NULL, in which case no field
@@ -503,7 +506,7 @@ typedef enum UNumberFormatTextAttribute UNumberFormatTextAttribute;
 * Get a text attribute associated with a UNumberFormat.
 * An example of a text attribute is the suffix for positive numbers.
 * @param fmt The formatter to query.
-* @param attr The attribute to query; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
+* @param tag The attribute to query; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
 * UNUM_NEGATIVE_PREFIX, UNUM_NEGATIVE_SUFFIX
 * @param result A pointer to a buffer to receive the attribute.
 * @param resultLength The maximum size of result.
@@ -525,7 +528,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
 * Set a text attribute associated with a UNumberFormat.
 * An example of a text attribute is the suffix for positive numbers.
 * @param fmt The formatter to set.
-* @param attr The attribute to set; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
+* @param tag The attribute to set; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
 * UNUM_NEGATIVE_PREFIX, UNUM_NEGATIVE_SUFFIX
 * @param newValue The new value of attr.
 * @param newValueLength The length of newValue, or -1 if null-terminated.

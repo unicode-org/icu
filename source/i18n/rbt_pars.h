@@ -156,6 +156,11 @@ public:
      * returns, query the public data members for results.  The caller
      * owns the 'data' and 'compoundFilter' data members after this
      * call returns.
+     * @param rules      rules, separated by ';'
+     * @param direction  either FORWARD or REVERSE.
+     * @param pe         Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param ec         Output param set to success/failure code.
      */
     void parse(const UnicodeString& rules,
                UTransDirection direction,
@@ -164,11 +169,13 @@ public:
 
     /**
      * Return the compound filter parsed by parse().  Caller owns result.
+     * @return the compound filter parsed by parse().
      */ 
     UnicodeSet* orphanCompoundFilter();
 
     /**
      * Return the data object parsed by parse().  Caller owns result.
+     * @return the data object parsed by parse().
      */
     TransliterationRuleData* orphanData();
 
@@ -188,6 +195,11 @@ public:
 
 private:
 
+    /**
+     * Return a representation of this transliterator as source rules.
+     * @param rules      Output param to receive the rules.
+     * @param direction  either FORWARD or REVERSE.
+     */
     void parseRules(const UnicodeString& rules,
                     UTransDirection direction);
 
@@ -203,11 +215,17 @@ private:
      * parses the end-of-rule character.  It recognizes context and cursor
      * indicators.  Once it does a lexical breakdown of the rule at pos, it
      * creates a rule object and adds it to our rule list.
+     * @param rules      Output param to receive the rules.
+     * @param pos        the starting position.
+     * @param limit      pointer past the last character of the rule.
+     * @return           the index after the last character parsed.
      */
     int32_t parseRule(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
      * Set the variable range to [start, end] (inclusive).
+     * @param start    the start value of the range.
+     * @param end      the end value of the range.
      */
     void setVariableRange(int32_t start, int32_t end);
 
@@ -215,18 +233,22 @@ private:
      * Assert that the given character is NOT within the variable range.
      * If it is, return FALSE.  This is neccesary to ensure that the
      * variable range does not overlap characters used in a rule.
+     * @param ch     the given character.
+     * @return       True, if the given character is NOT within the variable range.
      */
     UBool checkVariableRange(UChar32 ch) const;
 
     /**
      * Set the maximum backup to 'backup', in response to a pragma
      * statement.
+     * @param backup    the new value to be set.
      */
     void pragmaMaximumBackup(int32_t backup);
 
     /**
      * Begin normalizing all rules using the given mode, in response
      * to a pragma statement.
+     * @param mode    the given mode.
      */
     void pragmaNormalizeRules(UNormalizationMode mode);
 
@@ -235,6 +257,7 @@ private:
      * @param pos offset to the first non-whitespace character
      * of the rule.
      * @param limit pointer past the last character of the rule.
+     * @return true if the given rule looks like a pragma.
      */
     static UBool resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit);
 
@@ -254,15 +277,20 @@ private:
      * for the probable end of the rule.  Of course, if the error is that
      * the end of rule marker is missing, then the rule end will not be found.
      * In any case the rule start will be correctly reported.
-     * @param msg error description
-     * @param rule pattern string
-     * @param start position of first character of current rule
+     * @param parseErrorCode error code.
+     * @param msg error description.
+     * @param start position of first character of current rule.
+     * @return start position of first character of current rule.
      */
     int32_t syntaxError(UErrorCode parseErrorCode, const UnicodeString&, int32_t start);
 
     /**
      * Parse a UnicodeSet out, store it, and return the stand-in character
      * used to represent it.
+     *
+     * @param rule    the rule for UnicodeSet.
+     * @param pos     the position in pattern at which to start parsing.
+     * @return        the stand-in character used to represent it.
      */
     UChar parseSet(const UnicodeString& rule,
                    ParsePosition& pos);
@@ -270,28 +298,37 @@ private:
     /**
      * Generate and return a stand-in for a new UnicodeFunctor.  Store
      * the matcher (adopt it).
+     * @param adopted the UnicodeFunctor to be adopted.
+     * @return        a stand-in for a new UnicodeFunctor.
      */
     UChar generateStandInFor(UnicodeFunctor* adopted);
 
     /**
      * Return the standin for segment seg (1-based).
+     * @param seg    the given segment.
+     * @return       the standIn character for the given segment.
      */
     UChar getSegmentStandin(int32_t seg);
 
     /**
      * Set the object for segment seg (1-based).
+     * @param seg      the given segment.
+     * @param adopted  the StringMatcher to be adopted.
      */
     void setSegmentObject(int32_t seg, StringMatcher* adopted);
 
     /**
      * Return the stand-in for the dot set.  It is allocated the first
      * time and reused thereafter.
+     * @return    the stand-in for the dot set.
      */
     UChar getDotStandIn();
 
     /**
      * Append the value of the given variable name to the given
      * UnicodeString.
+     * @param name    the variable name to be appended.
+     * @param buf     the given UnicodeString to append to.
      */
     void appendVariableDef(const UnicodeString& name,
                            UnicodeString& buf);
@@ -305,7 +342,14 @@ private:
     friend class RuleHalf;
 
     // Disallowed methods; no impl.
+    /**
+     * Copy constructor
+     */
     TransliteratorParser(const TransliteratorParser&);
+    
+    /**
+     * Assignment operator
+     */
     TransliteratorParser& operator=(const TransliteratorParser&);
 
     /**

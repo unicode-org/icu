@@ -109,9 +109,18 @@ public:
     Formattable&    operator=(const Formattable&);
     /**
      * Equality comparison.
+     * @param other    the object to be compared with.
+     * @return        TRUE if other are equal to this, FALSE otherwise.
      * @stable
      */
     UBool          operator==(const Formattable&) const;
+    
+    /** 
+     * Equality operator.
+     * @param other    the object to be compared with.
+     * @return        TRUE if other are unequal to this, FALSE otherwise.
+     * @stable
+     */
     UBool          operator!=(const Formattable& other) const
       { return !operator==(other); }
 
@@ -134,28 +143,34 @@ public:
 
     /**
      * Gets the data type of this Formattable object.
+     * @return    the data type of this Formattable object.
      * @stable
      */
     Type            getType(void) const;
     
     /**
      * Gets the double value of this object.
+     * @return    the double value of this object.
      * @stable
      */ 
     double          getDouble(void) const { return fValue.fDouble; }
     /**
      * Gets the long value of this object.
+     * @return    the long value of this object.
      * @stable
      */ 
     int32_t            getLong(void) const { return fValue.fLong; }
     /**
      * Gets the Date value of this object.
+     * @return    the Date value of this object.
      * @stable
      */ 
     UDate            getDate(void) const { return fValue.fDate; }
 
     /**
      * Gets the string value of this object.
+     * @param result    Output param to receive the Date value of this object.
+     * @return          A reference to 'result'.
      * @stable
      */ 
     UnicodeString&  getString(UnicodeString& result) const
@@ -163,18 +178,22 @@ public:
 
     /**
      * Gets a const reference to the string value of this object.
+     * @return   a const reference to the string value of this object.
      * @draft
      */
     inline const UnicodeString& getString(void) const;
 
     /**
      * Gets a reference to the string value of this object.
+     * @return   a reference to the string value of this object.
      * @draft
      */
     inline UnicodeString& getString(void);
 
     /**
      * Gets the array value and count of this object.
+     * @param count    fill-in with the count of this object.
+     * @return         the array value of this object.
      * @stable
      */ 
     const Formattable* getArray(int32_t& count) const
@@ -190,31 +209,38 @@ public:
 
     /**
      * Sets the double value of this object.
+     * @param d    the new double value to be set.
      * @stable
      */ 
     void            setDouble(double d);
     /**
      * Sets the long value of this object.
+     * @param l    the new long value to be set.
      * @stable
      */ 
     void            setLong(int32_t l);
     /**
      * Sets the Date value of this object.
+     * @param d    the new Date value to be set.
      * @stable
      */ 
     void            setDate(UDate d);
     /**
      * Sets the string value of this object.
+     * @param stringToCopy    the new string value to be set.
      * @stable
      */ 
     void            setString(const UnicodeString& stringToCopy);
     /**
      * Sets the array value and count of this object.
+     * @param array    the array value.
+     * @param count    the number of array elements to be copied.
      * @stable
      */ 
     void            setArray(const Formattable* array, int32_t count);
     /**
      * Sets and adopts the string value and count of this object.
+     * @param stringToAdopt    the new string value to be adopted.
      * @stable
      */ 
     void            adoptString(UnicodeString* stringToAdopt);

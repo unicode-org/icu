@@ -57,7 +57,8 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
 class U_I18N_API CanonicalIterator : public UObject {
 public:
     /**
-     *@param source string to get results for
+     *@param source    string to get results for
+     *@param status    Fill-in parameter which receives the status of this operation.
      */
     CanonicalIterator(UnicodeString source, UErrorCode &status);    
 
@@ -83,16 +84,19 @@ public:
     UnicodeString next();    
 
     /**
-     *@param set the source string to iterate against. This allows the same iterator to be used
-     * while changing the source string, saving object creation.
+     *@param newSource     the source string to iterate against. This allows the same iterator to be used
+     *                     while changing the source string, saving object creation.
+     *@param status        Fill-in parameter which receives the status of this operation.
      */
     void setSource(const UnicodeString &newSource, UErrorCode &status);    
 
     /**
      * Dumb recursive implementation of permutation. 
      * TODO: optimize
-     * @param source the string to find permutations for
-     * @return the results in a set.
+     * @param source     the string to find permutations for
+     * @param skipZeros  determine if skip zeros
+     * @param result     the results in a set.
+     * @param status       Fill-in parameter which receives the status of this operation.
      */
     static void permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);     
     

@@ -155,12 +155,18 @@ public:
 
     /**
      * Return true if another object is semantically equal to this one.
+     *
+     * @param other    the object to be compared with.
+     * @return         true if another object is semantically equal to this one.
      * @stable
      */
     UBool operator==(const DecimalFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
+     *
+     * @param other    the object to be compared with.
+     * @return         true if another object is semantically unequal to this one.
      * @stable
      */
     UBool operator!=(const DecimalFormatSymbols& other) const { return !operator==(other); }
@@ -169,6 +175,9 @@ public:
      * Get one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
      * (characters with modifyer letters) can be used.
+     *
+     * @param symbol    Constant to indicate a number format symbol.
+     * @return    the format symbols by the param 'symbol'
      * @stable
      */
     UnicodeString getSymbol(ENumberFormatSymbol symbol) const;
@@ -177,6 +186,9 @@ public:
      * Set one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
      * (characters with modifyer letters) can be used.
+     *
+     * @param symbol    Constant to indicate a number format symbol.
+     * @param value     value of the format sybmol
      * @stable
      */
     void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
@@ -489,12 +501,20 @@ private:
      * Initializes the symbols from the LocaleElements resource bundle.
      * Note: The organization of LocaleElements badly needs to be
      * cleaned up.
+     *
+     * @param locale               The locale to get symbols for.
+     * @param success              Input/output parameter, set to success or
+     *                             failure code upon return.
+     * @param useLastResortData    determine if use last resort data
      */
     void initialize(const Locale& locale, UErrorCode& success, UBool useLastResortData = FALSE);
 
     /**
      * Initialize the symbols from the given array of UnicodeStrings.
      * The array must be of the correct size.
+     * 
+     * @param numberElements    the number format symbols
+     * @param currencyElements  the currency symbols
      */
     void initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements);
 

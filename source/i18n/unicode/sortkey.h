@@ -109,6 +109,7 @@ public:
 
     /**
     * Copy constructor.
+    * @param other    the object to be copied.
     * @stable
     */
     CollationKey(const CollationKey& other);
@@ -121,6 +122,7 @@ public:
 
     /**
     * Assignment operator
+    * @param other    the object to be copied.
     * @stable
     */
     const   CollationKey&   operator=(const CollationKey& other);
@@ -156,6 +158,7 @@ public:
     * is deleted.
     * @param count the output parameter of number of collation key values,
     * including any trailing nulls.
+    * @return a pointer to the collation key values.
     * @stable
     */
     const    uint8_t*       getByteArray(int32_t& count) const;
@@ -172,8 +175,7 @@ public:
     /**
     * Convenience method which does a string(bit-wise) comparison of the
     * two collation keys.
-    * @param sourceKey source collation key
-    * @param targetKey target collation key
+    * @param target target collation key to be compared with
     * @return Returns Collator::LESS if sourceKey &lt; targetKey,
     * Collator::GREATER if sourceKey > targetKey and Collator::EQUAL
     * otherwise.
@@ -221,7 +223,8 @@ private:
     /**
     * Returns an array of the collation key values as 16-bit integers.
     * The caller owns the storage and must delete it.
-    * @param size output parameter of the number of collation key values
+    * @param values Output param of the collation key values.
+    * @param count output parameter of the number of collation key values
     * @return a pointer to an array of 16-bit collation key values.
     */
     void adopt(uint8_t *values, int32_t count);

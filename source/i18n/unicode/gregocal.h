@@ -269,18 +269,21 @@ public:
 
     /**
      * Copy constructor
+     * @param source    the object to be copied.
      * @stable
      */
     GregorianCalendar(const GregorianCalendar& source);
 
     /**
      * Default assignment operator
+     * @param right    the object to be copied.
      * @stable
      */
     GregorianCalendar& operator=(const GregorianCalendar& right);
 
     /**
      * Create and return a polymorphic copy of this calendar.
+     * @return    return a polymorphic copy of this calendar.
      * @stable
      */
     virtual Calendar* clone(void) const;
@@ -339,6 +342,8 @@ public:
      * Calendar override.
      * Return true if another Calendar object is equivalent to this one.  An equivalent
      * Calendar will behave exactly as this one does, but may be set to a different time.
+     * @param other    the object to be compared with.
+     * @return         true if 'other' Calendar object is equivalent to this.
      * @stable
      */
     virtual UBool equivalentTo(const Calendar& other) const;
@@ -373,6 +378,8 @@ public:
     /**
      * (Overrides Calendar) Returns minimum value for the given field. e.g. for
      * Gregorian DAY_OF_MONTH, 1.
+     * @param field    the time field.
+     * @return         minimum value for the given field
      * @stable
      */
     virtual int32_t getMinimum(EDateFields field) const;
@@ -380,6 +387,8 @@ public:
     /**
      * (Overrides Calendar) Returns maximum value for the given field. e.g. for
      * Gregorian DAY_OF_MONTH, 31.
+     * @param field    the time field.
+     * @return         maximum value for the given field
      * @stable
      */
     virtual int32_t getMaximum(EDateFields field) const;
@@ -387,6 +396,9 @@ public:
     /**
      * (Overrides Calendar) Returns highest minimum value for the given field if varies.
      * Otherwise same as getMinimum(). For Gregorian, no difference.
+     * @param field    the time field.
+     * @return         highest minimum value for the given field if varies.
+     *                 Otherwise same as getMinimum().
      * @stable
      */
     virtual int32_t getGreatestMinimum(EDateFields field) const;
@@ -394,6 +406,9 @@ public:
     /**
      * (Overrides Calendar) Returns lowest maximum value for the given field if varies.
      * Otherwise same as getMaximum(). For Gregorian DAY_OF_MONTH, 28.
+     * @param field    the time field.
+     * @return         lowest maximum value for the given field if varies.
+     *                 Otherwise same as getMaximum(). 
      * @stable
      */
     virtual int32_t getLeastMaximum(EDateFields field) const;
@@ -401,6 +416,8 @@ public:
     /**
      * Return the minimum value that this field could have, given the current date.
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+     * @param field    the time field.
+     * @return         the minimum value that this field could have, given the current date.
      * @stable
      */
     int32_t getActualMinimum(EDateFields field) const;
@@ -410,6 +427,8 @@ public:
      * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
      * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
      * for some years the actual maximum for MONTH is 12, and for others 13.
+     * @param field    the time field.
+     * @return         the maximum value that this field could have, given the current date.
      * @stable
      */
     int32_t getActualMaximum(EDateFields field) const;
@@ -456,6 +475,7 @@ protected:
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
+     * @param status Fill-in parameter which receives the status of this operation.
      * @stable
      */
     virtual void computeFields(UErrorCode& status);
@@ -476,14 +496,36 @@ private:
     /**
      * Return the ERA.  We need a special method for this because the
      * default ERA is AD, but a zero (unset) ERA is BC.
+     * @return    the ERA.
      */
     int32_t internalGetEra() const;
 
+    /**
+     * return the length of the given month.
+     * @param month    the given month.
+     * @return    the length of the given month.
+     */
     int32_t monthLength(int32_t month) const;
+
+    /**
+     * return the length of the month according to the given year.
+     * @param month    the given month.
+     * @param year     the given year.
+     * @return         the length of the month
+     */
     int32_t monthLength(int32_t month, int32_t year) const;
-
+    
+    /**
+     * return the length of the given year.
+     * @param year    the given year.
+     * @return        the length of the given year.
+     */
     int32_t yearLength(int32_t year) const;
-
+    
+    /**
+     * return the length of the year field.
+     * @return    the length of the year field
+     */
     int32_t yearLength(void) const;
 
     /**
@@ -497,16 +539,45 @@ private:
     /**
      * Return the day number with respect to the epoch.  January 1, 1970 (Gregorian)
      * is day zero.
+     * @param status Fill-in parameter which receives the status of this operation.
+     * @return       the day number with respect to the epoch.  
      */
     UDate getEpochDay(UErrorCode& status);
 
+    /**
+     * Compute the julian day number of the given year.
+     * @param isGregorian    if true, using Gregorian calendar, otherwise using Julian calendar
+     * @param year           the given year.
+     * @param isLeap         true if the year is a leap year.       
+     * @return 
+     */
     static double computeJulianDayOfYear(UBool isGregorian, int32_t year,
                                          UBool& isLeap);
-
+    
+    /**
+     * Compute the day of week, relative to the first day of week, from
+     * 0..6, of the current DOW_LOCAL or DAY_OF_WEEK fields.  This is
+     * equivalent to get(DOW_LOCAL) - 1.
+     * @return    the day of week, relative to the first day of week.
+     */
     int32_t computeRelativeDOW() const;
-
+    
+    /**
+     * Compute the day of week, relative to the first day of week,
+     * from 0..6 of the given julian day.
+     * @param julianDay    the given julian day.
+     * @return             the day of week, relative to the first day of week.
+     */
     int32_t computeRelativeDOW(double julianDay) const;
 
+    /**
+     * Compute the DOY using the WEEK_OF_YEAR field and the julian day
+     * of the day BEFORE January 1 of a year (a return value from
+     * computeJulianDayOfYear).
+     * @param julianDayOfYear  the given julian day of the day BEFORE 
+     *                         January 1 of a year.
+     * @return the DOY using the WEEK_OF_YEAR field.
+     */
     int32_t computeDOYfromWOY(double julianDayOfYear) const;
 
     /**
@@ -527,6 +598,7 @@ private:
      * whichever is in effect
      * @param quick if true, only compute the ERA, YEAR, MONTH, DATE,
      * DAY_OF_WEEK, and DAY_OF_YEAR.
+     * @param status Fill-in parameter which receives the status of this operation.
      */
     void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
 
@@ -549,6 +621,7 @@ private:
 
     /**
      * Validates the values of the set time fields.  True if they're all valid.
+     * @return    True if the set time fields are all valid.
      */
     UBool validateFields(void) const;
 
@@ -562,6 +635,9 @@ private:
      * individual pseudo-time-stamps.  If either of the fields
      * is unset, then the aggregate is unset.  Otherwise, the
      * aggregate is the later of the two stamps.
+     * @param stamp_a    One given field.
+     * @param stamp_b    Another given field.
+     * @return the pseudo-time-stamp for two fields
      */
     int32_t aggregateStamp(int32_t stamp_a, int32_t stamp_b);
 
@@ -613,6 +689,7 @@ private:
      * not a true Julian date, since it is measured from midnight, not noon. Return
      * value is one-based.
      *
+     * @param julian  The given Julian date number.
      * @return   Day number from 1..7 (SUN..SAT).
      */
     static uint8_t julianDayToDayOfWeek(double julian);

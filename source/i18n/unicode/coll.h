@@ -255,7 +255,9 @@ public:
   * used; neither the requested locale nor any of its fall back locales
   * could be found.
   * The caller owns the returned object and is responsible for deleting it.
-  * @return the collation object of the default locale.(for example, en_US)
+  *
+  * @param err    the error code status.
+  * @return       the collation object of the default locale.(for example, en_US)
   * @see Locale#getDefault
   * @stable
   */
@@ -276,10 +278,10 @@ public:
   * used; neither the requested locale nor any of its fall back locales
   * could be found.
   * The caller owns the returned object and is responsible for deleting it.
-  * @param desiredLocale the desired locale to create the collation table
-  *        with.
-  * @return the created table-based collation object based on the desired
-  *         locale.
+  * @param loc    The locale ID for which to open a collator.
+  * @param err    the error code status.
+  * @return       the created table-based collation object based on the desired
+  *               locale.
   * @see Locale
   * @see ResourceLoader
   * @stable
@@ -367,6 +369,7 @@ public:
   * If the source string is null, a null collation key will be returned.
   * @param source the source string to be transformed into a sort key.
   * @param key the collation key to be filled in
+  * @param status the error code status.
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
   * @stable
@@ -386,6 +389,7 @@ public:
   * @param source the source string to be transformed into a sort key.
   * @param sourceLength length of the collation key
   * @param key the collation key to be filled in
+  * @param status the error code status.
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
   * @stable
@@ -402,6 +406,12 @@ public:
 
   /**
   * Gets the locale of the Collator
+  *
+  * @param type can be either requested, valid or actual locale. For more
+  *             information see the definition of ULocDataLocaleType in
+  *             uloc.h
+  * @return locale where the collation data lives. If the collator
+  *         was instantiated from rules, locale is empty.
   * @draft ICU 2.1
   */
   virtual const Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;

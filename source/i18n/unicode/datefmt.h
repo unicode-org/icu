@@ -342,6 +342,11 @@ public:
 
     /**
      * Redeclared Format method.
+     *
+     * @param obj       The object to be formatted into a string.
+     * @param result    Output param which will receive the formatted date.
+     * @param status    Output param filled with success/failure status.
+     * @return          A reference to 'result'.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -374,6 +379,8 @@ public:
      * @see DateFormat::setLenient(boolean)
      *
      * @param text  The date/time string to be parsed
+     * @param cal   a Calendar set to the date and time to be formatted
+     *              into a date/time string.
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
@@ -507,6 +514,8 @@ public:
      * parsing, the parser may use heuristics to interpret inputs that do not
      * precisely match this object's format. With strict parsing, inputs must
      * match this object's format.
+     * 
+     * @param lenient  True specifies date/time interpretation to be lenient.
      * @see Calendar::setLenient
      * @stable
      */
@@ -523,6 +532,8 @@ public:
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.  The caller should
      * not delete the Calendar object after it is adopted by this call.
+     *
+     * @param calendarToAdopt    Calendar object to be adopted.
      * @stable
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
@@ -530,6 +541,8 @@ public:
     /**
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.
+     *
+     * @param newCalendar Calendar object to be set.
      * @stable
      */
     virtual void setCalendar(const Calendar& newCalendar);
@@ -553,7 +566,7 @@ public:
 
     /**
      * Allows you to set the number formatter.
-     * @param formatToAdopt     NumberFormat object to be adopted.
+     * @param formatToAdopt     NumberFormat object to be set.
      * @stable
      */
     virtual void setNumberFormat(const NumberFormat& newNumberFormat);
@@ -568,7 +581,7 @@ public:
     /**
      * Sets the time zone for the calendar of this DateFormat object. The caller
      * no longer owns the TimeZone object and should not delete it after this call.
-     * @param zone the new time zone.
+     * @param zoneToAdopt the TimeZone to be adopted.
      * @stable
      */
     virtual void adoptTimeZone(TimeZone* zoneToAdopt);

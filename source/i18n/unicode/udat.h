@@ -164,10 +164,8 @@ typedef enum UDateFormatStyle UDateFormatStyle;
  * @param tzID A timezone ID specifying the timezone to use.  If 0, use
  * the default timezone.
  * @param tzIDLength The length of tzID, or -1 if null-terminated.
- * @param status A pointer to an UErrorCode to receive any errors
  * @param pattern A pattern specifying the format to use.
  * @param patternLength The number of characters in the pattern, or -1 if null-terminated.
- * @param locale The locale specifying the formatting conventions
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
  * an error occurred.
@@ -236,7 +234,7 @@ udat_format(    const    UDateFormat*    format,
 * Parse a string into an date/time using a UDateFormat.
 * The date will be parsed using the conventions specified in \Ref{udat_open}
 * or \Ref{udat_openPattern}
-* @param fmt The formatter to use.
+* @param format The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
 * @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
@@ -257,7 +255,7 @@ udat_parse(    const    UDateFormat*    format,
 * Parse a string into an date/time using a UDateFormat.
 * The date will be parsed using the conventions specified in \Ref{udat_open}
 * or \Ref{udat_openPattern}
-* @param fmt The formatter to use.
+* @param format The formatter to use.
 * @param calendar The calendar in which to store the parsed data.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -424,7 +422,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 /**
 * Set the pattern used by an UDateFormat.
 * The pattern should follow the pattern syntax rules.
-* @param fmt The formatter to set.
+* @param format The formatter to set.
 * @param localized TRUE if the pattern is localized, FALSE otherwise.
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
@@ -506,7 +504,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * Set the symbols associated with an UDateFormat.
 * The symbols are what a UDateFormat uses to represent locale-specific data,
 * for example month or day names.
-* @param fmt The formatter to set
+* @param format The formatter to set
 * @param type The type of symbols to set.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
 * @param index The index of the symbol to set of type type.

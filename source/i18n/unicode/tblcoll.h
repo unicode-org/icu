@@ -340,6 +340,7 @@ public:
   * @param type can be either requested, valid or actual locale. For more
   *             information see the definition of ULocDataLocaleType in
   *             uloc.h
+  * @param status the error code status.
   * @return locale where the collation data lives. If the collator
   *         was instantiated from rules, locale is empty.
   * @draft ICU 2.1
@@ -667,6 +668,7 @@ private:
   /**
   * Constructor that takes in a UCollator struct
   * @param collator UCollator struct
+  * @param rule     the rule for the collator.
   */
   RuleBasedCollator(UCollator *collator, UnicodeString *rule);
 
@@ -682,7 +684,14 @@ private:
    */
   RuleBasedCollator(const Locale& desiredLocale, UErrorCode& status);
 
-  /** common constructor implementation */
+  /**
+   * common constructor implementation
+   *
+   * @param rules the collation rules to build the collation table from.
+   * @param collationStrength default strength for comparison
+   * @param decompositionMode the normalisation mode
+   * @param status reporting a success or an error.
+   */
   void
   construct(const UnicodeString& rules,
             UColAttributeValue collationStrength,

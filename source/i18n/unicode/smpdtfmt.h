@@ -180,6 +180,7 @@ public:
      * <P>
      * [Note:] Not all locales support SimpleDateFormat; for full generality,
      * use the factory methods in the DateFormat class.
+     * @param status    Output param set to success/failure code.
      * @stable
      */
     SimpleDateFormat(UErrorCode& status);
@@ -191,6 +192,8 @@ public:
      * <P>
      * [Note:] Not all locales support SimpleDateFormat; for full generality,
      * use the factory methods in the DateFormat class.
+     * @param pattern    the pattern for the format.
+     * @param status     Output param set to success/failure code.
      * @stable
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -203,6 +206,9 @@ public:
      * <P>
      * [Note:] Not all locales support SimpleDateFormat; for full generality,
      * use the factory methods in the DateFormat class.
+     * @param pattern    the pattern for the format.
+     * @param locale     the given locale.
+     * @param staus      Output param set to success/failure code.
      * @stable
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -213,6 +219,9 @@ public:
      * Construct a SimpleDateFormat using the given pattern and locale-specific
      * symbol data.  The formatter takes ownership of the DateFormatSymbols object;
      * the caller is no longer responsible for deleting it.
+     * @param pattern           the given pattern for the format.
+     * @param formatDataToAdopt the symbols to be adopted.
+     * @param staus             Output param set to success/faulure code.
      * @stable
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -223,6 +232,9 @@ public:
      * Construct a SimpleDateFormat using the given pattern and locale-specific
      * symbol data.  The DateFormatSymbols object is NOT adopted; the caller
      * remains responsible for deleting it.
+     * @param pattern           the given pattern for the format.
+     * @param formatDataToAdopt the symbols to be set.
+     * @param staus             Output param set to success/faulure code.
      * @stable
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -250,6 +262,7 @@ public:
     /**
      * Clone this Format object polymorphically. The caller owns the result and
      * should delete it when done.
+     * @return    A copy of the object.
      * @stable
      */
     virtual Format* clone(void) const;
@@ -257,6 +270,8 @@ public:
     /**
      * Return true if the given Format objects are semantically equal. Objects
      * of different subclasses are considered unequal.
+     * @param other    the object to be compared with.
+     * @return         true if the given Format objects are semantically equal.
      * @stable
      */
     virtual UBool operator==(const Format& other) const;
@@ -296,6 +311,7 @@ public:
      *                      string.
      * @param pos           The formatting position. On input: an alignment field,
      *                      if desired. On output: the offsets of the alignment field.
+     * @param status        Output param set to success/faulure code.
      * @return              A reference to 'toAppendTo'.
      * @stable
      */
@@ -306,6 +322,11 @@ public:
 
     /**
      * Redeclared DateFormat method.
+     * @param date          the Date value to be formatted.
+     * @param result        Output param to receive the formatted string.
+     * @param fieldPosition The formatting position. On input: an alignment field,
+     *                      if desired. On output: the offsets of the alignment field.
+     * @return              A reference to 'result'.
      * @draft ICU 2.1
      */
     UnicodeString& format(UDate date,
@@ -314,6 +335,10 @@ public:
 
     /**
      * Redeclared DateFormat method.
+     * @param obj    the object to be formatted.
+     * @param result Output param to receive the formatted string.
+     * @param status Output param set to success/faulure code.
+     * @return              A reference to 'toAppendTo'. 
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -322,6 +347,9 @@ public:
 
     /**
      * Redeclared DateFormat method.
+     * @param date          the Date value to be formatted.
+     * @param result        Output param to receive the formatted string.
+     * @return              A reference to 'result'.
      * @stable
      */
     UnicodeString& format(UDate date, UnicodeString& result) const;
@@ -337,6 +365,8 @@ public:
      * calling setLenient(false).
      *
      * @param text  The date/time string to be parsed
+     * @param cal   a Calendar set to the date and time to be formatted
+     *              into a date/time string.
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
@@ -399,6 +429,9 @@ public:
      * <P>
      * By default, the two digit start date is set to 80 years before the current
      * time at which a SimpleDateFormat object is created.
+     * @param d      start UDate used to interpret two-digit year strings.
+     * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
+     *               an error value if there was a parse error.
      * @stable
      */
     virtual void set2DigitYearStart(UDate d, UErrorCode& status);
@@ -414,12 +447,16 @@ public:
      * <P>
      * By default, the two digit start date is set to 80 years before the current
      * time at which a SimpleDateFormat object is created.
+     * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
+     *               an error value if there was a parse error.
      * @stable
      */
     UDate get2DigitYearStart(UErrorCode& status) const;
 
     /**
      * Return a pattern string describing this date format.
+     * @param result Output param to receive the pattern.
+     * @return       A reference to 'result'.
      * @stable
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
@@ -437,6 +474,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
+     * @return          A reference to 'result'.
      * @stable
      */
     virtual UnicodeString& toLocalizedPattern(UnicodeString& result,
@@ -543,6 +581,11 @@ private:
 
     /**
      * Used by the DateFormat factory methods to construct a SimpleDateFormat.
+     * @param timeStyle the time style.
+     * @param dateStyle the date style.
+     * @param locale    the given locale.
+     * @param status    Output param set to success/failure code on
+     *                  exit.
      */
     SimpleDateFormat(EStyle timeStyle, EStyle dateStyle, const Locale& locale, UErrorCode& status);
 
@@ -550,6 +593,9 @@ private:
      * Construct a SimpleDateFormat for the given locale.  If no resource data
      * is available, create an object of last resort, using hard-coded strings.
      * This is an internal method, called by DateFormat.  It should never fail.
+     * @param locale    the given locale.
+     * @param status    Output param set to success/failure code on
+     *                  exit.
      */
     SimpleDateFormat(const Locale& locale, UErrorCode& status); // Use default pattern
 
@@ -619,7 +665,10 @@ private:
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param field the date field being parsed.
-     * @param data the string array to parsed.
+     * @param stringArray the string array to parsed.
+     * @param stringArrayCount the size of the array.
+     * @param cal a Calendar set to the date and time to be formatted
+     *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
@@ -634,6 +683,9 @@ private:
      * @param ch the pattern character for the date field text to be parsed.
      * @param count the count of a pattern character.
      * @param obeyCount if true then the count is strictly obeyed.
+     * @param ambiguousYear If true then the two-digit year == the default start year.
+     * @param cal a Calendar set to the date and time to be formatted
+     *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
@@ -654,6 +706,12 @@ private:
      * corresponding character in the to string. Return an error if the original
      * pattern contains an unmapped character, or if a quote is unmatched.
      * Quoted (single quotes only) material is not translated.
+     * @param originalPattern   the original pattern.
+     * @param translatedPattern Output param to receive the translited pattern.
+     * @param from              the characters to be translited from.
+     * @param to                the characters to be translited to.
+     * @param status            Receives a status code, which will be U_ZERO_ERROR 
+     *                          if the operation succeeds.
      */
     static void translatePattern(const UnicodeString& originalPattern,
                                 UnicodeString& translatedPattern,
@@ -669,18 +727,25 @@ private:
     /**
      * Sets the starting date of the 100-year window that dates with 2-digit years
      * are considered to fall within.
+     * @param startDate the start date
+     * @param status    Receives a status code, which will be U_ZERO_ERROR 
+     *                  if the operation succeeds.
      */
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
 
     /**
      * Returns the beginning date of the 100-year window that dates with 2-digit years
      * are considered to fall within.
+     * @return    the beginning date of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
      */
     UDate         internalGetDefaultCenturyStart(void) const;
 
     /**
      * Returns the first year of the 100-year window that dates with 2-digit years
      * are considered to fall within.
+     * @return    the first year of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
      */
     int32_t          internalGetDefaultCenturyStartYear(void) const;
 

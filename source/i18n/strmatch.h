@@ -40,11 +40,14 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
 
     /**
      * Construct a matcher that matches the given pattern string.
-     * @param theString the pattern to be matched, possibly containing
+     * @param string the pattern to be matched, possibly containing
      * stand-ins that represent nested UnicodeMatcher objects.
+     * @param start inclusive start index of text to be replaced
+     * @param limit exclusive end index of text to be replaced;
+     * must be greater than or equal to start
      * @param segmentNum the segment number from 1..n, or 0 if this is
      * not a segment.
-     * @param theData context object mapping stand-ins to
+     * @param data context object mapping stand-ins to
      * UnicodeMatcher objects.
      */
     StringMatcher(const UnicodeString& string,
@@ -53,6 +56,10 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
                   int32_t segmentNum,
                   const TransliterationRuleData& data);
 
+    /**
+     * Copy constructor
+     * @param o  the object to be copied.
+     */
     StringMatcher(const StringMatcher& o);
         
     /**
@@ -62,23 +69,45 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
 
     /**
      * Implement UnicodeFunctor
+     * @return a copy of the object.
      */
     virtual UnicodeFunctor* clone() const;
 
     /**
      * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
      * and return the pointer.
+     * @return the UnicodeMatcher point.
      */
     virtual UnicodeMatcher* toMatcher() const;
 
     /**
      * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
      * and return the pointer.
+     * @return the UnicodeReplacer pointer.
      */
     virtual UnicodeReplacer* toReplacer() const;
 
     /**
      * Implement UnicodeMatcher
+     * @param text the text to be matched
+     * @param offset on input, the index into text at which to begin
+     * matching.  On output, the limit of the matched text.  The
+     * number of matched characters is the output value of offset
+     * minus the input value.  Offset should always point to the
+     * HIGH SURROGATE (leading code unit) of a pair of surrogates,
+     * both on entry and upon return.
+     * @param limit the limit index of text to be matched.  Greater
+     * than offset for a forward direction match, less than offset for
+     * a backward direction match.  The last character to be
+     * considered for matching will be text.charAt(limit-1) in the
+     * forward direction or text.charAt(limit+1) in the backward
+     * direction.
+     * @param incremental  if TRUE, then assume further characters may
+     * be inserted at limit and check for partial matching.  Otherwise
+     * assume the text as given is complete.
+     * @return a match degree value indicating a full match, a partial
+     * match, or a mismatch.  If incremental is FALSE then
+     * U_PARTIAL_MATCH should never be returned.
      */
     virtual UMatchDegree matches(const Replaceable& text,
                                  int32_t& offset,
@@ -87,12 +116,22 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
 
     /**
      * Implement UnicodeMatcher
+     * @param result            Output param to receive the pattern.
+     * @param escapeUnprintable if True then escape the unprintable characters.
+     * @return                  A reference to 'result'.
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
                                      UBool escapeUnprintable = FALSE) const;
 
     /**
      * Implement UnicodeMatcher
+     * Returns TRUE if this matcher will match a character c, where c
+     * & 0xFF == v, at offset, in the forward direction (with limit >
+     * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     * @param v    the given value
+     * @return     TRUE if this matcher will match a character c, 
+     *             where c & 0xFF == v
      */
     virtual UBool matchesIndexValue(uint8_t v) const;
 

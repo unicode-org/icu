@@ -208,6 +208,7 @@ utrans_clone(const UTransliterator* trans,
 /**
  * Close a transliterator.  Any non-NULL pointer returned by
  * utrans_openXxx() or utrans_clone() should eventually be closed.
+ * @param trans the transliterator to be closed.
  * @stable
  */
 U_CAPI void U_EXPORT2 
@@ -241,7 +242,7 @@ utrans_getID(const UTransliterator* trans,
  * <p>NOTE: After this call the system owns the adoptedTrans and will
  * close it.  The user must not call utrans_close() on adoptedTrans.
  *
- * @param trans a transliterator, typically the result of
+ * @param adoptedTrans a transliterator, typically the result of
  * utrans_openRules(), to be registered with the system.
  * @param status a pointer to the UErrorCode
  * @stable
@@ -287,6 +288,7 @@ utrans_setFilter(UTransliterator* trans,
 
 /**
  * Return the number of system transliterators.
+ * @return the number of system transliterators.
  * @stable
  */
 U_CAPI int32_t U_EXPORT2 

@@ -109,19 +109,27 @@ public:
 
     /**
      * Return true if another object is semantically equal to this one.
+     *
+     * @param other    the DateFormatSymbols object to be compared with.
+     * @return         true if other is semantically equal to this.
      * @stable
      */
     UBool operator==(const DateFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
+     *
+     * @param other    the DateFormatSymbols object to be compared with.
+     * @return         true if other is semantically unequal to this.
      * @stable
      */
     UBool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * Gets era strings. For example: "AD" and "BC".
-     * @return the era strings.
+     *
+     * @param count    Filled in with length of the array.
+     * @return         the era strings.
      * @stable
      */
     const UnicodeString* getEras(int32_t& count) const;
@@ -144,13 +152,17 @@ public:
 
     /**
      * Sets month strings. For example: "January", "February", etc.
-     * @param newMonths the new month strings. (not adopted; caller retains ownership)
+     *
+     * @param months    the new month strings. (not adopted; caller retains ownership)
+     * @param count     Filled in with length of the array.
      * @stable
      */
     void setMonths(const UnicodeString* months, int32_t count);
 
     /**
      * Gets short month strings. For example: "Jan", "Feb", etc.
+     *
+     * @param count Filled in with length of the array.
      * @return the short month strings. (DateFormatSymbols retains ownership.)
      * @stable
      */
@@ -158,13 +170,15 @@ public:
 
     /**
      * Sets short month strings. For example: "Jan", "Feb", etc.
-     * @param newShortMonths the new short month strings. (not adopted; caller retains ownership)
+     * @param count        Filled in with length of the array.
+     * @param shortMonths  the new short month strings. (not adopted; caller retains ownership)
      * @stable
      */
     void setShortMonths(const UnicodeString* shortMonths, int32_t count);
 
     /**
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
+     * @param count        Filled in with length of the array.
      * @return the weekday strings. (DateFormatSymbols retains ownership.)
      * @stable
      */
@@ -172,35 +186,40 @@ public:
 
     /**
      * Sets weekday strings. For example: "Sunday", "Monday", etc.
-     * @param newWeekdays the new weekday strings. (not adopted; caller retains ownership)
+     * @param weekdays     the new weekday strings. (not adopted; caller retains ownership)
+     * @param count        Filled in with length of the array.
      * @stable
      */
     void setWeekdays(const UnicodeString* weekdays, int32_t count);
 
     /**
      * Gets short weekday strings. For example: "Sun", "Mon", etc.
-     * @return the short weekday strings. (DateFormatSymbols retains ownership.)
+     * @param count        Filled in with length of the array.
+     * @return             the short weekday strings. (DateFormatSymbols retains ownership.)
      * @stable
      */
     const UnicodeString* getShortWeekdays(int32_t& count) const;
 
     /**
      * Sets short weekday strings. For example: "Sun", "Mon", etc.
-     * @param newShortWeekdays the new short weekday strings. (not adopted; caller retains ownership)
+     * @param shortWeekdays  the new short weekday strings. (not adopted; caller retains ownership)
+     * @param count          Filled in with length of the array.
      * @stable
      */
     void setShortWeekdays(const UnicodeString* shortWeekdays, int32_t count);
 
     /**
      * Gets AM/PM strings. For example: "AM" and "PM".
-     * @return the weekday strings. (DateFormatSymbols retains ownership.)
+     * @param count        Filled in with length of the array.
+     * @return             the weekday strings. (DateFormatSymbols retains ownership.)
      * @stable
      */
     const UnicodeString* getAmPmStrings(int32_t& count) const;
 
     /**
      * Sets ampm strings. For example: "AM" and "PM".
-     * @param newAmpms the new ampm strings. (not adopted; caller retains ownership)
+     * @param ampms        the new ampm strings. (not adopted; caller retains ownership)
+     * @param count        Filled in with length of the array.
      * @stable
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
@@ -231,13 +250,15 @@ public:
 
     /**
      * Get the non-localized date-time pattern characters.
+     * @return    the non-localized date-time pattern characters
      * @stable
      */
     static const UChar *getPatternUChars(void);
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
-     * @return the localized date-time pattern characters.
+     * @param result    Output param which will receive the localized date-time pattern characters.
+     * @return          A reference to 'result'.
      * @stable
      */
     UnicodeString& getLocalPatternChars(UnicodeString& result) const;
@@ -359,11 +380,21 @@ private:
 
     /**
      * Called by the constructors to actually load data from the resources
+     *
+     * @param locale               The locale to get symbols for.
+     * @param status               Input/output parameter, set to success or
+     *                             failure code upon return.
+     * @param useLastResortData    determine if use last resort data
      */
     void initializeData(const Locale&, UErrorCode& status, UBool useLastResortData = FALSE);
 
     /**
      * Copy or alias an array in another object, as appropriate.
+     *
+     * @param dstArray    the copy destination array.
+     * @param dstCount    fill in with the lenth of 'dstArray'.
+     * @param srcArray    the source array to be copied.
+     * @param srcCount    the length of items to be copied from the 'srcArray'.
      */
     static void assignArray(UnicodeString*& dstArray,
                             int32_t& dstCount,
@@ -373,6 +404,12 @@ private:
     /**
      * Return true if the given arrays' contents are equal, or if the arrays are
      * identical (pointers are equal).
+     *
+     * @param array1   one array to be compared with.
+     * @param array2   another array to be compared with.
+     * @param count    the length of items to be copied.
+     * @return         true if the given arrays' contents are equal, or if the arrays are
+     *                 identical (pointers are equal).
      */
     static UBool arrayCompare(const UnicodeString* array1,
                              const UnicodeString* array2,
@@ -409,6 +446,7 @@ private:
 
     /**
      * Copy all of the other's data to this.
+     * @param other the object to be copied.
      */
     void copyData(const DateFormatSymbols& other);
 
