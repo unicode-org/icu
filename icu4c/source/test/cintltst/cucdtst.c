@@ -24,6 +24,7 @@
 #include "cucdtst.h"
 #include "uparse.h"
 #include "unicode/uscript.h"
+#include "usc_impl.h"
 
 /* prototypes --------------------------------------------------------------- */
 
