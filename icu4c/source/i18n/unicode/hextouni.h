@@ -22,7 +22,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.6 $ $Date: 2000/05/18 22:08:27 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.7 $ $Date: 2000/06/27 19:00:38 $
  * @draft
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
@@ -148,7 +148,7 @@ public:
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
-    virtual void handleTransliterate(Replaceable& text, Position& offset,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
 };
 

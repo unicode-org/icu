@@ -40,7 +40,7 @@ CompoundTransliterator::CompoundTransliterator(
  * takes the inverse of each ID.
  */
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
-                              Transliterator::Direction direction,
+                              UTransDirection direction,
                               UnicodeFilter* adoptedFilter,
                               UErrorCode& status) :
     Transliterator(ID, 0), // set filter to 0 here!
@@ -52,18 +52,18 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               UErrorCode& status) :
     Transliterator(ID, 0), // set filter to 0 here!
     filters(0), trans(0) {
-    init(ID, FORWARD, 0, status);
+    init(ID, UTRANS_FORWARD, 0, status);
 }
 
 void CompoundTransliterator::init(const UnicodeString& ID,
-                                  Transliterator::Direction direction,
+                                  UTransDirection direction,
                                   UnicodeFilter* adoptedFilter,
                                   UErrorCode& status) {
     if (U_FAILURE(status)) return;
     UnicodeString* list = split(ID, ID_DELIM, count);
     trans = new Transliterator*[count];
     for (int32_t i = 0; i < count; ++i) {
-        trans[i] = createInstance(list[direction==FORWARD ? i : (count-1-i)],
+        trans[i] = createInstance(list[direction==UTRANS_FORWARD ? i : (count-1-i)],
                                   direction);
         if (trans[i] == NULL) {
             while (++i < count) trans[i] = 0;
@@ -285,7 +285,7 @@ void CompoundTransliterator::adoptFilter(UnicodeFilter* f) {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void CompoundTransliterator::handleTransliterate(Replaceable& text, Position& index,
+void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
                                                  UBool incremental) const {
     /* Call each transliterator with the same start value and
      * initial cursor index, but with the limit index as modified

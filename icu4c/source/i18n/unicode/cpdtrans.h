@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.9 $ $Date: 2000/05/20 04:34:20 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.10 $ $Date: 2000/06/27 19:00:38 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -74,7 +74,7 @@ public:
      * @draft
      */
     CompoundTransliterator(const UnicodeString& ID,
-                           Direction dir,
+                           UTransDirection dir,
                            UnicodeFilter* adoptedFilter,
                            UErrorCode& status);
 
@@ -149,13 +149,13 @@ public:
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
-    virtual void handleTransliterate(Replaceable& text, Position& index,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
 
 private:
 
     void init(const UnicodeString& ID,
-              Direction dir,
+              UTransDirection dir,
               UnicodeFilter* adoptedFilter,
               UErrorCode& status);
 

@@ -62,7 +62,7 @@ Transliterator* HangulJamoTransliterator::clone(void) const {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void HangulJamoTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+void HangulJamoTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                    UBool isIncremental) const {
     int32_t cursor = offsets.cursor;
     int32_t limit = offsets.limit;
