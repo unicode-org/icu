@@ -8,7 +8,6 @@
 */
 package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.text.*;
-import com.ibm.icu.lang.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
