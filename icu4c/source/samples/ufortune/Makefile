@@ -34,7 +34,8 @@ ALL_SUBDIR=   all-$(RESDIR)
 CLEAN_SUBDIR= clean-$(RESDIR)
 
 # Need: ustdio, and to link with ufortune
-LDFLAGS += $(LDFLAGS_USTDIO) $(RESLDFLAGS)
+XTRALIBS=$(RESLDFLAGS)
+LDFLAGS += $(LDFLAGS_USTDIO)
 CPPFLAGS += $(RESCPPFLAGS)
 
 ### Include standard rules
