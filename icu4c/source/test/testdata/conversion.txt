@@ -45,6 +45,22 @@ conversion {
       Cases {
         // DBCS-only extensions
         {
+          "ibm-970",
+          :bin{ 617eece9b2eb },
+          "\x61\x7e\u4e00\ub000",
+          :intvector{ 0, 1, 2, 4 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-971",
+          :bin{ 617eece9b2eb },
+          "\ufffd\u4e00\ub000",
+          :intvector{ 0, 2, 4 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
+        {
           "ibm-16684",
           :bin{ 430e4395ecc1404042e1 },
           "\ufffd\u30C8\u30C8\u309A\u3000\u20ac",
@@ -162,6 +178,22 @@ conversion {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
         // DBCS-only extensions
+        {
+          "ibm-970",
+          "\x61\uffa1\u2015\ub000",
+          :bin{ 611aa1aab2eb },
+          :intvector{ 0, 1, 2, 2, 3, 3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        {
+          "ibm-971",
+          "\x61\uffa1\u2015\ub000",
+          :bin{ affeaffeaffeb2eb },
+          :intvector{ 0, 0, 1, 1, 2, 2, 3, 3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         {
           "ibm-1390,swaplfnl",
           "\uff63\u30C8\u30C8\u309A\u3000\x41\u20ac\x0a",
@@ -339,6 +371,13 @@ conversion {
       Headers { "charset", "map", "mapnot", "which" }
       Cases {
         // DBCS-only
+        {
+          "ibm-971",
+          "[\xa1\xa4\uac01\ub000]",
+          "[\x00-\x9f\u2015]",
+          :int{0}
+        }
+
         {
           "ibm-16684",
           "[\xa0\xa1\xa4\xa6-\xab\xad-\u017f\u0254\u309b-\u30ff\u4e00-\u4e05\U00023d00\U000243bc\U0002a6b2"
