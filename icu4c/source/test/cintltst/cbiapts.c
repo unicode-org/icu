@@ -23,13 +23,12 @@
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cbiapts.h"
-#include<stdio.h>
-#include<string.h>
 
+void addBrkIterAPITest(TestNode** root);
 
 void addBrkIterAPITest(TestNode** root)
 {
-    addTest(root, &TestBreakIteratorCAPI, "tstxtbd/capitst/TestBreakIteratorCAPI");
+    addTest(root, &TestBreakIteratorCAPI, "tstxtbd/cbiapts/TestBreakIteratorCAPI");
 
 }
 
