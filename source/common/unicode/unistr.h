@@ -78,6 +78,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return TRUE if <TT>text</TT> contains the same characters as this one,
    * FALSE otherwise.
+   * @stable
    */
   inline bool_t operator== (const UnicodeString& text) const;
   
@@ -86,6 +87,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return FALSE if <TT>text</TT> contains the same characters as this one,
    * TRUE otherwise.
+   * @stable
    */
   inline bool_t operator!= (const UnicodeString& text) const;
 
@@ -94,6 +96,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return TRUE if the characters in <TT>text</TT> are bitwise
    * greater than the characters in this, FALSE otherwise
+   * @stable
    */
   inline bool_t operator> (const UnicodeString& text) const;
 
@@ -102,6 +105,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return TRUE if the characters in <TT>text</TT> are bitwise
    * less than the characters in this, FALSE otherwise
+   * @stable
    */
   inline bool_t operator< (const UnicodeString& text) const;
 
@@ -110,6 +114,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return TRUE if the characters in <TT>text</TT> are bitwise
    * greater than or equal to the characters in this, FALSE otherwise
+   * @stable
    */
   inline bool_t operator>= (const UnicodeString& text) const;
 
@@ -118,6 +123,7 @@ public:
    * @param text The UnicodeString to compare to this one.
    * @return TRUE if the characters in <TT>text</TT> are bitwise
    * less than or equal to the characters in this, FALSE otherwise
+   * @stable
    */
   inline bool_t operator<= (const UnicodeString& text) const;
 
@@ -130,6 +136,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compare(const UnicodeString& text) const;
 
@@ -145,6 +152,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compare(UTextOffset start,
          int32_t length,
@@ -165,6 +173,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
    inline int8_t compare(UTextOffset start,
          int32_t length,
@@ -182,6 +191,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compare(const UChar *srcChars,
          int32_t srcLength) const;
@@ -198,6 +208,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compare(UTextOffset start,
          int32_t length,
@@ -218,6 +229,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compare(UTextOffset start,
          int32_t length,
@@ -240,6 +252,7 @@ public:
    * <TT>text</TT> are bitwise less than the characters in this, +1 if the
    * characters in <TT>text</TT> are bitwise greater than the characters 
    * in this.
+   * @stable
    */
   inline int8_t compareBetween(UTextOffset start,
             UTextOffset limit,
@@ -252,6 +265,7 @@ public:
    * @param text The text to match.
    * @return TRUE if this starts with the characters in <TT>text</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t startsWith(const UnicodeString& text) const;
 
@@ -263,6 +277,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> to match
    * @return TRUE if this starts with the characters in <TT>text</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t startsWith(const UnicodeString& srcText,
             UTextOffset srcStart,
@@ -274,6 +289,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT>
    * @return TRUE if this starts with the characters in <TT>srcChars</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t startsWith(const UChar *srcChars,
             int32_t srcLength) const;
@@ -286,6 +302,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> to match
    * @return TRUE if this ends with the characters in <TT>srcChars</TT>, 
    FALSE otherwise
+   * @stable
   */
   inline bool_t startsWith(const UChar *srcChars,
             UTextOffset srcStart,
@@ -296,6 +313,7 @@ public:
    * @param text The text to match.
    * @return TRUE if this ends with the characters in <TT>text</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t endsWith(const UnicodeString& text) const;
 
@@ -307,6 +325,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> to match
    * @return TRUE if this ends with the characters in <TT>text</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t endsWith(const UnicodeString& srcText,
           UTextOffset srcStart,
@@ -318,6 +337,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT>
    * @return TRUE if this ends with the characters in <TT>srcChars</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t endsWith(const UChar *srcChars,
           int32_t srcLength) const;
@@ -330,6 +350,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> to match
    * @return TRUE if this ends with the characters in <TT>srcChars</TT>, 
    * FALSE otherwise
+   * @stable
    */
   inline bool_t endsWith(const UChar *srcChars,
           UTextOffset srcStart,
@@ -344,6 +365,7 @@ public:
    * @param text The text to search for.
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UnicodeString& text) const;
 
@@ -354,6 +376,7 @@ public:
    * @param start The offset at which searching will start.
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UnicodeString& text,
               UTextOffset start) const;
@@ -367,6 +390,7 @@ public:
    * @param length The number of characters to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UnicodeString& text,
               UTextOffset start,
@@ -386,6 +410,7 @@ public:
    * @param length the number of characters in this to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UnicodeString& srcText,
               UTextOffset srcStart,
@@ -402,6 +427,7 @@ public:
    * @param start the offset into this at which to start matching
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UChar *srcChars,
               int32_t srcLength,
@@ -417,6 +443,7 @@ public:
    * @param length The number of characters to search
    * @return The offset into this of the start of <TT>srcChars</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset indexOf(const UChar *srcChars,
               int32_t srcLength,
@@ -437,6 +464,7 @@ public:
    * @param length the number of characters in this to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   UTextOffset indexOf(const UChar *srcChars,
               UTextOffset srcStart,
@@ -449,6 +477,7 @@ public:
    * using bitwise comparison.
    * @param c The character to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset indexOf(UChar c) const;
 
@@ -458,6 +487,7 @@ public:
    * @param c The character to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset indexOf(UChar c,
               UTextOffset start) const;
@@ -470,6 +500,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset indexOf(UChar c,
               UTextOffset start,
@@ -481,6 +512,7 @@ public:
    * @param text The text to search for.
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UnicodeString& text) const;
 
@@ -491,6 +523,7 @@ public:
    * @param start The offset at which searching will start.
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UnicodeString& text,
               UTextOffset start) const;
@@ -504,6 +537,7 @@ public:
    * @param length The number of characters to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UnicodeString& text,
               UTextOffset start,
@@ -523,6 +557,7 @@ public:
    * @param length the number of characters in this to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UnicodeString& srcText,
               UTextOffset srcStart,
@@ -538,6 +573,7 @@ public:
    * @param start the offset into this at which to start matching
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UChar *srcChars,
               int32_t srcLength,
@@ -553,6 +589,7 @@ public:
    * @param length The number of characters to search
    * @return The offset into this of the start of <TT>srcChars</TT>, 
    * or -1 if not found.
+   * @stable
    */
   inline UTextOffset lastIndexOf(const UChar *srcChars,
               int32_t srcLength,
@@ -573,6 +610,7 @@ public:
    * @param length the number of characters in this to search
    * @return The offset into this of the start of <TT>text</TT>, 
    * or -1 if not found.
+   * @stable
    */
   UTextOffset lastIndexOf(const UChar *srcChars,
               UTextOffset srcStart,
@@ -585,6 +623,7 @@ public:
    * using bitwise comparison.
    * @param c The character to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset lastIndexOf(UChar c) const;
 
@@ -594,6 +633,7 @@ public:
    * @param c The character to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset lastIndexOf(UChar c,
               UTextOffset start) const;
@@ -606,6 +646,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
    */
   inline UTextOffset lastIndexOf(UChar c,
               UTextOffset start,
@@ -618,6 +659,7 @@ public:
    * Return the character at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
    * @returns the character at offset <tt>offset</tt>
+   * @draft
    */
   inline UChar charAt(UTextOffset offset) const;
 
@@ -625,6 +667,7 @@ public:
    * Return the character at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
    * @returns the character at offset <tt>offset</tt>
+   * @draft
    */
   inline UChar operator [] (UTextOffset offset) const;
 
@@ -641,6 +684,7 @@ public:
    * must be at least (<tt>dstStart + length</tt>).
    * @param dstStart the offset in <TT>dst</TT> where the first character
    * will be extracted
+   * @stable
    */
   inline void extract(UTextOffset start, 
            int32_t length, 
@@ -655,6 +699,7 @@ public:
    * @param length the number of characters to extract
    * @param target UnicodeString into which to copy characters.
    * @return A reference to <TT>target</TT>
+   * @stable
    */
   inline void extract(UTextOffset start,
            int32_t length,
@@ -669,6 +714,7 @@ public:
    * must be at least (<tt>dstStart + (limit - start)</tt>).
    * @param dstStart the offset in <TT>dst</TT> where the first character
    * will be extracted
+   * @stable
    */
   inline void extractBetween(UTextOffset start, 
               UTextOffset limit, 
@@ -682,6 +728,7 @@ public:
    * @param limit offset immediately following the last character to be copied
    * @param target UnicodeString into which to copy characters.
    * @return A reference to <TT>target</TT>
+   * @stable
    */
   inline void extractBetween(UTextOffset start,
               UTextOffset limit,
@@ -700,6 +747,7 @@ public:
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
    * @return the number of characters written to <TT>dst</TT>
+   * @stable
    */
   int32_t extract(UTextOffset start,
            int32_t length,
@@ -713,12 +761,14 @@ public:
    * Return the length of the UnicodeString object.  
    * The length is the number of characters in the text.
    * @returns the length of the UnicodeString object
+   * @stable
    */
   inline int32_t  length(void) const;
 
   /**
    * Determine if this string is empty.
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
+   * @stable
    */
   inline bool_t empty(void) const;
 
@@ -728,12 +778,14 @@ public:
   /**
    * Generate a hash code for this object.
    * @return The hash code of this UnicodeString.
+   * @stable
    */
   inline int32_t hashCode(void) const;
 
   /**
    * Determine if this string is still valid.
    * @return TRUE if the string is valid, FALSE otherwise
+   * @draft
    */
   inline bool_t isBogus(void) const;
 
@@ -749,6 +801,7 @@ public:
    * with the characters from <TT>srcText</TT>.
    * @param srcText The text containing the characters to replace
    * @return a reference to this
+   * @stable
    */
    UnicodeString& operator= (const UnicodeString& srcText);
 
@@ -757,6 +810,7 @@ public:
    * with the character <TT>ch</TT>.
    * @param ch the character to replace
    * @return a reference to this
+   * @draft
    */
   inline UnicodeString& operator= (UChar ch);
 
@@ -771,6 +825,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> in the
    * replace string.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& setTo(const UnicodeString& srcText, 
                UTextOffset srcStart, 
@@ -782,6 +837,7 @@ public:
    * <TT>srcText</TT> is not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& setTo(const UnicodeString& srcText);
 
@@ -796,6 +852,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> in the 
    * replace string
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& setTo(const UChar *srcChars, 
                UTextOffset srcStart, 
@@ -807,6 +864,7 @@ public:
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in srcChars.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& setTo(const UChar *srcChars,
                int32_t srcLength);
@@ -817,6 +875,7 @@ public:
    * @param srcChar the character which becomes the UnicodeString's character 
    * content
    * @return a reference to this
+   * @draft
    */
   UnicodeString& setTo(UChar srcChar);
 
@@ -825,6 +884,7 @@ public:
    * @param offset A valid offset into the text of the character to set
    * @param ch The new character
    * @return A reference to this
+   * @draft
    */
   UnicodeString& setCharAt(UTextOffset offset, 
                UChar ch);
@@ -837,6 +897,7 @@ public:
    * object.
    * @param ch the character to be appended
    * @return a reference to this
+   * @draft
    */
  inline  UnicodeString& operator+= (UChar ch);
 
@@ -846,6 +907,7 @@ public:
    * not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& operator+= (const UnicodeString& srcText);
 
@@ -861,6 +923,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> in 
    * the append string
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& append(const UnicodeString& srcText, 
             UTextOffset srcStart, 
@@ -871,6 +934,7 @@ public:
    * offset <TT>start</TT>. <TT>srcText</TT> is not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& append(const UnicodeString& srcText);
 
@@ -885,6 +949,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> in 
    * the append string
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& append(const UChar *srcChars, 
             UTextOffset srcStart, 
@@ -896,6 +961,7 @@ public:
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in <TT>srcChars</TT>
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& append(const UChar *srcChars,
             int32_t srcLength);
@@ -904,6 +970,7 @@ public:
    * Append the character <TT>srcChar</TT> to the UnicodeString object.
    * @param srcChar the character to append
    * @return a reference to this
+   * @draft
    */
   inline UnicodeString& append(UChar srcChar);
 
@@ -921,6 +988,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> in 
    * the insert string
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             const UnicodeString& srcText, 
@@ -933,6 +1001,7 @@ public:
    * @param start the offset where the insertion begins
    * @param srcText the source for the new characters 
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             const UnicodeString& srcText);
@@ -948,6 +1017,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> 
    * in the insert string
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             const UChar *srcChars, 
@@ -961,6 +1031,7 @@ public:
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in srcChars.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             const UChar *srcChars,
@@ -972,6 +1043,7 @@ public:
    * @param start the offset at which the insertion occurs
    * @param srcChar the character to insert
    * @return a reference to this
+   * @draft
    */
   inline UnicodeString& insert(UTextOffset start, 
             UChar srcChar);
@@ -994,6 +1066,7 @@ public:
    * @param srcLength the number of characters in <TT>srcText</TT> in 
    * the replace string
    * @return a reference to this
+   * @stable
    */
   UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1011,6 +1084,7 @@ public:
    * <TT>start + length</TT> is not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
+   * @stable
    */
   UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1031,6 +1105,7 @@ public:
    * @param srcLength the number of characters in <TT>srcChars</TT> 
    * in the replace string
    * @return a reference to this
+   * @stable
    */
   UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1048,6 +1123,7 @@ public:
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in srcChars
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1063,6 +1139,7 @@ public:
    * <TT>start + length</TT> is not modified.
    * @param srcChar the new character
    * @return a reference to this
+   * @draft
    */
   inline UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1075,6 +1152,7 @@ public:
    * @param limit the offset immediately following the replace range
    * @param srcText the source for the new characters
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& replaceBetween(UTextOffset start, 
                 UTextOffset limit, 
@@ -1092,6 +1170,7 @@ public:
    * @param srcLimit the offset immediately following the range to copy 
    * in <TT>srcText</TT>
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& replaceBetween(UTextOffset start, 
                 UTextOffset limit, 
@@ -1107,6 +1186,7 @@ public:
    * <= length()</code>.
    * @param text the text to replace characters <code>start</code>
    * to <code>limit - 1</code>
+   * @stable
    */
   virtual void handleReplaceBetween(UTextOffset start,
                                     UTextOffset limit,
@@ -1121,6 +1201,7 @@ public:
    * @param oldText the text containing the search text
    * @param newText the text containing the replacement text
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& findAndReplace(const UnicodeString& oldText,
                 const UnicodeString& newText);
@@ -1134,6 +1215,7 @@ public:
    * @param oldText the text containing the search text
    * @param newText the text containing the replacement text
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& findAndReplace(UTextOffset start,
                 int32_t length,
@@ -1155,6 +1237,7 @@ public:
    * @param newStart the start of the replacement range in <TT>newText</TT>
    * @param newLength the length of the replacement range in <TT>newText</TT>
    * @return a reference to this
+   * @stable
    */
   UnicodeString& findAndReplace(UTextOffset start,
                 int32_t length,
@@ -1171,6 +1254,7 @@ public:
   /**
    * Remove all characters from the UnicodeString object.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& remove(void);
 
@@ -1180,6 +1264,7 @@ public:
    * @param start the offset of the first character to remove
    * @param length the number of characters to remove
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& remove(UTextOffset start, 
             int32_t length = LONG_MAX);
@@ -1190,6 +1275,7 @@ public:
    * @param start the offset of the first character to remove
    * @param limit the offset immediately following the range to remove
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& removeBetween(UTextOffset start,
                    UTextOffset limit = LONG_MAX);
@@ -1206,6 +1292,7 @@ public:
    * @param padChar the character to use for padding. Defaults to 
    * space (U+0020)
    * @return TRUE if the text was padded, FALSE otherwise.
+   * @draft
    */
   inline bool_t padLeading(int32_t targetLength,
             UChar padChar = 0x0020);
@@ -1219,6 +1306,7 @@ public:
    * @param padChar the character to use for padding. Defaults to 
    * space (U+0020)
    * @return TRUE if the text was padded, FALSE otherwise.
+   * @draft
    */
   inline bool_t padTrailing(int32_t targetLength,
              UChar padChar = 0x0020);
@@ -1227,12 +1315,14 @@ public:
    * Truncate this UnicodeString to the <TT>targetLength</TT>.
    * @param targetLength the desired length of this UnicodeString.
    * @return TRUE if the text was truncated, FALSE otherwise
+   * @stable
    */
   inline bool_t truncate(int32_t targetLength);
 
   /**
    * Trims leading and trailing whitespace from this UnicodeString.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& trim(void);
 
@@ -1242,6 +1332,7 @@ public:
   /**
    * Reverse this UnicodeString in place.
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& reverse(void);
 
@@ -1251,6 +1342,7 @@ public:
    * @param start the start of the range to reverse
    * @param length the number of characters to to reverse
    * @return a reference to this
+   * @stable
    */
   inline UnicodeString& reverse(UTextOffset start,
              int32_t length);
@@ -1259,6 +1351,7 @@ public:
    * Convert the characters in this to UPPER CASE following the conventions of
    * the default locale.
    * @return A reference to this.
+   * @stable
    */
   UnicodeString& toUpper(void);
 
@@ -1267,6 +1360,7 @@ public:
    * a specific locale.
    * @param locale The locale containing the conventions to use.
    * @return A reference to this.
+   * @stable
    */
   UnicodeString& toUpper(const Locale& locale);
 
@@ -1274,6 +1368,7 @@ public:
    * Convert the characters in this to UPPER CASE following the conventions of
    * the default.
    * @return A reference to this.
+   * @stable
    */
   UnicodeString& toLower(void);
 
@@ -1282,6 +1377,7 @@ public:
    * a specific locale.
    * @param locale The locale containing the conventions to use.
    * @return A reference to this.
+   * @stable
    */
   UnicodeString& toLower(const Locale& locale);
 
@@ -1290,7 +1386,9 @@ public:
   // Constructors
   //========================================
 
-  /** Construct an empty UnicodeString.  */
+  /** Construct an empty UnicodeString.  
+   * @stable
+   */
   UnicodeString();
 
 
@@ -1298,12 +1396,14 @@ public:
    * Construct a UnicodeString with capacity to hold <TT>capacity</TT> UChars
    * @param capacity the number of UChars this UnicodeString should hold
    * before a resize is necessary
+   * @stable
    */
   UnicodeString(int32_t capacity);
 
   /**
    * Single UChar constructor.
    * @param ch the character to place in the UnicodeString
+   * @draft
    */
   UnicodeString(UChar ch);
 
@@ -1311,6 +1411,7 @@ public:
    * UChar* constructor.
    * @param text The characters to place in the UnicodeString.  <TT>text</TT>
    * must be NULL (U+0000) terminated.
+   * @stable
    */
   UnicodeString(const UChar *text);
 
@@ -1319,6 +1420,7 @@ public:
    * @param text The characters to place in the UnicodeString.
    * @param textLength The number of Unicode characters in <TT>text</TT>
    * to copy.
+   * @stable
    */
   UnicodeString(const UChar *text,
         int32_t textLength);
@@ -1337,6 +1439,7 @@ public:
    * @param textLength The number of Unicode characters in <code>text</code> to alias.
    *                   If -1, then this constructor will determine the length
    *                   by calling <code>u_strlen()</code>.
+   * @stable
    */
   UnicodeString(bool_t isTerminated,
                 UChar *text,
@@ -1351,6 +1454,7 @@ public:
    * If <code>codepage</code> is an empty string (<code>""</code>),
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
+   * @stable
    */
   UnicodeString(const char *codepageData,
         const char *codepage = 0);
@@ -1365,6 +1469,7 @@ public:
    * If <code>codepage</code> is an empty string (<code>""</code>),
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
+   * @stable
    */
   UnicodeString(const char *codepageData,
         int32_t dataLength,
@@ -1373,10 +1478,13 @@ public:
   /**
    * Copy constructor.
    * @param that The UnicodeString object to copy.
+   * @stable
    */
   inline UnicodeString(const UnicodeString& that);
 
-  /** Destructor. */
+  /** Destructor. 
+   * @stable
+  */
   ~UnicodeString();
 
 
@@ -1402,6 +1510,7 @@ public:
    * of how many Latin display cells the text will take up in a monospaced
    * font.
    * @return the number of display cells occupied by the specified substring.
+   * @stable
    */
   int32_t numDisplayCells(UTextOffset start = 0,
               int32_t length = LONG_MAX,
@@ -1557,26 +1666,35 @@ public:
   // Deprecated API
   //========================================
 
-  // size() -> length()
+  /* size() -> length()
+   * @deprecated */
   inline int32_t size(void) const;
 
   // parameters reordered for consistency
+   /* @deprecated */
   inline UnicodeString& findAndReplace(const UnicodeString& oldText,
                 const UnicodeString& newText,
                 UTextOffset start,
                 int32_t length);
 
+   /* @deprecated */
   inline void* operator new(size_t size);
+   /* @deprecated */
   inline void* operator new(size_t size, void *location);
+   /* @deprecated */
   inline void operator delete(void *location);
 
 
   //========================================
   // Non-public API - will be removed!
   //========================================
+   /* @deprecated */
   UnicodeString(UChar *buff, int32_t bufLength, int32_t buffCapacity);
+   /* @deprecated */
   const UChar* getUChars(void) const;
+   /* @deprecated */
   inline const UChar* getUniChars(void) const;
+   /* @deprecated */
   UChar* orphanStorage(void);
 
 };

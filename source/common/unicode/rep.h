@@ -39,6 +39,7 @@ class UnicodeString;
  * <code>extractBetween()</code>.
  *
  * @author Alan Liu
+ * @draft
  */
 class U_COMMON_API Replaceable {
 
@@ -46,12 +47,14 @@ public:
 
     /**
      * Destructor.
+     * @draft
      */
     virtual ~Replaceable();
 
     /**
      * Return the number of characters in the text.
      * @return number of characters in text
+     * @draft
      */ 
     virtual int32_t length() const = 0;
 
@@ -60,6 +63,7 @@ public:
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return character of text at given offset
+     * @draft
      */
     virtual UChar charAt(UTextOffset offset) const = 0;
 
@@ -78,7 +82,9 @@ public:
      * @param srcLimit the ending index to copy, exclusive;
      * <code>srcStart <= srcLimit <= length()</code>.
      * @param dst the destination array.
-     * @param dstStart the start offset in the destination array.  */
+     * @param dstStart the start offset in the destination array.  
+     * @draft
+     */
     virtual void extractBetween(UTextOffset srcStart,
                                 UTextOffset srcLimit,
                                 UChar* dst,
@@ -94,7 +100,9 @@ public:
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= length()</code>.
      * @param text the text to replace characters <code>start</code>
-     * to <code>limit - 1</code> */
+     * to <code>limit - 1</code> 
+     * @draft
+     */
     virtual void handleReplaceBetween(UTextOffset start,
                                       UTextOffset limit,
                                       const UnicodeString& text) = 0;
