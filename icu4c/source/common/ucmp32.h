@@ -77,7 +77,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.12 $ 8/25/98
+ * @version            $Revision: 1.13 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -222,7 +222,7 @@ U_CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
 U_CAPI void U_EXPORT2 ucmp32_streamMemIn( CompactIntArray* array, UMemoryStream* is);
 U_CAPI void U_EXPORT2 ucmp32_streamMemOut(CompactIntArray* array, UMemoryStream* os);
 
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp32(UMemoryStream *MS, const CompactIntArray* array);
+U_CAPI  uint32_t U_EXPORT2 ucmp32_flattenMem(const CompactIntArray* array, UMemoryStream *MS);
 U_CAPI  void U_EXPORT2 ucmp32_initFromData(CompactIntArray *this_obj, const uint8_t **source, UErrorCode *status);
 
 #endif
