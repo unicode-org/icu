@@ -145,8 +145,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
  * The _SAFE macro checks for errors and optionally for
  * irregular sequences, too, i.e., for sequences that
  * are longer than necessary, such as <c0 80> instead of <0>.
- * The strict checks also check for surrogates and
- * for 0xXXXXfffe and 0xXXXXffff.
+ * The strict checks also check for non-characters.
  */
 #define UTF8_NEXT_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
@@ -204,8 +203,12 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 
 #define UTF8_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
-    if(UTF8_IS_LEAD(c)) { \
-        (c)=utf8_nextCharSafeBody(s, &(i), (UTextOffset)(length), c, strict); \
+    if((c)>=0x80) { \
+        if(UTF8_IS_LEAD(c)) { \
+            (c)=utf8_nextCharSafeBody(s, &(i), (UTextOffset)(length), c, strict); \
+        } else { \
+            (c)=UTF8_ERROR_VALUE_1; \
+        } \
     } \
 }
 
@@ -288,8 +291,12 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 
 #define UTF8_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
-    if(UTF8_IS_TRAIL((c))) { \
-        (c)=utf8_prevCharSafeBody(s, start, &(i), c, strict); \
+    if((c)>=0x80) { \
+        if((c)<=0xbf) { \
+            (c)=utf8_prevCharSafeBody(s, start, &(i), c, strict); \
+        } else { \
+            (c)=UTF8_ERROR_VALUE_1; \
+        } \
     } \
 }
 
@@ -307,13 +314,15 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
     } \
 }
 
+/*
+ * Need to use UTF8_FWD_1_SAFE() because UTF8_BACK_1_SAFE()
+ * may have started from the middle of the sequence and not checked
+ * all trail bytes.
+ */
 #define UTF8_SET_CHAR_LIMIT_SAFE(s, start, i, length) { \
     if((start)<(i) && (i)<(length)) { \
         UTF8_BACK_1_SAFE(s, start, i); \
-        (i)+=1+UTF8_COUNT_TRAIL_BYTES((s)[i]); \
-        if((i)>(length)) { \
-            (i)=(length); \
-        } \
+        UTF8_FWD_1_SAFE(s, i, length); \
     } \
 }
 

@@ -25,14 +25,18 @@
 *   <p>utf.h is included by utypes.h and itself includes the utfXX.h after some
 *   common definitions. Those files define the macros for each UTF-size.</p>
 *
-*   <p>ICU allows in principle to set which UTF (UTF-8/16/32) is used internally
+*   <p>The original concept for these files was for ICU to allow
+*   in principle to set which UTF (UTF-8/16/32) is used internally
 *   by defining UTF_SIZE to either 8, 16, or 32. utf.h would then define the UChar type
-*   accordingly. UTF-16 is the default.<br>
-*   In praxis, since a lot of the ICU source code &mdash; especially low-level code like
-*   conversion and collation &mdash; assumes UTF-16, utf.h enforces the default of UTF-16.
-*   This is unlikely to change in the future. Only some files (like ubidi.h and most of unistr.h) should work with any UTF.</p>
+*   accordingly. UTF-16 was the default.</p>
 *
-*   <p>Accordinly, utf.h defines UChar to be an unsigned 16-bit integer. If this matches wchar_t, then
+*   <p>This concept has been abandoned.
+*   A lot of the ICU source code &mdash; especially low-level code like
+*   conversion, normalization, and collation &mdash; assumes UTF-16,
+*   utf.h enforces the default of UTF-16.
+*   The UTF-8 and UTF-32 macros remain for now for completeness and backward compatibility.</p>
+*
+*   <p>Accordingly, utf.h defines UChar to be an unsigned 16-bit integer. If this matches wchar_t, then
 *   UChar is defined to be exactly wchar_t, otherwise uint16_t.</p>
 *
 *   <p>UChar32 is always defined to be a 32-bit integer to be large enough for a 21-bit
@@ -52,10 +56,10 @@
 *   ones with ..._UNSAFE and ..._SAFE suffixes. The unsafe macros are fast but may cause
 *   program failures if the strings are not well-formed. The safe macros have an additional, boolean
 *   parameter "strict". If strict is FALSE, then only illegal sequences are detected.
-*   Otherwise, irregular sequences are detected as well (like single surrogates in UTF-8/32).
+*   Otherwise, irregular sequences and non-characters are detected as well (like single surrogates).
 *   Safe macros return special error code points for illegal/irregular sequences:
-*   Typically, U+ffff, or for UTF-8 values that would result in a byte sequence of the same length
-*   as the illegal input sequence.<br>
+*   Typically, U+ffff, or values that would result in a code unit sequence of the same length
+*   as the erroneous input sequence.<br>
 *   Note that _UNSAFE macros have fewer parameters: They do not have the strictness parameter, and
 *   they do not have start/length parameters for boundary checking.</p>
 *
@@ -172,10 +176,22 @@ typedef int32_t UTextOffset;
 /**
  * Is a given 32-bit code point/Unicode scalar value
  * actually a valid Unicode (abstract) character?
+ *
+ * Non-characters include:
+ * - single surrogate code points (U+d800..U+dfff, 2048 code points)
+ * - the last two code points on each plane (U+__fffe and U+__ffff, 34 code points)
+ * - U+fdd0..U+fdef (new with Unicode 3.1, 32 code points)
+ * - the highest Unicode code point value is U+10ffff
+ *
+ * This means that all code points below U+d800 are character code points,
+ * and that boundary is tested first for performance.
  */
 #define UTF_IS_UNICODE_CHAR(c) \
-    ((uint32_t)(c)<=0x10ffff && \
-     !UTF_IS_SURROGATE(c) && ((c)&0xfffe)!=0xfffe)
+    ((uint32_t)(c)<0xd800 || \
+        ((uint32_t)(c)>0xdfff && \
+         (uint32_t)(c)<=0x10ffff && \
+         ((c)&0xfffe)!=0xfffe && \
+         !(0xfdd0<=(uint32_t)(c) && (uint32_t)(c)<=0xfdef)))
 
 /**
  * Is a given 32-bit code an error value
@@ -186,9 +202,7 @@ typedef int32_t UTextOffset;
 
 /** This is a combined macro: Is c a valid Unicode value _and_ not an error code? */
 #define UTF_IS_VALID(c) \
-    ((uint32_t)(c)<=0x10ffff && \
-     !UTF_IS_SURROGATE(c) && \
-     ((c)&0xfffe)!=0xfffe && \
+    (UTF_IS_UNICODE_CHAR(c) && \
      (c)!=UTF8_ERROR_VALUE_1 && (c)!=UTF8_ERROR_VALUE_2)
 
 /* include the utfXX.h ------------------------------------------------------ */

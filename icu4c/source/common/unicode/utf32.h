@@ -33,8 +33,9 @@
 /* internal definitions ----------------------------------------------------- */
 
 #define UTF32_IS_SAFE(c, strict) \
-    ((uint32_t)(c)<=0x10ffff && \
-     (!(strict) || !UTF_IS_SURROGATE(c) && ((c)&0xfffe)!=0xfffe))
+    (!(strict) ? \
+        (uint32_t)(c)<=0x10ffff : \
+        UTF_IS_UNICODE_CHAR(c))
 
 /*
  * For the semantics of all of these macros, see utf16.h.
