@@ -224,7 +224,7 @@ u_charFromName(UCharNameChoice nameChoice,
     AlgorithmicRange *algRange;
     uint32_t *p;
     uint32_t i;
-    UChar32 c;
+    UChar32 cp = 0;
     char c0;
     UChar32 error = 0xffff;     /* Undefined, but use this for backwards compatibility. */
 
@@ -264,8 +264,7 @@ u_charFromName(UCharNameChoice nameChoice,
                 for (--i; lower[i] && lower[i] != '-'; --i);
 
                 if (lower[i] == '-') { /* We've got a category. */
-                    UChar32 cp = 0;
-                    int c;
+                    uint32_t cIdx;
 
                     lower[i] = 0;
 
@@ -284,10 +283,10 @@ u_charFromName(UCharNameChoice nameChoice,
                        We could use a binary search, or a trie, if
                        we really wanted to. */
 
-                    for (lower[i] = 0, c = 0; c < sizeof(charCatNames) / sizeof(*charCatNames); ++c) {
+                    for (lower[i] = 0, cIdx = 0; cIdx < sizeof(charCatNames) / sizeof(*charCatNames); ++cIdx) {
 
-                        if (!uprv_strcmp(lower + 1, charCatNames[c])) {
-                            if (getCharCat(cp) == c) {
+                        if (!uprv_strcmp(lower + 1, charCatNames[cIdx])) {
+                            if (getCharCat(cp) == cIdx) {
                                 return cp;
                             }
                             break;
@@ -297,7 +296,7 @@ u_charFromName(UCharNameChoice nameChoice,
             }
         }
 
-         *pErrorCode = U_ILLEGAL_CHAR_FOUND;
+        *pErrorCode = U_ILLEGAL_CHAR_FOUND;
         return error;
     }
 
@@ -306,8 +305,8 @@ u_charFromName(UCharNameChoice nameChoice,
     i=*p;
     algRange=(AlgorithmicRange *)(p+1);
     while(i>0) {
-        if((c=findAlgName(algRange, nameChoice, upper))!=0xffff) {
-            return c;
+        if((cp=findAlgName(algRange, nameChoice, upper))!=0xffff) {
+            return cp;
         }
         algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
         --i;
