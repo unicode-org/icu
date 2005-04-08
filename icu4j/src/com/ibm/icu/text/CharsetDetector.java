@@ -162,13 +162,13 @@ public class CharsetDetector {
             confidence = detectResults & 0x000000ff;
             if (confidence > 0) {
                 CharsetMatch  m = new CharsetMatch(this, csr, confidence);
-                matches.add(csr);
+                matches.add(m);
             }
         }
         Collections.sort(matches);      // CharsetMatch compares on confidence
         Collections.reverse(matches);   //  Put best match first.
         CharsetMatch [] resultArray = new CharsetMatch[matches.size()];
-        matches.toArray(resultArray);
+        resultArray = (CharsetMatch[]) matches.toArray(resultArray);
         return resultArray;
     }
 
