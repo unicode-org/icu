@@ -17,13 +17,21 @@ import java.io.Reader;
  * or for Java Reader or String to access the original byte data in Unicode form.
  * <p/>
  * Instances of this class are created only by CharsetDetectors.
+ * <p/>
+ * Note:  this class has a natural ordering that is inconsistent with equals.
+ *        The natural ordering is based on the match confidence value.
  */
-public class CharsetMatch {
+public class CharsetMatch implements Comparable {
 
     
     /**
      * Create a java.io.Reader for reading the Unicode character data corresponding
      * to the original byte data supplied to the Charset detect operation.
+     * <p/>
+     * CAUTION:  if the source of the byte data was an InputStream, a Reader
+     * can be created for only one matching char set using this method.  If more 
+     * than one charset needs to be tried, the caller will need to reset
+     * the InputStream and create InputStreamReaders itself, based on the Char Set name.
      *
      * @return the Reader for the Unicode character data.
      */
@@ -98,7 +106,43 @@ public class CharsetMatch {
      * @return The name of the charset.
      */
     public String getName() {
-        return "";
+        return fRecognizer.getName();
     }
+    
+    
+    /**
+     * Comparison function, for java.lang.Comparable
+     * Comparison is based on the match confidence value, which conveniently
+     *   allows CharsetDetector.detectAll() to order its results. 
+     */
+    public int compareTo (Object o) {
+        CharsetMatch other = (CharsetMatch)o;
+        int compareResult = 0;
+        if (this.fConfidence > other.fConfidence) {
+            compareResult = 1;
+        } else if (this.fConfidence < other.fConfidence) {
+            compareResult = -1;
+        }
+        return compareResult;
+    }
+    
+    
+    
+    /**
+     *  Constructor.  Implementation internal
+     *
+     */
+    CharsetMatch(CharsetDetector det, CharsetRecognizer rec, int conf) {
+        fRecognizer = rec;
+        fConfidence = conf;
+    }
+
+    
+    //
+    //   Private Data
+    //
+    private int                 fConfidence;
+    private CharsetRecognizer   fRecognizer;
+    
 
 }
