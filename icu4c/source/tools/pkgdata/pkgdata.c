@@ -456,7 +456,7 @@ static int executeMakefile(const UPKGOptions *o)
         o->rebuild ? "'rebuild'"   : "",
         o->install ? "'install'"   : "",
         o->makeArgs && *o->makeArgs ? "'"          : "",
-        o->makeArgs && *o->makeArgs,
+        o->makeArgs && *o->makeArgs ? o->makeArgs  : "",
         o->makeArgs && *o->makeArgs ? "'"          : "");
 #else
     sprintf(cmd, "%s %s%s -f %s %s %s %s %s",
