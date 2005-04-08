@@ -8,6 +8,11 @@ package com.ibm.icu.text;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import java.util.Arrays;
 
 
 /**
@@ -64,7 +69,8 @@ public class CharsetDetector {
     * 
     *  @param encoding The declared encoding 
     */
-    public CharsetDetector setDecaredEncoding(String encoding) {
+    public CharsetDetector setDeclaredEncoding(String encoding) {
+        fDeclaredEncoding = encoding;
         return this;
     }
     
@@ -73,7 +79,9 @@ public class CharsetDetector {
      * @param in the input text of unknown encoding
      * @return This CharsetDetector
      */
-    public CharsetDetector setText(byte in[]) {
+    public CharsetDetector setText(byte [] in) {
+        fRawInput  = in;
+        fRawLength = in.length;      
         return this;
     }
     
@@ -89,7 +97,14 @@ public class CharsetDetector {
      * @param in the input text of unknown encoding
      * @return This CharsetDetector
      */
-    public CharsetDetector setText(InputStream in) {
+    public CharsetDetector setText(InputStream in) throws IOException {
+        fInputStream = in;
+        fInputStream.mark(4000);
+        fRawInput = new byte[4000];       // Always make a new buffer because the
+                                          //   previous one may have come from the caller,
+                                          //   in which case we can't touch it.
+        fRawLength = fInputStream.read(fRawInput);
+        fInputStream.reset();
         return this;
     }
 
@@ -109,10 +124,15 @@ public class CharsetDetector {
      *  </ul>
      *
      * @return a CharsetMatch object representing the best matching charset.
+     * *
+     * TODO:  A better implementation would be to copy the detect loop from
+     *        detectAll(), and cut it short as soon as a match with a high confidence
+     *        is found.  This is something to be done later, after things are otherwise
+     *        working.
      */
     public CharsetMatch detect() {
-        return null;
-    }
+        return detectAll()[0];
+     }
     
     /**
      *  Return an array of all charsets that appear to be plausible
@@ -128,7 +148,28 @@ public class CharsetDetector {
      * @return An array of CharsetMatch objects representing possibly matching charsets.
      */
     public CharsetMatch[] detectAll() {
-        return null;
+        CharsetRecognizer csr;
+        int               i;
+        int               detectResults;
+        int               confidence;
+        ArrayList         matches = new ArrayList();
+        
+        //  Iterate over all possible charsets, remember all that
+        //    give a match quality > 0.
+        for (i=0; i<fCSRecognizers.size(); i++) {
+            csr = (CharsetRecognizer)fCSRecognizers.get(i);
+            detectResults = csr.match(this);
+            confidence = detectResults & 0x000000ff;
+            if (confidence > 0) {
+                CharsetMatch  m = new CharsetMatch(this, csr, confidence);
+                matches.add(csr);
+            }
+        }
+        Collections.sort(matches);      // CharsetMatch compares on confidence
+        Collections.reverse(matches);   //  Put best match first.
+        CharsetMatch [] resultArray = new CharsetMatch[matches.size()];
+        matches.toArray(resultArray);
+        return resultArray;
     }
 
     
@@ -182,8 +223,121 @@ public class CharsetDetector {
      * by the charset detector.
      */
     public static String[] getAllDetectableCharsets() {
-        return null;
+        return fCharsetNames;
     }
+    
 
+    /**
+     *  MungeInput - after getting a set of raw input data to be analyzed, preprocess
+     *               it by removing what appears to be html markup.
+     */
+    private void MungeInput() {
+        int srci = 0;
+        int dsti = 0;
+        byte b;
+        boolean  inMarkup = false;
+        int      openTags = 0;
+        int      badTags  = 0;
+        
+        //
+        //  html / xml markup stripping.
+        //     quick and dirty, not 100% accurate, but hopefully good enough, statistically.
+        //     discard everything within < brackets >
+        //     Count how many total '<' and illegal (nested) '<' occur, so we can make some
+        //     guess as to whether the input was actually marked up at all.
+        for (srci=0; srci<fRawLength; srci++) {
+            b = fRawInput[srci];
+            if (b == (byte)'<') {
+                if (inMarkup) {
+                    badTags++;
+                }
+                inMarkup = true;
+                openTags++;
+            }
+            if (inMarkup == false) {
+                fInputBytes[dsti++] = b;
+            }
+            
+            if (b == (byte)'>') {
+                inMarkup = false;
+            }        
+        }
+        fInputLen = dsti;
+        
+        //
+        //  If it looks like this input wasn't marked up, or if it looks like it's
+        //    essentially nothing but markup abandon the markup stripping.
+        //    Detection will have to work on the unstripped input.
+        //
+        if (openTags<5 || openTags/5 < badTags || 
+                (fInputLen < 100 && fRawLength>600)) {
+            for (srci=0; srci<fRawLength; srci++) {
+                fInputBytes[srci] = fRawInput[srci];
+            }
+            fInputLen = srci;
+        }
+        
+        //
+        // Tally up the byte occurence statistics.
+        //   These are available for use by the various detectors.
+        //
+        Arrays.fill(fByteStats, (short)0);
+        for (srci=0; srci<fInputLen; srci++) {
+            int val = fInputBytes[srci] & 0x00ff;
+            fByteStats[val]++;
+        }        
+     }
 
+    /**
+     *  The following items are accessed by individual CharsetRecongizers during
+     *     the recognition process
+     */
+    byte[]      fInputBytes =     // The text to be checked.  Markup will have been
+                   new byte[4000];//   removed if appropriate.
+    
+    int         fInputLen;        // Length of the byte data in fInputText.
+    
+    short       fByteStats[];     // byte frequency statistics for the input text.
+                                  //   Value is percent, not absolute.
+                                  //   Value is rounded up, so zero really means zero occurences.
+    
+    String      fDeclaredEncoding;
+    
+    
+
+    //
+    //  Stuff private to CharsetDetector
+    //
+    private byte[]       fRawInput;     // Original, untouched input bytes.
+                                        //  If user gave us a byte array, this is it.
+                                        //  If user gave us a stream, it's read to a 
+                                        //   buffer here.
+    private int          fRawLength;    // Length of data in fRawInput array.
+    
+    private InputStream  fInputStream;  // User's input stream, or null if the user
+                                        //   gave us a byte array.
+    
+    
+    /**
+     *  List of recognizers for all charsets known to the implementation.
+     *
+     */
+    private static ArrayList fCSRecognizers = createRecognizers();
+    private static String [] fCharsetNames;
+    
+   /**
+     * Create the singleton instances of the CharsetRecognizer classes
+     */
+    private static ArrayList createRecognizers() {
+        ArrayList recognizers = new ArrayList();
+        recognizers.add(new CharsetRecog_UTF8());
+        
+        // Create an array of all charset names, as a side effect.
+        // Needed for the getAllDetectableCharsets() API.
+        fCharsetNames = new String [recognizers.size()];
+        for (int i=0; i<recognizers.size(); i++) {
+            fCharsetNames[i] = ((CharsetRecognizer)recognizers.get(i)).getName();          
+        }
+        return recognizers;
+    }
 }
