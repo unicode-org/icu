@@ -61,8 +61,14 @@ public class CharsetMatch implements Comparable {
      * @param maxLength The maximium length of the String to be created.
      * @return a String created from the converted input data.
      */
-    public String getString(int maxLength) {
-        return null;
+    public String getString(int maxLength) throws java.io.IOException {
+        String result = null;
+        if (fInputStream != null) {
+            // TODO:  read the stream in somehow.
+        } else {
+            result = new String(fRawInput, getName());            
+        }
+        return result;
 
     }
     
@@ -75,7 +81,7 @@ public class CharsetMatch implements Comparable {
      * @return the confidence in the charset match
      */
     public int getConfidence() {
-        return 0;
+        return fConfidence;
     }
     
     /**
@@ -135,6 +141,17 @@ public class CharsetMatch implements Comparable {
     CharsetMatch(CharsetDetector det, CharsetRecognizer rec, int conf) {
         fRecognizer = rec;
         fConfidence = conf;
+        
+        // The references to the original aplication input data must be copied out
+        //   of the charset recognizer to here, in case the application resets the
+        //   recognizer before using this CharsetMatch.
+        if (det.fInputStream == null) {
+            // We only want the existing input byte data if it came straight from the user,
+            //   not if is just the head of a stream.
+            fRawInput    = det.fRawInput;
+            fRawLength   = det.fRawLength;
+        };
+        fInputStream = det.fInputStream;
     }
 
     
@@ -143,6 +160,12 @@ public class CharsetMatch implements Comparable {
     //
     private int                 fConfidence;
     private CharsetRecognizer   fRecognizer;
+    private byte[]              fRawInput = null;     // Original, untouched input bytes.
+                                                      //  If user gave us a byte array, this is it.
+    private int                 fRawLength;           // Length of data in fRawInput array.
+
+    private InputStream         fInputStream = null;  // User's input stream, or null if the user
+                                                      //   gave us a byte array.
     
 
 }

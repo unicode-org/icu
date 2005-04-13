@@ -308,13 +308,13 @@ public class CharsetDetector {
     //
     //  Stuff private to CharsetDetector
     //
-    private byte[]       fRawInput;     // Original, untouched input bytes.
+    byte[]               fRawInput;     // Original, untouched input bytes.
                                         //  If user gave us a byte array, this is it.
                                         //  If user gave us a stream, it's read to a 
                                         //   buffer here.
-    private int          fRawLength;    // Length of data in fRawInput array.
+    int                  fRawLength;    // Length of data in fRawInput array.
     
-    private InputStream  fInputStream;  // User's input stream, or null if the user
+     InputStream         fInputStream;  // User's input stream, or null if the user
                                         //   gave us a byte array.
     
     
@@ -331,6 +331,7 @@ public class CharsetDetector {
     private static ArrayList createRecognizers() {
         ArrayList recognizers = new ArrayList();
         recognizers.add(new CharsetRecog_UTF8());
+        recognizers.add(new CharsetRecog_mbcs("Shift_JIS", new CharsetDetectEnc_sjis()));
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.

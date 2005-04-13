@@ -77,6 +77,6 @@ public class TestCharsetDetector extends TestFmwk {
         CharsetMatch m = det.detect();
         CheckAssert(m.getName().equals("UTF-8"));
         String retrievedS = m.getString();
-        CheckAssert(s == retrievedS);
+        CheckAssert(s.equals(retrievedS));
     }
 }
