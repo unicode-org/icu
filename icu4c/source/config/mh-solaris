@@ -1,6 +1,6 @@
 ## -*-makefile-*-
-## Solaris-specific setup using Sun's workshop compilers
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Solaris-specific setup using Sun's compilers
+## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -11,9 +11,6 @@ SHAREDLIBCPPFLAGS = -DPIC
 ## Commands to generate dependency files
 GEN_DEPS.c=  $(CC) -xM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc= $(CXX) -xM $(DEFS) $(CPPFLAGS)
-
-# -libmil means use the intrinsic library functions like strlen
-CPPFLAGS += -libmil
 
 # -mt means 'compiles and links a multithreaded program'
 THREADSCFLAGS += -mt
