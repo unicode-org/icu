@@ -140,16 +140,16 @@ case $platform in
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        RELEASE_CFLAGS=-xO4
-        RELEASE_CXXFLAGS=-O4
+        RELEASE_CFLAGS="-xO4 -xlibmil"
+        RELEASE_CXXFLAGS="-O4 -xlibmil"
         ;;
     Solaris/W4.2)
         THE_OS=SOLARIS
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        RELEASE_CFLAGS=-x04
-        RELEASE_CXXFLAGS="-O4 +d"
+        RELEASE_CFLAGS="-xO4 -xlibmil"
+        RELEASE_CXXFLAGS="-O4 -xlibmil +d"
         ;;
     Solaris/GCC)
         THE_OS=SOLARIS
