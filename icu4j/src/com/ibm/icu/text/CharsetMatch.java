@@ -47,8 +47,8 @@ public class CharsetMatch implements Comparable {
      *
      * @return a String created from the converted input data.
      */
-    public String getString() {
-        return null;
+    public String getString()  throws java.io.IOException {
+        return getString(-1);
 
     }
     /**
@@ -58,7 +58,9 @@ public class CharsetMatch implements Comparable {
      * the string will be trunctated to this length if necessary.  A limit value of
      * zero or less is ignored, and treated as no limit.
      *
-     * @param maxLength The maximium length of the String to be created.
+     * @param maxLength The maximium length of the String to be created when the
+     *                  source of the data is an input stream, or -1 for
+     *                  unlimited length.
      * @return a String created from the converted input data.
      */
     public String getString(int maxLength) throws java.io.IOException {
