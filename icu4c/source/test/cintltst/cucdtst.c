@@ -60,10 +60,48 @@ static void TestPropertyValues(void);
 static void TestConsistency(void);
 static void TestUCase(void);
 static void TestUBiDiProps(void);
+static void TestCaseFolding(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
 static int32_t MakeDir(char* str);
+
+/* helpers ------------------------------------------------------------------ */
+
+static void
+parseUCDFile(const char *filename,
+             char *fields[][2], int32_t fieldCount,
+             UParseLineFn *lineFn, void *context,
+             UErrorCode *pErrorCode) {
+    char path[256];
+    char backupPath[256];
+
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    /* Look inside ICU_DATA first */
+    strcpy(path, u_getDataDirectory());
+    strcat(path, ".." U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
+    strcat(path, filename);
+
+    /* As a fallback, try to guess where the source data was located
+     *    at the time ICU was built, and look there.
+     */
+    strcpy(backupPath, ctest_dataSrcDir());
+    strcat(backupPath, U_FILE_SEP_STRING);
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING);
+    strcat(backupPath, filename);
+
+    u_parseDelimitedFile(path, ';', fields, fieldCount, lineFn, context, pErrorCode);
+    if(*pErrorCode==U_FILE_ACCESS_ERROR) {
+        *pErrorCode=U_ZERO_ERROR;
+        u_parseDelimitedFile(backupPath, ';', fields, fieldCount, lineFn, context, pErrorCode);
+    }
+    if(U_FAILURE(*pErrorCode)) {
+        log_err("error parsing %s: %s\n", filename, u_errorName(*pErrorCode));
+    }
+}
 
 /* test data ---------------------------------------------------------------- */
 
@@ -150,6 +188,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
     addTest(root, &TestUCase, "tsutil/cucdtst/TestUCase");
     addTest(root, &TestUBiDiProps, "tsutil/cucdtst/TestUBiDiProps");
+    addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
 }
 
 /*==================================================== */
@@ -1160,25 +1199,12 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
 /* tests for several properties */
 static void TestUnicodeData()
 {
-    char newPath[256];
-    char backupPath[256];
     UVersionInfo expectVersionArray;
     UVersionInfo versionArray;
     char *fields[15][2];
     UErrorCode errorCode;
     UChar32 c;
     int8_t type;
-
-    /* Look inside ICU_DATA first */
-    strcpy(newPath, u_getDataDirectory());
-    strcat(newPath, ".." U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
-
-    /* As a fallback, try to guess where the source data was located
-     *    at the time ICU was built, and look there.
-     */
-    strcpy(backupPath, ctest_dataSrcDir());
-    strcat(backupPath, U_FILE_SEP_STRING);
-    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
     u_versionFromString(expectVersionArray, U_UNICODE_VERSION);
     u_getUnicodeVersion(versionArray);
@@ -1201,13 +1227,8 @@ static void TestUnicodeData()
     }
 
     errorCode=U_ZERO_ERROR;
-    u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
-    if(errorCode==U_FILE_ACCESS_ERROR) {
-        errorCode=U_ZERO_ERROR;
-        u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
-    }
+    parseUCDFile("UnicodeData.txt", fields, 15, unicodeDataLineFn, NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
         return; /* if we couldn't parse UnicodeData.txt, we should return */
     }
 
@@ -2963,4 +2984,209 @@ static void TestUBiDiProps() {
     if(ubidi_getClass(bdp, 0x20)!=0) {
         log_err("ubidi_getClass(dummy, space)!=0\n");
     }
+}
+
+/* test case folding, compare return values with CaseFolding.txt ------------ */
+
+/* bit set for which case foldings for a character have been tested already */
+enum {
+    CF_SIMPLE=1,
+    CF_FULL=2,
+    CF_TURKIC=4,
+    CF_ALL=7
+};
+
+static void
+testFold(UChar32 c, int which,
+         UChar32 simple, UChar32 turkic,
+         const UChar *full, int32_t fullLength,
+         const UChar *turkicFull, int32_t turkicFullLength) {
+    UChar s[2], t[32];
+    UChar32 c2;
+    int32_t length, length2;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    length=0;
+    U16_APPEND_UNSAFE(s, length, c);
+
+    if((which&CF_SIMPLE)!=0 && (c2=u_foldCase(c, 0))!=simple) {
+        log_err("u_foldCase(U+%04lx, default)=U+%04lx != U+%04lx\n", (long)c, (long)c2, (long)simple);
+    }
+    if((which&CF_FULL)!=0) {
+        length2=u_strFoldCase(t, LENGTHOF(t), s, length, 0, &errorCode);
+        if(length2!=fullLength || 0!=u_memcmp(t, full, fullLength)) {
+            log_err("u_strFoldCase(U+%04lx, default) does not fold properly\n", (long)c);
+        }
+    }
+    if((which&CF_TURKIC)!=0) {
+        if((c2=u_foldCase(c, U_FOLD_CASE_EXCLUDE_SPECIAL_I))!=turkic) {
+            log_err("u_foldCase(U+%04lx, turkic)=U+%04lx != U+%04lx\n", (long)c, (long)c2, (long)simple);
+        }
+
+        length2=u_strFoldCase(t, LENGTHOF(t), s, length, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &errorCode);
+        if(length2!=turkicFullLength || 0!=u_memcmp(t, turkicFull, length2)) {
+            log_err("u_strFoldCase(U+%04lx, turkic) does not fold properly\n", (long)c);
+        }
+    }
+}
+
+/* test that c case-folds to itself */
+static void
+testFoldToSelf(UChar32 c, int which) {
+    UChar s[2];
+    int32_t length;
+
+    length=0;
+    U16_APPEND_UNSAFE(s, length, c);
+    testFold(c, which, c, c, s, length, s, length);
+}
+
+struct CaseFoldingData {
+    USet *notSeen;
+    UChar32 prev, prevSimple;
+    UChar prevFull[32];
+    int32_t prevFullLength;
+    int which;
+};
+typedef struct CaseFoldingData CaseFoldingData;
+
+static void U_CALLCONV
+caseFoldingLineFn(void *context,
+                  char *fields[][2], int32_t fieldCount,
+                  UErrorCode *pErrorCode) {
+    CaseFoldingData *pData=(CaseFoldingData *)context;
+    char *end;
+    UChar full[32];
+    UChar32 c, prev, simple;
+    int32_t count;
+    int which;
+    char status;
+
+    /* get code point */
+    c=(UChar32)strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
+    end=(char *)u_skipWhitespace(end);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        log_err("syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        return;
+    }
+
+    /* get the status of this mapping */
+    status=*u_skipWhitespace(fields[1][0]);
+    if(status!='C' && status!='S' && status!='F' && status!='T') {
+        log_err("unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        return;
+    }
+
+    /* get the mapping */
+    count=u_parseString(fields[2][0], full, 32, (uint32_t *)&simple, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        log_err("error parsing CaseFolding.txt mapping at %s\n", fields[0][0]);
+        return;
+    }
+
+    /* there is a simple mapping only if there is exactly one code point (count is in UChars) */
+    if(count==0 || count>2 || (count==2 && U16_IS_SINGLE(full[1]))) {
+        simple=c;
+    }
+
+    if(c!=(prev=pData->prev)) {
+        /*
+         * Test remaining mappings for the previous code point.
+         * If a turkic folding was not mentioned, then it should fold the same
+         * as the regular simple case folding.
+         */
+        UChar s[2];
+        int32_t length;
+
+        length=0;
+        U16_APPEND_UNSAFE(s, length, prev);
+        testFold(prev, (~pData->which)&CF_ALL,
+                 prev, pData->prevSimple,
+                 s, length,
+                 pData->prevFull, pData->prevFullLength);
+        pData->prev=pData->prevSimple=c;
+        length=0;
+        U16_APPEND_UNSAFE(pData->prevFull, length, c);
+        pData->prevFullLength=length;
+        pData->which=0;
+    }
+
+    /*
+     * Turn the status into a bit set of case foldings to test.
+     * Remember non-Turkic case foldings as defaults for Turkic mode.
+     */
+    switch(status) {
+    case 'C':
+        which=CF_SIMPLE|CF_FULL;
+        pData->prevSimple=simple;
+        u_memcpy(pData->prevFull, full, count);
+        pData->prevFullLength=count;
+        break;
+    case 'S':
+        which=CF_SIMPLE;
+        pData->prevSimple=simple;
+        break;
+    case 'F':
+        which=CF_FULL;
+        u_memcpy(pData->prevFull, full, count);
+        pData->prevFullLength=count;
+        break;
+    case 'T':
+        which=CF_TURKIC;
+        break;
+    default:
+        break; /* won't happen because of test above */
+    }
+
+    testFold(c, which, simple, simple, full, count, full, count);
+
+    /* remember which case foldings of c have been tested */
+    pData->which|=which;
+
+    /* remove c from the set of ones not mentioned in CaseFolding.txt */
+    uset_remove(pData->notSeen, c);
+}
+
+static void
+TestCaseFolding() {
+    CaseFoldingData data={ NULL };
+    char *fields[3][2];
+    UErrorCode errorCode;
+
+    static char *lastLine="10FFFF; C; 10FFFF;";
+
+    errorCode=U_ZERO_ERROR;
+    /* test BMP & plane 1 - nothing interesting above */
+    data.notSeen=uset_open(0, 0x1ffff);
+    data.prevFullLength=1; /* length of full case folding of U+0000 */
+
+    parseUCDFile("CaseFolding.txt", fields, 3, caseFoldingLineFn, &data, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        int32_t i, start, end;
+
+        /* add a pseudo-last line to finish testing of the actual last one */
+        fields[0][0]=lastLine;
+        fields[0][1]=lastLine+6;
+        fields[1][0]=lastLine+7;
+        fields[1][1]=lastLine+9;
+        fields[2][0]=lastLine+10;
+        fields[2][1]=lastLine+17;
+        caseFoldingLineFn(&data, fields, 3, &errorCode);
+
+        /* verify that all code points that are not mentioned in CaseFolding.txt fold to themselves */
+        for(i=0;
+            0==uset_getItem(data.notSeen, i, &start, &end, NULL, 0, &errorCode) &&
+                U_SUCCESS(errorCode);
+            ++i
+        ) {
+            do {
+                testFoldToSelf(start, CF_ALL);
+            } while(++start<=end);
+        }
+    }
+
+    uset_close(data.notSeen);
 }
