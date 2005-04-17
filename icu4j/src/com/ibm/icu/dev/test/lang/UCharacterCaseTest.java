@@ -647,11 +647,21 @@ public final class UCharacterCaseTest extends TestFmwk
                        0x003f, 0x003a, 0x006b, 0x006c, 0x6d, 0x006e, 0x006f,
                        0x01c6, 0x01c9, 0x000c, 0x0000};
 
+    /*
+     * CaseFolding.txt says about i and its cousins:
+     *   0049; C; 0069; # LATIN CAPITAL LETTER I
+     *   0049; T; 0131; # LATIN CAPITAL LETTER I
+     *
+     *   0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+     *   0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+     * That's all.
+     * See CaseFolding.txt and the Unicode Standard for how to apply the case foldings.
+     */
     private static final int FOLDING_SIMPLE_[] = {
         // input, default, exclude special i
         0x61,   0x61,  0x61,
         0x49,   0x69,  0x131,
-        0x130,  0x69,  0x69,
+        0x130,  0x130, 0x69,
         0x131,  0x131, 0x131,
         0xdf,   0xdf,  0xdf,
         0xfb03, 0xfb03, 0xfb03,
