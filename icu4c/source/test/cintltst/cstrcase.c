@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -331,12 +331,22 @@ TestCaseTitle() {
 
 U_CFUNC void
 TestCaseFolding() {
+    /*
+     * CaseFolding.txt says about i and its cousins:
+     *   0049; C; 0069; # LATIN CAPITAL LETTER I
+     *   0049; T; 0131; # LATIN CAPITAL LETTER I
+     *
+     *   0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+     *   0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+     * That's all.
+     * See CaseFolding.txt and the Unicode Standard for how to apply the case foldings.
+     */
     static const UChar32
     simple[]={
         /* input, default, exclude special i */
         0x61,   0x61,  0x61,
         0x49,   0x69,  0x131,
-        0x130,  0x69,  0x69,
+        0x130,  0x130, 0x69,
         0x131,  0x131, 0x131,
         0xdf,   0xdf,  0xdf,
         0xfb03, 0xfb03, 0xfb03,
