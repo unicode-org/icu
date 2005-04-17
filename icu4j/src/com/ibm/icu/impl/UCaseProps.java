@@ -1155,15 +1155,7 @@ public final class UCaseProps {
     0049; C; 0069; # LATIN CAPITAL LETTER I
     0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
 
-     * U+0130 is otherwise lowercased to U+0069 (UnicodeData.txt).
-     *
-     * In case this code is used with CaseFolding.txt from an older version of Unicode
-     * where CaseFolding.txt contains mappings with a status of 'I' that
-     * have the opposite polarity ('I' mappings are included by default but excluded for Turkic),
-     * we must also hardcode the Unicode 3.2 mappings for the code points 
-     * with 'I' mappings.
-     * Unicode 3.1.1 has 'I' mappings for U+0130 and U+0131.
-     * Unicode 3.2 has a 'T' mapping for U+0130, and lowercases U+0131 to itself (see UnicodeData.txt).
+     * U+0130 has no simple case folding (simple-case-folds to itself).
      */
 
     /**
@@ -1192,8 +1184,8 @@ public final class UCaseProps {
                         /* 0049; C; 0069; # LATIN CAPITAL LETTER I */
                         return 0x69;
                     } else if(c==0x130) {
-                        /* no simple default mapping for U+0130, use UnicodeData.txt */
-                        return 0x69;
+                        /* no simple case folding for U+0130 */
+                        return c;
                     }
                 } else {
                     /* Turkic mappings */
