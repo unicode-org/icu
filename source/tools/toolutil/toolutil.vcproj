@@ -21,8 +21,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;U_TOOLUTIL_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -86,8 +86,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;U_TOOLUTIL_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
@@ -171,6 +171,9 @@
 			<File
 				RelativePath=".\uparse.c">
 			</File>
+			<File
+				RelativePath=".\xmlparser.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -195,6 +198,9 @@
 			</File>
 			<File
 				RelativePath=".\uparse.h">
+			</File>
+			<File
+				RelativePath=".\xmlparser.h">
 			</File>
 		</Filter>
 		<Filter
