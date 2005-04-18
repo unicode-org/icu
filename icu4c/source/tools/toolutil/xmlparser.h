@@ -36,6 +36,10 @@ enum UXMLNodeType {
     UXML_NODE_TYPE_COUNT
 };
 
+U_NAMESPACE_BEGIN
+
+class UXMLParser;
+
 /**
  * This class represents an element node in a parsed XML tree.
  */
@@ -153,7 +157,7 @@ private:
  * The parse methods parse whole documents and return the parse trees via their
  * root elements.
  */
-class  U_TOOLUTIL_API UXMLParser : public UObject {
+class U_TOOLUTIL_API UXMLParser : public UObject {
 public:
     /**
      * Create an XML parser.
@@ -232,5 +236,7 @@ private:
                                             //    xml source (in fSrc).
     UnicodeString         fOneLF;
 };
+
+U_NAMESPACE_END
 
 #endif

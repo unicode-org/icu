@@ -21,9 +21,6 @@
 #include "filestrm.h"
 #include "xmlparser.h"
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UXMLParser)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UXMLElement)
-
 // character constants
 enum {
     x_QUOT=0x22,
@@ -47,6 +44,11 @@ enum {
 
 //  XML #6
 #define  XML_NAME    XML_NAMESTARTCHAR "(?:" XML_NAMECHAR ")*"
+
+U_NAMESPACE_BEGIN
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UXMLParser)
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UXMLElement)
 
 //
 //   UXMLParser constructor.   Mostly just initializes the ICU regexes that are
@@ -809,3 +811,5 @@ UXMLElement::getChildElement(const UnicodeString &name) const {
     }
     return NULL;
 }
+
+U_NAMESPACE_END
