@@ -209,10 +209,11 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         ucnv_toUnicode(
             cnv,
             &pu, buffer+src.getCapacity(),
-            &pb, bytes+sizeof(bytes),
+            &pb, bytes+bytesLength,
             NULL, TRUE, &errorCode);
         src.releaseBuffer((int32_t)(pu-buffer));
         ucnv_close(cnv);
+        cnv=NULL;
         if(U_FAILURE(errorCode)) {
             // unexpected error in conversion from Latin-1
             src.remove();
