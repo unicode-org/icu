@@ -33,8 +33,14 @@
     <alias from="no_NO_NY" to="nn_NO" /> 
     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
     <aliasLocale locale="sh" /> 
+    <aliasLocale locale="sh_BA" /> 
+    <aliasLocale locale="sh_CS" /> 
     <aliasLocale locale="sh_YU" /> 
+    <aliasLocale locale="sr_BA" /> 
+    <aliasLocale locale="sr_CS" /> 
     <aliasLocale locale="sr_YU" /> 
+    <aliasLocale locale="sr_Cyrl_YU" /> 
+    <aliasLocale locale="sr_Latn_YU" /> 
     <aliasLocale locale="zh_CN" /> 
     <aliasLocale locale="zh_HK" /> 
     <aliasLocale locale="zh_MO" /> 
