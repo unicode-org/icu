@@ -32,6 +32,7 @@
     <alias from="no_NO" to="nb_NO"/> 
     <alias from="no_NO_NY" to="nn_NO" /> 
     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
+    <aliasLocale locale="az_AZ" /> 
     <aliasLocale locale="sh" /> 
     <aliasLocale locale="sh_BA" /> 
     <aliasLocale locale="sh_CS" /> 
