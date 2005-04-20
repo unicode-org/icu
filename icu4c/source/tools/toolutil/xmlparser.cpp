@@ -226,7 +226,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         if(mXMLDecl.reset(src).lookingAt(0, errorCode)) {
             int32_t declEnd=mXMLDecl.end(errorCode);
             // go beyond <?xml
-            int32_t pos=src.indexOf(x_l)+1;
+            int32_t pos=src.indexOf((UChar)x_l)+1;
 
             mAttrValue.reset(src);
             while(pos<declEnd && mAttrValue.lookingAt(pos, errorCode)) {  // loop runs once per attribute on this element.
