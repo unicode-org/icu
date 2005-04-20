@@ -1953,6 +1953,7 @@ structLocale{
         fat{""}
         ff{""}
         fi{""}
+        fil{""}
         fiu{""}
         fj{""}
         fo{""}
@@ -2109,6 +2110,7 @@ structLocale{
         mul{""}
         mun{""}
         mus{""}
+        mwl{""}
         mwr{""}
         my{""}
         myn{""}
@@ -2187,6 +2189,7 @@ structLocale{
         sas{""}
         sat{""}
         sc{""}
+        scn{""}
         sco{""}
         sd{""}
         se{""}
@@ -2217,6 +2220,7 @@ structLocale{
         son{""}
         sq{""}
         sr{""}
+        srn{""}
         srr{""}
         ss{""}
         ssa{""}

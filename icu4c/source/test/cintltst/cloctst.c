@@ -869,7 +869,7 @@ static void TestISOFunctions()
     {
         test = *(str+count);
 
-#if 0
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
         {
             /* This code only works on ASCII machines where the keys are stored in ASCII order */
             const char *key;
