@@ -1,5 +1,5 @@
 # WordBreakProperty-4.1.0.txt
-# Date: 2005-02-26, 02:43:08 GMT [MD]
+# Date: 2005-03-26, 00:36:01 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -478,7 +478,6 @@ FE13..FE14    ; MidNum
 # ================================================
 
 0030..0039    ; Numeric
-005F          ; Numeric
 0660..0669    ; Numeric
 066B..066C    ; Numeric
 06F0..06F9    ; Numeric
@@ -499,12 +498,18 @@ FE13..FE14    ; MidNum
 1810..1819    ; Numeric
 1946..194F    ; Numeric
 19D0..19D9    ; Numeric
-203F..2040    ; Numeric
-2054          ; Numeric
-FE33..FE34    ; Numeric
-FE4D..FE4F    ; Numeric
-FF3F          ; Numeric
 104A0..104A9  ; Numeric
 1D7CE..1D7FF  ; Numeric
 
-# Total code points: 272
+# Total code points: 262
+
+# ================================================
+
+005F          ; ExtendNumLet
+203F..2040    ; ExtendNumLet
+2054          ; ExtendNumLet
+FE33..FE34    ; ExtendNumLet
+FE4D..FE4F    ; ExtendNumLet
+FF3F          ; ExtendNumLet
+
+# Total code points: 10

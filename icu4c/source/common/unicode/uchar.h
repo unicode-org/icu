@@ -1370,10 +1370,10 @@ typedef enum UJoiningGroup {
  * @draft ICU 3.4
  */
 typedef enum UGraphemeClusterBreak {
-    U_GCB_OTHER,            /*[Other]*/ /*See note !!*/
-    U_GCB_CONTROL,          /*[Control]*/
+    U_GCB_OTHER,            /*[XX]*/ /*See note !!*/
+    U_GCB_CONTROL,          /*[CN]*/
     U_GCB_CR,               /*[CR]*/
-    U_GCB_EXTEND,           /*[Extend]*/
+    U_GCB_EXTEND,           /*[EX]*/
     U_GCB_L,                /*[L]*/
     U_GCB_LF,               /*[LF]*/
     U_GCB_LV,               /*[LV]*/
@@ -1391,13 +1391,14 @@ typedef enum UGraphemeClusterBreak {
  * @draft ICU 3.4
  */
 typedef enum UWordBreakValues {
-    U_WB_OTHER,             /*[Other]*/ /*See note !!*/
-    U_WB_ALETTER,           /*[ALetter]*/
-    U_WB_FORMAT,            /*[Format]*/
-    U_WB_KATAKANA,          /*[Katakana]*/
-    U_WB_MIDLETTER,         /*[MidLetter]*/
-    U_WB_MIDNUM,            /*[MidNum]*/
-    U_WB_NUMERIC,           /*[Numeric]*/
+    U_WB_OTHER,             /*[XX]*/ /*See note !!*/
+    U_WB_ALETTER,           /*[LE]*/
+    U_WB_FORMAT,            /*[FO]*/
+    U_WB_KATAKANA,          /*[KA]*/
+    U_WB_MIDLETTER,         /*[ML]*/
+    U_WB_MIDNUM,            /*[MN]*/
+    U_WB_NUMERIC,           /*[NU]*/
+    U_WB_EXTENDNUMLET,      /*[EX]*/
     U_WB_COUNT
 } UWordBreakValues;
 
@@ -1408,17 +1409,17 @@ typedef enum UWordBreakValues {
  * @draft ICU 3.4
  */
 typedef enum USentenceBreak {
-    U_SB_OTHER,             /*[Other]*/ /*See note !!*/
-    U_SB_ATERM,             /*[ATerm]*/
-    U_SB_CLOSE,             /*[Close]*/
-    U_SB_FORMAT,            /*[Format]*/
-    U_SB_LOWER,             /*[Lower]*/
-    U_SB_NUMERIC,           /*[Numeric]*/
-    U_SB_OLETTER,           /*[OLetter]*/
-    U_SB_SEP,               /*[Sep]*/
-    U_SB_SP,                /*[Sp]*/
-    U_SB_STERM,             /*[STerm]*/
-    U_SB_UPPER,             /*[Upper]*/
+    U_SB_OTHER,             /*[XX]*/ /*See note !!*/
+    U_SB_ATERM,             /*[AT]*/
+    U_SB_CLOSE,             /*[CL]*/
+    U_SB_FORMAT,            /*[FO]*/
+    U_SB_LOWER,             /*[LO]*/
+    U_SB_NUMERIC,           /*[NU]*/
+    U_SB_OLETTER,           /*[LE]*/
+    U_SB_SEP,               /*[SE]*/
+    U_SB_SP,                /*[SP]*/
+    U_SB_STERM,             /*[ST]*/
+    U_SB_UPPER,             /*[UP]*/
     U_SB_COUNT
 } USentenceBreak;
 

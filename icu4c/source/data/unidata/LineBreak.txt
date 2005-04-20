@@ -1,9 +1,15 @@
 # LineBreak-4.1.0.txt
+# Date: 2005-03-17, 15:21:00 PST [KW]
 #
 # Line Break Properties
 #
-# This file is a supplement to the UnicodeData.txt file.
+# This file is a normative contributory data file in the
+# Unicode Character Database.
 # It contains both normative and informative data.
+#
+# Copyright (c) 1991-2005 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
+#
 # The format is two fields separated by a semicolon.
 # Field 0: Unicode value
 # Field 1: LineBreak property, consisting of one of the following values:
@@ -22,7 +28,7 @@
 # The Unicode name of each character is provided in a comment for help
 # in identifying the characters.
 #
-# See UTR #14: Line Breaking Properties, for more information
+# See UAX #14: Line Breaking Properties, for more information
 0000..0008;CM
 0009;BA
 000A;LF

@@ -1,10 +1,11 @@
 # PropertyValueAliases-4.1.0.txt
-# Date: 2005-02-26, 11:13:54 GMT [MD]
+# Date: 2005-03-28, 17:21:48 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
+#
 # This file contains aliases for property values used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
 # property tests, and other programmatic textual descriptions of Unicode data.
@@ -332,16 +333,16 @@ gc ; Zs        ; Space_Separator
 
 # Grapheme_Cluster_Break (GCB)
 
-GCB; Control   ; Control
+GCB; CN        ; Control
 GCB; CR        ; CR
-GCB; Extend    ; Extend
+GCB; EX        ; Extend
 GCB; L         ; L
 GCB; LF        ; LF
 GCB; LV        ; LV
 GCB; LVT       ; LVT
-GCB; Other     ; Other
 GCB; T         ; T
 GCB; V         ; V
+GCB; XX        ; Other
 
 # Hangul_Syllable_Type (hst)
 
@@ -553,24 +554,25 @@ sc ; Zyyy      ; Common
 
 # Sentence_Break (SB)
 
-SB ; ATerm     ; ATerm
-SB ; Close     ; Close
-SB ; Format    ; Format
-SB ; Lower     ; Lower
-SB ; Numeric   ; Numeric
-SB ; OLetter   ; OLetter
-SB ; Other     ; Other
-SB ; Sep       ; Sep
-SB ; Sp        ; Sp
-SB ; STerm     ; STerm
-SB ; Upper     ; Upper
+SB ; AT        ; ATerm
+SB ; CL        ; Close
+SB ; FO        ; Format
+SB ; LE        ; OLetter
+SB ; LO        ; Lower
+SB ; NU        ; Numeric
+SB ; SE        ; Sep
+SB ; SP        ; Sp
+SB ; ST        ; STerm
+SB ; UP        ; Upper
+SB ; XX        ; Other
 
 # Word_Break (WB)
 
-WB ; ALetter   ; ALetter
-WB ; Format    ; Format
-WB ; Katakana  ; Katakana
-WB ; MidLetter ; MidLetter
-WB ; MidNum    ; MidNum
-WB ; Numeric   ; Numeric
-WB ; Other     ; Other
+WB ; EX        ; ExtendNumLet
+WB ; FO        ; Format
+WB ; KA        ; Katakana
+WB ; LE        ; ALetter
+WB ; ML        ; MidLetter
+WB ; MN        ; MidNum
+WB ; NU        ; Numeric
+WB ; XX        ; Other
