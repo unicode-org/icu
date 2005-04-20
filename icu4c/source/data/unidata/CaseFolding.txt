@@ -1,10 +1,11 @@
 # CaseFolding-4.1.0.txt
-# Date: 2004-12-11, 05:35:45 GMT [MD]
+# Date: 2005-03-26, 00:24:43 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
+#
 # Case Folding Properties
 #
 # This file is a supplement to the UnicodeData file.
@@ -16,7 +17,7 @@
 # The data supports both implementations that require simple case foldings
 # (where string lengths don't change), and implementations that allow full case folding
 # (where string lengths may grow). Note that where they can be supported, the
-# full case foldings are superior: for example, they allow "MASSE" and "Maﬂe" to match.
+# full case foldings are superior: for example, they allow "MASSE" and "Ma√üe" to match.
 #
 # All code points not listed in this file map to themselves.
 #

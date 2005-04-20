@@ -1,5 +1,5 @@
 # DerivedBidiClass-4.1.0.txt
-# Date: 2005-02-26, 02:31:45 GMT [MD]
+# Date: 2005-03-30, 02:09:58 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -9,6 +9,15 @@
 # ================================================
 
 # Bidi Class (listing UnicodeData.txt, field 4: see UCD.html)
+# Unlike other properties, unassigned code points in blocks
+# reserved for right-to-left scripts are given either types R or AL.
+# The unassigned characters that default to R are:
+#   Hebrew, Cypriot_Syllabary, Kharoshthi, and the ranges \u07C0-\u08FF
+#   \uFB1D-\uFB4F \U00010840-\U000109FF \U00010A60-\U00010FFF
+# The unassigned characters that default to AL are:
+#   Arabic, Syriac, Arabic_Supplement, Thaana, Arabic_Presentation_Forms_A,
+#   Arabic_Presentation_Forms_B, minus the Noncharacter_Code_Points
+# For all other cases:
 
 #  All code points not explicitly listed for Bidi_Class
 #  have the value Left_To_Right (L).

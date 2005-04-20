@@ -1,9 +1,14 @@
 # EastAsianWidth-4.1.0.txt
+# Date: 2005-03-17, 15:21:00 PST [KW]
 #
 # East Asian Width Properties
 #
-# This file is a supplement to the UnicodeData.txt file.
-# It contains informative data only.
+# This file is an informative contributory data file in the
+# Unicode Character Database.
+#
+# Copyright (c) 1991-2005 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
+#
 # The format is two fields separated by a semicolon.
 # Field 0: Unicode value
 # Field 1: East Asian Width property, consisting of one of the following values:
