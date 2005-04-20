@@ -2275,7 +2275,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @draft ICU 3.4
          * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public static final int COUNT = 7;
+        public static final int EXTENDNUMLET = 7;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COUNT = 8;
     }
 
     /**
