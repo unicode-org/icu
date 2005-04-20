@@ -1,5 +1,5 @@
 # PropList-4.1.0.txt
-# Date: 2005-03-10, 01:42:15 GMT [MD]
+# Date: 2005-03-26, 00:34:40 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -838,7 +838,6 @@ E0100..E01EF  ; Variation_Selector # Mn [240] VARIATION SELECTOR-17..VARIATION S
 00B0          ; Pattern_Syntax # So       DEGREE SIGN
 00B1          ; Pattern_Syntax # Sm       PLUS-MINUS SIGN
 00B6          ; Pattern_Syntax # So       PILCROW SIGN
-00B7          ; Pattern_Syntax # Po       MIDDLE DOT
 00BB          ; Pattern_Syntax # Pf       RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
 00BF          ; Pattern_Syntax # Po       INVERTED QUESTION MARK
 00D7          ; Pattern_Syntax # Sm       MULTIPLICATION SIGN
@@ -1047,4 +1046,4 @@ FD3E          ; Pattern_Syntax # Ps       ORNATE LEFT PARENTHESIS
 FD3F          ; Pattern_Syntax # Pe       ORNATE RIGHT PARENTHESIS
 FE45..FE46    ; Pattern_Syntax # Po   [2] SESAME DOT..WHITE SESAME DOT
 
-# Total code points: 2761
+# Total code points: 2760

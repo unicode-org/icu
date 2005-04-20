@@ -1,9 +1,13 @@
 # BidiMirroring-4.1.0.txt
+# Date: 2005-03-17, 15:21:00 PST [KW]
 #
 # Bidi_Mirroring_Glyph Property
 # 
 # This file is an informative contributory data file in the
 # Unicode Character Database.
+#
+# Copyright (c) 1991-2005 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 #
 # This data file lists characters that have the mirrored property
 # where there is another Unicode character that typically has a glyph
