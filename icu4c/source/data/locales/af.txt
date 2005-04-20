@@ -138,7 +138,6 @@ af{
         VC{"Saint Vincent en die Grenadine"}
         VN{"Viëtnam"}
         YE{"Jemen"}
-        YU{"Serwië"}
         ZA{"Suid-Afrika"}
         ZM{"Zambië"}
     }

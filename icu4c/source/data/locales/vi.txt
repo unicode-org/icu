@@ -193,7 +193,6 @@ vi{
         VU{"Va-nu-a-tu"}
         WS{"Xa-moa"}
         YE{"Y-ê-men"}
-        YU{"Nam Tư"}
         ZA{"Nam Phi"}
         ZM{"Dăm-bi-a"}
         ZW{"Dim-ba-bu-ê"}

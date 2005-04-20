@@ -246,7 +246,6 @@ hu{
         WS{"Szamoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Jugoszlávia"}
         ZA{"Dél-Afrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -267,10 +266,6 @@ hu{
         AFN{
             "Af",
             "Afghani",
-        }
-        ALK{
-            "ALK",
-            "Albán lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -463,10 +458,6 @@ hu{
         CLP{
             "Ch$",
             "Chilei peso",
-        }
-        CNX{
-            "CNX",
-            "Kínai USA dollár konvertibilis valuta",
         }
         CNY{
             "Y",

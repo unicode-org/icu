@@ -246,7 +246,6 @@ pl{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Majotta"}
-        YU{"Jugosławia"}
         ZA{"Afryka Południowa"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -267,10 +266,6 @@ pl{
         AFN{
             "Af",
             "afgani",
-        }
-        ALK{
-            "ALK",
-            "lek albański (1946-1961)",
         }
         ALL{
             "lek",
@@ -451,10 +446,6 @@ pl{
         CLP{
             "Ch$",
             "peso chilijskie",
-        }
-        CNX{
-            "CNX",
-            "dolar chiński dla transakcji zagranicznych",
         }
         CNY{
             "Y",

@@ -246,7 +246,6 @@ sk{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Juhoslávia"}
         ZA{"Južná Afrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -259,10 +258,6 @@ sk{
         AED{
             "AED",
             "UAE dirham",
-        }
-        ALK{
-            "ALK",
-            "Albánsky lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -451,10 +446,6 @@ sk{
         CLP{
             "Ch$",
             "Čílske peso",
-        }
-        CNX{
-            "CNX",
-            "Čínsky certifikáty v US dolároch",
         }
         CNY{
             "Y",

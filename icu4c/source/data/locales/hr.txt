@@ -246,16 +246,11 @@ hr{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Majote"}
-        YU{"Jugoslavija"}
         ZA{"Južna Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
     }
     Currencies{
-        ALK{
-            "ALK",
-            "Albanski lek (1946-1961)",
-        }
         ALL{
             "lek",
             "Albanski lek",

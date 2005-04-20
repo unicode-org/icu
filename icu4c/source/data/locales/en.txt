@@ -246,7 +246,6 @@ en{
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
-        YU{"Yugoslavia"}
         ZA{"South Africa"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -267,10 +266,6 @@ en{
         AFN{
             "Af",
             "Afghani",
-        }
-        ALK{
-            "ALK",
-            "Albanian Lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -463,10 +458,6 @@ en{
         CLP{
             "Ch$",
             "Chilean Peso",
-        }
-        CNX{
-            "CNX",
-            "Chinese US Dollar Foreign Exchange Certificates",
         }
         CNY{
             "Y",

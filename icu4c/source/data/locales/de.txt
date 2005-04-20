@@ -246,7 +246,6 @@ de{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Jugoslawien"}
         ZA{"Südafrika"}
         ZM{"Sambia"}
         ZW{"Simbabwe"}
@@ -267,10 +266,6 @@ de{
         AFN{
             "Af",
             "Afghani",
-        }
-        ALK{
-            "ALK",
-            "Albanischer Lek (1946-1961)",
         }
         ALL{
             "ALL",

@@ -246,7 +246,6 @@ pt{
         WS{"Samoa"}
         YE{"Iêmen"}
         YT{"Mayotte"}
-        YU{"Iugoslávia"}
         ZA{"África do Sul"}
         ZM{"Zâmbia"}
         ZW{"Zimbábwe"}
@@ -459,10 +458,6 @@ pt{
         CLP{
             "CLP",
             "Peso chileno",
-        }
-        CNX{
-            "CNX",
-            "Certificados de câmbio chineses em dólares dos EUA",
         }
         CNY{
             "CNY",

@@ -246,7 +246,6 @@ sv{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Jugoslavien"}
         ZA{"Sydafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -259,10 +258,6 @@ sv{
         AED{
             "AED",
             "Förenade arabemiratens dirham",
-        }
-        ALK{
-            "ALK",
-            "Albansk lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -451,10 +446,6 @@ sv{
         CLP{
             "Ch$",
             "Chilensk peso",
-        }
-        CNX{
-            "CNX",
-            "Kinesisk USA-dollar Foreign Exchange Certificates",
         }
         CNY{
             "Y",
