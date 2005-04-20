@@ -127,7 +127,7 @@ static const char * const LANGUAGES[] = {
     "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
     "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
     "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
-    "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",
+    "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
     "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",
     "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",
     "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",
@@ -146,7 +146,7 @@ static const char * const LANGUAGES[] = {
     "mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",
     "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
     "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",
-    "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
+    "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
     "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
     "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
     "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
@@ -155,11 +155,11 @@ static const char * const LANGUAGES[] = {
     "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
     "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",
     "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
-    "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",
+    "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "sel", "sem",
     "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",
     "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
     "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",
-    "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
+    "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
     "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
     "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
     "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
@@ -221,8 +221,8 @@ static const char * const LANGUAGES_3[] = {
     "dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
 /*  "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
     "enm", "epo", "spa", "est", "eus", "ewo", "fas",
-/*  "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
-    "fan", "fat", "ful", "fin", "fiu", "fij", "fao", "fon",
+/*  "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",    */
+    "fan", "fat", "ful", "fin", "fil", "fiu", "fij", "fao", "fon",
 /*  "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
     "fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
 /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
@@ -259,8 +259,8 @@ static const char * const LANGUAGES_3[] = {
     "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
 /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
     "mol", "moh", "mos", "mar", "msa", "mlt", "mul", "mun",
-/*  "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
-    "mus", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
+/*  "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
+    "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
 /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
     "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
 /*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
@@ -277,16 +277,16 @@ static const char * const LANGUAGES_3[] = {
     "raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
 /*  "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
     "rus", "kin", "san", "sad", "sah", "sai", "sal", "sam",
-/*  "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
-    "sas", "sat", "srd", "sco", "snd", "sme", "sel", "sem",
+/*  "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "sel", "sem",    */
+    "sas", "sat", "srd", "scn", "sco", "snd", "sme", "sel", "sem",
 /*  "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
     "sag", "sga", "sgn", "shn", "sin", "sid", "sio", "sit",
 /*  "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
     "slk", "slv", "sla", "smo", "sma", "smi", "smj", "smn",
 /*  "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
     "sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
-/*  "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
-    "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
+/*  "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
+    "srn", "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
 /*  "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
     "swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
 /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
