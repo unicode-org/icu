@@ -244,7 +244,6 @@ is{
         WS{"Samóa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Júgóslavía"}
         ZA{"Suður-Afríka"}
         ZM{"Sambía"}
     }
@@ -256,10 +255,6 @@ is{
         AED{
             "AED",
             "Arabískt dírham",
-        }
-        ALK{
-            "ALK",
-            "Lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -356,10 +351,6 @@ is{
         CLP{
             "Ch$",
             "Chileskur pesi",
-        }
-        CNX{
-            "CNX",
-            "Kínverskt gjaldeyrisskírteini í Bandaríkjadölum",
         }
         CNY{
             "Y",

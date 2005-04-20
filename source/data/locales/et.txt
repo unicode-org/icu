@@ -246,7 +246,6 @@ et{
         WS{"Samoa"}
         YE{"Jeemen"}
         YT{"Mayotte"}
-        YU{"Jugoslaavia"}
         ZA{"Lõuna-Aafrika Vabariik"}
         ZM{"Sambia"}
         ZW{"Zimbabwe"}

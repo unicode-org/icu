@@ -246,7 +246,6 @@ mt{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Majotte"}
-        YU{"Jugoslavja"}
         ZA{"Afrika t'Isfel"}
         ZM{"Żambja"}
         ZW{"Żimbabwe"}

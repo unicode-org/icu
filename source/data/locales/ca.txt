@@ -202,7 +202,6 @@ ca{
         VU{"Vanuatu"}
         YE{"Iemen"}
         YT{"Mayotte"}
-        YU{"Iugoslàvia"}
         ZA{"Sud-àfrica"}
         ZM{"Zàmbia"}
         ZW{"Zimbabwe"}

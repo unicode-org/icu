@@ -246,7 +246,6 @@ da{
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
-        YU{"Jugoslavien"}
         ZA{"Sydafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
@@ -259,10 +258,6 @@ da{
         AED{
             "AED",
             "Dirham fra de Forenede Arabiske Emirater",
-        }
-        ALK{
-            "ALK",
-            "Albansk lek (1946-1961)",
         }
         ALL{
             "lek",

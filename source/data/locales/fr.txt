@@ -245,7 +245,6 @@ fr{
         WS{"Samoa"}
         YE{"Yémen"}
         YT{"Mayotte"}
-        YU{"Yougoslavie"}
         ZA{"Afrique du Sud"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
@@ -266,10 +265,6 @@ fr{
         AFN{
             "Af",
             "afghani",
-        }
-        ALK{
-            "ALK",
-            "lek albanais (1946-1961)",
         }
         ALL{
             "lek",
@@ -462,10 +457,6 @@ fr{
         CLP{
             "CLP",
             "peso chilien",
-        }
-        CNX{
-            "CNX",
-            "dollar US chinois (certificat de devises étrangères)",
         }
         CNY{
             "CNY",

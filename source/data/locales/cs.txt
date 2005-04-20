@@ -246,7 +246,6 @@ cs{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        YU{"Jugoslávie"}
         ZA{"Jižní Afrika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
@@ -267,10 +266,6 @@ cs{
         AFN{
             "Af",
             "Afghán",
-        }
-        ALK{
-            "ALK",
-            "Lek (1946-1961)",
         }
         ALL{
             "lek",
@@ -463,10 +458,6 @@ cs{
         CLP{
             "Ch$",
             "Peso chilské",
-        }
-        CNX{
-            "CNX",
-            "Dolar lidové banky",
         }
         CNY{
             "Y",
