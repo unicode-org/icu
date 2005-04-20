@@ -159,7 +159,6 @@ sq{
         VC{"Saint Vincent e Grenadinet"}
         VE{"Venezuelë"}
         YE{"Jemen"}
-        YU{"Serbië"}
         ZA{"Afrika e Jugut"}
         ZM{"Zambi"}
         ZW{"Zimbabve"}

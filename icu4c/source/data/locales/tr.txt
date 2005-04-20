@@ -246,7 +246,6 @@ tr{
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
-        YU{"Yugoslavya"}
         ZA{"Güney Afrika"}
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
@@ -267,10 +266,6 @@ tr{
         AFN{
             "Af",
             "Afganistan Afganisi",
-        }
-        ALK{
-            "ALK",
-            "Arnavutluk Leki (1946-1961)",
         }
         ALL{
             "lek",
@@ -463,10 +458,6 @@ tr{
         CLP{
             "Ch$",
             "Şili Pezosu",
-        }
-        CNX{
-            "CNX",
-            "Çin ABD Doları FEC",
         }
         CNY{
             "Y",

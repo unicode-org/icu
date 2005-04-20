@@ -60,6 +60,7 @@ structLocale{
         AT{""}
         AU{""}
         AW{""}
+        AX{""}
         AZ{""}
         BA{""}
         BB{""}
@@ -308,10 +309,6 @@ structLocale{
             "",
         }
         AIF{
-            "",
-            "",
-        }
-        ALK{
             "",
             "",
         }
@@ -604,10 +601,6 @@ structLocale{
             "",
         }
         CNP{
-            "",
-            "",
-        }
-        CNX{
             "",
             "",
         }

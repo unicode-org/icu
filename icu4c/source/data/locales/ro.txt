@@ -245,7 +245,6 @@ ro{
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
-        YU{"Iugoslavia"}
         ZA{"Africa de Sud"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}

@@ -245,7 +245,6 @@ lv{
         WS{"Samoa"}
         YE{"Jemena"}
         YT{"Majota"}
-        YU{"Dienvidslāvija"}
         ZA{"Dienvidāfrika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}

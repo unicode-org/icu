@@ -245,7 +245,6 @@ lt{
         WS{"Samoa"}
         YE{"Jemenas"}
         YT{"Majotė"}
-        YU{"Jugoslavija"}
         ZA{"Pietų Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabvė"}

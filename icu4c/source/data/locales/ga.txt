@@ -244,7 +244,6 @@ ga{
         WS{"Samó"}
         YE{"Éimin"}
         YT{"Mayotte"}
-        YU{"An Iúgslaiv"}
         ZA{"An Afraic Theas"}
         ZM{"An tSaimbia"}
         ZW{"An tSiombáib"}
@@ -265,10 +264,6 @@ ga{
         AFN{
             "Af",
             "Afgainí",
-        }
-        ALK{
-            "ALK",
-            "Lek Albánach (1946-1961)",
         }
         ALL{
             "lek",
@@ -461,10 +456,6 @@ ga{
         CLP{
             "Ch$",
             "Peso na Sile",
-        }
-        CNX{
-            "CNX",
-            "Teastais Airgeadraí Dollar SAM Síneach",
         }
         CNY{
             "Y",

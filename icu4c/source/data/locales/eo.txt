@@ -232,7 +232,6 @@ eo{
         WS{"Samoo"}
         YE{"Jemeno"}
         YT{"Majoto"}
-        YU{"Serbujo"}
         ZA{"Sud-Afriko"}
         ZM{"Zambio"}
         ZW{"Zimbabvo"}

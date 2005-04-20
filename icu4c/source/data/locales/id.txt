@@ -241,7 +241,6 @@ id{
         WS{"Samoa"}
         YE{"Yaman"}
         YT{"Mayotte"}
-        YU{"Yugoslavia"}
         ZA{"Afrika Selatan"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
