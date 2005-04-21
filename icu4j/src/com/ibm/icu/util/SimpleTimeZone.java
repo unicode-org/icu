@@ -6,6 +6,8 @@
 package com.ibm.icu.util;
 import com.ibm.icu.impl.JDKTimeZone;
 
+import java.io.IOException;
+
 ///CLOVER:USECLASS
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
@@ -38,6 +40,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public SimpleTimeZone(int rawOffset, String ID) {
         this(new java.util.SimpleTimeZone(rawOffset, ID));
+        raw = rawOffset;
     }
 
     /**
@@ -102,8 +105,22 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime) {
         this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
-                                 startDayOfWeek, startTime, endMonth,
-                                 endDay, endDayOfWeek, endTime));
+                                          startDayOfWeek, startTime, endMonth,
+                                          endDay, endDayOfWeek, endTime));
+
+        raw = rawOffset;
+
+        sm = startMonth;
+        sdwm = startDay;
+        sdw = startDayOfWeek;
+        st = startTime;
+        sdm = -1;
+
+        em = endMonth;
+        edwm = endDay;
+        edw = endDayOfWeek;
+        et = endTime;
+        edm = -1;
     }
 
     /**
@@ -119,8 +136,28 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int endMonth, int endDay, int endDayOfWeek, int endTime,
                           int dstSavings) {
         this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
-                                 startDayOfWeek, startTime, endMonth,
-                                 endDay, endDayOfWeek, endTime, dstSavings));
+                                          startDayOfWeek, startTime, endMonth,
+                                          endDay, endDayOfWeek, endTime, dstSavings));
+
+        raw = rawOffset;
+	dst = dstSavings;
+
+        sm = startMonth;
+        sdwm = startDay;
+        sdw = startDayOfWeek;
+        st = startTime;
+        sdm = -1;
+
+        em = endMonth;
+        edwm = endDay;
+        edw = endDayOfWeek;
+        et = endTime;
+        edm = -1;
+    }
+
+    public void setRawOffset(int offsetMillis) {
+        super.setRawOffset(offsetMillis);
+        raw = offsetMillis;
     }
 
     /**
@@ -131,6 +168,8 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setStartYear(int year) {
         unwrapSTZ().setStartYear(year);
+
+        sy = year;
     }
 
     /**
@@ -157,6 +196,12 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time) {
         unwrapSTZ().setStartRule(month, dayOfWeekInMonth, dayOfWeek, time);
+
+        sm = month;
+        sdwm = dayOfWeekInMonth;
+        sdw = dayOfWeek;
+        st = time;
+        sdm = -1;
     }
 
     /**
@@ -173,6 +218,12 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setStartRule(int month, int dayOfMonth, int time) {
         unwrapSTZ().setStartRule(month, dayOfMonth, time);
+
+        sm = month;
+        sdwm = -1;
+        sdw = -1;
+        st = time;
+        sdm = dayOfMonth;
     }
 
     /**
@@ -194,6 +245,13 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
         unwrapSTZ().setStartRule(month, dayOfMonth, dayOfWeek, time, after);
+
+        sm = month;
+        sdwm = -1;
+        sdw = dayOfWeek;
+        st = time;
+        sdm = dayOfMonth;
+        sa = after;
     }
 
     /**
@@ -219,6 +277,12 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                            int time) {
         unwrapSTZ().setEndRule(month, dayOfWeekInMonth, dayOfWeek, time);
+
+        em = month;
+        edwm = dayOfWeekInMonth;
+        edw = dayOfWeek;
+        et = time;
+        edm = -1;
     }
 
     /**
@@ -235,6 +299,12 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setEndRule(int month, int dayOfMonth, int time) {
         unwrapSTZ().setEndRule(month, dayOfMonth, time);
+
+        em = month;
+        edwm = -1;
+        edw = -1;
+        et = time;
+        edm = dayOfMonth;
     }
 
     /**
@@ -256,6 +326,13 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
         unwrapSTZ().setEndRule(month, dayOfMonth, dayOfWeek, time, after);
+
+        em = month;
+        edwm = -1;
+        edw = dayOfWeek;
+        et = time;
+        edm = dayOfMonth;
+        ea = after;
     }
 
     /**
@@ -267,6 +344,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setDSTSavings(int millisSavedDuringDST) {
         unwrapSTZ().setDSTSavings(millisSavedDuringDST);
+	dst = millisSavedDuringDST;
     }
 
     /**
@@ -287,7 +365,13 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @internal
      */
     public SimpleTimeZone(java.util.SimpleTimeZone tz) {
+        // public so JDKTimeZone can instantiate it
+        // note, this is a problem since if the java STZ has been tweaked before
+        // we get it, we can't extract the info from it so we can't serialize
+        // or deserialize
         super(tz);
+
+        raw = tz.getRawOffset();
     }
 
     /**
@@ -296,6 +380,52 @@ public class SimpleTimeZone extends JDKTimeZone {
     java.util.SimpleTimeZone unwrapSTZ() {
         return (java.util.SimpleTimeZone) unwrap();
     }
+
+    // on JDK 1.4 and later, can't deserialize a SimpleTimeZone as a SimpleTimeZone...
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        if (!(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(getID()))) {
+            // System.out.println("*** readjust " + zone.getClass().getName() + " " + zone.getID() + " ***");
+            java.util.SimpleTimeZone stz = 
+                new java.util.SimpleTimeZone(raw, getID());
+            if (dst != 0) {
+                stz.setDSTSavings(dst);
+                // if it is 0, then there shouldn't be start/end rules and the default
+                // behavior should be no dst
+            }
+
+            if (sy != -1) {
+                stz.setStartYear(sy);
+            }
+            if (sm != -1) {
+                if (sdm == -1) {
+                    stz.setStartRule(sm, sdwm, sdw, st);
+                } else if (sdw == -1) {
+                    stz.setStartRule(sm, sdm, st);
+                } else {
+                    stz.setStartRule(sm, sdm, sdw, st, sa);
+                }
+            }
+            if (em != -1) {
+                if (edm == -1) {
+                    stz.setEndRule(em, edwm, edw, et);
+                } else if (edw == -1) {
+                    stz.setEndRule(em, edm, et);
+                } else {
+                    stz.setEndRule(em, edm, edw, et, ea);
+                }
+            }
+            zone = stz;
+        }
+    }
+
+    // data needed for streaming mutated SimpleTimeZones in JDK14
+    int raw, dst = 3600000;
+    int sy = -1;
+    int sm = -1, sdwm, sdw, st, sdm;
+    boolean sa;
+    int em = -1, edwm, edw, et, edm;
+    boolean ea;
 }
 
 //eof

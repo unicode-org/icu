@@ -18,10 +18,15 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.lang.reflect.InvocationTargetException;
 
 public class TimeZoneTest extends TestFmwk
 {
@@ -887,6 +892,57 @@ public class TimeZoneTest extends TestFmwk
     if (offset != -25200000) {
         errln("expected offset -25200000, got: " + offset);
     }
+    }
+
+    // jb4484
+    public void TestSimpleTimeZoneSerialization() 
+    {
+        SimpleTimeZone stz0 = new SimpleTimeZone(32400000, "MyTimeZone");
+        SimpleTimeZone stz1 = new SimpleTimeZone(32400000, "Asia/Tokyo");
+        SimpleTimeZone stz2 = new SimpleTimeZone(32400000, "Asia/Tokyo");
+        stz2.setRawOffset(0);
+        SimpleTimeZone stz3 = new SimpleTimeZone(32400000, "Asia/Tokyo");
+        stz3.setStartYear(100);
+        SimpleTimeZone stz4 = new SimpleTimeZone(32400000, "Asia/Tokyo");
+        stz4.setStartYear(1000);
+        stz4.setDSTSavings(1800000);
+        stz4.setStartRule(3, 4, 180000);
+        stz4.setEndRule(6, 3, 4, 360000);
+        SimpleTimeZone stz5 = new SimpleTimeZone(32400000, "Asia/Tokyo");
+        stz5.setStartRule(2, 3, 4, 360000);
+        stz5.setEndRule(6, 3, 4, 360000);
+        
+        SimpleTimeZone[] stzs = { stz0, stz1, stz2, stz3, stz4, stz5, };
+
+        for (int i = 0; i < stzs.length; ++i) {
+            SimpleTimeZone stz = stzs[i];
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(stz);
+                oos.close();
+                byte[] bytes = baos.toByteArray();
+                logln("id: " + stz.getID() + " length: " + bytes.length);
+
+                ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+                ObjectInputStream ois = new ObjectInputStream(bais);
+
+                SimpleTimeZone stzDeserialized = (SimpleTimeZone)ois.readObject();
+                ois.close();
+
+                assertEquals("time zones", stz, stzDeserialized);
+            }
+            catch (ClassCastException cce) {
+                cce.printStackTrace();
+                errln("could not deserialize SimpleTimeZone");
+            }
+            catch (IOException ioe) {
+                errln(ioe.getMessage());
+            }
+            catch (ClassNotFoundException cnfe) {
+                errln(cnfe.getMessage());
+            }
+        }
     }
 }
 
