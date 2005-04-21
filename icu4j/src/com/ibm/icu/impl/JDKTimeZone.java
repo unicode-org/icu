@@ -34,7 +34,8 @@ public class JDKTimeZone extends TimeZone {
     /**
      * The java.util.TimeZone wrapped by this object.  Must not be null.
      */
-    transient java.util.TimeZone zone;
+    // give access to SimpleTimeZone
+    protected transient java.util.TimeZone zone;
 
     /**
      * Given a java.util.TimeZone, wrap it in the appropriate adapter
