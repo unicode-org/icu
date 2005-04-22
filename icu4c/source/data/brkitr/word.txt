@@ -6,8 +6,10 @@
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on Version 4.1 draft, dated 2004-11-11
+#      These rules are based on Unicode Version 4.1 
 #
+# Note:  Updates to word.txt will usually need to be merged into
+#        word_POSIX.txt and word_ja.txt also.
 
 ##############################################################################
 #
@@ -28,7 +30,7 @@ $ALetter      = [\p{Word_Break = ALetter}];
 $MidLetter    = [\p{Word_Break = MidLetter}];
 $MidNum       = [\p{Word_Break = MidNum}];
 $Numeric      = [\p{Word_Break = Numeric}];
-$ExtendNumLet = [\p{General_Category=Connector_Punctuation}];
+$ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
 
 
 $CR             = \u000d;
@@ -43,6 +45,11 @@ $MidNumEx       = $MidNum       $Extend*;
 $NumericEx      = $Numeric      $Extend*;
 $ExtendNumLetEx = $ExtendNumLet $Extend*;
 
+$Hiragana       = [:Hiragana:];
+$Ideographic    = [:IDEOGRAPHIC:];
+$HiraganaEx     = $Hiragana    $Extend*;
+$IdeographicEx  = $Ideographic $Extend*;
+
 ## -------------------------------------------------
 
 !!forward;
@@ -53,8 +60,11 @@ $ExtendNumLetEx = $ExtendNumLet $Extend*;
 
 $CR $LF;
 [^$Control $CR $LF] $Extend+;
-$NumericEx $Extend* {100};
-$ALetterEx $Extend* {200};
+$NumericEx {100};
+$ALetterEx {200};
+$KatakanaEx {300};
+$HiraganaEx {300};
+$IdeographicEx {400};
 
 # rule 5
 
@@ -82,9 +92,6 @@ $NumericEx $Format* $MidNumEx $Format* $NumericEx {100};
 # rule 13
 
 $KatakanaEx  $Format* $KatakanaEx {300};
-
-[\p{Hiragana}]    $Extend* {300};     # To get tag values.
-[\p{Ideographic}] $Extend* {400};
 
 # rule 13a/b
 

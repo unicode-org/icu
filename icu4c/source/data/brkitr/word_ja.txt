@@ -6,8 +6,10 @@
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on Version 4.1 draft, dated 2004-11-11
+#      These rules are based on Unicode Version 4.1 
 #
+# Note:  Updates to word.txt will usually need to be merged into
+#        word_POSIX.txt and word+ja.txt also.
 
 ##############################################################################
 #
@@ -17,64 +19,36 @@
 
 !!chain;
 
-$Katakana  = [[:Script = KATAKANA:]
-			  [:name = VERTICAL KANA REPEAT MARK:]
-			  [:name = VERTICAL KANA REPEAT WITH VOICED SOUND MARK:]
-			  [:name = VERTICAL KANA REPEAT MARK UPPER HALF:]
-			  [:name = VERTICAL KANA REPEAT WITH VOICED SOUND MARK UPPER HALF:]
-			  [:name = VERTICAL KANA REPEAT MARK LOWER HALF:]
-			  [:name = KATAKANA-HIRAGANA VOICED SOUND MARK:]
-			  [:name = KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK:]
-			  [:name = KATAKANA-HIRAGANA DOUBLE HYPHEN:]
-			  [:name = KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
-
-
-$ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:]
-						   - [:Ideographic:]
-						   - $Katakana
-						   - [:Script = Hiragana:]
-						   - [:Script = Lao:]
-						   - [:Grapheme_Extend = TRUE:]];
-						   
-$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]
-			  [:name = HEBREW PUNCTUATION GERSHAYIM:]
-			  [:name = RIGHT SINGLE QUOTATION MARK:]
-			  [:name = HYPHENATION POINT:]
-			  [:name = COLON:]];
-
-			
-$MidNum    = [[:LineBreak = Infix_Numeric:] - [:name = COLON:]];
-$Numeric   = [[:Nd:][:name = ARABIC DECIMAL SEPARATOR:][:name = ARABIC THOUSANDS SEPARATOR:]];
-$ExtendNumLet = [[:Connector_Punctuation:] 
-			- [:name = KATAKANA MIDDLE DOT:]
-			- [:name = HALFWIDTH KATAKANA MIDDLE DOT:]];
-			
-			
 
 #
 #  Character Class Definitions.
-#    The names are those from TR29.
 #
+
+$Format       = [\p{Word_Break = Format}];
+$Katakana     = [\p{Word_Break = Katakana}];
+$ALetter      = [\p{Word_Break = ALetter}];
+$MidLetter    = [\p{Word_Break = MidLetter}];
+$MidNum       = [\p{Word_Break = MidNum}];
+$Numeric      = [\p{Word_Break = Numeric}];
+$ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
+
 
 $CR             = \u000d;
 $LF             = \u000a;
-$Extend         = [[:Grapheme_Extend = TRUE:]];
-$Control        = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - $Extend];
-$Format         = [[:Cf:] - $Extend];
+$Extend         = [\p{Grapheme_Cluster_Break = Extend}];
+$Control        = [\p{Grapheme_Cluster_Break = Control}];
+
+$KatakanaEx     = $Katakana    $Extend*;
+$ALetterEx      = $ALetter     $Extend*;
+$MidLetterEx    = $MidLetter   $Extend*;
+$MidNumEx       = $MidNum      $Extend*;
+$NumericEx      = $Numeric     $Extend*;
+$ExtendNumLetEx = $ExtendNumLet $Extend*;
+
 $Hiragana       = [:Hiragana:];
 $Ideographic    = [:IDEOGRAPHIC:];
-
-$ALetterEx      = $ALetter     $Extend*;
-$NumericEx      = $Numeric     $Extend*;
-$MidNumEx       = $MidNum      $Extend*;
-$MidLetterEx    = $MidLetter   $Extend*;
-$KatakanaEx     = $Katakana    $Extend*;
 $HiraganaEx     = $Hiragana    $Extend*;
 $IdeographicEx  = $Ideographic $Extend*;
-$ExtendNumLetEx = $ExtendNumLet $Extend*;
 
 ## -------------------------------------------------
 
@@ -82,10 +56,10 @@ $ExtendNumLetEx = $ExtendNumLet $Extend*;
 
 
 # Rule 3 - don't break grapheme clusters.
-# see character breaks
+#          see character breaks.
 
 $CR $LF;
-[^$Control] $Extend+;
+[^$Control $CR $LF] $Extend+;
 $NumericEx {100};
 $ALetterEx {200};
 $KatakanaEx {300};
@@ -151,7 +125,7 @@ $LF $CR;
 
 # see character breaks
 
-$Extend* [^$Control];
+$Extend* [^$Control $CR $LF];
 
 # rule 5
 
@@ -245,3 +219,4 @@ $MidLetterEx $Format* $ALetterEx;
 
 # rule 11
 $MidNumEx $Format* $NumericEx;
+
