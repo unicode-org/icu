@@ -13,23 +13,18 @@
 #
 # Character categories as defined in TR 29
 #
-$Sep     = [\u000a \u000d \u0085 \u2028 \u2029];
-$Format  = [[:Format:] - [:Grapheme_Extend:]];
-$Sp      = [[:Whitespace:] - $Sep];
-$Lower   = [[:Lowercase:]];
-$Upper   = [[:TitleCase_Letter:] [:Uppercase:]];
-$OLetter = [[:Alphabetic:] [:name = HEBREW PUNCTUATION GERESH:] - [$Lower $Upper]];
-$Numeric = [:LineBreak = Numeric:];
+$Sep       = [\p{Sentence_Break = Sep}];
+$Format    = [\p{Sentence_Break = Format}];
+$Sp        = [\p{Sentence_Break = Sp}];
+$Lower     = [\p{Sentence_Break = Lower}];
+$Upper     = [\p{Sentence_Break = Upper}];
+$OLetter   = [\p{Sentence_Break = OLetter}];
+$Numeric   = [\p{Sentence_Break = Numeric}];
+$ATerm     = [\p{Sentence_Break = ATerm}];
+$Term      = [\p{Sentence_Break = STerm}];
+$Close     = [\p{Sentence_Break = Close}];
 
-$ATerm = [.];
-
-$Term  = [:STerm:];
-
-$Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
-           [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
-
-
-
+#
 # Define extended forms of the character classes,
 #   incorporate grapheme cluster + format chars.
 
