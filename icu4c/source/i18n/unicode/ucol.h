@@ -1118,6 +1118,10 @@ U_INTERNAL UBool U_EXPORT2
 ucol_equals(const UCollator *source, const UCollator *target);
 
 /** Calculates the set of unsafe code points, given a collator.
+ *   A character is unsafe if you could append any character and cause the ordering to alter significantly.
+ *   Collation sorts in normalized order, so anything that rearranges in normalization can cause this.
+ *   Thus if you have a character like a_umlaut, and you add a lower_dot to it,
+ *   then it normalizes to a_lower_dot + umlaut, and sorts differently.
  *  @param coll Collator
  *  @param unsafe a fill-in set to receive the unsafe points
  *  @param status for catching errors
