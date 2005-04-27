@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2004-2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -2330,19 +2330,32 @@ structLocale{
     Scripts{
         Arab{""}
         Armn{""}
+        Bali{""}
+        Batk{""}
         Beng{""}
+        Blis{""}
         Bopo{""}
+        Brah{""}
         Brai{""}
+        Bugi{""}
         Buhd{""}
         Cans{""}
+        Cham{""}
         Cher{""}
+        Cirt{""}
         Copt{""}
         Cprt{""}
         Cyrl{""}
+        Cyrs{""}
         Deva{""}
         Dsrt{""}
+        Egyd{""}
+        Egyh{""}
+        Egyp{""}
         Ethi{""}
+        Geok{""}
         Geor{""}
+        Glag{""}
         Goth{""}
         Grek{""}
         Gujr{""}
@@ -2354,37 +2367,71 @@ structLocale{
         Hant{""}
         Hebr{""}
         Hira{""}
+        Hmng{""}
         Hrkt{""}
+        Hung{""}
+        Inds{""}
         Ital{""}
+        Java{""}
+        Kali{""}
         Kana{""}
+        Khar{""}
         Khmr{""}
         Knda{""}
         Laoo{""}
+        Latf{""}
+        Latg{""}
         Latn{""}
+        Lepc{""}
         Limb{""}
+        Lina{""}
         Linb{""}
+        Mand{""}
+        Maya{""}
+        Mero{""}
         Mlym{""}
         Mong{""}
         Mymr{""}
+        Nkoo{""}
         Ogam{""}
+        Orkh{""}
         Orya{""}
         Osma{""}
+        Perm{""}
+        Phag{""}
+        Phnx{""}
+        Plrd{""}
         Qaai{""}
+        Roro{""}
         Runr{""}
+        Sara{""}
         Shaw{""}
         Sinh{""}
+        Sylo{""}
         Syrc{""}
+        Syre{""}
+        Syrj{""}
+        Syrn{""}
         Tagb{""}
         Tale{""}
+        Talu{""}
         Taml{""}
         Telu{""}
+        Teng{""}
+        Tfng{""}
         Tglg{""}
         Thaa{""}
         Thai{""}
         Tibt{""}
         Ugar{""}
+        Vaii{""}
+        Visp{""}
+        Xpeo{""}
+        Xsux{""}
         Yiii{""}
+        Zxxx{""}
         Zyyy{""}
+        Zzzz{""}
     }
     Types{
         calendar{
