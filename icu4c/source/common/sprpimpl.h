@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -88,7 +88,7 @@ struct UStringPrepProfile{
     UTrie sprepTrie;
     const uint16_t* mappingData;
     UDataMemory* sprepData;
-    UBiDiProps *bdp; /* used only if checkBiDi is set */
+    const UBiDiProps *bdp; /* used only if checkBiDi is set */
     UBool isDataLoaded;
     int32_t refCount;
     UBool doNFKC;

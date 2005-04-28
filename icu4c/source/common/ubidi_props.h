@@ -41,7 +41,7 @@ U_CAPI void U_EXPORT2
 ubidi_closeProps(UBiDiProps *bdp);
 
 
-U_CAPI UBiDiProps * U_EXPORT2
+U_CAPI const UBiDiProps * U_EXPORT2
 ubidi_getSingleton(UErrorCode *pErrorCode);
 
 /**
@@ -49,7 +49,7 @@ ubidi_getSingleton(UErrorCode *pErrorCode);
  * This can be used when the real data is not available.
  * Using the dummy can reduce checks for available data after an initial failure.
  */
-U_CAPI UBiDiProps * U_EXPORT2
+U_CAPI const UBiDiProps * U_EXPORT2
 ubidi_getDummy(UErrorCode *pErrorCode);
 
 

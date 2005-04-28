@@ -156,7 +156,7 @@ struct UBiDi {
      */
     const UBiDi * pParaBiDi;
 
-    UBiDiProps *bdp;
+    const UBiDiProps *bdp;
 
     /* alias pointer to the current text */
     const UChar *text;
