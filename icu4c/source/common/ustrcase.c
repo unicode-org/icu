@@ -125,7 +125,7 @@ UCaseMapFull(const UCaseProps *csp, UChar32 c,
  * context [0..srcLength[ into account.
  */
 static int32_t
-_caseMap(UCaseProps *csp, UCaseMapFull *map,
+_caseMap(const UCaseProps *csp, UCaseMapFull *map,
          UChar *dest, int32_t destCapacity,
          const UChar *src, UCaseContext *csc,
          int32_t srcStart, int32_t srcLimit,
@@ -160,7 +160,7 @@ _caseMap(UCaseProps *csp, UCaseMapFull *map,
  * Must get titleIter!=NULL.
  */
 static int32_t
-_toTitle(UCaseProps *csp,
+_toTitle(const UCaseProps *csp,
          UChar *dest, int32_t destCapacity,
          const UChar *src, UCaseContext *csc,
          int32_t srcLength,
@@ -223,7 +223,7 @@ _toTitle(UCaseProps *csp,
 }
 
 U_CFUNC int32_t
-ustr_toTitle(UCaseProps *csp,
+ustr_toTitle(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UBreakIterator *titleIter,
@@ -247,7 +247,7 @@ ustr_toTitle(UCaseProps *csp,
 /* functions available in the common library (for unistr_case.cpp) */
 
 U_CFUNC int32_t
-ustr_toLower(UCaseProps *csp,
+ustr_toLower(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
@@ -266,7 +266,7 @@ ustr_toLower(UCaseProps *csp,
 }
 
 U_CFUNC int32_t
-ustr_toUpper(UCaseProps *csp,
+ustr_toUpper(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
@@ -285,7 +285,7 @@ ustr_toUpper(UCaseProps *csp,
 }
 
 U_CFUNC int32_t
-ustr_foldCase(UCaseProps *csp,
+ustr_foldCase(const UCaseProps *csp,
               UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               uint32_t options,
@@ -333,7 +333,7 @@ caseMap(UChar *dest, int32_t destCapacity,
     UChar buffer[300];
     UChar *temp;
 
-    UCaseProps *csp;
+    const UCaseProps *csp;
 
     int32_t destLength;
     UBool ownTitleIter;
@@ -527,7 +527,7 @@ u_strcmpFold(const UChar *s1, int32_t length1,
              const UChar *s2, int32_t length2,
              uint32_t options,
              UErrorCode *pErrorCode) {
-    UCaseProps *csp;
+    const UCaseProps *csp;
 
     /* current-level start/limit - s1/s2 as current */
     const UChar *start1, *start2, *limit1, *limit2;

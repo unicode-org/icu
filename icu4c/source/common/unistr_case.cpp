@@ -109,7 +109,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   UErrorCode errorCode;
 
   errorCode = U_ZERO_ERROR;
-  UCaseProps *csp=ucase_getSingleton(&errorCode);
+  const UCaseProps *csp=ucase_getSingleton(&errorCode);
   if(U_FAILURE(errorCode)) {
     setToBogus();
     return *this;
