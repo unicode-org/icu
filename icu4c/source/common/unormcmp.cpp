@@ -138,7 +138,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
                    const UChar *s2, int32_t length2,
                    uint32_t options,
                    UErrorCode *pErrorCode) {
-    UCaseProps *csp;
+    const UCaseProps *csp;
 
     /* current-level start/limit - s1/s2 as current */
     const UChar *start1, *start2, *limit1, *limit2;

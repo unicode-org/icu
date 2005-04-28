@@ -35,7 +35,7 @@
 
 /* cleanup ------------------------------------------------------------------ */
 
-static UCaseProps *gCsp=NULL;
+static const UCaseProps *gCsp=NULL;
 static UBiDiProps *gBdp=NULL;
 
 static UBool U_CALLCONV uprops_cleanup(void) {
@@ -47,7 +47,7 @@ static UBool U_CALLCONV uprops_cleanup(void) {
 /* case mapping properties API ---------------------------------------------- */
 
 /* get the UCaseProps singleton, or else its dummy, once and for all */
-static UCaseProps *
+static const UCaseProps *
 getCaseProps() {
     /*
      * This lazy intialization with double-checked locking (without mutex protection for
@@ -56,7 +56,7 @@ getCaseProps() {
      */
 
     /* the initial check is performed by the GET_CASE_PROPS() macro */
-    UCaseProps *csp;
+    const UCaseProps *csp;
     UErrorCode errorCode=U_ZERO_ERROR;
 
     csp=ucase_getSingleton(&errorCode);
@@ -256,7 +256,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         } else {
             if(column==UPROPS_SRC_CASE) {
                 /* case mapping properties */
-                UCaseProps *csp=GET_CASE_PROPS();
+                const UCaseProps *csp=GET_CASE_PROPS();
                 if(csp==NULL) {
                     return FALSE;
                 }
