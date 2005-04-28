@@ -225,7 +225,7 @@ static void
 _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
                                 UChar digitBase,
                                 UBool isLogical, UBool lastStrongWasAL) {
-    UBiDiProps *bdp;
+    const UBiDiProps *bdp;
     UErrorCode errorCode;
 
     int32_t i;

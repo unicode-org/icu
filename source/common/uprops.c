@@ -36,7 +36,7 @@
 /* cleanup ------------------------------------------------------------------ */
 
 static const UCaseProps *gCsp=NULL;
-static UBiDiProps *gBdp=NULL;
+static const UBiDiProps *gBdp=NULL;
 
 static UBool U_CALLCONV uprops_cleanup(void) {
     gCsp=NULL;
@@ -147,7 +147,7 @@ u_foldCase(UChar32 c, uint32_t options) {
 /* bidi/shaping properties API ---------------------------------------------- */
 
 /* get the UBiDiProps singleton, or else its dummy, once and for all */
-static UBiDiProps *
+static const UBiDiProps *
 getBiDiProps() {
     /*
      * This lazy intialization with double-checked locking (without mutex protection for
@@ -156,7 +156,7 @@ getBiDiProps() {
      */
 
     /* the initial check is performed by the GET_BIDI_PROPS() macro */
-    UBiDiProps *bdp;
+    const UBiDiProps *bdp;
     UErrorCode errorCode=U_ZERO_ERROR;
 
     bdp=ubidi_getSingleton(&errorCode);
@@ -291,7 +291,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 #endif
             } else if(column==UPROPS_SRC_BIDI) {
                 /* bidi/shaping properties */
-                UBiDiProps *bdp=GET_BIDI_PROPS();
+                const UBiDiProps *bdp=GET_BIDI_PROPS();
                 if(bdp==NULL) {
                     return FALSE;
                 }
