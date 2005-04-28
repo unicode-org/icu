@@ -1446,7 +1446,7 @@ ucase_toFullTitle(const UCaseProps *csp, UChar32 c,
 
 /* return the simple case folding mapping for c */
 U_CAPI UChar32 U_EXPORT2
-ucase_fold(UCaseProps *csp, UChar32 c, uint32_t options) {
+ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
