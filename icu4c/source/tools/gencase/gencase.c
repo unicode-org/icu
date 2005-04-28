@@ -187,7 +187,8 @@ enum
     DESTDIR,
     SOURCEDIR,
     UNICODE_VERSION,
-    ICUDATADIR
+    ICUDATADIR,
+    CSOURCE
 };
 
 /* Keep these values in sync with the above enums */
@@ -198,8 +199,9 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
-    UOPTION_ICUDATADIR
+    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
+    UOPTION_ICUDATADIR,
+    UOPTION_DEF("csource", 'C', UOPT_NO_ARG)
 };
 
 extern int
@@ -241,7 +243,8 @@ main(int argc, char* argv[]) {
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
             "\t-c or --copyright   include a copyright notice\n"
-            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n");
+            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
+            "\t-C or --csource     generate a .c source file rather than the .icu binary\n");
         fprintf(stderr,
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
@@ -316,7 +319,7 @@ main(int argc, char* argv[]) {
 
     if(U_SUCCESS(errorCode)) {
         /* write the properties data file */
-        generateData(destDir);
+        generateData(destDir, options[CSOURCE].doesOccur);
     }
 
     u_cleanup();
