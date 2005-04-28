@@ -2914,6 +2914,7 @@ TestConsistency() {
 static void TestUCase() {
     UDataMemory *pData;
     UCaseProps *csp;
+    const UCaseProps *ccsp;
     UErrorCode errorCode;
 
     /* coverage for ucase_openBinary() */
@@ -2942,8 +2943,8 @@ static void TestUCase() {
 
     /* coverage for ucase_getDummy() */
     errorCode=U_ZERO_ERROR;
-    csp=ucase_getDummy(&errorCode);
-    if(ucase_tolower(csp, 0x41)!=0x41) {
+    ccsp=ucase_getDummy(&errorCode);
+    if(ucase_tolower(ccsp, 0x41)!=0x41) {
         log_err("ucase_tolower(dummy, A)!=A\n");
     }
 }
@@ -2952,6 +2953,7 @@ static void TestUCase() {
 static void TestUBiDiProps() {
     UDataMemory *pData;
     UBiDiProps *bdp;
+    const UBiDiProps *cbdp;
     UErrorCode errorCode;
 
     /* coverage for ubidi_openBinary() */
@@ -2980,8 +2982,8 @@ static void TestUBiDiProps() {
 
     /* coverage for ubidi_getDummy() */
     errorCode=U_ZERO_ERROR;
-    bdp=ubidi_getDummy(&errorCode);
-    if(ubidi_getClass(bdp, 0x20)!=0) {
+    cbdp=ubidi_getDummy(&errorCode);
+    if(ubidi_getClass(cbdp, 0x20)!=0) {
         log_err("ubidi_getClass(dummy, space)!=0\n");
     }
 }

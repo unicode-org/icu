@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -97,7 +97,7 @@ protected:
                                      UTransPosition& offsets, 
                                      UBool isIncremental) const;
 
-    UCaseProps *fCsp;
+    const UCaseProps *fCsp;
     UCaseMapFull *fMap;
 };
 
