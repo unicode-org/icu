@@ -27,12 +27,23 @@ U_CAPI FILE * U_EXPORT2
 usrc_create(const char *path, const char *filename);
 
 U_CAPI void U_EXPORT2
-usrc_writeArray(FILE *f, const void *p, int32_t width, int32_t length);
+usrc_writeArray(FILE *f,
+                const char *prefix,
+                const void *p, int32_t width, int32_t length,
+                const char *postfix);
 
 U_CAPI void U_EXPORT2
-usrc_writeUTrie(FILE *f, const uint8_t *p, int32_t length,
-                const char *declaration,
-                const char *arrayStorage, const char *arrayPrefix,
-                const char *getFoldingOffsetName);
+usrc_writeUTrieArrays(FILE *f,
+                      const char *indexPrefix, const char *dataPrefix,
+                      const UTrie *pTrie,
+                      const char *postfix);
+
+U_CAPI void U_EXPORT2
+usrc_writeUTrieStruct(FILE *f,
+                      const char *prefix,
+                      const UTrie *pTrie,
+                      const char *indexName, const char *dataName,
+                      const char *getFoldingOffsetName,
+                      const char *postfix);
 
 #endif
