@@ -172,6 +172,9 @@
 				RelativePath=".\uparse.c">
 			</File>
 			<File
+				RelativePath=".\writesrc.c">
+			</File>
+			<File
 				RelativePath=".\xmlparser.cpp">
 			</File>
 		</Filter>
@@ -198,6 +201,9 @@
 			</File>
 			<File
 				RelativePath=".\uparse.h">
+			</File>
+			<File
+				RelativePath=".\writesrc.h">
 			</File>
 			<File
 				RelativePath=".\xmlparser.h">
