@@ -297,7 +297,8 @@ enum {
     DESTDIR,
     SOURCEDIR,
     UNICODE_VERSION,
-    ICUDATADIR
+    ICUDATADIR,
+    CSOURCE
 };
 
 /* Keep these values in sync with the above enums */
@@ -308,8 +309,9 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
-    UOPTION_ICUDATADIR
+    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
+    UOPTION_ICUDATADIR,
+    UOPTION_DEF("csource", 'C', UOPT_NO_ARG)
 };
 
 extern int
@@ -418,7 +420,7 @@ main(int argc, char* argv[]) {
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
         /* write the properties data file */
-        generateData(destDir);
+        generateData(destDir, options[CSOURCE].doesOccur);
     }
 
     u_cleanup();

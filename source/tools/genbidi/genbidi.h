@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -40,7 +40,7 @@ extern void
 addMirror(UChar32 src, UChar32 mirror);
 
 extern void
-generateData(const char *dataDir);
+generateData(const char *dataDir, UBool csource);
 
 U_CDECL_END
 
