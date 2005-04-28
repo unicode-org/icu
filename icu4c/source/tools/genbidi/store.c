@@ -28,6 +28,7 @@
 #include "unicode/udata.h"
 #include "unewdata.h"
 #include "propsvec.h"
+#include "writesrc.h"
 #include "ubidi_props.h"
 #include "genbidi.h"
 
@@ -52,7 +53,7 @@ The file contains the following structures:
 
     i0 indexLength; -- length of indexes[] (UBIDI_IX_TOP)
     i1 dataLength; -- length in bytes of the post-header data (incl. indexes[])
-    i2 trieSize; -- size in bytes of the case mapping properties trie
+    i2 trieSize; -- size in bytes of the bidi/shaping properties trie
     i3 mirrorLength; -- length in uint32_t of the bidi mirroring array
 
     i4 jgStart; -- first code point with Joining_Group data
@@ -284,7 +285,7 @@ makeMirror() {
 /* generate output data ----------------------------------------------------- */
 
 extern void
-generateData(const char *dataDir) {
+generateData(const char *dataDir, UBool csource) {
     static int32_t indexes[UBIDI_IX_TOP]={
         UBIDI_IX_TOP
     };
@@ -375,30 +376,83 @@ generateData(const char *dataDir) {
         (((int32_t)U_JT_COUNT-1)<<UBIDI_JT_SHIFT)|
         (((int32_t)U_JG_COUNT-1)<<UBIDI_MAX_JG_SHIFT);
 
-    /* write the data */
-    pData=udata_create(dataDir, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genbidi: unable to create data memory, %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
+    if(csource) {
+        /* write .c file for hardcoded data */
+        UTrie trie={ NULL };
+        FILE *f;
 
-    udata_writeBlock(pData, indexes, sizeof(indexes));
-    udata_writeBlock(pData, trieBlock, trieSize);
-    udata_writeBlock(pData, mirrors, 4*mirrorTop);
-    udata_writeBlock(pData, jgArray, prev-jgStart);
+        utrie_unserialize(&trie, trieBlock, trieSize, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "genbidi error: failed to utrie_unserialize(ubidi.icu trie) - %s\n",
+                u_errorName(errorCode));
+            return;
+        }
 
-    /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genbidi: error %d writing the output file\n", errorCode);
-        exit(errorCode);
-    }
+        f=usrc_create(dataDir, "ubidi_props_data.c");
+        if(f!=NULL) {
+            usrc_writeArray(f,
+                "static const UVersionInfo ubidi_props_dataVersion={",
+                dataInfo.dataVersion, 8, 4,
+                "};\n\n");
+            usrc_writeArray(f,
+                "static const int32_t ubidi_props_indexes[UBIDI_IX_TOP]={",
+                indexes, 32, UBIDI_IX_TOP,
+                "};\n\n");
+            usrc_writeUTrieArrays(f,
+                "static const uint16_t ubidi_props_trieIndex[%ld]={\n", NULL,
+                &trie,
+                "\n};\n\n");
+            usrc_writeArray(f,
+                "static const uint32_t ubidi_props_mirrors[%ld]={\n",
+                mirrors, 32, mirrorTop,
+                "\n};\n\n");
+            usrc_writeArray(f,
+                "static const uint8_t ubidi_props_jgArray[%ld]={\n",
+                jgArray, 8, prev-jgStart,
+                "\n};\n\n");
+            fputs(
+                "static const UBiDiProps ubidi_props_singleton={\n"
+                "  NULL,\n"
+                "  ubidi_props_indexes,\n"
+                "  ubidi_props_mirrors,\n"
+                "  ubidi_props_jgArray,\n",
+                f);
+            usrc_writeUTrieStruct(f,
+                "  {\n",
+                &trie, "ubidi_props_trieIndex", NULL, NULL,
+                "  },\n");
+            usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
+            fputs("};\n", f);
+            fclose(f);
+        }
+    } else {
+        /* write the data */
+        pData=udata_create(dataDir, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &dataInfo,
+                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genbidi: unable to create data memory, %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
 
-    if(dataLength!=indexes[UBIDI_IX_LENGTH]) {
-        fprintf(stderr, "genbidi: data length %ld != calculated size %d\n",
-            dataLength, (int)indexes[UBIDI_IX_LENGTH]);
-        exit(U_INTERNAL_PROGRAM_ERROR);
+        udata_writeBlock(pData, indexes, sizeof(indexes));
+        udata_writeBlock(pData, trieBlock, trieSize);
+        udata_writeBlock(pData, mirrors, 4*mirrorTop);
+        udata_writeBlock(pData, jgArray, prev-jgStart);
+
+        /* finish up */
+        dataLength=udata_finish(pData, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genbidi: error %d writing the output file\n", errorCode);
+            exit(errorCode);
+        }
+
+        if(dataLength!=indexes[UBIDI_IX_LENGTH]) {
+            fprintf(stderr, "genbidi: data length %ld != calculated size %d\n",
+                dataLength, (int)indexes[UBIDI_IX_LENGTH]);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
     }
 
     utrie_close(pTrie);
