@@ -527,6 +527,18 @@ utrie_unserializeDummy(UTrie *trie,
                        UBool make16BitTrie,
                        UErrorCode *pErrorCode);
 
+/**
+ * Default implementation for UTrie.getFoldingOffset, set automatically by
+ * utrie_unserialize().
+ * Simply returns the lead surrogate's value itself - which is the inverse
+ * of the default folding function used by utrie_serialize().
+ * Exported for static const UTrie structures.
+ *
+ * @see UTrieGetFoldingOffset
+ */
+U_CAPI int32_t U_EXPORT2
+utrie_defaultGetFoldingOffset(uint32_t data);
+
 /* Building a trie ----------------------------------------------------------*/
 
 /**
