@@ -81,7 +81,10 @@ usrc_create(const char *path, const char *filename) {
 }
 
 U_CAPI void U_EXPORT2
-usrc_writeArray(FILE *f, const void *p, int32_t width, int32_t length) {
+usrc_writeArray(FILE *f,
+                const char *prefix,
+                const void *p, int32_t width, int32_t length,
+                const char *postfix) {
     const uint8_t *p8;
     const uint16_t *p16;
     const uint32_t *p32;
@@ -105,7 +108,9 @@ usrc_writeArray(FILE *f, const void *p, int32_t width, int32_t length) {
         fprintf(stderr, "usrc_writeArray(width=%ld) unrecognized width\n", (long)width);
         return;
     }
-    fputs("{\n", f);
+    if(prefix!=NULL) {
+        fprintf(f, prefix, (long)length);
+    }
     for(i=col=0; i<length; ++i, ++col) {
         if(i>0) {
             if(col<16) {
@@ -129,85 +134,62 @@ usrc_writeArray(FILE *f, const void *p, int32_t width, int32_t length) {
             value=0; /* unreachable */
             break;
         }
-        if(value<=9) {
-            fprintf(f, "%lu", (unsigned long)value);
-        } else {
-            fprintf(f, "0x%lx", (unsigned long)value);
-        }
+        fprintf(f, value<=9 ? "%lu" : "0x%lx", (unsigned long)value);
     }
-    fputs("\n};\n\n", f);
+    if(postfix!=NULL) {
+        fputs(postfix, f);
+    }
 }
 
 U_CAPI void U_EXPORT2
-usrc_writeUTrie(FILE *f, const uint8_t *p, int32_t length,
-                const char *declaration,
-                const char *arrayStorage, const char *arrayPrefix,
-                const char *getFoldingOffsetName) {
-    UTrie trie={ NULL };
-    UErrorCode errorCode;
-
-    errorCode=U_ZERO_ERROR;
-    utrie_unserialize(&trie, p, length, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(
-            stderr,
-            "usrc_writeUTrie() failed to utrie_unserialize(data[%ld]) - %s\n",
-            (long)length,
-            u_errorName(errorCode));
-        return;
-    }
-
-    if(trie.data32==NULL) {
+usrc_writeUTrieArrays(FILE *f,
+                      const char *indexPrefix, const char *dataPrefix,
+                      const UTrie *pTrie,
+                      const char *postfix) {
+    if(pTrie->data32==NULL) {
         /* 16-bit trie */
-        int32_t arrayLength=trie.indexLength+trie.dataLength;
-        fprintf(f,
-            "%s uint16_t %s_index[%ld]=",
-            arrayStorage, arrayPrefix,
-            (long)arrayLength);
-        usrc_writeArray(f, trie.index, 16, arrayLength);
-        fprintf(
-            f,
-            "%s={\n"
-            "    %s_index,\n"
-            "    NULL,\n",
-            declaration,
-            arrayPrefix);
+        usrc_writeArray(f, indexPrefix, pTrie->index, 16, pTrie->indexLength+pTrie->dataLength, postfix);
     } else {
         /* 32-bit trie */
-        fprintf(f,
-            "%s uint16_t %s_index[%ld]=",
-            arrayStorage, arrayPrefix,
-            (long)trie.indexLength);
-        usrc_writeArray(f, trie.index, 16, trie.indexLength);
-        fprintf(f,
-            "%s uint32_t %s_index[%ld]=",
-            arrayStorage, arrayPrefix,
-            (long)trie.dataLength);
-        usrc_writeArray(f, trie.data32, 32, trie.dataLength);
-        fprintf(
-            f,
-            "%s={\n"
-            "    %s_index,\n"
-            "    %s_data32,\n",
-            declaration,
-            arrayPrefix, arrayPrefix);
+        usrc_writeArray(f, indexPrefix, pTrie->index, 16, pTrie->indexLength, postfix);
+        usrc_writeArray(f, dataPrefix, pTrie->data32, 32, pTrie->dataLength, postfix);
     }
+}
 
-    if(getFoldingOffsetName!=NULL) {
-        fprintf(f, "    %s,\n", getFoldingOffsetName);
-    } else {
-        fputs("    utrie_defaultGetFoldingOffset,\n", f);
+U_CAPI void U_EXPORT2
+usrc_writeUTrieStruct(FILE *f,
+                      const char *prefix,
+                      const UTrie *pTrie,
+                      const char *indexName, const char *dataName,
+                      const char *getFoldingOffsetName,
+                      const char *postfix) {
+    if(prefix!=NULL) {
+        fputs(prefix, f);
+    }
+    if(dataName==NULL) {
+        dataName="NULL";
+    }
+    if(getFoldingOffsetName==NULL) {
+        getFoldingOffsetName="utrie_defaultGetFoldingOffset";
     }
     fprintf(
         f,
+        "    %s,\n"
+        "    %s,\n"
+        "    %s,\n"
         "    %ld,\n"
         "    %ld,\n"
         "    %lu,\n"
-        "    %s\n"
-        "};\n\n",
-        (long)trie.indexLength, (long)trie.dataLength,
-        (unsigned long)trie.initialValue,
-        trie.isLatin1Linear ? "TRUE" : "FALSE");
+        "    %s\n",
+        indexName,
+        dataName,
+        getFoldingOffsetName,
+        (long)pTrie->indexLength, (long)pTrie->dataLength,
+        (unsigned long)pTrie->initialValue,
+        pTrie->isLatin1Linear ? "TRUE" : "FALSE");
+    if(postfix!=NULL) {
+        fputs(postfix, f);
+    }
 }
 
 #endif
