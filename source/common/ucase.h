@@ -41,7 +41,7 @@ U_CAPI void U_EXPORT2
 ucase_close(UCaseProps *csp);
 
 
-U_CAPI UCaseProps * U_EXPORT2
+U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode);
 
 /**
@@ -49,7 +49,7 @@ ucase_getSingleton(UErrorCode *pErrorCode);
  * This can be used when the real data is not available.
  * Using the dummy can reduce checks for available data after an initial failure.
  */
-U_CAPI UCaseProps * U_EXPORT2
+U_CAPI const UCaseProps * U_EXPORT2
 ucase_getDummy(UErrorCode *pErrorCode);
 
 
@@ -89,7 +89,7 @@ U_CAPI UChar32 U_EXPORT2
 ucase_totitle(const UCaseProps *csp, UChar32 c);
 
 U_CAPI UChar32 U_EXPORT2
-ucase_fold(UCaseProps *csp, UChar32 c, uint32_t options);
+ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options);
 
 /**
  * Adds all simple case mappings and the full case folding for c to sa,

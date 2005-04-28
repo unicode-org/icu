@@ -1402,7 +1402,7 @@ addCaseMapping(UnicodeSet &set, int32_t result, const UChar *full, UnicodeString
 UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
     if (attribute & (USET_CASE | USET_ADD_CASE_MAPPINGS)) {
         UErrorCode status = U_ZERO_ERROR;
-        UCaseProps *csp = ucase_getSingleton(&status);
+        const UCaseProps *csp = ucase_getSingleton(&status);
         if (U_SUCCESS(status)) {
             UnicodeSet foldSet(*this);
             UnicodeString str;
