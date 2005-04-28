@@ -882,8 +882,8 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
 }
 
 /* inverse to defaultGetFoldedValue() */
-static int32_t U_CALLCONV
-defaultGetFoldingOffset(uint32_t data) {
+U_CAPI int32_t U_EXPORT2
+utrie_defaultGetFoldingOffset(uint32_t data) {
     return (int32_t)data;
 }
 
@@ -957,7 +957,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
         length=(int32_t)sizeof(UTrieHeader)+2*trie->indexLength+2*trie->dataLength;
     }
 
-    trie->getFoldingOffset=defaultGetFoldingOffset;
+    trie->getFoldingOffset=utrie_defaultGetFoldingOffset;
 
     return length;
 }
@@ -1072,7 +1072,7 @@ utrie_unserializeDummy(UTrie *trie,
         }
     }
 
-    trie->getFoldingOffset=defaultGetFoldingOffset;
+    trie->getFoldingOffset=utrie_defaultGetFoldingOffset;
 
     return actualLength;
 }
