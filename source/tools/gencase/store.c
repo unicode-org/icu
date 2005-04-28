@@ -1079,28 +1079,53 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
         /* write .c file for hardcoded data */
-        FILE *f=usrc_create(dataDir, "ucase_props_data.c");
+        UTrie trie={ NULL };
+        FILE *f;
+
+        utrie_unserialize(&trie, trieBlock, trieSize, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "gencase error: failed to utrie_unserialize(ucase.icu trie) - %s\n",
+                u_errorName(errorCode));
+            return;
+        }
+
+        f=usrc_create(dataDir, "ucase_props_data.c");
         if(f!=NULL) {
-            fputs("static const uint8_t ucase_props_formatVersion[4]=", f);
-            usrc_writeArray(f, dataInfo.formatVersion, 8, 4);
-
-            fputs("static const uint8_t ucase_props_dataVersion[4]=", f);
-            usrc_writeArray(f, dataInfo.dataVersion, 8, 4);
-
-            fputs("static const int32_t ucase_props_indexes[UCASE_IX_TOP]=", f);
-            usrc_writeArray(f, indexes, 32, UCASE_IX_TOP);
-
-            usrc_writeUTrie(f, trieBlock, trieSize,
-                "static const UTrie ucase_props_trie",
-                "static const", "ucase_props",
-                NULL);
-
-            fprintf(f, "static const uint16_t ucase_props_exceptions[%ld]=", (long)exceptionsTop);
-            usrc_writeArray(f, exceptions, 16, exceptionsTop);
-
-            fprintf(f, "static const uint16_t ucase_props_unfold[%ld]=", (long)unfoldTop);
-            usrc_writeArray(f, unfold, 16, unfoldTop);
-
+            usrc_writeArray(f,
+                "static const UVersionInfo ucase_props_dataVersion={",
+                dataInfo.dataVersion, 8, 4,
+                "};\n\n");
+            usrc_writeArray(f,
+                "static const int32_t ucase_props_indexes[UCASE_IX_TOP]={",
+                indexes, 32, UCASE_IX_TOP,
+                "};\n\n");
+            usrc_writeUTrieArrays(f,
+                "static const uint16_t ucase_props_trieIndex[%ld]={\n", NULL,
+                &trie,
+                "\n};\n\n");
+            usrc_writeArray(f,
+                "static const uint16_t ucase_props_exceptions[%ld]={\n",
+                exceptions, 16, exceptionsTop,
+                "\n};\n\n");
+            usrc_writeArray(f,
+                "static const uint16_t ucase_props_unfold[%ld]={\n",
+                unfold, 16, unfoldTop,
+                "\n};\n\n");
+            fputs(
+                "static const UCaseProps ucase_props_singleton={\n"
+                "  NULL,\n"
+                "  ucase_props_indexes,\n"
+                "  ucase_props_exceptions,\n"
+                "  ucase_props_unfold,\n",
+                f);
+            usrc_writeUTrieStruct(f,
+                "  {\n",
+                &trie, "ucase_props_trieIndex", NULL, NULL,
+                "  },\n");
+            usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
+            fputs("};\n", f);
             fclose(f);
         }
     } else {
