@@ -120,7 +120,7 @@ extern void
 makeExceptions(void);
 
 extern void
-generateData(const char *dataDir);
+generateData(const char *dataDir, UBool csource);
 
 U_CDECL_END
 

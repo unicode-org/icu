@@ -30,6 +30,7 @@
 #include "unicode/udata.h"
 #include "unewdata.h"
 #include "propsvec.h"
+#include "writesrc.h"
 #include "gencase.h"
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
@@ -1026,7 +1027,7 @@ makeExceptions() {
 /* generate output data ----------------------------------------------------- */
 
 extern void
-generateData(const char *dataDir) {
+generateData(const char *dataDir, UBool csource) {
     static int32_t indexes[UCASE_IX_TOP]={
         UCASE_IX_TOP
     };
@@ -1076,30 +1077,58 @@ generateData(const char *dataDir) {
         printf("data size:                             %5d\n", (int)indexes[UCASE_IX_LENGTH]);
     }
 
-    /* write the data */
-    pData=udata_create(dataDir, UCASE_DATA_TYPE, UCASE_DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencase: unable to create data memory, %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
+    if(csource) {
+        /* write .c file for hardcoded data */
+        FILE *f=usrc_create(dataDir, "ucase_props_data.c");
+        if(f!=NULL) {
+            fputs("static const uint8_t ucase_props_formatVersion[4]=", f);
+            usrc_writeArray(f, dataInfo.formatVersion, 8, 4);
 
-    udata_writeBlock(pData, indexes, sizeof(indexes));
-    udata_writeBlock(pData, trieBlock, trieSize);
-    udata_writeBlock(pData, exceptions, 2*exceptionsTop);
-    udata_writeBlock(pData, unfold, 2*unfoldTop);
+            fputs("static const uint8_t ucase_props_dataVersion[4]=", f);
+            usrc_writeArray(f, dataInfo.dataVersion, 8, 4);
 
-    /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencase: error %d writing the output file\n", errorCode);
-        exit(errorCode);
-    }
+            fputs("static const int32_t ucase_props_indexes[UCASE_IX_TOP]=", f);
+            usrc_writeArray(f, indexes, 32, UCASE_IX_TOP);
 
-    if(dataLength!=indexes[UCASE_IX_LENGTH]) {
-        fprintf(stderr, "gencase: data length %ld != calculated size %d\n",
-            dataLength, (int)indexes[UCASE_IX_LENGTH]);
-        exit(U_INTERNAL_PROGRAM_ERROR);
+            usrc_writeUTrie(f, trieBlock, trieSize,
+                "static const UTrie ucase_props_trie",
+                "static const", "ucase_props",
+                NULL);
+
+            fprintf(f, "static const uint16_t ucase_props_exceptions[%ld]=", (long)exceptionsTop);
+            usrc_writeArray(f, exceptions, 16, exceptionsTop);
+
+            fprintf(f, "static const uint16_t ucase_props_unfold[%ld]=", (long)unfoldTop);
+            usrc_writeArray(f, unfold, 16, unfoldTop);
+
+            fclose(f);
+        }
+    } else {
+        /* write the data */
+        pData=udata_create(dataDir, UCASE_DATA_TYPE, UCASE_DATA_NAME, &dataInfo,
+                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gencase: unable to create data memory, %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+
+        udata_writeBlock(pData, indexes, sizeof(indexes));
+        udata_writeBlock(pData, trieBlock, trieSize);
+        udata_writeBlock(pData, exceptions, 2*exceptionsTop);
+        udata_writeBlock(pData, unfold, 2*unfoldTop);
+
+        /* finish up */
+        dataLength=udata_finish(pData, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gencase: error %d writing the output file\n", errorCode);
+            exit(errorCode);
+        }
+
+        if(dataLength!=indexes[UCASE_IX_LENGTH]) {
+            fprintf(stderr, "gencase: data length %ld != calculated size %d\n",
+                dataLength, (int)indexes[UCASE_IX_LENGTH]);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
     }
 
     utrie_close(pTrie);
