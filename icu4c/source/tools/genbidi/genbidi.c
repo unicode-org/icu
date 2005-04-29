@@ -353,7 +353,8 @@ main(int argc, char* argv[]) {
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
             "\t-c or --copyright   include a copyright notice\n"
-            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n");
+            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
+            "\t-C or --csource     generate a .c source file rather than the .icu binary\n");
         fprintf(stderr,
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
