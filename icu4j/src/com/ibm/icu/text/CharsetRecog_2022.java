@@ -110,6 +110,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
         
         int   match(CharsetDetector det) {
             return match(det.fInputBytes, det.fInputLen, escapeSequences);
+        }
     }
 
     static class CharsetRecog_2022KR extends CharsetRecog_2022 {
@@ -153,4 +154,4 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
     }
     
     }
-}
+
