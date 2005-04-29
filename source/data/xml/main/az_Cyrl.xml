@@ -7,14 +7,15 @@
 >
 <ldml draft="true">
 	<identity>
-		<version number="x0.3"/>
-		<generation date="2004-09-01" />
+		<version number="x0.1"/>
+		<generation date="2005-04-29" />
 		<language type="az" /> 
+		<script type="Cyrl" /> 
 	</identity>
 	<characters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
+				<icu:script type="1">Cyrl</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
