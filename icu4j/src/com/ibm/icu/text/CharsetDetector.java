@@ -332,6 +332,9 @@ public class CharsetDetector {
         ArrayList recognizers = new ArrayList();
         recognizers.add(new CharsetRecog_UTF8());
         recognizers.add(new CharsetRecog_mbcs("Shift_JIS", new CharsetDetectEnc_sjis()));
+        recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());
+        recognizers.add(new CharsetRecog_2022.CharsetRecog_2022CN());
+        recognizers.add(new CharsetRecog_2022.CharsetRecog_2022KR());
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.
