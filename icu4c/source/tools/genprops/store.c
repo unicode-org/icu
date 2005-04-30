@@ -25,6 +25,7 @@
 #include "utrie.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
+#include "writesrc.h"
 #include "uprops.h"
 #include "genprops.h"
 
@@ -379,7 +380,7 @@ repeatProps(uint32_t first, uint32_t last, uint32_t x) {
 /* generate output data ----------------------------------------------------- */
 
 extern void
-generateData(const char *dataDir) {
+generateData(const char *dataDir, UBool csource) {
     static int32_t indexes[UPROPS_INDEX_COUNT]={
         0, 0, 0, 0,
         0, 0, 0, 0,
@@ -415,36 +416,80 @@ generateData(const char *dataDir) {
         printf("trie size in bytes:                    %5u\n", (int)trieSize);
     }
 
-    additionalPropsSize=writeAdditionalData(additionalProps, sizeof(additionalProps), indexes);
+    if(csource) {
+        /* write .c file for hardcoded data */
+        UTrie trie={ NULL };
+        FILE *f;
 
-    size=4*offset+additionalPropsSize;      /* total size of data */
+        utrie_unserialize(&trie, trieBlock, trieSize, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "genprops error: failed to utrie_unserialize(ucase.icu trie) - %s\n",
+                u_errorName(errorCode));
+            return;
+        }
+
+        f=usrc_create(dataDir, "uchar_props_data.c");
+        if(f!=NULL) {
+            usrc_writeArray(f,
+                "static const UVersionInfo formatVersion={",
+                dataInfo.formatVersion, 8, 4,
+                "};\n\n");
+            usrc_writeArray(f,
+                "static const UVersionInfo dataVersion={",
+                dataInfo.dataVersion, 8, 4,
+                "};\n\n");
+            usrc_writeUTrieArrays(f,
+                "static const uint16_t propsTrie_index[%ld]={\n", NULL,
+                &trie,
+                "\n};\n\n");
+            usrc_writeUTrieStruct(f,
+                "static const UTrie propsTrie={\n",
+                &trie, "propsTrie_index", NULL, NULL,
+                "};\n\n");
+
+            additionalPropsSize=writeAdditionalData(f, additionalProps, sizeof(additionalProps), indexes);
+            size=4*offset+additionalPropsSize;      /* total size of data */
+
+            usrc_writeArray(f,
+                "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
+                indexes, 32, UPROPS_INDEX_COUNT,
+                "};\n\n");
+            fclose(f);
+        }
+    } else {
+        /* write the data */
+        pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
+                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genprops: unable to create data memory, %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+
+        additionalPropsSize=writeAdditionalData(NULL, additionalProps, sizeof(additionalProps), indexes);
+        size=4*offset+additionalPropsSize;      /* total size of data */
+
+        udata_writeBlock(pData, indexes, sizeof(indexes));
+        udata_writeBlock(pData, trieBlock, trieSize);
+        udata_writeBlock(pData, additionalProps, additionalPropsSize);
+
+        /* finish up */
+        dataLength=udata_finish(pData, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genprops: error %d writing the output file\n", errorCode);
+            exit(errorCode);
+        }
+
+        if(dataLength!=(long)size) {
+            fprintf(stderr, "genprops: data length %ld != calculated size %lu\n",
+                dataLength, (unsigned long)size);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
+    }
+
     if(beVerbose) {
         printf("data size:                            %6lu\n", (unsigned long)size);
-    }
-
-    /* write the data */
-    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: unable to create data memory, %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
-
-    udata_writeBlock(pData, indexes, sizeof(indexes));
-    udata_writeBlock(pData, trieBlock, trieSize);
-    udata_writeBlock(pData, additionalProps, additionalPropsSize);
-
-    /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: error %d writing the output file\n", errorCode);
-        exit(errorCode);
-    }
-
-    if(dataLength!=(long)size) {
-        fprintf(stderr, "genprops: data length %ld != calculated size %lu\n",
-            dataLength, (unsigned long)size);
-        exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
 

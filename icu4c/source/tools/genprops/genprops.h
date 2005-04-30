@@ -73,7 +73,7 @@ extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 extern void
-generateData(const char *dataDir);
+generateData(const char *dataDir, UBool csource);
 
 /* props2.c */
 U_CFUNC void
@@ -86,6 +86,6 @@ U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
 
 U_CFUNC int32_t
-writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[16]);
+writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[16]);
 
 #endif
