@@ -27,6 +27,7 @@
 #include "uprops.h"
 #include "propsvec.h"
 #include "uparse.h"
+#include "writesrc.h"
 #include "genprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -662,7 +663,7 @@ numericLineFn(void *context,
 /* data serialization ------------------------------------------------------- */
 
 U_CFUNC int32_t
-writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
+writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
     int32_t length;
     UErrorCode errorCode;
 
@@ -673,11 +674,31 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
         exit(errorCode);
     }
     if(p!=NULL) {
-        p+=length;
-        capacity-=length;
         if(beVerbose) {
             printf("size in bytes of additional props trie:%5u\n", (int)length);
         }
+        if(f!=NULL) {
+            UTrie trie2={ NULL };
+            utrie_unserialize(&trie2, p, length, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(
+                    stderr,
+                    "genprops error: failed to utrie_unserialize(trie for additional properties) - %s\n",
+                    u_errorName(errorCode));
+                exit(errorCode);
+            }
+            usrc_writeUTrieArrays(f,
+                "static const uint16_t propsVectorsTrie_index[%ld]={\n", NULL,
+                &trie2,
+                "\n};\n\n");
+            usrc_writeUTrieStruct(f,
+                "static const UTrie propsVectorsTrie={\n",
+                &trie2, "propsVectorsTrie_index", NULL, NULL,
+                "};\n\n");
+        }
+
+        p+=length;
+        capacity-=length;
 
         /* set indexes */
         indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
@@ -699,7 +720,16 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
     }
 
     if(p!=NULL && (pvCount*4)<=capacity) {
-        uprv_memcpy(p, pv, pvCount*4);
+        if(f!=NULL) {
+            usrc_writeArray(f,
+                "static const uint32_t propsVectors[%ld]={\n",
+                pv, 32, pvCount,
+                "};\n\n");
+            fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
+            fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]);
+        } else {
+            uprv_memcpy(p, pv, pvCount*4);
+        }
         if(beVerbose) {
             printf("number of additional props vectors:    %5u\n", (int)pvCount/UPROPS_VECTOR_WORDS);
             printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
