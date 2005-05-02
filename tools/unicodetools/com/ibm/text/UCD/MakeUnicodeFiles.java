@@ -515,6 +515,8 @@ public class MakeUnicodeFiles {
             GenerateCaseFolding.generateSpecialCasing(false);
         } else if (filename.equals("StandardizedVariants")) {
             GenerateStandardizedVariants.generate();
+        } else if (filename.equals("NamedSequences")) {
+        	GenerateNamedSequences.generate();
         } else if (filename.equals("GraphemeBreakTest")) {
             new GenerateGraphemeBreakTest(Default.ucd()).run();
         } else if (filename.equals("WordBreakTest")) {

@@ -1,4 +1,4 @@
-Generate: DerivedBidiClass
+Generate: NamedSequences
 DeltaVersion: 14
 CopyrightYear: 2005
 
@@ -359,6 +359,9 @@ File:	SpecialCasing
 Property: SPECIAL
 
 File:	StandardizedVariants
+Property: SPECIAL
+
+File:	NamedSequences
 Property: SPECIAL
 
 HackName:	noBreak

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2005/04/06 08:48:16 $ 
-* $Revision: 1.24 $
+* $Date: 2005/05/02 15:39:54 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -930,7 +930,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      */
     static final char EMPTY = '\uFFFF';
     char rearrangeBuffer = EMPTY;
-    UnicodeSet rearrangeList = null;
+    UnicodeSet rearrangeList = new UnicodeSet();
     int hangulBufferPosition = 0;
     StringBuffer hangulBuffer = new StringBuffer();
 
@@ -1102,7 +1102,23 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     UnicodeSet variantSecondaries = new UnicodeSet(0x0153,0x0154);
     UnicodeSet digitSecondaries = new UnicodeSet(0x155,0x017F);
     UnicodeSet homelessSecondaries;
-    
+    static final UnicodeSet moreSamples = new UnicodeSet();
+    static {
+    	moreSamples.add("\u09C7\u09BE");
+    	moreSamples.add("\u09C7\u09D7");
+    	moreSamples.add("\u1025\u102E");
+    	moreSamples.add("\u0DD9\u0DCF");
+    	moreSamples.add("\u0DD9\u0DDF");
+    	moreSamples.add("\u1100\u1161");
+    	moreSamples.add("\u1100\u1175");
+    	moreSamples.add("\u1112\u1161");
+    	moreSamples.add("\u1112\u1175");
+    	moreSamples.add("\uAC00\u1161");
+    	moreSamples.add("\uAC00\u1175");
+    	moreSamples.add("\uD788\u1161");
+    	moreSamples.add("\uD788\u1175");
+    }
+
     // static UnicodeSet homelessSecondaries = new UnicodeSet(0x0176, 0x0198);
     //  0x0153..0x017F
 
@@ -1121,6 +1137,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         int skip = 1;
         boolean doSamples = false;
         AbbreviatedUnicodeSetIterator usi = new AbbreviatedUnicodeSetIterator();
+        UnicodeSetIterator moreSampleIterator = new UnicodeSetIterator(moreSamples);
+     
         
         /**
          * use FIXED_CE as the limit
@@ -1231,6 +1249,12 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
                 return result;
             }
             
+            if (moreSampleIterator.next()) {
+            	result = moreSampleIterator.getString();
+                if (DEBUG) System.out.println("More Samples: " + ucd.getCodeAndName(result));
+                return result;
+           }
+            
             // extra samples
             if (currentRange < SAMPLE_RANGES.length) {
                 try {
@@ -1329,9 +1353,10 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         
         // In UAX 3.1, the rearrange list is moved to UCD.
         
-        rearrangeList = UnifiedBinaryProperty.make(UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd)
+        if (ucaData.lessThan410) {        	
+        	rearrangeList = UnifiedBinaryProperty.make(UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd)
             .getSet();
-        
+        }
             
         while (true) try {
             inputLine = in.readLine();
@@ -1465,7 +1490,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd);
         UnicodeSet desiredSet = ubp.getSet();
         
-        if (!rearrangeList.equals(desiredSet)) {
+        if (ucaData.lessThan410 && !rearrangeList.equals(desiredSet)) {
             throw new IllegalArgumentException("Rearrangement should be " + desiredSet.toPattern(true)
                 + ", but is " + rearrangeList.toPattern(true));
         }

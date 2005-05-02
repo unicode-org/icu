@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2005/04/06 08:48:17 $ 
-* $Revision: 1.40 $
+* $Date: 2005/05/02 15:39:54 $ 
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -440,9 +440,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             if (!shortPrint) {
                 log.print(Utility.hex(source));
                 log.print(
-                    ";\t# " + (extra != LOW_ACCENT ? extra : '.') + " " + ucd.getName(clipped, SHORT) + "\t" + UCA.toString(key));
+                    ";\t# (" + quoteOperand(clipped) + ") " + ucd.getName(clipped) + "\t" + UCA.toString(key));
             } else {
-                log.print(Utility.hex(source) + ";\t" + Utility.hex(clipped));
+                log.print(Utility.hex(source));
             }
             log.println();
         }
@@ -537,16 +537,16 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         //Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         //Normalizer nfc = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
         switch (strength) {
-            case 1: log.println("<h2>3. Primaries Incompatible with Decompositions</h2>"); break;
-            case 2: log.println("<h2>4. Secondaries Incompatible with Decompositions</h2>"); break;
-            case 3: log.println("<h2>5. Tertiaries Incompatible with Decompositions</h2>"); 
-                log.println("<p>Note: Tertiary differences are not really errors; these are just warnings</p>"); 
-            break;
+            case 1: log.println("<h2>3. Primaries Incompatible with NFKD</h2>"); break;
+            case 2: log.println("<h2>4. Secondaries Incompatible with NFKD</h2>"); break;
+            case 3: log.println("<h2>5. Tertiaries Incompatible with NFKD</h2>"); 
+             break;
             default: throw new IllegalArgumentException("bad strength: " + strength);
         }
+        log.println("<p>Note: Differences are not really errors; but they should be checked over for inadvertant problems</p>"); 
         log.println("<p>Warning: only checking characters defined in base: " + ucd_uca_base.getVersion() + "</p>");
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
-        log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
+        log.println("<tr><th>Code</td><th>Sort Key</th><th>NFKD Sort Key</th><th>Name</th></tr>");
         
         int errorCount = 0;
         
@@ -1991,7 +1991,7 @@ F900..FAFF; CJK Compatibility Ideographs
                     relation = getStrengthDifference(ces, len, ces2, len2);
                     	
                     reset = quoteOperand(UTF16.valueOf(resetCp));
-                    resetComment = ucd.getCodeAndName(resetCp);
+                    if (!shortPrint) resetComment = ucd.getCodeAndName(resetCp);
                     // lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
                     xmlReset = 2;
                 }
@@ -2523,7 +2523,8 @@ F900..FAFF; CJK Compatibility Ideographs
     static StringBuffer quoteOperandBuffer = new StringBuffer(); // faster
     
     static UnicodeSet needsQuoting = null;
-    
+    static UnicodeSet needsUnicodeForm = null;
+        
     static final String quoteOperand(String s) {
         if (needsQuoting == null) {
             /*
@@ -2533,8 +2534,13 @@ F900..FAFF; CJK Compatibility Ideographs
               || (c >= 0xA0 && !UCharacterProperty.isRuleWhiteSpace(c))
               */
             needsQuoting = new UnicodeSet(
-                "[[:whitespace:][:c:][:z:][[:ascii:]-[a-zA-Z0-9]]]");
+            "[[:whitespace:][:c:][:z:][:ascii:]-[a-zA-Z0-9]]"); // 
+            //"[[:ascii:]-[a-zA-Z0-9]-[:c:]-[:z:]]"); // [:whitespace:][:c:][:z:]
+            //for (int i = 0; i <= 0x10FFFF; ++i) {
+            //	if (UCharacterProperty.isRuleWhiteSpace(i)) needsQuoting.add(i);
+            //}
             // needsQuoting.remove();
+            needsUnicodeForm = new UnicodeSet("[\\u000d\\u000a[:zl:][:zp:]]");
         }
     	s = Default.nfc().normalize(s);
         quoteOperandBuffer.setLength(0);
@@ -2558,7 +2564,8 @@ F900..FAFF; CJK Compatibility Ideographs
                         quoteOperandBuffer.append('\'');
                         inQuote = true;
                     }
-                    if (cp > 0xFFFF) {
+                    if (!needsUnicodeForm.contains(cp)) quoteOperandBuffer.append(UTF16.valueOf(cp)); // cp != 0x2028
+                    else if (cp > 0xFFFF) {
                         quoteOperandBuffer.append("\\U").append(Utility.hex(cp,8));
                     } else if (cp <= 0x20 || cp > 0x7E) {
                         quoteOperandBuffer.append("\\u").append(Utility.hex(cp));
