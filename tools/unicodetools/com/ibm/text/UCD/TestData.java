@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/04/06 08:48:17 $
-* $Revision: 1.21 $
+* $Date: 2005/05/02 15:39:53 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
 import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeMap;
@@ -152,6 +153,7 @@ public class TestData implements UCD_Types {
 	Matcher m;
 	
 	static class GenStringPrep {
+		
 		UnicodeSet[] coreChars = new UnicodeSet[100];
 		UnicodeSet decomposable = new UnicodeSet();
 		UnicodeMap suspect = new UnicodeMap();
@@ -159,11 +161,15 @@ public class TestData implements UCD_Types {
 		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
 		//UnicodeSet id_continue = ups.getSet("ID_Continue=true");
 		UnicodeSet xid_continue = ups.getSet("XID_Continue=true");
-		UnicodeSet wordChars = ups.getSet("name=.*MODIFIER LETTER.*", new RegexMatcher());
+		UnicodeSet wordChars = new UnicodeSet();
 		{
-			wordChars.retainAll(ups.getSet("gc=Sk"));
+			if (false) {
+				wordChars.addAll(ups.getSet("name=.*MODIFIER LETTER.*", new RegexMatcher()));
+				wordChars.retainAll(ups.getSet("gc=Sk"));
+			}
 			wordChars.addAll(new UnicodeSet("[\\u0027 \\u002D \\u002E \\u003A \\u00B7 \\u058A \\u05F3" +
-			" \\u05F4 \\u200C \\u200D \\u2010 \\u2019 \\u2027 \\u30A0 \\u04C0]"));
+			" \\u05F4 \\u200C \\u200D \\u2010 \\u2019 \\u2027 \\u30A0 \\u04C0" +
+			" \\u055A \\u02B9 \\u02BA]"));
 			//wordChars.removeAll(xid_continue);
 		}
 		
@@ -193,6 +199,7 @@ public class TestData implements UCD_Types {
 		UnicodeSet inIDN = new UnicodeSet();
 
 		void genStringPrep() throws IOException {
+			//showScriptToBlock();
 			bf.setShowLiteral(BagFormatter.toHTMLControl);
 			//bf.setValueSource(UnicodeLabel.NULL);
 			if (false) {
@@ -221,10 +228,13 @@ public class TestData implements UCD_Types {
 			
 			Utility.fixDot();
 			PrintWriter htmlOut = BagFormatter.openUTF8Writer(GEN_DIR, "idn-chars.html");
+			PrintWriter htmlOut2 = BagFormatter.openUTF8Writer(GEN_DIR, "script-chars.html");
 			PrintWriter textOut = BagFormatter.openUTF8Writer(GEN_DIR, "idn-chars.txt");
 			textOut.println('\uFEFF');
 			textOut.println("For documentation, see idn-chars.html");
-			Utility.appendFile("./com/ibm/text/UCD/idn-charsHeader.html", Utility.UTF8_WINDOWS, htmlOut);
+			
+			Utility.appendFile("./com/ibm/text/UCD/idn-charsHeader.html", Utility.UTF8_WINDOWS, htmlOut, 
+					new String[] {"%date%", Default.getDate()});
 			/*
 			out
 					.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -241,27 +251,31 @@ public class TestData implements UCD_Types {
 			out.println("-->");
 			out.println("</style></head><body><table>");
 			*/
-			htmlOut.println("<table border='1' cellpadding='2' cellspacing='0' style='border-collapse: collapse'>");
+			htmlOut.println("<table border='1' cellpadding='2' cellspacing='0'>");
+			htmlOut2.println("<html><body><table border='1' cellpadding='2' cellspacing='0'>");
 
 			for (int scriptCode = 0; scriptCode < coreChars.length; ++scriptCode) {
 				if (scriptCode == COMMON_SCRIPT
 						|| scriptCode == INHERITED_SCRIPT)
 					continue;
-				showCodes(htmlOut, textOut, scriptCode);
+				showCodes(htmlOut, textOut, scriptCode, htmlOut2);
 			}
-			showCodes(htmlOut, textOut, COMMON_SCRIPT);
-			showCodes(htmlOut, textOut, INHERITED_SCRIPT);
+			showCodes(htmlOut, textOut, COMMON_SCRIPT, htmlOut2);
+			showCodes(htmlOut, textOut, INHERITED_SCRIPT, htmlOut2);
 			htmlOut.println("</table></body></html>");
 			htmlOut.close();
+			htmlOut2.println("</table></body></html>");
+			htmlOut2.close();
 			bf.setMergeRanges(false);
 
 			textOut.println();
-			textOut.println("# *** WORD CHARACTERS ADDED ***");
+			textOut.println("# *** ADDITIONAL WORD CHARACTERS ***");
+			textOut.println();
 			bf.setValueSource("word-chars");
 			bf.showSetNames(textOut, wordChars);
 			
 			textOut.println();
-			textOut.println("# *** FOR REVIEW (collected from above) ***");
+			textOut.println("# *** FOR REVIEW ***");
 			bf.setLabelSource(UnicodeLabel.NULL);
 			for (Iterator it = new TreeSet(suspect.getAvailableValues()).iterator(); it.hasNext();) {
 				textOut.println();
@@ -271,6 +285,93 @@ public class TestData implements UCD_Types {
 			}
 			textOut.close();
 		}
+		
+		/**
+		 * 
+		 */
+		private void showScriptToBlock() {
+			UnicodeMap scripts = ToolUnicodePropertySource.make("").getProperty("script").getUnicodeMap();
+			UnicodeMap blocks = ToolUnicodePropertySource.make("").getProperty("block").getUnicodeMap();
+			UnicodeMap.Composer myCompose = new UnicodeMap.Composer() {
+				public Object compose(Object a, Object b) {
+					return a + "\t" + b;
+				}
+			};
+			UnicodeMap sb = ((UnicodeMap)scripts.clone()).composeWith(blocks, myCompose);
+			for (Iterator it = sb.getAvailableValues(new TreeSet()).iterator(); it.hasNext();) {
+				System.out.println(it.next());
+			}
+			throw new IllegalArgumentException();
+		}
+		
+		Map scriptToGif = CollectionUtilities.asMap(script_to_gif);
+		
+		static String[][] script_to_gif = {
+				
+			{"Common","common.gif"}, //Miscellaneous_Symbols
+			{"Inherited","combiningdiacritics.gif"}, //Combining_Diacritical_Marks
+			{"Arabic","arabic.gif"}, //Arabic
+			{"Armenian","armenian.gif"}, //Armenian
+			{"Bengali","bengali.gif"}, //Bengali
+			{"Bopomofo","bopomofo.gif"}, //Bopomofo
+			{"Braille","braillesymbols.gif"}, //Braille_Patterns
+			{"Buginese","buginese.gif"}, //Buginese
+			{"Buhid","buhid.gif"}, //Buhid
+			{"Canadian_Aboriginal","canadiansyllabics.gif"}, //Unified_Canadian_Aboriginal_Syllabics
+			{"Cherokee","cherokee.gif"}, //Cherokee
+			{"Coptic","coptic.gif"}, //Coptic
+			{"Cypriot","cypriot.gif"}, //Cypriot_Syllabary
+			{"Cyrillic","cyrillic.gif"}, //Cyrillic
+			{"Deseret","deseret.gif"}, //Deseret
+			{"Devanagari","devanagari.gif"}, //Devanagari
+			{"Ethiopic","ethiopic.gif"}, //Ethiopic
+			{"Georgian","georgian.gif"}, //Georgian
+			{"Glagolitic","glagolitic.gif"}, //Glagolitic
+			{"Gothic","gothic.gif"}, //Gothic
+			{"Greek","greek.gif"}, //Greek_and_Coptic
+			{"Gujarati","gujarati.gif"}, //Gujarati
+			{"Gurmukhi","gurmukhi.gif"}, //Gurmukhi
+			{"Han","cjkideographcompat.gif"}, //CJK_Compatibility_Ideographs
+			{"Han","kangxiradicals.gif"}, //Kangxi_Radicals
+			{"Hangul","hangulsyllables.gif"}, //Hangul_Syllables
+			{"Hanunoo","hanunoo.gif"}, //Hanunoo
+			{"Hebrew","hebrew.gif"}, //Hebrew
+			{"Hiragana","hiragana.gif"}, //Hiragana
+			{"Kannada","kannada.gif"}, //Kannada
+			{"Katakana","katakana.gif"}, //Katakana
+			{"Kharoshthi","kharoshthi.gif"}, //Kharoshthi
+			{"Khmer","khmer.gif"}, //Khmer
+			{"Lao","lao.gif"}, //Lao
+			{"Latin","latin.gif"}, //Basic_Latin
+			{"Limbu","limbu.gif"}, //Limbu
+			{"Linear_B","linearbsyllabary.gif"}, //Linear_B_Syllabary
+			{"Malayalam","malayalam.gif"}, //Malayalam
+			{"Mongolian","mongolian.gif"}, //Mongolian
+			{"Myanmar","myanmar.gif"}, //Myanmar
+			{"New_Tai_Lue","newtailu.gif"}, //New_Tai_Lue
+			{"Ogham","ogham.gif"}, //Ogham
+			{"Old_Italic","olditalic.gif"}, //Old_Italic
+			{"Old_Persian","oldpersiancuneiform.gif"}, //Old_Persian
+			{"Oriya","oriya.gif"}, //Oriya
+			{"Osmanya","osmanya.gif"}, //Osmanya
+			{"Runic","runic.gif"}, //Runic
+			{"Shavian","shavian.gif"}, //Shavian
+			{"Sinhala","sinhala.gif"}, //Sinhala
+			{"Syloti_Nagri","silotinagri.gif"}, //Syloti_Nagri
+			{"Syriac","syriac.gif"}, //Syriac
+			{"Tagalog","tagalog.gif"}, //Tagalog
+			{"Tagbanwa","tagbanwa.gif"}, //Tagbanwa
+			{"Tai_Le","taile.gif"}, //Tai_Le
+			{"Tamil","tamil.gif"}, //Tamil
+			{"Telugu","telugu.gif"}, //Telugu
+			{"Thaana","thaana.gif"}, //Thaana
+			{"Thai","thai.gif"}, //Thai
+			{"Tibetan","tibetan.gif"}, //Tibetan
+			{"Tifinagh","tifinagh.gif"}, //Tifinagh
+			{"Ugaritic","ugaritic.gif"}, //Ugaritic
+			{"Yi","yi.gif"}, //Yi_Syllables
+
+		};
 		
 		UnicodeSet idnaTypeSet[] = new UnicodeSet[IDNA_TYPE_LIMIT];
 		{
@@ -309,16 +410,22 @@ public class TestData implements UCD_Types {
 		 * @param htmlOut
 		 * @param textOut TODO
 		 * @param scriptCode
+		 * @param htmlOut2 TODO
 		 * @param ucd
 		 * @param coreChars
 		 * @param decompChars
 		 */
-		private void showCodes(PrintWriter htmlOut, PrintWriter textOut, int scriptCode) {
+		private void showCodes(PrintWriter htmlOut, PrintWriter textOut, int scriptCode, PrintWriter htmlOut2) {
 			if (coreChars[scriptCode] == null) return;
-			System.out.println(ucd.getScriptID_fromIndex((byte) scriptCode));
 			String script = Default.ucd().getScriptID_fromIndex((byte) scriptCode);
+			script = Utility.getUnskeleton(script.toLowerCase(),true);
+			System.out.println(script);
+			
 			htmlOut.println();
-			htmlOut.println("<tr><th class='script'>Script: " + script + "</th></tr>");
+			String scriptLine = "<tr><th class='script'><img src='images/" + ((String)scriptToGif.get(script)).toLowerCase()
+			+ "'> Script: " + script + "</th></tr>";
+			htmlOut.println(scriptLine);
+			htmlOut2.println(scriptLine);
 			textOut.println();
 			textOut.println("#*** Script: " + script + " ***");
 			UnicodeSet core = new UnicodeSet(coreChars[scriptCode]);
@@ -354,13 +461,13 @@ public class TestData implements UCD_Types {
 			if (bicameralNoupper.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic-no-uppercase", bicameralNoupper, scriptCode);
 			if (pattern.size() != 0) printlnSet(htmlOut, textOut, script, "Pattern_Syntax", pattern, scriptCode);
 			if (non_id.size() != 0) printlnSet(htmlOut, textOut, script, "Non-XID", non_id, scriptCode);
-			if (decomp.size() != 0) printlnSet(htmlOut, textOut, script, "Decomposable", decomp, scriptCode);
+			if (decomp.size() != 0) printlnSet(htmlOut, textOut, script, "NFD-Decomposable", decomp, scriptCode);
 
 			if (remappedIsNFKC.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Case-Atomic", remappedIsNFKC, scriptCode);
-			if (remappedIsNFKCDecomp.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Case-Decomposable", remappedIsNFKCDecomp, scriptCode);
+			if (remappedIsNFKCDecomp.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Case-NFD-Decomposable", remappedIsNFKCDecomp, scriptCode);
 			if (remapped.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Compat", remapped, scriptCode);
 			if (deleted.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Deleted", deleted, scriptCode);
-			if (illegal.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Illegal", illegal, scriptCode);
+			if (illegal.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Prohibited", illegal, scriptCode);
 		}
 
 		/**
@@ -387,9 +494,11 @@ public class TestData implements UCD_Types {
 			int size = unicodeset.size();
 			String dir = unicodeset.containsSome(bidiR)
 					&& unicodeset.containsNone(bidiL) ? " dir='rtl'" : "";
-			htmlOut.println("<tr><th class='" + title + "'>" + title + " ("
+			htmlOut.println("<tr><th class='" + title + "'><a href='#" +
+					title + "'>" + title + "</a> ("
 					+ nf.format(size) + ")</th></tr>");
 			htmlOut.print("<tr><td class='" + title + "'" + dir + ">");
+			// <a href="#Atomic">categorization</a>
 			textOut.println();
 			textOut.println("# " + title);
 			bf.setValueSource(script + " ; " + title);

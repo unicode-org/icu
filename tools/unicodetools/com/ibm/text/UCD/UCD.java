@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2005/03/10 02:37:20 $
-* $Revision: 1.38 $
+* $Date: 2005/05/02 15:39:53 $
+* $Revision: 1.39 $
 *
 *******************************************************************************
 */
@@ -31,6 +31,7 @@ import com.ibm.text.utility.*;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 public final class UCD implements UCD_Types {
@@ -157,11 +158,11 @@ public final class UCD implements UCD_Types {
      * Get the character names for the code points in a string, separated by ", "
      */
     public String getName(String s, byte style) {
-        if (s.length() == 1) return getName(s.charAt(0), style);
+        if (s.length() == 1) return getName(s.charAt(0), style); // optimize BMP
         StringBuffer result = new StringBuffer();
         int cp;
-        for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
-            cp = UTF32.char32At(s, i);
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
             if (i > 0) result.append(", ");
             result.append(getName(cp, style));
         }
@@ -1383,7 +1384,7 @@ to guarantee identifier closure.
         result.codePoint = codePoint;
         if (fixStrings) {
             if (result.name == null || isRemapped) result.name = constructedName;
-            if (result.shortName == null) result.shortName = Utility.replace(constructedName, UCD_Names.NAME_ABBREVIATIONS);
+            if (result.shortName == null) result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
             if (isRemapped) {
                 result.decompositionMapping = result.bidiMirror
                 = result.simpleLowercase = result.simpleUppercase = result.simpleTitlecase = result.simpleCaseFolding

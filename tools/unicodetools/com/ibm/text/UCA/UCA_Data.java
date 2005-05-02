@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Data.java,v $ 
-* $Date: 2004/03/11 19:03:19 $ 
-* $Revision: 1.2 $
+* $Date: 2005/05/02 15:39:54 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -29,6 +29,7 @@ import com.ibm.icu.text.UnicodeSet;
 public class UCA_Data implements UCA_Types {
     static final boolean DEBUG = false;
     static final boolean DEBUG_SHOW_ADD = false;
+    static final boolean lessThan410 = false;
     
     private Normalizer toD;
     private UCD ucd;
@@ -197,7 +198,7 @@ public class UCA_Data implements UCA_Types {
                 int increment = UTF16.getCharCount(cp2);
                 
                 // CHECK if last char was completely ignorable
-                if (isCompletelyIgnoreable(cp2)) {
+                if (lessThan410 && isCompletelyIgnoreable(cp2)) {
                     index += increment; // just skip char don't set probe, value
                     continue;
                 }
@@ -231,7 +232,7 @@ public class UCA_Data implements UCA_Types {
                 lastCan = can;                  // remember for next time
                 
                 // CHECK if last char was completely ignorable. If so, skip it.
-                if (isCompletelyIgnoreable(cp2)) {
+                if (lessThan410 && isCompletelyIgnoreable(cp2)) {
                     continue;
                 }
                 
