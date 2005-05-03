@@ -485,6 +485,7 @@ macos-2566-10.2 { UTR22* }      # This uses supplementary characters.
 ibm-1375_P100-2003 { UTR22* }   # IBM's interpretation of Windows' Taiwan Big-5 w/ HKSCS extensions
                         ibm-1375 { IBM* }
                         Big5-HKSCS
+                        MS950_HKSCS { JAVA }
                         # windows-950 # Windows-950 can be w/ or w/o HKSCS extensions. By default it's not.
                         # windows-950_hkscs
 
@@ -644,7 +645,7 @@ ibm-863_P100-1995 { UTR22* }    ibm-863 { IBM* } IBM863 { IANA* JAVA } cp863 { I
 ibm-864_X110-1999 { UTR22* }    ibm-864 { IBM* } IBM864 { IANA* JAVA } cp864 { IANA MIME* JAVA* } csIBM864 { IANA JAVA } # PC Arabic (w/o euro update)
 ibm-865_P100-1995 { UTR22* }    ibm-865 { IBM* } IBM865 { IANA* JAVA } cp865 { IANA MIME* JAVA* } 865 { IANA JAVA } csIBM865 { IANA JAVA }    # PC Nordic
 ibm-866_P100-1995 { UTR22* }    ibm-866 { IBM* } IBM866 { IANA* JAVA } cp866 { IANA MIME* WINDOWS JAVA* } 866 { IANA JAVA } csIBM866 { IANA JAVA } windows-866 { WINDOWS* } # PC Russian (w/o euro update)
-ibm-867_P100-1998 { UTR22* }    ibm-867 { IBM* } cp867   # PC Hebrew (w/ euro update) Updated version of ibm-862
+ibm-867_P100-1998 { UTR22* }    ibm-867 { IBM* } # PC Hebrew (w/ euro update) Updated version of ibm-862
 ibm-868_P100-1995 { UTR22* }    ibm-868 { IBM* } IBM868 { IANA* JAVA } CP868 { IANA MIME* JAVA* } 868 { JAVA } csIBM868 { IANA } cp-ar { IANA }          # PC Urdu
 ibm-869_P100-1995 { UTR22* }    ibm-869 { IBM* } IBM869 { IANA* WINDOWS JAVA } cp869 { IANA MIME* JAVA* } 869 { IANA JAVA } cp-gr { IANA JAVA } csIBM869 { IANA JAVA } windows-869 { WINDOWS* } # PC Greek (w/o euro update)
 ibm-878_P100-1996 { UTR22* }    ibm-878 { IBM* } KOI8-R { IANA* MIME* WINDOWS JAVA* } koi8 { WINDOWS JAVA } csKOI8R { IANA WINDOWS JAVA } windows-20866 { WINDOWS* } cp878   # Russian internet
@@ -655,17 +656,17 @@ ibm-1168_P100-2002 { UTR22* }   ibm-1168 { IBM* } KOI8-U { IANA* WINDOWS } windo
 ibm-4909_P100-1999 { UTR22* }   ibm-4909 { IBM* } # ISO Greek (w/ euro update), update of ibm-813
 
 # The cp aliases in this section aren't really windows aliases, but it was used by ICU for Windows.
-# cp is used to denote IBM in Java, and that is why we don't do that anymore.
+# cp is usually used to denote IBM in Java, and that is why we don't do that anymore.
 # The windows-* aliases mean windows codepages.
-ibm-5346_P100-1998 { UTR22* }   ibm-5346 { IBM* } windows-1250 { IANA* JAVA* WINDOWS* } cp1250 { WINDOWS }  # Windows Latin2 (w/ euro update)
-ibm-5347_P100-1998 { UTR22* }   ibm-5347 { IBM* } windows-1251 { IANA* JAVA* WINDOWS* } cp1251 { WINDOWS }  # Windows Cyrillic (w/ euro update)
-ibm-5348_P100-1997 { UTR22* }   ibm-5348 { IBM* } windows-1252 { IANA* JAVA* WINDOWS* } cp1252 { WINDOWS }  # Windows Latin1 (w/ euro update)
-ibm-5349_P100-1998 { UTR22* }   ibm-5349 { IBM* } windows-1253 { IANA* JAVA* WINDOWS* } cp1253 { WINDOWS }  # Windows Greek (w/ euro update)
-ibm-5350_P100-1998 { UTR22* }   ibm-5350 { IBM* } windows-1254 { IANA* JAVA* WINDOWS* } cp1254 { WINDOWS }  # Windows Turkish (w/ euro update)
-ibm-9447_P100-2002 { UTR22* }   ibm-9447 { IBM* } windows-1255 { IANA* JAVA* WINDOWS* } cp1255 { WINDOWS }  # Windows Hebrew (w/ euro update)
-windows-1256-2000 { UTR22* }    windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS }                    # Windows Arabic (w/ euro update)
-ibm-9449_P100-2002 { UTR22* }   ibm-9449 { IBM* } windows-1257 { IANA* JAVA* WINDOWS* } cp1257 { WINDOWS }  # Windows Baltic (w/ euro update)
-ibm-5354_P100-1998 { UTR22* }   ibm-5354 { IBM* } windows-1258 { IANA* JAVA* WINDOWS* } cp1258 { WINDOWS }  # Windows Vietnamese (w/ euro update)
+ibm-5346_P100-1998 { UTR22* }   ibm-5346 { IBM* } windows-1250 { IANA* JAVA* WINDOWS* } cp1250 { WINDOWS JAVA } # Windows Latin2 (w/ euro update)
+ibm-5347_P100-1998 { UTR22* }   ibm-5347 { IBM* } windows-1251 { IANA* JAVA* WINDOWS* } cp1251 { WINDOWS JAVA } # Windows Cyrillic (w/ euro update)
+ibm-5348_P100-1997 { UTR22* }   ibm-5348 { IBM* } windows-1252 { IANA* JAVA* WINDOWS* } cp1252 { JAVA }         # Windows Latin1 (w/ euro update)
+ibm-5349_P100-1998 { UTR22* }   ibm-5349 { IBM* } windows-1253 { IANA* JAVA* WINDOWS* } cp1253 { JAVA }         # Windows Greek (w/ euro update)
+ibm-5350_P100-1998 { UTR22* }   ibm-5350 { IBM* } windows-1254 { IANA* JAVA* WINDOWS* } cp1254 { JAVA }         # Windows Turkish (w/ euro update)
+ibm-9447_P100-2002 { UTR22* }   ibm-9447 { IBM* } windows-1255 { IANA* JAVA* WINDOWS* } cp1255 { JAVA }         # Windows Hebrew (w/ euro update)
+windows-1256-2000 { UTR22* }    windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS JAVA }                   # Windows Arabic (w/ euro update)
+ibm-9449_P100-2002 { UTR22* }   ibm-9449 { IBM* } windows-1257 { IANA* JAVA* WINDOWS* } cp1257 { JAVA }         # Windows Baltic (w/ euro update)
+ibm-5354_P100-1998 { UTR22* }   ibm-5354 { IBM* } windows-1258 { IANA* JAVA* WINDOWS* } cp1258 { JAVA }         # Windows Vietnamese (w/ euro update)
 
 # These tables are out of date, and most don't have the Euro
 # Leave the windows- variants untagged. They are alternate tables of the newer ones above.
