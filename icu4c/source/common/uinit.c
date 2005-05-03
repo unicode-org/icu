@@ -20,6 +20,7 @@
 #include "ustr_imp.h"
 #include "unormimp.h"
 #include "ucln_cmn.h"
+#include "ucnv_io.h"
 #include "umutex.h"
 #include "ucln.h"
 #include "cmemory.h"
@@ -93,6 +94,23 @@ u_init(UErrorCode *status) {
         return;
     }
 
+#if 1
+    /*
+     * 2005-may-02
+     *
+     * ICU4C 3.4 (jitterbug 4497) hardcodes the data for Unicode character
+     * properties for APIs that want to be fast.
+     * Therefore, we need not load them here nor check for errors.
+     * Instead, we load the converter alias table to see if any ICU data
+     * is available.
+     * Users should really open the service objects they need and check
+     * for errors there, to make sure that the actual items they need are
+     * available.
+     */
+#if !UCONFIG_NO_CONVERSION
+    ucnv_io_countStandards(status);
+#endif
+#else
     /* Do any required init for services that don't have open operations
      * and use "only" the double-check initialization method for performance
      * reasons (avoiding a mutex lock even for _checking_ whether the
@@ -109,6 +127,7 @@ u_init(UErrorCode *status) {
 #if !UCONFIG_NO_NORMALIZATION
     /*  Normalization  */
     unorm_haveData(status);
+#endif
 #endif
     gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
     umtx_unlock(&gICUInitMutex);
