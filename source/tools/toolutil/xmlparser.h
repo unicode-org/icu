@@ -145,9 +145,9 @@ private:
                                          //    this element's attributes.  The order is the same
                                          //    as that of the attribute name vector.
 
-    UXMLElement        *fParent;         // A pointer to the parent element of this element.
-
     UVector             fChildren;       // The child nodes of this element (a Vector)
+
+    UXMLElement        *fParent;         // A pointer to the parent element of this element.
 };
 
 /**

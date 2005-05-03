@@ -139,7 +139,7 @@ UXMLParser::UXMLParser(UErrorCode &status) :
       fElementStack(status),
       fOneLF((UChar)0x0a)        // Plain new-line string, used in new line normalization.
       {
-      };
+      }
 
 UXMLParser *
 UXMLParser::createParser(UErrorCode &errorCode) {
@@ -174,7 +174,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
     }
 
     bytesLength=T_FileStream_read(f, bytes, (int32_t)sizeof(bytes));
-    if(bytesLength<sizeof(bytes)) {
+    if(bytesLength<(int32_t)sizeof(bytes)) {
         // we have already read the entire file
         fileLength=bytesLength;
     } else {
