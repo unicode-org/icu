@@ -246,7 +246,7 @@ main(int argc, char *argv[]) {
     /* printf("files[%ld]\n", (long)count); */
     for(i=0; i<count; ++i) {
         if (usePkgdataFormat) {
-            printf("%s\n", uprv_strchr(base+*p, U_TREE_ENTRY_SEP_CHAR)+1);
+            printf("%s\n", uprv_strchr((const char *)(base+*p), U_TREE_ENTRY_SEP_CHAR)+1);
         }
         else {
             printf("%s%c%s\n", options[2].value, U_FILE_SEP_CHAR, base+*p);
