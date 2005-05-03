@@ -631,6 +631,8 @@ windows-874-2000 { UTR22* }   # Thai (w/ euro update)
 
 # Platform codepages
 ibm-437_P100-1995 { UTR22* }    ibm-437 { IBM* } IBM437 { IANA* WINDOWS JAVA } cp437 { IANA WINDOWS JAVA* } 437 { IANA WINDOWS JAVA } csPC8CodePage437 { IANA JAVA } windows-437 { WINDOWS* }  # PC US
+ibm-737_P100-1997 { UTR22* }    ibm-737 { IBM* } IBM737 { WINDOWS } cp737 { JAVA* } windows-737 { WINDOWS* } # PC Greek
+ibm-775_P100-1996 { UTR22* }    ibm-775 { IBM* } IBM775 { IANA* WINDOWS JAVA } cp775 { IANA WINDOWS JAVA* } csPC775Baltic { IANA } windows-775 { WINDOWS* } # PC Baltic
 ibm-850_P100-1995 { UTR22* }    ibm-850 { IBM* } IBM850 { IANA* WINDOWS JAVA } cp850 { IANA MIME* WINDOWS JAVA* } 850 { IANA JAVA } csPC850Multilingual { IANA JAVA } windows-850 { WINDOWS* } # PC latin1
 ibm-851_P100-1995 { UTR22* }    ibm-851 { IBM* } IBM851 { IANA* } cp851 { IANA MIME* } 851 { IANA } csPC851 { IANA }             # PC DOS Greek (w/o euro)
 ibm-852_P100-1995 { UTR22* }    ibm-852 { IBM* } IBM852 { IANA* WINDOWS JAVA } cp852 { IANA WINDOWS JAVA* } 852 { IANA WINDOWS JAVA } csPCp852 { IANA JAVA } windows-852 { WINDOWS* } # PC latin2 (w/o euro update)
