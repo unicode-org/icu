@@ -29,6 +29,7 @@
 #include "unicode/uset.h"
 #include "toolutil.h"
 #include "unewdata.h"
+#include "writesrc.h"
 #include "unormimp.h"
 #include "gennorm.h"
 
@@ -1764,7 +1765,7 @@ processData() {
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 extern void
-generateData(const char *dataDir) {
+generateData(const char *dataDir, UBool csource) {
     static uint8_t normTrieBlock[100000], fcdTrieBlock[100000], auxTrieBlock[100000];
 
     UNewDataMemory *pData;
@@ -1925,37 +1926,120 @@ generateData(const char *dataDir) {
 
 #endif
 
-    /* write the data */
-    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gennorm: unable to create the output file, error %d\n", errorCode);
-        exit(errorCode);
-    }
+    if(csource) {
+        /* write .c file for hardcoded data */
+        UTrie normTrie2={ NULL }, fcdTrie2={ NULL }, auxTrie2={ NULL };
+        FILE *f;
+
+        utrie_unserialize(&normTrie2, normTrieBlock, normTrieSize, &errorCode);
+        if(fcdTrieSize>0) {
+            utrie_unserialize(&fcdTrie2, fcdTrieBlock, fcdTrieSize, &errorCode);
+        }
+        if(auxTrieSize>0) {
+            utrie_unserialize(&auxTrie2, auxTrieBlock, auxTrieSize, &errorCode);
+        }
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "gennorm error: failed to utrie_unserialize() one of the tries - %s\n",
+                u_errorName(errorCode));
+            exit(errorCode);
+        }
+
+        f=usrc_create(dataDir, "unorm_props_data.c");
+        if(f!=NULL) {
+            usrc_writeArray(f,
+                "static const UVersionInfo formatVersion={ ",
+                dataInfo.formatVersion, 8, 4,
+                " };\n\n");
+            usrc_writeArray(f,
+                "static const UVersionInfo dataVersion={ ",
+                dataInfo.dataVersion, 8, 4,
+                " };\n\n");
+            usrc_writeArray(f,
+                "static const int32_t indexes[_NORM_INDEX_TOP]={\n",
+                indexes, 32, _NORM_INDEX_TOP,
+                "\n};\n\n");
+            usrc_writeUTrieArrays(f,
+                "static const uint16_t normTrie_index[%ld]={\n",
+                "static const uint32_t normTrie_data32[%ld]={\n",
+                &normTrie2,
+                "\n};\n\n");
+            usrc_writeUTrieStruct(f,
+                "static const UTrie normTrie={\n",
+                &normTrie2, "normTrie_index", "normTrie_data32", "getFoldingNormOffset",
+                "};\n\n");
+            usrc_writeArray(f,
+                "static const uint16_t extraData[%ld]={\n",
+                utm_getStart(extraMem), 16, utm_countItems(extraMem),
+                "\n};\n\n");
+            usrc_writeArray(f,
+                "static const uint16_t combiningTable[%ld]={\n",
+                combiningTable, 16, combiningTableTop,
+                "\n};\n\n");
+            if(fcdTrieSize>0) {
+                usrc_writeUTrieArrays(f,
+                    "static const uint16_t fcdTrie_index[%ld]={\n", NULL,
+                    &fcdTrie2,
+                    "\n};\n\n");
+                usrc_writeUTrieStruct(f,
+                    "static const UTrie fcdTrie={\n",
+                    &fcdTrie2, "fcdTrie_index", NULL, NULL,
+                    "};\n\n");
+            } else {
+                fputs( "static const UTrie fcdTrie={ NULL };\n\n", f);
+            }
+            if(auxTrieSize>0) {
+                usrc_writeUTrieArrays(f,
+                    "static const uint16_t auxTrie_index[%ld]={\n", NULL,
+                    &auxTrie2,
+                    "\n};\n\n");
+                usrc_writeUTrieStruct(f,
+                    "static const UTrie auxTrie={\n",
+                    &auxTrie2, "auxTrie_index", NULL, "getFoldingAuxOffset",
+                    "};\n\n");
+            } else {
+                fputs( "static const UTrie auxTrie={ NULL };\n\n", f);
+            }
+            usrc_writeArray(f,
+                "static const uint16_t canonStartSets[%ld]={\n",
+                canonStartSets, 16, canonStartSetsTop,
+                "\n};\n\n");
+            fclose(f);
+        }
+    } else {
+        /* write the data */
+        pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
+                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gennorm: unable to create the output file, error %d\n", errorCode);
+            exit(errorCode);
+        }
 
 #if !UCONFIG_NO_NORMALIZATION
 
-    udata_writeBlock(pData, indexes, sizeof(indexes));
-    udata_writeBlock(pData, normTrieBlock, normTrieSize);
-    udata_writeBlock(pData, utm_getStart(extraMem), utm_countItems(extraMem)*2);
-    udata_writeBlock(pData, combiningTable, combiningTableTop*2);
-    udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
-    udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
-    udata_writeBlock(pData, canonStartSets, canonStartSetsTop*2);
+        udata_writeBlock(pData, indexes, sizeof(indexes));
+        udata_writeBlock(pData, normTrieBlock, normTrieSize);
+        udata_writeBlock(pData, utm_getStart(extraMem), utm_countItems(extraMem)*2);
+        udata_writeBlock(pData, combiningTable, combiningTableTop*2);
+        udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
+        udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
+        udata_writeBlock(pData, canonStartSets, canonStartSetsTop*2);
 
 #endif
 
-    /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gennorm: error %d writing the output file\n", errorCode);
-        exit(errorCode);
-    }
+        /* finish up */
+        dataLength=udata_finish(pData, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gennorm: error %d writing the output file\n", errorCode);
+            exit(errorCode);
+        }
 
-    if(dataLength!=size) {
-        fprintf(stderr, "gennorm error: data length %ld != calculated size %ld\n",
-            (long)dataLength, (long)size);
-        exit(U_INTERNAL_PROGRAM_ERROR);
+        if(dataLength!=size) {
+            fprintf(stderr, "gennorm error: data length %ld != calculated size %ld\n",
+                (long)dataLength, (long)size);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
     }
 }
 
