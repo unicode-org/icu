@@ -20,6 +20,8 @@
 #include "cmemory.h"
 #include "ucln_in.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 // internal definition ---------------------------------------------------
 
 #define LAST_BYTE_MASK_          0xFF
@@ -896,32 +898,50 @@ static
 inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start, 
                                   int32_t    end) 
 {
+    UChar t2[32], p2[32];
     int32_t length = end - start;
     if (strsrch->strength != UCOL_IDENTICAL) {
         return TRUE;
     }
 
-    UErrorCode status = U_ZERO_ERROR;
-    int decomplength = unorm_decompose(NULL, -1, 
+    UErrorCode status = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
+    int32_t decomplength = unorm_decompose(t2, LENGTHOF(t2), 
                                        strsrch->search->text + start, length, 
                                        FALSE, 0, &status);
-    if (decomplength != unorm_decompose(NULL, -1, strsrch->pattern.text, 
+    // use separate status2 in case of buffer overflow
+    if (decomplength != unorm_decompose(p2, LENGTHOF(p2),
+                                        strsrch->pattern.text, 
                                         strsrch->pattern.textLength,
-                                        FALSE, 0, &status)) {
-        return FALSE;
+                                        FALSE, 0, &status2)) {
+        return FALSE; // lengths are different
     }
-    decomplength ++;
-    UChar *text    = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
-    UChar *pattern = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
-    unorm_decompose(text, decomplength, strsrch->search->text + start, 
-                    length, FALSE, 0, &status);
-    unorm_decompose(pattern, decomplength, strsrch->pattern.text, 
-                    strsrch->pattern.textLength, FALSE, 0, &status);
-    UBool result = (uprv_memcmp(pattern, text, decomplength * sizeof(UChar)) 
-                    == 0);
-    uprv_free(text);
-    uprv_free(pattern);
-    return result;
+
+    // compare contents
+    UChar *text, *pattern;
+    if(U_SUCCESS(status)) {
+        text = t2;
+        pattern = p2;
+    } else if(status==U_BUFFER_OVERFLOW_ERROR) {
+        status = U_ZERO_ERROR;
+        // allocate one buffer for both decompositions
+        text = (UChar *)uprv_malloc(decomplength * 2 * U_SIZEOF_UCHAR);
+        pattern = text + decomplength;
+        unorm_decompose(text, decomplength, strsrch->search->text + start, 
+                        length, FALSE, 0, &status);
+        unorm_decompose(pattern, decomplength, strsrch->pattern.text, 
+                        strsrch->pattern.textLength, FALSE, 0, &status);
+    } else {
+        // NFD failed, make sure that u_memcmp() does not overrun t2 & p2
+        // and that we don't uprv_free() an undefined text pointer
+        text = pattern = t2;
+        decomplength = 0;
+    }
+    UBool result = (UBool)(u_memcmp(pattern, text, decomplength) == 0);
+    if(text != t2) {
+        uprv_free(text);
+    }
+    // return FALSE if NFD failed
+    return U_SUCCESS(status) && result;
 }
 
 /**
