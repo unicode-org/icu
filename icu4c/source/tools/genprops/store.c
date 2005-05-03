@@ -425,7 +425,7 @@ generateData(const char *dataDir, UBool csource) {
         if(U_FAILURE(errorCode)) {
             fprintf(
                 stderr,
-                "genprops error: failed to utrie_unserialize(ucase.icu trie) - %s\n",
+                "genprops error: failed to utrie_unserialize(uprops.icu main trie) - %s\n",
                 u_errorName(errorCode));
             return;
         }
