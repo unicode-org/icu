@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2004, International Business Machines                   *
+* Copyright (C) 2001-2005, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -20,7 +20,20 @@
 #include "unicode/utypes.h"
 
 /**
- *  Initialize ICU.  This function loads and initializes data items
+ *  Initialize ICU. The description further below applies to ICU 2.6 to ICU 3.4.
+ *  Starting with ICU 3.4, u_init() needs not be called any more for
+ *  ensuring thread safety, but it can give an indication for whether ICU
+ *  can load its data. In ICU 3.4, it will try to load the converter alias table
+ *  (cnvalias.icu) and give an error code if that fails.
+ *  This may change in the future.
+ *  <p>
+ *  For ensuring the availability of necessary data, an application should
+ *  open the service objects (converters, collators, etc.) that it will use
+ *  and check for error codes there.
+ *  <p>
+ *  Documentation for ICU 2.6 to ICU 3.4:
+ *  <p>
+ *  This function loads and initializes data items
  *  that are required internally by various ICU functions.  Use of this explicit
  *  initialization is required in multi-threaded applications; in 
  *  single threaded apps, use is optional, but incurs little additional
