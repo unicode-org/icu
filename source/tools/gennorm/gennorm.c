@@ -60,6 +60,7 @@ enum {
     SOURCEDIR,
     UNICODE_VERSION,
     ICUDATADIR,
+    CSOURCE,
     STORE_FLAGS
 };
 
@@ -70,9 +71,10 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
+    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
     UOPTION_ICUDATADIR,
-    { "prune", NULL, NULL, NULL, 'p', UOPT_REQUIRES_ARG, 0 }
+    UOPTION_DEF("csource", 'C', UOPT_NO_ARG),
+    UOPTION_DEF("prune", 'p', UOPT_REQUIRES_ARG)
 };
 
 extern int
@@ -286,7 +288,7 @@ main(int argc, char* argv[]) {
         processData();
 
         /* write the properties data file */
-        generateData(destDir);
+        generateData(destDir, options[CSOURCE].doesOccur);
 
         cleanUpData();
     }

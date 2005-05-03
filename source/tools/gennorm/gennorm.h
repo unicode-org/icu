@@ -87,7 +87,7 @@ extern void
 processData(void);
 
 extern void
-generateData(const char *dataDir);
+generateData(const char *dataDir, UBool csource);
 
 extern void
 cleanUpData(void);
