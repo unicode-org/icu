@@ -335,6 +335,9 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022CN());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022KR());
+        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_cn());
+        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_jp());
+        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_kr());
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.
