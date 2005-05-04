@@ -100,13 +100,13 @@ int main(int argc, char **argv)
         break;
     }
 
-    /* ICU's ustdio package provides a convenient way to write Unicode
+    /* ICU's icuio package provides a convenient way to write Unicode
      *    data to stdout.  The string data that we get from resources
-     *    will be UChar * strings, which ustdio can handle nicely.
+     *    will be UChar * strings, which icuio can handle nicely.
      */
     u_stdout = u_finit(stdout, NULL /*locale*/,  NULL /*codepage */);
     if (verbose) {
-        u_fprintf(u_stdout, "%s:  checking output via ustdio.\n", programName);
+        u_fprintf(u_stdout, "%s:  checking output via icuio.\n", programName);
     }
 
 #ifndef UFORTUNE_NOSETAPPDATA
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
      */
     udata_setAppData("fortune_resources", &fortune_resources_dat, &err);
     if (U_FAILURE(err)) {
-        fprintf(stderr, "%s: ures_open failed with error \"%s\"\n", programName, u_errorName(err));
+        fprintf(stderr, "%s: udata_setAppData failed with error \"%s\"\n", programName, u_errorName(err));
         exit(-1);
     }
 #endif
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
         exit(-1);
     }
     if (numFortunes <= 0) {
-        fprintf(stderr, "%s: no fortunes found.\n");
+        fprintf(stderr, "%s: no fortunes found.\n", programName);
         exit(-1);
     }
 
