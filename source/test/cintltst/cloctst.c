@@ -2055,16 +2055,6 @@ static void TestDisplayNameWarning(void) {
 
 
 /**
- * Compare the ICU version against the given major/minor version.
- */
-static int32_t _cmpversion(const char* version) {
-    UVersionInfo x, icu;
-    u_versionFromString(x, version);
-    u_getVersion(icu);
-    return memcmp(icu, x, U_MAX_VERSION_LENGTH);
-}
-
-/**
  * Compare two locale IDs.  If they are equal, return 0.  If `string'
  * starts with `prefix' plus an additional element, that is, string ==
  * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
