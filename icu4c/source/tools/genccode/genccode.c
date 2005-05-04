@@ -151,6 +151,7 @@ static const struct AssemblyType {
         ".globl %s\n"
         "\t.section .rodata\n"
         "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "\t.type %s,@object\n"
         "%s:\n\n",
 
         ".long "
