@@ -122,8 +122,8 @@ main(int argc, char* argv[]) {
         }
     } else {
         strcpy(resPathBuffer, currdir);
-        strcat(resPathBuffer, U_FILE_SEP_STRING);
-        strcat(resPathBuffer, "uresb");
+        /*strcat(resPathBuffer, U_FILE_SEP_STRING);
+        strcat(resPathBuffer, "uresb");*/
         resPath = resPathBuffer; /* we'll just dump uresb samples resources */
     }
 
@@ -219,7 +219,6 @@ static UChar *quotedString(const UChar *string) {
 }
 
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status) {
-    int32_t noOfElements = ures_getSize(resource);
     int32_t i = 0;
     const char *key = ures_getKey(resource);
 
@@ -355,7 +354,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 }
 
 void reportError(UErrorCode *status) {
-    u_fprintf(outerr, "Error %d : %U happened!\n", *status, getErrorName(*status));
+    u_fprintf(outerr, "Error %d(%s) : %U happened!\n", *status, u_errorName(*status), getErrorName(*status));
 }
 
 
@@ -379,3 +378,4 @@ const UChar *getErrorName(UErrorCode errorNumber) {
     }
 
 }
+

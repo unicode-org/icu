@@ -16,13 +16,13 @@ ifeq ($(strip $(ICU_PATH)),)
   ICU_PATH=$(ICU_DEFAULT_PATH)
 endif
 
-GENRBOPT = -s. -d. --package-name $(PKG)
+GENRBOPT = -s. -d.
 
 # Name of your target
 TARGET=uresb
 PKG=$(TARGET)
 RES_SRC=root.txt en.txt sr.txt
-RESOURCES=$(RES_SRC:%.txt=$(PKG)_%.res)
+RESOURCES=$(RES_SRC:%.txt=%.res)
 
 # All object files (C or C++)
 OBJECTS=uresb.o
@@ -45,16 +45,16 @@ LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil $(shell icu-config --ldflags-tool
 
 distclean clean:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	-$(RMV) $(OBJECTS) $(TARGET)
+	-$(RMV) $(OBJECTS) $(TARGET) $(RESOURCES)
 
 
 ## resources
-$(PKG)_%.res: %.txt
+%.res: %.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $^
 
 ## Special for a special codepage
-$(PKG)_sr.res : sr.txt
+sr.res : sr.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) -e cp1251 $?
 
@@ -72,17 +72,6 @@ report: $(TARGET).report
 
 $(TARGET).report: check $(TARGET).cpp
 	more $(TARGET).cpp $(TARGET).out > $@
-
-
-
-
-
-
-
-
-
-
-
 
 
 
