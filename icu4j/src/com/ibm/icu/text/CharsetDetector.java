@@ -105,6 +105,8 @@ public class CharsetDetector {
                                           //   in which case we can't touch it.
         fRawLength = fInputStream.read(fRawInput);
         fInputStream.reset();
+        
+        MungeInput();                     // Strip html markup, collect byte stats.
         return this;
     }
 
@@ -292,14 +294,14 @@ public class CharsetDetector {
      *  The following items are accessed by individual CharsetRecongizers during
      *     the recognition process
      */
-    byte[]      fInputBytes =     // The text to be checked.  Markup will have been
-                   new byte[4000];//   removed if appropriate.
+    byte[]      fInputBytes =       // The text to be checked.  Markup will have been
+                   new byte[4000];  //   removed if appropriate.
     
-    int         fInputLen;        // Length of the byte data in fInputText.
+    int         fInputLen;          // Length of the byte data in fInputText.
     
-    short       fByteStats[];     // byte frequency statistics for the input text.
-                                  //   Value is percent, not absolute.
-                                  //   Value is rounded up, so zero really means zero occurences.
+    short       fByteStats[] =      // byte frequency statistics for the input text.
+                   new short[256];  //   Value is percent, not absolute.
+                                    //   Value is rounded up, so zero really means zero occurences.
     
     String      fDeclaredEncoding;
     
