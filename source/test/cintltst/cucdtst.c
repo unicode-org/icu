@@ -2910,13 +2910,28 @@ TestConsistency() {
 #endif
 }
 
+/*
+ * Starting with ICU4C 3.4, the core Unicode properties files
+ * (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
+ * are hardcoded in the common DLL and therefore not included
+ * in the data package any more.
+ * Test requiring these files are disabled so that
+ * we need not jump through hoops (like adding snapshots of these files
+ * to testdata).
+ * See Jitterbug 4497.
+ */
+#define HARDCODED_DATA_4497 1
+
 /* API coverage for ucase.c */
 static void TestUCase() {
+#if !HARDCODED_DATA_4497
     UDataMemory *pData;
     UCaseProps *csp;
+#endif
     const UCaseProps *ccsp;
     UErrorCode errorCode;
 
+#if !HARDCODED_DATA_4497
     /* coverage for ucase_openBinary() */
     errorCode=U_ZERO_ERROR;
     pData=udata_open(NULL, UCASE_DATA_TYPE, UCASE_DATA_NAME, &errorCode);
@@ -2940,6 +2955,7 @@ static void TestUCase() {
 
     ucase_close(csp);
     udata_close(pData);
+#endif
 
     /* coverage for ucase_getDummy() */
     errorCode=U_ZERO_ERROR;
@@ -2951,11 +2967,14 @@ static void TestUCase() {
 
 /* API coverage for ubidi_props.c */
 static void TestUBiDiProps() {
+#if !HARDCODED_DATA_4497
     UDataMemory *pData;
     UBiDiProps *bdp;
+#endif
     const UBiDiProps *cbdp;
     UErrorCode errorCode;
 
+#if !HARDCODED_DATA_4497
     /* coverage for ubidi_openBinary() */
     errorCode=U_ZERO_ERROR;
     pData=udata_open(NULL, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &errorCode);
@@ -2979,6 +2998,7 @@ static void TestUBiDiProps() {
 
     ubidi_closeProps(bdp);
     udata_close(pData);
+#endif
 
     /* coverage for ubidi_getDummy() */
     errorCode=U_ZERO_ERROR;

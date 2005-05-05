@@ -144,6 +144,9 @@
 			<File
 				RelativePath=".\icuswap.cpp">
 			</File>
+			<File
+				RelativePath=".\swapimpl.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
