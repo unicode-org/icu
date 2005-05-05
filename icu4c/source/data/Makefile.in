@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -105,6 +105,15 @@ distclean-local: clean
 
 all-local: build-dir icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
 
+# Starting with ICU4C 3.4, the core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
+# are hardcoded in the common DLL and therefore not included in the data package any more.
+# They are not built by default but need to be built for ICU4J data and for getting the .c source files
+# when updating the Unicode data.
+# Changed in Makefile.in revision 1.147. See Jitterbug 4497.
+uni-core-data: build-dir $(BUILDDIR)/uprops.icu $(BUILDDIR)/ucase.icu $(BUILDDIR)/ubidi.icu $(BUILDDIR)/unorm.icu
+	@echo Unicode .icu files built to $(BUILDDIR)
+	@echo Unicode .c source files built to $(OUTTMPDIR)
+
 dist-local:
 
 clean-map:
@@ -177,7 +186,10 @@ package390: $(OUTTMPDIR)/icudata390.lst $(OUTTMPDIR)/icudata.lst ./icupkg.inc pa
 # X_FILES = full paths (for dependency)
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu ucase.icu ubidi.icu pnames.icu unames.icu unorm.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
+#  2005-may-05 Removed Unicode properties files (unorm.icu, uprops.icu, ucase.icu, ubidi.icu)
+#  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
+#
+DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -306,14 +318,17 @@ $(BUILD_DIRS):
 # uprops.icu
 $(BUILDDIR)/uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
 	$(INVOKE) $(BINDIR)/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(BINDIR)/genprops --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
 
 # ubidi.icu
 $(BUILDDIR)/ubidi.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/genbidi$(EXEEXT)
 	$(INVOKE) $(BINDIR)/genbidi -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(BINDIR)/genbidi --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
 
 # ucase.icu
 $(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gencase$(EXEEXT)
 	$(INVOKE) $(BINDIR)/gencase -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(BINDIR)/gencase --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
 
 # pnames.icu
 $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(BINDIR)/genpname$(EXEEXT)
@@ -322,9 +337,12 @@ $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/
 # unorm.icu
 $(BUILDDIR)/unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)ucase.icu
 	$(INVOKE) $(BINDIR)/gennorm -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+	$(INVOKE) $(BINDIR)/gennorm --csource -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(OUTTMPDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
-$(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
+# used to depend on $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
+# see Jitterbug 4497
+$(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT)
 	$(INVOKE) $(BINDIR)/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
 # unames.icu
@@ -438,7 +456,9 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
-ALLFILES390=uprops.icu ucase.icu ubidi.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+# used to depend on uprops.icu ucase.icu ubidi.icu unorm.icu
+# see Jitterbug 4497
+ALLFILES390=pnames.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(OUTTMPDIR)/icudata390.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
