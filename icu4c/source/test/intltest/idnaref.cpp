@@ -258,7 +258,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE];
     //initialize pointers to stack buffers
     UChar  *b1 = b1Stack, *b2 = b2Stack;
-    int32_t b1Len, b2Len, 
+    int32_t b1Len=0, b2Len=0, 
             b1Capacity = MAX_LABEL_BUFFER_SIZE, 
             b2Capacity = MAX_LABEL_BUFFER_SIZE ,
             reqLength=0;
@@ -274,7 +274,18 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     // assume the source contains all LDH codepoints
     UBool srcIsLDH = TRUE; 
     int32_t j=0;
-//    UParseError parseError;
+
+    if(srcLength == -1){
+        srcLength = u_strlen(src);
+    }
+
+    // step 1 
+    for( j=0;j<srcLength;j++){
+        if(src[j] > 0x7F){
+            srcIsASCII = FALSE;
+        }
+        b1[b1Len++] = src[j];
+    }
     // step 2
     NamePrepTransform* prep = TestIDNA::getInstance(*status);
 
@@ -302,9 +313,10 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
         goto CLEANUP;
     }
 
+    srcIsASCII = TRUE;
     // step 3 & 4
     for( j=0;j<b1Len;j++){
-        if(b1[j] > 0x7F){
+        if(b1[j] > 0x7F){// check if output of usprep_prepare is all ASCII 
             srcIsASCII = FALSE;
         }else if(prep->isLDHChar(b1[j])==FALSE){  // if the char is in ASCII range verify that it is an LDH character{
             srcIsLDH = FALSE;

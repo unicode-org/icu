@@ -145,6 +145,9 @@ static UChar unicodeIn[][41] ={
         0x043e, 0x0440, 0x044f, 0x0442, 0x043f, 0x043e, 0x0440, 0x0443,
         0x0441, 0x0441, 0x043a, 0x0438
     },
+    {
+        0xFB00, 0xFB01
+    }
 
 };
 
@@ -172,6 +175,7 @@ static const char *asciiIn[] = {
     "xn--hxargifdar",                       // Greek
     "xn--bonusaa-5bb1da",                   // Maltese
     "xn--b1abfaaepdrnnbgefbadotcwatmq2g4l", // Russian (Cyrillic)
+    "fffi"
 };
 
 static const char *domainNames[] = {

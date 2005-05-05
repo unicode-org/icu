@@ -5,7 +5,7 @@
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  nameprep.h
+ *   file name:  punyref.h
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
