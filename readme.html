@@ -10,7 +10,7 @@
     <meta name="DESCRIPTION" content=
     "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-<style type="text/css">
+    <style type="text/css">
     h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
     h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
     h2.TOC {page-break-before: auto}
@@ -29,7 +29,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.3
     ReadMe</h1>
 
-    <p>Version: 2005-Apr-01<br>
+    <p>Version: 2005-May-05<br>
      Copyright &copy; 1997-2005 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1476,13 +1476,55 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <h3><a name="ImportantNotesCPlusPlus" href="#ImportantNotesCPlusPlus" id=
     "ImportantNotesCPlusPlus">Using ICU in a Multithreaded Environment</a></h3>
 
-    <p>Upon the first usage of most ICU APIs, the global mutex will get
-    initialized properly, but you can use the <code>u_init()</code> function
-    from uclean.h to ensure that it is initialized properly. Without calling
-    this function from a single thread, the data caches inside ICU may get
-    initialized more than once from multiple threads, which may cause memory
-    leaks and other problems. There is no harm in calling <code>u_init()</code>
-    in a single threaded application.</p>
+    <p>Some versions of ICU require calling the <code>u_init()</code> function
+    from <code> uclean.h</code> to ensure that ICU is initialized properly. In
+    those ICU versions, <code>u_init()</code>  must be called before ICU is used
+    from multiple threads. There is no harm in calling <code>u_init()</code>
+    in a single-threaded application, on a single-CPU machine, or in other cases
+    where <code>u_init()</code> is not required.</p>
+
+    <p>In addition to ensuring thread safety, <code>u_init()</code>  also
+    attempts to load at least one ICU data file. Assuming that all data files
+    are packaged together (or are in the same folder in files mode), a failure
+    code from <code>u_init()</code>  usually means that the data cannot be
+    found. In this case, the data may not be installed properly, or the
+    application may have failed to call <code>udata_setCommonData()</code> or <code>u_setDataDirectory()</code>
+    which specify to ICU where it can find its data.</p>
+
+    <p>Since <code>u_init()</code> will load only one or two data files, it
+    cannot guarantee that all of the data that an application needs is
+    available. It cannot check for all data files because the set of files is
+    customizable, and some ICU services work without loading any data at all. An
+    application should always check for error codes when opening ICU service
+    objects (using <code>ucnv_open()</code>, <code>ucol_open()</code>, C++
+    constructors, etc.).</p>
+
+    <h4>ICU 3.4 and later</h4>
+
+    <p>ICU 3.4 self-initializes properly for multi-threaded use. It achieves
+    this without performance penalty by hardcoding the core Unicode properties
+    data, at the cost of some flexibility. (For details see Jitterbug 4497.)</p>
+
+    <p><code>u_init()</code> can be used to check for data loading. It tries to
+    load the converter alias table (<code>cnvalias.icu</code>).</p>
+
+    <h4>ICU 2.6..3.2</h4>
+
+    <p>These ICU versions require a call to <code>u_init()</code> before
+    multi-threaded use. The services that are directly affected are those that
+    don't have a service object and need to be fast: normalization and character
+    properties.</p>
+
+    <p><code>u_init()</code> loads and initializes the data files for
+    normalization and character properties (<code>unorm.icu</code> and <code>uprops.icu</code>)
+    and can therefore also be used to check for data loading.</p>
+
+    <h4>ICU 2.4 and earlier</h4>
+
+    <p>ICU 2.4 and earlier versions were not prepared for multithreaded use on
+    multi-CPU platforms where the CPUs implement weak memory coherency. These
+    CPUs include: Power4, Power5, Alpha, Itanium. <code>u_init()</code> was not
+    defined yet.</p>
 
     <h4><a name="ImportantNotesHPUX" href="#ImportantNotesHPUX" id=
     "ImportantNotesHPUX">Using ICU in a Multithreaded Environment on
