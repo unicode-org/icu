@@ -16,9 +16,6 @@
 *   Helper functions for writing source code for data.
 */
 
-#ifndef __WRITESRC_H__
-#define __WRITESRC_H__
-
 #include <stdio.h>
 #include <time.h>
 #include "unicode/utypes.h"
@@ -191,5 +188,3 @@ usrc_writeUTrieStruct(FILE *f,
         fputs(postfix, f);
     }
 }
-
-#endif
