@@ -86,8 +86,13 @@ public class CharsetMatch implements Comparable {
         return fConfidence;
     }
     
+    
+    static public final int ENCODING_SCHEME    = 1;
+    static public final int BOM                = 2;
+    static public final int DECLARED_ENCODING  = 4;
+    static public final int LANG_STATISTICS    = 8;
     /**
-     * Return an indication of what it was about input data that 
+     * Return indications of what it was about input data that 
      * that caused this charset to be considered as a possible match.
      * <p>
      * TODO: create a list of enum-like constants for the possible types of matches.
