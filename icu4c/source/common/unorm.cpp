@@ -4073,7 +4073,10 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
 }
 
+#if !UNORM_HARDCODE_DATA
+
 /* data swapping ------------------------------------------------------------ */
+/* moved to the icuswap tool */
 
 U_CAPI int32_t U_EXPORT2
 unorm_swap(const UDataSwapper *ds,
@@ -4195,5 +4198,7 @@ unorm_swap(const UDataSwapper *ds,
 
     return headerSize+size;
 }
+
+#endif
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

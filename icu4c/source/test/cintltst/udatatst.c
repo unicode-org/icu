@@ -108,7 +108,7 @@ static void TestUDataOpen(){
     UErrorCode status=U_ZERO_ERROR;
     const char* memMap[][2]={
         {"root", "res"},
-        {"unorm", "icu"},
+        {"pnames", "icu"},
         {"cnvalias", "icu"},
         {"unames",   "icu"},
         {"ibm-37_P100-1995",   "cnv"}
@@ -1100,14 +1100,26 @@ static const struct {
     /* the last item should not be #if'ed so that it can reliably omit the last comma */
 
     /* Unicode properties */
-    {"unames",                   "icu", uchar_swapNames},
     {"pnames",                   "icu", upname_swap},
+#if 0
+    /*
+     * Starting with ICU4C 3.4, the core Unicode properties files
+     * (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
+     * are hardcoded in the common DLL and therefore not included
+     * in the data package any more.
+     * Their swapping code is moved from the common DLL to the icuswap tool so that
+     * we need not jump through hoops (like adding snapshots of these files
+     * to testdata) for code coverage in tests.
+     * See Jitterbug 4497.
+     */
 #if !UCONFIG_NO_NORMALIZATION
     {"unorm",                    "icu", unorm_swap},
 #endif
     {"uprops",                   "icu", uprops_swap},
     {"ucase",                    "icu", ucase_swap},
-    {"ubidi",                    "icu", ubidi_swap}
+    {"ubidi",                    "icu", ubidi_swap},
+#endif
+    {"unames",                   "icu", uchar_swapNames}
 };
 
 #define SWAP_BUFFER_SIZE 1000000

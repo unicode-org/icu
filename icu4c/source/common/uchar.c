@@ -225,9 +225,8 @@ loadPropsData(void) {
     return retVal;
 }
 
-#endif
-
 /* Unicode properties data swapping ----------------------------------------- */
+/* moved to the icuswap tool */
 
 U_CAPI int32_t U_EXPORT2
 uprops_swap(const UDataSwapper *ds,
@@ -357,6 +356,8 @@ uprops_swap(const UDataSwapper *ds,
     /* i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table */
     return headerSize+4*dataIndexes[UPROPS_RESERVED_INDEX];
 }
+
+#endif
 
 /* constants and macros for access to the data ------------------------------ */
 
