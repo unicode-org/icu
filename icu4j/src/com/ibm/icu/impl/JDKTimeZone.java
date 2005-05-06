@@ -31,6 +31,8 @@ import java.io.IOException;
  */
 public class JDKTimeZone extends TimeZone {
 
+    private static final long serialVersionUID = -3724907649889455280L;
+
     /**
      * The java.util.TimeZone wrapped by this object.  Must not be null.
      */
@@ -83,6 +85,7 @@ public class JDKTimeZone extends TimeZone {
      */
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int milliseconds) {
+
         return unwrap().getOffset(era, year, month, day,
                                   dayOfWeek, milliseconds);
     }

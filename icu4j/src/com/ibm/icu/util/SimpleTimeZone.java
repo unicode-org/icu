@@ -27,6 +27,8 @@ import java.io.IOException;
  * @stable ICU 2.0
  */
 public class SimpleTimeZone extends JDKTimeZone {
+    private static final long serialVersionUID = -7034676239311322769L;
+
     /**
      * Constructs a SimpleTimeZone with the given base time zone offset from GMT
      * and time zone ID. Timezone IDs can be obtained from
@@ -110,17 +112,9 @@ public class SimpleTimeZone extends JDKTimeZone {
 
         raw = rawOffset;
 
-        sm = startMonth;
-        sdwm = startDay;
-        sdw = startDayOfWeek;
-        st = startTime;
-        sdm = -1;
-
-        em = endMonth;
-        edwm = endDay;
-        edw = endDayOfWeek;
-        et = endTime;
-        edm = -1;
+        STZInfo xinfo = getSTZInfo();
+        xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
+        xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
     }
 
     /**
@@ -140,19 +134,11 @@ public class SimpleTimeZone extends JDKTimeZone {
                                           endDay, endDayOfWeek, endTime, dstSavings));
 
         raw = rawOffset;
-	dst = dstSavings;
+        dst = dstSavings;
 
-        sm = startMonth;
-        sdwm = startDay;
-        sdw = startDayOfWeek;
-        st = startTime;
-        sdm = -1;
-
-        em = endMonth;
-        edwm = endDay;
-        edw = endDayOfWeek;
-        et = endTime;
-        edm = -1;
+        STZInfo xinfo = getSTZInfo();
+        xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
+        xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
     }
 
     public void setRawOffset(int offsetMillis) {
@@ -169,7 +155,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setStartYear(int year) {
         unwrapSTZ().setStartYear(year);
 
-        sy = year;
+        getSTZInfo().sy = year;
     }
 
     /**
@@ -197,11 +183,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                              int time) {
         unwrapSTZ().setStartRule(month, dayOfWeekInMonth, dayOfWeek, time);
 
-        sm = month;
-        sdwm = dayOfWeekInMonth;
-        sdw = dayOfWeek;
-        st = time;
-        sdm = -1;
+        getSTZInfo().setStart(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
     }
 
     /**
@@ -219,11 +201,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setStartRule(int month, int dayOfMonth, int time) {
         unwrapSTZ().setStartRule(month, dayOfMonth, time);
 
-        sm = month;
-        sdwm = -1;
-        sdw = -1;
-        st = time;
-        sdm = dayOfMonth;
+        getSTZInfo().setStart(month, -1, -1, time, dayOfMonth, false);
     }
 
     /**
@@ -246,12 +224,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
         unwrapSTZ().setStartRule(month, dayOfMonth, dayOfWeek, time, after);
 
-        sm = month;
-        sdwm = -1;
-        sdw = dayOfWeek;
-        st = time;
-        sdm = dayOfMonth;
-        sa = after;
+        getSTZInfo().setStart(month, -1, dayOfWeek, time, dayOfMonth, after);
     }
 
     /**
@@ -278,11 +251,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                            int time) {
         unwrapSTZ().setEndRule(month, dayOfWeekInMonth, dayOfWeek, time);
 
-        em = month;
-        edwm = dayOfWeekInMonth;
-        edw = dayOfWeek;
-        et = time;
-        edm = -1;
+        getSTZInfo().setEnd(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
     }
 
     /**
@@ -300,11 +269,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setEndRule(int month, int dayOfMonth, int time) {
         unwrapSTZ().setEndRule(month, dayOfMonth, time);
 
-        em = month;
-        edwm = -1;
-        edw = -1;
-        et = time;
-        edm = dayOfMonth;
+        getSTZInfo().setEnd(month, -1, -1, time, dayOfMonth, false);
     }
 
     /**
@@ -327,12 +292,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
         unwrapSTZ().setEndRule(month, dayOfMonth, dayOfWeek, time, after);
 
-        em = month;
-        edwm = -1;
-        edw = dayOfWeek;
-        et = time;
-        edm = dayOfMonth;
-        ea = after;
+        getSTZInfo().setEnd(month, -1, dayOfWeek, time, dayOfMonth, after);
     }
 
     /**
@@ -344,7 +304,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setDSTSavings(int millisSavedDuringDST) {
         unwrapSTZ().setDSTSavings(millisSavedDuringDST);
-	dst = millisSavedDuringDST;
+        dst = millisSavedDuringDST;
     }
 
     /**
@@ -394,38 +354,23 @@ public class SimpleTimeZone extends JDKTimeZone {
                 // behavior should be no dst
             }
 
-            if (sy != -1) {
-                stz.setStartYear(sy);
-            }
-            if (sm != -1) {
-                if (sdm == -1) {
-                    stz.setStartRule(sm, sdwm, sdw, st);
-                } else if (sdw == -1) {
-                    stz.setStartRule(sm, sdm, st);
-                } else {
-                    stz.setStartRule(sm, sdm, sdw, st, sa);
-                }
-            }
-            if (em != -1) {
-                if (edm == -1) {
-                    stz.setEndRule(em, edwm, edw, et);
-                } else if (edw == -1) {
-                    stz.setEndRule(em, edm, et);
-                } else {
-                    stz.setEndRule(em, edm, edw, et, ea);
-                }
+            if (xinfo != null) {
+                xinfo.applyTo(stz);
             }
             zone = stz;
         }
     }
 
+    private STZInfo getSTZInfo() {
+        if (xinfo == null) {
+            xinfo = new STZInfo();
+        }
+        return xinfo;
+    }
+
     // data needed for streaming mutated SimpleTimeZones in JDK14
-    int raw, dst = 3600000;
-    int sy = -1;
-    int sm = -1, sdwm, sdw, st, sdm;
-    boolean sa;
-    int em = -1, edwm, edw, et, edm;
-    boolean ea;
+    private int raw, dst = 3600000;
+    private STZInfo xinfo = null;
 }
 
 //eof
