@@ -97,13 +97,25 @@ public class CharsetDetector {
      * @param in the input text of unknown encoding
      * @return This CharsetDetector
      */
+    private static final int kBufSize = 8000;
+    
     public CharsetDetector setText(InputStream in) throws IOException {
         fInputStream = in;
-        fInputStream.mark(4000);
-        fRawInput = new byte[4000];       // Always make a new buffer because the
+        fInputStream.mark(kBufSize);
+        fRawInput = new byte[kBufSize];   // Always make a new buffer because the
                                           //   previous one may have come from the caller,
                                           //   in which case we can't touch it.
-        fRawLength = fInputStream.read(fRawInput);
+        fRawLength = 0;
+        int remainingLength = kBufSize;
+        while (remainingLength > 0 ) {
+            // read() may give data in smallish chunks, esp. for remote sources.  Hence, this loop.
+            int  bytesRead = fInputStream.read(fRawInput, fRawLength, remainingLength);
+            if (bytesRead <= 0) {
+                 break;
+            }
+            fRawLength += bytesRead;
+            remainingLength -= bytesRead;
+        }
         fInputStream.reset();
         
         MungeInput();                     // Strip html markup, collect byte stats.
@@ -295,7 +307,7 @@ public class CharsetDetector {
      *     the recognition process
      */
     byte[]      fInputBytes =       // The text to be checked.  Markup will have been
-                   new byte[4000];  //   removed if appropriate.
+                   new byte[kBufSize];  //   removed if appropriate.
     
     int         fInputLen;          // Length of the byte data in fInputText.
     

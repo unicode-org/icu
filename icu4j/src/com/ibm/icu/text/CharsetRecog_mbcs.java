@@ -50,55 +50,72 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
         int   commonCharCount     = 0;
         int   badCharCount        = 0;
         int   totalCharCount      = 0;
+        int   confidence          = 0;
         iteratedChar   iter       = new iteratedChar();
         
-        
-        for (iter.reset(); nextChar(iter, det);) {
-            totalCharCount++;
-            if (iter.error) {
-                badCharCount++; 
-            } else {
-                
-                if (iter.charValue <= 0xff) {
-                    singleByteCharCount++;
+        detectBlock: {
+            for (iter.reset(); nextChar(iter, det);) {
+                totalCharCount++;
+                if (iter.error) {
+                    badCharCount++; 
                 } else {
-                    doubleByteCharCount++;
-                    if (commonChars != null) {
-                        if (Arrays.binarySearch(commonChars, iter.charValue) >= 0){
-                            commonCharCount++;
+                    
+                    if (iter.charValue <= 0xff) {
+                        singleByteCharCount++;
+                    } else {
+                        doubleByteCharCount++;
+                        if (commonChars != null) {
+                            if (Arrays.binarySearch(commonChars, iter.charValue) >= 0){
+                                commonCharCount++;
+                            }
                         }
                     }
                 }
+                if (badCharCount >= 2 && badCharCount*5 >= doubleByteCharCount) {
+                    // Bail out early if the byte data is not matching the encoding scheme.
+                    break detectBlock;
+                }
             }
-            if (badCharCount >= 2 && badCharCount*5 >= doubleByteCharCount) {
-                // Bail out early if the byte data is not matching the encoding scheme.
-                return 0;
+            
+            if (doubleByteCharCount == 0 && badCharCount== 0) {
+                // No multi-byte chars.
+                //   ASCII file?  It's probably not our encoding,
+                //   but is not incompatible with our encoding, so don't give it a zero.
+                confidence = 10;
+                break detectBlock;
             }
-        }
-        
-        int confidence = 40 + doubleByteCharCount - 10*badCharCount;
-        if (confidence < 0) {
-            confidence = 0;
-        }
-        if (confidence > 100) {
-            confidence = 100;
-        }
-        if (commonChars != null && doubleByteCharCount > 0) {
+            
             //
-            int commonCharPercentage = commonCharCount*100 / doubleByteCharCount;
-            if (commonCharPercentage < 10) {
+            //  No match if there are too many characters that don't fit the encoding scheme.
+            //    (should we have zero tolerance for these?)
+            //
+            if (doubleByteCharCount < 20*badCharCount) {
                 confidence = 0;
-            } else if (commonCharPercentage < 20) {
-                confidence = (confidence * (commonCharPercentage-10)) / 10;
-            } else {
-                // Percent of frequently occuring chars is > 20
-                //   Let the initial confidence, based soley on the encoding scheme match, stand.
+                break detectBlock;
             }
-        }
-         
+            
+            if (commonChars == null) {
+                // We have no statistics on frequently occuring characters.
+                //  Assess confidence purely on having a reasonable number of
+                //  multi-byte characters (the more the better
+                confidence = 30 + doubleByteCharCount - 20*badCharCount;
+                if (confidence > 100) {
+                    confidence = 100;
+                }
+            }else {
+                //
+                // Frequency of occurence statistics exist.
+                //
+                double maxVal = Math.log((float)doubleByteCharCount / 4);
+                double scaleFactor = 90.0 / maxVal;
+                confidence = (int)(Math.log(commonCharCount+1) * scaleFactor + 10);
+                confidence = Math.min(confidence, 100);
+            }
+        }   // end of detectBlock:
+        
         return confidence;
     }
-     
+    
      // "Character"  iterated character class.
      //    Recognizers for specific mbcs encodings make their "characters" available
      //    by providing a nextChar() function that fills in an instance of iteratedChar

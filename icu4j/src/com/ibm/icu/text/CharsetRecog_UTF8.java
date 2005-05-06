@@ -23,18 +23,18 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
         boolean     hasBOM = false;
         int         numValid = 0;
         int         numInvalid = 0;
-        byte        input[] = det.fInputBytes;
+        byte        input[] = det.fRawInput;
         int         i;
         int         trailBytes = 0;
         int         confidence;
         
-        if (det.fInputLen >= 3 && 
+        if (det.fRawLength >= 3 && 
                 input[0]==0xef && input[1]==0xbb & input[2]==0xbf) {
             hasBOM = true;
         }
         
         // Scan for multi-byte sequences
-        for (i=0; i<det.fInputLen; i++) {
+        for (i=0; i<det.fRawLength; i++) {
             int b = input[i];
             if ((b & 0x80) == 0) {
                 continue;   // ASCII
@@ -49,12 +49,18 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
                 trailBytes = 3;
             } else {
                 numInvalid++;
+                if (numInvalid > 5) {
+                    break;
+                }
                 trailBytes = 0;
             }
                 
             // Verify that we've got the right number of trail bytes in the sequence
             for (;;) {
                 i++;
+                if (i>=det.fRawLength) {
+                    break;
+                }
                 b = input[i];
                 if ((b & 0xc0) != 0x080) {
                     numInvalid++;
@@ -73,7 +79,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
         confidence = 0;
         if (hasBOM && numInvalid==0) {
             confidence = 100;
-        } else if (hasBOM && numValid > numInvalid) {
+        } else if (hasBOM && numValid > numInvalid*10) {
             confidence = 80;
         } else if (numValid > 3 && numInvalid == 0) {
             confidence = 100;            
@@ -81,10 +87,10 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
             confidence = 80;
         } else if (numValid == 0 && numInvalid == 0) {
             // Plain ASCII.  
-            confidence = 50;            
-        } else if (numValid > numInvalid) {
+            confidence = 10;            
+        } else if (numValid > numInvalid*10) {
             // Probably corruput utf-8 data.  Valid sequences aren't likely by chance.
-            confidence = 60;
+            confidence = 25;
         }
         return confidence;
     }
