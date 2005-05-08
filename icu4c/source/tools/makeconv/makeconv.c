@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2004, International Business Machines
+ *   Copyright (C) 1998-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 #include "unicode/putil.h"
-#include "ucnv_io.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "ucnv_imp.h"

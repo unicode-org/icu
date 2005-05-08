@@ -34,7 +34,6 @@
 #include "utracimp.h"
 #include "ustr_imp.h"
 #include "ucnv_imp.h"
-#include "ucnv_io.h"
 #include "ucnv_cnv.h"
 #include "ucnv_bld.h"
 
@@ -56,17 +55,6 @@ static const UAmbiguousConverter ambiguousConverters[]={
     { "ISO_2022,locale=ko,version=0", 0x20a9 }
 };
 
-U_CAPI const char*  U_EXPORT2
-ucnv_getDefaultName ()
-{
-    return ucnv_io_getDefaultConverterName();
-}
-
-U_CAPI void U_EXPORT2
-ucnv_setDefaultName (const char *converterName)
-{
-  ucnv_io_setDefaultConverterName(converterName);
-}
 /*Calls through createConverter */
 U_CAPI UConverter* U_EXPORT2
 ucnv_open (const char *name,
@@ -105,6 +93,28 @@ ucnv_openU (const UChar * name,
         return NULL;
     }
     return ucnv_open(u_austrcpy(asciiName, name), err);
+}
+
+/* Copy the string that is represented by the UConverterPlatform enum
+ * @param platformString An output buffer
+ * @param platform An enum representing a platform
+ * @return the length of the copied string.
+ */
+static int32_t
+ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
+{
+    switch (pltfrm)
+    {
+    case UCNV_IBM:
+        uprv_strcpy(platformString, "ibm-");
+        return 4;
+    case UCNV_UNKNOWN:
+        break;
+    }
+
+    /* default to empty string */
+    *platformString = 0;
+    return 0;
 }
 
 /*Assumes a $platform-#codepage.$CONVERTER_FILE_EXTENSION scheme and calls
@@ -350,47 +360,21 @@ ucnv_close (UConverter * converter)
 U_CAPI const char*   U_EXPORT2
 ucnv_getAvailableName (int32_t n)
 {
-  if (0 <= n && n <= 0xffff) {
-    UErrorCode err = U_ZERO_ERROR;
-    const char *name = ucnv_io_getAvailableConverter((uint16_t)n, &err);
-    if (U_SUCCESS(err)) {
-      return name;
+    if (0 <= n && n <= 0xffff) {
+        UErrorCode err = U_ZERO_ERROR;
+        const char *name = ucnv_bld_getAvailableConverter((uint16_t)n, &err);
+        if (U_SUCCESS(err)) {
+            return name;
+        }
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 U_CAPI int32_t   U_EXPORT2
 ucnv_countAvailable ()
 {
     UErrorCode err = U_ZERO_ERROR;
-    return ucnv_io_countAvailableConverters(&err);
-}
-
-U_CAPI uint16_t U_EXPORT2
-ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
-{
-    return ucnv_io_countAliases(alias, pErrorCode);
-}
-
-
-U_CAPI const char* U_EXPORT2
-ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode)
-{
-    return ucnv_io_getAlias(alias, n, pErrorCode);
-}
-
-U_CAPI void U_EXPORT2
-ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
-{
-    ucnv_io_getAliases(alias, 0, aliases, pErrorCode);
-}
-
-U_CAPI uint16_t U_EXPORT2
-ucnv_countStandards(void)
-{
-    UErrorCode err = U_ZERO_ERROR;
-    return ucnv_io_countStandards(&err);
+    return ucnv_bld_countAvailableConverters(&err);
 }
 
 U_CAPI void    U_EXPORT2

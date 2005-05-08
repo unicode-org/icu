@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2004, International Business Machines Corporation and
+ * Copyright (c) 1996-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -23,6 +23,7 @@
 
 #if !UCONFIG_NO_CONVERSION
 
+#include "unicode/putil.h"
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
 #include "unicode/uloc.h"
@@ -154,6 +155,12 @@ static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache a
                                           /*  Note:  the global mutex is used for      */
                                           /*         reference count updates.          */
 
+static const char **gAvailableConverters = NULL;
+static uint16_t gAvailableConverterCount = 0;
+
+static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
+static const char *gDefaultConverterName = NULL;
+
 
 static const char DATA_TYPE[] = "cnv";
 
@@ -169,6 +176,12 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
             SHARED_DATA_HASHTABLE = NULL;
         }
     }
+
+    /* Called from ucnv_flushCache because it allocates the hashtable */
+    /*ucnv_flushAvailableConverterCache();*/
+
+    gDefaultConverterName = NULL;
+    gDefaultConverterNameBuffer[0] = 0;
 
     umtx_destroy(&cnvCacheMutex);           /* Don't worry about destroying the mutex even  */
                                             /*  if the hash table still exists.  The mutex  */
@@ -307,23 +320,6 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
     return sharedData;
 }
 
-int32_t
-ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
-{
-    switch (pltfrm)
-    {
-    case UCNV_IBM:
-        uprv_strcpy(platformString, "ibm-");
-        return 4;
-    case UCNV_UNKNOWN:
-        break;
-    }
-
-    /* default to empty string */
-    *platformString = 0;
-    return 0;
-}
-
 /*returns a converter type from a string
  */
 static const UConverterSharedData *
@@ -379,7 +375,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
     if (SHARED_DATA_HASHTABLE == NULL)
     {
         SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars,
-                            ucnv_io_countAvailableAliases(&err),
+                            ucnv_io_countTotalAliases(&err),
                             &err);
         ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 
@@ -676,7 +672,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
 
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
-        lookup->realName = ucnv_io_getDefaultConverterName();
+        lookup->realName = ucnv_getDefaultName();
         if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
             return NULL;
@@ -905,6 +901,17 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     return myUConverter;
 }
 
+static void
+ucnv_flushAvailableConverterCache() {
+    if (gAvailableConverters) {
+        umtx_lock(&cnvCacheMutex);
+        gAvailableConverterCount = 0;
+        uprv_free((char **)gAvailableConverters);
+        gAvailableConverters = NULL;
+        umtx_unlock(&cnvCacheMutex);
+    }
+}
+
 /*Frees all shared immutable objects that aren't referred to (reference count = 0)
  */
 U_CAPI int32_t U_EXPORT2
@@ -974,10 +981,176 @@ ucnv_flushCache ()
 
     UTRACE_DATA1(UTRACE_INFO, "ucnv_flushCache() exits with %d converters remaining", remaining);
 
-    ucnv_io_flushAvailableConverterCache();
+    ucnv_flushAvailableConverterCache();
 
     UTRACE_EXIT_VALUE(tableDeletedNum);
     return tableDeletedNum;
+}
+
+/* available converters list --------------------------------------------------- */
+
+static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
+    int needInit;
+    UMTX_CHECK(&cnvCacheMutex, (gAvailableConverters == NULL), needInit);
+    if (needInit) {
+        UConverter tempConverter;
+        UEnumeration *allConvEnum = NULL;
+        uint16_t idx;
+        uint16_t localConverterCount;
+        uint16_t allConverterCount;
+        UErrorCode localStatus;
+        const char *converterName;
+        const char **localConverterList;
+
+        allConvEnum = ucnv_openAllNames(pErrorCode);
+        allConverterCount = uenum_count(allConvEnum, pErrorCode);
+        if (U_FAILURE(*pErrorCode)) {
+            return FALSE;
+        }
+
+        /* We can't have more than "*converterTable" converters to open */
+        localConverterList = (const char **) uprv_malloc(allConverterCount * sizeof(char*));
+        if (!localConverterList) {
+            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+            return FALSE;
+        }
+
+        localConverterCount = 0;
+
+        for (idx = 0; idx < allConverterCount; idx++) {
+            localStatus = U_ZERO_ERROR;
+            converterName = uenum_next(allConvEnum, NULL, &localStatus);
+            ucnv_close(ucnv_createConverter(&tempConverter, converterName, &localStatus));
+            if (U_SUCCESS(localStatus)) {
+                localConverterList[localConverterCount++] = converterName;
+            }
+        }
+        uenum_close(allConvEnum);
+
+        umtx_lock(&cnvCacheMutex);
+        if (gAvailableConverters == NULL) {
+            gAvailableConverters = localConverterList;
+            gAvailableConverterCount = localConverterCount;
+            ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+        }
+        else {
+            uprv_free((char **)localConverterList);
+        }
+        umtx_unlock(&cnvCacheMutex);
+    }
+    return TRUE;
+}
+
+U_CFUNC uint16_t
+ucnv_bld_countAvailableConverters(UErrorCode *pErrorCode) {
+    if (haveAvailableConverterList(pErrorCode)) {
+        return gAvailableConverterCount;
+    }
+    return 0;
+}
+
+U_CFUNC const char *
+ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
+    if (haveAvailableConverterList(pErrorCode)) {
+        if (n < gAvailableConverterCount) {
+            return gAvailableConverters[n];
+        }
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    }
+    return NULL;
+}
+
+/* default converter name --------------------------------------------------- */
+
+/*
+ * In order to be really thread-safe, the get function would have to take
+ * a buffer parameter and copy the current string inside a mutex block.
+ * This implementation only tries to be really thread-safe while
+ * setting the name.
+ * It assumes that setting a pointer is atomic.
+ */
+
+U_CAPI const char*  U_EXPORT2
+ucnv_getDefaultName() {
+    /* local variable to be thread-safe */
+    const char *name;
+
+    UMTX_CHECK(&cnvCacheMutex, gDefaultConverterName, name);
+    if(name==NULL) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = NULL;
+        int32_t length = 0;
+
+        name = uprv_getDefaultCodepage();
+
+        /* if the name is there, test it out and get the canonical name with options */
+        if(name != NULL) {
+            cnv = ucnv_open(name, &errorCode);
+            if(U_SUCCESS(errorCode) && cnv != NULL) {
+                name = ucnv_getName(cnv, &errorCode);
+            }
+        }
+
+        if(name == NULL || name[0] == 0
+            || U_FAILURE(errorCode) || cnv == NULL
+            || length>=sizeof(gDefaultConverterNameBuffer))
+        {
+            /* Panic time, let's use a fallback. */
+#if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
+            name = "US-ASCII";
+            /* there is no 'algorithmic' converter for EBCDIC */
+#elif defined(OS390)
+            name = "ibm-1047_P100-1995" UCNV_SWAP_LFNL_OPTION_STRING;
+#else
+            name = "ibm-37_P100-1995";
+#endif
+        }
+
+        length=(int32_t)(uprv_strlen(name));
+
+        /* Copy the name before we close the converter. */
+        umtx_lock(&cnvCacheMutex);
+        uprv_memcpy(gDefaultConverterNameBuffer, name, length);
+        gDefaultConverterNameBuffer[length]=0;
+        gDefaultConverterName = gDefaultConverterNameBuffer;
+        name = gDefaultConverterName;
+        ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+        umtx_unlock(&cnvCacheMutex);
+
+        /* The close may make the current name go away. */
+        ucnv_close(cnv);
+    }
+
+    return name;
+}
+
+U_CAPI void U_EXPORT2
+ucnv_setDefaultName(const char *converterName) {
+    if(converterName==NULL) {
+        /* reset to the default codepage */
+        umtx_lock(&cnvCacheMutex);
+        gDefaultConverterName=NULL;
+        umtx_unlock(&cnvCacheMutex);
+    } else {
+        UErrorCode errorCode=U_ZERO_ERROR;
+        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
+
+        umtx_lock(&cnvCacheMutex);
+
+        if(U_SUCCESS(errorCode) && name!=NULL) {
+            gDefaultConverterName=name;
+        } else {
+            /* do not set the name if the alias lookup failed and it is too long */
+            int32_t length=(int32_t)(uprv_strlen(converterName));
+            if(length<sizeof(gDefaultConverterNameBuffer)) {
+                /* it was not found as an alias, so copy it - accept an empty name */
+                uprv_memcpy(gDefaultConverterNameBuffer, converterName, length);
+                gDefaultConverterNameBuffer[length]=0;
+                gDefaultConverterName=gDefaultConverterNameBuffer;
+            }
+        }
+        umtx_unlock(&cnvCacheMutex);
+    }
 }
 
 /* data swapping ------------------------------------------------------------ */

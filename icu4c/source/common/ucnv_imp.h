@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -86,13 +86,6 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData);
  */
 void
 ucnv_incrementRefCount(UConverterSharedData *sharedData);
-
-/* Copy the string that is represented by the UConverterPlatform enum
- * @param platformString An output buffer
- * @param platform An enum representing a platform
- * @return the length of the copied string.
- */
-int32_t ucnv_copyPlatformString(char *platformString, UConverterPlatform platform);
 
 #endif
 
