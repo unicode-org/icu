@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -88,6 +88,7 @@ public:
      */
     Formattable(int64_t ll);
 
+#if !UCONFIG_NO_CONVERSION
     /**
      * Creates a Formattable object with a char string pointer.
      * Assumes that the char string is null terminated.
@@ -95,6 +96,7 @@ public:
      * @stable ICU 2.0
      */
     Formattable(const char* strToCopy);
+#endif
 
     /**
      * Creates a Formattable object with a UnicodeString object to copy from.
