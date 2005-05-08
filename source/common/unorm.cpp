@@ -237,9 +237,11 @@ unorm_cleanup() {
 #endif
 
     for(i=0; i<(int32_t)LENGTHOF(nxCache); ++i) {
-        delete nxCache[i];
+        if (nxCache[i]) {
+            delete nxCache[i];
+            nxCache[i] = 0;
+        }
     }
-    uprv_memset(nxCache, 0, sizeof(nxCache));
 
     return TRUE;
 }
@@ -523,6 +525,7 @@ internalGetNXHangul(UErrorCode &errorCode) {
         if(nxCache[UNORM_NX_HANGUL]==NULL) {
             nxCache[UNORM_NX_HANGUL]=set;
             set=NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_UNORM, unorm_cleanup);
         }
         umtx_unlock(NULL);
 
@@ -579,6 +582,7 @@ internalGetSerializedNX(int32_t options, int32_t nxIndex, UErrorCode &errorCode)
         if(nxCache[options]==NULL) {
             nxCache[options]=set;
             set=NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_UNORM, unorm_cleanup);
         }
         umtx_unlock(NULL);
 
@@ -669,6 +673,7 @@ internalGetNX(int32_t options, UErrorCode &errorCode) {
         if(nxCache[options]==NULL) {
             nxCache[options]=set;
             set=NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_UNORM, unorm_cleanup);
         }
         umtx_unlock(NULL);
 
