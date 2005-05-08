@@ -3178,7 +3178,7 @@ TestCaseFolding() {
     char *fields[3][2];
     UErrorCode errorCode;
 
-    static char *lastLine="10FFFF; C; 10FFFF;";
+    static char *lastLine= (char *)"10FFFF; C; 10FFFF;";
 
     errorCode=U_ZERO_ERROR;
     /* test BMP & plane 1 - nothing interesting above */
