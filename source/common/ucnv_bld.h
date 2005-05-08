@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -220,6 +220,26 @@ struct UConverter {
 U_CDECL_END /* end of UConverter */
 
 #define CONVERTER_FILE_EXTENSION ".cnv"
+
+
+/**
+ * Return the number of all converter names.
+ * @param pErrorCode The error code
+ * @return the number of all converter names
+ */
+U_CFUNC uint16_t
+ucnv_bld_countAvailableConverters(UErrorCode *pErrorCode);
+
+/**
+ * Return the (n)th converter name in mixed case, or NULL
+ * if there is none (typically, if the data cannot be loaded).
+ * 0<=index<ucnv_io_countAvailableConverters().
+ * @param n The number specifies which converter name to get
+ * @param pErrorCode The error code
+ * @return the (n)th converter name in mixed case, or NULL if there is none.
+ */
+U_CFUNC const char *
+ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
 
 /**
  * Load a non-algorithmic converter.

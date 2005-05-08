@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2004, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -104,54 +104,12 @@ U_CFUNC uint16_t
 ucnv_io_countStandards(UErrorCode *pErrorCode);
 
 /**
- * Return the number of all converter names.
- * @param pErrorCode The error code
- * @return the number of all converter names
- */
-U_CFUNC uint16_t
-ucnv_io_countAvailableConverters(UErrorCode *pErrorCode);
-
-/**
- * Return the (n)th converter name in mixed case, or NULL
- * if there is none (typically, if the data cannot be loaded).
- * 0<=index<ucnv_io_countAvailableConverters().
- * @param n The number specifies which converter name to get
- * @param pErrorCode The error code
- * @return the (n)th converter name in mixed case, or NULL if there is none.
- */
-U_CFUNC const char *
-ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
-
-/**
- * Return the (n)th converter name in mixed case, or NULL
- * if there is none (typically, if the data cannot be loaded).
- * 0<=index<ucnv_io_countAvailableConverters().
- */
-U_CFUNC void
-ucnv_io_flushAvailableConverterCache(void);
-
-/**
  * Return the number of all aliases (and converter names).
  * @param pErrorCode The error code
  * @return the number of all aliases
  */
 U_CFUNC uint16_t
-ucnv_io_countAvailableAliases(UErrorCode *pErrorCode);
-
-/**
- * Get the name of the default converter.
- * This name is already resolved by <code>ucnv_io_getConverterName()</code>.
- * @return the name of the default converter
- */
-U_CFUNC const char *
-ucnv_io_getDefaultConverterName(void);
-
-/**
- * Set the name of the default converter.
- * @param name The name set to the default converter
- */
-U_CFUNC void
-ucnv_io_setDefaultConverterName(const char *name);
+ucnv_io_countTotalAliases(UErrorCode *pErrorCode);
 
 /**
  * Swap an ICU converter alias table. See ucnv_io.c.

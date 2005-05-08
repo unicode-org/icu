@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -31,8 +31,7 @@
 
 #if !UCONFIG_NO_CONVERSION
 
-#include "unicode/putil.h"
-#include "unicode/ucnv.h"           /* This file implements ucnv_xXXX() APIs */
+#include "unicode/ucnv.h"
 #include "unicode/udata.h"
 
 #include "umutex.h"
@@ -196,12 +195,6 @@ static uint32_t gTaggedAliasArraySize;
 static uint32_t gTaggedAliasListsSize;
 static uint32_t gStringTableSize;
 
-static const char **gAvailableConverters = NULL;
-static uint16_t gAvailableConverterCount = 0;
-
-static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
-static const char *gDefaultConverterName = NULL;
-
 #define GET_STRING(idx) (const char *)(gStringTable + (idx))
 
 static UBool U_CALLCONV
@@ -226,8 +219,6 @@ static UBool U_CALLCONV ucnv_io_cleanup(void)
         gAliasData = NULL;
     }
 
-    ucnv_io_flushAvailableConverterCache();
-
     gConverterListSize       = 0;
     gTagListSize             = 0;
     gAliasListSize           = 0;
@@ -244,26 +235,21 @@ static UBool U_CALLCONV ucnv_io_cleanup(void)
     gTaggedAliasLists = NULL;
     gStringTable = NULL;
 
-    gDefaultConverterName = NULL;
-    gDefaultConverterNameBuffer[0] = 0;
-
     return TRUE;                   /* Everything was cleaned up */
 }
 
 static UBool
 haveAliasData(UErrorCode *pErrorCode) {
-    int haveData;
+    int needInit;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return FALSE;
     }
 
-    umtx_lock(NULL);
-    haveData = (int)(gAliasData==NULL);
-    umtx_unlock(NULL);
+    UMTX_CHECK(NULL, (gAliasData==NULL), needInit);
 
     /* load converter alias data from file if necessary */
-    if (haveData) {
+    if (needInit) {
         UDataMemory *data = NULL;
         const uint16_t *table = NULL;
         uint32_t tableStart;
@@ -830,6 +816,32 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
     return NULL;
 }
 
+U_CAPI uint16_t U_EXPORT2
+ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
+{
+    return ucnv_io_countAliases(alias, pErrorCode);
+}
+
+
+U_CAPI const char* U_EXPORT2
+ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode)
+{
+    return ucnv_io_getAlias(alias, n, pErrorCode);
+}
+
+U_CAPI void U_EXPORT2
+ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
+{
+    ucnv_io_getAliases(alias, 0, aliases, pErrorCode);
+}
+
+U_CAPI uint16_t U_EXPORT2
+ucnv_countStandards(void)
+{
+    UErrorCode err = U_ZERO_ERROR;
+    return ucnv_io_countStandards(&err);
+}
+
 U_CAPI const char * U_EXPORT2
 ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
@@ -840,80 +852,6 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
         }
     }
 
-    return NULL;
-}
-
-void
-ucnv_io_flushAvailableConverterCache() {
-    if (gAvailableConverters) {
-        umtx_lock(NULL);
-        gAvailableConverterCount = 0;
-        uprv_free((char **)gAvailableConverters);
-        gAvailableConverters = NULL;
-        umtx_unlock(NULL);
-    }
-}
-
-static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
-    if (gAvailableConverters == NULL) {
-        uint16_t idx;
-        uint16_t localConverterCount;
-        UErrorCode status;
-        const char *converterName;
-        const char **localConverterList;
-
-        if (!haveAliasData(pErrorCode)) {
-            return FALSE;
-        }
-
-        /* We can't have more than "*converterTable" converters to open */
-        localConverterList = (const char **) uprv_malloc(gConverterListSize * sizeof(char*));
-        if (!localConverterList) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return FALSE;
-        }
-
-        localConverterCount = 0;
-
-        for (idx = 0; idx < gConverterListSize; idx++) {
-            status = U_ZERO_ERROR;
-            converterName = GET_STRING(gConverterList[idx]);
-            ucnv_close(ucnv_open(converterName, &status));
-            if (U_SUCCESS(status)) {
-                localConverterList[localConverterCount++] = converterName;
-            }
-        }
-
-        umtx_lock(NULL);
-        if (gAvailableConverters == NULL) {
-            gAvailableConverters = localConverterList;
-            gAvailableConverterCount = localConverterCount;
-            /* haveData should have already registered the cleanup function */
-        }
-        else {
-            uprv_free((char **)localConverterList);
-        }
-        umtx_unlock(NULL);
-    }
-    return TRUE;
-}
-
-U_CFUNC uint16_t
-ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
-    if (haveAvailableConverterList(pErrorCode)) {
-        return gAvailableConverterCount;
-    }
-    return 0;
-}
-
-U_CFUNC const char *
-ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
-    if (haveAvailableConverterList(pErrorCode)) {
-        if (n < gAvailableConverterCount) {
-            return gAvailableConverters[n];
-        }
-        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
     return NULL;
 }
 
@@ -981,107 +919,11 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
 }
 
 U_CFUNC uint16_t
-ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
+ucnv_io_countTotalAliases(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
         return (uint16_t)gAliasListSize;
     }
     return 0;
-}
-
-/* default converter name --------------------------------------------------- */
-
-/*
- * In order to be really thread-safe, the get function would have to take
- * a buffer parameter and copy the current string inside a mutex block.
- * This implementation only tries to be really thread-safe while
- * setting the name.
- * It assumes that setting a pointer is atomic.
- */
-
-U_CFUNC const char *
-ucnv_io_getDefaultConverterName() {
-    /* local variable to be thread-safe */
-    const char *name;
-
-    umtx_lock(NULL);
-    name=gDefaultConverterName;
-    umtx_unlock(NULL);
-
-    if(name==NULL) {
-        UErrorCode errorCode = U_ZERO_ERROR;
-        UConverter *cnv = NULL;
-        int32_t length = 0;
-
-        name = uprv_getDefaultCodepage();
-
-        /* if the name is there, test it out and get the canonical name with options */
-        if(name != NULL) {
-            cnv = ucnv_open(name, &errorCode);
-            if(U_SUCCESS(errorCode) && cnv != NULL) {
-                name = ucnv_getName(cnv, &errorCode);
-            }
-        }
-
-        if(name == NULL || name[0] == 0
-            || U_FAILURE(errorCode) || cnv == NULL
-            || length>=sizeof(gDefaultConverterNameBuffer))
-        {
-            /* Panic time, let's use a fallback. */
-#if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
-            name = "US-ASCII";
-            /* there is no 'algorithmic' converter for EBCDIC */
-#elif defined(OS390)
-            name = "ibm-1047_P100-1995" UCNV_SWAP_LFNL_OPTION_STRING;
-#else
-            name = "ibm-37_P100-1995";
-#endif
-        }
-
-        length=(int32_t)(uprv_strlen(name));
-
-        /* Copy the name before we close the converter. */
-        umtx_lock(NULL);
-        uprv_memcpy(gDefaultConverterNameBuffer, name, length);
-        gDefaultConverterNameBuffer[length]=0;
-        gDefaultConverterName = gDefaultConverterNameBuffer;
-        name = gDefaultConverterName;
-        ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
-        umtx_unlock(NULL);
-
-        /* The close may make the current name go away. */
-        ucnv_close(cnv);
-    }
-
-    return name;
-}
-
-U_CFUNC void
-ucnv_io_setDefaultConverterName(const char *converterName) {
-    if(converterName==NULL) {
-        /* reset to the default codepage */
-        umtx_lock(NULL);
-        gDefaultConverterName=NULL;
-        umtx_unlock(NULL);
-    } else {
-        UErrorCode errorCode=U_ZERO_ERROR;
-        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
-
-        umtx_lock(NULL);
-
-        if(U_SUCCESS(errorCode) && name!=NULL) {
-            gDefaultConverterName=name;
-        } else {
-            /* do not set the name if the alias lookup failed and it is too long */
-            int32_t length=(int32_t)(uprv_strlen(converterName));
-            if(length<sizeof(gDefaultConverterNameBuffer)) {
-                /* it was not found as an alias, so copy it - accept an empty name */
-                uprv_memcpy(gDefaultConverterNameBuffer, converterName, length);
-                gDefaultConverterNameBuffer[length]=0;
-                gDefaultConverterName=gDefaultConverterNameBuffer;
-            }
-        }
-        umtx_unlock(NULL);
-    }
 }
 
 /* alias table swapping ----------------------------------------------------- */
