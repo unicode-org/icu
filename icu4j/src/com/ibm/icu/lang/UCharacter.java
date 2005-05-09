@@ -2876,7 +2876,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Compatibility override of Java deprecated method.  This
      * method will always remain deprecated.  Delegates to
      * java.lang.Character.isSpace.
-     * @param cp the code point
+     * @param ch the code point
      * @return true if the code point is a space character as
      * defined by java.lang.Character.isSpace.
      * @draft ICU 3.4
@@ -4236,7 +4236,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <p>Casing is dependent on the argument locale and context-sensitive</p>
      * @param locale which string is to be converted in
      * @param str source string to be performed on
-     * @param breakiter break iterator to determine the positions in which
+     * @param titleIter break iterator to determine the positions in which
      *        the character should be title cased.
      * @return lowercase version of the argument string
      * @draft ICU 3.2
