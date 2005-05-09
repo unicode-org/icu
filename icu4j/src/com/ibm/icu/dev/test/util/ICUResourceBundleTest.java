@@ -589,7 +589,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN");
         ICUResourceBundle b = rb.get("aliasClient");
         String result = b.getString();
-        String expResult= "teindest"; 
+        String expResult= "correct"; 
         if(!result.equals(expResult)){
             errln("Did not get the expected result for XPath style alias");
         }
