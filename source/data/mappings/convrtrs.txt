@@ -738,7 +738,7 @@ ISCII,version=7         x-iscii-ka { WINDOWS } windows-57008 { WINDOWS* } iscii-
 ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-mlm
 
 # Lotus specific
-LMBCS-1                 lmbcs
+LMBCS-1                 lmbcs ibm-65025 { IBM* }
 LMBCS-2
 LMBCS-3
 LMBCS-4
