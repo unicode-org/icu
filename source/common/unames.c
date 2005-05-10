@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -121,9 +121,7 @@ isDataLoaded(UErrorCode *pErrorCode) {
     UBool isCached;
 
     /* do this because double-checked locking is broken */
-    umtx_lock(NULL);
-    isCached=uCharNames!=NULL;
-    umtx_unlock(NULL);
+    UMTX_CHECK(NULL, (uCharNames!=NULL), isCached);
 
     if(!isCached) {
         UCharNames *names;

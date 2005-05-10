@@ -276,9 +276,8 @@ static UBool _load() {
  * to load it, and return TRUE if the load succeeds.
  */
 static inline UBool load() {
-    umtx_lock(NULL);
-    UBool f = (PNAME!=NULL);
-    umtx_unlock(NULL);
+    UBool f;
+    UMTX_CHECK(NULL, (PNAME!=NULL), f);
     return f || _load();
 }
 
