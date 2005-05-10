@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2003, International Business Machines Corporation and
+ * Copyright (c) 1999-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -87,7 +87,7 @@ char convertersToCheck[][15] = {
   "cp1253",
   /*  "cp819",
       "cp13488",*/
-  "cpibm4971",
+  "ibm-4971",
   /*"ibm-9061",*/ /* was "cp869" changed 2002nov25 */
   /* "cp813",*/
   /*"ibm-9044",*/ /* was "cp852" changed 2002nov25 */
@@ -105,7 +105,7 @@ char convertersToCheck[][15] = {
   "ibm-5123", /* was "cp1027" changed 2003jan08 */
   /* "cp300",*/
   /* "cp4930",*/
-  "cp1364",
+  "ibm-1364",
   /* "cp1362" removed 2000nov28 */
   "cp1363",
   /* "cp1114", removed 2002jul3 
