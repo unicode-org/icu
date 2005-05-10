@@ -279,7 +279,7 @@ public class TestData {
             0x002e, 0x0063, 0x006f, 0x006d, /* com. */
            
         },
-        "www.XN--8mb5595fsoa28orucya378bqre2tcwop06c5qbw82a1rffmae0361dea96b.com",
+        "www.xn--8mb5595fsoa28orucya378bqre2tcwop06c5qbw82a1rffmae0361dea96b.com",
         new StringPrepParseException("",StringPrepParseException.PROHIBITED_ERROR),
         false, true, true),
 
@@ -290,7 +290,7 @@ public class TestData {
                 0x002e, 0x0063, 0x006f, 0x006d, /* com. */
                
             },
-            "www.XN--6lA2Bz548Fj1GuA391Bf1Gb1N59Ab29A7iA.com",
+            "www.xn--6la2bz548fj1gua391bf1gb1n59ab29a7ia.com",
 
             new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR),
             false, true, true

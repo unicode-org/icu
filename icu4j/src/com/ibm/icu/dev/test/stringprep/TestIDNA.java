@@ -232,7 +232,7 @@ public class TestIDNA extends TestFmwk {
         try{
             
             StringBuffer out = IDNA.convertIDNToASCII(src,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                 errln("convertToIDNASCII did not return expected result with options : "+ options + 
                       " Expected: " + expected+" Got: "+out);
             }
@@ -246,7 +246,7 @@ public class TestIDNA extends TestFmwk {
         }
         try{
             StringBuffer out = IDNA.convertIDNToASCII(inBuf,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                errln("convertToIDNASCII did not return expected result with options : "+ options + 
                      " Expected: " + expected+" Got: "+out);
             }           
@@ -261,7 +261,7 @@ public class TestIDNA extends TestFmwk {
         
         try{
             StringBuffer out = IDNA.convertIDNToASCII(inIter,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                errln("convertIDNToASCII did not return expected result with options : "+ options +
                      " Expected: " + expected+" Got: "+ out);
             }
@@ -725,5 +725,41 @@ public class TestIDNA extends TestFmwk {
                 errln("string "+i+" yields "+es+" instead of VERIFICATION_ERROR");
             }
         }
+    }
+    public void TestJB4490(){
+        String[] in = new String[]{
+                "\u00F5\u00dE\u00dF\u00dD",
+                "\uFB00\uFB01"
+               };
+        for ( int i=0; i< in.length; i++){   
+            try{
+                String ascii = IDNA.convertToASCII(in[i],IDNA.DEFAULT).toString();
+                try{
+                    String unicode = IDNA.convertToUnicode(ascii,IDNA.DEFAULT).toString();
+                }catch(StringPrepParseException ex){
+                    errln("Unexpected exception for convertToUnicode: " + ex.getMessage());
+                }
+            }catch(StringPrepParseException ex){
+                errln("Unexpected exception for convertToASCII: " + ex.getMessage());
+            }
+        }
+    }
+    public void TestJB4475(){
+        String[] in = new String[]{
+                        "TEST",
+                        "test"
+                       };
+        for ( int i=0; i< in.length; i++){
+            
+            try{
+                String ascii = IDNA.convertToASCII(in[i],IDNA.DEFAULT).toString();
+                if(!ascii.equals(in[i])){
+                    errln("Did not get the expected string for convertToASCII. Expected: "+ in[i] +" Got: " + ascii);
+                }
+            }catch(StringPrepParseException ex){
+                errln("Unexpected exception: " + ex.getMessage());
+            }
+        }
+            
     }
 }

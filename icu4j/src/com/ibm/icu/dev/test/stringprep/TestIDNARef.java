@@ -254,7 +254,7 @@ public class TestIDNARef extends TestFmwk {
         try{
             
             StringBuffer out = IDNAReference.convertIDNToASCII(src,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                 errln("convertToIDNAReferenceASCII did not return expected result with options : "+ options + 
                       " Expected: " + expected+" Got: "+out);
             }
@@ -268,7 +268,7 @@ public class TestIDNARef extends TestFmwk {
         }
         try{
             StringBuffer out = IDNAReference.convertIDNtoASCII(inBuf,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                errln("convertToIDNAReferenceASCII did not return expected result with options : "+ options + 
                      " Expected: " + expected+" Got: "+out);
             }           
@@ -283,7 +283,7 @@ public class TestIDNARef extends TestFmwk {
         
         try{
             StringBuffer out = IDNAReference.convertIDNtoASCII(inIter,options);
-            if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
+            if(expected!=null && out != null && !out.toString().equals(expected)){
                errln("convertIDNToASCII did not return expected result with options : "+ options +
                      " Expected: " + expected+" Got: "+ out);
             }
