@@ -344,6 +344,7 @@ public class CharsetDetector {
      */
     private static ArrayList createRecognizers() {
         ArrayList recognizers = new ArrayList();
+        
         recognizers.add(new CharsetRecog_UTF8());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_sjis());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());
@@ -352,6 +353,17 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_cn());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_jp());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_kr());
+        
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_de());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_es());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_fr());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_cs());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_pl());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_ro());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_5_ru());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_7_el());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_windows_1251());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_KOI8_R());
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.
