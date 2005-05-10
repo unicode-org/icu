@@ -132,19 +132,40 @@ public class IDNAReference {
 
         //get the options
         boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
-    
+
+        int ch;
+        // step 1
+        while((ch = srcIter.next())!= UCharacterIterator.DONE){
+            if(ch> 0x7f){
+                srcIsASCII = false;
+            }
+        }
         int failPos = -1;
-        // step 2
-        //StringPrep prep = StringPrep.getNameprepInstance();
-        StringBuffer processOut = transform.prepare(srcIter,options);
+        srcIter.setToStart();
+        StringBuffer processOut = null;
+        // step 2 is performed only if the source contains non ASCII
+        if(!srcIsASCII){
+            // step 2
+            processOut =  transform.prepare(srcIter,options);
+        }else{
+            processOut = new StringBuffer(srcIter.getText());
+        }
         int poLen = processOut.length();
+        
         StringBuffer dest = new StringBuffer();
+        
+        // reset the variable to verify if output of prepare is ASCII or not
+        srcIsASCII = true;
+        
         // step 3 & 4
         for(int j=0;j<poLen;j++ ){
-            char ch=processOut.charAt(j);
+            ch=processOut.charAt(j);
             if(ch > 0x7F){
                 srcIsASCII = false;
             }else if(isLDHChar(ch)==false){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = false;
                 failPos = j;
             }
