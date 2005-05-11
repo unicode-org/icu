@@ -1892,6 +1892,28 @@
 				RelativePath=".\ustrtrns.c">
 			</File>
 			<File
+				RelativePath=".\utext.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\utext.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\unicode\utf.h">
 				<FileConfiguration
 					Name="Release|Win32">
