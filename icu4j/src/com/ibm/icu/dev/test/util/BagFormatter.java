@@ -31,7 +31,16 @@ import com.ibm.icu.text.UnicodeSet;
 
 public class BagFormatter {
     static final boolean DEBUG = false;
-    public static final boolean SHOW_FILES = System.getProperty("SHOW_FILES") != null;
+    public static final boolean SHOW_FILES;
+    static {
+	boolean showFiles = false;
+	try {
+	    showFiles = System.getProperty("SHOW_FILES") != null;
+	}
+	catch (SecurityException e) {
+	}
+	SHOW_FILES = showFiles;
+    }
 
     private static final String BASE_RULES =
 	  	"'<' > '&lt;' ;" +
