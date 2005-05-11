@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1808,11 +1808,11 @@ static void TestShortString(void)
 
                 if(idFromSS != identifier) {
                     log_err("FD = %i, id didn't round trip. %08X vs %08X (%s)\n", 
-                        j, idFromSS, identifier, testCases[i]);
+                        j, idFromSS, identifier, testCases[i].input);
                 }
                 if(strcmp(fromIDBuffer, fromIDRoundtrip)) {
                     log_err("FD = %i, SS didn't round trip. %s vs %s (%s)\n", 
-                        j, fromIDBuffer, fromIDRoundtrip, testCases[i]);
+                        j, fromIDBuffer, fromIDRoundtrip, testCases[i].input);
                 }
             }
 
