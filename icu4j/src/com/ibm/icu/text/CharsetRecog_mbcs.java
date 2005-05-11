@@ -206,7 +206,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
          }
          
          String getName() {
-             return "SHIFT_JIS";
+             return "Shift_JIS";
          }
          
      }
@@ -304,7 +304,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                      0xa1ca, 0xa1cb, 0xa5cb, 0xbaee, 0xa4c1, 0xa5ad, 0xa5c7, 0xa4e4, 0xa5ec, 0xc7bd};
              
              String getName() {
-                 return "EUC_JP";
+                 return "EUC-JP";
              }
              
              int match(CharsetDetector det) {
@@ -335,7 +335,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                      0xb1c7, 0xbad0, 0xbefa, 0xc0e5, 0xbec8, 0xc1b6, 0xb8bb, 0xb0f8, 0xb9cc, 0xb0c5};
              
              String getName() {
-                 return "EUC_KR";
+                 return "EUC-KR";
              }
              
              int match(CharsetDetector det) {
@@ -370,7 +370,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                      0xb8f1, 0xb6f8, 0xb6a8, 0xcde2, 0xbac3, 0xb3cc, 0xccd8, 0xd7d4, 0xcbb5};
              
              String getName() {
-                 return "EUC_CN";
+                 return "EUC-CN";
              }
              
              int match(CharsetDetector det) {
