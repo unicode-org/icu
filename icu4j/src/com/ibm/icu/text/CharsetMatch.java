@@ -122,6 +122,15 @@ public class CharsetMatch implements Comparable {
         return fRecognizer.getName();
     }
     
+    /**
+     * Get the ISO code for the language of the detected charset.  
+     *
+     * @return The ISO code for the language or <code>null</code> if the language cannot be determined.
+     */
+    public String getLanguage() {
+        return fRecognizer.getLanguage();
+    }
+    
     
     /**
      * Comparison function, for java.lang.Comparable

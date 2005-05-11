@@ -205,9 +205,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0xFF, 
         };
 
-        String getName()
+        public String getName()
         {
-            return "8859_1";
+            return "ISO-8859-1";
         }
     }
 
@@ -220,9 +220,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
                 0x6E6520, 0x6E6720, 0x6E6765, 0x6E7465, 0x722064, 0x726465, 0x726569, 0x736368, 0x737465, 0x742064, 0x746520, 0x74656E, 0x746572, 0x756E64, 0x756E67, 0x766572, 
             };
 
-        public String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_de";
+            return "de";
         }
         
         public int match(CharsetDetector det)
@@ -240,9 +240,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x6F2065, 0x6F6E20, 0x6F7220, 0x6F7320, 0x706172, 0x717565, 0x726120, 0x726573, 0x732064, 0x732065, 0x732070, 0x736520, 0x746520, 0x746F20, 0x756520, 0xF36E20, 
         };
             
-        public String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_es";
+            return "es";
         }
         
         public int match(CharsetDetector det)
@@ -260,9 +260,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x6F6E20, 0x6F6E74, 0x6F7572, 0x717565, 0x72206C, 0x726520, 0x732061, 0x732064, 0x732065, 0x73206C, 0x732070, 0x742064, 0x746520, 0x74696F, 0x756520, 0x757220, 
         };
 
-        public String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_fr";
+            return "fr";
         }
         
         public int match(CharsetDetector det)
@@ -308,9 +308,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0x20, 
         };
 
-        String getName()
+        public String getName()
         {
-            return "8859_2";
+            return "ISO-8859-2";
         }
     }
     
@@ -323,9 +323,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x736520, 0x736F75, 0x737461, 0x737469, 0x73746E, 0x746572, 0x746EED, 0x746F20, 0x752070, 0xBE6520, 0xE16EED, 0xE9686F, 0xED2070, 0xED2073, 0xED6D20, 0xF86564, 
         };
 
-        String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_cs";
+            return "cs";
         }
         
         public int match(CharsetDetector det)
@@ -343,9 +343,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x706F6C, 0x707261, 0x70726F, 0x70727A, 0x727A65, 0x727A79, 0x7369EA, 0x736B69, 0x737461, 0x776965, 0x796368, 0x796D20, 0x7A6520, 0x7A6965, 0x7A7920, 0xF37720, 
         };
 
-        String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_pl";
+            return "pl";
         }
         
         public int match(CharsetDetector det)
@@ -363,9 +363,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x6C7569, 0x6E6520, 0x6E7472, 0x6F7220, 0x70656E, 0x726520, 0x726561, 0x727520, 0x73E320, 0x746520, 0x747275, 0x74E320, 0x756920, 0x756C20, 0xBA6920, 0xEE6E20, 
         };
 
-        String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_ro";
+            return "ro";
         }
         
         public int match(CharsetDetector det)
@@ -411,9 +411,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0x20, (byte) 0xFE, (byte) 0xFF, 
         };
 
-        String getName()
+        public String getName()
         {
-            return "8859_5";
+            return "ISO-8859-5";
         }
     }
     
@@ -426,9 +426,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0xDFDEDB, 0xDFE0D5, 0xDFE0D8, 0xDFE0DE, 0xE0D0D2, 0xE0D5D4, 0xE1E2D0, 0xE1E2D2, 0xE1E2D8, 0xE1EF20, 0xE2D5DB, 0xE2DE20, 0xE2DEE0, 0xE2EC20, 0xE7E2DE, 0xEBE520, 
         };
 
-        String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_ru";
+            return "ru";
         }
         
         public int match(CharsetDetector det)
@@ -474,9 +474,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0x20, 
         };
 
-        String getName()
+        public String getName()
         {
-            return "8859_7";
+            return "ISO-8859-7";
         }
     }
     
@@ -489,9 +489,9 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0xF220EA, 0xF220F0, 0xF220F4, 0xF3E520, 0xF3E720, 0xF3F4EF, 0xF4E120, 0xF4E1E9, 0xF4E7ED, 0xF4E7F2, 0xF4E9EA, 0xF4EF20, 0xF4EFF5, 0xF4F9ED, 0xF9ED20, 0xFEED20, 
         };
 
-        String getName()
+        public String getLanguage()
         {
-            return super.getName() + "_el";
+            return "el";
         }
         
         public int match(CharsetDetector det)
@@ -544,9 +544,14 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0xFF, 
         };
 
-        String getName()
+        public String getName()
         {
-            return  "windows_1251";
+            return  "windows-1251";
+        }
+        
+        public String getLanguage()
+        {
+            return "ru";
         }
         
         public int match(CharsetDetector det)
@@ -599,9 +604,14 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xD8, (byte) 0xD9, (byte) 0xDA, (byte) 0xDB, (byte) 0xDC, (byte) 0xDD, (byte) 0xDE, (byte) 0xDF, 
         };
         
-        String getName()
+        public String getName()
         {
-            return  "KOI8_R";
+            return  "KOI8-R";
+        }
+        
+        public String getLanguage()
+        {
+            return "ru";
         }
         
         public int match(CharsetDetector det)

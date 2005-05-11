@@ -29,6 +29,15 @@ abstract class CharsetRecognizer {
     abstract String      getName();
     
     /**
+     * Get the ISO language code for this charset.
+     * @return the language code, or <code>null</code> if the language cannot be determined.
+     */
+    public   String      getLanguage()
+    {
+        return null;
+    }
+    
+    /**
      * Test the match of this charset with the input text data
      *      which is obtained via the CharsetDetector object.
      * 
