@@ -1315,7 +1315,7 @@ static void TestAlias() {
     for (i = 0; i < CONVERTERS_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(CONVERTERS_NAMES[i].alias, 0, &status);
         if(!mapBack) {
-          log_data_err("Couldn't get alias for %s. You probably have no data\n", CONVERTERS_NAMES[i]);
+          log_data_err("Couldn't get alias for %s. You probably have no data\n", CONVERTERS_NAMES[i].name);
           continue;
         }
         if (0 != strcmp(mapBack, CONVERTERS_NAMES[i].name)) {
