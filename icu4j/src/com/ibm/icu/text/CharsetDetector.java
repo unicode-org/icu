@@ -355,8 +355,11 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_kr());
         
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_de());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_en());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_es());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_fr());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_it());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_pt());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_cs());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_pl());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_ro());
