@@ -42,6 +42,8 @@
     <aliasLocale locale="sr_YU" /> 
     <aliasLocale locale="sr_Cyrl_YU" /> 
     <aliasLocale locale="sr_Latn_YU" /> 
+    <aliasLocale locale="uz_AF" /> 
+    <aliasLocale locale="uz_UZ" /> 
     <aliasLocale locale="zh_CN" /> 
     <aliasLocale locale="zh_HK" /> 
     <aliasLocale locale="zh_MO" /> 
