@@ -371,6 +371,26 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
+    static class CharsetRecog_8859_1_sv extends CharsetRecog_8859_1
+    {
+        private static int[] ngrams = {
+            0x206174, 0x206176, 0x206465, 0x20656E, 0x2066F6, 0x206861, 0x206920, 0x20696E, 0x206B6F, 0x206D65, 0x206F63, 0x2070E5, 0x20736B, 0x20736F, 0x207374, 0x207469, 
+            0x207661, 0x207669, 0x20E472, 0x616465, 0x616E20, 0x616E64, 0x617220, 0x617474, 0x636820, 0x646520, 0x64656E, 0x646572, 0x646574, 0x656420, 0x656E20, 0x657220, 
+            0x657420, 0x66F672, 0x67656E, 0x696C6C, 0x696E67, 0x6B6120, 0x6C6C20, 0x6D6564, 0x6E2073, 0x6E6120, 0x6E6465, 0x6E6720, 0x6E6765, 0x6E696E, 0x6F6368, 0x6F6D20, 
+            0x6F6E20, 0x70E520, 0x722061, 0x722073, 0x726120, 0x736B61, 0x736F6D, 0x742073, 0x746120, 0x746520, 0x746572, 0x74696C, 0x747420, 0x766172, 0xE47220, 0xF67220, 
+        };
+
+        public String getLanguage()
+        {
+            return "sv";
+        }
+        
+        public int match(CharsetDetector det)
+        {
+            return match(det, ngrams, byteMap);
+        }
+    }
+    
     abstract static class CharsetRecog_8859_2 extends CharsetRecog_sbcs
     {
         protected static byte[] byteMap = {
