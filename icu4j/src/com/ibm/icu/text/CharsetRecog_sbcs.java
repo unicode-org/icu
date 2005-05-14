@@ -454,6 +454,26 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
+    static class CharsetRecog_8859_2_hu extends CharsetRecog_8859_2
+    {
+        private static int[] ngrams = {
+            0x206120, 0x20617A, 0x206265, 0x206567, 0x20656C, 0x206665, 0x206861, 0x20686F, 0x206973, 0x206B65, 0x206B69, 0x206BF6, 0x206C65, 0x206D61, 0x206D65, 0x206D69, 
+            0x206E65, 0x20737A, 0x207465, 0x20E973, 0x612061, 0x61206B, 0x61206D, 0x612073, 0x616B20, 0x616E20, 0x617A20, 0x62616E, 0x62656E, 0x656779, 0x656B20, 0x656C20, 
+            0x656C65, 0x656D20, 0x656E20, 0x657265, 0x657420, 0x657465, 0x657474, 0x677920, 0x686F67, 0x696E74, 0x697320, 0x6B2061, 0x6BF67A, 0x6D6567, 0x6D696E, 0x6E2061, 
+            0x6E616B, 0x6E656B, 0x6E656D, 0x6E7420, 0x6F6779, 0x732061, 0x737A65, 0x737A74, 0x737AE1, 0x73E967, 0x742061, 0x747420, 0x74E173, 0x7A6572, 0xE16E20, 0xE97320, 
+        };
+
+        public String getLanguage()
+        {
+            return "hu";
+        }
+        
+        public int match(CharsetDetector det)
+        {
+            return match(det, ngrams, byteMap);
+        }
+    }
+    
     static class CharsetRecog_8859_2_pl extends CharsetRecog_8859_2
     {
         private static int[] ngrams = {
