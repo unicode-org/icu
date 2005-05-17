@@ -323,7 +323,13 @@ public class CharsetDetector {
         //
         if (openTags<5 || openTags/5 < badTags || 
                 (fInputLen < 100 && fRawLength>600)) {
-            for (srci=0; srci<fRawLength; srci++) {
+            int limit = fRawLength;
+            
+            if (limit > kBufSize) {
+                limit = kBufSize;
+            }
+            
+            for (srci=0; srci<limit; srci++) {
                 fInputBytes[srci] = fRawInput[srci];
             }
             fInputLen = srci;
