@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 1998-2000, International Business Machines
+//*   Copyright (C) 1998-2005, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -97,6 +97,12 @@ root
     rootAliasTable {
         destination { "correct" }
     }
+    a {
+	a1{"ar1"}
+	a2{"ar2"}
+        a3{"ar3"}
+	a4{"ar4"}
+    }    
 }
 
 //eof

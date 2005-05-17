@@ -89,6 +89,8 @@ te_IN
         tag7 { TE_IN7 } 
     }
     aliasDestination {"correct" }
+
+    a:alias{ "sh_YU"}
 }
 
 //eof
