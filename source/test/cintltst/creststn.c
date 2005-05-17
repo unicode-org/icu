@@ -127,7 +127,19 @@ typedef enum E_Where E_Where;
 #define CONFIRM_INT_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of %d\n",  action, actual, expected); }
 #define CONFIRM_INT_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x >= %d\n",  action, actual, expected); }
 #define CONFIRM_INT_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x != %d\n",  action, actual, expected); }
-#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); }
+/*#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); } */
+static void 
+CONFIRM_ErrorCode(UErrorCode actual,UErrorCode expected) 
+{
+  if ((expected)==(actual)) 
+  { 
+    record_pass(); 
+  } else { 
+    record_fail();  
+    /*log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); */
+    log_err("returned  %s  instead of %s\n", myErrorName(actual), myErrorName(expected)); 
+  }
+}
 
 
 /* Array of our test objects */
@@ -161,7 +173,7 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 static void TestDecodedBundle(void);
 static void TestGetKeywordValues(void);
 static void TestGetFunctionalEquivalent(void);
-
+static void TestCLDRStyleAliases(void);
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -187,7 +199,8 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
     addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
-    addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath");
+    addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath"); 
+    addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
 
 }
 
@@ -1031,7 +1044,7 @@ static void TestAPI() {
     key=ures_getKey(teFillin);
     /*if(strcmp(key, "%%CollationBin") != 0){*/
     /*if(strcmp(key, "array_2d_in_Root_te") != 0){*/ /* added "aliasClient" that goes first */
-    if(strcmp(key, "aliasClient") != 0){
+    if(strcmp(key, "a") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
 #endif
@@ -2581,4 +2594,47 @@ static void TestXPath(void) {
 
     ures_close(alias);
     ures_close(rb);
+}
+static void TestCLDRStyleAliases(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *rb = NULL, *alias = NULL, *a3=NULL, *a4=NULL, *a5=NULL, *a6=NULL, *a=NULL;
+    int32_t i, len;
+    char resource[256];
+    const UChar *result = NULL, expected[256];
+    const char *expects[7] = { "", "a41", "a12", "a03", "ar4" };
+    const char *testdatapath=loadTestData(&status);
+    if(U_FAILURE(status)) {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+    log_verbose("Testing CLDR style aliases......\n");
+
+    rb = ures_open(testdatapath, "te_IN_REVISED", &status);
+    if(U_FAILURE(status)) {
+      log_err("Could not open te_IN (%s)\n", myErrorName(status));
+      return;
+    }
+    alias = ures_getByKey(rb, "a", alias, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't find the aliased with name \"a\" resource (%s)\n", myErrorName(status));
+      ures_close(rb);
+      return;
+    }
+    for(i = 2; i < 5 ; i++) {
+      resource[0]='a';
+      resource[1]='0'+i;
+      resource[2]=0;
+      /* instead of sprintf(resource, "a%i", i); */
+      a = ures_getByKeyWithFallback(alias, resource, a, &status);
+      result = ures_getString(a, &len, &status);
+      u_charsToUChars(expects[i], expected, strlen(expects[i])+1);
+      if(U_FAILURE(status) || !result || u_strcmp(result, expected)) {
+        log_err("CLDR style aliases failed resource with name \"%s\" resource, exp %s, got %S (%s)\n", resource, expects[i], result, myErrorName(status)); 
+        status = U_ZERO_ERROR;
+      }
+    }
+
+  ures_close(a);
+  ures_close(alias);
+  ures_close(rb);
 }
