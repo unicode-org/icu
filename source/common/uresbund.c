@@ -1380,9 +1380,8 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                         res = res_findResource(&(dataEntry->fData), rootRes, &myPath, &key);
                         if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
                             /* We hit an alias, but we didn't finish following the path. */
-                            // use 'key' because this is what we have found
                             helper = init_resb_result(&(dataEntry->fData), res, NULL, -1, dataEntry, resB, 0, helper, status); 
-                            //helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);
+                            /*helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);*/
                             if(helper) {
                               dataEntry = helper->fData;
                               rootRes = helper->fRes;
