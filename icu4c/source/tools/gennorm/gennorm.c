@@ -442,6 +442,12 @@ unicodeDataLineFn(void *context,
     /* reset the properties */
     uprv_memset(&norm, 0, sizeof(Norm));
 
+    /*
+     * The combiningIndex must not be initialized to 0 because 0 is the
+     * combiningIndex of the first forward-combining character.
+     */
+    norm.combiningIndex=0xffff;
+
     /* get the character code, field 0 */
     code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
