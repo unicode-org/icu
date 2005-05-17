@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -557,7 +557,7 @@ class CalendarCalcFrame extends Frame implements ActionListener
         String              name;
         JTextField           text;
         Checkbox            rollAdd;
-    };
+    }
 
     private final CalendarRec[] calendars = {
         new CalendarRec("Gregorian",        new GregorianCalendar()),
@@ -573,8 +573,8 @@ class CalendarCalcFrame extends Frame implements ActionListener
         IslamicCalendar cal = new IslamicCalendar();
         cal.setCivil(civil);
         return cal;
-    };
-};
+    }
+}
 
 class RollAddField {
     RollAddField(int field, String name) {
@@ -583,4 +583,4 @@ class RollAddField {
     }
     int field;
     String name;
-};
+}

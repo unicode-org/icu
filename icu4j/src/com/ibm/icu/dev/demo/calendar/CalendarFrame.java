@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -240,7 +240,7 @@ class CalendarFrame extends Frame
         }
 
         updateMonthName();
-    };
+    }
 
 
     private void updateMonthName()
@@ -315,7 +315,7 @@ class CalendarFrame extends Frame
                 }
             }
          }
-    };
+    }
 
     /**
      * AddAction handles the next/previous year/month buttons...
@@ -411,7 +411,7 @@ class CalendarFrame extends Frame
 
         Calendar  calendar;
         String              name;
-    };
+    }
 
     private final CalendarRec[] CALENDARS = {
         new CalendarRec("Gregorian Calendar",       new GregorianCalendar()),
@@ -426,7 +426,7 @@ class CalendarFrame extends Frame
         IslamicCalendar cal = new IslamicCalendar();
         cal.setCivil(civil);
         return cal;
-    };
+    }
 
     static final Color[] COLORS = { Color.blue, Color.black };
 }

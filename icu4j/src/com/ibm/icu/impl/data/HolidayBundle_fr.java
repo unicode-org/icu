@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,4 +40,4 @@ public class HolidayBundle_fr extends ListResourceBundle {
     };
 
     public synchronized Object[][] getContents() { return fContents; }
-};
+}
