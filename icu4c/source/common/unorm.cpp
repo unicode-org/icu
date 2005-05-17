@@ -117,6 +117,7 @@ enum {
     _NORM_OPTIONS_COMPOSE_CONTIGUOUS=0x2000
 };
 
+U_CDECL_BEGIN
 static inline UBool
 isHangulWithoutJamoT(UChar c) {
     c-=HANGUL_BASE;
@@ -181,6 +182,7 @@ static int32_t U_CALLCONV
 getFoldingAuxOffset(uint32_t data) {
     return (int32_t)(data&_NORM_AUX_FNC_MASK)<<UTRIE_SURROGATE_BLOCK_BITS;
 }
+U_CDECL_END
 
 #define UNORM_HARDCODE_DATA 1
 
