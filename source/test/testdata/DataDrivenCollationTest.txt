@@ -18,6 +18,19 @@ DataDrivenCollationTest {
                      }
     }
     TestData {
+		TestMorePinyin {
+			Info {
+				Description { "Testing the primary strength." }
+			}
+			Settings {
+				{
+					TestLocale { "zh" }
+					Arguments { "[strength 1]" }
+				}
+			}
+			Cases { "lā = lĀ = Lā = LĀ < lān = lĀn < lē = lĒ = Lē = LĒ < lēn = lĒn" }
+			
+		}
         TestLithuanian {
             Info {
                 Description { "Lithuanian sort order." }
