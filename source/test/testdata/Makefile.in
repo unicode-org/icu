@@ -106,7 +106,7 @@ TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm test4x.ucm ibm9027.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
 
-TEST_RES = casing.txt mc.txt root.txt sh.txt sh_YU.txt te.txt te_IN.txt te_IN_REVISED testtypes.txt testaliases.txt testempty.txt structLocale.txt DataDrivenCollationTest.txt idna_rules.txt conversion.txt icuio.txt testtable32.txt
+TEST_RES = casing.txt mc.txt root.txt sh.txt sh_YU.txt te.txt te_IN.txt te_IN_REVISED.txt testtypes.txt testaliases.txt testempty.txt structLocale.txt DataDrivenCollationTest.txt idna_rules.txt conversion.txt icuio.txt testtable32.txt
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/$(TESTDT)%.res) $(TESTBUILDDIR)/$(TESTDT)iscii.res $(TESTSRCDATADIR)/$(TESTDT)icu26_testtypes.res $(TESTSRCDATADIR)/$(TESTDT)icu26e_testtypes.res
 
 ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES) $(TESTOUTDIR)/$(TESTDT)nam.typ
