@@ -2620,7 +2620,7 @@ static void TestCLDRStyleAliases(void) {
       ures_close(rb);
       return;
     }
-    for(i = 2; i < 5 ; i++) {
+    for(i = 1; i < 5 ; i++) {
       resource[0]='a';
       resource[1]='0'+i;
       resource[2]=0;
