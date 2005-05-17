@@ -31,7 +31,6 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         private static final int N_GRAM_SIZE = 3;
         private static final int N_GRAM_MASK = 0xFFFFFF;
 
-        private int byteCount = 0;
         private int byteIndex = 0;
         private int ngram = 0;
         
@@ -47,7 +46,6 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             byteMap   = theByteMap;
             
             ngram = 0;
-            byteCount = 0;
             
             ngramCount = hitCount = 0;
         }
@@ -107,11 +105,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         private void addByte(int b)
         {
             ngram = ((ngram << 8) + (b & 0xFF)) & N_GRAM_MASK;
-            
-            if (++byteCount >= N_GRAM_SIZE) {
-                lookup(ngram);
-                byteCount = N_GRAM_SIZE - 1;
-            }
+            lookup(ngram);
         }
         
         private int nextByte(CharsetDetector det)

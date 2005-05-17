@@ -81,10 +81,15 @@ public class CharsetDetector {
      */
     public CharsetDetector setText(byte [] in) {
         fRawInput  = in;
-        fRawLength = in.length;      
+        fRawLength = in.length;
+        
+        MungeInput();
+        
         return this;
     }
     
+    private static final int kBufSize = 8000;
+
     /**
      * Set the input text (byte) data whose charset is to be detected.
      *  <p/>
@@ -97,7 +102,6 @@ public class CharsetDetector {
      * @param in the input text of unknown encoding
      * @return This CharsetDetector
      */
-    private static final int kBufSize = 8000;
     
     public CharsetDetector setText(InputStream in) throws IOException {
         fInputStream = in;
@@ -225,7 +229,8 @@ public class CharsetDetector {
      * @param declaredEncoding  A declared encoding for the data, if available,
      *           or null or an empty string if none is available.
      */
-    public String getString(byte[] in, String declaredEncoding) {
+    public String getString(byte[] in, String declaredEncoding)
+    {
         return null;
     }
 
@@ -240,7 +245,36 @@ public class CharsetDetector {
         return fCharsetNames;
     }
     
-
+    /**
+     * Test whether or not input filtering is enabled.
+     * 
+     * @return <code>true</code> if input text will be filtered.
+     * 
+     * @see enableInputFilter
+     */
+    public boolean inputFilterEnabled()
+    {
+        return fStripTags;
+    }
+    
+    /**
+     * Enable filtering of input text. If filtering is enabled,
+     * text within angle brackets ("<" and ">") will be removed
+     * before detection.
+     * 
+     * @param filter <code>true</code> to enable input text filtering.
+     * 
+     * @return The previous setting.
+     */
+    public boolean enableInputFilter(boolean filter)
+    {
+        boolean previous = fStripTags;
+        
+        fStripTags = filter;
+        
+        return previous;
+    }
+    
     /**
      *  MungeInput - after getting a set of raw input data to be analyzed, preprocess
      *               it by removing what appears to be html markup.
@@ -259,24 +293,28 @@ public class CharsetDetector {
         //     discard everything within < brackets >
         //     Count how many total '<' and illegal (nested) '<' occur, so we can make some
         //     guess as to whether the input was actually marked up at all.
-        for (srci=0; srci<fRawLength; srci++) {
-            b = fRawInput[srci];
-            if (b == (byte)'<') {
-                if (inMarkup) {
-                    badTags++;
+        if (fStripTags) {
+            for (srci=0; srci<fRawLength; srci++) {
+                b = fRawInput[srci];
+                if (b == (byte)'<') {
+                    if (inMarkup) {
+                        badTags++;
+                    }
+                    inMarkup = true;
+                    openTags++;
                 }
-                inMarkup = true;
-                openTags++;
-            }
-            if (inMarkup == false) {
-                fInputBytes[dsti++] = b;
+                
+                if (! inMarkup) {
+                    fInputBytes[dsti++] = b;
+                }
+                
+                if (b == (byte)'>') {
+                    inMarkup = false;
+                }        
             }
             
-            if (b == (byte)'>') {
-                inMarkup = false;
-            }        
+            fInputLen = dsti;
         }
-        fInputLen = dsti;
         
         //
         //  If it looks like this input wasn't marked up, or if it looks like it's
@@ -325,11 +363,14 @@ public class CharsetDetector {
     byte[]               fRawInput;     // Original, untouched input bytes.
                                         //  If user gave us a byte array, this is it.
                                         //  If user gave us a stream, it's read to a 
-                                        //   buffer here.
+    //   buffer here.
     int                  fRawLength;    // Length of data in fRawInput array.
     
      InputStream         fInputStream;  // User's input stream, or null if the user
                                         //   gave us a byte array.
+     
+     boolean             fStripTags =   // If true, setText() will strip tags from input text.
+                           false;
     
     
     /**
