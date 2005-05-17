@@ -412,6 +412,7 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_7_el());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_windows_1251());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_KOI8_R());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_9_tr());
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.
