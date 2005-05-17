@@ -101,7 +101,12 @@ te
     aliasClient:alias {"/LOCALE/aliasDestination"}
     aliasDestination {"tedest"}
     rootAliasDestination {"correct"}
-
+    a {
+	a1{"a21"}
+	a2{"a22"}
+        a3{"a23"}
+	a4{"a24"}
+    }    
 }
 
 //eof
