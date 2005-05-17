@@ -152,6 +152,19 @@ static uint16_t canonStartSets[_NORM_MAX_CANON_SETS+2*_NORM_MAX_SET_SEARCH_TABLE
 static int32_t canonStartSetsTop=_NORM_SET_INDEX_TOP;
 static int32_t canonSetsCount=0;
 
+/* allocate and initialize a Norm unit */
+static Norm *
+allocNorm() {
+    /* allocate Norm */
+    Norm *p=(Norm *)utm_alloc(normMem);
+    /*
+     * The combiningIndex must not be initialized to 0 because 0 is the
+     * combiningIndex of the first forward-combining character.
+     */
+    p->combiningIndex=0xffff;
+    return p;
+}
+
 extern void
 init() {
     uint16_t *p16;
@@ -173,7 +186,7 @@ init() {
 
     /* allocate Norm structures and reset the first one */
     normMem=utm_open("gennorm normalization structs", 20000, 20000, sizeof(Norm));
-    norms=utm_alloc(normMem);
+    norms=allocNorm();
 
     /* allocate UTF-32 string memory */
     utf32Mem=utm_open("gennorm UTF-32 strings", 30000, 30000, 4);
@@ -217,7 +230,7 @@ createNorm(uint32_t code) {
         p=norms+i;
     } else {
         /* allocate Norm */
-        p=(Norm *)utm_alloc(normMem);
+        p=allocNorm();
         if(!utrie_set32(normTrie, (UChar32)code, (uint32_t)(p-norms))) {
             fprintf(stderr, "error: too many normalization entries\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
@@ -911,7 +924,7 @@ setHangulJamoSpecials() {
     }
 
     /* set Hangul specials, precompacted */
-    norm=(Norm *)utm_alloc(normMem);
+    norm=allocNorm();
     norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_HANGUL;
     if(DO_STORE(UGENNORM_STORE_COMPAT)) {
         norm->qcFlags=_NORM_QC_NFD|_NORM_QC_NFKD;
@@ -1185,7 +1198,8 @@ make32BitNorm(Norm *norm) {
     }
 
     /* set the combining index value into the extra data */
-    if(norm->combiningIndex!=0) {
+    /* 0xffff: no combining index; 0..0x7fff: combining index */
+    if(norm->combiningIndex!=0xffff) {
         extra[0]=norm->combiningIndex;
         beforeZero=1;
     }
