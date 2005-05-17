@@ -700,8 +700,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                 }
                 if(key) {
                   /* we need to make keyPath from parent's fResPath and
-                   * current key, if there is a key associated
-                   */
+                  * current key, if there is a key associated
+                  */
                   len = (int32_t)(uprv_strlen(key) + 1);
                   if(len > capacity) {
                     capacity = len;
@@ -729,7 +729,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   }
                 }
                 if(r != RES_BOGUS) {
-                  result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, parent, noAlias+1, resB, status);
+                  result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, mainRes, noAlias+1, resB, status);
                 } else {
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
@@ -833,7 +833,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fHasFallback = FALSE;
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
-    resB->fKey = key;
+    resB->fKey = key; 
     resB->fParentRes = parent;
     resB->fTopLevelData = parent->fTopLevelData;
     if(parent->fResPath && parent != resB) {
@@ -842,7 +842,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     if(key != NULL) {
         ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
         ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
-    } else {
+    } else if(index >= 0) {
         char buf[256];
         int32_t len = T_CString_integerToString(buf, index, 10);
         ures_appendResPath(resB, buf, len);
@@ -1347,7 +1347,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                           const char* inKey, 
                           UResourceBundle *fillIn, 
                           UErrorCode *status) {
-    Resource res = RES_BOGUS;
+    Resource res = RES_BOGUS, rootRes = RES_BOGUS;
     /*UResourceDataEntry *realData = NULL;*/
     const char *key = inKey;
     UResourceBundle *helper = NULL;
@@ -1370,17 +1370,25 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
                 dataEntry = dataEntry->fParent;
+                rootRes = dataEntry->fData.rootRes;
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
                     uprv_strncpy(path, resB->fResPath, resB->fResPathLen);
                     uprv_strcpy(path+resB->fResPathLen, inKey);
                     myPath = path;
                     key = inKey;
                     do {
-                        res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key);
+                        res = res_findResource(&(dataEntry->fData), rootRes, &myPath, &key);
                         if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
                             /* We hit an alias, but we didn't finish following the path. */
-                            helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);
-                            dataEntry = helper->fData;
+                            // use 'key' because this is what we have found
+                            helper = init_resb_result(&(dataEntry->fData), res, NULL, -1, dataEntry, resB, 0, helper, status); 
+                            //helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);
+                            if(helper) {
+                              dataEntry = helper->fData;
+                              rootRes = helper->fRes;
+                            } else {
+                              break;
+                            }
                         }
                     } while(*myPath); /* Continue until the whole path is consumed */
                 }
