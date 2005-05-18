@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -60,7 +60,6 @@ final class SwingDocumentWindow extends JFrame implements DocumentWindow {
     /**
      * Create a new AwtDocumentWindow.
      * @param application the application that owns this document
-     * @param clipboard the clipboard to use
      * @param document the document to show in this AwtDocumentWindow
      */
     SwingDocumentWindow(EditApplication application,

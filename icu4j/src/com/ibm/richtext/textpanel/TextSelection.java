@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -438,7 +438,7 @@ class TextSelection extends Behavior implements Runnable {
     * @param g The graphics environment to draw into.  If null, this method does nothing.
     * @param start The beginning of the range to highlight
     * @param limit The end of the range to highlight
-    * @param vsible If true, draw; if false, erase
+    * @param visible If true, draw; if false, erase
     */
     protected void drawSelectionRange(  Graphics    g,
                                         TextOffset  start,

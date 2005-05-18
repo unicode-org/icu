@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -191,7 +191,7 @@ final class JObjectDialog extends JDialog {
 
     /**
     * Handle the user input
-    * @param obj the value object
+    * @param value The value object
     */
     private void sendAction(Object value) {
 
