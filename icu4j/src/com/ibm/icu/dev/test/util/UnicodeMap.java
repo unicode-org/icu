@@ -9,7 +9,9 @@ package com.ibm.icu.dev.test.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -33,26 +35,17 @@ public final class UnicodeMap implements Cloneable {
     private Object[] values = new Object[10];
     private boolean errorOnReset = false;
     
-    private ListSet availableValues;
+    private LinkedHashSet availableValues = new LinkedHashSet();
     boolean staleAvailableValues = false;
 
     private int lastIndex = 0;
-    
-    public UnicodeMap(Comparator equator) {
-        this.equator = equator;
-        availableValues = new ListSet(equator);
-    }
-    
-    public UnicodeMap() {
-        this(SIMPLE_EQUATOR);
-    }
     
     /* Boilerplate */
     public boolean equals(Object other) {
         if (other == null) return false;
         try {
             UnicodeMap that = (UnicodeMap) other;
-            if (length != that.length || !equator.equals(that.equator)) return false;
+            if (length != that.length) return false;
             for (int i = 0; i < length-1; ++i) {
                 if (transitions[i] != that.transitions[i]) return false;
                 if (!areEqual(values[i], that.values[i])) return false;
@@ -68,9 +61,10 @@ public final class UnicodeMap implements Cloneable {
     	//equator.getHashCode
     }
     
-    public boolean areEqual(Object a, Object b) {
-    	return equator.compare(a, b) == 0;
-    	//equator.getHashCode
+    public static boolean areEqual(Object a , Object b) {
+    	if (a == b) return true;
+    	if (a == null || b == null) return false;
+    	return a.equals(b);
     }
     
     public int hashCode() {
@@ -91,8 +85,7 @@ public final class UnicodeMap implements Cloneable {
         that.length = length;
         that.transitions = (int[]) transitions.clone();
         that.values = (Object[]) values.clone();
-        that.equator = equator;
-        that.availableValues = new ListSet(equator);
+        that.availableValues = new LinkedHashSet(availableValues);
         return that;
     }
     
@@ -125,21 +118,6 @@ public final class UnicodeMap implements Cloneable {
         }
     }
     
-    private static final class SimpleEquator implements Comparator {
-        public int compare(Object a, Object b) {
-            if (a == b) return 0;
-            if (a == null) return -1;
-            if (b == null) return 1;
-            return ((Comparable)a).compareTo((Comparable)b);
-        }
-        public int getHashCode(Object a) {
-            if (a == null) return 0;
-            return a.hashCode();
-        }
-    }
-    public static Comparator SIMPLE_EQUATOR = new SimpleEquator(); 
-    private Comparator equator = SIMPLE_EQUATOR;
- 
     /**
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
      * Assumes that 0 <= codepoint <= 0x10FFFF
@@ -338,6 +316,12 @@ public final class UnicodeMap implements Cloneable {
         lastIndex = baseIndex; // store for next time
         return this;
     }
+    private UnicodeMap _putAll(int startCodePoint, int endCodePoint, Object value) {
+        for (int i = startCodePoint; i <= endCodePoint; ++i) {
+            _put(i, value);
+        }
+        return this;
+    }
     /**
      * Sets the codepoint value.
      * @param codepoint
@@ -361,8 +345,8 @@ public final class UnicodeMap implements Cloneable {
     public UnicodeMap putAll(UnicodeSet codepoints, Object value) {
         // TODO optimize
         UnicodeSetIterator it = new UnicodeSetIterator(codepoints);
-        while (it.next()) {
-            _put(it.codepoint, value);
+        while (it.nextRange()) {
+            _putAll(it.codepoint, it.codepointEnd, value);
         }
         return this;
     }
@@ -442,7 +426,7 @@ public final class UnicodeMap implements Cloneable {
     	if (staleAvailableValues) {
     		// collect all the current values
     		// retain them in the availableValues
-    		Set temp = new TreeSet(equator);
+    		Set temp = new HashSet();
             for (int i = 0; i < length - 1; ++i) {
                 temp.add(values[i]);
             }
@@ -471,6 +455,19 @@ public final class UnicodeMap implements Cloneable {
             throw new IllegalArgumentException("Codepoint out of range: " + codepoint);
         }
         return values[_findIndex(codepoint)];
+    }
+    
+    public interface Composer {
+    	Object compose(Object a, Object b);
+    }
+    
+    public UnicodeMap composeWith(UnicodeMap other, Composer composer) {
+    	for (int i = 0; i <= 0x10FFFF; ++i) {
+    		Object v1 = getValue(i);
+    		Object v2 = other.getValue(i);
+    		put(i, composer.compose(v1, v2));
+    	}
+    	return this;
     }
     
     /**

@@ -25,7 +25,7 @@ import java.util.TreeSet;
 public class ListSet implements Set, List {
 	List list = new ArrayList();
 	Set set;
-	Comparator comparator;
+	Equator equator;
 	
 	ListSet(Comparator comparator) {
 		this.comparator = comparator;

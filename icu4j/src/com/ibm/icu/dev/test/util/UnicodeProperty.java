@@ -232,7 +232,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return result;
         }
         List temp = new ArrayList(1); // to avoid reallocating...
-        UnicodeMap um = getUnicodeMap();
+        UnicodeMap um = getUnicodeMap_internal();
         Iterator it = um.getAvailableValues(null).iterator();
         main:
         while (it.hasNext()) {
@@ -308,7 +308,14 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     /**
      * @return the unicode map
      */
-    protected UnicodeMap getUnicodeMap() {
+    public UnicodeMap getUnicodeMap() {
+        return (UnicodeMap) getUnicodeMap_internal().clone();
+    }
+
+    /**
+     * @return the unicode map
+     */
+    protected UnicodeMap getUnicodeMap_internal() {
         if (unicodeMap == null) unicodeMap = _getUnicodeMap();
         return unicodeMap;
     }
@@ -896,17 +903,18 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             addAllUnique(propertyAliases, result);
             return result;
         }
-        public BaseProperty addValueAliases(String[][] valueAndAlternates) {
+        public BaseProperty addValueAliases(String[][] valueAndAlternates, boolean errorIfCant) {
         	if (toValueAliases == null) _fixValueAliases();
             for (int i = 0; i < valueAndAlternates.length; ++i) {
             	for (int j = 1; j < valueAndAlternates[0].length; ++j) {
-            		addValueAlias(valueAndAlternates[i][0], valueAndAlternates[i][j]);
+            		addValueAlias(valueAndAlternates[i][0], valueAndAlternates[i][j], errorIfCant);
             	}
             }
             return this;
         }
-		public void addValueAlias(String value, String valueAlias) {
+		public void addValueAlias(String value, String valueAlias, boolean errorIfCant) {
     		List result = (List) toValueAliases.get(value);
+    		if (result == null && !errorIfCant) return;
     		addUnique(value, result);
     		addUnique(valueAlias, result);
 		}
@@ -982,7 +990,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
 
         protected void _fillValues() {
-            List newvalues = (List) getUnicodeMap().getAvailableValues(new ArrayList());
+            List newvalues = (List) getUnicodeMap_internal().getAvailableValues(new ArrayList());
             for (Iterator it = newvalues.iterator(); it.hasNext();) {
                 _addToValues((String)it.next(), null);
             }
@@ -993,7 +1001,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             if (toValueAliases == null) _fixValueAliases();
             addUnique(item, values);
             _ensureValueInAliases(item);
-            addValueAlias(item, alias);
+            addValueAlias(item, alias, true);
         }
 /*        public String _getVersion() {
             return version;
