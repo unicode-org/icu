@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,7 @@ import com.ibm.icu.lang.*;
 
 public class UnicodeChart {
     public static void main(String[] args) throws IOException {
-        int rowWidth = 256;
+        //int rowWidth = 256;
         PrintWriter pw = BagFormatter.openUTF8Writer("", "UnicodeChart.html");
         pw.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         pw.println("<script type='text/javascript' src='UnicodeChart.js'></script>");
@@ -34,7 +34,7 @@ public class UnicodeChart {
         System.out.println("Surrogate Type: Java=" + Character.SURROGATE + ", ICU=" + surrogateType);
         System.out.println("Private-Use Type: Java=" + Character.PRIVATE_USE + ", ICU=" + privateUseType);
         
-        boolean gotOne = true;
+        //boolean gotOne = true;
         int columns = 0;
         int limit = 0x10FFFF;
         char lastType = 'x';

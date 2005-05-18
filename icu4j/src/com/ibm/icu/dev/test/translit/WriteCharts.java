@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -83,7 +83,7 @@ public class WriteCharts {
         String[] results = new String[set.size()];
         set.toArray(results);
         return results;
-    };
+    }
     
     static public int priority(int script) {
         if (script == UScript.LATIN) return -2;
