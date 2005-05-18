@@ -34,6 +34,7 @@ The following names can be supplied as the argument for platform:
     BeOS                Use the GNU gcc/g++ compilers on BeOS
     Cygwin              Use the GNU gcc/g++ compilers on Cygwin
     Cygwin/MSVC         Use the Microsoft Visual C++ compiler on Cygwin
+    Cygwin/ICL          Use the Intel C++ compiler on Cygwin
     FreeBSD             Use the GNU gcc/g++ compilers on Free BSD
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
     Linux               Use the GNU gcc/g++ compilers on Linux
@@ -230,6 +231,18 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2'
         RELEASE_CXXFLAGS='/O2 /Ob2'
+        # The real debug flags are defined by the mh file because configure can't handle them.
+        DEBUG_CFLAGS=
+        DEBUG_CXXFLAGS=
+        ;;
+    Cygwin/ICL)
+        THE_OS="Windows with Cygwin"
+        THE_COMP="Intel C++"
+        CC=icl; export CC
+        CXX=icl; export CXX
+        # The Intel compiler has optimization bugs. So we disable optimization.
+        RELEASE_CFLAGS='/Od'
+        RELEASE_CXXFLAGS='/Od'
         # The real debug flags are defined by the mh file because configure can't handle them.
         DEBUG_CFLAGS=
         DEBUG_CXXFLAGS=
