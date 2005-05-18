@@ -521,6 +521,7 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         "ibm-367",
         "ibm-437",
         "ibm-850",
+        "ibm-878",
         "ibm-1051",
         "ibm-1089",
         "ibm-1250",
@@ -531,8 +532,7 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         "ibm-1256",
         "ibm-1257",
         "ibm-1258",
-        "ibm-1276",
-        "ibm-1277"
+        "ibm-1276"
     };
 
     int32_t i=0;
