@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -209,7 +209,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             auxMapping(cal, 1582, Calendar.OCTOBER, 4);
             auxMapping(cal, 1582, Calendar.OCTOBER, 15);
             auxMapping(cal, 1582, Calendar.OCTOBER, 16);
-            for (int y=800; y<3000; y+=1+(int)100*Math.random()) {
+            for (int y=800; y<3000; y+=1+(int)(100*Math.random())) {
                 for (int m=Calendar.JANUARY; m<=Calendar.DECEMBER; ++m) {
                     auxMapping(cal, y, m, 15);
                 }

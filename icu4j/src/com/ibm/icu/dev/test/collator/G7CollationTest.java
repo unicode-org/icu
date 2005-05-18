@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -51,8 +51,8 @@ public class G7CollationTest extends TestFmwk{
         { 19, 22, 21, 24, 23, 25, 12, 13, 9, 0, 17, 16, 28, 26, 27, 15, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }
     };
     
-    private static final int MAX_TOKEN_LEN = 16;
-    private static final int TESTLOCALES = 12;
+    //private static final int MAX_TOKEN_LEN = 16;
+    //private static final int TESTLOCALES = 12;
     private static final int FIXEDTESTSET = 15;
     private static final int TOTALTESTSET = 30;
     

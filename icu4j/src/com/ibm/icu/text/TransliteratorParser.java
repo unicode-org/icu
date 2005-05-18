@@ -312,7 +312,7 @@ class TransliteratorParser {
          * Subclass method to return the next line of the source.
          */
         abstract String handleNextLine();
-    };
+    }
 
     /**
      * RuleBody subclass for a String[] array.
@@ -327,7 +327,7 @@ class TransliteratorParser {
         public void reset() {
             i = 0;
         }
-    };
+    }
 
     /**
      * RuleBody subclass for a ResourceReader.
@@ -344,7 +344,7 @@ class TransliteratorParser {
         public void reset() {
             reader.reset();
         }
-    };
+    }
 
     //----------------------------------------------------------------------
     // class RuleHalf

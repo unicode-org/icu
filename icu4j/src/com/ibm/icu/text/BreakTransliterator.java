@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,7 +10,6 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 import java.text.CharacterIterator;
-import java.util.Locale;
 
 
 /**
@@ -44,7 +43,7 @@ final class BreakTransliterator extends Transliterator {
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
         // typically over 2000 ms.
-        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new ULocale("th_TH"));
+        if (bi == null) bi = BreakIterator.getWordInstance(new ULocale("th_TH"));
         return bi;
     }
 
