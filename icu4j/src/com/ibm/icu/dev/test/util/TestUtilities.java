@@ -39,7 +39,6 @@ public class TestUtilities extends TestFmwk {
     UnicodeMap map1 = new UnicodeMap();
     Map map2 = new HashMap();
     Map map3 = new TreeMap();
-    Comparator equator = UnicodeMap.SIMPLE_EQUATOR;
     SortedSet log = new TreeSet();
     static String[] TEST_VALUES = {null, "A", "B", "C", "D", "E", "F"};
     static Random random = new Random(12345);
@@ -94,7 +93,31 @@ public class TestUtilities extends TestFmwk {
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
                 throw new IllegalArgumentException("Halting");
             }
-        }   
+        } 
+        
+        logln("Getting Scripts");
+        UnicodeMap scripts = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
+        UnicodeMap.Composer composer = new UnicodeMap.Composer() {
+			public Object compose(Object a, Object b) {
+				return a.toString() + "_" + b.toString();
+			}       	
+        };
+        
+        logln("Trying Compose");
+        UnicodeMap composed = ((UnicodeMap)scripts.clone()).composeWith(map1, composer);
+        Object last = "";
+        for (int i = 0; i < 0x10FFFF; ++i) {
+        	Object comp = composed.getValue(i);
+        	Object gc = map1.getValue(i);
+        	Object sc = scripts.getValue(i);
+        	if (!comp.equals(composer.compose(gc, sc))) {
+        		errln("Failed compose at: " + i);
+        	}
+        	if (!last.equals(comp)) {
+        		logln(Utility.hex(i) + "\t" + comp);
+        		last = comp;
+        	}
+        }
 
         // check boilerplate
         List argList = new ArrayList();
@@ -113,7 +136,7 @@ public class TestUtilities extends TestFmwk {
         UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
         Map map3 = new TreeMap();
         while (mi.nextRange()) {
-            //System.out.println(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
+            logln(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
             for (int i = mi.codepoint; i <= mi.codepointEnd; ++i) {
                 if (i >= limit) continue;
                 map3.put(new Integer(i), mi.value);
@@ -126,7 +149,7 @@ public class TestUtilities extends TestFmwk {
         map3 = new TreeMap();
         Object lastValue = new Object();
         while (mi.next()) {
-            if (UnicodeMap.SIMPLE_EQUATOR.compare(lastValue, mi.value) != 0) {
+            if (!UnicodeMap.areEqual(lastValue, mi.value)) {
                 // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);
                 lastValue = mi.value;
             }
@@ -140,7 +163,7 @@ public class TestUtilities extends TestFmwk {
         for (int i = 0; i < LIMIT; ++i) {
             Object value1 = map1.getValue(i);
             Object value2 = map2.get(new Integer(i));
-            if (equator.compare(value1, value2) != 0) {
+            if (!UnicodeMap.areEqual(value1, value2)) {
                 errln(counter + " Difference at " + Utility.hex(i)
                      + "\t UnicodeMap: " + value1
                      + "\t HashMap: " + value2);
