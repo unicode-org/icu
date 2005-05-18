@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -72,9 +72,9 @@ final class Scroller implements AdjustmentListener
      * so the Scroller can enable and disable them.
      * However, a Scroller can work with either AWT Scrollbars
      * or JFC JScrollbars.
-     * @param horizScrollbar the horizontal scrollbar.  null if
+     * @param horizScrollBar the horizontal scrollbar.  null if
      * there is no horizontal scrollbar.
-     * @param vertScrollbar the vertical scrollbar.  null if
+     * @param vertScrollBar the vertical scrollbar.  null if
      * there is no vertical scrollbar.
      */
     public Scroller(Adjustable horizScrollBar,
