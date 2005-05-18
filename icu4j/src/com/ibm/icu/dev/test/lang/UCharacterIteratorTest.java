@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -124,8 +124,8 @@ public final class UCharacterIteratorTest extends TestFmwk
     
     // private data members ---------------------------------------------
     
-    private static final String ITERATION_STRING_ =
-                                        "Testing 1 2 3 \ud800\udc00 456";
-    private static final int ITERATION_SUPPLEMENTARY_INDEX = 14;    
+    //private static final String ITERATION_STRING_ =
+    //                                    "Testing 1 2 3 \ud800\udc00 456";
+    //private static final int ITERATION_SUPPLEMENTARY_INDEX = 14;    
 }
 
