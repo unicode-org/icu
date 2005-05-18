@@ -1225,7 +1225,7 @@ public class BasicTest extends TestFmwk {
 
         private int[] s;
         private int length, i;
-    };
+    }
     public void TestPreviousNext() {
         // src and expect strings
         char src[]={
@@ -2233,7 +2233,7 @@ public class BasicTest extends TestFmwk {
                 c=cp;
                 s=src;
             }
-        };
+        }
         
         TestStruct[] tests= new TestStruct[]{
             new TestStruct( 0x037A, "\u0020\u03B9" ),

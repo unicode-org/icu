@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -173,7 +173,7 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
-     * @param return true if got == exp
+     * @returns true if got == exp
      */
     private boolean assertEqual(String op, String s, String got,
                                 String exp, String msg) {
