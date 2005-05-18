@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -386,7 +386,7 @@ public class ExhaustiveTest extends TestFmwk {
         
         if(len > byteBuffer.length) {
             logln("Warning: printBytes called with length too large. Truncating");
-            byteBufferLimit = byteBuffer.length;;
+            byteBufferLimit = byteBuffer.length;
         }
         
         while(curByteIndex < byteBufferLimit) {

@@ -1,13 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 
 public final class TestLogWriter extends Writer {
