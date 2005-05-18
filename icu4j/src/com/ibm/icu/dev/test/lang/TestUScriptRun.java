@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1999-2004, International Business Machines Corporation and    *
+* Copyright (C) 1999-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -32,7 +32,7 @@ public class TestUScriptRun extends TestFmwk
             runText   = theText;
             runScript = theScriptCode;
         }
-    };
+    }
     
     private static final RunTestData[][] testData = {
         {
