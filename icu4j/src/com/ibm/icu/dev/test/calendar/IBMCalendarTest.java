@@ -509,7 +509,7 @@ public class IBMCalendarTest extends CalendarTest {
                 this.normalized = data;
                 if (normalized != null) this.normalized = normalized;
             }
-        };
+        }
 
         //      July 2001            August 2001           January 2002    
         // Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa

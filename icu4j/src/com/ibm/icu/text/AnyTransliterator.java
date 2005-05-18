@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2004, International Business Machines Corporation
+* Copyright (c) 2002-2005, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -119,8 +119,6 @@ class AnyTransliterator extends Transliterator {
      * there is no variant
      * @param theTargetScript the script code corresponding to
      * theTarget.
-     * @param ec error code, fails if the internal hashtable cannot be
-     * allocated
      */
     private AnyTransliterator(String id,
                               String theTarget,

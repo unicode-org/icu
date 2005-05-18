@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -38,7 +38,7 @@ public class CollationMiscTest extends TestFmwk {
         int u;
         String NFC;
         String NFD;
-    };
+    }
     
     private static final boolean hasCollationElements(Locale locale)
     {
@@ -1262,7 +1262,7 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     public void TestIncrementalNormalize() {
-        Collator        coll = null;;
+        Collator        coll = null;
         // logln("Test 1 ....");
         {
             /* Test 1.  Run very long unnormalized strings, to force overflow of*/

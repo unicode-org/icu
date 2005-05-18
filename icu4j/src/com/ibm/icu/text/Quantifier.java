@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -103,7 +103,7 @@ class Quantifier implements UnicodeMatcher {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @return a reference to toUnionTo
+     * @returns a reference to toUnionTo
      */
     public void addMatchSetTo(UnicodeSet toUnionTo) {
         if (maxCount > 0) {

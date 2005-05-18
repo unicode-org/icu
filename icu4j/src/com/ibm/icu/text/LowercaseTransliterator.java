@@ -9,7 +9,6 @@ package com.ibm.icu.text;
 import java.io.IOException;
 
 import com.ibm.icu.impl.UCaseProps;
-import com.ibm.icu.impl.UCharacterProperty;
 
 import com.ibm.icu.util.ULocale;
 
