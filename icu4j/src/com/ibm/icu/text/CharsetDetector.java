@@ -408,6 +408,7 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_fr());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_it());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_nl());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_no());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_pt());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_sv());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_2_cs());
