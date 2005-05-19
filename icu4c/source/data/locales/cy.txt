@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/cy.xml
+// * Source File: ../../../cldr/common/main/cy.xml
 // *
 // ***************************************************************************
 /**
@@ -68,7 +68,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.19"}
+    Version{"1.23"}
     calendar{
         gregorian{
             dayNames{
@@ -82,15 +82,6 @@ cy{
                         "Gwen",
                         "Sad",
                     }
-                    narrow{
-                        "S",
-                        "L",
-                        "M",
-                        "M",
-                        "I",
-                        "G",
-                        "S",
-                    }
                     wide{
                         "Dydd Sul",
                         "Dydd Llun",
@@ -99,6 +90,17 @@ cy{
                         "Dydd Iau",
                         "Dydd Gwener",
                         "Dydd Sadwrn",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "L",
+                        "M",
+                        "M",
+                        "I",
+                        "G",
+                        "S",
                     }
                 }
             }
@@ -118,20 +120,6 @@ cy{
                         "Tach",
                         "Rhag",
                     }
-                    narrow{
-                        "I",
-                        "C",
-                        "M",
-                        "E",
-                        "M",
-                        "M",
-                        "G",
-                        "A",
-                        "M",
-                        "H",
-                        "T",
-                        "R",
-                    }
                     wide{
                         "Ionawr",
                         "Chwefror",
@@ -145,6 +133,22 @@ cy{
                         "Hydref",
                         "Tachwedd",
                         "Rhagfyr",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "C",
+                        "M",
+                        "E",
+                        "M",
+                        "M",
+                        "G",
+                        "A",
+                        "M",
+                        "H",
+                        "T",
+                        "R",
                     }
                 }
             }

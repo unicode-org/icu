@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/fa_AF.xml
+// * Source File: ../../../cldr/common/main/fa_AF.xml
 // *
 // ***************************************************************************
 fa_AF{
@@ -146,7 +146,7 @@ fa_AF{
         "#,##0%",
         "#E0",
     }
-    Version{"1.27"}
+    Version{"1.31"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -185,16 +185,6 @@ fa_AF{
                     }
                 }
             }
-        }
-    }
-    zoneStrings{
-        {
-            "Asia/Kabul",
-            "وقت افغانستان",
-            "AFT",
-            "وقت افغانستان",
-            "AFT",
-            "کابل",
         }
     }
 }

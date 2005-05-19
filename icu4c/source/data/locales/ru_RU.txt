@@ -3,29 +3,15 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ru_RU.xml
+// * Source File: ../../../cldr/common/main/ru_RU.xml
 // *
 // ***************************************************************************
 ru_RU{
-    NumberElements{
-        ",",
-        " ",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "�",
-        "+",
-    }
     NumberPatterns{
         "#,##0.###",
         "#,##0.00¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.26"}
+    Version{"1.29"}
 }

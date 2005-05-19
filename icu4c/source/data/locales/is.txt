@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/is.xml
+// * Source File: ../../../cldr/common/main/is.xml
 // *
 // ***************************************************************************
 /**
@@ -1394,7 +1394,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.38"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1419,15 +1419,6 @@ is{
                         "fös",
                         "lau",
                     }
-                    narrow{
-                        "s",
-                        "m",
-                        "þ",
-                        "m",
-                        "f",
-                        "f",
-                        "l",
-                    }
                     wide{
                         "sunnudagur",
                         "mánudagur",
@@ -1436,6 +1427,17 @@ is{
                         "fimmtudagur",
                         "föstudagur",
                         "laugardagur",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "s",
+                        "m",
+                        "þ",
+                        "m",
+                        "f",
+                        "f",
+                        "l",
                     }
                 }
             }
@@ -1455,20 +1457,6 @@ is{
                         "nóv",
                         "des",
                     }
-                    narrow{
-                        "j",
-                        "f",
-                        "m",
-                        "a",
-                        "m",
-                        "j",
-                        "j",
-                        "á",
-                        "s",
-                        "o",
-                        "n",
-                        "d",
-                    }
                     wide{
                         "janúar",
                         "febrúar",
@@ -1482,6 +1470,22 @@ is{
                         "október",
                         "nóvember",
                         "desember",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "j",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "j",
+                        "j",
+                        "á",
+                        "s",
+                        "o",
+                        "n",
+                        "d",
                     }
                 }
             }

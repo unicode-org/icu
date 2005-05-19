@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/zh.xml
+// * Source File: ../../../cldr/common/main/zh.xml
 // *
 // ***************************************************************************
 /**
@@ -1766,7 +1766,7 @@ zh{
     Variants{
         REVISED{"已修订"}
     }
-    Version{"1.41"}
+    Version{"1.48"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1776,22 +1776,13 @@ zh{
             dayNames{
                 format{
                     abbreviated{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
+                        "周日",
+                        "周一",
+                        "周二",
+                        "周三",
+                        "周四",
+                        "周五",
+                        "周六",
                     }
                     wide{
                         "星期日",
@@ -1801,6 +1792,17 @@ zh{
                         "星期四",
                         "星期五",
                         "星期六",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "日",
+                        "一",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
                     }
                 }
             }
@@ -1826,20 +1828,6 @@ zh{
                         "十一月",
                         "十二月",
                     }
-                    narrow{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
                     wide{
                         "一月",
                         "二月",
@@ -1855,19 +1843,27 @@ zh{
                         "十二月",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
+                }
             }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "格林威治标准时间",
-            "GMT",
-            "格林威治标准时间",
-            "GMT",
-            "伦敦",
-        }
         {
             "America/Halifax",
             "大西洋标准时间",

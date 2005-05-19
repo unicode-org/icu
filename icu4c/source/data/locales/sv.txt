@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/sv.xml
+// * Source File: ../../../cldr/common/main/sv.xml
 // *
 // ***************************************************************************
 /**
@@ -1351,7 +1351,6 @@ sv{
         grc{"forngrekiska (till 1453)"}
         gu{"gujarati"}
         gv{"manx gaeliska"}
-        gwi{"gwichʻin"}
         ha{"haussa"}
         hai{"haida"}
         haw{"hawaiiska"}
@@ -1754,7 +1753,7 @@ sv{
     Variants{
         REVISED{"Reviderad"}
     }
-    Version{"1.44"}
+    Version{"1.54"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1787,15 +1786,6 @@ sv{
                         "fr",
                         "lö",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "O",
-                        "T",
-                        "F",
-                        "L",
-                    }
                     wide{
                         "söndag",
                         "måndag",
@@ -1804,6 +1794,17 @@ sv{
                         "torsdag",
                         "fredag",
                         "lördag",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
                     }
                 }
             }
@@ -1829,20 +1830,6 @@ sv{
                         "nov",
                         "dec",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "januari",
                         "februari",
@@ -1858,18 +1845,26 @@ sv{
                         "december",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
             }
         }
     }
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Greenwichtid",
-            "GMT",
-            "Greenwichtid",
-            "GMT",
-            "London",
-        }
         {
             "America/Halifax",
             "Atlantic, normaltid",

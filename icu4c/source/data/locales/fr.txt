@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/fr.xml
+// * Source File: ../../../cldr/common/main/fr.xml
 // *
 // ***************************************************************************
 /**
@@ -1515,7 +1515,7 @@ fr{
     Variants{
         REVISED{"Révisé"}
     }
-    Version{"1.46"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1544,15 +1544,6 @@ fr{
                         "ven.",
                         "sam.",
                     }
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
                     wide{
                         "dimanche",
                         "lundi",
@@ -1561,6 +1552,17 @@ fr{
                         "jeudi",
                         "vendredi",
                         "samedi",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
                     }
                 }
             }
@@ -1586,20 +1588,6 @@ fr{
                         "nov.",
                         "déc.",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "janvier",
                         "février",
@@ -1613,6 +1601,22 @@ fr{
                         "octobre",
                         "novembre",
                         "décembre",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
@@ -1665,20 +1669,14 @@ fr{
     localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
         {
-            "Etc/GMT",
-            "Temps Moyen de Greenwich",
-            "GMT",
-            "Temps Moyen de Greenwich",
-            "GMT",
-            "(GMT)",
-        }
-        {
             "America/Vancouver",
             "Heure normale du Pacifique",
             "HNP",
             "Heure avancée du Pacifique",
             "HAP",
             "Vancouver",
+            "Heure du Pacifique",
+            "HP",
         }
         {
             "America/Edmonton",
@@ -1687,6 +1685,8 @@ fr{
             "Heure avancée des Rocheuses",
             "HAR",
             "Edmonton",
+            "Heure des Rocheuses",
+            "HR",
         }
         {
             "America/Winnipeg",
@@ -1695,6 +1695,8 @@ fr{
             "Heure avancée du Centre",
             "HAC",
             "Winnipeg",
+            "Heure du Centre",
+            "HC",
         }
         {
             "America/Montreal",
@@ -1703,6 +1705,8 @@ fr{
             "Heure avancée de l’Est",
             "HAE",
             "Montréal",
+            "Heure de l’Est",
+            "HE",
         }
         {
             "America/Halifax",
@@ -1711,6 +1715,8 @@ fr{
             "Heure avancée de l’Atlantique",
             "HAA",
             "Halifax",
+            "Heure de l’Atlantique",
+            "HA",
         }
         {
             "America/St_Johns",
@@ -1719,6 +1725,8 @@ fr{
             "Heure avancée de Terre-Neuve",
             "HAT",
             "Saint-Jean de Terre-Neuve",
+            "Heure de Terre-Neuve",
+            "HT",
         }
         {
             "Asia/Shanghai",
@@ -1735,6 +1743,8 @@ fr{
             "Heure avancée de l’Europe centrale",
             "HAEC",
             "Paris",
+            "Heure de l’Europe centrale",
+            "HEC",
         }
         {
             "Asia/Jerusalem",
@@ -1767,6 +1777,8 @@ fr{
             "Heure avancée d’Hawaï",
             "HDT",
             "Honolulu",
+            "Heure d’Hawaï",
+            "HT",
         }
         {
             "America/Anchorage",
@@ -1775,6 +1787,8 @@ fr{
             "Heure avancée de l’Alaska",
             "HAAK",
             "Anchorage",
+            "Heure de l’Alaska",
+            "HAK",
         }
         {
             "America/Los_Angeles",
@@ -1783,6 +1797,8 @@ fr{
             "Heure avancée du Pacifique (ÉUA)",
             "HAP (ÉUA)",
             "Los Angeles",
+            "Heure du Pacifique (ÉUA)",
+            "HP (ÉUA)",
         }
         {
             "America/Phoenix",
@@ -1791,6 +1807,8 @@ fr{
             "Heure avancée des Rocheuses (ÉUA)",
             "HAR (ÉUA)",
             "Phoenix",
+            "Heure des Rocheuses (ÉUA)",
+            "HR (ÉUA)",
         }
         {
             "America/Denver",
@@ -1799,6 +1817,8 @@ fr{
             "Heure avancée des Rocheuses (ÉUA)",
             "HAR (ÉUA)",
             "Denver",
+            "Heure des Rocheuses (ÉUA)",
+            "HR (ÉUA)",
         }
         {
             "America/Chicago",
@@ -1807,6 +1827,8 @@ fr{
             "Heure avancée du Centre (ÉUA)",
             "HAC (ÉUA)",
             "Chicago",
+            "Heure du Centre (ÉUA)",
+            "HC (ÉUA)",
         }
         {
             "America/Indianapolis",
@@ -1815,6 +1837,8 @@ fr{
             "Heure avancée de l’Est (ÉUA)",
             "HAE (ÉUA)",
             "Indianapolis",
+            "Heure de l’Est (ÉUA)",
+            "HE (ÉUA)",
         }
         {
             "America/New_York",
@@ -1823,6 +1847,8 @@ fr{
             "Heure avancée de l’Est (ÉUA)",
             "HAE (ÉUA)",
             "New York",
+            "Heure de l’Est (ÉUA)",
+            "HE (ÉUA)",
         }
     }
 }

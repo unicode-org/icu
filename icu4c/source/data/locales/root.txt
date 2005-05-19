@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/root.xml
+// * Source File: ../../../cldr/common/main/root.xml
 // *
 // ***************************************************************************
 /**
@@ -65,7 +65,7 @@ root{
         297,
         210,
     }
-    Version{"1.41"}
+    Version{"1.47"}
     boundaries{
         grapheme{"char"}
         line{"line"}
@@ -143,7 +143,7 @@ root{
                         "7",
                     }
                     default{"wide"}
-                    narrow{
+                    wide{
                         "1",
                         "2",
                         "3",
@@ -152,7 +152,9 @@ root{
                         "6",
                         "7",
                     }
-                    wide{
+                }
+                stand-alone{
+                    narrow{
                         "1",
                         "2",
                         "3",
@@ -187,7 +189,7 @@ root{
                         "12",
                     }
                     default{"wide"}
-                    narrow{
+                    wide{
                         "1",
                         "2",
                         "3",
@@ -201,7 +203,9 @@ root{
                         "11",
                         "12",
                     }
-                    wide{
+                }
+                stand-alone{
+                    narrow{
                         "1",
                         "2",
                         "3",
@@ -532,6 +536,14 @@ root{
                     "Taishō",
                     "Shōwa",
                     "Heisei",
+                }
+            }
+        }
+        persian{
+            monthNames{
+                default{"format"}
+                format{
+                    default{"wide"}
                 }
             }
         }

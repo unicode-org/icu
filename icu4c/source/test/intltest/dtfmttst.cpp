@@ -294,7 +294,10 @@ void DateFormatTest::TestFieldPosition() {
         }
     }
     dateFormats[3] = new SimpleDateFormat(buf, Locale::getUS(), ec);
-
+    if(U_FAILURE(ec)){
+        errln(UnicodeString("Could not create SimpleDateFormat object for locale en_US. Error: " )+ UnicodeString(u_errorName(ec)));
+        return;
+    }
     UDate aug13 = 871508052513.0;
 
     // Expected output field values for above DateFormats on aug13
@@ -905,11 +908,11 @@ DateFormatTest::TestDateFormatZone146()
         UDate greenwichdate = greenwichcalendar->getTime(status);
         // format every way
         UnicodeString DATA [] = {
-            UnicodeString("simple format:  "), UnicodeString("04/04/97 23:00 GMT"),
+            UnicodeString("simple format:  "), UnicodeString("04/04/97 23:00 GMT+00:00"),
                 UnicodeString("MM/dd/yy HH:mm z"),
-            UnicodeString("full format:    "), UnicodeString("Friday, April 4, 1997 11:00:00 o'clock PM GMT"),
+            UnicodeString("full format:    "), UnicodeString("Friday, April 4, 1997 11:00:00 o'clock PM GMT+00:00"),
                 UnicodeString("EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a z"),
-            UnicodeString("long format:    "), UnicodeString("April 4, 1997 11:00:00 PM GMT"),
+            UnicodeString("long format:    "), UnicodeString("April 4, 1997 11:00:00 PM GMT+00:00"),
                 UnicodeString("MMMM d, yyyy h:mm:ss a z"),
             UnicodeString("default format: "), UnicodeString("04-Apr-97 11:00:00 PM"),
                 UnicodeString("dd-MMM-yy h:mm:ss a"),

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/tr.xml
+// * Source File: ../../../cldr/common/main/tr.xml
 // *
 // ***************************************************************************
 /**
@@ -1228,7 +1228,7 @@ tr{
             "Zimbabwe Doları",
         }
     }
-    ExemplarCharacters{"[a-zâûöüıçşğ]"}
+    ExemplarCharacters{"[a-zâûöüıçşğİ]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1428,7 +1428,7 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.42"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1457,15 +1457,6 @@ tr{
                         "Cum",
                         "Cmt",
                     }
-                    narrow{
-                        "P",
-                        "P",
-                        "S",
-                        "Ç",
-                        "P",
-                        "C",
-                        "C",
-                    }
                     wide{
                         "Pazar",
                         "Pazartesi",
@@ -1474,6 +1465,17 @@ tr{
                         "Perşembe",
                         "Cuma",
                         "Cumartesi",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "P",
+                        "P",
+                        "S",
+                        "Ç",
+                        "P",
+                        "C",
+                        "C",
                     }
                 }
             }
@@ -1499,20 +1501,6 @@ tr{
                         "Kas",
                         "Ara",
                     }
-                    narrow{
-                        "O",
-                        "Ş",
-                        "M",
-                        "N",
-                        "M",
-                        "H",
-                        "T",
-                        "A",
-                        "E",
-                        "E",
-                        "K",
-                        "A",
-                    }
                     wide{
                         "Ocak",
                         "Şubat",
@@ -1526,6 +1514,22 @@ tr{
                         "Ekim",
                         "Kasım",
                         "Aralık",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "O",
+                        "Ş",
+                        "M",
+                        "N",
+                        "M",
+                        "H",
+                        "T",
+                        "A",
+                        "E",
+                        "E",
+                        "K",
+                        "A",
                     }
                 }
             }

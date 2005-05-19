@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/en.xml
+// * Source File: ../../../cldr/common/main/en.xml
 // *
 // ***************************************************************************
 /**
@@ -450,6 +450,10 @@ en{
         CHF{
             "SwF",
             "Swiss Franc",
+        }
+        CHW{
+            "CHW",
+            "WIR Franc",
         }
         CLF{
             "CLF",
@@ -1388,11 +1392,10 @@ en{
         gon{"Gondi"}
         gor{"Gorontalo"}
         got{"Gothic"}
-        grb{"Gerbo"}
+        grb{"Grebo"}
         grc{"Greek, Ancient (to 1453)"}
         gu{"Gujarati"}
         gv{"Manx"}
-        gwi{"Gwichʻin"}
         ha{"Hausa"}
         hai{"Haida"}
         haw{"Hawaiian"}
@@ -1520,6 +1523,7 @@ en{
         mul{"Multiple Languages"}
         mun{"Munda Languages"}
         mus{"Creek"}
+        mwl{"Mirandese"}
         mwr{"Marwari"}
         my{"Burmese"}
         myn{"Mayan"}
@@ -1598,6 +1602,7 @@ en{
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardinian"}
+        scn{"Sicilian"}
         sco{"Scots"}
         sd{"Sindhi"}
         se{"Northern Sami"}
@@ -1628,9 +1633,10 @@ en{
         son{"Songhai"}
         sq{"Albanian"}
         sr{"Serbian"}
+        srn{"Sranan Tongo"}
         srr{"Serer"}
         ss{"Swati"}
-        ssa{"Nilo-Saharam (Other)"}
+        ssa{"Nilo-Saharan (Other)"}
         st{"Sotho, Southern"}
         su{"Sundanese"}
         suk{"Sukuma"}
@@ -1730,6 +1736,7 @@ en{
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
         Ethi{"Ethiopic"}
+        Geok{"Khutsuri (Asomtavruli and Nuskhuri)"}
         Geor{"Georgian"}
         Goth{"Gothic"}
         Grek{"Greek"}
@@ -1754,6 +1761,7 @@ en{
         Mlym{"Malayalam"}
         Mong{"Mongolian"}
         Mymr{"Myanmar"}
+        Nkoo{"N’Ko"}
         Ogam{"Ogham"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
@@ -1795,7 +1803,7 @@ en{
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
     }
-    Version{"1.52"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1820,15 +1828,6 @@ en{
                         "Fri",
                         "Sat",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
                     wide{
                         "Sunday",
                         "Monday",
@@ -1837,6 +1836,17 @@ en{
                         "Thursday",
                         "Friday",
                         "Saturday",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
                     }
                 }
             }
@@ -1862,20 +1872,6 @@ en{
                         "Nov",
                         "Dec",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "January",
                         "February",
@@ -1891,18 +1887,26 @@ en{
                         "December",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
             }
         }
     }
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "(GMT)",
-        }
         {
             "America/Vancouver",
             "Pacific Standard Time (CA)",
@@ -1910,6 +1914,8 @@ en{
             "Pacific Daylight Time (CA)",
             "PDT (CA)",
             "Vancouver",
+            "Pacific Time (CA)",
+            "PT (CA)",
         }
         {
             "America/Edmonton",
@@ -1918,6 +1924,8 @@ en{
             "Mountain Daylight Time (CA)",
             "MDT (CA)",
             "Edmonton",
+            "Mountain Time (CA)",
+            "MT (CA)",
         }
         {
             "America/Winnipeg",
@@ -1926,6 +1934,8 @@ en{
             "Central Daylight Time (CA)",
             "CDT (CA)",
             "Winnipeg",
+            "Central Time (CA)",
+            "CT (CA)",
         }
         {
             "America/Montreal",
@@ -1934,6 +1944,8 @@ en{
             "Eastern Daylight Time (CA)",
             "EDT (CA)",
             "Montreal",
+            "Eastern Time (CA)",
+            "ET (CA)",
         }
         {
             "America/Halifax",
@@ -1942,6 +1954,8 @@ en{
             "Atlantic Daylight Time",
             "ADT",
             "Halifax",
+            "Atlantic Time",
+            "AT",
         }
         {
             "America/St_Johns",
@@ -1950,6 +1964,8 @@ en{
             "Newfoundland Daylight Time",
             "NDT",
             "St. John’s",
+            "Newfoundland Time",
+            "NT",
         }
         {
             "Asia/Shanghai",
@@ -1966,6 +1982,8 @@ en{
             "Central European Daylight Time",
             "CEDT",
             "Paris",
+            "Central European Time",
+            "CET",
         }
         {
             "Europe/London",
@@ -1974,6 +1992,8 @@ en{
             "British Daylight Time",
             "BDT",
             "London",
+            "British Time",
+            "BT",
         }
         {
             "Asia/Jerusalem",
@@ -2006,6 +2026,8 @@ en{
             "Hawaii Daylight Time",
             "HDT",
             "Honolulu",
+            "Hawaii Time",
+            "HT",
         }
         {
             "America/Anchorage",
@@ -2014,6 +2036,8 @@ en{
             "Alaska Daylight Time",
             "AKDT",
             "Anchorage",
+            "Alaska Time",
+            "AKT",
         }
         {
             "America/Los_Angeles",
@@ -2022,6 +2046,8 @@ en{
             "Pacific Daylight Time",
             "PDT",
             "Los Angeles",
+            "Pacific Time",
+            "PT",
         }
         {
             "America/Phoenix",
@@ -2030,6 +2056,8 @@ en{
             "Mountain Daylight Time",
             "MDT",
             "Phoenix",
+            "Mountain Time",
+            "MT",
         }
         {
             "America/Denver",
@@ -2038,6 +2066,8 @@ en{
             "Mountain Daylight Time",
             "MDT",
             "Denver",
+            "Mountain Time",
+            "MT",
         }
         {
             "America/Chicago",
@@ -2046,6 +2076,8 @@ en{
             "Central Daylight Time",
             "CDT",
             "Chicago",
+            "Central Time",
+            "CT",
         }
         {
             "America/Indianapolis",
@@ -2054,6 +2086,8 @@ en{
             "Eastern Daylight Time",
             "EDT",
             "Indianapolis",
+            "Eastern Time",
+            "ET",
         }
         {
             "America/New_York",
@@ -2062,6 +2096,8 @@ en{
             "Eastern Daylight Time",
             "EDT",
             "New York",
+            "Eastern Time",
+            "ET",
         }
     }
 }

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/gu.xml
+// * Source File: ../../../cldr/common/main/gu.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ gu{
             "INR",
         }
     }
-    ExemplarCharacters{"[[:Gujr:]‌‍]"}
+    ExemplarCharacters{"[ઁ-ઃઅ-ઍએ-ઑઓ-નપ-રલળવ-હ઼-ૅે-ૉો-્ૐૠ-ૣ૦-૯૱‌‍]"}
     Languages{
         gu{"ગુજરાતી"}
     }
@@ -49,7 +49,7 @@ gu{
         "�",
         "+",
     }
-    Version{"1.24"}
+    Version{"1.26"}
     calendar{
         gregorian{
             AmPmMarkers{

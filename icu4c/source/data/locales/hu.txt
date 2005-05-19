@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/hu.xml
+// * Source File: ../../../cldr/common/main/hu.xml
 // *
 // ***************************************************************************
 /**
@@ -1443,7 +1443,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.40"}
+    Version{"1.46"}
     calendar{
         buddhist{
             eras{
@@ -1483,15 +1483,6 @@ hu{
                         "P",
                         "Szo",
                     }
-                    narrow{
-                        "V",
-                        "H",
-                        "K",
-                        "S",
-                        "C",
-                        "P",
-                        "S",
-                    }
                     wide{
                         "vasárnap",
                         "hétfő",
@@ -1500,6 +1491,17 @@ hu{
                         "csütörtök",
                         "péntek",
                         "szombat",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "V",
+                        "H",
+                        "K",
+                        "S",
+                        "C",
+                        "P",
+                        "S",
                     }
                 }
             }
@@ -1525,20 +1527,6 @@ hu{
                         "nov.",
                         "dec.",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "Á",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "január",
                         "február",
@@ -1552,6 +1540,22 @@ hu{
                         "október",
                         "november",
                         "december",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "Á",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
