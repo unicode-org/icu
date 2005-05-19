@@ -280,7 +280,7 @@ void TestProperty()
       ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
     */
     UVersionInfo currVersionArray = {0x29, 0x80, 0x00, 0x04};
-    UVersionInfo currUCAVersionArray = {4, 0, 0, 0};
+    UVersionInfo currUCAVersionArray = {4, 1, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
     
@@ -763,10 +763,12 @@ void TestSortKey()
 {   
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
     uint8_t sortk2_compat[] = { 
-      /* 2.6.1 key */
-        0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
-        0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
-        0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
+        /* 3.4 key, UCA 4.1 */
+        0x28, 0x2a, 0x2c, 0x2e, 0x28, 0x01, 
+        0x09, 0x01, 0x09, 0x01, 0x27, 0x01, 
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x00        
+        /* 2.6.1 key */
+        /* 0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00 */
         /* 2.2 key */
         /*0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01, 0x09, 0x01, 0x09, 0x01, 0x1C, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
         /* 2.0 key */
@@ -1731,7 +1733,7 @@ static void TestShortString(void)
         int32_t    expectedOffset;
         uint32_t   expectedIdentifier;
     } testCases[] = {
-        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2600_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2800_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
         {"LEN_RUS_NO_AS_S4","AS_LEN_NO_S4", NULL, U_USING_FALLBACK_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
