@@ -678,9 +678,9 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
       i++;
     }
     element->noOfCEs = CEindex;
-
+#if 0
     element->isThai = UCOL_ISTHAIPREVOWEL(element->cPoints[0]);
-
+#endif
     // we don't want any strange stuff after useful data!
     while(pointer < commentStart)  {
         if(*pointer != ' ' && *pointer != '\t')
@@ -798,8 +798,8 @@ write_uca_table(const char *filename,
         return 0;
     }
     uprv_memset(opts, 0, sizeof(UColOptionSet));
-    UChar contractionCEs[256][3];
-    uprv_memset(contractionCEs, 0, 256*3*sizeof(UChar));
+    UChar contractionCEs[512][3];
+    uprv_memset(contractionCEs, 0, 512*3*sizeof(UChar));
     uint32_t noOfContractions = 0;
     UCAConstants consts;
     uprv_memset(&consts, 0, sizeof(consts));
