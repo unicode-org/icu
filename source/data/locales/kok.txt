@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/kok.xml
+// * Source File: ../../../cldr/common/main/kok.xml
 // *
 // ***************************************************************************
 /**
@@ -19,7 +19,7 @@ kok{
             "INR",
         }
     }
-    ExemplarCharacters{"[[:Deva:]‌‍]"}
+    ExemplarCharacters{"[ँ-ह़-्ॐ-॔क़-ॣ०-९ॽ‌‍]"}
     Languages{
         aa{"अफार"}
         ab{"अबखेज़ियन"}
@@ -165,7 +165,7 @@ kok{
     LocaleScript{
         "Deva",
     }
-    Version{"1.30"}
+    Version{"1.31"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -232,16 +232,6 @@ kok{
                     }
                 }
             }
-        }
-    }
-    zoneStrings{
-        {
-            "Asia/Calcutta",
-            "भारतीय समय",
-            "IST",
-            "भारतीय समय",
-            "IST",
-            "Calcutta",
         }
     }
 }

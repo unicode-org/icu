@@ -1309,9 +1309,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         //    GMT[+-]hhmm or
         //    GMT.
         
-        if ((text.length() - start) > gmtLen &&
-            (text.caseCompare(start, gmtLen, gGmt, 0, gmtLen, U_FOLD_CASE_DEFAULT)) == 0)
-        {
+            if ((text.length() - start) >= gmtLen &&
+                (text.caseCompare(start, gmtLen, gGmt, 0, gmtLen, U_FOLD_CASE_DEFAULT)) == 0)
+            {
             cal.set(UCAL_DST_OFFSET, 0);
 
             pos.setIndex(start + gmtLen);

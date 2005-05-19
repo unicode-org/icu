@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/th.xml
+// * Source File: ../../../cldr/common/main/th.xml
 // *
 // ***************************************************************************
 /**
@@ -218,32 +218,16 @@ th{
         ZW{"ซิมบาบเว"}
     }
     Currencies{
-        EUR{
-            "\u20AC",
-            "EUR",
-        }
-        GBP{
-            "\u00A3",
-            "GBP",
-        }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
             "INR",
-        }
-        JPY{
-            "\u00A5",
-            "JPY",
         }
         THB{
             "฿",
             "บาท",
         }
-        USD{
-            "US$",
-            "USD",
-        }
     }
-    ExemplarCharacters{"[ก-ฺเ-๎]"}
+    ExemplarCharacters{"[ก-ฺเ-๎​]"}
     Languages{
         aa{"อาฟา"}
         ab{"แอบกาเซีย"}
@@ -388,7 +372,7 @@ th{
     LocaleScript{
         "Thai",
     }
-    Version{"1.41"}
+    Version{"1.47"}
     boundaries{
         line{"line_th"}
         word{"word_th"}

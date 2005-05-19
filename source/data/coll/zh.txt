@@ -3,11 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/collation/zh.xml
+// * Source File: ../../../cldr/common/collation/zh.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/collation/zh.xml
+ */
 zh{
-    Version{"1.20"}
+    Version{"1.21"}
     collations{
         big5han{
             Sequence{
@@ -1258,6 +1261,20 @@ zh{
                 "<蟕<纗<嶊<嘴<噿<濢<璻<枠<栬<絊<酔<晬<最<祽<罪<辠<酻<蕞<醉<嶵<檇<鋷<錊<檌<穝<欈<尊<嶟<遵<樽<繜<罇<鶎<鐏"
                 "<鳟<鱒<鷷<僔<噂<撙<譐<捘<銌<昨<秨<莋<捽<椊<葃<稓<筰<鈼<左<佐<繓<作<坐<阼<岝<岞<怍<侳<柞<祚<胙<唑<座<袏"
                 "<做<葄<蓙<飵<糳<咗"
+            }
+            Version{"1.3"}
+        }
+        standard{
+            Sequence{
+                "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
+                "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
+                "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
+                "&[before 2]i<<ī<<<Ī<<í<<<Í<<ǐ<<<Ǐ<<ì<<<Ì"
+                "&[before 2]m<<m̄<<<M̄<<ḿ<<<Ḿ<<m̌<<<M̌<<m̀<<<M̀"
+                "&[before 2]n<<n̄<<<N̄<<ń<<<Ń<<ň<<<Ň<<ǹ<<<Ǹ"
+                "&[before 2]o<<ō<<<Ō<<ó<<<Ó<<ǒ<<<Ǒ<<ò<<<Ò"
+                "&[before 2]u<<ū<<<Ū<<ú<<<Ú<<ǔ<<<Ǔ<<ù<<<Ù"
+                "&U<<ǖ<<<Ǖ<<ǘ<<<Ǘ<<ǚ<<<Ǚ<<ǜ<<<Ǜ<<ü<<<Ü"
             }
             Version{"1.3"}
         }

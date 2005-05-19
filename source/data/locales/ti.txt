@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ti.xml
+// * Source File: ../../../cldr/common/main/ti.xml
 // *
 // ***************************************************************************
 /**
@@ -11,12 +11,33 @@
  */
 ti{
     Countries:alias{"am"}
-    ExemplarCharacters{"[:Ethi:]"}
+    Currencies{
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+    }
+    ExemplarCharacters{
+        "[ሀ-ቈቊ-ቍቐ-ቖቘቚ-ቝበ-ኈኊ-ኍነ-ኰኲ-ኵኸ-ኾዀዂ-ዅወ-ዖዘ-ጐጒ-ጕጘ-ፚ፟-፼ᎀ-᎙ⶀ-ⶖⶠ-ⶦⶨ-ⶮⶰ-ⶶⶸ-ⶾⷀ-ⷆⷈ-ⷎⷐ-ⷖⷘ"
+        "-ⷞ]"
+    }
     Languages:alias{"am"}
     LocaleScript{
         "Ethi",
     }
-    Version{"1.28"}
+    Version{"1.31"}
     calendar{
         gregorian{
             AmPmMarkers{

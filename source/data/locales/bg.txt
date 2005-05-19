@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/bg.xml
+// * Source File: ../../../cldr/common/main/bg.xml
 // *
 // ***************************************************************************
 /**
@@ -1358,7 +1358,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.41"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1387,15 +1387,6 @@ bg{
                         "пет.",
                         "съб.",
                     }
-                    narrow{
-                        "н",
-                        "п",
-                        "в",
-                        "с",
-                        "ч",
-                        "п",
-                        "с",
-                    }
                     wide{
                         "неделя",
                         "понеделник",
@@ -1404,6 +1395,17 @@ bg{
                         "четвъртък",
                         "петък",
                         "събота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "в",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
                     }
                 }
             }
@@ -1429,20 +1431,6 @@ bg{
                         "ноем.",
                         "дек.",
                     }
-                    narrow{
-                        "я",
-                        "ф",
-                        "м",
-                        "а",
-                        "м",
-                        "ю",
-                        "ю",
-                        "а",
-                        "с",
-                        "о",
-                        "н",
-                        "д",
-                    }
                     wide{
                         "януари",
                         "февруари",
@@ -1458,19 +1446,27 @@ bg{
                         "декември",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "я",
+                        "ф",
+                        "м",
+                        "а",
+                        "м",
+                        "ю",
+                        "ю",
+                        "а",
+                        "с",
+                        "о",
+                        "н",
+                        "д",
+                    }
+                }
             }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Часова зона Гринуич",
-            "GMT",
-            "Часова зона Гринуич",
-            "GMT",
-            "Лондон",
-        }
         {
             "America/Halifax",
             "Атлантическа часова зона",

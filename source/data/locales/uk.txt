@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/uk.xml
+// * Source File: ../../../cldr/common/main/uk.xml
 // *
 // ***************************************************************************
 /**
@@ -1435,7 +1435,7 @@ uk{
             traditional{"Традиційний"}
         }
     }
-    Version{"1.39"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1464,15 +1464,6 @@ uk{
                         "Пт",
                         "Сб",
                     }
-                    narrow{
-                        "Н",
-                        "П",
-                        "В",
-                        "С",
-                        "Ч",
-                        "П",
-                        "С",
-                    }
                     wide{
                         "Неділя",
                         "Понеділок",
@@ -1481,6 +1472,17 @@ uk{
                         "Четвер",
                         "Пʼятниця",
                         "Субота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Н",
+                        "П",
+                        "В",
+                        "С",
+                        "Ч",
+                        "П",
+                        "С",
                     }
                 }
             }

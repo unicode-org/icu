@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/pl.xml
+// * Source File: ../../../cldr/common/main/pl.xml
 // *
 // ***************************************************************************
 /**
@@ -1294,7 +1294,7 @@ pl{
             traditional{"tradycyjny"}
         }
     }
-    Version{"1.41"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1323,15 +1323,6 @@ pl{
                         "Pt",
                         "So",
                     }
-                    narrow{
-                        "N",
-                        "P",
-                        "W",
-                        "Ś",
-                        "C",
-                        "P",
-                        "S",
-                    }
                     wide{
                         "niedziela",
                         "poniedziałek",
@@ -1340,6 +1331,17 @@ pl{
                         "czwartek",
                         "piątek",
                         "sobota",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "N",
+                        "P",
+                        "W",
+                        "Ś",
+                        "C",
+                        "P",
+                        "S",
                     }
                 }
             }
@@ -1424,18 +1426,18 @@ pl{
                         "g",
                     }
                     wide{
-                        "Styczeń",
-                        "Luty",
-                        "Marzec",
-                        "Kwiecień",
-                        "Maj",
-                        "Czerwiec",
-                        "Lipiec",
-                        "Sierpień",
-                        "Wrzesień",
-                        "Październik",
-                        "Listopad",
-                        "Grudzień",
+                        "styczeń",
+                        "luty",
+                        "marzec",
+                        "kwiecień",
+                        "maj",
+                        "czerwiec",
+                        "lipiec",
+                        "sierpień",
+                        "wrzesień",
+                        "październik",
+                        "listopad",
+                        "grudzień",
                     }
                 }
             }

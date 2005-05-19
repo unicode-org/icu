@@ -1338,7 +1338,11 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
     int32_t dow = cal.get(UCAL_DOW_LOCAL, status);
     UDate t = cal.getTime(status);
-
+    
+    if(U_FAILURE(status)){
+        errln(UnicodeString("Failed to create Calendar for locale. Error: ") + UnicodeString(u_errorName(status)));
+        return;
+    }
     UnicodeString str, str2;
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"), status);
     fmt.setCalendar(cal);

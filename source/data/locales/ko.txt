@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ko.xml
+// * Source File: ../../../cldr/common/main/ko.xml
 // *
 // ***************************************************************************
 /**
@@ -1717,7 +1717,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.44"}
+    Version{"1.49"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1746,15 +1746,6 @@ ko{
                         "금",
                         "토",
                     }
-                    narrow{
-                        "일",
-                        "월",
-                        "화",
-                        "수",
-                        "목",
-                        "금",
-                        "토",
-                    }
                     wide{
                         "일요일",
                         "월요일",
@@ -1763,6 +1754,17 @@ ko{
                         "목요일",
                         "금요일",
                         "토요일",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "일",
+                        "월",
+                        "화",
+                        "수",
+                        "목",
+                        "금",
+                        "토",
                     }
                 }
             }
@@ -1788,7 +1790,7 @@ ko{
                         "11월",
                         "12월",
                     }
-                    narrow{
+                    wide{
                         "1월",
                         "2월",
                         "3월",
@@ -1802,7 +1804,9 @@ ko{
                         "11월",
                         "12월",
                     }
-                    wide{
+                }
+                stand-alone{
+                    narrow{
                         "1월",
                         "2월",
                         "3월",
@@ -1822,14 +1826,6 @@ ko{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "그리니치 표준시",
-            "GMT",
-            "그리니치 표준시",
-            "GMT",
-            "런던",
-        }
         {
             "America/Halifax",
             "대서양 표준시",

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ja.xml
+// * Source File: ../../../cldr/common/main/ja.xml
 // *
 // ***************************************************************************
 /**
@@ -1268,7 +1268,7 @@ ja{
         ba{"バシキール語"}
         be{"ベラルーシ語"}
         bg{"ブルガリア語"}
-        bh{"ビハ―ル語"}
+        bh{"ビハール語"}
         bi{"ビスラマ語"}
         bm{"バンバラ語"}
         bn{"ベンガル語"}
@@ -1362,7 +1362,7 @@ ja{
         mh{"マーシャル語"}
         mi{"マオリ語"}
         mk{"マケドニア語"}
-        ml{"マラヤ―ラム語"}
+        ml{"マラヤーラム語"}
         mn{"モンゴル語"}
         mo{"モルダビア語"}
         mr{"マラーティー語"}
@@ -1530,7 +1530,7 @@ ja{
     Variants{
         REVISED{"改訂版"}
     }
-    Version{"1.42"}
+    Version{"1.56"}
     boundaries{
         word{"word_ja"}
     }
@@ -1562,15 +1562,6 @@ ja{
                         "金",
                         "土",
                     }
-                    narrow{
-                        "日",
-                        "月",
-                        "火",
-                        "水",
-                        "木",
-                        "金",
-                        "土",
-                    }
                     wide{
                         "日曜日",
                         "月曜日",
@@ -1579,6 +1570,17 @@ ja{
                         "木曜日",
                         "金曜日",
                         "土曜日",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "日",
+                        "月",
+                        "火",
+                        "水",
+                        "木",
+                        "金",
+                        "土",
                     }
                 }
             }
@@ -1863,14 +1865,6 @@ ja{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "グリニッジ標準時",
-            "GMT",
-            "グリニッジ標準時",
-            "GMT",
-            "ロンドン",
-        }
         {
             "America/Halifax",
             "大西洋標準時",

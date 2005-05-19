@@ -1318,6 +1318,10 @@ LocaleTest::Test4139940()
     UDate mydate = date(98,3,13); // A Monday
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat df_full("EEEE", mylocale, status);
+    if(U_FAILURE(status)){
+        errln(UnicodeString("Could not create SimpleDateFormat object for locale hu. Error: " )+ UnicodeString(u_errorName(status)));
+        return;
+    }
     UnicodeString str;
     FieldPosition pos(FieldPosition::DONT_CARE);
     df_full.format(mydate, str, pos);

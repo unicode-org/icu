@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/en_IE.xml
+// * Source File: ../../../cldr/common/main/en_IE.xml
 // *
 // ***************************************************************************
 en_IE{
@@ -13,7 +13,7 @@ en_IE{
             "Irish Pound",
         }
     }
-    Version{"1.27"}
+    Version{"1.29"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -31,16 +31,6 @@ en_IE{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
-        }
-    }
-    zoneStrings{
-        {
-            "Europe/Dublin",
-            "Greenwich Mean Time",
-            "GMT",
-            "Irish Summer Time",
-            "IST",
-            "Dublin",
         }
     }
 }

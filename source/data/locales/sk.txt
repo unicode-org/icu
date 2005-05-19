@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/sk.xml
+// * Source File: ../../../cldr/common/main/sk.xml
 // *
 // ***************************************************************************
 /**
@@ -1276,7 +1276,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.36"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1305,15 +1305,6 @@ sk{
                         "Pi",
                         "So",
                     }
-                    narrow{
-                        "N",
-                        "P",
-                        "U",
-                        "S",
-                        "Š",
-                        "P",
-                        "S",
-                    }
                     wide{
                         "Nedeľa",
                         "Pondelok",
@@ -1322,6 +1313,17 @@ sk{
                         "Štvrtok",
                         "Piatok",
                         "Sobota",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "N",
+                        "P",
+                        "U",
+                        "S",
+                        "Š",
+                        "P",
+                        "S",
                     }
                 }
             }
@@ -1347,20 +1349,6 @@ sk{
                         "nov",
                         "dec",
                     }
-                    narrow{
-                        "j",
-                        "f",
-                        "m",
-                        "a",
-                        "m",
-                        "j",
-                        "j",
-                        "a",
-                        "s",
-                        "o",
-                        "n",
-                        "d",
-                    }
                     wide{
                         "január",
                         "február",
@@ -1374,6 +1362,22 @@ sk{
                         "október",
                         "november",
                         "december",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "j",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "j",
+                        "j",
+                        "a",
+                        "s",
+                        "o",
+                        "n",
+                        "d",
                     }
                 }
             }

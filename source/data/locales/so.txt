@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/so.xml
+// * Source File: ../../../cldr/common/main/so.xml
 // *
 // ***************************************************************************
 /**
@@ -45,7 +45,6 @@ so{
         HU{"Hangeri"}
         ID{"Indoneesiya"}
         IE{"Ayrlaanda"}
-        IL{"Israa'iil"}
         IN{"Hindiya"}
         IQ{"Ciraaq"}
         IR{"Iiraan"}
@@ -125,7 +124,7 @@ so{
     LocaleScript{
         "Latn",
     }
-    Version{"1.28"}
+    Version{"1.29"}
     calendar{
         gregorian{
             AmPmMarkers{

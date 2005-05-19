@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/nl.xml
+// * Source File: ../../../cldr/common/main/nl.xml
 // *
 // ***************************************************************************
 /**
@@ -1524,7 +1524,7 @@ nl{
     Variants{
         REVISED{"Gewijzigd"}
     }
-    Version{"1.43"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1549,15 +1549,6 @@ nl{
                         "vr",
                         "za",
                     }
-                    narrow{
-                        "Z",
-                        "M",
-                        "D",
-                        "W",
-                        "D",
-                        "V",
-                        "Z",
-                    }
                     wide{
                         "zondag",
                         "maandag",
@@ -1566,6 +1557,17 @@ nl{
                         "donderdag",
                         "vrijdag",
                         "zaterdag",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Z",
+                        "M",
+                        "D",
+                        "W",
+                        "D",
+                        "V",
+                        "Z",
                     }
                 }
             }
@@ -1591,20 +1593,6 @@ nl{
                         "nov",
                         "dec",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "januari",
                         "februari",
@@ -1618,6 +1606,22 @@ nl{
                         "oktober",
                         "november",
                         "december",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
@@ -1673,14 +1677,6 @@ nl{
         islamic-civil:alias{"nl/calendar/islamic"}
     }
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Londen",
-        }
         {
             "America/Halifax",
             "Atlantic-standaardtijd",
