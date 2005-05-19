@@ -137,6 +137,7 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
     }
     (s)->iterator = NULL;
     //(s)->iteratorIndex = 0;
+    (s)->consumedChars = 0;
 }
 
 U_CAPI void  U_EXPORT2
@@ -174,6 +175,7 @@ inline void backupState(const collIterate *data, collIterateState *backup)
         data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
       }
     }
+    backup->consumedChars = data->consumedChars;
 }
 
 /**
@@ -231,6 +233,7 @@ inline void loadState(collIterate *data, const collIterateState *backup,
         */
         data->fcdPosition = backup->fcdPosition;
     }
+    data->consumedChars = backup->consumedChars;
 }
 
 
@@ -528,24 +531,6 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->options = opts;
 }
 
-#if 0
-// doesn't look like anybody is using this
-void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return;
-  }
-    opts->caseFirst = result->caseFirst;
-    opts->caseLevel = result->caseLevel;
-    opts->frenchCollation = result->frenchCollation;
-    opts->normalizationMode = result->normalizationMode;
-    opts->strength = result->strength;
-    opts->variableTopValue = result->variableTopValue;
-    opts->alternateHandling = result->alternateHandling;
-    opts->hiraganaQ = result->hiraganaQ;
-    opts->numericCollation = result->numericCollation;
-}
-#endif
-
 
 /**
 * Approximate determination if a character is at a contraction end.
@@ -556,7 +541,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
 */
 static
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
-    if (UTF_IS_TRAIL(c)) {
+    if (U16_IS_TRAIL(c)) {
       return TRUE;
     }
 
@@ -582,9 +567,9 @@ inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
 *        in contraction processing.
 */
 static
-inline uint8_t i_getCombiningClass(UChar c, const UCollator *coll) {
+inline uint8_t i_getCombiningClass(UChar32 c, const UCollator *coll) {
     uint8_t sCC = 0;
-    if (c >= 0x300 && ucol_unsafeCP(c, coll)) {
+    if ((c >= 0x300 && ucol_unsafeCP(c, coll)) || c > 0xFFFF) {
         sCC = u_getCombiningClass(c);
     }
     return sCC;
@@ -1259,8 +1244,8 @@ inline UBool collIterFCD(collIterate *collationSource) {
     /* trie access */
     fcd = unorm_getFCD16(fcdTrieIndex, c);
     if (fcd != 0) {
-        if (UTF_IS_FIRST_SURROGATE(c)) {
-            if ((endP == NULL || srcP != endP) && UTF_IS_SECOND_SURROGATE(c2=*srcP)) {
+        if (U16_IS_LEAD(c)) {
+            if ((endP == NULL || srcP != endP) && U16_IS_TRAIL(c2=*srcP)) {
                 ++srcP;
                 fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
             } else {
@@ -1280,8 +1265,8 @@ inline UBool collIterFCD(collIterate *collationSource) {
                 c = *srcP++;
                 /* trie access */
                 fcd = unorm_getFCD16(fcdTrieIndex, c);
-                if (fcd != 0 && UTF_IS_FIRST_SURROGATE(c)) {
-                    if ((endP == NULL || srcP != endP) && UTF_IS_SECOND_SURROGATE(c2=*srcP)) {
+                if (fcd != 0 && U16_IS_LEAD(c)) {
+                    if ((endP == NULL || srcP != endP) && U16_IS_TRAIL(c2=*srcP)) {
                         ++srcP;
                         fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
                     } else {
@@ -1330,6 +1315,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     }
 
     UChar ch = 0;
+    collationSource->consumedChars = 0;
 
     for (;;)                           /* Loop handles case when incremental normalize switches   */
     {                                  /*   to or from the side buffer / original string, and we  */
@@ -1568,9 +1554,9 @@ inline UBool collPrevIterFCD(collIterate *data)
 
     /* Get the trailing combining class of the current character. */
     c = *--src;
-    if (!UTF_IS_SURROGATE(c)) {
+    if (!U16_IS_SURROGATE(c)) {
         fcd = unorm_getFCD16(fcdTrieIndex, c);
-    } else if (UTF_IS_SECOND_SURROGATE(c) && start < src && UTF_IS_FIRST_SURROGATE(c2 = *(src - 1))) {
+    } else if (U16_IS_TRAIL(c) && start < src && U16_IS_LEAD(c2 = *(src - 1))) {
         --src;
         fcd = unorm_getFCD16(fcdTrieIndex, c2);
         if (fcd != 0) {
@@ -1595,9 +1581,9 @@ inline UBool collPrevIterFCD(collIterate *data)
             }
 
             c = *--src;
-            if (!UTF_IS_SURROGATE(c)) {
+            if (!U16_IS_SURROGATE(c)) {
                 fcd = unorm_getFCD16(fcdTrieIndex, c);
-            } else if (UTF_IS_SECOND_SURROGATE(c) && start < src && UTF_IS_FIRST_SURROGATE(c2 = *(src - 1))) {
+            } else if (U16_IS_TRAIL(c) && start < src && U16_IS_LEAD(c2 = *(src - 1))) {
                 --src;
                 fcd = unorm_getFCD16(fcdTrieIndex, c2);
                 if (fcd != 0) {
@@ -1817,75 +1803,34 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         contraction
         */
         if (ucol_contractionEndCP(ch, coll) && !isAtStartPrevIterate(data)) {
-            result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
-        }
-        else {
-              // TODO: fix me for THAI - I reference *(data->pos-1)
-                if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
-                    /*UCOL_ISTHAIBASECONSONANT(ch) &&*/   // This is from the old specs - we now rearrange unconditionally
-                    // makes sure that we're not at the beggining of the string
-                    //data->pos > data->string &&
-                    !collIter_bos(data) &&
-                    UCOL_ISTHAIPREVOWEL(peekCharacter(data, -1)))
-                    //UCOL_ISTHAIPREVOWEL(*(data->pos -1)))
-                {
-                    collIterateState entryState;
-                    backupState(data, &entryState);
-                    // we have to check if the previous character is also Thai
-                    // if not, we can just set the result
-                    goBackOne(data);
-                    if(collIter_bos(data) || !UCOL_ISTHAIPREVOWEL(peekCharacter(data, -1))) {
-                      loadState(data, &entryState, FALSE);
-                      result = UCOL_THAI;
-                    } else { // previous is also reordered
-                      // we need to go back as long as they are being reordered
-                      // count over the range of reorderable characters and see
-                      // if there is an even or odd number of them
-                      // if even, we should not reorder. If odd we should reorder.
-                      int32_t noReordered = 1; // the one we already detected
-                      while(!collIter_bos(data) && UCOL_ISTHAIPREVOWEL(peekCharacter(data, -1))) {
-                        noReordered++;
-                        goBackOne(data);
-                      }
-                      if(noReordered & 1) { // odd number of reorderables
-                        result = UCOL_THAI;
-                      } else {
-                        result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
-                      }
-                      loadState(data, &entryState, FALSE);
-                    }
-                }
-            else if (ch <= 0xFF) {
-              result = coll->latinOneMapping[ch];
-              //if (result > UCOL_NOT_FOUND) {
-                //result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-              //}
+          result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
+        } else {
+          if (ch <= 0xFF) {
+            result = coll->latinOneMapping[ch];
+          }
+          else {
+            result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
+          }
+          if (result > UCOL_NOT_FOUND) {
+            result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
+          }
+          if (result == UCOL_NOT_FOUND) {
+            if (!isAtStartPrevIterate(data) &&
+              ucol_contractionEndCP(ch, data->coll)) {
+                result = UCOL_CONTRACTION;
+              }
+            else {
+              if(coll->UCA) {
+                result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
+              }
             }
-                else {
-                    /*result = ucmpe32_get(coll->mapping, ch);*/
-                    result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
-                }
-                    if (result > UCOL_NOT_FOUND) {
-                        result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-                    }
-                if (result == UCOL_NOT_FOUND) {
-                  if (!isAtStartPrevIterate(data) &&
-                      ucol_contractionEndCP(ch, data->coll)) {
-                      result = UCOL_CONTRACTION;
-                  }
-                  else {
-                        /*result = ucmpe32_get(UCA->mapping, ch);*/
-                      if(coll->UCA) {
-                        result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
-                      }
-                  }
 
-                  if (result > UCOL_NOT_FOUND && coll->UCA) {
-                    result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
-                  }
-                }
+            if (result > UCOL_NOT_FOUND && coll->UCA) {
+              result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
             }
+          }
         }
+    }
     return result;
 }
 
@@ -2613,7 +2558,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         UChar trail;
         collIterateState state;
         backupState(source, &state);
-        if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
+        if (collIter_eos(source) || !(U16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
           // we chould have stepped one char forward and it might have turned that it
           // was not a trail surrogate. In that case, we have to backup.
           loadState(source, &state, TRUE);
@@ -2629,93 +2574,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           // calculate the supplementary code point value, if surrogate was not tailored
           cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         }
-      }
-      break;
-    case THAI_TAG:
-      /* Thai/Lao reordering */
-        if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
-          || collIter_eos(source))                        /* At end of string.  No swap possible    */
-        {
-            // Treat Thai as a length one expansion */
-            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-            CE = *CEOffset++;
-        }
-        else
-        {
-          // Move the prevowel and the following base Consonant into the normalization buffer
-          //   with their order swapped
-          // Note: this operation might activate the normalization buffer. We have to check for
-          // that and act accordingly.
-          UChar thCh = getNextNormalizedChar(source);
-          UChar32 cp = 0;
-          if(U16_IS_LEAD(thCh)) {
-            if(!collIter_eos(source)) {
-              collIterateState thaiState;
-              backupState(source, &thaiState);
-              UChar trailCh = getNextNormalizedChar(source);
-              if(U16_IS_TRAIL(trailCh)) {
-                cp = U16_GET_SUPPLEMENTARY(thCh, trailCh);
-              } else {
-                loadState(source, &thaiState, TRUE);
-                cp = (UChar32)thCh;
-              }
-            } else {
-              cp = (UChar32)thCh;
-            }
-          } else {
-              cp = (UChar32)thCh;
-          }
-          // Now we have the character that needs to be decomposed
-          // if the normalizing buffer was not used, we can just use our structure and be happy.
-          if((source->flags & UCOL_ITER_INNORMBUF) == 0) {
-            // decompose into writable buffer
-            int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
-            if(decompLen < 0) {
-              decompLen = -decompLen;
-            }
-            // reorder Thai and the character after it
-            if(decompLen >= 2 && U16_IS_LEAD(source->writableBuffer[1]) && U16_IS_TRAIL(source->writableBuffer[2])) {
-              source->writableBuffer[0] = source->writableBuffer[1];
-              source->writableBuffer[1] = source->writableBuffer[2];
-              source->writableBuffer[2] = ch;
-            } else {
-              source->writableBuffer[0] = source->writableBuffer[1];
-              source->writableBuffer[1] = ch;
-            }
-            // zero terminate, since normalization buffer is always zero terminated
-            source->writableBuffer[decompLen+1] = 0; // we added the prevowel
-            if(source->pos) {
-              source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
-                                                           //   after exhausting the writableBuffer
-            }
-            source->pos   = source->writableBuffer;
-            source->origFlags         = source->flags;
-            source->flags            |= UCOL_ITER_INNORMBUF;
-            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
-          }
-          else {
-              // stuff is already normalized... what to do here???
-
-              // if we are in the normalization buffer, thCh must be in it
-              // prove by contradiction
-              // if thCh is not in the normalization buffer,
-              // that means that trailCh is the normalization buffer
-              // that means that trailCh is a trail surrogate by the above
-              // bounding if block, this is a contradiction because there
-              // are no characters at the moment that decomposes to an
-              // unmatched surrogate. qed.
-              if (cp >= 0x10000) {
-                  source->writableBuffer[0] = source->writableBuffer[1];
-                  source->writableBuffer[1] = source->writableBuffer[2];
-                  source->writableBuffer[2] = ch;
-              }
-              else {
-                  source->writableBuffer[0] = source->writableBuffer[1];
-                  source->writableBuffer[1] = ch;
-              }
-              source->pos = source->writableBuffer;
-          }
-          CE = UCOL_IGNORABLE;
       }
       break;
     case SPEC_PROC_TAG:
@@ -2759,42 +2617,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           }
           else
           {
-              // if there is a completely ignorable code point in the middle of
-              // a prefix, we need to act as if it's not there
-              // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
-              // lone surrogates cannot be set to zero as it would break other processing
-              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
-              // it's easy for BMP code points
-              if(isZeroCE == 0) {
-                continue;
-              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
-                // for supplementary code points, we have to check the next one
-                // situations where we are going to ignore
-                // 1. beginning of the string: schar is a lone surrogate
-                // 2. schar is a lone surrogate
-                // 3. schar is a trail surrogate in a valid surrogate sequence
-                //    that is explicitly set to zero.
-                if (!collIter_bos(source)) {
-                  UChar lead;
-                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
-                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
-                    if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
-                      if(finalCE == 0) {
-                        // this is a real, assigned completely ignorable code point
-                        goBackOne(source);
-                        continue;
-                      }
-                    }
-                  } else {
-                    // lone surrogate, completely ignorable
-                    continue;
-                  }
-                } else {
-                  // lone surrogate at the beggining, completely ignorable
-                  continue;
-                }
-              }
               // Source string char was not in the table.
               //   We have not found the prefix.
               CE = *(coll->contractionCEs +
@@ -2864,45 +2686,23 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             //  Pick up the corresponding CE from the table.
             CE = *(coll->contractionCEs +
                 (UCharOffset - coll->contractionIndex));
+            source->consumedChars++;
         }
         else
         {
-            // if there is a completely ignorable code point in the middle of
-            // contraction, we need to act as if it's not there
-            uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
-            // it's easy for BMP code points
-            if(isZeroCE == 0) {
-                continue;
-            } else if(UTF_IS_LEAD(schar)) {
-              if(!collIter_eos(source)) {
-                backupState(source, &state);
-                UChar trail = getNextNormalizedChar(source);
-                if(UTF_IS_TRAIL(trail)) { // do stuff with trail
-                  if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, trail);
-                    if(finalCE == 0) {
-                      continue;
-                    }
-                  }
-                } else {
-                  // broken surrogate sequence, thus completely ignorable
-                  loadState(source, &state, TRUE);
-                  continue;
-                }
-                loadState(source, &state, TRUE);
-              } else { // no  more characters, so broken surrogate pair...
-                // this contraction will ultimately fail, but not because of us
-                continue;
-              }
-            } // else if(UTF_IS_LEAD(schar))
-
             // Source string char was not in contraction table.
             //   Unless we have a discontiguous contraction, we have finished
             //   with this contraction.
+            UChar32 miss = schar;
+            if(U16_IS_LEAD(schar)) { // in order to do the proper detection, we
+              // need to see if we're dealing with a supplementary
+              miss = U16_GET_SUPPLEMENTARY(schar, getNextNormalizedChar(source));
+            }
+
             uint8_t sCC;
-            if (schar < 0x300 ||
+            if (miss < 0x300 ||
                 maxCC == 0 ||
-                (sCC = i_getCombiningClass(schar, coll)) == 0 ||
+                (sCC = i_getCombiningClass(miss, coll)) == 0 ||
                 sCC>maxCC ||
                 (allSame != 0 && sCC == maxCC) ||
                 collIter_eos(source)) {
@@ -2910,6 +2710,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                     goBackOne(source);  // back up the source string by one,
                                         //  because  the character we just looked at was
                                         //  not part of the contraction.   */
+                    if(U_IS_SUPPLEMENTARY(miss)) {
+                      goBackOne(source);
+                    }
                     CE = *(coll->contractionCEs +
                         (ContractionStart - coll->contractionIndex));
             } else {
@@ -2921,9 +2724,13 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                 /* find the next character if schar is not a base character
                     and we are not yet at the end of the string */
                 tempchar = getNextNormalizedChar(source);
+                // probably need another supplementary thingie here
                 goBackOne(source);
                 if (i_getCombiningClass(tempchar, coll) == 0) {
                     goBackOne(source);
+                    if(U_IS_SUPPLEMENTARY(miss)) {
+                      goBackOne(source);
+                    }
                     /* Spit out the last char of the string, wasn't tasty enough */
                     CE = *(coll->contractionCEs +
                         (ContractionStart - coll->contractionIndex));
@@ -3217,20 +3024,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
           CE = *CEOffset++;
           break;
-#if 0
-          CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-          size = getExpansionCount(CE);
-          CE = *CEOffset++;
-          if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
-            for(i = 1; i<size; i++) {
-              *(source->CEpos++) = *CEOffset++;
-            }
-          } else { /* else, we do */
-            while(*CEOffset != 0) {
-              *(source->CEpos++) = *CEOffset++;
-            }
-          }
-#endif
       }
       return CE;
       }
@@ -3395,78 +3188,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       /* if you have encountered it here, it means that a */
       /* broken sequence was encountered and this is an error */
       return 0;
-    case THAI_TAG:
-      if  ((source->flags & UCOL_ITER_INNORMBUF) || /* Already Swapped || */
-            source->string == source->pos        || /* At start of string.|| */
-            /* previous char not Thai prevowel */
-            /*UCOL_ISTHAIBASECONSONANT(*(source->pos)) == FALSE ||*/ // This is from the old specs - we now rearrange unconditionally
-            UCOL_ISTHAIPREVOWEL(peekCharacter(source, -1)) == FALSE)
-            //UCOL_ISTHAIPREVOWEL(*(source->pos - 1)) == FALSE)
-      {
-          /* Treat Thai as a length one expansion */
-          /* find the offset to expansion table */
-          CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE);
-          CE = *CEOffset ++;
-      }
-      else
-      {
-          /*
-          Move the prevowel and the following base Consonant into the
-          normalization buffer with their order swapped
-          */
-          UChar32 cp = (UChar32)peekCharacter(source, 0);
-          UBool reorder = TRUE;
-
-          int32_t decompLen = unorm_getDecomposition(cp, FALSE, source->writableBuffer, UCOL_WRITABLE_BUFFER_SIZE-1);
-          if(decompLen < 0) {
-            decompLen = -decompLen; // there was no decomposition
-          } else { // we need to check if we will hit a contraction trigger because of decomposition
-            int32_t i = decompLen;
-            for(i = 0; i < decompLen; i++) {
-              if(ucol_contractionEndCP(source->writableBuffer[i], coll)) {
-                reorder = FALSE;
-              }
-            }
-          }
-
-          UChar *tempbuffer = source->writableBuffer +
-                              (source->writableBufSize - 1);
-          uprv_memcpy(tempbuffer-decompLen + 1, source->writableBuffer, sizeof(UChar)*decompLen);
-          if(reorder) {
-            *(tempbuffer - decompLen) = *(tempbuffer - decompLen + 1);
-            *(tempbuffer - decompLen + 1)     = peekCharacter(source, -1);
-          } else {
-            *(tempbuffer - decompLen) = peekCharacter(source, -1);
-          }
-          *(tempbuffer - decompLen - 1) = 0;
-
-
-/*
-          UChar *tempbuffer = source->writableBuffer +
-                              (source->writableBufSize - 1);
-          *(tempbuffer - 2) = 0;
-          *(tempbuffer - 1) = peekCharacter(source, 0);
-          *(tempbuffer)     = peekCharacter(source, -1);
-*/
-          /*
-          Indicate where to continue in main input string after exhausting
-          the writableBuffer
-          */
-          if (source->pos - 1 == source->string) {
-              source->fcdPosition = NULL;
-          } else {
-            source->fcdPosition       = source->pos-2;
-          }
-
-          source->pos               = tempbuffer+1; // we're doing predecrement, right?
-          source->origFlags         = source->flags;
-          source->flags            |= UCOL_ITER_INNORMBUF;
-          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-
-          //CE = UCOL_IGNORABLE;
-          return(UCOL_IGNORABLE);
-      }
-      break;
     case SPEC_PROC_TAG:
       {
         // Special processing is getting a CE that is preceded by a certain prefix
@@ -3513,7 +3234,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
               // it's easy for BMP code points
               if(isZeroCE == 0) {
                 continue;
-              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
+              } else if(U16_IS_TRAIL(schar) || U16_IS_LEAD(schar)) {
                 // for supplementary code points, we have to check the next one
                 // situations where we are going to ignore
                 // 1. beginning of the string: schar is a lone surrogate
@@ -3522,7 +3243,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 //    that is explicitly set to zero.
                 if (!collIter_bos(source)) {
                   UChar lead;
-                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
+                  if(U16_IS_LEAD(lead = getPrevNormalizedChar(source))) {
                     isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
                     if(getCETag(isZeroCE) == SURROGATE_TAG) {
                       uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
@@ -3581,9 +3302,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         *(UCharOffset --) = 0;
         noChars = 0;
         // have to swap thai characters
-        while (ucol_unsafeCP(schar, coll) || UCOL_ISTHAIPREVOWEL(peekCharacter(source, -1))) {
-          // we might have ended here after trying to reorder Thai, but seeing that there are unsafe points
-          // in the backward processing
+        while (ucol_unsafeCP(schar, coll)) {
             *(UCharOffset) = schar;
             noChars++;
             UCharOffset --;
@@ -3911,33 +3630,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE);
           CE = *(CEOffset++);
           break;
-#if 0
-        /* find the offset to expansion table */
-          CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE);
-          size     = getExpansionCount(CE);
-          if (size != 0) {
-            /*
-            if there are less than 16 elements in expansion, we don't terminate
-            */
-            uint32_t count;
-            for (count = 0; count < size; count++) {
-              *(source->CEpos ++) = *CEOffset++;
-            }
-          }
-          else {
-            /* else, we do */
-            while (*CEOffset != 0) {
-              *(source->CEpos ++) = *CEOffset ++;
-            }
-          }
-          source->toReturn = source->CEpos - 1;
-          // in case of one element expansion, we
-          // want to immediately return CEpos
-          if(source->toReturn == source->CEs) {
-            source->CEpos = source->CEs;
-          }
-          return *(source->toReturn);
-#endif
       }
       }
     case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
@@ -4044,7 +3736,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       prevChar = *prev;
 
       /* Handles Han and Supplementary characters here.*/
-      if (UTF_IS_FIRST_SURROGATE(prevChar)) {
+      if (U16_IS_LEAD(prevChar)) {
         cp = ((((uint32_t)prevChar)<<10UL)+(ch)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         source->pos = prev;
       } else {
@@ -6456,6 +6148,7 @@ saveState:
       } else {
         state[0] = iterState;
         iterSkips++;
+        iterSkips += s.consumedChars;
       }
     }
     // Store the number of elements processed. On CE levels, this is
@@ -8325,9 +8018,6 @@ ucol_strcollIter( const UCollator    *coll,
 
   while((sChar = sColl.iterator->next(sColl.iterator)) ==
     (tChar = tColl.iterator->next(tColl.iterator))) {
-    if(UCOL_ISTHAIPREVOWEL(sChar)) {
-      break;
-    }
     if(sChar == U_SENTINEL) {
       result = UCOL_EQUAL;
       goto end_compare;
@@ -8422,9 +8112,6 @@ ucol_strcoll( const UCollator    *coll,
             if ( *pSrc != *pTarg || *pSrc == 0) {
                 break;
             }
-            if(UCOL_ISTHAIPREVOWEL(*pSrc)) {
-              break;
-            }
             pSrc++;
             pTarg++;
         }
@@ -8456,9 +8143,6 @@ ucol_strcoll( const UCollator    *coll,
                     break;
                 }
                 if (*pSrc != *pTarg) {
-                    break;
-                }
-                if(UCOL_ISTHAIPREVOWEL(*pSrc)) { // they are the same here, so any will do
                     break;
                 }
                 pSrc++;

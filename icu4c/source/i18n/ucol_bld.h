@@ -28,6 +28,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION_BUILDER
 
 #include "ucol_imp.h"
 #include "ucol_tok.h"
@@ -55,6 +56,7 @@ typedef struct {
   uint32_t fHigh; /*forbidden High */
 } ucolCEGenerator;
 
+#endif /* #if !UCONFIG_NO_COLLATION_BUILDER */
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
