@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.MissingResourceException;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
