@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -806,7 +806,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // sigh, can't have static inner classes, why not?
 
     static final class PI extends Number {
-        private PI() {};
+        private PI() {}
         public int intValue() { return (int)Math.PI; }
         public long longValue() { return (long)Math.PI; }
         public float  floatValue() { return (float)Math.PI; }

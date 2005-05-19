@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -12,6 +12,7 @@
  */
 package com.ibm.richtext.textpanel;
 
+import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -87,8 +88,8 @@ public final class JTextPanel extends JPanel implements MTextPanel {
             boolean scrollBarsVisible = settings.getScrollBarsVisible();
 
             if (scrollBarsVisible) {
-                horzSb = new JScrollBar(JScrollBar.HORIZONTAL);
-                vertSb = new JScrollBar(JScrollBar.VERTICAL);
+                horzSb = new JScrollBar(Adjustable.HORIZONTAL);
+                vertSb = new JScrollBar(Adjustable.VERTICAL);
                 add("South", horzSb);
                 add("East", vertSb);
             }

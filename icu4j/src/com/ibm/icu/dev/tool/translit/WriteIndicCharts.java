@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-20043, International Business Machines Corporation and    *
+* Copyright (C) 2002-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -326,7 +326,7 @@ public class WriteIndicCharts {
                 if(s1.equals("")){
                     arr[index] = UTF16.valueOf(start+(((byte)iter.codepoint)&0xFF))+":CONSUMED";
                 }else{
-                    arr[index] = s1+ ":FALLBACK";;
+                    arr[index] = s1+ ":FALLBACK";
                 }
             } else{
                 if(s2.equals("")){

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -213,7 +213,7 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
      *  perform tests using aNumber and fNumberFormat, called in many variations
      **/
     public void tryIt(int aNumber) {
-        long number;;
+        long number;
         
         String stringNum = fNumberFormat.format(aNumber);
         try {

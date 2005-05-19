@@ -11,7 +11,6 @@ import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.util.ULocale;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk {
 
