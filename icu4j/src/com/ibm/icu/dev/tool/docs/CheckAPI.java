@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and         *
+* Copyright (C) 2004-2005, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -944,7 +944,7 @@ public class CheckAPI {
                 }
                 return res;
             }
-        };
+        }
 
         Tag[] tags = doc.tags();
         Result result = new Result();

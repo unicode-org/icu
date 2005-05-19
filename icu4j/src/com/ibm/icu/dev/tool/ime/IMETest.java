@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class IMETest {
     public static void main(String[] args) {
@@ -18,7 +19,7 @@ public class IMETest {
     Rectangle loc = new Rectangle(100, 100, 300, 300);
     for (int i = 0; i < 2; ++i) {
         JFrame jf = new JFrame("Test Window " + i);
-        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Box box = Box.createVerticalBox();
         box.add(new JTextField(sampleText));
         box.add(new JTextField(sampleText));

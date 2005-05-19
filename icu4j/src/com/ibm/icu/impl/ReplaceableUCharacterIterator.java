@@ -170,7 +170,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * @param currentIndex the currentIndex within the text. 
      * @exception IllegalArgumentException is thrown if an invalid currentIndex is 
      *            supplied. i.e. currentIndex is out of bounds.
-     * @return the character at the specified currentIndex or DONE if the specified 
+     * @returns the character at the specified currentIndex or DONE if the specified 
      *         currentIndex is equal to the end of the text.
      */
     public void setIndex(int currentIndex) throws IndexOutOfBoundsException{

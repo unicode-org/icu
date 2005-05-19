@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -342,7 +342,7 @@ final public class SortedVector {
     public static final class StringComparator implements Comparator {
         public int compare(Object a, Object b) {
             return ((String)a).compareTo((String)b);
-        };
+        }
     }
     //{{DECLARE_CONTROLS
 //}}
