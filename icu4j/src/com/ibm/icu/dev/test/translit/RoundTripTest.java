@@ -11,7 +11,6 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.Utility;
 
 import java.io.BufferedWriter;

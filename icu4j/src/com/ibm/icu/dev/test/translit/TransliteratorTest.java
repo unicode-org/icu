@@ -1417,7 +1417,7 @@ public class TransliteratorTest extends TestFmwk {
                                                Position offsets, boolean incremental) {
                 offsets.start = offsets.limit;
             }
-        };
+        }
         String id;
         public TestFact(String theID) {
             id = theID;
@@ -1425,7 +1425,7 @@ public class TransliteratorTest extends TestFmwk {
         public Transliterator getInstance(String ignoredID) {
             return new NameableNullTrans(id);
         }
-    };
+    }
 
     public void TestSTV() {
         Enumeration es = Transliterator.getAvailableSources();

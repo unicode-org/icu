@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.lang.*;
+import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
@@ -311,7 +312,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         set = new UnicodeSet("[:Lu:]");
         for (int i=0; i<0x200; ++i) {
-            boolean lu = (UCharacter.getType(i) == UCharacterCategory.UPPERCASE_LETTER);
+            boolean lu = (UCharacter.getType(i) == ECharacterCategory.UPPERCASE_LETTER);
             if (lu != set.contains((char)i)) {
                 errln("FAIL: Lu contains " + (char)i + " = " + 
                       set.contains((char)i));
