@@ -169,13 +169,14 @@ void UCAConformanceTest::testConformance(UCollator *coll)
   int32_t buflen = 0, oldBlen = 0;
   uint32_t first = 0;
   uint32_t offset = 0;
+  UnicodeString oldS, newS;
 
 
   while (fgets(lineB, 1024, testFile) != NULL) {
     offset = 0;
 
     line++;
-    if(*lineB == 0 || lineB[0] == '#') {
+    if(*lineB == 0 || strlen(lineB) < 3 || lineB[0] == '#') {
       continue;
     }
     offset = u_parseString(lineB, buffer, 1024, &first, &status);
@@ -203,6 +204,9 @@ void UCAConformanceTest::testConformance(UCollator *coll)
       if(res > 0) {
         errln("Line %i is not greater or equal than previous line", line);
         logln("Data line %s", lineB);
+        prettify(CollationKey(oldSk, oldLen), oldS);
+        prettify(CollationKey(newSk, resLen), newS);
+        logln("Keys: "+oldS+" and "+newS);
       } else if(res == 0) { /* equal */
         res = u_strcmpCodePointOrder(oldB, buffer);
         if (res == 0) {
