@@ -412,8 +412,9 @@ void CollationThaiTest::TestReordering(void) {
                           "\\u0E41\\uD87E\\uDC02", "=", "\\u0E41\\u4E41", // supplementary composition decomps to BMP
                           "\\u0E41\\u0301",        "=", "\\u0E41\\u0301", // unsafe (just checking backwards iteration)
                           "\\u0E41\\u0301\\u0316", "=", "\\u0E41\\u0316\\u0301",
-                          "\\u0e24\\u0e41",        "=", "\\u0e41\\u0e24", // exiting contraction bug
-                          "\\u0e3f\\u0e3f\\u0e24\\u0e41", "=", "\\u0e3f\\u0e3f\\u0e41\\u0e24",
+                          // after UCA 4.1, the two lines below are not equal anymore do not have equal sign
+                          "\\u0e24\\u0e41",        "<", "\\u0e41\\u0e24", // exiting contraction bug
+                          "\\u0e3f\\u0e3f\\u0e24\\u0e41", "<", "\\u0e3f\\u0e3f\\u0e41\\u0e24",
 
                           "abc\\u0E41c\\u0301",       "=", "abc\\u0E41\\u0107", // composition
                           "abc\\u0E41\\uD834\\uDC00", "<", "abc\\u0E41\\uD834\\uDC01", // supplementaries
@@ -440,7 +441,7 @@ void CollationThaiTest::TestReordering(void) {
   compareArray(*coll, tests, sizeof(tests)/sizeof(tests[0]));
  
   const char *rule = "& c < ab";
-  const char *testcontraction[] = { "\\u0E41ab", "<", "\\u0E41c"};
+  const char *testcontraction[] = { "\\u0E41ab", ">", "\\u0E41c"}; // After UCA 4.1 Thai are normal so won't break a contraction
   UnicodeString rules;
   UErrorCode status = U_ZERO_ERROR;
   parseChars(rules, rule);
