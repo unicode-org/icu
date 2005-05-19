@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/fr_CH.xml
+// * Source File: ../../../cldr/common/main/fr_CH.xml
 // *
 // ***************************************************************************
 fr_CH{
@@ -27,7 +27,7 @@ fr_CH{
         "#,##0%",
         "#E0",
     }
-    Version{"1.26"}
+    Version{"1.27"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ga.xml
+// * Source File: ../../../cldr/common/main/ga.xml
 // *
 // ***************************************************************************
 /**
@@ -1348,7 +1348,7 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.32"}
+    Version{"1.35"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1419,14 +1419,6 @@ ga{
     }
     localPatternChars{"RbMLkUnsSElFtTauKcBeyrAC"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Meán-Am Greenwich",
-            "MAG",
-            "Meán-Am Greenwich",
-            "MAG",
-            "Londain",
-        }
         {
             "Europe/Belfast",
             "Meán-Am Greenwich",

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/fi.xml
+// * Source File: ../../../cldr/common/main/fi.xml
 // *
 // ***************************************************************************
 /**
@@ -1756,7 +1756,7 @@ fi{
             traditional{"Perinteinen"}
         }
     }
-    Version{"1.40"}
+    Version{"1.51"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1778,15 +1778,6 @@ fi{
                         "pe",
                         "la",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "K",
-                        "T",
-                        "P",
-                        "L",
-                    }
                     wide{
                         "sunnuntai",
                         "maanantai",
@@ -1795,6 +1786,17 @@ fi{
                         "torstai",
                         "perjantai",
                         "lauantai",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "K",
+                        "T",
+                        "P",
+                        "L",
                     }
                 }
             }
@@ -1820,20 +1822,6 @@ fi{
                         "marras",
                         "joulu",
                     }
-                    narrow{
-                        "T",
-                        "H",
-                        "M",
-                        "H",
-                        "T",
-                        "K",
-                        "H",
-                        "E",
-                        "S",
-                        "L",
-                        "M",
-                        "J",
-                    }
                     wide{
                         "tammikuu",
                         "helmikuu",
@@ -1849,12 +1837,27 @@ fi{
                         "joulukuu",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "T",
+                        "H",
+                        "M",
+                        "H",
+                        "T",
+                        "K",
+                        "H",
+                        "E",
+                        "S",
+                        "L",
+                        "M",
+                        "J",
+                    }
+                }
             }
         }
         hebrew{
             monthNames{
                 format{
-                    abbreviated:alias{"fi/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tišrìkuu",
                         "Hešvánkuu",
@@ -1900,14 +1903,6 @@ fi{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Greenwichin aika",
-            "GMT",
-            "Greenwichin aika",
-            "GMT",
-            "Lontoo",
-        }
         {
             "America/Halifax",
             "Atlantin normaaliaika",

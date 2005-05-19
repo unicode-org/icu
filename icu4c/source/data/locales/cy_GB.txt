@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/cy_GB.xml
+// * Source File: ../../../cldr/common/main/cy_GB.xml
 // *
 // ***************************************************************************
 cy_GB{
@@ -13,7 +13,7 @@ cy_GB{
         "#,##0%",
         "#E0",
     }
-    Version{"1.17"}
+    Version{"1.20"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

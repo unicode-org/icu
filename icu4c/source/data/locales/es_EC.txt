@@ -3,23 +3,15 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/es_EC.xml
+// * Source File: ../../../cldr/common/main/es_EC.xml
 // *
 // ***************************************************************************
 es_EC{
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "�",
-        "+",
+    Currencies{
+        USD{
+            "$",
+            "dólar estadounidense",
+        }
     }
     NumberPatterns{
         "#,##0.###",
@@ -27,7 +19,7 @@ es_EC{
         "#,##0%",
         "#E0",
     }
-    Version{"1.25"}
+    Version{"1.29"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/ar.xml
+// * Source File: ../../../cldr/common/main/ar.xml
 // *
 // ***************************************************************************
 /**
@@ -435,7 +435,7 @@ ar{
             traditional{"تقليدي"}
         }
     }
-    Version{"1.40"}
+    Version{"1.43"}
     calendar{
         buddhist{
             eras{
@@ -475,15 +475,6 @@ ar{
                         "ج",
                         "س",
                     }
-                    narrow{
-                        "ح",
-                        "ن",
-                        "ث",
-                        "ر",
-                        "خ",
-                        "ج",
-                        "س",
-                    }
                     wide{
                         "الأحد",
                         "الاثنين",
@@ -492,6 +483,17 @@ ar{
                         "الخميس",
                         "الجمعة",
                         "السبت",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ح",
+                        "ن",
+                        "ث",
+                        "ر",
+                        "خ",
+                        "ج",
+                        "س",
                     }
                 }
             }
@@ -517,20 +519,6 @@ ar{
                         "نوفمبر",
                         "ديسمبر",
                     }
-                    narrow{
-                        "ي",
-                        "ف",
-                        "م",
-                        "آ",
-                        "و",
-                        "ن",
-                        "ل",
-                        "غ",
-                        "س",
-                        "ك",
-                        "ب",
-                        "د",
-                    }
                     wide{
                         "يناير",
                         "فبراير",
@@ -544,6 +532,22 @@ ar{
                         "أكتوبر",
                         "نوفمبر",
                         "ديسمبر",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ي",
+                        "ف",
+                        "م",
+                        "آ",
+                        "و",
+                        "ن",
+                        "ل",
+                        "غ",
+                        "س",
+                        "ك",
+                        "ب",
+                        "د",
                     }
                 }
             }

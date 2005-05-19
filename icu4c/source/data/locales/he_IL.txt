@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/he_IL.xml
+// * Source File: ../../../cldr/common/main/he_IL.xml
 // *
 // ***************************************************************************
 he_IL{
@@ -13,5 +13,5 @@ he_IL{
         "#,##0%",
         "#E0",
     }
-    Version{"1.27"}
+    Version{"1.28"}
 }

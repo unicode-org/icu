@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/it.xml
+// * Source File: ../../../cldr/common/main/it.xml
 // *
 // ***************************************************************************
 /**
@@ -1389,7 +1389,6 @@ it{
         grc{"greco, antico (fino al 1453)"}
         gu{"gujarati"}
         gv{"manx"}
-        gwi{"gwichʻin"}
         ha{"haussa"}
         hai{"haida"}
         haw{"hawaiano"}
@@ -1792,7 +1791,7 @@ it{
     Variants{
         REVISED{"Modificato"}
     }
-    Version{"1.38"}
+    Version{"1.47"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1825,15 +1824,6 @@ it{
                         "ven",
                         "sab",
                     }
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "G",
-                        "V",
-                        "S",
-                    }
                     wide{
                         "domenica",
                         "lunedì",
@@ -1842,6 +1832,17 @@ it{
                         "giovedì",
                         "venerdì",
                         "sabato",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "G",
+                        "V",
+                        "S",
                     }
                 }
             }
@@ -1867,20 +1868,6 @@ it{
                         "nov",
                         "dic",
                     }
-                    narrow{
-                        "G",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "G",
-                        "L",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "gennaio",
                         "febbraio",
@@ -1896,18 +1883,26 @@ it{
                         "dicembre",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "G",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "G",
+                        "L",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
             }
         }
     }
     zoneStrings{
-        {
-            "Etc/GMT",
-            "Ora Meridiano Greenwich",
-            "GMT",
-            "Ora Meridiano Greenwich",
-            "GMT",
-            "Londra",
-        }
         {
             "America/Halifax",
             "Ora Standard Atlantico",

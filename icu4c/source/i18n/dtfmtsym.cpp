@@ -675,7 +675,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             goto cleanup;
         }
         zoneRow = ures_getByIndex(zoneArray, i, zoneRow, &status);
-        for(int32_t j = 0; j<fZoneStringsColCount; j++) {
+        // compute the size of the array dynamically. Don't assume
+        // that all rows of zone strings are of the same size.
+        int32_t size = ures_getSize(zoneRow);
+        for(int32_t j = 0; j<size; j++) {
             resStr = ures_getStringByIndex(zoneRow, j, &len, &status);
             // setTo() - see assignArray comments
             fZoneStrings[i][j].setTo(TRUE, resStr, len);

@@ -3,23 +3,15 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/es_UY.xml
+// * Source File: ../../../cldr/common/main/es_UY.xml
 // *
 // ***************************************************************************
 es_UY{
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "�",
-        "+",
+    Currencies{
+        UYU{
+            "UYU",
+            "peso uruguayo",
+        }
     }
     NumberPatterns{
         "#,##0.###",
@@ -27,7 +19,7 @@ es_UY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.24"}
+    Version{"1.28"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/hr.xml
+// * Source File: ../../../cldr/common/main/hr.xml
 // *
 // ***************************************************************************
 /**
@@ -1058,7 +1058,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.40"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1087,15 +1087,6 @@ hr{
                         "pet",
                         "sub",
                     }
-                    narrow{
-                        "n",
-                        "p",
-                        "u",
-                        "s",
-                        "č",
-                        "p",
-                        "s",
-                    }
                     wide{
                         "nedjelja",
                         "ponedjeljak",
@@ -1104,6 +1095,17 @@ hr{
                         "četvrtak",
                         "petak",
                         "subota",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
                     }
                 }
             }

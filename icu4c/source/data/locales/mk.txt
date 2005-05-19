@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/mk.xml
+// * Source File: ../../../cldr/common/main/mk.xml
 // *
 // ***************************************************************************
 /**
@@ -1015,7 +1015,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.37"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1044,15 +1044,6 @@ mk{
                         "пет.",
                         "саб.",
                     }
-                    narrow{
-                        "н",
-                        "п",
-                        "в",
-                        "с",
-                        "ч",
-                        "п",
-                        "с",
-                    }
                     wide{
                         "недела",
                         "понеделник",
@@ -1061,6 +1052,17 @@ mk{
                         "четврток",
                         "петок",
                         "сабота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "в",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
                     }
                 }
             }
@@ -1086,20 +1088,6 @@ mk{
                         "ноем.",
                         "декем.",
                     }
-                    narrow{
-                        "ј",
-                        "ф",
-                        "м",
-                        "а",
-                        "м",
-                        "ј",
-                        "ј",
-                        "а",
-                        "се",
-                        "о",
-                        "но",
-                        "д",
-                    }
                     wide{
                         "јануари",
                         "февруари",
@@ -1113,6 +1101,22 @@ mk{
                         "октомври",
                         "ноември",
                         "декември",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ј",
+                        "ф",
+                        "м",
+                        "а",
+                        "м",
+                        "ј",
+                        "ј",
+                        "а",
+                        "се",
+                        "о",
+                        "но",
+                        "д",
                     }
                 }
             }

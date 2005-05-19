@@ -3,15 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/am_ET.xml
+// * Source File: ../../../cldr/common/main/am_ET.xml
 // *
 // ***************************************************************************
 am_ET{
     Currencies{
-        ETB{
-            "$",
-            "ETB",
-        }
         USD{
             "US$",
             "USD",
@@ -23,7 +19,7 @@ am_ET{
         "#,##0%",
         "#E0",
     }
-    Version{"1.28"}
+    Version{"1.29"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/sr.xml
+// * Source File: ../../../cldr/common/main/sr.xml
 // *
 // ***************************************************************************
 /**
@@ -240,7 +240,6 @@ sr{
         WS{"Самоа"}
         YE{"Јемен"}
         YT{"Мајоте"}
-        YU{"Југославија"}
         ZA{"Јужна Африка"}
         ZM{"Замбија"}
         ZW{"Зимбабве"}
@@ -490,7 +489,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.43"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -519,15 +518,6 @@ sr{
                         "пет",
                         "суб",
                     }
-                    narrow{
-                        "н",
-                        "п",
-                        "у",
-                        "с",
-                        "ч",
-                        "п",
-                        "с",
-                    }
                     wide{
                         "недеља",
                         "понедељак",
@@ -536,6 +526,17 @@ sr{
                         "четвртак",
                         "петак",
                         "субота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "у",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
                     }
                 }
             }
@@ -561,20 +562,6 @@ sr{
                         "нов",
                         "дец",
                     }
-                    narrow{
-                        "ј",
-                        "ф",
-                        "м",
-                        "а",
-                        "м",
-                        "ј",
-                        "ј",
-                        "а",
-                        "с",
-                        "о",
-                        "н",
-                        "д",
-                    }
                     wide{
                         "јануар",
                         "фебруар",
@@ -588,6 +575,22 @@ sr{
                         "октобар",
                         "новембар",
                         "децембар",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ј",
+                        "ф",
+                        "м",
+                        "а",
+                        "м",
+                        "ј",
+                        "ј",
+                        "а",
+                        "с",
+                        "о",
+                        "н",
+                        "д",
                     }
                 }
             }
