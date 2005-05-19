@@ -3560,7 +3560,7 @@ static void TestRuleOptions(void) {
     },
 
     { "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
-        {  "c", "b", "\\uD800\\uDD33", "a", "\\u02d0" }, 5
+        {  "c", "b", "\\uD802\\uDE47", "a", "\\u02d0" }, 5
     },
 
     { "&[first regular]<a"
@@ -3570,7 +3570,7 @@ static void TestRuleOptions(void) {
 
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
-        { "b", "\\uD800\\uDF9D", "a", "\\u4e00" }, 4
+        { "b", "\\uD800\\uDFCF", "a", "\\u4e00" }, 4
     },
 
     { "&[before 1][first implicit]<b"
@@ -4637,7 +4637,9 @@ TestThaiSortKey(void)
   UErrorCode status = U_ZERO_ERROR;
   uint8_t key[256];
   int32_t keyLen = 0;
-  uint8_t expectedKey[256] = { 0x01, 0xd9, 0xb2, 0x01, 0x05, 0x00 };
+  /* UCA 4.0 uint8_t expectedKey[256] = { 0x01, 0xd9, 0xb2, 0x01, 0x05, 0x00 }; */
+  /* UCA 4.1 moves Yammakan */
+  uint8_t expectedKey[256] = { 0x01, 0xdb, 0x3a, 0x01, 0x05, 0x00 };
   UCollator *coll = ucol_open("th", &status);
   if(U_FAILURE(status)) {
     log_err("Could not open a collator, exiting (%s)\n", u_errorName(status));
@@ -4645,7 +4647,7 @@ TestThaiSortKey(void)
 
   keyLen = ucol_getSortKey(coll, &yamakan, 1, key, 256);
   if(strcmp((char *)key, (char *)expectedKey)) {
-    log_err("Yamakan key is different from ICU 262!\n");
+    log_err("Yammakan key is different from ICU 34!\n");
   }
 
   ucol_close(coll);
