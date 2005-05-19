@@ -223,7 +223,8 @@ DataDrivenCollationTest {
                 "a<x\ud800\udc00b"
             }
         }
-                
+/*
+	UCA 4.1 removes skipping of ignorable code points in contractions!
         TestCIgnorableContraction {
             Info {
                 Description { "Checks whether completely ignorable code points are "
@@ -248,7 +249,9 @@ DataDrivenCollationTest {
             }
         }
                 
-
+*/
+/*
+	UCA 4.1 removes skipping of ignorable code points in contractions!
         TestCIgnorablePrefix {
             Info {
                 Description { "Checks whether completely ignorable code points are "
@@ -272,7 +275,8 @@ DataDrivenCollationTest {
                "= \u30A1\u0000\u059a\u30FC"
                "= \u30A1\u30FC"
             }
-        }  
+        }
+*/
         da_TestPrimary {
             Info {
                 Description { "This test goes through primary strength cases" }
