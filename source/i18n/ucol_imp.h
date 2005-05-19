@@ -279,6 +279,9 @@ typedef struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UCharIterator *iterator;
+  uint32_t consumedChars; /* number of extra consumed chars in a contraction */
+                          /* used in conjuction with iterator state for partial */
+                          /* sortkeys */
   /*int32_t iteratorIndex;*/
 } collIterate;
 
@@ -295,6 +298,7 @@ struct collIterateState {
     uint8_t   origFlags;
     uint32_t   iteratorIndex;
     int32_t    iteratorMove;
+    uint32_t consumedChars;
 };
 
 U_CAPI void U_EXPORT2 
@@ -558,7 +562,7 @@ enum {
     UCOL_BYTE_FIRST_TAILORED = 0x04,
     UCOL_BYTE_COMMON = 0x05,
     UCOL_BYTE_FIRST_UCA = UCOL_BYTE_COMMON,
-    UCOL_CODAN_PLACEHOLDER = 0x24,
+    UCOL_CODAN_PLACEHOLDER = 0x26,
     UCOL_BYTE_LAST_LATIN_PRIMARY = 0x4C,
     UCOL_BYTE_FIRST_NON_LATIN_PRIMARY = 0x4D,
     UCOL_BYTE_UNSHIFTED_MAX = 0xFF
