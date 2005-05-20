@@ -918,13 +918,13 @@ enum {
 /* separator? */
 #define is_sep(c) ((c)=='_' || (c)=='-' || (c)==0)
 
-/*
+/**
  * Requires non-NULL locale ID but otherwise does the equivalent of
  * checking for language codes as if uloc_getLanguage() were called:
  * Accepts both 2- and 3-letter codes and accepts case variants.
  */
-static int32_t
-getCaseLocale(const char *locale, int32_t *locCache) {
+U_CFUNC int32_t
+ucase_getCaseLocale(const char *locale, int32_t *locCache) {
     int32_t result;
     char c;
 
@@ -1171,7 +1171,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
 
         if(excWord&UCASE_EXC_CONDITIONAL_SPECIAL) {
             /* use hardcoded conditions and mappings */
-            int32_t loc=getCaseLocale(locale, locCache);
+            int32_t loc=ucase_getCaseLocale(locale, locCache);
 
             /*
              * Test for conditional mappings first
@@ -1318,7 +1318,7 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
 
         if(excWord&UCASE_EXC_CONDITIONAL_SPECIAL) {
             /* use hardcoded conditions and mappings */
-            int32_t loc=getCaseLocale(locale, locCache);
+            int32_t loc=ucase_getCaseLocale(locale, locCache);
 
             if(loc==LOC_TURKISH && c==0x69) {
                 /*

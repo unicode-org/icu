@@ -1752,6 +1752,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ucasemap.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ucasemap.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\uchriter.cpp">
 			</File>
 			<File

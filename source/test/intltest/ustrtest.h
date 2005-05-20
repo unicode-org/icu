@@ -1,12 +1,14 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #ifndef UNICODESTRINGTEST_H
 #define UNICODESTRINGTEST_H
 
+#include "unicode/unistr.h"
+#include "unicode/ubrk.h"
 #include "intltest.h"
 
 /**
@@ -83,9 +85,18 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 
     void TestCaseConversion();
+
+    void TestCasingImpl(const UnicodeString &input,
+                        const UnicodeString &output,
+                        int32_t whichCase,
+                        const char *localeID, uint32_t options);
 #if !UCONFIG_NO_BREAK_ITERATION
-    void TestTitleCasing();
+    void TestTitleCasing(const UnicodeString &input,
+                         const UnicodeString &output,
+                         const char *localeID,
+                         UBreakIterator *iter);
 #endif
+    void TestCasing();
 };
 
 #endif

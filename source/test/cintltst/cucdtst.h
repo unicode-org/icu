@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -23,5 +23,6 @@ U_CFUNC void TestCaseUpper(void);
 U_CFUNC void TestCaseTitle(void);
 U_CFUNC void TestCaseFolding(void);
 U_CFUNC void TestCaseCompare(void);
+U_CFUNC void TestUCaseMap(void);
 
 #endif

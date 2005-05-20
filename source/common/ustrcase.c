@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -121,7 +121,7 @@ UCaseMapFull(const UCaseProps *csp, UChar32 c,
              const char *locale, int32_t *locCache);
 
 /*
- * Lowercases [srcStart..srcLimit[ but takes
+ * Case-maps [srcStart..srcLimit[ but takes
  * context [0..srcLength[ into account.
  */
 static int32_t
@@ -132,7 +132,7 @@ _caseMap(const UCaseProps *csp, UCaseMapFull *map,
          const char *locale, int32_t *locCache,
          UErrorCode *pErrorCode) {
     const UChar *s;
-    UChar32 c;
+    UChar32 c, c2;
     int32_t srcIndex, destIndex;
 
     /* case mapping loop */
@@ -143,7 +143,12 @@ _caseMap(const UCaseProps *csp, UCaseMapFull *map,
         U16_NEXT(src, srcIndex, srcLimit, c);
         csc->cpLimit=srcIndex;
         c=map(csp, c, utf16_caseContextIterator, csc, &s, locale, locCache);
-        destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+        if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0xffff : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0xffff)) {
+            /* fast path version of appendResult() for BMP results */
+            dest[destIndex++]=(UChar)c2;
+        } else {
+            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+        }
     }
 
     if(destIndex>destCapacity) {
@@ -293,14 +298,19 @@ ustr_foldCase(const UCaseProps *csp,
     int32_t srcIndex, destIndex;
 
     const UChar *s;
-    UChar32 c;
+    UChar32 c, c2;
 
     /* case mapping loop */
     srcIndex=destIndex=0;
     while(srcIndex<srcLength) {
         U16_NEXT(src, srcIndex, srcLength, c);
         c=ucase_toFullFolding(csp, c, &s, options);
-        destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+        if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0xffff : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0xffff)) {
+            /* fast path version of appendResult() for BMP results */
+            dest[destIndex++]=(UChar)c2;
+        } else {
+            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+        }
     }
 
     if(destIndex>destCapacity) {
