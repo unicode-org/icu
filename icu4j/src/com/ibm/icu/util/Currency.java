@@ -605,7 +605,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Constructs a currency object for the given ISO 4217 3-letter
      * code.  This constructor assumes that the code is valid.
      */
-    private Currency(String theISOCode) {
+    protected Currency(String theISOCode) {
         isoCode = theISOCode;
     }
 
