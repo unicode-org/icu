@@ -6,7 +6,10 @@
 */
 package com.ibm.icu.text;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 
@@ -36,7 +39,18 @@ public class CharsetMatch implements Comparable {
      * @return the Reader for the Unicode character data.
      */
     public Reader getReader() {
-        return null;
+        InputStream inputStream = fInputStream;
+        
+        if (inputStream == null) {
+            inputStream = new ByteArrayInputStream(fRawInput, 0, fRawLength);
+        }
+        
+        try {
+            fInputStream.reset();
+            return new InputStreamReader(fInputStream, getName());
+        } catch (IOException e) {
+            return null;
+        }
     }
     
     
@@ -66,7 +80,20 @@ public class CharsetMatch implements Comparable {
     public String getString(int maxLength) throws java.io.IOException {
         String result = null;
         if (fInputStream != null) {
-            // TODO:  read the stream in somehow.
+            StringBuffer sb = new StringBuffer();
+            char[] buffer = new char[1024];
+            Reader reader = getReader();
+            int max = maxLength < 0? Integer.MAX_VALUE : maxLength;
+            int bytesRead = 0;
+            
+            while ((bytesRead = reader.read(buffer, 0, Math.min(max, 1024))) >= 0) {
+                sb.append(buffer, 0, bytesRead);
+                max -= bytesRead;
+            }
+            
+            reader.close();
+            
+            return sb.toString();
         } else {
             result = new String(fRawInput, getName());            
         }
