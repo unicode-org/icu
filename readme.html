@@ -2,6 +2,7 @@
 
 <html lang="en-US">
   <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
     <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2004 IBM Corporation and others. All Rights Reserved.">
@@ -10,7 +11,7 @@
     <meta name="DESCRIPTION" content=
     "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-    <style type="text/css">
+<style type="text/css">
     h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
     h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
     h2.TOC {page-break-before: auto}
@@ -29,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.3
     ReadMe</h1>
 
-    <p>Version: 2005-May-05<br>
+    <p>Version: 2005-May-20<br>
      Copyright &copy; 1997-2005 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -222,8 +223,8 @@
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. For more news about
     this release, see the <a href=
-    "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.2 download
-    page</a>.</p>
+    "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.2
+    download page</a>.</p>
 
     <h3><a name="News_putil_h" id="News_putil_h">Changes to putil.h and
     utypes.h</a></h3>
@@ -1275,28 +1276,22 @@ Data set name type  : PDS</samp>
       <li>
         Create AS400 target library. This library will be the target for the
         resulting modules, programs and service programs. You will specify this
-        library on the OUTPUTDIR environment variable in step 2.<br>
-         
+        library on the OUTPUTDIR environment variable in step 2. 
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)</samp>
 </pre>
-        <br>
       </li>
 
       <li>
         Set up the following environment variables in your build process (use
-        the <i>libraryname</i> from the previous step) 
+        the <i>libraryname</i> from the previous step). The <i>libraryname</i>
+        identifies target as400 library for *module, *pgm and *srvpgm objects. 
 <pre>
 <samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
 ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 </pre>
-        <i>libraryname</i> identifies target as400 library for *module, *pgm
-        and *srvpgm objects.<br>
-        <br>
-         
-        <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
       </li>
 
       <li>Run <tt>'CHGJOB CCSID(37)'</tt></li>
@@ -1304,19 +1299,19 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       <li>Run <tt>'QSH'</tt></li>
 
       <li>Run gunzip on the ICU source code compressed tar archive
-      (icu-<i>X</i>.<i>Y</i>.tgz or icu-<i>X</i>.<i>Y</i>.tar.gz).</li>
+      (icu-<i>X</i>.<i>Y</i>.tgz).</li>
 
-      <li>Run unpax-icu.sh on the tar file from the ICU download page.</li>
+      <li>Run unpax-icu.sh on the tar file generated from the previous step.</li>
 
       <li>Change your current directory to icu/source.</li>
 
       <li>Run <tt>'export CFLAGS=-O4 CXXFLAGS=-O4'</tt> to optimize your build
       of ICU. If the build fails, rerun these build steps without this step
-      before asking the icu4c-support mailing list for help.</li>
+      before asking the icu-support mailing list for help.</li>
 
       <li>Run <tt>'cp ../as_is/os400/configure .'</tt></li>
 
-      <li>Run <tt>'./configure --host=as400-os400'</tt></li>
+      <li>Run <tt>'./configure'</tt></li>
 
       <li>Run <tt>'gmake'</tt> to build ICU.</li>
 
@@ -1477,25 +1472,26 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     "ImportantNotesCPlusPlus">Using ICU in a Multithreaded Environment</a></h3>
 
     <p>Some versions of ICU require calling the <code>u_init()</code> function
-    from <code> uclean.h</code> to ensure that ICU is initialized properly. In
-    those ICU versions, <code>u_init()</code>  must be called before ICU is used
-    from multiple threads. There is no harm in calling <code>u_init()</code>
-    in a single-threaded application, on a single-CPU machine, or in other cases
+    from <code>uclean.h</code> to ensure that ICU is initialized properly. In
+    those ICU versions, <code>u_init()</code> must be called before ICU is used
+    from multiple threads. There is no harm in calling <code>u_init()</code> in
+    a single-threaded application, on a single-CPU machine, or in other cases
     where <code>u_init()</code> is not required.</p>
 
-    <p>In addition to ensuring thread safety, <code>u_init()</code>  also
+    <p>In addition to ensuring thread safety, <code>u_init()</code> also
     attempts to load at least one ICU data file. Assuming that all data files
     are packaged together (or are in the same folder in files mode), a failure
-    code from <code>u_init()</code>  usually means that the data cannot be
+    code from <code>u_init()</code> usually means that the data cannot be
     found. In this case, the data may not be installed properly, or the
-    application may have failed to call <code>udata_setCommonData()</code> or <code>u_setDataDirectory()</code>
-    which specify to ICU where it can find its data.</p>
+    application may have failed to call <code>udata_setCommonData()</code> or
+    <code>u_setDataDirectory()</code> which specify to ICU where it can find
+    its data.</p>
 
     <p>Since <code>u_init()</code> will load only one or two data files, it
     cannot guarantee that all of the data that an application needs is
     available. It cannot check for all data files because the set of files is
-    customizable, and some ICU services work without loading any data at all. An
-    application should always check for error codes when opening ICU service
+    customizable, and some ICU services work without loading any data at all.
+    An application should always check for error codes when opening ICU service
     objects (using <code>ucnv_open()</code>, <code>ucol_open()</code>, C++
     constructors, etc.).</p>
 
@@ -1503,7 +1499,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
     <p>ICU 3.4 self-initializes properly for multi-threaded use. It achieves
     this without performance penalty by hardcoding the core Unicode properties
-    data, at the cost of some flexibility. (For details see Jitterbug 4497.)</p>
+    data, at the cost of some flexibility. (For details see Jitterbug
+    4497.)</p>
 
     <p><code>u_init()</code> can be used to check for data loading. It tries to
     load the converter alias table (<code>cnvalias.icu</code>).</p>
@@ -1512,12 +1509,13 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
     <p>These ICU versions require a call to <code>u_init()</code> before
     multi-threaded use. The services that are directly affected are those that
-    don't have a service object and need to be fast: normalization and character
-    properties.</p>
+    don't have a service object and need to be fast: normalization and
+    character properties.</p>
 
     <p><code>u_init()</code> loads and initializes the data files for
-    normalization and character properties (<code>unorm.icu</code> and <code>uprops.icu</code>)
-    and can therefore also be used to check for data loading.</p>
+    normalization and character properties (<code>unorm.icu</code> and
+    <code>uprops.icu</code>) and can therefore also be used to check for data
+    loading.</p>
 
     <h4>ICU 2.4 and earlier</h4>
 
@@ -1701,9 +1699,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <p>If you are using ICU's Makefiles to build ICU on a new platform, there
     are a few places where you will need to add or modify some files. If you
     need more help, you can always ask the <a href=
-    "http://icu.sourceforge.net/contacts.html">icu4c-support mailing list</a>.
+    "http://icu.sourceforge.net/contacts.html">icu-support mailing list</a>.
     Once you have finished porting ICU to a new platform, it is recommended
-    that you contribute your changes back to ICU via the icu4c-support mailing
+    that you contribute your changes back to ICU via the icu-support mailing
     list. This will make it easier for everyone to benefit from your work.</p>
 
     <h4>Data For a New Platform</h4>
