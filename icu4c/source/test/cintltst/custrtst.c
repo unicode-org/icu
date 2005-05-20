@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -64,6 +64,7 @@ void addUStringTest(TestNode** root)
 #endif
     addTest(root, &TestCaseFolding, "tsutil/custrtst/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/custrtst/TestCaseCompare");
+    addTest(root, &TestUCaseMap, "tsutil/custrtst/TestUCaseMap");
 }
 
 /* test data for TestStringFunctions ---------------------------------------- */

@@ -62,6 +62,14 @@ U_CAPI void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
+ * Requires non-NULL locale ID but otherwise does the equivalent of
+ * checking for language codes as if uloc_getLanguage() were called:
+ * Accepts both 2- and 3-letter codes and accepts case variants.
+ */
+U_CFUNC int32_t
+ucase_getCaseLocale(const char *locale, int32_t *locCache);
+
+/**
  * Bit mask for getting just the options from a string compare options word
  * that are relevant for case-insensitive string comparison.
  * See uchar.h. Also include _STRNCMP_STYLE and U_COMPARE_CODE_POINT_ORDER.

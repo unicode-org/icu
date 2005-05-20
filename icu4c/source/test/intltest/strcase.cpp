@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -21,6 +21,8 @@
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
+#include "unicode/unistr.h"
+#include "unicode/ucasemap.h"
 #include "ustrtest.h"
 #include "unicode/tstdtmod.h"
 
@@ -32,9 +34,9 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     switch (index) {
         case 0: name = "TestCaseConversion"; if (exec) TestCaseConversion(); break;
         case 1:
-            name = "TestTitleCasing";
+            name = "TestCasing";
 #if !UCONFIG_NO_BREAK_ITERATION
-            if(exec) TestTitleCasing();
+            if(exec) TestCasing();
 #endif
             break;
 
@@ -45,21 +47,21 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 void
 StringCaseTest::TestCaseConversion()
 {
-    UChar uppercaseGreek[] =
+    static const UChar uppercaseGreek[] =
         { 0x399, 0x395, 0x3a3, 0x3a5, 0x3a3, 0x20, 0x03a7, 0x3a1, 0x399, 0x3a3, 0x3a4,
         0x39f, 0x3a3, 0 };
         // "IESUS CHRISTOS"
 
-    UChar lowercaseGreek[] = 
+    static const UChar lowercaseGreek[] = 
         { 0x3b9, 0x3b5, 0x3c3, 0x3c5, 0x3c2, 0x20, 0x03c7, 0x3c1, 0x3b9, 0x3c3, 0x3c4,
         0x3bf, 0x3c2, 0 };
         // "iesus christos"
 
-    UChar lowercaseTurkish[] = 
+    static const UChar lowercaseTurkish[] = 
         { 0x69, 0x73, 0x74, 0x61, 0x6e, 0x62, 0x75, 0x6c, 0x2c, 0x20, 0x6e, 0x6f, 0x74, 0x20, 0x63, 0x6f, 
         0x6e, 0x73, 0x74, 0x61, 0x6e, 0x74, 0x0131, 0x6e, 0x6f, 0x70, 0x6c, 0x65, 0x21, 0 };
 
-    UChar uppercaseTurkish[] = 
+    static const UChar uppercaseTurkish[] = 
         { 0x54, 0x4f, 0x50, 0x4b, 0x41, 0x50, 0x49, 0x20, 0x50, 0x41, 0x4c, 0x41, 0x43, 0x45, 0x2c, 0x20,
         0x0130, 0x53, 0x54, 0x41, 0x4e, 0x42, 0x55, 0x4c, 0 };
     
@@ -318,45 +320,176 @@ StringCaseTest::TestCaseConversion()
     }
 }
 
+// data-driven case mapping tests ------------------------------------------ ***
+
+enum {
+    TEST_LOWER,
+    TEST_UPPER,
+#if !UCONFIG_NO_BREAK_ITERATION
+    TEST_TITLE,
+#endif
+    TEST_COUNT
+};
+
+// names of TestData children in casing.txt
+static const char *const dataNames[TEST_COUNT+1]={
+    "lowercasing",
+    "uppercasing",
+#if !UCONFIG_NO_BREAK_ITERATION
+    "titlecasing",
+#endif
+    ""
+};
+
+void
+StringCaseTest::TestCasingImpl(const UnicodeString &input,
+                               const UnicodeString &output,
+                               int32_t whichCase,
+                               const char *localeID, uint32_t options) {
+    // UnicodeString
+    UnicodeString result;
+    const char *name;
+
+    result=input;
+    switch(whichCase) {
+    case TEST_LOWER:
+        name="toLower";
+        result.toLower(Locale(localeID));
+        break;
+    case TEST_UPPER:
+        name="toUpper";
+        result.toUpper(Locale(localeID));
+        break;
+    default:
+        name="";
+        break; // won't happen
+    }
+    if(result!=output) {
+        errln("error: UnicodeString.%s() got a wrong result for a test case from casing.res", name);
+    }
+
+    // UTF-8
+    char utf8In[100], utf8Out[100];
+    int32_t utf8InLength, utf8OutLength, resultLength;
+    UChar *buffer;
+
+    UCaseMap *csm;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    csm=ucasemap_open(localeID, options, &errorCode);
+
+    u_strToUTF8(utf8In, (int32_t)sizeof(utf8In), &utf8InLength, input.getBuffer(), input.length(), &errorCode);
+    switch(whichCase) {
+    case TEST_LOWER:
+        name="ucasemap_utf8ToLower";
+        utf8OutLength=ucasemap_utf8ToLower(csm,
+                    utf8Out, (int32_t)sizeof(utf8Out),
+                    utf8In, utf8InLength, &errorCode);
+        break;
+    case TEST_UPPER:
+        name="ucasemap_utf8ToUpper";
+        utf8OutLength=ucasemap_utf8ToUpper(csm,
+                    utf8Out, (int32_t)sizeof(utf8Out),
+                    utf8In, utf8InLength, &errorCode);
+        break;
+    default:
+        name="";
+        utf8OutLength=0;
+        break; // won't happen
+    }
+    buffer=result.getBuffer(utf8OutLength);
+    u_strFromUTF8(buffer, result.getCapacity(), &resultLength, utf8Out, utf8OutLength, &errorCode);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? resultLength : 0);
+
+    if(U_FAILURE(errorCode)) {
+        errln("error: %s() got an error for a test case from casing.res - %s", name, u_errorName(errorCode));
+    } else if(result!=output) {
+        errln("error: %s() got a wrong result for a test case from casing.res", name);
+    }
+    ucasemap_close(csm);
+}
+
 #if !UCONFIG_NO_BREAK_ITERATION
 
 void
-StringCaseTest::TestTitleCasing() {
+StringCaseTest::TestTitleCasing(const UnicodeString &input,
+                                const UnicodeString &output,
+                                const char *localeID,
+                                UBreakIterator *iter) {
+    UnicodeString result;
+
+    result=input;
+    result.toTitle((BreakIterator *)iter, Locale(localeID));
+    if(result!=output) {
+        errln("error: UnicodeString.toTitle() got a wrong result for a test case from casing.res");
+    }
+}
+
+#endif
+
+void
+StringCaseTest::TestCasing() {
     UErrorCode status = U_ZERO_ERROR;
+#if !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *iter;
+#endif
     char cLocaleID[100];
-    UnicodeString locale, input, result;
-    int32_t type;
+    UnicodeString locale, input, output, result;
+    int32_t whichCase, type;
     TestDataModule *driver = TestDataModule::getTestDataModule("casing", *this, status);
     if(U_SUCCESS(status)) {
-        TestData *casingTest = driver->createTestData("titlecasing", status);
-        const DataMap *myCase = NULL;
-        while(casingTest->nextCase(myCase, status)) {
-            locale = myCase->getString("Locale", status);
-            locale.extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
-            type = myCase->getInt("Type", status);
-      
-
-            input = myCase->getString("Input", status);
-            if(type<0) {
-                iter=0;
-            } else {
-                iter=ubrk_open((UBreakIteratorType)type, cLocaleID, NULL, 0, &status);
-            }
-
+        for(whichCase=0; whichCase<TEST_COUNT; ++whichCase) {
+            TestData *casingTest = driver->createTestData(dataNames[whichCase], status);
             if(U_FAILURE(status)) {
-                errln("error: TestTitleCasing() ubrk_open(%d) failed for test case  from casing.res: %s", type,  u_errorName(status));
-                status = U_ZERO_ERROR;
-            } else {
-                result=input;
-                result.toTitle((BreakIterator *)iter, Locale(cLocaleID));
-                if(result!=myCase->getString("Output", status)) {
-                    errln("error: TestTitleCasing() got a wrong result for test case from casing.res");
-                }
-                ubrk_close(iter);
+                errln("TestCasing failed to createTestData(%s) - %s", dataNames[whichCase], u_errorName(status));
+                break;
             }
+            const DataMap *myCase = NULL;
+            while(casingTest->nextCase(myCase, status)) {
+                locale = myCase->getString("Locale", status);
+                locale.extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
+
+                input = myCase->getString("Input", status);
+                output = myCase->getString("Output", status);
+
+#if !UCONFIG_NO_BREAK_ITERATION
+                iter=NULL;
+                if(whichCase==TEST_TITLE) {
+                    type = myCase->getInt("Type", status);
+                    if(type>=0) {
+                        iter=ubrk_open((UBreakIteratorType)type, cLocaleID, NULL, 0, &status);
+                    }
+                }
+#endif
+
+                if(U_FAILURE(status)) {
+                    errln("error: TestCasing() setup failed for %s test case from casing.res: %s", dataNames[whichCase],  u_errorName(status));
+                    status = U_ZERO_ERROR;
+                } else {
+                    switch(whichCase) {
+                    case TEST_LOWER:
+                    case TEST_UPPER:
+                        TestCasingImpl(input, output, whichCase, cLocaleID, 0);
+                        break;
+#if !UCONFIG_NO_BREAK_ITERATION
+                    case TEST_TITLE:
+                        TestTitleCasing(input, output, cLocaleID, iter);
+                        break;
+#endif
+                    default:
+                        break; // won't happen
+                    }
+                }
+
+#if !UCONFIG_NO_BREAK_ITERATION
+                if(iter!=NULL) {
+                    ubrk_close(iter);
+                }
+#endif
+            }
+            delete casingTest;
         }
-        delete casingTest;
     }
     delete driver;
 
@@ -367,77 +500,4 @@ StringCaseTest::TestTitleCasing() {
     if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
         errln("UnicodeString::toTitle(NULL) failed");
     }
-
-#if 0
-    char cLocaleID[100];
-    UnicodeString in, expect, result, localeID;
-    UResourceBundle *casing, *titlecasing, *test, *res;
-    UErrorCode errorCode;
-    int32_t testIndex, type;
-
-    errorCode=U_ZERO_ERROR;
-    loadTestData(errorCode);
-    casing=ures_openDirect("testdata", "casing", &errorCode);
-    if(U_FAILURE(errorCode)) {
-        errln("error: TestTitleCasing() is unable to open casing.res: %s", u_errorName(errorCode));
-        return;
-    }
-
-    // titlecasing tests
-    titlecasing=ures_getByKey(casing, "titlecasing", 0, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        logln("TestTitleCasing() is unable to open get casing.res/titlecasing: %s", u_errorName(errorCode));
-    } else {
-        UBreakIterator *iter;
-
-        for(testIndex=0;; ++testIndex) {
-            // get test case
-            test=ures_getByIndex(titlecasing, testIndex, 0, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                break; // done
-            }
-
-            // get test case data
-            in=ures_getUnicodeStringByIndex(test, 0, &errorCode);
-            expect=ures_getUnicodeStringByIndex(test, 1, &errorCode);
-            localeID=ures_getUnicodeStringByIndex(test, 2, &errorCode);
-
-            res=ures_getByIndex(test, 3, 0, &errorCode);
-            type=ures_getInt(res, &errorCode);
-            ures_close(res);
-
-            if(U_FAILURE(errorCode)) {
-                errln("error: TestTitleCasing() is unable to get data for test case %ld from casing.res: %s", testIndex, u_errorName(errorCode));
-                continue; // skip this test case
-            }
-
-            // run this test case
-            localeID.extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
-            if(type<0) {
-                iter=0;
-            } else {
-                iter=ubrk_open((UBreakIteratorType)type, cLocaleID, in.getBuffer(), in.length(), &errorCode);
-            }
-
-            if(U_FAILURE(errorCode)) {
-                errln("error: TestTitleCasing() ubrk_open(%d) failed for test case %d from casing.res: %s", type, testIndex, u_errorName(errorCode));
-            } else {
-                result=in;
-                result.toTitle((BreakIterator *)iter, Locale(cLocaleID));
-                if(result!=expect) {
-                    errln("error: TestTitleCasing() got a wrong result for test case %ld from casing.res", testIndex);
-                }
-            }
-
-            // clean up
-            ubrk_close(iter);
-            ures_close(test);
-        }
-        ures_close(titlecasing);
-        logln("TestTitleCasing() processed %ld test cases", testIndex);
-    }
-
-    ures_close(casing);
-#endif
 }
-#endif

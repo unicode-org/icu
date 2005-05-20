@@ -1,21 +1,38 @@
 ﻿//*******************************************************************************
 //*
-//*   Copyright (C) 2002, International Business Machines
+//*   Copyright (C) 2002-2005, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
 
 casing {
     Info {
-        Description { "This is test data file for string casing" }
+        Description { "This is test data file for string casing." }
 
-        LongDescription { "each item is an array with"
-                      "input string, result string, locale ID, break iterator"
-                      "the break iterator is specified as an int, same as in UBreakIteratorType:"
-                      "0=UBRK_CHARACTER  1=UBRK_WORD  2=UBRK_LINE  3=UBRK_SENTENCE  4=UBRK_TITLE  -1=default"
-                     }
+        LongDescription {
+            "each item is an array with\n"
+            "input string, result string, locale ID[, break iterator]\n"
+            "the break iterator (only for titlecasing) is specified as an int, same as in UBreakIteratorType:\n"
+            "0=UBRK_CHARACTER  1=UBRK_WORD  2=UBRK_LINE  3=UBRK_SENTENCE  4=UBRK_TITLE  -1=default\n"
+        }
     }
     TestData {
+      lowercasing {
+        Headers { "Input", "Output", "Locale" }
+        Cases {
+            { " tHe QUIcK bRoWn", " the quick brown", "" },
+            { "aBIΣßΣ/񟿿𐐅", "abiσßς/񟿿𐐭", "" },
+            { "aBIΣßΣ/񟿿𐐅", "abıσßς/񟿿𐐭", "tur" } // tur: 3-letter code for Turkish
+        }
+      }
+      uppercasing {
+        Headers { "Input", "Output", "Locale" }
+        Cases {
+            { " tHe QUIcK bRoWn", " THE QUICK BROWN", "" },
+            { "aBiσßς/ﬃ񟿿𐐭", "ABIΣSSΣ/FFI񟿿𐐅", "" },
+            { "aBiσßς/ﬃ񟿿𐐭", "ABİΣSSΣ/FFI񟿿𐐅", "az" } // az same casing as tr
+        }
+      }
       titlecasing {
         Headers { "Input", "Output", "Locale", "Type" }
         Cases {
