@@ -212,7 +212,15 @@ public class CharsetDetector {
      *           or null or an empty string if none is available.
      */
     public Reader getReader(InputStream in, String declaredEncoding) {
-        return null;
+        fDeclaredEncoding = declaredEncoding;
+        
+        try {
+            setText(in);
+            
+            return detect().getReader();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     /**
@@ -231,7 +239,14 @@ public class CharsetDetector {
      */
     public String getString(byte[] in, String declaredEncoding)
     {
-        return null;
+        fDeclaredEncoding = declaredEncoding;
+       
+        try {
+            setText(in);
+            return detect().getString(-1);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
  
@@ -343,7 +358,14 @@ public class CharsetDetector {
         for (srci=0; srci<fInputLen; srci++) {
             int val = fInputBytes[srci] & 0x00ff;
             fByteStats[val]++;
-        }        
+        }
+        
+        for (int i = 0x80; i <= 0x9F; i += 1) {
+            if (fByteStats[i] != 0) {
+                fC1Bytes = true;
+                break;
+            }
+        }
      }
 
     /**
@@ -358,6 +380,9 @@ public class CharsetDetector {
     short       fByteStats[] =      // byte frequency statistics for the input text.
                    new short[256];  //   Value is percent, not absolute.
                                     //   Value is rounded up, so zero really means zero occurences.
+    
+    boolean     fC1Bytes =          // True if any bytes in the range 0x80 - 0x9F are in the input;
+                   false;
     
     String      fDeclaredEncoding;
     

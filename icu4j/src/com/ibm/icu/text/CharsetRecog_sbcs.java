@@ -148,16 +148,13 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
-    private int byteIndex;
-    
-    void reset()
-    {
-        byteIndex = 0;
-    }
+    protected boolean haveC1Bytes = false;
     
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap)
     {
         NGramParser parser = new NGramParser(ngrams, byteMap);
+        
+        haveC1Bytes = det.fC1Bytes;
         
         return parser.parse(det);
     }
@@ -201,7 +198,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return "ISO-8859-1";
+            return haveC1Bytes? "windows-1252" : "ISO-8859-1";
         }
     }
 
@@ -444,7 +441,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return "ISO-8859-2";
+            return haveC1Bytes? "windows-1250" : "ISO-8859-2";
         }
     }
     
@@ -630,7 +627,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return "ISO-8859-7";
+            return haveC1Bytes? "windows-1253" : "ISO-8859-7";
         }
     }
     
@@ -693,7 +690,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return "ISO-8859-9";
+            return haveC1Bytes? "windows-1254" : "ISO-8859-9";
         }
     }
     
