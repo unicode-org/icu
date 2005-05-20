@@ -139,7 +139,7 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         }
     
         final String zones[][] = symbols.getZoneStrings();
-        int index = 6;
+        int index = 5;
         //int rowCount = zones.length, colCount = zones[0].length; //The variable is never used
         logln("Long zone name = " + zones[index][1]);
         if (!zones[index][1].equals(jstLong)) {
