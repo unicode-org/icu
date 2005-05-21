@@ -1009,7 +1009,6 @@ final class CollationParsedRuleBuilder
     int m_sizeTer_[];
     boolean m_variableTop_;
     boolean m_caseBit_;
-    boolean m_isThai_;
         
     // package private constructors -------------------------------------
         
@@ -1043,7 +1042,6 @@ final class CollationParsedRuleBuilder
         m_sizeTer_ = element.m_sizeTer_;
         m_variableTop_ = element.m_variableTop_;
         m_caseBit_ = element.m_caseBit_;
-        m_isThai_ = element.m_isThai_;
     }
 
         // package private methods -------------------------------------------
@@ -1065,7 +1063,6 @@ final class CollationParsedRuleBuilder
             Arrays.fill(m_sizeTer_, 0);
             m_variableTop_ = false;
             m_caseBit_ = false;
-            m_isThai_ = false;
         }
 
         
@@ -1728,8 +1725,6 @@ final class CollationParsedRuleBuilder
                                      offset + size);
         }
         m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
-        m_utilElement_.m_isThai_ = CollationElementIterator.isThaiPreVowel(
-                                           m_utilElement_.m_cPoints_.charAt(0));
         for (int i = 0; i < m_utilElement_.m_cPoints_.length() 
              - m_utilElement_.m_cPointsOffset_; i ++) {
         if (isJamo(m_utilElement_.m_cPoints_.charAt(i))) {
@@ -1905,25 +1900,13 @@ final class CollationParsedRuleBuilder
      */
     private int addAnElement(BuildTable t, Elements element) 
     {
-    Vector expansions = t.m_expansions_;
+        Vector expansions = t.m_expansions_;
         element.m_mapCE_ = 0;
         
         if (element.m_CELength_ == 1) {
-        if (element.m_isThai_ == false) {
-        element.m_mapCE_ = element.m_CEs_[0];
-        } 
-        else { // add thai - totally bad here
-                // omitted the expansion offset here for the builder
-                // (HEADER_SIZE_ >> 2)
-        int expansion = RuleBasedCollator.CE_SPECIAL_FLAG_ 
-            | (CE_THAI_TAG_ << RuleBasedCollator.CE_TAG_SHIFT_) 
-            | (addExpansion(expansions, element.m_CEs_[0])
-               << 4) 
-            | 0x1;
-        element.m_mapCE_ = expansion;
-        }
-    } 
-    else {     
+            element.m_mapCE_ = element.m_CEs_[0];
+
+        } else {     
         // unfortunately, it looks like we have to look for a long primary 
         // here since in canonical closure we are going to hit some long 
         // primaries from the first phase, and they will come back as 
@@ -2032,7 +2015,6 @@ final class CollationParsedRuleBuilder
         m_utilElement2_.m_caseBit_ = element.m_caseBit_;
             m_utilElement2_.m_CELength_ = element.m_CELength_;
             m_utilElement2_.m_CEs_ = element.m_CEs_;
-            m_utilElement2_.m_isThai_ = element.m_isThai_;
             m_utilElement2_.m_mapCE_ = element.m_mapCE_;
             //m_utilElement2_.m_prefixChars_ = element.m_prefixChars_;
             m_utilElement2_.m_sizePrim_ = element.m_sizePrim_;
@@ -2040,8 +2022,7 @@ final class CollationParsedRuleBuilder
             m_utilElement2_.m_sizeTer_ = element.m_sizeTer_;
             m_utilElement2_.m_variableTop_ = element.m_variableTop_;
             m_utilElement2_.m_prefix_ = element.m_prefix_;
-            m_utilElement2_.m_prefixChars_ 
-        = Normalizer.compose(element.m_prefixChars_, false);
+            m_utilElement2_.m_prefixChars_ = Normalizer.compose(element.m_prefixChars_, false);
             m_utilElement2_.m_uchars_ = element.m_uchars_;
             m_utilElement2_.m_cPoints_ = element.m_cPoints_;
             m_utilElement2_.m_cPointsOffset_ = 0;
@@ -3788,9 +3769,6 @@ final class CollationParsedRuleBuilder
                             // Since unsafeCPSet is static in ucol_elm, we are 
                             // going to wrap it up in the unsafeCPAddCCNZ 
                             // function
-                            m_utilElement_.m_isThai_ 
-                = CollationElementIterator.isThaiPreVowel(
-                                      m_utilElement_.m_cPoints_.charAt(0));
                         }
                         addAnElement(t, m_utilElement_);
                     }
@@ -3843,7 +3821,6 @@ final class CollationParsedRuleBuilder
                 while (start < limit) {
                     int CE = t.m_mapping_.getValue(start);
                     if (CE == CE_NOT_FOUND_) {
-                        m_utilElement_.m_isThai_ = false;
                         m_utilElement_.m_prefix_ = 0;
                         m_utilElement_.m_uchars_ = UCharacter.toString(start);
                         m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;

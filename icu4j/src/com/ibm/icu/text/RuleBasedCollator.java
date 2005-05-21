@@ -2944,8 +2944,7 @@ public final class RuleBasedCollator extends Collator
             minlength = tlength;
         }
         while (result < minlength
-                && source.charAt(result) == target.charAt(result)
-                && !CollationElementIterator.isThaiPreVowel(source.charAt(result))) {
+                && source.charAt(result) == target.charAt(result)) {
             result ++;
         }
         if (result > 0) {
