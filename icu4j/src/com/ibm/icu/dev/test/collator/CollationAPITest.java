@@ -99,18 +99,19 @@ public class CollationAPITest extends TestFmwk {
         // Need to use identical strength
         col.setStrength(Collator.IDENTICAL);
 
-        byte key2compat[] = { // 2.6.1 key
-            (byte)0x26, (byte)0x28, (byte)0x2A, (byte)0x2C, (byte)0x26, 
-            (byte)0x01, 
-            (byte)0x09, 
-            (byte)0x01, 
-            (byte)0x09, 
-            (byte)0x01, 
-            (byte)0x25, 
-            (byte)0x01, 
-            (byte)0x92, (byte)0x93, (byte)0x94, (byte)0x95, (byte)0x92, 
-            (byte)0x00 
-
+        byte key2compat[] = { // 3.4 key UCA 4.1
+            (byte) 0x28, (byte) 0x2a, (byte) 0x2c, 
+            (byte) 0x2e, (byte) 0x28, (byte) 0x01, 
+            (byte) 0x09, (byte) 0x01, (byte) 0x09, 
+            (byte) 0x01, (byte) 0x27, (byte) 0x01, 
+            (byte) 0x92, (byte) 0x93, (byte) 0x94, 
+            (byte) 0x95, (byte) 0x92, (byte) 0x00        
+            //          2.6.1 key
+            /*
+            0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
+            0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
+            0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
+            */
             // 2.2 key
             /*
             0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
@@ -515,7 +516,7 @@ public class CollationAPITest extends TestFmwk {
         doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
         
         logln("Test getUCAVersion");
-        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x4, 0, 0, 0);
+        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x04, 0x01, 0, 0);
         doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
         
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
