@@ -839,5 +839,26 @@ public final class ICUResourceBundleTest extends TestFmwk {
            warnln("Could not load the locale data: " + e.getMessage());
         }
     }
+
+    public void TestCLDRStyleAliases() {
+        String result = null;
+        String expected = null;
+        String[]expects = new String[] { "", "a41", "a12", "a03", "ar4" };
+
+        logln("Testing CLDR style aliases......\n");
+
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te_IN_REVISED");
+        ICUResourceBundle alias = rb.get("a");
+
+        for(int i = 1; i < 5 ; i++) {
+          String resource="a"+i;
+          ICUResourceBundle a = ((ICUResourceBundle)alias).getWithFallback(resource);
+          result = a.getString();
+          if(result.equals(expected)) {
+              errln("CLDR style aliases failed resource with name "+resource+"resource, exp "+expects[i] +" , got " + result); 
+          }
+        }
+
+    }
 }
 
