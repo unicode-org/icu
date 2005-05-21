@@ -157,9 +157,9 @@ public class CollationMiscTest extends TestFmwk {
             {"c", "b", "\\u0332", "a"},
             {"\\u0332", "\\u20e3", "c", "b", "a"},
             {"c", "b", "\\u0009", "a", "\\u000a"},
-            {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
+            {"c", "b", "\\uD802\\uDE47", "a", "\\u02d0"},
             {"b", "\\u02d0", "a", "\\u02d1"},
-            {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
+            {"b", "\\ud800\\udfcf", "a", "\\u4e00"},
             {"b", "\\u4e00", "a", "\\u4e01"},
             {"b", "\\U0010FFFD", "a"},
             {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
@@ -1623,7 +1623,7 @@ public class CollationMiscTest extends TestFmwk {
                 }
                 prevrule = rule;
             } catch (Exception e) {
-                errln("Error retrieving resource bundle for testing");
+                errln("Error retrieving resource bundle for testing: " + e.toString());
             }
         }
     }

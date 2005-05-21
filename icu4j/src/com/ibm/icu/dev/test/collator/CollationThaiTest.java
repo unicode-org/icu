@@ -288,7 +288,7 @@ public class CollationThaiTest extends TestFmwk {
         compareArray(collator, tests);
     
         String rule = "& c < ab";
-        String testcontraction[] = { "\u0E41ab", "<", "\u0E41c"};
+        String testcontraction[] = { "\u0E41ab", ">", "\u0E41c"};
         try {
             collator = new RuleBasedCollator(rule);
         } catch (Exception e) {
