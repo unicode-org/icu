@@ -755,6 +755,12 @@
 			<File
 				RelativePath=".\ustrtest.h">
 			</File>
+			<File
+				RelativePath=".\utxttest.cpp">
+			</File>
+			<File
+				RelativePath=".\utxttest.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="transforms"

@@ -71,6 +71,78 @@ typedef struct UText UText; /**< C typedef for struct UText. @draft ICU 3.4 */
 struct UTextChunk;
 typedef struct UTextChunk UTextChunk; /**< C typedef for struct UTextChunk. @draft ICU 3.4 */
 
+
+
+/***************************************************************************************
+ *
+ *   C Functions for creating UText wrappers around various kinds of text strings.
+ *
+ *         TODO:  Have a single generic close function
+ *                     utext_close(UText *t) 
+ *                so client code doesn't need to keep track of how one was opened.
+ *
+ ****************************************************************************************/
+
+
+
+/**
+ * Open a read-only UText implementation for UTF-8 strings.
+ */
+U_DRAFT UText * U_EXPORT2
+utext_openUTF8(const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
+
+U_DRAFT void U_EXPORT2
+utext_closeUTF8(UText *t);
+
+U_DRAFT void U_EXPORT2
+utext_resetUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
+
+/**
+ * Open a read-only UText implementation for SBCS strings.
+ * The implementation converts 1:1 according to the provided mapping table.
+ * Supplementary code points are not supported.
+ *
+ * @param toU Mapping table for conversion from SBCS to Unicode (BMP only).
+ *            The mapping table must be available during the lifetime of the
+ *            UText object.
+ */
+U_DRAFT UText * U_EXPORT2
+utext_openSBCS(const UChar toU[256],
+               const char *s, int32_t length,
+               UErrorCode *pErrorCode);
+
+U_DRAFT void U_EXPORT2
+utext_closeSBCS(UText *t);
+
+U_DRAFT void U_EXPORT2
+utext_resetSBCS(UText *t, const char *s, int32_t length, UErrorCode *pErrorCode);
+
+
+
+/**
+ * Set the UText object to handle a writable UnicodeString.
+ */
+U_DRAFT void U_EXPORT2
+utext_setUnicodeString(UText *t, UnicodeString *s);
+
+
+#if 0 // initially commented out to reduce testing
+
+/**
+ * Open a writable UText implementation for Replaceable objects.
+ */
+U_DRAFT UText * U_EXPORT2
+utext_openReplaceable(Replaceable *rep, UErrorCode *pErrorCode);
+
+U_DRAFT void U_EXPORT2
+utext_closeReplaceable(UText *t);
+
+U_DRAFT void U_EXPORT2
+utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode);
+
+#endif
+
+
 struct UTextChunk {
     /** Pointer to contents of text chunk. */
     const UChar *contents;
@@ -88,29 +160,6 @@ struct UTextChunk {
     uint16_t sizeOfStruct;
 };
 
-/**
- * UText caller properties (bit field indexes).
- *
- * @see UText
- * @draft ICU 3.4
- */
-enum {
-    /**
-     * The caller uses more random access than iteration.
-     * @draft ICU 3.4
-     */
-    UTEXT_CALLER_RANDOM_ACCESS,
-    /**
-     * The caller requires UTF-16 index semantics.
-     * @draft ICU 3.4
-     */
-    UTEXT_CALLER_REQUIRES_UTF16,
-    /**
-     * The caller provides a suggested chunk size in bits 31..16.
-     * @draft ICU 3.4
-     */
-    UTEXT_CALLER_CHUNK_SIZE_SHIFT=16
-};
 
 /**
  * UText provider properties (bit field indexes).
@@ -155,9 +204,15 @@ enum {
 /**
  * Function type declaration for UText.clone().
  *
- * TBD
+ * clone this UText.  The cloned copy will refer to the same input text, and
+ *    have the same current position as the original UText.  Subsequent iteration
+ *    on the source and the copy UTexts operate independently of each other.
  *
- * May return NULL if the object cannot be cloned.
+ *   UText.clone() does not clone the underlying text itself.  Only the UText
+ *   wrapper, including the interation position, is cloned.
+ *
+ * @return a pointer to the newly created copy of the UTex object.
+ *         May return NULL if the object cannot be cloned.
  *
  * @see UText
  * @draft ICU 3.4
@@ -166,20 +221,17 @@ typedef UText * U_CALLCONV
 UTextClone(const UText *t);
 
 /**
- * Function type declaration for UText.exchangeProperties().
+ * Function type declaration for UText.GetProperties().
  *
- * TBD
+ * Gets the provider properties for this UText.
  *
- * @param callerProperties Bit field with caller properties.
- *        If negative, none are communicated, only the provider properties
- *        are requested.
  * @return Provider properties bit field.
  *
  * @see UText
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextExchangeProperties(UText *t, int32_t callerProperties);
+UTextGetProperties(UText *t);
 
 /**
  * Function type declaration for UText.length().
@@ -312,6 +364,21 @@ UTextMapOffsetToNative(UText *t, UTextChunk *chunk, int32_t offset);
 typedef int32_t U_CALLCONV
 UTextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index);
 
+
+/**
+  *   UText struct.  Provides the interface between the generic UText access code
+  *                  and the UText provider code that works on specific kinds of
+  *                  text  (utf-8, noncontiugous utf-16, whatever.)
+  *
+  *                  This needs to be plain C, not C++, for reasons of release-to-
+  *                  release binary compatibility.  An application may create a
+  *                  provider for it's own unique text format, and that application 
+  *                  binary must continue to work with future versions of ICU.
+  *
+  *                  Applications that are using predefined types of text providers
+  *                  to pass text data to ICU services will have no need to view the
+  *                  internals of the UText structs that they open.
+  */
 struct UText {
     /**
      * (protected) Pointer to string or wrapped object or similar.
@@ -353,10 +420,10 @@ struct UText {
     /**
      * (public) TBD
      *
-     * @see UTextExchangeProperties
+     * @see UTextGetProperties
      * @draft ICU 3.4
      */
-    UTextExchangeProperties *exchangeProperties;
+    UTextGetProperties *properties;
 
     /**
      * (public) Returns the length of the text.
@@ -434,45 +501,25 @@ struct UText {
     UTextMapIndexToUTF16 *mapIndexToUTF16;
 };
 
-/**
- * Open a read-only UText implementation for UTF-8 strings.
- */
-U_DRAFT UText * U_EXPORT2
-utext_openUTF8(const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
-
-U_DRAFT void U_EXPORT2
-utext_closeUTF8(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
-
-/**
- * Open a read-only UText implementation for SBCS strings.
- * The implementation converts 1:1 according to the provided mapping table.
- * Supplementary code points are not supported.
- *
- * @param toU Mapping table for conversion from SBCS to Unicode (BMP only).
- *            The mapping table must be available during the lifetime of the
- *            UText object.
- */
-U_DRAFT UText * U_EXPORT2
-utext_openSBCS(const UChar toU[256],
-               const char *s, int32_t length,
-               UErrorCode *pErrorCode);
-
-U_DRAFT void U_EXPORT2
-utext_closeSBCS(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetSBCS(UText *t, const char *s, int32_t length, UErrorCode *pErrorCode);
-
 U_CDECL_END
 
-#ifdef XP_CPLUSPLUS
 
+
+
+#ifdef XP_CPLUSPLUS
 U_NAMESPACE_BEGIN
 
-class UTextIterator {
+
+/**
+ *
+ *  UTextIterator    is the class used to access the text data that is
+ *                   behind a UText object.  Services that receive text in the
+ *                   form of a UText will instanitate one or more UTextIterators
+ *                   for this purpose.
+ *
+ *                   @draft ICU 3.4
+ */
+class U_COMMON_API UTextIterator : public UMemory {
 public:
     // all-inline, and stack-allocatable
     // constructors, get/set UText, etc.
@@ -480,7 +527,7 @@ public:
     // for performance, may use a current-position pointer and chunk start/limit
     // pointers and translate back into indexes only when necessary
 
-    UTextIterator(UText *t, int32_t callerProperties=0);
+    UTextIterator(UText *t);
 
     /**
      * Returns the code point at the requested index,
@@ -490,13 +537,37 @@ public:
 
     // U_SENTINEL (-1) if out of bounds
     inline UChar32 next32();
+
+    /**
+     *  Move the iterator position to the character (code point) whose
+     *  index precedes the current position, and return that character.
+     *  This is a pre-decrement operation.
+     *  If the initial iterator position is in the interior of a multi-unit
+     *  character (a utf-8 sequence or a utf-16 surrogate pair, for example),
+     *  the position will be backed up to the beginning of that character,
+     *  and that character will be returned.
+     *
+     *  @return the previous UChar32 code point, or U_SENTINEL (-1) 
+     *          if the index is out of bounds
+     *  @draft ICU 3.4
+     */
     inline UChar32 previous32();
 
     /**
      * Set the iteration index for a following next32() or previous32().
      * Does not immediately access text from the provider.
+     * If the specified index is less than zero or greater than the
+     * length of the text, the position will be set to zero or the length.
      * next32From(index) is more efficient than setIndex()+next32().
      * previous32From(index) is more efficient than setIndex()+previous32().
+     *
+     * <p>
+     * TODO:  what should happen if the new index is not on a code point boundary?
+     * 
+     * @param index the new index position to set the iterator to.
+     *
+     * @draft ICU 3.4
+
      */
     inline void setIndex(int32_t index);
 
@@ -507,6 +578,7 @@ public:
      * @param index Iteration index.
      * @return Code point which starts at or before index,
      *         or U_SENTINEL (-1) if it is out of bounds.
+     * @draft ICU 3.4
      */
     inline UChar32 next32From(int32_t index);
     /**
@@ -516,16 +588,41 @@ public:
      * @param index Iteration index.
      * @return Code point which ends at or before index,
      *         or U_SENTINEL (-1) if it is out of bounds.
+     *
+     * @draft ICU 3.4
      */
     inline UChar32 previous32From(int32_t index);
 
-    // see next32From() -- inline UBool setIndex(int32_t index);   // use origin enum as in UCharIterator?
-    inline int32_t getIndex();              // use origin enum as in UCharIterator?
+    /**
+     * Get the current iterator position, which can range from 0 to length.
+     * The position is an index into the input text, in whatever format it
+     * may have, and may not always correspond to a UChar (UTF-16) index
+     * into the text.
+     *
+     * @return the current index position.
+     * @draft ICU 3.4
+     */
+    inline int32_t getIndex();
 
     /**
-     * @return TRUE if successful.
+     * Move the iterator postion by delta code points.  The amount to move
+     * is a signed number; a negative delta will move the iterator backwards,
+     * towards the start of the text.
+     * <p/>
+     * Behavior for out-of-bounds indexes:
+     * <code>moveIndex</code> pins the input index to 0..length(), i.e.,
+     * if the input index<0 then it is pinned to 0;
+     * if it is index>length() then it is pinned to length().
+     * Afterwards, the index is moved by <code>delta</code> code points
+     * forward or backward,
+     * but no further backward than to 0 and no further forward than to length().
+     * The resulting index value will be in between 0 and length(), inclusive.
+     *
+     * @return TRUE if the position could be moved the requested number of positions without
+     *              running of the start or end of the text.
+     * @draft ICU 3.4
      */
-    UBool moveIndex(int32_t delta);  // signed delta code points
+    UBool moveIndex(int32_t delta);  
 
     /**
      * Compare the text starting from the current index with the string
@@ -551,50 +648,47 @@ public:
      */
     UBool compare(const UChar *s, int32_t length, UBool codePointOrder);
 
-    // convenience wrappers for length(), access(), extract()?
+    /**
+     * Get the total length of the text, expressed in the units of the
+     *   underlying text storage, which is not necessarily utf-16 code units.
+     *   The length of a utf-8 string, for example, would be returned in bytes.
+     * May be expensive to compute.
+     *
+     * @return the lenght of the text.
+     *
+     * @draft ICU 3.4
+     */
+    int32_t  length();
+
+    // convenience wrappers for access(), extract()?
     // needed at least for extract()/copy() for chunk invalidation
     // getChunkStart(), getChunkLimit() for the current chunk?
     // const UTextChunk *getChunk()?
 
 private:
     UText *t;
-    UTextChunk chunk;
-    int32_t chunkOffset;
-    int32_t providerProperties; // -1 if not known yet
+    UTextChunk chunk;   
+    int32_t chunkOffset;                 // Current index within this chunk.
+    int32_t providerProperties;          // -1 if not known yet
 
     void setChunkInvalid(int32_t index);
 
     /** Call chunkOffset=t->access() and return TRUE if a chunk is returned. */
     UBool access(int32_t index, UBool forward);
+
+    UChar32  getSupplementary();         // Get a supplementary char at the current position.
+                                         //  position could be on either lead or trail.
+                                         //  Position will be adjusted to be on lead.
+                                         //  Out-of-line, to reduce amount of inline code.
 };
 
-U_NAMESPACE_END
 
-#if 0 // initially commented out to reduce testing
+//--------------------------------------------------------------------------------
+//
+// UTextIterator inline implementations 
+//
+//--------------------------------------------------------------------------------
 
-/**
- * Open a writable UText implementation for Replaceable objects.
- */
-U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(Replaceable *rep, UErrorCode *pErrorCode);
-
-U_DRAFT void U_EXPORT2
-utext_closeReplaceable(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode);
-
-#endif
-
-/**
- * Set the UText object to handle a writable UnicodeString.
- */
-U_DRAFT void U_EXPORT2
-utext_setUnicodeString(UText *t, UnicodeString *s);
-
-// UTextIterator inline implementations ------------------------------------ ***
-
-U_NAMESPACE_BEGIN
 
 UChar32
 UTextIterator::next32() {
@@ -623,6 +717,7 @@ UTextIterator::previous32() {
 void
 UTextIterator::setIndex(int32_t index) {
     if(index<chunk.start || chunk.limit<index) {
+        // The desired position is outside of the current chunk.  Invalidate it and
         // leave it to next32() or previous32() to access the text
         // in the desired direction
         setChunkInvalid(index);
@@ -648,6 +743,7 @@ UTextIterator::next32From(int32_t index) {
 
     UChar32 c;
     U16_NEXT(chunk.contents, chunkOffset, chunk.length, c);
+    return c;
 }
 
 UChar32 UTextIterator::previous32From(int32_t index) {
@@ -663,11 +759,17 @@ UChar32 UTextIterator::previous32From(int32_t index) {
     }
 
     UChar32 c;
-    U16_PREV(chunk.contents, 0, chunkOffset, c);
+    chunkOffset--;
+    c = chunk.contents[chunkOffset];
+    if (U16_IS_SURROGATE(c)) {
+        // take supplementary support out-of-line
+        c = this->getSupplementary();
+    }
+    return c;
 }
 
 int32_t UTextIterator::getIndex() {
-    if(!chunk.nonUTF16Indexes) {
+    if(!chunk.nonUTF16Indexes || chunkOffset==0) {
         return chunk.start+chunkOffset;
     } else {
         return t->mapOffsetToNative(t, &chunk, chunkOffset);

@@ -22,18 +22,31 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+U_NAMESPACE_BEGIN
+
 #define I32_FLAG(bitIndex) ((int32_t)1<<(bitIndex))
 
-/* UTextIterator implementation --------------------------------------------- */
+/*---------------------------------------------------------------------------
+ *
+ * UTextIterator implementation
+ *
+ * ---------------------------------------------------------------------------*/
 
-UTextIterator::UTextIterator(UText *text, int32_t callerProperties) {
+UTextIterator::UTextIterator(UText *text) {
     t=text;
     chunk.sizeOfStruct=(uint16_t)sizeof(UTextChunk);
     chunk.padding=0;
     setChunkInvalid(0);
-    providerProperties=t->exchangeProperties(t, callerProperties);
+    providerProperties=t->properties(t);
 }
 
+
+
+//
+//   setChunkInvalid()   This is called when the iterator position is set outside
+//                       of the current range of the chunk.  The index position is
+//                       kept, but chunk contents are set such that an attempt to
+//                       access data will fail.
 void
 UTextIterator::setChunkInvalid(int32_t index) {
     chunk.contents=NULL;
@@ -42,6 +55,8 @@ UTextIterator::setChunkInvalid(int32_t index) {
     chunk.nonUTF16Indexes=FALSE;
 }
 
+
+
 UBool
 UTextIterator::access(int32_t index, UBool forward) {
     chunkOffset=t->access(t, index, forward, &chunk);
@@ -49,33 +64,73 @@ UTextIterator::access(int32_t index, UBool forward) {
         return TRUE;
     } else {
         // no chunk available here
+        //  TODO:  Possibly cleaner end-of-string bail-out.  
         setChunkInvalid(index);
         return FALSE;
     }
 }
 
+
+
 UBool
 UTextIterator::moveIndex(int32_t delta) {
+    UBool retval = TRUE;
     if(delta>0) {
         do {
             if(chunkOffset>=chunk.length && !access(chunk.limit, TRUE)) {
-                return FALSE;
+                retval = FALSE;
+                break;
             }
             U16_FWD_1(chunk.contents, chunkOffset, chunk.length);
         } while(--delta>0);
-        return TRUE;
-    } else if(delta<0) {
+    } else if (delta<0) {
         do {
             if(chunkOffset<=chunk.start && !access(chunk.start, FALSE)) {
-                return FALSE;
+                retval = FALSE;
+                break;
             }
             U16_BACK_1(chunk.contents, chunk.start, chunkOffset);
         } while(++delta<0);
-        return TRUE;
     } else {
-        return TRUE;
+        // Delta == 0.
+        // Need to trim current postion to be within the bounds of the text.
+        if (chunkOffset>=0 && chunkOffset<chunk.limit) {
+            // Current position is within the current chunk.
+            // No action needed.
+        } else if (chunk.start<=0) {
+            // Current position is <= 0, and outside of the current chunk.
+            //   can only get negative if someone did a setIndex(negative value).
+            //   Trim position back to zero.
+            setChunkInvalid(0);
+        } else {
+            // Current postion is past the current chunk bounds.
+            // Force trim to length of text by doing a text access.
+            access(chunk.limit, FALSE);
+        }
     }
+    return retval;
 }
+
+
+int32_t
+UTextIterator::length() {
+    return t->length(t);
+}
+
+
+
+UChar32  
+UTextIterator::getSupplementary() {
+    UChar32  c;
+    U16_GET(chunk.contents, 0, chunkOffset, chunk.length, c);
+    if (U16_IS_TRAIL(chunk.contents[chunkOffset]) && U_IS_SUPPLEMENTARY(c)) {
+        // Incoming position pointed to the trailing supplementary pair.
+        // Move ourselves back to the lead.
+        chunkOffset--;
+    }
+    return c;
+}
+
 
 UBool
 UTextIterator::compare(const UChar *s, int32_t length, UBool codePointOrder) {
@@ -116,6 +171,10 @@ UTextIterator::compare(const UChar *s, int32_t length, UBool codePointOrder) {
     }
     return 0;
 }
+U_NAMESPACE_END
+
+
+
 
 /* No-Op UText implementation for illegal input ----------------------------- */
 
@@ -125,8 +184,7 @@ noopTextClone(const UText *t) {
 }
 
 static int32_t U_CALLCONV
-noopTextExchangeProperties(UText * /*t*/, int32_t /* callerProperties */) {
-    // ignore callerProperties
+noopTextGetProperties(UText * /*t*/) {
     return
         I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_INEXPENSIVE)|
         I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS);
@@ -164,7 +222,7 @@ static const UText noopText={
     NULL, NULL, NULL, NULL,
     (int32_t)sizeof(UText), 0, 0, 0,
     noopTextClone,
-    noopTextExchangeProperties,
+    noopTextGetProperties,
     noopTextLength,
     noopTextAccess,
     noopTextExtract,
@@ -174,12 +232,16 @@ static const UText noopText={
     noopTextMapIndexToUTF16
 };
 
-/* UText implementation for UTF-8 strings (read-only) ----------------------- */
 
-/*
- * Use of UText data members:
- *   context    pointer to UTF-8 string
- */
+
+//------------------------------------------------------------------------------
+//
+//     UText implementation for UTF-8 strings (read-only) 
+//
+//         Use of UText data members:
+//            context    pointer to UTF-8 string
+//
+//------------------------------------------------------------------------------
 
 enum { UTF8_TEXT_CHUNK_SIZE=10 };
 
@@ -204,8 +266,7 @@ struct UTF8Text : public UText {
 };
 
 static int32_t U_CALLCONV
-utf8TextExchangeProperties(UText * /*t*/, int32_t /* callerProperties */) {
-    // ignore callerProperties for now
+utf8TextGetProperties(UText * /*t*/) {
     return
         I32_FLAG(UTEXT_PROVIDER_NON_UTF16_INDEXES)|
         I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_INEXPENSIVE);
@@ -361,7 +422,7 @@ static const UText utf8Text={
     NULL, NULL, NULL, NULL,
     (int32_t)sizeof(UText), 0, 0, 0,
     noopTextClone,
-    utf8TextExchangeProperties,
+    utf8TextGetProperties,
     utf8TextLength,
     utf8TextAccess,
     utf8TextExtract,
@@ -420,12 +481,18 @@ utext_resetUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCo
     }
 }
 
-/* UText implementation for SBCS strings (read-only) ------------------------ */
 
-/*
- * Use of UText data members:
- *   context    pointer to SBCS string
- */
+
+
+//------------------------------------------------------------------------------
+//
+//     UText implementation for SBCS strings (read-only) 
+//
+//         Use of UText data members:
+//            context    pointer to SBCS string
+//
+//------------------------------------------------------------------------------
+
 
 enum { SBCS_TEXT_CHUNK_SIZE=10 };
 
@@ -439,8 +506,7 @@ struct SBCSText : public UText {
 };
 
 static int32_t U_CALLCONV
-sbcsTextExchangeProperties(UText * /*t*/, int32_t /* callerProperties */) {
-    // ignore callerProperties for now
+sbcsTextGetProperties(UText * /*t*/) {
     return
         I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_INEXPENSIVE);
         // not UTEXT_PROVIDER_STABLE_CHUNKS because chunk-related data is kept
@@ -531,7 +597,7 @@ static const UText sbcsText={
     NULL, NULL, NULL, NULL,
     (int32_t)sizeof(UText), 0, 0, 0,
     noopTextClone,
-    sbcsTextExchangeProperties,
+    sbcsTextGetProperties,
     sbcsTextLength,
     sbcsTextAccess,
     sbcsTextExtract,
@@ -594,12 +660,22 @@ utext_resetSBCS(UText *t, const char *s, int32_t length, UErrorCode *pErrorCode)
 
 /* UText implementation wrapper for Replaceable (read/write) ---------------- */
 
+
+
+
+
+//------------------------------------------------------------------------------
+//
+//     UText implementation wrapper for Replaceable (read/write) 
+//
+//         Use of UText data members:
+//            context    pointer to Replaceable
+//
+//------------------------------------------------------------------------------
+
 #if 0 // initially commented out to reduce testing
 
-/*
- * Use of UText data members:
- *   context    pointer to Replaceable
- *
+ /*
  * TODO: use a flag in RepText to support readonly strings?
  *       -> omit UTEXT_PROVIDER_WRITABLE
  */
@@ -628,8 +704,7 @@ repTextClone(const UText *t) {
 }
 
 static int32_t U_CALLCONV
-repTextExchangeProperties(UText *t, int32_t /* callerProperties */) {
-    // ignore callerProperties for now
+repTextGetProperties(UText *t) {
     int32_t props=I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     if(((const Replaceable *)((const RepText *)t)->context)->hasMetaData()) {
         props|=I32_FLAG(UTEXT_PROVIDER_HAS_META_DATA);
@@ -807,7 +882,7 @@ static const UText repText={
     NULL, NULL, NULL, NULL,
     (int32_t)sizeof(UText), 0, 0, 0,
     repTextClone,
-    repTextExchangeProperties,
+    repTextGetProperties,
     repTextLength,
     repTextAccess,
     repTextExtract,
@@ -858,12 +933,22 @@ utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode) {
 
 #endif
 
-/* UText implementation for UnicodeString (read/write) ---------------------- */
 
-/*
- * Use of UText data members:
- *   context    pointer to UnicodeString
- *
+
+
+
+
+
+//------------------------------------------------------------------------------
+//
+//     UText implementation for UnicodeString (read/write) 
+//
+//         Use of UText data members:
+//            context    pointer to UnicodeString
+//
+//------------------------------------------------------------------------------
+
+ /*
  * TODO: use a flag in UText to support readonly strings?
  *       -> omit UTEXT_PROVIDER_WRITABLE
  */
@@ -883,8 +968,7 @@ unistrTextClone(const UText *t) {
 }
 
 static int32_t U_CALLCONV
-unistrTextExchangeProperties(UText * /*t*/, int32_t /* callerProperties */) {
-    // ignore callerProperties for now
+unistrTextGetProperties(UText * /*t*/) {
     return
         I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_INEXPENSIVE)|
         I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS)|
@@ -897,17 +981,25 @@ unistrTextLength(UText *t) {
 }
 
 static int32_t U_CALLCONV
-unistrTextAccess(UText *t, int32_t index, UBool /* forward */, UTextChunk *chunk) {
+unistrTextAccess(UText *t, int32_t index, UBool  forward, UTextChunk *chunk) {
     const UnicodeString *us=(const UnicodeString *)t->context;
     int32_t length=us->length();
 
-    if(index<0 || length<index) {
-        return -1;
+    if (forward) {
+        if (index<0 || index>=length) {
+            // Forward iteration.  Character after index position must exist.
+            return -1;
+        }
+    } else {
+        if (index<=0 || index>length) {
+            // Reverse iteration.  Character before index position must exist.
+            return -1;
+        }
     }
 
     chunk->contents=us->getBuffer();
     chunk->length=length;
-    chunk->start=index;
+    chunk->start=0;
     chunk->limit=length;
     chunk->nonUTF16Indexes=FALSE;
     return index; // chunkOffset corresponding to index
@@ -1012,13 +1104,17 @@ unistrTextCopy(UText *t,
     if(chunk!=NULL && oldBuffer!=us->getBuffer()) {
         chunk->contents=NULL;
     }
-}
+};
 
+//
+//  Statically initialized utext object, pre-setup
+//   for UnicodeStrings.
+//  
 static const UText unistrText={
     NULL, NULL, NULL, NULL,
     (int32_t)sizeof(UText), 0, 0, 0,
     unistrTextClone,
-    unistrTextExchangeProperties,
+    unistrTextGetProperties,
     unistrTextLength,
     unistrTextAccess,
     unistrTextExtract,
@@ -1033,3 +1129,5 @@ utext_setUnicodeString(UText *t, UnicodeString *s) {
     *t=unistrText;
     t->context=s;
 }
+
+
