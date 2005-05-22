@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -236,6 +236,9 @@ U_NAMESPACE_END
 
 /**
  * Is this character a "white space" in the sense of ICU rule parsers?
+ * Equivalent to test for Pattern_White_Space Unicode property.
+ * Stable set of characters, won't change.
+ * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
  * @internal
  */
 U_CAPI UBool U_EXPORT2

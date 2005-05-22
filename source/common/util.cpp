@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -613,8 +613,9 @@ U_CAPI UBool U_EXPORT2
 uprv_isRuleWhiteSpace(UChar32 c) {
     /* "white space" in the sense of ICU rule parsers
        This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
-       See UTR #31: http://www.unicode.org/reports/tr31/.
+       See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
        U+0009..U+000D, U+0020, U+0085, U+200E..U+200F, and U+2028..U+2029
+       Equivalent to test for Pattern_White_Space Unicode property.
     */
     return (c >= 0x0009 && c <= 0x2029 &&
             (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
