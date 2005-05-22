@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -132,15 +132,3 @@ uset_toPattern(const USet* set,
     ((const UnicodeSet*) set)->toPattern(pat, escapeUnprintable);
     return pat.extract(result, resultCapacity, *ec);
 }
-
-U_CAPI USet* U_EXPORT2
-uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
-    static const UChar _PATTERN[] = {
-        /* "[[:Cf:][:WSpace:]]" */
-        91, 91, 58, 67, 102, 58, 93, 91, 58, 87,
-        83, 112, 97, 99, 101, 58, 93, 93, 0
-    };
-    return uset_openPattern(_PATTERN,
-                            sizeof(_PATTERN)/sizeof(_PATTERN[0])-1, ec);
-}
-
