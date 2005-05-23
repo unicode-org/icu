@@ -84,6 +84,9 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * @draft ICU 2.8 
  */
 public final class ULocale implements Serializable {
+    // using serialver from jdk1.4.2_05
+    static final long serialVersionUID = 3715177670352309217L;
+
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
