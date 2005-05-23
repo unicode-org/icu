@@ -54,6 +54,24 @@
  *   (which would need to be passed in) became invalid during the operation.
  *   Same for copy().
  *
+ * - Single text iterator only.  Because UText owns the buffer for non-UTF-16 sources, there
+ *   can only be a single UTextIterator on a UText.  A second iterator could cause buffer
+ *   contents to be moved, while info about what's in the buffer in the first iterator would
+ *   not be updated.  
+ *
+ *     - Add some kind of failure status to construction of UTextIterator, to prevent
+ *       two from existing?  Seems hostile to developers.
+ *     - Make UText.clone() be shallow.  Don't clone the text, do clone the buffer so that
+ *       a second UTextIterator can be instantiated.   Developer hostile, again.
+ *     - Move the buffer from the UText to the UTextIterator.
+ *         - developer-friendly.
+ *         - NOP (good performance) on utf-16  strings.  (all can share a buffer)
+ *         - Extra allocation for buffer on utf-8, codepage data, etc.
+ *     - Use buffer in UText if available, otherwise allocate another
+ *         Complicated implementation.
+ *         Threading model?
+ *       
+ *
  * @see UText
  */
 
@@ -204,12 +222,10 @@ enum {
 /**
  * Function type declaration for UText.clone().
  *
- * clone this UText.  The cloned copy will refer to the same input text, and
- *    have the same current position as the original UText.  Subsequent iteration
- *    on the source and the copy UTexts operate independently of each other.
- *
- *   UText.clone() does not clone the underlying text itself.  Only the UText
- *   wrapper, including the interation position, is cloned.
+ * clone this UText.  
+ * Text providers are not required to support clone.
+ * Applications must be prepared for the possibility that clone is not supported.
+ * TODO:  should we just drop clone altogether?
  *
  * @return a pointer to the newly created copy of the UTex object.
  *         May return NULL if the object cannot be cloned.
@@ -514,7 +530,7 @@ U_NAMESPACE_BEGIN
  *
  *  UTextIterator    is the class used to access the text data that is
  *                   behind a UText object.  Services that receive text in the
- *                   form of a UText will instanitate one or more UTextIterators
+ *                   form of a UText will instanitate a UTextIterator
  *                   for this purpose.
  *
  *                   @draft ICU 3.4

@@ -451,6 +451,7 @@ utext_openUTF8(const uint8_t *s, int32_t length, UErrorCode *pErrorCode) {
     if(length>=0) {
         t8->length=length;
     } else {
+        // TODO:  really undesirable to do this scan upfront.
         t8->length=(int32_t)uprv_strlen((const char *)s);
     }
     return t8;
