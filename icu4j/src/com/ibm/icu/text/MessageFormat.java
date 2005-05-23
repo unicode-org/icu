@@ -475,7 +475,7 @@ public class MessageFormat extends UFormat {
                     } else {
                         segments[part].append(ch);
                     }
-                } else  if (inQuote) {              // just copy quotes in parts
+                } else  if (inQuote) {  // just copy quotes in parts
                     segments[part].append(ch);
                     if (ch == '\'') {
                         inQuote = false;
@@ -1641,5 +1641,95 @@ public class MessageFormat extends UFormat {
         if (ulocale == null) {
             ulocale = ULocale.forLocale(locale);
         }
+    }
+
+    private static final char SINGLE_QUOTE = '\'';
+    private static final char CURLY_BRACE_LEFT = '{';
+    private static final char CURLY_BRACE_RIGHT = '}';
+
+    private static final int STATE_INITIAL = 0;
+    private static final int STATE_SINGLE_QUOTE = 1;
+    private static final int STATE_IN_QUOTE = 2;
+    private static final int STATE_MSG_ELEMENT = 3;
+
+    /**
+     * Convert an 'apostrophe-friendly' pattern into a standard
+     * pattern.  Standard patterns treat all apostrophes as
+     * quotes, which is problematic in some languages, e.g. 
+     * French, where apostrophe is commonly used.  This utility
+     * assumes that only an unpaired apostrophe before a brace is a 
+     * true quote, other unpaired apostrophes are paired,
+     * and the resulting standard pattern string is returned.
+     *
+     * <p><b>Note</b> it is not guaranteed that the returned pattern
+     * is indeed a valid pattern.  The only effect is to convert
+     * between patterns having different quoting semantics.
+     *
+     * @param pattern the 'apostrophe-friendly' patttern to convert
+     * @param the standard pattern equivalent to the original pattern
+     * @since ICU 3.4
+     */
+    public static String autoQuoteApostrophe(String pattern) {
+        StringBuffer buf = new StringBuffer(pattern.length()*2);
+        int state = STATE_INITIAL;
+        int braceCount = 0;
+        for (int i = 0, j = pattern.length(); i < j; ++i) {
+            char c = pattern.charAt(i);
+            switch (state) {
+            case STATE_INITIAL:
+                switch (c) {
+                case SINGLE_QUOTE:
+                    state = STATE_SINGLE_QUOTE;
+                    break;
+                case CURLY_BRACE_LEFT:
+                    state = STATE_MSG_ELEMENT;
+                    ++braceCount;
+                    break;
+                }
+                break;
+            case STATE_SINGLE_QUOTE:
+                switch (c) {
+                case SINGLE_QUOTE:
+                    state = STATE_INITIAL;
+                    break;
+                case CURLY_BRACE_LEFT:
+                case CURLY_BRACE_RIGHT:
+                    state = STATE_IN_QUOTE;
+                    break;
+                default:
+                    buf.append(SINGLE_QUOTE);
+                    state = STATE_INITIAL;
+                    break;
+                }
+                break;
+            case STATE_IN_QUOTE:
+                switch (c) {
+                case SINGLE_QUOTE:
+                    state = STATE_INITIAL;
+                    break;
+                }
+                break;
+            case STATE_MSG_ELEMENT:
+                switch (c) {
+                case CURLY_BRACE_LEFT:
+                    ++braceCount;
+                    break;
+                case CURLY_BRACE_RIGHT:
+                    if (--braceCount == 0) {
+                        state = STATE_INITIAL;
+                    }
+                    break;
+                }
+                break;
+            default: // Never happens.
+                break;
+            }
+            buf.append(c);
+        }
+        // End of scan
+        if (state == STATE_SINGLE_QUOTE || state == STATE_IN_QUOTE) {
+            buf.append(SINGLE_QUOTE);
+        }
+        return new String(buf);
     }
 }

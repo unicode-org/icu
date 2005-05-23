@@ -909,4 +909,24 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("2nd subformmater: its Locale", ULocale.GERMAN, ((UFormat)fmts2[1]).getLocale(ULocale.VALID_LOCALE));
         assertTrue("The third subFormatter is null", null == fmts2[2]);
     }
+
+    // Test the fix pattern api
+    public void TestAutoQuoteApostrophe() {
+        final String[] patterns = { // new pattern, expected pattern
+            "'", "''",
+            "''", "''",
+            "'{", "'{'",
+            "' {", "'' {",
+            "'a", "''a",
+            "'{'a", "'{'a",
+            "'{a'", "'{a'",
+            "'{}", "'{}'",
+            "{'", "{'",
+            "{'a", "{'a",
+            "{'a{}'a}'a", "{'a{}'a}''a",
+        };
+        for (int i = 0; i < patterns.length; i += 2) {
+            assertEquals("[" + (i/2) + "] \"" + patterns[i] + "\"", patterns[i+1], MessageFormat.autoQuoteApostrophe(patterns[i]));
+        }
+    }
 }
