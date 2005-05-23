@@ -195,6 +195,29 @@ void UTextTest::TestAccess(UText *ut, int cpCount, m *cpMap) {
         }
     }
 
+    //
+    // moveIndex(int32_t delta);
+    //
+    uti.setIndex(0);
+    for (i=2; i<cpCount; i+=2) {
+        uti.moveIndex(2);
+        index = uti.getIndex();
+        expectedIndex = cpMap[i].nativeIdx;
+        TEST_ASSERT(expectedIndex == index);
+    }
+
+    i = cpMap[cpCount-1].nativeIdx;
+    uti.setIndex(i);
+    for (i=cpCount-1; i>=0; i-=3) {
+        index = uti.getIndex();
+        expectedIndex = cpMap[i].nativeIdx;
+        TEST_ASSERT(expectedIndex == index);
+        uti.moveIndex(-3);
+    }
+
+
+
+
 }
 
 
