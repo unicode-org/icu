@@ -70,6 +70,9 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @stable ICU 2.0
  */
 abstract public class TimeZone implements Serializable, Cloneable {
+    // using serialver from jdk1.4.2_05
+    static final long serialVersionUID = -744942128318337471L;
+
     /**
      * Default constructor.  (For invocation by subclass constructors,
      * typically implicit.)
