@@ -104,6 +104,7 @@ public class ICUService extends ICUNotifier {
         name = "";
     }
 
+    private static final boolean DEBUG = ICUDebug.enabled("service");
     /**
      * Construct with a name (useful for debugging).
      */
@@ -390,8 +391,7 @@ public class ICUService extends ICUNotifier {
             return handleDefault(key, actualReturn);
         }
 
-        boolean debug = false;
-        if (debug) System.out.println("Service: " + name + " key: " + key.canonicalID());
+        if (DEBUG) System.out.println("Service: " + name + " key: " + key.canonicalID());
 
         CacheEntry result = null;
         if (key != null) {
@@ -404,11 +404,11 @@ public class ICUService extends ICUNotifier {
                 Map cache = null;
                 SoftReference cref = cacheref; // copy so we don't need to sync on this
                 if (cref != null) {
-                    if (debug) System.out.println("Service " + name + " ref exists");
+                    if (DEBUG) System.out.println("Service " + name + " ref exists");
                     cache = (Map)cref.get();
                 }
                 if (cache == null) {
-                    if (debug) System.out.println("Service " + name + " cache was empty");
+                    if (DEBUG) System.out.println("Service " + name + " cache was empty");
                     // synchronized since additions and queries on the cache must be atomic
                     // they can be interleaved, though
                     cache = Collections.synchronizedMap(new HashMap());
@@ -441,13 +441,13 @@ public class ICUService extends ICUNotifier {
             outer:
                 do {
                     currentDescriptor = key.currentDescriptor();
-                    if (debug) System.out.println(name + "[" + NDebug++ + "] looking for: " + currentDescriptor);
+                    if (DEBUG) System.out.println(name + "[" + NDebug++ + "] looking for: " + currentDescriptor);
                     result = (CacheEntry)cache.get(currentDescriptor);
                     if (result != null) {
-                        if (debug) System.out.println(name + " found with descriptor: " + currentDescriptor);
+                        if (DEBUG) System.out.println(name + " found with descriptor: " + currentDescriptor);
                         break outer;
                     } else {
-                        if (debug) System.out.println("did not find: " + currentDescriptor + " in cache");
+                        if (DEBUG) System.out.println("did not find: " + currentDescriptor + " in cache");
                     }
 
                     // first test of cache failed, so we'll have to update
@@ -459,14 +459,14 @@ public class ICUService extends ICUNotifier {
                     int index = startIndex;
                     while (index < limit) {
                         Factory f = (Factory)factories.get(index++);
-                        if (debug) System.out.println("trying factory[" + (index-1) + "] " + f.toString());
+                        if (DEBUG) System.out.println("trying factory[" + (index-1) + "] " + f.toString());
                         Object service = f.create(key, this);
                         if (service != null) {
                             result = new CacheEntry(currentDescriptor, service);
-                            if (debug) System.out.println(name + " factory supported: " + currentDescriptor + ", caching");
+                            if (DEBUG) System.out.println(name + " factory supported: " + currentDescriptor + ", caching");
                             break outer;
                         } else {
-                            if (debug) System.out.println("factory did not support: " + currentDescriptor);
+                            if (DEBUG) System.out.println("factory did not support: " + currentDescriptor);
                         }
                     }
 
@@ -484,13 +484,13 @@ public class ICUService extends ICUNotifier {
 
                 if (result != null) {
                     if (putInCache) {
-                        if (debug) System.out.println("caching '" + result.actualDescriptor + "'");
+                        if (DEBUG) System.out.println("caching '" + result.actualDescriptor + "'");
                         cache.put(result.actualDescriptor, result);
                         if (cacheDescriptorList != null) {
                             Iterator iter = cacheDescriptorList.iterator();
                             while (iter.hasNext()) {
                                 String desc = (String)iter.next();
-                                if (debug) System.out.println(name + " adding descriptor: '" + desc + "' for actual: '" + result.actualDescriptor + "'");
+                                if (DEBUG) System.out.println(name + " adding descriptor: '" + desc + "' for actual: '" + result.actualDescriptor + "'");
 
                                 cache.put(desc, result);
                             }
@@ -511,7 +511,7 @@ public class ICUService extends ICUNotifier {
                         }
                     }
 
-                    if (debug) System.out.println("found in service: " + name);
+                    if (DEBUG) System.out.println("found in service: " + name);
 
                     return result.service;
                 }
@@ -521,7 +521,7 @@ public class ICUService extends ICUNotifier {
             }
         }
 
-        if (debug) System.out.println("not found in service: " + name);
+        if (DEBUG) System.out.println("not found in service: " + name);
 
         return handleDefault(key, actualReturn);
     }
