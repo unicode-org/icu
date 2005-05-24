@@ -107,7 +107,7 @@ public class CopticTest extends CalendarTest
 
 	    /* Skip these tests until JD bug fixed in the Gregorian calendar:
 	     * http://www.jtcsv.com/cgibin/icu-bugs/incoming?id=4406;page=2;user=guest
-	     */
+	     *
 	     new TestCase(1721059.5,  0,  -284,    5,   7,  SAT,    0,  0,  0), // Gregorian: 01/01/0000
 	     new TestCase(1721425.5,  0,  -283,    5,   8,  MON,    0,  0,  0), // Gregorian: 01/01/0001
 	     new TestCase(1824663.5,  0,    -1,   13,   6,  WED,    0,  0,  0), // Gregorian: 29/08/0283
@@ -124,7 +124,7 @@ public class CopticTest extends CalendarTest
 	     new TestCase(1826489.5,  1,     4,   13,   5,  TUE,    0,  0,  0), // Gregorian: 28/08/0288
 	     new TestCase(2299158.5,  1,  1299,    2,   6,  WED,    0,  0,  0), // Gregorian: 13/10/1582
 	     new TestCase(2299159.5,  1,  1299,    2,   7,  THU,    0,  0,  0), // Gregorian: 14/10/1582
-            /**/
+            */
             new TestCase(2299160.5,  1,  1299,    2,   8,  FRI,    0,  0,  0), // Gregorian: 15/10/1582
             new TestCase(2299161.5,  1,  1299,    2,   9,  SAT,    0,  0,  0), // Gregorian: 16/10/1582
 
