@@ -774,7 +774,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
             String expected =
                 "On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "+
-                "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PST) "+
+                "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PT) "+
                 "there were 1,303 werjes "+
                 "(a 8% increase over 1,202) "+
                 "despite the Glimmung's efforts "+

@@ -1,4 +1,4 @@
-/*
+ /*
  *******************************************************************************
  * Copyright (C) 2001-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
@@ -205,13 +205,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
             "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
+            "Wednesday", "", "", "", "", "PM", "2", "", "PT", "", "", "", "", "", "",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
-            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "",
+            "mercredi", "", "", "", "", "", "", "", "HP (\u00C9UA)", "", "", "", "", "", "",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PT", "1997", "4", "1997", "2450674", "52452513", "-0700",
 
             "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
@@ -284,6 +284,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * General parse/format tests.  Add test cases as needed.
      */
     public void TestGeneral() {
+        
         String DATA[] = {
             "yyyy MM dd HH:mm:ss.SSS",
 
@@ -295,6 +296,128 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.568", "2004/3/10 16:36:31.5680",
         };
         expect(DATA, new Locale("en", "", ""));
+    }
+
+    public void TestGenericTime() {
+	if (System.getSecurityManager() != null) {
+	    // !!! if we're running under a security manager, JDKTimeZone won't return the right
+	    // dst offset values for us in a few cases around the DST changeover, so ignore this test.
+	    warnln("cannot pass under security manager");
+	    return;
+	}
+
+        // any zone pattern should parse any zone
+        Locale en = new Locale("en", "", "");
+        String ZDATA[] = {
+            "yyyy MM dd HH:mm zzz",
+            // round trip
+            "y/M/d H:mm zzzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Standard Time",
+            "y/M/d H:mm zzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+            "y/M/d H:mm zz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d H:mm z", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
+            // non-generic timezone string influences dst offset even if wrong for date/time
+            "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 PST",
+            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
+            "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 PDT",
+            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 Pacific Time",
+            // generic timezone generates dst offset appropriate for local time
+            "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
+            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+            // daylight savings time transition edge cases.
+            // time to parse does not really exist, PT interpreted as earlier time
+            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST", // adjust earlier
+            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
+            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
+            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT", // adjust earlier
+            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
+            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+            "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 01:30 PST", "2005/4/3 1:30",
+            // time to parse is ambiguous, PT interpreted as earlier time (?)
+            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT", // fail
+            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
+            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
+            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT", // fail
+            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
+            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
+            "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PDT", "2004/10/31 1:30", // fail
+        };
+        expect(ZDATA, en);
+
+        logln("cross format/parse tests");
+        final String basepat = "yy/MM/dd H:mm ";
+        final SimpleDateFormat[] formats = { 
+            new SimpleDateFormat(basepat + "z", en),
+            new SimpleDateFormat(basepat + "zz", en),
+            new SimpleDateFormat(basepat + "zzz", en),
+            new SimpleDateFormat(basepat + "zzzz", en)
+        };
+
+        final SimpleDateFormat univ = new SimpleDateFormat("yyyy MM dd HH:mm zzz", en);
+        final String[] times = { "2004 01 02 03:04 PST", "2004 07 08 09:10 PDT" };
+        for (int i = 0; i < times.length; ++i) {
+            try {
+                Date d = univ.parse(times[i]);
+                logln("time: " + d);
+                for (int j = 0; j < formats.length; ++j) {
+                    String test = formats[j].format(d);
+                    logln("test: '" + test + "'");
+                    for (int k = 0; k < formats.length; ++k) {
+                        try {
+                            Date t = formats[k].parse(test);
+                            if (!d.equals(t)) {
+                                errln("format " + k + 
+                                      " incorrectly parsed output of format " + j + 
+                                      " (" + test + "), returned " +
+                                      t + " instead of " + d);
+                            } else {
+                                logln("format " + k + " parsed ok");
+                            }
+                        }
+                        catch (ParseException e) {
+                            errln("format " + k + 
+                                  " could not parse output of format " + j + 
+                                  " (" + test + ")");
+                        }
+                    }
+                }
+            }
+            catch (ParseException e) {
+                errln("univ could not parse: " + times[i]);
+            }
+        }
+
+    }
+
+    public void TestGenericTimeZoneOrder() {
+        // generic times should parse the same no matter what the placement of the time zone string
+        // should work for standard and daylight times
+
+        String XDATA[] = {
+            "yyyy MM dd HH:mm zzz",
+            // standard time, explicit daylight/standard
+            "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+            "y/M/d zzz H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 PST 1:00",
+            "zzz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "PST 2004/1/1 1:00",
+
+            // standard time, generic
+            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d zz H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 Pacific Time 1:00",
+            "zz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "Pacific Time 2004/1/1 1:00",
+
+            // dahylight time, explicit daylight/standard
+            "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
+            "y/M/d zzz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 PDT 1:00",
+            "zzz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "PDT 2004/7/1 1:00",
+
+            // daylight time, generic
+            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+            "y/M/d zz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 Pacific Time 1:00",
+            "zz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "Pacific Time 2004/7/1 1:00",
+        };
+        Locale en = new Locale("en", "", "");
+        expect(XDATA, en);
     }
 
     /**
@@ -730,9 +853,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // format every way
         String DATA[] = {
                 "simple format:  ", "04/04/97 23:00 GMT+00:00", 
-                "MM/dd/yy HH:mm z", "full format:    ", 
+                "MM/dd/yy HH:mm zzz", "full format:    ", 
                 "Friday, April 4, 1997 11:00:00 o'clock PM GMT+00:00", 
-                "EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a z", 
+                "EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a zzz", 
                 "long format:    ", "April 4, 1997 11:00:00 PM GMT+00:00", 
                 "MMMM d, yyyy h:mm:ss a z", "default format: ", 
                 "04-Apr-97 11:00:00 PM", "dd-MMM-yy h:mm:ss a", 
@@ -767,9 +890,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HAP (\u00C9UA)";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HP (\u00C9UA)";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
+        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);
@@ -871,7 +994,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String DATA[] = {
             "yyyy MM dd",
 
-            // pattern, input, expexted output (in quotes)
+            // pattern, input, expected output (in quotes)
             "MMMM d yy", " 04 05 06",  null, // MMMM wants Apr/April
             null,        "04 05 06",   null,
             "MM d yy",   " 04 05 06",  "2006 04 05",
@@ -1293,22 +1416,15 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             // create DFS that recognizes our bogus time zone, sortof
-            /* 
-             * TODO: Etc/GMT is not in data anymore .. comment out till we figure out what to do
             DateFormatSymbols xsym = new DateFormatSymbols();
             String[][] tzids = xsym.getZoneStrings();
-            boolean changedGMT = false;
-            for (int i = 0; i < tzids.length; ++i) {
-                if (tzids[i][0].equals("Etc/GMT")) {
-                    tzids[i][1] = "DBDY"; // change a local name
-                    logln("replaced GMT with DBDY");
-                    changedGMT = true;
-                    break;
-                }
-            }
-            xsym.setZoneStrings(tzids);
-            fmt.setDateFormatSymbols(xsym);
-            if(changedGMT==true){
+            if (tzids.length > 0) { // let's hope!
+                tzids[0][1] = "DBDY"; // change a local name
+                logln("replaced '" + tzids[0][0] + "' with DBDY");
+
+                xsym.setZoneStrings(tzids);
+                fmt.setDateFormatSymbols(xsym);
+
                 try {
                     fmt.parse(text);
                     logln("we parsed DBDY (as GMT, but still...)");
@@ -1319,11 +1435,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 finally {
                     TimeZone.setDefault(oldtz);
                 }
-            }else{
-                errln("Could not find Etc/GMT in the tzids returned.");
-            }*/
+            }
         }
-        
 
         {
             //cover getAvailableULocales
@@ -1425,37 +1538,62 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /**
-     * Test formatting and parsing.  Input is an array that starts
-     * with the following header:
+     * Test formatting and parsing.  Input is an array of String that starts
+     * with a single 'header' element
      *
-     * [0]   = pattern string to parse [i+2] with
+     * [0]   = reference dateformat pattern string (ref)
      *
-     * followed by test cases, each of which is 3 array elements:
+     * followed by test cases, each of which is 4 or 5 elements:
      *
-     * [i]   = pattern, or null to reuse prior pattern
+     * [i]   = test dateformat pattern string (test), or null to reuse prior test pattern
      * [i+1] = control string, either "fp", "pf", or "F".
-     * [i+2..] = data strings
+     * [i+2] = data string A
+     * [i+3] = data string B
+     * [i+4] = data string C (not present for 'F' control string)
      *
-     * The number of data strings depends on the control string.
+     * Note: the number of data strings depends on the control string.
+     *
+     * fp formats a date, checks the result, then parses the result and checks against a (possibly different) date
+     * pf parses a string, checks the result, then formats the result and checks against a (possibly different) string
+     * F is a shorthand for fp when the second date is the same as the first
+     * P is a shorthand for pf when the second string is the same as the first
+     *
      * Examples:
-     * 1. "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.56", "2004 03 10 16:36:31.560",
-     * 'f': Format date [i+2] (as parsed using pattern [0]) and expect string [i+3].
-     * 'p': Parse string [i+3] and expect date [i+4].
+     * (fp) "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.56", "2004 03 10 16:36:31.560",
+     * -- ref.parse A, get t0
+     * -- test.format t0, get r0
+     * -- compare r0 to B, fail if not equal
+     * -- test.parse B, get t1
+     * -- ref.parse C, get t2
+     * -- compare t1 and t2, fail if not equal
      *
-     * 2. "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567"
-     * 'F': Format date [i+2] and expect string [i+3],
-     *      then parse string [i+3] and expect date [i+2].
+     * (F) "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567"
+     * -- ref.parse A, get t0
+     * -- test.format t0, get r0
+     * -- compare r0 to B, fail if not equal
+     * -- test.parse B, get t1
+     * -- compare t1 and t0, fail if not equal
      *
-     * 3. "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.5670",
-     * 'p': Parse string [i+2] and expect date [i+3].
-     * 'f': Format date [i+3] and expect string [i+4].
+     * (pf) "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.5670",
+     * -- test.parse A, get t0
+     * -- ref.parse B, get t1
+     * -- compare t0 to t1, fail if not equal
+     * -- test.format t1, get r0
+     * -- compare r0 and C, fail if not equal
+     *
+     * (P) "y/M/d H:mm:ss.SSSS", "P", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.567"",
+     * -- test.parse A, get t0
+     * -- ref.parse B, get t1
+     * -- compare t0 to t1, fail if not equal
+     * -- test.format t1, get r0
+     * -- compare r0 and A, fail if not equal
      */
     void expect(String[] data, Locale loc) {
         int i = 0;
 
         SimpleDateFormat fmt = new SimpleDateFormat("", loc);
         SimpleDateFormat ref = new SimpleDateFormat(data[i++], loc);
-        SimpleDateFormat univ = new SimpleDateFormat("EE G yyyy MM dd HH:mm:ss.SSS z", loc);
+        SimpleDateFormat univ = new SimpleDateFormat("EE G yyyy MM dd HH:mm:ss.SSS zzz", loc);
 
         String currentPat = null;
         while (i<data.length) {
@@ -1467,27 +1605,32 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             String control = data[i++];
 
-            if (control.equals("fp")) {
+            if (control.equals("fp") || control.equals("F")) {
                 // 'f'
                 String datestr = data[i++];
                 String string = data[i++];
+                String datestr2 = datestr;
+                if (control.length() == 2) {
+                    datestr2 = data[i++];
+                }
                 Date date = null;
                 try {
                     date = ref.parse(datestr);
                 } catch (ParseException e) {
                     errln("FAIL: Internal test error; can't parse " + datestr);
-                    return;
+                    continue;
                 }
                 assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
                              string,
                              fmt.format(date));
                 // 'p'
-                datestr = data[i++];
-                try {
-                    date = ref.parse(datestr);
-                } catch (ParseException e2) {
-                    errln("FAIL: Internal test error; can't parse " + datestr);
-                    return;
+                if (!datestr2.equals(datestr)) {
+                    try {
+                        date = ref.parse(datestr2);
+                    } catch (ParseException e2) {
+                        errln("FAIL: Internal test error; can't parse " + datestr2);
+                        continue;
+                    }
                 }
                 try {
                     Date parsedate = fmt.parse(string);
@@ -1497,19 +1640,24 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 } catch (ParseException e3) {
                     errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
                           e3);
+                    continue;
                 }
             }
-
-            else if (control.equals("pf")) {
+            else if (control.equals("pf") || control.equals("P")) {
                 // 'p'
                 String string = data[i++];
                 String datestr = data[i++];
+                String string2 = string;
+                if (control.length() == 2) {
+                    string2 = data[i++];
+                }
+
                 Date date = null;
                 try {
                     date = ref.parse(datestr);
                 } catch (ParseException e) {
                     errln("FAIL: Internal test error; can't parse " + datestr);
-                    return;
+                    continue;
                 }
                 try {
                     Date parsedate = fmt.parse(string);
@@ -1519,40 +1667,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 } catch (ParseException e2) {
                     errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
                           e2);
+                    continue;
                 }
                 // 'f'
-                string = data[i++];
                 assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
-                             string,
+                             string2,
                              fmt.format(date));
             }
-
-            else if (control.equals("F")) {
-                String datestr  = data[i++];
-                String string   = data[i++];
-                Date date = null;
-                try {
-                    date = ref.parse(datestr);
-                } catch (ParseException e) {
-                    errln("FAIL: Internal test error; can't parse " + datestr);
-                    return;
-                }
-
-                assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
-                             string,
-                             fmt.format(date));
-
-                try {
-                    Date parsedate = fmt.parse(string);
-                    assertEquals("\"" + currentPat + "\".parse(" + string + ")",
-                                 univ.format(date),
-                                 univ.format(parsedate));
-                } catch (ParseException e2) {
-                    errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
-                          e2);
-                }
-            }
-
             else {
                 errln("FAIL: Invalid control string " + control);
                 return;

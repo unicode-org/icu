@@ -93,25 +93,33 @@ public class JDKTimeZone extends TimeZone {
     /**
      * Override TimeZone to handle wrapped ZoneInfo.
      */
+
     public void getOffset(long date, boolean local, int[] offsets) {
         // The following code works only on 1.4 or later.  We no longer support JDK 1.3.
-        try {
-            if (zone instanceof sun.util.calendar.ZoneInfo) {
-                ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-                if (local) {
-                    date -= offsets[0] + offsets[1];
-                    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-                }
-                return;
-            } 
-        }
-        catch (SecurityException ex) {
-            // ok; fall through, we're running in a protected context
-        } 
-        catch (Throwable th) {
-            // System.out.println("caught: " + th);
-        }
+	// assume if we're running under a security manager, then we don't have access to
+	// sun classes
+	if (System.getSecurityManager() == null) {
+	    try {
+		if (zone instanceof sun.util.calendar.ZoneInfo) {
+		    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+		    if (local) {
+			date -= offsets[0] + offsets[1];
+			((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+		    }
+// 		    System.err.println("offsets: " + offsets[0] + ", " + offsets[1]);
+		    return;
+		} 
+	    }
+	    catch (SecurityException ex) {
+		// ok; fall through, we're running in a protected context
+	    } 
+	    catch (Throwable th) {
+		// System.out.println("caught: " + th);
+	    }
+	}
+	
         super.getOffset(date, local, offsets);
+// 	System.err.println("default offsets: " + offsets[0] + ", " + offsets[1]);
     }
  
     /**
@@ -178,32 +186,38 @@ public class JDKTimeZone extends TimeZone {
      */
     public int getDSTSavings() {
         if (useDaylightTime()) {
-            try {   
-                // This is only to make a 1.3 compiler happy.  JDKTimeZone
-                // is only used in JDK 1.4, where TimeZone has the getDSTSavings
-                // API on it, so a straight call to getDSTSavings would actually
-                // work if we could compile it.  Since on 1.4 the time zone is
-                // not a SimpleTimeZone, we can't downcast in order to make
-                // the direct call that a 1.3 compiler would like, because at
-                // runtime the downcast would fail.
-                // todo: remove when we no longer support compiling under 1.3
+	    if (System.getSecurityManager() == null) {
+		// assume if we have a security manager, we'll fail
+		try {   
+		    // This is only to make a 1.3 compiler happy.  JDKTimeZone
+		    // is only used in JDK 1.4, where TimeZone has the getDSTSavings
+		    // API on it, so a straight call to getDSTSavings would actually
+		    // work if we could compile it.  Since on 1.4 the time zone is
+		    // not a SimpleTimeZone, we can't downcast in order to make
+		    // the direct call that a 1.3 compiler would like, because at
+		    // runtime the downcast would fail.
+		    // todo: remove when we no longer support compiling under 1.3
 
-                // The following works if getDSTSavings is declared in   
-                // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
-                final Object[] args = new Object[0];
-                final Class[] argtypes = new Class[0];
-                Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
-                return ((Integer) m.invoke(zone, args)).intValue();   
-            } catch (Exception e) {
-                // if zone is in the sun.foo class hierarchy and we
-                // are in a protection domain, we'll get a security
-                // exception.  And if we claim to support DST, but 
-                // return a value of 0, later java.util.SimpleTimeZone will
-                // throw an illegalargument exception.  so... fake
-                // the dstoffset;
-                return 3600000;
-            }   
-        }
+		    // The following works if getDSTSavings is declared in   
+		    // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
+		    final Object[] args = new Object[0];
+		    final Class[] argtypes = new Class[0];
+		    Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
+		    int result = ((Integer) m.invoke(zone, args)).intValue();
+// 		    System.err.println("JDKTZ got " + (result/3600000f) + " hour daylight saving time");
+		    return result;
+		} catch (Exception e) {
+		    // if zone is in the sun.foo class hierarchy and we
+		    // are in a protection domain, we'll get a security
+		    // exception.  And if we claim to support DST, but 
+		    // return a value of 0, later java.util.SimpleTimeZone will
+		    // throw an illegalargument exception.  so... fake
+		    // the dstoffset;
+		}   
+	    }
+// 	    System.err.println("JDKTZ assume 1 hour daylight saving time");
+	    return 3600000;
+	}
         return 0;
     }
 
