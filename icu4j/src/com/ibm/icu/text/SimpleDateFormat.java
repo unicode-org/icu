@@ -254,6 +254,8 @@ public class SimpleDateFormat extends DateFormat {
 
     transient private int defaultCenturyStartYear;
 
+    private transient TimeZone parsedTimeZone;
+
     private static final int millisPerHour = 60 * 60 * 1000;
     private static final int millisPerMinute = 60 * 1000;
 
@@ -808,21 +810,20 @@ public class SimpleDateFormat extends DateFormat {
                     buf.append(':');
                     zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
                 }
-            else if (cal.get(Calendar.DST_OFFSET) != 0)
-                {
-                    if (count >= 4)
-                        buf.append(formatData.zoneStrings[zoneIndex][3]);
-                    else
-                        // count < 4, use abbreviated form if exists
-                        buf.append(formatData.zoneStrings[zoneIndex][4]);
+            else {
+                String[] zs = formatData.zoneStrings[zoneIndex];
+                if (zs.length < 7 && count < 3) {
+                    count += 2; // no generic time, default to full times
                 }
-            else
-                {
-                    if (count >= 4)
-                        buf.append(formatData.zoneStrings[zoneIndex][1]);
-                    else
-                        buf.append(formatData.zoneStrings[zoneIndex][2]);
+                int ix;
+                switch (count) {
+                case 1: ix = zs.length == 7 ? 6 : 7; break; // short generic time
+                case 2: ix = zs.length == 7 ? 5 : 6; break; // long generic time
+                case 3: ix = cal.get(Calendar.DST_OFFSET) != 0 ? 4 : 2; break; // short dst/standard time
+                default: ix = cal.get(Calendar.DST_OFFSET) != 0 ? 3 : 1; break; // long dst/standard time
                 }
+                buf.append(zs[ix]);
+            }
             break;
         case 23: // 'Z' - TIMEZONE_RFC
             {
@@ -916,6 +917,9 @@ public class SimpleDateFormat extends DateFormat {
         int start = pos;
         boolean[] ambiguousYear = {false};
         int count = 0;
+
+        // hack, clear parsedTimeZone
+        parsedTimeZone = null;
 
         // For parsing abutting numeric fields. 'abutPat' is the
         // offset into 'pattern' of the first of 2 or more abutting
@@ -1109,20 +1113,35 @@ public class SimpleDateFormat extends DateFormat {
         // front or the back of the default century.  This only works because we adjust
         // the year correctly to start with in other cases -- see subParse().
         try {
-            if (ambiguousYear[0]) // If this is true then the two-digit year == the default start year
-                {
-                    // We need a copy of the fields, and we need to avoid triggering a call to
-                    // complete(), which will recalculate the fields.  Since we can't access
-                    // the fields[] array in Calendar, we clone the entire object.  This will
-                    // stop working if Calendar.clone() is ever rewritten to call complete().
-                    Calendar copy = (Calendar)cal.clone();
+            if (ambiguousYear[0] || parsedTimeZone != null) {
+                // We need a copy of the fields, and we need to avoid triggering a call to
+                // complete(), which will recalculate the fields.  Since we can't access
+                // the fields[] array in Calendar, we clone the entire object.  This will
+                // stop working if Calendar.clone() is ever rewritten to call complete().
+                Calendar copy = (Calendar)cal.clone();
+                if (ambiguousYear[0]) { // the two-digit year == the default start year
                     Date parsedDate = copy.getTime();
-                    if (parsedDate.before(defaultCenturyStart))
-                        {
-                            // We can't use add here because that does a complete() first.
-                            cal.set(Calendar.YEAR, defaultCenturyStartYear + 100);
-                        }
+                    if (parsedDate.before(defaultCenturyStart)) {
+                        // We can't use add here because that does a complete() first.
+                        cal.set(Calendar.YEAR, defaultCenturyStartYear + 100);
+                    }
                 }
+
+                if (parsedTimeZone != null) {
+                    final long MINUTE = 1000 * 60;
+                    final long HOUR = MINUTE * 60;
+
+                    TimeZone tz = parsedTimeZone;
+
+                    // the calendar a number representing the parse as gmt time
+                    // we need to turn this into local time, so we add the raw offset
+                    // then we ask the timezone to handle this local time
+                    int[] offsets = new int[2];
+                    tz.getOffset(copy.getTimeInMillis()+tz.getRawOffset(), true, offsets);
+                    cal.set(Calendar.ZONE_OFFSET, offsets[0]);
+                    cal.set(Calendar.DST_OFFSET, offsets[1]);
+                }
+            }
         }
         // An IllegalArgumentException will be thrown by Calendar.getTime()
         // if any fields are out of range, e.g., MONTH == 17.
@@ -1182,17 +1201,19 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     private int matchZoneString(String text, int start, int zoneIndex) {
-        int j;
-        for (j = 1; j <= 4; ++j) {
+        String[] zs = formatData.zoneStrings[zoneIndex];
+        for (int j = 1; j < zs.length; ++j) {
+            if (j == 5 && (zs.length ==6 || zs.length >= 8)) { // skip city name if we have it
+                continue;
+            }
             // Checking long and short zones [1 & 2],
-            // and long and short daylight [3 & 4].
-            if (text.regionMatches(true, start,
-                                   formatData.zoneStrings[zoneIndex][j], 0,
-                                   formatData.zoneStrings[zoneIndex][j].length())) {
-                break;
+            // and long and short daylight [3 & 4],
+            // and long and short generic [6 & 7]
+            if (text.regionMatches(true, start, zs[j], 0, zs[j].length())) {
+                return j;
             }
         }
-        return (j > 4) ? -1 : j;
+        return -1;
     }
 
     /**
@@ -1204,6 +1225,7 @@ public class SimpleDateFormat extends DateFormat {
         // Want to be able to parse both short and long forms.
         int zoneIndex =
             formatData.getZoneIndex (getTimeZone().getID());
+
         TimeZone tz = null;
         int j = 0, i = 0;
         if (zoneIndex != -1) {
@@ -1237,12 +1259,23 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         if (tz != null) { // Matched any ?
+            // always set zone offset, needed to get correct hour in wall time
+            // when checking daylight savings
             cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-            int savings = 0;
-            if (j >= 3) {
-                savings = tz.getDSTSavings();
+            if (j < 3) {
+                // standard time
+                cal.set(Calendar.DST_OFFSET, 0);
+            } else if (j < 5) {
+                // daylight time
+                cal.set(Calendar.DST_OFFSET, tz.getDSTSavings());
+            } else { 
+                // either standard or daylight
+                // need to finish getting the date, then compute dst offset as appropriate
+
+                // !!! hack for api compatibility, can't modify subParse(...) so can't
+                // pass this back any other way.
+                parsedTimeZone = tz;
             }
-            cal.set(Calendar.DST_OFFSET, savings);
             return (start + formatData.zoneStrings[i][j].length());
         }
         return 0;

@@ -529,9 +529,12 @@
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
     <!-- jvmarg value="-verbose"/ -->
         <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
+        <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
         <jvmarg value="-Djava.security.manager"/>
         <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
+	<!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
         <arg value="-w"/>
+	<!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
         <classpath>
             <pathelement location="clover.jar"/>
             <pathelement location="${jar.file}"/>

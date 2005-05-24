@@ -171,7 +171,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Localized names of time zones in this locale.  This is a
      * two-dimensional array of strings of size <em>n</em> by <em>m</em>,
-     * where <em>m</em> is at least 5.  Each of the <em>n</em> rows is an
+     * where <em>m</em> is at least 5 and up to 8.  Each of the <em>n</em> rows is an
      * entry containing the localized names for a single <code>TimeZone</code>.
      * Each such row contains (with <code>i</code> ranging from
      * 0..<em>n</em>-1):
@@ -185,6 +185,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * savings time</li>
      * <li><code>zoneStrings[i][4]</code> - short name of zone in daylight
      * savings time</li>
+     * <li>The remainder varies depending on whether there is data 
+     * on city name or generic time.  The city name, if available, comes
+     * first.  The long and short generic times, if available, come next,
+     * in that order. The length of the array (m) can be examined to 
+     * determine which optional information is available.</li>
      * </ul>
      * The zone ID is <em>not</em> localized; it corresponds to the ID
      * value associated with a system time zone object.  All other entries
