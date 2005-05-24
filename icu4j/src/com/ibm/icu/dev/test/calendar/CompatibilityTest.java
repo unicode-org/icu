@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
+import com.ibm.icu.text.DateFormat;
 
 import java.util.Date;
 import java.util.Locale;
@@ -1062,6 +1063,52 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.roll(Calendar.HOUR, 9);
         f = cal.get(Calendar.HOUR);
         if (f != 0) errln("Rolling HOUR=3 delta=9 gave " + f + " Wanted 0");
+    }
+
+    public void TestComputeJulianDay4406() {
+        // jb4406 is probably not a bug, this is to document the behavior
+        GregorianCalendar cal = new GregorianCalendar();
+        final int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
+        
+        logln("julian day value jumps at changeover");
+        for (int day = 12; day < 18; ++day) {
+            cal.set(1582, 9, day);
+            logln("[" + day + "] " + (cal.getTimeInMillis()/MILLIS_IN_DAY));
+        }
+
+        logln("\njulian days not accurate before 1 March 0004");
+        for (int day = 1; day < 3; ++day) {
+            cal.set(1, 0, day);
+            logln("[" + day + "] " + (cal.getTimeInMillis()/MILLIS_IN_DAY));
+        }
+
+        DateFormat fmt = cal.getDateTimeFormat(DateFormat.LONG, 0, Locale.getDefault());
+
+        logln("\nswitchover in 1582");
+        cal.set(1582, 9, 4);
+        logln(fmt.format(cal));
+        cal.add(Calendar.DATE, 1);
+        logln(fmt.format(cal));
+        cal.set(Calendar.JULIAN_DAY, 1721426);
+        logln(fmt.format(cal));
+
+        logln("\nlate switchover - proleptic Julian");
+        cal.set(1582, 9, 4);
+        cal.setGregorianChange(new Date(Long.MAX_VALUE));
+        logln(fmt.format(cal));
+        cal.add(Calendar.DATE, 1);
+        logln(fmt.format(cal));
+        cal.set(Calendar.JULIAN_DAY, 1721426);
+        logln(fmt.format(cal));
+
+        logln("\nearly switchover - proleptic Gregorian");
+        cal.set(1582, 9, 4);
+        cal.setGregorianChange(new Date(Long.MIN_VALUE));
+        logln(fmt.format(cal));
+        cal.add(Calendar.DATE, 1);
+        logln(fmt.format(cal));
+        cal.set(Calendar.JULIAN_DAY, 1721426);
+        logln(fmt.format(cal));
     }
 }
 
