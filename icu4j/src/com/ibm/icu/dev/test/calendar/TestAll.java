@@ -21,6 +21,8 @@ public class TestAll extends TestGroup {
                   "AstroTest",
                   "CalendarRegression",
                   "CompatibilityTest",
+                  "CopticTest",
+                  "EthiopicTest",
                   "HebrewTest",
                   "IBMCalendarTest",
                   "IslamicTest",
