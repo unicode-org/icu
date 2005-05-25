@@ -39,7 +39,7 @@ GENRB_ALIAS_SOURCE = $(GENRB_SYNTHETIC_ALIAS) sh.txt sh_YU.txt sr_Cyrl_YU.txt sr
 
 # Ordinary resources
 GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
- ar.txt ar_AE.txt ar_BH.txt ar_DZ.txt ar_IN.txt\
+ ar.txt ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt ar_IN.txt\
  ar_IQ.txt ar_JO.txt ar_KW.txt ar_LB.txt ar_LY.txt\
  ar_MA.txt ar_OM.txt ar_QA.txt ar_SA.txt ar_SD.txt\
  ar_SY.txt ar_TN.txt ar_YE.txt be.txt be_BY.txt\
@@ -61,7 +61,7 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  fr_CH.txt fr_FR.txt fr_LU.txt ga.txt ga_IE.txt\
  gl.txt gl_ES.txt gu.txt gu_IN.txt gv.txt\
  gv_GB.txt he.txt he_IL.txt hi.txt hi_IN.txt\
- hr.txt hu.txt hu_HU.txt hy.txt hy_AM.txt\
+ hr.txt hr_HU.txt hu.txt hu_HU.txt hy.txt hy_AM.txt\
  hy_AM_REVISED.txt id.txt id_ID.txt is.txt is_IS.txt\
  it.txt it_CH.txt it_IT.txt ja.txt ja_JP.txt\
  kk.txt kk_KZ.txt kl.txt kl_GL.txt kn.txt\
@@ -75,8 +75,8 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  pa_IN.txt pl.txt pl_PL.txt ps.txt ps_AF.txt\
  pt.txt pt_BR.txt pt_PT.txt ro.txt ro_RO.txt\
  ru.txt ru_RU.txt ru_UA.txt sk.txt sk_SK.txt\
- sl.txt so.txt so_DJ.txt so_ET.txt so_KE.txt\
- so_SO.txt sq.txt sq_AL.txt sr.txt sr_Latn.txt\
+ sl.txt sl_SI.txt so.txt so_DJ.txt so_ET.txt so_KE.txt\
+ so_SO.txt sq.txt sq_AL.txt sr.txt sr_Cyrl.txt sr_Latn.txt\
  sv.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
  sw_TZ.txt ta.txt ta_IN.txt te.txt te_IN.txt\
  th.txt th_TH.txt ti.txt ti_ER.txt ti_ET.txt\
