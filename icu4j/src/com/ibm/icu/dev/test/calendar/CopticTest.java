@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CopticCalendar;
 import com.ibm.icu.util.TimeZone;
@@ -96,35 +97,33 @@ public class CopticTest extends CalendarTest
             // because it's easier to edit that way.
             //                      Coptic
             //          Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
-	    //
-	    // Dates from "Emporer Theodore..."
+            //
+            // Dates from "Emporer Theodore..."
+
             new TestCase(2401442.5,  1,  1579,    2,  20,  WED,    0,  0,  0), // Gregorian: 20/10/1862
             new TestCase(2402422.5,  1,  1581,   10,  29,  WED,    0,  0,  0), // Gregorian: 05/07/1865
             new TestCase(2402630.5,  1,  1582,    5,  22,  MON,    0,  0,  0), // Gregorian: 29/01/1866
             new TestCase(2402708.5,  1,  1582,    8,  10,  TUE,    0,  0,  0), // Gregorian: 17/04/1866
             new TestCase(2402971.5,  1,  1583,    4,  28,  SAT,    0,  0,  0), // Gregorian: 05/01/1867
             new TestCase(2403344.5,  1,  1584,    5,   5,  MON,    0,  0,  0), // Gregorian: 13/01/1868
+            new TestCase(1721059.5,  0,  -284,    5,   7,  SAT,    0,  0,  0), // Gregorian: 01/01/0000
+            new TestCase(1721425.5,  0,  -283,    5,   8,  MON,    0,  0,  0), // Gregorian: 01/01/0001
+            new TestCase(1824663.5,  0,    -1,   13,   6,  WED,    0,  0,  0), // Gregorian: 29/08/0283
+            new TestCase(1824664.5,  1,     0,    1,   1,  THU,    0,  0,  0), // Gregorian: 30/08/0283
+            new TestCase(1825029.5,  1,     1,    1,   1,  FRI,    0,  0,  0), // Gregorian: 29/08/0284
+            new TestCase(1825394.5,  1,     2,    1,   1,  SAT,    0,  0,  0), // Gregorian: 29/08/0285
+            new TestCase(1825759.5,  1,     3,    1,   1,  SUN,    0,  0,  0), // Gregorian: 29/08/0286
+            new TestCase(1826125.5,  1,     4,    1,   1,  TUE,    0,  0,  0), // Gregorian: 30/08/0287
+            new TestCase(1825028.5,  1,     0,   13,   5,  THU,    0,  0,  0), // Gregorian: 28/08/0284
+            new TestCase(1825393.5,  1,     1,   13,   5,  FRI,    0,  0,  0), // Gregorian: 28/08/0285
+            new TestCase(1825758.5,  1,     2,   13,   5,  SAT,    0,  0,  0), // Gregorian: 28/08/0286
+            new TestCase(1826123.5,  1,     3,   13,   5,  SUN,    0,  0,  0), // Gregorian: 28/08/0287
+            new TestCase(1826124.5,  1,     3,   13,   6,  MON,    0,  0,  0), // Gregorian: 29/08/0287
+                          // above is first coptic leap year
+            new TestCase(1826489.5,  1,     4,   13,   5,  TUE,    0,  0,  0), // Gregorian: 28/08/0288
+            new TestCase(2299158.5,  1,  1299,    2,   6,  WED,    0,  0,  0), // Gregorian: 13/10/1582
+            new TestCase(2299159.5,  1,  1299,    2,   7,  THU,    0,  0,  0), // Gregorian: 14/10/1582
 
-	    /* Skip these tests until JD bug fixed in the Gregorian calendar:
-	     * http://www.jtcsv.com/cgibin/icu-bugs/incoming?id=4406;page=2;user=guest
-	     *
-	     new TestCase(1721059.5,  0,  -284,    5,   7,  SAT,    0,  0,  0), // Gregorian: 01/01/0000
-	     new TestCase(1721425.5,  0,  -283,    5,   8,  MON,    0,  0,  0), // Gregorian: 01/01/0001
-	     new TestCase(1824663.5,  0,    -1,   13,   6,  WED,    0,  0,  0), // Gregorian: 29/08/0283
-	     new TestCase(1824664.5,  1,     0,    1,   1,  THU,    0,  0,  0), // Gregorian: 30/08/0283
-	     new TestCase(1825029.5,  1,     1,    1,   1,  FRI,    0,  0,  0), // Gregorian: 29/08/0284
-	     new TestCase(1825394.5,  1,     2,    1,   1,  SAT,    0,  0,  0), // Gregorian: 29/08/0285
-	     new TestCase(1825759.5,  1,     3,    1,   1,  SUN,    0,  0,  0), // Gregorian: 29/08/0286
-	     new TestCase(1826125.5,  1,     4,    1,   1,  TUE,    0,  0,  0), // Gregorian: 30/08/0287
-	     new TestCase(1825028.5,  1,     0,   13,   5,  THU,    0,  0,  0), // Gregorian: 28/08/0284
-	     new TestCase(1825393.5,  1,     1,   13,   5,  FRI,    0,  0,  0), // Gregorian: 28/08/0285
-	     new TestCase(1825758.5,  1,     2,   13,   5,  SAT,    0,  0,  0), // Gregorian: 28/08/0286
-	     new TestCase(1826123.5,  1,     3,   13,   5,  SUN,    0,  0,  0), // Gregorian: 28/08/0287
-	     new TestCase(1826124.5,  1,     3,   13,   6,  MON,    0,  0,  0), // Gregorian: 29/08/0287 - first coptic leap year
-	     new TestCase(1826489.5,  1,     4,   13,   5,  TUE,    0,  0,  0), // Gregorian: 28/08/0288
-	     new TestCase(2299158.5,  1,  1299,    2,   6,  WED,    0,  0,  0), // Gregorian: 13/10/1582
-	     new TestCase(2299159.5,  1,  1299,    2,   7,  THU,    0,  0,  0), // Gregorian: 14/10/1582
-            */
             new TestCase(2299160.5,  1,  1299,    2,   8,  FRI,    0,  0,  0), // Gregorian: 15/10/1582
             new TestCase(2299161.5,  1,  1299,    2,   9,  SAT,    0,  0,  0), // Gregorian: 16/10/1582
 
@@ -136,6 +135,38 @@ public class CopticTest extends CalendarTest
         CopticCalendar testCalendar = new CopticCalendar();
         testCalendar.setLenient(true);
         doTestCases(tests, testCalendar);
+    }
+
+    // basic sanity check that the conversion algorithm round-trips
+    public void TestCopticToJD() {
+        for (int y = -2; y < 3; ++y) {
+            for (int m = 0; m < 12; ++m) { // don't understand rules for 13th month
+                for (int d = 1; d < 25; d += 3) { // play it safe on days per month
+                    int jd = CopticCalendar.copticToJD(y, m, d);
+                    Integer[] res = CopticCalendar.getDateFromJD(jd);
+                    if (!(y == res[0].intValue() &&
+                          m == res[1].intValue() &&
+                          d == res[2].intValue())) {
+                        errln("y: " + y +
+                              " m: " + m + 
+                              " d: " + d + 
+                              " --> jd: " + jd +
+                              " --> y: " + res[0].intValue() +
+                              " m: " + res[1].intValue() +
+                              " d: " + res[2].intValue());
+                    }
+                }
+            }
+        }
+    }
+
+    // basic check to see that we print out eras ok
+    // eventually should modify to use locale strings and formatter appropriate to coptic calendar
+    public void TestEraStart() {
+        CopticCalendar cal = new CopticCalendar(0, 0, 1);
+        SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
+        assertEquals("Coptic Date", "Thu Jan 01, 0000 AD", fmt.format(cal));
+        assertEquals("Gregorian Date", "Thu Aug 30, 0283 AD", fmt.format(cal.getTime()));
     }
 
     public void TestBasic() {
@@ -156,78 +187,78 @@ public class CopticTest extends CalendarTest
 
     public void TestCoverage() {
 
-	{
-	    // new CopticCalendar(TimeZone)
-	    CopticCalendar cal = new CopticCalendar(TimeZone.getDefault()); 
-	    if(cal == null){
-		errln("could not create CopticCalendar with TimeZone");
-	    }
-	}
+        {
+            // new CopticCalendar(TimeZone)
+            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault()); 
+            if(cal == null){
+                errln("could not create CopticCalendar with TimeZone");
+            }
+        }
 
-	{
-	    // new CopticCalendar(ULocale)
-	    CopticCalendar cal = new CopticCalendar(ULocale.getDefault());
-	    if(cal == null){
-		errln("could not create CopticCalendar with ULocale");
-	    }
-	}
+        {
+            // new CopticCalendar(ULocale)
+            CopticCalendar cal = new CopticCalendar(ULocale.getDefault());
+            if(cal == null){
+                errln("could not create CopticCalendar with ULocale");
+            }
+        }
         
-	{
-	    // new CopticCalendar(Locale)
-	    CopticCalendar cal = new CopticCalendar(Locale.getDefault());
-	    if(cal == null){
-		errln("could not create CopticCalendar with Locale");
-	    }
-	}
+        {
+            // new CopticCalendar(Locale)
+            CopticCalendar cal = new CopticCalendar(Locale.getDefault());
+            if(cal == null){
+                errln("could not create CopticCalendar with Locale");
+            }
+        }
 
-	{
-	    // new CopticCalendar(Date)
-	    CopticCalendar cal = new CopticCalendar(new Date());
-	    if(cal == null){
-		errln("could not create CopticCalendar with Date");
-	    }
-	}
+        {
+            // new CopticCalendar(Date)
+            CopticCalendar cal = new CopticCalendar(new Date());
+            if(cal == null){
+                errln("could not create CopticCalendar with Date");
+            }
+        }
 
-	{
-	    // new CopticCalendar(int year, int month, int date)
-	    CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1);
-	    if(cal == null){
-		errln("could not create CopticCalendar with year,month,date");
-	    }
-	}
+        {
+            // new CopticCalendar(int year, int month, int date)
+            CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1);
+            if(cal == null){
+                errln("could not create CopticCalendar with year,month,date");
+            }
+        }
 
-	{
-	    // new CopticCalendar(int year, int month, int date, int hour, int minute, int second)
-	    CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1, 1, 1, 1);
-	    if(cal == null){
-		errln("could not create CopticCalendar with year,month,date,hour,minute,second");
-	    }
-	}
+        {
+            // new CopticCalendar(int year, int month, int date, int hour, int minute, int second)
+            CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1, 1, 1, 1);
+            if(cal == null){
+                errln("could not create CopticCalendar with year,month,date,hour,minute,second");
+            }
+        }
     
-	{
-	    // data
-	    CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1);
-	    Date time = cal.getTime();
+        {
+            // data
+            CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1);
+            Date time = cal.getTime();
 
-	    String[] calendarLocales = {
-		"am_ET", "gez_ET", "ti_ET"
-	    };
+            String[] calendarLocales = {
+                "am_ET", "gez_ET", "ti_ET"
+            };
 
-	    String[] formatLocales = {
-		"en", "am", "gez", "ti"
-	    };
-	    for (int i = 0; i < calendarLocales.length; ++i) {
-        	String calLocName = calendarLocales[i];
-        	Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-        	cal = new CopticCalendar(calLocale);
+            String[] formatLocales = {
+                "en", "am", "gez", "ti"
+            };
+            for (int i = 0; i < calendarLocales.length; ++i) {
+                String calLocName = calendarLocales[i];
+                Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+                cal = new CopticCalendar(calLocale);
 
-        	for (int j = 0; j < formatLocales.length; ++j) {
-        	    String locName = formatLocales[j];
-        	    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-        	    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-        	    logln(calLocName + "/" + locName + " --> " + format.format(time));
-        	}
-	    }
-	}
+                for (int j = 0; j < formatLocales.length; ++j) {
+                    String locName = formatLocales[j];
+                    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+                    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                }
+            }
+        }
     }
 }
