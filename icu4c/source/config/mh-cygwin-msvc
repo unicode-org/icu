@@ -184,9 +184,12 @@ ICUPKGDATA_INSTALL_LIBDIR = $(shell cygpath -dma $(DESTDIR)$(libdir))#M#
 
 ## Versioned import library names. The library names are versioned,
 ## but the import libraries do not need versioning.
-IMPORT_LIB = $(basename $(SO_TARGET))$(IMPORT_LIB_EXT)
-MIDDLE_IMPORT_LIB = $(IMPORT_LIB)
-FINAL_IMPORT_LIB = $(MIDDLE_IMPORT_LIB)
+IMPORT_LIB = $(basename $(SO_TARGET))$(IMPORT_LIB_EXT)#M#
+MIDDLE_IMPORT_LIB = $(IMPORT_LIB)#M#
+FINAL_IMPORT_LIB = $(MIDDLE_IMPORT_LIB)#M#
+
+# The following is for Makefile.inc's use.
+ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
 
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
