@@ -156,9 +156,7 @@ class CECalendar extends Calendar {
      */
     protected CECalendar(int year, int month, int date) {
         super(TimeZone.getDefault(), ULocale.getDefault());
-        this.set(YEAR, year);
-        this.set(MONTH, month);
-        this.set(DATE, date);
+        this.set(year, month, date);
     }
 
     /**
@@ -185,15 +183,10 @@ class CECalendar extends Calendar {
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
      */
     protected CECalendar(int year, int month, int date, int hour,
-			 int minute, int second)
+                         int minute, int second)
     {
         super(TimeZone.getDefault(), ULocale.getDefault());
-        this.set(YEAR, year);
-        this.set(MONTH, month);
-        this.set(DATE, date);
-        this.set(HOUR_OF_DAY, hour);
-        this.set(MINUTE, minute);
-        this.set(SECOND, second);
+        this.set(year, month, date, hour, minute, second);
     }
     
     
@@ -236,7 +229,7 @@ class CECalendar extends Calendar {
 
         // Do we want to use EthiopicCalendar.AA, .AM here?
         int era = GregorianCalendar.AD;
-        if (_year < 1) {
+        if (_year < 0) { // dlf: this is what the test says to do
             era   = GregorianCalendar.BC;
             ceyear = 1 - _year;
         }
@@ -253,18 +246,18 @@ class CECalendar extends Calendar {
      */
     public static int ceToJD(long year, int month, int date, int jdEpochOffset) {
 
-	// Julian<->Ethiopic algorithms from:
-	//"Calendars in Ethiopia", Berhanu Beyene, Manfred Kudlek, International Conference
-	// of Ethiopian Studies XV, Hamburg, 2003
+        // Julian<->Ethiopic algorithms from:
+        // "Calendars in Ethiopia", Berhanu Beyene, Manfred Kudlek, International Conference
+        // of Ethiopian Studies XV, Hamburg, 2003
 
         return (int) (
             (jdEpochOffset+365)     // difference from Julian epoch to 1,1,1
-	    + 365 * (year - 1)      // number of days from years
-	    + quotient(year, 4)     // extra day of leap year
-	    + 30 * (month + 1)      // number of days from months
-	    + date                  // number of days for present month
-	    - 31                    // slack?
-	    );
+            + 365 * (year - 1)      // number of days from years
+            + quotient(year, 4)     // extra day of leap year
+            + 30 * (month + 1)      // number of days from months
+            + date                  // number of days for present month
+            - 31                    // slack?
+            );
     }
 
     /**
@@ -272,15 +265,15 @@ class CECalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Integer[] getDateFromJD(int julianDay, int jdEpochOffset) {
-    	// 1461 is the number of days in 4 years
+        // 1461 is the number of days in 4 years
         long r4 = mod(julianDay - jdEpochOffset, 1461); // number of days within a 4 year period
         long  n = mod(r4, 365) + 365 * quotient(r4, 1460);  // days in present year
 
         long aprime = 4   // number of years in the leap year cycle
-	    * quotient(julianDay - jdEpochOffset, 1461)  // number of 4 year periods between epochs?
+            * quotient(julianDay - jdEpochOffset, 1461)  // number of 4 year periods between epochs?
             + quotient(r4, 365)   // number of regular years?
             - quotient(r4, 1460)  // number of 4 year periods?
-	    - 1;
+            - 1;
 
         int _year   = (int) (aprime + 1);
         int _month  = (int) (quotient(n, 30));
@@ -301,4 +294,3 @@ class CECalendar extends Calendar {
         return (int) Math.floor((double) i / j);
     }
 }
-

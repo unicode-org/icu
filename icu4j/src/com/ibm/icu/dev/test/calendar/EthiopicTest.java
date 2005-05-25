@@ -11,7 +11,9 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.EthiopicCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -121,41 +123,44 @@ public class EthiopicTest extends CalendarTest
             // because it's easier to edit that way.
             //                      Ethiopic
             //          Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
-	    //
-	    // Dates from "Emporer Theodore..."
+            //
+            // Dates from "Emporer Theodore..."
+
             new TestCase(2401442.5,  1,  1855,    2,  20,  WED,   0,  0,  0), // Gregorian: 29/10/1862
             new TestCase(2402422.5,  1,  1857,   10,  29,  WED,   0,  0,  0), // Gregorian: 05/07/1865
             new TestCase(2402630.5,  1,  1858,    5,  22,  MON,   0,  0,  0), // Gregorian: 29/01/1866
             new TestCase(2402708.5,  1,  1858,    8,  10,  TUE,   0,  0,  0), // Gregorian: 17/04/1866
             new TestCase(2402971.5,  1,  1859,    4,  28,  SAT,   0,  0,  0), // Gregorian: 05/01/1867
             new TestCase(2403344.5,  1,  1860,    5,   5,  MON,   0,  0,  0), // Gregorian: 13/01/1868
-			
-	    // Miscellaneous:
-	    /* Skip these tests until JD bug fixed in the Gregorian calendar:
-	     * http://www.jtcsv.com/cgibin/icu-bugs/incoming?id=4406;page=2;user=guest
-	     * 
-	     new TestCase(1721059.5,  0,    -8,    5,   7,  SAT,   0,  0,  0), // Gregorian: 01/01/0000
-	     new TestCase(1721425.5,  0,    -7,    5,   8,  MON,   0,  0,  0), // Gregorian: 01/01/0001
-	     new TestCase(1723854.5,  0,    -1,   13,   6,  MON,   0,  0,  0), // Gregorian: 27/08/0007
+                        
+            // Miscellaneous:
+            /* Skip these tests until JD bug fixed in the Gregorian calendar:
+             * http://www.jtcsv.com/cgibin/icu-bugs/incoming?id=4406;page=2;user=guest
+             */
+             new TestCase(1721059.5,  0,    -8,    5,   7,  SAT,   0,  0,  0), // Gregorian: 01/01/0000
+             new TestCase(1721425.5,  0,    -7,    5,   8,  MON,   0,  0,  0), // Gregorian: 01/01/0001
+             new TestCase(1723854.5,  0,    -1,   13,   6,  MON,   0,  0,  0), // Gregorian: 27/08/0007
             
-	     new TestCase(1723855.5,  1,     0,    1,   1,  TUE,   0,  0,  0), // Gregorian: 28/08/0007
-	     new TestCase(1724220.5,  1,     1,    1,   1,  WED,   0,  0,  0), // Gregorian: 27/08/0008
-	     new TestCase(1724585.5,  1,     2,    1,   1,  THU,   0,  0,  0), // Gregorian: 27/08/0009
-	     new TestCase(1724950.5,  1,     3,    1,   1,  FRI,   0,  0,  0), // Gregorian: 27/08/0010
-	     new TestCase(1724536.5,  1,     4,    1,   1,  SUN,   0,  0,  0), // Gregorian: 28/08/0011
-	     new TestCase(1724219.5,  1,     0,   13,   5,  TUE,   0,  0,  0), // Gregorian: 26/08/0008
-	     new TestCase(1724584.5,  1,     1,   13,   5,  WED,   0,  0,  0), // Gregorian: 26/08/0009
-	     new TestCase(1724949.5,  1,     2,   13,   5,  THU,   0,  0,  0), // Gregorian: 26/08/0010
-	     new TestCase(1725314.5,  1,     3,   13,   5,  FRI,   0,  0,  0), // Gregorian: 26/08/0011
-	     new TestCase(1725315.5,  1,     3,   13,   6,  SAT,   0,  0,  0), // Gregorian: 27/08/0011 - first ethiopic leap year
-	     new TestCase(1725560.5,  1,     4,   13,   5,  SUN,   0,  0,  0), // Gregorian: 26/08/0012
-            
-	     new TestCase(2299158.5,  1,  1575,    2,   6,  WED,   0,  0,  0), // Gregorian: 13/10/1582  
-	     new TestCase(2299159.5,  1,  1575,    2,   7,  THU,   0,  0,  0), // Gregorian: 14/10/1582  Julian 04/10/1582
-	    */
+             new TestCase(1723855.5,  1,     0,    1,   1,  TUE,   0,  0,  0), // Gregorian: 28/08/0007
+             new TestCase(1724220.5,  1,     1,    1,   1,  WED,   0,  0,  0), // Gregorian: 27/08/0008
+             new TestCase(1724585.5,  1,     2,    1,   1,  THU,   0,  0,  0), // Gregorian: 27/08/0009
+             new TestCase(1724950.5,  1,     3,    1,   1,  FRI,   0,  0,  0), // Gregorian: 27/08/0010
+
+            // new TestCase(1724536.5,  1,     4,    1,   1,  SUN,   0,  0,  0), // Gregorian: 28/08/0011
+             new TestCase(1725316.5,  1,     4,    1,   1,  SUN,   0,  0,  0), // Gregorian: 28/08/0011 - dlf
+             new TestCase(1724219.5,  1,     0,   13,   5,  TUE,   0,  0,  0), // Gregorian: 26/08/0008
+             new TestCase(1724584.5,  1,     1,   13,   5,  WED,   0,  0,  0), // Gregorian: 26/08/0009
+             new TestCase(1724949.5,  1,     2,   13,   5,  THU,   0,  0,  0), // Gregorian: 26/08/0010
+             new TestCase(1725314.5,  1,     3,   13,   5,  FRI,   0,  0,  0), // Gregorian: 26/08/0011
+             new TestCase(1725315.5,  1,     3,   13,   6,  SAT,   0,  0,  0), // Gregorian: 27/08/0011 - first ethiopic leap year
+            // new TestCase(1725560.5,  1,     4,   13,   5,  SUN,   0,  0,  0), // Gregorian: 26/08/0012 - dlf
+             new TestCase(1725680.5,  1,     4,   13,   5,  SUN,   0,  0,  0), // Gregorian: 26/08/0012
+             new TestCase(2299158.5,  1,  1575,    2,   6,  WED,   0,  0,  0), // Gregorian: 13/10/1582  
+             new TestCase(2299159.5,  1,  1575,    2,   7,  THU,   0,  0,  0), // Gregorian: 14/10/1582  Julian 04/10/1582
+
             new TestCase(2299160.5,  1,  1575,    2,   8,  FRI,   0,  0,  0), // Gregorian: 15/10/1582
             new TestCase(2299161.5,  1,  1575,    2,   9,  SAT,   0,  0,  0), // Gregorian: 16/10/1582
-			
+                        
             new TestCase(2415020.5,  1,  1892,    4,  23,  MON,   0,  0,  0), // Gregorian: 01/01/1900
             new TestCase(2453371.5,  1,  1997,    4,  23,  SAT,   0,  0,  0), // Gregorian: 01/01/2005
             new TestCase(2454719.5,  1,  2000,   13,   5,  WED,   0,  0,  0), // Gregorian: 10/09/2008
@@ -164,6 +169,25 @@ public class EthiopicTest extends CalendarTest
         EthiopicCalendar testCalendar = new EthiopicCalendar();
         testCalendar.setLenient(true);
         doTestCases(tests, testCalendar);
+    }
+
+    // basic check to see that we print out eras ok
+    // eventually should modify to use locale strings and formatter appropriate to coptic calendar
+    public void TestEraStart() {
+        EthiopicCalendar cal = new EthiopicCalendar(0, 0, 1);
+        SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
+        assertEquals("Ethiopic Date", "Tue Jan 01, 0000 AD", fmt.format(cal));
+
+        // The gregorian calendar gets off by two days when
+        // the date gets low, unless the gregorian changeover is set to 
+        // very early.  The funny thing is, it's ok for dates in the year
+        // 283, but not in the year 7, and it claims to be ok until the year 4.
+        // should track down when the dates start to differ...
+        
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setGregorianChange(new Date(Long.MIN_VALUE)); // act like proleptic Gregorian
+        gc.setTime(cal.getTime());
+        assertEquals("Gregorian Date", "Tue Aug 28, 0007 AD", fmt.format(gc));
     }
 
     public void TestBasic() {
@@ -184,105 +208,105 @@ public class EthiopicTest extends CalendarTest
 
     public void TestCoverage() {
 
-	{
-	    // new EthiopicCalendar(TimeZone)
-	    EthiopicCalendar cal = new EthiopicCalendar(TimeZone.getDefault()); 
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with TimeZone");
-	    }
-	}
+        {
+            // new EthiopicCalendar(TimeZone)
+            EthiopicCalendar cal = new EthiopicCalendar(TimeZone.getDefault()); 
+            if(cal == null){
+                errln("could not create EthiopicCalendar with TimeZone");
+            }
+        }
 
-	{
-	    // new EthiopicCalendar(ULocale)
-	    EthiopicCalendar cal = new EthiopicCalendar(ULocale.getDefault());
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with ULocale");
-	    }
-	}
+        {
+            // new EthiopicCalendar(ULocale)
+            EthiopicCalendar cal = new EthiopicCalendar(ULocale.getDefault());
+            if(cal == null){
+                errln("could not create EthiopicCalendar with ULocale");
+            }
+        }
         
-	{
-	    // new EthiopicCalendar(Locale)
-	    EthiopicCalendar cal = new EthiopicCalendar(Locale.getDefault());
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with Locale");
-	    }
-	}
+        {
+            // new EthiopicCalendar(Locale)
+            EthiopicCalendar cal = new EthiopicCalendar(Locale.getDefault());
+            if(cal == null){
+                errln("could not create EthiopicCalendar with Locale");
+            }
+        }
 
-	{
-	    // new EthiopicCalendar(Date)
-	    EthiopicCalendar cal = new EthiopicCalendar(new Date());
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with Date");
-	    }
-	}
+        {
+            // new EthiopicCalendar(Date)
+            EthiopicCalendar cal = new EthiopicCalendar(new Date());
+            if(cal == null){
+                errln("could not create EthiopicCalendar with Date");
+            }
+        }
 
-	{
-	    // new EthiopicCalendar(int year, int month, int date)
-	    EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1);
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with year,month,date");
-	    }
-	}
+        {
+            // new EthiopicCalendar(int year, int month, int date)
+            EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1);
+            if(cal == null){
+                errln("could not create EthiopicCalendar with year,month,date");
+            }
+        }
 
-	{
-	    // new EthiopicCalendar(int year, int month, int date, int hour, int minute, int second)
-	    EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1, 1, 1, 1);
-	    if(cal == null){
-		errln("could not create EthiopicCalendar with year,month,date,hour,minute,second");
-	    }
-	}
+        {
+            // new EthiopicCalendar(int year, int month, int date, int hour, int minute, int second)
+            EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1, 1, 1, 1);
+            if(cal == null){
+                errln("could not create EthiopicCalendar with year,month,date,hour,minute,second");
+            }
+        }
 
-	{
-	    // setCivil/isCivil
-	    // operations on non-civil calendar
-	    EthiopicCalendar cal = newAmeteAlemEraCalendar();
-	    cal.setAmeteAlemEra(false);
-	    if (cal.isAmeteAlemEra()) {
-        	errln("EthiopicCalendar calendar is old system");
-	    }
+        {
+            // setCivil/isCivil
+            // operations on non-civil calendar
+            EthiopicCalendar cal = newAmeteAlemEraCalendar();
+            cal.setAmeteAlemEra(false);
+            if (cal.isAmeteAlemEra()) {
+                errln("EthiopicCalendar calendar is old system");
+            }
 
-	    Date now = new Date();
-	    cal.setTime(now);
+            Date now = new Date();
+            cal.setTime(now);
 
-	    Date then = cal.getTime();
-	    if (!now.equals(then)) {
-        	errln("get/set time failed with non-civil EthiopicCalendar calendar");
-	    }
+            Date then = cal.getTime();
+            if (!now.equals(then)) {
+                errln("get/set time failed with non-civil EthiopicCalendar calendar");
+            }
 
-	    logln(then.toString());
+            logln(then.toString());
 
-	    cal.add(Calendar.MONTH, 1);
-	    cal.add(Calendar.DAY_OF_MONTH, 1);
-	    cal.add(Calendar.YEAR, 1);
+            cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.YEAR, 1);
 
-	    logln(cal.getTime().toString());
-	}
+            logln(cal.getTime().toString());
+        }
     
-	{
-	    // data
-	    EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1);
-	    Date time = cal.getTime();
+        {
+            // data
+            EthiopicCalendar cal = new EthiopicCalendar(1997, EthiopicCalendar.MESKEREM, 1);
+            Date time = cal.getTime();
 
-	    String[] calendarLocales = {
-		"am_ET", "gez_ET", "ti_ET"
-	    };
+            String[] calendarLocales = {
+                "am_ET", "gez_ET", "ti_ET"
+            };
 
-	    String[] formatLocales = {
-		"en", "am", "gez", "ti"
-	    };
-	    for (int i = 0; i < calendarLocales.length; ++i) {
-        	String calLocName = calendarLocales[i];
-        	Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-        	cal = new EthiopicCalendar(calLocale);
+            String[] formatLocales = {
+                "en", "am", "gez", "ti"
+            };
+            for (int i = 0; i < calendarLocales.length; ++i) {
+                String calLocName = calendarLocales[i];
+                Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+                cal = new EthiopicCalendar(calLocale);
 
-        	for (int j = 0; j < formatLocales.length; ++j) {
-        	    String locName = formatLocales[j];
-        	    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-        	    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-        	    logln(calLocName + "/" + locName + " --> " + format.format(time));
-        	}
-	    }
-	}
+                for (int j = 0; j < formatLocales.length; ++j) {
+                    String locName = formatLocales[j];
+                    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+                    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                }
+            }
+        }
     }
     
     private static EthiopicCalendar newAmeteAlemEraCalendar() {
