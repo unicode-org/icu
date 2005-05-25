@@ -61,7 +61,7 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  fr_CH.txt fr_FR.txt fr_LU.txt ga.txt ga_IE.txt\
  gl.txt gl_ES.txt gu.txt gu_IN.txt gv.txt\
  gv_GB.txt he.txt he_IL.txt hi.txt hi_IN.txt\
- hr.txt hr_HU.txt hu.txt hu_HU.txt hy.txt hy_AM.txt\
+ hr.txt hr_HR.txt hu.txt hu_HU.txt hy.txt hy_AM.txt\
  hy_AM_REVISED.txt id.txt id_ID.txt is.txt is_IS.txt\
  it.txt it_CH.txt it_IT.txt ja.txt ja_JP.txt\
  kk.txt kk_KZ.txt kl.txt kl_GL.txt kn.txt\
