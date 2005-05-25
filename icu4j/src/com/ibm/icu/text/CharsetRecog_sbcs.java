@@ -777,6 +777,26 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
+    static class CharsetRecog_8859_8_he_visual extends CharsetRecog_8859_8
+    {
+        private static int[] ngrams = {
+            0x20E0E5, 0x20E0EC, 0x20E4E9, 0x20E4EC, 0x20E4EE, 0x20E4F0, 0x20E9F0, 0x20ECF2, 0x20ECF9, 0x20EDE5, 0x20EDE9, 0x20EFE5, 0x20EFE9, 0x20F8E5, 0x20F8E9, 0x20FAE0, 
+            0x20FAE5, 0x20FAE9, 0xE020E4, 0xE020EC, 0xE020ED, 0xE020FA, 0xE0E420, 0xE0E5E4, 0xE0EC20, 0xE0EE20, 0xE120E4, 0xE120ED, 0xE120FA, 0xE420E4, 0xE420E9, 0xE420EC, 
+            0xE420ED, 0xE420EF, 0xE420F8, 0xE420FA, 0xE4EC20, 0xE5E020, 0xE5E420, 0xE7E020, 0xE9E020, 0xE9E120, 0xE9E420, 0xEC20E4, 0xEC20ED, 0xEC20FA, 0xECF220, 0xECF920, 
+            0xEDE9E9, 0xEDE9F0, 0xEDE9F8, 0xEE20E4, 0xEE20ED, 0xEE20FA, 0xEEE120, 0xEEE420, 0xF2E420, 0xF920E4, 0xF920ED, 0xF920FA, 0xF9E420, 0xFAE020, 0xFAE420, 0xFAE5E9, 
+        };
+
+        public String getLanguage()
+        {
+            return "he_VISUAL";
+        }
+        
+        public int match(CharsetDetector det)
+        {
+            return match(det, ngrams, byteMap);
+        }
+    }
+    
     abstract static class CharsetRecog_8859_9 extends CharsetRecog_sbcs
     {
         protected static byte[] byteMap = {
