@@ -991,10 +991,10 @@ public final class CollationElementIterator
      * @param ch UTF16 character
      * @return combining class of ch
      */
-    private int getCombiningClass(char ch)
+    private int getCombiningClass(int ch)
     {
         if (ch >= LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_ &&
-            m_collator_.isUnsafe(ch)) {
+            m_collator_.isUnsafe((char)ch) || ch > 0xFFFF) {
             return NormalizerImpl.getCombiningClass(ch);
         }
         return 0;
@@ -1145,7 +1145,7 @@ public final class CollationElementIterator
             m_source_.next();
             int next = m_source_.current();
             if (next == UCharacterIterator.DONE
-                || next <= LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
+                || next < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
                 return result; // end of source string and if next character
                 // starts with a base character is always fcd.
             }
@@ -1640,7 +1640,7 @@ public final class CollationElementIterator
             }
 
             // get the discontiguos maximum combining class
-            byte maxCC = (byte)(collator.m_contractionIndex_[offset] & 0xFF);
+            int maxCC = (collator.m_contractionIndex_[offset] & 0xFF);
             // checks if all characters have the same combining class
             byte allSame = (byte)(collator.m_contractionIndex_[offset] >> 8);
             char ch = (char)nextChar();
@@ -1658,12 +1658,20 @@ public final class CollationElementIterator
             else {
                 // Source string char was not in contraction table.
                 // Unless it is a discontiguous contraction, we are done
-                byte sCC;
-                if (maxCC == 0 || (sCC = (byte)getCombiningClass(ch)) == 0
+                int miss = ch;
+                if(UTF16.isLeadSurrogate(ch)) { // in order to do the proper detection, we
+                    // need to see if we're dealing with a supplementary
+                    miss = UCharacterProperty.getRawSupplementary(ch, (char) nextChar());
+                  }
+                int sCC;
+                if (maxCC == 0 || (sCC = getCombiningClass(miss)) == 0
                     || sCC > maxCC || (allSame != 0 && sCC == maxCC) ||
                     isEnd()) {
                     // Contraction can not be discontiguous, back up by one
                     previousChar();
+                    if(miss > 0xFFFF) {
+                        previousChar();
+                    }
                     ce = collator.m_contractionCE_[entryoffset];
                 }
                 else {
@@ -1676,6 +1684,9 @@ public final class CollationElementIterator
                     char nextch = (char)ch_int;
                     if (getCombiningClass(nextch) == 0) {
                         previousChar();
+                        if(miss > 0xFFFF) {
+                            previousChar();
+                        }    
                         // base character not part of discontiguous contraction
                         ce = collator.m_contractionCE_[entryoffset];
                     }
