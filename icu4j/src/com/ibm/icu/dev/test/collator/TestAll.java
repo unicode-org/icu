@@ -41,6 +41,7 @@ public class TestAll extends TestGroup {
                   "CollationChineseTest",
                   "CollationServiceTest",
                   "RandomCollator",
+                  "UCAConformanceTest",
                   // don't test Search API twice!
                   //"com.ibm.icu.dev.test.search.SearchTest"
               },
