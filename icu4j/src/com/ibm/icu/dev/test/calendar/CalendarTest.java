@@ -92,6 +92,7 @@ public class CalendarTest extends TestFmwk {
         // Now iterate through the test cases and see what happens
         for (int i = 0; i < cases.length; i++)
         {
+            logln("\ntest case: " + i);
             TestCase test = cases[i];
             
             //
