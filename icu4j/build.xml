@@ -105,8 +105,8 @@
         <!-- fix the data folder every time there is a version update-->
         <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt33b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
-        <property name="icu4j.javac.source" value="1.4"/> <!-- debug -->
-        <property name="icu4j.javac.target" value="1.4"/> <!-- debug -->
+        <property name="icu4j.javac.source" value="1.4"/>
+        <property name="icu4j.javac.target" value="1.4"/>
 
         <path id="build.classpath">
             <pathelement path="${build.dir}"/>
