@@ -5,15 +5,23 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.BuddhistCalendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.CopticCalendar;
+import com.ibm.icu.util.EthiopicCalendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -1644,7 +1652,31 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         }
 
         if (factory == null) {
-            return new GregorianCalendar(zone, locale);
+            int calType = getCalendarType(locale);
+            switch (calType) {
+            case BUDDHIST:
+                return new BuddhistCalendar(zone, locale);
+            case CHINESE:
+                return new ChineseCalendar(zone, locale);
+            case COPTIC:
+                return new CopticCalendar(zone, locale);
+            case ETHIOPIC:
+                return new EthiopicCalendar(zone, locale);
+            case GREGORIAN:
+                return new GregorianCalendar(zone, locale);
+            case HEBREW:
+                return new HebrewCalendar(zone, locale);
+            case ISLAMIC:
+            case ISLAMIC_CIVIL: {
+                IslamicCalendar result = new IslamicCalendar(zone, locale);
+                result.setCivil(calType == ISLAMIC_CIVIL);
+                return result;
+            }
+            case JAPANESE:
+                return new JapaneseCalendar(zone, locale);
+            default:
+                throw new InternalError();
+            }
         } else {
             Calendar result = factory.create(zone, locale);
 
@@ -1655,6 +1687,44 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             return result;
         }
     }
+    
+    private static final int BUDDHIST = 0;
+    private static final int CHINESE = 1;
+    private static final int COPTIC = 2;
+    private static final int ETHIOPIC = 3;
+    private static final int GREGORIAN = 4;
+    private static final int HEBREW = 5;
+    private static final int ISLAMIC = 6;
+    private static final int ISLAMIC_CIVIL = 7;
+    private static final int JAPANESE = 8;
+
+    private static final String[] calTypes = {
+        "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
+        "islamic", "islamic-civil", "japanese",
+    };
+
+    private static int getCalendarType(ULocale l) {
+        String s = l.getKeywordValue("calendar");
+        if (s == null) {
+            l = ICUResourceBundle.getFunctionalEquivalent(
+                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", l, null);
+            s = l.getKeywordValue("calendar");
+        }
+        return getCalendarType(s);
+    }
+
+    private static int getCalendarType(String s) {
+        if (s != null) {
+            s = s.toLowerCase();
+            for (int i = 0; i < calTypes.length; ++i) {
+                if (s.equals(calTypes[i])) {
+                    return i;
+                }
+            }
+        }
+        return GREGORIAN;
+    }
+
     ///CLOVER:ON
     /**
      * Gets the list of locales for which Calendars are installed.
@@ -2898,8 +2968,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @draft ICU 3.4
      */
     public int compareTo(Calendar that) {
-	long v = getTimeInMillis() - that.getTimeInMillis();
-	return v < 0 ? -1 : (v > 0 ? 1 : 0);
+        long v = getTimeInMillis() - that.getTimeInMillis();
+        return v < 0 ? -1 : (v > 0 ? 1 : 0);
     }
 
     /**
@@ -2908,7 +2978,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @draft ICU 3.4
      */
     public int compareTo(Object that) {
-	return compareTo((Calendar)that);
+        return compareTo((Calendar)that);
     }
 
     //-------------------------------------------------------------------------
@@ -3929,6 +3999,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         // 11/6/00
 
         long days = floorDivide(localMillis, ONE_DAY);
+
         fields[JULIAN_DAY] = (int) days + EPOCH_JULIAN_DAY;
 
         // In some cases we will have to call this method again below to

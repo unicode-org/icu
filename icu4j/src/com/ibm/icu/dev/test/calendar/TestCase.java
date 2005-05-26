@@ -189,19 +189,21 @@ public class TestCase {
     public boolean fieldsEqual(Calendar c, TestLog log) {
         for (int i=0; i < c.getFieldCount(); i++) {
             if (isSet(i) && get(i) != c.get(i)) {
-                log.errln("Fail: " + CalendarTest.fieldName(i) + " = " + c.get(i) +
+                StringBuffer buf = new StringBuffer();
+                buf.append("Fail: " + CalendarTest.fieldName(i) + " = " + c.get(i) +
                           ", expected " + get(i));
                 for (int j=0; j<c.getFieldCount(); ++j) {
                     if (isSet(j)) {
                         if (get(j) == c.get(j)) {
-                            log.errln(" OK: " + CalendarTest.fieldName(j) + " = " +
+                            buf.append("\n  ok: " + CalendarTest.fieldName(j) + " = " +
                                       c.get(j));
                         } else {
-                            log.errln(" Fail: " + CalendarTest.fieldName(j) + " = " +
+                            buf.append("\n  fail: " + CalendarTest.fieldName(j) + " = " +
                                       c.get(j) + ", expected " + get(j));
                         }
                     }
                 }
+                log.errln(buf.toString());
                 return false;
             }
         }
