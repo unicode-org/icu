@@ -65,13 +65,13 @@
                 <equals arg1="${ant.java.version}" arg2="1.5"/>
             </or>
         </condition>
-	
+        
         <condition property="doc.params"
             value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tests' 'com.ibm.icu.dev.test*' -group 'Demos' 'com.ibm.icu.dev.demo*' -group 'ICU Tools' 'com.ibm.icu.dev*'">
                 <equals arg1="${version.1.4}" arg2="true"/>
         </condition>
 
-	<condition property="richeditdoc.params"
+        <condition property="richeditdoc.params"
             value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'Rich Text Editing' 'com.ibm.richtext*'">
                 <equals arg1="${version.1.4}" arg2="true"/>
         </condition>
@@ -105,6 +105,8 @@
         <!-- fix the data folder every time there is a version update-->
         <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt33b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
+        <property name="icu4j.javac.source" value="1.4"/> <!-- debug -->
+        <property name="icu4j.javac.target" value="1.4"/> <!-- debug -->
 
         <path id="build.classpath">
             <pathelement path="${build.dir}"/>
@@ -183,7 +185,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"
             encoding="ascii"/>
     </target>
@@ -194,42 +197,48 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/collator/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/format/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/translit/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/lang/**/*.java, com/ibm/icu/dev/test/normalizer/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -239,28 +248,30 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
     <target name="buildmangle" depends="init,anthack1" if="version.1.4">
         <javac includes="com/ibm/icu/dev/tool/docs/CodeMangler.java"
-	srcdir="${src.dir}"
-	destdir="${build.dir}"
-	classpathref="build.classpath"
-	source="1.4"/>
+        srcdir="${src.dir}"
+        destdir="${build.dir}"
+        classpathref="build.classpath"
+        source="${icu4j.javac.source}"
+        target="${icu4j.javac.target}"/>
     </target>
 
     <target name="mangle" depends="buildmangle" if="version.1.4">
     <!-- this is a hack for now, need a way to express dependency on the .jpp files
     and to provide directories or trees of files to the code mangler tool. -->
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-	    <arg value="-d"/>
-	    <arg value="VERSION_${ant.java.version}"/>
-	    <arg value="-in"/>
-	    <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.jpp"/>
-	    <arg value="-out"/>
-	    <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java"/>
+            <arg value="-d"/>
+            <arg value="VERSION_${ant.java.version}"/>
+            <arg value="-in"/>
+            <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.jpp"/>
+            <arg value="-out"/>
+            <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java"/>
          </java>
     </target>
 
@@ -270,7 +281,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4" 
+            source="${icu4j.javac.source}" 
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -280,7 +292,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -332,9 +345,9 @@
 
     <target name ="testData" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
-	    todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+            todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
-	    todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+            todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
@@ -342,16 +355,17 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy todir="${build.dir}/com/ibm/icu/dev/data">
             <fileset dir="${src.dir}/com/ibm/icu/dev/data"
                 includes="*.spp"/>
         </copy>
         <copy todir="${build.dir}/com/ibm/icu/dev/data/unicode">
-	    <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode"
-	        includes="*.txt"/>
-	</copy>
+            <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode"
+                includes="*.txt"/>
+        </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
@@ -365,7 +379,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy todir="${build.dir}/com/ibm/richtext/textapps/resources" overwrite="yes" includeEmptyDirs="no">
             <fileset dir="${src.dir}/com/ibm/richtext/textapps/resources" includes="*.red"/>
@@ -418,7 +433,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/translit/Transliterator.properties"
             todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
@@ -437,7 +453,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/indic/DisplayNames.properties"
             todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
@@ -457,7 +474,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
             <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
@@ -532,9 +550,9 @@
         <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
         <jvmarg value="-Djava.security.manager"/>
         <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
-	<!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
+        <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
         <arg value="-w"/>
-	<!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+        <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
         <classpath>
             <pathelement location="clover.jar"/>
             <pathelement location="${jar.file}"/>
@@ -586,7 +604,7 @@
             <!-- arg value="-html"/>  -->
             <arg value="-out:"/>
             <!-- arg value="${api.dir}/icu4j_compare_30_32.html"/> -->
-	    <arg value="icu4j_compare_30_32.txt"/>
+            <arg value="icu4j_compare_30_32.txt"/>
         </java>
     </target>
 
@@ -729,7 +747,8 @@
             excludes="**/CVS/**/*,com/ibm/icu/lang/UScriptRun.java, com/ibm/icu/impl/ICUListResourceBundle.java, com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -739,7 +758,8 @@
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -754,7 +774,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -764,7 +785,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -783,7 +805,8 @@
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -795,7 +818,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -807,7 +831,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
     
@@ -819,7 +844,8 @@
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -830,7 +856,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -842,7 +869,8 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -853,7 +881,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -866,7 +895,8 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -877,7 +907,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
 
@@ -890,7 +921,8 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -901,7 +933,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
@@ -916,7 +949,8 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <copy file="${src.dir}/com/ibm/icu/impl/data/th.brk"
@@ -929,7 +963,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
@@ -949,7 +984,8 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -960,7 +996,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}">
             <patternset>
@@ -984,7 +1021,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-	    source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
         <jar jarfile="xliff.jar"
             compress="true"
@@ -999,7 +1037,8 @@
         <javac includes="com/ibm/icu/dev/test/util/BagFormatter.java,com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/util/SortedBag.java,com/ibm/icu/dev/test/util/Relation*.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/test/util/ArrayComparator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
         <jar jarfile="utilities.jar"
