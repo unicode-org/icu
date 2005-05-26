@@ -129,6 +129,39 @@ final class CollationParsedRuleBuilder
             return strength;                
         }
 
+        private int compareCEs(int source0, int source1, int target0, int target1) {
+            int s1 = source0, s2, t1 = target0, t2;
+            if(RuleBasedCollator.isContinuation(source1)) {
+                s2 = source1;
+            } else {
+                s2 = 0;
+            }
+            if(RuleBasedCollator.isContinuation(target1)) {
+                t2 = target1;
+            } else {
+                t2 = 0;
+            }
+            
+            int s = 0, t = 0;
+            if(s1 == t1 && s2 == t2) {
+                return 0;
+            }
+            s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16); 
+            t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16);
+            if(s == t) {
+                s = (s1 & 0x0000FF00) | (s2 & 0x0000FF00)>>8;
+                t = (t1 & 0x0000FF00) | (t2 & 0x0000FF00)>>8;
+                if(s == t) {
+                    s = (s1 & 0x000000FF)<<8 | (s2 & 0x000000FF);
+                    t = (t1 & 0x000000FF)<<8 | (t2 & 0x000000FF);
+                    return Utility.compareUnsigned(s, t);
+                } else { 
+                    return Utility.compareUnsigned(s, t);
+                }
+            } else {
+                return Utility.compareUnsigned(s, t);                
+            }
+        }
         
         /**
          * Finding the inverse CE of the argument CEs
@@ -141,33 +174,25 @@ final class CollationParsedRuleBuilder
             int bottom = 0;
             int top = m_table_.length / 3;
             int result = 0;
-    
+            
             while (bottom < top - 1) {
-        result = (top + bottom) >> 1;
-        int first = m_table_[3 * result];
-        int second = m_table_[3 * result + 1];
-                int comparison = Utility.compareUnsigned(first, ce);
-        if (comparison > 0) {
-            top = result;
-        } 
+                result = (top + bottom) >> 1;
+                int first = m_table_[3 * result];
+                int second = m_table_[3 * result + 1];
+                int comparison = compareCEs(first, second, ce, contce);
+                if (comparison > 0) {
+                    top = result;
+                } 
                 else if (comparison < 0) {
-            bottom = result;
-        } 
-                else {
-            if (second > contce) {
-            top = result;
-            } 
-                    else if (second < contce) {
-            bottom = result;
-            } 
-                    else {
-            break;
+                    bottom = result;
+                } 
+                else { 
+                    break;
+                }
             }
+            
+            return result;
         }
-        }
-        
-        return result;
-    }
     
     /**
      * Getting gap offsets in the inverse UCA
