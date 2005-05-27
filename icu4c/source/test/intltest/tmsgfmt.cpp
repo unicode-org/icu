@@ -194,7 +194,7 @@ void TestMessageFormat::testBug2()
 
 #include "unicode/datefmt.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <string.h>
 
 IntlTest&
 operator<<( IntlTest&           stream,
