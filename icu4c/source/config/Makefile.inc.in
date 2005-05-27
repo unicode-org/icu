@@ -153,6 +153,9 @@ platform = @platform@
 ##################################################################
 AIX_SHLIB = @AIX_SHLIB@
 AR = @AR@
+# initial tab keeps it out of the shell version.
+	ARFLAGS := @ARFLAGS@ $(ARFLAGS)
+#SH#ARFLAGS="@ARFLAGS@ ${ARFLAGS}"
 CC = @CC@
 CFLAGS = @CFLAGS@ 
 CPP = @CPP@
