@@ -1,5 +1,4 @@
 ﻿# Invariance tests
-# dummy commit.
 # Each line indicates an invariant set relationship to be tested,
 # and is of the form:
 #
@@ -36,13 +35,28 @@
 # When this file is parsed, an error message may contain <@>
 #  to indicate the location of an error in the input line.
 
-# The following not very interesting, but show examples of use
+# General Constants
+Let $gcAllPunctuation = [$gc:Open_Punctuation $gc:Close_Punctuation $gc:Dash_Punctuation $gc:Connector_Punctuation $gc:Other_Punctuation $gc:Initial_Punctuation $gc:Final_Punctuation]
+Let $gcAllSymbols = [$gc:Currency_Symbol $gc:Modifier_Symbol $gc:Math_Symbol $gc:Other_Symbol]
+Let $gcAllMarks = [$gc:Nonspacing_Mark $gc:Enclosing_Mark $gc:Spacing_Mark]
 
+##### EXAMPLES OF USAGE #####
+
+#Show [[^$gc:unassigned]-[^$×gc:unassigned]-[^$dt:none]]
 #$GC:Zs ! $GC:Zp
 #$East_Asian_Width:Neutral ? $GC:Uppercase_Letter
 $GC:Zs ? $Name:«.*SPACE.*»
+#$Script:Common ! [$Alphabetic - $Math]
+
+# $Pattern_Whitespace = [$Whitespace \u200E \u200F]
+# $Pattern_Syntax = [$gcAllSymbols $gcAllPunctuation [\u2190-\u2BFF\u2e00-\u2e7F]]
+# $Pattern_Syntax ! $Alphabetic
+# $Pattern_Syntax ! $ID_Continue
 
 # [$script:greek&$gc:«.*letter.*»] = [;\u00B5\u00B7\u00C4\u00CB\u00CF\u00D6\u00DC\u00E4\u00EB\u00EF\u00F6\u00FC\u00FF-\u0101\u0112-\u0113\u012A-\u012B\u014C-\u014D\u016A-\u016B\u0178\u01D5-\u01DC\u01DE-\u01E3\u01EC-\u01ED\u022A-\u022D\u0230-\u0233\u0304\u0308\u0313-\u0314\u0342-\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D7\u03DB\u03DD\u03DF\u03E1\u03E3\u03E5\u03E7\u03E9\u03EB\u03ED\u03EF-\u03F5\u0401\u0407\u0451\u0457\u04D2-\u04D3\u04DA-\u04DF\u04E2-\u04E7\u04EA-\u04F1\u04F4-\u04F5\u04F8-\u04F9\u1E14-\u1E17\u1E20-\u1E21\u1E26-\u1E27\u1E2E-\u1E2F\u1E38-\u1E39\u1E4E-\u1E53\u1E5C-\u1E5D\u1E7A-\u1E7B\u1E84-\u1E85\u1E8C-\u1E8D\u1E97\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC1-\u1FC4\u1FC6-\u1FCC\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDF-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126]
+
+# $script:greek = $×script:greek
+# $gc:lm = $script:inherited
 
 # Examples of parsing errors
 
@@ -50,27 +64,82 @@ $GC:Zs ? $Name:«.*SPACE.*»
 # $LB:foo =  $GC:Zp # example of non-existant value
 # $GC:Zs @ $GC:Zp # example of unknown relation
 
-# The following should be real invariants
+#### REAL INVARIANTS FOLLOW ####
+
 # For illustration, different alias styles are used
 
 $Line_Break:Unknown = [$General_Category:Unassigned $GeneralCategory:PrivateUse]
 $LB:OP = $GC:Ps
-$General_Category:Decimal_Number = $Numeric_Type:Decimal
 $Whitespace ⊃ [$GC:Zs $GC:Zp $GC:Zl]
 $Dash ⊃ [$GC:Pd]
 $Script:Common ! [$GC:Mn $GC:Me]
-$Script:Common ! [$Alphabetic - $Math]
 $Alphabetic ⊃ [$Uppercase $Lowercase]
 
-# Comparisons across versions
+# Numbers: the following must be equal
 
-$ID_Start ⊇ $×ID_Start
-$ID_Continue ⊇ $×ID_Continue
+$General_Category:Decimal_Number = $Numeric_Type:Decimal
+
+# Decimals are 0..9
+
+Let $decimalValue = $Numeric_Value:«[0-9].0»
+$decimalValue ⊇ $General_Category:Decimal_Number
+
+# All and only those items with numeric types have numeric values
+
+Let $anyNumericValue = $Numeric_Value:«-?[0-9]+.[0-9]+»
+[$Numeric_Type:Decimal $Numeric_Type:Digit $Numeric_Type:Numeric] = $anyNumericValue
+
+# Canonical decompositions (minus exclusions) must be identical across releases
 [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] = [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion]
 
-#$age:4.0.1 = $age4.0.0
+# Identifiers must be backwards compatible
+$ID_Start ⊇ $×ID_Start
+$ID_Continue ⊇ $×ID_Continue
+$XID_Start ⊇ $×XID_Start
+$XID_Continue ⊇ $×XID_Continue
 
-# Derivations
+# Continue must contain start
+$ID_Continue ⊇ $ID_Start
+$XID_Continue ⊇ $XID_Start
+
+# Identifiers can't intersect pattern stuff
+$ID_Continue ! [$Pattern_Whitespace $Pattern_Syntax]
+$Pattern_Whitespace ! [$ID_Continue $Pattern_Syntax]
+$Pattern_Syntax ! [$ID_Continue $Pattern_Whitespace]
+
+$XID_Continue ! [$Pattern_Whitespace $Pattern_Syntax]
+$Pattern_Whitespace ! [$XID_Continue $Pattern_Syntax]
+$Pattern_Syntax ! [$XID_Continue $Pattern_Whitespace]
+
+# testing
+# [$Pattern_Whitespace $Pattern_Syntax] ! [[^$WB:Format $WB:Other] \u2019 \u0027 \u02BC \u002d \u00ad \u2027 \u058A]
+Let $otherword = [\u2019 \u0027 \u02BC \u002d \u00ad \u2027 \u058A]
+Let $currentword = [[^$WB:Format $WB:Other $WB:MidNum] $Grapheme_Extend $alphabetic]
+Show [$currentword $otherword - $ID_Continue]
+Show [$currentword $otherword - [$alphabetic $anyNumericValue $gcAllMarks]]
+Show [$otherword - $currentword]
+Show [$name:«.*LETTER.*» - $alphabetic]
+
+# Pattern characters are invariant!
+# Add after 4.1.0
+#$Pattern_Whitespace = $×Pattern_Whitespace
+#$Pattern_Syntax = $×Pattern_Syntax
+
+#BIDI invariant constants
+Let $R_blocks = [$block:Kharoshthi $block:Hebrew $block:Cypriot_Syllabary  \u07C0-\u08FF \uFB1D-\uFB4F \U00010840-\U00010FFF]
+Let $AL_blocks = [[$block:Arabic_Supplement $block:Arabic $block:Syriac $block:Arabic $block:Thaana $block:Arabic_Presentation_Forms_A $block:Arabic_Presentation_Forms_B [\u0750-\u077F]] -$Noncharacter_Code_Point]
+
+#Unassigned characters in these blocks have R or AL respectively
+$Bidi_Class:R ⊇ [$R_blocks & $gc:Cn]
+$Bidi_Class:AL ⊇ [$AL_blocks & $gc:Cn]
+
+# There are no strong characters of the other directionalities (out of L, AL, R) in these blocks, 
+# and anything R or L is in the block (or RLM)
+$R_blocks ! [$Bidi_Class:L $Bidi_Class:AL]
+$AL_blocks ! [$Bidi_Class:L $Bidi_Class:R]
+[$R_blocks $AL_blocks \u200F] ⊇ [$Bidi_Class:AL $Bidi_Class:R]
+
+# Derivations must match
 
 $Math = [$GC:Sm $Other_Math]
 $Alphabetic = [$GC:Lu $GC:Ll $GC:Lt $GC:Lm $GC:Lo $GC:Nl $Other_Alphabetic]
@@ -83,6 +152,7 @@ $Grapheme_Extend = [$GC:Me $GC:Mn $Other_Grapheme_Extend]
 $Grapheme_Base = [^$GC:Cc $GC:Cf $GC:Cs $GC:Co $GC:Cn $GC:Zl $GC:Zp $Grapheme_Extend]
 
 # "Minimal" Other_: NOT hard requirements; just if we want to be minimal
+# (Should add way to make these warnings, not errors)
 
 $Other_Math = [$Math - $GC:Sm]
 $Other_Alphabetic = [$Alphabetic - [$GC:Lu $GC:Ll $GC:Lt $GC:Lm $GC:Lo $GC:Nl]]
@@ -92,13 +162,9 @@ $Other_ID_Start = [$ID_Start - [$GC:Lu $GC:Ll $GC:Lt $GC:Lm $GC:Lo $GC:Nl]]
 $Other_Default_Ignorable_Code_Point = [$Default_Ignorable_Code_Point - [[$GC:Cf $GC:Cc $GC:Cs $Variation_Selector $Noncharacter_Code_Point] - [$White_Space\uFFF9-\uFFFB]]]
 $Other_Grapheme_Extend = [$Grapheme_Extend - [$GC:Me $GC:Mn]]
 
-# Testing
-# $script:greek = $×script:greek
-# $gc:lm = $script:inherited
-
 # ===========================
 
-# Compatibility Properties (UTS#18)
+# POSIX Compatibility Properties (UTS#18)
 # http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap07.html
 
 # constants
@@ -113,9 +179,6 @@ Let $NEL = [\u0085]	# \N{next line}
 Let $ZWNJ = [\u200C]	# [\N{ZERO WIDTH NON-JOINER}]
 Let $ZWJ = [\u200D]	# [\N{ZERO WIDTH JOINER}]
 
-Let $gcAllPunctuation = [$gc:Open_Punctuation $gc:Close_Punctuation $gc:Dash_Punctuation $gc:Connector_Punctuation $gc:Other_Punctuation $gc:Initial_Punctuation $gc:Final_Punctuation]
-Let $gcAllSymbols = [$gc:Currency_Symbol $gc:Modifier_Symbol $gc:Math_Symbol $gc:Other_Symbol]
-Let $gcAllMarks = [$gc:Nonspacing_Mark $gc:Enclosing_Mark $gc:Spacing_Mark]
 Let $strange = [\u24B6-\u24E9]
 
 # Unassigned, Control, Format, Private_Use, Surrogate, 
