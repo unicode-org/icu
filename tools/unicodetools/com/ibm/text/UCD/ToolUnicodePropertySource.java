@@ -240,7 +240,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
 				{"Control", "CN"},
 				{"Extend", "EX"},
 				{"Other", "XX"},
-		}).swapFirst2ValueAliases());
+		}, true).swapFirst2ValueAliases());
 
         add(new UnicodeProperty.UnicodeMapProperty() {
         	{
@@ -283,7 +283,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
 				{"Numeric", "NU"},
 				{"ExtendNumLet", "EX"},
 				{"Other", "XX"},
-		}).swapFirst2ValueAliases());
+		}, true).swapFirst2ValueAliases());
 
         add(new UnicodeProperty.UnicodeMapProperty() {
         	{
@@ -335,7 +335,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
 				{"STerm", "ST"},
 				{"Close", "CL"},
 				{"Other", "XX"},
-		}).swapFirst2ValueAliases());
+		}, false).swapFirst2ValueAliases());
     }
     
     static String[] YES_NO_MAYBE = {"N", "M", "Y"};

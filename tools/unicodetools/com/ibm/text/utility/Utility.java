@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2005/03/30 17:19:32 $
-* $Revision: 1.48 $
+* $Date: 2005/05/27 21:39:03 $
+* $Revision: 1.49 $
 *
 *******************************************************************************
 */
@@ -336,6 +336,10 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
 
     public static String fromHex(String p) {
+    	return fromHex(p, false);
+    }
+    
+    public static String fromHex(String p, boolean acceptChars) {
         StringBuffer output = new StringBuffer();
         int value = 0;
         int count = 0;
@@ -357,13 +361,31 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 default:
                     int type = Character.getType(ch);
                     if (type != Character.SPACE_SEPARATOR) {
+                    	if (acceptChars) {
+                            if (count >= 4 && count <= 6) {
+                                UTF32.append32(output, value);
+                                count = 0;
+                                value = 0;
+                            } else if (count != 0) {
+                            	output.append(p.substring(i-count, i)); // TODO fix supplementary characters
+                            }
+                            UTF32.append32(output, ch);
+                            continue main;
+                   		
+                    	}
                         throw new ChainException("bad hex value: '{0}' at position {1} in \"{2}\"",
                             new Object[] {String.valueOf(ch), new Integer(i), p});
                     }
                     // fall through!!
                 case ' ': case ',': case ';': // do SPACE here, just for speed
                     if (count != 0) {
-                        UTF32.append32(output, value);
+                    	if (count < 4 || count > 6) {
+                    		if (acceptChars) output.append(p.substring(i-count, i));
+                    		else throw new ChainException("bad hex value: '{0}' at position {1} in \"{2}\"",
+                                    new Object[] {String.valueOf(ch), new Integer(i), p});
+                    	} else {
+                    		UTF32.append32(output, value);
+                    	}
                     }
                     count = 0;
                     value = 0;
@@ -378,7 +400,13 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             count++;
         }
         if (count != 0) {
-            UTF32.append32(output, value);
+           	if (count < 4 || count > 6) {
+           		if (acceptChars) output.append(p.substring(p.length()-count, p.length()));
+        		else throw new ChainException("bad hex value: '{0}' at position {1} in \"{2}\"",
+                        new Object[] {"EOS", new Integer(p.length()), p});
+        	} else {
+        		UTF32.append32(output, value);
+        	}
         }
         return output.toString();
     }
