@@ -86,6 +86,7 @@ public:
     void testParse(void);
     void testAdopt(void);
     void TestTurkishCasing(void);
+    void testAutoQuoteApostrophe(void);
 
 private:
 };

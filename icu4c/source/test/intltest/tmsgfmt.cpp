@@ -28,6 +28,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/choicfmt.h"
 #include "unicode/gregocal.h"
+#include <stdio.h>
 
 void
 TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
@@ -53,6 +54,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(17,TestUnlimitedArgsAndSubformats);
         TESTCASE(18,TestRBNF);
         TESTCASE(19,TestTurkishCasing);
+        TESTCASE(20,testAutoQuoteApostrophe);
         default: name = ""; break;
     }
 }
@@ -193,7 +195,6 @@ void TestMessageFormat::testBug2()
 #include "unicode/datefmt.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 IntlTest&
 operator<<( IntlTest&           stream,
@@ -1209,6 +1210,34 @@ void TestMessageFormat::TestRBNF(void) {
         delete fmt;
     }
     delete numFmt;
+}
+
+void TestMessageFormat::testAutoQuoteApostrophe(void) {
+    const char* patterns[] = { // pattern, expected pattern
+        "'", "''",
+        "''", "''",
+        "'{", "'{'",
+        "' {", "'' {",
+        "'a", "''a",
+        "'{'a", "'{'a",
+        "'{a'", "'{a'",
+        "'{}", "'{}'",
+        "{'", "{'",
+        "{'a", "{'a",
+        "{'a{}'a}'a", "{'a{}'a}''a",
+    };
+    int32_t pattern_count = sizeof(patterns)/sizeof(patterns[0]);
+
+    for (int i = 0; i < pattern_count; i += 2) {
+	UErrorCode status = U_ZERO_ERROR;
+        UnicodeString result = MessageFormat::autoQuoteApostrophe(patterns[i], status);
+        UnicodeString target(patterns[i+1]);
+        if (target != result) {
+            char buf[128];
+            sprintf(buf, "[%2d] \"%s\" : \"%s\" != \"%s\"\n", i/2, patterns[i], patterns[i+1], result);
+            errln(buf);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
