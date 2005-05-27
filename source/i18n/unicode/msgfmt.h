@@ -574,6 +574,26 @@ public:
                              ParsePosition& pos) const;
 
     /**
+     * Convert an 'apostrophe-friendly' pattern into a standard
+     * pattern.  Standard patterns treat all apostrophes as
+     * quotes, which is problematic in some languages, e.g. 
+     * French, where apostrophe is commonly used.  This utility
+     * assumes that only an unpaired apostrophe immediately before
+     * a brace is a true quote.  Other unpaired apostrophes are paired,
+     * and the resulting standard pattern string is returned.
+     *
+     * <p><b>Note</b> it is not guaranteed that the returned pattern
+     * is indeed a valid pattern.  The only effect is to convert
+     * between patterns having different quoting semantics.
+     *
+     * @param pattern the 'apostrophe-friendly' patttern to convert
+     * @return the standard equivalent of the original pattern
+     * @since ICU 3.4
+     */
+    static UnicodeString autoQuoteApostrophe(const UnicodeString& pattern, 
+        UErrorCode& status);
+
+    /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
      * C++ compilers support genuine RTTI.  Polymorphic operator==() and

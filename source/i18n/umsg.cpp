@@ -30,6 +30,7 @@
 #include "unicode/unistr.h"
 #include "cpputils.h"
 #include "uassert.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_USE
 
@@ -601,5 +602,106 @@ umsg_vparse(const UMessageFormat *fmt,
     delete [] args;
 }
 
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define CURLY_BRACE_LEFT  ((UChar)0x007B)
+#define CURLY_BRACE_RIGHT ((UChar)0x007D)
+
+#define STATE_INITIAL 0
+#define STATE_SINGLE_QUOTE 1
+#define STATE_IN_QUOTE 2
+#define STATE_MSG_ELEMENT 3
+
+#define MAppend(c) if (len < blen) buffer[len++] = c; else len++
+
+
+int32_t umsg_autoQuoteApostrophe(const UChar* pattern, 
+			     int32_t plen,
+			     UChar* buffer,
+			     int32_t blen,
+			     UErrorCode* ec)
+{
+  int32_t state = STATE_INITIAL;
+  int32_t braceCount = 0;
+  int32_t len = 0;
+
+  if (ec == NULL || U_FAILURE(*ec)) {
+    return -1;
+  }
+
+  if (pattern == NULL || plen < -1 || (buffer == NULL && blen > 0)) {
+    *ec = U_ILLEGAL_ARGUMENT_ERROR;
+    return -1;
+  }
+
+  if (plen == -1) {
+    plen = u_strlen(pattern);
+  }
+
+  for (int i = 0; i < plen; ++i) {
+    UChar c = pattern[i];
+    switch (state) {
+    case STATE_INITIAL:
+      switch (c) {
+      case SINGLE_QUOTE:
+	state = STATE_SINGLE_QUOTE;
+	break;
+      case CURLY_BRACE_LEFT:
+	state = STATE_MSG_ELEMENT;
+	++braceCount;
+	break;
+      }
+      break;
+
+    case STATE_SINGLE_QUOTE:
+      switch (c) {
+      case SINGLE_QUOTE:
+	state = STATE_INITIAL;
+	break;
+      case CURLY_BRACE_LEFT:
+      case CURLY_BRACE_RIGHT:
+	state = STATE_IN_QUOTE;
+	break;
+      default:
+	MAppend(SINGLE_QUOTE);
+	state = STATE_INITIAL;
+	break;
+      }
+      break;
+
+    case STATE_IN_QUOTE:
+      switch (c) {
+      case SINGLE_QUOTE:
+	state = STATE_INITIAL;
+	break;
+      }
+      break;
+
+    case STATE_MSG_ELEMENT:
+      switch (c) {
+      case CURLY_BRACE_LEFT:
+	++braceCount;
+	break;
+      case CURLY_BRACE_RIGHT:
+	if (--braceCount == 0) {
+	  state = STATE_INITIAL;
+	}
+	break;
+      }
+      break;
+
+    default: // Never happens.
+      break;
+    }
+
+    MAppend(c);
+  }
+
+  // End of scan
+  if (state == STATE_SINGLE_QUOTE || state == STATE_IN_QUOTE) {
+    MAppend(SINGLE_QUOTE);
+  }
+
+  return u_terminateUChars(buffer, blen, len, ec);
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
