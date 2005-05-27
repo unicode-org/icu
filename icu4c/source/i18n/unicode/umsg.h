@@ -597,6 +597,36 @@ umsg_vparse(const UMessageFormat *fmt,
             UErrorCode     *status);
 
 
+    /**
+     * Convert an 'apostrophe-friendly' pattern into a standard
+     * pattern.  Standard patterns treat all apostrophes as
+     * quotes, which is problematic in some languages, e.g. 
+     * French, where apostrophe is commonly used.  This utility
+     * assumes that only an unpaired apostrophe immediately before
+     * a brace is a true quote.  Other unpaired apostrophes are paired,
+     * and the resulting standard pattern string is returned.
+     *
+     * <p><b>Note</b> it is not guaranteed that the returned pattern
+     * is indeed a valid pattern.  The only effect is to convert
+     * between patterns having different quoting semantics.
+     *
+     * @param pattern the 'apostrophe-friendly' patttern to convert
+     * @param plen the length of pattern, or -1 if unknown and pattern is null-terminated
+     * @param buffer the buffer for the result, or NULL if preflight only
+     * @param blen the length of the buffer, or 0 if preflighting
+     * @param ec the error code
+     * @return the length of the resulting text, not including trailing null
+     *        if buffer has room for the trailing null, it is provided, otherwise
+     *        not
+     * @draft ICU 3.4
+     */
+U_STABLE int32_t U_EXPORT2 
+umsg_autoQuoteApostrophe(const UChar* pattern, 
+			 int32_t plen,
+			 UChar* buffer,
+			 int32_t blen,
+			 UErrorCode* ec);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
