@@ -357,6 +357,7 @@ tools/unicodetools/com/ibm/text/UCA/norm_help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/norm_index_header.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/script_help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/script_index_header.html svneol=native#text/html
+tools/unicodetools/com/ibm/text/UCD/NamedSequences-Template.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCD/StandardizedVariants-Template.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCD/idn-charsHeader.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/data/CheckCollationValidity.html svneol=native#text/html
