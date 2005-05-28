@@ -144,6 +144,12 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 //                return 0;
 //            }
             
+            // TODO - This is a bit of a hack to take care of a case
+            // were we were getting a confidence of 135...
+            if (rawPercent > 0.33) {
+                return 98;
+            }
+            
             return (int) (rawPercent * 300.0);
         }
     }
@@ -757,7 +763,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
-    static class CharsetRecog_8859_8_he extends CharsetRecog_8859_8
+    static class CharsetRecog_8859_8_I_he extends CharsetRecog_8859_8
     {
         private static int[] ngrams = {
             0x20E0E5, 0x20E0E7, 0x20E0E9, 0x20E0FA, 0x20E1E9, 0x20E1EE, 0x20E4E0, 0x20E4E5, 0x20E4E9, 0x20E4EE, 0x20E4F2, 0x20E4F9, 0x20E4FA, 0x20ECE0, 0x20ECE4, 0x20EEE0, 
@@ -777,7 +783,7 @@ public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
     
-    static class CharsetRecog_8859_8_he_visual extends CharsetRecog_8859_8
+    static class CharsetRecog_8859_8_he extends CharsetRecog_8859_8
     {
         private static int[] ngrams = {
             0x20E0E5, 0x20E0EC, 0x20E4E9, 0x20E4EC, 0x20E4EE, 0x20E4F0, 0x20E9F0, 0x20ECF2, 0x20ECF9, 0x20EDE5, 0x20EDE9, 0x20EFE5, 0x20EFE9, 0x20F8E5, 0x20F8E9, 0x20FAE0, 

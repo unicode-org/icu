@@ -105,7 +105,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                 };
         
         String getName() {
-            return "ISO2022-JP";
+            return "ISO-2022-JP";
         }
         
         int   match(CharsetDetector det) {
@@ -119,7 +119,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                  };
         
         String getName() {
-            return "ISO2022-KR";
+            return "ISO-2022-KR";
         }
         
         int   match(CharsetDetector det) {
@@ -144,7 +144,7 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
         };
         
         String getName() {
-            return "ISO2022-CN";
+            return "ISO-2022-CN";
         }
         
         
