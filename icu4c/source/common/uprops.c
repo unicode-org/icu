@@ -239,7 +239,12 @@ static const struct {
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKC_INERT */
     { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_SEGMENT_STARTER */
     {  2,               U_MASK(UPROPS_V2_PATTERN_SYNTAX) },
-    {  2,               U_MASK(UPROPS_V2_PATTERN_WHITE_SPACE) }
+    {  2,               U_MASK(UPROPS_V2_PATTERN_WHITE_SPACE) },
+    { UPROPS_SRC_CHAR_AND_PROPSVEC,  0 },                       /* UCHAR_POSIX_ALNUM */
+    { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_BLANK */
+    { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_GRAPH */
+    { UPROPS_SRC_CHAR,  0 },                                    /* UCHAR_POSIX_PRINT */
+    { UPROPS_SRC_CHAR,  0 }                                     /* UCHAR_POSIX_XDIGIT */
 };
 
 U_CAPI UBool U_EXPORT2
@@ -302,6 +307,26 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                     return ubidi_isBidiControl(bdp, c);
                 case UCHAR_JOIN_CONTROL:
                     return ubidi_isJoinControl(bdp, c);
+                default:
+                    break;
+                }
+            } else if(column==UPROPS_SRC_CHAR) {
+                switch(which) {
+                case UCHAR_POSIX_BLANK:
+                    return u_isblank(c);
+                case UCHAR_POSIX_GRAPH:
+                    return u_isgraphPOSIX(c);
+                case UCHAR_POSIX_PRINT:
+                    return u_isprintPOSIX(c);
+                case UCHAR_POSIX_XDIGIT:
+                    return u_isxdigit(c);
+                default:
+                    break;
+                }
+            } else if(column==UPROPS_SRC_CHAR_AND_PROPSVEC) {
+                switch(which) {
+                case UCHAR_POSIX_ALNUM:
+                    return u_isalnumPOSIX(c);
                 default:
                     break;
                 }

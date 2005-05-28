@@ -77,12 +77,31 @@ U_CDECL_BEGIN
  * (In ICU, BreakIterator is the most sophisticated API for word boundaries.)
  * Another example: There is no "istitle()" class for titlecase characters.
  *
- * A summary of the behavior of some C/POSIX character classification implementations
- * for Unicode is available at http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/posix_classes.html
+ * ICU 3.4 and later provides API access for all twelve C/POSIX character classes.
+ * ICU implements them according to the Standard Recommendations in
+ * Annex C: Compatibility Properties of UTS #18 Unicode Regular Expressions
+ * (http://www.unicode.org/reports/tr18/#Compatibility_Properties).
  *
- * <strong>Important</strong>:
- * The behavior of the ICU C/POSIX-style character classification
- * functions is subject to change according to discussion of the above summary.
+ * API access for C/POSIX character classes is as follows:
+ * - alpha:     u_isUAlphabetic(c) or u_hasBinaryProperty(c, UCHAR_ALPHABETIC)
+ * - lower:     u_isULowercase(c) or u_hasBinaryProperty(c, UCHAR_LOWERCASE)
+ * - upper:     u_isUUppercase(c) or u_hasBinaryProperty(c, UCHAR_UPPERCASE)
+ * - punct:     u_ispunct(c)
+ * - digit:     u_charType(c)==U_DECIMAL_DIGIT_NUMBER
+ * - xdigit:    u_isxdigit(c) or u_hasBinaryProperty(c, UCHAR_POSIX_XDIGIT)
+ * - alnum:     u_hasBinaryProperty(c, UCHAR_POSIX_ALNUM)
+ * - space:     u_isUWhiteSpace(c) or u_hasBinaryProperty(c, UCHAR_WHITE_SPACE)
+ * - blank:     u_isblank(c) or u_hasBinaryProperty(c, UCHAR_POSIX_BLANK)
+ * - cntrl:     u_charType(c)==U_CONTROL_CHAR
+ * - graph:     u_hasBinaryProperty(c, UCHAR_POSIX_GRAPH)
+ * - print:     u_hasBinaryProperty(c, UCHAR_POSIX_PRINT)
+ *
+ * Note: Some of the u_isxyz() functions in uchar.h predate, and do not match,
+ * the Standard Recommendations in UTS #18. Instead, they match Java
+ * functions according to their API documentation.
+ *
+ * The C/POSIX character classes are also available in UnicodeSet patterns,
+ * using patterns like [:graph:] or \p{graph}.
  *
  * Note: There are several ICU whitespace functions.
  * Comparison:
@@ -368,6 +387,31 @@ typedef enum UProperty {
         (http://www.unicode.org/reports/tr31/)
         @draft ICU 3.4 */
     UCHAR_PATTERN_WHITE_SPACE,
+    /** Binary property alnum (a C/POSIX character class).
+        Implemented according to the UTS #18 Annex C Standard Recommendation.
+        See the uchar.h file documentation.
+        @draft ICU 3.4 */
+    UCHAR_POSIX_ALNUM,
+    /** Binary property blank (a C/POSIX character class).
+        Implemented according to the UTS #18 Annex C Standard Recommendation.
+        See the uchar.h file documentation.
+        @draft ICU 3.4 */
+    UCHAR_POSIX_BLANK,
+    /** Binary property graph (a C/POSIX character class).
+        Implemented according to the UTS #18 Annex C Standard Recommendation.
+        See the uchar.h file documentation.
+        @draft ICU 3.4 */
+    UCHAR_POSIX_GRAPH,
+    /** Binary property print (a C/POSIX character class).
+        Implemented according to the UTS #18 Annex C Standard Recommendation.
+        See the uchar.h file documentation.
+        @draft ICU 3.4 */
+    UCHAR_POSIX_PRINT,
+    /** Binary property xdigit (a C/POSIX character class).
+        Implemented according to the UTS #18 Annex C Standard Recommendation.
+        See the uchar.h file documentation.
+        @draft ICU 3.4 */
+    UCHAR_POSIX_XDIGIT,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
@@ -1739,7 +1783,6 @@ u_getNumericValue(UChar32 c);
  * @see UCHAR_LOWERCASE
  * @see u_isupper
  * @see u_istitle
- * @see u_islower
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2
