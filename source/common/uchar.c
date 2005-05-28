@@ -504,12 +504,21 @@ u_isUAlphabetic(UChar32 c) {
     return (u_getUnicodeProperties(c, 1)&U_MASK(UPROPS_ALPHABETIC))!=0;
 }
 
-/* Checks if ch is a letter or a decimal digit */
+/* Checks if c is a letter or a decimal digit */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_ND_MASK))!=0);
+}
+
+/**
+ * Checks if c is alphabetic, or a decimal digit; implements UCHAR_POSIX_ALNUM.
+ * @internal
+ */
+U_CFUNC UBool
+u_isalnumPOSIX(UChar32 c) {
+    return (UBool)(u_isUAlphabetic(c) || u_isdigit(c));
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
@@ -577,8 +586,10 @@ u_isblank(UChar32 c) {
     if((uint32_t)c<=0x9f) {
         return c==9 || c==0x20; /* TAB or SPACE */
     } else {
-        /* White_Space but not LS (Zl) or PS (Zp) */
-        return u_isUWhiteSpace(c) && ((c&0xfffffffe)!=0x2028);
+        /* Zs */
+        uint32_t props;
+        GET_PROPS(c, props);
+        return (UBool)(GET_CATEGORY(props)==U_SPACE_SEPARATOR);
     }
 }
 
@@ -596,6 +607,22 @@ u_isprint(UChar32 c) {
     return (UBool)((CAT_MASK(props)&U_GC_C_MASK)==0);
 }
 
+/**
+ * Checks if c is in \p{graph}\p{blank} - \p{cntrl}.
+ * Implements UCHAR_POSIX_PRINT.
+ * @internal
+ */
+U_CFUNC UBool
+u_isprintPOSIX(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
+    /*
+     * The only cntrl character in graph+blank is TAB (in blank).
+     * Here we implement (blank-TAB)=Zs instead of calling u_isblank().
+     */
+    return (UBool)((GET_CATEGORY(props)==U_SPACE_SEPARATOR) || u_isgraphPOSIX(c));
+}
+
 U_CAPI UBool U_EXPORT2
 u_isgraph(UChar32 c) {
     uint32_t props;
@@ -603,6 +630,24 @@ u_isgraph(UChar32 c) {
     /* comparing ==0 returns FALSE for the categories mentioned */
     return (UBool)((CAT_MASK(props)&
                     (U_GC_CC_MASK|U_GC_CF_MASK|U_GC_CS_MASK|U_GC_CN_MASK|U_GC_Z_MASK))
+                   ==0);
+}
+
+/**
+ * Checks if c is in
+ * [^\p{space}\p{gc=Control}\p{gc=Surrogate}\p{gc=Unassigned}]
+ * with space=\p{Whitespace} and Control=Cc.
+ * Implements UCHAR_POSIX_GRAPH.
+ * @internal
+ */
+U_CFUNC UBool
+u_isgraphPOSIX(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
+    /* \p{space}\p{gc=Control} == \p{gc=Z}\p{Control} */
+    /* comparing ==0 returns FALSE for the categories mentioned */
+    return (UBool)((CAT_MASK(props)&
+                    (U_GC_CC_MASK|U_GC_CS_MASK|U_GC_CN_MASK|U_GC_Z_MASK))
                    ==0);
 }
 
@@ -1003,9 +1048,11 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add code points with hardcoded properties, plus the ones following them */
 
+    /* add for u_isblank() */
+    USET_ADD_CP_AND_NEXT(sa, TAB);
+
     /* add for IS_THAT_CONTROL_SPACE() */
-    sa->add(sa->set, TAB); /* range TAB..CR */
-    sa->add(sa->set, CR+1);
+    sa->add(sa->set, CR+1); /* range TAB..CR */
     sa->add(sa->set, 0x1c);
     sa->add(sa->set, 0x1f+1);
     USET_ADD_CP_AND_NEXT(sa, NL);

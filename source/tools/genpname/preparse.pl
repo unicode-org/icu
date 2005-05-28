@@ -65,6 +65,9 @@ my $UNIDATA_DIR = "$ICU_DIR/source/data/unidata";
 # Get the current year from the system
 my $YEAR = 1900+@{[localtime]}[5]; # Get the current year
 
+# Used to make "n/a" property aliases (Unicode or Synthetic) unique
+my $propNA = 0;
+
 #----------------------------------------------------------------------
 # Top level property keys for binary, enumerated, string, and double props
 my @TOP     = qw( _bp _ep _sp _dp _mp );
@@ -304,7 +307,7 @@ END
                 $i = $groupToInt{$groupString};
             } else {
                 my @names = split(/\|/, $groupString);
-                die "Error: Wrong number of names in " . $groupString if (@names < 2);
+                die "Error: Wrong number of names in " . $groupString if (@names < 1);
                 $i = @nameGroups; # index of group we are making 
                 $groupToInt{$groupString} = $i; # Cache for reuse
                 push @nameGroups, map { $stringToID{$_} } @names;
@@ -589,7 +592,12 @@ sub merge_PropertyAliases {
                 die "Error: Property $long_name not found (or used more than once)";
             }
 
-            my $value = $pa->{$long_name} . "|" . $long_name;
+            my $value;
+            if($pa->{$long_name} =~ m|^n/a\d*$|) {
+                $value = $long_name;
+            } else {
+                $value = $pa->{$long_name} . "|" . $long_name;
+            }
             if (exists $additional_property_aliases{$long_name}) {
                 $value .= "|" . $additional_property_aliases{$long_name};
             }
@@ -689,8 +697,8 @@ sub merge_PropertyValueAliases {
             my $l = $n;
             my $r = $pva->{$n};
             # convert |n/a\d+| to blank
-            $l = '' if ($l =~ m|^n/a\d+$|);
-            $r = '' if ($r =~ m|^n/a\d+$|);
+            $l = '' if ($l =~ m|^n/a\d*$|);
+            $r = '' if ($r =~ m|^n/a\d*$|);
 
             $hh->{$enum} = "$l|$r";
             # Don't delete the 'gc' properties because we need to share
@@ -766,8 +774,6 @@ sub read_PropertyAliases {
     my $in = new FileHandle($filename, 'r');
     die "Error: Cannot open $filename" if (!defined $in);
 
-    my $sym = 0; # Used to make "n/a" strings unique
-
     while (<$in>) {
 
         # Read version (embedded in a comment)
@@ -795,9 +801,12 @@ sub read_PropertyAliases {
             }
 
             # Make "n/a" strings unique
+            if ($short eq 'n/a') {
+                $short .= sprintf("%03d", $propNA++);
+            }
             my $long = $fields[0];
             if ($long eq 'n/a') {
-                $long .= sprintf("%03d", $sym++);
+                $long .= sprintf("%03d", $propNA++);
             }
 
             # Add long name->short name to the hash=pa hash table
@@ -847,7 +856,7 @@ sub read_PropertyValueAliases {
     my $in = new FileHandle($filename, 'r');
     die "Error: Cannot open $filename" if (!defined $in);
 
-    my $sym = 0; # Used to make "n/a" strings unique
+    my $valueNA = 0; # Used to make "n/a" strings unique
 
     while (<$in>) {
 
@@ -868,7 +877,7 @@ sub read_PropertyValueAliases {
             die "Error: Wrong number of fields in $filename"
                 if (@fields < 2 || @fields > 3);
             # Make "n/a" strings unique
-            $fields[0] .= sprintf("%03d", $sym++) if ($fields[0] eq 'n/a');
+            $fields[0] .= sprintf("%03d", $valueNA++) if ($fields[0] eq 'n/a');
             # Squash extra fields together
             while (@fields > 2) {
                 my $f = pop @fields;

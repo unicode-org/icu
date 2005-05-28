@@ -265,7 +265,8 @@ uset_applyIntPropertyValue(USet* set,
  * matched loosely and correspond to the following sets:
  *
  * "ANY" = [\\u0000-\\U0010FFFF],
- * "ASCII" = [\\u0000-\\u007F].
+ * "ASCII" = [\\u0000-\\u007F],
+ * "Assigned" = [:^Cn:].
  *
  * @param propLength the length of the prop, or -1 if NULL
  *

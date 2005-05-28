@@ -77,41 +77,11 @@ static const UChar HYPHEN_RIGHT_BRACE[] = {HYPHEN,SET_CLOSE,0}; /*-]*/
 // Special property set IDs
 static const char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
 static const char ASCII[] = "ASCII"; // [\u0000-\u007F]
+static const char ASSIGNED[] = "Assigned"; // [:^Cn:]
 
 // Unicode name property alias
 #define NAME_PROP "na"
 #define NAME_PROP_LENGTH 2
-
-// TODO: Remove the following special-case code when
-// these four C99-compatibility properties are implemented
-// as enums/names.
-U_CDECL_BEGIN
-    typedef UBool (U_CALLCONV *C99_Property_Function)(UChar32);
-U_CDECL_END
-static const struct C99_Map {
-    const char* name;
-    C99_Property_Function func;
-    UPropertySource src;
-} C99_DISPATCH[] = {
-    // These three entries omitted; they clash with PropertyAliases
-    // names for Unicode properties, so UnicodeSet already maps them
-    // to those properties.
-    //{ "alpha", u_isalpha, UPROPS_SRC_PROPSVEC },
-    //{ "lower", u_islower, UPROPS_SRC_CASE },
-    //{ "upper", u_isupper, UPROPS_SRC_CASE },
-
-    // MUST be in SORTED order
-    { "alnum", u_isalnum, UPROPS_SRC_CHAR },
-    { "blank", u_isblank, UPROPS_SRC_PROPSVEC },
-    // new alias in Unicode 4.1 { "cntrl", u_iscntrl, UPROPS_SRC_CHAR },
-    // new alias in Unicode 4.1 { "digit", u_isdigit, UPROPS_SRC_CHAR },
-    { "graph", u_isgraph, UPROPS_SRC_CHAR },
-    { "print", u_isprint, UPROPS_SRC_CHAR },
-    // new alias in Unicode 4.1 { "punct", u_ispunct, UPROPS_SRC_CHAR },
-    // new alias in Unicode 4.1 { "space", u_isspace, UPROPS_SRC_CHAR },
-    { "title", u_istitle, UPROPS_SRC_CHAR },
-    { "xdigit", u_isxdigit, UPROPS_SRC_CHAR }
-};
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -931,14 +901,6 @@ static UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
 
 #define FAIL(ec) {ec=U_ILLEGAL_ARGUMENT_ERROR; return *this;}
 
-// TODO: Remove the following special-case code when
-// these four C99-compatibility properties are implemented
-// as enums/names.
-static UBool c99Filter(UChar32 ch, void* context) {
-    struct C99_Map* m = (struct C99_Map*) context;
-    return m->func(ch);
-}
-
 UnicodeSet&
 UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec) {
     if (U_FAILURE(ec)) return *this;
@@ -974,7 +936,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
 
     UProperty p;
     int32_t v;
-    UBool mustNotBeEmpty = FALSE;
+    UBool mustNotBeEmpty = FALSE, invert = FALSE;
 
     if (value.length() > 0) {
         p = u_getPropertyEnum(pname);
@@ -1081,22 +1043,12 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 } else if (0 == uprv_comparePropertyNames(ASCII, pname)) {
                     set(0, 0x7F);
                     return *this;
+                } else if (0 == uprv_comparePropertyNames(ASSIGNED, pname)) {
+                    // [:Assigned:]=[:^Cn:]
+                    p = UCHAR_GENERAL_CATEGORY_MASK;
+                    v = U_GC_CN_MASK;
+                    invert = TRUE;
                 } else {
-
-                    // TODO: Remove the following special-case code when
-                    // these four C99-compatibility properties are implemented
-                    // as enums/names.
-                    for (int32_t i=0; i<LENGTHOF(C99_DISPATCH); ++i) {
-                        int32_t c = uprv_comparePropertyNames(pname, C99_DISPATCH[i].name);
-                        if (c == 0) {
-                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], C99_DISPATCH[i].src, ec);
-                            return *this;
-                        } else if (c < 0) {
-                            // Further entries will not match; bail out
-                            break;
-                        }
-                    }
-
                     FAIL(ec);
                 }
             }
@@ -1104,6 +1056,9 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
     }
     
     applyIntPropertyValue(p, v, ec);
+    if(invert) {
+        complement();
+    }
 
     if (U_SUCCESS(ec) && (mustNotBeEmpty && isEmpty())) {
         // mustNotBeEmpty is set to true if an empty set indicates
@@ -1340,6 +1295,10 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 uchar_addPropertyStarts(&sa, &status);
                 break;
             case UPROPS_SRC_PROPSVEC:
+                upropsvec_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_CHAR_AND_PROPSVEC:
+                uchar_addPropertyStarts(&sa, &status);
                 upropsvec_addPropertyStarts(&sa, &status);
                 break;
             case UPROPS_SRC_HST:
