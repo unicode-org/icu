@@ -229,6 +229,7 @@ icu4j/src/com/ibm/icu/dev/demo/translit/Test_Instructions.html svneol=native#tex
 icu4j/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
