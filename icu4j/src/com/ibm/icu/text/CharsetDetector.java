@@ -443,8 +443,8 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_5_ru());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_6_ar());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_7_el());
+        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_8_I_he());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_8_he());
-        recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_8_he_visual());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_windows_1251());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_windows_1256());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_KOI8_R());
