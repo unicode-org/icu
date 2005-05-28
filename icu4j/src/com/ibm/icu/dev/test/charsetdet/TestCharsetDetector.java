@@ -6,8 +6,13 @@
  */
 package com.ibm.icu.dev.test.charsetdet;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.*;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
 
 
 /**
@@ -53,6 +58,42 @@ public class TestCharsetDetector extends TestFmwk {
         }
         
     }
+    
+    private void checkEncoding(String testString, String encoding, String id)
+    {
+        String enc = null, lang = null;
+        String[] split = encoding.split("/");
+        
+        enc = split[0];
+        if (split.length > 1) {
+            lang = split[1];
+        }
+        
+        try {
+            byte[] bytes = testString.getBytes(enc);
+            CharsetDetector det = new CharsetDetector();
+            
+            det.setText(bytes);
+            
+            CharsetMatch m = det.detect();
+            
+//          CheckAssert(m.getName().equals(enc));
+            if (! m.getName().equals(enc)) {
+                errln(id + ": detection failure - expected " + enc + " got " + m.getName());
+            }
+            
+            if (lang != null) {
+//              CheckAssert(m.getLanguage().equals(lang));
+                if (! m.getLanguage().equals(lang)) {
+                    errln(id + ": language detection failure - expected " + lang + " got " + m.getLanguage());
+                }
+            }
+        } catch (Exception e) {
+            errln(id + ": " + e.toString());
+        }
+        
+    }
+    
     public void TestConstruction() {
         int i;
         CharsetDetector  det = new CharsetDetector();
@@ -78,5 +119,64 @@ public class TestCharsetDetector extends TestFmwk {
         CheckAssert(m.getName().equals("UTF-8"));
         String retrievedS = m.getString();
         CheckAssert(s.equals(retrievedS));
+    }
+    
+    public void TestDetection()
+    {
+        //
+        //  Open and read the test data file.
+        //
+        InputStreamReader isr = null;
+        
+        try {
+            InputStream is = TestCharsetDetector.class.getResourceAsStream("CharsetDetectionTests.xml");
+            if (is == null) {
+                errln("Could not open test data file CharsetDetectionTests.xml");
+                return;
+            }
+            
+            isr = new InputStreamReader(is, "UTF-8"); 
+
+            // Set up an xml parser.
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            
+            factory.setIgnoringComments(true);
+            
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            // Parse the xml content from the test case file.
+            Document doc = builder.parse(is, null);
+            Element root = doc.getDocumentElement();
+            
+            NodeList testCases = root.getElementsByTagName("test-case");
+            
+            // Process each test case
+            for (int n = 0; n < testCases.getLength(); n += 1) {
+                Node testCase = testCases.item(n);
+                NamedNodeMap attrs = testCase.getAttributes();
+                NodeList testData  = testCase.getChildNodes();
+                StringBuffer testText = new StringBuffer();
+                String id = attrs.getNamedItem("id").getNodeValue();
+                String encodings = attrs.getNamedItem("encodings").getNodeValue();
+                
+                // Collect the test case text.
+                for (int t = 0; t < testData.getLength(); t += 1) {
+                    Node textNode = testData.item(t);
+                    
+                    testText.append(textNode.getNodeValue());                    
+                }
+                
+                // Process test text with each encoding / language pair.
+                String testString = testText.toString();
+                String[] encodingList = encodings.split(" ");
+                
+                for (int e = 0; e < encodingList.length; e += 1) {
+                    checkEncoding(testString, encodingList[e], id);
+                }
+            }
+            
+        } catch (Exception e) {
+            errln("exception while processing test cases: " + e.toString());
+        }
     }
 }
