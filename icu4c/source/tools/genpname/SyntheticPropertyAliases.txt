@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (c) 2003-2004, International Business Machines
+# Copyright (c) 2003-2005, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # Author: Alan Liu
@@ -42,3 +42,11 @@ nfcinert; NFC_Inert
 nfkcinert; NFKC_Inert
 
 segstart; Segment_Starter
+
+# C/POSIX character classes that do not have Unicode property [value] aliases
+# see uchar.h
+n/a; alnum
+n/a; blank
+n/a; graph
+n/a; print
+n/a; xdigit

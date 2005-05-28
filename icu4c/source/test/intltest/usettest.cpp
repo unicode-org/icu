@@ -889,6 +889,9 @@ void UnicodeSetTest::TestPropertySet() {
         "\\u0F73\\u0F75\\u0F81",
         "abcd\\u0300\\u0301\\u00c0\\u00c5",
 
+        "[:Assigned:]",
+        "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
+        "\\u0888\\uFDD3\\uFFFE\\U00050005"
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
@@ -946,24 +949,20 @@ void UnicodeSetTest::TestPosixClasses() {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
-    UVersionInfo ICU_34 = {3, 4, 0, 0};  // Time Bomb for bug 4199
     {
-        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
-            UErrorCode status = U_ZERO_ERROR;
-            UnicodeSet s1("[:alnum:]", status);
-            UnicodeSet s2("[\\p{Alphabetic}\\p{DecimalNumber}]", status);
-            TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT(s1==s2);
-        }
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeSet s1("[:alnum:]", status);
+        UnicodeSet s2("[\\p{Alphabetic}\\p{DecimalNumber}]", status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(s1==s2);
     }
     {
-        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
-            UErrorCode status = U_ZERO_ERROR;
-            UnicodeSet s1("[:space:]", status);
-            UnicodeSet s2("\\p{Whitespace}", status);
-            TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT(s1==s2);
-        }    }
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeSet s1("[:space:]", status);
+        UnicodeSet s2("\\p{Whitespace}", status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(s1==s2);
+    }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:blank:]", status);
@@ -974,39 +973,29 @@ void UnicodeSetTest::TestPosixClasses() {
         TEST_ASSERT(s1==s2);
     }
     {
-        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
-            UErrorCode status = U_ZERO_ERROR;
-            UnicodeSet s1("[:cntrl:]", status);
-            TEST_ASSERT_SUCCESS(status);
-            UnicodeSet s2("\\p{Control}", status);
-            TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT(s1==s2);
-        }
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeSet s1("[:cntrl:]", status);
+        TEST_ASSERT_SUCCESS(status);
+        UnicodeSet s2("\\p{Control}", status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:graph:]", status);
         TEST_ASSERT_SUCCESS(status);
-        UnicodeSet s2("[^\\p{Whitespace}\\p{Control}\\p{Format}"
-            "\\p{Surrogate}\\p{Unassigned}]", status);
+        UnicodeSet s2("[^\\p{Whitespace}\\p{Control}\\p{Surrogate}\\p{Unassigned}]", status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
-        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
-            UErrorCode status = U_ZERO_ERROR;
-            UnicodeSet s1("[:print:]", status);
-            TEST_ASSERT_SUCCESS(status);
-            UnicodeSet s2(
-                "[[^\\p{Whitespace}\\p{Control}\\p{Format}\\p{Surrogate}\\p{Unassigned}]"
-                "[\\p{Whitespace}-[\\u000a\\u000B\\u000c\\u000d\\u0085\\p{LineSeparator}]]"
-                "-[\\p{Control}]]"
-                , status);
-            TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT(s1==s2);
-        }
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeSet s1("[:print:]", status);
+        TEST_ASSERT_SUCCESS(status);
+        UnicodeSet s2("[[:graph:][:blank:]-[\\p{Control}]]" ,status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(s1==s2);
     }
-
 }
 /**
  * Test cloning of UnicodeSet.  For C++, we test the copy constructor.

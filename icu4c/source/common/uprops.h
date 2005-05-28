@@ -224,6 +224,31 @@ uprv_getMaxValues(int32_t column);
 U_CFUNC UHangulSyllableType
 uchar_getHST(UChar32 c);
 
+/**
+ * Checks if c is alphabetic, or a decimal digit; implements UCHAR_POSIX_ALNUM.
+ * @internal
+ */
+U_CFUNC UBool
+u_isalnumPOSIX(UChar32 c);
+
+/**
+ * Checks if c is in
+ * [^\p{space}\p{gc=Control}\p{gc=Surrogate}\p{gc=Unassigned}]
+ * with space=\p{Whitespace} and Control=Cc.
+ * Implements UCHAR_POSIX_GRAPH.
+ * @internal
+ */
+U_CFUNC UBool
+u_isgraphPOSIX(UChar32 c);
+
+/**
+ * Checks if c is in \p{graph}\p{blank} - \p{cntrl}.
+ * Implements UCHAR_POSIX_PRINT.
+ * @internal
+ */
+U_CFUNC UBool
+u_isprintPOSIX(UChar32 c);
+
 /** Turn a bit index into a bit flag. @internal */
 #define FLAG(n) ((uint32_t)1<<(n))
 
@@ -359,6 +384,8 @@ enum UPropertySource {
     UPROPS_SRC_CASE,
     /** From ubidi_props.c/ubidi.icu */
     UPROPS_SRC_BIDI,
+    /** From uchar.c/uprops.icu main trie as well as properties vectors trie */
+    UPROPS_SRC_CHAR_AND_PROPSVEC,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
