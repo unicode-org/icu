@@ -306,6 +306,7 @@ public class UnicodeSet extends UnicodeFilter {
     // Special property set IDs
     private static final String ANY_ID   = "ANY";   // [\u0000-\U0010FFFF]
     private static final String ASCII_ID = "ASCII"; // [\u0000-\u007F]
+    private static final String ASSIGNED = "Assigned"; // [:^Cn:]
 
     /**
      * A set of all characters _except_ the second through last characters of
@@ -2693,7 +2694,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     private static synchronized UnicodeSet getInclusions(int src) {
         if (INCLUSIONS == null) {
-            INCLUSIONS = new UnicodeSet[8];
+            INCLUSIONS = new UnicodeSet[UCharacterProperty.SRC_COUNT];
         }
         if(INCLUSIONS[src] == null) {
             UnicodeSet incl = new UnicodeSet();
@@ -2702,6 +2703,10 @@ public class UnicodeSet extends UnicodeFilter {
                 UCharacterProperty.getInstance().addPropertyStarts(incl);
                 break;
             case UCharacterProperty.SRC_PROPSVEC:
+                UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
+                break;
+            case UCharacterProperty.SRC_CHAR_AND_PROPSVEC:
+                UCharacterProperty.getInstance().addPropertyStarts(incl);
                 UCharacterProperty.getInstance().upropsvec_addPropertyStarts(incl);
                 break;
             case UCharacterProperty.SRC_HST:
@@ -2895,7 +2900,7 @@ public class UnicodeSet extends UnicodeFilter {
                                          String valueAlias, SymbolTable symbols) {
         int p;
         int v;
-        boolean mustNotBeEmpty = false;
+        boolean mustNotBeEmpty = false, invert = false;
 
         if (symbols != null
                 && (symbols instanceof XSymbolTable)
@@ -3001,6 +3006,11 @@ public class UnicodeSet extends UnicodeFilter {
                         } else if (0 == UPropertyAliases.compare(ASCII_ID, propertyAlias)) {
                             set(0, 0x7F);
                             return this;
+                        } else if (0 == UPropertyAliases.compare(ASSIGNED, propertyAlias)) {
+                            // [:Assigned:]=[:^Cn:]
+                            p = UProperty.GENERAL_CATEGORY_MASK;
+                            v = (1<<UCharacter.UNASSIGNED);
+                            invert = true;
                         } else {
                             // Property name was never matched.
                             throw new IllegalArgumentException("Invalid property alias: " + propertyAlias + "=" + valueAlias);
@@ -3015,6 +3025,9 @@ public class UnicodeSet extends UnicodeFilter {
         }
 
         applyIntPropertyValue(p, v);
+        if(invert) {
+            complement();
+        }
 
         if (mustNotBeEmpty && isEmpty()) {
             // mustNotBeEmpty is set to true if an empty set indicates

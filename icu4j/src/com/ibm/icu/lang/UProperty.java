@@ -431,11 +431,56 @@ public interface UProperty
      */
     public static final int PATTERN_WHITE_SPACE = 43;
 
+    /**
+     * Binary property alnum (a C/POSIX character class).
+     * Implemented according to the UTS #18 Annex C Standard Recommendation.
+     * See the UCharacter class documentation.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int POSIX_ALNUM = 44;
+
+    /**
+     * Binary property blank (a C/POSIX character class).
+     * Implemented according to the UTS #18 Annex C Standard Recommendation.
+     * See the UCharacter class documentation.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int POSIX_BLANK = 45;
+
+    /**
+     * Binary property graph (a C/POSIX character class).
+     * Implemented according to the UTS #18 Annex C Standard Recommendation.
+     * See the UCharacter class documentation.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int POSIX_GRAPH = 46;
+
+    /**
+     * Binary property print (a C/POSIX character class).
+     * Implemented according to the UTS #18 Annex C Standard Recommendation.
+     * See the UCharacter class documentation.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int POSIX_PRINT = 47;
+
+    /**
+     * Binary property xdigit (a C/POSIX character class).
+     * Implemented according to the UTS #18 Annex C Standard Recommendation.
+     * See the UCharacter class documentation.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int POSIX_XDIGIT = 48;
+
     /** 
      * <p>One more than the last constant for binary Unicode properties.</p> 
      * @stable ICU 2.6
      */
-    public static final int BINARY_LIMIT = 44;
+    public static final int BINARY_LIMIT = 49;
     
     /** 
      * Enumerated property Bidi_Class.

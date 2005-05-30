@@ -35,9 +35,10 @@ import com.ibm.icu.util.VersionInfo;
  * The UCharacter class provides extensions to the 
  * <a href=http://java.sun.com/j2se/1.3/docs/api/java/lang/Character.html>
  * java.lang.Character</a> class. These extensions provide support for 
- * Unicode 3.2 properties and together with the <a href=../text/UTF16.html>UTF16</a> 
+ * more Unicode properties and together with the <a href=../text/UTF16.html>UTF16</a> 
  * class, provide support for supplementary characters (those with code 
  * points above U+FFFF).
+ * Each ICU release supports the latest version of Unicode available at that time.
  * </p>
  * <p>
  * Code points are represented in these API using ints. While it would be 
@@ -56,7 +57,7 @@ import com.ibm.icu.util.VersionInfo;
  * <i>$ICU4J_CLASS/com.ibm.icu.impl.data</i>.
  * </p>
  * <p>
- * Aside from the additions for UTF-16 support, and the updated Unicode 3.1
+ * Aside from the additions for UTF-16 support, and the updated Unicode
  * properties, the main differences between UCharacter and Character are:
  * <ul>
  * <li> UCharacter is not designed to be a char wrapper and does not have 
@@ -66,7 +67,7 @@ import com.ibm.icu.util.VersionInfo;
  *        <li> char charValue(), 
  *        <li> int compareTo(java.lang.Character, java.lang.Character), etc.
  *      </ul>
- * <li> UCharacter does not include Character APIs that are deprecated, not 
+ * <li> UCharacter does not include Character APIs that are deprecated, nor
  *      does it include the Java-specific character information, such as 
  *      boolean isJavaIdentifierPart(char ch).
  * <li> Character maps characters 'A' - 'Z' and 'a' - 'z' to the numeric 
@@ -80,6 +81,71 @@ import com.ibm.icu.util.VersionInfo;
  * Further detail differences can be determined from the program 
  *        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java>
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
+ * </p>
+ * <p>
+ * In addition to Java compatibility functions, which calculate derived properties,
+ * this API provides low-level access to the Unicode Character Database.
+ * </p>
+ * <p>
+ * Unicode assigns each code point (not just assigned character) values for
+ * many properties.
+ * Most of them are simple boolean flags, or constants from a small enumerated list.
+ * For some properties, values are strings or other relatively more complex types.
+ * </p>
+ * <p>
+ * For more information see
+ * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
+ * and the ICU User Guide chapter on Properties (http://icu.sourceforge.net/userguide/properties.html).
+ * </p>
+ * <p>
+ * There are also functions that provide easy migration from C/POSIX functions
+ * like isblank(). Their use is generally discouraged because the C/POSIX
+ * standards do not define their semantics beyond the ASCII range, which means
+ * that different implementations exhibit very different behavior.
+ * Instead, Unicode properties should be used directly.
+ * </p>
+ * <p>
+ * There are also only a few, broad C/POSIX character classes, and they tend
+ * to be used for conflicting purposes. For example, the "isalpha()" class
+ * is sometimes used to determine word boundaries, while a more sophisticated
+ * approach would at least distinguish initial letters from continuation
+ * characters (the latter including combining marks).
+ * (In ICU, BreakIterator is the most sophisticated API for word boundaries.)
+ * Another example: There is no "istitle()" class for titlecase characters.
+ * </p>
+ * <p>
+ * ICU 3.4 and later provides API access for all twelve C/POSIX character classes.
+ * ICU implements them according to the Standard Recommendations in
+ * Annex C: Compatibility Properties of UTS #18 Unicode Regular Expressions
+ * (http://www.unicode.org/reports/tr18/#Compatibility_Properties).
+ * </p>
+ * <p>
+ * API access for C/POSIX character classes is as follows:
+ * - alpha:     isUAlphabetic(c) or hasBinaryProperty(c, UProperty.ALPHABETIC)
+ * - lower:     isULowercase(c) or hasBinaryProperty(c, UProperty.LOWERCASE)
+ * - upper:     isUUppercase(c) or hasBinaryProperty(c, UProperty.UPPERCASE)
+ * - punct:     ((1<<getType(c)) & ((1<<DASH_PUNCTUATION)|(1<<START_PUNCTUATION)|(1<<END_PUNCTUATION)|(1<<CONNECTOR_PUNCTUATION)|(1<<OTHER_PUNCTUATION)|(1<<INITIAL_PUNCTUATION)|(1<<FINAL_PUNCTUATION)))!=0
+ * - digit:     isDigit(c) or getType(c)==DECIMAL_DIGIT_NUMBER
+ * - xdigit:    hasBinaryProperty(c, UProperty.POSIX_XDIGIT)
+ * - alnum:     hasBinaryProperty(c, UProperty.POSIX_ALNUM)
+ * - space:     isUWhiteSpace(c) or hasBinaryProperty(c, UProperty.WHITE_SPACE)
+ * - blank:     hasBinaryProperty(c, UProperty.POSIX_BLANK)
+ * - cntrl:     getType(c)==CONTROL
+ * - graph:     hasBinaryProperty(c, UProperty.POSIX_GRAPH)
+ * - print:     hasBinaryProperty(c, UProperty.POSIX_PRINT)
+ * </p>
+ * <p>
+ * The C/POSIX character classes are also available in UnicodeSet patterns,
+ * using patterns like [:graph:] or \p{graph}.
+ * </p>
+ * <p>
+ * Note: There are several ICU (and Java) whitespace functions.
+ * Comparison:
+ * - isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
+ * - isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - isSpaceChar: just Z (including no-break spaces)
  * </p>
  * <p>
  * This class is not subclassable
