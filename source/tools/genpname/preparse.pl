@@ -594,7 +594,11 @@ sub merge_PropertyAliases {
 
             my $value;
             if($pa->{$long_name} =~ m|^n/a\d*$|) {
-                $value = $long_name;
+                # replace an "n/a" short name with an empty name (nothing before "|");
+                # don't remove it (don't remove the "|"): there must always be a long name,
+                # and if the short name is removed, then the long name becomes the
+                # short name and there is no long name left (unless there is another alias)
+                $value = "|" . $long_name;
             } else {
                 $value = $pa->{$long_name} . "|" . $long_name;
             }
@@ -696,7 +700,7 @@ sub merge_PropertyValueAliases {
 
             my $l = $n;
             my $r = $pva->{$n};
-            # convert |n/a\d+| to blank
+            # convert |n/a\d*| to blank
             $l = '' if ($l =~ m|^n/a\d*$|);
             $r = '' if ($r =~ m|^n/a\d*$|);
 
