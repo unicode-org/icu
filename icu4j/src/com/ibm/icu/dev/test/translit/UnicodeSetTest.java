@@ -991,6 +991,10 @@ public class UnicodeSetTest extends TestFmwk {
             "[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
             "\u0F73\u0F75\u0F81",
             "abcd\u0300\u0301\u00c0\u00c5",
+
+            "[:Assigned:]",
+            "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
+            "\\u0888\\uFDD3\\uFFFE\\U00050005"
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
@@ -1249,6 +1253,25 @@ public class UnicodeSetTest extends TestFmwk {
                 logln("OK: got " + inSet);
             }
         }
+    }
+
+    /**
+      * Test that Posix style character classes [:digit:], etc.
+      *   have the Unicode definitions from TR 18.
+      */
+    public void TestPosixClasses() {
+        expectEqual("POSIX alpha", "[:alpha:]", "\\p{Alphabetic}");
+        expectEqual("POSIX lower", "[:lower:]", "\\p{lowercase}");
+        expectEqual("POSIX upper", "[:upper:]", "\\p{Uppercase}");
+        expectEqual("POSIX punct", "[:punct:]", "\\p{gc=Punctuation}");
+        expectEqual("POSIX digit", "[:digit:]", "\\p{gc=DecimalNumber}");
+        expectEqual("POSIX xdigit", "[:xdigit:]", "[\\p{DecimalNumber}\\p{HexDigit}]");
+        expectEqual("POSIX alnum", "[:alnum:]", "[\\p{Alphabetic}\\p{DecimalNumber}]");
+        expectEqual("POSIX space", "[:space:]", "\\p{Whitespace}");
+        expectEqual("POSIX blank", "[:blank:]", "[\\p{Whitespace}-[\\u000a\\u000B\\u000c\\u000d\\u0085\\p{LineSeparator}\\p{ParagraphSeparator}]]");
+        expectEqual("POSIX cntrl", "[:cntrl:]", "\\p{Control}");
+        expectEqual("POSIX graph", "[:graph:]", "[^\\p{Whitespace}\\p{Control}\\p{Surrogate}\\p{Unassigned}]");
+        expectEqual("POSIX print", "[:print:]", "[[:graph:][:blank:]-[\\p{Control}]]");
     }
 
     public class TokenSymbolTable implements SymbolTable {
@@ -1595,7 +1618,20 @@ public class UnicodeSetTest extends TestFmwk {
         return true;
     }
             
-    
+    void expectEqual(String name, String pat1, String pat2) {
+        UnicodeSet set1, set2;
+        try {
+            set1 = new UnicodeSet(pat1);
+            set2 = new UnicodeSet(pat2);
+        } catch (IllegalArgumentException e) {
+            errln("FAIL: Couldn't create UnicodeSet from pattern for \"" + name + "\": " + e.getMessage());
+            return;
+        }
+        if(!set1.equals(set2)) {
+            errln("FAIL: Sets built from patterns differ for \"" + name + "\"");
+        }
+    }
+
     /**
      * Expect the given set to contain the characters in charsIn and
      * to not contain those in charsOut.

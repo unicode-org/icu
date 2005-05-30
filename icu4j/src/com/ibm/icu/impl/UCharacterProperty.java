@@ -103,8 +103,10 @@ public final class UCharacterProperty
     public static final int SRC_CASE=6;
     /** From ubidi_props.c/ubidi.icu */
     public static final int SRC_BIDI=7;
+    /** From uchar.c/uprops.icu main trie as well as properties vectors trie */
+    public static final int SRC_CHAR_AND_PROPSVEC=8;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=8;
+    public static final int SRC_COUNT=9;
 
     // public methods ----------------------------------------------------
 
@@ -244,7 +246,33 @@ public final class UCharacterProperty
                            (version >> FIRST_NIBBLE_SHIFT_) & LAST_NIBBLE_MASK_,
                            version & LAST_NIBBLE_MASK_, 0, 0);
     }
+
     private static final long UNSIGNED_INT_MASK = 0xffffffffL;
+
+    private static final int GC_CN_MASK = getMask(UCharacter.UNASSIGNED);
+    private static final int GC_CC_MASK = getMask(UCharacter.CONTROL);
+    private static final int GC_CS_MASK = getMask(UCharacter.SURROGATE);
+    private static final int GC_ZS_MASK = getMask(UCharacter.SPACE_SEPARATOR);
+    private static final int GC_ZL_MASK = getMask(UCharacter.LINE_SEPARATOR);
+    private static final int GC_ZP_MASK = getMask(UCharacter.PARAGRAPH_SEPARATOR);
+    /** Mask constant for multiple UCharCategory bits (Z Separators). */
+    private static final int GC_Z_MASK = GC_ZS_MASK|GC_ZL_MASK|GC_ZP_MASK;
+
+    /**
+     * Checks if c is in
+     * [^\p{space}\p{gc=Control}\p{gc=Surrogate}\p{gc=Unassigned}]
+     * with space=\p{Whitespace} and Control=Cc.
+     * Implements UCHAR_POSIX_GRAPH.
+     * @internal
+     */
+    private static final boolean isgraphPOSIX(int c) {
+        /* \p{space}\p{gc=Control} == \p{gc=Z}\p{Control} */
+        /* comparing ==0 returns FALSE for the categories mentioned */
+        return (getMask(UCharacter.getType(c))&
+                (GC_CC_MASK|GC_CS_MASK|GC_CN_MASK|GC_Z_MASK))
+               ==0;
+    }
+
     private static final class BinaryProperties{
        int column;
        long mask;
@@ -303,6 +331,11 @@ public final class UCharacterProperty
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_SEGMENT_STARTER */
        new BinaryProperties(  2,                (  1 << V2_PATTERN_SYNTAX) ),
        new BinaryProperties(  2,                (  1 << V2_PATTERN_WHITE_SPACE) ),
+       new BinaryProperties( SRC_CHAR_AND_PROPSVEC,  0 ),                           /* UCHAR_POSIX_ALNUM */
+       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_BLANK */
+       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_GRAPH */
+       new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_PRINT */
+       new BinaryProperties( SRC_CHAR,  0 )                                         /* UCHAR_POSIX_XDIGIT */
    };
 
 
@@ -397,6 +430,46 @@ public final class UCharacterProperty
                         return bdp.isBidiControl(codepoint);
                     case UProperty.JOIN_CONTROL:
                         return bdp.isJoinControl(codepoint);
+                    default:
+                        break;
+                    }
+                } else if(column==SRC_CHAR) {
+                    switch(property) {
+                    case UProperty.POSIX_BLANK:
+                        // "horizontal space"
+                        if(codepoint<=0x9f) {
+                            return codepoint==9 || codepoint==0x20; /* TAB or SPACE */
+                        } else {
+                            /* Zs */
+                            return UCharacter.getType(codepoint)==UCharacter.SPACE_SEPARATOR;
+                        }
+                    case UProperty.POSIX_GRAPH:
+                        return isgraphPOSIX(codepoint);
+                    case UProperty.POSIX_PRINT:
+                        /*
+                         * Checks if codepoint is in \p{graph}\p{blank} - \p{cntrl}.
+                         *
+                         * The only cntrl character in graph+blank is TAB (in blank).
+                         * Here we implement (blank-TAB)=Zs instead of calling u_isblank().
+                         */
+                        return (UCharacter.getType(codepoint)==UCharacter.SPACE_SEPARATOR) || isgraphPOSIX(codepoint);
+                    case UProperty.POSIX_XDIGIT:
+                        /* check ASCII and Fullwidth ASCII a-fA-F */
+                        if(
+                            (codepoint<=0x66 && codepoint>=0x41 && (codepoint<=0x46 || codepoint>=0x61)) ||
+                            (codepoint>=0xff21 && codepoint<=0xff46 && (codepoint<=0xff26 || codepoint>=0xff41))
+                        ) {
+                            return true;
+                        }
+    
+                        return UCharacter.getType(codepoint)==UCharacter.DECIMAL_DIGIT_NUMBER;
+                    default:
+                        break;
+                    }
+                } else if(column==SRC_CHAR_AND_PROPSVEC) {
+                    switch(property) {
+                    case UProperty.POSIX_ALNUM:
+                        return UCharacter.isUAlphabetic(codepoint) || UCharacter.isDigit(codepoint);
                     default:
                         break;
                     }
@@ -631,7 +704,7 @@ public final class UCharacterProperty
      * @param type character type
      * @return mask
      */
-    public static int getMask(int type)
+    public static final int getMask(int type)
     {
         return 1 << type;
     }
@@ -1001,9 +1074,12 @@ public final class UCharacterProperty
 
         /* add code points with hardcoded properties, plus the ones following them */
 
+        /* add for u_isblank() */
+        set.add(TAB);
+        set.add(TAB+1);
+
         /* add for IS_THAT_CONTROL_SPACE() */
-        set.add(TAB); /* range TAB..CR */
-        set.add(CR+1);
+        set.add(CR+1); /* range TAB..CR */
         set.add(0x1c);
         set.add(0x1f+1);
         set.add(NL);
