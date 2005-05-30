@@ -87,7 +87,7 @@ U_CDECL_BEGIN
  * - lower:     u_isULowercase(c) or u_hasBinaryProperty(c, UCHAR_LOWERCASE)
  * - upper:     u_isUUppercase(c) or u_hasBinaryProperty(c, UCHAR_UPPERCASE)
  * - punct:     u_ispunct(c)
- * - digit:     u_charType(c)==U_DECIMAL_DIGIT_NUMBER
+ * - digit:     u_isdigit(c) or u_charType(c)==U_DECIMAL_DIGIT_NUMBER
  * - xdigit:    u_isxdigit(c) or u_hasBinaryProperty(c, UCHAR_POSIX_XDIGIT)
  * - alnum:     u_hasBinaryProperty(c, UCHAR_POSIX_ALNUM)
  * - space:     u_isUWhiteSpace(c) or u_hasBinaryProperty(c, UCHAR_WHITE_SPACE)
