@@ -95,70 +95,89 @@ typedef struct UTextChunk UTextChunk; /**< C typedef for struct UTextChunk. @dra
  *
  *   C Functions for creating UText wrappers around various kinds of text strings.
  *
- *         TODO:  Have a single generic close function
- *                     utext_close(UText *t) 
- *                so client code doesn't need to keep track of how one was opened.
- *
  ****************************************************************************************/
 
 
+/**
+  * utext_close    Close function for UText instances.
+  *                Cleans up, releases any resources being held by an
+  *                open UText instance.
+  * <p/>
+  *     If the UText was originally allocated by one of the utext_open functions,
+  *     the storage associated with the utext will also be deleted.
+  *     If the UText storage originated with the application, as it would with
+  *     a local or static instance, the storage will not be deleted.
+  * 
+  * @param ut  The UText instance object to be closed.
+  */
+U_DRAFT void U_EXPORT2
+utext_close(UText *ut);
 
 /**
  * Open a read-only UText implementation for UTF-8 strings.
+ * 
+ * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ *               If non-NULL, must refer to an already existing UText, which will then
+ *               be reset to reference the specified UTF-8 string.
+ * @param s      A utf-8 string
+ *               TODO:  does this want to be (uint8_t *) or (char *)?
+ * @param length The length of the utf-8 string in bytes, or -1 if the string is
+ *               zero terminated.
+ * @param pErrorCode Errors are returned here.
  */
 U_DRAFT UText * U_EXPORT2
-utext_openUTF8(const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
-
-U_DRAFT void U_EXPORT2
-utext_closeUTF8(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
+utext_openUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCode);
 
 /**
  * Open a read-only UText implementation for SBCS strings.
  * The implementation converts 1:1 according to the provided mapping table.
  * Supplementary code points are not supported.
  *
- * @param toU Mapping table for conversion from SBCS to Unicode (BMP only).
- *            The mapping table must be available during the lifetime of the
- *            UText object.
+ * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ *               If non-NULL, must refer to an already existing UText, which will then
+ *               be reset to reference the specified input string.
+ * @param toU    Mapping table for conversion from SBCS to Unicode (BMP only).
+ *               The mapping table must be available during the lifetime of the
+ *               UText object.
+ * @param s      A byte text string
+ * @param length The length of the input string in bytes, or -1 if the string is
+ *               zero terminated.
+ * @param pErrorCode Errors are returned here.
  */
 U_DRAFT UText * U_EXPORT2
-utext_openSBCS(const UChar toU[256],
+utext_openSBCS(UText *t,
+               const UChar toU[256],
                const char *s, int32_t length,
                UErrorCode *pErrorCode);
 
-U_DRAFT void U_EXPORT2
-utext_closeSBCS(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetSBCS(UText *t, const char *s, int32_t length, UErrorCode *pErrorCode);
-
 
 
 /**
- * Set the UText object to handle a writable UnicodeString.
+ * Open a  UText object for a UnicodeString.
+ * 
+ * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ *               If non-NULL, must refer to an initialized UText, which will then
+ *               be reset to reference the specified UTF-8 string.
+ * @param s      A UnicodeString
+ * @param pErrorCode Errors are returned here.
+ * @return       Pointer to the UText.  If a UText was supplied as input, this
+ *               will always be returned.
  */
-U_DRAFT void U_EXPORT2
-utext_setUnicodeString(UText *t, UnicodeString *s);
+U_DRAFT UText * U_EXPORT2
+utext_openUnicodeString(UText *t, UnicodeString *s, UErrorCode *pErrorCode);
 
 
-#if 0 // initially commented out to reduce testing
 
 /**
  * Open a writable UText implementation for Replaceable objects.
+ * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ *               If non-NULL, must refer to an already existing UText, which will then
+ *               be reset to reference the specified UTF-8 string.
+ * @param rep    A Replaceable text object.
+ * @param pErrorCode Errors are returned here.
  */
 U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(Replaceable *rep, UErrorCode *pErrorCode);
-
-U_DRAFT void U_EXPORT2
-utext_closeReplaceable(UText *t);
-
-U_DRAFT void U_EXPORT2
-utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode);
-
-#endif
+utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode);
 
 
 struct UTextChunk {
@@ -225,6 +244,12 @@ enum {
  * clone this UText.  
  * Text providers are not required to support clone.
  * Applications must be prepared for the possibility that clone is not supported.
+ *
+ * This is a shallow clone.  The underlying text is not copied, only the
+ * UText wrapper to the text is cloned.  A cloned UText allows having multiple
+ * UTextIteartors active over the same underlying text.  (Any single instance
+ * of UText can only have one iterator active.)
+ *
  * TODO:  should we just drop clone altogether?
  *
  * @return a pointer to the newly created copy of the UTex object.
@@ -281,24 +306,38 @@ UTextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk);
 /**
  * Function type declaration for UText.extract().
  *
- * TBD
+ * Extract text from a UText into a UChar buffer.  The range of text to be extracted
+ * is specified in the native indices of the UText provider.  These may not necessarily
+ * be utf-16 indices.
+ * <p/>
+ * The size (number of 16 bit UChars) in the data to be extracted is returned.  The
+ * full amount is returned, even when the specified buffer size is smaller.
  *
- * The extracted string must be NUL-terminated if possible.
+ * The extracted string will (if you are a user) / must (if you are a text provider)
+ * be NUL-terminated if there is sufficient space in the destination buffer.
  *
- * @return Number of UChars extracted.
+ * @param  ut    the UText from which to extract data.
+ * @param  start the native index of the first characer to extract.
+ * @param  limit the native string index of the position following the last
+ *               character to extract.
+ * @param  dest  the UChar (utf-16) buffer into which the extracted text is placed
+ * @param  destCapacity  The size, in UChars, of the destination buffer.  May be zero
+ *               for precomputing the required size.
+ * @param  status receives any error status.
  *         If U_BUFFER_OVERFLOW_ERROR: Returns number of UChars for
  *         preflighting.
- *         If U_INDEX_OUTOFBOUNDS_ERROR: Start and limit do not specify
- *         accessible text. Return value undefined.
+ * @return Number of UChars in the data.  Does not include a trailing NUL.
+ *
+ *  TODO: how should invalid source data be handled?  Corrupt utf-8, for example.
  *
  * @see UText
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextExtract(UText *t,
+UTextExtract(UText *ut,
              int32_t start, int32_t limit,
              UChar *dest, int32_t destCapacity,
-             UErrorCode *pErrorCode);
+             UErrorCode *status);
 
 /**
  * Function type declaration for UText.replace().
@@ -382,6 +421,20 @@ UTextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index);
 
 
 /**
+ * Function type declaration for UText.utextClose().
+ *
+ * TBD
+ *
+ * @param t A UText object to be closed.
+ *
+ * @see UText
+ * @draft ICU 3.4
+ */
+typedef void U_CALLCONV
+UTextClose(UText *t);
+
+
+/**
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
   *                  text  (utf-8, noncontiugous utf-16, whatever.)
@@ -409,6 +462,29 @@ struct UText {
      * @draft ICU 3.4
      */
     const void *p, *q, *r;
+
+    /**
+     *  (protected)  Pointer to additional space requested by the
+     *               provider during the utext_open operation.
+     */
+    void     *pExtra;
+
+    /**
+     *   (protected)  Size in bytes of the extra space (pExtra).
+     */
+    int32_t   extraSize;
+
+    /**
+     *     (private)  Flags for managing the allocation and freeing of
+     *                memory associated with this UText.
+     */
+    int32_t   flags;
+
+    /**
+     *     (private)  Magic.  Try to detect when we are handed junk.
+     */
+    int32_t   magic;
+
 
     /**
      * (public) sizeOfStruct=sizeof(UText)
@@ -515,7 +591,75 @@ struct UText {
      * @draft ICU 3.4
      */
     UTextMapIndexToUTF16 *mapIndexToUTF16;
+
+    /**
+      * (public)
+      *
+      * @see UTextClose
+      * @draft ICU 3.4
+      */
+    UTextClose  *close;
 };
+
+
+/**
+  *  Function for use by Text Provider implementations to allocate and/or initialize
+  *  a new UText struct.  To be called in the implementation of utext_open() functions.
+  *  If the suppliec utxt parameter is null, a new UText struct will be allocated on the heap.
+  *  If the supplied UText is already open, the provider's clsoe function will be called
+  *  so that the struct can be reused by the open that is in progress.
+  *
+  * @param utxt pointer to a UText struct to be re-used, or null if a new UText
+  *             should be allocated.
+  * @param extraSpace The amount of additional space to be allocated as part
+  *             of this UText, for use by types of providers that require
+  *             additional storage.
+  */
+U_DRAFT UText * U_EXPORT2
+UTextSetup(UText *utxt, int32_t extraSpace, UErrorCode *status);
+
+/**
+  * @internal
+  */
+enum {
+    UTEXT_MAGIC = 0xe45ad82c
+};
+
+
+/**
+ * @internal
+ */
+#define UTEXT_INITIALZIER_HEAD  \
+                  NULL,                 /* context      */ \
+                  NULL, NULL, NULL,     /* p, q, r      */ \
+                  NULL,                 /* pExtra       */ \
+                  0,                    /* extraSize    */ \
+                  0,                    /* flags        */ \
+                  UTEXT_MAGIC,          /* magic        */ \
+                  sizeof(UText),        /* sizeOfStruct */ \
+                  0, 0, 0        
+
+
+/**
+ * initializer to be used with local (stack) instances of a UText
+ *  struct.  UText structs must be initialized before passing
+ *  them to one of the utext_open functions.
+ *
+ * @draft ICU 3.4
+ */
+#define UTEXT_INITIALIZER {                                \
+                  UTEXT_INITIALZIER_HEAD,                  \
+                  NULL,                 /* clone ()     */ \
+                  NULL,                 /* properties ()*/ \
+                  NULL,                 /* length ()    */ \
+                  NULL,                 /* access ()    */ \
+                  NULL,                 /* extract ()   */ \
+                  NULL,                 /* replace ()   */ \
+                  NULL,                 /* copy ()      */ \
+                  NULL, NULL,           /* map * 2 ()   */ \
+                  NULL                  /* close ()     */ \
+};
+
 
 U_CDECL_END
 
@@ -735,12 +879,21 @@ UTextIterator::setIndex(int32_t index) {
     if(index<chunk.start || chunk.limit<index) {
         // The desired position is outside of the current chunk.  Invalidate it and
         // leave it to next32() or previous32() to access the text
-        // in the desired direction
+        // in the desired direction.
         setChunkInvalid(index);
     } else if(chunk.nonUTF16Indexes) {
         chunkOffset=t->mapIndexToUTF16(t, &chunk, index);
     } else {
         chunkOffset=index-chunk.start;
+        // Our convention is that the index must always be on a code point boundary.
+        //  If we are somewhere in the middle of a utf-16 buffer, check that new index
+        //  is not in the middle of a surrogate pair.
+        if (index>chunk.start && index < chunk.limit) {   // TODO:  clean up end-of-chunk / end of input handling.  Everywhere.
+            UChar c = chunk.contents[chunkOffset];
+            if (U16_TRAIL(c)) {
+                this->getSupplementary();  // force index onto a code point boundary.
+            }
+        }
     }
 }
 
