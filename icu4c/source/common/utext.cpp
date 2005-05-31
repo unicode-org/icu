@@ -307,9 +307,10 @@ utext_close(UText *ut) {
 // No-Op UText implementation for illegal input 
 //
 //------------------------------------------------------------------------------
+U_CDECL_BEGIN
 
 static UText * U_CALLCONV
-noopTextClone(const UText *t) {
+noopTextClone(const UText * /* t */) {
     return NULL; // not supported
 }
 
@@ -321,32 +322,36 @@ noopTextGetProperties(UText * /*t*/) {
 }
 
 static int32_t U_CALLCONV
-noopTextLength(UText *t) {
+noopTextLength(UText * /* t */) {
     return 0;
 }
 
 static int32_t U_CALLCONV
-noopTextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
+noopTextAccess(UText * /* t */, int32_t /* index */, UBool /* forward*/,
+               UTextChunk * /* chunk */) {
     return -1;
 }
 
 static int32_t U_CALLCONV
-noopTextExtract(UText *t,
-                int32_t start, int32_t limit,
-                UChar *dest, int32_t destCapacity,
-                UErrorCode *pErrorCode) {
+noopTextExtract(UText * /* t */,
+                int32_t /* start */, int32_t /* limit */,
+                UChar * /* dest */, int32_t /* destCapacity */,
+                UErrorCode * /* pErrorCode */) {
     return 0;
 }
 
 static int32_t U_CALLCONV
-noopTextMapOffsetToNative(UText *t, UTextChunk *chunk, int32_t offset) {
+noopTextMapOffsetToNative(UText * /* t */, UTextChunk * /* chunk */, int32_t /* offset */) {
     return 0;
 }
 
 static int32_t U_CALLCONV
-noopTextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index) {
+noopTextMapIndexToUTF16(UText * /* t */, UTextChunk * /* chunk */, int32_t /* index */) {
     return 0;
 }
+
+U_CDECL_END
+
 
 static const UText noopText={
     UTEXT_INITIALZIER_HEAD,
@@ -401,6 +406,7 @@ struct UTF8Extra {
 //     working towards the front, the filled part of the buffers may not begin
 //     at the start of the available storage for the buffers.
 
+U_CDECL_BEGIN
 
 static int32_t U_CALLCONV
 utf8TextGetProperties(UText * /*t*/) {
@@ -556,7 +562,7 @@ utf8TextExtract(UText *ut,
 
 // Assume nonUTF16Indexes and 0<=offset<=chunk->length
 static int32_t U_CALLCONV
-utf8TextMapOffsetToNative(UText *ut, UTextChunk *chunk, int32_t offset) {
+utf8TextMapOffsetToNative(UText *ut, UTextChunk * /* chunk */, int32_t offset) {
     // UText.q points to the index mapping array that is allocated in the extra storage area.
     int32_t *map=(int32_t *)(ut->q);
     return map[offset];
@@ -564,7 +570,7 @@ utf8TextMapOffsetToNative(UText *ut, UTextChunk *chunk, int32_t offset) {
 
 // Assume nonUTF16Indexes and chunk->start<=index<=chunk->limit
 static int32_t U_CALLCONV
-utf8TextMapIndexToUTF16(UText *ut, UTextChunk *chunk, int32_t index) {
+utf8TextMapIndexToUTF16(UText *ut, UTextChunk * /*chunk */, int32_t index) {
     int32_t *map=(int32_t *)(ut->q);
     int32_t offset=0;
 
@@ -611,6 +617,7 @@ utext_openUTF8(UText *ut, const uint8_t *s, int32_t length, UErrorCode *status) 
     return ut;
 }
 
+U_CDECL_END
 
 
 
@@ -635,6 +642,9 @@ struct SBCSText : public UText {
     /* chunk UChars */
     UChar s[SBCS_TEXT_CHUNK_SIZE];
 };
+
+
+U_CDECL_BEGIN
 
 static int32_t U_CALLCONV
 sbcsTextGetProperties(UText * /*t*/) {
@@ -739,8 +749,8 @@ static const UText sbcsText={
 };
 
 U_DRAFT UText * U_EXPORT2
-utext_openSBCS(UText *ut,
-               const UChar toU[256],
+utext_openSBCS(UText * /*ut */,
+               const UChar /* toU*/[256] ,
                const char *s, int32_t length,
                UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
@@ -790,6 +800,8 @@ utext_resetSBCS(UText *t, const char *s, int32_t length, UErrorCode *pErrorCode)
     }
 }
 
+U_CDECL_END
+
 /* UText implementation wrapper for Replaceable (read/write) ---------------- */
 
 
@@ -820,6 +832,8 @@ struct RepText : public UText {
     /* chunk UChars */
     UChar s[REP_TEXT_CHUNK_SIZE];
 };
+
+U_CDECL_BEGIN
 
 static UText * U_CALLCONV
 repTextClone(const UText *t) {
@@ -1062,6 +1076,7 @@ utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode) {
     RepText *rt=(RepText *)t;
     rt->context=rep;
 }
+U_CDECL_END
 
 #endif
 
@@ -1174,7 +1189,7 @@ unistrTextReplace(UText *t,
                   UTextChunk *chunk,
                   UErrorCode *pErrorCode) {
     UnicodeString *us=(UnicodeString *)t->context;
-    const UChar *oldBuffer;
+    const UChar *oldBuffer = NULL;
     int32_t oldLength;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -1209,7 +1224,7 @@ unistrTextCopy(UText *t,
                UTextChunk *chunk,
                UErrorCode *pErrorCode) {
     UnicodeString *us=(UnicodeString *)t->context;
-    const UChar *oldBuffer;
+    const UChar *oldBuffer = NULL;
     int32_t length=us->length();
 
     if(U_FAILURE(*pErrorCode)) {

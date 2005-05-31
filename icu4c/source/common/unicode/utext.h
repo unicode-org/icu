@@ -483,7 +483,7 @@ struct UText {
     /**
      *     (private)  Magic.  Try to detect when we are handed junk.
      */
-    int32_t   magic;
+    uint32_t   magic;
 
 
     /**
