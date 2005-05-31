@@ -6,8 +6,10 @@
  */
 package com.ibm.icu.dev.test.charsetdet;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.*;
@@ -59,6 +61,51 @@ public class TestCharsetDetector extends TestFmwk {
         
     }
     
+    private String stringFromReader(Reader reader)
+    {
+        StringBuffer sb = new StringBuffer();
+        char[] buffer   = new char[1024];
+        int bytesRead   = 0;
+        
+        try {
+            while ((bytesRead = reader.read(buffer, 0, 1024)) >= 0) {
+                sb.append(buffer, 0, bytesRead);
+            }
+            
+            return sb.toString();
+        } catch (Exception e) {
+            errln("stringFromReader() failed: " + e.toString());
+            return null;
+        }
+    }
+    
+    private void checkMatch(CharsetDetector det, String testString, String encoding, String language, String id) throws Exception
+    {
+        CharsetMatch m = det.detect();
+        String decoded;
+        
+        if (! m.getName().equals(encoding)) {
+            errln(id + ": encoding detection failure - expected " + encoding + ", got " + m.getName());
+            return;
+        }
+        
+        if (! (language == null || m.getLanguage().equals(language))) {
+            errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
+        }
+        
+        decoded = m.getString();
+        
+        if (! testString.equals(decoded)) {
+            errln(id + ", " + encoding + ": getString() didn't return the original string!");
+        }
+        
+        decoded = stringFromReader(m.getReader());
+        
+        if (! testString.equals(decoded)) {
+            errln(id + ", " + encoding + ": getReader() didn't yield the original string!");
+        }
+    }
+    
     private void checkEncoding(String testString, String encoding, String id)
     {
         String enc = null, lang = null;
@@ -74,21 +121,11 @@ public class TestCharsetDetector extends TestFmwk {
             CharsetDetector det = new CharsetDetector();
             
             det.setText(bytes);
+            checkMatch(det, testString, enc, lang, id);
             
-            CharsetMatch m = det.detect();
-            
-//          CheckAssert(m.getName().equals(enc));
-            if (! m.getName().equals(enc)) {
-                errln(id + ": detection failure - expected " + enc + " got " + m.getName());
-            }
-            
-            if (lang != null) {
-//              CheckAssert(m.getLanguage().equals(lang));
-                if (! m.getLanguage().equals(lang)) {
-                    errln(id + ": language detection failure - expected " + lang + " got " + m.getLanguage());
-                }
-            }
-        } catch (Exception e) {
+            det.setText(new ByteArrayInputStream(bytes));
+            checkMatch(det, testString, enc, lang, id);
+         } catch (Exception e) {
             errln(id + ": " + e.toString());
         }
         
@@ -105,6 +142,30 @@ public class TestCharsetDetector extends TestFmwk {
             // System.out.println("\"" + charsetNames[i] + "\"");
         }
      }
+
+    public void TestInputFilter() throws Exception
+    {
+        String s = "<a> <lot> <of> <English> <inside> <the> <markup> Une peut de Fran\u00E7ais. <to> <confuse> <the> <detector>";
+        byte[] bytes = s.getBytes("ISO-8859-1");
+        CharsetDetector det = new CharsetDetector();
+        CharsetMatch m;
+        
+        det.enableInputFilter(true);
+        det.setText(bytes);
+        m = det.detect();
+        
+        if (! m.getLanguage().equals("fr")) {
+            errln("input filter did not strip markup!");
+        }
+        
+        det.enableInputFilter(false);
+        det.setText(bytes);
+        m = det.detect();
+        
+        if (! m.getLanguage().equals("en")) {
+            errln("unfiltered input did not detect as English!");
+        }
+    }
     
     public void TestUTF8() throws Exception {
         
@@ -114,11 +175,27 @@ public class TestCharsetDetector extends TestFmwk {
                     "Sure would be nice if our source could contain Unicode directly!";
         byte [] bytes = s.getBytes("UTF-8");
         CharsetDetector det = new CharsetDetector();
+        CharsetMatch m;
+        String retrievedS;
+        Reader reader;
+        
         det.setText(bytes);
-        CharsetMatch m = det.detect();
+        m = det.detect();
         CheckAssert(m.getName().equals("UTF-8"));
-        String retrievedS = m.getString();
+        retrievedS = m.getString();
         CheckAssert(s.equals(retrievedS));
+        
+        reader = m.getReader();
+        CheckAssert(s.equals(stringFromReader(reader)));
+        
+        det.setText(new ByteArrayInputStream(bytes));
+        m = det.detect();
+        CheckAssert(m.getName().equals("UTF-8"));
+        retrievedS = m.getString();
+        CheckAssert(s.equals(retrievedS));
+        
+        reader = m.getReader();
+        CheckAssert(s.equals(stringFromReader(reader)));
     }
     
     public void TestDetection()
