@@ -1657,8 +1657,8 @@ public class MessageFormat extends UFormat {
      * pattern.  Standard patterns treat all apostrophes as
      * quotes, which is problematic in some languages, e.g. 
      * French, where apostrophe is commonly used.  This utility
-     * assumes that only an unpaired apostrophe before a brace is a 
-     * true quote, other unpaired apostrophes are paired,
+     * assumes that only an unpaired apostrophe immediately before
+     * a brace is a true quote.  Other unpaired apostrophes are paired,
      * and the resulting standard pattern string is returned.
      *
      * <p><b>Note</b> it is not guaranteed that the returned pattern
@@ -1666,7 +1666,7 @@ public class MessageFormat extends UFormat {
      * between patterns having different quoting semantics.
      *
      * @param pattern the 'apostrophe-friendly' patttern to convert
-     * @param the standard pattern equivalent to the original pattern
+     * @return the standard equivalent of the original pattern
      * @since ICU 3.4
      */
     public static String autoQuoteApostrophe(String pattern) {
