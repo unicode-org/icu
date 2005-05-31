@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u16.c
@@ -1328,7 +1328,7 @@ static const UConverterImpl _UTF16Impl = {
 static const UConverterStaticData _UTF16StaticData = {
     sizeof(UConverterStaticData),
     "UTF-16",
-    0, /* ### TODO review correctness of all Unicode CCSIDs */
+    1204, /* CCSID for BOM sensitive UTF-16 */
     UCNV_IBM, UCNV_UTF16, 2, 2,
 #if U_IS_BIG_ENDIAN
     { 0xff, 0xfd, 0, 0 }, 2,

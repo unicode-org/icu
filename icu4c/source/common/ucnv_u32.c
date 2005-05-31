@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u32.c
@@ -1156,10 +1156,11 @@ static const UConverterImpl _UTF32Impl = {
     ucnv_getCompleteUnicodeSet
 };
 
+/* The 1236 CCSID refers to any version of Unicode with a BOM sensitive endianess of UTF-32 */
 static const UConverterStaticData _UTF32StaticData = {
     sizeof(UConverterStaticData),
     "UTF-32",
-    0, /* ### TODO review correctness of all Unicode CCSIDs */
+    1236,
     UCNV_IBM, UCNV_UTF32, 4, 4,
 #if U_IS_BIG_ENDIAN
     { 0, 0, 0xff, 0xfd }, 4,
