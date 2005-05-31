@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 //import java.util.ResourceBundle;
@@ -720,9 +721,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public RuleBasedNumberFormat(ULocale locale, int format) {
         this.locale = locale;
 
-        // load up the resource bundle containing the description
-        // from the specified locale
-        //        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
             getBundleInstance(ICUResourceBundle.ICU_RBNF_BASE_NAME, locale);
 
@@ -733,27 +731,29 @@ public class RuleBasedNumberFormat extends NumberFormat {
         setLocale(uloc, uloc);
 
         String description = "";
+        String[][] localizations = null;
 
-        // pick a description from the resource bundle based on the
-        // kind of formatter the user asked for
-        switch (format) {
-        case SPELLOUT:
-            description = bundle.getString("SpelloutRules");
-            break;
-
-        case ORDINAL:
-            description = bundle.getString("OrdinalRules");
-            break;
-
-        case DURATION:
-            description = bundle.getString("DurationRules");
-            break;
+        try {
+            description = bundle.getString(rulenames[format-1]);
+            ICUResourceBundle locb = bundle.get(locnames[format-1]);
+            localizations = new String[locb.getSize()][];
+            for (int i = 0; i < localizations.length; ++i) {
+                localizations[i] = locb.get(i).getStringArray();
+            }
+        }
+        catch (MissingResourceException e) {
+            // might have description and no localizations, or no description...
         }
 
-        // construct the formatter based on the description
-        // TODO: amend this so we can add the localizations
-        init(description, null);
+        init(description, localizations);
     }
+
+    private static final String[] rulenames = {
+        "SpelloutRules", "OrdinalRules", "DurationRules",
+    };
+    private static final String[] locnames = {
+        "SpelloutLocalizations", "OrdinalLocalizations", "DurationLocalizations",
+    };
 
     /**
      * Creates a RuleBasedNumberFormat from a predefined description.  Uses the
