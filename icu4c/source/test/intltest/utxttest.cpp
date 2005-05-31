@@ -151,8 +151,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     UTextIterator it(ut);
     int         i = 0;
     int         index;
-    int         expectedIndex;
-    int         foundIndex;
+    int         expectedIndex = 0;
+    int         foundIndex = 0;
     UChar32     expectedC;
     UChar32     foundC;
     int32_t     len;
