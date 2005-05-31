@@ -175,26 +175,13 @@ public class TestCharsetDetector extends TestFmwk {
                     "Sure would be nice if our source could contain Unicode directly!";
         byte [] bytes = s.getBytes("UTF-8");
         CharsetDetector det = new CharsetDetector();
-        CharsetMatch m;
         String retrievedS;
         Reader reader;
         
-        det.setText(bytes);
-        m = det.detect();
-        CheckAssert(m.getName().equals("UTF-8"));
-        retrievedS = m.getString();
+        retrievedS = det.getString(bytes, "UTF-8");
         CheckAssert(s.equals(retrievedS));
         
-        reader = m.getReader();
-        CheckAssert(s.equals(stringFromReader(reader)));
-        
-        det.setText(new ByteArrayInputStream(bytes));
-        m = det.detect();
-        CheckAssert(m.getName().equals("UTF-8"));
-        retrievedS = m.getString();
-        CheckAssert(s.equals(retrievedS));
-        
-        reader = m.getReader();
+        reader = det.getReader(new ByteArrayInputStream(bytes), "UTF-8");
         CheckAssert(s.equals(stringFromReader(reader)));
     }
     
