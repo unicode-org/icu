@@ -2600,7 +2600,8 @@ static void TestCLDRStyleAliases(void) {
     UResourceBundle *rb = NULL, *alias = NULL, *a3=NULL, *a4=NULL, *a5=NULL, *a6=NULL, *a=NULL;
     int32_t i, len;
     char resource[256];
-    const UChar *result = NULL, expected[256];
+    const UChar *result = NULL;
+    UChar expected[256];
     const char *expects[7] = { "", "a41", "a12", "a03", "ar4" };
     const char *testdatapath=loadTestData(&status);
     if(U_FAILURE(status)) {
