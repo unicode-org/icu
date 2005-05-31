@@ -37,7 +37,7 @@ private:
     };
 
     void TestString(const UnicodeString &s);
-    void TestAccess(UText *ut, int cpCount, m *cpMap);
+    void TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap);
 };
 
 
