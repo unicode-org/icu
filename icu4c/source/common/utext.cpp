@@ -28,7 +28,9 @@ U_NAMESPACE_BEGIN
 
 /*---------------------------------------------------------------------------
  *
- * UTextIterator implementation
+ * UTextIterator implementation.   Note: the most common UTextIterator 
+ *                                  functions are inline, implemented in
+ *                                  utext.h
  *
  * ---------------------------------------------------------------------------*/
 
@@ -85,16 +87,16 @@ UTextIterator::moveIndex(int32_t delta) {
         } while(--delta>0);
     } else if (delta<0) {
         do {
-            if(chunkOffset<=chunk.start && !access(chunk.start, FALSE)) {
+            if(chunkOffset<=0 && !access(chunk.start, FALSE)) {
                 retval = FALSE;
                 break;
             }
-            U16_BACK_1(chunk.contents, chunk.start, chunkOffset);
+            U16_BACK_1(chunk.contents, 0, chunkOffset);
         } while(++delta<0);
     } else {
         // Delta == 0.
         // Need to trim current postion to be within the bounds of the text.
-        if (chunkOffset>=0 && chunkOffset<chunk.limit) {
+        if (chunkOffset>=0 && chunkOffset<chunk.length) {
             // Current position is within the current chunk.
             // No action needed.
         } else if (chunk.start<=0) {
@@ -175,8 +177,136 @@ U_NAMESPACE_END
 
 
 
+//------------------------------------------------------------------------------
+//
+//   UText common functions implementation
+//
+//------------------------------------------------------------------------------
 
-/* No-Op UText implementation for illegal input ----------------------------- */
+//
+//  UText.flags bit definitions
+//
+enum {
+    UTEXT_HEAP_ALLOCATED  = 1,      //  1 if ICU has allocated this UText struct on the heap.
+                                    //  0 if caller provided storage for the UText.
+
+    UTEXT_EXTRA_HEAP_ALLOCATED = 2, //  1 if ICU has allocated extra storage as a separate
+                                    //     heap block.
+                                    //  0 if there is no separate allocation.  Either no extra
+                                    //     storage was requested, or it is appended to the end
+                                    //     of the main UText storage.
+
+    UTEXT_OPEN = 4                  //  1 if this UText is currently open
+                                    //  0 if this UText is not open.
+};
+
+
+//
+//  Extended form of a UText.  The purpose is to aid in computing the total size required
+//    when a provider asks for a UText to be allocated with extra storage.
+//
+struct ExtendedUText: public UText {
+    void  *extension;
+};
+
+static UText emptyText = UTEXT_INITIALIZER;
+
+U_DRAFT UText * U_EXPORT2
+utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
+    if (U_FAILURE(*status)) {
+        return ut;
+    }
+
+    if (ut == NULL) {
+        // We need to heap-allocate storage for the new UText
+        int32_t spaceRequired = sizeof(UText);
+        if (extraSpace > 0) {
+            spaceRequired = sizeof(ExtendedUText) + extraSpace - sizeof(void *);
+        }
+        ut = (UText *)uprv_malloc(spaceRequired);
+        *ut = emptyText;
+        ut->flags |= UTEXT_HEAP_ALLOCATED;
+        if (spaceRequired>0) {
+            ut->extraSize = spaceRequired;
+            ut->pExtra    = &((ExtendedUText *)ut)->extension;
+        }
+    } else {
+        // We have been supplied with an already existing UText.
+        // Verify that it really appears to be a UText.
+        if (ut->magic != UTEXT_MAGIC) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return ut;
+        }
+        // If the ut is already open and there's a provider supplied close
+        //   function, call it.
+        if ((ut->flags & UTEXT_OPEN) && ut->close != NULL)  {
+            ut->close(ut);
+        }
+        ut->flags &= ~UTEXT_OPEN;
+
+        // If extra space was requested by our caller, check whether
+        //   sufficient already exists, and allocate new if needed.
+        if (extraSpace > ut->extraSize) {
+            // Need more space.  If there is existing separately allocated space,
+            //   delete it first, then allocate new space.
+            if (ut->flags & UTEXT_EXTRA_HEAP_ALLOCATED) {
+                uprv_free(ut->pExtra);
+                ut->extraSize = 0;
+            }
+            ut->pExtra = uprv_malloc(extraSpace);
+            if (ut->pExtra == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+            } else {
+                ut->extraSize = extraSpace;
+            }
+        }
+    }
+    return ut;
+}
+
+
+U_DRAFT void U_EXPORT2
+utext_close(UText *ut) {
+    if (ut==NULL ||
+        ut->magic != UTEXT_MAGIC ||
+        (ut->flags & UTEXT_OPEN) == 0)
+    {
+        // The supplied ut is not an open UText.
+        // Do nothing.
+        return;
+    }
+
+    // If the provider gave us a close function, call it now.
+    // This will clean up anything allocated specifically by the provider.
+    if (ut->close != NULL) {
+        ut->close(ut);
+    }
+    ut->flags &= ~UTEXT_OPEN;
+
+    // If we (the famework) allocated the UText or subsidiary storage,
+    //   delete it.
+    if (ut->flags & UTEXT_EXTRA_HEAP_ALLOCATED) {
+        uprv_free(ut->pExtra);
+        ut->pExtra = NULL;
+    }
+    if (ut->flags & UTEXT_HEAP_ALLOCATED) {
+        // This UText was allocated by UText setup.  We need to free it.
+        // Clear magic, so we can detect if the user messes up and immediately
+        //  tries to reopen another UText using the deleted storage.
+        ut->magic = 0;
+        uprv_free(ut);
+    }
+}
+
+
+
+
+
+//------------------------------------------------------------------------------
+//
+// No-Op UText implementation for illegal input 
+//
+//------------------------------------------------------------------------------
 
 static UText * U_CALLCONV
 noopTextClone(const UText *t) {
@@ -219,8 +349,7 @@ noopTextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index) {
 }
 
 static const UText noopText={
-    NULL, NULL, NULL, NULL,
-    (int32_t)sizeof(UText), 0, 0, 0,
+    UTEXT_INITIALZIER_HEAD,
     noopTextClone,
     noopTextGetProperties,
     noopTextLength,
@@ -229,7 +358,8 @@ static const UText noopText={
     NULL, // replace
     NULL, // copy
     noopTextMapOffsetToNative,
-    noopTextMapIndexToUTF16
+    noopTextMapIndexToUTF16,
+    NULL  // close
 };
 
 
@@ -241,13 +371,14 @@ static const UText noopText={
 //         Use of UText data members:
 //            context    pointer to UTF-8 string
 //
+//      TODO:  make creation of the index mapping array lazy.
+//             Create it for a chunk the first time the user asks for an index.
+//
 //------------------------------------------------------------------------------
 
 enum { UTF8_TEXT_CHUNK_SIZE=10 };
 
-struct UTF8Text : public UText {
-    /* length of UTF-8 string (in bytes) */
-    int32_t length;
+struct UTF8Extra {
     /*
      * Chunk UChars.
      * +1 to simplify filling with surrogate pair at the end.
@@ -261,9 +392,15 @@ struct UTF8Text : public UText {
      * of s[].
      */
     int32_t map[UTF8_TEXT_CHUNK_SIZE+2];
-    /* points into map[] corresponding to where chunk.contents starts in s[] */
-    int32_t *chunkMap;
 };
+
+//  utext.b  is the input string length (bytes).
+//  utext.q  pointer to the filled part of the Map array.
+//
+//     because backwards iteration fills the buffers starting at the end and
+//     working towards the front, the filled part of the buffers may not begin
+//     at the start of the available storage for the buffers.
+
 
 static int32_t U_CALLCONV
 utf8TextGetProperties(UText * /*t*/) {
@@ -275,16 +412,20 @@ utf8TextGetProperties(UText * /*t*/) {
 }
 
 static int32_t U_CALLCONV
-utf8TextLength(UText *t) {
-    return ((UTF8Text *)t)->length;
+utf8TextLength(UText *ut) {
+    return ut->b;
 }
 
 static int32_t U_CALLCONV
-utf8TextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
-    UTF8Text *t8=(UTF8Text *)t;
-    const uint8_t *s8=(const uint8_t *)t8->context;
-    UChar32 c;
-    int32_t i, length=t8->length;
+utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
+    const uint8_t *s8=(const uint8_t *)ut->context;
+    UChar32  c;
+    int32_t  i;
+    int32_t  length = ut->b;              // Length of original utf-8
+
+    UTF8Extra  *ut8e   = (UTF8Extra *)ut->pExtra;
+    UChar      *u16buf = ut8e->s;
+    int32_t    *map    = ut8e->map;
 
     if(forward) {
         if(length<=index) {
@@ -294,39 +435,42 @@ utf8TextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
         chunk->start=index;
         c=s8[index];
         if(c<=0x7f) {
-            // get a chunk of ASCII characters
-            t8->s[0]=(UChar)c;
+            // get a run of ASCII characters.
+            // Even if we don't fill the buffer, we will stop with the first
+            //   non-ascii char, so that the buffer can use utf-16 indexing.
+            u16buf[0]=(UChar)c;
             for(i=1, ++index;
                 i<UTF8_TEXT_CHUNK_SIZE && index<length && (c=s8[index])<=0x7f;
                 ++i, ++index
             ) {
-                t8->s[i]=(UChar)c;
+                u16buf[i]=(UChar)c;
             }
             chunk->nonUTF16Indexes=FALSE;
         } else {
             // get a chunk of characters starting with a non-ASCII one
-            U8_SET_CP_START(s8, 0, index);
-            for(i=0;
-                i<UTF8_TEXT_CHUNK_SIZE && index<length;
-                ++i
-            ) {
-                t8->map[i]=index;
-                t8->map[i+1]=index; // in case there is a trail surrogate
+            U8_SET_CP_START(s8, 0, index);  // put utf-8 index at first byte of char, if not there already.
+            for(i=0;  i<UTF8_TEXT_CHUNK_SIZE && index<length;  ) {
+                //  i     is utf-16 index into chunk buffer.
+                //  index is utf-8 index into original string
+                map[i]=index;
+                map[i+1]=index; // in case there is a trail surrogate
                 U8_NEXT(s8, index, length, c);
                 if(c<0) {
                     c=0xfffd; // use SUB for illegal sequences
                 }
-                U16_APPEND_UNSAFE(t8->s, i, c);
+                U16_APPEND_UNSAFE(u16buf, i, c);    // post-increments i.
             }
-            t8->map[i]=index;
-            t8->chunkMap=t8->map;
+            map[i]=index;
             chunk->nonUTF16Indexes=TRUE;
         }
-        chunk->contents=t8->s;
-        chunk->length=i;
-        chunk->limit=index;
+        chunk->contents = u16buf;
+        chunk->length   = i;
+        chunk->limit    = index;
+        ut->q           = map;  
         return 0; // chunkOffset corresponding to index
     } else {
+        // Reverse Access.  The chunk buffer must be filled so as to contain the
+        //                  character preceding the specified index.
         if(index<=0) {
             return -1;
         }
@@ -334,11 +478,10 @@ utf8TextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
         chunk->limit=index;
         c=s8[index-1];
         if(c<=0x7f) {
-            // get a chunk of ASCII characters
+            // get a chunk of ASCII characters.  Don't build the index map
             i=UTF8_TEXT_CHUNK_SIZE;
-            t8->map[i]=index;
             do {
-                t8->s[--i]=(UChar)c;
+                u16buf[--i]=(UChar)c;
                 --index;
             } while(i>0 && index>0 && (c=s8[index-1])<=0x7f);
             chunk->nonUTF16Indexes=FALSE;
@@ -347,52 +490,65 @@ utf8TextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
             if(index<length) {
                 U8_SET_CP_START(s8, 0, index);
             }
-            i=UTF8_TEXT_CHUNK_SIZE+1;
-            t8->map[i]=index;
+            i=UTF8_TEXT_CHUNK_SIZE;
+            map[i]=index;    // map position for char following the last one in the buffer.
             do {
+                //  i     is utf-16 index into chunk buffer.
+                //  index is utf-8 index into original string
                 U8_PREV(s8, 0, index, c);
                 if(c<0) {
                     c=0xfffd; // use SUB for illegal sequences
                 }
                 if(c<=0xffff) {
-                    t8->s[--i]=(UChar)c;
-                    t8->map[i]=index;
+                    u16buf[--i]=(UChar)c;
+                    map[i]=index;
                 } else {
-                    t8->s[--i]=U16_TRAIL(c);
-                    t8->map[i]=index;
-                    t8->s[--i]=U16_LEAD(c);
-                    t8->map[i]=index;
+                    // We've got a supplementary char
+                    if (i<2) {
+                        // Both halves of the surrogate pair wont fit in the chunk buffer.
+                        // Stop without putting either half in.
+                        U8_NEXT(s8, index, length, c);  // restore index.
+                        break;
+                    }
+                    u16buf[--i]=U16_TRAIL(c);
+                    map[i]=index;
+                    u16buf[--i]=U16_LEAD(c);
+                    map[i]=index;
                 }
-            } while(i>1 && index>0);
-            t8->chunkMap=t8->map+i;
+            } while(i>0 && index>0);
+
+            // Because we have filled the map & chunk buffers from back to front,
+            //   the start position for accesses may not be at the start of the
+            //   available storage.
+            ut->q = map+i;
             chunk->nonUTF16Indexes=TRUE;
         }
-        chunk->contents=t8->s+i;
-        chunk->length=(UTF8_TEXT_CHUNK_SIZE+1)-i;
+        // Common reverse iteration, for both UTF16 and non-UTIF16 indexes.
+        chunk->contents=u16buf+i;
+        chunk->length=(UTF8_TEXT_CHUNK_SIZE)-i;
         chunk->start=index;
         return chunk->length; // chunkOffset corresponding to index
     }
 }
 
 static int32_t U_CALLCONV
-utf8TextExtract(UText *t,
+utf8TextExtract(UText *ut,
                 int32_t start, int32_t limit,
                 UChar *dest, int32_t destCapacity,
                 UErrorCode *pErrorCode) {
-    UTF8Text *t8=(UTF8Text *)t;
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
     if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
-    if(start<0 || start>limit || t8->length<limit) {
+    if(start<0 || start>limit || ut->b<limit) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
     int32_t destLength=0;
     u_strFromUTF8(dest, destCapacity, &destLength,
-                    (const char *)t8->context+start, limit-start,
+                    (const char *)ut->context+start, limit-start,
                     pErrorCode);
     return destLength;
     // TODO: if U_INVALID|ILLEGAL_CHAR_FOUND, extract text anyway and use SUB for illegal sequences?
@@ -400,16 +556,16 @@ utf8TextExtract(UText *t,
 
 // Assume nonUTF16Indexes and 0<=offset<=chunk->length
 static int32_t U_CALLCONV
-utf8TextMapOffsetToNative(UText *t, UTextChunk *chunk, int32_t offset) {
-    UTF8Text *t8=(UTF8Text *)t;
-    return t8->chunkMap[offset];
+utf8TextMapOffsetToNative(UText *ut, UTextChunk *chunk, int32_t offset) {
+    // UText.q points to the index mapping array that is allocated in the extra storage area.
+    int32_t *map=(int32_t *)(ut->q);
+    return map[offset];
 }
 
 // Assume nonUTF16Indexes and chunk->start<=index<=chunk->limit
 static int32_t U_CALLCONV
-utf8TextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index) {
-    UTF8Text *t8=(UTF8Text *)t;
-    int32_t *map=t8->chunkMap;
+utf8TextMapIndexToUTF16(UText *ut, UTextChunk *chunk, int32_t index) {
+    int32_t *map=(int32_t *)(ut->q);
     int32_t offset=0;
 
     while(index>map[offset]) {
@@ -418,69 +574,43 @@ utf8TextMapIndexToUTF16(UText *t, UTextChunk *chunk, int32_t index) {
     return offset;
 }
 
-static const UText utf8Text={
-    NULL, NULL, NULL, NULL,
-    (int32_t)sizeof(UText), 0, 0, 0,
-    noopTextClone,
-    utf8TextGetProperties,
-    utf8TextLength,
-    utf8TextAccess,
-    utf8TextExtract,
-    NULL, // replace
-    NULL, // copy
-    utf8TextMapOffsetToNative,
-    utf8TextMapIndexToUTF16
-};
+
+
 
 U_DRAFT UText * U_EXPORT2
-utext_openUTF8(const uint8_t *s, int32_t length, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
+utext_openUTF8(UText *ut, const uint8_t *s, int32_t length, UErrorCode *status) {
+    if(U_FAILURE(*status)) {
         return NULL;
     }
     if(s==NULL || length<-1) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    UTF8Text *t8=(UTF8Text *)uprv_malloc(sizeof(UTF8Text));
-    if(t8==NULL) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+
+    ut = utext_setup(ut, sizeof(UTF8Extra), status);
+    if (U_FAILURE(*status)) {
+        return ut;
     }
-    *((UText *)t8)=utf8Text;
-    t8->context=s;
+
+    ut->clone      = noopTextClone;
+    ut->properties = utf8TextGetProperties;
+    ut->length     = utf8TextLength;
+    ut->access     = utf8TextAccess;
+    ut->extract    = utf8TextExtract;
+    ut->mapOffsetToNative = utf8TextMapOffsetToNative;
+    ut->mapIndexToUTF16   = utf8TextMapIndexToUTF16;
+
+    ut->context=s;
     if(length>=0) {
-        t8->length=length;
+        ut->b=length;
     } else {
         // TODO:  really undesirable to do this scan upfront.
-        t8->length=(int32_t)uprv_strlen((const char *)s);
+        ut->b=(int32_t)uprv_strlen((const char *)s);
     }
-    return t8;
+
+    return ut;
 }
 
-U_DRAFT void U_EXPORT2
-utext_closeUTF8(UText *t) {
-    if(t!=NULL) {
-        uprv_free((UTF8Text *)t);
-    }
-}
-
-U_DRAFT void U_EXPORT2
-utext_resetUTF8(UText *t, const uint8_t *s, int32_t length, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-    if(s==NULL || length<-1) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    UTF8Text *t8=(UTF8Text *)t;
-    t8->context=s;
-    if(length>=0) {
-        t8->length=length;
-    } else {
-        t8->length=(int32_t)uprv_strlen((const char *)s);
-    }
-}
 
 
 
@@ -595,8 +725,7 @@ sbcsTextExtract(UText *t,
 }
 
 static const UText sbcsText={
-    NULL, NULL, NULL, NULL,
-    (int32_t)sizeof(UText), 0, 0, 0,
+    UTEXT_INITIALZIER_HEAD,
     noopTextClone,
     sbcsTextGetProperties,
     sbcsTextLength,
@@ -605,11 +734,13 @@ static const UText sbcsText={
     NULL, // replace
     NULL, // copy
     NULL, // mapOffsetToNative
-    NULL  // mapIndexToUTF16
+    NULL, // mapIndexToUTF16
+    NULL  // close
 };
 
 U_DRAFT UText * U_EXPORT2
-utext_openSBCS(const UChar toU[256],
+utext_openSBCS(UText *ut,
+               const UChar toU[256],
                const char *s, int32_t length,
                UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
@@ -1025,11 +1156,15 @@ unistrTextExtract(UText *t,
         return 0;
     }
     length=limit-start;
-    if(length>destCapacity) {
-        length=destCapacity;
+    if (destCapacity>0 && dest!=NULL) {
+        int32_t trimmedLength = length;
+        if(trimmedLength>destCapacity) {
+            trimmedLength=destCapacity;
+        }
+        us->extract(start, trimmedLength, dest);
     }
-    us->extract(start, length, dest);
-    return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+    u_terminateUChars(dest, destCapacity, length, pErrorCode);
+    return length;
 }
 
 static int32_t U_CALLCONV
@@ -1107,28 +1242,23 @@ unistrTextCopy(UText *t,
     }
 };
 
-//
-//  Statically initialized utext object, pre-setup
-//   for UnicodeStrings.
-//  
-static const UText unistrText={
-    NULL, NULL, NULL, NULL,
-    (int32_t)sizeof(UText), 0, 0, 0,
-    unistrTextClone,
-    unistrTextGetProperties,
-    unistrTextLength,
-    unistrTextAccess,
-    unistrTextExtract,
-    unistrTextReplace,
-    unistrTextCopy,
-    NULL, // mapOffsetToNative
-    NULL  // mapIndexToUTF16
-};
 
-U_DRAFT void U_EXPORT2
-utext_setUnicodeString(UText *t, UnicodeString *s) {
-    *t=unistrText;
-    t->context=s;
+
+U_DRAFT UText * U_EXPORT2
+utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
+    ut = utext_setup(ut, 0, status);
+    if (U_SUCCESS(*status)) {
+        ut->clone      = unistrTextClone;
+        ut->properties = unistrTextGetProperties;
+        ut->length     = unistrTextLength;
+        ut->access     = unistrTextAccess;
+        ut->extract    = unistrTextExtract;
+        ut->replace    = unistrTextReplace;
+        ut->copy       = unistrTextCopy;
+
+        ut->context     = s;
+    }
+    return ut;
 }
 
 
