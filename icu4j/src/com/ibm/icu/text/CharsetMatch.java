@@ -46,8 +46,8 @@ public class CharsetMatch implements Comparable {
         }
         
         try {
-            fInputStream.reset();
-            return new InputStreamReader(fInputStream, getName());
+            inputStream.reset();
+            return new InputStreamReader(inputStream, getName());
         } catch (IOException e) {
             return null;
         }
