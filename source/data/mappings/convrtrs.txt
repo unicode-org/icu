@@ -134,36 +134,70 @@
 # Fully algorithmic converters
 
 UTF-8 { IANA* MIME* JAVA* WINDOWS }
-                                ibm-1208 { IBM* }
-                                ibm-1209 { IBM }
-                                ibm-5304 { IBM }
-                                ibm-5305 { IBM }
+                                ibm-1208 { IBM* } # UTF-8 with IBM PUA
+                                ibm-1209 { IBM }  # UTF-8
+                                ibm-5304 { IBM }  # Unicode 2.0, UTF-8 with IBM PUA
+                                ibm-5305 { IBM }  # Unicode 2.0, UTF-8
+                                ibm-13496 { IBM } # Unicode 3.0, UTF-8 with IBM PUA
+                                ibm-13497 { IBM } # Unicode 3.0, UTF-8
+                                ibm-17592 { IBM } # Unicode 4.0, UTF-8 with IBM PUA
+                                ibm-17593 { IBM } # Unicode 4.0, UTF-8
                                 windows-65001 { WINDOWS* }
                                 cp1208
 
 # The ICU 2.2 UTF-16/32 converters detect and write a BOM.
-UTF-16 { IANA* MIME* JAVA* }    ISO-10646-UCS-2 { IANA } unicode csUnicode ucs-2
+UTF-16 { IANA* MIME* JAVA* }    ISO-10646-UCS-2 { IANA }
+                                ibm-1204 { IBM* } # UTF-16 with IBM PUA and BOM sensitive
+                                ibm-1205 { IBM }  # UTF-16 BOM sensitive
+                                unicode
+                                csUnicode
+                                ucs-2
+# The following Unicode CCSIDs (IBM) are not valid in ICU because they are
+# considered pure DBCS (exactly 2 bytes) of Unicode,
+# and they are a subset of Unicode. ICU does not support their encoding structures.
+# 1400 1401 1402 1410 1414 1415 1446 1447 1448 1449 64770 64771 65520 5496 5497 5498 9592 13688
 UTF-16BE { IANA* MIME* JAVA* }  x-utf-16be { JAVA }
-                                # iso-10646-ucs-2 { JAVA } # This is ambiguous
-                                ibm-1200 { IBM* }
-                                ibm-1201 { IBM }
-                                ibm-5297 { IBM }
-                                ibm-13488 { IBM }
-                                ibm-17584 { IBM }
+                                ibm-1200 { IBM* } # UTF-16 BE with IBM PUA
+                                ibm-1201 { IBM }  # UTF-16 BE
+                                ibm-13488 { IBM } # Unicode 2.0, UTF-16 BE with IBM PUA
+                                ibm-13489 { IBM } # Unicode 2.0, UTF-16 BE
+                                ibm-17584 { IBM } # Unicode 3.0, UTF-16 BE with IBM PUA
+                                ibm-17585 { IBM } # Unicode 3.0, UTF-16 BE
+                                ibm-21680 { IBM } # Unicode 4.0, UTF-16 BE with IBM PUA
+                                ibm-21681 { IBM } # Unicode 4.0, UTF-16 BE
+                                ibm-61955 { IBM } # UTF-16BE with Gaidai University (Japan) PUA
+                                ibm-61956 { IBM } # UTF-16BE with HKSCS-Big 5 PUA
                                 windows-1201 { WINDOWS* }
                                 cp1200
                                 cp1201
                                 UTF16_BigEndian
+                                # ibm-5297 { IBM }  # Unicode 2.0, UTF-16 (BE) (reserved, never used)
+                                # iso-10646-ucs-2 { JAVA } # This is ambiguous
+                                # ibm-61952 is not a valid CCSID because it's Unicode 1.1
+                                # ibm-61953 is not a valid CCSID because it's Unicode 1.0
 UTF-16LE { IANA* MIME* JAVA* }  x-utf-16le { JAVA }
-                                ibm-1202 { IBM* }
-                                ibm-13490 { IBM }
-                                ibm-17586 { IBM }
+                                ibm-1202 { IBM* } # UTF-16 LE with IBM PUA
+                                ibm-1203 { IBM }  # UTF-16 LE
+                                ibm-13490 { IBM } # Unicode 2.0, UTF-16 LE with IBM PUA
+                                ibm-13491 { IBM } # Unicode 2.0, UTF-16 LE
+                                ibm-17586 { IBM } # Unicode 3.0, UTF-16 LE with IBM PUA
+                                ibm-17587 { IBM } # Unicode 3.0, UTF-16 LE
+                                ibm-21682 { IBM } # Unicode 4.0, UTF-16 LE with IBM PUA
+                                ibm-21683 { IBM } # Unicode 4.0, UTF-16 LE
                                 UTF16_LittleEndian
                                 windows-1200 { WINDOWS* }
 
-UTF-32 { IANA* MIME* }          ISO-10646-UCS-4 { IANA } csUCS4 ucs-4
-UTF-32BE { IANA* }              UTF32_BigEndian ibm-1232 { IBM* } ibm-1233 { IBM }
-UTF-32LE { IANA* }              UTF32_LittleEndian ibm-1234 { IBM* }
+UTF-32 { IANA* MIME* }          ISO-10646-UCS-4 { IANA }
+                                ibm-1236 { IBM* } # UTF-32 with IBM PUA and BOM sensitive
+                                ibm-1237 { IBM }  # UTF-32 BOM sensitive
+                                csUCS4
+                                ucs-4
+UTF-32BE { IANA* }              UTF32_BigEndian
+                                ibm-1232 { IBM* } # UTF-32 BE with IBM PUA
+                                ibm-1233 { IBM }  # UTF-32 BE
+UTF-32LE { IANA* }              UTF32_LittleEndian
+                                ibm-1234 { IBM* } # UTF-32 LE, with IBM PUA
+                                ibm-1235 { IBM }  # UTF-32 LE
 
 # ICU-specific names for special uses
 UTF16_PlatformEndian
@@ -185,6 +219,9 @@ UTF32_OppositeEndian
 # For details about email headers see RFC 2047.
 UTF-7 { IANA* MIME* WINDOWS }   windows-65000 { WINDOWS* }
 
+# UTF-EBCDIC doesn't exist in ICU, but the aliases are here for reference.
+#UTF-EBCDIC ibm-1210 { IBM* } ibm-1211 { IBM }
+
 # IMAP-mailbox-name is an ICU-specific name for the encoding of IMAP mailbox names.
 # It is a substantially modified UTF-7 encoding. See the specification in:
 #
@@ -194,11 +231,16 @@ UTF-7 { IANA* MIME* WINDOWS }   windows-65000 { WINDOWS* }
 IMAP-mailbox-name
 
 SCSU { IANA* }
-BOCU-1 { IANA* } csBOCU-1 { IANA }
+    ibm-1212 { IBM* } # SCSU with IBM PUA
+    ibm-1213 { IBM }  # SCSU
+BOCU-1 { IANA* }
+    csBOCU-1 { IANA }
+    ibm-1214 { IBM* } # BOCU-1 with IBM PUA
+    ibm-1215 { IBM }  # BOCU-1
 
 # See http://www.unicode.org/unicode/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
 # The Unicode Consortium does not encourage the use of CESU-8
-CESU-8 { IANA* }
+CESU-8 { IANA* } ibm-9400 { IBM* }
 
 # Standard iso-8859-1, which does not have the Euro update.
 # See iso-8859-15 (latin9) for the Euro update

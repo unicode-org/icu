@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2008,7 +2008,7 @@ static const UConverterImpl _SCSUImpl={
 static const UConverterStaticData _SCSUStaticData={
     sizeof(UConverterStaticData),
     "SCSU",
-    0, /* CCSID for SCSU */
+    1212, /* CCSID for SCSU */
     UCNV_IBM, UCNV_SCSU,
     1, 3, /* one UChar generates at least 1 byte and at most 3 bytes */
     /*

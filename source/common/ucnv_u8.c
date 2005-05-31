@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -798,7 +798,8 @@ static const UConverterImpl _CESU8Impl={
 static const UConverterStaticData _CESU8StaticData={
     sizeof(UConverterStaticData),
     "CESU-8",
-    0, UCNV_UNKNOWN, UCNV_CESU8, 1, 3,
+    9400, /* CCSID for CESU-8 */
+    UCNV_UNKNOWN, UCNV_CESU8, 1, 3,
     { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
     0,
     0,
