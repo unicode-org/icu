@@ -41,11 +41,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule33d.dll"
+				OutputFile="..\..\bin\icule34d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icule33d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule34d.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\iculed.lib"/>
 			<Tool
@@ -105,10 +105,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule33.dll"
+				OutputFile="..\..\bin\icule34.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icule33.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule34.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\icule.lib"/>
