@@ -252,9 +252,29 @@ fa{
             "افغانی",
             "افغانی",
         }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
         IRR{
             "﷼",
             "IRR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[ء-ؤئ-غفقل-وً-ْٰٔپچژکگی‌‍‏‎]"}
@@ -504,7 +524,7 @@ fa{
         Yiii{"یی"}
         Zyyy{"مشترک"}
     }
-    Version{"1.38"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -512,14 +532,14 @@ fa{
                 "ب.ظ.",
             }
             DateTimePatterns{
-                "HH:mm:ss (z)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE، d MMMM yyyy",
+                "H:mm:ss (zzzz)",
+                "H:mm:ss (zz)",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d MMMM yyyy G",
                 "d MMMM yyyy",
-                "yyyy/MM/d",
-                "yyyy/MM/d",
+                "yyyy/M/d",
+                "yy/M/d G",
                 "{1} {0}",
             }
             dayNames{

@@ -348,7 +348,7 @@ hi{
         "�",
         "+",
     }
-    Version{"1.35"}
+    Version{"1.37"}
     calendar{
         gregorian{
             AmPmMarkers{

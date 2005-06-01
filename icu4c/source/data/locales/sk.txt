@@ -11,6 +11,34 @@
  */
 sk{
     Countries{
+        001{"Svet"}
+        002{"Afrika"}
+        005{"Južná Amerika"}
+        013{"Stredná Amerika"}
+        014{"Východná Afrika"}
+        015{"Severná Afrika"}
+        017{"Stredná Afrika"}
+        018{"Južná Afrika"}
+        019{"Americký kontinent"}
+        021{"Severná Amerika"}
+        029{"Karibik"}
+        030{"Východná Ázia"}
+        035{"Juhovýchodná Ázia"}
+        039{"Južná Európa"}
+        053{"Austrália a Nový Zéland"}
+        054{"Melanézia"}
+        057{"Mikronésia"}
+        061{"Polynézia"}
+        062{"Južná Ázia"}
+        142{"Ázia"}
+        145{"Západná Ázia"}
+        150{"Európa"}
+        151{"Východná Európa"}
+        154{"Severná Európa"}
+        155{"Západná Európa"}
+        200{"Československo"}
+        830{"Kanál La Manche"}
+        833{"Ostrov Man"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afganistan"}
@@ -26,6 +54,7 @@ sk{
         AT{"Rakúsko"}
         AU{"Austrália"}
         AW{"Aruba"}
+        AX{"Alandské ostrovy"}
         AZ{"Azerbajdžan"}
         BA{"Bosna a Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +88,7 @@ sk{
         CN{"Čína"}
         CO{"Kolumbia"}
         CR{"Kostarika"}
+        CS{"Srbsko a Čierna Hora"}
         CU{"Kuba"}
         CV{"Kapverdy"}
         CX{"Vianočný ostrov"}
@@ -190,6 +220,7 @@ sk{
         PW{"Palau"}
         PY{"Paraguaj"}
         QA{"Katar"}
+        QO{"Tichomorie - ostatné"}
         RE{"Reunion"}
         RO{"Rumunsko"}
         RU{"Ruská federácia"}
@@ -1276,7 +1307,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.41"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

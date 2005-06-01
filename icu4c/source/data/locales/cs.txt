@@ -11,6 +11,36 @@
  */
 cs{
     Countries{
+        001{"Svět"}
+        002{"Afrika"}
+        005{"Jižní Amerika"}
+        009{"Oceánie"}
+        011{"Západní Afrika"}
+        013{"Střední Amerika"}
+        014{"Východní Afrika"}
+        015{"Severní Afrika"}
+        017{"Střední Afrika"}
+        018{"Jižní Afrika"}
+        019{"Amerika"}
+        021{"Severní Amerika"}
+        029{"Karibik"}
+        030{"Východní Asie"}
+        035{"Jihovýchodní Asie"}
+        039{"Jižní Evropa"}
+        053{"Austrálie a Nový Zéland"}
+        054{"Melanésie"}
+        057{"Mikronésie"}
+        061{"Polynésie"}
+        062{"Jižní a centrální Asie"}
+        142{"Asie"}
+        145{"Západní Asie"}
+        150{"Evropa"}
+        151{"Východní Evropa"}
+        154{"Severní Evropa"}
+        155{"Západní Evropa"}
+        200{"Československo"}
+        830{"Normanské ostrovy"}
+        833{"Ostrov Man"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afghánistán"}
@@ -26,6 +56,7 @@ cs{
         AT{"Rakousko"}
         AU{"Austrálie"}
         AW{"Aruba"}
+        AX{"Alandy"}
         AZ{"Ázerbájdžán"}
         BA{"Bosna a Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +90,7 @@ cs{
         CN{"Čína"}
         CO{"Kolumbie"}
         CR{"Kostarika"}
+        CS{"Srbsko a Černá Hora"}
         CU{"Kuba"}
         CV{"Kapverdy"}
         CX{"Vánoční ostrovy"}
@@ -190,6 +222,7 @@ cs{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
+        QO{"Vnější Oceánie"}
         RE{"Réunion"}
         RO{"Rumunsko"}
         RU{"Rusko"}
@@ -1055,6 +1088,10 @@ cs{
             "TL",
             "Lira turecká",
         }
+        TRY{
+            "TRY",
+            "Lira nová turecká",
+        }
         TTD{
             "TT$",
             "Dolar Trinidad a Tobago",
@@ -1380,6 +1417,9 @@ cs{
         "�",
         "+",
     }
+    Scripts{
+        Latn{"Latinka"}
+    }
     Types{
         calendar{
             buddhist{"Budhistický kalendář"}
@@ -1391,7 +1431,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.56"}
+    Version{"1.60"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1432,6 +1472,17 @@ cs{
                         "čtvrtek",
                         "pátek",
                         "sobota",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "N",
+                        "P",
+                        "Ú",
+                        "S",
+                        "Č",
+                        "P",
+                        "S",
                     }
                 }
             }
@@ -1532,6 +1583,10 @@ cs{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"‚"}
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
     zoneStrings{

@@ -13,5 +13,5 @@ zh_Hant_TW{
         "#,##0%",
         "#E0",
     }
-    Version{"1.8"}
+    Version{"1.9"}
 }

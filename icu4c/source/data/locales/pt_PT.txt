@@ -90,7 +90,7 @@ pt_PT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -105,5 +105,11 @@ pt_PT{
                 "{1} {0}",
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
 }

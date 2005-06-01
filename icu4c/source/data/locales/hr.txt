@@ -11,6 +11,35 @@
  */
 hr{
     Countries{
+        001{"Svijet"}
+        002{"Afrika"}
+        005{"Južna Amerika"}
+        009{"Oceanija"}
+        011{"Zapadna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Istočna Afrika"}
+        015{"Sjeverna Afrika"}
+        017{"Središnja Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Sjeverna Amerika"}
+        029{"Karibi"}
+        030{"Istočna Azija"}
+        035{"Jugoistočna Azija"}
+        039{"Južna Europa"}
+        053{"Australija i Novi Zeland"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        145{"Zapadna Azija"}
+        150{"Europa"}
+        151{"Istočna Europa"}
+        154{"Sjeverna Europa"}
+        155{"Zapadna Europa"}
+        830{"Kanalski otoci"}
+        833{"Otok Man"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Afganistan"}
@@ -26,6 +55,7 @@ hr{
         AT{"Austrija"}
         AU{"Australija"}
         AW{"Aruba"}
+        AX{"Alandski otoci"}
         AZ{"Azerbajdžan"}
         BA{"Bosna i Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +89,7 @@ hr{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
+        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Zeleni Rt"}
         CX{"Božićni Otoci"}
@@ -190,6 +221,7 @@ hr{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        QO{"Ostala oceanija"}
         RE{"Reunion"}
         RO{"Rumunjska"}
         RU{"Ruska Federacija"}
@@ -311,6 +343,10 @@ hr{
             "BND",
             "Brunejski dolar",
         }
+        BRL{
+            "BRL",
+            "Brazilski Real",
+        }
         CAD{
             "Can$",
             "Kanadski dolar",
@@ -326,6 +362,10 @@ hr{
         CLP{
             "Ch$",
             "Čileanski pezo",
+        }
+        CNY{
+            "CNY",
+            "Kineski Yuan Renminbi",
         }
         COP{
             "Col$",
@@ -839,6 +879,10 @@ hr{
             "TL",
             "Turska lira",
         }
+        TRY{
+            "TRY",
+            "Nova Turska Lira",
+        }
         TTD{
             "TT$",
             "Trinidadtobaški dolar",
@@ -1040,6 +1084,9 @@ hr{
         "�",
         "+",
     }
+    Scripts{
+        Latn{"Latinski"}
+    }
     Types{
         calendar{
             buddhist{"Budistički kalendar"}
@@ -1058,7 +1105,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.45"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

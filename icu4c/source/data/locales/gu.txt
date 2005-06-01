@@ -49,7 +49,7 @@ gu{
         "�",
         "+",
     }
-    Version{"1.26"}
+    Version{"1.27"}
     calendar{
         gregorian{
             AmPmMarkers{

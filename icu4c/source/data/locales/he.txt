@@ -11,6 +11,7 @@
  */
 he{
     Countries{
+        009{"אוקיניה"}
         AD{"אנדורה"}
         AE{"איחוד האמירויות הערביות"}
         AF{"אפגניסטן"}
@@ -265,7 +266,7 @@ he{
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "רופי הודית",
         }
         JPY{
             "¥",
@@ -369,7 +370,7 @@ he{
             hebrew{"לוח שנה עברי"}
         }
     }
-    Version{"1.45"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -469,7 +470,7 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"he/calendar/hebrew/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "תשרי",
                         "חשון",
@@ -496,7 +497,7 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"he/calendar/islamic/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "מוחרם",
                         "ספר",
@@ -514,7 +515,7 @@ he{
                 }
             }
         }
-        islamic-civil:alias{"he/calendar/islamic"}
+        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
 }

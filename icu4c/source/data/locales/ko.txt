@@ -59,6 +59,7 @@ ko{
         CN{"중국"}
         CO{"콜롬비아"}
         CR{"코스타리카"}
+        CS{"세르비아 및 몬테네그로"}
         CU{"쿠바"}
         CV{"까뽀베르데"}
         CX{"크리스마스섬"}
@@ -1039,6 +1040,10 @@ ko{
             "TRL",
             "터기 리라",
         }
+        TRY{
+            "TRY",
+            "새로운 터키 리라",
+        }
         TTD{
             "TTD",
             "트리니다드 토바고 달러",
@@ -1717,7 +1722,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.49"}
+    Version{"1.51"}
     calendar{
         gregorian{
             AmPmMarkers{
