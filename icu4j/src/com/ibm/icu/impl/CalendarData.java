@@ -88,8 +88,8 @@ public class CalendarData {
         return get(key, subKey).getStringArray();
     }
     public String[] getEras(String subkey){
-        UResourceBundle bundle = get("eras");
-        return bundle.getStringArray(subkey);
+        ICUResourceBundle bundle = get("eras/"+subkey);
+        return bundle.getStringArray();
     }
     public ULocale getULocale() {
         return fBundle.getULocale();
