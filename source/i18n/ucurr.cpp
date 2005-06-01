@@ -490,6 +490,10 @@ ucurr_getName(const UChar* currency,
         // If that fails (because we are already at root) then exit.
         if (U_SUCCESS(ec2) || !fallback(loc)) {
             break;
+        } else if (strlen(loc) == 0) {
+            *ec = U_USING_DEFAULT_WARNING;
+        } else if (*ec != U_USING_DEFAULT_WARNING) {
+            *ec = U_USING_FALLBACK_WARNING;
         }
     }
 
@@ -512,6 +516,7 @@ ucurr_getName(const UChar* currency,
 
     // If we fail to find a match, use the ISO 4217 code
     *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
+    *ec = U_USING_DEFAULT_WARNING;
     return currency;
 }
 
