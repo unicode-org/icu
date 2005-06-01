@@ -113,7 +113,7 @@ static int32_t _installedLocalesCount = 0;
  */
 static const char * const LANGUAGES[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",
-    "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",
+    "afh", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "apa",
     "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
     "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
     "bai", "bal", "ban", "bas", "bat", "be",  "bej",
@@ -194,7 +194,7 @@ static const char * const LANGUAGES_3[] = {
 /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
 /*  "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
-    "afh", "aka", "akk", "ale", "alg", "amh", "arg", "ang", "apa",
+    "afh", "aka", "akk", "ale", "alg", "alt", "amh", "arg", "ang", "apa",
 /*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
     "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
 /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */

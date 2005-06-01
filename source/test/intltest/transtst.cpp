@@ -776,7 +776,7 @@ void TransliteratorTest::TestJ277(void) {
     // Transliterate the Greek locale data
     Locale el("el");
     DateFormatSymbols syms(el, status);
-    if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
+    if (U_FAILURE(status)) { errln("FAIL: DateFormatSymbols constructor failed. Error: " + UnicodeString(u_errorName(status))); return; }
     int32_t i, count;
     const UnicodeString* data = syms.getMonths(count);
     for (i=0; i<count; ++i) {
