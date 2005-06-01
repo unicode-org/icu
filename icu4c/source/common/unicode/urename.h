@@ -201,6 +201,7 @@
 #define u_isUWhiteSpace u_isUWhiteSpace_3_4
 #define u_isWhitespace u_isWhitespace_3_4
 #define u_isalnum u_isalnum_3_4
+#define u_isalnumPOSIX u_isalnumPOSIX_3_4
 #define u_isalpha u_isalpha_3_4
 #define u_isbase u_isbase_3_4
 #define u_isblank u_isblank_3_4
@@ -208,8 +209,10 @@
 #define u_isdefined u_isdefined_3_4
 #define u_isdigit u_isdigit_3_4
 #define u_isgraph u_isgraph_3_4
+#define u_isgraphPOSIX u_isgraphPOSIX_3_4
 #define u_islower u_islower_3_4
 #define u_isprint u_isprint_3_4
+#define u_isprintPOSIX u_isprintPOSIX_3_4
 #define u_ispunct u_ispunct_3_4
 #define u_isspace u_isspace_3_4
 #define u_istitle u_istitle_3_4
@@ -318,9 +321,11 @@
 #define ubidi_addPropertyStarts ubidi_addPropertyStarts_3_4
 #define ubidi_close ubidi_close_3_4
 #define ubidi_closeProps ubidi_closeProps_3_4
+#define ubidi_countParagraphs ubidi_countParagraphs_3_4
 #define ubidi_countRuns ubidi_countRuns_3_4
 #define ubidi_getClass ubidi_getClass_3_4
 #define ubidi_getDirection ubidi_getDirection_3_4
+#define ubidi_getDummy ubidi_getDummy_3_4
 #define ubidi_getJoiningGroup ubidi_getJoiningGroup_3_4
 #define ubidi_getJoiningType ubidi_getJoiningType_3_4
 #define ubidi_getLength ubidi_getLength_3_4
@@ -333,6 +338,8 @@
 #define ubidi_getMemory ubidi_getMemory_3_4
 #define ubidi_getMirror ubidi_getMirror_3_4
 #define ubidi_getParaLevel ubidi_getParaLevel_3_4
+#define ubidi_getParagraph ubidi_getParagraph_3_4
+#define ubidi_getParagraphByIndex ubidi_getParagraphByIndex_3_4
 #define ubidi_getRuns ubidi_getRuns_3_4
 #define ubidi_getSingleton ubidi_getSingleton_3_4
 #define ubidi_getText ubidi_getText_3_4
@@ -344,16 +351,15 @@
 #define ubidi_isInverse ubidi_isInverse_3_4
 #define ubidi_isJoinControl ubidi_isJoinControl_3_4
 #define ubidi_isMirrored ubidi_isMirrored_3_4
+#define ubidi_isOrderParagraphsLTR ubidi_isOrderParagraphsLTR_3_4
 #define ubidi_open ubidi_open_3_4
-#define ubidi_openBinary ubidi_openBinary_3_4
-#define ubidi_openProps ubidi_openProps_3_4
 #define ubidi_openSized ubidi_openSized_3_4
+#define ubidi_orderParagraphsLTR ubidi_orderParagraphsLTR_3_4
 #define ubidi_reorderLogical ubidi_reorderLogical_3_4
 #define ubidi_reorderVisual ubidi_reorderVisual_3_4
 #define ubidi_setInverse ubidi_setInverse_3_4
 #define ubidi_setLine ubidi_setLine_3_4
 #define ubidi_setPara ubidi_setPara_3_4
-#define ubidi_swap ubidi_swap_3_4
 #define ubidi_writeReordered ubidi_writeReordered_3_4
 #define ubidi_writeReverse ubidi_writeReverse_3_4
 #define ublock_getCode ublock_getCode_3_4
@@ -410,14 +416,13 @@
 #define ucase_addStringCaseClosure ucase_addStringCaseClosure_3_4
 #define ucase_close ucase_close_3_4
 #define ucase_fold ucase_fold_3_4
+#define ucase_getCaseLocale ucase_getCaseLocale_3_4
+#define ucase_getDummy ucase_getDummy_3_4
 #define ucase_getSingleton ucase_getSingleton_3_4
 #define ucase_getType ucase_getType_3_4
 #define ucase_getTypeOrIgnorable ucase_getTypeOrIgnorable_3_4
 #define ucase_isCaseSensitive ucase_isCaseSensitive_3_4
 #define ucase_isSoftDotted ucase_isSoftDotted_3_4
-#define ucase_open ucase_open_3_4
-#define ucase_openBinary ucase_openBinary_3_4
-#define ucase_swap ucase_swap_3_4
 #define ucase_toFullFolding ucase_toFullFolding_3_4
 #define ucase_toFullLower ucase_toFullLower_3_4
 #define ucase_toFullTitle ucase_toFullTitle_3_4
@@ -425,6 +430,14 @@
 #define ucase_tolower ucase_tolower_3_4
 #define ucase_totitle ucase_totitle_3_4
 #define ucase_toupper ucase_toupper_3_4
+#define ucasemap_close ucasemap_close_3_4
+#define ucasemap_getLocale ucasemap_getLocale_3_4
+#define ucasemap_getOptions ucasemap_getOptions_3_4
+#define ucasemap_open ucasemap_open_3_4
+#define ucasemap_setLocale ucasemap_setLocale_3_4
+#define ucasemap_setOptions ucasemap_setOptions_3_4
+#define ucasemap_utf8ToLower ucasemap_utf8ToLower_3_4
+#define ucasemap_utf8ToUpper ucasemap_utf8ToUpper_3_4
 #define uchar_addPropertyStarts uchar_addPropertyStarts_3_4
 #define uchar_getHST uchar_getHST_3_4
 #define uchar_swapNames uchar_swapNames_3_4
@@ -460,6 +473,8 @@
 #define ucnv_MBCSIsLeadByte ucnv_MBCSIsLeadByte_3_4
 #define ucnv_MBCSSimpleGetNextUChar ucnv_MBCSSimpleGetNextUChar_3_4
 #define ucnv_MBCSToUnicodeWithOffsets ucnv_MBCSToUnicodeWithOffsets_3_4
+#define ucnv_bld_countAvailableConverters ucnv_bld_countAvailableConverters_3_4
+#define ucnv_bld_getAvailableConverter ucnv_bld_getAvailableConverter_3_4
 #define ucnv_cbFromUWriteBytes ucnv_cbFromUWriteBytes_3_4
 #define ucnv_cbFromUWriteSub ucnv_cbFromUWriteSub_3_4
 #define ucnv_cbFromUWriteUChars ucnv_cbFromUWriteUChars_3_4
@@ -469,7 +484,6 @@
 #define ucnv_compareNames ucnv_compareNames_3_4
 #define ucnv_convert ucnv_convert_3_4
 #define ucnv_convertEx ucnv_convertEx_3_4
-#define ucnv_copyPlatformString ucnv_copyPlatformString_3_4
 #define ucnv_countAliases ucnv_countAliases_3_4
 #define ucnv_countAvailable ucnv_countAvailable_3_4
 #define ucnv_countStandards ucnv_countStandards_3_4
@@ -489,6 +503,7 @@
 #define ucnv_flushCache ucnv_flushCache_3_4
 #define ucnv_fromAlgorithmic ucnv_fromAlgorithmic_3_4
 #define ucnv_fromUChars ucnv_fromUChars_3_4
+#define ucnv_fromUCountPending ucnv_fromUCountPending_3_4
 #define ucnv_fromUWriteBytes ucnv_fromUWriteBytes_3_4
 #define ucnv_fromUnicode ucnv_fromUnicode_3_4
 #define ucnv_fromUnicode_UTF8 ucnv_fromUnicode_UTF8_3_4
@@ -519,16 +534,11 @@
 #define ucnv_getUnicodeSet ucnv_getUnicodeSet_3_4
 #define ucnv_incrementRefCount ucnv_incrementRefCount_3_4
 #define ucnv_io_countAliases ucnv_io_countAliases_3_4
-#define ucnv_io_countAvailableAliases ucnv_io_countAvailableAliases_3_4
-#define ucnv_io_countAvailableConverters ucnv_io_countAvailableConverters_3_4
 #define ucnv_io_countStandards ucnv_io_countStandards_3_4
-#define ucnv_io_flushAvailableConverterCache ucnv_io_flushAvailableConverterCache_3_4
+#define ucnv_io_countTotalAliases ucnv_io_countTotalAliases_3_4
 #define ucnv_io_getAlias ucnv_io_getAlias_3_4
 #define ucnv_io_getAliases ucnv_io_getAliases_3_4
-#define ucnv_io_getAvailableConverter ucnv_io_getAvailableConverter_3_4
 #define ucnv_io_getConverterName ucnv_io_getConverterName_3_4
-#define ucnv_io_getDefaultConverterName ucnv_io_getDefaultConverterName_3_4
-#define ucnv_io_setDefaultConverterName ucnv_io_setDefaultConverterName_3_4
 #define ucnv_io_stripASCIIForCompare ucnv_io_stripASCIIForCompare_3_4
 #define ucnv_io_stripEBCDICForCompare ucnv_io_stripEBCDICForCompare_3_4
 #define ucnv_isAmbiguous ucnv_isAmbiguous_3_4
@@ -553,6 +563,7 @@
 #define ucnv_swapAliases ucnv_swapAliases_3_4
 #define ucnv_toAlgorithmic ucnv_toAlgorithmic_3_4
 #define ucnv_toUChars ucnv_toUChars_3_4
+#define ucnv_toUCountPending ucnv_toUCountPending_3_4
 #define ucnv_toUWriteCodePoint ucnv_toUWriteCodePoint_3_4
 #define ucnv_toUWriteUChars ucnv_toUWriteUChars_3_4
 #define ucnv_toUnicode ucnv_toUnicode_3_4
@@ -646,7 +657,6 @@
 #define ucol_setText ucol_setText_3_4
 #define ucol_setVariableTop ucol_setVariableTop_3_4
 #define ucol_shortStringToIdentifier ucol_shortStringToIdentifier_3_4
-#define ucol_sortKeyToString ucol_sortKeyToString_3_4
 #define ucol_strcoll ucol_strcoll_3_4
 #define ucol_strcollIter ucol_strcollIter_3_4
 #define ucol_swap ucol_swap_3_4
@@ -820,11 +830,11 @@
 #define ulocdata_getMeasurementSystem ulocdata_getMeasurementSystem_3_4
 #define ulocdata_getPaperSize ulocdata_getPaperSize_3_4
 #define umsg_applyPattern umsg_applyPattern_3_4
+#define umsg_autoQuoteApostrophe umsg_autoQuoteApostrophe_3_4
 #define umsg_clone umsg_clone_3_4
 #define umsg_close umsg_close_3_4
 #define umsg_format umsg_format_3_4
 #define umsg_getLocale umsg_getLocale_3_4
-#define umsg_getLocaleByType umsg_getLocaleByType_3_4
 #define umsg_open umsg_open_3_4
 #define umsg_parse umsg_parse_3_4
 #define umsg_setLocale umsg_setLocale_3_4
@@ -868,7 +878,6 @@
 #define unorm_quickCheck unorm_quickCheck_3_4
 #define unorm_quickCheckWithOptions unorm_quickCheckWithOptions_3_4
 #define unorm_setIter unorm_setIter_3_4
-#define unorm_swap unorm_swap_3_4
 #define unum_applyPattern unum_applyPattern_3_4
 #define unum_clone unum_clone_3_4
 #define unum_close unum_close_3_4
@@ -895,7 +904,7 @@
 #define unum_toPattern unum_toPattern_3_4
 #define upname_swap upname_swap_3_4
 #define uprops_getSource uprops_getSource_3_4
-#define uprops_swap uprops_swap_3_4
+#define upropsvec_addPropertyStarts upropsvec_addPropertyStarts_3_4
 #define uprv_asciiFromEbcdic uprv_asciiFromEbcdic_3_4
 #define uprv_asciitolower uprv_asciitolower_3_4
 #define uprv_ceil uprv_ceil_3_4
@@ -1091,6 +1100,7 @@
 #define userv_deleteStringPair userv_deleteStringPair_3_4
 #define uset_add uset_add_3_4
 #define uset_addAll uset_addAll_3_4
+#define uset_addAllCodePoints uset_addAllCodePoints_3_4
 #define uset_addRange uset_addRange_3_4
 #define uset_addString uset_addString_3_4
 #define uset_applyIntPropertyValue uset_applyIntPropertyValue_3_4
@@ -1104,6 +1114,7 @@
 #define uset_complementAll uset_complementAll_3_4
 #define uset_contains uset_contains_3_4
 #define uset_containsAll uset_containsAll_3_4
+#define uset_containsAllCodePoints uset_containsAllCodePoints_3_4
 #define uset_containsNone uset_containsNone_3_4
 #define uset_containsRange uset_containsRange_3_4
 #define uset_containsSome uset_containsSome_3_4
@@ -1140,6 +1151,13 @@
 #define ustr_toLower ustr_toLower_3_4
 #define ustr_toTitle ustr_toTitle_3_4
 #define ustr_toUpper ustr_toUpper_3_4
+#define utext_close utext_close_3_4
+#define utext_closeSBCS utext_closeSBCS_3_4
+#define utext_openSBCS utext_openSBCS_3_4
+#define utext_openUTF8 utext_openUTF8_3_4
+#define utext_openUnicodeString utext_openUnicodeString_3_4
+#define utext_resetSBCS utext_resetSBCS_3_4
+#define utext_setup utext_setup_3_4
 #define utf8_appendCharSafeBody utf8_appendCharSafeBody_3_4
 #define utf8_back1SafeBody utf8_back1SafeBody_3_4
 #define utf8_countTrailBytes utf8_countTrailBytes_3_4
@@ -1173,6 +1191,7 @@
 #define utrans_register utrans_register_3_4
 #define utrans_rep_caseContextIterator utrans_rep_caseContextIterator_3_4
 #define utrans_setFilter utrans_setFilter_3_4
+#define utrans_stripRules utrans_stripRules_3_4
 #define utrans_trans utrans_trans_3_4
 #define utrans_transIncremental utrans_transIncremental_3_4
 #define utrans_transIncrementalUChars utrans_transIncrementalUChars_3_4
@@ -1181,6 +1200,7 @@
 #define utrans_unregisterID utrans_unregisterID_3_4
 #define utrie_clone utrie_clone_3_4
 #define utrie_close utrie_close_3_4
+#define utrie_defaultGetFoldingOffset utrie_defaultGetFoldingOffset_3_4
 #define utrie_enum utrie_enum_3_4
 #define utrie_get32 utrie_get32_3_4
 #define utrie_getData utrie_getData_3_4
@@ -1190,6 +1210,7 @@
 #define utrie_setRange32 utrie_setRange32_3_4
 #define utrie_swap utrie_swap_3_4
 #define utrie_unserialize utrie_unserialize_3_4
+#define utrie_unserializeDummy utrie_unserializeDummy_3_4
 /* C++ class names renaming defines */
 
 #ifdef XP_CPLUSPLUS
@@ -1274,6 +1295,7 @@
 #define GlyphDefinitionTableHeader GlyphDefinitionTableHeader_3_4
 #define GlyphIterator GlyphIterator_3_4
 #define GlyphLookupTableHeader GlyphLookupTableHeader_3_4
+#define GlyphPositionAdjustments GlyphPositionAdjustments_3_4
 #define GlyphPositioningLookupProcessor GlyphPositioningLookupProcessor_3_4
 #define GlyphPositioningTableHeader GlyphPositioningTableHeader_3_4
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_3_4
@@ -1286,7 +1308,6 @@
 #define ICUBreakIteratorService ICUBreakIteratorService_3_4
 #define ICUCollatorFactory ICUCollatorFactory_3_4
 #define ICUCollatorService ICUCollatorService_3_4
-#define ICULayoutEngine ICULayoutEngine_3_4
 #define ICULocaleService ICULocaleService_3_4
 #define ICUNotifier ICUNotifier_3_4
 #define ICUNumberFormatFactory ICUNumberFormatFactory_3_4
@@ -1303,7 +1324,11 @@
 #define IntegralPartSubstitution IntegralPartSubstitution_3_4
 #define IslamicCalendar IslamicCalendar_3_4
 #define JapaneseCalendar JapaneseCalendar_3_4
+#define KernTable KernTable_3_4
 #define KeywordEnumeration KeywordEnumeration_3_4
+#define KhmerClassTable KhmerClassTable_3_4
+#define KhmerOpenTypeLayoutEngine KhmerOpenTypeLayoutEngine_3_4
+#define KhmerReordering KhmerReordering_3_4
 #define LECharMapper LECharMapper_3_4
 #define LEFontInstance LEFontInstance_3_4
 #define LEGlyphFilter LEGlyphFilter_3_4
@@ -1450,8 +1475,10 @@
 #define UCharCharacterIterator UCharCharacterIterator_3_4
 #define UMemory UMemory_3_4
 #define UObject UObject_3_4
+#define URegularExpression URegularExpression_3_4
 #define UStack UStack_3_4
 #define UStringEnumeration UStringEnumeration_3_4
+#define UTextIterator UTextIterator_3_4
 #define UVector UVector_3_4
 #define UVector32 UVector32_3_4
 #define UnescapeTransliterator UnescapeTransliterator_3_4
@@ -1472,7 +1499,6 @@
 #define util64_fromDouble util64_fromDouble_3_4
 #define util64_pow util64_pow_3_4
 #define util64_tou util64_tou_3_4
-#define util64_utoi util64_utoi_3_4
 
 #endif
 #endif
