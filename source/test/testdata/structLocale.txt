@@ -74,7 +74,6 @@ structLocale{
         BM{""}
         BN{""}
         BO{""}
-        BQ{""}
         BR{""}
         BS{""}
         BT{""}
@@ -96,13 +95,11 @@ structLocale{
         CO{""}
         CR{""} 
         CS{""}
-        CT{""}
         CU{""}
         CV{""}
         CX{""}
         CY{""}
         CZ{""}
-        DD{""}
         DE{""}
         DJ{""}
         DK{""}
@@ -121,9 +118,7 @@ structLocale{
         FK{""}
         FM{""}
         FO{""}
-        FQ{""}
         FR{""}
-        FX{""}
         GA{""}
         GB{""}
         GD{""}
@@ -160,7 +155,6 @@ structLocale{
         JM{""}
         JO{""}
         JP{""}
-        JT{""}
         KE{""}
         KG{""}
         KH{""}
@@ -188,7 +182,6 @@ structLocale{
         MD{""}
         MG{""}
         MH{""}
-        MI{""}
         MK{""}
         ML{""}
         MM{""}
@@ -214,14 +207,11 @@ structLocale{
         NL{""}
         NO{""}
         NP{""}
-        NQ{""}
         NR{""}
-        NT{""}
         NU{""}
         NZ{""}
         OM{""}
         PA{""}
-        PC{""}
         PE{""}
         PF{""}
         PG{""}
@@ -233,10 +223,8 @@ structLocale{
         PR{""}
         PS{""}
         PT{""}
-        PU{""}
         PW{""}
         PY{""}
-        PZ{""}
         QA{""}
         QO{""}
         RE{""}
@@ -260,7 +248,6 @@ structLocale{
         SP{""}
         SR{""}
         ST{""}
-        SU{""}
         SV{""}
         SY{""}
         SZ{""}
@@ -288,16 +275,13 @@ structLocale{
         UZ{""}
         VA{""}
         VC{""}
-        VD{""}
         VE{""}
         VG{""}
         VI{""}
         VN{""}
         VU{""}
         WF{""}
-        WK{""}
         WS{""}
-        YD{""}
         YE{""}
         YT{""}
         ZA{""}
@@ -1910,12 +1894,6 @@ structLocale{
             "",
         }
     }
-    delimiters{
-        quotationStart{""}
-        quotationEnd{""}
-        alternateQuotationEnd{""}
-        alternateQuotationStart{""}
-    }
     ExemplarCharacters{""}
     Keys{
         calendar{""}
@@ -2558,15 +2536,6 @@ structLocale{
         1996{""}
         POSIX{""}
         REVISED{""}
-        boont{""}
-        gaulish{""}
-        guoyu{""}
-        hakka{""}
-        lojban{""}
-        nedis{""}
-        rozaj{""}
-        scouse{""}
-        xiang{""}
     }
     Version{""}
     boundaries{
@@ -2592,10 +2561,6 @@ structLocale{
             eras{
                 abbreviated{
                     "",
-                }
-                wide{
-                    "",
-                    ""
                 }
             }
         }
@@ -2700,10 +2665,6 @@ structLocale{
                 abbreviated{
                     "",
                     "",
-                }
-                wide{
-                    "",
-                    ""
                 }
             }
             monthNames{
@@ -2811,10 +2772,6 @@ structLocale{
                 abbreviated{
                     "",
                 }
-                wide{
-                    "",
-                    ""
-                }
             }
             monthNames{
                 default{""}
@@ -2843,10 +2800,6 @@ structLocale{
             eras{
                 abbreviated{
                     "",
-                }
-                wide{
-                    "",
-                    ""
                 }
             }
             monthNames{
@@ -3122,10 +3075,6 @@ structLocale{
                     "",
                     "",
                     "",
-                }
-                wide{
-                    "",
-                    ""
                 }
             }
         }
