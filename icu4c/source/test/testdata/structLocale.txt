@@ -94,6 +94,7 @@ structLocale{
         CN{""}
         CO{""}
         CR{""}
+        CS{""}
         CU{""}
         CV{""}
         CX{""}
@@ -225,6 +226,7 @@ structLocale{
         PW{""}
         PY{""}
         QA{""}
+        QO{""}
         RE{""}
         RO{""}
         RU{""}
@@ -282,7 +284,6 @@ structLocale{
         WS{""}
         YE{""}
         YT{""}
-        YU{""}
         ZA{""}
         ZM{""}
         ZW{""}
@@ -576,7 +577,7 @@ structLocale{
             "",
             "",
         }
-       CHW{
+        CHW{
             "",
             "",
         }
@@ -1842,6 +1843,7 @@ structLocale{
         akk{""}
         ale{""}
         alg{""}
+        alt{""}
         am{""}
         an{""}
         ang{""}
@@ -3013,3 +3015,4 @@ structLocale{
         }
     }
 }
+
