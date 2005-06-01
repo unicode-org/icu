@@ -360,10 +360,10 @@
             debug="on" deprecation="off"/>
         <copy todir="${build.dir}/com/ibm/icu/dev/data">
             <fileset dir="${src.dir}/com/ibm/icu/dev/data"
-                includes="*.spp"/>
+                includes="*.spp,*.txt"/>
         </copy>
-        <copy todir="${build.dir}/com/ibm/icu/dev/data/unicode">
-            <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode"
+        <copy todir="${build.dir}/com/ibm/icu/dev/data/unicode/">
+            <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode/"
                 includes="*.txt"/>
         </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
@@ -401,7 +401,6 @@
     <target name="testJar" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
-            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/TestDataElements*.class"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
         </jar>
     </target>
@@ -551,8 +550,9 @@
         <jvmarg value="-Djava.security.manager"/>
         <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
         <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
-        <arg value="-w"/>
+        <!-- arg value="-w"/ -->
         <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+        <arg value="Util/ICUResourceBundleTest"/>
         <classpath>
             <pathelement location="clover.jar"/>
             <pathelement location="${jar.file}"/>
