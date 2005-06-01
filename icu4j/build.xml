@@ -550,9 +550,8 @@
         <jvmarg value="-Djava.security.manager"/>
         <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
         <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
-        <!-- arg value="-w"/ -->
+        <arg value="-w"/>
         <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
-        <arg value="Util/ICUResourceBundleTest"/>
         <classpath>
             <pathelement location="clover.jar"/>
             <pathelement location="${jar.file}"/>
