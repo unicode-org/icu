@@ -729,7 +729,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   }
                 }
                 if(r != RES_BOGUS) {
-                  result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, mainRes, noAlias+1, resB, status);
+                  result = init_resb_result(&(mainRes->fResData), r, temp, -1, mainRes->fData, mainRes, noAlias+1, resB, status);
                 } else {
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
@@ -761,7 +761,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   while(*myPath && U_SUCCESS(*status)) {
                     r = res_findResource(&(dataEntry->fData), r, &myPath, &temp);
                     if(r != RES_BOGUS) { /* found a resource, but it might be an indirection */
-                      resB = init_resb_result(&(dataEntry->fData), r, key, -1, dataEntry, parent, noAlias+1, resB, status);
+                      resB = init_resb_result(&(dataEntry->fData), r, temp, -1, dataEntry, result, noAlias+1, resB, status);
                       result = resB;
                       if(result) {
                         r = result->fRes; /* switch to a new resource, possibly a new tree */
@@ -841,12 +841,16 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     }
     if(key != NULL) {
         ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
-        ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
+          ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        }
     } else if(index >= 0) {
         char buf[256];
         int32_t len = T_CString_integerToString(buf, index, 10);
         ures_appendResPath(resB, buf, len);
-        ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
+          ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        }
     }
     /* Make sure that Purify doesn't complain about uninitialized memory copies. */
     {
@@ -1367,13 +1371,15 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
             UResourceDataEntry *dataEntry = resB->fData;
             char path[256];
             char* myPath = path;
+            const char* resPath = resB->fResPath;
+            int32_t len = resB->fResPathLen;
 
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
                 dataEntry = dataEntry->fParent;
                 rootRes = dataEntry->fData.rootRes;
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
-                    uprv_strncpy(path, resB->fResPath, resB->fResPathLen);
-                    uprv_strcpy(path+resB->fResPathLen, inKey);
+                    uprv_strncpy(path, resPath, len);
+                    uprv_strcpy(path+len, inKey);
                     myPath = path;
                     key = inKey;
                     do {
@@ -1385,6 +1391,9 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                             if(helper) {
                               dataEntry = helper->fData;
                               rootRes = helper->fRes;
+                              resPath = helper->fResPath;
+                              len = helper->fResPathLen;
+
                             } else {
                               break;
                             }
