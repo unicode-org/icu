@@ -105,6 +105,16 @@ fa_AF{
         WS{"ساموآی غربی"}
         ZW{"زیمبابوی"}
     }
+    Currencies{
+        JPY{
+            "¥",
+            "JPY",
+        }
+        USD{
+            "$",
+            "USD",
+        }
+    }
     Languages{
         es{"هسپانوی"}
         fa{"دری"}
@@ -126,27 +136,7 @@ fa_AF{
         sv{"سویدنی"}
         tg{"تاجکی"}
     }
-    NumberElements{
-        "٫",
-        "٬",
-        ";",
-        "٪",
-        "۰",
-        "#",
-        "−",
-        "×۱۰^",
-        "‰",
-        "∞",
-        "�",
-        "+",
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.31"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -185,6 +175,16 @@ fa_AF{
                     }
                 }
             }
+        }
+    }
+    zoneStrings{
+        {
+            "Asia/Kabul",
+            "وقت افغانستان",
+            "AFT",
+            "وقت افغانستان",
+            "AFT",
+            "کابل",
         }
     }
 }

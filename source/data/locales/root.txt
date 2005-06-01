@@ -65,7 +65,7 @@ root{
         297,
         210,
     }
-    Version{"1.47"}
+    Version{"1.51"}
     boundaries{
         grapheme{"char"}
         line{"line"}
@@ -237,7 +237,7 @@ root{
             monthNames{
                 default{"format"}
                 format{
-                    abbreviated:alias{"root/calendar/hebrew/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     default{"wide"}
                     wide{
                         "Tishri",
@@ -266,7 +266,7 @@ root{
             monthNames{
                 default{"format"}
                 format{
-                    abbreviated:alias{"root/calendar/islamic/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     default{"wide"}
                     wide{
                         "Muharram",
@@ -285,7 +285,7 @@ root{
                 }
             }
         }
-        islamic-civil:alias{"root/calendar/islamic"}
+        islamic-civil:alias{"/LOCALE/calendar/islamic"}
         japanese{
             DateTimePatterns{
                 "h:mm:ss a z",
@@ -548,9 +548,17 @@ root{
             }
         }
     }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
     localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZ"}
     zoneStrings{
         {
+            "",
+            "",
             "",
             "",
             "",

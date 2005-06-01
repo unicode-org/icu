@@ -10,12 +10,12 @@
 		<version number="x0.1"/>
 		<generation date="2004-09-01" />
 		<language type="uz" /> 
-		<territory type="AF" /> 
+        <script type="Latn" /> 
 	</identity>
 	<characters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
-				<icu:script type="1">Arab</icu:script>
+				<icu:script type="1">Latn</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>

@@ -15,9 +15,29 @@ om{
         KE{"Keeniyaa"}
     }
     Currencies{
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
+        }
+        JPY{
+            "¥",
+            "JPY",
+        }
         KES{
             "Ksh",
             "KES",
+        }
+        USD{
+            "$",
+            "USD",
         }
     }
     ExemplarCharacters{"[a-z]"}
@@ -27,7 +47,7 @@ om{
     LocaleScript{
         "Latn",
     }
-    Version{"1.28"}
+    Version{"1.29"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

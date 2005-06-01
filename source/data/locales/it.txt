@@ -59,6 +59,7 @@ it{
         CN{"Cina"}
         CO{"Colombia"}
         CR{"Costa Rica"}
+        CS{"Serbia e Montenegro"}
         CU{"Cuba"}
         CV{"Capo Verde"}
         CX{"Isola Christmas"}
@@ -78,7 +79,7 @@ it{
         ES{"Spagna"}
         ET{"Etiopia"}
         FI{"Finlandia"}
-        FJ{"Fiji"}
+        FJ{"Figi"}
         FK{"Isole Falkland"}
         FM{"Micronesia"}
         FO{"Isole Faroe"}
@@ -227,6 +228,7 @@ it{
         TR{"Turchia"}
         TT{"Trinidad e Tobago"}
         TV{"Tuvalu"}
+        TW{"Taiwan"}
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}
@@ -245,7 +247,7 @@ it{
         WS{"Samoa"}
         YE{"Yemen"}
         YT{"Mayotte"}
-        ZA{"Sud Africa"}
+        ZA{"Sudafrica"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
@@ -1389,6 +1391,7 @@ it{
         grc{"greco, antico (fino al 1453)"}
         gu{"gujarati"}
         gv{"manx"}
+        gwi{"gwichʼin"}
         ha{"haussa"}
         hai{"haida"}
         haw{"hawaiano"}
@@ -1401,7 +1404,7 @@ it{
         ho{"hiri motu"}
         hr{"croato"}
         hsb{"alto sorabo"}
-        ht{"haitian"}
+        ht{"haitiano"}
         hu{"ungherese"}
         hup{"hupa"}
         hy{"armeno"}
@@ -1469,7 +1472,7 @@ it{
         lb{"lussemburghese"}
         lez{"lezghian"}
         lg{"ganda"}
-        li{"limburgish"}
+        li{"limburgese"}
         ln{"lingala"}
         lo{"lao"}
         lol{"lolo (bantu)"}
@@ -1492,7 +1495,7 @@ it{
         mdf{"moksha"}
         mdr{"mandar"}
         men{"mende"}
-        mg{"malagasy"}
+        mg{"malgascio"}
         mga{"irlandese medio (900-1200)"}
         mh{"marshallese"}
         mi{"maori"}
@@ -1510,13 +1513,13 @@ it{
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
-        ms{"malay"}
+        ms{"malese"}
         mt{"maltese"}
         mul{"multilingua"}
         mun{"munda (altra lingua)"}
         mus{"creek"}
         mwr{"marwari"}
-        my{"burmese"}
+        my{"birmano"}
         myn{"lingue maya"}
         myv{"erzya"}
         na{"nauru"}
@@ -1526,7 +1529,7 @@ it{
         nb{"norvegese bokmål"}
         nd{"ndebele del nord"}
         nds{"basso tedesco; basso sassone"}
-        ne{"nepali"}
+        ne{"nepalese"}
         new{"newari"}
         ng{"ndonga"}
         nic{"niger - cordofan (altra lingua)"}
@@ -1576,7 +1579,7 @@ it{
         rar{"rarotonga"}
         rm{"lingua rhaeto-romance"}
         rn{"rundi"}
-        ro{"romeno"}
+        ro{"rumeno"}
         roa{"lingua romanza (altra lingua)"}
         rom{"romani"}
         ru{"russo"}
@@ -1673,7 +1676,7 @@ it{
         vi{"vietnamita"}
         vo{"volapük"}
         vot{"voto"}
-        wa{"walloon"}
+        wa{"vallone"}
         wak{"lingue wakash"}
         wal{"walamo"}
         war{"waray"}
@@ -1791,7 +1794,7 @@ it{
     Variants{
         REVISED{"Modificato"}
     }
-    Version{"1.47"}
+    Version{"1.48"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1901,6 +1904,12 @@ it{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
     zoneStrings{
         {

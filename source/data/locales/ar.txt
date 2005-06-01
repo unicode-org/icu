@@ -150,6 +150,7 @@ ar{
         PH{"الفيلبين"}
         PK{"الباكستان"}
         PL{"بولندا"}
+        PS{"فلسطين"}
         PT{"البرتغال"}
         PW{"بالاو"}
         PY{"باراغواي"}
@@ -266,6 +267,10 @@ ar{
         SAR{
             "ر.س.‏",
             "SAR",
+        }
+        SDD{
+            ".‏د.س",
+            "SDD",
         }
         SDP{
             "ج.س.‏",
@@ -435,7 +440,7 @@ ar{
             traditional{"تقليدي"}
         }
     }
-    Version{"1.43"}
+    Version{"1.45"}
     calendar{
         buddhist{
             eras{
@@ -566,7 +571,7 @@ ar{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"ar/calendar/islamic/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "محرم",
                         "صفر",
@@ -585,8 +590,8 @@ ar{
             }
         }
         islamic-civil{
-            eras:alias{"ar/calendar/islamic/eras"}
-            monthNames:alias{"ar/calendar/islamic/monthNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}

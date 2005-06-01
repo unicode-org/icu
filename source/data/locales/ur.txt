@@ -1,0 +1,27 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../cldr/common/main/ur.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/main/ur.xml
+ */
+ur{
+    Countries{
+        PK{"پاکستان"}
+    }
+    ExemplarCharacters{
+        "[\u0621-\u0624 \u0626-\u063a \u0641-\u0642 \u0644-\u0648 \u0679-\u067e "
+        "\u0686 \u0688 \u0691 \u0698 \u06a9 \u06af \u06ba \u06be \u06cc \u06d2]"
+    }
+    Languages{
+        ur{"اردو"}
+    }
+    LocaleScript{
+        "Arab",
+    }
+    Version{"1.20"}
+}

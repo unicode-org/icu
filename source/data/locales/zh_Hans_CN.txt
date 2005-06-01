@@ -13,7 +13,7 @@ zh_Hans_CN{
         "#,##0%",
         "#E0",
     }
-    Version{"1.15"}
+    Version{"1.16"}
     calendar{
         gregorian{
             DateTimePatterns{

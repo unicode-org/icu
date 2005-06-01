@@ -59,6 +59,7 @@ mk{
         CN{"Кина"}
         CO{"Колумбија"}
         CR{"Костарика"}
+        CS{"Србија и Црна Гора"}
         CU{"Куба"}
         CV{"Зеленортски Острови"}
         CX{"Божиќни Острови"}
@@ -1015,7 +1016,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

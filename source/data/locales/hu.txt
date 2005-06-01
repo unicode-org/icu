@@ -1443,7 +1443,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.46"}
+    Version{"1.48"}
     calendar{
         buddhist{
             eras{
@@ -1568,7 +1568,7 @@ hu{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"hu/calendar/hebrew/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tisri",
                         "Hesván",
@@ -1595,7 +1595,7 @@ hu{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"hu/calendar/islamic/monthNames/format/wide"}
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "Moharrem",
                         "Safar",
@@ -1613,7 +1613,7 @@ hu{
                 }
             }
         }
-        islamic-civil:alias{"hu/calendar/islamic"}
+        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
 }

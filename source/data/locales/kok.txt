@@ -234,4 +234,14 @@ kok{
             }
         }
     }
+    zoneStrings{
+        {
+            "Asia/Calcutta",
+            "भारतीय समय",
+            "IST",
+            "भारतीय समय",
+            "IST",
+            "Calcutta",
+        }
+    }
 }

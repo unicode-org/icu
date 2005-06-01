@@ -13,7 +13,7 @@ ko_KR{
         "#,##0%",
         "#E0",
     }
-    Version{"1.28"}
+    Version{"1.30"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -28,5 +28,11 @@ ko_KR{
                 "{1} {0}",
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
 }

@@ -30,6 +30,7 @@ eu{
         CM{"Kamerun"}
         CN{"Txina"}
         CO{"Kolonbia"}
+        CS{"Serbia eta Montenegro"}
         CU{"Kuba"}
         CV{"Cabo Verde"}
         CY{"Zipre"}
@@ -152,7 +153,7 @@ eu{
         "�",
         "+",
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             dayNames{

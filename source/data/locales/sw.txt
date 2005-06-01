@@ -26,6 +26,7 @@ sw{
         CM{"Kamerun"}
         CN{"Uchina"}
         CO{"Kolombia"}
+        CS{"Serbiya da Montenegro"}
         CV{"Rasi Verde"}
         CZ{"Jamhuri ya Czech"}
         DE{"Udachi"}
@@ -107,7 +108,7 @@ sw{
     LocaleScript{
         "Latn",
     }
-    Version{"1.31"}
+    Version{"1.32"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
