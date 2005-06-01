@@ -1419,6 +1419,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // USD { "US$", "US Dollar"            } // 04/04/1792-
     UErrorCode ec = U_ZERO_ERROR;
     static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
     UBool isChoiceFormat;
     int32_t len;
     // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
@@ -1434,6 +1435,16 @@ void NumberFormatTest::TestCurrencyNames(void) {
                                              UCURR_LONG_NAME,
                                              &isChoiceFormat, &len, &ec)));
     assertSuccess("ucurr_getName", ec);
+    
+    // Test that a default or fallback warning is being returned. JB 4239.
+    (void) ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
+                            &len, &ec);
+    assertTrue("ucurr_getName (fallback)",
+                    U_USING_FALLBACK_WARNING == ec, TRUE);
+    (void) ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
+                            &len, &ec);
+    assertTrue("ucurr_getName (default)",
+                    U_USING_DEFAULT_WARNING == ec, TRUE);
     
     // TODO add more tests later
 }
