@@ -646,7 +646,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         if(bundleName.equals(LOCALE)){
             bundleName = baseName;
             bundle = requested;
-            keyPath = locale;
+            keyPath = resPath.substring(LOCALE.length() + 2/* prepending and appending / */, resPath.length());
             locale = requested.getLocaleID();
         }else if (locale == null) {
             bundle = (ICUResourceBundle) getBundleInstance(bundleName, "",

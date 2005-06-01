@@ -603,7 +603,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         ICUResourceBundle actualBundle = this;
 
         // now recuse to pick up sub levels of the items
-        result = findResourceWithFallback(path, actualBundle);
+        result = findResourceWithFallback(path, actualBundle, null);
 
         if(result == null){
             throw new MissingResourceException("Can't find resource for bundle "
@@ -1000,14 +1000,17 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         return ae;
     }
 
-    private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle) {
+    private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle, ICUResourceBundle requested) {
         ICUResourceBundle sub = null;
+        if(requested==null){
+            requested=actualBundle;
+        }
         while (actualBundle != null) {
             StringTokenizer st = new StringTokenizer(path, "/");
             ICUResourceBundle current = actualBundle;
             while (st.hasMoreTokens()) {
                 String subKey = st.nextToken();
-                sub = current.handleGet(subKey, null);
+                sub = current.handleGet(subKey, requested);
                 if(sub==null){
                    break;
                 }
