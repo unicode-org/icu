@@ -38,11 +38,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu33.dll"
+				OutputFile="..\..\..\bin\icutu34.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu33.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu34.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutu.lib"/>
@@ -104,12 +104,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu33d.dll"
+				OutputFile="..\..\..\bin\icutu34d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu33d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu34d.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutud.lib"/>
 			<Tool
