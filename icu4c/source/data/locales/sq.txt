@@ -28,6 +28,7 @@ sq{
         BH{"Bahrein"}
         BN{"Brunej"}
         BO{"Bolivi"}
+        BR{"Brazili"}
         BT{"Butan"}
         BW{"Botsvana"}
         BY{"Bjellorusi"}
@@ -41,6 +42,7 @@ sq{
         CN{"Kinë"}
         CO{"Kolumbi"}
         CR{"Kosta Rika"}
+        CS{"Serbië en Montenegro"}
         CU{"Kubë"}
         CV{"Kap Verde"}
         CY{"Qipro"}
@@ -168,30 +170,53 @@ sq{
             "Lek",
             "ALL",
         }
+        BRL{
+            "BRL",
+            "Real Brazilian",
+        }
+        CNY{
+            "CNY",
+            "Renminbi(Yuan) Kinez",
+        }
         EUR{
             "€",
-            "EUR",
+            "Euro",
         }
         GBP{
             "£",
-            "GBP",
+            "Paund Sterlina Britanike",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Rupee indiane",
         }
         JPY{
             "¥",
-            "JPY",
+            "Jeni Japonez",
+        }
+        RUB{
+            "RUB",
+            "Rubla ruse",
         }
         USD{
             "$",
-            "USD",
+            "Dollar amerikan",
         }
     }
     ExemplarCharacters{"[a-zçë{dh}{gj}{ll}{nj}{rr}{sh}{th}{xh}{zh}]"}
     Languages{
+        ar{"Arabisht"}
+        de{"Gjermanisht"}
+        en{"Anglisht"}
+        es{"Spanjisht"}
+        fr{"Frengjisht"}
+        hi{"Hindi"}
+        it{"Italisht"}
+        ja{"Japanisht"}
+        pt{"Portugeze"}
+        ru{"Rusisht"}
         sq{"shqipe"}
+        zh{"Kineze"}
     }
     LocaleScript{
         "Latn",
@@ -210,7 +235,10 @@ sq{
         "�",
         "+",
     }
-    Version{"1.38"}
+    Scripts{
+        Latn{"Latine"}
+    }
+    Version{"1.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -253,6 +281,17 @@ sq{
                         "e shtunë",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "H",
+                        "M",
+                        "M",
+                        "E",
+                        "P",
+                        "S",
+                    }
+                }
             }
             eras{
                 abbreviated{
@@ -289,6 +328,22 @@ sq{
                         "tetor",
                         "nëntor",
                         "dhjetor",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "S",
+                        "M",
+                        "P",
+                        "M",
+                        "Q",
+                        "K",
+                        "G",
+                        "S",
+                        "T",
+                        "N",
+                        "D",
                     }
                 }
             }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: ./xml/collation/fi.xml
  */
 fi{
-    Version{"1.19"}
+    Version{"1.20"}
     collations{
         standard{
             Sequence{

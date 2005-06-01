@@ -52,6 +52,7 @@ ca{
         CN{"Xina"}
         CO{"Colòmbia"}
         CR{"Costa Rica"}
+        CS{"Sèrbia i Montenegro"}
         CU{"Cuba"}
         CV{"Cap Verd"}
         CY{"Xipre"}
@@ -86,6 +87,7 @@ ca{
         GT{"Guatemala"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
+        HK{"Hong Kong"}
         HN{"Hondures"}
         HR{"Croàcia"}
         HT{"Haití"}
@@ -207,6 +209,14 @@ ca{
         ZW{"Zimbabwe"}
     }
     Currencies{
+        BRL{
+            "BRL",
+            "Real brasiler",
+        }
+        CNY{
+            "CNY",
+            "Iuan renmimbi xinès",
+        }
         ESP{
             "₧",
             "ESP",
@@ -218,23 +228,27 @@ ca{
         }
         EUR{
             "€",
-            "EUR",
+            "Euro",
         }
         GBP{
             "£",
-            "GBP",
+            "Lliura esterlina britànica",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Rupia índia",
         }
         JPY{
             "¥",
-            "JPY",
+            "Ien japonès",
+        }
+        RUB{
+            "RUB",
+            "Ruble rus",
         }
         USD{
             "$",
-            "USD",
+            "Dòlar EUA",
         }
     }
     ExemplarCharacters{"[a-z é í ó ú à è ò ï ü ŀ ç ñ]"}
@@ -396,12 +410,26 @@ ca{
         "�",
         "+",
     }
-    Version{"1.45"}
+    Scripts{
+        Latn{"Llatí"}
+    }
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 2,
                 1,
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -425,11 +453,17 @@ ca{
                     }
                 }
             }
+            eras{
+                abbreviated{
+                    "aC",
+                    "dC",
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
                         "gen.",
-                        "feb.",
+                        "febr.",
                         "març",
                         "abr.",
                         "maig",

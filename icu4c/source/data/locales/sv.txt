@@ -11,6 +11,34 @@
  */
 sv{
     Countries{
+        002{"Afrika"}
+        005{"Sydamerika"}
+        009{"Oceanien"}
+        011{"Västafrika"}
+        013{"Centralamerika"}
+        014{"Östafrika"}
+        015{"Nordafrika"}
+        017{"Centralafrika"}
+        018{"Södra Afrika"}
+        019{"Nord- och Sydamerika"}
+        021{"Nordamerika"}
+        029{"Karibien"}
+        030{"Ostasien"}
+        035{"Sydostasien"}
+        039{"Sydeuropa"}
+        053{"Australien och Nya Zeeland"}
+        054{"Melanesien"}
+        057{"Mikronesien"}
+        061{"Polynesien"}
+        062{"Södra Centralasien"}
+        142{"Asien"}
+        145{"Västasien"}
+        150{"Europa"}
+        151{"Östeuropa"}
+        154{"Nordeuropa"}
+        155{"Västeuropa"}
+        830{"Kanalöarna"}
+        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"Förenade Arabemiraten"}
         AF{"Afghanistan"}
@@ -26,6 +54,7 @@ sv{
         AT{"Österrike"}
         AU{"Australien"}
         AW{"Aruba"}
+        AX{"Åland"}
         AZ{"Azerbajdzjan"}
         BA{"Bosnien och Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +88,7 @@ sv{
         CN{"Kina"}
         CO{"Colombia"}
         CR{"Costa Rica"}
+        CS{"Serbien och Montenegro"}
         CU{"Kuba"}
         CV{"Kap Verde"}
         CX{"Julön"}
@@ -190,6 +220,7 @@ sv{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Yttre öar i Oceanien"}
         RE{"Réunion"}
         RO{"Rumänien"}
         RU{"Ryssland"}
@@ -1051,6 +1082,10 @@ sv{
             "TL",
             "Turkisk lira",
         }
+        TRY{
+            "TRY",
+            "Ny turkisk lira",
+        }
         TTD{
             "TT$",
             "Trinidadisk dollar",
@@ -1351,6 +1386,7 @@ sv{
         grc{"forngrekiska (till 1453)"}
         gu{"gujarati"}
         gv{"manx gaeliska"}
+        gwi{"gwich'in"}
         ha{"haussa"}
         hai{"haida"}
         haw{"hawaiiska"}
@@ -1744,16 +1780,16 @@ sv{
         }
         collation{
             direct{"Direkt ordning"}
-            phonebook{"Telefonboksordning"}
-            pinyin{"Pinyinordning"}
-            stroke{"Raderingsordning"}
-            traditional{"Traditionell ordning"}
+            phonebook{"telefonboksordning"}
+            pinyin{"pinyinordning"}
+            stroke{"strecksortering"}
+            traditional{"traditionell sortering"}
         }
     }
     Variants{
-        REVISED{"Reviderad"}
+        REVISED{"reviderad"}
     }
-    Version{"1.54"}
+    Version{"1.57"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1769,9 +1805,9 @@ sv{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "'den 'd MMMM yyyy",
-                "'den 'd MMM yyyy",
-                "yyyy-MM-dd",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
                 "yyyy-MM-dd",
                 "{1} {0}",
             }

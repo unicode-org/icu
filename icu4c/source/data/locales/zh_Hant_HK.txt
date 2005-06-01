@@ -16,7 +16,7 @@ zh_Hant_HK{
         "#,##0%",
         "#E0",
     }
-    Version{"1.18"}
+    Version{"1.19"}
     calendar{
         gregorian{
             DateTimePatterns{

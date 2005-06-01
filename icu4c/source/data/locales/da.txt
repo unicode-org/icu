@@ -59,6 +59,7 @@ da{
         CN{"Kina"}
         CO{"Colombia"}
         CR{"Costa Rica"}
+        CS{"Serbien og Montenegro"}
         CU{"Cuba"}
         CV{"Kap Verde"}
         CX{"Juleøen"}
@@ -1039,6 +1040,10 @@ da{
             "TL",
             "Tyrkisk lira",
         }
+        TRY{
+            "TRY",
+            "Ny tyrkisk lira",
+        }
         TTD{
             "TT$",
             "Dollar fra Trinidad og Tobago",
@@ -1338,6 +1343,7 @@ da{
         grc{"Græsk, Old- (til 1453)"}
         gu{"Gujaratisk"}
         gv{"Manx"}
+        gwi{"Gwichʼin"}
         ha{"Hausa"}
         hai{"Haida"}
         haw{"Hawaiiansk"}
@@ -1698,12 +1704,23 @@ da{
             traditional{"Traditionel sorteringsrækkefølge"}
         }
     }
-    Version{"1.44"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 2,
                 4,
+            }
+            DateTimePatterns{
+                "H.mm.ss z",
+                "H.mm.ss z",
+                "H.mm.ss",
+                "H.mm",
+                "EEEE 'den' d. MMMM yyyy",
+                "d. MMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
             }
             dayNames{
                 format{

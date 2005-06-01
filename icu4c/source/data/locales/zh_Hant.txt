@@ -1622,7 +1622,7 @@ zh_Hant{
     Variants{
         REVISED{"已修訂"}
     }
-    Version{"1.36"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimePatterns{

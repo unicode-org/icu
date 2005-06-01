@@ -11,7 +11,32 @@
  */
 ro{
     Countries{
-        AD{"Andorra"}
+        001{"Lume"}
+        005{"America de Sud"}
+        011{"Africa occidentală"}
+        013{"America centrală"}
+        014{"Africa orientală"}
+        015{"Africa septentrională"}
+        017{"Africa centrală"}
+        018{"Africa australă"}
+        019{"Americi"}
+        021{"America de Nord"}
+        029{"Caraibe"}
+        030{"Asia orientală"}
+        035{"Asia de Sud-Est"}
+        039{"Europa meridională"}
+        053{"Australia și Noua Zeelandă"}
+        054{"Melanezia"}
+        057{"Micronezia"}
+        061{"Polinezia"}
+        062{"Asia centrala şi de Sud"}
+        145{"Asia occidentală"}
+        150{"Europa"}
+        151{"Europa de Est"}
+        154{"Europa septentrională"}
+        155{"Europa occidentală"}
+        830{"Insulele Anglo-Normande"}
+        AD{"Andora"}
         AE{"Emiratele Arabe Unite"}
         AF{"Afganistan"}
         AG{"Antigua şi Barbuda"}
@@ -26,6 +51,7 @@ ro{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
+        AX{"Insulele Aland"}
         AZ{"Azerbaidjan"}
         BA{"Bosnia şi Herzegovina"}
         BB{"Barbados"}
@@ -59,6 +85,7 @@ ro{
         CN{"China"}
         CO{"Columbia"}
         CR{"Costa Rica"}
+        CS{"Serbia şi Muntenegru"}
         CU{"Cuba"}
         CV{"Capul Verde"}
         CX{"Insula Christmas"}
@@ -190,6 +217,7 @@ ro{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Altă Oceania"}
         RE{"Reunion"}
         RO{"România"}
         RU{"Federaţia Rusă"}
@@ -227,6 +255,7 @@ ro{
         TR{"Turcia"}
         TT{"Trinidad şi Tobago"}
         TV{"Tuvalu"}
+        TW{"Taiwan"}
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}
@@ -321,7 +350,7 @@ ro{
         "�",
         "+",
     }
-    Version{"1.44"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -360,6 +389,17 @@ ro{
                         "sîmbătă",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                }
             }
             eras{
                 abbreviated{
@@ -396,6 +436,22 @@ ro{
                         "octombrie",
                         "noiembrie",
                         "decembrie",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "I",
+                        "I",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }

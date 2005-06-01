@@ -13,7 +13,15 @@
   <overrideDraft locale="or_IN"/>
   <overrideDraft locale="sl_SI"/>
   <overrideDraft locale="sr_Cyrl"/>
-
+  
+  <!-- only for 3.4 -->
+  <overrideDraft locale="az"/> 
+  <overrideDraft locale="az_Cyrl"/> 
+  <overrideDraft locale="uz"/> 
+  <overrideDraft locale="uz_Cyrl"/>
+  <overrideDraft locale="uz_Latn"/>
+  <overrideDraft locale="uz_UZ"/>
+  
   <!-- collation aliases -->
   <deprecates type="collation"> 
     <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 

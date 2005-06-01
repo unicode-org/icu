@@ -11,6 +11,35 @@
  */
 sr_Latn{
     Countries{
+        001{"Svet"}
+        002{"Afrika"}
+        005{"Južna Amerika"}
+        009{"Okeanija"}
+        011{"Zapadna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Istočna Afrika"}
+        015{"Severna Afrika"}
+        017{"Centralna Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Severna Amerika"}
+        029{"Karibi"}
+        030{"Istočna Azija"}
+        035{"Jugoistočna Azija"}
+        039{"Južna Evropa"}
+        053{"Australija i Novi Zeland"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        145{"Zapadna Azija"}
+        150{"Evropa"}
+        151{"Istočna Evropa"}
+        154{"Severna Evropa"}
+        155{"Zapadna Evropa"}
+        830{"Kanalska ostrva"}
+        833{"Ostrvo Man"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Avganistan"}
@@ -26,6 +55,7 @@ sr_Latn{
         AT{"Austrija"}
         AU{"Australija"}
         AW{"Aruba"}
+        AX{"Alandska ostrva"}
         AZ{"Azerbejdžan"}
         BA{"Bosna i Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +89,7 @@ sr_Latn{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
+        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Uskršnja Ostrva"}
@@ -190,6 +221,7 @@ sr_Latn{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        QO{"Ostala okeanija"}
         RE{"Rejunion"}
         RO{"Rumunija"}
         RU{"Rusija"}
@@ -267,6 +299,10 @@ sr_Latn{
             "BF",
             "Belgijski franak",
         }
+        BRL{
+            "BRL",
+            "Brazilski Real",
+        }
         CAD{
             "Can$",
             "Kanadski dolar",
@@ -274,6 +310,14 @@ sr_Latn{
         CHF{
             "SwF",
             "Švajcarski franak",
+        }
+        CNY{
+            "CNY",
+            "Kineski Juan Renminbi",
+        }
+        CSD{
+            "CSD",
+            "Srpski Dinar",
         }
         DEM{
             "DEM",
@@ -318,6 +362,10 @@ sr_Latn{
         IEP{
             "IR£",
             "Irska funta",
+        }
+        INR{
+            "INR",
+            "Indijski Rupi",
         }
         ITL{
             "₤",
@@ -481,13 +529,9 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.27"}
+    Version{"1.30"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "HH.mm.ss z",
                 "HH.mm.ss z",

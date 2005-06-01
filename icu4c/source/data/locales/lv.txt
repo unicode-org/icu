@@ -305,7 +305,7 @@ lv{
         "�",
         "+",
     }
-    Version{"1.36"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

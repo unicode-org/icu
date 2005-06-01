@@ -11,16 +11,17 @@
  */
 lt{
     Countries{
+        200{"Čekoslovakija"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
         AF{"Afganistanas"}
         AG{"Antigva ir Barbuda"}
-        AI{"Angvila"}
+        AI{"Angilija"}
         AL{"Albanija"}
         AM{"Armėnija"}
-        AN{"Nyderlandų Antilai"}
+        AN{"Olandijos Antilai"}
         AO{"Angola"}
-        AQ{"Antarktika"}
+        AQ{"Antarktis"}
         AR{"Argentina"}
         AS{"Amerikos Samoa"}
         AT{"Austrija"}
@@ -36,11 +37,11 @@ lt{
         BH{"Bahreinas"}
         BI{"Burundis"}
         BJ{"Beninas"}
-        BM{"Bermudai"}
+        BM{"Bermuda"}
         BN{"Brunėjus"}
         BO{"Bolivija"}
         BR{"Brazilija"}
-        BS{"Bahamai"}
+        BS{"Bahamos"}
         BT{"Butanas"}
         BV{"Bouvet sala"}
         BW{"Botsvana"}
@@ -52,7 +53,7 @@ lt{
         CF{"Centrinės Afrikos Respublika"}
         CG{"Kongas"}
         CH{"Šveicarija"}
-        CI{"Kot d’Ivuar"}
+        CI{"Dramblio Kaulo Krantas"}
         CK{"Kuko salos"}
         CL{"Čilė"}
         CM{"Kamerūnas"}
@@ -60,10 +61,10 @@ lt{
         CO{"Kolumbija"}
         CR{"Kosta Rika"}
         CU{"Kuba"}
-        CV{"Žaliojo Kyšulio salos"}
+        CV{"Žaliasis Kyšulys"}
         CX{"Kalėdų sala"}
         CY{"Kipras"}
-        CZ{"Čekijos respublika"}
+        CZ{"Čekija"}
         DE{"Vokietija"}
         DJ{"Džibutis"}
         DK{"Danija"}
@@ -79,8 +80,8 @@ lt{
         ET{"Etiopija"}
         FI{"Suomija"}
         FJ{"Fidžis"}
-        FK{"Folklendo salos (Malvinai)"}
-        FM{"Mikronezijos Federacinės Valstijos"}
+        FK{"Falklando salos"}
+        FM{"Mikronezija"}
         FO{"Farerų salos"}
         FR{"Prancūzija"}
         GA{"Gabonas"}
@@ -94,15 +95,15 @@ lt{
         GM{"Gambija"}
         GN{"Gvinėja"}
         GP{"Gvadelupė"}
-        GQ{"Ekvatorinė Gvinėja"}
+        GQ{"Pusiaujo Gvinėja"}
         GR{"Graikija"}
         GS{"Rytų Džordžija ir Rytų Sandwich salos"}
         GT{"Gvatemala"}
         GU{"Guamas"}
-        GW{"Gvinėja-Bisau"}
-        GY{"Gviana"}
+        GW{"Bisau Gvinėja"}
+        GY{"Gajana"}
         HK{"Kinijos S.A.R.Honkongas"}
-        HM{"Heard ir McDonald salos"}
+        HM{"Heardo salos"}
         HN{"Hondūras"}
         HR{"Kroatija"}
         HT{"Haitis"}
@@ -111,9 +112,9 @@ lt{
         IE{"Airija"}
         IL{"Izraelis"}
         IN{"Indija"}
-        IO{"Britų Indijos vandenyno teritorija"}
+        IO{"Indijos vandenyno britų sritis"}
         IQ{"Irakas"}
-        IR{"Irano"}
+        IR{"Iranas"}
         IS{"Islandija"}
         IT{"Italija"}
         JM{"Jamaika"}
@@ -130,7 +131,7 @@ lt{
         KW{"Kuveitas"}
         KY{"Kaimanų salos"}
         KZ{"Kazachstanas"}
-        LA{"Laoso Liaudies Demokratinė Respublika"}
+        LA{"Laosas"}
         LB{"Libanas"}
         LC{"Šventoji Liucija"}
         LI{"Lichtenšteinas"}
@@ -140,21 +141,21 @@ lt{
         LT{"Lietuva"}
         LU{"Liuksemburgas"}
         LV{"Latvija"}
-        LY{"Libijos Arabų Džamahirija"}
+        LY{"Libija"}
         MA{"Marokas"}
         MC{"Monakas"}
-        MD{"Moldovos Respublika"}
+        MD{"Moldova"}
         MG{"Madagaskaras"}
-        MH{"Maršalo salos"}
-        MK{"Makedonijos Respublika"}
+        MH{"Maršalo Salos"}
+        MK{"Makedonija"}
         ML{"Malis"}
-        MM{"Mjanma"}
+        MM{"Mianmaras"}
         MN{"Mongolija"}
         MO{"Kinijos S.A.R. Makao"}
-        MP{"Šiaurinės Marianos salos"}
+        MP{"Marianos šiaurinės salos"}
         MQ{"Martinika"}
         MR{"Mauritanija"}
-        MS{"Montserat"}
+        MS{"Montserratas"}
         MT{"Malta"}
         MU{"Mauricijus"}
         MV{"Maldivai"}
@@ -172,7 +173,7 @@ lt{
         NO{"Norvegija"}
         NP{"Nepalas"}
         NR{"Nauru"}
-        NU{"Niujė"}
+        NU{"Niue"}
         NZ{"Naujoji Zelandija"}
         OM{"Omanas"}
         PA{"Panama"}
@@ -210,15 +211,15 @@ lt{
         SO{"Somalis"}
         SR{"Surinamas"}
         ST{"San Tomė ir Principė"}
-        SV{"El Salvadoras"}
+        SV{"Salvadoras"}
         SY{"Sirija"}
         SZ{"Svazilendas"}
-        TC{"Turks ir Kaikos salos"}
+        TC{"Turkso ir Caicoso salos"}
         TD{"Čadas"}
-        TF{"Prancūzų pietinės teritorijos"}
+        TF{"Prancūzijos Pietų sritys"}
         TG{"Togas"}
         TH{"Tailandas"}
-        TJ{"Tadžikija"}
+        TJ{"Tadžikistanas"}
         TK{"Tokelau"}
         TL{"Rytų Timoras"}
         TM{"Turkmėnistanas"}
@@ -227,59 +228,72 @@ lt{
         TR{"Turkija"}
         TT{"Trinidadas ir Tobagas"}
         TV{"Tuvalu"}
+        TW{"Taivanas"}
         TZ{"Tanzanija"}
         UA{"Ukraina"}
         UG{"Uganda"}
-        UM{"JAV antraeilės teritorijos salos"}
-        US{"United States"}
+        UM{"Jungtinių Valstijų mažosios aplinkinės salos"}
+        US{"Jungtinės Valstijos"}
         UY{"Urugvajus"}
-        UZ{"Uzbekija"}
-        VA{"Vatikano Miesto Valstija"}
+        UZ{"Uzbekistanas"}
+        VA{"Vatikanas"}
         VC{"Šventasis Vincentas ir Grenadinai"}
         VE{"Venesuela"}
-        VG{"Britų Virginijos salos"}
-        VI{"JAV Virginijos salos"}
+        VG{"Didžiosios Britanijos Mergelių salos"}
+        VI{"Mergelių salos (JAV)"}
         VN{"Vietnamas"}
         VU{"Vanuatu"}
-        WF{"Valiso ir Futuna salos"}
+        WF{"Wallisas ir Futuna"}
         WS{"Samoa"}
         YE{"Jemenas"}
-        YT{"Majotė"}
+        YT{"Mayotte’as"}
         ZA{"Pietų Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabvė"}
     }
     Currencies{
+        BRL{
+            "BRL",
+            "Brazilijos realas",
+        }
+        CNY{
+            "CNY",
+            "Ženminbi juanis",
+        }
         EUR{
             "€",
-            "EUR",
+            "Euras",
         }
         GBP{
             "£",
-            "GBP",
+            "Svaras sterlingų",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Indijos rupija",
         }
         JPY{
             "¥",
-            "JPY",
+            "Jena",
         }
         LTL{
             "Lt",
-            "LTL",
+            "Litas",
+        }
+        RUB{
+            "RUB",
+            "Rusijos rublis",
         }
         USD{
             "$",
-            "USD",
+            "JAV doleris",
         }
     }
     ExemplarCharacters{"[a-z ą ę į ų ė ū č š ž]"}
     Languages{
         ar{"Arabų"}
         bg{"Bulgarų"}
-        cs{"Čekijos"}
+        cs{"Čekų"}
         da{"Danų"}
         de{"Vokiečių"}
         el{"Graikų"}
@@ -289,6 +303,7 @@ lt{
         fi{"Suomių"}
         fr{"Prancūzų"}
         he{"Hebrajų"}
+        hi{"Hindi"}
         hr{"Kroatų"}
         hu{"Vengrų"}
         it{"Italų"}
@@ -325,9 +340,16 @@ lt{
         "�",
         "+",
     }
-    Version{"1.41"}
+    Scripts{
+        Latn{"Latin"}
+    }
+    Version{"1.43"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "priešpiet",
+                "popiet",
+            }
             DateTimeElements:intvector{
                 2,
                 4,
@@ -340,7 +362,7 @@ lt{
                 "yyyy 'm.' MMMM d 'd.',EEEE",
                 "yyyy 'm.' MMMM d 'd.'",
                 "yyyy.MM.dd",
-                "yyyy.MM.dd",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
             dayNames{
@@ -355,20 +377,31 @@ lt{
                         "Št",
                     }
                     wide{
-                        "Sekmadienis",
-                        "Pirmadienis",
-                        "Antradienis",
-                        "Trečiadienis",
-                        "Ketvirtadienis",
-                        "Penktadienis",
-                        "Šeštadienis",
+                        "sekmadienis",
+                        "pirmadienis",
+                        "antradienis",
+                        "trečiadienis",
+                        "ketvirtadienis",
+                        "penktadienis",
+                        "šeštadienis",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "P",
+                        "A",
+                        "T",
+                        "K",
+                        "P",
+                        "Š",
                     }
                 }
             }
             eras{
                 abbreviated{
-                    "pr.Kr.",
-                    "po.Kr.",
+                    "pr. Kr.",
+                    "po Kr.",
                 }
             }
             monthNames{
@@ -383,23 +416,53 @@ lt{
                         "Lie",
                         "Rgp",
                         "Rgs",
-                        "Spa",
+                        "Spl",
                         "Lap",
                         "Grd",
                     }
                     wide{
-                        "Sausio",
-                        "Vasario",
-                        "Kovo",
-                        "Balandžio",
-                        "Gegužės",
-                        "Birželio",
-                        "Liepos",
-                        "Rugpjūčio",
-                        "Rugsėjo",
-                        "Spalio",
-                        "Lapkričio",
-                        "Gruodžio",
+                        "sausio",
+                        "vasario",
+                        "kovo",
+                        "balandžio",
+                        "gegužės",
+                        "birželio",
+                        "liepos",
+                        "rugpjūčio",
+                        "rugsėjo",
+                        "spalio",
+                        "lapkričio",
+                        "gruodžio",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "V",
+                        "K",
+                        "B",
+                        "G",
+                        "B",
+                        "L",
+                        "R",
+                        "R",
+                        "S",
+                        "L",
+                        "G",
+                    }
+                    wide{
+                        "Sausis",
+                        "Vasaris",
+                        "Kovas",
+                        "Balandis",
+                        "Gegužė",
+                        "Birželis",
+                        "Liepa",
+                        "Rugpjūtis",
+                        "Rugsėjis",
+                        "Spalis",
+                        "Lapkritis",
+                        "Gruodis",
                     }
                 }
             }

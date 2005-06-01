@@ -11,6 +11,39 @@
  */
 en{
     Countries{
+        001{"World"}
+        002{"Africa"}
+        003{"North America"}
+        005{"South America"}
+        009{"Oceania"}
+        011{"Western Africa"}
+        013{"Central America"}
+        014{"Eastern Africa"}
+        015{"Northern Africa"}
+        017{"Middle Africa"}
+        018{"Southern Africa"}
+        019{"Americas"}
+        021{"Northern America"}
+        029{"Caribbean"}
+        030{"Eastern Asia"}
+        035{"South-eastern Asia"}
+        039{"Southern Europe"}
+        053{"Australia and New Zealand"}
+        054{"Melanesia"}
+        057{"Micronesian Region"}
+        061{"Polynesia"}
+        062{"South-central Asia"}
+        142{"Asia"}
+        145{"Western Asia"}
+        150{"Europe"}
+        151{"Eastern Europe"}
+        154{"Northern Europe"}
+        155{"Western Europe"}
+        172{"Commonwealth of Independent States"}
+        200{"Czechoslovakia"}
+        419{"Latin America and the Caribbean"}
+        830{"Channel Islands"}
+        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"United Arab Emirates"}
         AF{"Afghanistan"}
@@ -26,6 +59,7 @@ en{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
+        AX{"Aland Islands"}
         AZ{"Azerbaijan"}
         BA{"Bosnia and Herzegovina"}
         BB{"Barbados"}
@@ -39,6 +73,7 @@ en{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"British Antarctic Territory"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -48,9 +83,9 @@ en{
         BZ{"Belize"}
         CA{"Canada"}
         CC{"Cocos (Keeling) Islands"}
-        CD{"Democratic Republic of the Congo"}
+        CD{"Congo (Kinshasa)"}
         CF{"Central African Republic"}
-        CG{"Congo"}
+        CG{"Congo (Brazzaville)"}
         CH{"Switzerland"}
         CI{"Ivory Coast"}
         CK{"Cook Islands"}
@@ -59,11 +94,14 @@ en{
         CN{"China"}
         CO{"Colombia"}
         CR{"Costa Rica"}
+        CS{"Serbia And Montenegro"}
+        CT{"Canton and Enderbury Islands"}
         CU{"Cuba"}
         CV{"Cape Verde"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
         CZ{"Czech Republic"}
+        DD{"East Germany"}
         DE{"Germany"}
         DJ{"Djibouti"}
         DK{"Denmark"}
@@ -82,7 +120,9 @@ en{
         FK{"Falkland Islands"}
         FM{"Micronesia"}
         FO{"Faroe Islands"}
+        FQ{"French Southern and Antarctic Territories"}
         FR{"France"}
+        FX{"Metropolitan France"}
         GA{"Gabon"}
         GB{"United Kingdom"}
         GD{"Grenada"}
@@ -119,6 +159,7 @@ en{
         JM{"Jamaica"}
         JO{"Jordan"}
         JP{"Japan"}
+        JT{"Johnston Island"}
         KE{"Kenya"}
         KG{"Kyrgyzstan"}
         KH{"Cambodia"}
@@ -146,6 +187,7 @@ en{
         MD{"Moldova"}
         MG{"Madagascar"}
         MH{"Marshall Islands"}
+        MI{"Midway Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
@@ -171,11 +213,14 @@ en{
         NL{"Netherlands"}
         NO{"Norway"}
         NP{"Nepal"}
+        NQ{"Dronning Maud Land"}
         NR{"Nauru"}
+        NT{"Neutral Zone"}
         NU{"Niue"}
         NZ{"New Zealand"}
         OM{"Oman"}
         PA{"Panama"}
+        PC{"Pacific Islands Trust Territory"}
         PE{"Peru"}
         PF{"French Polynesia"}
         PG{"Papua New Guinea"}
@@ -187,9 +232,12 @@ en{
         PR{"Puerto Rico"}
         PS{"Palestinian Territory"}
         PT{"Portugal"}
+        PU{"U.S. Miscellaneous Pacific Islands"}
         PW{"Palau"}
         PY{"Paraguay"}
+        PZ{"Panama Canal Zone"}
         QA{"Qatar"}
+        QO{"Outlying Oceania"}
         RE{"Reunion"}
         RO{"Romania"}
         RU{"Russia"}
@@ -210,6 +258,7 @@ en{
         SO{"Somalia"}
         SR{"Suriname"}
         ST{"Sao Tome and Principe"}
+        SU{"Union of Soviet Socialist Republics"}
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
@@ -237,13 +286,16 @@ en{
         UZ{"Uzbekistan"}
         VA{"Vatican"}
         VC{"Saint Vincent and the Grenadines"}
+        VD{"North Vietnam"}
         VE{"Venezuela"}
         VG{"British Virgin Islands"}
         VI{"U.S. Virgin Islands"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Wallis and Futuna"}
+        WK{"Wake Island"}
         WS{"Samoa"}
+        YD{"People's Democratic Republic of Yemen"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"South Africa"}
@@ -447,6 +499,10 @@ en{
             "CDF",
             "Congolese Franc Congolais",
         }
+        CHE{
+            "CHE",
+            "WIR Euro",
+        }
         CHF{
             "SwF",
             "Swiss Franc",
@@ -471,9 +527,17 @@ en{
             "Col$",
             "Colombian Peso",
         }
+        COU{
+            "COU",
+            "Unidad de Valor Real",
+        }
         CRC{
             "C",
             "Costa Rican Colon",
+        }
+        CSD{
+            "CSD",
+            "Serbian Dinar",
         }
         CSK{
             "CSK",
@@ -535,9 +599,21 @@ en{
             "EGP",
             "Egyptian Pound",
         }
+        EQE{
+            "EQE",
+            "Ekwele",
+        }
         ERN{
             "ERN",
             "Eritrean Nakfa",
+        }
+        ESA{
+            "ESA",
+            "Spanish Peseta (A account)",
+        }
+        ESB{
+            "ESB",
+            "Spanish Peseta (convertible account)",
         }
         ESP{
             "₧",
@@ -751,6 +827,10 @@ en{
             "M",
             "Lesotho Loti",
         }
+        LSM{
+            "LSM",
+            "Maloti",
+        }
         LTL{
             "LTL",
             "Lithuanian Lita",
@@ -759,9 +839,17 @@ en{
             "LTT",
             "Lithuanian Talonas",
         }
+        LUC{
+            "LUC",
+            "Luxembourg Convertible Franc",
+        }
         LUF{
             "LUF",
             "Luxembourg Franc",
+        }
+        LUL{
+            "LUL",
+            "Luxembourg Financial Franc",
         }
         LVL{
             "LVL",
@@ -947,6 +1035,10 @@ en{
             "QR",
             "Qatari Rial",
         }
+        RHD{
+            "RHD",
+            "Rhodesian Dollar",
+        }
         ROL{
             "leu",
             "Romanian Leu",
@@ -1011,6 +1103,10 @@ en{
             "So. Sh.",
             "Somali Shilling",
         }
+        SRD{
+            "SRD",
+            "Surinam Dollar",
+        }
         SRG{
             "Sf",
             "Suriname Guilder",
@@ -1066,6 +1162,10 @@ en{
         TRL{
             "TL",
             "Turkish Lira",
+        }
+        TRY{
+            "TRY",
+            "New Turkish Lira",
         }
         TTD{
             "TT$",
@@ -1139,6 +1239,10 @@ en{
             "XAF",
             "CFA Franc BEAC",
         }
+        XAG{
+            "XAG",
+            "Silver",
+        }
         XAU{
             "XAU",
             "Gold",
@@ -1183,9 +1287,29 @@ en{
             "XOF",
             "CFA Franc BCEAO",
         }
+        XPD{
+            "XPD",
+            "Palladium",
+        }
         XPF{
             "CFPF",
             "CFP Franc",
+        }
+        XPT{
+            "XPT",
+            "Platinum",
+        }
+        XRE{
+            "XRE",
+            "RINET Funds",
+        }
+        XTS{
+            "XTS",
+            "Testing Currency Code",
+        }
+        XXX{
+            "XXX",
+            "No Currency",
         }
         YDD{
             "YDD",
@@ -1253,9 +1377,10 @@ en{
         akk{"Akkadian"}
         ale{"Aleut"}
         alg{"Algonquian Languages"}
+        alt{"Southern Altai"}
         am{"Amharic"}
         an{"Aragonese"}
-        ang{"English, Old (ca.450-1100)"}
+        ang{"Old English (ca.450-1100)"}
         apa{"Apache Languages"}
         ar{"Arabic"}
         arc{"Aramaic"}
@@ -1321,9 +1446,9 @@ en{
         cmc{"Chamic Languages"}
         co{"Corsican"}
         cop{"Coptic"}
-        cpe{"Creoles and Pidgins, English-based (Other)"}
-        cpf{"Creoles and Pidgins, French-based (Other)"}
-        cpp{"Creoles and pidgins, Portuguese-based (Other)"}
+        cpe{"Other English-based Creoles and Pidgins"}
+        cpf{"Other French-based Creoles and Pidgins"}
+        cpp{"Other Portuguese-based Creoles and Pidgins"}
         cr{"Cree"}
         crh{"Crimean Turkish; Crimean Tatar"}
         crp{"Creoles and Pidgins (Other)"}
@@ -1346,7 +1471,7 @@ en{
         dra{"Dravidian (Other)"}
         dsb{"Lower Sorbian"}
         dua{"Duala"}
-        dum{"Dutch, Middle (ca. 1050-1350)"}
+        dum{"Middle Dutch"}
         dv{"Divehi"}
         dyu{"Dyula"}
         dz{"Dzongkha"}
@@ -1357,7 +1482,7 @@ en{
         el{"Greek"}
         elx{"Elamite"}
         en{"English"}
-        enm{"English, Middle (1100-1500)"}
+        enm{"Middle English"}
         eo{"Esperanto"}
         es{"Spanish"}
         et{"Estonian"}
@@ -1368,13 +1493,14 @@ en{
         fat{"Fanti"}
         ff{"Fulah"}
         fi{"Finnish"}
+        fil{"Filipino"}
         fiu{"Finno - Ugrian (Other)"}
         fj{"Fijian"}
         fo{"Faroese"}
         fon{"Fon"}
         fr{"French"}
-        frm{"French, Middle (ca.1400-1600)"}
-        fro{"French, Old (842-ca.1400)"}
+        frm{"Middle French"}
+        fro{"Old French"}
         fur{"Friulian"}
         fy{"Frisian"}
         ga{"Irish"}
@@ -1386,16 +1512,17 @@ en{
         gez{"Geez"}
         gil{"Gilbertese"}
         gl{"Gallegan"}
-        gmh{"German, Middle High (ca.1050-1500)"}
+        gmh{"Middle High German"}
         gn{"Guarani"}
-        goh{"German, Old High (ca.750-1050)"}
+        goh{"Old High German"}
         gon{"Gondi"}
         gor{"Gorontalo"}
         got{"Gothic"}
         grb{"Grebo"}
-        grc{"Greek, Ancient (to 1453)"}
+        grc{"Ancient Greek"}
         gu{"Gujarati"}
         gv{"Manx"}
+        gwi{"Gwichʼin"}
         ha{"Hausa"}
         hai{"Haida"}
         haw{"Hawaiian"}
@@ -1501,7 +1628,7 @@ en{
         mdr{"Mandar"}
         men{"Mende"}
         mg{"Malagasy"}
-        mga{"Irish, Middle (900-1200)"}
+        mga{"Middle Irish"}
         mh{"Marshallese"}
         mi{"Maori"}
         mic{"Micmac"}
@@ -1533,7 +1660,7 @@ en{
         nai{"North American Indian (Other)"}
         nap{"Neapolitan"}
         nb{"Norwegian Bokmål"}
-        nd{"Ndebele, North"}
+        nd{"North Ndebele"}
         nds{"Low German; Low Saxon"}
         ne{"Nepali"}
         new{"Newari"}
@@ -1546,8 +1673,8 @@ en{
         no{"Norwegian"}
         nog{"Nogai"}
         non{"Norse, Old"}
-        nr{"Ndebele, South"}
-        nso{"Sotho, Northern"}
+        nr{"South Ndebele"}
+        nso{"Northern Sotho"}
         nub{"Nubian Languages"}
         nv{"Navajo"}
         nwc{"Classical Newari"}
@@ -1562,7 +1689,7 @@ en{
         or{"Oriya"}
         os{"Ossetic"}
         osa{"Osage"}
-        ota{"Turkish, Ottoman (1500-1928)"}
+        ota{"Ottoman Turkish"}
         oto{"Otomian Languages"}
         pa{"Punjabi"}
         paa{"Papuan (Other)"}
@@ -1571,14 +1698,14 @@ en{
         pam{"Pampanga"}
         pap{"Papiamento"}
         pau{"Palauan"}
-        peo{"Persian Old (ca.600-400 B.C.)"}
+        peo{"Old Persian"}
         phi{"Philippine (Other)"}
         phn{"Phoenician"}
         pi{"Pali"}
         pl{"Polish"}
         pon{"Pohnpeian"}
         pra{"Prakrit Languages"}
-        pro{"Provençal, Old (to 1500)"}
+        pro{"Old Provençal"}
         ps{"Pashto (Pushto)"}
         pt{"Portuguese"}
         qu{"Quechua"}
@@ -1609,7 +1736,7 @@ en{
         sel{"Selkup"}
         sem{"Semitic (Other)"}
         sg{"Sango"}
-        sga{"Irish, Old (to 900)"}
+        sga{"Old Irish"}
         sgn{"Sign Languages"}
         sh{"Serbo-Croatian"}
         shn{"Shan"}
@@ -1637,7 +1764,7 @@ en{
         srr{"Serer"}
         ss{"Swati"}
         ssa{"Nilo-Saharan (Other)"}
-        st{"Sotho, Southern"}
+        st{"Southern Sotho"}
         su{"Sundanese"}
         suk{"Sukuma"}
         sus{"Susu"}
@@ -1724,20 +1851,31 @@ en{
     Scripts{
         Arab{"Arabic"}
         Armn{"Armenian"}
+        Bali{"Balinese"}
+        Batk{"Batak"}
         Beng{"Bengali"}
+        Blis{"Blissymbols"}
         Bopo{"Bopomofo"}
+        Brah{"Brahmi"}
         Brai{"Braille"}
+        Bugi{"Buginese"}
         Buhd{"Buhid"}
         Cans{"Unified Canadian Aboriginal Symbols"}
         Cher{"Cherokee"}
+        Cirt{"Cirth"}
         Copt{"Coptic"}
         Cprt{"Cypriot"}
         Cyrl{"Cyrillic"}
+        Cyrs{"Cyrillic (Old Church Slavonic variant)"}
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
+        Egyd{"Egyptian demotic"}
+        Egyh{"Egyptian hieratic"}
+        Egyp{"Egyptian hieroglyphs"}
         Ethi{"Ethiopic"}
         Geok{"Khutsuri (Asomtavruli and Nuskhuri)"}
         Geor{"Georgian"}
+        Glag{"Glagolitic"}
         Goth{"Gothic"}
         Grek{"Greek"}
         Gujr{"Gujarati"}
@@ -1749,37 +1887,70 @@ en{
         Hant{"Traditional Han"}
         Hebr{"Hebrew"}
         Hira{"Hiragana"}
+        Hmng{"Pahawh Hmong"}
         Hrkt{"Katakana or Hiragana"}
+        Hung{"Old Hungarian"}
+        Inds{"Indus (Harappan)"}
         Ital{"Old Italic"}
+        Java{"Javanese"}
+        Kali{"Kayah Li"}
         Kana{"Katakana"}
+        Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
         Laoo{"Lao"}
+        Latf{"Latin (Fraktur variant)"}
+        Latg{"Latin (Gaelic variant)"}
         Latn{"Latin"}
+        Lepc{"Lepcha (Róng)"}
         Limb{"Limbu"}
+        Lina{"Linear A"}
         Linb{"Linear B"}
+        Mand{"Mandaean"}
+        Maya{"Mayan hieroglyphs"}
+        Mero{"Meroitic"}
         Mlym{"Malayalam"}
         Mong{"Mongolian"}
         Mymr{"Myanmar"}
         Nkoo{"N’Ko"}
         Ogam{"Ogham"}
+        Orkh{"Orkhon"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
+        Perm{"Old Permic"}
+        Phag{"Phags-pa"}
+        Phnx{"Phoenician"}
+        Plrd{"Pollard Phonetic"}
         Qaai{"Inherited"}
+        Roro{"Rongorongo"}
         Runr{"Runic"}
+        Sara{"Sarati"}
         Shaw{"Shavian"}
         Sinh{"Sinhala"}
+        Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
+        Syre{"Syriac (Estrangelo variant)"}
+        Syrj{"Syriac (Western variant)"}
+        Syrn{"Syriac (Eastern variant)"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
+        Talu{"New Tai Lue"}
         Taml{"Tamil"}
         Telu{"Telugu"}
+        Teng{"Tengwar"}
+        Tfng{"Tifinagh (Berber)"}
         Tglg{"Tagalog"}
         Thaa{"Thaana"}
         Tibt{"Tibetan"}
         Ugar{"Ugaritic"}
+        Vaii{"Vai"}
+        Visp{"Visible Speech"}
+        Xpeo{"Old Persian"}
+        Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zxxx{"Code for unwritten languages"}
         Zyyy{"Common"}
+        Zzzz{"Code for uncoded script"}
     }
     Types{
         calendar{
@@ -1792,7 +1963,9 @@ en{
             japanese{"Japanese Calendar"}
         }
         collation{
+            big5han{"Traditional Chinese (Big5)"}
             direct{"Direct Order"}
+            gb2312han{"Simplified Chinese (GB2312)"}
             phonebook{"Phonebook Order"}
             pinyin{"Pinyin Order"}
             stroke{"Stroke Order"}
@@ -1800,10 +1973,21 @@ en{
         }
     }
     Variants{
+        1901{"Traditional German orthography"}
+        1996{"German orthography of 1996"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
+        boont{"Boontling"}
+        gaulish{"Gaulish"}
+        guoyu{"Mandarin or Standard Chinese"}
+        hakka{"Hakka"}
+        lojban{"Lojban"}
+        nedis{"Natisone dialect"}
+        rozaj{"Resian"}
+        scouse{"Scouse"}
+        xiang{"Xiang or Hunanese"}
     }
-    Version{"1.67"}
+    Version{"1.70"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1855,6 +2039,10 @@ en{
                     "BC",
                     "AD",
                 }
+                wide{
+                    "Before Christ",
+                    "Anno Domini",
+                }
             }
             monthNames{
                 format{
@@ -1905,6 +2093,12 @@ en{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
     zoneStrings{
         {

@@ -11,6 +11,35 @@
  */
 sl{
     Countries{
+        001{"Svet"}
+        002{"Afrika"}
+        005{"Južna Amerika"}
+        009{"Oceanija"}
+        011{"Zahodna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Vzhodna Afrika"}
+        015{"Severna Afrika"}
+        017{"Centralna Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Severna Amerika"}
+        029{"Karibi"}
+        030{"Vzhodna Azija"}
+        035{"Jugovzhodna Azija"}
+        039{"Južna Evropa"}
+        053{"Avstralija i Nova Zelandija"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        145{"Zahodna Azija"}
+        150{"Evropa"}
+        151{"Vzhodna Evropa"}
+        154{"Severna Evropa"}
+        155{"Zapadna Evropa"}
+        830{"Kanalski otoki"}
+        833{"Otok Man"}
         AD{"Andora"}
         AE{"Združeni arabski emirati"}
         AF{"Afganistan"}
@@ -26,6 +55,7 @@ sl{
         AT{"Avstrija"}
         AU{"Avstralija"}
         AW{"Aruba"}
+        AX{"Alandski otoki"}
         AZ{"Azerbajdžan"}
         BA{"Bosna in Hercegovina"}
         BB{"Barbados"}
@@ -59,6 +89,7 @@ sl{
         CN{"Kitajska"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
+        CS{"Srbija in Črna gora"}
         CU{"Kuba"}
         CV{"Kapverdski otoki"}
         CX{"Božični otok"}
@@ -190,6 +221,7 @@ sl{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        QO{"Ostala oceanija"}
         RE{"Reunion"}
         RO{"Romunija"}
         RU{"Ruska federacija"}
@@ -251,21 +283,33 @@ sl{
         ZW{"Zimbabve"}
     }
     Currencies{
+        BRL{
+            "BRL",
+            "Brazilski Real",
+        }
+        CNY{
+            "CNY",
+            "Kitajski Yuan Renminbi",
+        }
         EUR{
             "€",
-            "EUR",
+            "Evro",
         }
         GBP{
             "£",
-            "GBP",
+            "Britanski Funt Sterling",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Indijski Rupi",
         }
         JPY{
             "¥",
-            "JPY",
+            "Japonski Jen",
+        }
+        RUB{
+            "RUB",
+            "Ruska Rublja",
         }
         SIT{
             "SIT",
@@ -273,7 +317,7 @@ sl{
         }
         USD{
             "$",
-            "USD",
+            "Ameriški Dolar",
         }
     }
     ExemplarCharacters{"[a-pr-vzčšž]"}
@@ -331,6 +375,9 @@ sl{
         "�",
         "+",
     }
+    Scripts{
+        Latn{"Latinski"}
+    }
     Types{
         calendar{
             buddhist{"Budistični kolendar"}
@@ -349,7 +396,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.45"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -363,8 +410,8 @@ sl{
                 "H:mm",
                 "EEEE, dd. MMMM yyyy",
                 "dd. MMMM yyyy",
-                "yyyy.M.d",
-                "yy.M.d",
+                "d.M.yyyy",
+                "d.M.yy",
                 "{1} {0}",
             }
             dayNames{

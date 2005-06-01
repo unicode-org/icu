@@ -11,6 +11,35 @@
  */
 tr{
     Countries{
+        001{"Dünya"}
+        002{"Afrika"}
+        005{"Güney Amerika"}
+        009{"Okyanusya"}
+        011{"Batı Afrika"}
+        013{"Orta Amerika"}
+        014{"Doğu Afrika"}
+        015{"Kuzey Afrika"}
+        017{"Orta Afrika"}
+        018{"Güney Afrika"}
+        019{"Amerika"}
+        021{"Kuzey Amerika"}
+        029{"Karayipler"}
+        030{"Doğu Asya"}
+        035{"Güney Doğu Asya"}
+        039{"Güney Avrupa"}
+        053{"Avustralya ve Yeni Zelanda"}
+        054{"Melanezya"}
+        057{"Mikronezya"}
+        061{"Polinezya"}
+        062{"Güney Orta Asya"}
+        142{"Asya"}
+        145{"Batı Asya"}
+        150{"Avrupa"}
+        151{"Doğu Avrupa"}
+        154{"Kuzey Avrupa"}
+        155{"Batı Avrupa"}
+        830{"Kanal Adaları"}
+        833{"Man Adası"}
         AD{"Andora"}
         AE{"Birleşik Arap Emirlikleri"}
         AF{"Afganistan"}
@@ -26,6 +55,7 @@ tr{
         AT{"Avusturya"}
         AU{"Avustralya"}
         AW{"Aruba"}
+        AX{"Aland Adaları"}
         AZ{"Azerbaycan"}
         BA{"Bosna Hersek"}
         BB{"Barbados"}
@@ -59,6 +89,7 @@ tr{
         CN{"Çin"}
         CO{"Kolombiya"}
         CR{"Kosta Rika"}
+        CS{"Sırbistan-Karadağ"}
         CU{"Küba"}
         CV{"Cape Verde"}
         CX{"Christmas Adası"}
@@ -190,6 +221,7 @@ tr{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
+        QO{"Uzak Okyanusya"}
         RE{"Reunion"}
         RO{"Romanya"}
         RU{"Rusya Federasyonu"}
@@ -1063,6 +1095,10 @@ tr{
             "TL",
             "Türk Lirası",
         }
+        TRY{
+            "TRY",
+            "Yeni Türk Lirası",
+        }
         TTD{
             "TT$",
             "Trinidad ve Tobago Doları",
@@ -1237,117 +1273,229 @@ tr{
     Languages{
         aa{"Afar"}
         ab{"Abazca"}
+        ady{"Adige"}
         af{"Afrikaan Dili"}
+        afa{"Afro Asya Dilleri (Diğer)"}
+        akk{"Akad Dili"}
+        alg{"Algonquian Dilleri"}
         am{"Amharik"}
+        ang{"Eski İngilizce (450-1100)"}
+        apa{"Apaçi Dilleri"}
         ar{"Arapça"}
+        arc{"Aramice"}
+        art{"Yapay (Diğer)"}
+        ath{"Athapascan Dilleri"}
+        aus{"Avustralya Dilleri"}
+        av{"Avar Dili"}
         ay{"Aymara"}
         az{"Azerice"}
         ba{"Başkırt Dili"}
+        bai{"Bamileke Dilleri"}
+        ban{"Bali Dili"}
+        bat{"Baltık (Diğer)"}
         be{"Beyaz Rusça"}
+        ber{"Berberi"}
         bg{"Bulgarca"}
         bh{"Bihari"}
         bi{"Bislama"}
         bn{"Bengal Dili"}
         bo{"Tibetçe"}
         br{"Breton Dili"}
+        bs{"Bosna Dili"}
         ca{"Katalan Dili"}
+        cad{"Caddo"}
+        cai{"Orta Amerika Yerlileri (Diğer)"}
+        cau{"Kafkasça (Diğer)"}
+        ce{"Çeçence"}
+        cel{"Keltçe (Diğer)"}
+        chg{"Çağatay Dili"}
+        chr{"Çeroki"}
+        chy{"Çeyen"}
+        cmc{"Chamic Dilleri"}
         co{"Korsika Dili"}
+        cop{"Kiptice"}
+        cpe{"Creoles ve Pidgins, İngilizce tabanlı (Diğer)"}
+        cpf{"Creoles ve Pidgins, Fransızca tabanlı (Diğer)"}
+        cpp{"Creoles ve Pidgins, Portekizce tabanlı (Diğer)"}
+        crh{"Kırım Türkçesi; Kırım Tatarcası"}
+        crp{"Creoles ve Pidgins (Diğer)"}
         cs{"Çekçe"}
+        cu{"Kilise Slavcası"}
+        cus{"Cushitic (Diğer)"}
+        cv{"Çuvaş"}
         cy{"Gal Dili"}
         da{"Danca"}
         de{"Almanca"}
+        dra{"Dravidian (Diğer)"}
+        dsb{"Aşağı Sorbça"}
+        dum{"Felemenkçe (1050-1350)"}
         dz{"Bhutan Dili"}
+        ee{"Ewe"}
+        egy{"Mısır Dili (Eski)"}
         el{"Yunanca"}
+        elx{"Elam"}
         en{"İngilizce"}
+        enm{"İngilizce (1100-1500)"}
         eo{"Esperanto"}
         es{"İspanyolca"}
         et{"Estonya Dili"}
         eu{"Bask Dili"}
         fa{"Farsça"}
         fi{"Fince"}
+        fiu{"Finno - Ugrian (Diğer)"}
         fj{"Fiji Dili"}
         fo{"Faroe Dili"}
         fr{"Fransızca"}
+        frm{"Fransızca (1400-1600)"}
+        fro{"Fransızca (842-1400)"}
         fy{"Frizye Dili"}
         ga{"İrlanda Dili"}
         gd{"İskoç Gal Dili"}
+        gem{"Almanca tabanlı (Diğer)"}
         gl{"Galiçya Dili"}
+        gmh{"Almanca (1050-1500)"}
         gn{"Guarani"}
+        goh{"Almanca (750-1050)"}
+        grc{"Antik Yunan (1453'e kadar)"}
         gu{"Gujarati"}
         ha{"Hausa"}
+        haw{"Hawaii Dili"}
         he{"İbranice"}
         hi{"Hint Dili"}
+        hit{"Hititçe"}
         hr{"Hırvatça"}
+        hsb{"Yukarı Sorbça"}
+        ht{"Haiti Dili"}
         hu{"Macarca"}
         hy{"Ermenice"}
         ia{"Interlingua"}
         id{"Endonezya Dili"}
         ie{"Interlingue"}
         ik{"Inupiak"}
+        inc{"Hintçe (Diğer)"}
+        ine{"Hint-Avrupa (Diğer)"}
+        inh{"İnguş Dili"}
+        io{"Ido"}
+        ira{"İran Dili"}
+        iro{"Iroquoian Dilleri"}
         is{"İzlandaca"}
         it{"İtalyanca"}
         iu{"Inuktitut"}
         ja{"Japonca"}
         jv{"Java Dili"}
         ka{"Gürcüce"}
+        khi{"Khoisan (Diğer)"}
         kk{"Kazak Dili"}
         kl{"Grönland Dili"}
         km{"Kamboçya Dili"}
         kn{"Kannada"}
         ko{"Korece"}
+        krc{"Karaçay-Balkar"}
         ks{"Keşmirce"}
         ku{"Kürtçe"}
+        kum{"Kumukça"}
         ky{"Kırgızca"}
         la{"Latince"}
+        lb{"Lüksemburg Dili"}
         ln{"Lingala"}
         lo{"Laos Dili"}
         lt{"Litvanya Dili"}
         lv{"Letonya Dili"}
+        mad{"Madura Dili"}
         mg{"Malaga Dili"}
+        mga{"İrlanda Dili (900-1200)"}
+        mh{"Marshall Adaları Dili"}
         mi{"Maori"}
+        mis{"Çeşitli Diller"}
         mk{"Makedonca"}
+        mkh{"Mon-Khmer (Diğer)"}
         ml{"Malayalam"}
         mn{"Moğol Dili"}
+        mnc{"Mançurya Dili"}
+        mno{"Manobo Dilleri"}
         mo{"Moldavya Dili"}
         mr{"Marathi"}
         ms{"Malay"}
         mt{"Malta Dili"}
+        mul{"Birden Fazla Diller"}
+        mun{"Munda Dilleri"}
         my{"Birmanya Dili"}
         na{"Nauru"}
+        nai{"Kuzey Amerika Yerlileri Dili (Diğer)"}
+        nb{"Norveç Kitap Dili"}
+        nd{"Kuzey Ndebele"}
+        nds{"Aşağı Almanca; Aşağı Sakson"}
         ne{"Nepal Dili"}
+        nic{"Nijer - Kordofanian (Diğer)"}
         nl{"Hollanda Dili"}
+        nn{"Norveççe Nynorsk"}
         no{"Norveççe"}
-        oc{"Occitan"}
+        nr{"Güney Ndebele"}
+        nub{"Nubian Dilleri"}
+        oc{"Occitan (1500 sonrası); Provençal"}
+        oj{"Ojibwa"}
         om{"Oromo (Afan)"}
         or{"Oriya"}
+        os{"Oset"}
+        osa{"Osage"}
+        ota{"Osmanlıca (1500-1928)"}
+        oto{"Osmanlı Dilleri"}
         pa{"Pencap Dili"}
+        paa{"Papua Dili (Diğer)"}
+        pau{"Palau Dili"}
+        peo{"Eski Farsça (600-400 M.Ö.)"}
+        phi{"Filipinler Dili (Diğer)"}
         pl{"Polonya Dili"}
+        pra{"Prakrit Dilleri"}
+        pro{"Eski Provençal (1500'e kadar)"}
         ps{"Peştun Dili"}
         pt{"Portekizce"}
         qu{"Quechua"}
         rm{"Rhaeto-Roman Dili"}
         rn{"Kirundi"}
         ro{"Romence"}
+        roa{"Roman Dili (Diğer)"}
+        rom{"Romanca"}
         ru{"Rusça"}
         rw{"Kinyarwanda"}
         sa{"Sanskritçe"}
+        sai{"Güney Amerika Yerlileri Dili (Diğer)"}
+        sal{"Salishan Dilleri"}
+        sc{"Sardunya Dili"}
+        sco{"İskoç"}
         sd{"Sindhi"}
+        se{"Kuzey Sami"}
+        sem{"Sami (Diğer)"}
         sg{"Sangho"}
+        sga{"Eski İrlandaca (900'e kadar)"}
+        sgn{"İşaret Dilleri"}
         sh{"Sırp-Hırvat Dili"}
         si{"Sinhal Dili"}
+        sio{"Siu Dilleri"}
+        sit{"Çin-Tibet (Diğer)"}
         sk{"Slovakça"}
         sl{"Slovence"}
+        sla{"Slav Dilleri (Diğer)"}
         sm{"Samoa Dili"}
+        sma{"Güney Sami"}
+        smi{"Sami Dilleri (Diğer)"}
+        smj{"Lule Sami"}
+        smn{"Inari Sami"}
+        sms{"Skolt Sami"}
         sn{"Shona"}
         so{"Somali Dili"}
         sq{"Arnavutça"}
         sr{"Sırpça"}
         ss{"Siswati"}
+        ssa{"Nil-Sahara (Diğer)"}
         st{"Sesotho"}
         su{"Sudan Dili"}
+        sux{"Sümer"}
         sv{"İsveççe"}
         sw{"Swahili"}
+        syr{"Süryanice"}
         ta{"Tamil"}
+        tai{"Tay Dili (Diğer)"}
         te{"Telugu"}
         tg{"Tacik Dili"}
         th{"Tay Dili"}
@@ -1355,21 +1503,28 @@ tr{
         tk{"Türkmence"}
         tl{"Tagalog"}
         tn{"Setswana"}
-        to{"Tonga"}
+        to{"Tonga (Tonga Adaları)"}
         tr{"Türkçe"}
         ts{"Tsonga"}
         tt{"Tatarca"}
+        tup{"Tupi dilleri"}
+        tut{"Altay Dilleri (Diğer)"}
         tw{"Twi"}
+        ty{"Tahiti Dili"}
         ug{"Uygurca"}
         uk{"Ukraynaca"}
         ur{"Urduca"}
         uz{"Özbekçe"}
         vi{"Vietnam Dili"}
         vo{"Volapuk"}
+        wak{"Wakashan Dilleri"}
+        wen{"Sorb Dilleri"}
         wo{"Wolof"}
+        xal{"Kalmık"}
         xh{"Xhosa"}
         yi{"Yiddiş"}
         yo{"Yoruba"}
+        ypk{"Yupik Dilleri"}
         za{"Zhuang"}
         zh{"Çince"}
         zu{"Zulu"}
@@ -1394,6 +1549,7 @@ tr{
     Scripts{
         Arab{"Arapça"}
         Armn{"Ermenice"}
+        Beng{"Bengal"}
         Cher{"Çeroki"}
         Cprt{"Kıbrıs"}
         Cyrl{"Kiril"}
@@ -1405,7 +1561,10 @@ tr{
         Hans{"Basit Han"}
         Hant{"Geleneksel Han"}
         Hebr{"İbranice"}
+        Laoo{"Laos"}
         Mong{"Moğolca"}
+        Sinh{"Sinhal"}
+        Syrc{"Süryanice"}
         Thai{"Tayca"}
         Tibt{"Tibetçe"}
         Zyyy{"Ortak"}
@@ -1428,7 +1587,7 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.48"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
