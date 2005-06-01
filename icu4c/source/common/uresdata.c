@@ -439,7 +439,7 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
 
 U_CFUNC Resource 
 res_getTableItemByKey(const ResourceData *pResData, Resource table,
-                      int32_t *indexR, const char **key) {
+                      int32_t *indexR, const char **key ){
     if(key != NULL && *key != NULL) {
         if(RES_GET_TYPE(table)==URES_TABLE) {
             return _res_findTableItem(pResData->pRoot, table, *key, indexR, key);

@@ -877,8 +877,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 472)
-        errln("Expected getISOLanguages() to return 472 languages; it returned %d", testCount);
+    if (testCount != 473)
+        errln("Expected getISOLanguages() to return 473 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -1051,15 +1051,15 @@ LocaleTest::TestAtypicalLocales()
                                      CharsToUnicodeString("B\\u00E9lgica") };
     // De-Anglicizing root required the change from
     // English display names to ISO Codes - ram 2003/09/26
-    UnicodeString bengaliDisplayNames [] = { "de (CA)",
-                                     "ja (ZA)",
-                                     "ru (MX)",
-                                     "en (FR)",
-                                     "es (DE)",
-                                     "HR",
-                                     "SE",
-                                     "DO",
-                                     "BE" };
+    UnicodeString invDisplayNames [] = { "German (Canada)",
+                                     "Japanese (South Africa)",
+                                     "Russian (Mexico)",
+                                     "English (France)",
+                                     "Spanish (Germany)",
+                                     "Croatia",
+                                     "Sweden",
+                                     "Dominican Republic",
+                                     "Belgium" };
 
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
@@ -1097,16 +1097,16 @@ LocaleTest::TestAtypicalLocales()
 
     for (i = 0; i < 9; i++) {
         UnicodeString name;
-        localesToTest[i].getDisplayName(Locale("be", "ES"), name);
+        localesToTest[i].getDisplayName(Locale("inv", "IN"), name);
         logln(name + " Locale fallback to be, and data fallback to root");
-        if (name != bengaliDisplayNames[i])
-            errln("Lookup in Bengali failed: expected \"" + bengaliDisplayNames[i]
-                        + "\", got \"" + name + "\"");
-        localesToTest[i].getDisplayName(Locale("be", "EG"), name);
+        if (name != invDisplayNames[i])
+            errln("Lookup in INV failed: expected \"" + prettify(invDisplayNames[i])
+                        + "\", got \"" + prettify(name) + "\"");
+        localesToTest[i].getDisplayName(Locale("inv", "BD"), name);
         logln(name + " Data fallback to root");
-        if (name != bengaliDisplayNames[i])
-            errln("Lookup in Bengali failed: expected \"" + bengaliDisplayNames[i]
-                        + "\", got \"" + name + "\"");
+        if (name != invDisplayNames[i])
+            errln("Lookup in INV failed: expected \"" + prettify(invDisplayNames[i])
+                        + "\", got \"" + prettify(name )+ "\"");
     }
     Locale::setDefault(saveLocale, status);
 }
