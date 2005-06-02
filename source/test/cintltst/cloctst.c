@@ -569,6 +569,13 @@ static void TestDisplayNames()
     if(errorCode!=U_USING_DEFAULT_WARNING || length!=2 || buffer[0]!=0x71 || buffer[1]!=0x71) {
         log_err("error getting the display string for an unknown language - %s\n", u_errorName(errorCode));
     }
+    
+    /* test that we get a default warning for a display name where one component is unknown (4255) */
+    errorCode=U_ZERO_ERROR;
+    length=uloc_getDisplayName("qq_US_POSIX", "en_US", buffer, LENGTHOF(buffer), &errorCode);
+    if(errorCode!=U_USING_DEFAULT_WARNING) {
+        log_err("error getting the display name for a locale with an unknown language - %s\n", u_errorName(errorCode));
+    }
 
     {
         int32_t i;
