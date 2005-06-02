@@ -78,6 +78,7 @@ static UDataMemory *gStubICUData   = NULL;    /* If gCommonICUData does get upda
 
 static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU data files.  */
 
+static UDataFileAccess  gDataFileAccess = UDATA_DEFAULT_ACCESS;
 
 static UBool U_CALLCONV
 udata_cleanup(void)
@@ -1492,3 +1493,10 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
         }
     }
 }
+
+
+U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess fa)
+{
+    gDataFileAccess = fa;
+}
+
