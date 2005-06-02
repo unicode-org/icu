@@ -1095,6 +1095,8 @@ U_CDECL_END
 //
 //------------------------------------------------------------------------------
 
+U_CDECL_BEGIN
+
  /*
  * TODO: use a flag in UText to support readonly strings?
  *       -> omit UTEXT_PROVIDER_WRITABLE
@@ -1257,6 +1259,7 @@ unistrTextCopy(UText *t,
     }
 };
 
+U_CDECL_END
 
 
 U_DRAFT UText * U_EXPORT2
