@@ -50,6 +50,12 @@ static void TestNonExistentCurrency(void);
  **/
 static void TestRBNFFormat(void);
 
+/**
+ * Test some Currency stuff
+ **/
+static void TestCurrencyRegression(void);
+
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
