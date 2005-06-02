@@ -1465,6 +1465,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     // Proclaim serialization compatibility with JDK 1.1
     // static final long       serialVersionUID = -1807547505821590642L;
+    
+    // haven't been compatible for awhile, no longer try
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = 6222646104888790989L;
 
     /**
      * Bitmask for internalSet() defining which fields may legally be set
@@ -3068,6 +3072,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
                 }
                 result = cal.handleGetDateFormat(pattern, loc);
             } catch (MissingResourceException e) {
+		// !!! need dateformat subclass appropriate to calendar type here!
                 // No custom patterns
                 result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
 

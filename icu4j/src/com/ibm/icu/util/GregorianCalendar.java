@@ -165,6 +165,9 @@ import java.util.Locale;
  * @stable ICU 2.0
  */
 public class GregorianCalendar extends Calendar {
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = 9199388694351062137L;
+
     /*
      * Implementation Notes
      *

@@ -518,17 +518,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * The formatter's rule sets.
      */
-    private NFRuleSet[] ruleSets = null;
+    private transient NFRuleSet[] ruleSets = null;
 
     /**
      * A pointer to the formatter's default rule set.  This is always included
      * in ruleSets.
      */
-    private NFRuleSet defaultRuleSet = null;
+    private transient NFRuleSet defaultRuleSet = null;
 
     /**
      * The formatter's locale.  This is used to create DecimalFormatSymbols and
      * Collator objects.
+     * @serial
      */
     private ULocale locale = null;
 
@@ -537,17 +538,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the collator is actually created the first time the client does a parse
      * with lenient-parse mode turned on.
      */
-    private Collator collator = null;
+    private transient Collator collator = null;
 
     /**
      * The DecimalFormatSymbols object that any DecimalFormat objects this
      * formatter uses should use.  This variable is lazy-evaluated: it isn't
      * filled in if the rule set never uses a DecimalFormat pattern.
      */
-    private DecimalFormatSymbols decimalFormatSymbols = null;
+    private transient DecimalFormatSymbols decimalFormatSymbols = null;
 
     /**
      * Flag specifying whether lenient parse mode is on or off.  Off by default.
+     * @serial
      */
     private boolean lenientParse = false;
 
@@ -555,26 +557,28 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * If the description specifies lenient-parse rules, they're stored here until
      * the collator is created.
      */
-    private String lenientParseRules;
+    private transient String lenientParseRules;
 
     /**
      * If the description specifies post-process rules, they're stored here until
      * post-processing is required.
      */
-    private String postProcessRules;
+    private transient String postProcessRules;
 
     /**
      * Post processor lazily constructed from the postProcessRules.
      */
-    private RBNFPostProcessor postProcessor;
+    private transient RBNFPostProcessor postProcessor;
 
     /**
      * Localizations for rule set names.
+     * @serial
      */
     private Map ruleSetDisplayNames;
 
     /**
      * The public rule set names;
+     * @serial
      */
     private String[] publicRuleSetNames;
 

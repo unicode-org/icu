@@ -1471,7 +1471,7 @@ public abstract class NumberFormat extends UFormat {
 
     // Removed "implements Cloneable" clause.  Needs to update serialization
     // ID for backward compatibility.
-    static final long serialVersionUID = -2308460125733713944L;
+    private static final long serialVersionUID = -2308460125733713944L;
 
     /**
      * Empty constructor.  Public for compatibily with JDK which lets the

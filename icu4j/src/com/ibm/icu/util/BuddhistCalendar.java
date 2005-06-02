@@ -37,7 +37,8 @@ import java.util.Locale;
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class BuddhistCalendar extends GregorianCalendar {
-    
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = 2583005278132380631L;
     private static String copyright = "Copyright \u00a9 1998 IBM Corp. All Rights Reserved.";
 
     //-------------------------------------------------------------------------

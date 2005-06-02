@@ -830,7 +830,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private ULocale ulocale;
 
     // Proclaim JDK 1.1 FCS compatibility
-    static final long serialVersionUID = 5772796243397350300L;
+    private static final long serialVersionUID = 5772796243397350300L;
 
     // The internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.5

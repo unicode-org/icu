@@ -219,7 +219,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     String  localPatternChars = null;
 
     /* use serialVersionUID from JDK 1.1.4 for interoperability */
-    static final long serialVersionUID = -5987973545549424702L;
+    private static final long serialVersionUID = -5987973545549424702L;
 
     /**
      * Gets era strings. For example: "AD" and "BC".
