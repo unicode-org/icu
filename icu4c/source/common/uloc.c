@@ -2182,13 +2182,16 @@ _getStringOrCopyKey(const char *path, const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
-U_CAPI int32_t U_EXPORT2
-uloc_getDisplayLanguage(const char *locale,
-                        const char *displayLocale,
-                        UChar *dest, int32_t destCapacity,
-                        UErrorCode *pErrorCode) {
+static int32_t
+_getDisplayNameForComponent(const char *locale,
+                            const char *displayLocale,
+                            UChar *dest, int32_t destCapacity,
+                            int32_t (*getter)(const char *, char *, int32_t, UErrorCode *),
+                            const char *tag,
+                            UErrorCode *pErrorCode) {
     char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
     int32_t length;
+    UErrorCode localStatus;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -2200,9 +2203,9 @@ uloc_getDisplayLanguage(const char *locale,
         return 0;
     }
 
-    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
-    length=uloc_getLanguage(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+    localStatus = U_ZERO_ERROR;
+    length=(*getter)(locale, localeBuffer, sizeof(localeBuffer), &localStatus);
+    if(U_FAILURE(localStatus) || localStatus==U_STRING_NOT_TERMINATED_WARNING) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2211,10 +2214,19 @@ uloc_getDisplayLanguage(const char *locale,
     }
 
     return _getStringOrCopyKey(NULL, displayLocale,
-                               _kLanguages, NULL, localeBuffer,
+                               tag, NULL, localeBuffer,
                                localeBuffer, 
                                dest, destCapacity,
                                pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_getDisplayLanguage(const char *locale,
+                        const char *displayLocale,
+                        UChar *dest, int32_t destCapacity,
+                        UErrorCode *pErrorCode) {
+    return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                uloc_getLanguage, _kLanguages, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2223,35 +2235,8 @@ uloc_getDisplayScript(const char* locale,
                       UChar *dest, int32_t destCapacity,
                       UErrorCode *pErrorCode)
 {
-    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
-    int32_t length;
-
-    /* argument checking */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
-    length=uloc_getScript(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    if(length==0) {
-        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
-    }
-
-    return _getStringOrCopyKey(NULL, displayLocale,
-                               _kScripts, NULL, 
-                               localeBuffer,
-                               localeBuffer,
-                               dest, destCapacity,
-                               pErrorCode);
+    return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                uloc_getScript, _kScripts, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2259,35 +2244,8 @@ uloc_getDisplayCountry(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
-    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
-    int32_t length;
-
-    /* argument checking */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
-    length=uloc_getCountry(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    if(length==0) {
-        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
-    }
-
-    return _getStringOrCopyKey(NULL, displayLocale,
-                               _kCountries, NULL,
-                               localeBuffer,
-                               localeBuffer,
-                               dest, destCapacity,
-                               pErrorCode);
+    return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                uloc_getCountry, _kCountries, pErrorCode);
 }
 
 /*
@@ -2300,40 +2258,8 @@ uloc_getDisplayVariant(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
-    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
-    int32_t length;
-
-    /* argument checking */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    /*
-     * display names for variants are top-level items of
-     * locale resource bundles
-     */
-    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
-    length=uloc_getVariant(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    if(length==0) {
-        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
-    }
-
-    /* pass itemKey=NULL to look for a top-level item */
-    return _getStringOrCopyKey(NULL, displayLocale,
-                               _kVariants, NULL,
-                               localeBuffer, 
-                               localeBuffer,      
-                               dest, destCapacity,
-                               pErrorCode);
+    return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                uloc_getVariant, _kVariants, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2629,7 +2555,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
         if(U_FAILURE(*status)){
             if(*status == U_MISSING_RESOURCE_ERROR){
                 /* we just want to write the value over if nothing is available */
-                *status = U_ZERO_ERROR;
+                *status = U_USING_DEFAULT_WARNING;
             }else{
                 return 0;
             }
