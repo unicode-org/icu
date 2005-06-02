@@ -44,6 +44,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNumberFormatPadding);
     TESTCASE(TestInt64Format);
     TESTCASE(TestNonExistentCurrency);
+    /*TESTCASE(TestCurrencyRegression);*/
     TESTCASE(TestRBNFFormat);
 }
 
@@ -1284,6 +1285,63 @@ static void TestRBNFFormat() {
     for (i = 0; i < COUNT; ++i) {
         unum_close(formats[i]);
     }
+}
+
+static void TestCurrencyRegression() {
+/* 
+ I've found a case where unum_parseDoubleCurrency is not doing what I
+expect.  The value I pass in is $1234567890q123460000.00 and this
+returns with a status of zero error & a parse pos of 22 (I would
+expect a parse error at position 11).
+
+I stepped into DecimalFormat::subparse() and it looks like it parses
+the first 10 digits and then stops parsing at the q but doesn't set an
+error. Then later in DecimalFormat::parse() the value gets crammed
+into a long (which greatly truncates the value).
+
+This is very problematic for me 'cause I try to remove chars that are
+invalid but this allows my users to enter bad chars and truncates
+their data!
+*/
+
+    UChar buf[1024];
+    UChar currency[8];
+    char acurrency[16];
+    double d;
+    UNumberFormat *cur;
+    int32_t pos;
+    UErrorCode status  = U_ZERO_ERROR;
+    const int32_t expected = 11;
+
+    currency[0]=0;
+    u_uastrcpy(buf, "$1234567890q643210000.00");
+    cur = unum_open(UNUM_CURRENCY, NULL,0,"en_US", NULL, &status);
+    
+    if(U_FAILURE(status)) {
+        log_err("unum_open failed: %s\n", u_errorName(status));
+        return;
+    }
+    
+    status = U_ZERO_ERROR; /* so we can test it later. */
+    pos = 0;
+    
+    d = unum_parseDoubleCurrency(cur,
+                         buf,
+                         -1,
+                         &pos, /* 0 = start */
+                         currency,
+                         &status);
+
+    u_austrcpy(acurrency, currency);
+
+    if(U_SUCCESS(status) || (pos != expected)) {
+        log_err("unum_parseDoubleCurrency should have failed with pos %d, but gave: value %.9f, err %s, pos=%d, currency [%s]\n",
+            expected, d, u_errorName(status), pos, acurrency);
+    } else {
+        log_verbose("unum_parseDoubleCurrency failed, value %.9f err %s, pos %d, currency [%s]\n", d, u_errorName(status), pos, acurrency);
+    }
+    
+    unum_close(cur);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
