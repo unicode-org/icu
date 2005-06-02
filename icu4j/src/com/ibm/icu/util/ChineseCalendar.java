@@ -78,7 +78,7 @@ import java.util.Locale;
  */
 public class ChineseCalendar extends Calendar {
     // jdk1.4.2 serialver
-    private static final long serialVersionUID = 7312110751940929420L;'
+    private static final long serialVersionUID = 7312110751940929420L;
 
     //------------------------------------------------------------------
     // Developer Notes
