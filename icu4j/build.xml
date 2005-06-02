@@ -348,6 +348,8 @@
             todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml"
+	        todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
