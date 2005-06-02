@@ -1233,9 +1233,15 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
         UnicodeString result = MessageFormat::autoQuoteApostrophe(patterns[i], status);
         UnicodeString target(patterns[i+1]);
         if (target != result) {
-            char buf[128];
-            sprintf(buf, "[%2d] \"%s\" : \"%s\" != \"%s\"\n", i/2, patterns[i], patterns[i+1], result);
-            errln(buf);
+	  const int BUF2_LEN = 64;
+	  char buf[256];
+	  char buf2[BUF2_LEN];
+	  int32_t len = result.extract(0, result.length(), buf2, BUF2_LEN);
+	  if (len >= BUF2_LEN) {
+	    buf2[BUF2_LEN-1] = 0;
+	  }
+	  sprintf(buf, "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
+	  errln(buf);
         }
     }
 }
