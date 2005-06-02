@@ -489,6 +489,10 @@ ucurr_getName(const UChar* currency,
         // If we've succeeded we're done.  Otherwise, try to fallback.
         // If that fails (because we are already at root) then exit.
         if (U_SUCCESS(ec2) || !fallback(loc)) {
+            if (ec2 == U_USING_DEFAULT_WARNING
+                || (ec2 == U_USING_FALLBACK_WARNING && *ec != U_USING_DEFAULT_WARNING)) {
+                *ec = ec2;
+            }
             break;
         } else if (strlen(loc) == 0) {
             *ec = U_USING_DEFAULT_WARNING;

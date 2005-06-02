@@ -1420,6 +1420,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
     UErrorCode ec = U_ZERO_ERROR;
     static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
     static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
+    static const UChar ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
     UBool isChoiceFormat;
     int32_t len;
     // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
@@ -1444,6 +1445,12 @@ void NumberFormatTest::TestCurrencyNames(void) {
     (void) ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (default)",
+                    U_USING_DEFAULT_WARNING == ec, TRUE);
+    
+    // Test that a default warning is being returned when falling back to root. JB 4536.
+    (void) ucurr_getName(ITL, "cy", UCURR_LONG_NAME, &isChoiceFormat,
+                            &len, &ec);
+    assertTrue("ucurr_getName (default to root)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
     
     // TODO add more tests later
