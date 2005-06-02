@@ -4360,7 +4360,7 @@ public class DecimalFormat extends NumberFormat {
     static final int MAX_SCIENTIFIC_INTEGER_DIGITS = 8;
 
     // Proclaim JDK 1.1 serial compatibility.
-    static final long serialVersionUID = 864413376551465018L;
+    private static final long serialVersionUID = 864413376551465018L;
 
     /**
      * Cache to hold the NumberPattern of a Locale.

@@ -11,6 +11,9 @@ import java.util.Locale;
 
 public final class EthiopicCalendar extends CECalendar 
 {
+    //jdk1.4.2 serialver
+    private static final long serialVersionUID = -2438495771339315608L;
+
     /** 
      * Constant for \u1218\u1235\u12a8\u1228\u121d, the 1st month of the Ethiopic year. 
      */

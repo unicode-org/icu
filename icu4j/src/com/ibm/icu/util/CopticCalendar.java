@@ -11,6 +11,9 @@ import java.util.Locale;
 
 public final class CopticCalendar extends CECalendar 
 {
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = 5903818751846742911L;
+
     /** 
      * Constant for \u03c9\u03bf\u03b3\u03c4/\u062a\ufeee\ufe97,
      * the 1st month of the Coptic year. 

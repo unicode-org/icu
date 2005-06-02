@@ -14,6 +14,8 @@ import java.util.Locale;
  * @internal
  */
 class CECalendar extends Calendar {
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = -999547623066414271L;
 
     private static final int LIMITS[][] = {
         // Minimum  Greatest    Least  Maximum

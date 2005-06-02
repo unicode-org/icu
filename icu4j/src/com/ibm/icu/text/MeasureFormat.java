@@ -25,6 +25,7 @@ import com.ibm.icu.util.ULocale;
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public abstract class MeasureFormat extends UFormat {
+    // no serialVersionUID, can't instantiate
 
     /**
      * @internal

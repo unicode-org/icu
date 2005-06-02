@@ -206,7 +206,7 @@ public class SimpleDateFormat extends DateFormat {
 
     // the official serial version ID which says cryptically
     // which version we're compatible with
-    static final long serialVersionUID = 4774881970558875024L;
+    private static final long serialVersionUID = 4774881970558875024L;
 
     // the internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.3

@@ -37,7 +37,7 @@ import com.ibm.icu.impl.LocaleUtility;
  */
 public class Currency extends MeasureUnit implements Serializable {
     // using serialver from jdk1.4.2_05
-    static final long serialVersionUID = -5839973855554750484L;
+    private static final long serialVersionUID = -5839973855554750484L;
 
     /**
      * ISO 4217 3-letter code.

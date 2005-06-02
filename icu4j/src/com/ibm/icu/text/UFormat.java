@@ -21,6 +21,8 @@ import com.ibm.icu.util.ULocale;
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public abstract class UFormat extends Format {
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = -4964390515840164416L;
 
     /**
      * @draft ICU 2.8

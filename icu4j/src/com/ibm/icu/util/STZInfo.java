@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @internal
  */
 final class STZInfo implements Serializable {
-    static final long serialVersionUID = -7849612037842370168L;
+    private static final long serialVersionUID = -7849612037842370168L;
 
     void setStart(int sm, int sdwm, int sdw, int st, int sdm, boolean sa) {
         this.sm = sm;

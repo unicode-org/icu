@@ -72,6 +72,8 @@ import java.util.Locale;
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class IslamicCalendar extends Calendar {
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = -6253365474073869325L;
 
     private static String copyright = "Copyright \u00a9 1997-1998 IBM Corp. All Rights Reserved.";
 
