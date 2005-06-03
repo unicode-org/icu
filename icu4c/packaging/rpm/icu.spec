@@ -1,4 +1,4 @@
-#   Copyright (C) 2000-2004, International Business Machines
+#   Copyright (C) 2000-2005, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # RPM specification file for ICU.
@@ -9,9 +9,9 @@
 # This file can be freely redistributed under the same license as ICU.
 
 Name: icu
-Version: 3.0
+Version: 3.4
 Release: 1
-Requires: libicu30 >= %{version}
+Requires: libicu34 >= %{version}
 Summary: International Components for Unicode
 Packager: Ian Holsman (CNET Networks) <ianh@cnet.com>
 Copyright: X License
@@ -34,10 +34,10 @@ This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
 `icu' and `icu-locales` packages.
 
-%package -n libicu30
+%package -n libicu34
 Summary: International Components for Unicode (libraries)
 Group: Development/Libraries
-%description -n libicu30
+%description -n libicu34
 ICU is a set of C and C++ libraries that provides robust and full-featured
 Unicode support. This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
@@ -46,7 +46,7 @@ not contain any of the data files needed at runtime and present in the
 %package -n libicu-devel
 Summary: International Components for Unicode (development files)
 Group: Development/Libraries
-Requires: libicu30 = %{version}
+Requires: libicu34 = %{version}
 %description -n libicu-devel
 ICU is a set of C and C++ libraries that provides robust and full-featured
 Unicode support. This package contains the development files for ICU.
@@ -54,7 +54,7 @@ Unicode support. This package contains the development files for ICU.
 %package locales
 Summary: Locale data for ICU
 Group: System Environment/Libraries
-Requires: libicu30 >= %{version}
+Requires: libicu34 >= %{version}
 %description locales
 The locale data are used by ICU to provide localization (l10n), 
 internationalization (i18n) and timezone support to ICU applications.
@@ -86,7 +86,7 @@ then
     ln -s "$icucurrent" current
 fi
 
-%post -n libicu30
+%post -n libicu34
 ldconfig
 
 # Adjust the current ICU link in /usr/lib/icu
@@ -99,7 +99,7 @@ then
     ln -s "$icucurrent" current
 fi
 
-%preun -n libicu30
+%preun -n libicu34
 # Adjust the current ICU link in /usr/lib/icu
 
 icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/%{version}\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
@@ -130,9 +130,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %doc readme.html
 %doc license.html
 /usr/share/icu/%{version}/license.html
-/usr/share/icu/%{version}/icudt30l/*.cnv
-/usr/share/icu/%{version}/icudt30l/*.icu
-/usr/share/icu/%{version}/icudt30l/*.spp
+/usr/share/icu/%{version}/icudt34l/*.cnv
+/usr/share/icu/%{version}/icudt34l/*.icu
+/usr/share/icu/%{version}/icudt34l/*.spp
 
 /usr/bin/derb
 /usr/bin/genbrk
@@ -146,17 +146,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/sbin/decmn
 /usr/sbin/genccode
 /usr/sbin/gencmn
-/usr/sbin/gennames
-/usr/sbin/gennorm
-/usr/sbin/genpname
-/usr/sbin/genprops
 /usr/sbin/gensprep
 /usr/sbin/genuca
 /usr/sbin/icuswap
 /usr/share/icu/%{version}/mkinstalldirs
 
-/usr/man/man1/gencnval.1.*
 /usr/man/man1/derb.1.*
+/usr/man/man1/gencnval.1.*
 /usr/man/man1/genrb.1.*
 /usr/man/man1/icu-config.1.*
 /usr/man/man1/makeconv.1.*
@@ -165,33 +161,32 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/man/man8/decmn.8.*
 /usr/man/man8/genccode.8.*
 /usr/man/man8/gencmn.8.*
-/usr/man/man8/gennames.8.*
-/usr/man/man8/gennorm.8.*
-/usr/man/man8/genprops.8.*
-/usr/man/man8/genuca.8.*
 /usr/man/man8/gensprep.8.*
+/usr/man/man8/genuca.8.*
 
 %files -n icu-locales
-/usr/share/icu/%{version}/icudt30l/*.brk
-/usr/share/icu/%{version}/icudt30l/*.res
-/usr/share/icu/%{version}/icudt30l/coll/*.res
+/usr/share/icu/%{version}/icudt34l/*.brk
+/usr/share/icu/%{version}/icudt34l/*.res
+/usr/share/icu/%{version}/icudt34l/coll/*.res
+/usr/share/icu/%{version}/icudt34l/rbnf/*.res
+/usr/share/icu/%{version}/icudt34l/translit/*.res
 
-%files -n libicu30
+%files -n libicu34
 %doc license.html
-/usr/lib/libicui18n.so.30
-/usr/lib/libicui18n.so.30.0
-/usr/lib/libicutu.so.30
-/usr/lib/libicutu.so.30.0
-/usr/lib/libicuuc.so.30
-/usr/lib/libicuuc.so.30.0
-/usr/lib/libicudata.so.30
-/usr/lib/libicudata.so.30.0
-/usr/lib/libicuio.so.30
-/usr/lib/libicuio.so.30.0
-/usr/lib/libiculx.so.30
-/usr/lib/libiculx.so.30.0
-/usr/lib/libicule.so.30
-/usr/lib/libicule.so.30.0
+/usr/lib/libicui18n.so.34
+/usr/lib/libicui18n.so.34.0
+/usr/lib/libicutu.so.34
+/usr/lib/libicutu.so.34.0
+/usr/lib/libicuuc.so.34
+/usr/lib/libicuuc.so.34.0
+/usr/lib/libicudata.so.34
+/usr/lib/libicudata.so.34.0
+/usr/lib/libicuio.so.34
+/usr/lib/libicuio.so.34.0
+/usr/lib/libiculx.so.34
+/usr/lib/libiculx.so.34.0
+/usr/lib/libicule.so.34
+/usr/lib/libicule.so.34.0
 
 %files -n libicu-devel
 %doc readme.html
