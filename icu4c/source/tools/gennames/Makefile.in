@@ -40,7 +40,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local\
 distclean distclean-local dist dist-local check	\
-check-local install-man install-manx
+check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -56,14 +56,13 @@ check: all check-local
 all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+#	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
 # man page
-install-man: install-manx
-install-manx: $(MANX_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+install-man: $(MANX_FILES)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \

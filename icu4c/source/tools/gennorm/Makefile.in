@@ -54,13 +54,13 @@ check: all check-local
 all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+#	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
 # man page
 install-man: $(MAN_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
