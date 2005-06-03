@@ -452,6 +452,36 @@ conversion {
         // See ucnv_extContinueMatchFromU() comment
         // "the match did not use all of preFromU[] - keep the rest for replay"
 
+        // do not convert SO/SI/ESC
+        {
+          "iso-2022-jp",
+          "A\x0eB\x0f\x09\x1bC",
+          :bin{       411a421a091a43 },
+          :intvector{ 0,1,2,3,4,5,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "iso-2022-cn",
+          "A\x0eB\x0f\x09\x1bC",
+          :bin{       411a421a091a43 },
+          :intvector{ 0,1,2,3,4,5,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "iso-2022-kr",
+          "A\x0eB\x0f\x09\x1bC",
+          :bin{           1b242943411a421a091a43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,3,4,5,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ibm-25546",
+          "A\x0eB\x0f\x09\x1bC",
+          :bin{           1b242943411a421a091a43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,3,4,5,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         // test ISO 8859-1/7 vs. JIS X 0201
         {
           "ISO-2022-JP-2",
@@ -937,39 +967,45 @@ conversion {
       // which - numeric UConverterUnicodeSet value
       Headers { "charset", "map", "mapnot", "which" }
       Cases {
-        // ISO-2022-KR
+        // versions of ISO-2022-KR
         {
           "ISO-2022-KR",
-          "[\x00-\x7f\xa1\xa4\xfe\u0111\u4e00\u4e01\uac00-\uac02\uffe6]",
-          "[\x80-\xa0\xa3\xa5\xff-\u0110\uac03\uffe7-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa1\xa4\xfe\u0111\u4e00\u4e01\uac00-\uac02\uffe6]",
+          "[\x0e\x0f\x1b\x80-\xa0\xa3\xa5\xff-\u0110\uac03\uffe7-\U0010ffff]",
+          :int{0}
+        }
+        {
+          "ibm-25546",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa1\xa4\xfe\u0111\u4e00\u4e01\uac00-\uac01\uffe6]",
+          "[\x0e\x0f\x1b\x80-\xa0\xa3\xa5\xff-\u0110\uac02\uffe7-\U0010ffff]",
           :int{0}
         }
 
         // versions of ISO-2022-JP
         {
           "ISO-2022-JP",
-          "[\x00-\x7f\u0391-\u03a1\uff61-\uff9f\u4e00\u4e01\uffe5]",
-          "[\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\uffe6-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\u0391-\u03a1\uff61-\uff9f\u4e00\u4e01\uffe5]",
+          "[\x0e\x0f\x1b\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\uffe6-\U0010ffff]",
           :int{0}
         }
         {
           "ISO-2022-JP-2",
-          "[\x00-\u0113\u0385-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
-          "[\uffe7-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0385-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
+          "[\x0e\x0f\x1b\uffe7-\U0010ffff]",
           :int{0}
         }
 
         // versions of ISO-2022-CN
         {
           "ISO-2022-CN",
-          "[\x00-\x7f\u4e00\u4e01\u9f98\ufe6b]",
-          "[\u4e29\uffe6-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\u4e00\u4e01\u9f98\ufe6b]",
+          "[\x0e\x0f\x1b\u4e29\uffe6-\U0010ffff]",
           :int{0}
         }
         {
           "ISO-2022-CN-EXT",
-          "[\x00-\x7f\u4e00-\u4e05\u9f98\ufe6b\u4e28-\u4e2b\U00020000\U00020003-\U00020005\U00029664]",
-          "[\U00020001\U00020002\U0002a6d7-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\u4e00-\u4e05\u9f98\ufe6b\u4e28-\u4e2b\U00020000\U00020003-\U00020005\U00029664]",
+          "[\x0e\x0f\x1b\U00020001\U00020002\U0002a6d7-\U0010ffff]",
           :int{0}
         }
 
