@@ -1,6 +1,6 @@
 # *******************************************************************************
 # *
-# *   Copyright (C) 1995-2001, International Business Machines
+# *   Copyright (C) 1995-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # *******************************************************************************
@@ -38,6 +38,12 @@ CHARMAP
 <U000B> \x0B |0
 <U000C> \x0C |0
 <U000D> \x0D |0
+
+# an ISO-2022 converter must not convert SO/SI/ESC (Jitterbug 4268)
+# use <subchar1>
+<U000E> \x1A |2
+<U000F> \x1A |2
+
 <U0010> \x10 |0
 <U0011> \x11 |0
 <U0012> \x12 |0
@@ -49,7 +55,12 @@ CHARMAP
 <U0018> \x18 |0
 <U0019> \x19 |0
 <U001A> \x1A |0
-<U001B> \x1B |0
+
+# an ISO-2022 converter must not convert SO/SI/ESC (Jitterbug 4268)
+# <U001B> \x1B |0
+# use <subchar1>
+<U001B> \x1A |2
+
 <U001C> \x1C |0
 <U001D> \x1D |0
 <U001E> \x1E |0
