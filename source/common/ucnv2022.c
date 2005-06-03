@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv2022.c
@@ -1242,6 +1242,10 @@ static const StateEnum jpCharsetPref[]={
     HWKANA_7BIT
 };
 
+/*
+ * The escape sequences must be in order of the enum constants like JISX201  = 3,
+ * not in order of jpCharsetPref[]!
+ */
 static const char escSeqChars[][6] ={
     "\x1B\x28\x42",         /* <ESC>(B  ASCII       */
     "\x1B\x2E\x41",         /* <ESC>.A  ISO-8859-1  */

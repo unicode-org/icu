@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2004, International Business Machines
+//   Copyright (C) 2003-2005, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -451,6 +451,16 @@ conversion {
         // than the match length when converting one code unit at a time.
         // See ucnv_extContinueMatchFromU() comment
         // "the match did not use all of preFromU[] - keep the rest for replay"
+
+        // test ISO 8859-1/7 vs. JIS X 0201
+        {
+          "ISO-2022-JP-2",
+          "?@A\u00e4\u03b1\u203EB",
+          :bin{       3f40411B2E411B4E641B2E461B4E611B284A7E421B2842 },
+          :intvector{ 0,1,2,3,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,6,6,6,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         {
           "*test3",
           "\U00101234\U00101234\U00050005\U000603ff",
