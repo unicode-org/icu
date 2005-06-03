@@ -33,6 +33,9 @@ USetAddRange(USet *set, UChar32 start, UChar32 end);
 typedef void U_CALLCONV
 USetAddString(USet *set, const UChar *str, int32_t length);
 
+typedef void U_CALLCONV
+USetRemove(USet *set, UChar32 c);
+
 /**
  * Interface for adding items to a USet, to keep low-level code from
  * statically depending on the USet implementation.
@@ -43,6 +46,7 @@ struct USetAdder {
     USetAdd *add;
     USetAddRange *addRange;
     USetAddString *addString;
+    USetRemove *remove;
 };
 typedef struct USetAdder USetAdder;
 

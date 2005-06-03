@@ -84,6 +84,14 @@ static const char SHIFT_OUT_STR[] = "\x0E";
 #define V_TAB   0x0B
 #define SPACE   0x20
 
+/*
+ * ISO 2022 control codes must not be converted from Unicode
+ * because they would mess up the byte stream.
+ * The bit mask 0x0800c000 has bits set at bit positions 0xe, 0xf, 0x1b
+ * corresponding to SO, SI, and ESC.
+ */
+#define IS_2022_CONTROL(c) (((c)<0x20) && (((uint32_t)1<<(c))&0x0800c000)!=0)
+
 /* for ISO-2022-JP and -CN implementations */
 typedef enum  {
         /* shared values */
@@ -1324,7 +1332,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
 
             sourceChar  = *(source++);
             /*check if the char is a First surrogate*/
-             if(UTF_IS_SURROGATE(sourceChar)) {
+            if(UTF_IS_SURROGATE(sourceChar)) {
                 if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
 getTrail:
                     /*look ahead to find the trail surrogate*/
@@ -1356,6 +1364,14 @@ getTrail:
                     args->converter->fromUChar32=sourceChar;
                     break;
                 }
+            }
+
+            /* do not convert SO/SI/ESC */
+            if(IS_2022_CONTROL(sourceChar)) {
+                /* callback(illegal) */
+                *err=U_ILLEGAL_CHAR_FOUND;
+                args->converter->fromUChar32=sourceChar;
+                break;
             }
 
             /* do the conversion */
@@ -1901,6 +1917,15 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
 
         if(target < (unsigned char*) args->targetLimit){
             sourceChar = *source++;
+
+            /* do not convert SO/SI/ESC */
+            if(IS_2022_CONTROL(sourceChar)) {
+                /* callback(illegal) */
+                *err=U_ILLEGAL_CHAR_FOUND;
+                args->converter->fromUChar32=sourceChar;
+                break;
+            }
+
            /* length= ucnv_MBCSFromUChar32(converterData->currentConverter->sharedData,
                 sourceChar,&targetByteUnit,args->converter->useFallback);*/
             MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetByteUnit,useFallback,&length,MBCS_OUTPUT_2);
@@ -1997,7 +2022,6 @@ getTrail:
                 }
 
                 args->converter->fromUChar32=sourceChar;
-                args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
                 break;
             }
         } /* end if(myTargetIndex<myTargetLength) */
@@ -2442,6 +2466,14 @@ getTrail:
 
             /* do the conversion */
             if(sourceChar <= 0x007f ){
+                /* do not convert SO/SI/ESC */
+                if(IS_2022_CONTROL(sourceChar)) {
+                    /* callback(illegal) */
+                    *err=U_ILLEGAL_CHAR_FOUND;
+                    args->converter->fromUChar32=sourceChar;
+                    break;
+                }
+
                 /* US-ASCII */
                 if(pFromU2022State->g == 0) {
                     buffer[0] = (char)sourceChar;
@@ -3028,17 +3060,18 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
         /* there is only one converter for KR, and it is not in the myConverterArray[] */
         cnvData->currentConverter->sharedData->impl->getUnicodeSet(
                 cnvData->currentConverter, sa, which, pErrorCode);
-        return;
+        /* the loop over myConverterArray[] will simply not find another converter */
+        break;
     default:
         break;
     }
 
     /*
-     * TODO: need to make this version-specific for CN.
+     * Version-specific for CN:
      * CN version 0 does not map CNS planes 3..7 although
      * they are all available in the CNS conversion table;
      * CN version 1 does map them all.
-     * The two versions need to create different Unicode sets.
+     * The two versions create different Unicode sets.
      */
     for (i=0; i<UCNV_2022_MAX_CONVERTERS; i++) {
         if(cnvData->myConverterArray[i]!=NULL) {
@@ -3056,6 +3089,15 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
             }
         }
     }
+
+    /*
+     * ISO 2022 converters must not convert SO/SI/ESC despite what
+     * sub-converters do by themselves.
+     * Remove these characters from the set.
+     */
+    sa->remove(sa->set, 0x0e);
+    sa->remove(sa->set, 0x0f);
+    sa->remove(sa->set, 0x1b);
 }
 
 static const UConverterImpl _ISO2022Impl={
