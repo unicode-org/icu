@@ -344,7 +344,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 #  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
 #
 !IFDEF ICUDATA_SOURCE_ARCHIVE
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) $(ICUDATA_SOURCE_ARCHIVE)
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICUDATA_SOURCE_ARCHIVE)"
 	@echo Building icu data from $(ICUDATA_SOURCE_ARCHIVE)
 	cd "$(ICUBLD)"
 	decmn --pkgdata $(ICUDATA_SOURCE_ARCHIVE) > "$(ICUTMP)\pkgdatain.txt"
