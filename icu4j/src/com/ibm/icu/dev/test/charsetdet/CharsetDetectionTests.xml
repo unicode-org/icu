@@ -379,7 +379,7 @@
     </test-case>
 
     <!-- No UTF-8 in this test because it detects as Shift_JIS -->
-    <!-- No ISO-2022-CN in this test because Java doesn't support it :-( -->
+    <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
     <!-- test-case id="IUC10-zh-Hant" encodings="UTF-8 ISO-2022-CN" -->
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
@@ -397,6 +397,7 @@
 
     <!-- /test-case -->
 
+    <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
     <test-case id="IUC10-zh-Hans" encodings="UTF-8 EUC-CN">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
