@@ -347,7 +347,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICUDATA_SOURCE_ARCHIVE)"
 	@echo Building icu data from $(ICUDATA_SOURCE_ARCHIVE)
 	cd "$(ICUBLD)"
-	decmn --pkgdata $(ICUDATA_SOURCE_ARCHIVE) > "$(ICUTMP)\pkgdatain.txt"
+	decmn --pkgdata "$(ICUDATA_SOURCE_ARCHIVE)" > "$(ICUTMP)\pkgdatain.txt"
 	cd "$(ICUBLD_PKG)"
 	@"$(ICUP)\bin\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) "$(ICUTMP)\pkgdatain.txt"
 	copy "$(U_ICUDATA_NAME).dll" "$(DLL_OUTPUT)"
