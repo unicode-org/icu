@@ -1878,6 +1878,12 @@ structLocale{
             "",
         }
     }
+    delimiters{
+        quotationStart{""}
+        quotationEnd{""}
+        alternateQuotationEnd{""}
+        alternateQuotationStart{""}
+    }
     ExemplarCharacters{""}
     Keys{
         calendar{""}
@@ -2520,6 +2526,15 @@ structLocale{
         1996{""}
         POSIX{""}
         REVISED{""}
+        BOONT{""}
+        GAULISH{""}
+        GUOYU{""}
+        HAKKA{""}
+        LOJBAN{""}
+        NEDIS{""}
+        ROZAJ{""}
+        SCOUSE{""}
+        XIANG{""}
     }
     Version{""}
     boundaries{
@@ -2545,6 +2560,10 @@ structLocale{
             eras{
                 abbreviated{
                     "",
+                }
+                wide{
+                    "",
+                    ""
                 }
             }
         }
@@ -2649,6 +2668,10 @@ structLocale{
                 abbreviated{
                     "",
                     "",
+                }
+                wide{
+                    "",
+                    ""
                 }
             }
             monthNames{
@@ -2756,6 +2779,10 @@ structLocale{
                 abbreviated{
                     "",
                 }
+                wide{
+                    "",
+                    ""
+                }
             }
             monthNames{
                 default{""}
@@ -2784,6 +2811,10 @@ structLocale{
             eras{
                 abbreviated{
                     "",
+                }
+                wide{
+                    "",
+                    ""
                 }
             }
             monthNames{
@@ -3059,6 +3090,10 @@ structLocale{
                     "",
                     "",
                     "",
+                }
+                wide{
+                    "",
+                    ""
                 }
             }
         }
