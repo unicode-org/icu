@@ -92,13 +92,15 @@ static const UChar QUOTE = 0x27; // Single quote
 SimpleDateFormat::~SimpleDateFormat()
 {
     delete fSymbols;
+    delete parsedTimeZone; // sanity check
 }
 
 //----------------------------------------------------------------------
 
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
   :   fLocale(Locale::getDefault()),
-      fSymbols(NULL)
+      fSymbols(NULL),
+      parsedTimeZone(NULL)
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
@@ -110,7 +112,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode &status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fSymbols(NULL)
+    fSymbols(NULL),
+    parsedTimeZone(NULL)
 {
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -123,7 +126,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(pattern),
-    fLocale(locale)
+    fLocale(locale),
+    parsedTimeZone(NULL)
 {
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -137,7 +141,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fSymbols(symbolsToAdopt)
+    fSymbols(symbolsToAdopt),
+    parsedTimeZone(NULL)
 {
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
@@ -151,7 +156,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fSymbols(new DateFormatSymbols(symbols))
+    fSymbols(new DateFormatSymbols(symbols)),
+    parsedTimeZone(NULL)
 {
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
@@ -166,7 +172,8 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fLocale(locale),
-    fSymbols(NULL)
+    fSymbols(NULL),
+    parsedTimeZone(NULL)
 {
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
@@ -185,7 +192,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(gDefaultPattern),
     fLocale(locale),
-    fSymbols(NULL)
+    fSymbols(NULL),
+    parsedTimeZone(NULL)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -212,7 +220,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
-    fSymbols(NULL)
+    fSymbols(NULL),
+    parsedTimeZone(NULL)
 {
     *this = other;
 }
@@ -225,6 +234,8 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
 
     delete fSymbols;
     fSymbols = NULL;
+
+    delete parsedTimeZone; parsedTimeZone = NULL;
 
     if (other.fSymbols)
         fSymbols = new DateFormatSymbols(*other.fSymbols);
@@ -254,11 +265,11 @@ SimpleDateFormat::operator==(const Format& other) const
     if (DateFormat::operator==(other)) {
         // DateFormat::operator== guarantees following cast is safe
         SimpleDateFormat* that = (SimpleDateFormat*)&other;
-        return     (fPattern             == that->fPattern &&
+        return (fPattern             == that->fPattern &&
                 fSymbols             != NULL && // Check for pathological object
-                that->fSymbols         != NULL && // Check for pathological object
-                *fSymbols             == *that->fSymbols &&
-                    fHaveDefaultCentury == that->fHaveDefaultCentury &&
+                that->fSymbols       != NULL && // Check for pathological object
+                *fSymbols            == *that->fSymbols &&
+                fHaveDefaultCentury  == that->fHaveDefaultCentury &&
                 fDefaultCenturyStart == that->fDefaultCenturyStart);
     }
     return FALSE;
@@ -673,43 +684,45 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         break;
 
     // for the "z" symbols, we have to check our time zone data first.  If we have a
-    // localized name for the time zone, then "zzzz" is the whole name and anything
-    // shorter is the abbreviation (we also have to check for daylight savings time
-    // since the name will be different).  If we don't have a localized time zone name,
+    // localized name for the time zone, then "zzzz" / "zzz" indicate whether
+    // daylight time is in effect (long/short) and "zz" / "z" do not (long/short).
+    // If we don't have a localized time zone name,
     // then the time zone shows up as "GMT+hh:mm" or "GMT-hh:mm" (where "hh:mm" is the
     // offset from GMT) regardless of how many z's were in the pattern symbol
     case UDAT_TIMEZONE_FIELD: {
         UnicodeString str;
         int32_t zoneIndex = fSymbols->getZoneIndex(cal.getTimeZone().getID(str));
         if (zoneIndex == -1) {
-            value = cal.get(UCAL_ZONE_OFFSET, status) +
-                    cal.get(UCAL_DST_OFFSET, status);
+          value = cal.get(UCAL_ZONE_OFFSET, status) +
+            cal.get(UCAL_DST_OFFSET, status);
 
-            if (value < 0) {
-                appendTo += gGmtMinus;
-                value = -value; // suppress the '-' sign for text display.
-            }
-            else
-                appendTo += gGmtPlus;
-            
-            zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
-            appendTo += (UChar)0x003A /*':'*/;
-            zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
-        }
-        else if (cal.get(UCAL_DST_OFFSET, status) != 0) {
-            if (count >= 4) 
-                appendTo += fSymbols->fZoneStrings[zoneIndex][3];
-            else 
-                appendTo += fSymbols->fZoneStrings[zoneIndex][4];
+          if (value < 0) {
+            appendTo += gGmtMinus;
+            value = -value; // suppress the '-' sign for text display.
+          }
+          else
+            appendTo += gGmtPlus;
+
+          zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
+          appendTo += (UChar)0x003A /*':'*/;
+          zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
         }
         else {
-            if (count >= 4) 
-                appendTo += fSymbols->fZoneStrings[zoneIndex][1];
-            else 
-                appendTo += fSymbols->fZoneStrings[zoneIndex][2];
+          int ix;
+          int zsrc = fSymbols->fZoneStringsColCount;
+          if (zsrc < 7 && count < 3) {
+            count += 2; // no generic time, default to full times
+          }
+          switch (count) {
+          case 1: ix = zsrc == 7 ? 6 : 7; break; // short generic time
+          case 2: ix = zsrc == 7 ? 5 : 6; break; // long generic time
+          case 3: ix = cal.get(UCAL_DST_OFFSET, status) != 0 ? 4 : 2; break; // short dst/std time
+          default: ix = cal.get(UCAL_DST_OFFSET, status) != 0 ? 3 : 1; break; // long dst/std time
+          }
+          appendTo += fSymbols->fZoneStrings[zoneIndex][ix];
         }
-        }
-        break;
+      }
+    break;
     
     case 23: // 'Z' - TIMEZONE_RFC
         {
@@ -779,6 +792,10 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t start = pos;
     UBool ambiguousYear[] = { FALSE };
     int32_t count = 0;
+
+    // hack, clear parsedTimeZone, cast away const
+    delete parsedTimeZone;
+    ((SimpleDateFormat*)this)->parsedTimeZone = NULL;
 
     // For parsing abutting numeric fields. 'abutPat' is the
     // offset into 'pattern' of the first of 2 or more abutting
@@ -974,20 +991,38 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // front or the back of the default century.  This only works because we adjust
     // the year correctly to start with in other cases -- see subParse().
     UErrorCode status = U_ZERO_ERROR;
-    if (ambiguousYear[0]) // If this is true then the two-digit year == the default start year
+    if (ambiguousYear[0] || parsedTimeZone != NULL) // If this is true then the two-digit year == the default start year
     {
         // We need a copy of the fields, and we need to avoid triggering a call to
         // complete(), which will recalculate the fields.  Since we can't access
         // the fields[] array in Calendar, we clone the entire object.  This will
         // stop working if Calendar.clone() is ever rewritten to call complete().
         Calendar *copy = cal.clone();
-        UDate parsedDate = copy->getTime(status);
-        // {sfb} check internalGetDefaultCenturyStart
-        if (fHaveDefaultCentury && (parsedDate < fDefaultCenturyStart))
-        {
-            // We can't use add here because that does a complete() first.
-            cal.set(UCAL_YEAR, fDefaultCenturyStartYear + 100);
+        if (ambiguousYear[0]) {
+            UDate parsedDate = copy->getTime(status);
+            // {sfb} check internalGetDefaultCenturyStart
+            if (fHaveDefaultCentury && (parsedDate < fDefaultCenturyStart)) {
+                // We can't use add here because that does a complete() first.
+                cal.set(UCAL_YEAR, fDefaultCenturyStartYear + 100);
+            }
         }
+
+        if (parsedTimeZone != NULL) {
+            TimeZone *tz = parsedTimeZone;
+
+            // the calendar represents the parse as gmt time
+            // we need to turn this into local time, so we add the raw offset
+            // then we ask the timezone to handle this local time
+            int32_t rawOffset = 0;
+            int32_t dstOffset = 0;
+            tz->getOffset(copy->getTime(status)+tz->getRawOffset(), TRUE, 
+                rawOffset, dstOffset, status);
+            if (U_SUCCESS(status)) {
+                cal.set(UCAL_ZONE_OFFSET, rawOffset);
+                cal.set(UCAL_DST_OFFSET, dstOffset);
+            }
+        }
+
         delete copy;
     }
 
@@ -1309,20 +1344,20 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         //    GMT[+-]hhmm or
         //    GMT.
         
-            if ((text.length() - start) >= gmtLen &&
-                (text.caseCompare(start, gmtLen, gGmt, 0, gmtLen, U_FOLD_CASE_DEFAULT)) == 0)
-            {
+        if ((text.length() - start) >= gmtLen &&
+            (text.caseCompare(start, gmtLen, gGmt, 0, gmtLen, U_FOLD_CASE_DEFAULT)) == 0)
+          {
             cal.set(UCAL_DST_OFFSET, 0);
 
             pos.setIndex(start + gmtLen);
 
             if( text[pos.getIndex()] == 0x002B /*'+'*/ )
-                sign = 1;
+              sign = 1;
             else if( text[pos.getIndex()] == 0x002D /*'-'*/ )
-                sign = -1;
+              sign = -1;
             else {
-                cal.set(UCAL_ZONE_OFFSET, 0 );
-                return pos.getIndex();
+              cal.set(UCAL_ZONE_OFFSET, 0 );
+              return pos.getIndex();
             }
 
             // Look for hours:minutes or hhmm.
@@ -1331,59 +1366,38 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             Formattable tzNumber;
             fNumberFormat->parse(text, tzNumber, pos);
             if( pos.getIndex() == parseStart) {
-                return -start;
+              return -start;
             }
             if( text[pos.getIndex()] == 0x003A /*':'*/ ) {
-                // This is the hours:minutes case
-                offset = tzNumber.getLong() * 60;
-                pos.setIndex(pos.getIndex() + 1);
-                parseStart = pos.getIndex();
-                fNumberFormat->parse(text, tzNumber, pos);
-                if( pos.getIndex() == parseStart) {
-                    return -start;
-                }
-                offset += tzNumber.getLong();
+              // This is the hours:minutes case
+              offset = tzNumber.getLong() * 60;
+              pos.setIndex(pos.getIndex() + 1);
+              parseStart = pos.getIndex();
+              fNumberFormat->parse(text, tzNumber, pos);
+              if( pos.getIndex() == parseStart) {
+                return -start;
+              }
+              offset += tzNumber.getLong();
             }
             else {
-                // This is the hhmm case.
-                offset = tzNumber.getLong();
-                if( offset < 24 )
-                    offset *= 60;
-                else
-                    offset = offset % 100 + offset / 100 * 60;
+              // This is the hhmm case.
+              offset = tzNumber.getLong();
+              if( offset < 24 )
+                offset *= 60;
+              else
+                offset = offset % 100 + offset / 100 * 60;
             }
 
             // Fall through for final processing below of 'offset' and 'sign'.
-        }
+          }
         else {
             // At this point, check for named time zones by looking through
             // the locale data from the DateFormatZoneData strings.
             // Want to be able to parse both short and long forms.
-            const UnicodeString *zs;
-            int32_t j;
-
-            for (i = 0; i < fSymbols->fZoneStringsRowCount; i++)
-            {
-                // Checking long and short zones [1 & 2],
-                // and long and short daylight [3 & 4].
-                for (j = 1; j <= 4; ++j)
-                {
-                    zs = &fSymbols->fZoneStrings[i][j];
-                    // ### TODO markus 20021014: This use of caseCompare() will fail
-                    // if the text contains a character that case-folds into multiple
-                    // characters. In that case, zs->length() may be too long, and it does not match.
-                    // We need a case-insensitive version of startsWith().
-                    // There are similar cases of such caseCompare() uses elsewhere in ICU.
-                    if (0 == (text.caseCompare(start, zs->length(), *zs, 0))) {
-                        TimeZone *tz = TimeZone::createTimeZone(fSymbols->fZoneStrings[i][0]);
-                        cal.set(UCAL_ZONE_OFFSET, tz->getRawOffset());
-                        // Must call set() with something -- TODO -- Fix this to
-                        // use the correct DST SAVINGS for the zone.
-                        delete tz;
-                        cal.set(UCAL_DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
-                        return (start + fSymbols->fZoneStrings[i][j].length());
-                    }
-                }
+                        // !!! side effect, might set parsedZoneString 
+            int32_t result = subParseZoneString(text, start, cal);
+            if (result != 0) {
+                return result;
             }
 
             // As a last resort, look for numeric timezones of the form
@@ -1454,6 +1468,124 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
         return -start;
     }
+}
+
+int32_t 
+SimpleDateFormat::getTimeZoneIndex(const UnicodeString& id) const
+{
+  int32_t i = fSymbols->fZoneStringsRowCount;
+  while (--i >= 0 && fSymbols->fZoneStrings[i][0] != id);
+  return i;
+}
+
+int32_t
+SimpleDateFormat::matchZoneString(const UnicodeString& text, int32_t start, int32_t zi) const
+{
+  // ### TODO markus 20021014: This use of caseCompare() will fail
+  // if the text contains a character that case-folds into multiple
+  // characters. In that case, zs->length() may be too long, and it does not match.
+  // We need a case-insensitive version of startsWith().
+  // There are similar cases of such caseCompare() uses elsewhere in ICU.
+
+  int32_t i = fSymbols->fZoneStringsColCount;
+  const int32_t zscc = i;
+
+  while (--i >= 1) {
+    if (i == 5 && (zscc == 6 || zscc >= 8)) { // skip city name if we have it
+      continue;
+    }
+
+    const UnicodeString& zs = fSymbols->fZoneStrings[zi][i];
+    if (zs.length() > 0 && 0 == text.caseCompare(start, zs.length(), zs, 0)) {
+      break;
+    }
+  }
+  return i;
+}
+
+/**
+ * find time zone 'text' matched zoneStrings and set cal.
+ * includes optimizations for calendar and default time zones
+ */
+int32_t
+SimpleDateFormat::subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal) const
+{
+  // At this point, check for named time zones by looking through
+  // the locale data from the DateFormatZoneData strings.
+  // Want to be able to parse both short and long forms.
+
+  TimeZone *tz = NULL;
+  UnicodeString id;
+  int32_t zoneIndex = -1;
+  int32_t zi;
+
+  // optimize for calendar's current time zone
+  zi = getTimeZoneIndex(getTimeZone().getID(id));
+  if (zi != -1) {
+    int32_t j = matchZoneString(text, start, zi);
+    if (j > 0) {
+      tz = getTimeZone().clone();
+      zoneIndex = j;
+    }
+  }
+
+  // optimize for default time zone, assume different from caller
+  if (tz == NULL) {
+    TimeZone* defaultZone = TimeZone::createDefault();
+    zi = getTimeZoneIndex(defaultZone->getID(id));
+    if (zi != -1) {
+      int32_t j = matchZoneString(text, start, zi);
+      if (j > 0) {
+                  zoneIndex = j;
+                  tz = defaultZone;
+          }
+        }
+        if (tz == NULL) {
+                delete defaultZone;
+        }
+  }
+
+  // still no luck, check all time zone strings
+  if (tz == NULL) {
+    for (zi = 0; zi < fSymbols->fZoneStringsRowCount; zi++) {
+      int32_t j = matchZoneString(text, start, zi);
+      if (j > 0) {
+                  tz = TimeZone::createTimeZone(fSymbols->fZoneStrings[zi][0]);
+                  zoneIndex = j;
+                  break;
+      }
+    }
+  }
+
+  if (tz != NULL) { // Matched any ?
+    // always set zone offset, needed to get correct hour in wall time
+    // when checking daylight savings
+    cal.set(UCAL_ZONE_OFFSET, tz->getRawOffset());
+    if (zoneIndex < 3) {
+      // standard time
+      cal.set(UCAL_DST_OFFSET, 0);
+      delete tz; tz = NULL;
+    } else if (zoneIndex < 5) {
+      // daylight time
+      // !!! todo - no getDSTSavings() in ICU's timezone
+      // use the correct DST SAVINGS for the zone.
+      // cal.set(UCAL_DST_OFFSET, tz->getDSTSavings());
+      cal.set(UCAL_DST_OFFSET, U_MILLIS_PER_HOUR);
+      delete tz; tz = NULL;
+    } else { 
+      // either standard or daylight
+      // need to finish getting the date, then compute dst offset as appropriate
+
+      // !!! hack for api compatibility, can't modify subParse(...) so can't
+      // pass this back any other way.  cast away const.
+      ((SimpleDateFormat*)this)->parsedTimeZone = tz;
+    }
+
+    return start + fSymbols->fZoneStrings[zi][zoneIndex].length();
+  }
+  
+  // complete failure
+  return 0;
 }
 
 /**

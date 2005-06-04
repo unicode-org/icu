@@ -19,6 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
+
 // *****************************************************************************
 // class DateFormatTest
 // *****************************************************************************
@@ -51,6 +52,8 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(21,TestInvalidPattern);
         TESTCASE(22,TestGeneral);
         TESTCASE(23,TestGreekMay);
+        TESTCASE(24,TestGenericTime);
+        TESTCASE(25,TestGenericTimeZoneOrder);
         default: name = ""; break;
     }
 }
@@ -188,7 +191,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     int32_t y, m, day, hr, min, sec;
     dateToFields(d, y, m, day, hr, min, sec);
     if (hr != hour)
-        errln((UnicodeString)"FAIL: Should parse to hour " + hour);
+        errln((UnicodeString)"FAIL: Should parse to hour " + hour + " but got " + hr);
 
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: " + (int32_t)status);
@@ -304,13 +307,13 @@ void DateFormatTest::TestFieldPosition() {
     // Fields are given in order of DateFormat field number
     const char* EXPECTED[] = {
         "", "1997", "August", "13", "", "", "34", "12", "",
-        "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
+        "Wednesday", "", "", "", "", "PM", "2", "", "PT", "", "", "", "", "", "",
 
         "", "1997", "ao\\u00FBt", "13", "", "14", "34", "", "",
-        "mercredi", "", "", "", "", "", "", "", "HAP (\\u00C9UA)", "", "", "", "", "", "",
+        "mercredi", "", "", "", "", "", "", "", "HP (\\u00C9UA)", "", "", "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
+        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PT", "1997", "4", "1997", "2450674", "52452513", "-0700",
 
         "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
         "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
@@ -956,10 +959,10 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HAP (\\u00C9UA)" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HP (\\u00C9UA)" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
-    UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PDT" );
+    UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
     logln((UnicodeString)"Date set to : " + dateToString(testDate));
     UnicodeString out; 
     dfFrench->format(testDate, out);
@@ -1326,6 +1329,125 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
             return;
         }
     }
+}
+
+void DateFormatTest::TestGenericTime() {
+  // any zone pattern should parse any zone
+  const Locale en("en");
+  const char* ZDATA[] = {
+    "yyyy MM dd HH:mm zzz",
+    // round trip
+    "y/M/d H:mm zzzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Standard Time",
+    "y/M/d H:mm zzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+    "y/M/d H:mm zz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+    "y/M/d H:mm z", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
+    // non-generic timezone string influences dst offset even if wrong for date/time
+    "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 PST",
+    "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
+    "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 PDT",
+    "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 Pacific Time",
+    // generic timezone generates dst offset appropriate for local time
+    "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+    "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+    "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
+    "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+    // daylight savings time transition edge cases.
+    // time to parse does not really exist, PT interpreted as earlier time
+    "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST", // adjust earlier
+    "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
+    "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
+    "y/M/d H:mm z", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT", // adjust earlier
+    "y/M/d H:mm z", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
+    "y/M/d H:mm z", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+    "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 01:30 PST", "2005/4/3 1:30",
+    // time to parse is ambiguous, PT interpreted as earlier time (?)
+    "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT", // fail
+    "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
+    "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
+    "y/M/d H:mm z", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT", // fail
+    "y/M/d H:mm z", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
+    "y/M/d H:mm z", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
+    "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PDT", "2004/10/31 1:30", // fail
+  };
+  const int32_t ZDATA_length = sizeof(ZDATA)/ sizeof(ZDATA[0]);
+  expect(ZDATA, ZDATA_length, en);
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  logln("cross format/parse tests");
+  UnicodeString basepat("yy/MM/dd H:mm ");
+  SimpleDateFormat formats[] = { 
+    SimpleDateFormat(basepat + "z", en, status),
+    SimpleDateFormat(basepat + "zz", en, status),
+    SimpleDateFormat(basepat + "zzz", en, status),
+    SimpleDateFormat(basepat + "zzzz", en, status)
+  };
+  const int32_t formats_length = sizeof(formats)/sizeof(formats[0]);
+
+  UnicodeString test;
+  SimpleDateFormat univ("yyyy MM dd HH:mm zzz", en, status);
+  const UnicodeString times[] = { 
+    "2004 01 02 03:04 PST", 
+    "2004 07 08 09:10 PDT" 
+  };
+  int32_t times_length = sizeof(times)/sizeof(times[0]);
+  for (int i = 0; i < times_length; ++i) {
+    UDate d = univ.parse(times[i], status);
+    logln(UnicodeString("\ntime: ") + d);
+    for (int j = 0; j < formats_length; ++j) {
+      test.remove();
+      formats[j].format(d, test);
+      logln("\ntest: '" + test + "'");
+      for (int k = 0; k < formats_length; ++k) {
+        UDate t = formats[k].parse(test, status);
+        if (U_SUCCESS(status)) {
+          if (d != t) {
+            errln((UnicodeString)"FAIL: format " + k + 
+                  " incorrectly parsed output of format " + j + 
+                  " (" + test + "), returned " +
+                  dateToString(t) + " instead of " + dateToString(d));
+          } else {
+            logln((UnicodeString)"OK: format " + k + " parsed ok");
+          }
+        } else if (status == U_PARSE_ERROR) {
+          errln((UnicodeString)"FAIL: format " + k + 
+                " could not parse output of format " + j + 
+                " (" + test + ")");
+        }
+      }
+    }
+  }
+}
+
+void DateFormatTest::TestGenericTimeZoneOrder() {
+  // generic times should parse the same no matter what the placement of the time zone string
+  // should work for standard and daylight times
+
+  const char* XDATA[] = {
+    "yyyy MM dd HH:mm zzz",
+    // standard time, explicit daylight/standard
+    "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
+    "y/M/d zzz H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 PST 1:00",
+    "zzz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "PST 2004/1/1 1:00",
+
+    // standard time, generic
+    "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+    "y/M/d zz H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 Pacific Time 1:00",
+    "zz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "Pacific Time 2004/1/1 1:00",
+
+    // dahylight time, explicit daylight/standard
+    "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
+    "y/M/d zzz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 PDT 1:00",
+    "zzz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "PDT 2004/7/1 1:00",
+
+    // daylight time, generic
+    "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+    "y/M/d zz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 Pacific Time 1:00",
+    "zz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "Pacific Time 2004/7/1 1:00",
+  };
+  const int32_t XDATA_length = sizeof(XDATA)/sizeof(XDATA[0]);
+  Locale en("en");
+  expect(XDATA, XDATA_length, en);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
