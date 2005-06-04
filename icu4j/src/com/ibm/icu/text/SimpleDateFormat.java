@@ -919,7 +919,7 @@ public class SimpleDateFormat extends DateFormat {
     {
         int pos = parsePos.getIndex();
         int start = pos;
-        boolean[] ambiguousYear = {false};
+        boolean[] ambiguousYear = { false };
         int count = 0;
 
         // hack, clear parsedTimeZone
@@ -1132,12 +1132,9 @@ public class SimpleDateFormat extends DateFormat {
                 }
 
                 if (parsedTimeZone != null) {
-                    final long MINUTE = 1000 * 60;
-                    final long HOUR = MINUTE * 60;
-
                     TimeZone tz = parsedTimeZone;
 
-                    // the calendar a number representing the parse as gmt time
+                    // the calendar represents the parse as gmt time
                     // we need to turn this into local time, so we add the raw offset
                     // then we ask the timezone to handle this local time
                     int[] offsets = new int[2];
