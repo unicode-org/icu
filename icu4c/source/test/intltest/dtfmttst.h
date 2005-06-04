@@ -157,6 +157,10 @@ public: // package
 
     void TestGreekMay(void);
 
+    void TestGenericTime(void);
+
+    void TestGenericTimeZoneOrder(void);
+
  private:
     void expectParse(const char** data, int32_t data_length,
                      const Locale& locale);
