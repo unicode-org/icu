@@ -256,10 +256,10 @@ RBNF_SOURCE=$(RBNF_SOURCE) $(RBNF_SOURCE_LOCAL)
 !MESSAGE Warning: cannot find "rbnffiles.mk"
 !ENDIF
 
-RBNF_FILES = $(ICURBNF)\root.txt $(RBNF_ALIAS_SOURCE) $(RBNF_SOURCE)
+RBNF_FILES = $(RBNF_ALIAS_SOURCE) $(RBNF_SOURCE)
 RBNF_RES_FILES = $(RBNF_FILES:.txt =.res rbnf\)
 RBNF_RES_FILES = $(RBNF_RES_FILES:.txt=.res)
-RBNF_RES_FILES = $(RBNF_RES_FILES:rbnf\ =rbnf\)
+#RBNF_RES_FILES = $(RBNF_RES_FILES:rbnf\ =rbnf\)
 
 # Read list of transliterator resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICUTRNS)\trnsfiles.mk")
@@ -274,10 +274,10 @@ TRANSLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
 !MESSAGE Warning: cannot find "trnsfiles.mk"
 !ENDIF
 
-TRANSLIT_FILES = $(ICUTRNS)\root.txt $(TRANSLIT_ALIAS_SOURCE) $(TRANSLIT_SOURCE)
+TRANSLIT_FILES = $(TRANSLIT_ALIAS_SOURCE) $(TRANSLIT_SOURCE)
 TRANSLIT_RES_FILES = $(TRANSLIT_FILES:.txt =.res translit\)
 TRANSLIT_RES_FILES = $(TRANSLIT_RES_FILES:.txt=.res)
-TRANSLIT_RES_FILES = $(TRANSLIT_RES_FILES:translit\ =translit\)
+#TRANSLIT_RES_FILES = $(TRANSLIT_RES_FILES:translit\ =translit\)
 
 # Read list of miscellaneous resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICUMISC2)\miscfiles.mk")

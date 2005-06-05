@@ -1,4 +1,4 @@
-# *   Copyright (C) 1997-2004, International Business Machines
+# *   Copyright (C) 1997-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
@@ -26,7 +26,7 @@
 
 # This is the list of locales that are built, but not considered installed in ICU.
 # These are usually aliased locales or the root locale.
-RBNF_ALIAS_SOURCE = 
+RBNF_ALIAS_SOURCE = root.txt
 
 
 # Please try to keep this list in alphabetical order

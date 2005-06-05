@@ -1,4 +1,4 @@
-# *   Copyright (C) 1997-2004, International Business Machines
+# *   Copyright (C) 1997-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
@@ -22,5 +22,7 @@
 #    |  TRANLIST_SOURCE = el.txt th.txt
 #
 #
+
+TRANSLIT_ALIAS_SOURCE=root.txt
 
 TRANSLIT_SOURCE=el.txt en.txt
