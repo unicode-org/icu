@@ -1616,7 +1616,6 @@ IntlTestRBNF::TestAllLocales()
     " (ordinal)  ",
     " (duration) "
   };
-  UnicodeString err;
   int32_t count = 0;
   const Locale* locales = Locale::getAvailableLocales(count);
   for (int i = 0; i < count; ++i) {
@@ -1630,26 +1629,13 @@ IntlTestRBNF::TestAllLocales()
         f->format(n, str);
         delete f;
 
-        UnicodeString msg;
-        msg.append(loc->getName());
-        msg.append(names[j]);
-        msg.append("success: 45.678 -> ");
-        msg.append(str);
-        logln(msg);
+        logln(UnicodeString(loc->getName()) + UnicodeString(names[j])
+            + UnicodeString("success: 45.678 -> ") + str);
       } else {
-        UnicodeString msg;
-        msg.append(loc->getName());
-        msg.append(names[j]);
-        msg.append("ERROR could not instantiate");
-        logln(msg);
-          
-        err.append("\n");
-        err.append(msg);
+        errln(UnicodeString(loc->getName()) + UnicodeString(names[j])
+            + UnicodeString("ERROR could not instantiate -> ") + UnicodeString(u_errorName(status)));
       }
     }
-  }
-  if (err.length()) {
-    errln(err);
   }
 }
 
