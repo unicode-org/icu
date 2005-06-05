@@ -193,12 +193,17 @@ void CompoundTransliteratorTest::TestGetCount(){
     CompoundTransliterator *ct1=new CompoundTransliterator("Halfwidth-Fullwidth;Fullwidth-Halfwidth", parseError, status);
     CompoundTransliterator *ct2=new CompoundTransliterator("Any-Hex;Hex-Any;Cyrillic-Latin;Latin-Cyrillic", parseError, status);
     CompoundTransliterator *ct3=(CompoundTransliterator*)ct1;
+    if (U_FAILURE(status)) {
+        errln("FAILED: CompoundTransliterator constructor failed");
+        return;
+    }
     CompoundTransliterator *ct4=new CompoundTransliterator("Latin-Devanagari", parseError, status);
     CompoundTransliterator *ct5=new CompoundTransliterator(*ct4);
 
     if (U_FAILURE(status)) {
         errln("FAILED: CompoundTransliterator constructor failed");
-    } else
+        return;
+    }
     if(ct1->getCount() == ct2->getCount() || ct1->getCount() != ct3->getCount() || 
         ct2->getCount() == ct3->getCount() || 
         ct4->getCount() != ct5->getCount() || ct4->getCount() == ct1->getCount() ||
