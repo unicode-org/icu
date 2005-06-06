@@ -248,7 +248,7 @@ void RBBISetBuilder::build() {
     //     subtree for each UnicodeSet that contains the string {eof}
     //   Because EOF is not a character in the normal sense, it doesn't
     //   affect the computation of ranges or TRIE.
-    static UChar eofUString[] = {0x65, 0x6f, 0x66, 0};
+    static const UChar eofUString[] = {0x65, 0x6f, 0x66, 0};
     UnicodeString eofString(eofUString);
     for (ni=0; ; ni++) {        // Loop over each of the UnicodeSets encountered in the input rules
         usetNode = (RBBINode *)this->fRB->fUSetNodes->elementAt(ni);
