@@ -151,8 +151,8 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 /* gcc 3.2 has an optimization bug */
 static const int64_t gNan64 = INT64_C(0x7FF8000000000000);
 static const int64_t gInf64 = INT64_C(0x7FF0000000000000);
-static const double * fgNan = (const double *)(&gNan64);
-static const double * fgInf = (const double *)(&gInf64);
+static const double * const fgNan = (const double * const)(&gNan64);
+static const double * const fgInf = (const double * const)(&gInf64);
 #else
 
 #if IEEE_754
