@@ -514,7 +514,6 @@ res_index {
 
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt{$(ICUTRNS)}.res::
 	@echo Making Transliterator files
-	@echo $(TRANSLIT_RES_FILES)
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD_PKG)" -d"$(ICUBLD_PKG)\$(ICUTRNS)" $<
 
 
