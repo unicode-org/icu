@@ -300,7 +300,7 @@ void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset
     }
 
     if (fTypoFlags & 0x1) { /* kerning enabled */
-      static le_uint32 kernTableTag = LE_KERN_TABLE_TAG;
+      static const le_uint32 kernTableTag = LE_KERN_TABLE_TAG;
 
       KernTable kt(fFontInstance, getFontTable(kernTableTag));
       kt.process(glyphStorage);
