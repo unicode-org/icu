@@ -1,13 +1,17 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and        *
+* Copyright (C) 2005, International Business Machines Corporation and        *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -883,8 +887,28 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             doPrivileged(new java.security.PrivilegedAction() {
                     public Object run() {
 			// WebSphere class loader will return null for a raw directory name without trailing slash
-                        URL url = root.getResource(baseName.endsWith("/") ? baseName : baseName + "/"); // 
+			String bn = baseName.endsWith("/") ? baseName : baseName + "/";
 
+			// look for prebuilt indices first
+			try {
+			    InputStream s = root.getResourceAsStream(bn + "res_index.txt");
+			    if (s != null) {
+				ArrayList list = new ArrayList();
+				BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
+				String line;
+				while ((line = br.readLine()) != null) {
+				    if (line.length() != 0 && !line.startsWith("#")) {
+					list.add(line);
+				    }
+				}
+				return list;
+			    }
+			}
+			catch (IOException e) {
+			    // swallow it
+			}
+			
+			URL url = root.getResource(bn);
 			URLHandler handler = URLHandler.get(url);
 			if (handler != null) {
 			    final ArrayList list = new ArrayList();
