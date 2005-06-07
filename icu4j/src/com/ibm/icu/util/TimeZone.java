@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2004, International Business Machines
+ * Copyright (C) 1996-2005, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 

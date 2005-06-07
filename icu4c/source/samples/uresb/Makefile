@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2004 IBM, Inc. and others
+# Copyright (c) 2000-2005 IBM, Inc. and others
 # conversion sample code
 # Usage:
 #  - configure, build, install ICU
