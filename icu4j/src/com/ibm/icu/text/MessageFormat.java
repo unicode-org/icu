@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -118,6 +118,11 @@ import com.ibm.icu.util.ULocale;
  * bundle source files) which strings will be processed by MessageFormat.
  * Note that localizers may need to use single quotes in translated
  * strings where the original version doesn't have them.
+ * <br>Note also that the simplest way to avoid the problem is to
+ * use the real apostrophe (single quote) character \u2019 (') for
+ * human-readable text, and to use the ASCII apostrophe (\u0027 ' )
+ * only in program syntax, like quoting in MessageFormat.
+ * See the annotations for U+0027 Apostrophe in The Unicode Standard.</p>
  * </dl>
  * <p>
  * The <i>ArgumentIndex</i> value is a non-negative integer written
