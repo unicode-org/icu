@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2004 IBM, Inc. and others
+# Copyright (c) 2002-2005 IBM, Inc. and others
 # Sample code makefile definitions 
 
 CLEANFILES=*~ $(TARGET).out

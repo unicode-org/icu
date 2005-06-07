@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2002 IBM, Inc. and others
+# Copyright (c) 2001-2005 IBM, Inc. and others
 #
 # File
 #    icu/source/samples/ufortune/resources/Makefile
