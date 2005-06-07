@@ -1,8 +1,9 @@
 /*
- * Created on Apr 12, 2005
+ **************************************************************************
+ * Copyright (C) 2005, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                           *
+ **************************************************************************
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package com.ibm.icu.text;
 

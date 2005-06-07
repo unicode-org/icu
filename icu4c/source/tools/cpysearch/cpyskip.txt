@@ -57,6 +57,8 @@ icu/source/tools/tzcode/patch-icu-tzcode
 icu4jni/src/classes/com/ibm/icu4jni/test/text/NormalizationTest.txt
 icu4jni/src/native/converter/ConverterInterface.h
 #ICU4J files that don't need an IBM copyright
+icu4j/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt
+icu4j/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict
 icu4j/src/com/ibm/icu/dev/data/rbbi/words.txt

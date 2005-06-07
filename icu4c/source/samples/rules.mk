@@ -1,4 +1,4 @@
-# Copyright (c) 2002 IBM, Inc. and others
+# Copyright (c) 2002-2005 IBM, Inc. and others
 # sample code rules for a single-target simple sample
 
 # list of targets that aren't actually created
