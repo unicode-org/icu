@@ -275,6 +275,21 @@
          </java>
     </target>
 
+    <target name="indices" depends="icudata,tools">
+        <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/" />
+	</java>
+        <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/rbnf" />
+	</java>
+        <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/coll" />
+	</java>
+        <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/translit" />
+	</java>
+    </target>
+
     <target name="one4tools" depends="anthack1,anthack2,mangle" if="version.1.4">
         <javac includes="com/ibm/icu/dev/localeconverter/docs/*.java,com/ibm/icu/dev/tool/docs/*.java"
             excludes="**/CVS/**/*"
@@ -392,7 +407,7 @@
     <!-- Creates the 3 release jar archives for distribution -->
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
-    <target name="jar" depends="core" description="build full 'icu4j.jar' jar file">
+    <target name="jar" depends="core,indices" description="build full 'icu4j.jar' jar file">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
