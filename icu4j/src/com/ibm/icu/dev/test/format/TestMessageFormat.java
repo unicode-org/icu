@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -924,6 +924,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             "{'", "{'",
             "{'a", "{'a",
             "{'a{}'a}'a", "{'a{}'a}''a",
+	    "'}'", "'}'",
+	    "'} '{'}'", "'} '{'}''",
+	    "'} {{{''", "'} {{{'''",
         };
         for (int i = 0; i < patterns.length; i += 2) {
             assertEquals("[" + (i/2) + "] \"" + patterns[i] + "\"", patterns[i+1], MessageFormat.autoQuoteApostrophe(patterns[i]));
