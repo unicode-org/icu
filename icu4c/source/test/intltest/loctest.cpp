@@ -908,8 +908,8 @@ LocaleTest::TestGetLangsAndCountries()
     for(testCount=0;test[testCount];testCount++)
       ;
 
-    if (testCount != 239)
-        errln("Expected getISOLanguages to return 238 languages; it returned" + testCount);
+    if (testCount != 240)
+        errln("Expected getISOLanguages to return 240 languages; it returned" + testCount);
     else {
         for (i = 0; i < spot2Len; i++) {
             int32_t j;
