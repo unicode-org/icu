@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -193,7 +193,7 @@ NULL
 static const char * const LANGUAGES_3[] = {
 /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
-/*  "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
+/*  "afh", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "apa",    */
     "afh", "aka", "akk", "ale", "alg", "alt", "amh", "arg", "ang", "apa",
 /*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
     "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
