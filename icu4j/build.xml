@@ -103,7 +103,7 @@
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
         <!-- fix the data folder every time there is a version update-->
-        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt33b/" />
+        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt34b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
         <property name="icu4j.javac.source" value="1.4"/>
         <property name="icu4j.javac.target" value="1.4"/>
@@ -151,7 +151,7 @@
     <!-- build everything but dist-related stuff -->
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs" description="build all primary targets"/>
 
-    <target name="resources" depends="init">
+    <target name="resources" depends="init" description="builds all the resources">
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
@@ -367,6 +367,7 @@
 	        todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
+
         <javac includes="com/ibm/icu/dev/data/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -1050,7 +1051,7 @@
     <!-- Target for builing Utilities Jar for CLDR -->
 
     <target name="cldrUtil" depends="init" description="build Utilities for CLDR">
-        <javac includes="com/ibm/icu/dev/test/util/BagFormatter.java,com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/util/SortedBag.java,com/ibm/icu/dev/test/util/Relation*.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/test/util/ArrayComparator.java"
+        <javac includes="com/ibm/icu/dev/test/util/BagFormatter.java,com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/util/SortedBag.java,com/ibm/icu/dev/test/util/Relation*.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/test/util/ArrayComparator.java,com/ibm/icu/dev/test/util/FileUtilities.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             source="${icu4j.javac.source}"
@@ -1059,7 +1060,7 @@
             debug="on" deprecation="off"/>
         <jar jarfile="utilities.jar"
             compress="true"
-            includes="com/ibm/icu/dev/test/util/BagFormatter*.class,com/ibm/icu/dev/test/util/SortedBag*.class,com/ibm/icu/dev/test/util/Relation*.class, com/ibm/icu/dev/test/util/ICUPropertyFactory*.class, com/ibm/icu/dev/test/util/Unicode*.class, com/ibm/icu/dev/test/util/Tabber*.class,com/ibm/icu/dev/test/util/ArrayComparator*.class,com/ibm/icu/dev/test/util/ListSet*.class, com/ibm/icu/dev/test/util/Visitor*.class,com/ibm/icu/dev/test/TestFmwk*.class,com/ibm/icu/dev/test/AbstractTest*.class,com/ibm/icu/dev/test/TestLog*.class,com/ibm/icu/dev/tool/UOption*.class"
+            includes="com/ibm/icu/dev/test/util/BagFormatter*.class,com/ibm/icu/dev/test/util/SortedBag*.class,com/ibm/icu/dev/test/util/Relation*.class, com/ibm/icu/dev/test/util/ICUPropertyFactory*.class, com/ibm/icu/dev/test/util/Unicode*.class, com/ibm/icu/dev/test/util/Tabber*.class,com/ibm/icu/dev/test/util/ArrayComparator*.class,com/ibm/icu/dev/test/util/ListSet*.class, com/ibm/icu/dev/test/util/Visitor*.class,com/ibm/icu/dev/test/TestFmwk*.class,com/ibm/icu/dev/test/AbstractTest*.class,com/ibm/icu/dev/test/TestLog*.class,com/ibm/icu/dev/tool/UOption*.class, com/ibm/icu/dev/test/util/FileUtilities*.class"
             basedir="${build.dir}"
             manifest="${cldr.util.manifest}"/>
      </target>
