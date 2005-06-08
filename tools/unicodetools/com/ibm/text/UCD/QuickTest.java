@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2004/02/07 01:01:14 $
-* $Revision: 1.3 $
+* $Date: 2005/06/08 01:44:48 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,24 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
-    static final void test() {
+	static final void test() {
+		String testString = "en-Arab-200-gaulish-a-abcd-def-x-abcd1234-12345678";
+		for (int i = testString.length() + 1; i > 0; --i) {
+			String trunc = truncateValidLanguageTag(testString, i);
+			System.out.println(i + "\t" + trunc + "\t" + trunc.length());
+		}
+	}
+	
+	static String truncateValidLanguageTag(String tag, int limit) {
+		if (tag.length() <= limit) return tag;
+		// legit truncation point has - after, and two letters before
+		do { 
+			if (tag.charAt(limit) == '-' && tag.charAt(limit-1) != '-' && tag.charAt(limit-2) != '-') break;
+		} while (--limit > 2);
+		return tag.substring(0,limit);
+	}
+	
+    static final void test2() {
         
         UnicodeSet format = new UnicodeSet("[:Cf:]");
 /*
