@@ -243,6 +243,9 @@ ubidi_close(UBiDi *pBiDi) {
         if(pBiDi->levelsMemory!=NULL) {
             uprv_free(pBiDi->levelsMemory);
         }
+        if(pBiDi->parasMemory!=NULL) {
+            uprv_free(pBiDi->parasMemory);
+        }
         if(pBiDi->runsMemory!=NULL) {
             uprv_free(pBiDi->runsMemory);
         }
