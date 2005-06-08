@@ -2884,6 +2884,7 @@ static void TestFromUCountPending(){
             log_err("ucnv_fromUInputHeld did not return correct length for tail\n");
         }
     }
+    ucnv_close(cnv);
 }
 static void
 TestToUCountPending(){
