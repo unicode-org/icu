@@ -1225,6 +1225,9 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
         "{'", "{'",
         "{'a", "{'a",
         "{'a{}'a}'a", "{'a{}'a}''a",
+        "'}'", "'}'",
+        "'} '{'}'", "'} '{'}''",
+        "'} {{{''", "'} {{{'''",
     };
     int32_t pattern_count = sizeof(patterns)/sizeof(patterns[0]);
 
