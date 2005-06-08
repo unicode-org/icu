@@ -72,10 +72,13 @@ icu4j/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt
 icu4j/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt
 icu4j/src/com/ibm/icu/dev/data/unicode/ucdterms.txt
 icu4j/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt
+icu4j/src/com/ibm/icu/dev/data/testdata.jar
+icu4j/src/com/ibm/icu/dev/data/IDNATestInput.txt
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz
 icu4j/src/com/ibm/icu/dev/tool/ime/indic/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/icu/dev/tool/ime/translit/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/icu/impl/data/th.brk
+icu4j/src/com/ibm/icu/impl/data/icudata.jar
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red
