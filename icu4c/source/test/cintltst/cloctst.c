@@ -925,7 +925,7 @@ static void TestISOFunctions()
         if(!strcmp(test,"ZR"))
             log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
     }
-    expect=239;
+    expect=240;
     if(count!=expect)
     {
         log_err("There is an error in getISOCountries, got %d, expected %d \n", count, expect);
