@@ -85,6 +85,16 @@ TESTSRCDATADIR=$(top_srcdir)/test/testdata
 TESTOUTDIR=$(top_builddir)/test/testdata/out
 BUILD_DIRS = $(TESTOUTDIR) $(TESTBUILDDIR)
 
+ifeq ($(PKGDATA_MODE),common)
+ICU_DATA_OPT = -i $(OUTDIR)
+else
+ifeq ($(PKGDATA_MODE),dll)
+ICU_DATA_OPT =
+else
+ICU_DATA_OPT = -i $(BUILDDIR)
+endif
+endif
+
 PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME)
 PKGDATA_INVOKE:=$(INVOKE) $(PKGDATA_INVOKE_OPTS)
 
@@ -131,38 +141,38 @@ $(TESTBUILDDIR)/testtable32.txt:  $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/gentest/gentest -r -d $(TESTBUILDDIR) 
 
 $(TESTBUILDDIR)/$(TESTDT)testtable32.res: $(TESTBUILDDIR)/testtable32.txt $(BINDIR)/genrb$(EXEEXT)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTBUILDDIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTBUILDDIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) $(<F)
 
 # Targets for nfscsi.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
 	@echo Building nfscsi.icu
-	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
 
 # Targets for nfscss.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscss.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
 	@echo Building nfscss.icu
-	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
 
 # Targets for nfscis.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscis.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cis_prep.txt
 	@echo Building nfscis.spp
-	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
 $(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_s.txt
 	@echo Building nfsmxs.spp
-	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
 $(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_p.txt
 	@echo Building nfsmxp.spp
-	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
 
 $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(BINDIR)/makeconv$(EXEEXT)
 	$(INVOKE) $(BINDIR)/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
 $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) $(<F)
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(BINDIR)/genrb$(EXEEXT)
 	@echo Testing genrb -e option
