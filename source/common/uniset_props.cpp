@@ -1286,7 +1286,8 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
             (USet *)incl,
             _set_add,
             _set_addRange,
-            _set_addString
+            _set_addString,
+            NULL // don't need remove()
         };
 
         if (incl != NULL) {
@@ -1369,7 +1370,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 (USet *)&foldSet,
                 _set_add,
                 _set_addRange,
-                _set_addString
+                _set_addString,
+                NULL // don't need remove()
             };
 
             // start with input set to guarantee inclusion
