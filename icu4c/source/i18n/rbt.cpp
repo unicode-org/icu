@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -43,13 +43,13 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
         return;
     }
 
-    if (parser.idBlock.length() != 0 ||
+    if (parser.idBlockVector->size() != 0 ||
         parser.compoundFilter != NULL) {
         status = U_INVALID_RBT_SYNTAX; // ::ID blocks disallowed in RBT
         return;
     }
 
-    fData = parser.orphanData();
+    fData = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
     setMaximumContextLength(fData->ruleSet.getMaximumContextLength());
 }
 

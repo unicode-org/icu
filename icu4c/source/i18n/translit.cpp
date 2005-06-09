@@ -921,30 +921,26 @@ Transliterator::createInstance(const UnicodeString& ID,
         return NULL;
     }
     
-    TransliteratorIDParser::instantiateList(list, NULL, -1, status);
+    TransliteratorIDParser::instantiateList(list, status);
     if (U_FAILURE(status)) {
         return NULL;
     }
     
     U_ASSERT(list.size() > 0);
     Transliterator* t = NULL;
-    switch (list.size()) {
-    case 1:
-        t = (Transliterator*) list.elementAt(0);
-        break;
-    default:
+    
+    if (list.size() > 1 || canonID.indexOf(";") >= 0) {
+        // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
+        // has one child transliterator.  This is so that toRules() will return the right thing
+        // (without any inactive ID), but our main ID still comes out correct.  That is, if we
+        // instantiate "(Lower);Latin-Greek;", we want the rules to come out as "::Latin-Greek;"
+        // even though the ID is "(Lower);Latin-Greek;".
         t = new CompoundTransliterator(list, parseError, status);
-        /* test for NULL */
-        if (t == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-        }
-        if (U_FAILURE(status)) {
-            delete t;
-            return NULL;
-        }
-        break;
     }
+    else {
+        t = (Transliterator*)list.elementAt(0);
+    }
+    
     t->setID(canonID);
     if (globalFilter != NULL) {
         t->adoptFilter(globalFilter);
@@ -1053,59 +1049,61 @@ Transliterator::createFromRules(const UnicodeString& ID,
     }
 
     // NOTE: The logic here matches that in TransliteratorRegistry.
-    if (parser.idBlock.length() == 0) {
-        if (parser.data == NULL) {
-            // No idBlock, no data -- this is just an
-            // alias for Null
-            t = new NullTransliterator();
-        } else {
-            // No idBlock, data != 0 -- this is an
-            // ordinary RBT_DATA.
-            t = new RuleBasedTransliterator(ID, parser.orphanData(), TRUE); // TRUE == adopt data object
+    if (parser.idBlockVector->size() == 0 && parser.dataVector->size() == 0) {
+        t = new NullTransliterator();
+    }
+    else if (parser.idBlockVector->size() == 0 && parser.dataVector->size() == 1) {
+        t = new RuleBasedTransliterator(ID, (TransliterationRuleData*)parser.dataVector->orphanElementAt(0), TRUE);
+    }
+    else if (parser.idBlockVector->size() == 1 && parser.dataVector->size() == 0) {
+        // idBlock, no data -- this is an alias.  The ID has
+        // been munged from reverse into forward mode, if
+        // necessary, so instantiate the ID in the forward
+        // direction.
+        if (parser.compoundFilter != NULL) {
+            UnicodeString filterPattern;
+            parser.compoundFilter->toPattern(filterPattern, FALSE);
+            t = createInstance(filterPattern + ";"
+                    + *((UnicodeString*)parser.idBlockVector->elementAt(0)), UTRANS_FORWARD, parseError, status);
         }
-        /* test for NULL */
-        if (t == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-        }
-    } else {
-        if (parser.data == NULL) {
-            // idBlock, no data -- this is an alias.  The ID has
-            // been munged from reverse into forward mode, if
-            // necessary, so instantiate the ID in the forward
-            // direction.
-            t = createInstance(parser.idBlock, UTRANS_FORWARD, parseError, status);
-            if (t != NULL) {
-                t->setID(ID);
-            }
-        } else {
-            // idBlock and data -- this is a compound
-            // RBT
-            UnicodeString id((UChar)0x005F); // '_'
-            t = new RuleBasedTransliterator(id, parser.orphanData(), TRUE); // TRUE == adopt data object
-            /* test for NULL */
-            if (t == 0) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-            t = new CompoundTransliterator(ID, parser.idBlock, parser.idSplitPoint,
-                                           t, status);
-            /* test for NULL */
-            if (t == 0) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-            if (U_FAILURE(status)) {
-                delete t;
-                t = 0;
-            }
-            if (parser.compoundFilter != NULL) {
-                t->adoptFilter(parser.orphanCompoundFilter());
-            }
-            return t;
+        else
+            t = createInstance(*((UnicodeString*)parser.idBlockVector->elementAt(0)), UTRANS_FORWARD, parseError, status);
+
+
+        if (t != NULL) {
+            t->setID(ID);
         }
     }
+    else {
+        UVector transliterators(status);
+        int32_t passNumber = 1;
 
+        int32_t limit = parser.idBlockVector->size();
+        if (parser.dataVector->size() > limit)
+            limit = parser.dataVector->size();
+
+        for (int32_t i = 0; i < limit; i++) {
+            if (i < parser.idBlockVector->size()) {
+                UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector->elementAt(i);
+                if (!idBlock->isEmpty()) {
+                    Transliterator* temp = createInstance(*idBlock, UTRANS_FORWARD, parseError, status);
+                    if (temp != NULL && temp->getDynamicClassID() != NullTransliterator::getStaticClassID())
+                        transliterators.addElement(temp, status);
+                    else
+                        delete temp;
+                }
+            }
+            if (!parser.dataVector->isEmpty()) {
+                TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
+                transliterators.addElement(new RuleBasedTransliterator((UnicodeString)"%Pass" + (passNumber++),
+                    data, TRUE), status);
+            }
+        }
+
+        t = new CompoundTransliterator(transliterators, passNumber - 1, parseError, status);
+        t->setID(ID);
+        t->adoptFilter(parser.orphanCompoundFilter());
+    }
     return t;
 }
 
