@@ -1073,7 +1073,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     
     if (U_SUCCESS(status)) {
         // Convert the set vector to an array
-        for (int32_t i = 0; i < dataVector->size(); i++) {
+        int32_t i, dataVectorSize = dataVector->size();
+        for (i = 0; i < dataVectorSize; i++) {
             TransliterationRuleData* data = (TransliterationRuleData*)dataVector->elementAt(i);
             data->variablesLength = variablesVector->size();
             if (data->variablesLength == 0) {
@@ -1107,12 +1108,13 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             }
         }        
 
-        for (int32_t i = 0; i < dataVector->size(); i++) {
+        for (i = 0; i < dataVectorSize; i++) {
             TransliterationRuleData* data = (TransliterationRuleData*)dataVector->elementAt(i);
             data->ruleSet.freeze(parseError, status);
         }
-        if (idBlockVector->size() == 1 && ((UnicodeString*)idBlockVector->elementAt(0))->isEmpty())
+        if (idBlockVector->size() == 1 && ((UnicodeString*)idBlockVector->elementAt(0))->isEmpty()) {
             idBlockVector->removeElementAt(0);
+        }
     }
 }
 
