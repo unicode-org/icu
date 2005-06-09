@@ -43,9 +43,9 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
 
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
     UMemory(other), ruleSet(other.ruleSet),
+    variablesAreOwned(TRUE),
     variablesBase(other.variablesBase),
-    variablesLength(other.variablesLength),
-    variablesAreOwned(TRUE)
+    variablesLength(other.variablesLength)
 {
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);
