@@ -288,7 +288,7 @@ getDirProps(UBiDi *pBiDi) {
     UChar32 uchar;
     DirProp dirProp, paraDirDefault;
     UBool isDefaultLevel=IS_DEFAULT_LEVEL(pBiDi->paraLevel);
-    UBool paraLevelStillDefault;        /* flag for real value not set */
+    UBool paraLevelStillDefault=FALSE;  /* flag for real value not set */
 
     typedef enum {
          NOT_CONTEXTUAL,                /* 0: not contextual paraLevel */
@@ -296,7 +296,7 @@ getDirProps(UBiDi *pBiDi) {
          FOUND_STRONG_CHAR              /* 2: found first strong char       */
     } State;
     State state;
-    int32_t paraStart;                  /* index of first char in paragraph */
+    int32_t paraStart=0;                /* index of first char in paragraph */
     DirProp paraDir;                    /* == CONTEXT_RTL within paragraphs
                                            starting with strong R char      */
 
