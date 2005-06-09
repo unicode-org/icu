@@ -71,7 +71,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     //
     // Build up the mapping between code points and UTF-16 code unit indexes.
     //
-    m * cpMap = new m[sa.length() + 1];
+    m *cpMap = new m[sa.length() + 1];
     j = 0;
     for (i=0; i<sa.length(); i=sa.moveIndex32(i, 1)) {
         c = sa.char32At(i);
@@ -131,6 +131,9 @@ void UTextTest::TestString(const UnicodeString &s) {
 
     // Replaceable test
 
+	delete []cpMap;
+	delete []u8Map;
+	delete []u8String;
 }
 
 
