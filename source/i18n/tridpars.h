@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- *   Copyright (c) 2002-2004, International Business Machines Corporation *
+ *   Copyright (c) 2002-2005, International Business Machines Corporation *
  *   and others.  All Rights Reserved.                                    *
  **************************************************************************
  *   Date        Name        Description                                  *
@@ -202,23 +202,15 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
      * the reverse.  THIS MAY RESULT IN AN EMPTY VECTOR.  Convert
      * SingleID entries to actual transliterators.
      *
-     * Also, optionally, insert the given transliterator at the given
-     * position.  This effectively happens before anything else.
-     *
      * @param list vector of SingleID objects.  On exit, vector
      * of one or more Transliterators.
-     * @param insert Transliterator to insert, or null if none.
-     * @param insertIndex index from 0..list.size()-1, at which
-     * to place 'insert', or -1 if none.
      * @param ec Output param to receive a success or an error code.
      * @return new value of insertIndex.  The index will shift if
      * there are empty items, like "(Lower)", with indices less than
      * insertIndex.
      */
-    static int32_t instantiateList(UVector& list,
-                                   Transliterator* insert,
-                                   int32_t insertIndex,
-                                   UErrorCode& ec);
+    static void instantiateList(UVector& list,
+                                UErrorCode& ec);
 
     /**
      * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,

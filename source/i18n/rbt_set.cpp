@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2004, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -120,7 +120,7 @@ inline void _debugOut(const char* msg, TransliterationRule* rule,
     UnicodeString esc;
     _escape(buf, esc);
     CharString cbuf(esc);
-    printf("%s\n", (char*) cbuf);
+    printf("%s\n", (const char*) cbuf);
 }
 
 #else

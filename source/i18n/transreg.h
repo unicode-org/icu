@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -44,13 +44,13 @@ class TransliteratorAlias : public UMemory {
      * Construct a simple alias (type == SIMPLE)
      * @param aliasID the given id.
      */
-    TransliteratorAlias(const UnicodeString& aliasID);
+    TransliteratorAlias(const UnicodeString& aliasID, const UnicodeSet* compoundFilter);
 
     /**
      * Construct a compound RBT alias (type == COMPOUND)
      */
-    TransliteratorAlias(const UnicodeString& ID, const UnicodeString& idBlock,
-                        Transliterator* adopted, int32_t idSplitPoint,
+    TransliteratorAlias(const UnicodeString& ID, const UnicodeString& idBlocks,
+                        UVector* adoptedTransliterators,
                         const UnicodeSet* compoundFilter);
 
     /**
@@ -108,10 +108,10 @@ class TransliteratorAlias : public UMemory {
     //    Here ID is the ID, aliasID is the rules string.
     //    idSplitPoint is the UTransDirection.
     UnicodeString ID;
-    UnicodeString aliasID; // rename! holds rules for RULES type
-    Transliterator* trans; // owned
+    UnicodeString aliasesOrRules;
+    UVector* transes; // owned
     const UnicodeSet* compoundFilter; // alias
-    int32_t idSplitPoint; // rename! holds UTransDirection for RULES type
+    UTransDirection direction;
     enum { SIMPLE, COMPOUND, RULES } type;
 
     TransliteratorAlias(const TransliteratorAlias &other); // forbid copying of this class

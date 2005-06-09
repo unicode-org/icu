@@ -1101,19 +1101,19 @@ void TransliteratorRoundTripTest::TestHan() {
     pn->transliterate(target2);
 
     // verify that there are no marks
-    Transliterator *nfc = Transliterator::createInstance("nfc", UTRANS_FORWARD, status);
+    Transliterator *nfd = Transliterator::createInstance("nfd", UTRANS_FORWARD, status);
     ASSERT_SUCCESS(status);
 
-    UnicodeString nfced = target2;
-    nfc->transliterate(nfced);
-    UnicodeSet allMarks("[:mark:]", status);
+    UnicodeString nfded = target2;
+    nfd->transliterate(nfded);
+    UnicodeSet allMarks("[\\u0304\\u0301\\u030C\\u0300\\u0306]", status); // look only for Pinyin tone marks, not all marks (there are some others in there)
     ASSERT_SUCCESS(status);
-    assertFalse("NumericPinyin must contain no marks", allMarks.containsSome(nfced));
+    assertFalse("NumericPinyin must contain no marks", allMarks.containsSome(nfded));
 
     // verify roundtrip
     Transliterator *np = pn->createInverse(status);
     ASSERT_SUCCESS(status);
-    UnicodeString target3 = target;
+    UnicodeString target3 = target2;
     np->transliterate(target3);
     UBool roundtripOK = (target3.compare(target) == 0);
     assertTrue("NumericPinyin must roundtrip", roundtripOK);
@@ -1125,13 +1125,15 @@ void TransliteratorRoundTripTest::TestHan() {
         writeStringInU8(out, target);
         fprintf(out, "\nPinyin-Numeric-Pinyin: ");
         writeStringInU8(out, target2);
+        fprintf(out, "\nNumeric-Pinyin-Pinyin: ");
+        writeStringInU8(out, target3);
         fprintf(out, "\n");
         fclose(out);
     }
 
     delete hanTL;
     delete pn;
-    delete nfc;
+    delete nfd;
     delete np;
     uset_close(USetExemplars);
 }
