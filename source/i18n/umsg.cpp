@@ -611,13 +611,12 @@ umsg_vparse(const UMessageFormat *fmt,
 #define STATE_IN_QUOTE 2
 #define STATE_MSG_ELEMENT 3
 
-#define MAppend(c) if (len < blen) buffer[len++] = c; else len++
-
+#define MAppend(c) if (len < destCapacity) dest[len++] = c; else len++
 
 int32_t umsg_autoQuoteApostrophe(const UChar* pattern, 
-			     int32_t plen,
-			     UChar* buffer,
-			     int32_t blen,
+			     int32_t patternLength,
+			     UChar* dest,
+			     int32_t destCapacity,
 			     UErrorCode* ec)
 {
   int32_t state = STATE_INITIAL;
@@ -628,16 +627,16 @@ int32_t umsg_autoQuoteApostrophe(const UChar* pattern,
     return -1;
   }
 
-  if (pattern == NULL || plen < -1 || (buffer == NULL && blen > 0)) {
+  if (pattern == NULL || patternLength < -1 || (dest == NULL && destCapacity > 0)) {
     *ec = U_ILLEGAL_ARGUMENT_ERROR;
     return -1;
   }
 
-  if (plen == -1) {
-    plen = u_strlen(pattern);
+  if (patternLength == -1) {
+    patternLength = u_strlen(pattern);
   }
 
-  for (int i = 0; i < plen; ++i) {
+  for (int i = 0; i < patternLength; ++i) {
     UChar c = pattern[i];
     switch (state) {
     case STATE_INITIAL:
@@ -701,7 +700,7 @@ int32_t umsg_autoQuoteApostrophe(const UChar* pattern,
     MAppend(SINGLE_QUOTE);
   }
 
-  return u_terminateUChars(buffer, blen, len, ec);
+  return u_terminateUChars(dest, destCapacity, len, ec);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
