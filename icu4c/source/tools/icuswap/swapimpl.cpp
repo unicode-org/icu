@@ -77,7 +77,7 @@ uprops_swap(const UDataSwapper *ds,
     }
 
     /* the properties file must contain at least the indexes array */
-    if(length>=0 && (length-headerSize)<sizeof(dataIndexes)) {
+    if(length>=0 && (length-headerSize)<(int32_t)sizeof(dataIndexes)) {
         udata_printError(ds, "uprops_swap(): too few bytes (%d after header) for a Unicode properties file\n",
                          length-headerSize);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
