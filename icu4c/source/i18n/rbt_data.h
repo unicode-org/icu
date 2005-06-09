@@ -81,7 +81,7 @@ public:
      * the same variables list, so only the first one is considered to own
      * the variables)
      */
-    bool variablesAreOwned;
+    UBool variablesAreOwned;
 
     /**
      * The character that represents variables[0].  Characters
