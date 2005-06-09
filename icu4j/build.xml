@@ -277,16 +277,16 @@
 
     <target name="indices" depends="icudata,tools">
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/" />
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/" />
 	</java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/rbnf" />
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/rbnf" />
 	</java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/coll" />
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/coll" />
 	</java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt33b/translit" />
+	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/translit" />
 	</java>
     </target>
 
