@@ -238,26 +238,41 @@ class TransliteratorRegistry {
 
     static class CompoundRBTEntry {
         private String ID;
-        private String idBlock;
-        private int idSplitPoint;
-        private RuleBasedTransliterator.Data data;
+        private Vector idBlockVector;
+        private Vector dataVector;
         private UnicodeSet compoundFilter;
 
-        public CompoundRBTEntry(String theID, String theIDBlock,
-                                int theIDSplitPoint,
-                                RuleBasedTransliterator.Data theData,
+        public CompoundRBTEntry(String theID, Vector theIDBlockVector,
+                                Vector theDataVector,
                                 UnicodeSet theCompoundFilter) {
             ID = theID;
-            idBlock = theIDBlock;
-            idSplitPoint = theIDSplitPoint;
-            data = theData;
+            idBlockVector = theIDBlockVector;
+            dataVector = theDataVector;
             compoundFilter = theCompoundFilter;
         }
 
         public Transliterator getInstance() {
-            Transliterator t = new RuleBasedTransliterator("_", data, null);
-            t = new CompoundTransliterator(ID, idBlock, idSplitPoint, t);
-            t.setFilter(compoundFilter);
+            Vector transliterators = new Vector();
+            int passNumber = 1;
+
+            int limit = Math.max(idBlockVector.size(), dataVector.size());
+            for (int i = 0; i < limit; i++) {
+                if (i < idBlockVector.size()) {
+                    String idBlock = (String)idBlockVector.get(i);
+                    if (idBlock.length() > 0)
+                        transliterators.add(Transliterator.getInstance(idBlock));
+                }
+                if (i < dataVector.size()) {
+                    RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+                    transliterators.add(new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
+                }
+            }
+
+            Transliterator t = new CompoundTransliterator(transliterators, passNumber - 1);
+            t.setID(ID);
+            if (compoundFilter != null) {
+                t.setFilter(compoundFilter);
+            }
             return t;
         }
     }
@@ -846,29 +861,30 @@ class TransliteratorRegistry {
             // do this, we only loop through twice at most.
             // NOTE: The logic here matches that in
             // Transliterator.createFromRules().
-            if (parser.idBlock.length() == 0) {
-                if (parser.data == null) {
-                    // No idBlock, no data -- this is just an
-                    // alias for Null
-                    entryWrapper[0] = new AliasEntry(NullTransliterator._ID);
-                } else {
-                    // No idBlock, data != 0 -- this is an
-                    // ordinary RBT_DATA
-                    entryWrapper[0] = parser.data;
-                }
-            } else {
-                if (parser.data == null) {
-                    // idBlock, no data -- this is an alias.  The ID has
-                    // been munged from reverse into forward mode, if
-                    // necessary, so instantiate the ID in the forward
-                    // direction.
-                    entryWrapper[0] = new AliasEntry(parser.idBlock);
-                } else {
-                    // idBlock and data -- this is a compound
-                    // RBT
-                    entryWrapper[0] = new CompoundRBTEntry(
-                        ID, parser.idBlock, parser.idSplitPoint, parser.data, parser.compoundFilter);
-                }
+            if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 0) {
+                // No idBlock, no data -- this is just an
+                // alias for Null
+                entryWrapper[0] = new AliasEntry(NullTransliterator._ID);
+            }
+            else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
+                // No idBlock, data != 0 -- this is an
+                // ordinary RBT_DATA
+                entryWrapper[0] = parser.dataVector.get(0);
+            }
+            else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
+                // idBlock, no data -- this is an alias.  The ID has
+                // been munged from reverse into forward mode, if
+                // necessary, so instantiate the ID in the forward
+                // direction.
+                if (parser.compoundFilter != null)
+                    entryWrapper[0] = new AliasEntry(parser.compoundFilter.toPattern(false) + ";"
+                            + (String)parser.idBlockVector.get(0));
+                else
+                    entryWrapper[0] = new AliasEntry((String)parser.idBlockVector.get(0));
+            }
+            else {
+                entryWrapper[0] = new CompoundRBTEntry(ID, parser.idBlockVector, parser.dataVector,
+                        parser.compoundFilter);
             }
         }
     }

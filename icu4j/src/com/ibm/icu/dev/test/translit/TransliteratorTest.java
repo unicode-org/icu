@@ -2896,6 +2896,285 @@ public class TransliteratorTest extends TestFmwk {
     }
     
     //======================================================================
+    // New tests for the ::BEGIN/::END syntax
+    //======================================================================
+
+    private static final String[] BEGIN_END_RULES = new String[] {
+        // [0]
+        "abc > xy;"
+        + "aba > z;",
+
+        // [1]
+/*
+        "::BEGIN;"
+        + "abc > xy;"
+        + "::END;"
+        + "::BEGIN;"
+        + "aba > z;"
+        + "::END;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [2]
+/*
+        "abc > xy;"
+        + "::BEGIN;"
+        + "aba > z;"
+        + "::END;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [3]
+/*
+        "::BEGIN;"
+        + "abc > xy;"
+        + "::END;"
+        + "aba > z;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [4]
+        "abc > xy;"
+        + "::Null;"
+        + "aba > z;",
+
+        // [5]
+        "::Upper;"
+        + "ABC > xy;"
+        + "AB > x;"
+        + "C > z;"
+        + "::Upper;"
+        + "XYZ > p;"
+        + "XY > q;"
+        + "Z > r;"
+        + "::Upper;",
+
+        // [6]
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';",
+
+        // [7]
+        "::Null;"
+        + "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';",
+
+        // [8]
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';"
+        + "::Null;",
+
+        // [9]
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "::Null;"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';",
+
+        // [10]
+/*
+        "::BEGIN;"
+        + "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "::END;"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [11]
+/*
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "::BEGIN;"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';"
+        + "::END;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [12]
+/*
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "$ab = [ab];"
+        + "::BEGIN;"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';"
+        + "::END;"
+        + "::BEGIN;"
+        + "$ab { ' ' } $ab > '-';"
+        + "c { ' ' > ;"
+        + "::END;"
+        + "::BEGIN;"
+        + "'a-a' > a\\%|a;"
+        + "::END;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [13]
+        "$ws = [[:Separator:][\\u0009-\\u000C]$];"
+        + "$delim = [\\-$ws];"
+        + "$ab = [ab];"
+        + "::Null;"
+        + "$ws $delim* > ' ';"
+        + "'-' $delim* > '-';"
+        + "::Null;"
+        + "$ab { ' ' } $ab > '-';"
+        + "c { ' ' > ;"
+        + "::Null;"
+        + "'a-a' > a\\%|a;",
+
+        // [14]
+/*
+        "::[abc];"
+        + "::BEGIN;"
+        + "abc > xy;"
+        + "::END;"
+        + "::BEGIN;"
+        + "aba > yz;"
+        + "::END;"
+        + "::Upper;",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [15]
+        "::[abc];"
+        + "abc > xy;"
+        + "::Null;"
+        + "aba > yz;"
+        + "::Upper;",
+
+        // [16]
+/*
+        "::[abc];"
+        + "::BEGIN;"
+        + "abc <> xy;"
+        + "::END;"
+        + "::BEGIN;"
+        + "aba <> yz;"
+        + "::END;"
+        + "::Upper(Lower);"
+        + "::([XYZ]);",
+*/
+        "", // test case commented out below, this is here to keep from messing up the indexes
+
+        // [17]
+        "::[abc];"
+        + "abc <> xy;"
+        + "::Null;"
+        + "aba <> yz;"
+        + "::Upper(Lower);"
+        + "::([XYZ]);"
+    };
+
+/*
+(This entire test is commented out below and will need some heavy revision when we re-add
+the ::BEGIN/::END stuff)
+    private static final String[] BOGUS_BEGIN_END_RULES = new String[] {
+        // [7]
+        "::BEGIN;"
+        + "abc > xy;"
+        + "::BEGIN;"
+        + "aba > z;"
+        + "::END;"
+        + "::END;",
+
+        // [8]
+        "abc > xy;"
+        + " aba > z;"
+        + "::END;",
+
+        // [9]
+        "::BEGIN;"
+        + "::Upper;"
+        + "::END;"
+    };
+*/
+
+    private static final String[] BEGIN_END_TEST_CASES = new String[] {
+        BEGIN_END_RULES[0], "abc ababc aba", "xy zbc z",
+//        BEGIN_END_RULES[1], "abc ababc aba", "xy abxy z",
+//        BEGIN_END_RULES[2], "abc ababc aba", "xy abxy z",
+//        BEGIN_END_RULES[3], "abc ababc aba", "xy abxy z",
+        BEGIN_END_RULES[4], "abc ababc aba", "xy abxy z",
+        BEGIN_END_RULES[5], "abccabaacababcbc", "PXAARXQBR",
+
+        BEGIN_END_RULES[6], "e   e - e---e-  e", "e e e-e-e",
+        BEGIN_END_RULES[7], "e   e - e---e-  e", "e e e-e-e",
+        BEGIN_END_RULES[8], "e   e - e---e-  e", "e e e-e-e",
+        BEGIN_END_RULES[9], "e   e - e---e-  e", "e e e-e-e",
+//        BEGIN_END_RULES[10], "e   e - e---e-  e", "e e e-e-e",
+//        BEGIN_END_RULES[11], "e   e - e---e-  e", "e e e-e-e",
+//        BEGIN_END_RULES[12], "e   e - e---e-  e", "e e e-e-e",
+//        BEGIN_END_RULES[12], "a    a    a    a", "a%a%a%a",
+//        BEGIN_END_RULES[12], "a a-b c b a", "a%a-b cb-a",
+        BEGIN_END_RULES[13], "e   e - e---e-  e", "e e e-e-e",
+        BEGIN_END_RULES[13], "a    a    a    a", "a%a%a%a",
+        BEGIN_END_RULES[13], "a a-b c b a", "a%a-b cb-a",
+
+//        BEGIN_END_RULES[14], "abc xy ababc xyz aba", "XY xy ABXY xyz YZ",
+        BEGIN_END_RULES[15], "abc xy ababc xyz aba", "XY xy ABXY xyz YZ",
+//        BEGIN_END_RULES[16], "abc xy ababc xyz aba", "XY xy ABXY xyz YZ",
+        BEGIN_END_RULES[17], "abc xy ababc xyz aba", "XY xy ABXY xyz YZ"
+    };
+
+    public void TestBeginEnd() {
+        // run through the list of test cases above
+        for (int i = 0; i < BEGIN_END_TEST_CASES.length; i += 3) {
+            expect(BEGIN_END_TEST_CASES[i], BEGIN_END_TEST_CASES[i + 1], BEGIN_END_TEST_CASES[i + 2]);
+        }
+
+        // instantiate the one reversible rule set in the reverse direction and make sure it does the right thing
+        Transliterator reversed  = Transliterator.createFromRules("Reversed", BEGIN_END_RULES[17],
+                Transliterator.REVERSE);
+        expect(reversed, "xy XY XYZ yz YZ", "xy abc xaba yz aba");
+
+        // finally, run through the list of syntactically-ill-formed rule sets above and make sure
+        // that all of them cause errors
+/*
+(commented out until we have the real ::BEGIN/::END stuff in place
+        for (int i = 0; i < BOGUS_BEGIN_END_RULES.length; i++) {
+            try {
+                Transliterator t = Transliterator.createFromRules("foo", BOGUS_BEGIN_END_RULES[i],
+                        Transliterator.FORWARD);
+                errln("Should have gotten syntax error from " + BOGUS_BEGIN_END_RULES[i]);
+            }
+            catch (IllegalArgumentException e) {
+                // this is supposed to happen; do nothing here
+            }
+        }
+*/
+    }
+
+    public void TestBeginEndToRules() {
+        // run through the same list of test cases we used above, but this time, instead of just
+        // instantiating a Transliterator from the rules and running the test against it, we instantiate
+        // a Transliterator from the rules, do toRules() on it, instantiate a Transliterator from
+        // the resulting set of rules, and make sure that the generated rule set is semantically equivalent
+        // to (i.e., does the same thing as) the original rule set
+        for (int i = 0; i < BEGIN_END_TEST_CASES.length; i += 3) {
+            Transliterator t = Transliterator.createFromRules("--", BEGIN_END_TEST_CASES[i],
+                    Transliterator.FORWARD);
+            String rules = t.toRules(false);
+            Transliterator t2 = Transliterator.createFromRules("Test case #" + (i / 3), rules, Transliterator.FORWARD);
+            expect(t2, BEGIN_END_TEST_CASES[i + 1], BEGIN_END_TEST_CASES[i + 2]);
+        }
+
+        // do the same thing for the reversible test case
+        Transliterator reversed = Transliterator.createFromRules("Reversed", BEGIN_END_RULES[17],
+                Transliterator.REVERSE);
+        String rules = reversed.toRules(false);
+        Transliterator reversed2 = Transliterator.createFromRules("Reversed", rules, Transliterator.FORWARD);
+        expect(reversed2, "xy XY XYZ yz YZ", "xy abc xaba yz aba");
+    }
+
+    //======================================================================
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================

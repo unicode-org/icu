@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.Utility;
 import java.util.Vector;
+import java.util.Hashtable;
 import java.text.ParsePosition;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -20,38 +21,28 @@ class TransliteratorParser {
     //----------------------------------------------------------------------
 
     /**
-     * PUBLIC data member containing the parsed data object, or null if
-     * there were no rules.
+     * PUBLIC data member.
+     * A Vector of RuleBasedTransliterator.Data objects, one for each discrete group
+     * of rules in the rule set
      */
-    public RuleBasedTransliterator.Data data;
+    public Vector dataVector;
 
     /**
      * PUBLIC data member.
-     * The block of ::IDs, both at the top and at the bottom.
-     * Inserted into these may be additional rules at the
-     * idSplitPoint.
+     * A Vector of Strings containing all of the ID blocks in the rule set
      */
-    public String idBlock;
+    public Vector idBlockVector;
 
     /**
-     * PUBLIC data member.
-     * In a compound RBT, the index at which the RBT rules are
-     * inserted into the ID block.  Index 0 means before any IDs
-     * in the block.  Index idBlock.length() means after all IDs
-     * in the block.  Index is a string index.
+     * The current data object for which we are parsing rules
      */
-    public int idSplitPoint;
+    private RuleBasedTransliterator.Data curData;
 
     /**
      * PUBLIC data member containing the parsed compound filter, if any.
      */
     public UnicodeSet compoundFilter;
 
-
-    // The number of rules parsed.  This tells us if there were
-    // any actual transliterator rules, or if there were just ::ID
-    // block IDs.
-    private int ruleCount;
 
     private int direction;
 
@@ -66,6 +57,12 @@ class TransliteratorParser {
      * element 0 corresponds to character data.variablesBase.
      */
     private Vector variablesVector;
+
+    /**
+     * Temporary table of variable names.  When parsing is complete, this is
+     * copied into data.variableNames.
+     */
+    private Hashtable variableNames;
 
     /**
      * String of standins for segments.  Used during the parsing of a single
@@ -121,6 +118,13 @@ class TransliteratorParser {
     // Indicator for ID blocks
     private static final String ID_TOKEN = "::";
     private static final int ID_TOKEN_LEN = 2;
+
+/*
+(reserved for future expansion)
+    // markers for beginning and end of rule groups
+    private static final String BEGIN_TOKEN = "BEGIN";
+    private static final String END_TOKEN = "END";
+*/
 
     // Operators
     private static final char VARIABLE_DEF_OP   = '=';
@@ -195,7 +199,7 @@ class TransliteratorParser {
          * Implement SymbolTable API.
          */
         public char[] lookup(String name) {
-            return (char[]) data.variableNames.get(name);
+            return (char[]) variableNames.get(name);
         }
 
         /**
@@ -204,7 +208,7 @@ class TransliteratorParser {
         public UnicodeMatcher lookupMatcher(int ch) {
             // Note that we cannot use data.lookup() because the
             // set array has not been constructed yet.
-            int i = ch - data.variablesBase;
+            int i = ch - curData.variablesBase;
             if (i >= 0 && i < variablesVector.size()) {
                 return (UnicodeMatcher) variablesVector.elementAt(i);
             }
@@ -240,7 +244,7 @@ class TransliteratorParser {
         public boolean isMatcher(int ch) {
             // Note that we cannot use data.lookup() because the
             // set array has not been constructed yet.
-            int i = ch - data.variablesBase;
+            int i = ch - curData.variablesBase;
             if (i >= 0 && i < variablesVector.size()) {
                 return variablesVector.elementAt(i) instanceof UnicodeMatcher;
             }
@@ -254,7 +258,7 @@ class TransliteratorParser {
         public boolean isReplacer(int ch) {
             // Note that we cannot use data.lookup() because the
             // set array has not been constructed yet.
-            int i = ch - data.variablesBase;
+            int i = ch - curData.variablesBase;
             if (i >= 0 && i < variablesVector.size()) {
                 return variablesVector.elementAt(i) instanceof UnicodeReplacer;
             }
@@ -563,7 +567,7 @@ class TransliteratorParser {
                         // standin for that matcher.
                         StringMatcher m =
                             new StringMatcher(buf.substring(bufSegStart),
-                                              segmentNumber, parser.data);
+                                              segmentNumber, parser.curData);
 
                         // Record and associate object and segment number
                         parser.setSegmentObject(segmentNumber, m);
@@ -598,7 +602,7 @@ class TransliteratorParser {
                         // in buf, starting at offset bufSegStart.
                         FunctionReplacer r =
                             new FunctionReplacer(t,
-                                new StringReplacer(buf.substring(bufSegStart), parser.data));
+                                new StringReplacer(buf.substring(bufSegStart), parser.curData));
 
                         // Replace the buffer contents with a stand-in
                         buf.setLength(bufSegStart);
@@ -696,7 +700,7 @@ class TransliteratorParser {
 
                         UnicodeMatcher m =
                             new StringMatcher(buf.toString(), qstart, qlimit,
-                                              0, parser.data);
+                                              0, parser.curData);
                         int min = 0;
                         int max = Quantifier.MAX;
                         switch (c) {
@@ -873,18 +877,17 @@ class TransliteratorParser {
      * rules
      */
     void parseRules(RuleBody ruleArray, int dir) {
-        data = new RuleBasedTransliterator.Data();
+        boolean parsingIDs = true;
+        boolean inBeginEndBlock = false;
+        int ruleCount = 0;
+
+        dataVector = new Vector();
+        idBlockVector = new Vector();
+        curData = null;
         direction = dir;
-        ruleCount = 0;
         compoundFilter = null;
-
-        // By default, rules use part of the private use area
-        // E000..F8FF for variables and other stand-ins.  Currently
-        // the range F000..F8FF is typically sufficient.  The 'use
-        // variable range' pragma allows rule sets to modify this.
-        setVariableRange(0xF000, 0xF8FF);
-
         variablesVector = new Vector();
+        variableNames = new Hashtable();
         parseData = new ParseData();
 
         StringBuffer errors = null;
@@ -893,13 +896,6 @@ class TransliteratorParser {
         ruleArray.reset();
 
         StringBuffer idBlockResult = new StringBuffer();
-        idSplitPoint = -1;
-        // The mode marks whether we are in the header ::id block, the
-        // rule block, or the footer ::id block.
-        // mode == 0: start: rule->1, ::id->0
-        // mode == 1: in rules: rule->1, ::id->2
-        // mode == 2: in footer rule block: rule->ERROR, ::id->2
-        int mode = 0;
 
         // The compound filter offset is an index into idBlockResult.
         // If it is 0, then the compound filter occurred at the start,
@@ -908,9 +904,6 @@ class TransliteratorParser {
         // compound filter pattern within idBlockResult.
         this.compoundFilter = null;
         int compoundFilterOffset = -1;
-
-        // The number of ::ID block entries we have parsed
-        int idBlockCount = 0;
 
     main:
         for (;;) {
@@ -933,32 +926,43 @@ class TransliteratorParser {
                     }
                     continue; // Either fall out or restart with next line
                 }
+
+                // skip empty rules
+                if (c == END_OF_RULE)
+                    continue;
+
                 // Often a rule file contains multiple errors.  It's
                 // convenient to the rule author if these are all reported
                 // at once.  We keep parsing rules even after a failure, up
                 // to a specified limit, and report all errors at once.
                 try {
+                    ++ruleCount;
+
                     // We've found the start of a rule or ID.  c is its first
                     // character, and pos points past c.
                     --pos;
                     // Look for an ID token.  Must have at least ID_TOKEN_LEN + 1
                     // chars left.
                     if ((pos + ID_TOKEN_LEN + 1) <= limit &&
-                        rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
+                            rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
                         pos += ID_TOKEN_LEN;
                         c = rule.charAt(pos);
                         while (UCharacterProperty.isRuleWhiteSpace(c) && pos < limit) {
                             ++pos;
                             c = rule.charAt(pos);
                         }
-                        if (mode == 1) {
-                            // We have just entered the footer ::ID block
-                            mode = 2;
-                            // In the forward direction add elements at the end.
-                            // In the reverse direction add elements at the start.
-                            idSplitPoint = idBlockCount;
-                        }
                         int[] p = new int[] { pos };
+
+                        if (!parsingIDs) {
+                            if (curData != null) {
+                                if (direction == Transliterator.FORWARD)
+                                    dataVector.add(curData);
+                                else
+                                    dataVector.insertElementAt(curData, 0);
+                                curData = null;
+                            }
+                            parsingIDs = true;
+                        }
 
                         TransliteratorIDParser.SingleID id =
                             TransliteratorIDParser.parseSingleID(
@@ -972,12 +976,10 @@ class TransliteratorParser {
                                 idBlockResult.insert(0, id.canonID + END_OF_RULE);
                             }
 
-                            ++idBlockCount;
-
                         } else {
                             // Couldn't parse an ID.  Try to parse a global filter
                             int[] withParens = new int[] { -1 };
-                            UnicodeSet f = TransliteratorIDParser.parseGlobalFilter(rule, p, direction, withParens, idBlockResult);
+                            UnicodeSet f = TransliteratorIDParser.parseGlobalFilter(rule, p, direction, withParens, null);
                             if (f != null && Utility.parseChar(rule, p, END_OF_RULE)) {
                                 if ((direction == Transliterator.FORWARD) ==
                                     (withParens[0] == 0)) {
@@ -986,7 +988,7 @@ class TransliteratorParser {
                                         syntaxError("Multiple global filters", rule, pos);
                                     }
                                     compoundFilter = f;
-                                    compoundFilterOffset = idBlockCount;
+                                    compoundFilterOffset = ruleCount;
                                }
                             } else {
                                 // Invalid ::id
@@ -996,22 +998,33 @@ class TransliteratorParser {
                         }
 
                         pos = p[0];
-                    } else if (resemblesPragma(rule, pos, limit)) {
-                        int ppp = parsePragma(rule, pos, limit);
-                        if (ppp < 0) {
-                            syntaxError("Unrecognized pragma", rule, pos);
-                        }
-                        pos = ppp;
                     } else {
-                        // Parse a rule
-                        pos = parseRule(rule, pos, limit);
-                        ++ruleCount;
-                        if (mode == 2) {
-                            // ::id in illegal position (because a rule
-                            // occurred after the ::id footer block)
-                            syntaxError("::ID in illegal position", rule, pos);
+                        if (parsingIDs) {
+                            if (direction == Transliterator.FORWARD)
+                                idBlockVector.add(idBlockResult.toString());
+                            else
+                                idBlockVector.insertElementAt(idBlockResult.toString(), 0);
+                            idBlockResult.delete(0, idBlockResult.length());
+                            parsingIDs = false;
+                            curData = new RuleBasedTransliterator.Data();
+
+                            // By default, rules use part of the private use area
+                            // E000..F8FF for variables and other stand-ins.  Currently
+                            // the range F000..F8FF is typically sufficient.  The 'use
+                            // variable range' pragma allows rule sets to modify this.
+                            setVariableRange(0xF000, 0xF8FF);
                         }
-                        mode = 1;
+
+                        if (resemblesPragma(rule, pos, limit)) {
+                            int ppp = parsePragma(rule, pos, limit);
+                            if (ppp < 0) {
+                                syntaxError("Unrecognized pragma", rule, pos);
+                            }
+                            pos = ppp;
+                        // Parse a rule
+                        } else {
+                            pos = parseRule(rule, pos, limit);
+                        }
                     }
                 } catch (IllegalArgumentException e) {
                     if (errorCount == 30) {
@@ -1028,38 +1041,48 @@ class TransliteratorParser {
                 }
             }
         }
-
-        idBlock = idBlockResult.toString();
-
-        if (idSplitPoint < 0) {
-            idSplitPoint = idBlockCount;
+        if (parsingIDs && idBlockResult.length() > 0) {
+            if (direction == Transliterator.FORWARD)
+                idBlockVector.add(idBlockResult.toString());
+            else
+                idBlockVector.insertElementAt(idBlockResult.toString(), 0);
         }
-
-        if (direction == Transliterator.REVERSE) {
-            idSplitPoint = idBlockCount - idSplitPoint;
+        else if (!parsingIDs && curData != null) {
+            if (direction == Transliterator.FORWARD)
+                dataVector.add(curData);
+            else
+                dataVector.insertElementAt(curData, 0);
         }
 
         // Convert the set vector to an array
-        data.variables = new Object[variablesVector.size()];
-        variablesVector.copyInto(data.variables);
+        for (int i = 0; i < dataVector.size(); i++) {
+            RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+            data.variables = new Object[variablesVector.size()];
+            variablesVector.copyInto(data.variables);
+            data.variableNames = new Hashtable();
+            data.variableNames.putAll(variableNames);
+        }
         variablesVector = null;
 
         // Do more syntax checking and index the rules
         try {
             if (compoundFilter != null) {
                 if ((direction == Transliterator.FORWARD &&
-                     compoundFilterOffset != 0) ||
+                     compoundFilterOffset != 1) ||
                     (direction == Transliterator.REVERSE &&
-                     compoundFilterOffset != idBlockCount)) {
+                     compoundFilterOffset != ruleCount)) {
                     throw new IllegalArgumentException("Compound filters misplaced");
                 }
             }
 
-            data.ruleSet.freeze();
-
-            if (ruleCount == 0) {
-                data = null;
+            for (int i = 0; i < dataVector.size(); i++) {
+                RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+                data.ruleSet.freeze();
             }
+
+            if (idBlockVector.size() == 1 && ((String)idBlockVector.get(0)).length() == 0)
+                idBlockVector.remove(0);
+
         } catch (IllegalArgumentException e) {
             if (errors == null) {
                 errors = new StringBuffer(e.getMessage());
@@ -1162,7 +1185,7 @@ class TransliteratorParser {
             int n = right.text.length();
             char[] value = new char[n];
             right.text.getChars(0, n, value, 0);
-            data.variableNames.put(undefinedVariableName, value);
+            variableNames.put(undefinedVariableName, value);
 
             ++variableLimit;
             return pos;
@@ -1249,12 +1272,12 @@ class TransliteratorParser {
             segmentObjects.toArray(segmentsArray);
         }
 
-        data.ruleSet.addRule(new TransliterationRule(
+        curData.ruleSet.addRule(new TransliterationRule(
                                      left.text, left.ante, left.post,
                                      right.text, right.cursor, right.cursorOffset,
                                      segmentsArray,
                                      left.anchorStart, left.anchorEnd,
-                                     data));
+                                     curData));
 
         return pos;
     }
@@ -1267,8 +1290,12 @@ class TransliteratorParser {
             throw new IllegalArgumentException("Invalid variable range " + start + ", " + end);
         }
         
-        data.variablesBase = variableNext = (char) start; // first private use
-        variableLimit = (char) (end + 1);
+        curData.variablesBase = (char) start; // first private use
+
+        if (dataVector.size() == 0) {
+            variableNext = (char) start;
+            variableLimit = (char) (end + 1);
+        }
     }
 
     /**
@@ -1277,7 +1304,7 @@ class TransliteratorParser {
      * variable range does not overlap characters used in a rule.
      */
     private void checkVariableRange(int ch, String rule, int start) {
-        if (ch >= data.variablesBase && ch < variableLimit) {
+        if (ch >= curData.variablesBase && ch < variableLimit) {
             syntaxError("Variable range character in rule", rule, start);
         }
     }
@@ -1417,7 +1444,7 @@ class TransliteratorParser {
         // (typical n is 0, 1, or 2); linear search is optimal.
         for (int i=0; i<variablesVector.size(); ++i) {
             if (variablesVector.elementAt(i) == obj) { // [sic] pointer comparison
-                return (char) (data.variablesBase + i);
+                return (char) (curData.variablesBase + i);
             }
         }
 
@@ -1461,7 +1488,7 @@ class TransliteratorParser {
         if (segmentObjects.size() < seg) {
             segmentObjects.setSize(seg);
         }
-        int index = getSegmentStandin(seg) - data.variablesBase;
+        int index = getSegmentStandin(seg) - curData.variablesBase;
         if (segmentObjects.elementAt(seg-1) != null ||
             variablesVector.elementAt(index) != null) {
             throw new RuntimeException(); // should never happen
@@ -1487,7 +1514,7 @@ class TransliteratorParser {
      * @exception IllegalArgumentException if the name is unknown.
      */
     private void appendVariableDef(String name, StringBuffer buf) {
-        char[] ch = (char[]) data.variableNames.get(name);
+        char[] ch = (char[]) variableNames.get(name);
         if (ch == null) {
             // We allow one undefined variable so that variable definition
             // statements work.  For the first undefined variable we return

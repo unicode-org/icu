@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -30,13 +30,7 @@ class CompoundTransliterator extends Transliterator {
 
     private Transliterator[] trans;
 
-    /**
-     * For compound RBTs (those with an ::id block before and/or after
-     * the main rule block) we record the index of the RBT here.
-     * Otherwise, this should have a value of -1.  We need this
-     * information to implement toRules().
-     */
-    private int compoundRBTIndex;
+    private int numAnonymousRBTs = 0;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
@@ -86,7 +80,7 @@ class CompoundTransliterator extends Transliterator {
     public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
         super(ID, filter);
-        init(ID, direction, -1, null, true);
+        init(ID, direction, true);
     }
 
     /**
@@ -109,28 +103,19 @@ class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Package private constructor for compound RBTs.  Construct a
-     * compound transliterator using the given idBlock, with the
-     * splitTrans inserted at the idSplitPoint.
-     */
-    CompoundTransliterator(String ID,
-                           String idBlock,
-                           int idSplitPoint,
-                           Transliterator splitTrans) {
-        super(ID, null);
-        init(idBlock, FORWARD, idSplitPoint, splitTrans, false);
-    }
-
-    /**
      * Package private constructor for Transliterator from a vector of
      * transliterators.  The caller is responsible for fixing up the
      * ID.
      */
     CompoundTransliterator(Vector list) {
+        this(list, 0);
+    }
+
+    CompoundTransliterator(Vector list, int numAnonymousRBTs) {
         super("", null);
         trans = null;
-        compoundRBTIndex = -1;
         init(list, FORWARD, false);
+        this.numAnonymousRBTs = numAnonymousRBTs;
         // assume caller will fixup ID
     }
 
@@ -151,8 +136,6 @@ class CompoundTransliterator extends Transliterator {
      */
     private void init(String id,
                       int direction,
-                      int idSplitPoint,
-                      Transliterator splitTrans,
                       boolean fixReverseID) {
         // assert(trans == 0);
 
@@ -164,7 +147,7 @@ class CompoundTransliterator extends Transliterator {
             throw new IllegalArgumentException("Invalid ID " + id);
         }
 
-        compoundRBTIndex = TransliteratorIDParser.instantiateList(list, splitTrans, idSplitPoint);
+        TransliteratorIDParser.instantiateList(list);
 
         init(list, direction, fixReverseID);
 
@@ -200,11 +183,6 @@ class CompoundTransliterator extends Transliterator {
         for (i=0; i<count; ++i) {
             int j = (direction == FORWARD) ? i : count - 1 - i;
             trans[i] = (Transliterator) list.elementAt(j);
-        }
-
-        // Fix compoundRBTIndex for REVERSE transliterators
-        if (compoundRBTIndex >= 0 && direction == REVERSE) {
-            compoundRBTIndex = count - 1 - compoundRBTIndex;
         }
 
         // If the direction is UTRANS_REVERSE then we may need to fix the
@@ -287,15 +265,31 @@ class CompoundTransliterator extends Transliterator {
         // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
         // we do call toRules() recursively.
         StringBuffer rulesSource = new StringBuffer();
-        if (compoundRBTIndex >= 0 && getFilter() != null) {
+        if (numAnonymousRBTs >= 1 && getFilter() != null) {
             // If we are a compound RBT and if we have a global
             // filter, then emit it at the top.
             rulesSource.append("::").append(getFilter().toPattern(escapeUnprintable)).append(ID_DELIM);
         }
         for (int i=0; i<trans.length; ++i) {
             String rule;
-            if (i == compoundRBTIndex) {
+
+            // Anonymous RuleBasedTransliterators (inline rules and
+            // ::BEGIN/::END blocks) are given IDs that begin with
+            // "%Pass": use toRules() to write all the rules to the output
+            // (and insert "::Null;" if we have two in a row)
+            if (trans[i].getID().startsWith("%Pass")) {
                 rule = trans[i].toRules(escapeUnprintable);
+                if (numAnonymousRBTs > 1 && i > 0 && trans[i - 1].getID().startsWith("%Pass"))
+                    rule = "::Null;" + rule;
+
+            // we also use toRules() on CompoundTransliterators (which we
+            // check for by looking for a semicolon in the ID)-- this gets
+            // the list of their child transliterators output in the right
+            // format
+            } else if (trans[i].getID().indexOf(';') >= 0) {
+                rule = trans[i].toRules(escapeUnprintable);
+
+            // for everything else, use baseToRules()
             } else {
                 rule = trans[i].baseToRules(escapeUnprintable);
             }
