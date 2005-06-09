@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2004, International Business Machines Corporation
+*   Copyright (c) 2002-2005, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -437,22 +437,13 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
  * the reverse.  THIS MAY RESULT IN AN EMPTY VECTOR.  Convert
  * SingleID entries to actual transliterators.
  *
- * Also, optionally, insert the given transliterator at the given
- * position.  This effectively happens before anything else.
- *
  * @param list vector of SingleID objects.  On exit, vector
  * of one or more Transliterators.
- * @param insert Transliterator to insert, or NULL if none.
- * Adopted.
- * @param insertIndex index from 0..list.size()-1, at which
- * to place 'insert', or -1 if none.
  * @return new value of insertIndex.  The index will shift if
  * there are empty items, like "(Lower)", with indices less than
  * insertIndex.
  */
-int32_t TransliteratorIDParser::instantiateList(UVector& list,
-                                                Transliterator* insert,
-                                                int32_t insertIndex,
+void TransliteratorIDParser::instantiateList(UVector& list,
                                                 UErrorCode& ec) {
     UVector tlist(ec);
     if (U_FAILURE(ec)) {
@@ -463,15 +454,6 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
     Transliterator* t;
     int32_t i;
     for (i=0; i<=list.size(); ++i) { // [sic]: i<=list.size()
-        if (insertIndex == i) {
-            insertIndex = tlist.size();
-            tlist.addElement(insert, ec);
-            if (U_FAILURE(ec)) {
-                goto RETURN;
-            }
-            insert = NULL;
-        }
-
         // We run the loop too long by one, so we can
         // do an insert after the last element
         if (i==list.size()) {
@@ -525,9 +507,7 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
         }
     }
 
-    delete insert; // Clean up in case of failure
     list.setDeleter(save);
-    return insertIndex;
 }
 
 /**

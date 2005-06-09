@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1999-2004, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2005, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -73,6 +73,15 @@ public:
      * variables[i] represents character (variablesBase + i).
      */
     UnicodeFunctor** variables;
+
+    /**
+     * Flag that indicates whether the variables are owned (if a single
+     * call to Transliterator::createFromRules() produces a CompoundTransliterator
+     * with more than one RuleBasedTransliterator as children, they all share
+     * the same variables list, so only the first one is considered to own
+     * the variables)
+     */
+    bool variablesAreOwned;
 
     /**
      * The character that represents variables[0].  Characters

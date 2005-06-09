@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -42,13 +42,7 @@ class U_I18N_API CompoundTransliterator : public Transliterator {
 
     int32_t count;
 
-    /**
-     * For compound RBTs (those with an ::id block before and/or after
-     * the main rule block) we record the index of the RBT here.
-     * Otherwise, this should have a value of -1.  We need this
-     * information to implement toRules().
-     */
-    int32_t compoundRBTIndex;
+    int32_t numAnonymousRBTs;
 
 public:
 
@@ -203,27 +197,26 @@ private:
     friend class TransliteratorAlias; // to access private ct
 
     /**
-     * Private constructor for compound RBTs.  Construct a compound
-     * transliterator using the given idBlock, with the adoptedTrans
-     * inserted at the idSplitPoint.
-     */
-    CompoundTransliterator(const UnicodeString& ID,
-                           const UnicodeString& idBlock,
-                           int32_t idSplitPoint,
-                           Transliterator *adoptedTrans,
-                           UErrorCode& status);
-                           
-    /**
      * Private constructor for Transliterator.
      */
+    CompoundTransliterator(const UnicodeString& ID,
+                           UVector& list,
+                           UnicodeFilter* adoptedFilter,
+                           int32_t numAnonymousRBTs,
+                           UParseError& parseError,
+                           UErrorCode& status);
+    
     CompoundTransliterator(UVector& list,
+                           UParseError& parseError,
+                           UErrorCode& status);
+
+    CompoundTransliterator(UVector& list,
+                           int32_t anonymousRBTs,
                            UParseError& parseError,
                            UErrorCode& status);
 
     void init(const UnicodeString& id,
               UTransDirection direction,
-              int32_t idSplitPoint,
-              Transliterator *adoptedRbt,
               UBool fixReverseID,
               UErrorCode& status);
 
