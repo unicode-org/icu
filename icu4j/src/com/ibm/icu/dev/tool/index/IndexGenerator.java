@@ -21,7 +21,7 @@ public class IndexGenerator {
 
 	File inDir = new File(args[0]);
 	if (!inDir.isDirectory() || !inDir.exists()) {
-	    usage("first argument must be existing directory");
+	    usage("first argument '" + inDir + "' must be existing directory");
 	}
 
 	File outDir = inDir;
@@ -47,9 +47,9 @@ public class IndexGenerator {
 	    if (files != null) {
 		for (int i = 0; i < files.length; i++){
 		    if (!files[i].isDirectory()) {
-			String name = files[i].getName();
+			String name = "," + files[i].getName(); // add ',' to get exact match
 			if (name.endsWith(".res") && stoplist.indexOf(name) == -1) {
-			    pw.println(name.substring(0, name.lastIndexOf('.')));
+			    pw.println(name.substring(1, name.lastIndexOf('.'))); // 1 to trim off ','
 			    ++count;
 			}
 		    }
