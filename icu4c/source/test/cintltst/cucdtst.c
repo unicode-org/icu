@@ -1680,7 +1680,8 @@ TestCharNames() {
                 NULL,
                 uset_add,
                 uset_addRange,
-                uset_addString
+                uset_addString,
+                NULL // don't need remove()
             };
             sa.set=set;
             uprv_getCharNameCharacters(&sa);
