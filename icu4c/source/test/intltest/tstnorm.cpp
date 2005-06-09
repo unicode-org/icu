@@ -1713,7 +1713,8 @@ BasicNormalizerTest::TestSkippable() {
         (USet *)&starts,
         _set_add,
         _set_addRange,
-        _set_addString
+        _set_addString,
+        NULL // don't need remove()
     };
     unorm_addPropertyStarts(&sa, &status);
     if(U_FAILURE(status)) {

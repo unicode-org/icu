@@ -63,7 +63,8 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
         (USet *)&legal, // USet* == UnicodeSet*
         _set_add,
         _set_addRange,
-        _set_addString
+        _set_addString,
+        NULL // don't need remove()
     };
     uprv_getCharNameCharacters(&sa);
 }
