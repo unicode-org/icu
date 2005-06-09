@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -296,12 +296,12 @@ class RuleBasedTransliterator extends Transliterator {
 
         TransliteratorParser parser = new TransliteratorParser();
         parser.parse(rules, direction);
-        if (parser.idBlock.length() != 0 ||
+        if (parser.idBlockVector.size() != 0 ||
             parser.compoundFilter != null) {
             throw new IllegalArgumentException("::ID blocks illegal in RuleBasedTransliterator constructor");
         }
 
-        data = parser.data;
+        data = (Data)parser.dataVector.get(0);
         setMaximumContextLength(data.ruleSet.getMaximumContextLength());
     }
 

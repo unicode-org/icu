@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1354,18 +1354,22 @@ public abstract class Transliterator {
             throw new IllegalArgumentException("Invalid ID " + ID);
         }
 
-        TransliteratorIDParser.instantiateList(list, null, -1);
+        TransliteratorIDParser.instantiateList(list);
 
         // assert(list.size() > 0);
         Transliterator t = null;
-        switch (list.size()) {
-        case 1:
-            t = (Transliterator) list.elementAt(0);
-            break;
-        default:
+        if (list.size() > 1 || canonID.indexOf(";") >= 0) {
+            // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
+            // has one child transliterator.  This is so that toRules() will return the right thing
+            // (without any inactive ID), but our main ID still comes out correct.  That is, if we
+            // instantiate "(Lower);Latin-Greek;", we want the rules to come out as "::Latin-Greek;"
+            // even though the ID is "(Lower);Latin-Greek;".
             t = new CompoundTransliterator(list);
-            break;
         }
+        else {
+            t = (Transliterator)list.elementAt(0);
+        }
+
         t.setID(canonID.toString());
         if (globalFilter[0] != null) {
             t.setFilter(globalFilter[0]);
@@ -1413,35 +1417,52 @@ public abstract class Transliterator {
         parser.parse(rules, dir);
 
         // NOTE: The logic here matches that in TransliteratorRegistry.
-        if (parser.idBlock.length() == 0) {
-            if (parser.data == null) {
-                // No idBlock, no data -- this is just an
-                // alias for Null
-                t = new NullTransliterator();
-            } else {
-                // No idBlock, data != 0 -- this is an
-                // ordinary RBT_DATA.
-                t = new RuleBasedTransliterator(ID, parser.data, null);
+        if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 0) {
+            t = new NullTransliterator();
+        }
+        else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
+            t = new RuleBasedTransliterator(ID, (RuleBasedTransliterator.Data)parser.dataVector.get(0), null);
+        }
+        else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
+            // idBlock, no data -- this is an alias.  The ID has
+            // been munged from reverse into forward mode, if
+            // necessary, so instantiate the ID in the forward
+            // direction.
+            if (parser.compoundFilter != null)
+                t = getInstance(parser.compoundFilter.toPattern(false) + ";"
+                        + (String)parser.idBlockVector.get(0));
+            else
+                t = getInstance((String)parser.idBlockVector.get(0));
+
+
+            if (t != null) {
+                t.setID(ID);
             }
-        } else {
-            if (parser.data == null) {
-                // idBlock, no data -- this is an alias.  The ID has
-                // been munged from reverse into forward mode, if
-                // necessary, so instantiate the ID in the forward
-                // direction.
-                t = getInstance(parser.idBlock);
-                if (t != null) {
-                    t.setID(ID);
+        }
+        else {
+            Vector transliterators = new Vector();
+            int passNumber = 1;
+
+            int limit = Math.max(parser.idBlockVector.size(), parser.dataVector.size());
+            for (int i = 0; i < limit; i++) {
+                if (i < parser.idBlockVector.size()) {
+                    String idBlock = (String)parser.idBlockVector.get(i);
+                    if (idBlock.length() > 0) {
+                        Transliterator temp = getInstance(idBlock);
+                        if (!(temp instanceof NullTransliterator))
+                            transliterators.add(getInstance(idBlock));
+                    }
                 }
-            } else {
-                // idBlock and data -- this is a compound
-                // RBT
-                t = new RuleBasedTransliterator("_", parser.data, null);
-                t = new CompoundTransliterator(ID, parser.idBlock, parser.idSplitPoint,
-                                               t);
-                if (parser.compoundFilter != null) {
-                    t.setFilter(parser.compoundFilter);
+                if (i < parser.dataVector.size()) {
+                    RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)parser.dataVector.get(i);
+                    transliterators.add(new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
                 }
+            }
+
+            t = new CompoundTransliterator(transliterators, passNumber - 1);
+            t.setID(ID);
+            if (parser.compoundFilter != null) {
+                t.setFilter(parser.compoundFilter);
             }
         }
 

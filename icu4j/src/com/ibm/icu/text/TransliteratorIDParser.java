@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2003, International Business Machines Corporation
+*   Copyright (c) 2002-2005, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -423,28 +423,12 @@ class TransliteratorIDParser {
      * the reverse.  THIS MAY RESULT IN AN EMPTY VECTOR.  Convert
      * SingleID entries to actual transliterators.
      *
-     * Also, optionally, insert the given transliterator at the given
-     * position.  This effectively happens before anything else.
-     *
      * @param list vector of SingleID objects.  On exit, vector
      * of one or more Transliterators.
-     * @param insert Transliterator to insert, or null if none.
-     * @param insertIndex index from 0..list.size()-1, at which
-     * to place 'insert', or -1 if none.
-     * @return new value of insertIndex.  The index will shift if
-     * there are empty items, like "(Lower)", with indices less than
-     * insertIndex.
      */
-    public static int instantiateList(Vector list,
-                                      Transliterator insert,
-                                      int insertIndex) {
+    public static void instantiateList(Vector list) {
         Transliterator t;
         for (int i=0; i<=list.size(); ) { // [sic]: i<=list.size()
-            if (insertIndex == i) {
-                list.insertElementAt(insert, i++);
-                continue;
-            }
-            
             // We run the loop too long by one, so we can
             // do an insert after the last element
             if (i==list.size()) {
@@ -454,9 +438,6 @@ class TransliteratorIDParser {
             SingleID single = (SingleID) list.elementAt(i);
             if (single.basicID.length() == 0) {
                 list.removeElementAt(i);
-                if (insertIndex > i) {
-                    --insertIndex;
-                }
             } else {
                 t = single.getInstance();
                 if (t == null) {
@@ -476,8 +457,6 @@ class TransliteratorIDParser {
             }
             list.addElement(t);
         }
-
-        return insertIndex;
     }
 
     /**
