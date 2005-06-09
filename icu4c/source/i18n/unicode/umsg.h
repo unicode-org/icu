@@ -626,9 +626,9 @@ umsg_vparse(const UMessageFormat *fmt,
      * between patterns having different quoting semantics.
      *
      * @param pattern the 'apostrophe-friendly' patttern to convert
-     * @param plen the length of pattern, or -1 if unknown and pattern is null-terminated
-     * @param buffer the buffer for the result, or NULL if preflight only
-     * @param blen the length of the buffer, or 0 if preflighting
+     * @param patternLength the length of pattern, or -1 if unknown and pattern is null-terminated
+     * @param dest the buffer for the result, or NULL if preflight only
+     * @param destCapacity the length of the buffer, or 0 if preflighting
      * @param ec the error code
      * @return the length of the resulting text, not including trailing null
      *        if buffer has room for the trailing null, it is provided, otherwise
@@ -637,9 +637,9 @@ umsg_vparse(const UMessageFormat *fmt,
      */
 U_STABLE int32_t U_EXPORT2 
 umsg_autoQuoteApostrophe(const UChar* pattern, 
-			 int32_t plen,
-			 UChar* buffer,
-			 int32_t blen,
+			 int32_t patternLength,
+			 UChar* dest,
+			 int32_t destCapacity,
 			 UErrorCode* ec);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
