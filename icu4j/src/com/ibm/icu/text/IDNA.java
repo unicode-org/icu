@@ -334,6 +334,9 @@ public final class IDNA {
         }
         int poLen = processOut.length();
         
+        if(poLen==0){
+            throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+        }
         StringBuffer dest = new StringBuffer();
         
         // reset the variable to verify if output of prepare is ASCII or not

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1566,8 +1566,6 @@ public final class Normalizer implements Cloneable {
                                   char[] dest,  int destStart,  int destLimit,
                                   Normalizer.Mode mode, int options) {
                                
-        char[] buffer=new char[100];
-        int bufferLength;
     
         UCharacterIterator iter;
         
@@ -1604,7 +1602,8 @@ public final class Normalizer implements Cloneable {
         iter = UCharacterIterator.getInstance(left, leftStart, leftLimit);
                                              
         iter.setIndex(iter.getLength()); /* end of left string */
-    
+        char[] buffer=new char[100];
+        int bufferLength;
         bufferLength=previous(iter, buffer,0,buffer.length,mode,false,null,options);
         
         leftBoundary=iter.getIndex();
@@ -2334,13 +2333,13 @@ public final class Normalizer implements Cloneable {
         IsPrevBoundary isPreviousBoundary;
         int destLength, bufferLength;
         int/*unsigned*/ mask;
-        int[] startIndex= new int[1];
+        
         int c,c2;
         
         char minC;
         int destCapacity = destLimit-destStart;
         destLength=0;
-        char[] buffer = new char[100];
+        
         
         if(pNeededToNormalize!=null) {
             pNeededToNormalize[0]=false;
@@ -2375,7 +2374,9 @@ public final class Normalizer implements Cloneable {
             }
             return destLength;
         }
-    
+        
+        char[] buffer = new char[100];
+        int[] startIndex= new int[1];
         bufferLength=findPreviousIterationBoundary(src,
                                                    isPreviousBoundary, 
                                                    minC, mask,buffer, 
@@ -2560,7 +2561,6 @@ public final class Normalizer implements Cloneable {
                             boolean[] pNeededToNormalize,
                             int options) {
                                 
-        char[] buffer=new char[100];
         IsNextBoundary isNextBoundary;
         int /*unsigned*/ mask;
         int /*unsigned*/ bufferLength;
@@ -2568,7 +2568,7 @@ public final class Normalizer implements Cloneable {
         char minC;
         int destCapacity = destLimit - destStart;
         int destLength = 0;
-        int[] startIndex = new int[1];
+        
         if(pNeededToNormalize!=null) {
             pNeededToNormalize[0]=false;
         }
@@ -2603,6 +2603,9 @@ public final class Normalizer implements Cloneable {
             }
             return destLength;
         }
+
+        char[] buffer=new char[100];
+        int[] startIndex = new int[1];
         
         bufferLength=findNextIterationBoundary(src,isNextBoundary, minC, mask,
                                                buffer);

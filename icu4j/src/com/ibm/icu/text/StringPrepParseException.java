@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -67,6 +67,12 @@ public class StringPrepParseException extends ParseException {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int BUFFER_OVERFLOW_ERROR   = 9;
+    
+    /**
+     * @draft ICU 2.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int ZERO_LENGTH_LABEL   = 10;
     
     /**
      * Construct a ParseException object with the given message
