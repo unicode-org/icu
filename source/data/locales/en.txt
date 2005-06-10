@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/en.xml
+// * Source File: /work/cldr/common/main/en.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/en.xml
+ *  ICU <specials> source: /work/icu/source/data/xml/main/en.xml
  */
 en{
     Countries{
@@ -73,7 +73,6 @@ en{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"British Antarctic Territory"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -95,13 +94,11 @@ en{
         CO{"Colombia"}
         CR{"Costa Rica"}
         CS{"Serbia And Montenegro"}
-        CT{"Canton and Enderbury Islands"}
         CU{"Cuba"}
         CV{"Cape Verde"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
         CZ{"Czech Republic"}
-        DD{"East Germany"}
         DE{"Germany"}
         DJ{"Djibouti"}
         DK{"Denmark"}
@@ -120,9 +117,7 @@ en{
         FK{"Falkland Islands"}
         FM{"Micronesia"}
         FO{"Faroe Islands"}
-        FQ{"French Southern and Antarctic Territories"}
         FR{"France"}
-        FX{"Metropolitan France"}
         GA{"Gabon"}
         GB{"United Kingdom"}
         GD{"Grenada"}
@@ -159,7 +154,6 @@ en{
         JM{"Jamaica"}
         JO{"Jordan"}
         JP{"Japan"}
-        JT{"Johnston Island"}
         KE{"Kenya"}
         KG{"Kyrgyzstan"}
         KH{"Cambodia"}
@@ -187,7 +181,6 @@ en{
         MD{"Moldova"}
         MG{"Madagascar"}
         MH{"Marshall Islands"}
-        MI{"Midway Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
@@ -213,14 +206,11 @@ en{
         NL{"Netherlands"}
         NO{"Norway"}
         NP{"Nepal"}
-        NQ{"Dronning Maud Land"}
         NR{"Nauru"}
-        NT{"Neutral Zone"}
         NU{"Niue"}
         NZ{"New Zealand"}
         OM{"Oman"}
         PA{"Panama"}
-        PC{"Pacific Islands Trust Territory"}
         PE{"Peru"}
         PF{"French Polynesia"}
         PG{"Papua New Guinea"}
@@ -232,10 +222,8 @@ en{
         PR{"Puerto Rico"}
         PS{"Palestinian Territory"}
         PT{"Portugal"}
-        PU{"U.S. Miscellaneous Pacific Islands"}
         PW{"Palau"}
         PY{"Paraguay"}
-        PZ{"Panama Canal Zone"}
         QA{"Qatar"}
         QO{"Outlying Oceania"}
         RE{"Reunion"}
@@ -258,7 +246,6 @@ en{
         SO{"Somalia"}
         SR{"Suriname"}
         ST{"Sao Tome and Principe"}
-        SU{"Union of Soviet Socialist Republics"}
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
@@ -286,16 +273,13 @@ en{
         UZ{"Uzbekistan"}
         VA{"Vatican"}
         VC{"Saint Vincent and the Grenadines"}
-        VD{"North Vietnam"}
         VE{"Venezuela"}
         VG{"British Virgin Islands"}
         VI{"U.S. Virgin Islands"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
         WF{"Wallis and Futuna"}
-        WK{"Wake Island"}
         WS{"Samoa"}
-        YD{"People's Democratic Republic of Yemen"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"South Africa"}
@@ -1975,19 +1959,19 @@ en{
     Variants{
         1901{"Traditional German orthography"}
         1996{"German orthography of 1996"}
+        BOONT{"Boontling"}
+        GAULISH{"Gaulish"}
+        GUOYU{"Mandarin or Standard Chinese"}
+        HAKKA{"Hakka"}
+        LOJBAN{"Lojban"}
+        NEDIS{"Natisone dialect"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
-        boont{"Boontling"}
-        gaulish{"Gaulish"}
-        guoyu{"Mandarin or Standard Chinese"}
-        hakka{"Hakka"}
-        lojban{"Lojban"}
-        nedis{"Natisone dialect"}
-        rozaj{"Resian"}
-        scouse{"Scouse"}
-        xiang{"Xiang or Hunanese"}
+        ROZAJ{"Resian"}
+        SCOUSE{"Scouse"}
+        XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.70"}
+    Version{"1.71"}
     calendar{
         gregorian{
             DateTimePatterns{
