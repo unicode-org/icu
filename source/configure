@@ -2267,7 +2267,7 @@ fi
 
 GENCCODE_ASSEMBLY=
 case "${host}" in
-i*86-*-*bsd*|i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*)
+i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*|i*86-*-solaris*)
     if test "$GCC" = yes; then
                 GENCCODE_ASSEMBLY="-a gcc"
     fi ;;
