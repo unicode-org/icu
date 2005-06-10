@@ -72,7 +72,7 @@ char *scriptNames[] =
       "USCRIPT_BENGALI",     /* Beng */
       "USCRIPT_BOPOMOFO",    /* Bopo */
       "USCRIPT_CHEROKEE",    /* Cher */
-      "USCRIPT_COPTIC",      /* Qaac */
+      "USCRIPT_COPTIC",      /* Copt=Qaac */
       "USCRIPT_CYRILLIC",    /* Cyrl (Cyrs) */
       "USCRIPT_DESERET",     /* Dsrt */
       "USCRIPT_DEVANAGARI",  /* Deva */

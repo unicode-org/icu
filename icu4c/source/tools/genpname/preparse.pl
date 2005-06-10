@@ -897,8 +897,13 @@ sub read_PropertyValueAliases {
 
     $in->close();
 
-    # Script Qaac (Coptic) is a special case.  Handle it here.  See UTR#24:
-    # http://www.unicode.org/unicode/reports/tr24/
+    # Script Copt=Qaac (Coptic) is a special case.
+    # Before the Copt code was defined, the private-use code Qaac was used.
+    # Starting with Unicode 4.1, PropertyValueAliases.txt contains
+    # Copt as the short name as well as Qaac as an alias.
+    # For use with older Unicode data files, we add here a Qaac->Coptic entry.
+    # This should not do anything for 4.1-and-later Unicode data files.
+    # See also UAX #24: Script Names http://www.unicode.org/unicode/reports/tr24/
     $hash->{'sc'}->{'Qaac'} = 'Coptic'
         unless (exists $hash->{'sc'}->{'Qaac'} || exists $hash->{'sc'}->{'Copt'});
 
