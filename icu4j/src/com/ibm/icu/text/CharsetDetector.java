@@ -418,6 +418,12 @@ public class CharsetDetector {
         ArrayList recognizers = new ArrayList();
         
         recognizers.add(new CharsetRecog_UTF8());
+        
+        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_16_BE());
+        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_16_LE());
+        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_32_BE());
+        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_32_LE());;
+        
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_sjis());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022CN());
@@ -452,10 +458,20 @@ public class CharsetDetector {
         
         // Create an array of all charset names, as a side effect.
         // Needed for the getAllDetectableCharsets() API.
-        fCharsetNames = new String [recognizers.size()];
-        for (int i=0; i<recognizers.size(); i++) {
-            fCharsetNames[i] = ((CharsetRecognizer)recognizers.get(i)).getName();          
+        String[] charsetNames = new String [recognizers.size()];
+        int out = 0;
+        
+        for (int i = 0; i < recognizers.size(); i++) {
+            String name = ((CharsetRecognizer)recognizers.get(i)).getName();
+            
+            if (out == 0 || ! name.equals(charsetNames[out - 1])) {
+                charsetNames[out++] = name;
+            }
         }
+        
+        fCharsetNames = new String[out];
+        System.arraycopy(charsetNames, 0, fCharsetNames, 0, out);
+        
         return recognizers;
     }
 }
