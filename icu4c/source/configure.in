@@ -884,9 +884,13 @@ case "${host}" in
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
-			ICUDATA_CHAR="e" ;;
+			if test "${ICU_ENABLE_ASCII_STRINGS}" != "1"; then
+				ICUDATA_CHAR="e"
+			fi ;;
 	*-*-os400*)	platform=OS400
-			ICUDATA_CHAR="e" ;;
+			if test "${ICU_ENABLE_ASCII_STRINGS}" != "1"; then
+				ICUDATA_CHAR="e"
+			fi ;;
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-beos)		platform=U_BEOS ;;
