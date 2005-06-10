@@ -367,7 +367,8 @@
 	        todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
-
+   		<copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
+	            todir="${build.dir}/com/ibm/icu/dev/data"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"

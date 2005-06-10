@@ -512,9 +512,21 @@ public class TestIDNA extends TestFmwk {
             doTestChainingToASCII(new String(TestData.unicodeIn[i]));
         }
     }
+    
+
+    /* IDNA RFC Says:
+    A label is an individual part of a domain name.  Labels are usually
+    shown separated by dots; for example, the domain name
+    "www.example.com" is composed of three labels: "www", "example", and
+    "com".  (The zero-length root label described in [STD13], which can
+    be explicit as in "www.example.com." or implicit as in
+    "www.example.com", is not considered a label in this specification.)
+     so this test is wrong. The conformance test also tests whether an exception is thrown
+     when the API is given a zero-length lable.
+    *
     public void TestRootLabelSeparator() throws Exception{
         String www = "www.";
-        String com = ".com."; /*root label separator*/
+        String com = ".com."; //root label separator
         StringBuffer source = new StringBuffer(www);
         StringBuffer uni0   = new StringBuffer(www);
         StringBuffer uni1   = new StringBuffer(www);
@@ -563,6 +575,7 @@ public class TestIDNA extends TestFmwk {
         }
 
     }
+    */
     
     private static final int loopCount = 100;
     private static final int maxCharCount = 15;
@@ -761,5 +774,24 @@ public class TestIDNA extends TestFmwk {
             }
         }
             
+    }
+    public void TestDebug(){     
+        try{
+            String src = "\u00ED4dn";
+            String uni = IDNA.convertToUnicode(src,IDNA.DEFAULT).toString();
+            if(!uni.equals(src)){
+                errln("Did not get the expected result. Expected: "+ prettify(src) +" Got: " +uni);
+            }
+        }catch(StringPrepParseException ex){
+            logln("Unexpected exception: " + ex.getMessage());
+        }
+        try{
+            String ascii = IDNA.convertToASCII("\u00AD",IDNA.DEFAULT).toString();
+            if(ascii!=null){
+                errln("Did not get the expected exception");
+            }
+        }catch(StringPrepParseException ex){
+            logln("Got the expected exception: " + ex.getMessage());
+        }
     }
 }
