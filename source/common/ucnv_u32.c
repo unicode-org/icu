@@ -34,6 +34,10 @@
 /* -SURROGATE_LOW_START + HALF_BASE */
 #define SURROGATE_LOW_BASE      9216
 
+enum {
+    UCNV_NEED_TO_WRITE_BOM=1
+};
+
 /* UTF-32BE ----------------------------------------------------------------- */
 
 static void
@@ -204,13 +208,30 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
     const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
+    unsigned char *myTarget;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UChar32 ch, ch2;
     unsigned int indexToWrite;
     unsigned char temp[sizeof(uint32_t)];
 
+    if(mySource >= sourceLimit) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    /* write the BOM if necessary */
+    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+        static const char bom[]={ 0, 0, (char)0xfe, (char)0xff };
+        ucnv_fromUWriteBytes(args->converter,
+                             bom, 4,
+                             &args->target, args->targetLimit,
+                             &args->offsets, -1,
+                             err);
+        args->converter->fromUnicodeStatus=0;
+    }
+
+    myTarget = (unsigned char *) args->target;
     temp[0] = 0;
 
     if (args->converter->fromUChar32) {
@@ -288,8 +309,8 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
     const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
-    int32_t *myOffsets = args->offsets;
+    unsigned char *myTarget;
+    int32_t *myOffsets;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UChar32 ch, ch2;
@@ -297,6 +318,24 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     unsigned int indexToWrite;
     unsigned char temp[sizeof(uint32_t)];
 
+    if(mySource >= sourceLimit) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    /* write the BOM if necessary */
+    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+        static const char bom[]={ 0, 0, (char)0xfe, (char)0xff };
+        ucnv_fromUWriteBytes(args->converter,
+                             bom, 4,
+                             &args->target, args->targetLimit,
+                             &args->offsets, -1,
+                             err);
+        args->converter->fromUnicodeStatus=0;
+    }
+
+    myTarget = (unsigned char *) args->target;
+    myOffsets = args->offsets;
     temp[0] = 0;
 
     if (args->converter->fromUChar32) {
@@ -645,13 +684,30 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
     const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
+    unsigned char *myTarget;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UChar32 ch, ch2;
     unsigned int indexToWrite;
     unsigned char temp[sizeof(uint32_t)];
 
+    if(mySource >= sourceLimit) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    /* write the BOM if necessary */
+    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+        static const char bom[]={ (char)0xff, (char)0xfe, 0, 0 };
+        ucnv_fromUWriteBytes(args->converter,
+                             bom, 4,
+                             &args->target, args->targetLimit,
+                             &args->offsets, -1,
+                             err);
+        args->converter->fromUnicodeStatus=0;
+    }
+
+    myTarget = (unsigned char *) args->target;
     temp[3] = 0;
 
     if (args->converter->fromUChar32)
@@ -737,8 +793,8 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
     const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
-    int32_t *myOffsets = args->offsets;
+    unsigned char *myTarget;
+    int32_t *myOffsets;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UChar32 ch, ch2;
@@ -746,6 +802,24 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     unsigned char temp[sizeof(uint32_t)];
     int32_t offsetNum = 0;
 
+    if(mySource >= sourceLimit) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    /* write the BOM if necessary */
+    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+        static const char bom[]={ (char)0xff, (char)0xfe, 0, 0 };
+        ucnv_fromUWriteBytes(args->converter,
+                             bom, 4,
+                             &args->target, args->targetLimit,
+                             &args->offsets, -1,
+                             err);
+        args->converter->fromUnicodeStatus=0;
+    }
+
+    myTarget = (unsigned char *) args->target;
+    myOffsets = args->offsets;
     temp[3] = 0;
 
     if (args->converter->fromUChar32)
@@ -948,18 +1022,7 @@ _UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         /* reset fromUnicode: prepare to output the UTF-32PE BOM */
-        cnv->charErrorBufferLength=4;
-#if U_IS_BIG_ENDIAN
-        cnv->charErrorBuffer[0]=0;
-        cnv->charErrorBuffer[1]=0;
-        cnv->charErrorBuffer[2]=0xfe;
-        cnv->charErrorBuffer[3]=0xff;
-#else
-        cnv->charErrorBuffer[0]=0xff;
-        cnv->charErrorBuffer[1]=0xfe;
-        cnv->charErrorBuffer[2]=0;
-        cnv->charErrorBuffer[3]=0;
-#endif
+        cnv->fromUnicodeStatus=UCNV_NEED_TO_WRITE_BOM;
     }
 }
 
