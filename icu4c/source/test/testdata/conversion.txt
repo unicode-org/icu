@@ -445,12 +445,21 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
-        // Improve ucnv_ext.c code coverage:
-        // There will be a partial match up to the lead surrogate of U+603ff
-        // which then results in one more unit in the prefetch buffer
-        // than the match length when converting one code unit at a time.
-        // See ucnv_extContinueMatchFromU() comment
-        // "the match did not use all of preFromU[] - keep the rest for replay"
+        // UTF-16/32: do not output a BOM if there is no data at all
+        {
+          "UTF-16",
+          "",
+          :bin{       "" },
+          :intvector{  },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "UTF-32",
+          "",
+          :bin{       "" },
+          :intvector{  },
+          :int{1}, :int{1}, "", "?", ""
+        }
 
         // do not convert SO/SI/ESC
         {
@@ -491,6 +500,12 @@ conversion {
           :int{1}, :int{1}, "", "?", ""
         }
 
+        // Improve ucnv_ext.c code coverage:
+        // There will be a partial match up to the lead surrogate of U+603ff
+        // which then results in one more unit in the prefetch buffer
+        // than the match length when converting one code unit at a time.
+        // See ucnv_extContinueMatchFromU() comment
+        // "the match did not use all of preFromU[] - keep the rest for replay"
         {
           "*test3",
           "\U00101234\U00101234\U00050005\U000603ff",
