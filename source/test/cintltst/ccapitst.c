@@ -2830,19 +2830,25 @@ static void TestFromUCountPending(){
         }
     }
     status = U_ZERO_ERROR;
-    /* time bomb this test for now */
-    if(isICUVersionAtLeast(ICU_34)){
+    {
+        /*
+         * The converter has to read the tail before it knows that
+         * only head alone matches.
+         * At the end, the output for head will overflow the target,
+         * middle will be pending, and tail will not have been consumed.
+         */
         /* 
         \U00101234  -> x (<U101234>   \x07 |0)
-        \U00050005 -> y (<U50005>     \x01\x02\x08 |0)
-        \U00101234\U00050005\u0006006 -> z (<U101234>+<U50005>+<U60006> \x07+\x00+\x01\x02\x0f+\x09 |0)
+        \U00101234\U00050005 -> y (<U101234>+<U50005>          \x07+\x00+\x01\x02\x0e+\x05 |0)
+        \U00101234\U00050005\U00060006 -> z (<U101234>+<U50005>+<U60006> \x07+\x00+\x01\x02\x0f+\x09 |0)
+        \U00060007 -> unassigned
         */
-        UChar head[] = {0xDBC4,0xDE34,0x0000};/* \U00101234\U00050005 */
-        UChar middle[] = {0xD900,0x0000};
-        UChar tail[] = {0xDC05,0x0006,0x0000};/* \U00080008 */
+        static const UChar head[] = {0xDBC4,0xDE34,0xD900,0xDC05,0x0000};/* \U00101234\U00050005 */
+        static const UChar middle[] = {0xD940,0x0000};     /* first half of \U00060006 or \U00060007 */
+        static const UChar tail[] = {0xDC07,0x0000};/* second half of \U00060007 */
         char tgt[10];
         char* target = tgt;
-        char* targetLimit = target + 2;
+        char* targetLimit = target + 2; /* expect overflow from converting \U00101234\U00050005 */
         const UChar* source = head;
         const UChar* sourceLimit = source + u_strlen(head); 
         int32_t len = 0;
@@ -2853,7 +2859,7 @@ static void TestFromUCountPending(){
             log_err("ucnv_fromUnicode call did not succeed. Error: %s\n", u_errorName(status));
             status = U_ZERO_ERROR;
         }
-        if(len!=2){
+        if(len!=4){
             log_err("ucnv_fromUInputHeld did not return correct length for head\n");
         }
         source = middle;
@@ -2864,28 +2870,28 @@ static void TestFromUCountPending(){
             log_err("ucnv_fromUnicode call did not succeed. Error: %s\n", u_errorName(status));
             status = U_ZERO_ERROR;
         }
-        if(len!=4){
+        if(len!=5){
             log_err("ucnv_fromUInputHeld did not return correct length for middle\n");
         }
         source = tail;
         sourceLimit = source + u_strlen(tail);
         ucnv_fromUnicode(cnv,&target, targetLimit, &source, sourceLimit, NULL, FALSE, &status);
-        if(status == U_BUFFER_OVERFLOW_ERROR){
-            status = U_ZERO_ERROR;
-        }
-        if(U_FAILURE(status)){
+        if(status != U_BUFFER_OVERFLOW_ERROR){
             log_err("ucnv_fromUnicode call did not succeed. Error: %s\n", u_errorName(status));
         }
+        status = U_ZERO_ERROR;
         len = ucnv_fromUCountPending(cnv, &status);
+        /* middle[1] is pending, tail has not been consumed */
         if(U_FAILURE(status)){
             log_err("ucnv_fromUInputHeld call did not succeed. Error: %s\n", u_errorName(status));
         }
-        if(len!=2){
+        if(len!=1){
             log_err("ucnv_fromUInputHeld did not return correct length for tail\n");
         }
     }
     ucnv_close(cnv);
 }
+
 static void
 TestToUCountPending(){
     UErrorCode status = U_ZERO_ERROR;
@@ -2931,18 +2937,24 @@ TestToUCountPending(){
     ucnv_close(cnv);
 
     {
+        /*
+         * The converter has to read the tail before it knows that
+         * only head alone matches.
+         * At the end, the output for head will overflow the target,
+         * mid will be pending, and tail will not have been consumed.
+         */
         char head[] = { 0x01, 0x02, 0x03, 0x0a , 0x00};
         char mid[] = { 0x01, 0x02, 0x03, 0x0b, 0x00 };
-                      
         char tail[] = {  0x01, 0x02, 0x03, 0x0d, 0x00 };
         /* 
         0x01, 0x02, 0x03, 0x0a  -> x (<U23456>    \x01\x02\x03\x0a |0)
         0x01, 0x02, 0x03, 0x0b  -> y (<U000b>     \x01\x02\x03\x0b |0)
-        0x01, 0x02, 0x03, 0x0a + 0x01, 0x02, 0x03, 0x0b + 0x01, 0x0e -> z <U80008>    (\x01\x02\x03\x0a+\x01\x02\x03\x0b+\x01\x0e)
+        0x01, 0x02, 0x03, 0x0d  -> z (<U34567>    \x01\x02\x03\x0d |3)
+        0x01, 0x02, 0x03, 0x0a + 0x01, 0x02, 0x03, 0x0b + 0x01 + many more -> z (see test4 "many bytes, and bytes per UChar")
         */
         UChar tgt[10];
         UChar* target = tgt;
-        UChar* targetLimit = target + 1;
+        UChar* targetLimit = target + 1; /* expect overflow from converting */
         const char* source = head;
         const char* sourceLimit = source + strlen(head); 
         int32_t len = 0;
@@ -2975,12 +2987,14 @@ TestToUCountPending(){
         sourceLimit = source+strlen(tail);
         targetLimit = target;
         ucnv_toUnicode(cnv,&target, targetLimit, &source, sourceLimit, NULL, FALSE, &status);
-        if(status == U_BUFFER_OVERFLOW_ERROR){
-            status = U_ZERO_ERROR;
-        }
-        len = ucnv_toUCountPending(cnv,&status);
-        if(U_FAILURE(status)){
+        if(status != U_BUFFER_OVERFLOW_ERROR){
             log_err("ucnv_toUnicode call did not succeed. Error: %s\n", u_errorName(status));
+        }
+        status = U_ZERO_ERROR;
+        len = ucnv_toUCountPending(cnv,&status);
+        /* mid[4] is pending, tail has not been consumed */
+        if(U_FAILURE(status)){
+            log_err("ucnv_toUCountPending call did not succeed. Error: %s\n", u_errorName(status));
         }
         if(len != 4){
             log_err("Did not get the expected len for tail.\n");
