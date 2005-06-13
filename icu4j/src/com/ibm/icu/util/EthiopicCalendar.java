@@ -164,5 +164,14 @@ public final class EthiopicCalendar extends CECalendar
     public boolean isAmeteAlemEra() {
     	return this.jdEpochOffset == JD_EPOCH_OFFSET_AMETE_ALEM;
     }
+
+    /**
+     * Return the current Calendar type.
+     * @return type of calendar (gregorian, etc.)
+     * @internal ICU 3.4
+     */
+    public String getType() {
+        return "ethiopic";
+    }
 }
 
