@@ -1211,7 +1211,7 @@ enum {
                   0,                   /* start         */ \
                   0,                   /* limit         */ \
                   FALSE,               /* nonUTF16idx   */ \
-                  FALSE,               /* padding       */ \
+                  FALSE, FALSE, FALSE, /* padding1,2,3  */ \
                   sizeof(UTextChunk)                       \
 }               
 
