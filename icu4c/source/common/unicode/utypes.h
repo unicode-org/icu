@@ -601,6 +601,7 @@ typedef enum UErrorCode {
     U_INVALID_STATE_ERROR     = 27,     /**< Requested operation can not be completed with ICU in its current state */
     U_COLLATOR_VERSION_MISMATCH = 28,   /**< Collator version is not compatible with the base version */
     U_USELESS_COLLATOR_ERROR  = 29,     /**< Collator is options only and no base is specified */
+    U_NO_WRITE_PERMISSION     = 30,     /**< Attempt to modify read-only or constant data. */
 
     U_STANDARD_ERROR_LIMIT,             /**< This must always be the last value to indicate the limit for standard errors */
     /*
