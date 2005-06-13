@@ -242,7 +242,7 @@ utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *status);
   *  @return       The newly created clone, or NULL if the clone operation failed.
   */
 U_DRAFT UText * U_EXPORT2
-utext_clone(UText *dest, UText *src, UBool deep, UErrorCode *status);
+utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
 
 
 /*****************************************************************************
@@ -274,7 +274,7 @@ utext_length(UText *ut);
  * @draft ICU 3.4
  */
 U_DRAFT UBool U_EXPORT2
-utext_lengthIsExpensive(UText *ut);
+utext_lengthIsExpensive(const UText *ut);
 
 /**
  * Returns the code point at the requested index,
@@ -587,7 +587,7 @@ utext_extract(UText *ut,
  *
  */
 U_DRAFT UBool U_EXPORT2
-utext_isWriteable(UText *ut);
+utext_isWriteable(const UText *ut);
 
 
 /**
@@ -599,7 +599,7 @@ utext_isWriteable(UText *ut);
   * @draft ICU 3.4
   */
 U_DRAFT UBool U_EXPORT2
-utext_hasMetaData(UText *ut);
+utext_hasMetaData(const UText *ut);
 
 
 /**
