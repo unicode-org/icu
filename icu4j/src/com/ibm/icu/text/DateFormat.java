@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -320,12 +320,22 @@ public abstract class DateFormat extends UFormat {
     public final static int TIMEZONE_RFC_FIELD = 23;
 
     /**
+     * FieldPosition selector for 'v' field alignment,
+     * corresponding to the {@link Calendar#ZONE_OFFSET} and
+     * {@link Calendar#DST_OFFSET} fields.  This displays the generic zone
+     * name, if available.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static int TIMEZONE_GENERIC_FIELD = 24;
+
+    /**
      * Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public final static int FIELD_COUNT = 24; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 25; // must == DateFormatSymbols.patternChars.length()
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
@@ -909,7 +919,11 @@ public abstract class DateFormat extends UFormat {
             throw new IllegalArgumentException("Illegal date style " + dateStyle);
         }
         try {
-            return new SimpleDateFormat(timeStyle, dateStyle, loc);
+            Calendar cal = Calendar.getInstance(loc);
+            DateFormat result = cal.getDateTimeFormat(dateStyle, timeStyle, loc);
+	    result.setLocale(cal.getLocale(ULocale.VALID_LOCALE),
+			     cal.getLocale(ULocale.ACTUAL_LOCALE));
+	    return result;
         } catch (MissingResourceException e) {
             ///CLOVER:OFF
             // coverage requires separate run with no data, so skip

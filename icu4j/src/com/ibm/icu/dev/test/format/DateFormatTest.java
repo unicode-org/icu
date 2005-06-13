@@ -205,16 +205,16 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
             "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "PT", "", "", "", "", "", "",
+            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "", "",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
-            "mercredi", "", "", "", "", "", "", "", "HP (\u00C9UA)", "", "", "", "", "", "",
+            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PT", "1997", "4", "1997", "2450674", "52452513", "-0700",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",
 
             "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
-            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
+            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700", "Pacific Time",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -247,7 +247,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZ";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZv";
         
     /**
      * A list of the names of all the fields in DateFormat.
@@ -277,7 +277,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "EXTENDED_YEAR_FIELD",
         "JULIAN_DAY_FIELD",
         "MILLISECONDS_IN_DAY_FIELD",
-        "TIMEZONE_RFC_FIELD"
+        "TIMEZONE_RFC_FIELD",
+	"GENERIC_TIMEZONE_FIELD",
     };
     
     /**
@@ -313,43 +314,43 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // round trip
             "y/M/d H:mm zzzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Standard Time",
             "y/M/d H:mm zzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
-            "y/M/d H:mm zz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
-            "y/M/d H:mm z", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
+            "y/M/d H:mm vvvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d H:mm vvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
             // non-generic timezone string influences dst offset even if wrong for date/time
             "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 PST",
-            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
+            "y/M/d H:mm vvvv", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
             "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 PDT",
-            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 Pacific Time",
+            "y/M/d H:mm vvvv", "pf", "2004/7/1 1:00 PST", "2004 07 01 02:00 PDT", "2004/7/1 2:00 Pacific Time",
             // generic timezone generates dst offset appropriate for local time
             "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
-            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d H:mm vvvv", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
             "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
-            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+            "y/M/d H:mm vvvv", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
             // daylight savings time transition edge cases.
             // time to parse does not really exist, PT interpreted as earlier time
-            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST", // adjust earlier
+            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
             "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
             "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
-            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT", // adjust earlier
-            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
-            "y/M/d H:mm z", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+            "y/M/d H:mm v", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+            "y/M/d H:mm v", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
+            "y/M/d H:mm v", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
             "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 01:30 PST", "2005/4/3 1:30",
             // time to parse is ambiguous, PT interpreted as earlier time (?)
-            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT", // fail
+            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
             "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
             "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
-            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT", // fail
-            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
-            "y/M/d H:mm z", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
-            "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PDT", "2004/10/31 1:30", // fail
+            "y/M/d H:mm v", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
+            "y/M/d H:mm v", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
+            "y/M/d H:mm v", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
+            "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PDT", "2004/10/31 1:30",
         };
         expect(ZDATA, en);
 
         logln("cross format/parse tests");
         final String basepat = "yy/MM/dd H:mm ";
         final SimpleDateFormat[] formats = { 
-            new SimpleDateFormat(basepat + "z", en),
-            new SimpleDateFormat(basepat + "zz", en),
+            new SimpleDateFormat(basepat + "vvv", en),
+            new SimpleDateFormat(basepat + "vvvv", en),
             new SimpleDateFormat(basepat + "zzz", en),
             new SimpleDateFormat(basepat + "zzzz", en)
         };
@@ -402,19 +403,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "zzz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "PST 2004/1/1 1:00",
 
             // standard time, generic
-            "y/M/d H:mm zz", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
-            "y/M/d zz H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 Pacific Time 1:00",
-            "zz y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "Pacific Time 2004/1/1 1:00",
+            "y/M/d H:mm vvvv", "pf", "2004/1/1 1:00 PT", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
+            "y/M/d vvvv H:mm", "pf", "2004/1/1 PT 1:00", "2004 01 01 01:00 PST", "2004/1/1 Pacific Time 1:00",
+            "vvvv y/M/d H:mm", "pf", "PT 2004/1/1 1:00", "2004 01 01 01:00 PST", "Pacific Time 2004/1/1 1:00",
 
-            // dahylight time, explicit daylight/standard
+            // daylight time, explicit daylight/standard
             "y/M/d H:mm zzz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 PDT",
             "y/M/d zzz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 PDT 1:00",
             "zzz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "PDT 2004/7/1 1:00",
 
             // daylight time, generic
-            "y/M/d H:mm zz", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
-            "y/M/d zz H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 Pacific Time 1:00",
-            "zz y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "Pacific Time 2004/7/1 1:00",
+            "y/M/d H:mm vvvv", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
+            "y/M/d vvvv H:mm", "pf", "2004/7/1 PT 1:00", "2004 07 01 01:00 PDT", "2004/7/1 Pacific Time 1:00",
+            "vvvv y/M/d H:mm", "pf", "PT 2004/7/1 1:00", "2004 07 01 01:00 PDT", "Pacific Time 2004/7/1 1:00",
         };
         Locale en = new Locale("en", "", "");
         expect(XDATA, en);
@@ -890,9 +891,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HP (\u00C9UA)";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HAP (\u00C9UA)";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PT";
+        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);

@@ -75,6 +75,7 @@ import java.util.Map;
  * K        hour in am/pm (0~11)    (Number)            0
  * z        time zone               (Text)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
+ * v        time zone (generic)     (Text)              Pacific Time
  * g*       Julian day              (Number)            2451334
  * A*       milliseconds in day     (Number)            69540000
  * '        escape for text         (Delimiter)         'Date='
@@ -657,7 +658,8 @@ public class SimpleDateFormat extends DateFormat {
         /*wWa*/ Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH, Calendar.AM_PM,
         /*hKz*/ Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
         /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
-        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET
+        /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET,
+        /*v*/   Calendar.ZONE_OFFSET
     };
 
     // Map index into pattern character string to DateFormat field number
@@ -669,7 +671,8 @@ public class SimpleDateFormat extends DateFormat {
         /*wWa*/ DateFormat.WEEK_OF_YEAR_FIELD, DateFormat.WEEK_OF_MONTH_FIELD, DateFormat.AM_PM_FIELD,
         /*hKz*/ DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD, DateFormat.TIMEZONE_FIELD,
         /*Yeu*/ DateFormat.YEAR_WOY_FIELD, DateFormat.DOW_LOCAL_FIELD, DateFormat.EXTENDED_YEAR_FIELD,
-        /*gAZ*/ DateFormat.JULIAN_DAY_FIELD, DateFormat.MILLISECONDS_IN_DAY_FIELD, DateFormat.TIMEZONE_RFC_FIELD
+        /*gAZ*/ DateFormat.JULIAN_DAY_FIELD, DateFormat.MILLISECONDS_IN_DAY_FIELD, DateFormat.TIMEZONE_RFC_FIELD,
+        /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD
     };
 
     /**
@@ -793,6 +796,7 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(buf, value, count, maxIntCount);
             break;
         case 17: // 'z' - ZONE_OFFSET
+        case 24: // 'v' - TIMEZONE_GENERIC
             int zoneIndex
                 = formatData.getZoneIndex (cal.getTimeZone().getID());
             if (zoneIndex == -1)
@@ -816,15 +820,18 @@ public class SimpleDateFormat extends DateFormat {
                 }
             else {
                 String[] zs = formatData.zoneStrings[zoneIndex];
-                if (zs.length < 7 && count < 3) {
-                    count += 2; // no generic time, default to full times
-                }
+
                 int ix;
-                switch (count) {
-                case 1: ix = zs.length == 7 ? 6 : 7; break; // short generic time
-                case 2: ix = zs.length == 7 ? 5 : 6; break; // long generic time
-                case 3: ix = cal.get(Calendar.DST_OFFSET) != 0 ? 4 : 2; break; // short dst/standard time
-                default: ix = cal.get(Calendar.DST_OFFSET) != 0 ? 3 : 1; break; // long dst/standard time
+                if (patternCharIndex == 24 && zs.length >= 7) {
+                    ix = count < 4 ? 6 : 5;
+                    if (zs.length > 7) {
+                        ix += 1;
+                    }
+                } else {
+                    ix = count < 4 ? 2 : 1;
+                    if (cal.get(Calendar.DST_OFFSET) != 0) {
+                        ix += 2;
+                    }
                 }
                 buf.append(zs[ix]);
             }
@@ -1452,6 +1459,7 @@ public class SimpleDateFormat extends DateFormat {
                 return pos.getIndex();
             case 17: // 'z' - ZONE_OFFSET
             case 23: // 'Z' - TIMEZONE_RFC
+            case 24: // 'v' - TIMEZONE_GENERIC
                 // First try to parse generic forms such as GMT-07:00. Do this first
                 // in case localized DateFormatZoneData contains the string "GMT"
                 // for a zone; in that case, we don't want to match the first three

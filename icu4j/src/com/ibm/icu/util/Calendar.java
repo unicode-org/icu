@@ -3072,8 +3072,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
                 }
                 result = cal.handleGetDateFormat(pattern, loc);
             } catch (MissingResourceException e) {
-		// !!! need dateformat subclass appropriate to calendar type here!
+                // !!! need dateformat subclass appropriate to calendar type here!
                 // No custom patterns
+                // !!! note: possible circularity here, if getDateTimeInstance calls us because of
+                // loc specifying a calendar.
                 result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
 
                 DateFormatSymbols symbols = new DateFormatSymbols(cal, loc);
