@@ -151,7 +151,6 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //  Iterate forwards, verify that we get the correct code points
     //   at the correct native offsets.
     //
-    UTextIterator it(ut);
     int         i = 0;
     int         index;
     int         expectedIndex = 0;
@@ -160,39 +159,54 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     UChar32     foundC;
     int32_t     len;
 
-    UTextIterator uti(ut);
     for (i=0; i<cpCount; i++) {
         expectedIndex = cpMap[i].nativeIdx;
-        foundIndex    = uti.getIndex();
+        foundIndex    = utext_getIndex(ut);
         TEST_ASSERT(expectedIndex == foundIndex);
         expectedC     = cpMap[i].cp;
-        foundC        = uti.next32();
+        foundC        = utext_next32(ut);    
         TEST_ASSERT(expectedC == foundC);
         if (gFailed) {
             return;
         }
     }
-    foundC = uti.next32();
+    foundC = utext_next32(ut);
     TEST_ASSERT(foundC == U_SENTINEL);
     
+    // Repeat above, using macros
+    utext_setIndex(ut, 0);
+    for (i=0; i<cpCount; i++) {
+        expectedIndex = cpMap[i].nativeIdx;
+        foundIndex    = utext_getIndex(ut);
+        TEST_ASSERT(expectedIndex == foundIndex);
+        expectedC     = cpMap[i].cp;
+        foundC        = UTEXT_NEXT32(ut);    
+        TEST_ASSERT(expectedC == foundC);
+        if (gFailed) {
+            return;
+        }
+    }
+    foundC = utext_next32(ut);
+    TEST_ASSERT(foundC == U_SENTINEL);
+
     //
     //  Forward iteration (above) should have left index at the
     //   end of the input, which should == length().
     //
-    len = uti.length();
-    foundIndex  = uti.getIndex();
+    len = utext_length(ut);
+    foundIndex  = utext_getIndex(ut);
     TEST_ASSERT(len == foundIndex);
 
     //
     // Iterate backwards over entire test string
     //
-    len = uti.getIndex();
-    uti.setIndex(len);
+    len = utext_getIndex(ut);
+    utext_setIndex(ut, len);
     for (i=cpCount-1; i>=0; i--) {
         expectedC     = cpMap[i].cp;
         expectedIndex = cpMap[i].nativeIdx;
-        foundC        = uti.previous32();
-        foundIndex    = uti.getIndex();
+        foundC        = utext_previous32(ut);
+        foundIndex    = utext_getIndex(ut);
         TEST_ASSERT(expectedIndex == foundIndex);
         TEST_ASSERT(expectedC == foundC);
         if (gFailed) {
@@ -204,12 +218,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //  Backwards iteration, above, should have left our iterator
     //   position at zero, and continued backwards iterationshould fail.
     //
-    foundIndex = uti.getIndex();
+    foundIndex = utext_getIndex(ut);
     TEST_ASSERT(foundIndex == 0);
 
-    foundC = uti.previous32();
+    foundC = utext_previous32(ut);
     TEST_ASSERT(foundC == U_SENTINEL);
-    foundIndex = uti.getIndex();
+    foundIndex = utext_getIndex(ut);
     TEST_ASSERT(foundIndex == 0);
     if (gFailed) {
         return;
@@ -223,7 +237,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         cpIndex = (cpIndex + 9973) % cpCount;
         index         = cpMap[cpIndex].nativeIdx;
         expectedC     = cpMap[cpIndex].cp;
-        foundC        = uti.next32From(index);
+        foundC        = utext_next32From(ut, index);
         TEST_ASSERT(expectedC == foundC);
         TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
@@ -236,7 +250,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         cpIndex = (cpIndex + 9973) % cpCount;
         index         = cpMap[cpIndex+1].nativeIdx;
         expectedC     = cpMap[cpIndex].cp;
-        foundC        = uti.previous32From(index);
+        foundC        = utext_previous32From(ut, index);
         TEST_ASSERT(expectedC == foundC);
         TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
@@ -249,42 +263,42 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //
 
     // Walk through frontwards, incrementing by one
-    uti.setIndex(0);
+    utext_setIndex(ut, 0);
     for (i=1; i<=cpCount; i++) {
-        uti.moveIndex(1);
-        index = uti.getIndex();
+        utext_moveIndex(ut, 1);
+        index = utext_getIndex(ut);
         expectedIndex = cpMap[i].nativeIdx;
         TEST_ASSERT(expectedIndex == index);
     }
 
     // Walk through frontwards, incrementing by two
-    uti.setIndex(0);
+    utext_setIndex(ut, 0);
     for (i=2; i<cpCount; i+=2) {
-        uti.moveIndex(2);
-        index = uti.getIndex();
+        utext_moveIndex(ut, 2);
+        index = utext_getIndex(ut);
         expectedIndex = cpMap[i].nativeIdx;
         TEST_ASSERT(expectedIndex == index);
     }
 
     // walk through the string backwards, decrementing by one.
     i = cpMap[cpCount].nativeIdx;
-    uti.setIndex(i);
+    utext_setIndex(ut, i);
     for (i=cpCount; i>=0; i--) {
         expectedIndex = cpMap[i].nativeIdx;
-        index = uti.getIndex();
+        index = utext_getIndex(ut);
         TEST_ASSERT(expectedIndex == index);
-        uti.moveIndex(-1);
+        utext_moveIndex(ut, -1);
     }
 
 
     // walk through backwards, decrementing by three
     i = cpMap[cpCount].nativeIdx;
-    uti.setIndex(i);
+    utext_setIndex(ut, i);
     for (i=cpCount; i>=0; i-=3) {
         expectedIndex = cpMap[i].nativeIdx;
-        index = uti.getIndex();
+        index = utext_getIndex(ut);
         TEST_ASSERT(expectedIndex == index);
-        uti.moveIndex(-3);
+        utext_moveIndex(ut, -3);
     }
 
 
@@ -295,20 +309,20 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     UChar *buf = new UChar[bufSize];
     status = U_ZERO_ERROR;
     expectedLen = us.length();
-    len = ut->extract(ut, 0, utlen, buf, bufSize, &status);
+    len = utext_extract(ut, 0, utlen, buf, bufSize, &status);
     TEST_SUCCESS(status);
     TEST_ASSERT(len == expectedLen);
     int compareResult = us.compare(buf, -1);
     TEST_ASSERT(compareResult == 0);
 
     status = U_ZERO_ERROR;
-    len = ut->extract(ut, 0, utlen, NULL, 0, &status);
+    len = utext_extract(ut, 0, utlen, NULL, 0, &status);
     TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR)
     TEST_ASSERT(len == expectedLen);
 
     status = U_ZERO_ERROR;
     u_memset(buf, 0x5555, bufSize);
-    len = ut->extract(ut, 0, utlen, buf, 1, &status);
+    len = utext_extract(ut, 0, utlen, buf, 1, &status);
     if (us.length() == 0) {
         TEST_SUCCESS(status);
         TEST_ASSERT(buf[0] == 0);
