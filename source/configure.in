@@ -65,7 +65,18 @@ AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
 
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
-AC_EXEEXT
+
+dnl Determine the executable suffix
+dnl We don't use AC_EXEEXT because some compilers output separate debugging
+dnl files, which confuses the AC_EXEEXT macro.
+AC_MSG_CHECKING(checking for executable suffix)
+case "${host}" in
+    *-*-cygwin*|*-*-mingw*)  EXEEXT=.exe ;;
+    *)      EXEEXT="" ;;
+esac
+ac_exeext=$EXEEXT
+AC_MSG_RESULT($EXEEXT)
+AC_SUBST(EXEEXT)
 
 dnl Determine how strict we want to be when compiling
 AC_CHECK_STRICT_COMPILE
