@@ -1081,6 +1081,7 @@ void MultithreadTest::TestThreadedIntl()
     int i;
     UnicodeString theErr;
     UBool   haveDisplayedInfo[kFormatThreadThreads];
+    static const int32_t PATIENCE_SECONDS = 30;
 
     //
     //  Create and start the test threads
@@ -1101,12 +1102,23 @@ void MultithreadTest::TestThreadedIntl()
 
 
     // Spin, waiting for the test threads to finish.
-    //   (An earlier version used a wait in this loop, but that seems to trigger
-    //    a bug in some versions of AIX.)
     UBool   stillRunning;
+    UDate startTime, endTime;
+    startTime = Calendar::getNow();
     do {
         /*  Spin until the test threads  complete. */
         stillRunning = FALSE;
+        endTime = Calendar::getNow();
+        if ((((int32_t)(endTime - startTime)%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND) > PATIENCE_SECONDS) {
+            errln("Patience exceeded. Test is taking too long.");
+            return;
+        }
+        /*
+         The following sleep must be here because the *BSD operating systems
+         have a brain dead thread scheduler. They starve the child threads from
+         CPU time.
+        */
+        SimpleThread::sleep(1); // yield
         for(i=0;i<kFormatThreadThreads;i++) {
             if (tests[i].isRunning()) {
                 stillRunning = TRUE;
@@ -1126,8 +1138,6 @@ void MultithreadTest::TestThreadedIntl()
     //
 cleanupAndReturn:
     delete [] tests;
-    return;
-
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
