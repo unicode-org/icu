@@ -1360,7 +1360,6 @@ unistrTextReplace(UText *t,
                   const UChar *src, int32_t length,
                   UErrorCode *pErrorCode) {
     UnicodeString *us=(UnicodeString *)t->context;
-    const UChar *oldBuffer = NULL;
     int32_t oldLength;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -1389,7 +1388,6 @@ unistrTextCopy(UText *t,
                UBool move,
                UErrorCode *pErrorCode) {
     UnicodeString *us=(UnicodeString *)t->context;
-    const UChar *oldBuffer = NULL;
     int32_t length=us->length();
 
     if(U_FAILURE(*pErrorCode)) {
