@@ -87,6 +87,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "citer", "..\citer\citer.vcp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coll", "..\coll\coll.vcproj", "{D7209337-9F39-4BCC-AAEA-982632FD846E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -181,6 +185,10 @@ Global
 		{247E2681-6C84-408B-B40C-5DB50BC5E18F}.Debug.Build.0 = Debug|Win32
 		{247E2681-6C84-408B-B40C-5DB50BC5E18F}.Release.ActiveCfg = Release|Win32
 		{247E2681-6C84-408B-B40C-5DB50BC5E18F}.Release.Build.0 = Release|Win32
+		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Debug.ActiveCfg = Debug|Win32
+		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Debug.Build.0 = Debug|Win32
+		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Release.ActiveCfg = Release|Win32
+		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

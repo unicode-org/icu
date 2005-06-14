@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/ucnv.exe"
 				LinkIncremental="2"
@@ -101,7 +100,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/ucnv.exe"
 				LinkIncremental="1"

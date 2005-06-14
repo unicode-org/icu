@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="..\..\..\lib\iculx.lib ..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icuin.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/layout.exe"
 				LinkIncremental="1"
@@ -99,7 +98,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="..\..\..\lib\iculxd.lib ..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icuind.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/layout.exe"
 				LinkIncremental="2"
