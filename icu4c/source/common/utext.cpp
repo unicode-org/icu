@@ -326,7 +326,7 @@ struct ExtendedUText: public UText {
     void  *extension;
 };
 
-static const UText emptyText = UTEXT_INITIALIZER
+static const UText emptyText = UTEXT_INITIALIZER;
 
 U_DRAFT UText * U_EXPORT2
 utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
