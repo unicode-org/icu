@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrule.cpp
@@ -28,9 +28,6 @@
 #include "util.h"
 
 U_NAMESPACE_BEGIN
-
-extern const UChar* CSleftBracket;
-extern const UChar* CSrightBracket;
 
 NFRule::NFRule(const RuleBasedNumberFormat* _rbnf)
   : baseValue((int32_t)0)
@@ -572,7 +569,7 @@ static void util_append64(UnicodeString& result, int64_t n)
 }
 
 void
-NFRule::appendRuleText(UnicodeString& result) const
+NFRule::_appendRuleText(UnicodeString& result) const
 {
     switch (getType()) {
     case kNegativeNumberRule: result.append(gMinusX); break;
@@ -766,7 +763,7 @@ NFRule::doParse(const UnicodeString& text,
     fprintf(stderr, "doParse %x ", this);
     {
         UnicodeString rt;
-        appendRuleText(rt);
+        _appendRuleText(rt);
         dumpUS(stderr, rt);
     }
 
