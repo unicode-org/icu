@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.cpp
@@ -701,14 +701,14 @@ NFRuleSet::appendRules(UnicodeString& result) const
     // followed by the regular rules...
     for (uint32_t i = 0; i < rules.size(); i++) {
         result.append(gFourSpaces);
-        rules[i]->appendRuleText(result);
+        rules[i]->_appendRuleText(result);
         result.append(gLineFeed);
     }
 
     // followed by the special rules (if they exist)
     if (negativeNumberRule) {
         result.append(gFourSpaces);
-        negativeNumberRule->appendRuleText(result);
+        negativeNumberRule->_appendRuleText(result);
         result.append(gLineFeed);
     }
 
@@ -716,7 +716,7 @@ NFRuleSet::appendRules(UnicodeString& result) const
         for (uint32_t i = 0; i < 3; ++i) {
             if (fractionRules[i]) {
                 result.append(gFourSpaces);
-                fractionRules[i]->appendRuleText(result);
+                fractionRules[i]->_appendRuleText(result);
                 result.append(gLineFeed);
             }
         }
