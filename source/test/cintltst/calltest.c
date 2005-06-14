@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2004, International Business Machines Corporation and
+ * Copyright (c) 1996-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -37,6 +37,8 @@ void addIDNATest(TestNode** root);
 void addHeapMutexTest(TestNode **root);
 void addUTraceTest(TestNode** root);
 void addURegexTest(TestNode** root);
+void addUTextTest(TestNode** root);
+
 
 void addAllTests(TestNode** root)
 {
@@ -73,5 +75,6 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     addURegexTest(root);
 #endif
+    addUTextTest(root);
 }
 

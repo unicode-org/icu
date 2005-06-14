@@ -225,6 +225,33 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     TEST_ASSERT(foundC == U_SENTINEL);
     foundIndex = utext_getIndex(ut);
     TEST_ASSERT(foundIndex == 0);
+
+
+    // And again, with the macros
+    utext_setIndex(ut, len);
+    for (i=cpCount-1; i>=0; i--) {
+        expectedC     = cpMap[i].cp;
+        expectedIndex = cpMap[i].nativeIdx;
+        foundC        = UTEXT_PREVIOUS32(ut);
+        foundIndex    = utext_getIndex(ut);
+        TEST_ASSERT(expectedIndex == foundIndex);
+        TEST_ASSERT(expectedC == foundC);
+        if (gFailed) {
+            return;
+        }
+    }
+
+    //
+    //  Backwards iteration, above, should have left our iterator
+    //   position at zero, and continued backwards iterationshould fail.
+    //
+    foundIndex = utext_getIndex(ut);
+    TEST_ASSERT(foundIndex == 0);
+
+    foundC = utext_previous32(ut);
+    TEST_ASSERT(foundC == U_SENTINEL);
+    foundIndex = utext_getIndex(ut);
+    TEST_ASSERT(foundIndex == 0);
     if (gFailed) {
         return;
     }
@@ -251,6 +278,32 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         index         = cpMap[cpIndex+1].nativeIdx;
         expectedC     = cpMap[cpIndex].cp;
         foundC        = utext_previous32From(ut, index);
+        TEST_ASSERT(expectedC == foundC);
+        TEST_ASSERT(expectedIndex == foundIndex);
+        if (gFailed) {
+            return;
+        }
+    }
+
+    cpIndex = 0;
+    for (i=0; i<cpCount; i++) {
+        cpIndex = (cpIndex + 9973) % cpCount;
+        index         = cpMap[cpIndex].nativeIdx;
+        expectedC     = cpMap[cpIndex].cp;
+        foundC        = UTEXT_NEXT32FROM(ut, index);
+        TEST_ASSERT(expectedC == foundC);
+        TEST_ASSERT(expectedIndex == foundIndex);
+        if (gFailed) {
+            return;
+        }
+    }
+
+    cpIndex = 0;
+    for (i=0; i<cpCount; i++) {
+        cpIndex = (cpIndex + 9973) % cpCount;
+        index         = cpMap[cpIndex+1].nativeIdx;
+        expectedC     = cpMap[cpIndex].cp;
+        foundC        = UTEXT_PREVIOUS32FROM(ut, index);
         TEST_ASSERT(expectedC == foundC);
         TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
