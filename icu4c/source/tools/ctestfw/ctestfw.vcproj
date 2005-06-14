@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				OutputFile="..\..\..\bin\icutest.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -105,7 +104,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				OutputFile="..\..\..\bin\icutestd.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
