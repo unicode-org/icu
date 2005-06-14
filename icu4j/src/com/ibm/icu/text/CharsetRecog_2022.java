@@ -14,6 +14,7 @@ package com.ibm.icu.text;
  * 
  *                           The separate classes are nested within this class.
  * 
+ * @internal
  */
 abstract class CharsetRecog_2022 extends CharsetRecognizer {
 

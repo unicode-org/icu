@@ -9,10 +9,10 @@
 package com.ibm.icu.text;
 
 /**
- * @author emader
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * This class matches UTF-16 and UTF-32, both big- and little-endian. The
+ * BOM will be used if it is present.
+ * 
+ * @internal.
  */
 public abstract class CharsetRecog_Unicode extends CharsetRecognizer {
 

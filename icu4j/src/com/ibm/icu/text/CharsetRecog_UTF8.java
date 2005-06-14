@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 /**
  * Charset recognizer for UTF-8
  *
+ * @internal
  */
 class CharsetRecog_UTF8 extends CharsetRecognizer {
 
