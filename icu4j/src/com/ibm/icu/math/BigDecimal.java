@@ -7,7 +7,7 @@ import com.ibm.icu.impl.Utility;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2003.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2005.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */
@@ -1267,9 +1267,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
        as our add/subtract routine only handles non-negative results
        so we may need to swap the operands. */
     {swaptest:do{/*select*/
-    if (rhs.ind==iszero)
-     ; // original A bigger
-    else if ((usellen<userlen)|(lhs.ind==iszero))
+    if (rhs.ind==iszero){
+     // original A bigger
+    }else if ((usellen<userlen)|(lhs.ind==iszero))
      { // original B bigger
       t=usel;
       usel=user;
@@ -1279,9 +1279,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
       userlen=tlen; // ..
       res.ind=(byte)-res.ind; // and set sign
      }
-    else if (usellen>userlen)
-     ; // original A bigger
-    else{
+    else if (usellen>userlen){
+     // original A bigger
+    }else{
      {/* logical lengths the same */ // need compare
       /* may still need to swap: compare the strings */
       ia=0;
@@ -2523,11 +2523,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   if (exdigits<(-1)) 
    badarg("format",4,java.lang.String.valueOf(explaces));
   {/*select*/
-  if (exformint==com.ibm.icu.math.MathContext.SCIENTIFIC)
-   ;
-  else if (exformint==com.ibm.icu.math.MathContext.ENGINEERING)
-   ;
-  else if (exformint==(-1))
+  if (exformint==com.ibm.icu.math.MathContext.SCIENTIFIC){
+  }else if (exformint==com.ibm.icu.math.MathContext.ENGINEERING){
+  }else if (exformint==(-1))
    exformint=com.ibm.icu.math.MathContext.SCIENTIFIC;
    // note PLAIN isn't allowed
   else{
@@ -4108,7 +4106,6 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   if (rhs.mant.length>dig) 
    if ((!(allzero(rhs.mant,dig)))) 
     throw new java.lang.ArithmeticException("Too many digits:"+" "+rhs.toString());
-  return;
   }
 
  /* <sgml> Round to specified digits, if necessary. </sgml>
@@ -4203,9 +4200,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
          increment=sign;
       }
    }
-  else if (mode==ROUND_DOWN)
-   ; // never increment
-  else if (mode==ROUND_UP)
+  else if (mode==ROUND_DOWN){
+   // never increment
+  }else if (mode==ROUND_UP)
    { // increment if discarded non-zero
     if ((!(allzero(oldmant,len)))) 
      increment=sign;

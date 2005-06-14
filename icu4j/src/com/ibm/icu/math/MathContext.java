@@ -5,7 +5,7 @@ package com.ibm.icu.math;
 /* ------------------------------------------------------------------ */
 /* MathContext -- Math context settings                               */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1997, 2000.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1997, 2000, 2005.  All Rights Reserved.       */
 /*                                                                    */
 /*   The MathContext object encapsulates the settings used by the     */
 /*   BigDecimal class; it could also be used by other arithmetics.    */
@@ -444,13 +444,11 @@ public final class MathContext implements java.io.Serializable{
      throw new java.lang.IllegalArgumentException("Digits too large:"+" "+setdigits);
    }
   {/*select*/
-  if (setform==SCIENTIFIC)
-   ; // [most common]
-  else if (setform==ENGINEERING)
-   ;
-  else if (setform==PLAIN)
-   ;
-  else{
+  if (setform==SCIENTIFIC){
+   // [most common]
+  }else if (setform==ENGINEERING){
+  }else if (setform==PLAIN){
+  }else{
    throw new java.lang.IllegalArgumentException("Bad form value:"+" "+setform);
   }
   }
