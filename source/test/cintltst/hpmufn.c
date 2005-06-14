@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 200-20043, International Business Machines Corporation and
+ * Copyright (c) 2003-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -381,7 +381,7 @@ const void *gIncDecContext;
 
 static int32_t U_CALLCONV myIncFunc(const void *context, int32_t *p) {
     int32_t  retVal;
-    TEST_ASSERT(context == gIncDecContext);
+    TEST_ASSERT(context == &gIncDecContext);
     gIncCount++;
     retVal = ++(*p);
     return retVal;
@@ -389,7 +389,7 @@ static int32_t U_CALLCONV myIncFunc(const void *context, int32_t *p) {
 
 static int32_t U_CALLCONV myDecFunc(const void *context, int32_t *p) {
     int32_t  retVal;
-    TEST_ASSERT(context == gIncDecContext);
+    TEST_ASSERT(context == &gIncDecContext);
     gDecCount++;
     retVal = --(*p);
     return retVal;
