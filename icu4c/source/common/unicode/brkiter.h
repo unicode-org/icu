@@ -42,6 +42,7 @@ U_NAMESPACE_END
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
 #include "unicode/strenum.h"
+#include "unicode/utext.h"
 
 U_NAMESPACE_BEGIN
 
@@ -262,6 +263,14 @@ public:
      * @stable ICU 2.0
      */
     virtual void  setText(const UnicodeString &text) = 0;
+
+    /**
+     * Change the text over which this operates. The boundary iteration position is
+     * reset to the start.
+     * @param text The UText used to change the text.
+     * @stable ICU 2.0
+     */
+    //virtual void  setText(UText &text) = 0;
 
     /**
      * Change the text over which this operates. The text boundary is

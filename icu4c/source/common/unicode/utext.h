@@ -1196,7 +1196,7 @@ UTextSetup(UText *utxt, int32_t extraSpace, UErrorCode *status);
   * @internal
   */
 enum {
-    UTEXT_MAGIC = 0xe45ad82c
+    UTEXT_MAGIC = 0x345ad82c
 };
 
 
