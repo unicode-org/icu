@@ -50,8 +50,8 @@
 
 
 #include "unicode/utypes.h"
-#include "unicode/rep.h"
 #ifdef XP_CPLUSPLUS
+#include "unicode/rep.h"
 #include "unicode/unistr.h"
 #endif
 
@@ -543,9 +543,9 @@ utext_extract(UText *ut,
  * @draft ICU 3.4
  */
 #define UTEXT_NEXT32FROM(ut, index) \
-    ((index) >= (ut)->start && \
-     (index) <  (ut)->limit && \
-     (ut)->chunk.UTF16Indexes && \
+    ((index) >= (ut)->chunk.start && \
+     (index) <  (ut)->chunk.limit && \
+     !(ut)->chunk.nonUTF16Indexes && \
      (ut)->chunk.contents[(ut)->chunk.offset=(ut)->chunk.start+(index)] < 0xd800 ? \
             (ut)->chunk.contents[((ut)->chunk.offset)++] : utext_next32From(ut, index))
 
@@ -559,11 +559,11 @@ utext_extract(UText *ut,
   * @draft ICU 3.4
   */
 #define UTEXT_PREVIOUS32FROM(ut, index) \
-    ((index) > (ut)->start && \
-     (index) <=  (ut)->limit && \
-     (ut)->chunk.UTF16Indexes && \
+    ((index) > (ut)->chunk.start && \
+     (index) <=  (ut)->chunk.limit && \
+     !(ut)->chunk.nonUTF16Indexes && \
      (ut)->chunk.contents[(ut)->chunk.offset=(ut)->chunk.start+(index-1)] < 0xd800 ? \
-            (ut)->chunk.contents[--((ut)->chunk.offset)] : utext_previous32From(ut, index))
+            (ut)->chunk.contents[(ut)->chunk.offset] : utext_previous32From(ut, index))
 
 
 
@@ -1255,7 +1255,7 @@ enum {
                   NULL,                 /* copy ()      */ \
                   NULL, NULL,           /* map * 2 ()   */ \
                   NULL                  /* close ()     */ \
-};
+}
 
 
 U_CDECL_END
