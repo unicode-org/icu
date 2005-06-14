@@ -343,9 +343,6 @@
 			Name="formatting"
 			Filter="">
 			<File
-				RelativePath=".\calltest.c">
-			</File>
-			<File
 				RelativePath=".\ccaltst.c">
 			</File>
 			<File
@@ -429,6 +426,9 @@
 			Name="misc"
 			Filter="">
 			<File
+				RelativePath=".\calltest.c">
+			</File>
+			<File
 				RelativePath=".\cintltst.c">
 			</File>
 			<File
@@ -493,6 +493,9 @@
 			</File>
 			<File
 				RelativePath=".\custrtst.c">
+			</File>
+			<File
+				RelativePath=".\utexttst.c">
 			</File>
 			<File
 				RelativePath=".\utf16tst.c">
