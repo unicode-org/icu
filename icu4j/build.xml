@@ -562,23 +562,40 @@
     </target>
 
     <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
-    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-    <!-- jvmarg value="-verbose"/ -->
-        <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
-        <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
-        <jvmarg value="-Djava.security.manager"/>
-        <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
-        <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
-        <arg value="-w"/>
-        <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
-        <classpath>
-            <pathelement location="clover.jar"/>
-            <pathelement location="${jar.file}"/>
-            <pathelement location="${testjar.file}"/>
-        </classpath>
-    </java>
+	    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+	    <!-- jvmarg value="-verbose"/ -->
+	        <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
+	        <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
+	        <jvmarg value="-Djava.security.manager"/>
+	        <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
+	        <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
+	        <arg value="-w"/>
+	        <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+	        <classpath>
+	            <pathelement location="clover.jar"/>
+	            <pathelement location="${jar.file}"/>
+	            <pathelement location="${testjar.file}"/>
+	        </classpath>
+	    </java>
     </target>
-
+    <target name="noDataCheck" depends="core, tests" description="runs the tests when no data is present">
+    	<delete>
+    		<fileset dir="${build.dir}/${icu4j.data.path}"/>
+            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
+    		<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
+    		<fileset dir="${build.dir}/${icu4j.testdata.path}"/>
+    		<fileset dir="${build.dir}/${icu4j.testdata.path}../"/>    		
+    	</delete>
+	    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+	        <arg value="-nothrow"/>
+	    	<arg value="-nodata"/>
+	    	<!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+	        <classpath>
+	            <pathelement location="clover.jar"/>
+	            <pathelement location="${build.dir}"/>
+	        </classpath>
+	    </java>
+    </target>
     <target name="_requires14" unless="version.1.4">
         <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4"/>
     </target>
