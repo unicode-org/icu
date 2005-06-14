@@ -1765,11 +1765,13 @@ public class CollationMiscTest extends TestFmwk {
                 coll.setVariableTop("");
                 errln("Empty string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
+            	logln("PASS: Empty string failed as expected");
             }
             try {
                 coll.setVariableTop(null);
                 errln("Null string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
+            	logln("PASS: null string failed as expected");
             }
         } catch (Exception e) {
             errln("Error creating RuleBasedCollator");

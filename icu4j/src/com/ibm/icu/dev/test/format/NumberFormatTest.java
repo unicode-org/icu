@@ -830,6 +830,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("numberformat of string did not throw exception");
         }
         catch (Exception e) {
+        	logln("PASS: numberformat of string failed as expected");
         }
 
         int hash = fmt.hashCode();
