@@ -1,13 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -293,7 +292,8 @@ public class ICULocaleService extends ICUService {
         public boolean fallback() {
             int x = currentID.lastIndexOf('_');
             if (x != -1) {
-                while (--x >= 0 && currentID.charAt(x) == '_'); // handle zh__PINYIN
+                while (--x >= 0 && currentID.charAt(x) == '_') { // handle zh__PINYIN
+                }
                 currentID = currentID.substring(0, x+1);
                 return true;
             }

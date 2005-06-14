@@ -192,12 +192,11 @@ public final class CanonicalIterator {
                 output.add(piece);
             }
         }
-        return;
     }
 
     // FOR TESTING
 
-    /**
+    /*
      *@return the set of "safe starts", characters that are class zero AND are never non-initial in a decomposition.
      *@internal
      *
@@ -205,7 +204,7 @@ public final class CanonicalIterator {
         return (UnicodeSet) SAFE_START.clone();
     }
     */
-    /**
+    /*
      *@return the set of characters whose decompositions start with the given character
      *@internal
      *

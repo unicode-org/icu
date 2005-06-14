@@ -535,7 +535,6 @@ public class BasicTest extends TestFmwk {
         if(!input.equals(output)){
              errln("ERROR in NFC of string");
         }
-        return;
     }
     public void TestQuickCheckResultMAYBE()
                 throws Exception{

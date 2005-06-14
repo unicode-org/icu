@@ -892,11 +892,11 @@ public final class ULocale implements Serializable {
      * If the caller does not have write permission to the
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
+     * @param newLocale the new default locale
      * @throws SecurityException
      *        if a security manager exists and its
      *        <code>checkPermission</code> method doesn't allow the operation.
      * @throws NullPointerException if <code>newLocale</code> is null
-     * @param newLocale the new default locale
      * @see SecurityManager#checkPermission
      * @see java.util.PropertyPermission
      * @draft ICU 3.0 
@@ -1324,7 +1324,8 @@ public final class ULocale implements Serializable {
          * Advance index until the next terminator or id separator, and leave it there.
          */
         private void skipUntilTerminatorOrIDSeparator() {
-            while (!isTerminatorOrIDSeparator(next()));
+            while (!isTerminatorOrIDSeparator(next())) {
+            }
             --index;
         }
 
@@ -1751,14 +1752,16 @@ public final class ULocale implements Serializable {
 
         private String getKeyword() {
             int start = index;
-            while (!isDoneOrKeywordAssign(next()));
+            while (!isDoneOrKeywordAssign(next())) {
+            }
             --index;
             return new String(id, start, index-start).trim().toLowerCase();
         }
 
         private String getValue() {
             int start = index;
-            while (!isDoneOrItemSeparator(next()));
+            while (!isDoneOrItemSeparator(next())) {
+            }
             --index;
             return new String(id, start, index-start).trim(); // leave case alone
         }
@@ -2032,7 +2035,7 @@ public final class ULocale implements Serializable {
      * value must not be null or empty.
      * @param localeID the locale id to modify
      * @param keyword the keyword to add, if not already present
-     * @param the value to add, if not already present
+     * @param value the value to add, if not already present
      * @return the updated locale id
      * @internal
      */
