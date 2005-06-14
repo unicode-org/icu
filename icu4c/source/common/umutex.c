@@ -500,7 +500,7 @@ u_setMutexFunctions(const void *context, UMtxInitFn *i, UMtxFn *d, UMtxFn *l, UM
 /* Pointers to user-supplied inc/dec functions.  Null if no funcs have been set.  */
 static UMtxAtomicFn  *pIncFn = NULL;
 static UMtxAtomicFn  *pDecFn = NULL;
-static void *gIncDecContext  = NULL;
+static const void *gIncDecContext  = NULL;
 
 
 U_CAPI int32_t U_EXPORT2
@@ -569,6 +569,7 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *
 
     pIncFn = ip;
     pDecFn = dp;
+    gIncDecContext = context;
 
     testInt = 0;
     U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
@@ -594,6 +595,7 @@ U_CFUNC UBool umtx_cleanup(void) {
     gGlobalMutex    = NULL;
     pIncFn          = NULL;
     pDecFn          = NULL;
+    gIncDecContext  = NULL;
     gIncDecMutex    = NULL;
 
 #if (ICU_USE_THREADS == 1)
