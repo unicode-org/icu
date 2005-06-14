@@ -176,6 +176,20 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
       *
       */
      static class CharsetRecog_sjis extends CharsetRecog_mbcs {
+         static int [] commonChars = 
+             // TODO:  This set of data comes from the character frequency-
+             //        of-occurence analysis tool.  The data needs to be moved
+             //        into a resource and loaded from there.
+                {0x82cc, 0x82c5, 0x82a2, 0x815b, 0x8141, 0x82b5, 0x82c9, 0x82b7, 0x8142, 0x82c4, 
+                 0x82c6, 0x82cd, 0x82dc, 0x82f0, 0x82e9, 0x82c8, 0x82aa, 0x8393, 0x82bd, 0x8358, 
+                 0x82ea, 0x8343, 0x82a4, 0x82a9, 0x8367, 0x82b1, 0x8145, 0x82e0, 0x838b, 0x834e, 
+                 0x82e8, 0x82e7, 0x8140, 0x8362, 0x8389, 0x82c1, 0x838a, 0x82ab, 0x8376, 0x82b3, 
+                 0x82f1, 0x82a0, 0x8368, 0x93fa, 0x8175, 0x8176, 0x835e, 0x82e6, 0x8357, 0x82ad, 
+                 0x8381, 0x82a6, 0x82b9, 0x82bb, 0x82be, 0x8341, 0x8374, 0x82af, 0x9056, 0x82a8, 
+                 0x82c2, 0x8354, 0x8e67, 0x8375, 0x82c7, 0x95f1, 0x8356, 0x967b, 0x92e8, 0x8345, 
+                 0x82ce, 0x8385, 0x9770, 0x82df, 0x82dd, 0x836f, 0x8342, 0x8ca7, 0x8352, 0x837d, 
+                 0x838d, 0x8346, 0x834f, 0x8380, 0x82ed, 0x8d73, 0x8349, 0x8365, 0x8fee, 0x95b6, 
+                 0x8169, 0x816a, 0x836a, 0x8dec, 0x82bf, 0x834c, 0x8366, 0x82e2, 0x838c, 0x945c};
          
          boolean nextChar(iteratedChar it, CharsetDetector det) {
              it.index = it.nextIndex;
@@ -194,7 +208,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              if (secondByte < 0)  {
                  return false;          
              }
-             it.charValue = firstByte << 8 + secondByte;
+             it.charValue = (firstByte << 8) | secondByte;
              if (! ((secondByte>=0x40 && secondByte<=0x7f) || (secondByte>=0x80 && secondByte<=0xff))) {
                  // Illegal second byte value.
                  it.error = true;
@@ -203,7 +217,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
          }
          
          int match(CharsetDetector det) {
-             return match(det, null);
+             return match(det, commonChars);
          }
          
          String getName() {
