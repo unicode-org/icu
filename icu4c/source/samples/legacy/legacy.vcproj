@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icuin.lib ../../../../icu-1-8-1/lib/icuuc.lib ../../../../icu-1-8-1/lib/icuin.lib"
 				OutputFile=".\Release/legacy.exe"
 				LinkIncremental="1"
@@ -98,7 +97,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuind.lib ../../../../icu-1-8-1/lib/icuucd.lib ../../../../icu-1-8-1/lib/icuind.lib"
 				OutputFile=".\Debug/legacy.exe"
 				LinkIncremental="2"

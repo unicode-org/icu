@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuind.lib"
 				OutputFile=".\Debug/datefmt.exe"
 				LinkIncremental="2"
@@ -101,7 +100,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icuin.lib"
 				OutputFile=".\Release/datefmt.exe"
 				LinkIncremental="1"

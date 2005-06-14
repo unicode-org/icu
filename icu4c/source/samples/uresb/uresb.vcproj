@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icuio.lib icutu.lib"
 				OutputFile=".\Release/uresb.exe"
 				LinkIncremental="1"
@@ -101,7 +100,6 @@
 				Outputs="..\..\..\bin\$(InputName).exe"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuiod.lib icutud.lib"
 				OutputFile=".\Debug/uresb.exe"
 				LinkIncremental="2"

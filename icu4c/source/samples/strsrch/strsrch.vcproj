@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuind.lib icuucd.lib"
 				OutputFile=".\Debug/strsrch.exe"
 				LinkIncremental="2"
@@ -100,7 +99,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuin.lib icuuc.lib"
 				OutputFile=".\Release/strsrch.exe"
 				LinkIncremental="1"

@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib"
 				OutputFile=".\reader_Win32_Debug/reader.exe"
 				LinkIncremental="2"
@@ -101,7 +100,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib"
 				OutputFile=".\reader_Win32_Release/reader.exe"
 				LinkIncremental="1"

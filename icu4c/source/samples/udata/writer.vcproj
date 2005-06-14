@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icutud.lib"
 				OutputFile=".\Debug/writer.exe"
 				LinkIncremental="2"
@@ -101,7 +100,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icutu.lib"
 				OutputFile=".\Release/writer.exe"
 				LinkIncremental="1"
