@@ -7,7 +7,7 @@ import com.ibm.icu.util.VersionInfo;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests                                       mfc */
-/* Copyright (c) IBM Corporation 1996-2004.  All Rights Reserved.     */
+/* Copyright (c) IBM Corporation 1996-2005.  All Rights Reserved.     */
 /* ------------------------------------------------------------------ */
 /* DiagBigDecimal                                                     */
 /*                                                                    */
@@ -156,8 +156,9 @@ public class DiagBigDecimal extends TestFmwk{
    */
  
  public DiagBigDecimal(){super();
-  return;
-  }
+ }
+
+ static final boolean isJDK15OrLater = VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1,5)) >= 0;
 
  /** Run the tests in the test suite.
   *
@@ -170,8 +171,6 @@ public class DiagBigDecimal extends TestFmwk{
   * successful, >0 (the count of failures) if some failures were
   * detected, or <0 if an unexpected Exception was signalled.
   */
- 
-    static final boolean isJDK15OrLater = VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1,5)) >= 0;
 
  public int diagrun(boolean isContinue){
   int fails;
@@ -906,7 +905,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("cuc041")).ok=(mcfd.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
   summary("No mutation");
-  return;}
+ }
 
  
  /* ----------------------------------------------------------------- */
@@ -966,7 +965,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("abs022")).ok=flag;
   
   summary("abs");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#add} method. */
@@ -1239,7 +1238,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("add205")).ok=flag;
   
   summary("add");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  /** Test the {@link com.ibm.icu.math.BigDecimal#compareTo(BigDecimal)} method. */
@@ -1293,7 +1292,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("cpt103")).ok=flag;
   
   summary("compareTo");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -1617,7 +1616,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("div211")).ok=flag;
   
   summary("divide");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#divideInteger} method. */
@@ -1698,7 +1697,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("dvI104")).ok=flag;
   
   summary("divideInteger");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#max} method. */
@@ -1751,7 +1750,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkdigits*/
   (new Test("max013")).ok=flag;
   summary("max");
-  return;}
+ }
 
  /** Test the {@link com.ibm.icu.math.BigDecimal#min} method. */
  
@@ -1807,7 +1806,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkdigits*/
   (new Test("min013")).ok=flag;
   summary("min");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#multiply} method. */
@@ -2054,7 +2053,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("mul207")).ok=flag;
   
   summary("multiply");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -2104,7 +2103,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkdigits*/
   (new Test("neg101")).ok=flag;
   summary("negate");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#plus} method. */
@@ -2183,7 +2182,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkdigits*/
   (new Test("plu101")).ok=flag;
   summary("plus");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#pow} method. */
@@ -2422,7 +2421,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("pow161")).ok=flag;
   
   summary("pow");
-  return;}
+ }
 
  /*--------------------------------------------------------------------*/
  
@@ -2588,7 +2587,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("rem203")).ok=flag;
   
   summary("remainder");
-  return;}
+ }
 /*--------------------------------------------------------------------*/
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#subtract} method. */
@@ -2848,7 +2847,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkdigits*/
   (new Test("sub203")).ok=flag;
   summary("subtract");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /* ----------------------------------------------------------------- */
@@ -2962,7 +2961,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*i*/
   
   summary("byteValue+");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#compareTo(java.lang.Object)} method. */
@@ -2999,7 +2998,7 @@ public class DiagBigDecimal extends TestFmwk{
   }
   (new Test("cto102")).ok=flag;
   summary("compareTo(Obj)");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#doubleValue} method. */
@@ -3022,7 +3021,7 @@ public class DiagBigDecimal extends TestFmwk{
   val="-1e1000";
   (new Test("dov007")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==java.lang.Double.NEGATIVE_INFINITY;
   summary("doubleValue");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#equals} method. */
@@ -3036,7 +3035,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("equ004")).ok=d.equals((java.lang.Object)d);
   (new Test("equ005")).ok=d.equals((java.lang.Object)((new com.ibm.icu.math.BigDecimal(10)).add(new com.ibm.icu.math.BigDecimal(7))));
   summary("equals");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3064,7 +3063,7 @@ public class DiagBigDecimal extends TestFmwk{
   val="-1e1000";
   (new Test("flv009")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==java.lang.Float.NEGATIVE_INFINITY;
   summary("floatValue");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3307,7 +3306,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("for136")).ok=flag;
   
   summary("format");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#hashCode} method. */
@@ -3325,7 +3324,7 @@ public class DiagBigDecimal extends TestFmwk{
   d=new com.ibm.icu.math.BigDecimal(hs);
   (new Test("has003")).ok=(d.hashCode())!=(hs.hashCode());
   summary("hashCode");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#intValue} method. */
@@ -3533,7 +3532,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*i*/
   
   summary("intValue+");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3686,7 +3685,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*i*/
   
   summary("longValue+");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3726,7 +3725,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("mpl036")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(+10).toString()).equals("0.0000000005");
   
   summary("movePointLeft");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#movePointRight} method. */
@@ -3765,7 +3764,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("mpr036")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(-10).toString()).equals("0.0000000005");
   
   summary("movePointRight");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#scale} method. */
@@ -3789,7 +3788,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("sca016")).ok=((new com.ibm.icu.math.BigDecimal("-0.12")).scale())==2;
   (new Test("sca017")).ok=((new com.ibm.icu.math.BigDecimal("-0.123")).scale())==3;
   summary("scale");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3897,7 +3896,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkrunn*/
   (new Test("ssc102")).ok=flag;
   summary("setScale");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -3988,7 +3987,7 @@ public class DiagBigDecimal extends TestFmwk{
   
   
   summary("shortValue+");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4014,7 +4013,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("sig016")).ok=1==((new com.ibm.icu.math.BigDecimal("1e+12")).signum());
   (new Test("sig017")).ok=0==((new com.ibm.icu.math.BigDecimal("00e+12")).signum());
   summary("signum");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4034,7 +4033,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("tbd009")).ok=((new com.ibm.icu.math.BigDecimal("1E10")).toBigDecimal().toString()).equals("10000000000");
   (new Test("tbd010")).ok=((new com.ibm.icu.math.BigDecimal("1E12")).toBigDecimal().toString()).equals("1000000000000");
   summary("toBigDecimal");
-  return;}
+ }
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#toBigInteger} method. */
@@ -4136,7 +4135,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*i*/
   
   summary("toBigInteger+");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4158,7 +4157,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("tca003")).ok=(d.toCharArray() instanceof char[]);
   (new Test("tca004")).ok=(ca instanceof char[]);
   summary("toCharArray");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4184,7 +4183,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("tos005")).ok=(cs instanceof java.lang.String);
   (new Test("tos006")).ok=(d.toString() instanceof java.lang.String);
   summary("toString");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4221,7 +4220,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("uns027")).ok=((new com.ibm.icu.math.BigDecimal("-111.111")).unscaledValue().toString()).equals("-111111");
   (new Test("uns028")).ok=((new com.ibm.icu.math.BigDecimal("+111.111")).unscaledValue().toString()).equals("111111");
   summary("unscaledValue");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4342,7 +4341,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("val303")).ok=flag;
   
   summary("valueOf");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -4498,7 +4497,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("mcn122")).ok=flag;
   
   summary("MathContext");
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  
@@ -5022,7 +5021,7 @@ public class DiagBigDecimal extends TestFmwk{
   mathtest(500,def,"-373484759E-113589964","844101958E-852538240","-3.73484759E-113589956","-3.73484759E-113589956","-3.15259216E-966128187","-4.42464036E+738948275","","","3.78602147E-908719644");
   
   summary("Arithmetic");
-  return;}
+ }
 
  /* mathtest -- general arithmetic test routine
     Arg1  is test number
@@ -5184,7 +5183,7 @@ public class DiagBigDecimal extends TestFmwk{
    say("OK"+" "+left(section,14)+" "+right("["+count+" "+"tests]",12));
   else 
    throw new DiagException(section+" "+"[failed"+" "+bad+" "+"of"+" "+count+" "+"tests]",bad);
-  return;}
+ }
 
  
  /* ----------------------------------------------------------------- */
@@ -5235,7 +5234,7 @@ public class DiagBigDecimal extends TestFmwk{
   if (s==null) 
    s="  ";
   logln(s);
-  return;}
+ }
 
  /* ----------------------------------------------------------------- */
  /* Scaffolding for stand-alone run                                   */
@@ -5304,7 +5303,7 @@ public class DiagBigDecimal extends TestFmwk{
   public Test(java.lang.String testname){super();
    name=testname; // save the name
    DiagBigDecimal.this.Tests.addElement((java.lang.Object)this); // and add to parent's list
-   return;}
+  }
   }
 
  /* ------------------------------------------------------------------ */
@@ -5348,5 +5347,5 @@ public class DiagBigDecimal extends TestFmwk{
   public DiagException(java.lang.String message,int fails){
    super(message);
    failcount=fails;
-   return;}
+  }
  }}
