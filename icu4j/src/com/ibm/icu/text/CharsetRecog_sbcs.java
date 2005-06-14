@@ -9,10 +9,10 @@
 package com.ibm.icu.text;
 
 /**
- * @author emader
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * This class recognizes single-byte encodings. Because the encoding scheme is so
+ * simple, language statistics are used to do the matching.
+ * 
+ * @internal
  */
 public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 

@@ -20,6 +20,7 @@ package com.ibm.icu.text;
  * The WILL be shared by multiple instances of CharsetDetector.
  * They encapsulate const charset-specific information.
  * 
+ * @internal
  */
 abstract class CharsetRecognizer {
     /**

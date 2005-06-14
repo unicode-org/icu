@@ -20,7 +20,8 @@ import java.util.Arrays;
  *                   CharsetDetector class and kept in the global list of available
  *                   encodings to be checked.  The specific encoding being recognized
  *                   is determined by subclass.
- *                   
+ * 
+ * @internal                  
  */
 abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
