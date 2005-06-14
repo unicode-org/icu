@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -38,7 +38,7 @@ public class SearchTest extends TestFmwk {
         String              breaker;
         int[]               offset;
         int[]               size;
-    };
+    }
 
     RuleBasedCollator m_en_us_;
     RuleBasedCollator m_fr_fr_;
@@ -911,6 +911,7 @@ public class SearchTest extends TestFmwk {
         strsrch.reset();
         strsrch.setCanonical(true);
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[1])) {
+        	logln("COLLATORCANONICAL[1] failed");  // Error should already be reported.
         }
         strsrch.setCollator(m_en_us_);
         strsrch.reset();
@@ -918,6 +919,7 @@ public class SearchTest extends TestFmwk {
             errln("Error setting rule based collator");
         }
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[0])) {
+        	logln("COLLATORCANONICAL[0] failed");  // Error should already be reported.
         }
     }
 
@@ -1103,12 +1105,16 @@ public class SearchTest extends TestFmwk {
         try {
             strsrch.setIndex(-1);
             errln("Error expecting set offset error");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        	logln("PASS: strsrch.setIndex(-1) failed as expected");
+       	}
 
         try {
             strsrch.setIndex(128);
             errln("Error expecting set offset error");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        	logln("PASS: strsrch.setIndex(128) failed as expected");
+       	}
 
         int index   = 0;
         while (BASIC[index].text != null) {
@@ -1173,11 +1179,15 @@ public class SearchTest extends TestFmwk {
         try {
             strsrch.setIndex(-1);
             errln("Error expecting set offset error");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        	logln("PASS: strsrch.setIndex(-1) failed as expected");
+       	}
         try {
             strsrch.setIndex(128);
             errln("Error expecting set offset error");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        	logln("PASS: strsrch.setIndex(128) failed as expected");
+       	}
 
         int   index   = 0;
         while (BASICCANONICAL[index].text != null) {
@@ -1344,51 +1354,66 @@ public class SearchTest extends TestFmwk {
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: null arguments should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: null arguments failed as expected");
+       	}
 
         chariter.setText(text);
         try {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: null arguments should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: null arguments failed as expected");
+       	}
 
         text  = String.valueOf(0x1);
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty pattern should produce an error");
         } catch (Exception e) {
+        	logln("PASS: Empty pattern failed as expected");
         }
 
         chariter.setText(text);
         try {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: Empty pattern should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: Empty pattern failed as expected");
+        }
 
         text = "";
         pattern =temp;
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty text should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: Empty text failed as expected");
+        }
 
         chariter.setText(text);
         try {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: Empty text should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: Empty text failed as expected");
+    	}
 
         text += temp;
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: null arguments should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: null arguments failed as expected");
+       	}
 
         chariter.setText(text);
         try {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: null arguments should produce an error");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        	logln("PASS: null arguments failed as expected");
+       	}
 
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);

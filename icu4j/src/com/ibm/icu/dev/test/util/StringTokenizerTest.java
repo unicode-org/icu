@@ -1,6 +1,6 @@
-/**
+/*
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -101,27 +101,32 @@ public final class StringTokenizerTest extends TestFmwk
             defaultst = new StringTokenizer(null);
             errln("null string should throw an exception");
         } catch (Exception e) {
+        	logln("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiter = new StringTokenizer(null, delimiter);
             errln("null string should throw an exception");
         } catch (Exception e) {
+        	logln("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiterreturn = new StringTokenizer(null, delimiter, false);
             errln("null string should throw an exception");
         } catch (Exception e) {
+        	logln("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiterset = new StringTokenizer(null, delimiterset);
             errln("null string should throw an exception");
         } catch (Exception e) {
+        	logln("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimitersetreturn = new StringTokenizer(null, delimiterset,
                                                        false);
             errln("null string should throw an exception");
         } catch (Exception e) {
+        	logln("PASS: Constructor with null string failed as expected");
         }
     }
     
@@ -236,6 +241,7 @@ public final class StringTokenizerTest extends TestFmwk
             tokenizer.nextElement();
             errln("Empty string should not have any tokens");
         } catch (Exception e) {
+        	logln("PASS: empty string failed as expected");
         }
         
         tokenizer = new StringTokenizer(", ,", ", ");
@@ -246,6 +252,7 @@ public final class StringTokenizerTest extends TestFmwk
             tokenizer.nextElement();
             errln("String with only delimiters should not have any tokens");
         } catch (Exception e) {
+        	logln("PASS: String with only delimiters failed as expected");
         }
 
         tokenizer = new StringTokenizer("q, ,", ", ");
@@ -257,14 +264,16 @@ public final class StringTokenizerTest extends TestFmwk
         } 
         try {
             tokenizer.nextElement();
-            errln("String has only one tokens");
+            errln("String has only one token");
         } catch (Exception e) {
+        	logln("PASS: String with only one token failed as expected");
         }
 
         try {
             tokenizer = new StringTokenizer(null, delimiter);
             errln("StringTokenizer constructed with null source should throw a nullpointerexception");
         } catch (Exception e) {
+        	logln("PASS: StringTokenizer constructed with null source failed as expected");
         }
 
         tokenizer = new StringTokenizer(str, "q");
@@ -305,6 +314,7 @@ public final class StringTokenizerTest extends TestFmwk
             tokenizer.nextElement();
             errln("Empty string should not have any tokens");
         } catch (Exception e) {
+        	logln("PASS: Empty string failed as expected");
         }
         
         tokenizer = new StringTokenizer(", ,", ", ", true);
@@ -329,6 +339,7 @@ public final class StringTokenizerTest extends TestFmwk
             tokenizer = new StringTokenizer(null, delimiter, true);
             errln("StringTokenizer constructed with null source should throw a nullpointerexception");
         } catch (Exception e) {
+        	logln("PASS: StringTokenizer constructed with null source failed as expected");
         }
 
         tokenizer = new StringTokenizer(str, "q", true);

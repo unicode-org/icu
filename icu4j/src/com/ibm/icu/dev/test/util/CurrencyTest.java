@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -53,6 +53,7 @@ public class CurrencyTest extends TestFmwk {
       errln("expected getName with invalid type parameter to throw exception");
     }
     catch (Exception e) {
+    	logln("PASS: getName failed as expected");
     }
     }
 
@@ -68,6 +69,7 @@ public class CurrencyTest extends TestFmwk {
       errln("expected unregister of null to throw exception");
     }
     catch (Exception e) {
+    	logln("PASS: unregister of null failed as expected");
     }
 
     if (Currency.unregister("")) { // coverage

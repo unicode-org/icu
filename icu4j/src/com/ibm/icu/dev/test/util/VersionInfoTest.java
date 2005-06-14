@@ -1,6 +1,6 @@
-/**
+/*
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -46,19 +46,20 @@ public final class VersionInfoTest extends TestFmwk
      */
     public void TestInstance()
     {
-        VersionInfo version=null;
         for (int i = 0; i < INSTANCE_INVALID_STRING_.length; i ++) {
             try {
-                version = 
+            	VersionInfo version = 
                         VersionInfo.getInstance(INSTANCE_INVALID_STRING_[i]);
                 errln("\"" + INSTANCE_INVALID_STRING_[i] + 
                       "\" should produce an exception");
             } catch (RuntimeException e) {
+            	logln("PASS: \"" + INSTANCE_INVALID_STRING_[i] + 
+                      "\" failed as expected");
             }
         }
         for (int i = 0; i < INSTANCE_VALID_STRING_.length; i ++) {
             try {
-                version = VersionInfo.getInstance(INSTANCE_VALID_STRING_[i]);
+            	VersionInfo version = VersionInfo.getInstance(INSTANCE_VALID_STRING_[i]);
             } catch (RuntimeException e) {
                 errln("\"" + INSTANCE_VALID_STRING_[i] + 
                       "\" should produce an valid version");
@@ -66,19 +67,20 @@ public final class VersionInfoTest extends TestFmwk
         }
         for (int i = 0; i < INSTANCE_INVALID_INT_.length; i ++) {
             try {
-                version = getInstance(INSTANCE_INVALID_INT_[i]);
+            	VersionInfo version = getInstance(INSTANCE_INVALID_INT_[i]);
                 errln("invalid ints should produce an exception");
             } catch (RuntimeException e) {
+            	logln("PASS: \"" + INSTANCE_INVALID_INT_[i] + 
+                	  "\" failed as expected");
             }
         }
         for (int i = 0; i < INSTANCE_VALID_INT_.length; i ++) {
             try {
-                version = getInstance(INSTANCE_VALID_INT_[i]);
+            	VersionInfo version = getInstance(INSTANCE_VALID_INT_[i]);
             } catch (RuntimeException e) {
                 errln("valid ints should not produce an exception");
             }
         }
-        if(version==null){};
     }
     
     /**
