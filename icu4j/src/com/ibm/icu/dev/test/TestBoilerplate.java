@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -36,7 +36,8 @@ public abstract class TestBoilerplate extends TestFmwk {
 
     public final void TestMain() throws Exception {
         List list = new LinkedList();
-        while (_addTestObject(list));
+        while (_addTestObject(list)) {
+        }
         Object[] testArray = list.toArray();
         for (int i = 0; i < testArray.length; ++i) {
             //logln("Testing " + i);

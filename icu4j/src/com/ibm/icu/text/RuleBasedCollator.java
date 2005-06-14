@@ -646,7 +646,7 @@ public final class RuleBasedCollator extends Collator
      * @param varTop Collation element value, as returned by setVariableTop or 
      *               getVariableTop
      * @see #getVariableTop
-     * @see #setVariableTop
+     * @see #setVariableTop(String)
      * @stable ICU 2.6
      */
     public void setVariableTop(int varTop)
@@ -692,7 +692,7 @@ public final class RuleBasedCollator extends Collator
      *        collation order is required, otherwise false for returning only 
      *        the tailored rules
      * @return the current rules that defines this Collator.
-     * @see #getRules
+     * @see #getRules()
      * @stable ICU 2.6
      */
     public String getRules(boolean fullrules)
@@ -1202,7 +1202,7 @@ public final class RuleBasedCollator extends Collator
          * Number of attribute values
          */
         static final int LIMIT_ = 29;
-    };
+    }
 
     /**
      * Attributes that collation service understands. All the attributes can
@@ -1278,7 +1278,7 @@ public final class RuleBasedCollator extends Collator
          * Attribute count
          */
         static final int LIMIT_ = 7;
-    };
+    }
 
     /**
      * DataManipulate singleton
@@ -1328,7 +1328,7 @@ public final class RuleBasedCollator extends Collator
         private DataManipulate()
         {
         }
-    };
+    }
 
     /**
      * UCAConstants
@@ -2684,7 +2684,6 @@ public final class RuleBasedCollator extends Collator
 
     /**
      * Packs the French bytes
-     * @param count array of compression counts
      */
     private final void doFrench()
     {
@@ -2788,7 +2787,7 @@ public final class RuleBasedCollator extends Collator
 
     /**
      * Increase buffer size
-     * @param array array of bytes
+     * @param buffer array of bytes
      * @param size of the byte array
      * @param incrementsize size to increase
      * @return the new buffer
@@ -2803,7 +2802,7 @@ public final class RuleBasedCollator extends Collator
 
     /**
      * Increase buffer size
-     * @param array array of bytes
+     * @param buffer array of ints
      * @param size of the byte array
      * @param incrementsize size to increase
      * @return the new buffer
@@ -3389,7 +3388,8 @@ public final class RuleBasedCollator extends Collator
                 && offset >= 0) {
             if (continuationoffset == 0) {
                 result = cebuffer[offset];
-                while (isContinuation(cebuffer[offset --]));
+                while (isContinuation(cebuffer[offset --])){
+                }
                 // after this, sorder is at the start of continuation,
                 // and offset points before that
                 if (isContinuation(cebuffer[offset + 1])) {
@@ -3861,7 +3861,7 @@ public final class RuleBasedCollator extends Collator
         int primShift = 24;
         int secShift = 24;
         int terShift = 24;
-    };
+    }
 
     private final void
     addLatinOneEntry(char ch, int CE, shiftValues sh) {
@@ -4055,10 +4055,9 @@ public final class RuleBasedCollator extends Collator
       return true;
     }
 
-    private class
-    ContractionInfo {
+    private class ContractionInfo {
         int index;
-    };
+    }
 
     ContractionInfo m_ContInfo_;
 

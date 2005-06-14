@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -179,9 +179,7 @@ class TextComponent extends FakeComponent
         if (fHost != null) {
             return fHost.getBounds();
         }
-        else {
-            return new Rectangle(0, 0, 0, 0);
-        }
+        return new Rectangle(0, 0, 0, 0);
     }
     
     Graphics getGraphics() {
@@ -235,7 +233,7 @@ class TextComponent extends FakeComponent
     }
 
     public void mouseClicked(MouseEvent event) {
-        return;  // no behavior method for this
+        // no behavior method for this
     }
 
     public void mouseDragged(MouseEvent event) {
@@ -292,9 +290,7 @@ class TextComponent extends FakeComponent
             if (viewLimit >= targetLimit) {
                 return 0;
             }
-            else {
-                return Math.max(viewStart-targetStart, viewLimit-targetLimit);
-            }
+            return Math.max(viewStart-targetStart, viewLimit-targetLimit);
         }
         else if (viewLimit > targetLimit) {
 
@@ -414,9 +410,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.getScrollableArea();
         }
-        else {
-            return new Rectangle(0, 0, 0, 0);
-        }
+        return new Rectangle(0, 0, 0, 0);
     }
 
     public void scrollTo(int x, int y) {
@@ -453,9 +447,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.getCaretRect(offset);
         }
-        else {
-            return new Rectangle(0, 0);
-        }
+        return new Rectangle(0, 0);
     }
 
     TextOffset pointToTextOffset(TextOffset result,
@@ -467,9 +459,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.pointToTextOffset(result, x, y, anchor, infiniteMode);
         }
-        else {
-            return new TextOffset();
-        }
+        return new TextOffset();
     }
 
     // *** Other stuff used by Behaviors - mostly formatter exports
@@ -478,9 +468,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.lineContaining(offset);
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 
     int lineRangeLow(int lineNumber) {
@@ -488,9 +476,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.lineRangeLow(lineNumber);
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 
     int lineRangeLimit(int lineNumber) {
@@ -498,9 +484,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.lineRangeLimit(lineNumber);
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 
     void stopBackgroundFormatting() {
@@ -515,9 +499,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.getBoundingRect(offset1, offset2);
         }
-        else {
-            return new Rectangle(0, 0, 0, 0);
-        }
+        return new Rectangle(0, 0, 0, 0);
     }
 
     synchronized void reformatAndDrawText(int reformatStart,
@@ -545,9 +527,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.findNewInsertionOffset(result, initialOffset, previousOffset, direction);
         }
-        else {
-            return new TextOffset(initialOffset);
-        }
+        return new TextOffset(initialOffset);
     }
 
     synchronized void drawText(Graphics g,
@@ -574,9 +554,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.getFormatWidth();
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 
     /**
@@ -589,9 +567,7 @@ class TextComponent extends FakeComponent
         if (fDocumentView != null) {
             return fDocumentView.paragraphIsLeftToRight(offset);
         }
-        else {
-            return true;
-        }
+        return true;
     }
     
     private static final class DocumentView {
