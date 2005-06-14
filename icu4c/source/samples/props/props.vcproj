@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/props.exe"
 				LinkIncremental="1"
@@ -99,7 +98,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/props.exe"
 				LinkIncremental="2"

@@ -39,7 +39,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icuin.lib"
 				OutputFile=".\Release/msgfmt.exe"
 				LinkIncremental="1"
@@ -99,7 +98,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuind.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/msgfmt.exe"
 				LinkIncremental="2"

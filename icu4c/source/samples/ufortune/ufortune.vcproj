@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib resources\fortune_resources.lib icuiod.lib"
 				OutputFile=".\Debug/ufortune.exe"
 				LinkIncremental="2"
@@ -99,7 +98,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib resources\fortune_resources.lib icuio.lib"
 				OutputFile=".\Release/ufortune.exe"
 				LinkIncremental="1"
