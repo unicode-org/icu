@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.h
@@ -17,19 +17,35 @@
 
 #include "unicode/unistr.h"
 
-
 /**
- * Write the contents of a UnicodeString to an ostream. This functions writes
- * the characters in a UnicodeString to an ostream. The UChars in the
- * UnicodeString are truncated to char, leading to undefined results with
- * anything not in the Latin1 character set.
+ * \file
+ * \brief C++ API: Unicode iostream like API
+ *
+ * At this time, this API is very limited. It contains
+ * operator<< and operator>> for UnicodeString manipulation with the
+ * C++ I/O stream API.
  */
+
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
 
 U_NAMESPACE_BEGIN
+
+/**
+ * Write the contents of a UnicodeString to a C++ ostream. This functions writes
+ * the characters in a UnicodeString to an ostream. The UChars in the
+ * UnicodeString are converted to the char based ostream with the default
+ * converter.
+ * @draft 3.0
+ */
 U_IO_API std::ostream & U_EXPORT2 operator<<(std::ostream& stream, const UnicodeString& s);
 
+/**
+ * Write the contents from a C++ istream to a UnicodeString. The UChars in the
+ * UnicodeString are converted from the char based istream with the default
+ * converter.
+ * @draft 3.0
+ */
 U_IO_API std::istream & U_EXPORT2 operator>>(std::istream& stream, UnicodeString& s);
 U_NAMESPACE_END
 
