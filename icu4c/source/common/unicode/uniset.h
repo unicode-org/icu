@@ -1253,7 +1253,7 @@ private:
      *
      * The original design document is out of date, but still useful.
      * Ignore the property and value names:
-     * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html
+     * http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/unicodeset_properties.html
      *
      * Recognized syntax:
      *
