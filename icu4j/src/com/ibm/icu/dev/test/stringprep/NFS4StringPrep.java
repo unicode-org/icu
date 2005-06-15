@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.stringprep;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.StringPrepParseException;
@@ -35,29 +36,29 @@ public final class NFS4StringPrep {
 
     private  NFS4StringPrep (){
         ClassLoader loader = NFS4StringPrep.class.getClassLoader();
-      try{
-          InputStream  nfscsiFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscsi.spp");
-          nfscsi = new StringPrep(nfscsiFile);
-          nfscsiFile.close();
-          
-          InputStream  nfscssFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscss.spp");
-          nfscss = new StringPrep(nfscssFile);
-          nfscssFile.close();
-          
-          InputStream  nfscisFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscis.spp");
-          nfscis = new StringPrep(nfscisFile);
-          nfscisFile.close();
-          
-          InputStream  nfsmxpFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxp.spp");
-          nfsmxp = new StringPrep(nfsmxpFile);
-          nfsmxpFile.close();
-          
-          InputStream  nfsmxsFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxs.spp");
-          nfsmxs = new StringPrep(nfsmxsFile);
-          nfsmxsFile.close();
-      }catch(IOException e){
-          throw new RuntimeException(e.toString());
-      }
+        try{
+            InputStream  nfscsiFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscsi.spp");
+            nfscsi = new StringPrep(nfscsiFile);
+            nfscsiFile.close();
+            
+            InputStream  nfscssFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscss.spp");
+            nfscss = new StringPrep(nfscssFile);
+            nfscssFile.close();
+            
+            InputStream  nfscisFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscis.spp");
+            nfscis = new StringPrep(nfscisFile);
+            nfscisFile.close();
+            
+            InputStream  nfsmxpFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxp.spp");
+            nfsmxp = new StringPrep(nfsmxpFile);
+            nfsmxpFile.close();
+            
+            InputStream  nfsmxsFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxs.spp");
+            nfsmxs = new StringPrep(nfsmxsFile);
+            nfsmxsFile.close();
+        }catch(IOException e){
+            throw new MissingResourceException(e.toString(),"","");
+        }
     }
     
     private static byte[] prepare(byte[] src, StringPrep prep)

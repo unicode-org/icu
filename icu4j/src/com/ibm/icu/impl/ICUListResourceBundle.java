@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -153,7 +153,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             // assert pos==count;
             return data;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MissingResourceException(e.getMessage(),"","");
         }
     }
 
@@ -177,7 +177,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     stream.reset();
                     length <<= 1;
                 } else {
-                    throw new RuntimeException("maximum input stream length exceeded");
+                    throw new InternalError("maximum input stream length exceeded");
                 }
             }
 
@@ -187,7 +187,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             System.arraycopy(buffer, 0, data, 0, n);
             return data;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MissingResourceException(e.getMessage(),"","");
         }
     }
     /*

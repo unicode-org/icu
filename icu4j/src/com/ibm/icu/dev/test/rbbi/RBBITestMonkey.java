@@ -998,27 +998,35 @@ public class RBBITestMonkey extends TestFmwk {
     //
     //  The following UnicodeSets are used in matching a Grapheme Cluster
     //
-    private static UnicodeSet GC_Control =
-         new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[:Grapheme_Extend:]]");
+    private static UnicodeSet GC_Control;
     
-    private static UnicodeSet GC_Extend = 
-        new UnicodeSet("[[:Grapheme_Extend:]]");
+    private static UnicodeSet GC_Extend ;
     
-    private static UnicodeSet GC_L = 
-        new UnicodeSet("[[:Hangul_Syllable_Type=L:]]");
+    private static UnicodeSet GC_L ;
     
-    private static UnicodeSet GC_V = 
-        new UnicodeSet("[[:Hangul_Syllable_Type=V:]]");
+    private static UnicodeSet GC_V ;
     
-    private static UnicodeSet GC_T = 
-        new UnicodeSet("[[:Hangul_Syllable_Type=T:]]");
+    private static UnicodeSet GC_T ;
     
-    private static UnicodeSet GC_LV = 
-        new UnicodeSet("[[:Hangul_Syllable_Type=LV:]]");
+    private static UnicodeSet GC_LV;
     
-    private static UnicodeSet GC_LVT = 
-        new UnicodeSet("[[:Hangul_Syllable_Type=LVT:]]");
-    
+    private static UnicodeSet GC_LVT ;
+
+    protected void init()throws Exception{
+        GC_Control = new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[:Grapheme_Extend:]]");
+       
+        GC_Extend = new UnicodeSet("[[:Grapheme_Extend:]]");
+       
+        GC_L = new UnicodeSet("[[:Hangul_Syllable_Type=L:]]");
+       
+        GC_V = new UnicodeSet("[[:Hangul_Syllable_Type=V:]]");
+       
+        GC_T = new UnicodeSet("[[:Hangul_Syllable_Type=T:]]");
+       
+        GC_LV = new UnicodeSet("[[:Hangul_Syllable_Type=LV:]]");
+       
+        GC_LVT = new UnicodeSet("[[:Hangul_Syllable_Type=LVT:]]");
+    }
     /**
      * Find the end of the extent of a grapheme cluster.
      * This is the reference implementation used by the monkey test for comparison

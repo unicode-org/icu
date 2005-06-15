@@ -8,6 +8,7 @@
 package com.ibm.icu.text;
 
 //import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
@@ -581,6 +582,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @serial
      */
     private String[] publicRuleSetNames;
+    
+    private static final boolean DEBUG  =  ICUDebug.enabled("rbnf");
 
     //-----------------------------------------------------------------------
     // constructors
@@ -1310,7 +1313,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
             catch (Exception e) {
                 // If we get here, it means we have a malformed set of
                 // collation rules, which hopefully won't happen
-                e.printStackTrace();
+                if(DEBUG){
+                    e.printStackTrace();
+                }
                 collator = null;
             }
         }

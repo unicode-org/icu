@@ -58,7 +58,7 @@ public class WriteIndicCharts {
     static UnicodeSet telu = new UnicodeSet("[:telu:]");
     static UnicodeSet knda = new UnicodeSet("[:knda:]"); 
     static UnicodeSet mlym = new UnicodeSet("[:mlym:]");                      
-    static UnicodeSet inter= new UnicodeSet("[\uE000-\uE080]");
+    static UnicodeSet inter= new UnicodeSet("[\uE000-\uE082]");
     
     public static void writeIICharts(){
         try{

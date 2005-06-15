@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -461,10 +461,6 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (IOException e) {
             errln("Fail: " + e);
         } catch (ClassNotFoundException e) {
-            errln("Fail: " + e);
-        } catch (Exception e) {
-        System.out.println(e);
-        //        System.out.println(e.getCause());
             errln("Fail: " + e);
         }
     

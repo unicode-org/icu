@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -51,18 +52,18 @@ public final class UCharacterName
     /**
      * Gets the only instance of UCharacterName
      * @return only instance of UCharacterName
-     * @exception RuntimeException thrown when reading of name data fails
+     * @exception MissingResourceException thrown when reading of name data fails
      */
-    public static UCharacterName getInstance() throws RuntimeException
+    public static UCharacterName getInstance()
     {
         if (INSTANCE_ == null) {
             try {
                 INSTANCE_ = new UCharacterName();
             }catch(IOException e){
-                throw new InternalError("Could not construct UCharacterName. Missing unames.icu?");
+                throw new MissingResourceException("Could not construct UCharacterName. Missing unames.icu","","");
             }
             catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+                throw new MissingResourceException(e.getMessage(),"","");
             }
         }
         return INSTANCE_;

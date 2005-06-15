@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -35,7 +35,7 @@ public class CollationChineseTest extends TestFmwk{
             collator = (RuleBasedCollator)Collator.getInstance(
                                             new Locale("zh", "", "PINYIN"));
         } catch (Exception e) {
-            errln("ERROR: in creation of collator of zh__PINYIN locale");
+            warnln("ERROR: in creation of collator of zh__PINYIN locale");
             return;
         }
         for (int i = 0; i < seq.length - 1; i ++) {

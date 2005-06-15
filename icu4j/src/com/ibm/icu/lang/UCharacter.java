@@ -12,6 +12,7 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
@@ -3640,7 +3641,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String getName(int ch)
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
@@ -3680,7 +3681,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String getName1_0(int ch)
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getName(ch, 
                              UCharacterNameChoice.UNICODE_10_CHAR_NAME);
@@ -3707,7 +3708,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String getExtendedName(int ch) 
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getName(ch, UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
@@ -3728,7 +3729,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return null;
         }
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }    
         String result = NAME_.getGroupName(ch, 
                                            UCharacterNameChoice.ISO_COMMENT_);
@@ -3748,7 +3749,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCharFromName(String name)
     {     
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getCharFromName(
                      UCharacterNameChoice.UNICODE_CHAR_NAME, name);
@@ -3767,7 +3768,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCharFromName1_0(String name)
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getCharFromName(
                      UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
@@ -3795,7 +3796,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCharFromExtendedName(String name)
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return NAME_.getCharFromName(
                      UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
@@ -4677,7 +4678,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static ValueIterator getExtendedNameIterator()
     {
         if(NAME_==null){
-            throw new RuntimeException("Could not load unames.icu");
+            throw new MissingResourceException("Could not load unames.icu","","");
         }
         return new UCharacterNameIterator(NAME_,
                       UCharacterNameChoice.EXTENDED_CHAR_NAME);
@@ -5626,19 +5627,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     static UPropertyAliases PNAMES_ = null;
       
     // block to initialise name database and unicode 1.0 data 
-    static
-    {
-        try
-        {
-        PNAMES_ = new UPropertyAliases();
-        NAME_ = UCharacterName.getInstance();
-        }
-        catch (Exception e)
-        {
-        e.printStackTrace();
-        //throw new RuntimeException(e.getMessage());
-        // DONOT throw an exception
-        // we might be building ICU modularly wothout names.icu and pnames.icu
+    static {
+        try {
+            PNAMES_ = new UPropertyAliases();
+            NAME_ = UCharacterName.getInstance();
+        } catch (IOException e) {
+            // e.printStackTrace();
+            throw new MissingResourceException(e.getMessage(),"","");
+            //throw new RuntimeException(e.getMessage());
+            // DONOT throw an exception
+            // we might be building ICU modularly wothout names.icu and
+            // pnames.icu
         }
     }
         
@@ -5670,7 +5669,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e.getMessage());
+            throw new MissingResourceException(e.getMessage(),"","");
         }
 
         /*

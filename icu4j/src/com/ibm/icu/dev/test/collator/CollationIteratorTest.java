@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -206,7 +206,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             en_us = (RuleBasedCollator)Collator.getInstance(Locale.US);    
         } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
+            warnln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
 
@@ -498,7 +498,8 @@ public class CollationIteratorTest extends TestFmwk {
             th_th = (RuleBasedCollator)Collator.getInstance(
                                                        new Locale("th", "TH"));
         } catch (Exception e) {
-            errln("Error creating Thai collator");
+            warnln("Error creating Thai collator");
+            return;
         }
         StringBuffer source = new StringBuffer();
         source.append('\uFDFA');

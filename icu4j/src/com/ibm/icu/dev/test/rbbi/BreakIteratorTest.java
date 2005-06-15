@@ -27,6 +27,9 @@ public class BreakIteratorTest extends TestFmwk
 
     public BreakIteratorTest()
     {
+
+    }
+    protected void init(){
         characterBreak = BreakIterator.getCharacterInstance();
         wordBreak = BreakIterator.getWordInstance();
         lineBreak = BreakIterator.getLineInstance();
@@ -35,7 +38,6 @@ public class BreakIteratorTest extends TestFmwk
         //logln("Finished creating sentence iterator...");
         titleBreak = BreakIterator.getTitleInstance();
     }
-
     //=========================================================================
     // general test subroutines
     //=========================================================================

@@ -164,15 +164,16 @@ public class ICULocaleData {
                 return rb;
             }
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException e)
+        {
             if (DEBUG) {
                 System.out.println(name + " not found");
             }
             // ignore, keep looking
         }
         catch (Exception e) {
-            e.printStackTrace();
             if (DEBUG) {
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }
@@ -282,6 +283,9 @@ public class ICULocaleData {
                 System.out.println("failure");
                 System.out.println(e);
             }
+        }
+        if(b==null){
+            throw new MissingResourceException("Could not load data "+name,"","");
         }
         return b;
     }

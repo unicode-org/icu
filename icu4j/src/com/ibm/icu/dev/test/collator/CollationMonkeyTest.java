@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,7 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
              myCollator = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
+            warnln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
         
@@ -114,7 +114,7 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
              myCollator = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
+            warnln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
         
@@ -203,7 +203,7 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
             myCollation = new RuleBasedCollator(newRules);
         } catch (Exception e) {
-            errln( "Demo Test 1 Table Collation object creation failed.");
+            warnln( "Demo Test 1 Table Collation object creation failed.");
             return;
         }
         

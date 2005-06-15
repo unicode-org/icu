@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -30,6 +30,8 @@ public class LocaleDataTest extends TestFmwk{
     private ULocale[] availableLocales = null;
     
     public LocaleDataTest(){
+    }
+    protected void init(){
         availableLocales = ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
     }
     public void TestPaperSize(){

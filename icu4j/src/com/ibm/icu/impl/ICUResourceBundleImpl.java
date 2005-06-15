@@ -95,7 +95,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             // genrb does not generate Table32 with %%ALIAS
             return new ResourceTable32(null, rootResource, "", true);
         } else {
-            throw new RuntimeException("Invalid format error");
+            throw new InternalError("Invalid format error");
         }
     }
     private ICUResourceBundleImpl(byte[] rawData, String baseName,

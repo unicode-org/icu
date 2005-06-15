@@ -230,7 +230,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
      */
 
     public void Test4059654() {
-        try {
+   //     try {
             // work around bug for jdk1.4 on solaris 2.6, which uses funky
             // timezone names
             // jdk1.4.1 will drop support for 2.6 so we should be ok when it
@@ -255,10 +255,10 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             Date exp = cal.getTime();
             if (!cd.equals(exp))
                 errln("Fail: Calendar.set broken. Got " + cd + " Want " + exp);
-        } catch (RuntimeException e) {
+   //     } catch (RuntimeException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+   //         e.printStackTrace();
+  //      }
     }
 
     public void Test4061476() {

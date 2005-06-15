@@ -1,6 +1,6 @@
 /***************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -37,13 +37,16 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     //private static final byte DATE = TIME + 1; //The variable is never used
     //private static final byte DATE_TIME = DATE + 1; //The variable is never used
 
-    private DateFormat fFormat = DateFormat.getInstance();
+    private DateFormat fFormat = null;
     private String fTestName = new String("getInstance");
     private int fLimit = 3; // How many iterations it should take to reach convergence
     private Random random; // initialized in randDouble
 
     public IntlTestDateFormat() {
         //Constructure
+    } 
+    protected void init() throws Exception{
+        fFormat = DateFormat.getInstance();
     }
     
     public static void main(String[] args) throws Exception {

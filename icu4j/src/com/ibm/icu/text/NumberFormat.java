@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 //import com.ibm.icu.impl.ICULocaleData;
@@ -809,9 +810,12 @@ public abstract class NumberFormat extends UFormat {
                 Class cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
                 shim = (NumberFormatShim)cls.newInstance();
             }
+            catch (MissingResourceException e){
+                throw e;
+            }
             catch (Exception e) {
                 ///CLOVER:OFF
-                e.printStackTrace();
+               // e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
                 ///CLOVER:ON
             }

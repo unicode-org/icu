@@ -33,16 +33,13 @@ public class UCAConformanceTest extends TestFmwk {
     }
     
     public UCAConformanceTest() {
-        try {
-            UCA = (RuleBasedCollator)Collator.getInstance(
-                    new Locale("root", "", ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            errln("Could not open UCA!");
-        }
+    }
+    protected void init()throws Exception{
+        UCA = (RuleBasedCollator)Collator.getInstance(
+                new Locale("root", "", ""));
+
         comparer = new UTF16.StringComparator(true, false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
     }
-    
     RuleBasedCollator UCA;
     RuleBasedCollator rbUCA;
     UTF16.StringComparator comparer;

@@ -20,6 +20,7 @@ import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.lang.UCharacter;
 import java.text.CharacterIterator;
+import java.util.MissingResourceException;
 
 /**
  * <p><code>CollationElementIterator</code> is an iterator created by
@@ -928,6 +929,8 @@ public final class CollationElementIterator
     private static final int CJK_B_LIMIT_ = 0x2A6DF + 1;
     private static final int NON_CJK_OFFSET_ = 0x110000;
 
+    private static final boolean DEBUG  =  ICUDebug.enabled("collator");
+    
     // private methods ------------------------------------------------------
 
     /**
@@ -2318,8 +2321,14 @@ public final class CollationElementIterator
                                      m_CEBuffer_.length);
                     m_CEBuffer_ = tempbuffer;
                 }
+                catch( MissingResourceException e)
+                {
+                    throw e;
+                }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    if(DEBUG){
+                        e.printStackTrace();
+                    }
                     return NULLORDER;
                 }
             }

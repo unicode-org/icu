@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.UTF16Util;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.ReplaceableString;
@@ -1623,7 +1624,7 @@ public final class UTF16Test extends TestFmwk
         "\ud841\udc02\u0071\ud841\udc02\u0071\udc02\ud841\u0073";
     private final static int INDEXOF_SUPPLEMENTARY_CHAR_[] =
     {0x71, 0xd841, 0xdc02,
-     UCharacter.getCodePoint((char)0xd841,
+     UTF16Util.getRawSupplementary((char)0xd841,
                  (char)0xdc02)};
     private final static int INDEXOF_SUPPLEMENTARY_CHAR_INDEX_[][] =
     {{2, 5, 8, 12, 15},

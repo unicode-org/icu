@@ -12,6 +12,7 @@ import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 
@@ -38,7 +39,7 @@ import com.ibm.icu.impl.LocaleUtility;
 public class Currency extends MeasureUnit implements Serializable {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = -5839973855554750484L;
-
+    private static final boolean DEBUG = ICUDebug.enabled("currency");
     /**
      * ISO 4217 3-letter code.
      */
@@ -81,7 +82,9 @@ public class Currency extends MeasureUnit implements Serializable {
                 shim = (ServiceShim)cls.newInstance();
             }
             catch (Exception e) {
-                e.printStackTrace();
+                if(DEBUG){
+                    e.printStackTrace();
+                }
                 throw new RuntimeException(e.getMessage());
             }
         }
@@ -128,7 +131,10 @@ public class Currency extends MeasureUnit implements Serializable {
         if (variant.equals("PREEURO") || variant.equals("EURO")) {
             country = country + '_' + variant;
         }
-        ICUResourceBundle bundle = ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", true);
+        if(bundle==null){
+            //throw new MissingResourceException()
+        }
         ICUResourceBundle cm = bundle.get("CurrencyMap");
 
         // Do a linear search
@@ -371,31 +377,14 @@ public class Currency extends MeasureUnit implements Serializable {
         String s = null;
 
         // Multi-level resource inheritance fallback loop
-        while (locale != null) {
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
-            // We can't cast this to String[][]; the cast has to happen later
-            try {
-                ICUResourceBundle currencies = rb.get("Currencies");
-                s = currencies.get(isoCode).getString(nameStyle);
-                /*
-                Object[][] currencies = (Object[][]) rb.getObject("Currencies");
-                // Do a linear search
-                for (int i=0; i<currencies.length; ++i) {
-                    if (isoCode.equals((String) currencies[i][0])) {
-                        s = ((String[]) currencies[i][1])[nameStyle];
-                        break;
-                    }
-                } c
-                */
-            }
-            catch (MissingResourceException e) {}
+         try {
+             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+             // We can't cast this to String[][]; the cast has to happen later
 
-            // If we've succeeded we're done.  Otherwise, try to fallback.
-            // If that fails (because we are already at root) then exit.
-            if (s != null) {
-                break;
-            }
-            locale = locale.getFallback();
+            ICUResourceBundle currencies = rb.get("Currencies");
+            s = currencies.getWithFallback(isoCode).getString(nameStyle);
+        }catch (MissingResourceException e) {
+            //TODO what should be done here?
         }
 
         // Determine if this is a ChoiceFormat pattern.  One leading mark

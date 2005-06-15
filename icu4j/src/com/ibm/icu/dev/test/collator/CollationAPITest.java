@@ -37,12 +37,7 @@ public class CollationAPITest extends TestFmwk {
      */
     public void TestCollationKey() {
         logln("testing CollationKey begins...");
-        Collator col = null;
-        try {
-            col = Collator.getInstance();
-        } catch (Exception e) {
-            errln("Collator.getInstance() doesn't work");
-        }
+        Collator col = Collator.getInstance();
         col.setStrength(Collator.TERTIARY);
     
         String test1 = "Abcda";
@@ -150,7 +145,7 @@ public class CollationAPITest extends TestFmwk {
         doAssert(Arrays.equals(key2.toByteArray(), key2compat),
                  "Binary format for 'abcda' sortkey different for identical strength!");
     
-        logln("Use secondary comparision level testing ...\n");
+        logln("Use secondary comparision level testing ...");
         col.setStrength(Collator.SECONDARY);
     
         key1 = col.getCollationKey(test1);
@@ -215,7 +210,7 @@ public class CollationAPITest extends TestFmwk {
     
     void doAssert(boolean conditions, String message) {
         if (!conditions) {
-            errln("Error: " + message);
+            errln(message);
         }
     }
     
@@ -227,13 +222,7 @@ public class CollationAPITest extends TestFmwk {
      */
     public void TestCompare() {
         logln("The compare tests begin : ");
-        Collator col = null;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);
-        } catch (Exception e) {
-            errln("Default collation creation failed.");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);
         
         String test1 = "Abcda";
         String test2 = "abcda";
@@ -274,29 +263,26 @@ public class CollationAPITest extends TestFmwk {
     */
     public void TestDecomposition() {
         Collator en_US = null, el_GR = null, vi_VN = null;
-        try {
-            en_US = Collator.getInstance(new Locale("en", "US"));
-            el_GR = Collator.getInstance(new Locale("el", "GR"));
-            vi_VN = Collator.getInstance(new Locale("vi", "VN"));
-        } catch (Exception e) {
-            errln("ERROR: collation creation failed.\n");
-            return;
-        }
+
+        en_US = Collator.getInstance(new Locale("en", "US"));
+        el_GR = Collator.getInstance(new Locale("el", "GR"));
+        vi_VN = Collator.getInstance(new Locale("vi", "VN"));
+
         
         // there is no reason to have canonical decomposition in en_US OR default locale */
         if (vi_VN.getDecomposition() != Collator.CANONICAL_DECOMPOSITION)
         {
-            errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+            errln("vi_VN collation did not have cannonical decomposition for normalization!");
         }
 
         if (el_GR.getDecomposition() != Collator.CANONICAL_DECOMPOSITION)
         {
-            errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+            errln("el_GR collation did not have cannonical decomposition for normalization!");
         }
 
         if (en_US.getDecomposition() != Collator.NO_DECOMPOSITION)
         {
-            errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+            errln("en_US collation had cannonical decomposition for normalization!");
         }
     }
     
@@ -305,13 +291,7 @@ public class CollationAPITest extends TestFmwk {
      */
     public void TestDuplicate() {
         //Clone does not be implemented 
-        Collator col1 = null;
-        try {
-            col1 = Collator.getInstance(Locale.ENGLISH);
-        } catch (Exception e) {
-            errln("Failure creating english collator");
-            return;
-        }
+        Collator col1 = Collator.getInstance(Locale.ENGLISH);
         
         // Collator col2 = (Collator)col1.clone();
         // doAssert(col1.equals(col2), "Cloned object is not equal to the orginal");
@@ -339,13 +319,8 @@ public class CollationAPITest extends TestFmwk {
      */
     public void TestElemIter() {
         // logln("testing sortkey begins...");
-        Collator col = null;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);
-        } catch (Exception e) {
-            errln("Default collation creation failed.");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);
+
            
         String testString1 = "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?";
         String testString2 = "Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
@@ -361,7 +336,7 @@ public class CollationAPITest extends TestFmwk {
         int offset = 0;
         offset = iterator1.getOffset();
         if (offset != 0) {
-            errln("Error in getOffset for collation element iterator\n");
+            errln("Error in getOffset for collation element iterator");
             return;
         }
         iterator1.setOffset(6);
@@ -445,13 +420,7 @@ public class CollationAPITest extends TestFmwk {
      */
     public void TestHashCode() {
         logln("hashCode tests begin.");
-        Collator col1 = null;
-        try {
-            col1 = Collator.getInstance(Locale.ENGLISH);
-        } catch (Exception e) {
-            errln("Default collation creation failed.");
-            return;
-        }
+        Collator col1 = Collator.getInstance(Locale.ENGLISH);
     
         Collator col2 = null;
         Locale dk = new Locale("da", "DK", "");
@@ -499,7 +468,6 @@ public class CollationAPITest extends TestFmwk {
      * - get/set decomposition mode and comparison level
      */
     public void TestProperty() {
-        Collator col = null;
         /* 
           All the collations have the same version in an ICU
           version.
@@ -508,12 +476,8 @@ public class CollationAPITest extends TestFmwk {
         */    
         logln("The property tests begin : ");
         logln("Test ctors : ");
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);
-        } catch (Exception e) {
-            errln("Default Collator creation failed.");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);
+
     
         logln("Test getVersion");
         VersionInfo expectedVersion = VersionInfo.getInstance(0x29, 0x80, 0x00, 0x04);
@@ -573,21 +537,9 @@ public class CollationAPITest extends TestFmwk {
         logln("Create junk collation: ");
         Locale abcd = new Locale("ab", "CD", "");
         
-        Collator junk = null;
-        Collator col = null;
-        try {
-            junk = Collator.getInstance(abcd);
-        } catch (Exception e) {
-            errln("Junk collation creation failed, should at least return default.");
-            return;
-        }
-    
-        try {
-            col = Collator.getInstance();
-        } catch (Exception e) {
-            errln("Creating default collator failed.");
-            return;
-        }
+        Collator junk = Collator.getInstance(abcd);
+        Collator col = Collator.getInstance();
+
     
         String colrules = ((RuleBasedCollator)col).getRules();
         String junkrules = ((RuleBasedCollator)junk).getRules();
@@ -620,14 +572,14 @@ public class CollationAPITest extends TestFmwk {
         try {
             col1 = new RuleBasedCollator(ruleset1);
         } catch (Exception e) {
-            errln("RuleBased Collator creation failed.\n");
+            errln("RuleBased Collator creation failed.");
             return;
         }
     
         try {
             col2 = new RuleBasedCollator(ruleset2);
         } catch (Exception e) {
-            errln("RuleBased Collator creation failed.\n");
+            errln("RuleBased Collator creation failed.");
             return;
         }
     
@@ -644,14 +596,14 @@ public class CollationAPITest extends TestFmwk {
         try {
             col3 = (RuleBasedCollator)Collator.getInstance(locale);
         } catch (Exception e) {
-            errln("Fallback Collator creation failed.: %s\n");
+            errln("Fallback Collator creation failed.: %s");
             return;
         }
     
         try {
             col3 = (RuleBasedCollator)Collator.getInstance();
         } catch (Exception e) {
-            errln("Default Collator creation failed.: %s\n");
+            errln("Default Collator creation failed.: %s");
             return;
         }
     
@@ -666,7 +618,7 @@ public class CollationAPITest extends TestFmwk {
         try {
             col4 = new RuleBasedCollator(rule2);
         } catch (Exception e) {
-            errln("RuleBased Collator creation failed.\n");
+            errln("RuleBased Collator creation failed.");
             return;
         }
     
@@ -697,7 +649,7 @@ public class CollationAPITest extends TestFmwk {
                 }
             }
         } catch (Exception e) {
-            errln("RuleBased Collator creation failed for ! modifier.\n");
+            errln("RuleBased Collator creation failed for ! modifier.");
             return;
         }
     }
@@ -707,14 +659,9 @@ public class CollationAPITest extends TestFmwk {
     * - getRules
     */
     public void TestRules() {
-        RuleBasedCollator coll;
-        try {
-            coll = (RuleBasedCollator)Collator.getInstance(new Locale("","","")); //root
-            // logln("PASS: RuleBased Collator creation passed\n");
-        } catch (Exception e) {
-            errln("Root Collator creation failed.\n");
-            return;
-        }
+        RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(new Locale("","","")); //root
+            // logln("PASS: RuleBased Collator creation passed");
+
     
         String rules = coll.getRules();
         if (rules != null && rules.length() != 0) {
@@ -1094,7 +1041,7 @@ public class CollationAPITest extends TestFmwk {
                       Collator.getDisplayName(list[i],Locale.CHINA)); 
             }catch(MissingResourceException ex){
                 errorCount++;
-                logln("Error: could not get displayName for " + list[i]);
+                logln("could not get displayName for " + list[i]);
             }           
         }
         if(errorCount>0){

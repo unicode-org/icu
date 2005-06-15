@@ -132,10 +132,12 @@ public class RandomCollator extends TestFmwk {
     }
     
     public RandomCollator() {
-        this(1,10, new UnicodeSet("[AZa-z<\\&\\[\\]]"));
+        
     }
-    
-    public RandomCollator(int minRuleCount, int maxRuleCount, UnicodeSet chars) {
+    protected void init()throws Exception{
+        init(1,10, new UnicodeSet("[AZa-z<\\&\\[\\]]"));
+    }
+    private void init(int minRuleCount, int maxRuleCount, UnicodeSet chars) {
         this.chars = chars;
         bnf = new BNF(new Random(0), new Quoter.RuleQuoter())
         .addSet("$chars", chars)
@@ -143,7 +145,7 @@ public class RandomCollator extends TestFmwk {
         .complete();
     }
     
-    static String collationBNF =
+    private static String collationBNF =
         "$s = ' '? 50%;\r\n" +
         "$relationList = (" +        "   '<'" +        " | '  <<'" +        " | '  ;'" +
         " | '    <<<'" +        " | '    ,'" +

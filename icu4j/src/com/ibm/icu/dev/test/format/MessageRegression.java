@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -149,7 +149,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Formatted with null : " + tempBuffer);
             logln("toPattern : " + messageFormatter.toPattern());
         } catch (Exception foo) {
-            errln("Exception when formatting in bug 4031438. "+foo.getMessage());
+            warnln("Exception when formatting in bug 4031438. "+foo.getMessage());
         }
     }
     public void Test4052223()

@@ -60,13 +60,8 @@ public class G7CollationTest extends TestFmwk{
     public void TestDemo1() {
         logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
         
-        Collator col;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);    
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);    
+
         
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = " & Z < p, P";
@@ -96,13 +91,8 @@ public class G7CollationTest extends TestFmwk{
     // perorm test with added rules "& C < ch , cH, Ch, CH"
     public void TestDemo2() {
         logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
-        Collator col;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);    
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);    
+
 
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = "& C < ch , cH, Ch, CH";
@@ -128,13 +118,8 @@ public class G7CollationTest extends TestFmwk{
     // "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'"
     public void TestDemo3() {
         // logln("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\"");
-        Collator col;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);    
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);    
+
         
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
@@ -160,13 +145,8 @@ public class G7CollationTest extends TestFmwk{
     // " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' "
     public void TestDemo4() {
         logln("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
-        Collator col;
-        try {
-            col = Collator.getInstance(Locale.ENGLISH);    
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
-            return;
-        }
+        Collator col = Collator.getInstance(Locale.ENGLISH);    
+
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
         newRules = baseRules + newRules;
@@ -205,8 +185,8 @@ public class G7CollationTest extends TestFmwk{
                 myCollation = Collator.getInstance(locales[i]);
                 tblColl1 = new RuleBasedCollator(((RuleBasedCollator)myCollation).getRules());
             } catch (Exception foo) {
-                errln("Exception: " + foo.getMessage() +
-                      "; Locale : " + locales[i].getDisplayName() + " getRules failed\n");
+                warnln("Exception: " + foo.getMessage() +
+                      "; Locale : " + locales[i].getDisplayName() + " getRules failed");
                 continue;
             }
             for (j = 0; j < FIXEDTESTSET; j++) {

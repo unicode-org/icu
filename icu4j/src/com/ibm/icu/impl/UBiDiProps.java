@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.util.RangeValueIterator;
@@ -36,12 +37,13 @@ public final class UBiDiProps {
     // constructors etc. --------------------------------------------------- ***
 
     // port of ubidi_openProps()
-    public UBiDiProps() throws IOException {
-        InputStream is=ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
+    public UBiDiProps() throws IOException{
+        InputStream is=ICUData.getStream(ICUResourceBundle.ICU_BUNDLE+"/"+DATA_FILE_NAME);
         BufferedInputStream b=new BufferedInputStream(is, 4096 /* data buffer size */);
         readData(b);
         b.close();
         is.close();
+
     }
 
     private void readData(InputStream is) throws IOException {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -53,7 +53,7 @@ public final class ICUData {
         }
 
         if (i == null && required) {
-            throw new MissingResourceException("could not locate data", root.getPackage().getName(), resourceName);
+            throw new MissingResourceException("could not locate data " +resourceName, root.getPackage().getName(), resourceName);
         }
         return i;
     }

@@ -8,6 +8,7 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.UBiDiProps;
 
@@ -573,7 +574,7 @@ public final class ArabicShaping {
 		try {
 			bdp=UBiDiProps.getSingleton();
 		} catch (IOException e) {
-			return;
+			throw new MissingResourceException(e.getMessage(),"","");
 		}
         digitBase -= '0'; // move common adjustment out of loop
 

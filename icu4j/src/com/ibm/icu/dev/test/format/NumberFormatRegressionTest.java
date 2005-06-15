@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -175,7 +175,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                     errln("FAIL: the test data formats are not euqal");
                 }
             } catch (Exception e) {
-                errln("FAIL: " + e.getMessage());
+                warnln("FAIL: " + e.getMessage());
             }
         }
     }

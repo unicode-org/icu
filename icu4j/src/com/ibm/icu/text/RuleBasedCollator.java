@@ -6,10 +6,12 @@
 */
 package com.ibm.icu.text;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.ICUDebug;
@@ -1592,10 +1594,14 @@ public final class RuleBasedCollator extends Collator
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
             UCA_.m_rules_ = (String)rb.getObject("UCARules");
         }
-        catch (Exception e)
+        catch (MissingResourceException ex)
         {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw ex;
+        }
+        catch (IOException e)
+        {
+           // e.printStackTrace();
+            throw new MissingResourceException(e.getMessage(),"","");
         }
     }
 

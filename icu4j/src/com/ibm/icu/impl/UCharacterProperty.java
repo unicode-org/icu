@@ -11,6 +11,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -571,16 +572,16 @@ public final class UCharacterProperty
 
     /**
     * Loads the property data and initialize the UCharacterProperty instance.
-    * @throws RuntimeException when data is missing or data has been corrupted
+    * @throws MissingResourceException when data is missing or data has been corrupted
     */
-    public static UCharacterProperty getInstance() throws RuntimeException
+    public static UCharacterProperty getInstance()
     {
-        if (INSTANCE_ == null) {
+        if(INSTANCE_ == null) {
             try {
                 INSTANCE_ = new UCharacterProperty();
             }
             catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+                throw new MissingResourceException(e.getMessage(),"","");
             }
         }
         return INSTANCE_;
