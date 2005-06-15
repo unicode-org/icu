@@ -2494,7 +2494,15 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "hi@collation=direct",      "hi@collation=direct",
         "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi",
-        NULL
+        "t",    "de_DE@collation=pinyin",      "de", /* bug 4582 tests */
+        "f",    "de_DE_BONN@collation=pinyin", "de",
+        "t",    "nl",                          "root",
+        "t",    "nl_NL",                       "root",
+        "f",    "nl_NL_EEXT",                  "root",
+        "t",    "nl@collation=stroke",         "root",
+        "t",    "nl_NL@collation=stroke",      "root",
+        "f",    "nl_NL_EEXT@collation=stroke", "root",
+       NULL
   };
 
   static const char *calCases[] = {
