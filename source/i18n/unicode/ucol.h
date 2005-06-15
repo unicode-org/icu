@@ -29,7 +29,7 @@
  * <em>Important: </em>The ICU collation service has been reimplemented 
  * in order to achieve better performance and UCA compliance. 
  * For details, see the 
- * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+ * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
  * collation design document</a>.
  * <p>
  * For more information about the collation service see 
@@ -140,7 +140,7 @@ typedef enum {
  * Diacritical differences on the same base letter represent a secondary
  * difference.  Set comparison level to UCOL_SECONDARY to ignore tertiary
  * differences. Use this to set the strength of a Collator object.
- * Example of secondary difference, "&#x00E4;" >> "a".
+ * Example of secondary difference, "&auml;" >> "a".
  *
  * Uppercase and lowercase versions of the same character represents a
  * tertiary difference.  Set comparison level to UCOL_TERTIARY to include
@@ -150,7 +150,7 @@ typedef enum {
  *
  * Two characters are considered "identical" when they have the same
  * unicode spellings.  UCOL_IDENTICAL.
- * For example, "&#x00E4;" == "&#x00E4;".
+ * For example, "&auml;" == "&auml;".
  *
  * UCollationStrength is also used to determine the strength of sort keys 
  * generated from UCollator objects

@@ -52,18 +52,11 @@ U_NAMESPACE_BEGIN
 * the given collation object.
 * For example, consider the following in Spanish:
 * <pre>
-* \code
 *        "ca" -> the first key is key('c') and second key is key('a').
-*        "cha" -> the first key is key('ch') and second key is key('a').
-* \endcode
-* </pre>
+*        "cha" -> the first key is key('ch') and second key is key('a').</pre>
 * And in German,
-* <pre>
-* \code
-*        "&#x00E6;b"-> the first key is key('a'), the second key is key('e'), and
-*        the third key is key('b').
-* \endcode
-* </pre>
+* <pre> \htmlonly       "&#x00E6;b"-> the first key is key('a'), the second key is key('e'), and
+*        the third key is key('b'). \endhtmlonly </pre>
 * The key of a character, is an integer composed of primary order(short),
 * secondary order(char), and tertiary order(char). Java strictly defines the 
 * size and signedness of its primitive data types. Therefore, the static
