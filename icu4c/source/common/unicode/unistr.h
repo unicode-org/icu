@@ -119,10 +119,9 @@ class BreakIterator;        // unicode/brkiter.h
  * <a href="http://icu.sourceforge.net/userguide/strings.html">User Guide Strings chapter</a>.</p>
  *
  * <p>In ICU, a Unicode string consists of 16-bit Unicode <em>code units</em>.
- * A Unicode character may be stored with either
- * one code unit &#8212; which is the most common case &#8212; or with a matched pair of
- * special code units ("surrogates").
- * The data type for code units is UChar.<br>
+ * A Unicode character may be stored with either one code unit
+ * (the most common case) or with a matched pair of special code units
+ * ("surrogates"). The data type for code units is UChar. 
  * For single-character handling, a Unicode character code <em>point</em> is a value
  * in the range 0..0x10ffff. ICU uses the UChar32 type for code points.</p>
  *

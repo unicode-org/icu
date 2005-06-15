@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *
@@ -346,7 +346,7 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          &amp;#144470; and Zero padding is ignored.</li>
  *        <li>UCNV_ESCAPE_XML_HEX:Substitues the  ILLEGAL SEQUENCE with the decimal 
- *          representation in the format  &#xXXXX, e.g. "&amp;#xFFFE;&amp;#x00AC;&amp;#xC8FE;"). 
+ *          representation in the format  &amp;#xXXXX; e.g. "&amp;#xFFFE;&amp;#x00AC;&amp;#xC8FE;"). 
  *          In the Event the converter doesn't support the characters {&,#,x}[0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as

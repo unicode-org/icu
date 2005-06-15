@@ -898,18 +898,18 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  *
  * Usage:
  * <pre>
- * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
- * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
- * &#32;   static UBool didInit=FALSE;
- * &#32;
- * &#32;   int32_t function() {
- * &#32;       if(!didInit) {
- * &#32;           U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
- * &#32;           U_STRING_INIT(ustringVar2, "jumps 5%", 8);
- * &#32;           didInit=TRUE;
- * &#32;       }
- * &#32;       return u_strcmp(ustringVar1, ustringVar2);
- * &#32;   }
+ *    U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
+ *    U_STRING_DECL(ustringVar2, "jumps 5%", 8);
+ *    static UBool didInit=FALSE;
+ * 
+ *    int32_t function() {
+ *        if(!didInit) {
+ *            U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
+ *            U_STRING_INIT(ustringVar2, "jumps 5%", 8);
+ *            didInit=TRUE;
+ *        }
+ *        return u_strcmp(ustringVar1, ustringVar2);
+ *    }
  * </pre>
  * @stable ICU 2.0
  */
