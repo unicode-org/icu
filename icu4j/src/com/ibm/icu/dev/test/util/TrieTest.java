@@ -488,7 +488,8 @@ public final class TrieTest extends TestFmwk
         try {
              trie = UCharacterProperty.getInstance().m_trie_;
         } catch (Exception e) {
-            errln("Error creating ucharacter trie");
+            warnln("Error creating ucharacter trie");
+            return;
         }
         
         for (int i = 0; i < 0xFFFF; i ++) {

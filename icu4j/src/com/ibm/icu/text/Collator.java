@@ -8,8 +8,10 @@ package com.ibm.icu.text;
 
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.ULocale;
@@ -446,9 +448,15 @@ public abstract class Collator implements Comparator, Cloneable
                 Class cls = Class.forName("com.ibm.icu.text.CollatorServiceShim");
                 shim = (ServiceShim)cls.newInstance();
             }
+            catch (MissingResourceException e)
+            {
+                throw e;
+            }
             catch (Exception e) {
                 ///CLOVER:OFF
-                e.printStackTrace();
+                if(DEBUG){
+                    e.printStackTrace();
+                }
                 throw new RuntimeException(e.getMessage());
                 ///CLOVER:ON
             }
@@ -950,6 +958,8 @@ public abstract class Collator implements Comparator, Cloneable
      * Decomposition mode
      */
     private int m_decomposition_ = CANONICAL_DECOMPOSITION;
+    
+    private static final boolean DEBUG = ICUDebug.enabled("collator");
     
     // private methods -------------------------------------------------------
     

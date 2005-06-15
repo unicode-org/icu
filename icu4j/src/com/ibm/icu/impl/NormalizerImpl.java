@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;    
@@ -35,7 +36,7 @@ public final class NormalizerImpl {
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e.getMessage());
+            throw new MissingResourceException(e.getMessage(), "", "");
         }
     }
     

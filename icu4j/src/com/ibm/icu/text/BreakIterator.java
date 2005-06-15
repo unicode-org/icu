@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,7 +11,9 @@ import java.lang.ref.SoftReference;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -201,6 +203,9 @@ import com.ibm.icu.util.ULocale;
 
 public abstract class BreakIterator implements Cloneable
 {
+
+    private static final boolean DEBUG = ICUDebug.enabled("breakiterator");
+    
     /**
      * Default constructor.  There is no state that is carried by this abstract
      * base class.
@@ -778,9 +783,15 @@ public abstract class BreakIterator implements Cloneable
                 Class cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
                 shim = (BreakIteratorServiceShim)cls.newInstance();
             }
+            catch (MissingResourceException e)
+            {
+                throw e;
+            }
             catch (Exception e) {
                 ///CLOVER:OFF
-                e.printStackTrace();
+                if(DEBUG){
+                    e.printStackTrace();
+                }
                 throw new RuntimeException(e.getMessage());
                 ///CLOVER:ON
             }

@@ -8,6 +8,8 @@
 package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.MissingResourceException;
+
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
@@ -73,10 +75,13 @@ public class HebrewTest extends CalendarTest {
             {   5757, TISHRI,   30,     MONTH,   1,     5757, HESHVAN,  29 },
             {   5758, KISLEV,   30,     YEAR,   -1,     5757, KISLEV,   29 },
         };
-       
-        HebrewCalendar cal = new HebrewCalendar(UTC, Locale.getDefault());
-
-        doRollAdd(ROLL, cal, tests);
+//        try{
+            HebrewCalendar cal = new HebrewCalendar(UTC, Locale.getDefault());
+    
+            doRollAdd(ROLL, cal, tests);
+ //       }catch(MissingResourceException ex){
+//            warnln("Got Exception: "+ ex.getMessage());
+ //       }
     }
     
     /**
@@ -108,10 +113,13 @@ public class HebrewTest extends CalendarTest {
             {   5757, KISLEV,    1,     DATE,   30,     5757, TEVET,     2 },   // 29-day month
             {   5758, KISLEV,    1,     DATE,   31,     5758, TEVET,     2 },   // 30-day month
         };
-       
-        HebrewCalendar cal = new HebrewCalendar(UTC, Locale.getDefault());
-
-        doRollAdd(ADD, cal, tests);
+        try{
+            HebrewCalendar cal = new HebrewCalendar(UTC, Locale.getDefault());
+    
+            doRollAdd(ADD, cal, tests);
+        }catch( MissingResourceException ex){
+            warnln("Could not load the locale data");
+        }
     }
 
     /**
@@ -215,7 +223,7 @@ public class HebrewTest extends CalendarTest {
                 };
                 doTestCases(testCases, new HebrewCalendar());
    
-        }catch(Exception ex){
+        }catch(MissingResourceException ex){
             warnln("Got Exception: "+ ex.getMessage());
         }
     }
@@ -225,12 +233,16 @@ public class HebrewTest extends CalendarTest {
      * field in a Hebrew calendar causes the time fields to go negative.
      */
     public void TestTimeFields() {
-        HebrewCalendar calendar = new HebrewCalendar(5761, 0, 11, 12, 28, 15);
-        calendar.set(Calendar.YEAR, 5717);
-        calendar.set(Calendar.MONTH, 2);
-        calendar.set(Calendar.DAY_OF_MONTH, 23);
-        if (calendar.get(Calendar.HOUR_OF_DAY) != 12) {
-            errln("Fail: HebrewCalendar HOUR_OF_DAY = " + calendar.get(Calendar.HOUR_OF_DAY));
+        try{
+            HebrewCalendar calendar = new HebrewCalendar(5761, 0, 11, 12, 28, 15);
+            calendar.set(Calendar.YEAR, 5717);
+            calendar.set(Calendar.MONTH, 2);
+            calendar.set(Calendar.DAY_OF_MONTH, 23);
+            if (calendar.get(Calendar.HOUR_OF_DAY) != 12) {
+                errln("Fail: HebrewCalendar HOUR_OF_DAY = " + calendar.get(Calendar.HOUR_OF_DAY));
+            }
+        }catch(MissingResourceException ex){
+            warnln("Got Exception: "+ ex.getMessage());
         }
     }
 
@@ -240,27 +252,31 @@ public class HebrewTest extends CalendarTest {
      * ELUL on non leap years causes the date to be set on TISHRI next year.
      */
     public void TestElulMonth() {
-        HebrewCalendar cal = new HebrewCalendar();
-        // Leap years are:
-        // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
-        for (int year=1; year<50; year++) {
-            // I hope that year = 0 does not exists
-            // because the test fails for it !
-            cal.clear();
-            
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, ELUL);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            
-            int yact = cal.get(Calendar.YEAR);
-            int mact = cal.get(Calendar.MONTH);
-            
-            if (year != yact || ELUL != mact) {
-                errln("Fail: " + ELUL + "/" + year +
-                      " -> " +
-                      mact + "/" + yact);
+        try{
+            HebrewCalendar cal = new HebrewCalendar();
+            // Leap years are:
+            // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
+            for (int year=1; year<50; year++) {
+                // I hope that year = 0 does not exists
+                // because the test fails for it !
+                cal.clear();
+                
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, ELUL);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                
+                int yact = cal.get(Calendar.YEAR);
+                int mact = cal.get(Calendar.MONTH);
+                
+                if (year != yact || ELUL != mact) {
+                    errln("Fail: " + ELUL + "/" + year +
+                          " -> " +
+                          mact + "/" + yact);
+                }
             }
-        }
+        }catch(MissingResourceException ex){
+            warnln("Got Exception: "+ ex.getMessage());
+        }   
     }
     
     /**
@@ -269,66 +285,70 @@ public class HebrewTest extends CalendarTest {
      * years.
      */
     public void TestMonthMovement() {
-        HebrewCalendar cal = new HebrewCalendar();
-        // Leap years are:
-        // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
-        // We can't test complete() on some lines below because of ADAR_1 -- if
-        // the calendar is set to ADAR_1 on a non-leap year, the result is undefined.
-        int[] DATA = {
-            // m1/y1 - month/year before (month is 1-based) 
-            // delta - amount to add to month field
-            // m2/y2 - month/year after add(MONTH, delta)
-            // m3/y3 - month/year after set(MONTH, m1+delta)
-          //m1  y1 delta  m2  y2  m3  y3
-            10,  2,  +24,  9,  4,  9,  4,
-            10,  2,  +60,  8,  7,  8,  7,
-            1 ,  2,  +12,  1,  3, 13,  2, //*set != add; also see '*' below
-            3 , 18,  -24,  4, 16,  4, 16,
-            1 ,  6,  -24,  1,  4,  1,  4,
-            4 ,  3,   +2,  6,  3,  6,  3, // Leap year - no skip 4,5,6,7,8
-            8 ,  3,   -2,  6,  3,  6,  3, // Leap year - no skip
-            4 ,  2,   +2,  7,  2,  7,  2, // Skip leap month 4,5,(6),7,8
-            8 ,  2,   -2,  5,  2,  7,  2, //*Skip leap month going backward
-        };
-        for (int i=0; i<DATA.length; ) {
-            int m = DATA[i++], y = DATA[i++];
-            int monthDelta = DATA[i++];
-            int m2 = DATA[i++], y2 = DATA[i++];
-            int m3 = DATA[i++], y3 = DATA[i++];
-            int mact, yact;
-
-            cal.clear();
-            cal.set(Calendar.YEAR, y);
-            cal.set(Calendar.MONTH, m-1);
-            cal.add(Calendar.MONTH, monthDelta);
-            yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
-            if (y2 != yact || m2 != mact) {
-                errln("Fail: " + m + "/" + y +
-                      " -> add(MONTH, " + monthDelta + ") -> " +
-                      mact + "/" + yact + ", expected " +
-                      m2 + "/" + y2);
+        try{
+            HebrewCalendar cal = new HebrewCalendar();
+            // Leap years are:
+            // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
+            // We can't test complete() on some lines below because of ADAR_1 -- if
+            // the calendar is set to ADAR_1 on a non-leap year, the result is undefined.
+            int[] DATA = {
+                // m1/y1 - month/year before (month is 1-based) 
+                // delta - amount to add to month field
+                // m2/y2 - month/year after add(MONTH, delta)
+                // m3/y3 - month/year after set(MONTH, m1+delta)
+              //m1  y1 delta  m2  y2  m3  y3
+                10,  2,  +24,  9,  4,  9,  4,
+                10,  2,  +60,  8,  7,  8,  7,
+                1 ,  2,  +12,  1,  3, 13,  2, //*set != add; also see '*' below
+                3 , 18,  -24,  4, 16,  4, 16,
+                1 ,  6,  -24,  1,  4,  1,  4,
+                4 ,  3,   +2,  6,  3,  6,  3, // Leap year - no skip 4,5,6,7,8
+                8 ,  3,   -2,  6,  3,  6,  3, // Leap year - no skip
+                4 ,  2,   +2,  7,  2,  7,  2, // Skip leap month 4,5,(6),7,8
+                8 ,  2,   -2,  5,  2,  7,  2, //*Skip leap month going backward
+            };
+            for (int i=0; i<DATA.length; ) {
+                int m = DATA[i++], y = DATA[i++];
+                int monthDelta = DATA[i++];
+                int m2 = DATA[i++], y2 = DATA[i++];
+                int m3 = DATA[i++], y3 = DATA[i++];
+                int mact, yact;
+    
                 cal.clear();
                 cal.set(Calendar.YEAR, y);
                 cal.set(Calendar.MONTH, m-1);
-                logln("Start: " + m + "/" + y);
-                int delta = monthDelta > 0 ? 1 : -1;
-                for (int c=0; c!=monthDelta; c+=delta) {
-                    cal.add(Calendar.MONTH, delta);
-                    logln("+ " + delta + " MONTH -> " +
-                          (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
+                cal.add(Calendar.MONTH, monthDelta);
+                yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
+                if (y2 != yact || m2 != mact) {
+                    errln("Fail: " + m + "/" + y +
+                          " -> add(MONTH, " + monthDelta + ") -> " +
+                          mact + "/" + yact + ", expected " +
+                          m2 + "/" + y2);
+                    cal.clear();
+                    cal.set(Calendar.YEAR, y);
+                    cal.set(Calendar.MONTH, m-1);
+                    logln("Start: " + m + "/" + y);
+                    int delta = monthDelta > 0 ? 1 : -1;
+                    for (int c=0; c!=monthDelta; c+=delta) {
+                        cal.add(Calendar.MONTH, delta);
+                        logln("+ " + delta + " MONTH -> " +
+                              (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
+                    }
+                }
+                
+                cal.clear();
+                cal.set(Calendar.YEAR, y);
+                cal.set(Calendar.MONTH, m + monthDelta - 1);
+                yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
+                if (y3 != yact || m3 != mact) {
+                    errln("Fail: " + (m+monthDelta) + "/" + y +
+                          " -> complete() -> " +
+                          mact + "/" + yact + ", expected " +
+                          m3 + "/" + y3);
                 }
             }
-            
-            cal.clear();
-            cal.set(Calendar.YEAR, y);
-            cal.set(Calendar.MONTH, m + monthDelta - 1);
-            yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
-            if (y3 != yact || m3 != mact) {
-                errln("Fail: " + (m+monthDelta) + "/" + y +
-                      " -> complete() -> " +
-                      mact + "/" + yact + ", expected " +
-                      m3 + "/" + y3);
-            }
+        }catch(MissingResourceException ex){
+            warnln("Got Exception: "+ ex.getMessage());
         }
     }
 
@@ -356,68 +376,76 @@ public class HebrewTest extends CalendarTest {
      * With no fields set, the calendar should use default values.
      */
     public void TestDefaultFieldValues() {
-        HebrewCalendar cal = new HebrewCalendar();
-        cal.clear();
-        logln("cal.clear() -> " + cal.getTime());
+        try{
+            HebrewCalendar cal = new HebrewCalendar();
+            cal.clear();
+            logln("cal.clear() -> " + cal.getTime());
+        }catch(MissingResourceException ex){
+            warnln("could not load the locale data");
+        }
     }
     
     public void TestCoverage() {
-        {
-            // new HebrewCalendar(TimeZone)
-            HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
-            if(cal == null){
-                errln("could not create HebrewCalendar with TimeZone");
-            }
-        }
-
-        {
-            // new HebrewCalendar(ULocale)
-            HebrewCalendar cal = new HebrewCalendar(ULocale.getDefault());
-            if(cal == null){
-                errln("could not create HebrewCalendar with ULocale");
-            }
-        }
-            
-        {
-            // new HebrewCalendar(Locale)
-            HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
-            if(cal == null){
-                errln("could not create HebrewCalendar with locale");
-            }
-        }
-    
-        {
-            // new HebrewCalendar(Date)
-            HebrewCalendar cal = new HebrewCalendar(new Date());
-            if(cal == null){
-                errln("could not create HebrewCalendar with date");
-            }
-        }
-    
-        {
-            // data
-            HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
-            Date time = cal.getTime();
-    
-            String[] calendarLocales = {
-            "iw_IL"
-            };
-    
-            String[] formatLocales = {
-            "en", "fi", "fr", "hu", "iw", "nl"
-            };
-            for (int i = 0; i < calendarLocales.length; ++i) {
-                String calLocName = calendarLocales[i];
-                Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-                cal = new HebrewCalendar(calLocale);
-        
-                for (int j = 0; j < formatLocales.length; ++j) {
-                    String locName = formatLocales[j];
-                    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-                    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+        try{
+            {
+                // new HebrewCalendar(TimeZone)
+                HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
+                if(cal == null){
+                    errln("could not create HebrewCalendar with TimeZone");
                 }
             }
+    
+            {
+                // new HebrewCalendar(ULocale)
+                HebrewCalendar cal = new HebrewCalendar(ULocale.getDefault());
+                if(cal == null){
+                    errln("could not create HebrewCalendar with ULocale");
+                }
+            }
+                
+            {
+                // new HebrewCalendar(Locale)
+                HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
+                if(cal == null){
+                    errln("could not create HebrewCalendar with locale");
+                }
+            }
+        
+            {
+                // new HebrewCalendar(Date)
+                HebrewCalendar cal = new HebrewCalendar(new Date());
+                if(cal == null){
+                    errln("could not create HebrewCalendar with date");
+                }
+            }
+        
+            {
+                // data
+                HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
+                Date time = cal.getTime();
+        
+                String[] calendarLocales = {
+                "iw_IL"
+                };
+        
+                String[] formatLocales = {
+                "en", "fi", "fr", "hu", "iw", "nl"
+                };
+                for (int i = 0; i < calendarLocales.length; ++i) {
+                    String calLocName = calendarLocales[i];
+                    Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+                    cal = new HebrewCalendar(calLocale);
+            
+                    for (int j = 0; j < formatLocales.length; ++j) {
+                        String locName = formatLocales[j];
+                        Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+                        DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                        logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    }
+                }
+            }
+        }catch( MissingResourceException ex){
+            warnln("Could not load the locale data. "+ ex.getMessage());
         }
     }
 }

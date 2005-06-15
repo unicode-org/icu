@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.dev.test.collator;
  
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+
 import java.util.Locale;
  
 public class LotusCollationKoreanTest extends TestFmwk{
@@ -36,15 +37,11 @@ public class LotusCollationKoreanTest extends TestFmwk{
     private Collator myCollation;
     
     public LotusCollationKoreanTest() {
-        try {
-            myCollation = Collator.getInstance(Locale.KOREAN);
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of KOREAN locale");
-            return;
-        }
+    }
+    protected void init()throws Exception{
+        myCollation = Collator.getInstance(Locale.KOREAN);
         myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
     }
-    
     // performs test with strength TERIARY
     public void TestTertiary() {
         int i = 0;

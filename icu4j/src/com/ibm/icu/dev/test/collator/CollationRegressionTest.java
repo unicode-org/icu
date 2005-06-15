@@ -1074,8 +1074,12 @@ public class CollationRegressionTest extends TestFmwk {
         }
     }
 
-    static RuleBasedCollator en_us = (RuleBasedCollator)Collator.getInstance(Locale.US);
-
+    private static RuleBasedCollator en_us ;
+    protected void init()throws Exception{
+        if(en_us ==null){
+            en_us = (RuleBasedCollator)Collator.getInstance(Locale.US);
+        }
+    }
     public void Test4244884() throws Exception {
         RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(Locale.US);
         coll = new RuleBasedCollator(coll.getRules()

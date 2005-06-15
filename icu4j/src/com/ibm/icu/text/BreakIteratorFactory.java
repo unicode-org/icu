@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -133,11 +133,11 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             //      data/icudt30b/line.brk      (30 is version number)
             try {
                 String rulesFileName = ICUResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
-                InputStream is = ICUData.getRequiredStream(rulesFileName);
+                InputStream is = ICUData.getStream(rulesFileName);
                 iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);
             }
             catch (IOException e) {
-                throw new IllegalArgumentException(e.toString());
+                throw new MissingResourceException(e.toString(),"","");
             }
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {

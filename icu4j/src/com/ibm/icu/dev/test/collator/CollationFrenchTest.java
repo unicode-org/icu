@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -113,14 +113,11 @@ public class CollationFrenchTest extends TestFmwk{
     private Collator myCollation = null;
     
     public CollationFrenchTest() {
-        try {
-            myCollation = Collator.getInstance(Locale.FRENCH);
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of FRENCH locale");
-            return;
-        }
+
     }
-     
+    protected void init()throws Exception{
+        myCollation = Collator.getInstance(Locale.FRENCH);
+    }
      
     // perform tests with strength TERTIARY
     public void TestTertiary() {

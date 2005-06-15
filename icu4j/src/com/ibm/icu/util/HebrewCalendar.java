@@ -690,7 +690,7 @@ public class HebrewCalendar extends Calendar {
             case 355:
                 type = 2; break;
             default:
-                throw new RuntimeException("Illegal year length " + yearLength + " in year " + year);
+                throw new IllegalArgumentException("Illegal year length " + yearLength + " in year " + year);
 
         }
         return type;

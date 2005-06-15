@@ -1,12 +1,14 @@
 /*********************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and
+ * Copyright (C) 2000-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
 import com.ibm.icu.text.*;
+
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Test of ChineseCalendar.
@@ -523,6 +525,9 @@ public class ChineseTest extends CalendarTest {
     public void TestCoverage() {
         ChineseCalendar cal = new ChineseCalendar();
         DateFormat format = DateFormat.getInstance(cal);
+        if(!(format instanceof ChineseDateFormat)){
+            errln("DateFormat.getInstance("+cal+") did not return a ChineseDateFormat");
+        }
         ChineseDateFormat fmt = (ChineseDateFormat)format;
         fmt.applyPattern("llyyll");
         Date time = getDate(2100, Calendar.JANUARY, 1);
@@ -545,5 +550,26 @@ public class ChineseTest extends CalendarTest {
             str = fmt.format(time);
             logln("Chinese calendar time: " + time + " result: " + str);
         }        
+    }
+    public void TestScratch(){
+        String[] strMonths = {"Januari", "Pebruari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "Nopember", "Desember"};
+        String[] strShortMonths = {"Jan", "Peb", "Mar", "Apr", "Mei", "Jun",
+                     "Jul", "Agt", "Sep", "Okt", "Nop", "Des"};
+        String[] strWeeks = {"", "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"};
+        DateFormatSymbols dfsDate = new DateFormatSymbols(new Locale("id", "ID"));
+        dfsDate.setMonths(strMonths);
+        dfsDate.setShortMonths(strShortMonths);
+        dfsDate.setWeekdays(strWeeks);
+        ULocale uloInd = dfsDate.getLocale(ULocale.ACTUAL_LOCALE);
+        if(uloInd==null){
+            errln("did not get the expected ULocale");
+        }
+        logln(uloInd.toString());
+        Locale locInd = uloInd.toLocale();
+        if(locInd==null){
+            errln("did not get the expected result");
+        }
+        logln(locInd.toString());
     }
 }

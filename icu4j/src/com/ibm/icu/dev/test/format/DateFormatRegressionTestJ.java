@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,10 +20,14 @@ import java.util.Locale;
 
 public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     
-    static final String TIME_STRING = "2000/11/17 08:01:00";
-    static final long UTC_LONG = 974476860000L;
-    static SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final String TIME_STRING = "2000/11/17 08:01:00";
+    private static final long UTC_LONG = 974476860000L;
+    private static SimpleDateFormat sdf_;
     
+    protected void init()throws Exception{
+        sdf_ = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        
+    }
     public static void main(String[] args) throws Exception {
         new DateFormatRegressionTestJ().run(args);
     }

@@ -27,6 +27,7 @@ import com.ibm.icu.text.BreakIterator;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.MissingResourceException;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.Collection;
@@ -2719,18 +2720,18 @@ public class UnicodeSet extends UnicodeFilter {
                 try {
                     UCaseProps.getSingleton().addPropertyStarts(incl);
                 } catch(IOException e) {
-                    throw new RuntimeException(e);
+                    throw new MissingResourceException(e.getMessage(),"","");
                 }
                 break;
             case UCharacterProperty.SRC_BIDI:
                 try {
                     UBiDiProps.getSingleton().addPropertyStarts(incl);
                 } catch(IOException e) {
-                    throw new RuntimeException(e);
+                    throw new MissingResourceException(e.getMessage(),"","");
                 }
                 break;
             default:
-                throw new RuntimeException("UnicodeSet.getInclusions(unknown src "+src+")");
+                throw new InternalError("UnicodeSet.getInclusions(unknown src "+src+")");
             }
             INCLUSIONS[src] = incl;
         }

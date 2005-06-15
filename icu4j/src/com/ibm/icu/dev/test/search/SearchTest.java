@@ -44,8 +44,8 @@ public class SearchTest extends TestFmwk {
     RuleBasedCollator m_fr_fr_;
     RuleBasedCollator m_de_;
     RuleBasedCollator m_es_;
-    BreakIterator     m_en_wordbreaker_ = BreakIterator.getWordInstance();
-    BreakIterator     m_en_characterbreaker_ = BreakIterator.getCharacterInstance();
+    BreakIterator     m_en_wordbreaker_;
+    BreakIterator     m_en_characterbreaker_;
 
     static SearchData[] BASIC = {
         new SearchData("xxxxxxxxxxxxxxxxxxxx",          "fisher",       null, Collator.TERTIARY, null, new int[] {-1},            new int[]{0}),
@@ -439,22 +439,22 @@ public class SearchTest extends TestFmwk {
      */
     public SearchTest()
     {
+
+    }
+
+    protected void init()throws Exception{
         m_en_us_ = (RuleBasedCollator)Collator.getInstance(Locale.US);
         m_fr_fr_ = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
         m_de_ = (RuleBasedCollator)Collator.getInstance(new Locale("de", "DE"));
         m_es_ = (RuleBasedCollator)Collator.getInstance(new Locale("es", "ES"));
+        m_en_wordbreaker_ = BreakIterator.getWordInstance();
+        m_en_characterbreaker_ = BreakIterator.getCharacterInstance();
+        String rules = m_de_.getRules() + EXTRACOLLATIONRULE;
+        m_de_ = new RuleBasedCollator(rules);
+        rules = m_es_.getRules() + EXTRACOLLATIONRULE;
+        m_es_ = new RuleBasedCollator(rules);
 
-        try {
-            String rules = m_de_.getRules() + EXTRACOLLATIONRULE;
-            m_de_ = new RuleBasedCollator(rules);
-            rules = m_es_.getRules() + EXTRACOLLATIONRULE;
-            m_es_ = new RuleBasedCollator(rules);
-        }
-        catch (Exception e) {
-            errln("Error creating modified German and Spanish collators");
-        }
     }
-
     public static void main(String[] args) throws Exception {
         new SearchTest().run(args);
         // new SearchTest().TestContraction();

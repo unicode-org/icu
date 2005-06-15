@@ -74,7 +74,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            errln("Error: could not construct Thai collator");
+            warnln("could not construct Thai collator");
             return;
         }
         compareArray(coll, TESTS); 
@@ -116,7 +116,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            errln("Error: could not construct Thai collator");
+            warnln("could not construct Thai collator");
             return;
         }
      
@@ -225,7 +225,7 @@ public class CollationThaiTest extends TestFmwk {
             collator = getThaiCollator();
             comparator = new StrCmp();
         } catch (Exception e) {
-            errln("Error: could not construct Thai collator");
+            warnln("could not construct Thai collator");
             return;
         }
         
@@ -282,7 +282,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             collator = (RuleBasedCollator)getThaiCollator();
         } catch (Exception e) {
-            errln("Error: could not construct Thai collator");
+            warnln("could not construct Thai collator");
             return;
         }
         compareArray(collator, tests);

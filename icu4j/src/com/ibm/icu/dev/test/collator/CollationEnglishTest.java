@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.dev.test.collator;
  
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+
 import java.util.Locale;
  
 public class CollationEnglishTest extends TestFmwk{
@@ -239,14 +240,10 @@ public class CollationEnglishTest extends TestFmwk{
     private Collator myCollation = null;
     
     public CollationEnglishTest() {
-        try {
-            myCollation = Collator.getInstance(Locale.ENGLISH);
-        } catch(Exception e) {
-            errln("ERROR: in creation of collator of ENGLISH locale");
-            return;
-        } 
     }
-    
+    protected void init()throws Exception{
+        myCollation = Collator.getInstance(Locale.ENGLISH);
+    }
     
     //performs test with strength PRIMARY
     public void TestPrimary() {

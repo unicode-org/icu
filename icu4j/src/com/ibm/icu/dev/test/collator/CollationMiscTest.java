@@ -66,7 +66,7 @@ public class CollationMiscTest extends TestFmwk {
             coll = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
         } 
         catch (Exception e) {
-            errln("Error opening collator\n");
+            warnln("Error opening collator\n");
             return;
         }
     
@@ -485,7 +485,7 @@ public class CollationMiscTest extends TestFmwk {
             coll = (RuleBasedCollator)Collator.getInstance(locale);
             
         } catch (Exception e) {
-            errln("Unable to open collator for locale " + locale);
+            warnln("Unable to open collator for locale " + locale);
             return;
         }
         // logln("Locale starter for " + locale);
@@ -497,7 +497,8 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = (RuleBasedCollator)Collator.getInstance(locale);
         } catch (Exception e) {
-            errln("Unable to open collator for locale " + locale);
+            warnln("Unable to open collator for locale " + locale);
+            return;
         }
         // logln("Locale starter for " +locale);
         
@@ -551,7 +552,8 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            errln("Unable to open collator");
+            warnln("Unable to open collator");
+            return;
         }
         // logln("Test non characters");
         
@@ -652,7 +654,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             myCollation = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            errln("ERROR: in creation of rule based collator ");
+            warnln("ERROR: in creation of rule based collator ");
             return;
         }
         // logln("Testing different case settings");
@@ -913,7 +915,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             myCollation = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            errln("ERROR: in creation of rule based collator");
+            warnln("ERROR: in creation of rule based collator");
             return;
         }
         // logln("Testing some A letters, for some reason");
@@ -951,7 +953,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = Collator.getInstance(new Locale("cs", ""));
         } catch (Exception e) {
-            errln("Cannot create Collator");
+            warnln("Cannot create Collator");
             return;
         }
         int size = chTest.length;
@@ -992,7 +994,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = Collator.getInstance();
         } catch (Exception e) {
-            errln("Can't create collator");
+            warnln("Can't create collator");
             return;
         }
         
@@ -1271,7 +1273,7 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 coll = Collator.getInstance(new Locale("en", "US"));
             } catch (Exception e) {
-                errln("Cannot get default instance!");
+                warnln("Cannot get default instance!");
                 return;
             }
             char baseA     =0x41;
@@ -1795,7 +1797,7 @@ public class CollationMiscTest extends TestFmwk {
             }
             coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
-            errln(e.getMessage());
+            warnln(e.getMessage());
         }
     }
     
@@ -1911,7 +1913,7 @@ public class CollationMiscTest extends TestFmwk {
             CollationTest.doTest(this, (RuleBasedCollator)coll, 
                                  test[0], test[1], 0);
         } catch (Exception e) {
-            errln("Error creating UCA collator");
+            warnln("Error creating UCA collator");
         }
     }
     

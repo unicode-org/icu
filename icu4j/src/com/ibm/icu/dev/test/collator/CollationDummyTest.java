@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.collator;
  
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+
 import java.util.Locale;
  
 public class CollationDummyTest extends TestFmwk {
@@ -167,15 +168,12 @@ public class CollationDummyTest extends TestFmwk {
     public RuleBasedCollator myCollation;
     
     public CollationDummyTest() {
+    }
+    protected void init() throws Exception{
         String ruleset = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
         // String ruleset = "& Four, 4";
         myCollation = null;
-        try{
-            myCollation = new RuleBasedCollator(ruleset);
-        } catch(Exception e){
-            errln("Fail to create RuleBasedCollator with rules:" + ruleset);
-            return;
-        }
+        myCollation = new RuleBasedCollator(ruleset);
     }
     
     // perform test with strength tertiary

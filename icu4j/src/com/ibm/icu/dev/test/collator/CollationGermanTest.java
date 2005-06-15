@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -71,12 +71,14 @@
     private Collator myCollation = null;
     
     public CollationGermanTest() {
+
+    }
+    protected void init() throws Exception{
         myCollation = Collator.getInstance(Locale.GERMAN);
         if(myCollation == null) {
             errln("ERROR: in creation of collator of GERMAN locale");
         }
     }
-    
     // perform test with strength TERTIARY
     public void TestTertiary(){
         if(myCollation == null ) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -67,12 +67,10 @@ public class CollationTurkishTest extends TestFmwk{
     private Collator myCollation = null;
     
     public CollationTurkishTest() {
-        try {
-            myCollation = Collator.getInstance(new Locale("tr", ""));
-        } catch (Exception e) {
-            errln("ERROR: in creation of collator of TURKISH locale");
-            return;
-        }
+
+    }
+    protected void init()throws Exception{
+        myCollation = Collator.getInstance(new Locale("tr", ""));
     }
     
     public void TestTertiary() {

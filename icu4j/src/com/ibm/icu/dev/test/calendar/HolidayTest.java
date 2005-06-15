@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,11 +27,17 @@ public class HolidayTest extends TestFmwk {
     public static void main(String args[]) throws Exception {
         new HolidayTest().run(args);
     }
-
-    static final Calendar cal = new GregorianCalendar(1, 0, 1);
-    static final Date longTimeAgo = cal.getTime();
-    static final Date now = new Date();
-    static final long awhile = 3600L * 24 * 28; // 28 days
+    protected void init()throws Exception{
+        if(cal==null){
+            cal = new GregorianCalendar(1, 0, 1);
+            longTimeAgo = cal.getTime();
+            now = new Date();
+        }
+    }
+    static  Calendar cal;
+    static  Date longTimeAgo;
+    static  Date now;
+    static  long awhile = 3600L * 24 * 28; // 28 days
 
     public void TestAPI() {
         {

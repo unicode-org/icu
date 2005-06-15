@@ -1,11 +1,13 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
 
 package com.ibm.icu.dev.test.shaping;
+
+import java.util.MissingResourceException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ArabicShaping;
@@ -341,6 +343,9 @@ public class ArabicShapingRegTest extends TestFmwk {
                 shaper = new ArabicShaping(test.flags);
                 result = shaper.shape(test.source);
             }
+            catch(MissingResourceException e){
+                throw e;
+            }
             catch (Exception e) {
                 ex = e;
             }
@@ -430,6 +435,7 @@ public class ArabicShapingRegTest extends TestFmwk {
     }
 
     public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
+
         StringBuffer buf = new StringBuffer();
         buf.append("*** test failure ***\n");
         buf.append("index: " + index + "\n");
@@ -460,6 +466,9 @@ public class ArabicShapingRegTest extends TestFmwk {
     }
 
     private static String escapedString(String str) {
+        if(str==null){
+            return str;
+        }
         StringBuffer buf = new StringBuffer(str.length() * 6);
         for (int i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
