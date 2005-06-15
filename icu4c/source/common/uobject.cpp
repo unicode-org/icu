@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -75,6 +75,17 @@ void U_EXPORT2 UMemory::operator delete[](void *p) {
         uprv_free(p);
     }
 }
+
+#if U_HAVE_DEBUG_LOCATION_NEW
+void * U_EXPORT2 UMemory::operator new(size_t size, const char* /*file*/, int /*line*/) {
+    return UMemory::operator new(size);
+}
+
+void U_EXPORT2 UMemory::operator delete(void* p, const char* /*file*/, int /*line*/) {
+    UMemory::operator delete(p);
+}
+#endif /* U_HAVE_DEBUG_LOCATION_NEW */
+
 
 #endif
 
