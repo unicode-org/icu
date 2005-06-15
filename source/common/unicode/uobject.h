@@ -49,6 +49,16 @@ U_NAMESPACE_BEGIN
 #define U_HAVE_PLACEMENT_NEW 1
 #endif
 
+/**  U_HAVE_DEBUG_LOCATION_NEW - Define this to define the MFC debug
+ * version of the operator new.
+ *
+ * @draft ICU 3.4
+ */                              
+#ifndef U_HAVE_DEBUG_LOCATION_NEW
+#define U_HAVE_DEBUG_LOCATION_NEW 0
+#endif
+
+
 /**
  * UMemory is the common ICU base class.
  * All other ICU C++ classes are derived from UMemory (starting with ICU 2.4).
@@ -117,6 +127,24 @@ public:
      */
     static inline void U_EXPORT2 operator delete(void *, void *) {}
 #endif /* U_HAVE_PLACEMENT_NEW */
+#if U_HAVE_DEBUG_LOCATION_NEW
+    /**
+      * This method overrides the MFC debug version of the operator new
+      * 
+      * @param size   The requested memory size
+      * @param file   The file where the allocation was requested
+      * @param line   The line where the allocation was requested 
+      */ 
+    static void * U_EXPORT2 operator new(size_t size, const char* file, int line);
+    /**
+      * This method provides a matching delete for the MFC debug new
+      * 
+      * @param p      The pointer to the allocated memory
+      * @param file   The file where the allocation was requested
+      * @param line   The line where the allocation was requested 
+      */ 
+    static void U_EXPORT2 operator delete(void* p, const char* file, int line);
+#endif /* U_HAVE_DEBUG_LOCATION_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
 
     /*

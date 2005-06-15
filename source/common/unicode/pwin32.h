@@ -196,6 +196,10 @@ typedef unsigned int uint32_t;
 #ifndef U_HAVE_PLACEMENT_NEW
 #define U_HAVE_PLACEMENT_NEW 1
 #endif
+/* Determine whether to override new and delete for MFC. */
+#if !defined(U_HAVE_DEBUG_LOCATION_NEW) && defined(_MSC_VER)
+#define U_HAVE_DEBUG_LOCATION_NEW 1
+#endif
 
 /* Determine whether to enable tracing. */
 #ifndef U_ENABLE_TRACING
