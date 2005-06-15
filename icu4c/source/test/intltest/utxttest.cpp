@@ -60,10 +60,10 @@ void  UTextTest::TextTest() {
 
 
 void UTextTest::TestString(const UnicodeString &s) {
-    int         i;
-    int         j;
+    int32_t         i;
+    int32_t         j;
     UChar32     c;
-    int         cpCount = 0;
+    int32_t         cpCount = 0;
     UErrorCode  status = U_ZERO_ERROR;
 
     UnicodeString sa = s.unescape();
@@ -104,7 +104,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     //
 
     // Convert the test string from UnicodeString to (char *) in utf-8 format
-    int u8Len = sa.extract(0, sa.length(), NULL, 0, "utf-8");
+    int32_t u8Len = sa.extract(0, sa.length(), NULL, 0, "utf-8");
     char *u8String = new char[u8Len + 1];
     sa.extract(0, sa.length(), u8String, u8Len+1, "utf-8");
 
