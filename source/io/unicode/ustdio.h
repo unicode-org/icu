@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -89,12 +89,36 @@
  * \brief C API: Unicode stdio-like API
  *
  * <h2>Unicode stdio-like C API</h2>
-General printf format:<br>
-%[format modifier][width][.precision][type modifier][format]
-
-General scanf format:<br>
-%[*][format modifier][width][type modifier][format]
-
+ *
+ * <p>This API provides an stdio-like API wrapper around ICU's other
+ * formatting and parsing APIs. It is meant to ease the transition of adding
+ * Unicode support to a preexisting applications using stdio. The following
+ * is a small list of noticable differences between stdio and ICU I/O's
+ * ustdio implementation.</p>
+ *
+ * <ul>
+ * <li>Locale specific formatting and parsing is only done with file IO.</li>
+ * <li>u_fstropen can be used to simulate file IO with strings.
+ * This is similar to the iostream API, and it allows locale specific
+ * formatting and parsing to be used.</li>
+ * <li>This API provides uniform formatting and parsing behavior between
+ * platforms (unlike the standard stdio implementations found on various
+ * platforms).</li>
+ * <li>This API is better suited for text data handling than binary data
+ * handling when compared to the typical stdio implementation.</li>
+ * <li>You can specify a Transliterator while using the file IO.</li>
+ * <li>You can specify a file's codepage separately from the default
+ * system codepage.</li>
+ * </ul>
+ *
+ * <h2>Formatting and Parsing Specification</h2>
+ *
+ * General printf format:<br>
+ * %[format modifier][width][.precision][type modifier][format]
+ * 
+ * General scanf format:<br>
+ * %[*][format modifier][width][type modifier][format]
+ * 
 <table cellspacing="3">
 <tr><td>format</td><td>default<br>type</td><td>description</td></tr>
 <tr><td>%E</td><td>double</td><td>Scientific with an uppercase exponent</td></tr>

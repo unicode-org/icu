@@ -193,5 +193,10 @@
  *     <td>(no C API)</td>
  *     <td>LayoutEngine, ParagraphLayout</td>
  *   </tr>
+ *   <tr>
+ *     <td>ICU I/O</td>
+ *     <td>ustdio.h</td>
+ *     <td>ustream.h</td>
+ *   </tr>
  * </table>
  */
