@@ -770,6 +770,7 @@ static const uint8_t asciiDigits[] = {
 
 static const UChar kUMinus = (UChar)0x002d;
 
+#ifdef RBNF_DEBUG
 static const char kMinus = '-';
 
 static const uint8_t digitInfo[] = {
@@ -791,7 +792,6 @@ static const uint8_t digitInfo[] = {
     0xa1u, 0xa2u, 0xa3u,     0,     0,     0,     0,     0,
 };
 
-#ifdef RBNF_DEBUG
 int64_t util64_atoi(const char* str, uint32_t radix)
 {
     if (radix > 36) {
