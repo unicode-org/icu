@@ -52,6 +52,9 @@ public class CharsetDetector {
 
     /**
      *   Constructor
+     * 
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CharsetDetector() {
     }
@@ -71,6 +74,7 @@ public class CharsetDetector {
      *  @param encoding The declared encoding 
      *
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CharsetDetector setDeclaredEncoding(String encoding) {
         fDeclaredEncoding = encoding;
