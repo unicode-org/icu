@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -29,7 +29,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0]) 
 
-void addCurrencyTest(TestNode** root)
+void addCurrencyCollTest(TestNode** root)
 {
     
     addTest(root, &currTest, "tscoll/ccurrtst/currTest");

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -34,7 +34,7 @@ void reportCResult( const UChar source[], const UChar target[],
 UChar* appendCompareResult(UCollationResult result, UChar* target);
 
 void addCollAPITest(TestNode**);
-void addCurrencyTest(TestNode**);
+void addCurrencyCollTest(TestNode**);
 void addNormTest(TestNode**);
 void addDanishCollTest(TestNode**);
 void addGermanCollTest(TestNode**);

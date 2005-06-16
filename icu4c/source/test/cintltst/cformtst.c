@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -30,6 +30,7 @@ void addDateForRgrTest(TestNode**);
 void addNumFrDepTest(TestNode**);
 void addDtFrDepTest(TestNode**);
 void addUtmsTest(TestNode**);
+void addCurrencyTest(TestNode**);
 
 void addFormatTest(TestNode** root);
 
@@ -43,7 +44,7 @@ void addFormatTest(TestNode** root)
     addDateForRgrTest(root);
     addDtFrDepTest(root);
     addUtmsTest(root);
-
+    addCurrencyTest(root);
 }
 /*Internal functions used*/
 
