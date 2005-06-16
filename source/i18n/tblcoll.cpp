@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -125,6 +125,12 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
         getUCollationStrength(collationStrength),
         decompositionMode,
         status);
+}
+RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length, 
+                    const RuleBasedCollator *base, 
+                    UErrorCode &status) : dataIsOwned(TRUE)
+{
+  ucollator = ucol_openBinary(bin, length, base->ucollator, &status);
 }
 
 void
@@ -470,6 +476,12 @@ uint8_t* RuleBasedCollator::cloneRuleData(int32_t &length,
                                               UErrorCode &status)
 {
     return ucol_cloneRuleData(ucollator, &length, &status);
+}
+
+
+int32_t RuleBasedCollator::cloneBinary(uint8_t *buffer, int32_t capacity, UErrorCode &status)
+{
+  return ucol_cloneBinary(ucollator, buffer, capacity, &status);
 }
 
 void RuleBasedCollator::setAttribute(UColAttribute attr,
