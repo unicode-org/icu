@@ -205,6 +205,7 @@ public final class RuleBasedCollator extends Collator
      */
     public RuleBasedCollator(String rules) throws Exception
     {
+        checkUCA();
         if (rules == null) {
             throw new IllegalArgumentException(
                                             "Collation rules can not be null");
@@ -1563,48 +1564,48 @@ public final class RuleBasedCollator extends Collator
     // block to initialise character property database
     static
     {
+        // take pains to let static class init succeed, otherwise the class itself won't exist and
+        // clients will get a NoClassDefFoundException.  Instead, make the constructors fail if
+        // we can't load the UCA data.
+
+        RuleBasedCollator iUCA_ = null;
+        UCAConstants iUCA_CONSTANTS_ = null;
+        char iUCA_CONTRACTIONS_[] = null;
+        ImplicitCEGenerator iimpCEGen_ = null;
         try
         {
-            UCA_ = new RuleBasedCollator();
-            UCA_CONSTANTS_ = new UCAConstants();
-            UCA_CONTRACTIONS_ = CollatorReader.read(UCA_, UCA_CONSTANTS_);
-            /*
-            InputStream i = UCA_.getClass().getResourceAsStream(
-                                        "/com/ibm/icu/impl/data/ucadata.icu");
+            iUCA_ = new RuleBasedCollator();
+            iUCA_CONSTANTS_ = new UCAConstants();
+            iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_);
 
-            BufferedInputStream b = new BufferedInputStream(i, 90000);
-            CollatorReader reader = new CollatorReader(b);
-            UCA_CONTRACTIONS_ = reader.read(UCA_, UCA_CONSTANTS_);
-            b.close();
-            i.close();
-            */
             // called before doing canonical closure for the UCA.
-            impCEGen_ = new ImplicitCEGenerator(UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
-//            IMPLICIT_BASE_BYTE_ = UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_;
-//            // leave room for 1 3-byte and 2 4-byte forms
-//            IMPLICIT_LIMIT_BYTE_ = IMPLICIT_BASE_BYTE_ + 4;
-//            IMPLICIT_4BYTE_BOUNDARY_ = IMPLICIT_3BYTE_COUNT_ * OTHER_COUNT_
-//                                       * LAST_COUNT_;
-//            LAST_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT_;
-//            LAST2_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT2_;
-//            IMPLICIT_BASE_3BYTE_ = (IMPLICIT_BASE_BYTE_ << 24) + 0x030300;
-//            IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
-//                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
-            UCA_.init();
+            iimpCEGen_ = new ImplicitCEGenerator(iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
+            iUCA_.init();
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
-            UCA_.m_rules_ = (String)rb.getObject("UCARules");
+            iUCA_.m_rules_ = (String)rb.getObject("UCARules");
         }
         catch (MissingResourceException ex)
         {
-            throw ex;
+//             throw ex;
         }
         catch (IOException e)
         {
            // e.printStackTrace();
-            throw new MissingResourceException(e.getMessage(),"","");
+//             throw new MissingResourceException(e.getMessage(),"","");
         }
+
+        UCA_ = iUCA_;
+        UCA_CONSTANTS_ = iUCA_CONSTANTS_;
+        UCA_CONTRACTIONS_ = iUCA_CONTRACTIONS_;
+        impCEGen_ = iimpCEGen_;
     }
 
+    static void checkUCA() throws MissingResourceException {
+        if (UCA_ == null) {
+            throw new MissingResourceException("Collator UCA data unavailable", "", "");
+        }
+    }
+        
     // package private constructors ------------------------------------------
 
     /**
@@ -1618,6 +1619,7 @@ public final class RuleBasedCollator extends Collator
     */
     RuleBasedCollator()
     {
+        checkUCA();
         initUtility();
     }
 
@@ -1629,6 +1631,7 @@ public final class RuleBasedCollator extends Collator
      */
     RuleBasedCollator(ULocale locale)
     {
+        checkUCA();
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
         initUtility();
         if (rb != null) {
