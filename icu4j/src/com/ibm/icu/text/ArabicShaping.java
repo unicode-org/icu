@@ -571,11 +571,11 @@ public final class ArabicShaping {
                                                 char digitBase,
                                                 boolean lastStrongWasAL) {
         UBiDiProps bdp;
-		try {
-			bdp=UBiDiProps.getSingleton();
-		} catch (IOException e) {
-			throw new MissingResourceException(e.getMessage(),"","");
-		}
+        try {
+            bdp=UBiDiProps.getSingleton();
+        } catch (IOException e) {
+            throw new MissingResourceException(e.getMessage(), "(BidiProps)", "");
+        }
         digitBase -= '0'; // move common adjustment out of loop
 
         for(int i = start + length; --i >= start;) {

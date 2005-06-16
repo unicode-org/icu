@@ -119,6 +119,9 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
         BreakIterator iter = null;
         ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
+        if (bundle == null) {
+            throw new MissingResourceException("No ICU Data", "BreakIteratorRules", where.toString());
+        }
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
         String rules = bundle.getString(rulesName);
         if (classNames[kind].equals("RuleBasedBreakIterator")) {
@@ -180,5 +183,4 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         iter.setLocale(uloc, uloc);
         return iter;
     }
-
 }

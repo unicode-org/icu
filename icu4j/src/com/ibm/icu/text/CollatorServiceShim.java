@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2003-2004, International Business Machines Corporation and         *
+* Copyright (C) 2003-2005, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,6 +8,7 @@
 package com.ibm.icu.text;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleService;
@@ -31,6 +32,9 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         try {
             ULocale[] actualLoc = new ULocale[1];
             Collator coll = (Collator)service.get(locale, actualLoc);
+            if (coll == null) {
+                throw new MissingResourceException("Could not locate Collator data", "", "");
+            }
             coll = (Collator) coll.clone();
             coll.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
             return coll;
@@ -119,7 +123,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             if (actualIDReturn != null) {
                 actualIDReturn[0] = "root";
             }
-            return new RuleBasedCollator(ULocale.ROOT);
+            try {
+                return new RuleBasedCollator(ULocale.ROOT);
+            }
+            catch (MissingResourceException e) {
+                return null;
+            }
         }
     }
     private static ICULocaleService service = new CService();

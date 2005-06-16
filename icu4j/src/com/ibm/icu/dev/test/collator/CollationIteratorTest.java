@@ -38,7 +38,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             c = new RuleBasedCollator("&a < b < c & ab = d");
         } catch (Exception e) {
-            errln("Couldn't create a RuleBasedCollator.");
+            warnln("Couldn't create a RuleBasedCollator.");
             return;
         }
     
@@ -95,7 +95,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
-            errln("Fail to create RuleBasedCollator");
+            warnln("Fail to create RuleBasedCollator");
             return;
         }
         char ch = 0;
@@ -609,7 +609,7 @@ public class CollationIteratorTest extends TestFmwk {
             }
         }
         catch (Exception e) {
-            errln("Error running discontiguous tests " + e.toString());
+            warnln("Error running discontiguous tests " + e.toString());
         }
     }
 
@@ -631,7 +631,7 @@ public class CollationIteratorTest extends TestFmwk {
             coll = new RuleBasedCollator(rules);
             coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         } catch (Exception e) {
-            errln("ERROR: in creation of collator using rules " + rules);
+            warnln("ERROR: in creation of collator using rules " + rules);
             return;
         }
         
