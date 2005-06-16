@@ -516,9 +516,16 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             do {
                 try {
                     ICUResourceBundle irb = r.get(resName);
-                    /* UResourceBundle urb = */irb.get(kwVal);
+                    UResourceBundle urb = irb.get(kwVal);
+                    
                     // if we didn't fail before this..
                     fullBase = r.getULocale();
+                    
+                    // If the fetched item (urb) is in a different locale than our outer locale (r/fullBase)
+                    // then we are in a 'fallback' situation. treat as a missing resource situation.
+                    if(!fullBase.toString().equals(urb.getLocale().toString())) {
+                    	fullBase = null; // fallback condition. Loop and try again.
+                    }
 
                     // If we fell back to an ancestor of the old 'default',
                     // we need to re calculate the "default" keyword.
