@@ -76,7 +76,7 @@ public class CollationAPITest extends TestFmwk {
             errln("Non-CollationKey comparison");
         }
         catch (Exception e) {
-        	logln("PASS: Non-CollationKey comparison failed as expected");
+                logln("PASS: Non-CollationKey comparison failed as expected");
         }
         if (sortk1.equals(fake)) {
             errln("Non-CollationKey comparison");
@@ -186,14 +186,14 @@ public class CollationAPITest extends TestFmwk {
             errln("Constructor taking an array and a size > array.length "
                   + "expected to throw an exception"); 
         } catch (IndexOutOfBoundsException e) {
-        	logln("PASS: Constructor failed as expected");
+                logln("PASS: Constructor failed as expected");
         }
         try {
             key = new RawCollationKey(array, -1);
             errln("Constructor taking an array and a size < 0 "
                   + "expected to throw an exception"); 
         } catch (IndexOutOfBoundsException e) {
-        	logln("PASS: Constructor failed as expected");
+                logln("PASS: Constructor failed as expected");
         }
         key = new RawCollationKey(array, array.length >> 1);
         if (key.bytes != array || key.size != (array.length >> 1)) {
@@ -254,7 +254,7 @@ public class CollationAPITest extends TestFmwk {
             col.compare(die, test1);
             errln("Non-Strings should fail col.compare(Object, Object)");
         } catch (Exception e) {
-        	logln("PASS: Non-Strings comparison failed as expected");
+                logln("PASS: Non-Strings comparison failed as expected");
         }
     }
     
@@ -572,7 +572,8 @@ public class CollationAPITest extends TestFmwk {
         try {
             col1 = new RuleBasedCollator(ruleset1);
         } catch (Exception e) {
-            errln("RuleBased Collator creation failed.");
+            // only first error needs to be a warning since we exit function 
+            warnln("RuleBased Collator creation failed.");
             return;
         }
     
@@ -588,8 +589,10 @@ public class CollationAPITest extends TestFmwk {
             col3 = new RuleBasedCollator(ruleset3);
             errln("Failure: Empty rules for the collator should fail");
             return;
+        } catch (MissingResourceException e) {
+            warnln(e.getMessage());
         } catch (Exception e) {
-        	logln("PASS: Empty rules for the collator failed as expected");
+            logln("PASS: Empty rules for the collator failed as expected");
         }
         
         Locale locale = new Locale("aa", "AA");
@@ -737,7 +740,7 @@ public class CollationAPITest extends TestFmwk {
                     }
                 }
             } catch (Exception e) {
-                errln("Couldn't open collator with rules "+ rules[i]);
+                warnln("Couldn't open collator with rules "+ rules[i]);
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 
 import java.util.Locale;
 import java.util.Set;
+import java.util.MissingResourceException;
 
 //import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -86,6 +87,9 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         ULocale[] actualLoc = new ULocale[1];
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
+        if (fmt == null) {
+            throw new MissingResourceException("Unable to construct NumberFormat", "", "");
+        }
         fmt = (NumberFormat)fmt.clone();
 
         ULocale uloc = actualLoc[0];

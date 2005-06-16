@@ -182,7 +182,7 @@ public class CollationMiscTest extends TestFmwk {
             // logln("Rules starter for " + rules);
             genericOrderingTestWithResult(coll, s, result);
         } catch (Exception e) {
-            errln("Unable to open collator with rules " + rules);
+            warnln("Unable to open collator with rules " + rules);
         }
     }
     
@@ -317,7 +317,7 @@ public class CollationMiscTest extends TestFmwk {
             RuleBasedCollator coll = new RuleBasedCollator(string);
             logln("rule:" + coll.getRules());
         } catch (Exception e) {
-            errln("Error open RuleBasedCollator rule = " + string);
+            warnln("Error open RuleBasedCollator rule = " + string);
         }
     }
     
@@ -685,7 +685,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             myCollation = new RuleBasedCollator(gRules);
         } catch (Exception e) {
-            errln("ERROR: in creation of rule based collator");
+            warnln("ERROR: in creation of rule based collator");
             return;
         }
         // logln("Testing different case settings with custom rules");
@@ -785,7 +785,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(temp);
         } catch (Exception e) {
-            errln("fail to create RuleBasedCollator");
+            warnln("fail to create RuleBasedCollator");
             return;
         }
         
@@ -802,7 +802,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(temp);
         } catch (Exception e) {
-            errln("fail to create RuleBasedCollator");
+            warnln("fail to create RuleBasedCollator");
             return;
         }
         
@@ -1010,7 +1010,7 @@ public class CollationMiscTest extends TestFmwk {
             RuleBasedCollator coll = new RuleBasedCollator(rulez);
             logln("rule:" + coll.getRules());
         } catch (Exception e) {
-        
+            warnln(e.getMessage());
         }
     }
     
@@ -1062,7 +1062,8 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 rbc = new RuleBasedCollator(rule[i]); 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                warnln(e.getMessage());
+                return;
             }
             iter1 = rbc.getCollationElementIterator("CH"); 
             iter2 = rbc.getCollationElementIterator("\u0427");
@@ -1175,7 +1176,7 @@ public class CollationMiscTest extends TestFmwk {
                 logln(" credundant Rule:" + ((RuleBasedCollator)credundant).getRules());
                 logln(" cresulting Rule:" + ((RuleBasedCollator)cresulting).getRules());
             } catch (Exception e) {
-                errln("Cannot create RuleBasedCollator");
+                warnln("Cannot create RuleBasedCollator");
             }
             //testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
             // logln("testing using data\n");
@@ -1212,7 +1213,7 @@ public class CollationMiscTest extends TestFmwk {
                 logln(" credundant Rule:" + ((RuleBasedCollator)credundant).getRules());
                 logln(" cresulting Rule:" + ((RuleBasedCollator)cresulting).getRules());
             } catch (Exception e) {
-                
+                warnln(e.getMessage());
             }
             // testAgainstUCA still doesn't handle expansions correctly, so this is not run 
             // as a hard error test, but only in information mode 
@@ -1247,7 +1248,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(rlz);
         } catch (Exception e) {
-            errln("Unable to open collator with rules" + rules);
+            warnln("Unable to open collator with rules" + rules);
             return;
         }
         // logln("Using start of korean rules\n");
@@ -1447,7 +1448,7 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 coll = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                errln("Collator creation failed " + testrules[i]);
+                warnln("Collator creation failed " + testrules[i]);
                 return;
             }
             try {
@@ -1555,7 +1556,7 @@ public class CollationMiscTest extends TestFmwk {
             try {
                 coll = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                errln("Collator creation failed " + testrules[i]);
+                warnln("Collator creation failed " + testrules[i]);
                 return;
             }
             
@@ -1575,7 +1576,7 @@ public class CollationMiscTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(rules);
         } catch (Exception e) {
-            errln("Collator creation failed " + rules);
+            warnln("Collator creation failed " + rules);
             return;
         }
         CollationTest.doTest(this, (RuleBasedCollator)coll, src, tgt, 1);
@@ -1625,7 +1626,7 @@ public class CollationMiscTest extends TestFmwk {
                 }
                 prevrule = rule;
             } catch (Exception e) {
-                errln("Error retrieving resource bundle for testing: " + e.toString());
+                warnln("Error retrieving resource bundle for testing: " + e.toString());
             }
         }
     }
@@ -1659,7 +1660,7 @@ public class CollationMiscTest extends TestFmwk {
             coll.setStrength(Collator.IDENTICAL);
             CollationTest.doTest(this, coll, strA, strB, 1);
         } catch (Exception e) {
-            errln(e.getMessage());
+            warnln(e.getMessage());
         }
     }
     
@@ -1767,16 +1768,16 @@ public class CollationMiscTest extends TestFmwk {
                 coll.setVariableTop("");
                 errln("Empty string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
-            	logln("PASS: Empty string failed as expected");
+                logln("PASS: Empty string failed as expected");
             }
             try {
                 coll.setVariableTop(null);
                 errln("Null string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
-            	logln("PASS: null string failed as expected");
+                logln("PASS: null string failed as expected");
             }
         } catch (Exception e) {
-            errln("Error creating RuleBasedCollator");
+            warnln("Error creating RuleBasedCollator");
         }
     }
     
@@ -1897,7 +1898,7 @@ public class CollationMiscTest extends TestFmwk {
                 logln("Collator did not throw an exception");   
             }
         } catch (Exception e) {
-            errln("Error creating RuleBasedCollator with " + rule + " failed");
+            warnln("Error creating RuleBasedCollator with " + rule + " failed");
         }
     }
     
@@ -1919,10 +1920,14 @@ public class CollationMiscTest extends TestFmwk {
     
     public void TestJ3347()
     {
-        Collator coll = Collator.getInstance(Locale.FRENCH);
-        ((RuleBasedCollator)coll).setAlternateHandlingShifted(true);
-        if (coll.compare("6", "!6") != 0) {
-            errln("Jitterbug 3347 failed");
+        try {
+            Collator coll = Collator.getInstance(Locale.FRENCH);
+            ((RuleBasedCollator)coll).setAlternateHandlingShifted(true);
+            if (coll.compare("6", "!6") != 0) {
+                errln("Jitterbug 3347 failed");
+            }
+        } catch (Exception e) {
+            warnln("Error creating UCA collator");
         }
     }
     
@@ -2035,6 +2040,7 @@ public class CollationMiscTest extends TestFmwk {
             show(MAX_INPUT, foo);
         } catch (Exception e) {
             e.printStackTrace();
+            warnln(e.getMessage());
         } finally {
             logln("End");
         }

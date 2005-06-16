@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
@@ -81,7 +82,14 @@ public class ICUServiceThreadTest extends TestFmwk
      * sort the display names, and null for the matchID.
      */
     public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
-        Collator col = Collator.getInstance(locale);
+        Collator col;
+        try {
+            col = Collator.getInstance(locale);
+        } 
+        catch (MissingResourceException e) {
+            // if no collator resources, we can't collate
+            col = null;
+        }
         return service.getDisplayNames(locale, col, null);
     }
     private static final Random r = new Random(); // this is a multi thread test, can't 'unrandomize' 

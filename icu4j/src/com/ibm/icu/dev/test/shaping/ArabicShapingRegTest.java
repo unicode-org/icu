@@ -13,6 +13,8 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 
+import java.util.MissingResourceException;
+
 /**
  * Regression test for Arabic shaping.
  */
@@ -435,6 +437,9 @@ public class ArabicShapingRegTest extends TestFmwk {
     }
 
     public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
+        if (noData() && error != null && error instanceof MissingResourceException ) {
+            warnln(error.getMessage());
+        }
 
         StringBuffer buf = new StringBuffer();
         buf.append("*** test failure ***\n");
@@ -466,9 +471,10 @@ public class ArabicShapingRegTest extends TestFmwk {
     }
 
     private static String escapedString(String str) {
-        if(str==null){
-            return str;
+        if (str == null) {
+            return null;
         }
+
         StringBuffer buf = new StringBuffer(str.length() * 6);
         for (int i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
