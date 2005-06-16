@@ -12,9 +12,9 @@ package com.ibm.icu.text;
  * This class matches UTF-16 and UTF-32, both big- and little-endian. The
  * BOM will be used if it is present.
  * 
- * @internal.
+ * @internal
  */
-public abstract class CharsetRecog_Unicode extends CharsetRecognizer {
+abstract class CharsetRecog_Unicode extends CharsetRecognizer {
 
     /* (non-Javadoc)
      * @see com.ibm.icu.text.CharsetRecognizer#getName()

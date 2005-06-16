@@ -14,7 +14,7 @@ package com.ibm.icu.text;
  * 
  * @internal
  */
-public abstract class CharsetRecog_sbcs extends CharsetRecognizer {
+abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
     /* (non-Javadoc)
      * @see com.ibm.icu.text.CharsetRecognizer#getName()
