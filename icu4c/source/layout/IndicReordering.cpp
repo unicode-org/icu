@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -484,7 +484,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             le_bool  seenVattu = FALSE;
             le_bool  seenBelowBaseForm = FALSE;
 
-            if (classTable->isNukta(chars[postBase])) {
+            if (postBase < markStart && classTable->isNukta(chars[postBase])) {
                 postBase += 1;
             }
 
