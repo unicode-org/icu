@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2004, International Business Machines Corporation and    *
+* Copyright (C) 2002-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -114,7 +114,7 @@ public class CheckTags {
             }
 
             boolean show = !brief || last.reportError;
-           // boolean nomsg = show && brief && error;
+            // boolean nomsg = show && brief && error;
             //            System.out.println(">>> " + last + " error: " + error + " show: " + show + " nomsg: " + nomsg);
 
             if (show) {
@@ -276,30 +276,30 @@ public class CheckTags {
 
             boolean isClass = doc.isClass() || doc.isInterface();
             String header;
-        if (!isShort || isClass) {
-            header = "--- ";
-        } else {
-            header = "";
-        }
-        header += (isClass ? doc.qualifiedName() : doc.name());
+            if (!isShort || isClass) {
+                header = "--- ";
+            } else {
+                header = "";
+            }
+            header += (isClass ? doc.qualifiedName() : doc.name());
             if (doc instanceof ExecutableMemberDoc) {
                 header += ((ExecutableMemberDoc)doc).flatSignature();
             }
-        if (!isShort || isClass) {
-            header += " ---";
-        }
-        stack.push(header, isClass);
-        if (log) {
-            logln();
-        }
-        doTags(doc);
-        if (isClass) {
-            ClassDoc cdoc = (ClassDoc)doc;
-            doDocs(cdoc.fields(), "Fields", !brief);
-            doDocs(cdoc.constructors(), "Constructors", !brief);
-            doDocs(cdoc.methods(), "Methods", !brief);
-        }
-        stack.pop();
+            if (!isShort || isClass) {
+                header += " ---";
+            }
+            stack.push(header, isClass);
+            if (log) {
+                logln();
+            }
+            doTags(doc);
+            if (isClass) {
+                ClassDoc cdoc = (ClassDoc)doc;
+                doDocs(cdoc.fields(), "Fields", !brief);
+                doDocs(cdoc.constructors(), "Constructors", !brief);
+                doDocs(cdoc.methods(), "Methods", !brief);
+            }
+            stack.pop();
         }
     }
 
@@ -308,7 +308,7 @@ public class CheckTags {
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
         boolean foundDeprecatedTag = false;
-    boolean foundObsoleteTag = false;
+        boolean foundObsoleteTag = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -336,6 +336,10 @@ public class CheckTags {
                     tagErr(tag);
                     break;
                 }
+                if (tag.text().indexOf("ICU 2.8") != -1) {
+                    tagErr(tag);
+                    break;
+                }
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
                     break;
@@ -347,16 +351,16 @@ public class CheckTags {
                 if (tag.text().indexOf("ICU") == 0) {
                     foundRequiredTag = true;
                 }
-		if (tag.text().trim().length() == 0) {
-		    tagErr(tag);
-		}
+                if (tag.text().trim().length() == 0) {
+                    tagErr(tag);
+                }
                 break;
 
             case OBSOLETE:
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
                 }
-        foundObsoleteTag = true;
+                foundObsoleteTag = true;
                 foundRequiredTag = true;
                 break;
 
