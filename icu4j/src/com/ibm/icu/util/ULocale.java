@@ -784,7 +784,7 @@ public final class ULocale implements Serializable {
     /**
      * Convenience overload of ULocale(String, String, String) for 
      * compatibility with java.util.Locale.
-     * @see ULocale(String, String, String)
+     * @see #ULocale(String, String, String)
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
