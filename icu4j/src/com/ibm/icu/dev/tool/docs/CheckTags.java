@@ -292,8 +292,8 @@ public class CheckTags {
             if (log) {
                 logln();
             }
-            doTags(doc);
-            if (isClass) {
+            boolean recurse = doTags(doc);
+            if (recurse && isClass) {
                 ClassDoc cdoc = (ClassDoc)doc;
                 doDocs(cdoc.fields(), "Fields", !brief);
                 doDocs(cdoc.constructors(), "Constructors", !brief);
@@ -303,12 +303,14 @@ public class CheckTags {
         }
     }
 
-    void doTags(ProgramElementDoc doc) {
+    /** Return true if subelements of this doc should be checked */
+    boolean doTags(ProgramElementDoc doc) {
         Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
         boolean foundDeprecatedTag = false;
         boolean foundObsoleteTag = false;
+	boolean foundInternalTag = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -323,6 +325,7 @@ public class CheckTags {
 
             case INTERNAL:
                 foundRequiredTag = true;
+		foundInternalTag = true;
                 break;
 
             case DRAFT:
@@ -406,5 +409,6 @@ public class CheckTags {
         if (foundObsoleteTag && !foundDeprecatedTag) {
             errln("obsolete tag missing deprecated");
         }
+	return !foundInternalTag;
     }
 }
