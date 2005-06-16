@@ -6,6 +6,7 @@
 
 #include "cintltst.h"
 #include "unicode/ures.h"
+#include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include "unicode/uset.h"
 #include "unicode/udat.h"
@@ -1129,6 +1130,39 @@ static void TestExemplarSet(void){
     }
 }
 
+static void TestCurrencyList(void){
+    UErrorCode errorCode = U_ZERO_ERROR;
+    int32_t structLocaleCount, currencyCount;
+    UEnumeration *en = ucurr_openISOCurrencies(UCURR_ALL, &errorCode);
+    const char *isoCode, *structISOCode;
+    UResourceBundle *subBundle;
+    UResourceBundle *currencies = ures_openDirect(loadTestData(&errorCode), "structLocale", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("Can't open structLocale\n");
+        return;
+    }
+    currencies = ures_getByKey(currencies, "Currencies", currencies, &errorCode);
+    currencyCount = uenum_count(en, &errorCode);
+    structLocaleCount = ures_getSize(currencies);
+    if (currencyCount != structLocaleCount) {
+        log_err("structLocale(%d) and ISO4217(%d) currency list are out of sync.\n", structLocaleCount, currencyCount);
+#if U_CHARSET_FAMILY == U_ASCII_FAMILY
+        ures_resetIterator(currencies);
+        while ((isoCode = uenum_next(en, NULL, &errorCode)) != NULL && ures_hasNext(currencies)) {
+            subBundle = ures_getNextResource(currencies, NULL, &errorCode);
+            structISOCode = ures_getKey(subBundle);
+            ures_close(subBundle);
+            if (strcmp(structISOCode, isoCode) != 0) {
+                log_err("First difference found at structLocale(%s) and ISO4217(%s).\n", structISOCode, isoCode);
+                break;
+            }
+        }
+#endif
+    }
+    ures_close(currencies);
+    uenum_close(en);
+}
+
 #define TESTCASE(name) addTest(root, &name, "tsutil/cldrtest/" #name)
 
 void addCLDRTest(TestNode** root);
@@ -1139,4 +1173,5 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestConsistentCountryInfo);
     TESTCASE(VerifyTranslation);
     TESTCASE(TestExemplarSet);
+    TESTCASE(TestCurrencyList);
 }
