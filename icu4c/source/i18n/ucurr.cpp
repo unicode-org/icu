@@ -21,6 +21,7 @@
 #include "uassert.h"
 #include "mutex.h"
 #include "ucln_in.h"
+#include "uenumimp.h"
 
 //------------------------------------------------------------
 // Constants
@@ -717,6 +718,375 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
     // Return data[1] / 10^(data[0]).  The only actual rounding data,
     // as of this writing, is CHF { 2, 5 }.
     return double(data[1]) / POW10[data[0]];
+}
+
+U_CDECL_BEGIN
+
+typedef struct UCurrencyContext {
+    uint32_t currType; /* UCurrCurrencyType */
+    uint32_t listIdx;
+} UCurrencyContext;
+
+/*
+Please keep this list in alphabetical order.
+You can look at the CLDR supplemental data or ISO-4217 for the meaning of some
+of these items.
+ISO-4217: http://www.iso.org/iso/en/prods-services/popstds/currencycodeslist.html
+*/
+static const struct CurrencyList {
+    const char *currency;
+    uint32_t currType;
+} gCurrencyList[] = {
+    {"ADP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"AED", UCURR_CURRENCY},
+    {"AFA", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"AFN", UCURR_CURRENCY},
+    {"ALL", UCURR_CURRENCY},
+    {"AMD", UCURR_CURRENCY},
+    {"ANG", UCURR_CURRENCY},
+    {"AOA", UCURR_CURRENCY},
+    {"AOK", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"AON", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"AOR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ARA", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ARP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ARS", UCURR_CURRENCY},
+    {"ATS", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"AUD", UCURR_CURRENCY},
+    {"AWG", UCURR_CURRENCY},
+    {"AZM", UCURR_CURRENCY},
+    {"BAD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BAM", UCURR_CURRENCY},
+    {"BBD", UCURR_CURRENCY},
+    {"BDT", UCURR_CURRENCY},
+    {"BEC", UCURR_DEPRECATED},
+    {"BEF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BEL", UCURR_DEPRECATED},
+    {"BGL", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BGN", UCURR_CURRENCY},
+    {"BHD", UCURR_CURRENCY},
+    {"BIF", UCURR_CURRENCY},
+    {"BMD", UCURR_CURRENCY},
+    {"BND", UCURR_CURRENCY},
+    {"BOB", UCURR_CURRENCY},
+    {"BOP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BOV", 0},
+    {"BRB", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BRC", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BRE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BRL", UCURR_CURRENCY},
+    {"BRN", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BRR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BSD", UCURR_CURRENCY},
+    {"BTN", UCURR_CURRENCY},
+    {"BUK", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BWP", UCURR_CURRENCY},
+    {"BYB", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"BYR", UCURR_CURRENCY},
+    {"BZD", UCURR_CURRENCY},
+    {"CAD", UCURR_CURRENCY},
+    {"CDF", UCURR_CURRENCY},
+    {"CHE", 0},
+    {"CHF", UCURR_CURRENCY},
+    {"CHW", 0},
+    {"CLF", 0},
+    {"CLP", UCURR_CURRENCY},
+    {"CNY", UCURR_CURRENCY},
+    {"COP", UCURR_CURRENCY},
+    {"COU", 0},
+    {"CRC", UCURR_CURRENCY},
+    {"CSD", UCURR_CURRENCY},
+    {"CSK", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"CUP", UCURR_CURRENCY},
+    {"CVE", UCURR_CURRENCY},
+    {"CYP", UCURR_CURRENCY},
+    {"CZK", UCURR_CURRENCY},
+    {"DDM", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"DEM", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"DJF", UCURR_CURRENCY},
+    {"DKK", UCURR_CURRENCY},
+    {"DOP", UCURR_CURRENCY},
+    {"DZD", UCURR_CURRENCY},
+    {"ECS", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ECV", UCURR_DEPRECATED},
+    {"EEK", UCURR_CURRENCY},
+    {"EGP", UCURR_CURRENCY},
+    {"EQE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ERN", UCURR_CURRENCY},
+    {"ESA", UCURR_DEPRECATED},
+    {"ESB", UCURR_DEPRECATED},
+    {"ESP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ETB", UCURR_CURRENCY},
+    {"EUR", UCURR_CURRENCY},
+    {"FIM", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"FJD", UCURR_CURRENCY},
+    {"FKP", UCURR_CURRENCY},
+    {"FRF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GBP", UCURR_CURRENCY},
+    {"GEK", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GEL", UCURR_CURRENCY},
+    {"GHC", UCURR_CURRENCY},
+    {"GIP", UCURR_CURRENCY},
+    {"GMD", UCURR_CURRENCY},
+    {"GNF", UCURR_CURRENCY},
+    {"GNS", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GQE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GRD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GTQ", UCURR_CURRENCY},
+    {"GWE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"GWP", UCURR_CURRENCY},
+    {"GYD", UCURR_CURRENCY},
+    {"HKD", UCURR_CURRENCY},
+    {"HNL", UCURR_CURRENCY},
+    {"HRD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"HRK", UCURR_CURRENCY},
+    {"HTG", UCURR_CURRENCY},
+    {"HUF", UCURR_CURRENCY},
+    {"IDR", UCURR_CURRENCY},
+    {"IEP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ILP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ILS", UCURR_CURRENCY},
+    {"INR", UCURR_CURRENCY},
+    {"IQD", UCURR_CURRENCY},
+    {"IRR", UCURR_CURRENCY},
+    {"ISK", UCURR_CURRENCY},
+    {"ITL", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"JMD", UCURR_CURRENCY},
+    {"JOD", UCURR_CURRENCY},
+    {"JPY", UCURR_CURRENCY},
+    {"KES", UCURR_CURRENCY},
+    {"KGS", UCURR_CURRENCY},
+    {"KHR", UCURR_CURRENCY},
+    {"KMF", UCURR_CURRENCY},
+    {"KPW", UCURR_CURRENCY},
+    {"KRW", UCURR_CURRENCY},
+    {"KWD", UCURR_CURRENCY},
+    {"KYD", UCURR_CURRENCY},
+    {"KZT", UCURR_CURRENCY},
+    {"LAK", UCURR_CURRENCY},
+    {"LBP", UCURR_CURRENCY},
+    {"LKR", UCURR_CURRENCY},
+    {"LRD", UCURR_CURRENCY},
+    {"LSL", UCURR_CURRENCY},
+    {"LSM", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"LTL", UCURR_CURRENCY},
+    {"LTT", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"LUC", UCURR_DEPRECATED},
+    {"LUF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"LUL", UCURR_DEPRECATED},
+    {"LVL", UCURR_CURRENCY},
+    {"LVR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"LYD", UCURR_CURRENCY},
+    {"MAD", UCURR_CURRENCY},
+    {"MAF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"MDL", UCURR_CURRENCY},
+    {"MGA", UCURR_CURRENCY},
+    {"MGF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"MKD", UCURR_CURRENCY},
+    {"MLF", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"MMK", UCURR_CURRENCY},
+    {"MNT", UCURR_CURRENCY},
+    {"MOP", UCURR_CURRENCY},
+    {"MRO", UCURR_CURRENCY},
+    {"MTL", UCURR_CURRENCY},
+    {"MTP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"MUR", UCURR_CURRENCY},
+    {"MVR", UCURR_CURRENCY},
+    {"MWK", UCURR_CURRENCY},
+    {"MXN", UCURR_CURRENCY},
+    {"MXP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"MXV", 0},
+    {"MYR", UCURR_CURRENCY},
+    {"MZE", UCURR_CURRENCY},
+    {"MZM", UCURR_CURRENCY},
+    {"NAD", UCURR_CURRENCY},
+    {"NGN", UCURR_CURRENCY},
+    {"NIC", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"NIO", UCURR_CURRENCY},
+    {"NLG", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"NOK", UCURR_CURRENCY},
+    {"NPR", UCURR_CURRENCY},
+    {"NZD", UCURR_CURRENCY},
+    {"OMR", UCURR_CURRENCY},
+    {"PAB", UCURR_CURRENCY},
+    {"PEI", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"PEN", UCURR_CURRENCY},
+    {"PES", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"PGK", UCURR_CURRENCY},
+    {"PHP", UCURR_CURRENCY},
+    {"PKR", UCURR_CURRENCY},
+    {"PLN", UCURR_CURRENCY},
+    {"PLZ", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"PTE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"PYG", UCURR_CURRENCY},
+    {"QAR", UCURR_CURRENCY},
+    {"RHD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ROL", UCURR_CURRENCY},
+    {"RUB", UCURR_CURRENCY},
+    {"RUR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"RWF", UCURR_CURRENCY},
+    {"SAR", UCURR_CURRENCY},
+    {"SBD", UCURR_CURRENCY},
+    {"SCR", UCURR_CURRENCY},
+    {"SDD", UCURR_CURRENCY},
+    {"SDP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"SEK", UCURR_CURRENCY},
+    {"SGD", UCURR_CURRENCY},
+    {"SHP", UCURR_CURRENCY},
+    {"SIT", UCURR_CURRENCY},
+    {"SKK", UCURR_CURRENCY},
+    {"SLL", UCURR_CURRENCY},
+    {"SOS", UCURR_CURRENCY},
+    {"SRD", UCURR_CURRENCY},
+    {"SRG", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"STD", UCURR_CURRENCY},
+    {"SUR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"SVC", UCURR_CURRENCY},
+    {"SYP", UCURR_CURRENCY},
+    {"SZL", UCURR_CURRENCY},
+    {"THB", UCURR_CURRENCY},
+    {"TJR", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"TJS", UCURR_CURRENCY},
+    {"TMM", UCURR_CURRENCY},
+    {"TND", UCURR_CURRENCY},
+    {"TOP", UCURR_CURRENCY},
+    {"TPE", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"TRL", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"TRY", UCURR_CURRENCY},
+    {"TTD", UCURR_CURRENCY},
+    {"TWD", UCURR_CURRENCY},
+    {"TZS", UCURR_CURRENCY},
+    {"UAH", UCURR_CURRENCY},
+    {"UAK", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"UGS", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"UGX", UCURR_CURRENCY},
+    {"USD", UCURR_CURRENCY},
+    {"USN", 0},
+    {"USS", 0},
+    {"UYP", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"UYU", UCURR_CURRENCY},
+    {"UZS", UCURR_CURRENCY},
+    {"VEB", UCURR_CURRENCY},
+    {"VND", UCURR_CURRENCY},
+    {"VUV", UCURR_CURRENCY},
+    {"WST", UCURR_CURRENCY},
+    {"XAF", UCURR_CURRENCY},
+    {"XAG", 0},
+    {"XAU", 0},
+    {"XBA", 0},
+    {"XBB", 0},
+    {"XBC", 0},
+    {"XBD", 0},
+    {"XCD", UCURR_CURRENCY},
+    {"XDR", 0},
+    {"XEU", UCURR_DEPRECATED},
+    {"XFO", 0},
+    {"XFU", 0},
+    {"XOF", UCURR_CURRENCY},
+    {"XPD", 0},
+    {"XPF", UCURR_CURRENCY},
+    {"XPT", 0},
+    {"XRE", 0},
+    {"XTS", 0},
+    {"XXX", 0},
+    {"YDD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"YER", UCURR_CURRENCY},
+    {"YUD", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"YUM", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"YUN", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ZAL", 0},
+    {"ZAR", UCURR_CURRENCY},
+    {"ZMK", UCURR_CURRENCY},
+    {"ZRN", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ZRZ", UCURR_CURRENCY|UCURR_DEPRECATED},
+    {"ZWD", UCURR_CURRENCY},
+    { NULL, 0 } // Leave here to denote the end of the list.
+};
+
+#define UCURR_MATCHES_BITMASK(variable, typeToMatch) \
+    ((typeToMatch) == UCURR_ALL || (variable) == (typeToMatch))
+
+static int32_t U_CALLCONV
+ucurr_countCurrencyList(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+    UCurrencyContext *myContext = (UCurrencyContext *)(enumerator->context);
+    uint32_t currType = myContext->currType;
+    int32_t count = 0;
+
+    /* Count the number of items matching the type we are looking for. */
+    for (int32_t idx = 0; gCurrencyList[idx].currency != NULL; idx++) {
+        if (UCURR_MATCHES_BITMASK(gCurrencyList[idx].currType, currType)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+static const char* U_CALLCONV
+ucurr_nextCurrencyList(UEnumeration *enumerator,
+                        int32_t* resultLength,
+                        UErrorCode *pErrorCode)
+{
+    UCurrencyContext *myContext = (UCurrencyContext *)(enumerator->context);
+
+    /* Find the next in the list that matches the type we are looking for. */
+    while (myContext->listIdx < (sizeof(gCurrencyList)/sizeof(gCurrencyList[0]))-1) {
+        const struct CurrencyList *currItem = &gCurrencyList[myContext->listIdx++];
+        if (UCURR_MATCHES_BITMASK(currItem->currType, myContext->currType))
+        {
+            if (resultLength) {
+                *resultLength = 3; /* Currency codes are only 3 chars long */
+            }
+            return currItem->currency;
+        }
+    }
+    /* We enumerated too far. */
+    *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    return NULL;
+}
+
+static void U_CALLCONV
+ucurr_resetCurrencyList(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+    ((UCurrencyContext *)(enumerator->context))->listIdx = 0;
+}
+
+static void U_CALLCONV
+ucurr_closeCurrencyList(UEnumeration *enumerator) {
+    uprv_free(enumerator->context);
+    uprv_free(enumerator);
+}
+
+static const UEnumeration gEnumCurrencyList = {
+    NULL,
+    NULL,
+    ucurr_closeCurrencyList,
+    ucurr_countCurrencyList,
+    uenum_unextDefault,
+    ucurr_nextCurrencyList,
+    ucurr_resetCurrencyList
+};
+U_CDECL_END
+
+U_CAPI UEnumeration * U_EXPORT2
+ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode) {
+    UEnumeration *myEnum = NULL;
+    UCurrencyContext *myContext;
+
+    myEnum = (UEnumeration*)uprv_malloc(sizeof(UEnumeration));
+    if (myEnum == NULL) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    uprv_memcpy(myEnum, &gEnumCurrencyList, sizeof(UEnumeration));
+    myContext = (UCurrencyContext*)uprv_malloc(sizeof(UCurrencyContext));
+    if (myContext == NULL) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(myEnum);
+        return NULL;
+    }
+    myContext->currType = currType;
+    myContext->listIdx = 0;
+    myEnum->context = myContext;
+    return myEnum;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

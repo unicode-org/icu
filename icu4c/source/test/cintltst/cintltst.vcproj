@@ -391,6 +391,9 @@
 				RelativePath=".\cnumtst.h">
 			</File>
 			<File
+				RelativePath=".\currtest.c">
+			</File>
+			<File
 				RelativePath=".\utmstest.c">
 			</File>
 		</Filter>

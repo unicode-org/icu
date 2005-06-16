@@ -31,7 +31,7 @@ void addCollTest(TestNode** root);
 void addCollTest(TestNode** root)
 {
     addCollAPITest(root);
-    addCurrencyTest(root);
+    addCurrencyCollTest(root);
     addNormTest(root);
     addGermanCollTest(root);
     addSpanishCollTest(root);
