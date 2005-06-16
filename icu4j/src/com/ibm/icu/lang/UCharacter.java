@@ -2947,7 +2947,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return true if the code point is a space character as
      * defined by java.lang.Character.isSpace.
      * @draft ICU 3.4
-     * @deprecated
+     * @deprecated (Java)
      */
     public static boolean isSpace(int ch) {
 	return java.lang.Character.isSpace((char)(ch & 0xffff));
@@ -3066,7 +3066,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point
      * @return true if the code point can start a java identifier.
      * @draft ICU 3.4
-     * @deprecated
+     * @deprecated (Java)
      */
     public static boolean isJavaLetter(int cp) {
 	return isJavaIdentifierStart(cp);
@@ -3079,7 +3079,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point
      * @return true if the code point can continue a java identifier.
      * @draft ICU 3.4
-     * @deprecated
+     * @deprecated (Java)
      */
     public static boolean isJavaLetterOrDigit(int cp) {
 	return isJavaLetterOrDigit(cp);

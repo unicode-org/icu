@@ -2970,6 +2970,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int compareTo(Calendar that) {
         long v = getTimeInMillis() - that.getTimeInMillis();
@@ -2980,6 +2981,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Implement comparable API as a convenience override of
      * {@link #compareTo(Calendar)}.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int compareTo(Object that) {
         return compareTo((Calendar)that);

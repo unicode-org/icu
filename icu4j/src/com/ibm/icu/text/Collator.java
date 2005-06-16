@@ -187,7 +187,8 @@ public abstract class Collator implements Comparator, Cloneable
      * This is for backwards compatibility with Java APIs only.  It
      * should not be used, IDENTICAL should be used instead.  ICU's
      * collation does not support Java's FULL_DECOMPOSITION mode.
-     * @since ICU 3.4
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int FULL_DECOMPOSITION = IDENTICAL;
 

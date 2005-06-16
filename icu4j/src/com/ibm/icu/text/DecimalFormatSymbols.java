@@ -326,6 +326,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * ICU clients should use the Currency API directly.
      * @return the currency used, or null
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Currency getCurrency() {
         return currency;
@@ -342,9 +343,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      *
      * @param currency the new currency to be used
      * @throws NullPointerException if <code>currency</code> is null
-     * @draft ICU 3.4
      * @see #setCurrencySymbol
      * @see #setInternationalCurrencySymbol
+     *
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setCurrency(Currency currency) {
         if (currency == null) {
