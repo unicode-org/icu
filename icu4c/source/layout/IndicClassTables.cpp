@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -105,7 +105,7 @@ static const IndicClassTable::CharClass punjCharClasses[] =
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _xx, _iv, // 0A00 - 0A0F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0A10 - 0A1F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _bb, // 0A20 - 0A2F
-    _vt, _xx, _ct, _ct, _xx, _bb, _ct, _xx, _ct, _bb, _xx, _xx, _nu, _xx, _dr, _dl, // 0A30 - 0A3F
+    _vt, _xx, _ct, _cn, _xx, _bb, _cn, _xx, _ct, _bb, _xx, _xx, _nu, _xx, _dr, _dl, // 0A30 - 0A3F
     _dr, _db, _db, _xx, _xx, _xx, _xx, _da, _da, _xx, _xx, _da, _da, _vr, _xx, _xx, // 0A40 - 0A4F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _cn, _cn, _cn, _cn, _xx, _cn, _xx, // 0A50 - 0A5F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0A60 - 0A6F

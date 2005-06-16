@@ -325,8 +325,8 @@ static const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
 //   xx  vm  sm  iv  i2  ct  cn  nu  dv  s1  s2  s3  vr  zw
     { 1,  1,  1,  5,  8,  3,  2,  1,  5,  9,  5,  1,  1,  1}, //  0 - ground state
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  1 - exit state
-    {-1,  6,  1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, //  2 - consonant
-    {-1,  6,  1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, -1}, //  3 - consonant with nukta
+    {-1,  6,  1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, //  2 - consonant with nukta
+    {-1,  6,  1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, -1}, //  3 - consonant
     {-1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
     {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
