@@ -255,11 +255,11 @@
 
     <target name="buildmangle" depends="init,anthack1" if="version.1.4">
         <javac includes="com/ibm/icu/dev/tool/docs/CodeMangler.java"
-        srcdir="${src.dir}"
-        destdir="${build.dir}"
-        classpathref="build.classpath"
-        source="${icu4j.javac.source}"
-        target="${icu4j.javac.target}"/>
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"/>
     </target>
 
     <target name="mangle" depends="buildmangle" if="version.1.4">
@@ -277,17 +277,17 @@
 
     <target name="indices" depends="icudata,tools">
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/" />
-	</java>
+            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/" />
+        </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/rbnf" />
-	</java>
+            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/rbnf" />
+        </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/coll" />
-	</java>
+            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/coll" />
+        </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-	    <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/translit" />
-	</java>
+            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/translit" />
+        </java>
     </target>
 
     <target name="one4tools" depends="anthack1,anthack2,mangle" if="version.1.4">
@@ -364,11 +364,11 @@
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml"
-	        todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
+            todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
-   		<copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
-	            todir="${build.dir}/com/ibm/icu/dev/data"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
+            todir="${build.dir}/com/ibm/icu/dev/data"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -562,39 +562,38 @@
     </target>
 
     <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
-	    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-	    <!-- jvmarg value="-verbose"/ -->
-	        <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
-	        <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
-	        <jvmarg value="-Djava.security.manager"/>
-	        <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
-	        <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
-	        <arg value="-w"/>
-	        <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
-	        <classpath>
-	            <pathelement location="clover.jar"/>
-	            <pathelement location="${jar.file}"/>
-	            <pathelement location="${testjar.file}"/>
-	        </classpath>
-	    </java>
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+        <!-- jvmarg value="-verbose"/ -->
+        <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
+        <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
+            <jvmarg value="-Djava.security.manager"/>
+            <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
+            <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
+            <arg value="-w"/>
+            <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+            <classpath>
+                <pathelement location="clover.jar"/>
+                <pathelement location="${jar.file}"/>
+                <pathelement location="${testjar.file}"/>
+            </classpath>
+        </java>
     </target>
     <target name="noDataCheck" depends="core, tests" description="runs the tests when no data is present">
-    	<delete>
-    		<fileset dir="${build.dir}/${icu4j.data.path}"/>
+        <delete>
+            <fileset dir="${build.dir}/${icu4j.data.path}"/>
             <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
-    		<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
-    		<fileset dir="${build.dir}/${icu4j.testdata.path}"/>
-    		<fileset dir="${build.dir}/${icu4j.testdata.path}../"/>    		
-    	</delete>
-	    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-	        <arg value="-nothrow"/>
-	    	<arg value="-nodata"/>
-	    	<!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
-	        <classpath>
-	            <pathelement location="clover.jar"/>
-	            <pathelement location="${build.dir}"/>
-	        </classpath>
-	    </java>
+            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
+            <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
+            <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
+        </delete>
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-nothrow"/>
+            <arg value="-nodata"/>
+            <classpath>
+                <pathelement location="clover.jar"/>
+                <pathelement location="${build.dir}"/>
+            </classpath>
+        </java>
     </target>
     <target name="_requires14" unless="version.1.4">
         <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4"/>
@@ -623,8 +622,8 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.2"/>
-                <param name="-output" value="${api.dir}/icu4j32.api"/>
+                <param name="-name" value="ICU4J 3.4"/>
+                <param name="-output" value="${api.dir}/icu4j34.api"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
@@ -633,13 +632,13 @@
     <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
             <arg value="-old:"/>
-            <arg value="${api.dir}/icu4j30.api.gz"/>
-            <arg value="-new:"/>
             <arg value="${api.dir}/icu4j32.api.gz"/>
-            <!-- arg value="-html"/>  -->
+            <arg value="-new:"/>
+            <arg value="${api.dir}/icu4j34.api.gz"/>
+            <arg value="-html"/>
             <arg value="-out:"/>
-            <!-- arg value="${api.dir}/icu4j_compare_30_32.html"/> -->
-            <arg value="icu4j_compare_30_32.txt"/>
+            <arg value="${api.dir}/icu4j_compare_32_34.html"/>
+            <!-- arg value="icu4j_compare_32_34.txt"/> -->
         </java>
     </target>
 
@@ -762,7 +761,7 @@
     </target>
     
     <target name="copyAllICUData" depends="init">
-         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
     </target>
 
     <target name="moduleJar" depends="init" description="modular build of 'icu4j.jar' jar file">
@@ -836,7 +835,7 @@
     </target>
     
     <target name="propertiesClasses">
-             <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
+        <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -875,7 +874,7 @@
             Targets to build only Compression API API and tests
      -->
     <target name="compression" depends="init" description="modular build of compression services">
-         <javac includes="com/ibm/icu/text/SCSU.java, com/ibm/icu/text/UnicodeCompressor.java, com/ibm/icu/text/UnicodeDecompressor.java"
+        <javac includes="com/ibm/icu/text/SCSU.java, com/ibm/icu/text/UnicodeCompressor.java, com/ibm/icu/text/UnicodeDecompressor.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -980,7 +979,7 @@
      -->
 
     <target name="breakIterator" depends="init,copyFullPropsData" description="modular build of break iterator services">
-         <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/text/UnicodeSetIterator.java"
+        <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/text/UnicodeSetIterator.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -1009,13 +1008,13 @@
             Targets to build only StringPrep and IDNA API
      -->    
     <target name="copyStringPrepData" depends="init">
-      <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
             <patternset includes="**/*.spp"/>
-      </unjar>
+        </unjar>
     </target>
 
     <target name="stringPrep" depends="init,normalizer,copyStringPrepData" description="modular build of stringprep services">
-         <javac includes="com/ibm/icu/text/*StringPrep*.java,com/ibm/icu/text/*IDNA*.java,com/ibm/icu/impl/*StringPrep*.java"
+        <javac includes="com/ibm/icu/text/*StringPrep*.java,com/ibm/icu/text/*IDNA*.java,com/ibm/icu/impl/*StringPrep*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -1036,8 +1035,8 @@
             debug="on" deprecation="off"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}">
             <patternset>
-              <include name="**/*.spp"/>
-              <include name="**/idna_rules.res"/>
+                <include name="**/*.spp"/>
+                <include name="**/idna_rules.res"/>
             </patternset>
         </unjar>
     </target>
@@ -1045,7 +1044,7 @@
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
     <target name="extraTransliteratorData" depends="init" description="build han-to-latin transliterator data (normally omitted)">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
+            <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
 

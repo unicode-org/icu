@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and         *
+* Copyright (C) 2005, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -315,7 +315,10 @@ class APIInfo {
                             if (result == 0) {
                                 result = lhi.name.compareTo(rhi.name);
                                 if (result == 0 && lhi.getVal(CAT) != CAT_CLASS) {
-                                    result = lhi.sig.compareTo(rhi.sig);
+                                    // signature change on fields ignored
+                                    if (lhi.getVal(CAT) != CAT_FIELD) {
+                                        result = lhi.sig.compareTo(rhi.sig);
+                                    }
                                 }
                             }
                         }
