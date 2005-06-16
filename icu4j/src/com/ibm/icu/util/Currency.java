@@ -229,6 +229,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * is defined.
      * @return an array of the available ulocales
      * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
