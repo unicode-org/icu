@@ -551,7 +551,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 }
 
 LayoutEngine::~LayoutEngine() {
-    reset();
+    delete fGlyphStorage;
 }
 
 U_NAMESPACE_END
