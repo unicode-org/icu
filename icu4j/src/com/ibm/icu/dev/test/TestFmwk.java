@@ -1603,7 +1603,9 @@ public class TestFmwk extends AbstractTestLog {
                 logln("OK" + message + ": "
                         + (flip ? expected + relation + actual : expected));
             } else {
-                warnln(message
+		// assert must assume errors are true errors and not just warnings
+		// so cannot warnln here
+                errln(message
                         + ": expected"
                         + (flip ? relation + expected : " " + expected
                                 + (actual != null ? relation + actual : "")));
