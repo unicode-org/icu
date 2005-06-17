@@ -1535,6 +1535,9 @@ public final class RuleBasedCollator extends Collator
      * Table for UCA and builder use
      */
     static final char UCA_CONTRACTIONS_[];
+
+    private static boolean UCA_INIT_COMPLETE;
+
     /**
      * Implicit generator
      */
@@ -1574,6 +1577,11 @@ public final class RuleBasedCollator extends Collator
         ImplicitCEGenerator iimpCEGen_ = null;
         try
         {
+            // !!! note what's going on here...
+            // even though the static init of the class is not yet complete, we
+            // instantiate an instance of the class.  So we'd better be sure that
+            // instantiation doesn't rely on the static initialization that's
+            // not complete yet!
             iUCA_ = new RuleBasedCollator();
             iUCA_CONSTANTS_ = new UCAConstants();
             iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_);
@@ -1598,10 +1606,12 @@ public final class RuleBasedCollator extends Collator
         UCA_CONSTANTS_ = iUCA_CONSTANTS_;
         UCA_CONTRACTIONS_ = iUCA_CONTRACTIONS_;
         impCEGen_ = iimpCEGen_;
+
+        UCA_INIT_COMPLETE = true;
     }
 
     static void checkUCA() throws MissingResourceException {
-        if (UCA_ == null) {
+        if (UCA_INIT_COMPLETE && UCA_ == null) {
             throw new MissingResourceException("Collator UCA data unavailable", "", "");
         }
     }
