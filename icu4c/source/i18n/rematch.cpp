@@ -6,7 +6,7 @@
 //
 /*
 **************************************************************************
-*   Copyright (C) 2002-2004 International Business Machines Corporation  *
+*   Copyright (C) 2002-2005 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -454,7 +454,7 @@ UBool RegexMatcher::find() {
             for (;;) {
                 c = inputBuf[startPos-1];
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    (c == 0x0a || c == 0x0d ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 )) {
+                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029 )) {
                         if (c == 0x0d && startPos < inputLen && inputBuf[startPos] == 0x0a) {
                             startPos++;
                         }
@@ -1234,7 +1234,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             //   end of input, succeed.
             if (fp->fInputIdx == inputLen-1) {
                 UChar32 c = fInput->char32At(fp->fInputIdx);
-                if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                if ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029) {
                     // If not in the middle of a CR/LF sequence
                     if ( !(c==0x0a && fp->fInputIdx>0 && inputBuf[fp->fInputIdx-1]==0x0d)) {
                         break;
@@ -1263,7 +1263,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                  // If we are positioned just before a new-line, succeed.
                  // It makes no difference where the new-line is within the input.
                  UChar32 c = inputBuf[fp->fInputIdx];
-                 if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                 if ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029) {
                      // At a line end, except for the odd chance of  being in the middle of a CR/LF sequence
                      if ( !(c==0x0a && fp->fInputIdx>0 && inputBuf[fp->fInputIdx-1]==0x0d)) {
                         break;                         // At new-line at end of input. Success
@@ -1293,7 +1293,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                //   unless we are at the end of input
                UChar  c = inputBuf[fp->fInputIdx - 1]; 
                if ((fp->fInputIdx < inputLen) && 
-                   (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                   ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                    //  It's a new-line.  ^ is true.  Success.
                    break;                        
                }
@@ -1545,7 +1545,7 @@ GC_Done:
                 UChar32 c;
                 U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                     // End of line in normal mode.   . does not match.
                         fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
@@ -1589,7 +1589,7 @@ GC_Done:
                 UChar32 c;
                 U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                    ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                     // End of line in normal mode.   . does not match.
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
@@ -1600,7 +1600,7 @@ GC_Done:
                 while  (fp->fInputIdx < inputLen) {
                     U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                     if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                        (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                        ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                         U16_BACK_1(inputBuf, 0, fp->fInputIdx)
                             // Scan has reached a line-end.  We are done.
                             break;
@@ -2187,7 +2187,7 @@ GC_Done:
                         UChar32   c;
                         U16_NEXT(inputBuf, ix, inputLen, c);   // c = inputBuf[ix++]
                         if (((c & 0x7f) <= 0x29) &&     
-                            (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                            ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                             //  char is a line ending.  Put the input pos back to the  
                             //    line ending char, and exit the scanning loop.
                             U16_BACK_1(inputBuf, 0, ix);
