@@ -887,8 +887,8 @@ TimeZoneTest::TestDisplayName()
         TimeZone::EDisplayType style;
         const char *expect;
     } kData[] = {
-        {FALSE, TimeZone::SHORT, "PT"},
-        {TRUE,  TimeZone::SHORT, "PT"},
+        {FALSE, TimeZone::SHORT, "PST"},
+        {TRUE,  TimeZone::SHORT, "PDT"},
         {FALSE, TimeZone::LONG,  "Pacific Standard Time"},
         {TRUE,  TimeZone::LONG,  "Pacific Daylight Time"},
 

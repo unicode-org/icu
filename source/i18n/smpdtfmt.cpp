@@ -534,7 +534,8 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*wWa*/ UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_AM_PM,
     /*hKz*/ UCAL_HOUR, UCAL_HOUR, UCAL_ZONE_OFFSET,
     /*Yeu*/ UCAL_YEAR_WOY, UCAL_DOW_LOCAL, UCAL_EXTENDED_YEAR,
-    /*gAZ*/ UCAL_JULIAN_DAY, UCAL_MILLISECONDS_IN_DAY, UCAL_ZONE_OFFSET
+    /*gAZ*/ UCAL_JULIAN_DAY, UCAL_MILLISECONDS_IN_DAY, UCAL_ZONE_OFFSET,
+        /*v*/   UCAL_ZONE_OFFSET
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -547,7 +548,8 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*wWa*/ UDAT_WEEK_OF_YEAR_FIELD, UDAT_WEEK_OF_MONTH_FIELD, UDAT_AM_PM_FIELD,
     /*hKz*/ UDAT_HOUR1_FIELD, UDAT_HOUR0_FIELD, UDAT_TIMEZONE_FIELD,
     /*Yeu*/ UDAT_YEAR_WOY_FIELD, UDAT_DOW_LOCAL_FIELD, UDAT_EXTENDED_YEAR_FIELD,
-    /*gAZ*/ UDAT_JULIAN_DAY_FIELD, UDAT_MILLISECONDS_IN_DAY_FIELD, UDAT_TIMEZONE_RFC_FIELD
+    /*gAZ*/ UDAT_JULIAN_DAY_FIELD, UDAT_MILLISECONDS_IN_DAY_FIELD, UDAT_TIMEZONE_RFC_FIELD,
+        /*v*/   UDAT_TIMEZONE_GENERIC_FIELD
 };
 
 //----------------------------------------------------------------------
@@ -689,7 +691,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // If we don't have a localized time zone name,
     // then the time zone shows up as "GMT+hh:mm" or "GMT-hh:mm" (where "hh:mm" is the
     // offset from GMT) regardless of how many z's were in the pattern symbol
-    case UDAT_TIMEZONE_FIELD: {
+    case UDAT_TIMEZONE_FIELD: 
+        case UDAT_TIMEZONE_GENERIC_FIELD: {
         UnicodeString str;
         int32_t zoneIndex = fSymbols->getZoneIndex(cal.getTimeZone().getID(str));
         if (zoneIndex == -1) {
@@ -710,15 +713,17 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         else {
           int ix;
           int zsrc = fSymbols->fZoneStringsColCount;
-          if (zsrc < 7 && count < 3) {
-            count += 2; // no generic time, default to full times
-          }
-          switch (count) {
-          case 1: ix = zsrc == 7 ? 6 : 7; break; // short generic time
-          case 2: ix = zsrc == 7 ? 5 : 6; break; // long generic time
-          case 3: ix = cal.get(UCAL_DST_OFFSET, status) != 0 ? 4 : 2; break; // short dst/std time
-          default: ix = cal.get(UCAL_DST_OFFSET, status) != 0 ? 3 : 1; break; // long dst/std time
-          }
+                  if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD && zsrc >= 7) {
+                          ix = count < 4 ? 6 : 5;
+                          if (zsrc > 7) {
+                                  ix += 1;
+                          }
+                  } else {
+                          ix = count < 4 ? 2 : 1;
+                          if (cal.get(UCAL_DST_OFFSET, status) != 0) {
+                                  ix += 2;
+                          }
+                  }
           appendTo += fSymbols->fZoneStrings[zoneIndex][ix];
         }
       }
@@ -1328,6 +1333,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return pos.getIndex();
     case UDAT_TIMEZONE_FIELD:
     case UDAT_TIMEZONE_RFC_FIELD:
+        case UDAT_TIMEZONE_GENERIC_FIELD:
         {
         // First try to parse generic forms such as GMT-07:00. Do this first
         // in case localized DateFormatZoneData contains the string "GMT"
@@ -1495,6 +1501,9 @@ SimpleDateFormat::matchZoneString(const UnicodeString& text, int32_t start, int3
       continue;
     }
 
+        // Checking long and short zones [1 & 2],
+    // and long and short daylight [3 & 4],
+    // and long and short generic [6 & 7]
     const UnicodeString& zs = fSymbols->fZoneStrings[zi][i];
     if (zs.length() > 0 && 0 == text.caseCompare(start, zs.length(), zs, 0)) {
       break;
