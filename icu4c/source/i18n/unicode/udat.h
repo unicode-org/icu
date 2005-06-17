@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2005, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -341,7 +341,14 @@ typedef enum UDateFormatField {
      */
     UDAT_TIMEZONE_RFC_FIELD = 23,
 
-    /**
+     /**
+     * FieldPosition and UFieldPosition selector for 'v' field alignment,
+     * corresponding to the UCAL_ZONE_OFFSET field.
+     * @draft ICU 3.4
+     */
+    UDAT_TIMEZONE_GENERIC_FIELD = 24,
+
+   /**
      * Number of FieldPosition and UFieldPosition selectors for 
      * DateFormat and UDateFormat.
      * Valid selectors range from 0 to UDAT_FIELD_COUNT-1.
@@ -349,7 +356,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @draft ICU 3.0
      */
-    UDAT_FIELD_COUNT = 24
+    UDAT_FIELD_COUNT = 25
 
 } UDateFormatField;
 
