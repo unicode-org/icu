@@ -80,6 +80,7 @@ class DateFormat;
  * K        hour in am/pm (0~11)    (Number)            0
  * z        time zone               (Time)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
+ * v        time zone (generic)     (Text)              Pacific Time
  * g        Julian day              (Number)            2451334
  * A        milliseconds in day     (Number)            69540000
  * '        escape for text         (Delimiter)         'Date='
@@ -90,10 +91,6 @@ class DateFormat;
  * <P>
  * (Text): 4 or more, use full form, &lt;4, use short or abbreviated form if it
  * exists. (e.g., "EEEE" produces "Monday", "EEE" produces "Mon")
- * <P>
- * (Time): 4 or 3, display long/short time zone names with daylight/standard
- * designation (e.g., Pacific Daylight Time, PDT), 2 or 1, display long/short 
- * time zone generic names (e.g., Pacific Time, PT).
  * <P>
  * (Number): the minimum number of digits. Shorter numbers are zero-padded to
  * this amount (e.g. if "m" produces "6", "mm" produces "06"). Year is handled
@@ -117,11 +114,11 @@ class DateFormat;
  * \code
  *    Format Pattern                         Result
  *    --------------                         -------
- *    "yyyy.MM.dd G 'at' HH:mm:ss zz"   ->>  1996.07.10 AD at 15:08:56 Pacific Time
+ *    "yyyy.MM.dd G 'at' HH:mm:ss vvvv" ->>  1996.07.10 AD at 15:08:56 Pacific Time
  *    "EEE, MMM d, ''yy"                ->>  Wed, July 10, '96
  *    "h:mm a"                          ->>  12:08 PM
  *    "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
- *    "K:mm a, z"                       ->>  0:00 PM, PT
+ *    "K:mm a, vvv"                     ->>  0:00 PM, PT
  *    "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  1996.July.10 AD 12:08 PM
  * \endcode
  * </pre>
