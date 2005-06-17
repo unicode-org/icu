@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="letest"
 	SccProjectName=""
 	SccLocalPath="">
@@ -61,7 +61,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -115,24 +121,32 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath=".\FontTableCache.cpp">
-			</File>
-			<File
-				RelativePath=".\PortableFontInstance.cpp">
-			</File>
-			<File
 				RelativePath=".\cmaps.cpp">
 			</File>
 			<File
+				RelativePath=".\FontTableCache.cpp">
+			</File>
+			<File
 				RelativePath=".\letest.cpp">
+			</File>
+			<File
+				RelativePath=".\PortableFontInstance.cpp">
 			</File>
 			<File
 				RelativePath=".\testdata.cpp">
@@ -142,16 +156,16 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath=".\FontTableCache.h">
-			</File>
-			<File
-				RelativePath=".\PortableFontInstance.h">
-			</File>
-			<File
 				RelativePath=".\cmaps.h">
 			</File>
 			<File
+				RelativePath=".\FontTableCache.h">
+			</File>
+			<File
 				RelativePath=".\letest.h">
+			</File>
+			<File
+				RelativePath=".\PortableFontInstance.h">
 			</File>
 			<File
 				RelativePath=".\sfnt.h">
