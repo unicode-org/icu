@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2004 International Business Machines
+﻿# Copyright (c) 2001-2005 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:  
@@ -99,7 +99,7 @@
 
 
 # . does not match new-lines
-"."                            "\u000a\u000d\u0085\u000c\u2028\u2029<0>X</0>\u000aY"
+"."                            "\u000a\u000d\u0085\u000c\u000b\u2028\u2029<0>X</0>\u000aY"
 "A."                           "A\u000a "# no match
 
 # \d for decimal digits
@@ -453,6 +453,7 @@
 "."                           2   "1<0>2</0>3\u000aXYZ"
 "."                           3   "12<0>3</0>\u000aXYZ"
 "."                           4   "123\u000a<0>X</0>YZ"    # . doesn't match newlines
+"."                           4   "123\u000b<0>X</0>YZ"
 "."                           4   "123\u000c<0>X</0>YZ"
 "."                           4   "123\u000d<0>X</0>YZ"
 "."                           4   "123\u000d\u000a<0>X</0>YZ"
@@ -460,6 +461,7 @@
 "."                           4   "123\u2028<0>X</0>YZ"
 "."                           4   "123\u2029<0>X</0>YZ"
 "."                           4s  "123<0>\u000a</0>XYZ"    # . matches any
+"."                           4s  "123<0>\u000b</0>XYZ"
 "."                           4s  "123<0>\u000c</0>XYZ"
 "."                           4s  "123<0>\u000d</0>XYZ"
 "."                           4s  "123<0>\u000d\u000a</0>XYZ"
