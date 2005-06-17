@@ -2744,10 +2744,14 @@ u_isJavaIDPart(UChar32 c);
  * Same as java.lang.Character.toLowerCase().
  *
  * This function only returns the simple, single-code point case mapping.
- * Full case mappings may result in zero, one or more code points and depend
- * on context or language etc.
+ * Full case mappings should be used whenever possible because they produce
+ * better results by working on whole strings.
+ * They take into account the string context and the language and can map
+ * to a result string with a different length as appropriate.
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
+ * See also the User Guide chapter on C/POSIX migration:
+ * http://icu.sourceforge.net/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Lowercase_Mapping of the code point, if any;
@@ -2765,10 +2769,14 @@ u_tolower(UChar32 c);
  * Same as java.lang.Character.toUpperCase().
  *
  * This function only returns the simple, single-code point case mapping.
- * Full case mappings may result in zero, one or more code points and depend
- * on context or language etc.
+ * Full case mappings should be used whenever possible because they produce
+ * better results by working on whole strings.
+ * They take into account the string context and the language and can map
+ * to a result string with a different length as appropriate.
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
+ * See also the User Guide chapter on C/POSIX migration:
+ * http://icu.sourceforge.net/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Uppercase_Mapping of the code point, if any;
@@ -2786,10 +2794,14 @@ u_toupper(UChar32 c);
  * Same as java.lang.Character.toTitleCase().
  *
  * This function only returns the simple, single-code point case mapping.
- * Full case mappings may result in zero, one or more code points and depend
- * on context or language etc.
+ * Full case mappings should be used whenever possible because they produce
+ * better results by working on whole strings.
+ * They take into account the string context and the language and can map
+ * to a result string with a different length as appropriate.
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
+ * See also the User Guide chapter on C/POSIX migration:
+ * http://icu.sourceforge.net/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Titlecase_Mapping of the code point, if any;
@@ -2827,10 +2839,14 @@ u_totitle(UChar32 c);
  * itself is returned.
  *
  * This function only returns the simple, single-code point case mapping.
- * Full case mappings may result in zero, one or more code points and depend
- * on context or language etc.
+ * Full case mappings should be used whenever possible because they produce
+ * better results by working on whole strings.
+ * They take into account the string context and the language and can map
+ * to a result string with a different length as appropriate.
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
+ * See also the User Guide chapter on C/POSIX migration:
+ * http://icu.sourceforge.net/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
