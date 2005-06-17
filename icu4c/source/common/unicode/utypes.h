@@ -38,6 +38,10 @@
 #include "unicode/uversion.h"
 #include "unicode/uconfig.h"
 
+#if !U_DEFAULT_SHOW_DRAFT && !defined(U_SHOW_DRAFT_API)
+#define U_HIDE_DRAFT_API 1
+#endif
+
 #ifdef U_HIDE_DRAFT_API
 #include "unicode/udraft.h"
 #endif

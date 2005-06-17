@@ -206,6 +206,11 @@ typedef unsigned int uint32_t;
 #define U_ENABLE_TRACING 1
 #endif
 
+/* Do we allow ICU users to use the draft APIs by default? */
+#ifndef U_DEFAULT_SHOW_DRAFT
+#define U_DEFAULT_SHOW_DRAFT 1
+#endif
+
 /* Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX 0
 #define U_LIB_SUFFIX_C_NAME 

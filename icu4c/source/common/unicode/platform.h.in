@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -190,6 +190,11 @@ typedef unsigned int uint32_t;
 /* Determine whether to enable tracing. */
 #ifndef U_ENABLE_TRACING
 #define U_ENABLE_TRACING @U_ENABLE_TRACING@
+#endif
+
+/* Do we allow ICU users to use the draft APIs by default? */
+#ifndef U_DEFAULT_SHOW_DRAFT
+#define U_DEFAULT_SHOW_DRAFT @U_DEFAULT_SHOW_DRAFT@
 #endif
 
 /* Define the library suffix in a C syntax. */
