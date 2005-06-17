@@ -17,39 +17,39 @@ U_NAMESPACE_BEGIN
 enum
 {
     // Split matra table indices
-    _x1 = 1 << IndicClassTable::CF_INDEX_SHIFT,
-    _x2 = 2 << IndicClassTable::CF_INDEX_SHIFT,
-    _x3 = 3 << IndicClassTable::CF_INDEX_SHIFT,
-    _x4 = 4 << IndicClassTable::CF_INDEX_SHIFT,
-    _x5 = 5 << IndicClassTable::CF_INDEX_SHIFT,
-    _x6 = 6 << IndicClassTable::CF_INDEX_SHIFT,
-    _x7 = 7 << IndicClassTable::CF_INDEX_SHIFT,
-    _x8 = 8 << IndicClassTable::CF_INDEX_SHIFT,
-    _x9 = 9 << IndicClassTable::CF_INDEX_SHIFT,
+    _x1 = 1 << CF_INDEX_SHIFT,
+    _x2 = 2 << CF_INDEX_SHIFT,
+    _x3 = 3 << CF_INDEX_SHIFT,
+    _x4 = 4 << CF_INDEX_SHIFT,
+    _x5 = 5 << CF_INDEX_SHIFT,
+    _x6 = 6 << CF_INDEX_SHIFT,
+    _x7 = 7 << CF_INDEX_SHIFT,
+    _x8 = 8 << CF_INDEX_SHIFT,
+    _x9 = 9 << CF_INDEX_SHIFT,
 
     // simple classes
-    _xx = IndicClassTable::CC_RESERVED,
-    _ma = IndicClassTable::CC_VOWEL_MODIFIER | IndicClassTable::CF_POS_ABOVE,
-    _mp = IndicClassTable::CC_VOWEL_MODIFIER | IndicClassTable::CF_POS_AFTER,
-    _sa = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_ABOVE,
-    _sb = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_BELOW,
-    _iv = IndicClassTable::CC_INDEPENDENT_VOWEL,
-    _i2 = IndicClassTable::CC_INDEPENDENT_VOWEL_2,
-    _ct = IndicClassTable::CC_CONSONANT | IndicClassTable::CF_CONSONANT,
-    _cn = IndicClassTable::CC_CONSONANT_WITH_NUKTA | IndicClassTable::CF_CONSONANT,
-    _nu = IndicClassTable::CC_NUKTA,
-    _dv = IndicClassTable::CC_DEPENDENT_VOWEL,
-    _dl = _dv | IndicClassTable::CF_POS_BEFORE,
-    _db = _dv | IndicClassTable::CF_POS_BELOW,
-    _da = _dv | IndicClassTable::CF_POS_ABOVE,
-    _dr = _dv | IndicClassTable::CF_POS_AFTER,
-    _lm = _dv | IndicClassTable::CF_LENGTH_MARK,
-    _l1 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_1 | IndicClassTable::CF_POS_BEFORE,
-    _a1 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_1 | IndicClassTable::CF_POS_ABOVE,
-    _r2 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_2 | IndicClassTable::CF_POS_AFTER,
-    _m2 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_2 | IndicClassTable::CF_LENGTH_MARK,
-    _m3 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_3 | IndicClassTable::CF_LENGTH_MARK,
-    _vr = IndicClassTable::CC_VIRAMA,
+    _xx = CC_RESERVED,
+    _ma = CC_VOWEL_MODIFIER | CF_POS_ABOVE,
+    _mp = CC_VOWEL_MODIFIER | CF_POS_AFTER,
+    _sa = CC_STRESS_MARK | CF_POS_ABOVE,
+    _sb = CC_STRESS_MARK | CF_POS_BELOW,
+    _iv = CC_INDEPENDENT_VOWEL,
+    _i2 = CC_INDEPENDENT_VOWEL_2,
+    _ct = CC_CONSONANT | CF_CONSONANT,
+    _cn = CC_CONSONANT_WITH_NUKTA | CF_CONSONANT,
+    _nu = CC_NUKTA,
+    _dv = CC_DEPENDENT_VOWEL,
+    _dl = _dv | CF_POS_BEFORE,
+    _db = _dv | CF_POS_BELOW,
+    _da = _dv | CF_POS_ABOVE,
+    _dr = _dv | CF_POS_AFTER,
+    _lm = _dv | CF_LENGTH_MARK,
+    _l1 = CC_SPLIT_VOWEL_PIECE_1 | CF_POS_BEFORE,
+    _a1 = CC_SPLIT_VOWEL_PIECE_1 | CF_POS_ABOVE,
+    _r2 = CC_SPLIT_VOWEL_PIECE_2 | CF_POS_AFTER,
+    _m2 = CC_SPLIT_VOWEL_PIECE_2 | CF_LENGTH_MARK,
+    _m3 = CC_SPLIT_VOWEL_PIECE_3 | CF_LENGTH_MARK,
+    _vr = CC_VIRAMA,
 
     // split matras
     _s1 = _dv | _x1,
@@ -65,12 +65,12 @@ enum
     // consonants with special forms
     // NOTE: this assumes that no consonants with nukta have
     // special forms... (Bengali RA?)
-    _bb = _ct | IndicClassTable::CF_BELOW_BASE,
-    _pb = _ct | IndicClassTable::CF_POST_BASE,
-    _vt = _bb | IndicClassTable::CF_VATTU,
-    _rv = _vt | IndicClassTable::CF_REPH,
-    _rp = _pb | IndicClassTable::CF_REPH,
-    _rb = _bb | IndicClassTable::CF_REPH
+    _bb = _ct | CF_BELOW_BASE,
+    _pb = _ct | CF_POST_BASE,
+    _vt = _bb | CF_VATTU,
+    _rv = _vt | CF_REPH,
+    _rp = _pb | CF_REPH,
+    _rb = _bb | CF_REPH
 };
 
 //
@@ -212,15 +212,15 @@ static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, 
 // FIXME: post 'GSUB' reordering of MATRA_PRE's for Malayalam and Tamil
 // FIXME: reformed Malayalam needs to reorder VATTU to before base glyph...
 // FIXME: eyelash RA only for Devanagari??
-#define DEVA_SCRIPT_FLAGS (IndicClassTable::SF_EYELASH_RA | IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define BENG_SCRIPT_FLAGS (IndicClassTable::SF_REPH_AFTER_BELOW | IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define PUNJ_SCRIPT_FLAGS (IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define GUJR_SCRIPT_FLAGS (IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define ORYA_SCRIPT_FLAGS (IndicClassTable::SF_REPH_AFTER_BELOW | IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define TAML_SCRIPT_FLAGS (IndicClassTable::SF_MPRE_FIXUP | IndicClassTable::SF_NO_POST_BASE_LIMIT)
-#define TELU_SCRIPT_FLAGS (IndicClassTable::SF_MATRAS_AFTER_BASE | 3)
-#define KNDA_SCRIPT_FLAGS (IndicClassTable::SF_MATRAS_AFTER_BASE | 3)
-#define MLYM_SCRIPT_FLAGS (IndicClassTable::SF_MPRE_FIXUP | IndicClassTable::SF_NO_POST_BASE_LIMIT)
+#define DEVA_SCRIPT_FLAGS (SF_EYELASH_RA | SF_NO_POST_BASE_LIMIT)
+#define BENG_SCRIPT_FLAGS (SF_REPH_AFTER_BELOW | SF_NO_POST_BASE_LIMIT)
+#define PUNJ_SCRIPT_FLAGS (SF_NO_POST_BASE_LIMIT)
+#define GUJR_SCRIPT_FLAGS (SF_NO_POST_BASE_LIMIT)
+#define ORYA_SCRIPT_FLAGS (SF_REPH_AFTER_BELOW | SF_NO_POST_BASE_LIMIT)
+#define TAML_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+#define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | 3)
+#define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | 3)
+#define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
 
 //
 // Indic Class Tables

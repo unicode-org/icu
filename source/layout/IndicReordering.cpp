@@ -57,23 +57,23 @@ private:
             fLengthMark = matra;
             fLengthMarkIndex = matraIndex;
         } else {
-            switch (matraClass & IndicClassTable::CF_POS_MASK) {
-            case IndicClassTable::CF_POS_BEFORE:
+            switch (matraClass & CF_POS_MASK) {
+            case CF_POS_BEFORE:
                 fMpre = matra;
                 fMpreIndex = matraIndex;
                 break;
                
-            case IndicClassTable::CF_POS_BELOW:
+            case CF_POS_BELOW:
                 fMbelow = matra;
                 fMbelowIndex = matraIndex;
                 break;
                
-            case IndicClassTable::CF_POS_ABOVE:
+            case CF_POS_ABOVE:
                 fMabove = matra;
                 fMaboveIndex = matraIndex;
                 break;
                
-            case IndicClassTable::CF_POS_AFTER:
+            case CF_POS_AFTER:
                 fMpost = matra;
                 fMpostIndex = matraIndex;
                 break;
@@ -158,12 +158,12 @@ public:
         fVMTags  = vowelModifierTags;
         
         if (IndicClassTable::isVowelModifier(vmClass)) {
-           switch (vmClass & IndicClassTable::CF_POS_MASK) {
-           case IndicClassTable::CF_POS_ABOVE:
+           switch (vmClass & CF_POS_MASK) {
+           case CF_POS_ABOVE:
                fVMabove = vowelModifier;
                break;
             
-           case IndicClassTable::CF_POS_AFTER:
+           case CF_POS_AFTER:
                fVMpost = vowelModifier;
                break;
            
@@ -182,12 +182,12 @@ public:
         fSMTags  = stressMarkTags;
         
         if (IndicClassTable::isStressMark(smClass)) {
-            switch (smClass & IndicClassTable::CF_POS_MASK) {
-            case IndicClassTable::CF_POS_ABOVE:
+            switch (smClass & CF_POS_MASK) {
+            case CF_POS_ABOVE:
                 fSMabove = stressMark;
                 break;
             
-            case IndicClassTable::CF_POS_BELOW:
+            case CF_POS_BELOW:
                 fSMbelow = stressMark;
                 break;
            
@@ -320,7 +320,7 @@ static const LETag tagArray[] =
     blwmFeatureTag, abvmFeatureTag, distFeatureTag, emptyTag
 };
 
-static const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
+static const le_int8 stateTable[][CC_COUNT] =
 {
 //   xx  vm  sm  iv  i2  ct  cn  nu  dv  s1  s2  s3  vr  zw
     { 1,  1,  1,  5,  8,  3,  2,  1,  5,  9,  5,  1,  1,  1}, //  0 - ground state
@@ -350,7 +350,7 @@ le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const 
     while (cursor < charCount) {
         IndicClassTable::CharClass charClass = classTable->getCharClass(chars[cursor]);
 
-        state = stateTable[state][charClass & IndicClassTable::CF_CLASS_MASK];
+        state = stateTable[state][charClass & CF_CLASS_MASK];
 
         if (state < 0) {
             break;
@@ -369,7 +369,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
     MPreFixups *mpreFixups = NULL;
     const IndicClassTable *classTable = IndicClassTable::getScriptClassTable(scriptCode);
 
-    if (classTable->scriptFlags & IndicClassTable::SF_MPRE_FIXUP) {
+    if (classTable->scriptFlags & SF_MPRE_FIXUP) {
         mpreFixups = new MPreFixups(charCount);
     }
 
@@ -398,28 +398,28 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             matra -= 1;
         }
 
-        switch (classTable->getCharClass(chars[prev]) & IndicClassTable::CF_CLASS_MASK) {
-        case IndicClassTable::CC_RESERVED:
-        case IndicClassTable::CC_INDEPENDENT_VOWEL:
-        case IndicClassTable::CC_ZERO_WIDTH_MARK:
+        switch (classTable->getCharClass(chars[prev]) & CF_CLASS_MASK) {
+        case CC_RESERVED:
+        case CC_INDEPENDENT_VOWEL:
+        case CC_ZERO_WIDTH_MARK:
             for (i = prev; i < syllable; i += 1) {
                 output.writeChar(chars[i], i, &tagArray[1]);
             }
 
             break;
 
-        case IndicClassTable::CC_NUKTA:
-        case IndicClassTable::CC_VIRAMA:
+        case CC_NUKTA:
+        case CC_VIRAMA:
             output.writeChar(C_DOTTED_CIRCLE, prev, &tagArray[1]);
             output.writeChar(chars[prev], prev, &tagArray[1]);
             break;
 
-        case IndicClassTable::CC_DEPENDENT_VOWEL:
-        case IndicClassTable::CC_SPLIT_VOWEL_PIECE_1:
-        case IndicClassTable::CC_SPLIT_VOWEL_PIECE_2:
-        case IndicClassTable::CC_SPLIT_VOWEL_PIECE_3:
-        case IndicClassTable::CC_VOWEL_MODIFIER:
-        case IndicClassTable::CC_STRESS_MARK:
+        case CC_DEPENDENT_VOWEL:
+        case CC_SPLIT_VOWEL_PIECE_1:
+        case CC_SPLIT_VOWEL_PIECE_2:
+        case CC_SPLIT_VOWEL_PIECE_3:
+        case CC_VOWEL_MODIFIER:
+        case CC_STRESS_MARK:
             output.writeMpre();
 
             output.writeChar(C_DOTTED_CIRCLE, prev, &tagArray[1]);
@@ -428,22 +428,22 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             output.writeSMbelow();
             output.writeMabove();
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_MATRAS_AFTER_BASE) != 0) {
+            if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
                 output.writeMpost();
             }
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_REPH_AFTER_BELOW) != 0) {
+            if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) != 0) {
                 output.writeVMabove();
                 output.writeSMabove(); // FIXME: there are no SM's in these scripts...
             }
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_MATRAS_AFTER_BASE) == 0) {
+            if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) == 0) {
                 output.writeMpost();
             }
 
             output.writeLengthMark();
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_REPH_AFTER_BELOW) == 0) {
+            if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {
                 output.writeVMabove();
                 output.writeSMabove();
             }
@@ -451,9 +451,9 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             output.writeVMpost();
             break;
 
-        case IndicClassTable::CC_INDEPENDENT_VOWEL_2:
-        case IndicClassTable::CC_CONSONANT:
-        case IndicClassTable::CC_CONSONANT_WITH_NUKTA:
+        case CC_INDEPENDENT_VOWEL_2:
+        case CC_CONSONANT:
+        case CC_CONSONANT_WITH_NUKTA:
         {
             le_uint32 length = markStart - prev;
             le_int32  lastConsonant = markStart - 1;
@@ -464,7 +464,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 baseLimit += 2;
 
                 // Check for eyelash RA, if the script supports it
-                if ((classTable->scriptFlags & IndicClassTable::SF_EYELASH_RA) != 0 &&
+                if ((classTable->scriptFlags & SF_EYELASH_RA) != 0 &&
                     chars[baseLimit] == C_SIGN_ZWJ) {
                     if (length > 3) {
                         baseLimit += 1;
@@ -480,7 +480,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
             le_int32 baseConsonant = lastConsonant;
             le_int32 postBase = lastConsonant + 1;
-            le_int32 postBaseLimit = classTable->scriptFlags & IndicClassTable::SF_POST_BASE_LIMIT_MASK;
+            le_int32 postBaseLimit = classTable->scriptFlags & SF_POST_BASE_LIMIT_MASK;
             le_bool  seenVattu = FALSE;
             le_bool  seenBelowBaseForm = FALSE;
 
@@ -572,7 +572,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 output.writeChar(chars[i], i, &tagArray[4]);
             }
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_MATRAS_AFTER_BASE) != 0) {
+            if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
                 output.writeMbelow();
                 output.writeSMbelow(); // FIXME: there are no SMs in these scripts...
                 output.writeMabove();
@@ -592,13 +592,13 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             // write Mbelow, SMbelow, Mabove
-            if ((classTable->scriptFlags & IndicClassTable::SF_MATRAS_AFTER_BASE) == 0) {
+            if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) == 0) {
                 output.writeMbelow();
                 output.writeSMbelow();
                 output.writeMabove();
             }
 
-            if ((classTable->scriptFlags & IndicClassTable::SF_REPH_AFTER_BELOW) != 0) {
+            if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) != 0) {
                 if (baseLimit == prev + 2) {
                     output.writeChar(chars[prev], prev, &tagArray[0]);
                     output.writeChar(chars[prev + 1], prev + 1, &tagArray[0]);
@@ -627,14 +627,14 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             // write Mpost
-            if ((classTable->scriptFlags & IndicClassTable::SF_MATRAS_AFTER_BASE) == 0) {
+            if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) == 0) {
                 output.writeMpost();
             }
 
             output.writeLengthMark();
 
             // write reph
-            if ((classTable->scriptFlags & IndicClassTable::SF_REPH_AFTER_BELOW) == 0) {
+            if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {
                 if (baseLimit == prev + 2) {
                     output.writeChar(chars[prev], prev, &tagArray[0]);
                     output.writeChar(chars[prev + 1], prev + 1, &tagArray[0]);
