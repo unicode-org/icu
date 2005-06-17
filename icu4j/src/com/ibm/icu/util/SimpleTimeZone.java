@@ -141,6 +141,13 @@ public class SimpleTimeZone extends JDKTimeZone {
         xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
     }
 
+    /**
+     * Set the raw offset.
+     *
+     * @param offsetMillis the raw offset of the time zone
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public void setRawOffset(int offsetMillis) {
         super.setRawOffset(offsetMillis);
         raw = offsetMillis;
