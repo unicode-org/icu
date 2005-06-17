@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -44,6 +44,8 @@ FontTableCache::~FontTableCache()
     }
 
     fTableCacheCurr = 0;
+
+    LE_DELETE_ARRAY(fTableCache);
 }
 
 const void *FontTableCache::find(LETag tableTag) const
