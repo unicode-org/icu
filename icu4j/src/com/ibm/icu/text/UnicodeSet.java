@@ -2369,8 +2369,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Add the contents of the UnicodeSet (as strings) into a collection.
      * @param target collection to add into
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void addAllTo(Collection target) {
         UnicodeSetIterator it = new UnicodeSetIterator(this);
@@ -2382,8 +2381,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Add the contents of the collection (as strings) into this UnicodeSet.
      * @param source the collection to add
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void addAll(Collection source) {
         Iterator it = source.iterator();

@@ -259,8 +259,7 @@ public final class RuleBasedCollator extends Collator
      * The source iterator's integrity will be preserved since a new copy
      * will be created for use.
      * @see CollationElementIterator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public CollationElementIterator getCollationElementIterator(
                                                 UCharacterIterator source)
@@ -468,8 +467,7 @@ public final class RuleBasedCollator extends Collator
      * '100' to sort AFTER '2'
      * @see #getNumericCollation
      * @see #setNumericCollation
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void setNumericCollationDefault()
     {
@@ -664,8 +662,7 @@ public final class RuleBasedCollator extends Collator
      * @param flag true to turn numeric collation on and false to turn it off
      * @see #getNumericCollation
      * @see #setNumericCollationDefault
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void setNumericCollation(boolean flag)
     {
@@ -776,8 +773,7 @@ public final class RuleBasedCollator extends Collator
      * @see #getCollationKey 
      * @see #compare(String, String)
      * @see RawCollationKey
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public RawCollationKey getRawCollationKey(String source, 
                                               RawCollationKey key)
@@ -951,8 +947,7 @@ public final class RuleBasedCollator extends Collator
      * @see #setNumericCollation
      * @see #setNumericCollationDefault
      * @return true if numeric collation is turned on, false otherwise
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public boolean getNumericCollation()
     {
@@ -4430,10 +4425,10 @@ public final class RuleBasedCollator extends Collator
         }
         return 0;
     }
-    /** Get the version of this collator object.
-     *  @return the version object associated with this collator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+    /** 
+     * Get the version of this collator object.
+     * @return the version object associated with this collator
+     * @stable ICU 2.8
      */
     public VersionInfo getVersion() {
         /* RunTime version  */
@@ -4465,8 +4460,7 @@ public final class RuleBasedCollator extends Collator
     /** 
      * Get the UCA version of this collator object.
      * @return the version object associated with this collator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public VersionInfo getUCAVersion() {
         return UCA_.m_UCA_version_;

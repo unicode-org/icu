@@ -76,8 +76,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Default constructor.  (For invocation by subclass constructors,
      * typically implicit.)
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public TimeZone() {
     }
@@ -132,13 +131,12 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @see Calendar#ZONE_OFFSET
      * @see Calendar#DST_OFFSET
      * @see #getOffset(long, boolean, int[])
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public int getOffset(long date) {
-    int[] result = new int[2];
-    getOffset(date, false, result);
-    return result[0]+result[1];
+	int[] result = new int[2];
+	getOffset(date, false, result);
+	return result[0]+result[1];
     }
 
     /**
@@ -160,8 +158,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * time, in offsets[1]. If DST is not in effect, the DST offset is
      * zero; otherwise it is a positive value, typically one hour.
      *
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void getOffset(long date, boolean local, int[] offsets) {
         offsets[0] = getRawOffset();
@@ -514,14 +511,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * the known latest daylight saving value.
      *
      * @return the amount of saving time in milliseconds
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public int getDSTSavings() {
-    if (useDaylightTime()) {
-        return 3600000;
-    }
-    return 0;
+	if (useDaylightTime()) {
+	    return 3600000;
+	}
+	return 0;
     }
 
     /**

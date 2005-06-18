@@ -870,8 +870,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #compare(String, String)
      * @see #getCollationKey 
      * @see RawCollationKey
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public abstract RawCollationKey getRawCollationKey(String source, 
                                                        RawCollationKey key);
@@ -924,15 +923,14 @@ public abstract class Collator implements Comparator, Cloneable
     /** 
      * Get the version of this collator object.
      * @return the version object associated with this collator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public abstract VersionInfo getVersion();
         
-    /** Get the UCA version of this collator object.
-     *  @return the version object associated with this collator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+    /** 
+     * Get the UCA version of this collator object.
+     * @return the version object associated with this collator
+     * @stable ICU 2.8
      */
     public abstract VersionInfo getUCAVersion();
         
@@ -989,7 +987,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retain)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {

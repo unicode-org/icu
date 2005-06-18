@@ -25,16 +25,12 @@ import java.util.Locale;
  * The Buddhist Calendar has only one allowable era: <code>BE</code>.  If the
  * calendar is not in lenient mode (see <code>setLenient</code>), dates before
  * 1/1/1 BE are rejected with an <code>IllegalArgumentException</code>.
- * <p>
- * Note This API has not been promoted to @stable and instead has been left
- * as @draft ICU 2.8.  It may yet change or be removed in a future release.
  *
  * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public class BuddhistCalendar extends GregorianCalendar {
     // jdk1.4.2 serialver
@@ -50,16 +46,14 @@ public class BuddhistCalendar extends GregorianCalendar {
      * value for the Buddhist calendar.
      *
      * @see com.ibm.icu.util.Calendar#ERA
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int BE = 0;
     
     /**
      * Constructs a <code>BuddhistCalendar</code> using the current time
      * in the default time zone with the default locale.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar() {
         super();
@@ -70,8 +64,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the given time zone with the default locale.
      *
      * @param zone the given time zone.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(TimeZone zone) {
         super(zone);
@@ -82,8 +75,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the default time zone with the given locale.
      *
      * @param aLocale the given locale.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(Locale aLocale) {
         super(aLocale);
@@ -108,8 +100,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param zone the given time zone.
      *
      * @param aLocale the given locale.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
@@ -134,8 +125,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(Date date) {
         this();
@@ -152,8 +142,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      *                  The value is 0-based. e.g., 0 for January.
      *
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(int year, int month, int date) {
         super(year, month, date);
@@ -175,8 +164,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
      *
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public BuddhistCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -195,8 +183,7 @@ public class BuddhistCalendar extends GregorianCalendar {
     private static final int BUDDHIST_ERA_START = -543;
 
     /**
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */    
     protected int handleGetExtendedYear() {
         int year;
@@ -211,16 +198,14 @@ public class BuddhistCalendar extends GregorianCalendar {
 
     // Return JD of start of given month/year
     /**
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */    
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month, useMonth);
     }
 
     /**
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */    
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
@@ -234,8 +219,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * Override GregorianCalendar.  There is only one Buddhist ERA.  We
      * should really handle YEAR, YEAR_WOY, and EXTENDED_YEAR here too to
      * implement the 1..5000000 range, but it's not critical.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     protected int handleGetLimit(int field, int limitType) {
         if (field == ERA) {

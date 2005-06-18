@@ -34,8 +34,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * ToASCII(ToASCII(ToASCII...(ToASCII(string))) == ToASCII(string).
  * 
  * @author Ram Viswanadha
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public final class IDNA {
 
@@ -55,24 +54,21 @@ public final class IDNA {
      * do not check if the input conforms to STD-3 ASCII rules.
      * 
      * @see  #convertToASCII #convertToUnicode
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int DEFAULT             = 0x0000;
     /** 
      * Option to allow processing of unassigned codepoints in the input
      * 
      * @see  #convertToASCII #convertToUnicode
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED    = 0x0001;
     /** 
      * Option to check if input conforms to STD-3 ASCII rules
      * 
      * @see #convertToASCII #convertToUnicode
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int USE_STD3_RULES      = 0x0002;
     
@@ -198,8 +194,7 @@ public final class IDNA {
      * 
      * @param ch The code point to be ascertained
      * @return true if the char is a label separator
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     private static boolean isLabelSeparator(int ch){
         switch(ch){
@@ -236,8 +231,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */    
     public static StringBuffer convertToASCII(String src, int options)
         throws StringPrepParseException{
@@ -268,8 +262,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertToASCII(StringBuffer src, int options)
         throws StringPrepParseException{
@@ -300,8 +293,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertToASCII(UCharacterIterator src, int options)
                 throws StringPrepParseException{
@@ -440,8 +432,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(UCharacterIterator src, int options)
             throws StringPrepParseException{
@@ -476,8 +467,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(StringBuffer src, int options)
             throws StringPrepParseException{
@@ -512,8 +502,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(String src,int options)
             throws StringPrepParseException{
@@ -561,8 +550,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(String src, int options)
            throws StringPrepParseException{
@@ -593,8 +581,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(StringBuffer src, int options)
            throws StringPrepParseException{
@@ -625,8 +612,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertToUnicode(UCharacterIterator src, int options)
            throws StringPrepParseException{
@@ -746,8 +732,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(UCharacterIterator src, int options)
         throws StringPrepParseException{
@@ -779,8 +764,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(StringBuffer src, int options)
         throws StringPrepParseException{
@@ -812,8 +796,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(String src, int options)
         throws StringPrepParseException{
@@ -863,8 +846,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     //  TODO: optimize
     public static int compare(StringBuffer s1, StringBuffer s2, int options)
@@ -903,8 +885,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     //  TODO: optimize
     public static int compare(String s1, String s2, int options)
@@ -942,8 +923,7 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if i1 > i2 and < 0 if i1 < i2
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     //  TODO: optimize
     public static int compare(UCharacterIterator s1, UCharacterIterator s2, int options)

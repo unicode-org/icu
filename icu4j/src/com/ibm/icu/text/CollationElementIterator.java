@@ -512,8 +512,7 @@ public final class CollationElementIterator
      * <p>The source iterator's integrity will be preserved since a new copy
      * will be created for use.</p>
      * @param source the new source string iterator for iteration.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public void setText(UCharacterIterator source)
     {

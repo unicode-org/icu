@@ -213,8 +213,7 @@ public class UCharacterEnums {
          * Character type Pi
          * This name is compatible with java.lang.Character's name for this type.
          * @see #INITIAL_PUNCTUATION
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */
         public static final byte INITIAL_QUOTE_PUNCTUATION = 28;
 
@@ -229,8 +228,7 @@ public class UCharacterEnums {
          * Character type Pf
          * This name is compatible with java.lang.Character's name for this type.
          * @see #FINAL_PUNCTUATION
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */
         public static final byte FINAL_QUOTE_PUNCTUATION   = 29;
         

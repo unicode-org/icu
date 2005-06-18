@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,8 +21,7 @@ import com.ibm.icu.impl.Utility;
  * size when necessary.
  * </p> 
  * @author syn wee
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public class ByteArrayWrapper implements Comparable
 {
@@ -30,8 +29,7 @@ public class ByteArrayWrapper implements Comparable
     
     /**
      * Internal byte array.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public byte[] bytes;
 
@@ -39,8 +37,7 @@ public class ByteArrayWrapper implements Comparable
      * Size of the internal byte array used. 
      * Different from bytes.length, size will be &lt;= bytes.length. 
      * Semantics of size is similar to java.util.Vector.size().
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public int size;
     
@@ -48,8 +45,7 @@ public class ByteArrayWrapper implements Comparable
 
     /** 
      * Construct a new ByteArrayWrapper with no data.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public ByteArrayWrapper() {
         // leave bytes null, don't allocate twice
@@ -188,8 +184,7 @@ public class ByteArrayWrapper implements Comparable
      * Releases the internal byte array to the caller, resets the internal
      * byte array to null and its size to 0.
      * @return internal byte array.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public final byte[] releaseBytes()
     {
