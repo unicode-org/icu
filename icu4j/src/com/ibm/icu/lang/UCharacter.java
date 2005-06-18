@@ -3336,17 +3336,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * The given code point is mapped to its lowercase equivalent; if the code 
      * point has no lowercase equivalent, the code point itself is returned.
-     * UnicodeData only contains case mappings for code point where they are 
-     * one-to-one mappings; it also omits information about context-sensitive 
-     * case mappings.<br> 
-     * For language specific case conversion behavior, use 
-     * toLowerCase(locale, str). <br>
-     * For example, the case conversion for dot-less i and dotted I in Turkish,
-     * or for final sigma in Greek.
-     * For more information about Unicode case mapping please refer to the 
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>
-     * Technical report #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.toLowerCase()
+     *
+     * <p>This function only returns the simple, single-code point case mapping.
+     * Full case mappings should be used whenever possible because they produce
+     * better results by working on whole strings.
+     * They take into account the string context and the language and can map
+     * to a result string with a different length as appropriate.
+     * Full case mappings are applied by the case mapping functions
+     * that take String parameters rather than code points (int).
+     * See also the User Guide chapter on C/POSIX migration:
+     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     *
      * @param ch code point whose lowercase equivalent is to be retrieved
      * @return the lowercase equivalent code point
      * @stable ICU 2.1
@@ -3386,17 +3387,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                     
     /**
      * Converts the code point argument to titlecase.
-     * UnicodeData only contains case mappings for code points where they are 
-     * one-to-one mappings; it also omits information about context-sensitive 
-     * case mappings.<br> 
-     * There are only four Unicode characters that are truly titlecase forms
-     * that are distinct from uppercase forms.
-     * For more information about Unicode case mapping please refer
-     * to the <a href=http://www.unicode.org/unicode/reports/tr21/>
-     * Technical report #21</a>.<br>
      * If no titlecase is available, the uppercase is returned. If no uppercase 
-     * is available, the code point itself is returned.<br>
+     * is available, the code point itself is returned.
      * Up-to-date Unicode implementation of java.lang.Character.toTitleCase()
+     *
+     * <p>This function only returns the simple, single-code point case mapping.
+     * Full case mappings should be used whenever possible because they produce
+     * better results by working on whole strings.
+     * They take into account the string context and the language and can map
+     * to a result string with a different length as appropriate.
+     * Full case mappings are applied by the case mapping functions
+     * that take String parameters rather than code points (int).
+     * See also the User Guide chapter on C/POSIX migration:
+     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     *
      * @param ch code point  whose title case is to be retrieved
      * @return titlecase code point
      * @stable ICU 2.1
@@ -3407,14 +3411,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
        
     /**
      * Converts the character argument to uppercase.
-     * UnicodeData only contains case mappings for characters where they are 
-     * one-to-one mappings; it also omits information about context-sensitive 
-     * case mappings.<br> 
-     * For more information about Unicode case mapping please refer
-     * to the <a href=http://www.unicode.org/unicode/reports/tr21/>
-     * Technical report #21</a>.<br>
-     * If no uppercase is available, the character itself is returned.<br>
+     * If no uppercase is available, the character itself is returned.
      * Up-to-date Unicode implementation of java.lang.Character.toUpperCase()
+     *
+     * <p>This function only returns the simple, single-code point case mapping.
+     * Full case mappings should be used whenever possible because they produce
+     * better results by working on whole strings.
+     * They take into account the string context and the language and can map
+     * to a result string with a different length as appropriate.
+     * Full case mappings are applied by the case mapping functions
+     * that take String parameters rather than code points (int).
+     * See also the User Guide chapter on C/POSIX migration:
+     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     *
      * @param ch code point whose uppercase is to be retrieved
      * @return uppercase code point
      * @stable ICU 2.1
@@ -4400,9 +4409,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * The given character is mapped to its case folding equivalent according 
      * to UnicodeData.txt and CaseFolding.txt; if the character has no case 
      * folding equivalent, the character itself is returned.
-     * Only "simple", single-code point case folding mappings are used.
-     * For "full", multiple-code point mappings use the API 
-     * foldCase(String str, boolean defaultmapping).
+     *
+     * <p>This function only returns the simple, single-code point case mapping.
+     * Full case mappings should be used whenever possible because they produce
+     * better results by working on whole strings.
+     * They can map to a result string with a different length as appropriate.
+     * Full case mappings are applied by the case mapping functions
+     * that take String parameters rather than code points (int).
+     * See also the User Guide chapter on C/POSIX migration:
+     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     *
      * @param ch             the character to be converted
      * @param defaultmapping Indicates if all mappings defined in 
      *                       CaseFolding.txt is to be used, otherwise the 
@@ -4454,9 +4470,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * The given character is mapped to its case folding equivalent according 
      * to UnicodeData.txt and CaseFolding.txt; if the character has no case 
      * folding equivalent, the character itself is returned.
-     * Only "simple", single-code point case folding mappings are used.
-     * For "full", multiple-code point mappings use the API 
-     * foldCase(String str, boolean defaultmapping).
+     *
+     * <p>This function only returns the simple, single-code point case mapping.
+     * Full case mappings should be used whenever possible because they produce
+     * better results by working on whole strings.
+     * They can map to a result string with a different length as appropriate.
+     * Full case mappings are applied by the case mapping functions
+     * that take String parameters rather than code points (int).
+     * See also the User Guide chapter on C/POSIX migration:
+     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     *
      * @param ch             the character to be converted
      * @param options        A bit set for special processing. Currently the recognised options are
      *                        FOLD_CASE_EXCLUDE_SPECIAL_I and FOLD_CASE_DEFAULT 
