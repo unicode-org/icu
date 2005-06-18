@@ -80,8 +80,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * @author weiv
  * @author Alan Liu
  * @author Ram Viswanadha
- * @deprecated This is a draft API and might change in a future release of ICU.
- * @draft ICU 2.8 
+ * @stable ICU 2.8 
  */
 public final class ULocale implements Serializable {
     // using serialver from jdk1.4.2_05
@@ -268,8 +267,7 @@ public final class ULocale implements Serializable {
 
     /**
      * The root ULocale.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */ 
     public static final ULocale ROOT = new ULocale(EMPTY_STRING, (Locale)null);
     
@@ -733,7 +731,7 @@ public final class ULocale implements Serializable {
      * Construct a ULocale object from a {@link java.util.Locale}.
      * @param loc a JDK locale
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @internal
      */
     private ULocale(Locale loc) {
         this.localeID = getName(loc.toString());
@@ -774,8 +772,7 @@ public final class ULocale implements Serializable {
      * 
      * @param localeID string representation of the locale, e.g:
      * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR,collation=traditional"
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */ 
     public ULocale(String localeID) {
         this.localeID = getName(localeID);
@@ -856,8 +853,7 @@ public final class ULocale implements Serializable {
      * Convert this ULocale object to a {@link java.util.Locale}.
      * @return a JDK locale that either exactly represents this object
      * or is the closest approximation.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public Locale toLocale() {
         if (locale == null) {
@@ -874,8 +870,7 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns the current default ULocale.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */ 
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
@@ -2612,7 +2607,7 @@ public final class ULocale implements Serializable {
      * above the valid locale.  If the object was not constructed from
      * locale data, then the valid locale is <i>null</i>.
      *
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retain)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Type ACTUAL_LOCALE = new Type(0);
@@ -2628,7 +2623,7 @@ public final class ULocale implements Serializable {
      *
      * <p>Note: The valid locale will be returned correctly in ICU
      * 3.0 or later.  In ICU 2.8, it is not returned correctly.
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retain)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public static Type VALID_LOCALE = new Type(1);
@@ -2638,7 +2633,7 @@ public final class ULocale implements Serializable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retainAll)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final class Type {

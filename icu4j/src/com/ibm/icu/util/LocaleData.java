@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and      *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -12,8 +12,7 @@ import com.ibm.icu.text.UnicodeSet;
 /**
  * A class for accessing miscelleneous data in the locale bundles
  * @author ram
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public final class LocaleData {
     
@@ -50,22 +49,19 @@ public final class LocaleData {
     
     /**
      * Enumeration for representing the measurement systems.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final class MeasurementSystem{
         /** 
          * Measurement system specified by Le Syst&#x00E8;me International d'Unit&#x00E9;s (SI)
          * otherwise known as Metric system. 
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */
         public static final MeasurementSystem SI = new MeasurementSystem(0);
  
         /** 
          * Measurement system followed in the United States of America. 
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */ 
         public static final MeasurementSystem US = new MeasurementSystem(1);
     
@@ -73,6 +69,7 @@ public final class LocaleData {
         private MeasurementSystem(int id){
             systemID = id;
         }
+
         private boolean equals(int id){
             return systemID == id;
         }
@@ -105,8 +102,7 @@ public final class LocaleData {
     /**
      * A class that represents the size of letter head 
      * used in the country
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final class PaperSize{
         private int height;
@@ -119,8 +115,7 @@ public final class LocaleData {
         /** 
          * Retruns the height of the paper
          * @return the height 
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */
         public int getHeight(){
             return height;
@@ -128,8 +123,7 @@ public final class LocaleData {
         /**
          * Returns the width of hte paper
          * @return the width
-         * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.8
          */
         public int getWidth(){
             return width;

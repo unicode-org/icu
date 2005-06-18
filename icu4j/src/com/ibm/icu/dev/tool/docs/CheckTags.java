@@ -111,7 +111,7 @@ public class CheckTags {
             DocNode last = stack[ix];
             if (error) {
                 last.errorCount += 1;
-            }
+	    }
 
             boolean show = !brief || last.reportError;
             // boolean nomsg = show && brief && error;
@@ -253,7 +253,7 @@ public class CheckTags {
 
     void tagErr(Tag tag) {
         // Tag.position() requires JDK 1.4, build.xml tests for this
-        errln(tag.toString() + " [" + /* tag.position() + */ "]");
+        errln(tag.toString() + " [" + tag.position() + "]");
     }
 
     void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
@@ -311,6 +311,8 @@ public class CheckTags {
         boolean foundDeprecatedTag = false;
         boolean foundObsoleteTag = false;
 	boolean foundInternalTag = false;
+	boolean foundStableTag = false;
+	boolean retainAll = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -331,15 +333,8 @@ public class CheckTags {
             case DRAFT:
                 foundRequiredTag = true;
                 foundDraftTag = true;
-                if (tag.text().indexOf("ICU 2.4") != -1) {
-                    tagErr(tag);
-                    break;
-                }
-                if (tag.text().indexOf("ICU 2.6") != -1) {
-                    tagErr(tag);
-                    break;
-                }
-                if (tag.text().indexOf("ICU 2.8") != -1) {
+                if (tag.text().indexOf("ICU 2.8") != -1 &&
+		    tag.text().indexOf("(retain") == -1) { // catch both retain and retainAll
                     tagErr(tag);
                     break;
                 }
@@ -347,6 +342,7 @@ public class CheckTags {
                     tagErr(tag);
                     break;
                 }
+		retainAll |= (tag.text().indexOf("(retainAll)") != -1);
                 break;
 
             case DEPRECATED:
@@ -374,6 +370,7 @@ public class CheckTags {
                         tagErr(tag);
                     }
                     foundRequiredTag = true;
+		    foundStableTag = true;
                 }
                 break;
 
@@ -409,6 +406,10 @@ public class CheckTags {
         if (foundObsoleteTag && !foundDeprecatedTag) {
             errln("obsolete tag missing deprecated");
         }
-	return !foundInternalTag;
+	if (foundStableTag && foundDeprecatedTag) {
+	    logln("stable deprecated");
+	}
+
+	return !foundInternalTag && !retainAll;
     }
 }

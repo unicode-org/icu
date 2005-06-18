@@ -159,8 +159,7 @@ public final class CollationKey implements Comparable
      *            argument source. 
      * @see Collator
      * @see RawCollationKey
-     * @draft ICU 2.8 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8 
      */
     public CollationKey(String source, RawCollationKey key)
     {

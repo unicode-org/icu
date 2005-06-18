@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,7 +15,7 @@ import com.ibm.icu.util.GregorianCalendar;
  * A holiday whose date can be represented by a month, day, and optionally day of week
  * in the Gregorian calendar.
  *
- * @draft ICU 2.8
+ * @draft ICU 2.8 (retainAll)
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class SimpleHoliday extends Holiday {

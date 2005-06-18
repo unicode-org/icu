@@ -53,16 +53,14 @@ import com.ibm.icu.lang.UCharacterDirection;
  *           error.  </li>
  * </ol>
  * @author Ram Viswanadha
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public final class StringPrep {
     /** 
      * Option to prohibit processing of unassigned code points in the input
      * 
      * @see   #prepare
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int DEFAULT = 0x0000;
 
@@ -70,8 +68,7 @@ public final class StringPrep {
      * Option to allow processing of unassigned code points in the input
      * 
      * @see   #prepare
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED = 0x0001;
     
@@ -150,8 +147,7 @@ public final class StringPrep {
      * 
      * @param inputStream The stream for reading the StringPrep profile binarySun 
      * @throws IOException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public StringPrep(InputStream inputStream) throws IOException{
 
@@ -376,8 +372,7 @@ public final class StringPrep {
      *
      * @return StringBuffer A StringBuffer containing the output
      * @throws ParseException
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public StringBuffer prepare(UCharacterIterator src, int options)
                         throws StringPrepParseException{

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -30,15 +30,13 @@ import java.text.ParsePosition;
  * with the position immediately following the SYMBOL_REF.  The symbol
  * table parses the name, if there is one, and returns it.
  *
- * @draft ICU 2.8
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @stable ICU 2.8
  */
 public interface SymbolTable {
 
     /**
      * The character preceding a symbol reference name.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     static final char SYMBOL_REF = '$';
 
@@ -49,8 +47,7 @@ public interface SymbolTable {
      * @param s the symbolic name to lookup
      * @return a char array containing the name's value, or null if
      * there is no mapping for s.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     char[] lookup(String s);
 
@@ -60,8 +57,7 @@ public interface SymbolTable {
      * @param ch a 32-bit code point from 0 to 0x10FFFF inclusive.
      * @return the UnicodeMatcher object represented by the given
      * character, or null if there is no mapping for ch.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     UnicodeMatcher lookupMatcher(int ch);
 
@@ -80,8 +76,7 @@ public interface SymbolTable {
      * @param limit the index after the last character to be parsed.
      * @return the parsed name, or null if there is no valid symbolic
      * name at the given position.
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     String parseReference(String text, ParsePosition pos, int limit);
 }

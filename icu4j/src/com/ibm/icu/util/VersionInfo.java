@@ -125,22 +125,19 @@ public final class VersionInfo
 
     /**
      * ICU4J collator runtime version
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_RUNTIME_VERSION;
 
     /**
      * ICU4J collator builder version
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_BUILDER_VERSION;
 
     /**
      * ICU4J collator tailorings version
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_TAILORINGS_VERSION;
 

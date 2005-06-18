@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,7 @@ import java.util.Vector;
 
 /**
  * Implementation of DateRule that takes a range.
- * @draft ICU 2.8
+ * @draft ICU 2.8 (retainAll)
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class RangeDateRule implements DateRule {

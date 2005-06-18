@@ -17,7 +17,7 @@ import com.ibm.icu.util.ULocale;
  * @see com.ibm.icu.util.ULocale
  * @author weiv
  * @author Alan Liu
- * @draft ICU 2.8
+ * @draft ICU 2.8 (retain)
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public abstract class UFormat extends Format {
@@ -25,7 +25,7 @@ public abstract class UFormat extends Format {
     private static final long serialVersionUID = -4964390515840164416L;
 
     /**
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retain)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UFormat() {}
@@ -53,7 +53,7 @@ public abstract class UFormat extends Format {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8
+     * @draft ICU 2.8 (retain)
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
