@@ -343,13 +343,28 @@ ucol_openFromShortString( const char *definition,
  * @param status to hold the error code
  * @return the size of the contraction set
  *
- * @draft ICU 3.0
+ * @deprecated ICU 3.4, use ucol_getContractionsAndExpansions instead
  */
 U_CAPI int32_t U_EXPORT2
 ucol_getContractions( const UCollator *coll,
                   USet *conts,
                   UErrorCode *status);
 
+/**
+ * Get a set containing the expansions defined by the collator. The set includes
+ * both the UCA expansions and the expansions defined by the tailoring
+ * @param coll collator
+ * @param contractions if not NULL, the set to hold the contractions
+ * @param expansions if not NULL, the set to hold the expansions
+ * @param addPrefixes add the prefix contextual elements to contractions
+ * @param status to hold the error code
+ *
+ * @draft ICU 3.4
+ */
+U_CAPI void U_EXPORT2
+ucol_getContractionsAndExpansions( const UCollator *coll,
+                  USet *contractions, USet *expansions,
+                  UBool addPrefixes, UErrorCode *status);
 
 /** 
  * Close a UCollator.
