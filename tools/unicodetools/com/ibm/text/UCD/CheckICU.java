@@ -3,6 +3,7 @@ package com.ibm.text.UCD;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +20,9 @@ import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 import com.ibm.text.utility.Utility;
 
 public class CheckICU {
@@ -51,8 +54,8 @@ public class CheckICU {
     
  
     public static void test() throws IOException {
-        //generateFile("4.0.0", "DerivedCombiningClass");
-        //generateFile("4.0.0", "DerivedCoreProperties");
+        checkAvailable();
+        if (true) return;
         checkUCD();
         itemFailures = new UnicodeSet();
         icuFactory = ICUPropertyFactory.make();
@@ -86,7 +89,86 @@ public class CheckICU {
         }
     }
 
-    private static void checkUCD() throws IOException {
+    /**
+	 * 
+	 */
+	private static void checkAvailable() {
+		//generateFile("4.0.0", "DerivedCombiningClass");
+        //generateFile("4.0.0", "DerivedCoreProperties");
+    	ULocale[] locales = Collator.getAvailableULocales();
+    	
+    	System.out.println("Collation");
+    	System.out.println("Possible keyword=values pairs:");
+    	{
+	    	String[] keywords = Collator.getKeywords();
+	    	for (int i = 0; i < Collator.getKeywords().length; ++i) {
+	    		String[] values = Collator.getKeywordValues(keywords[i]);
+	    		for (int j = 0; j < values.length; ++j) {
+	    			System.out.println("\t" + keywords[i] + "=" + values[j]);
+	    		}
+	    	}
+    	}
+    	System.out.println("Differing Collators:");
+    	Set testSet = new HashSet(Arrays.asList(new String[] {
+    		"nl", "de", "de_DE", "zh_TW"
+    	}));
+    	for (int k = 0; k < locales.length; ++k) {
+    		if (!testSet.contains(locales[k].toString())) continue;
+			showCollationVariants(locales[k]);
+    	}
+	}
+
+	/**
+	 * 
+	 */
+	private static void showCollationVariants(ULocale locale) {
+		String[] keywords = Collator.getKeywords();
+		System.out.println(locale.getDisplayName(ULocale.ENGLISH) + " [" + locale + "]");
+		for (int i = 0; i < Collator.getKeywords().length; ++i) {
+			ULocale base = Collator.getFunctionalEquivalent(keywords[i], 
+					locale
+					//new ULocale(locale + "@" + keywords[i] + "=standard")
+					);
+			if (true) System.out.println("\"" + base + "\" == Collator.getFunctionalEquivalent(\"" + keywords[i] + "\", \"" + locale + "\");");
+			String[] values = Collator.getKeywordValues(keywords[i]);
+			for (int j = 0; j < Collator.getKeywordValues(keywords[i]).length; ++j) {       			
+				ULocale other = Collator.getFunctionalEquivalent(keywords[i], 
+						new ULocale(locale + "@" + keywords[i] + "=" + values[j]));
+				if (true) System.out.println(
+						"\"" + other
+						+ "\" == Collator.getFunctionalEquivalent(\"" + keywords[i]
+						+ "\", new ULocale(\""
+						+ locale + "@" + keywords[i] + "=" + values[j] + "\");");
+				// HACK: commented line should work but doesn't
+				if (!other.equals(base)) {
+				//if (other.toString().indexOf("@") >= 0) {
+					System.out.println("\t" + keywords[i] + "=" + values[j] + "; \t" + base + "; \t" + other);
+				}
+			}
+		}
+	}
+
+/**
+ * Sample code that prints out the variants that 'make a difference' for a given locale.
+ * To iterate through the locales, use Collator.getVariant
+ */
+private static void showCollationVariants2(ULocale locale) {
+	String[] keywords = Collator.getKeywords();
+	System.out.println(locale.getDisplayName(ULocale.ENGLISH) + " [" + locale + "]");
+	for (int i = 0; i < Collator.getKeywords().length; ++i) {
+		ULocale base = Collator.getFunctionalEquivalent(keywords[i], locale);
+		String[] values = Collator.getKeywordValues(keywords[i]);
+		for (int j = 0; j < Collator.getKeywordValues(keywords[i]).length; ++j) {       			
+			ULocale other = Collator.getFunctionalEquivalent(keywords[i], 
+					new ULocale(locale + "@" + keywords[i] + "=" + values[j]));
+			if (!other.equals(base)) {
+				System.out.println("\t" + keywords[i] + "=" + values[j] + "; \t" + base + "; \t" + other);
+			}
+		}
+	}
+}
+
+	private static void checkUCD() throws IOException {
         UCD myUCD = UCD.make("4.0.0");
         Normalizer nfc = new Normalizer(Normalizer.NFC, "4.0.0");
         UnicodeSet leading = new UnicodeSet();
