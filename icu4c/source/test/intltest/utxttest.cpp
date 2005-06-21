@@ -285,31 +285,6 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         }
     }
 
-    cpIndex = 0;
-    for (i=0; i<cpCount; i++) {
-        cpIndex = (cpIndex + 9973) % cpCount;
-        index         = cpMap[cpIndex].nativeIdx;
-        expectedC     = cpMap[cpIndex].cp;
-        foundC        = UTEXT_NEXT32FROM(ut, index);
-        TEST_ASSERT(expectedC == foundC);
-        TEST_ASSERT(expectedIndex == foundIndex);
-        if (gFailed) {
-            return;
-        }
-    }
-
-    cpIndex = 0;
-    for (i=0; i<cpCount; i++) {
-        cpIndex = (cpIndex + 9973) % cpCount;
-        index         = cpMap[cpIndex+1].nativeIdx;
-        expectedC     = cpMap[cpIndex].cp;
-        foundC        = UTEXT_PREVIOUS32FROM(ut, index);
-        TEST_ASSERT(expectedC == foundC);
-        TEST_ASSERT(expectedIndex == foundIndex);
-        if (gFailed) {
-            return;
-        }
-    }
 
     //
     // moveIndex(int32_t delta);
