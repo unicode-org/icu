@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -30,6 +30,7 @@ private:
     void testPositiveInfinity(void);
     void testNegativeInfinity(void);
     void testZero(void);
+    void testU_INLINE();
 
     // subtests of testNaN
     void testIsNaN(void);
