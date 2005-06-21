@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2005/05/27 21:39:03 $
-* $Revision: 1.49 $
+* $Date: 2005/06/21 21:28:31 $
+* $Revision: 1.50 $
 *
 *******************************************************************************
 */
@@ -898,14 +898,19 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
         if (!unique || !set.contains(value)) set.add(value);
     }
-        
+
     public static String readDataLine(BufferedReader br) throws IOException {
+    	return readDataLine(br, null);
+    }
+    
+    public static String readDataLine(BufferedReader br, int[] count) throws IOException {
         String originalLine = "";
         String line = "";
         
         try {
             line = originalLine = br.readLine();
             if (line == null) return null;
+            if (count != null) ++count[0];
             if (line.length() > 0 && line.charAt(0) == 0xFEFF) line = line.substring(1);
             int commentPos = line.indexOf('#');
             if (commentPos >= 0) line = line.substring(0, commentPos);

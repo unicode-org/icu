@@ -290,7 +290,7 @@ class GenerateStringPrep implements UCD_Types {
 	/**
 	 * 
 	 */
-	private int getIDNAType(int cp) {
+	static public int getIDNAType(int cp) {
 		inbuffer.setLength(0);
 		UTF16.append(inbuffer, cp);
 		try {
@@ -310,8 +310,8 @@ class GenerateStringPrep implements UCD_Types {
 			return REMAPPED;
 		return OK;
 	}
-	StringBuffer inbuffer = new StringBuffer();
-	StringBuffer intermediate, outbuffer;
+	static StringBuffer inbuffer = new StringBuffer();
+	static StringBuffer intermediate, outbuffer;
 
 	UnicodeSet lowercase = new UnicodeSet("[:Lowercase:]");
 

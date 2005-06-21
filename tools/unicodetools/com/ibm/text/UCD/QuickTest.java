@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/06/08 01:44:48 $
-* $Revision: 1.4 $
+* $Date: 2005/06/21 21:28:31 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCD;
 
 import java.util.*;
 import java.io.*;
+
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -22,6 +23,24 @@ import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
 	static final void test() {
+		String test2 = "ab\u263ac";
+		StringTokenizer st = new StringTokenizer(test2, "\u263a");
+		try {
+			while (true) {
+				String s = st.nextToken();
+				System.out.println(s);
+			}
+		} catch (Exception e) {		}
+		StringReader r = new StringReader(test2);
+		StreamTokenizer s = new StreamTokenizer(r);
+		try {
+			while (true) {
+				int x = s.nextToken();
+				if (x == StreamTokenizer.TT_EOF) break;
+				System.out.println(s.sval);
+			}
+		} catch (Exception e) {		}
+		
 		String testString = "en-Arab-200-gaulish-a-abcd-def-x-abcd1234-12345678";
 		for (int i = testString.length() + 1; i > 0; --i) {
 			String trunc = truncateValidLanguageTag(testString, i);
