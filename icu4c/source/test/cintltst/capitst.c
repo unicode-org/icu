@@ -1869,12 +1869,16 @@ TestGetContractionsAndUnsafes(void)
         const char* locale;
         const char* inConts;
         const char* outConts;
+        const char* inExp;
+        const char* outExp;
         const char* unsafeCodeUnits;
         const char* safeCodeUnits;
     } tests[] = {
         { "ru", 
             "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}]", 
             "[{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
+            "[\\u00e6]",
+            "[a]",
             "[\\u0474\\u0475\\u04d8\\u04d9\\u04e8\\u04e9]",
             "[aAbB\\u0430\\u0410\\u0433\\u0413]"
         },
@@ -1882,20 +1886,26 @@ TestGetContractionsAndUnsafes(void)
             "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}" 
             "{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
             "[]",
+            "[\\u00e6]",
+            "[a]",
             "[\\u0474\\u0475\\u04D8\\u04D9\\u04E8\\u04E9\\u0430\\u0410\\u0433\\u0413]",
             "[aAbBxv]",
-        },
-        { "ja",
-            "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
-            "[{lj}{nj}]",
-            "[\\u3099\\u309d\\u30fd]",
-            "[\\u30a6\\u3044\\uff73]"
         },
         { "sh",
             "[{C\\u0301}{C\\u030C}{C\\u0341}{DZ\\u030C}{Dz\\u030C}{D\\u017D}{D\\u017E}{lj}{nj}]",
             "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
+            "[\\u00e6]",
+            "[a]",
             "[nlcdzNLCDZ]",
             "[jabv]"
+        },
+        { "ja",
+          "[{\\u3053\\u3099\\u309D}{\\u3053\\u3099\\u309D\\u3099}{\\u3053\\u3099\\u309E}{\\u3053\\u3099\\u30FC}{\\u3053\\u309D}{\\u3053\\u309D\\u3099}{\\u3053\\u309E}{\\u3053\\u30FC}{\\u30B3\\u3099\\u30FC}{\\u30B3\\u3099\\u30FD}{\\u30B3\\u3099\\u30FD\\u3099}{\\u30B3\\u3099\\u30FE}{\\u30B3\\u30FC}{\\u30B3\\u30FD}{\\u30B3\\u30FD\\u3099}{\\u30B3\\u30FE}]",
+          "[{\\u30FD\\u3099}{\\u309D\\u3099}{\\u3053\\u3099}{\\u30B3\\u3099}{lj}{nj}]",
+            "[\\u30FE\\u00e6]",
+            "[a]",
+            "[\\u3099]",
+            "[]"
         }
     };
 
@@ -1907,24 +1917,42 @@ TestGetContractionsAndUnsafes(void)
     int32_t i = 0;
     int32_t noConts = 0;
     USet *conts = uset_open(0,0);
+    USet *exp = uset_open(0, 0);
     USet *set  = uset_open(0,0);
-    UChar buffer[32768];
+    int32_t setBufferLen = 65536;
+    UChar buffer[65536];
     int32_t setLen = 0;
 
     for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
         log_verbose("Testing locale: %s\n", tests[i].locale);
         coll = ucol_open(tests[i].locale, &status);
-        noConts = ucol_getContractions(coll, conts, &status);
+        ucol_getContractionsAndExpansions(coll, conts, exp, TRUE, &status);
         doSetsTest(conts, set, tests[i].inConts, tests[i].outConts, &status);
-        setLen = uset_toPattern(conts, buffer, 32768, TRUE, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
         if(U_SUCCESS(status)) {
-            log_verbose("%i: %s\n", noConts, aescstrdup(buffer, setLen));
+            /*log_verbose("Contractions %i: %s\n", uset_getItemCount(conts), aescstrdup(buffer, setLen));*/
         } else {
             log_err("error %s. %i\n", u_errorName(status), setLen);
+            status = U_ZERO_ERROR;
+        }
+        doSetsTest(exp, set, tests[i].inExp, tests[i].outExp, &status);
+        setLen = uset_toPattern(exp, buffer, setBufferLen, TRUE, &status);
+        if(U_SUCCESS(status)) {
+            /*log_verbose("Expansions %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));*/
+        } else {
+            log_err("error %s. %i\n", u_errorName(status), setLen);
+            status = U_ZERO_ERROR;
         }
 
         noConts = ucol_getUnsafeSet(coll, conts, &status);
         doSetsTest(conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
+        if(U_SUCCESS(status)) {
+            log_verbose("Unsafe %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));
+        } else {
+            log_err("error %s. %i\n", u_errorName(status), setLen);
+            status = U_ZERO_ERROR;
+        }
 
         ucol_close(coll);
     }
