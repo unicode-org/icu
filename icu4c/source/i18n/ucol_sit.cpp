@@ -13,6 +13,8 @@
 * 03/12/2004  weiv      Creation
 */
 
+#include "unicode/ustring.h"
+
 #include "utracimp.h"
 #include "ucol_imp.h"
 #include "ucol_tok.h"
@@ -423,6 +425,68 @@ ucol_sit_calculateWholeLocale(CollatorSpec *s) {
         }
     }
 }
+
+
+U_CAPI void U_EXPORT2
+ucol_prepareShortStringOpen( const char *definition,
+                          UBool forceDefaults,
+                          UParseError *parseError,
+                          UErrorCode *status)
+{
+    if(U_FAILURE(*status)) return;
+
+    UParseError internalParseError;
+
+    if(!parseError) {
+        parseError = &internalParseError;
+    }
+    parseError->line = 0;
+    parseError->offset = 0;
+    parseError->preContext[0] = 0;
+    parseError->postContext[0] = 0;
+
+
+    // first we want to pick stuff out of short string.
+    // we'll end up with an UCA version, locale and a bunch of
+    // settings
+
+    // analyse the string in order to get everything we need.
+    const char *string = definition;
+    CollatorSpec s;
+    ucol_sit_initCollatorSpecs(&s);
+    string = ucol_sit_readSpecs(&s, definition, parseError, status);
+    ucol_sit_calculateWholeLocale(&s);
+    
+    char buffer[internalBufferSize];
+    uprv_memset(buffer, 0, internalBufferSize);
+    uloc_canonicalize(s.locale, buffer, internalBufferSize, status);
+
+    UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer, status);
+    /* we try to find stuff from keyword */
+    UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
+    UResourceBundle *collElem = NULL;
+    char keyBuffer[256];
+    // if there is a keyword, we pick it up and try to get elements
+    if(!uloc_getKeywordValue(buffer, "collation", keyBuffer, 256, status)) {
+      // no keyword. we try to find the default setting, which will give us the keyword value
+      UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, status);
+      if(U_SUCCESS(*status)) {
+        int32_t defaultKeyLen = 0;
+        const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
+        u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
+        keyBuffer[defaultKeyLen] = 0;
+      } else {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+      }
+      ures_close(defaultColl);
+    }
+    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
+    ures_close(collElem);
+    ures_close(collations);
+    ures_close(b);
+}
+
 
 U_CAPI UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
