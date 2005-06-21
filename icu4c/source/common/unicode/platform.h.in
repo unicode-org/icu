@@ -260,7 +260,11 @@ typedef unsigned int uint32_t;
 /*===========================================================================*/
 
 #ifndef U_INLINE
-#define U_INLINE @U_INLINE@
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE @U_INLINE@
+#   endif
 #endif
 
 #define U_ALIGN_CODE(n) 

@@ -363,7 +363,11 @@ typedef int32_t UChar32;
 #endif
 
 #ifndef U_INLINE
-#   define U_INLINE
+#   ifdef XP_CPLUSPLUS
+#       define U_INLINE inline
+#   else
+#       define U_INLINE
+#   endif
 #endif
 
 #include "unicode/urename.h"
