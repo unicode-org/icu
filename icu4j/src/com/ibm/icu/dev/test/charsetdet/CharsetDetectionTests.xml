@@ -198,7 +198,7 @@
 
     </test-case>
 
-    <!-- No EUC-JP in this test because it detects as EUC-CN -->
+    <!-- No EUC-JP in this test because it detects as GB18030 -->
     <test-case id="IUC10-jp" encodings="UTF-8 Shift_JIS ISO-2022-JP">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
@@ -396,7 +396,7 @@
     <!-- /test-case -->
 
     <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
-    <test-case id="IUC10-zh-Hans" encodings="UTF-8 EUC-CN">
+    <test-case id="IUC10-zh-Hans" encodings="UTF-8 GB18030">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     欧洲，软件＋互联网
