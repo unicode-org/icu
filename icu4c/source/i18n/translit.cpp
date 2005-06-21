@@ -929,7 +929,7 @@ Transliterator::createInstance(const UnicodeString& ID,
     U_ASSERT(list.size() > 0);
     Transliterator* t = NULL;
     
-    if (list.size() > 1 || canonID.indexOf(";") >= 0) {
+    if (list.size() > 1 || canonID.indexOf(ID_DELIM) >= 0) {
         // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
         // has one child transliterator.  This is so that toRules() will return the right thing
         // (without any inactive ID), but our main ID still comes out correct.  That is, if we
@@ -1063,7 +1063,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
         if (parser.compoundFilter != NULL) {
             UnicodeString filterPattern;
             parser.compoundFilter->toPattern(filterPattern, FALSE);
-            t = createInstance(filterPattern + ";"
+            t = createInstance(filterPattern + UnicodeString(ID_DELIM)
                     + *((UnicodeString*)parser.idBlockVector->elementAt(0)), UTRANS_FORWARD, parseError, status);
         }
         else
@@ -1095,7 +1095,8 @@ Transliterator::createFromRules(const UnicodeString& ID,
             }
             if (!parser.dataVector->isEmpty()) {
                 TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
-                transliterators.addElement(new RuleBasedTransliterator((UnicodeString)"%Pass" + (passNumber++),
+                transliterators.addElement(
+                    new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
                     data, TRUE), status);
             }
         }
