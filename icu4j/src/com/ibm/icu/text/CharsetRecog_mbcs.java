@@ -327,8 +327,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                  return match(det, commonChars);
              }
          }
-
-     
          
          /**
           * The charset recognize for EUC-KR.  A singleton instance of this class
@@ -358,40 +356,100 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                  return match(det, commonChars);
              }
          }
+     }
+     
+     /**
+      * 
+      *   GB-18030 recognizer. Uses simplified Chinese statistics.   
+      *
+      */
+     static class CharsetRecog_gb_18030 extends CharsetRecog_mbcs {
          
-         
-         /**
-          * The charset recognize for EUC-CN.  A singleton instance of this class
-          *    is created and kept by the public CharsetDetector class
+         /*
+          *  (non-Javadoc)
+          *  Get the next character value for EUC based encodings.
+          *  Character "value" is simply the raw bytes that make up the character
+          *     packed into an int.
           */
-         static class CharsetRecog_euc_cn extends CharsetRecog_euc {
-             static int [] commonChars = 
-                 // TODO:  This set of data comes from the character frequency-
-                 //        of-occurence analysis tool.  The data needs to be moved
-                 //        into a resource and loaded from there.
+         boolean nextChar(iteratedChar it, CharsetDetector det) {
+             it.index = it.nextIndex;
+             it.error = false;
+             int firstByte  = 0;
+             int secondByte = 0;
+             int thirdByte  = 0;
+             int fourthByte = 0;
+             
+             buildChar: {
+                 firstByte = it.charValue = it.nextByte(det); 
+                 
+                 if (firstByte < 0) {
+                     // Ran off the end of the input data
+                     it.done = true;
+                     break buildChar;
+                 }
+                 
+                 if (firstByte <= 0x80) {
+                     // single byte char
+                     break buildChar;
+                 }
+                 
+                 secondByte = it.nextByte(det);
+                 it.charValue = (it.charValue << 8) | secondByte;
+                 
+                 if (firstByte >= 0x81 && firstByte <= 0xFE) {
+                     // Two byte Char
+                     if ((secondByte >= 0x40 && secondByte <= 0x7E) || (secondByte >=80 && secondByte <=0xFE)) {
+                         break buildChar;
+                     }
+                     
+                     // Four byte char
+                     if (secondByte >= 0x30 && secondByte <= 0x39) {
+                         thirdByte = it.nextByte(det);
+                         
+                         if (thirdByte >= 0x81 && thirdByte <= 0xFE) {
+                             fourthByte = it.nextByte(det);
+                             
+                             if (fourthByte >= 0x30 && fourthByte <= 0x39) {
+                                 it.charValue = (it.charValue << 16) | (thirdByte << 8) | fourthByte;
+                                 break buildChar;
+                             }
+                         }
+                     }
+                     
+                     it.error = true;
+                     break buildChar;
+                 }
+             }
+                 
+             return (it.done == false);
+         }
+         
+         static int [] commonChars = 
+             // TODO:  This set of data comes from the character frequency-
+             //        of-occurence analysis tool.  The data needs to be moved
+             //        into a resource and loaded from there.
              {0xa3ac, 0xb5c4, 0xa1a1, 0xa1a4, 0xa1a3, 0xcac7, 0xd2bb, 0xb4f3, 0xd4da, 0xd6d0, 
-                     0xcafd, 0xd3d0, 0xa1f3, 0xb2bb, 0xa3ba, 0xbbfa, 0xc8cb, 0xa1a2, 0xd3c3, 0xd1a7, 
-                     0xc8d5, 0xbedd, 0xb8f6, 0xd0c2, 0xcdf8, 0xd2aa, 0xb9fa, 0xc1cb, 0xc9cf, 0xa1b0, 
-                     0xa1b1, 0xced2, 0xbcfe, 0xcec4, 0xd2d4, 0xc4dc, 0xc0b4, 0xd4c2, 0xcab1, 0xd0d0, 
-                     0xbdcc, 0xbfc9, 0xb6d4, 0xbcdb, 0xb1be, 0xb3f6, 0xb8b4, 0xc9fa, 0xb1b8, 0xbcbc, 
-                     0xcfc2, 0xbacd, 0xbecd, 0xb3c9, 0xd5e2, 0xb8df, 0xb7d6, 0xc5cc, 0xbfc6, 0xbbe1, 
-                     0xceaa, 0xc8e7, 0xcfb5, 0xa1f1, 0xc4ea, 0xb1a8, 0xb6af, 0xc0ed, 0xd3fd, 0xb7a2, 
-                     0xc8ab, 0xb7bd, 0xcee5, 0xc2db, 0xbba7, 0xd0d4, 0xb9c9, 0xc3c7, 0xb9fd, 0xcad0, 
-                     0xb5e3, 0xbbd6, 0xcfd6, 0xcab5, 0xd2b2, 0xbfb4, 0xb6e0, 0xccec, 0xc7f8, 0xd0c5, 
-                     0xcad6, 0xb9d8, 0xb5bd, 0xb7dd, 0xc6f7, 0xcaf5, 0xa3a1, 0xb7a8, 0xb9ab, 0xd2b5, 
-                     0xcbf9, 0xcdbc, 0xc6e4, 0xd3da, 0xd0a1, 0xd1a1, 0xd3ce, 0xbfaa, 0xb4e6, 0xc4bf, 
-                     0xd7f7, 0xb5e7, 0xcdb3, 0xc7e9, 0xd7ee, 0xc6c0, 0xcfdf, 0xb5d8, 0xb5c0, 0xbead, 
-                     0xb4c5, 0xc6b7, 0xc4da, 0xd0c4, 0xb9a4, 0xd4aa, 0xc2bc, 0xc3c0, 0xbaf3, 0xcabd, 
-                     0xbcd2, 0xcef1, 0xbdab, 0xa3ad, 0xa3bf, 0xb3a4, 0xb9fb, 0xd6ae, 0xc1bf, 0xbbd8, 
-                     0xb8f1, 0xb6f8, 0xb6a8, 0xcde2, 0xbac3, 0xb3cc, 0xccd8, 0xd7d4, 0xcbb5};
-             
-             String getName() {
-                 return "EUC-CN";
-             }
-             
-             int match(CharsetDetector det) {
-                 return match(det, commonChars);
-             }
+             0xcafd, 0xd3d0, 0xa1f3, 0xb2bb, 0xa3ba, 0xbbfa, 0xc8cb, 0xa1a2, 0xd3c3, 0xd1a7, 
+             0xc8d5, 0xbedd, 0xb8f6, 0xd0c2, 0xcdf8, 0xd2aa, 0xb9fa, 0xc1cb, 0xc9cf, 0xa1b0, 
+             0xa1b1, 0xced2, 0xbcfe, 0xcec4, 0xd2d4, 0xc4dc, 0xc0b4, 0xd4c2, 0xcab1, 0xd0d0, 
+             0xbdcc, 0xbfc9, 0xb6d4, 0xbcdb, 0xb1be, 0xb3f6, 0xb8b4, 0xc9fa, 0xb1b8, 0xbcbc, 
+             0xcfc2, 0xbacd, 0xbecd, 0xb3c9, 0xd5e2, 0xb8df, 0xb7d6, 0xc5cc, 0xbfc6, 0xbbe1, 
+             0xceaa, 0xc8e7, 0xcfb5, 0xa1f1, 0xc4ea, 0xb1a8, 0xb6af, 0xc0ed, 0xd3fd, 0xb7a2, 
+             0xc8ab, 0xb7bd, 0xcee5, 0xc2db, 0xbba7, 0xd0d4, 0xb9c9, 0xc3c7, 0xb9fd, 0xcad0, 
+             0xb5e3, 0xbbd6, 0xcfd6, 0xcab5, 0xd2b2, 0xbfb4, 0xb6e0, 0xccec, 0xc7f8, 0xd0c5, 
+             0xcad6, 0xb9d8, 0xb5bd, 0xb7dd, 0xc6f7, 0xcaf5, 0xa3a1, 0xb7a8, 0xb9ab, 0xd2b5, 
+             0xcbf9, 0xcdbc, 0xc6e4, 0xd3da, 0xd0a1, 0xd1a1, 0xd3ce, 0xbfaa, 0xb4e6, 0xc4bf, 
+             0xd7f7, 0xb5e7, 0xcdb3, 0xc7e9, 0xd7ee, 0xc6c0, 0xcfdf, 0xb5d8, 0xb5c0, 0xbead, 
+             0xb4c5, 0xc6b7, 0xc4da, 0xd0c4, 0xb9a4, 0xd4aa, 0xc2bc, 0xc3c0, 0xbaf3, 0xcabd, 
+             0xbcd2, 0xcef1, 0xbdab, 0xa3ad, 0xa3bf, 0xb3a4, 0xb9fb, 0xd6ae, 0xc1bf, 0xbbd8, 
+             0xb8f1, 0xb6f8, 0xb6a8, 0xcde2, 0xbac3, 0xb3cc, 0xccd8, 0xd7d4, 0xcbb5};
+         
+         String getName() {
+             return "GB18030";
+         }
+         
+         int match(CharsetDetector det) {
+             return match(det, commonChars);
          }
      }
      

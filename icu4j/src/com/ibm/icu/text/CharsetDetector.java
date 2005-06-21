@@ -472,7 +472,7 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022CN());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022KR());
-        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_cn());
+        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_gb_18030());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_jp());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_kr());
         
