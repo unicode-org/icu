@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -486,7 +486,7 @@ uregex_reset(URegularExpression    *regexp,
 //------------------------------------------------------------------------------
 U_CAPI int32_t U_EXPORT2 
 uregex_replaceAll(URegularExpression    *regexp,
-                  UChar                 *replacementText,
+                  const UChar           *replacementText,
                   int32_t                replacementLength,
                   UChar                 *destBuf,
                   int32_t                destCapacity,
@@ -520,7 +520,7 @@ uregex_replaceAll(URegularExpression    *regexp,
 //------------------------------------------------------------------------------
 U_CAPI int32_t U_EXPORT2 
 uregex_replaceFirst(URegularExpression  *regexp,
-                    UChar               *replacementText,
+                    const UChar         *replacementText,
                     int32_t              replacementLength,
                     UChar               *destBuf,
                     int32_t              destCapacity,
@@ -564,7 +564,7 @@ U_NAMESPACE_BEGIN
 class RegexCImpl {
  public:
    inline static  int32_t appendReplacement(URegularExpression    *regexp,
-                      UChar                 *replacementText,
+                      const UChar           *replacementText,
                       int32_t                replacementLength,
                       UChar                **destBuf,
                       int32_t               *destCapacity,
@@ -611,7 +611,7 @@ static inline void appendToBuf(UChar c, int32_t *idx, UChar *buf, int32_t bufCap
 //  appendReplacement, the actual implementation.
 //
 int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
-                  UChar                 *replacementText,
+                  const UChar           *replacementText,
                   int32_t                replacementLength,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
@@ -694,7 +694,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
                     u_unescapeAt(unescape_charAt,
                        &replIdx,                   // Index is updated by unescapeAt 
                        replacementLength,          // Length of replacement text
-                       replacementText);
+                       (void *)replacementText);
 
                 if (escapedChar != (UChar32)0xFFFFFFFF) {
                     if (escapedChar <= 0xffff) {
@@ -810,7 +810,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
 //
 U_CAPI int32_t U_EXPORT2 
 uregex_appendReplacement(URegularExpression    *regexp,
-                  UChar                 *replacementText,
+                  const UChar           *replacementText,
                   int32_t                replacementLength,
                   UChar                **destBuf,
                   int32_t               *destCapacity,

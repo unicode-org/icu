@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -434,7 +434,7 @@ uregex_reset(URegularExpression    *regexp,
   */
 U_DRAFT int32_t U_EXPORT2 
 uregex_replaceAll(URegularExpression    *regexp,
-                  UChar                 *replacementText,
+                  const UChar           *replacementText,
                   int32_t                replacementLength,
                   UChar                 *destBuf,
                   int32_t                destCapacity,
@@ -467,7 +467,7 @@ uregex_replaceAll(URegularExpression    *regexp,
   */
 U_DRAFT int32_t U_EXPORT2 
 uregex_replaceFirst(URegularExpression  *regexp,
-                    UChar               *replacementText,
+                    const UChar         *replacementText,
                     int32_t              replacementLength,
                     UChar               *destBuf,
                     int32_t              destCapacity,
@@ -522,7 +522,7 @@ uregex_replaceFirst(URegularExpression  *regexp,
   */
 U_DRAFT int32_t U_EXPORT2 
 uregex_appendReplacement(URegularExpression    *regexp,
-                  UChar                 *replacementText,
+                  const UChar           *replacementText,
                   int32_t                replacementLength,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
