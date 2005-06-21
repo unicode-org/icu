@@ -982,6 +982,76 @@ conversion {
       // which - numeric UConverterUnicodeSet value
       Headers { "charset", "map", "mapnot", "which" }
       Cases {
+        // Unicode charsets that do not map surrogate code points
+        {
+          "UTF-8",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-16",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-16BE",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-16LE",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-32",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-32BE",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+        {
+          "UTF-32LE",
+          "[\x00-\ud7ff\ue000-\U0010ffff]",
+          "[\ud800-\udfff]",
+          :int{0}
+        }
+
+        // Unicode charsets that do map surrogate code points
+        {
+          "UTF-7",
+          "[\x00-\U0010ffff]",
+          "[]",
+          :int{0}
+        }
+        {
+          "SCSU",
+          "[\x00-\U0010ffff]",
+          "[]",
+          :int{0}
+        }
+        {
+          "BOCU-1",
+          "[\x00-\U0010ffff]",
+          "[]",
+          :int{0}
+        }
+        {
+          "CESU-8",
+          "[\x00-\U0010ffff]",
+          "[]",
+          :int{0}
+        }
+
         // versions of ISO-2022-KR
         {
           "ISO-2022-KR",
