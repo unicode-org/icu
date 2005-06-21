@@ -432,18 +432,39 @@ U_STABLE UConverter* U_EXPORT2
 ucnv_openPackage(const char *packageName, const char *converterName, UErrorCode *err);
 
 /**
- * Thread safe cloning operation
+ * Thread safe converter cloning operation.
+ * For most efficient operation, pass in a stackBuffer (and a *pBufferSize)
+ * with at least U_CNV_SAFECLONE_BUFFERSIZE bytes of space.
+ * If the buffer size is sufficient, then the clone will use the stack buffer;
+ * otherwise, it will be allocated, and *pBufferSize will indicate
+ * the actual size. (This should not occur with U_CNV_SAFECLONE_BUFFERSIZE.)
+ *
+ * You must ucnv_close() the clone in any case.
+ *
+ * If *pBufferSize==0, (regardless of whether stackBuffer==NULL or not)
+ * then *pBufferSize will be changed to a sufficient size
+ * for cloning this converter,
+ * without actually cloning the converter ("pure pre-flighting").
+ *
+ * If *pBufferSize is greater than zero but not large enough for a stack-based
+ * clone, then the converter is cloned using newly allocated memory
+ * and *pBufferSize is changed to the necessary size.
+ *
+ * If the converter clone fits into the stack buffer but the stack buffer is not
+ * sufficiently aligned for the clone, then the clone will use an
+ * adjusted pointer and use an accordingly smaller buffer size.
+ *
  * @param cnv converter to be cloned
  * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
  *  If buffer is not large enough, new memory will be allocated.
  *  Clients can use the U_CNV_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
- * @param pBufferSize pointer to size of allocated space. 
- *  If *pBufferSize == 0, a sufficient size for use in cloning will 
- *  be returned ('pre-flighting')
- *  If *pBufferSize is not enough for a stack-based safe clone, 
- *  new memory will be allocated.
+ * @param pBufferSize pointer to size of allocated space. pBufferSize must not be NULL.
  * @param status to indicate whether the operation went on smoothly or there were errors
- *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ *  An informational status value, U_SAFECLONE_ALLOCATED_WARNING,
+ *  is used if any allocations were necessary.
+ *  However, it is better to check if *pBufferSize grew for checking for
+ *  allocations because warning codes can be overridden by subsequent
+ *  function calls.
  * @return pointer to the new clone
  * @stable ICU 2.0
  */
