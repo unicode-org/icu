@@ -15,8 +15,10 @@
 
 #include "unicode/utypes.h"
 #include "unicode/utext.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
-
+#include "memory.h"
+#include "string.h"
 
 
 static void TestAPI(void);
@@ -45,7 +47,7 @@ addUTextTest(TestNode** root)
 /*
  *  TestAPI   verify that the UText API is accessible from C programs.
  *            This is not intended to be a complete test of the API functionality.  That is
- *             in the C++ intltest program.
+ *            in the C++ intltest program.
  *            This test is intended to check that everything can be accessed and built in 
  *            a pure C enviornment.
  */
@@ -55,19 +57,193 @@ static void TestAPI(void) {
     UErrorCode      status = U_ZERO_ERROR;
     UBool           gFailed = FALSE;
 
-    UText           utLoc = UTEXT_INITIALIZER;
-    const char *    cString = "Hello, World";
-    UChar   uString[]  = {0x41, 0x42, 0x43, 0};
-    uint8_t        *utf8String;
-    UText          *uta;
-    UText          *utb;
+    // Open
+    {
+        UText           utLoc = UTEXT_INITIALIZER;
+        const char *    cString = "Hello, World";
+        UChar           uString[]  = {0x41, 0x42, 0x43, 0};
+        uint8_t        *utf8String;
+        UText          *uta;
+        UText          *utb;
+        UChar           c;
 
-    utf8String = (uint8_t *)cString;
-    uta = utext_openUTF8(&utLoc, utf8String, -1, &status);
-    TEST_SUCCESS(status);
-    TEST_ASSERT(uta == &utLoc);
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString, -1, &status);
+        TEST_SUCCESS(status);
+        c = utext_next32(uta);
+        TEST_ASSERT(c == 0x41);
+        utb = utext_close(uta); 
+        TEST_ASSERT(utb == NULL);
 
-    uta = utext_close(&utLoc);
-    TEST_ASSERT(uta == &utLoc);
+        utf8String = (uint8_t *)cString;
+        uta = utext_openUTF8(&utLoc, utf8String, -1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(uta == &utLoc);
+
+        uta = utext_close(&utLoc);
+        TEST_ASSERT(uta == &utLoc);
+    }
+
+    // utext_clone()
+    {
+        UChar   uString[]  = {0x41, 0x42, 0x43, 0};
+        int     len;
+        UText   *uta;
+        UText   *utb;
+
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString, -1, &status);
+        TEST_SUCCESS(status);
+        utb = utext_clone(NULL, uta, FALSE, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utb != NULL);
+        TEST_ASSERT(utb != uta);
+        len = utext_length(uta);
+        TEST_ASSERT(len == u_strlen(uString));
+        utext_close(uta);
+        utext_close(utb);
+    }
+
+    // basic access functions
+    {
+        UChar     uString[]  = {0x41, 0x42, 0x43, 0};
+        UText     *uta;
+        UChar32   c;
+        int32_t   len;
+        UBool     b;
+        int32_t   i;
+
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString, -1, &status);
+        TEST_ASSERT(uta!=NULL);
+        TEST_SUCCESS(status);
+        b = utext_isLengthExpensive(uta);
+        TEST_ASSERT(b==TRUE);
+        len = utext_length(uta);
+        TEST_ASSERT(len == u_strlen(uString));
+        b = utext_isLengthExpensive(uta);
+        TEST_ASSERT(b==FALSE);
+
+        c = utext_char32At(uta, 0);
+        TEST_ASSERT(c==uString[0]);
+        
+        c = utext_current(uta);
+        TEST_ASSERT(c==uString[0]);
+
+        c = utext_next32(uta);
+        TEST_ASSERT(c==uString[0]);
+        c = utext_current(uta);
+        TEST_ASSERT(c==uString[1]);
+
+        c = utext_previous32(uta);
+        TEST_ASSERT(c==uString[0]);
+        c = utext_current(uta);
+        TEST_ASSERT(c==uString[0]);
+
+        c = utext_next32From(uta, 1);
+        TEST_ASSERT(c==uString[1]);
+        c = utext_next32From(uta, u_strlen(uString));
+        TEST_ASSERT(c==U_SENTINEL);
+
+        c = utext_previous32From(uta, 2);
+        TEST_ASSERT(c==uString[1]);
+        i = utext_getIndex(uta);
+        TEST_ASSERT(i == 1);
+
+        utext_setIndex(uta, 0);
+        b = utext_moveIndex(uta, 1);
+        TEST_ASSERT(b==TRUE);
+        i = utext_getIndex(uta);
+        TEST_ASSERT(i==1);
+
+        b = utext_moveIndex(uta, u_strlen(uString)-1);
+        TEST_ASSERT(b==TRUE);
+        i = utext_getIndex(uta);
+        TEST_ASSERT(i==u_strlen(uString));
+
+        b = utext_moveIndex(uta, 1);
+        TEST_ASSERT(b==FALSE);
+        i = utext_getIndex(uta);
+        TEST_ASSERT(i==u_strlen(uString));
+
+        utext_setIndex(uta, 0);
+        c = UTEXT_NEXT32(uta);
+        TEST_ASSERT(c==uString[0]);
+        c = utext_current(uta);
+        TEST_ASSERT(c==uString[1]);
+
+        c = UTEXT_PREVIOUS32(uta);
+        TEST_ASSERT(c==uString[0]);
+        c = UTEXT_PREVIOUS32(uta);
+        TEST_ASSERT(c==U_SENTINEL);
+
+
+        utext_close(uta);
+    }
+
+    {
+        //
+        // extract
+        //
+        UText     *uta;
+        UChar     uString[]  = {0x41, 0x42, 0x43, 0};
+        UChar     buf[100];
+        int32_t   i;
+
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString, -1, &status);
+        TEST_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        i = utext_extract(uta, 0, 100, NULL, 0, &status);
+        TEST_ASSERT(status==U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(i == u_strlen(uString));
+
+        status = U_ZERO_ERROR;
+        memset(buf, 0, sizeof(buf));
+        i = utext_extract(uta, 0, 100, buf, 100, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(i == u_strlen(uString));
+        i = u_strcmp(uString, buf);
+        TEST_ASSERT(i == 0);
+        utext_close(uta);
+    }
+
+    {
+        //
+        //  Copy, Replace, isWritable
+        //    Can't create an editable UText from plain C, so all we
+        //    can easily do is check that errors returned.
+        UText     *uta;
+        UChar     uString[]  = {0x41, 0x42, 0x43, 0};
+        UBool     b;
+
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString, -1, &status);
+        TEST_SUCCESS(status);
+
+        b = utext_isWriteble(uta);
+        TEST_ASSERT(b == FALSE);
+
+        b = utext_hasMetaData(uta);
+        TEST_ASSERT(b == FALSE);
+
+        utext_replace(uta,
+                      0, 1,     /* start, limit */
+                      uString, -1,  /* replacement, replacement length */
+                      &status);
+        TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+
+        utext_copy(uta,
+                   0, 1,         /* start, limit      */
+                   2,            /* destination index */
+                   FALSE,        /* move flag         */
+                   &status);
+        TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+    }
+
 
 }
+
