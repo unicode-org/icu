@@ -22,6 +22,8 @@
 
 
 static void TestAPI(void);
+void addUTextTest(TestNode** root);
+
 
 void
 addUTextTest(TestNode** root)
@@ -57,7 +59,7 @@ static void TestAPI(void) {
     UErrorCode      status = U_ZERO_ERROR;
     UBool           gFailed = FALSE;
 
-    // Open
+    /* Open    */
     {
         UText           utLoc = UTEXT_INITIALIZER;
         const char *    cString = "Hello, World";
@@ -67,7 +69,6 @@ static void TestAPI(void) {
         UText          *utb;
         UChar           c;
 
-        status = U_ZERO_ERROR;
         uta = utext_openUChars(NULL, uString, -1, &status);
         TEST_SUCCESS(status);
         c = utext_next32(uta);
@@ -84,7 +85,7 @@ static void TestAPI(void) {
         TEST_ASSERT(uta == &utLoc);
     }
 
-    // utext_clone()
+    /* utext_clone()  */
     {
         UChar   uString[]  = {0x41, 0x42, 0x43, 0};
         int     len;
@@ -104,7 +105,7 @@ static void TestAPI(void) {
         utext_close(utb);
     }
 
-    // basic access functions
+    /* basic access functions  */
     {
         UChar     uString[]  = {0x41, 0x42, 0x43, 0};
         UText     *uta;
@@ -182,9 +183,9 @@ static void TestAPI(void) {
     }
 
     {
-        //
-        // extract
-        //
+        /*
+         * extract
+         */
         UText     *uta;
         UChar     uString[]  = {0x41, 0x42, 0x43, 0};
         UChar     buf[100];
@@ -210,10 +211,11 @@ static void TestAPI(void) {
     }
 
     {
-        //
-        //  Copy, Replace, isWritable
-        //    Can't create an editable UText from plain C, so all we
-        //    can easily do is check that errors returned.
+        /*
+         *  Copy, Replace, isWritable
+         *    Can't create an editable UText from plain C, so all we
+         *    can easily do is check that errors returned.
+         */
         UText     *uta;
         UChar     uString[]  = {0x41, 0x42, 0x43, 0};
         UBool     b;
