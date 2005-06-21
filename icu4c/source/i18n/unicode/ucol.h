@@ -1148,6 +1148,38 @@ ucol_getUnsafeSet( const UCollator *coll,
                   USet *unsafe,
                   UErrorCode *status);
 
+/** Reset UCA's static pointers. You don't want to use this, unless your static memory can go away.
+ * @internal ICU 3.2.1
+ */
+U_INTERNAL void U_EXPORT2
+ucol_forgetUCA(void);
+
+/** Touches all resources needed for instantiating a collator from a short string definition,
+ *  thus filling up the cache.
+ * @param definition A short string containing a locale and a set of attributes. 
+ *                   Attributes not explicitly mentioned are left at the default
+ *                   state for a locale.
+ * @param parseError if not NULL, structure that will get filled with error's pre
+ *                   and post context in case of error.
+ * @param forceDefaults if FALSE, the settings that are the same as the collator 
+ *                   default settings will not be applied (for example, setting
+ *                   French secondary on a French collator would not be executed). 
+ *                   If TRUE, all the settings will be applied regardless of the 
+ *                   collator default value. If the definition
+ *                   strings are to be cached, should be set to FALSE.
+ * @param status     Error code. Apart from regular error conditions connected to 
+ *                   instantiating collators (like out of memory or similar), this
+ *                   API will return an error if an invalid attribute or attribute/value
+ *                   combination is specified.
+ * @see ucol_openFromShortString
+ * @internal ICU 3.2.1
+ */
+U_INTERNAL void U_EXPORT2
+ucol_prepareShortStringOpen( const char *definition,
+                          UBool forceDefaults,
+                          UParseError *parseError,
+                          UErrorCode *status);
+
 /** Creates a binary image of a collator. This binary image can be stored and 
  *  later used to instantiate a collator using ucol_openBinary.
  *  This API supports preflighting.
