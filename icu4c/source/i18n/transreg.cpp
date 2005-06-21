@@ -1223,7 +1223,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             UVector* rbts = new UVector(status);
             int32_t passNumber = 1;
             for (int32_t i = 0; U_SUCCESS(status) && i < entry->u.dataVector->size(); i++) {
-                Transliterator* t = new RuleBasedTransliterator((UnicodeString)"%Pass" + (passNumber++),
+                Transliterator* t = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
                     (TransliterationRuleData*)(entry->u.dataVector->elementAt(i)), FALSE);
                 if (t == 0)
                     status = U_MEMORY_ALLOCATION_ERROR;

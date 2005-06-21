@@ -191,6 +191,9 @@ public:
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
+    /* @internal */
+    static const UChar PASS_STRING[];
+
 private:
 
     friend class Transliterator;

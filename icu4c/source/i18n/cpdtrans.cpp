@@ -30,6 +30,8 @@ static const UChar COLON_COLON[] = {0x3A, 0x3A, 0}; //"::"
 
 U_NAMESPACE_BEGIN
 
+const UChar CompoundTransliterator::PASS_STRING[] = { 0x0025, 0x0050, 0x0061, 0x0073, 0x0073, 0 }; // "%Pass"
+
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CompoundTransliterator)
 
 /**
@@ -373,16 +375,16 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
         // ::BEGIN/::END blocks) are given IDs that begin with
         // "%Pass": use toRules() to write all the rules to the output
         // (and insert "::Null;" if we have two in a row)
-        if (trans[i]->getID().startsWith("%Pass")) {
+        if (trans[i]->getID().startsWith(PASS_STRING)) {
             trans[i]->toRules(rule, escapeUnprintable);
-            if (numAnonymousRBTs > 1 && i > 0 && trans[i - 1]->getID().startsWith("%Pass"))
-                rule = "::Null;" + rule;
+            if (numAnonymousRBTs > 1 && i > 0 && trans[i - 1]->getID().startsWith(PASS_STRING))
+                rule = UNICODE_STRING_SIMPLE("::Null;") + rule;
 
         // we also use toRules() on CompoundTransliterators (which we
         // check for by looking for a semicolon in the ID)-- this gets
         // the list of their child transliterators output in the right
         // format
-        } else if (trans[i]->getID().indexOf(';') >= 0) {
+        } else if (trans[i]->getID().indexOf(ID_DELIM) >= 0) {
             trans[i]->toRules(rule, escapeUnprintable);
 
         // for everything else, use Transliterator::toRules()
