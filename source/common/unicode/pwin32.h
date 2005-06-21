@@ -259,7 +259,11 @@ typedef unsigned int uint32_t;
 /*===========================================================================*/
 
 #ifndef U_INLINE
-#define U_INLINE __inline
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE __inline
+#   endif
 #endif
 
 #if defined(_MSC_VER) && defined(_M_IX86)
