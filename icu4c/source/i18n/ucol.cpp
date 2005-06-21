@@ -8296,5 +8296,12 @@ ucol_cloneBinary(const UCollator *coll,
     return length;
 }
 
+U_CAPI void U_EXPORT2
+ucol_forgetUCA(void)
+{
+  _staticUCA = NULL;
+  UCA_DATA_MEM = NULL;
+}
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
