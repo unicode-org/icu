@@ -88,7 +88,7 @@ static void TestAPI(void) {
     /* utext_clone()  */
     {
         UChar   uString[]  = {0x41, 0x42, 0x43, 0};
-        int     len;
+        int32_t len;
         UText   *uta;
         UText   *utb;
 
