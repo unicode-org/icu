@@ -14,64 +14,61 @@ U_NAMESPACE_BEGIN
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
-enum
-{
-    // Split matra table indices
-    _x1 = 1 << CF_INDEX_SHIFT,
-    _x2 = 2 << CF_INDEX_SHIFT,
-    _x3 = 3 << CF_INDEX_SHIFT,
-    _x4 = 4 << CF_INDEX_SHIFT,
-    _x5 = 5 << CF_INDEX_SHIFT,
-    _x6 = 6 << CF_INDEX_SHIFT,
-    _x7 = 7 << CF_INDEX_SHIFT,
-    _x8 = 8 << CF_INDEX_SHIFT,
-    _x9 = 9 << CF_INDEX_SHIFT,
+// Split matra table indices
+#define _x1  (1 << CF_INDEX_SHIFT)
+#define _x2  (2 << CF_INDEX_SHIFT)
+#define _x3  (3 << CF_INDEX_SHIFT)
+#define _x4  (4 << CF_INDEX_SHIFT)
+#define _x5  (5 << CF_INDEX_SHIFT)
+#define _x6  (6 << CF_INDEX_SHIFT)
+#define _x7  (7 << CF_INDEX_SHIFT)
+#define _x8  (8 << CF_INDEX_SHIFT)
+#define _x9  (9 << CF_INDEX_SHIFT)
 
-    // simple classes
-    _xx = CC_RESERVED,
-    _ma = CC_VOWEL_MODIFIER | CF_POS_ABOVE,
-    _mp = CC_VOWEL_MODIFIER | CF_POS_AFTER,
-    _sa = CC_STRESS_MARK | CF_POS_ABOVE,
-    _sb = CC_STRESS_MARK | CF_POS_BELOW,
-    _iv = CC_INDEPENDENT_VOWEL,
-    _i2 = CC_INDEPENDENT_VOWEL_2,
-    _ct = CC_CONSONANT | CF_CONSONANT,
-    _cn = CC_CONSONANT_WITH_NUKTA | CF_CONSONANT,
-    _nu = CC_NUKTA,
-    _dv = CC_DEPENDENT_VOWEL,
-    _dl = _dv | CF_POS_BEFORE,
-    _db = _dv | CF_POS_BELOW,
-    _da = _dv | CF_POS_ABOVE,
-    _dr = _dv | CF_POS_AFTER,
-    _lm = _dv | CF_LENGTH_MARK,
-    _l1 = CC_SPLIT_VOWEL_PIECE_1 | CF_POS_BEFORE,
-    _a1 = CC_SPLIT_VOWEL_PIECE_1 | CF_POS_ABOVE,
-    _r2 = CC_SPLIT_VOWEL_PIECE_2 | CF_POS_AFTER,
-    _m2 = CC_SPLIT_VOWEL_PIECE_2 | CF_LENGTH_MARK,
-    _m3 = CC_SPLIT_VOWEL_PIECE_3 | CF_LENGTH_MARK,
-    _vr = CC_VIRAMA,
+// simple classes
+#define _xx  (CC_RESERVED)
+#define _ma  (CC_VOWEL_MODIFIER | CF_POS_ABOVE)
+#define _mp  (CC_VOWEL_MODIFIER | CF_POS_AFTER)
+#define _sa  (CC_STRESS_MARK | CF_POS_ABOVE)
+#define _sb  (CC_STRESS_MARK | CF_POS_BELOW)
+#define _iv  (CC_INDEPENDENT_VOWEL)
+#define _i2  (CC_INDEPENDENT_VOWEL_2)
+#define _ct  (CC_CONSONANT | CF_CONSONANT)
+#define _cn  (CC_CONSONANT_WITH_NUKTA | CF_CONSONANT)
+#define _nu  (CC_NUKTA)
+#define _dv  (CC_DEPENDENT_VOWEL)
+#define _dl  (_dv | CF_POS_BEFORE)
+#define _db  (_dv | CF_POS_BELOW)
+#define _da  (_dv | CF_POS_ABOVE)
+#define _dr  (_dv | CF_POS_AFTER)
+#define _lm  (_dv | CF_LENGTH_MARK)
+#define _l1  (CC_SPLIT_VOWEL_PIECE_1 | CF_POS_BEFORE)
+#define _a1  (CC_SPLIT_VOWEL_PIECE_1 | CF_POS_ABOVE)
+#define _r2  (CC_SPLIT_VOWEL_PIECE_2 | CF_POS_AFTER)
+#define _m2  (CC_SPLIT_VOWEL_PIECE_2 | CF_LENGTH_MARK)
+#define _m3  (CC_SPLIT_VOWEL_PIECE_3 | CF_LENGTH_MARK)
+#define _vr  (CC_VIRAMA)
 
-    // split matras
-    _s1 = _dv | _x1,
-    _s2 = _dv | _x2,
-    _s3 = _dv | _x3,
-    _s4 = _dv | _x4,
-    _s5 = _dv | _x5,
-    _s6 = _dv | _x6,
-    _s7 = _dv | _x7,
-    _s8 = _dv | _x8,
-    _s9 = _dv | _x9,
+// split matras
+#define _s1  (_dv | _x1)
+#define _s2  (_dv | _x2)
+#define _s3  (_dv | _x3)
+#define _s4  (_dv | _x4)
+#define _s5  (_dv | _x5)
+#define _s6  (_dv | _x6)
+#define _s7  (_dv | _x7)
+#define _s8  (_dv | _x8)
+#define _s9  (_dv | _x9)
 
-    // consonants with special forms
-    // NOTE: this assumes that no consonants with nukta have
-    // special forms... (Bengali RA?)
-    _bb = _ct | CF_BELOW_BASE,
-    _pb = _ct | CF_POST_BASE,
-    _vt = _bb | CF_VATTU,
-    _rv = _vt | CF_REPH,
-    _rp = _pb | CF_REPH,
-    _rb = _bb | CF_REPH
-};
+// consonants with special forms
+// NOTE: this assumes that no consonants with nukta have
+// special forms... (Bengali RA?)
+#define _bb  (_ct | CF_BELOW_BASE)
+#define _pb  (_ct | CF_POST_BASE)
+#define _vt  (_bb | CF_VATTU)
+#define _rv  (_vt | CF_REPH)
+#define _rp  (_pb | CF_REPH)
+#define _rb  (_bb | CF_REPH)
 
 //
 // Character class tables
