@@ -807,7 +807,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     virtual UnicodeString& format(int64_t number,
                                   UnicodeString& appendTo,
@@ -881,7 +881,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     UnicodeString& format(int64_t number,
                           UnicodeString& appendTo) const;
@@ -1863,7 +1863,7 @@ protected:
      * this number, it wouldn't make sense anyway, and this is just to make sure
      * that someone turning on scientific mode with default settings doesn't
      * end up with lots of zeroes.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     static const int32_t  kMaxScientificIntegerDigits;
 };

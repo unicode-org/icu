@@ -418,7 +418,7 @@ public:
      * typically one hour.
      * @param ec input-output error code
      *
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
                            int32_t& dstOffset, UErrorCode& ec) const;

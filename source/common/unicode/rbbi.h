@@ -163,7 +163,7 @@ public:
      * @param status Information on any errors encountered.
      * @see udata_open
      * @see #getBinaryRules
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
 

@@ -216,9 +216,9 @@ uset_set(USet* set,
  *                          If the status code indicates failure, then the return value 
  *                          is the index of the error in the source.
  *                                  
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 uset_applyPattern(USet *set,
                   const UChar *pattern, int32_t patternLength,
                   uint32_t options,

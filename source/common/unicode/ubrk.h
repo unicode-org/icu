@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1996-2004, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2005, International Business Machines Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
 
@@ -253,7 +253,7 @@ typedef enum UWordBreak {
  *  word, to allow for further subdivisions of a category in future releases.
  *  Applications should check for tag values falling within the range, rather
  *  than for single individual values.
- *  @draft ICU 2.8
+ *  @stable ICU 2.8
 */
 typedef enum ULineBreakTag {
     /** Tag value for soft line breaks, positions at which a line break
@@ -275,7 +275,7 @@ typedef enum ULineBreakTag {
  *  sentence, to allow for further subdivisions of a category in future releases.
  *  Applications should check for tag values falling within the range, rather
  *  than for single individual values.
- *  @draft ICU 2.8
+ *  @stable ICU 2.8
 */
 typedef enum USentenceBreakTag {
     /** Tag value for for sentences  ending with a sentence terminator
@@ -552,7 +552,7 @@ ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, 
  * @param type locale type (valid or actual)
  * @param status error code
  * @return locale string
- * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
+ * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
  */
 U_DRAFT const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);

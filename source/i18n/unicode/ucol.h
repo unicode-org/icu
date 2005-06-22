@@ -810,7 +810,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * UCA version number (3.1.1, 4.0).
  * @param coll The UCollator to query.
  * @param info the version # information, the result will be filled in
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 U_DRAFT void U_EXPORT2
 ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
@@ -998,7 +998,7 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
- * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
+ * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
  */
 U_DRAFT const char * U_EXPORT2
 ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);

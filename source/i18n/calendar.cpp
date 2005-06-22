@@ -2112,7 +2112,6 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
  * should only be called if this calendar is not lenient.
  * @see #isLenient
  * @see #validateField(int)
- * @draft ICU 2.8
  */
 void Calendar::validateFields(UErrorCode &status) {
   for (int32_t field = 0; U_SUCCESS(status) && (field < UCAL_FIELD_COUNT); field++) {
@@ -2128,7 +2127,6 @@ void Calendar::validateFields(UErrorCode &status) {
  * Generic fields can be handled by
  * <code>Calendar.validateField()</code>.
  * @see #validateField(int, int, int)
- * @draft ICU 2.8
  */
 void Calendar::validateField(UCalendarDateFields field, UErrorCode &status) {
   int32_t y;
@@ -2164,7 +2162,6 @@ void Calendar::validateField(UCalendarDateFields field, UErrorCode &status) {
  * descriptive <code>IllegalArgumentException</code>.  Subclasses may
  * use this method in their implementation of {@link
  * #validateField(int)}.
- * @draft ICU 2.8
  */
 void Calendar::validateField(UCalendarDateFields field, int32_t min, int32_t max, UErrorCode& status)
 {

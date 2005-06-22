@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2005, International Business Machines Corporation and others. All Rights Reserved.
 * Modification History:
 *
 *   Date        Name        Description
@@ -407,9 +407,9 @@ unum_parse(    const   UNumberFormat*  fmt,
 * @see unum_format
 * @see unum_formatInt64
 * @see unum_formatDouble
-* @draft ICU 2.8
+* @stable ICU 2.8
 */
-U_CAPI int64_t U_EXPORT2 
+U_STABLE int64_t U_EXPORT2 
 unum_parseInt64(const UNumberFormat*  fmt,
         const UChar*  text,
         int32_t       textLength,
@@ -845,7 +845,7 @@ unum_setSymbol(UNumberFormat *fmt,
  * @param type type of the locale we're looking for (valid or actual) 
  * @param status error code for the operation
  * @return the locale name
- * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
+ * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
  */
 U_CAPI const char* U_EXPORT2
 unum_getLocaleByType(const UNumberFormat *fmt,

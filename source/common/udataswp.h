@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -82,7 +82,7 @@ typedef struct UDataSwapper UDataSwapper;
  * @return The actual length of the data.
  *
  * @see UDataSwapper
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef int32_t U_CALLCONV
 UDataSwapFn(const UDataSwapper *ds,
@@ -91,28 +91,28 @@ UDataSwapFn(const UDataSwapper *ds,
 
 /**
  * Convert one uint16_t from input to platform endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef uint16_t U_CALLCONV
 UDataReadUInt16(uint16_t x);
 
 /**
  * Convert one uint32_t from input to platform endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef uint32_t U_CALLCONV
 UDataReadUInt32(uint32_t x);
 
 /**
  * Convert one uint16_t from platform to input endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef void U_CALLCONV
 UDataWriteUInt16(uint16_t *p, uint16_t x);
 
 /**
  * Convert one uint32_t from platform to input endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef void U_CALLCONV
 UDataWriteUInt32(uint32_t *p, uint32_t x);
@@ -125,7 +125,7 @@ UDataWriteUInt32(uint32_t *p, uint32_t x);
  * according to the output charset.
  * You can use -1 for the length parameters of NUL-terminated strings as usual.
  * Returns Unicode code point order for invariant characters.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef int32_t U_CALLCONV
 UDataCompareInvChars(const UDataSwapper *ds,
@@ -141,53 +141,53 @@ UDataCompareInvChars(const UDataSwapper *ds,
  * @param fmt The format string.
  * @param args The arguments for format string inserts.
  *
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 typedef void U_CALLCONV
 UDataPrintError(void *context, const char *fmt, va_list args);
 
 struct UDataSwapper {
-    /** Input endianness. @draft ICU 2.8 */
+    /** Input endianness. @internal ICU 2.8 */
     UBool inIsBigEndian;
-    /** Input charset family. @see U_CHARSET_FAMILY @draft ICU 2.8 */
+    /** Input charset family. @see U_CHARSET_FAMILY @internal ICU 2.8 */
     uint8_t inCharset;
-    /** Output endianness. @draft ICU 2.8 */
+    /** Output endianness. @internal ICU 2.8 */
     UBool outIsBigEndian;
-    /** Output charset family. @see U_CHARSET_FAMILY @draft ICU 2.8 */
+    /** Output charset family. @see U_CHARSET_FAMILY @internal ICU 2.8 */
     uint8_t outCharset;
 
     /* basic functions for reading data values */
 
-    /** Convert one uint16_t from input to platform endianness. @draft ICU 2.8 */
+    /** Convert one uint16_t from input to platform endianness. @internal ICU 2.8 */
     UDataReadUInt16 *readUInt16;
-    /** Convert one uint32_t from input to platform endianness. @draft ICU 2.8 */
+    /** Convert one uint32_t from input to platform endianness. @internal ICU 2.8 */
     UDataReadUInt32 *readUInt32;
-    /** Compare an invariant-character output string with a local one. @draft ICU 2.8 */
+    /** Compare an invariant-character output string with a local one. @internal ICU 2.8 */
     UDataCompareInvChars *compareInvChars;
 
     /* basic functions for writing data values */
 
-    /** Convert one uint16_t from platform to input endianness. @draft ICU 2.8 */
+    /** Convert one uint16_t from platform to input endianness. @internal ICU 2.8 */
     UDataWriteUInt16 *writeUInt16;
-    /** Convert one uint32_t from platform to input endianness. @draft ICU 2.8 */
+    /** Convert one uint32_t from platform to input endianness. @internal ICU 2.8 */
     UDataWriteUInt32 *writeUInt32;
 
     /* basic functions for data transformations */
 
-    /** Transform an array of 16-bit integers. @draft ICU 2.8 */
+    /** Transform an array of 16-bit integers. @internal ICU 2.8 */
     UDataSwapFn *swapArray16;
-    /** Transform an array of 32-bit integers. @draft ICU 2.8 */
+    /** Transform an array of 32-bit integers. @internal ICU 2.8 */
     UDataSwapFn *swapArray32;
-    /** Transform an invariant-character string. @draft ICU 2.8 */
+    /** Transform an invariant-character string. @internal ICU 2.8 */
     UDataSwapFn *swapInvChars;
 
     /**
      * Function for message output when an error occurs during data swapping.
      * Can be NULL.
-     * @draft ICU 2.8
+     * @internal ICU 2.8
      */
     UDataPrintError *printError;
-    /** Context pointer for printError. @draft ICU 2.8 */
+    /** Context pointer for printError. @internal ICU 2.8 */
     void *printErrorContext;
 };
 
@@ -205,7 +205,7 @@ udata_openSwapper(UBool inIsBigEndian, uint8_t inCharset,
  * characteristics.
  *
  * @see udata_swap
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 U_CAPI UDataSwapper * U_EXPORT2
 udata_openSwapperForInputData(const void *data, int32_t length,
@@ -222,7 +222,7 @@ udata_closeSwapper(UDataSwapper *ds);
  *
  * @return The size of the data header, in bytes.
  *
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 U_CAPI int32_t U_EXPORT2
 udata_swapDataHeader(const UDataSwapper *ds,
@@ -231,14 +231,14 @@ udata_swapDataHeader(const UDataSwapper *ds,
 
 /**
  * Convert one int16_t from input to platform endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 U_CAPI int16_t U_EXPORT2
 udata_readInt16(const UDataSwapper *ds, int16_t x);
 
 /**
  * Convert one int32_t from input to platform endianness.
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 U_CAPI int32_t U_EXPORT2
 udata_readInt32(const UDataSwapper *ds, int32_t x);
@@ -335,7 +335,7 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
  *
  * @param isAcceptable Same as for udata_openChoice(). May be NULL.
  *
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 U_CAPI UDataMemory * U_EXPORT2
 udata_openSwap(const char *path, const char *type, const char *name,

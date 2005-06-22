@@ -294,7 +294,7 @@ ures_getLocale(const UResourceBundle* resourceBundle,
  *             ULocDataLocaleType in uloc.h
  * @param status just for catching illegal arguments
  * @return  A Locale name
- * @draft ICU 2.8
+ * @draft ICU 2.8 likely to change in the future
  */
 U_DRAFT const char* U_EXPORT2 
 ures_getLocaleByType(const UResourceBundle* resourceBundle, 
