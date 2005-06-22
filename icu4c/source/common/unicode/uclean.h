@@ -18,7 +18,11 @@
 #define __UCLEAN_H__
 
 #include "unicode/utypes.h"
-
+/**
+ * \file
+ * \brief C API: Initialize and clean up ICU
+ */
+ 
 /**
  *  Initialize ICU. The description further below applies to ICU 2.6 to ICU 3.4.
  *  Starting with ICU 3.4, u_init() needs not be called any more for

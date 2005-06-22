@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,6 +23,11 @@
 #include <stdarg.h>
 #include "unicode/utypes.h"
 
+/**
+ * \file
+ * \brief C API:  Definitions for ICU tracing/logging. 
+ */
+ 
 U_CDECL_BEGIN
 
 #ifndef U_HIDE_DRAFT_API

@@ -32,6 +32,12 @@
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 
+/**
+ * \file 
+ * \brief C++ API: Symbols for formatting numbers.
+ */
+
+
 U_NAMESPACE_BEGIN
 
 /**

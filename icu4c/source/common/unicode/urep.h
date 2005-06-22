@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -28,7 +28,10 @@ U_CDECL_BEGIN
 /********************************************************************
  * Data Structures
  ********************************************************************/
-
+/**
+ * \file
+ * \brief C API: Callbacks for UReplacebale
+ */
 /**
  * An opaque replaceable text object.  This will be manipulated only
  * through the caller-supplied UReplaceableFunctor struct.  Related

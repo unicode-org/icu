@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -24,7 +24,9 @@
 #include "unicode/parseerr.h"
   
 /**
- *\file
+ * \file
+ * \brief C API: Internationalized Domain Names in Applications Tranformation
+ *
  * UIDNA API implements the IDNA protocol as defined in the IDNA RFC 
  * (http://www.ietf.org/rfc/rfc3490.txt).
  * The RFC defines 2 operations: ToASCII and ToUnicode. Domain labels 

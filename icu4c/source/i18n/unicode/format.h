@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File FORMAT.H
@@ -22,6 +22,11 @@
 
 
 #include "unicode/utypes.h"
+
+/**
+ * \file 
+ * \brief C++ API: Base class for all formats. 
+ */
 
 #if !UCONFIG_NO_FORMATTING
 

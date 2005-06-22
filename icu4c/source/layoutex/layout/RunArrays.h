@@ -15,6 +15,11 @@
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
 
+/**
+ * \file 
+ * \brief C++ API: base class for building classes which represent data that is associated with runs of text.
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**

@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -13,7 +13,11 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
-
+/**
+ * \file
+ * \brief C++ API: Character Iterator
+ */
+ 
 U_NAMESPACE_BEGIN
 /**
  * Abstract class that defines an API for forward-only iteration

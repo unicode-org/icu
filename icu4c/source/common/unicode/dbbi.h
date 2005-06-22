@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2005 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
@@ -15,6 +15,11 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+/**
+ * \file
+ * \brief C++ API: Dictionary Based Break Iterator
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /* forward declaration */

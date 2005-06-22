@@ -26,6 +26,11 @@
 #include "unicode/locid.h"
 #include "unicode/ures.h"
 
+/**
+ * \file 
+ * \brief C++ API: Symbols for formatting dates.
+ */
+
 U_NAMESPACE_BEGIN
 
 /* forward declaration */

@@ -22,6 +22,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file
+ * \brief C++ API: Break Iterator.
+ */
+ 
 #if UCONFIG_NO_BREAK_ITERATION
 
 U_NAMESPACE_BEGIN

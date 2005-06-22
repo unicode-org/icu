@@ -17,6 +17,10 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+/**
+ * \file 
+ * \brief C++ API: Formattable is a thin wrapper for primitive numeric types.
+ */
 
 #if !UCONFIG_NO_FORMATTING
 

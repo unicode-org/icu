@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -18,9 +18,15 @@
 #include "unicode/measure.h"
 #include "unicode/currunit.h"
 
+/**
+ * \file 
+ * \brief C++ API: Currency Amount Object.
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**
+ *
  * A currency together with a numeric amount, such as 200 USD.
  *
  * @author Alan Liu

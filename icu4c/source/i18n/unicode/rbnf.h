@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and others.
+* Copyright (C) 1997-2005, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -9,6 +9,11 @@
 #define RBNF_H
 
 #include "unicode/utypes.h"
+
+/**
+ * \file 
+ * \brief C++ API: Rule Based Number Format
+ */
 
 /**
  * \def U_HAVE_RBNF
@@ -52,7 +57,6 @@ class Collator;
 #endif
 
 /**
- * \brief C++ API: RuleBasedNumberFormat
  *
  * <h2> Rule Based Number Format C++ API </h2>
  *

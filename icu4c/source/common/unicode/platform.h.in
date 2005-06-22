@@ -16,6 +16,11 @@
 ******************************************************************************
 */
 
+/**
+ * \file 
+ * \brief Basic types for the platform 
+ */
+
 /* Define the platform we're on. */
 #ifndef @platform@
 #define @platform@

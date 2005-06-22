@@ -12,6 +12,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Service for searching text based on RuleBasedCollator.
+ */
+ 
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/tblcoll.h"
@@ -20,7 +25,8 @@
 
 U_NAMESPACE_BEGIN
 
-/**
+/** 
+ *
  * <tt>StringSearch</tt> is a <tt>SearchIterator</tt> that provides
  * language-sensitive text searching based on the comparison rules defined
  * in a {@link RuleBasedCollator} object.

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File NUMFMT.H
@@ -22,6 +22,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Abstract base class for all number formats.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unistr.h"
@@ -42,6 +47,7 @@ typedef const void* URegistryKey;
 #endif
 
 /**
+ *
  * Abstract base class for all number formats.  Provides interface for
  * formatting and parsing a number.  Also provides methods for
  * determining which locales have number formats, and what their names
