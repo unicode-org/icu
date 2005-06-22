@@ -159,10 +159,12 @@ utext_close(UText *ut);
 /**
  * Open a read-only UText implementation for UTF-8 strings.
  * 
+ * \htmlonly
  * Any invalid utf-8 in the input will be handled in this way:
  * a sequence of bytes that has the form of a trunctated, but otherwise valid,
  * utf-8 sequence will be replaced by a single unicode replacement character, \uFFFD. 
  * Any other illegal bytes will each be replaced by a \uFFFD.
+ * \endhtmlonly
  * 
  * @param ut     Pointer to a UText struct.  If NULL, a new UText will be created.
  *               If non-NULL, must refer to an initialized UText struct, which will then

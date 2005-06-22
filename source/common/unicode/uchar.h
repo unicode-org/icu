@@ -100,8 +100,10 @@ U_CDECL_BEGIN
  * the Standard Recommendations in UTS #18. Instead, they match Java
  * functions according to their API documentation.
  *
+ * \htmlonly
  * The C/POSIX character classes are also available in UnicodeSet patterns,
  * using patterns like [:graph:] or \p{graph}.
+ * \endhtmlonly
  *
  * Note: There are several ICU whitespace functions.
  * Comparison:
