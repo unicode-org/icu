@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -166,7 +166,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
                             fMode, 0,
                             TRUE, &neededToNormalize,
                             &errorCode);
-        output.releaseBuffer(length);
+        output.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
         if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
             // use a larger output string buffer and do it again from the start
@@ -177,7 +177,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
                                 fMode, 0,
                                 TRUE, &neededToNormalize,
                                 &errorCode);
-            output.releaseBuffer(length);
+            output.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
         }
 
         if(U_FAILURE(errorCode)) {
