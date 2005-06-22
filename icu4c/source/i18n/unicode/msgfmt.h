@@ -602,6 +602,8 @@ public:
      * between patterns having different quoting semantics.
      *
      * @param pattern the 'apostrophe-friendly' patttern to convert
+     * @param status    Input/output error code.  If the pattern
+     *                  cannot be parsed, the failure code is set.
      * @return the standard equivalent of the original pattern
      * @since ICU 3.4
      */
