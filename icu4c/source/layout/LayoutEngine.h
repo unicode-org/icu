@@ -109,6 +109,8 @@ protected:
      * @param fontInstance - the font for the text
      * @param scriptCode - the script for the text
      * @param languageCode - the language for the text
+     * @param typoFlags - the typographic control flags for the text.  Set bit 1 if kerning
+     * is desired, set bit 2 if ligature formation is desired.  Others are reserved.
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h
