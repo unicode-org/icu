@@ -1,7 +1,7 @@
 # Doxyfile 1.3.7
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2004, International Business Machines Corporation
+#  * Copyright (c) 2004-2005, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ********************************************************************
 
@@ -33,6 +33,7 @@ ALIASES                = "draft=\par ICU_Draft:\n" \
                          "stable=\par ICU_Stable:\n" \
                          "deprecated=\par ICU_Deprecated:\n" \
                          "obsolete=\par ICU_Obsolete:\n" \
+                         "system=\par ICU_System:\n" \
                          "internal=\par ICU_Internal:\n"
 OPTIMIZE_OUTPUT_FOR_C  = YES
 OPTIMIZE_OUTPUT_JAVA   = NO
