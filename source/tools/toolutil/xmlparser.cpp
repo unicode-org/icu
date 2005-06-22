@@ -213,7 +213,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             &pu, buffer+src.getCapacity(),
             &pb, bytes+bytesLength,
             NULL, TRUE, &errorCode);
-        src.releaseBuffer((int32_t)(pu-buffer));
+        src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
         ucnv_close(cnv);
         cnv=NULL;
         if(U_FAILURE(errorCode)) {
@@ -281,7 +281,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
                 cnv, &pu, buffer+src.getCapacity(),
                 &pb, bytes+bytesLength,
                 NULL, FALSE, &errorCode);
-            src.releaseBuffer((int32_t)(pu-buffer));
+            src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                 errorCode=U_ZERO_ERROR;
                 capacity=(3*src.getCapacity())/2; // increase capacity by 50%
