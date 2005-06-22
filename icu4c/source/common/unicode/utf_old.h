@@ -15,7 +15,12 @@
 */
 
 /**
- * \file
+ * \file 
+ * \brief C API: Deprecated macros for 16-bit Unicode handling
+ */
+
+/**
+ * 
  * The macros in utf_old.h are all deprecated and their use discouraged.
  * Some of the design principles behind the set of UTF macros
  * have changed or proved impractical.

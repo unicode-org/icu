@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2004, International Business Machines                        *
+* Copyright (C) 2003-2005, International Business Machines                        *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -21,7 +21,10 @@
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
 
-
+/**
+ * \file
+ * \brief C API: Provides access to locale data. 
+ */
 /**
  * Returns the set of exemplar characters for a locale.
  *

@@ -16,11 +16,17 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Rule Based Break Iterator
+ */
+ 
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/parseerr.h"
+
 
 struct UTrie;
 
@@ -36,6 +42,7 @@ struct RBBIStateTable;
 
 
 /**
+ *
  * A subclass of BreakIterator whose behavior is specified using a list of rules.
  * <p>Instances of this class are most commonly created by the factory methods of
  *  BreakIterator::createWordInstance(), BreakIterator::createLineInstance(), etc.,

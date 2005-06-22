@@ -10,6 +10,11 @@
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
 
+/**
+ * \file 
+ * \brief C API: Encapsulates information about a currency.
+ */
+
 #if !UCONFIG_NO_FORMATTING
 
 /**

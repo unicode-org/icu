@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -17,9 +17,14 @@
 #ifndef __USPREP_H__
 #define __USPREP_H__
 
+/**
+ * \file 
+ * \brief C API: Implements the StringPrep algorithm.
+ */
+
 #include "unicode/utypes.h"
 /**
- *\file
+ *
  * StringPrep API implements the StingPrep framework as described by RFC 3454.
  * StringPrep prepares Unicode strings for use in network protocols.
  * Profiles of StingPrep are set of rules and data according to with the

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -13,6 +13,11 @@
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
+/**
+ * \file 
+ * \brief C++ API: String Enumeration
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**

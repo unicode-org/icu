@@ -17,7 +17,12 @@
 #include "unicode/utypes.h"
 
 /**
- * Constants for Unicode script values from ScriptNames.txt .
+ * \file
+ * \brief C API: Unicode Script Information
+ */
+ 
+/**
+ * Constants for Unicode script values from ScriptNames.txt.
  *
  * @stable ICU 2.2
  */

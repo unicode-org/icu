@@ -25,7 +25,11 @@
 #define PUTIL_H
 
 #include "unicode/utypes.h"
-
+ /**
+  * \file
+  * \brief C API: Platform Utilities
+  */
+  
 /* Define this to 1 if your platform supports IEEE 754 floating point,
    to 0 if it does not. */
 #ifndef IEEE_754

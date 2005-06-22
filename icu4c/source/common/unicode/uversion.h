@@ -15,6 +15,10 @@
 *  Gets included by utypes.h and Windows .rc files
 */
 
+/**
+ * \file
+ * \brief C API: Contains all the important version numbers for ICU. 
+ */
 /*===========================================================================*/
 /* Main ICU version information                                              */
 /*===========================================================================*/

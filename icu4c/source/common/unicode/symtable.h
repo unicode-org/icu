@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2000-2004, International Business Machines
+*   Copyright (c) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -13,6 +13,12 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
+/**
+ * \file 
+ * \brief C++ API: An interface that defines both lookup protocol and parsing of
+ * symbolic names.
+ */
+ 
 U_NAMESPACE_BEGIN
 
 class ParsePosition;

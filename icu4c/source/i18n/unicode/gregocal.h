@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File GREGOCAL.H
@@ -29,9 +29,14 @@
 
 #include "unicode/calendar.h"
 
+/**
+ * \file 
+ * \brief C++ API: Concrete class which provides the standard calendar.
+ */
+
 U_NAMESPACE_BEGIN
 
-/**
+/** 
  * Concrete class which provides the standard calendar used by most of the world.
  * <P>
  * The standard (Gregorian) calendar has 2 eras, BC and AD.

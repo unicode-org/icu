@@ -347,6 +347,21 @@ typedef enum UDateFormatField {
      * @draft ICU 3.4
      */
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
+    /**
+     * FieldPosition selector for 'c' field alignment,
+     * corresponding to the {@link Calendar#DAY} field. 
+     * This displays the stand alone day name, if available.
+     * @draft ICU 3.4
+     */
+    UDAT_STANDALONE_DAY_FIELD = 25,
+    
+    /**
+     * FieldPosition selector for 'L' field alignment,
+     * corresponding to the {@link Calendar#MONTH} field.  
+     * This displays the stand alone month name, if available.
+     * @draft ICU 3.4
+     */
+    UDAT_STANDALONE_MONTH_FIELD = 26,
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for 
@@ -356,7 +371,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @draft ICU 3.0
      */
-    UDAT_FIELD_COUNT = 25
+    UDAT_FIELD_COUNT = 27
 
 } UDateFormatField;
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -17,9 +17,15 @@
 
 #include "unicode/format.h"
 
+/**
+ * \file 
+ * \brief C++ API: Formatter for measure objects.
+ */
+
 U_NAMESPACE_BEGIN
 
 /**
+ * 
  * A formatter for measure objects.  This is an abstract base class.
  *
  * <p>To format or parse a measure object, first create a formatter

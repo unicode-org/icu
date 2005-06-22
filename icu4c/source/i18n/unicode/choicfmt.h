@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -24,6 +24,11 @@
  
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Choice Format.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unistr.h"

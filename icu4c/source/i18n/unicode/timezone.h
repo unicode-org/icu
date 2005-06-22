@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File TIMEZONE.H
@@ -28,6 +28,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: TimeZone object
+ */
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/uobject.h"
@@ -39,6 +44,7 @@ U_NAMESPACE_BEGIN
 class StringEnumeration;
 
 /**
+ *
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
  * savings.
  *

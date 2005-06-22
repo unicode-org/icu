@@ -56,6 +56,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: RuleBasedCollator class provides the simple implementation of Collator.
+ */
+ 
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/coll.h"

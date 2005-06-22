@@ -10,6 +10,11 @@
 
 #include "LETypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Virtual base class for complex text layout.
+ */
+
 U_NAMESPACE_BEGIN
 
 class LEFontInstance;

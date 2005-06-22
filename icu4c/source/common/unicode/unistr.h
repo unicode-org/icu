@@ -21,6 +21,11 @@
 #ifndef UNISTR_H
 #define UNISTR_H
 
+/**
+ * \file 
+ * \brief C++ API: Unicode String 
+ */
+
 #include "unicode/rep.h"
 
 struct UConverter;          // unicode/ucnv.h

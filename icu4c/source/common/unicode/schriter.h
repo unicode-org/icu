@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -22,6 +22,11 @@
 #include "unicode/chariter.h"
 #include "unicode/uchriter.h"
 
+/**
+ * \file 
+ * \brief C++ API: String Character Iterator
+ */
+ 
 U_NAMESPACE_BEGIN
 /**
  * A concrete subclass of CharacterIterator that iterates over the

@@ -16,6 +16,11 @@
 ******************************************************************************
 */
 
+ /**
+  * \file
+  * \brief C API: Constants for Win32 platform
+  */
+  
 /* Define the platform we're on. */
 #ifndef U_WINDOWS
 #define U_WINDOWS
