@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -166,7 +166,6 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
             U16_NEXT(buffer, bufIndex, bufLen, ch);
             if(unassigned.contains(ch)){
                 status = U_IDNA_UNASSIGNED_ERROR;
-                rsource.releaseBuffer();
                 return 0;
             }
         }

@@ -989,18 +989,14 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
         // c) compare it with unicodeIn not equivalent
         if(i==0){
             testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,FALSE);
-            uni1.releaseBuffer();
         }else{
             testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,FALSE);
-            uni0.releaseBuffer();
         }
         // d) compare it with asciiIn not equivalent
         if(i==0){
             testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,FALSE);
-            ascii1.releaseBuffer();
         }else{
             testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,FALSE);
-            ascii0.releaseBuffer();
         }
 
     }
@@ -1399,18 +1395,14 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
         // c) compare it with unicodeIn not equivalent
         if(i==0){
             testCompare(src,srcLen,uni1.getBuffer(),uni1.length()-1,testName, func,FALSE);
-            uni1.releaseBuffer();
         }else{
             testCompare(src,srcLen,uni0.getBuffer(),uni0.length()-1,testName, func,FALSE);
-            uni0.releaseBuffer();
         }
         // d) compare it with asciiIn not equivalent
         if(i==0){
             testCompare(src,srcLen,ascii1.getBuffer(),ascii1.length()-1,testName, func,FALSE);
-            ascii1.releaseBuffer();
         }else{
             testCompare(src,srcLen,ascii0.getBuffer(),ascii0.length()-1,testName, func,FALSE);
-            ascii0.releaseBuffer();
         }
     }
 }   
@@ -1555,7 +1547,6 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
                + " Got: " + UnicodeString(u_errorName(gotStatus))
                + " for Source: "+ prettify(srcUChars) 
                + " Options: " + options);
-        src.releaseBuffer();
         return UnicodeString("");
     }
     
@@ -1570,7 +1561,6 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
                + " for Source: "+ prettify(srcUChars) 
                + " Options: " + options);
         }
-        src.releaseBuffer();
         return UnicodeString(exp, expLen);
 
     }else{
@@ -1579,7 +1569,6 @@ UnicodeString TestIDNA::testCompareReferenceImpl(UnicodeString& src,
             + " with "+ UnicodeString(uIDNAName) 
             +" for input: " + prettify(srcUChars));
     }
-    src.releaseBuffer();
     return UnicodeString("");
 }
 
@@ -1647,7 +1636,6 @@ void TestIDNA::TestIDNAMonkeyTest(){
         const UChar* src = source.getBuffer();
         testCompareReferenceImpl(src,source.length()-1);
         testCompareReferenceImpl(src,source.length()-1);
-        source.releaseBuffer();
     }
     
     /* for debugging */
@@ -1659,14 +1647,12 @@ void TestIDNA::TestIDNAMonkeyTest(){
         const UChar *src = source.getBuffer();
         testCompareReferenceImpl(src,source.length()-1);
         //debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
-        source.releaseBuffer();
     }
 
     
     source.truncate(0);
     source.append("\\uCF18\\U00021161\\U000EEF11\\U0002BB82\\U0001D63C");
     debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
-    source.releaseBuffer();
     
     { // test deletion of code points
         UnicodeString source("\\u043f\\u00AD\\u034f\\u043e\\u0447\\u0435\\u043c\\u0443\\u0436\\u0435\\u043e\\u043d\\u0438\\u043d\\u0435\\u0433\\u043e\\u0432\\u043e\\u0440\\u044f\\u0442\\u043f\\u043e\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0000");
@@ -1676,17 +1662,10 @@ void TestIDNA::TestIDNAMonkeyTest(){
         UnicodeString ascii("xn--b1abfaaepdrnnbgefbadotcwatmq2g4l");
         ascii.append((UChar)0x0000);
         testAPI(source.getBuffer(),ascii.getBuffer(), "uidna_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, uidna_toASCII);
-        source.releaseBuffer();
-        ascii.releaseBuffer();
         
         testAPI(source.getBuffer(),ascii.getBuffer(), "idnaref_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, idnaref_toASCII);
-        source.releaseBuffer();
-        ascii.releaseBuffer();
-
 
         testCompareReferenceImpl(source.getBuffer(), source.length()-1);
-        source.releaseBuffer();
-
     }
 
 }
