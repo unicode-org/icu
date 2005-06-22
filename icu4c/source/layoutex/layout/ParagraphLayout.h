@@ -116,7 +116,7 @@ public:
          *
          * @return the width of the line.
          *
-         * @draft ICU 2.8
+         * @stable ICU 2.8
          */
         le_int32 getWidth() const;
     
@@ -384,7 +384,7 @@ public:
      * @see LayoutEngine.h
      * @see RunArrays.h
      *
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     ParagraphLayout(const LEUnicode chars[], le_int32 count,
                     const FontRuns *fontRuns,
