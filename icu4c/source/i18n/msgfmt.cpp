@@ -1182,9 +1182,7 @@ MessageFormat::autoQuoteApostrophe(const UnicodeString& pattern, UErrorCode& sta
       status = U_MEMORY_ALLOCATION_ERROR;
     } else {
       int32_t len = umsg_autoQuoteApostrophe(pat, plen, buf, blen, &status);
-      if (U_SUCCESS(status)) {
-	result.releaseBuffer(len);
-      }
+      result.releaseBuffer(U_SUCCESS(status) ? len : 0);
     }
   }
   if (U_FAILURE(status)) {

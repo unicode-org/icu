@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2004, International Business Machines
+ *   Copyright (C) 1997-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -745,7 +745,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
     length=uloc_getDisplayLanguage(fullName, displayLocale.fullName,
                                    buffer, result.getCapacity(),
                                    &errorCode);
-    result.releaseBuffer(length);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
@@ -757,11 +757,7 @@ Locale::getDisplayLanguage(const Locale &displayLocale,
         length=uloc_getDisplayLanguage(fullName, displayLocale.fullName,
                                        buffer, result.getCapacity(),
                                        &errorCode);
-        result.releaseBuffer(length);
-    }
-
-    if(U_FAILURE(errorCode)) {
-        result.truncate(0);
+        result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
     }
 
     return result;
@@ -789,7 +785,7 @@ Locale::getDisplayScript(const Locale &displayLocale,
     length=uloc_getDisplayScript(fullName, displayLocale.fullName,
                                   buffer, result.getCapacity(),
                                   &errorCode);
-    result.releaseBuffer(length);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
@@ -801,11 +797,7 @@ Locale::getDisplayScript(const Locale &displayLocale,
         length=uloc_getDisplayScript(fullName, displayLocale.fullName,
                                       buffer, result.getCapacity(),
                                       &errorCode);
-        result.releaseBuffer(length);
-    }
-
-    if(U_FAILURE(errorCode)) {
-        result.truncate(0);
+        result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
     }
 
     return result;
@@ -833,7 +825,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
     length=uloc_getDisplayCountry(fullName, displayLocale.fullName,
                                   buffer, result.getCapacity(),
                                   &errorCode);
-    result.releaseBuffer(length);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
@@ -845,11 +837,7 @@ Locale::getDisplayCountry(const Locale &displayLocale,
         length=uloc_getDisplayCountry(fullName, displayLocale.fullName,
                                       buffer, result.getCapacity(),
                                       &errorCode);
-        result.releaseBuffer(length);
-    }
-
-    if(U_FAILURE(errorCode)) {
-        result.truncate(0);
+        result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
     }
 
     return result;
@@ -877,7 +865,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
     length=uloc_getDisplayVariant(fullName, displayLocale.fullName,
                                   buffer, result.getCapacity(),
                                   &errorCode);
-    result.releaseBuffer(length);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
@@ -889,11 +877,7 @@ Locale::getDisplayVariant(const Locale &displayLocale,
         length=uloc_getDisplayVariant(fullName, displayLocale.fullName,
                                       buffer, result.getCapacity(),
                                       &errorCode);
-        result.releaseBuffer(length);
-    }
-
-    if(U_FAILURE(errorCode)) {
-        result.truncate(0);
+        result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
     }
 
     return result;
@@ -921,7 +905,7 @@ Locale::getDisplayName(const Locale &displayLocale,
     length=uloc_getDisplayName(fullName, displayLocale.fullName,
                                buffer, result.getCapacity(),
                                &errorCode);
-    result.releaseBuffer(length);
+    result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
 
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         buffer=result.getBuffer(length);
@@ -933,11 +917,7 @@ Locale::getDisplayName(const Locale &displayLocale,
         length=uloc_getDisplayName(fullName, displayLocale.fullName,
                                    buffer, result.getCapacity(),
                                    &errorCode);
-        result.releaseBuffer(length);
-    }
-
-    if(U_FAILURE(errorCode)) {
-        result.truncate(0);
+        result.releaseBuffer(U_SUCCESS(errorCode) ? length : 0);
     }
 
     return result;
