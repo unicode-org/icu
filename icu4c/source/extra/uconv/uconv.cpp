@@ -779,7 +779,7 @@ ConvertFile::convertFile(const char *pname,
                 buf + rd, useOffsets ? fromoffsets : NULL, flush, &err);
 
             ulen = (int32_t)(unibufp - unibuf);
-            u.releaseBuffer(ulen);
+            u.releaseBuffer(U_SUCCESS(err) ? ulen : 0);
 
             // fromSawEndOfBytes indicates that ucnv_toUnicode() is done
             // converting all of the input bytes.
