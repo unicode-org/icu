@@ -287,6 +287,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     // We will need the calendar to know what type of symbols to load.
     initializeCalendar(NULL, locale, status);
+    if (U_FAILURE(status)) return;
 
     CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
     UResourceBundle *dateTimePatterns = calData.getByKey(gDateTimePatternsTag, status);
@@ -357,10 +358,13 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 Calendar*
 SimpleDateFormat::initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status)
 {
-  if(!U_FAILURE(status)) {
-    fCalendar = Calendar::createInstance(adoptZone?adoptZone:TimeZone::createDefault(), locale, status);
-  }
-  return fCalendar;
+    if(!U_FAILURE(status)) {
+        fCalendar = Calendar::createInstance(adoptZone?adoptZone:TimeZone::createDefault(), locale, status);
+    }
+    if (U_SUCCESS(status) && fCalendar == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return fCalendar;
 }
 
 void
