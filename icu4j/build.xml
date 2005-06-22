@@ -578,14 +578,16 @@
             </classpath>
         </java>
     </target>
-    <target name="noDataCheck" depends="core, tests" description="runs the tests when no data is present">
-        <delete>
+	<target name="deleteData" depends="init" >
+       <delete failonerror="no">
+        	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
+        	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
             <fileset dir="${build.dir}/${icu4j.data.path}"/>
-            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
-            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
-            <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
-            <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
-        </delete>
+	        <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
+	        <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
+	    </delete>
+	</target>		
+    <target name="noDataCheck" depends="core, tests, deleteData" description="runs the tests when no data is present">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-nothrow"/>
             <arg value="-nodata"/>
