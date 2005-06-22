@@ -6,7 +6,9 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#include "unicode/unum.h"
 #include "unicode/ucurr.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cstring.h"
 
@@ -111,7 +113,7 @@ static int32_t checkItemCount(uint32_t currencyType) {
     int32_t expectedLen = 3, len;
     if (U_FAILURE(status)) {
        log_err("Error: ucurr_openISOCurrencies returned %s\n", myErrorName(status));
-       return;
+       return -1;
     }
 
     originalCount = uenum_count(en, &status);
@@ -149,6 +151,41 @@ static void TestEnumListCount(void) {
     }
 }
 
+static void TestFractionDigitOverride(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *fmt = unum_open(UNUM_CURRENCY, NULL, 0, "hu_HU", NULL, &status);
+    UChar buffer[256];
+    UChar expectedBuf[256];
+    const char expectedFirst[] = "123,46 Ft";
+    const char expectedSecond[] = "123 Ft";
+    const char expectedThird[] = "123,456 Ft";
+    if (U_FAILURE(status)) {
+       log_err("Error: unum_open returned %s\n", myErrorName(status));
+       return;
+    }
+    /* Make sure that you can format normal fraction digits. */
+    unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
+    u_charsToUChars(expectedFirst, expectedBuf, strlen(expectedFirst)+1);
+    if (u_strcmp(buffer, expectedBuf) != 0) {
+       log_err("Error: unum_formatDouble didn't return %s\n", expectedFirst);
+    }
+    /* Make sure that you can format no fraction digits. */
+    unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 0);
+    unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
+    u_charsToUChars(expectedSecond, expectedBuf, strlen(expectedSecond)+1);
+    if (u_strcmp(buffer, expectedBuf) != 0) {
+       log_err("Error: unum_formatDouble didn't return %s\n", expectedSecond);
+    }
+    /* Make sure that you can format more fraction digits. */
+    unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 3);
+    unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
+    u_charsToUChars(expectedThird, expectedBuf, strlen(expectedThird)+1);
+    if (u_strcmp(buffer, expectedBuf) != 0) {
+       log_err("Error: unum_formatDouble didn't return %s\n", expectedThird);
+    }
+    unum_close(fmt);
+}
+
 void addCurrencyTest(TestNode** root);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/currtest/" #x)
@@ -158,6 +195,7 @@ void addCurrencyTest(TestNode** root)
     TESTCASE(TestEnumList);
     TESTCASE(TestEnumListReset);
     TESTCASE(TestEnumListCount);
+    TESTCASE(TestFractionDigitOverride);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
