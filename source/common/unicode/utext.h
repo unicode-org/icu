@@ -331,7 +331,7 @@ utext_isLengthExpensive(const UText *ut);
  * (There is a difference if the index is out of bounds by being less than zero)
  * 
  * @param ut the text to be accessed
- * @param the native index of the character to be accessed.  If the index points
+ * @param nativeIndex the native index of the character to be accessed.  If the index points
  *        to other than the first unit of a multi-unit character, it will be adjusted
  *        to the start of the character.
  * @return the code point at the specified index.
@@ -401,7 +401,7 @@ utext_previous32(UText *ut);
   * begin a forward iteration.
   *
   *  @param ut the text to be accessed.
-  *  @param index Iteration index, in the native units of the text provider.
+  *  @param nativeIndex Iteration index, in the native units of the text provider.
   *  @return Code point which starts at or before index,
   *         or U_SENTINEL (-1) if it is out of bounds.
   * @draft ICU 3.4
@@ -420,7 +420,7 @@ utext_next32From(UText *ut, int32_t nativeIndex);
   * begin a backwards iteration.
   *
   * @param ut the text to be accessed.
-  * @param index Iteration index in the native units of the thext provider.
+  * @param nativeIndex Iteration index in the native units of the thext provider.
   * @return Code point preceding the one at the initial index,
   *         or U_SENTINEL (-1) if it is out of bounds.
   *
@@ -464,7 +464,7 @@ utext_getIndex(UText *ut);
   * easily knowable.
   *
   * @param ut the text to be accessed.
-  * @param index the native unit index of the new iteration position.
+  * @param nativeIndex the native unit index of the new iteration position.
   * @draft ICU 3.4
   */
 U_DRAFT void U_EXPORT2
@@ -509,8 +509,8 @@ utext_moveIndex(UText *ut, int32_t delta);
  * terminating NUL is not included in the returned length.
  *
  * @param  ut    the UText from which to extract data.
- * @param  start the native index of the first character to extract.
- * @param  limit the native string index of the position following the last
+ * @param  nativeStart the native index of the first character to extract.
+ * @param  nativeLimit the native string index of the position following the last
  *               character to extract.  If the specified limit is greater than the length
  *               of the text, the limit will be trimmed back to the text length.
  * @param  dest  the UChar (utf-16) buffer into which the extracted text is placed
@@ -631,7 +631,7 @@ utext_hasMetaData(const UText *ut);
  * @param nativeStart      the native index of the start of the region to be replaced
  * @param nativeLimit      the native index of the character following the region to be replaced.
  * @param replacementText  pointer to the replacement text
- * @param replacmentLength length of the replacement text, or -1 if the text is NUL terminated.
+ * @param replacementLength length of the replacement text, or -1 if the text is NUL terminated.
  * @param status           receives any error status.  Possible errors include
  *                         U_NO_WRITE_PERMISSION
  *
@@ -1169,19 +1169,20 @@ struct UText {
 
 
 /**
-  *  Common function for use by Text Provider implementations to allocate and/or initialize
-  *  a new UText struct.  To be called in the implementation of utext_open() functions.
-  *  If the suppliec utxt parameter is null, a new UText struct will be allocated on the heap.
-  *  If the supplied UText is already open, the provider's clsoe function will be called
-  *  so that the struct can be reused by the open that is in progress.
-  *
-  * @param utxt pointer to a UText struct to be re-used, or null if a new UText
-  *             should be allocated.
-  * @param extraSpace The amount of additional space to be allocated as part
-  *             of this UText, for use by types of providers that require
-  *             additional storage.
-  * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
-  */
+ *  Common function for use by Text Provider implementations to allocate and/or initialize
+ *  a new UText struct.  To be called in the implementation of utext_open() functions.
+ *  If the suppliec utxt parameter is null, a new UText struct will be allocated on the heap.
+ *  If the supplied UText is already open, the provider's clsoe function will be called
+ *  so that the struct can be reused by the open that is in progress.
+ *
+ * @param utxt pointer to a UText struct to be re-used, or null if a new UText
+ *             should be allocated.
+ * @param extraSpace The amount of additional space to be allocated as part
+ *             of this UText, for use by types of providers that require
+ *             additional storage.
+ * @param status Errors are returned here.
+ * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
+ */
 U_DRAFT UText * U_EXPORT2
 UTextSetup(UText *utxt, int32_t extraSpace, UErrorCode *status);
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -876,9 +876,12 @@ typedef enum {
 
 
 /**
- * @param httpAcceptLanguage - "Accept-Language:" header as per HTTP.
+ * Based on a HTTP header from a web browser and a list of available locales,
+ * determine an acceptable locale for the user.
  * @param result - buffer to accept the result locale
  * @param resultAvailable the size of the result buffer.
+ * @param outResult - An out parameter that contains the fallback status
+ * @param httpAcceptLanguage - "Accept-Language:" header as per HTTP.
  * @param availableLocales - list of available locales to match
  * @param status Error status, may be BUFFER_OVERFLOW_ERROR
  * @return length needed for the locale.
@@ -892,10 +895,13 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
                             UErrorCode *status);
 
 /**
- * @param acceptList -list of acceptable languages
- * @param acceptListCount - count of acceptList items
+ * Based on a list of available locales,
+ * determine an acceptable locale for the user.
  * @param result - buffer to accept the result locale
  * @param resultAvailable the size of the result buffer.
+ * @param outResult - An out parameter that contains the fallback status
+ * @param acceptList - list of acceptable languages
+ * @param acceptListCount - count of acceptList items
  * @param availableLocales - list of available locales to match
  * @param status Error status, may be BUFFER_OVERFLOW_ERROR
  * @return length needed for the locale.
@@ -908,10 +914,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                     UEnumeration* availableLocales,
                     UErrorCode *status);
 
-/*eof*/
-
 
 #endif /*_ULOC*/
-
 
 
