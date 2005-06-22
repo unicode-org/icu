@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-* Copyright (C) 1999-2004, International Business Machines Corporation and
+* Copyright (C) 1999-2005, International Business Machines Corporation and
 * others. All Rights Reserved.
 **************************************************************************
 *   Date        Name        Description
@@ -16,6 +16,11 @@
 
 #include "unicode/uobject.h"
 
+/**
+ * \file 
+ * \brief C++ API: Replaceable String
+ */
+ 
 U_NAMESPACE_BEGIN
 
 class UnicodeString;

@@ -52,6 +52,11 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
+/**
+ * \file 
+ * \brief C++ API: Resource Bundle
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**

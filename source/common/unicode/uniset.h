@@ -15,6 +15,11 @@
 #include "unicode/unistr.h"
 #include "unicode/uset.h"
 
+/**
+ * \file 
+ * \brief C++ API: Unicode Set
+ */
+ 
 U_NAMESPACE_BEGIN
 
 class ParsePosition;

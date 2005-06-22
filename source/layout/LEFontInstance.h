@@ -9,6 +9,10 @@
 #define __LEFONTINSTANCE_H
 
 #include "LETypes.h"
+/**
+ * \file 
+ * \brief C++ API: Layout Engine Font Instance object
+ */
 
 U_NAMESPACE_BEGIN
 

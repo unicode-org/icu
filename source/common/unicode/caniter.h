@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,6 +15,11 @@
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
+/**
+ * \file
+ * \brief C++ API: Canonical Iterator
+ */
+ 
 /** Should permutation skip characters with combining class zero
  *  Should be either TRUE or FALSE. This is a compile time option
  *  @stable ICU 2.4

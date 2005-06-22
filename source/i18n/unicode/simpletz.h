@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
 *                                                                              *
 ********************************************************************************
 *
@@ -25,6 +25,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: SimpleTimeZone is a concrete subclass of TimeZone.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/timezone.h"

@@ -9,6 +9,11 @@
 
 #define __PARAGRAPHLAYOUT_H
 
+/**
+ * \file 
+ * \brief C++ API: Paragraph Layout
+ */
+
 /*
  * ParagraphLayout doesn't make much sense without
  * BreakIterator...

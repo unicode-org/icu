@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -11,6 +11,11 @@
 #include "unicode/utypes.h"
 #include "unicode/chariter.h"
 
+/**
+ * \file 
+ * \brief C++ API: UChar Character Iterator
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**

@@ -11,6 +11,11 @@
 #include "LETypes.h"
 #include "LEInsertionList.h"
 
+/**
+ * \file 
+ * \brief C++ API: This class encapsulates the per-glyph storage used by the ICU LayoutEngine.
+ */
+
 U_NAMESPACE_BEGIN
 
 /**

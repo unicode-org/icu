@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -17,6 +17,11 @@
 
 #include "unicode/fmtable.h"
 
+/**
+ * \file 
+ * \brief C++ API: A unit for measuring a quantity.
+ */
+ 
 U_NAMESPACE_BEGIN
 
 /**

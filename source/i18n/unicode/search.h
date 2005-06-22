@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2005 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -12,6 +12,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: SearchIterator object.
+ */
+ 
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/uobject.h"
@@ -32,6 +37,7 @@ typedef struct USearch USearch;
 U_NAMESPACE_BEGIN
 
 /**
+ *
  * <tt>SearchIterator</tt> is an abstract base class that provides 
  * methods to search for a pattern within a text string. Instances of
  * <tt>SearchIterator</tt> maintain a current position and scans over the 

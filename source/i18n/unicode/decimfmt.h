@@ -25,7 +25,11 @@
 #define DECIMFMT_H
  
 #include "unicode/utypes.h"
-
+/**
+ * \file 
+ * \brief C++ API: Formats decimal numbers.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/dcfmtsym.h"

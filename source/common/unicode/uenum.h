@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file
+ * \brief C API: String Enumeration 
+ */
+ 
 /**
  * An enumeration object.
  * For usage in C programs.

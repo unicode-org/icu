@@ -19,6 +19,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Formats messages in a language-neutral way.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
@@ -31,6 +36,7 @@ class NumberFormat;
 class DateFormat;
 
 /**
+ *
  * A MessageFormat produces concatenated messages in a
  * language-neutral way.  It should be used for all string
  * concatenations that are visible to end users.

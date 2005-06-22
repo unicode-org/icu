@@ -25,6 +25,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Format and parse dates in a language-independent manner.
+ */
+ 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/datefmt.h"
@@ -35,6 +40,7 @@ class DateFormatSymbols;
 class DateFormat;
 
 /**
+ *
  * SimpleDateFormat is a concrete class for formatting and parsing dates in a
  * language-independent manner. It allows for formatting (millis -> text),
  * parsing (text -> millis), and normalization. Formats/Parses a date or time,

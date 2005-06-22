@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -11,12 +11,18 @@
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
+/**
+ * \file 
+ * \brief C++ API: UnicodeSetIterator iterates over the contents of a UnicodeSet.
+ */
+
 U_NAMESPACE_BEGIN
 
 class UnicodeSet;
 class UnicodeString;
 
 /**
+ *
  * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It
  * iterates over either code points or code point ranges.  After all
  * code points or ranges have been returned, it returns the

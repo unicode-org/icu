@@ -29,6 +29,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Collation Element Iterator.
+ */
+ 
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/uobject.h"

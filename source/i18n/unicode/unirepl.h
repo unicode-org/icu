@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2004, International Business Machines Corporation
+*   Copyright (c) 2002-2005, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -11,6 +11,11 @@
 #define UNIREPL_H
 
 #include "unicode/utypes.h"
+
+/**
+ * \file 
+ * \brief C++ API: UnicodeReplacer
+ */
 
 U_NAMESPACE_BEGIN
 

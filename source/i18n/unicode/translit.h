@@ -12,6 +12,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file 
+ * \brief C++ API: Tranforms text from one format to another.
+ */
+ 
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uobject.h"
@@ -30,6 +35,7 @@ class NormalizationTransliterator;
 class TransliteratorIDParser;
 
 /**
+ *
  * <code>Transliterator</code> is an abstract class that
  * transliterates text from one format to another.  The most common
  * kind of transliterator is a script, or alphabet, transliterator.
