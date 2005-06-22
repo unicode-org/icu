@@ -328,14 +328,34 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int TIMEZONE_GENERIC_FIELD = 24;
+ 
 
+    
+    /**
+     * FieldPosition selector for 'c' field alignment,
+     * corresponding to the {@link Calendar#DAY} field. 
+     * This displays the stand alone day name, if available.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static int STANDALONE_DAY_FIELD = 25;
+    
+    /**
+     * FieldPosition selector for 'L' field alignment,
+     * corresponding to the {@link Calendar#MONTH} field.  
+     * This displays the stand alone month name, if available.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static int STANDALONE_MONTH_FIELD = 26;
+    
     /**
      * Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public final static int FIELD_COUNT = 25; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 27; // must == DateFormatSymbols.patternChars.length()
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;

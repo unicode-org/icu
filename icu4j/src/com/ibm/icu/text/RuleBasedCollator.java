@@ -1605,7 +1605,8 @@ public final class RuleBasedCollator extends Collator
         UCA_INIT_COMPLETE = true;
     }
 
-    static void checkUCA() throws MissingResourceException {
+
+    private static void checkUCA() throws MissingResourceException {
         if (UCA_INIT_COMPLETE && UCA_ == null) {
             throw new MissingResourceException("Collator UCA data unavailable", "", "");
         }

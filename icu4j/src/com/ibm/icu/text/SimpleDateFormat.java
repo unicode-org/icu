@@ -655,7 +655,9 @@ public class SimpleDateFormat extends DateFormat {
         /*hKz*/ Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
         /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
         /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET,
-        /*v*/   Calendar.ZONE_OFFSET
+        /*v*/   Calendar.ZONE_OFFSET,
+        /*c*/   Calendar.DAY_OF_WEEK,
+        /*L*/   Calendar.MONTH
     };
 
     // Map index into pattern character string to DateFormat field number
@@ -668,7 +670,9 @@ public class SimpleDateFormat extends DateFormat {
         /*hKz*/ DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD, DateFormat.TIMEZONE_FIELD,
         /*Yeu*/ DateFormat.YEAR_WOY_FIELD, DateFormat.DOW_LOCAL_FIELD, DateFormat.EXTENDED_YEAR_FIELD,
         /*gAZ*/ DateFormat.JULIAN_DAY_FIELD, DateFormat.MILLISECONDS_IN_DAY_FIELD, DateFormat.TIMEZONE_RFC_FIELD,
-        /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD
+        /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD, 
+        /*c*/   DateFormat.STANDALONE_DAY_FIELD,
+        /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
     };
 
     /**
