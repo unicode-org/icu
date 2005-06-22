@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -530,7 +530,7 @@ public:
     *    @param   startIndex The input string index at which to begin matching.
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return TRUE if there is a match
-    *    @draft ICU 2.8
+    *    @stable ICU 2.8
     */
     virtual UBool matches(int32_t startIndex, UErrorCode &status);
 
@@ -563,7 +563,7 @@ public:
     *    @param   startIndex The input string index at which to begin matching.
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return  TRUE if there is a match.
-    *    @draft ICU 2.8
+    *    @stable ICU 2.8
     */
     virtual UBool lookingAt(int32_t startIndex, UErrorCode &status);
 
@@ -701,7 +701,7 @@ public:
     *       the specified position in the input string.
     *
     *   @return this RegexMatcher.
-    *   @draft ICU 2.8
+    *   @stable ICU 2.8
     */
     virtual RegexMatcher &reset(int32_t index, UErrorCode &status);
 

@@ -184,7 +184,7 @@ public:
      * @return a clone of this object
      *
      * @see getDynamicClassID
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     ResourceBundle *clone() const;
 
@@ -442,7 +442,7 @@ public:
      * @param status just for catching illegal arguments
      *
      * @return a Locale object
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     const Locale
       getLocale(ULocDataLocaleType type, UErrorCode &status) const;

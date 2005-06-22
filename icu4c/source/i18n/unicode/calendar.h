@@ -1800,7 +1800,7 @@ protected:
      *              {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek}
      *              is more than one.
      *
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     int32_t weekNumber(int32_t desiredDay, int32_t dayOfPeriod, int32_t dayOfWeek);
 
@@ -2091,7 +2091,7 @@ private:
      *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
      *  @return the locale
-     *  @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
+     *  @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode &status) const;
 

@@ -674,7 +674,7 @@ ucnv_getMaxCharSize(const UConverter *converter);
  *         converting length UChars with the converter that returned the maxCharSize.
  *
  * @see ucnv_getMaxCharSize
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 #define UCNV_GET_MAX_BYTES_FOR_STRING(length, maxCharSize) \
      (((int32_t)(length)+10)*(int32_t)(maxCharSize))

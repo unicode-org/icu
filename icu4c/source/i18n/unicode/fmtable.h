@@ -88,7 +88,7 @@ public:
     /**
      * Creates a Formattable object with an int64_t number
      * @param ll the int64_t number.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     Formattable(int64_t ll);
 
@@ -176,7 +176,7 @@ public:
      * @return a clone of this object
      *
      * @see getDynamicClassID
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     Formattable *clone() const;
 
@@ -225,7 +225,7 @@ public:
         /**
          * Selector indicating a 64-bit integer value.  Use getInt64
          * to retrieve the value.
-         * @draft ICU 2.8
+         * @stable ICU 2.8
          */
         kInt64,
 
@@ -304,7 +304,7 @@ public:
      * Gets the int64 value of this object. If this object is not of type
      * kInt64 then the result is undefined.
      * @return    the int64 value of this object.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */ 
     int64_t         getInt64(void) const { return fValue.fInt64; }
 
@@ -460,7 +460,7 @@ public:
      * Sets the int64 value of this object and changes the type to
      * kInt64.
      * @param ll    the new int64 value to be set.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */ 
     void            setInt64(int64_t ll);
 

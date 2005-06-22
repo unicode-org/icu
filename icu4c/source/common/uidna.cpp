@@ -127,7 +127,7 @@ compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len,
  * 
  * @param ch The code point to be ascertained
  * @return true if the char is a label separator
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 static inline UBool isLabelSeparator(UChar ch){
     switch(ch){

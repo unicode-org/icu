@@ -47,9 +47,9 @@
  * @return length of the currency string. It should always be 3. If 0,
  *                currency couldn't be found or the input values are 
  *                invalid. 
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucurr_forLocale(const char* locale,
                 UChar* buff,
                 int32_t buffCapacity,

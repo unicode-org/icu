@@ -47,7 +47,9 @@ typedef struct URegularExpression URegularExpression;
  * @stable ICU 2.4
  */
 typedef enum URegexpFlag{
-    /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
+    /** Forces normalization of pattern and strings. 
+    Not implemented yet, just a placeholder, hence draft. 
+    @draft ICU 2.4 */
     UREGEX_CANON_EQ         = 128,
 
     /**  Enable case insensitive matching.  @stable ICU 2.4 */
@@ -71,7 +73,7 @@ typedef enum URegexpFlag{
       *     Warning: Unicode word boundaries are quite different from
       *     traditional regular expression word boundaries.  See
       *     http://unicode.org/reports/tr29/#Word_Boundaries
-      *     @draft ICU 2.8
+      *     @stable ICU 2.8
       */
     UREGEX_UWORD            = 256
 }  URegexpFlag;

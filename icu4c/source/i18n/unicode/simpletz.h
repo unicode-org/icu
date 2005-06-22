@@ -605,7 +605,7 @@ public:
     /**
      * Redeclared TimeZone method.  This implementation simply calls
      * the base class method, which otherwise would be hidden.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
                            int32_t& dstOffset, UErrorCode& ec) const;
