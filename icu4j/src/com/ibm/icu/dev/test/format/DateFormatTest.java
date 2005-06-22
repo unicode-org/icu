@@ -180,7 +180,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
         assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
         assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
-        assertTrue("Data", DateFormat.FIELD_COUNT == PATTERN_CHARS.length());
+        if(DateFormat.FIELD_COUNT != PATTERN_CHARS.length()){
+            errln("Did not get the correct value for DateFormat.FIELD_COUNT. Expected:  "+ PATTERN_CHARS.length());
+        }
 
         // Create test formatters
         final int COUNT = 4;
@@ -204,17 +206,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Expected output field values for above DateFormats on aug13
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
-            "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "", "",
+             "", "1997", "August", "13", "", "", "34", "12", "",
+            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "", "","","",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
-            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "",
+            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","7",
 
             "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
-            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700", "Pacific Time",
+            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700", "Pacific Time","0004","0007"
+            
+            
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -243,11 +247,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZv";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcL";
         
     /**
      * A list of the names of all the fields in DateFormat.
@@ -278,7 +281,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "JULIAN_DAY_FIELD",
         "MILLISECONDS_IN_DAY_FIELD",
         "TIMEZONE_RFC_FIELD",
-	"GENERIC_TIMEZONE_FIELD",
+        "GENERIC_TIMEZONE_FIELD",
+        "STAND_ALONE_DAY_FIELD",
+        "STAND_ALONE_MONTH_FIELD",
     };
     
     /**
