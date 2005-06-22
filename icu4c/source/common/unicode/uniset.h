@@ -356,7 +356,7 @@ public:
      * @param symbols a symbol table mapping variable names to values
      * and stand-in characters to UnicodeSets; may be NULL
      * @param status input-output error code
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                uint32_t options,
@@ -513,7 +513,7 @@ public:
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @return a reference to this
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
                              ParsePosition& pos,

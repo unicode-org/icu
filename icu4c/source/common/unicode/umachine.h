@@ -201,7 +201,7 @@
 /**
  * Provides a platform independent way to specify a signed 64-bit integer constant.
  * note: may be wrong for some 64 bit platforms - ensure your compiler provides INT64_C
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 #   define INT64_C(c) c ## LL
 # endif
@@ -209,7 +209,7 @@
 /**
  * Provides a platform independent way to specify an unsigned 64-bit integer constant.
  * note: may be wrong for some 64 bit platforms - ensure your compiler provides UINT64_C
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 #   define UINT64_C(c) c ## ULL
 # endif

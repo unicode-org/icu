@@ -3196,7 +3196,7 @@ private:
  * @param s1 The first string to be copied to the new one.
  * @param s2 The second string to be copied to the new one, after s1.
  * @return UnicodeString(s1).append(s2)
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);

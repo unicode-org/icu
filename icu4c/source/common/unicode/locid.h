@@ -315,7 +315,7 @@ public:
      * @return a clone of this object
      *
      * @see getDynamicClassID
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     Locale *clone() const;
 
@@ -384,7 +384,7 @@ public:
      * @return      An alias to the code
      * @see uscript_getShortName
      * @see uscript_getCode
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     inline const char *  getScript( ) const;
 
@@ -417,7 +417,7 @@ public:
      * but without keywords.
      * @return      A pointer to "name".
      * @see getName
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     const char * getBaseName() const;
 
@@ -427,7 +427,7 @@ public:
      *
      * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
      * @param status Returns any error information while performing this operation.
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
 
@@ -440,7 +440,7 @@ public:
      * @param bufferCapacity The capacity of receiving buffer
      * @return the length of keyword value
      *
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
@@ -502,7 +502,7 @@ public:
      * dispScript to "Latin".
      * @param dispScript    Receives the scripts's display name.
      * @return              A reference to "dispScript".
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     UnicodeString&  getDisplayScript(          UnicodeString& dispScript) const;
 
@@ -518,7 +518,7 @@ public:
      *                      "".
      * @param dispScript    Receives the scripts's display name.
      * @return              A reference to "dispScript".
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      */
     UnicodeString&  getDisplayScript(  const   Locale&         displayLocale,
                                                UnicodeString&  dispScript) const;

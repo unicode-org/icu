@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -182,9 +182,9 @@ typedef struct UTransPosition {
  * @param pErrorCode a pointer to the UErrorCode
  * @return a transliterator pointer that may be passed to other
  *         utrans_xxx() functions, or NULL if the open call fails.
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT UTransliterator* U_EXPORT2
+U_STABLE UTransliterator* U_EXPORT2
 utrans_openU(const UChar *id,
              int32_t idLength,
              UTransDirection dir,
@@ -247,9 +247,9 @@ utrans_close(UTransliterator* trans);
  * @return the NUL-terminated ID string. This pointer remains
  * valid until utrans_close() is called on this transliterator.
  *
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT const UChar * U_EXPORT2
+U_STABLE const UChar * U_EXPORT2
 utrans_getUnicodeID(const UTransliterator *trans,
                     int32_t *resultLength);
 
@@ -278,9 +278,9 @@ utrans_register(UTransliterator* adoptedTrans,
  *
  * @param id an ID to unregister
  * @param idLength the length of id, or -1 if id is zero-terminated
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 utrans_unregisterID(const UChar* id, int32_t idLength);
 
 /**
@@ -324,9 +324,9 @@ utrans_countAvailableIDs(void);
  * @return UEnumeration for the available transliterators.
  *         Close with uenum_close().
  *
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT UEnumeration * U_EXPORT2
+U_STABLE UEnumeration * U_EXPORT2
 utrans_openIDs(UErrorCode *pErrorCode);
 
 /********************************************************************
