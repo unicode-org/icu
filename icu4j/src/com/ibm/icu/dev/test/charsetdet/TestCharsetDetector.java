@@ -13,6 +13,8 @@ import java.io.Reader;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.VersionInfo;
+
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
@@ -25,6 +27,74 @@ import org.w3c.dom.*;
  */
 public class TestCharsetDetector extends TestFmwk {
 
+    static abstract class UTF32
+    {
+        abstract protected void pack(byte[] bytes, int codePoint, int out);
+        abstract protected int unpack(byte[] bytes, int index);
+        
+         byte[] toBytes(String utf16)
+        {
+            int codePoints = UTF16.countCodePoint(utf16);
+            byte[] bytes = new byte[codePoints * 4];
+            int out = 0;
+
+            for (int cp = 0; cp < codePoints; out += 4) {
+                int codePoint = UTF16.charAt(utf16, cp);
+                
+                pack(bytes, codePoint, out);
+                cp += UTF16.getCharCount(codePoint);
+            }
+            
+            return bytes;
+        }
+        
+        String fromBytes(byte[] bytes)
+        {
+            StringBuffer buffer = new StringBuffer();
+            
+            for (int cp = 0; cp < bytes.length; cp += 4) {
+                int codePoint = unpack(bytes, cp);
+                
+                UTF16.append(buffer, codePoint);
+            }
+            
+            return buffer.toString();
+        }
+        
+        static class UTF32_BE extends UTF32
+        {
+            public void pack(byte[] bytes, int codePoint, int out)
+            {
+                bytes[out + 0] = (byte) ((codePoint >> 24) & 0xFF);
+                bytes[out + 1] = (byte) ((codePoint >> 16) & 0xFF);
+                bytes[out + 2] = (byte) ((codePoint >>  8) & 0xFF);
+                bytes[out + 3] = (byte) ((codePoint >>  0) & 0xFF);
+            }
+            
+            public int unpack(byte[] bytes, int index)
+            {
+                return (bytes[index + 0] & 0xFF) << 24 | (bytes[index + 1] & 0xFF) << 16 |
+                       (bytes[index + 2] & 0xFF) <<  8 | (bytes[index + 3] & 0xFF);
+            }
+        }
+        
+        static class UTF32_LE extends UTF32
+        {
+            public void pack(byte[] bytes, int codePoint, int out)
+            {
+                bytes[out + 3] = (byte) ((codePoint >> 24) & 0xFF);
+                bytes[out + 2] = (byte) ((codePoint >> 16) & 0xFF);
+                bytes[out + 1] = (byte) ((codePoint >>  8) & 0xFF);
+                bytes[out + 0] = (byte) ((codePoint >>  0) & 0xFF);
+            }
+            
+            public int unpack(byte[] bytes, int index)
+            {
+                return (bytes[index + 3] & 0xFF) << 24 | (bytes[index + 2] & 0xFF) << 16 |
+                       (bytes[index + 1] & 0xFF) <<  8 | (bytes[index + 0] & 0xFF);
+            }
+        }
+    }
     
     /**
      * Constructor
@@ -93,6 +163,10 @@ public class TestCharsetDetector extends TestFmwk {
             errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
         }
         
+        if (encoding.startsWith("UTF-32")) {
+            return;
+        }
+        
         decoded = m.getString();
         
         if (! testString.equals(decoded)) {
@@ -108,18 +182,47 @@ public class TestCharsetDetector extends TestFmwk {
     
     private void checkEncoding(String testString, String encoding, String id)
     {
-        String enc = null, lang = null;
+        String enc = null, from = null, lang = null;
         String[] split = encoding.split("/");
         
         enc = split[0];
+        
         if (split.length > 1) {
             lang = split[1];
         }
+
+        if (enc.equals("ISO-2022-CN")) {
+            
+            // Don't test ISO-2022-CN on older runtimes.
+            if (! have_ISO_2022_CN) {
+                return;
+            }
+            
+            // ISO-2022-CN only works for converting *to* Unicode,
+            // we need to use x-ISO-2022-CN-GB to convert *from* unicode...
+            from = "x-ISO-2022-CN-GB";
+        } else {
+            from = enc;
+        }
         
         try {
-            byte[] bytes = testString.getBytes(enc);
             CharsetDetector det = new CharsetDetector();
+            byte[] bytes;
             
+            if (from.startsWith("UTF-32")) {
+                UTF32 utf32;
+                
+                if (from.endsWith("BE")) {
+                    utf32 = new UTF32.UTF32_BE();
+                } else /*if (from.endsWith("LE"))*/ {
+                    utf32 = new UTF32.UTF32_LE();
+                }
+                
+                bytes = utf32.toBytes(testString);
+            } else {
+                bytes = testString.getBytes(from);
+            }
+        
             det.setText(bytes);
             checkMatch(det, testString, enc, lang, id);
             
@@ -145,7 +248,7 @@ public class TestCharsetDetector extends TestFmwk {
 
     public void TestInputFilter() throws Exception
     {
-        String s = "<a> <lot> <of> <English> <inside> <the> <markup> Une peut de Fran\u00E7ais. <to> <confuse> <the> <detector>";
+        String s = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\u00E8s petit peu de Fran\u00E7ais. <to> <confuse> <the> <detector>";
         byte[] bytes = s.getBytes("ISO-8859-1");
         CharsetDetector det = new CharsetDetector();
         CharsetMatch m;
@@ -243,4 +346,7 @@ public class TestCharsetDetector extends TestFmwk {
             errln("exception while processing test cases: " + e.toString());
         }
     }
+    
+    // Before Java 1.5, we cannot convert from Unicode to ISO-2022-CN, so checkEncoding() can't test it...
+    private boolean have_ISO_2022_CN = VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1, 5)) >= 0;
 }
