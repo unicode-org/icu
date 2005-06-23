@@ -1348,6 +1348,21 @@ UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
 }
 
 
+//-------------------------------------------------------------------------------
+//
+//  UText functions
+//
+//-------------------------------------------------------------------------------
+void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
+    // TODO: implement this.
+}
+
+
+UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const {
+    // TODO: implement this.
+    return fillIn;
+}
+
 
 U_NAMESPACE_END
 

@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 */
@@ -70,14 +70,16 @@ ubrk_open(UBreakIteratorType type,
     return 0;
   }
 
-  UCharCharacterIterator *iter = 0;
-  iter = new UCharCharacterIterator(text, textLength);
-  if(iter == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    delete result;
-    return 0;
+  if (text != NULL) {
+      UCharCharacterIterator *iter = 0;
+      iter = new UCharCharacterIterator(text, textLength);
+      if(iter == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          delete result;
+          return 0;
+      }
+      result->adoptText(iter);
   }
-  result->adoptText(iter);
 
   return (UBreakIterator*)result;
 }
@@ -186,6 +188,19 @@ ubrk_setText(UBreakIterator* bi,
   }
 }
 
+U_DRAFT void U_EXPORT2
+ubrk_setUText(UBreakIterator *bi,
+             UText          *text,
+             UErrorCode     *status)
+{
+    BreakIterator *brit = (BreakIterator *)bi;
+    brit->setText(text, *status);
+}
+
+
+
+
+
 U_CAPI int32_t U_EXPORT2
 ubrk_current(const UBreakIterator *bi)
 {
@@ -273,8 +288,8 @@ ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, 
 
 
 U_CAPI const char* U_EXPORT2
-ubrk_getLocaleByType(const UBreakIterator *bi, 
-                     ULocDataLocaleType type, 
+ubrk_getLocaleByType(const UBreakIterator *bi,
+                     ULocDataLocaleType type,
                      UErrorCode* status)
 {
     if (bi == NULL) {

@@ -8,6 +8,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uloc.h"
+#include "unicode/utext.h"
 
 /**
  * A text-break iterator.
@@ -391,6 +392,21 @@ ubrk_setText(UBreakIterator* bi,
              const UChar*    text,
              int32_t         textLength,
              UErrorCode*     status);
+
+
+/**
+ * Sets an existing iterator to point to a new piece of text
+ * @param bi The iterator to use
+ * @param text The text to be set
+ * @param status The error code
+ * @draft ICU 3.4
+ */
+U_DRAFT void U_EXPORT2
+ubrk_setUText(UBreakIterator* bi,
+             UText*          text,
+             UErrorCode*     status);
+
+
 
 /**
  * Determine the most recently-returned text boundary.

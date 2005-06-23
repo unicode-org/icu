@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2005 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
@@ -37,7 +37,7 @@ RuleBasedBreakIterator() {
 
 
 DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* rbbiData,
-                                                           const char* dictionaryFilename, 
+                                                           const char* dictionaryFilename,
                                                            UErrorCode& status)
 : RuleBasedBreakIterator(rbbiData, status)
 {
@@ -143,7 +143,7 @@ DictionaryBasedBreakIterator::previous()
         reset();
         int32_t result = RuleBasedBreakIterator::previous();
         if (cachedBreakPositions != NULL) {
-            for (positionInCache=0; 
+            for (positionInCache=0;
                 cachedBreakPositions[positionInCache] != result;
                 positionInCache++);
             U_ASSERT(positionInCache < numCachedBreakPositions);
@@ -334,7 +334,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     }
 
     //
-    //  If user buffer size is zero this is a preflight operation to 
+    //  If user buffer size is zero this is a preflight operation to
     //    obtain the needed buffer size, allowing for worst case misalignment.
     //
     if (bufferSize == 0) {
@@ -367,7 +367,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     }
 
     //
-    //  Initialize the clone object.  
+    //  Initialize the clone object.
     //    TODO:  using an overloaded C++ "operator new" to directly initialize the
     //           copy in the user's buffer would be better, but it doesn't seem
     //           to get along with namespaces.  Investigate why.
@@ -383,7 +383,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     if (status != U_SAFECLONE_ALLOCATED_WARNING) {
         clone->fBufferClone = TRUE;
     }
-    return clone;    
+    return clone;
 }
 
 
@@ -405,15 +405,15 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // that needs to be kept with the word).  Seek from the beginning of the
     // range to the first dictionary character
     fText->setIndex(startPos);
-    UChar c = fText->current();
+    UChar32 c = fText->current32();
     while (isDictionaryChar(c) == FALSE) {
-        c = fText->next();
+        c = fText->next32();
     }
 
     if (U_FAILURE(status)) {
         return; // UStack below overwrites the status error codes
     }
-    
+
     // initialize.  We maintain two stacks: currentBreakPositions contains
     // the list of break positions that will be returned if we successfully
     // finish traversing the whole range now.  possibleBreakPositions lists
@@ -429,9 +429,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // further, this saves us from having to follow each possible path
     // through the text all the way to the error (hopefully avoiding many
     // future recursive calls as well).
-    // there can be only one kind of error in UStack and UVector, so we'll 
+    // there can be only one kind of error in UStack and UVector, so we'll
     // just let the error fall through
-    UStack currentBreakPositions(status); 
+    UStack currentBreakPositions(status);
     UStack possibleBreakPositions(status);
     UVector wrongBreakPositions(status);
 
@@ -456,8 +456,15 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         return;
     }
     // initialize (we always exit the loop with a break statement)
-    c = fText->current();
+    c = fText->current32();
     for (;;) {
+        // The dictionary implementation doesn't do supplementary chars.
+        // Put them through as an unpaired surrogate, which
+        // will end any dictionary match in progress.
+        // With any luck, this dictionary implementation will be retired soon.
+        if (c>0x10000) {
+            c = 0xd800;
+        }
 
         // if we can transition to state "-1" from our current state, we're
         // on the last character of a legal word.  Push that position onto
@@ -470,7 +477,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         }
 
         // look up the new state to transition to in the dictionary
-        state = fTables->fDictionary->at(state, c);
+        state = fTables->fDictionary->at(state, (UChar)c);
 
         // if the character we're sitting on causes us to transition to
         // the "end of word" state, then it was a non-dictionary character
@@ -515,7 +522,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                         possibleBreakPositions.peeki())) {
                 possibleBreakPositions.popi();
             }
-            
+
             // if we've used up all possible break-position combinations, there's
             // an error or an unknown word in the text.  In this case, we start
             // over, treating the farthest character we've reached as the beginning
@@ -532,7 +539,8 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                     }
                     bestBreakPositions.removeAllElements();
                     if (farthestEndPoint < endPos) {
-                        fText->setIndex(farthestEndPoint + 1);
+                        fText->setIndex(farthestEndPoint);
+                        fText->next32();
                     }
                     else {
                         break;
@@ -547,7 +555,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                             return;
                         }
                     }
-                    fText->next();
+                    fText->next32();
                     currentBreakPositions.push(fText->getIndex(), status);
                     if (U_FAILURE(status)) {
                         return;
@@ -574,7 +582,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
 
             // re-sync "c" for the next go-round, and drop out of the loop if
             // we've made it off the end of the range
-            c = fText->current();
+            c = fText->current32();
             if (fText->getIndex() >= endPos) {
                 break;
             }
@@ -583,7 +591,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // if we didn't hit any exceptional conditions on this last iteration,
         // just advance to the next character and loop
         else {
-            c = fText->next();
+            c = fText->next32();
         }
     }
 
