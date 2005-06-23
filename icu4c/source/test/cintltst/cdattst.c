@@ -170,7 +170,7 @@ static void TestDateFormat()
         log_err("FAIL: Date Format for US locale failed using udat_format()\n");
     /*format using fr */
     
-    u_unescape("10 juil. 96 16 h 05 HP (\\u00c9UA)", temp, 30);
+    u_unescape("10 juil. 96 16 h 05 HAP (\\u00c9UA)", temp, 30);
     if(result != NULL) {
         free(result);
         result = NULL;
@@ -443,7 +443,7 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_AM_PMS, 1, "PM");
     VerifygetSymbols(fr, UDAT_SHORT_MONTHS, 0, "janv.");
     VerifygetSymbols(def, UDAT_SHORT_MONTHS, 11, "Dec");
-    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZ");
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcL");
 
 
     if(result != NULL) {
