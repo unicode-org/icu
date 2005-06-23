@@ -377,11 +377,12 @@ static void TestMutexFunctions() {
 int         gIncCount             = 0;
 int         gDecCount             = 0;
 const void *gIncDecContext;
+const void *gExpectedContext = &gIncDecContext;
 
 
 static int32_t U_CALLCONV myIncFunc(const void *context, int32_t *p) {
     int32_t  retVal;
-    TEST_ASSERT(context == &gIncDecContext);
+    TEST_ASSERT(context == gExpectedContext);
     gIncCount++;
     retVal = ++(*p);
     return retVal;
@@ -389,7 +390,7 @@ static int32_t U_CALLCONV myIncFunc(const void *context, int32_t *p) {
 
 static int32_t U_CALLCONV myDecFunc(const void *context, int32_t *p) {
     int32_t  retVal;
-    TEST_ASSERT(context == &gIncDecContext);
+    TEST_ASSERT(context == gExpectedContext);
     gDecCount++;
     retVal = --(*p);
     return retVal;
@@ -431,8 +432,10 @@ static void TestIncDecFunctions() {
 
     /* u_setIncDecFunctions() should work with null or non-null context pointer */
     status = U_ZERO_ERROR;
+    gExpectedContext = NULL;
     u_setAtomicIncDecFunctions(NULL, myIncFunc, myDecFunc,  &status);
     TEST_STATUS(status, U_ZERO_ERROR);
+    gExpectedContext = &gIncDecContext;
     u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
     TEST_STATUS(status, U_ZERO_ERROR);
 
@@ -442,6 +445,7 @@ static void TestIncDecFunctions() {
     u_setDataDirectory(dataDir);
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
+    gExpectedContext = &gIncDecContext;
     u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
 
