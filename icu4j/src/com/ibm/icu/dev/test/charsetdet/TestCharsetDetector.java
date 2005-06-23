@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
+ * Copyright (C) 2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.UTF32;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.VersionInfo;
 
@@ -25,76 +26,8 @@ import org.w3c.dom.*;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class TestCharsetDetector extends TestFmwk {
-
-    static abstract class UTF32
-    {
-        abstract protected void pack(byte[] bytes, int codePoint, int out);
-        abstract protected int unpack(byte[] bytes, int index);
-        
-         byte[] toBytes(String utf16)
-        {
-            int codePoints = UTF16.countCodePoint(utf16);
-            byte[] bytes = new byte[codePoints * 4];
-            int out = 0;
-
-            for (int cp = 0; cp < codePoints; out += 4) {
-                int codePoint = UTF16.charAt(utf16, cp);
-                
-                pack(bytes, codePoint, out);
-                cp += UTF16.getCharCount(codePoint);
-            }
-            
-            return bytes;
-        }
-        
-        String fromBytes(byte[] bytes)
-        {
-            StringBuffer buffer = new StringBuffer();
-            
-            for (int cp = 0; cp < bytes.length; cp += 4) {
-                int codePoint = unpack(bytes, cp);
-                
-                UTF16.append(buffer, codePoint);
-            }
-            
-            return buffer.toString();
-        }
-        
-        static class UTF32_BE extends UTF32
-        {
-            public void pack(byte[] bytes, int codePoint, int out)
-            {
-                bytes[out + 0] = (byte) ((codePoint >> 24) & 0xFF);
-                bytes[out + 1] = (byte) ((codePoint >> 16) & 0xFF);
-                bytes[out + 2] = (byte) ((codePoint >>  8) & 0xFF);
-                bytes[out + 3] = (byte) ((codePoint >>  0) & 0xFF);
-            }
-            
-            public int unpack(byte[] bytes, int index)
-            {
-                return (bytes[index + 0] & 0xFF) << 24 | (bytes[index + 1] & 0xFF) << 16 |
-                       (bytes[index + 2] & 0xFF) <<  8 | (bytes[index + 3] & 0xFF);
-            }
-        }
-        
-        static class UTF32_LE extends UTF32
-        {
-            public void pack(byte[] bytes, int codePoint, int out)
-            {
-                bytes[out + 3] = (byte) ((codePoint >> 24) & 0xFF);
-                bytes[out + 2] = (byte) ((codePoint >> 16) & 0xFF);
-                bytes[out + 1] = (byte) ((codePoint >>  8) & 0xFF);
-                bytes[out + 0] = (byte) ((codePoint >>  0) & 0xFF);
-            }
-            
-            public int unpack(byte[] bytes, int index)
-            {
-                return (bytes[index + 3] & 0xFF) << 24 | (bytes[index + 2] & 0xFF) << 16 |
-                       (bytes[index + 1] & 0xFF) <<  8 | (bytes[index + 0] & 0xFF);
-            }
-        }
-    }
+public class TestCharsetDetector extends TestFmwk
+{
     
     /**
      * Constructor
@@ -210,13 +143,7 @@ public class TestCharsetDetector extends TestFmwk {
             byte[] bytes;
             
             if (from.startsWith("UTF-32")) {
-                UTF32 utf32;
-                
-                if (from.endsWith("BE")) {
-                    utf32 = new UTF32.UTF32_BE();
-                } else /*if (from.endsWith("LE"))*/ {
-                    utf32 = new UTF32.UTF32_LE();
-                }
+                UTF32 utf32 = UTF32.getInstance(from);
                 
                 bytes = utf32.toBytes(testString);
             } else {
@@ -287,6 +214,32 @@ public class TestCharsetDetector extends TestFmwk {
         reader = det.getReader(new ByteArrayInputStream(bytes), "UTF-8");
         CheckAssert(s.equals(stringFromReader(reader)));
     }
+    
+    public void TestUTF16() throws Exception
+    {
+        String source = 
+                "u0623\u0648\u0631\u0648\u0628\u0627, \u0628\u0631\u0645\u062c\u064a\u0627\u062a " +
+                "\u0627\u0644\u062d\u0627\u0633\u0648\u0628 \u002b\u0020\u0627\u0646\u062a\u0631\u0646\u064a\u062a";
+        
+        byte[] beBytes = source.getBytes("UnicodeBig");
+        byte[] leBytes = source.getBytes("UnicodeLittle");
+        CharsetDetector det = new CharsetDetector();
+        CharsetMatch m;
+        
+        det.setText(beBytes);
+        m = det.detect();
+        
+        if (! m.getName().equals("UTF-16BE")) {
+            errln("Encoding detection failure: expected UTF-16BE, got " + m.getName());
+        }
+        
+        det.setText(leBytes);
+        m = det.detect();
+        
+        if (! m.getName().equals("UTF-16LE")) {
+            errln("Encoding detection failure: expected UTF-16LE, got " + m.getName());
+        }
+}
     
     public void TestDetection()
     {
