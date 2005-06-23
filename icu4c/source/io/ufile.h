@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -76,10 +76,11 @@ struct UFILE {
  * Like u_file_write but takes a flush parameter
  */
 U_CAPI int32_t U_EXPORT2
-u_file_write_flush(    const UChar     *chars, 
-        int32_t        count, 
-        UFILE         *f,
-        UBool         flush);
+u_file_write_flush( const UChar     *chars, 
+        int32_t     count, 
+        UFILE       *f,
+        UBool       flushIO,
+        UBool       flushTranslit);
 
 /**
  * Fill a UFILE's buffer with converted codepage data.
