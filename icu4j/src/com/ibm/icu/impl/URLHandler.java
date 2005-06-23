@@ -109,7 +109,7 @@ public abstract class URLHandler {
 	String protocol = url.getProtocol();
 	if (protocol.equals("file")) {
 	    return new FileURLHandler(url);
-	} else if (protocol.equals("jar") || protocol.equals("wsjar")) {
+	} else if (protocol.equals("jar")) {
 	    return new JarURLHandler(url);
 	} else {
 	    return null;
