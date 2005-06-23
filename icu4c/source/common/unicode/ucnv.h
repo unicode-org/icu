@@ -35,8 +35,8 @@
  *
  * <p>When a converter encounters an illegal, irregular, invalid or unmappable character
  * its default behavior is to use a substitution character to replace the
- * bad byte sequence. This behavior can be changed by using {@link ucnv_getFromUCallBack() }
- * or {@link ucnv_getToUCallBack() } on the converter. The header ucnv_err.h defines
+ * bad byte sequence. This behavior can be changed by using {@link ucnv_setFromUCallBack() }
+ * or {@link ucnv_setToUCallBack() } on the converter. The header ucnv_err.h defines
  * many other callback actions that can be used instead of a character substitution.</p>
  *
  * <p>More information about this API can be found in our 
@@ -151,6 +151,9 @@ typedef enum {
  * @param codeUnits Points to 'length' bytes of the concerned codepage sequence
  * @param length Size (in bytes) of the concerned codepage sequence
  * @param reason Defines the reason the callback was invoked
+ * @param pErrorCode    ICU error code in/out parameter.
+ *                      For converter callback functions, set to a conversion error
+ *                      before the call, and the callback may reset it to U_ZERO_ERROR.
  * @see ucnv_setToUCallBack
  * @see UConverterToUnicodeArgs
  * @stable ICU 2.0
@@ -161,7 +164,7 @@ typedef void (U_EXPORT2 *UConverterToUCallback) (
                   const char *codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
-                  UErrorCode *);
+                  UErrorCode *pErrorCode);
 
 /**
  * Function pointer for error callback in the unicode to codepage direction.
@@ -172,6 +175,9 @@ typedef void (U_EXPORT2 *UConverterToUCallback) (
  * @param length Size (in bytes) of the concerned codepage sequence
  * @param codePoint Single UChar32 (UTF-32) containing the concerend Unicode codepoint.
  * @param reason Defines the reason the callback was invoked
+ * @param pErrorCode    ICU error code in/out parameter.
+ *                      For converter callback functions, set to a conversion error
+ *                      before the call, and the callback may reset it to U_ZERO_ERROR.
  * @see ucnv_setFromUCallBack
  * @stable ICU 2.0
  */
@@ -182,7 +188,7 @@ typedef void (U_EXPORT2 *UConverterFromUCallback) (
                     int32_t length,
                     UChar32 codePoint,
                     UConverterCallbackReason reason,
-                    UErrorCode *);
+                    UErrorCode *pErrorCode);
 
 U_CDECL_END
 
