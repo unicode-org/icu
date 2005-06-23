@@ -128,17 +128,17 @@ static void TestAPI(void) {
         c = utext_char32At(uta, 0);
         TEST_ASSERT(c==uString[0]);
         
-        c = utext_current(uta);
+        c = utext_current32(uta);
         TEST_ASSERT(c==uString[0]);
 
         c = utext_next32(uta);
         TEST_ASSERT(c==uString[0]);
-        c = utext_current(uta);
+        c = utext_current32(uta);
         TEST_ASSERT(c==uString[1]);
 
         c = utext_previous32(uta);
         TEST_ASSERT(c==uString[0]);
-        c = utext_current(uta);
+        c = utext_current32(uta);
         TEST_ASSERT(c==uString[0]);
 
         c = utext_next32From(uta, 1);
@@ -170,7 +170,7 @@ static void TestAPI(void) {
         utext_setIndex(uta, 0);
         c = UTEXT_NEXT32(uta);
         TEST_ASSERT(c==uString[0]);
-        c = utext_current(uta);
+        c = utext_current32(uta);
         TEST_ASSERT(c==uString[1]);
 
         c = UTEXT_PREVIOUS32(uta);

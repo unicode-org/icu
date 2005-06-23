@@ -101,7 +101,7 @@ utext_setIndex(UText *ut, int32_t index) {
         if (index>ut->chunk.nativeStart && index < ut->chunk.nativeLimit) {
             UChar c = ut->chunk.contents[ut->chunk.offset];
             if (U16_TRAIL(c)) {
-                utext_current(ut);  // force index to the start of the curent code point.
+                utext_current32(ut);  // force index to the start of the curent code point.
             }
         }
     }
@@ -111,7 +111,7 @@ utext_setIndex(UText *ut, int32_t index) {
 
   
 U_DRAFT UChar32 U_EXPORT2
-utext_current(UText *ut) {
+utext_current32(UText *ut) {
     UChar32  c = U_SENTINEL;
     if (ut->chunk.offset < ut->chunk.length) {
         c = ut->chunk.contents[ut->chunk.offset];
@@ -161,7 +161,7 @@ utext_next32(UText *ut) {
     if (U16_IS_SURROGATE(c)) {
         // looking at a surrogate.  Could be unpaired, need to be careful.
         // Speed doesn't matter, will be very rare.
-        c =  utext_current(ut);
+        c =  utext_current32(ut);
         if (U_IS_SUPPLEMENTARY(c)) {
             offset++;
         }
@@ -192,7 +192,7 @@ utext_previous32(UText *ut) {
     if (U16_IS_SURROGATE(c)) {
         // Note that utext_current() will move the chunk offset to the lead surrogate
         // if we come in referring to trail half of a surrogate pair.
-        c =  utext_current(ut);
+        c =  utext_current32(ut);
     } 
 
 prev32_return:
@@ -224,7 +224,7 @@ utext_next32From(UText *ut, int32_t index) {
         // Surrogate code unit.  Could be pointing at either half of a pair, or at
         //   an unpaired surrogate.  Let utext_current() do the work.  Speed doesn't matter.
         chunk->offset = offset;
-        c = utext_current(ut);  
+        c = utext_current32(ut);  
         if (U_IS_SUPPLEMENTARY(c)) {
             offset++;
         }
@@ -257,8 +257,8 @@ utext_previous32From(UText *ut, int32_t index) {
     c = chunk->contents[offset];
     chunk->offset = offset;
     if (U16_IS_SURROGATE(c)) {
-        c = utext_current(ut);  // get supplementary char if not unpaired surrogate,
-                                //  and adjust offset to start.
+        c = utext_current32(ut);  // get supplementary char if not unpaired surrogate,
+                                  //  and adjust offset to start.
     }
 prev32return:
     return c;
@@ -911,7 +911,6 @@ U_CDECL_END
 //
 //------------------------------------------------------------------------------
 
-#if 0 // initially commented out to reduce testing
 
  /*
  * TODO: use a flag in RepText to support readonly strings?
@@ -922,124 +921,159 @@ U_CDECL_END
 // to allow for possible trimming for code point boundaries
 enum { REP_TEXT_CHUNK_SIZE=10 };
 
-struct RepText : public UText {
-    /* chunk UChars */
-    UChar s[REP_TEXT_CHUNK_SIZE];
+struct ReplExtra {
+    /*
+     * Chunk UChars.
+     * +1 to simplify filling with surrogate pair at the end.
+     */
+    UChar s[REP_TEXT_CHUNK_SIZE+1];
 };
+
 
 U_CDECL_BEGIN
 
 static UText * U_CALLCONV
-repTextClone(const UText *t) {
-    RepText *t2=(RepText *)uprv_malloc(sizeof(RepText));
-    if(t2!=NULL) {
-        *t2=*(const RepText *)t;
-        t2->context=((const Replaceable *)t->context)->clone();
-        if(t2->context==NULL) {
-            uprv_free(t2);
-            t2=NULL;
-        }
+repTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
+    // First do a generic shallow clone.  Does everything needed for the UText struct itself.
+    dest = noopTextClone(dest, src, deep, status);
+
+    if (deep && U_SUCCESS(*status)) {
+        const Replaceable *replSrc = (const Replaceable *)src->context;
+        dest->context = replSrc->clone();
     }
-    return t2;
+    return dest;
 }
 
-static int32_t U_CALLCONV
-repTextGetProperties(UText *t) {
-    int32_t props=I32_FLAG(UTEXT_PROVIDER_WRITABLE);
-    if(((const Replaceable *)((const RepText *)t)->context)->hasMetaData()) {
-        props|=I32_FLAG(UTEXT_PROVIDER_HAS_META_DATA);
-    }
-    return props;
-}
+
 
 static int32_t U_CALLCONV
-repTextLength(UText *t) {
-    return ((const Replaceable *)((const RepText *)t)->context)->length();
+repTextLength(UText *ut) {
+    const Replaceable *replSrc = (const Replaceable *)ut->context;
+    int32_t  len = replSrc->length();
+    return len;
 }
 
-static int32_t U_CALLCONV
-repTextAccess(UText *t, int32_t index, UBool forward, UTextChunk *chunk) {
-    RepText *rt=(RepText *)t;
-    const Replaceable *rep=(const Replaceable *)rt->context;
-    int32_t start, limit, length=rep->length();
-    int32_t chunkStart, chunkLength, chunkOffset;
+
+static UBool U_CALLCONV
+repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
+    const Replaceable *rep=(const Replaceable *)ut->context;
+    int32_t start;          // index of the start of the chunk to be loaded
+    int32_t limit;          // index of the end+1 of the chunk to be loaded.
+    int32_t length=rep->length();   // Full length of the input text (bigger than a chunk)
+
 
     /*
      * Compute start/limit boundaries around index, for a segment of text
      * to be extracted.
-     * The segment will be trimmed to not include halves of surrogate pairs.
+     * To allow for the possibility that our user gave an index to the trailing
+     * half of a surrogate pair, we must request one extra preceding UChar when
+     * going in the forward direction.  This will ensure that the buffer has the
+     * entire code point at the specified index.
      */
     if(forward) {
-        if(length<=index) {
-            return -1;
+
+        if (index>=ut->chunk.nativeStart && index<ut->chunk.nativeLimit) {
+            // Buffer already contains the requested position.
+            ut->chunk.offset = index - ut->chunk.nativeStart;
+            return TRUE;
         }
-        limit=index+REP_TEXT_CHUNK_SIZE-1;
-        if(limit>length) {
-            limit=length;
+        if (index>=length && ut->chunk.nativeLimit==length) {
+            // Request for end of string, and buffer already extends up to it.
+            // Can't get the data, but don't change the buffer.
+            ut->chunk.offset = length - ut->chunk.nativeStart;
+            return FALSE;
+        }
+
+        if (index<0) {
+            index = 0;
+        }
+        ut->chunk.nativeLimit = index + REP_TEXT_CHUNK_SIZE - 1;
+        // Going forward, so we want to have the buffer with stuff at and beyond
+        //   the requested index.  The -1 gets us one code point before the
+        //   requested index also, to handle the case of the index being on
+        //   a trail surrogate of a surrogate pair.
+        if(ut->chunk.nativeLimit > length) {
+            ut->chunk.nativeLimit = length;
+        }
+        // unless buffer ran off end, start is index-1.
+        ut->chunk.nativeStart = ut->chunk.nativeLimit - REP_TEXT_CHUNK_SIZE;   
+        if(ut->chunk.nativeStart < 0) {
+            ut->chunk.nativeStart = 0;
+        }
+    } else {
+        // Reverse iteration.  Fill buffer with data preceding the requested index.
+        if(index<0) {
+            index = 0;
+        }
+        if (index>ut->chunk.nativeStart && index<=ut->chunk.nativeLimit) {
+            // Requested position already in buffer.
+            ut->chunk.offset = index - ut->chunk.nativeStart;
+            return TRUE;
+        }
+        if (index==0 && ut->chunk.nativeStart==0) {
+            // Request for start, buffer already begins at start.
+            //  No data, but keep the buffer as is.
+            ut->chunk.offset = 0;
+            return FALSE;
+        }
+        limit = index;
+        if (limit>length) {
+            limit = length;
         }
         start=limit-REP_TEXT_CHUNK_SIZE;
         if(start<0) {
             start=0;
         }
-    } else {
-        if(index<0) {
-            return -1;
-        }
-        start=index-REP_TEXT_CHUNK_SIZE+1;
-        if(start<0) {
-            start=0;
-        }
-        limit=start+REP_TEXT_CHUNK_SIZE;
-        if(length<limit) {
-            limit=length;
-        }
     }
-    UnicodeString buffer(rt->s, 0, REP_TEXT_CHUNK_SIZE); // writable alias
-    rep->extractBetween(start, limit, buffer);
+    ReplExtra *ex = (ReplExtra *)ut->pExtra;
+    // UnicodeString with its buffer a writable alias to the chunk buffer
+    UnicodeString buffer(ex->s, 0 /*buffer length*/, REP_TEXT_CHUNK_SIZE /*buffer capacity*/); 
+    rep->extractBetween(ut->chunk.nativeStart, ut->chunk.nativeLimit, buffer);
 
-    chunkStart=0;
-    chunkLength=limit-start;
-    chunkOffset=index-start;
+    ut->chunk.contents = ex->s;
+    ut->chunk.length    = ut->chunk.nativeLimit - ut->chunk.nativeStart;
+    ut->chunk.offset    = index - ut->chunk.nativeStart;
 
-    // trim contents for code point boundaries
-    if(0<start && U16_IS_TRAIL(rt->s[chunkStart])) {
-        ++chunkStart;
-        --chunkLength;
-        ++start;
-    }
-    if(limit<length && U16_IS_LEAD(rt->s[chunkStart+chunkLength-1])) {
-        --chunkLength;
-        --limit;
+    // Surrogate pairs from the input text must not span chunk boundaries.
+    // If end of chunk could be the start of a surrogate, trim it off.
+    if (ut->chunk.nativeLimit < length &&
+        U16_IS_LEAD(ex->s[ut->chunk.length-1])) {
+            ut->chunk.length--;
+        }
+
+
+    // if the first UChar in the chunk could be the trailing half of a surrogate pair,
+    // trim it off.
+    if(ut->chunk.nativeStart>0 && U16_IS_TRAIL(ex->s[0])) {
+        ++(ut->chunk.contents);
+        --(ut->chunk.length);
+        --(ut->chunk.offset);
     }
 
     // adjust the index/chunkOffset to a code point boundary
-    U16_SET_CP_START(rt->s, chunkStart, chunkOffset);
+    U16_SET_CP_START(ut->chunk.contents, 0, ut->chunk.offset);
 
-    chunk->contents=rt->s+chunkStart;
-    chunk->length=chunkLength;
-    chunk->start=start;
-    chunk->limit=limit;
-    chunk->nonUTF16Indexes=FALSE;
-    return chunkOffset; // chunkOffset corresponding to index
+    return TRUE; 
 }
 
+
+
 static int32_t U_CALLCONV
-repTextExtract(UText *t,
+repTextExtract(UText *ut,
                int32_t start, int32_t limit,
                UChar *dest, int32_t destCapacity,
-               UErrorCode *pErrorCode) {
-    RepText *rt=(RepText *)t;
-    const Replaceable *rep=(const Replaceable *)rt->context;
+               UErrorCode *status) {
+    const Replaceable *rep=(const Replaceable *)ut->context;
     int32_t length=rep->length();
 
-    if(U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*status)) {
         return 0;
     }
     if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
     }
     if(start<0 || start>limit || length<limit) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
     length=limit-start;
@@ -1048,28 +1082,27 @@ repTextExtract(UText *t,
     }
     UnicodeString buffer(dest, 0, destCapacity); // writable alias
     rep->extractBetween(start, limit, buffer);
-    return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+    return u_terminateUChars(dest, destCapacity, length, status);
 }
 
 static int32_t U_CALLCONV
-repTextReplace(UText *t,
+repTextReplace(UText *ut,
                int32_t start, int32_t limit,
                const UChar *src, int32_t length,
-               UTextChunk *chunk,
-               UErrorCode *pErrorCode) {
-    RepText *rt=(RepText *)t;
-    Replaceable *rep=(Replaceable *)rt->context;
+               UErrorCode *status) {
+    Replaceable *rep=(Replaceable *)ut->context;
     int32_t oldLength;
 
-    if(U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*status)) {
         return 0;
     }
     if(src==NULL && length!=0) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
     oldLength=rep->length(); // will subtract from new length
     if(start<0 || start>limit || oldLength<limit) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
     // prepare
@@ -1082,24 +1115,22 @@ repTextReplace(UText *t,
 }
 
 static void U_CALLCONV
-repTextCopy(UText *t,
+repTextCopy(UText *ut,
             int32_t start, int32_t limit,
             int32_t destIndex,
             UBool move,
-            UTextChunk *chunk,
-            UErrorCode *pErrorCode) {
-    RepText *rt=(RepText *)t;
-    Replaceable *rep=(Replaceable *)rt->context;
+            UErrorCode *status) {
+    Replaceable *rep=(Replaceable *)ut->context;
     int32_t length=rep->length();
 
-    if(U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*status)) {
         return;
     }
     if( start<0 || start>limit || length<limit ||
         destIndex<0 || length<destIndex ||
         (start<destIndex && destIndex<limit)
     ) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return;
     }
     if(move) {
@@ -1118,61 +1149,37 @@ repTextCopy(UText *t,
     // never invalidate the chunk because we have a copy of the characters
 }
 
-static const UText repText={
-    NULL, NULL, NULL, NULL,
-    (int32_t)sizeof(UText), 0, 0, 0,
-    repTextClone,
-    repTextGetProperties,
-    repTextLength,
-    repTextAccess,
-    repTextExtract,
-    repTextReplace,
-    repTextCopy,
-    NULL, // mapOffsetToNative
-    NULL  // mapIndexToUTF16
-};
+
 
 U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(Replaceable *rep, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
+utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) {
+    if(U_FAILURE(*status)) {
         return NULL;
     }
     if(rep==NULL) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    RepText *rt=(RepText *)uprv_malloc(sizeof(RepText));
-    if(rt==NULL) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+    ut = utext_setup(ut, sizeof(ReplExtra), status);
+    
+    ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_WRITABLE);
+    if(rep->hasMetaData()) {
+        ut->providerProperties |=I32_FLAG(UTEXT_PROVIDER_HAS_META_DATA);
     }
-    *((UText *)rt)=repText;
-    rt->context=rep;
-    return rt;
+
+    ut->clone      = noopTextClone;
+    ut->length     = repTextLength;
+    ut->access     = repTextAccess;
+    ut->extract    = repTextExtract;
+    ut->replace    = repTextReplace;
+    ut->copy       = repTextCopy;
+
+    ut->context=rep;
+    return ut;
 }
 
-U_DRAFT void U_EXPORT2
-utext_closeReplaceable(UText *t) {
-    if(t!=NULL) {
-        uprv_free((RepText *)t);
-    }
-}
-
-U_DRAFT void U_EXPORT2
-utext_resetReplaceable(UText *t, Replaceable *rep, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-    if(rep==NULL) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    RepText *rt=(RepText *)t;
-    rt->context=rep;
-}
 U_CDECL_END
 
-#endif
 
 
 

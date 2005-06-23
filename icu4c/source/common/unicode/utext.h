@@ -329,7 +329,7 @@ utext_isLengthExpensive(const UText *ut);
  *
  * This function is roughly equivalent to the the sequence
  *    utext_setIndex(index);
- *    utext_current();
+ *    utext_current32();
  * (There is a difference if the index is out of bounds by being less than zero)
  * 
  * @param ut the text to be accessed
@@ -354,7 +354,7 @@ utext_char32At(UText *ut, int32_t nativeIndex);
  * @draft ICU 3.4
  */
 U_DRAFT UChar32 U_EXPORT2
-utext_current(UText *ut);
+utext_current32(UText *ut);
 
 
 /**
@@ -750,32 +750,32 @@ enum {
      * For example, byte indexes into UTF-8 text or UTF-32 indexes into UTF-32 text.
      * @draft ICU 3.4
      */
-    UTEXT_PROVIDER_NON_UTF16_INDEXES,
+    UTEXT_PROVIDER_NON_UTF16_INDEXES = 0,
     /**
      * It is potentially time consuming for the provider to determine the length of the text.
      * @draft ICU 3.4
      */
-    UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE,
+    UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE = 1,
     /**
      * Text chunks remain valid and usable until the text object is modified or
      * deleted, not just until the next time the access() function is called
      * (which is the default).
      * @draft ICU 3.4
      */
-    UTEXT_PROVIDER_STABLE_CHUNKS,
+    UTEXT_PROVIDER_STABLE_CHUNKS = 2,
     /**
      * The provider supports modifying the text via the replace() and copy()
      * functions.
      * @see Replaceable
      * @draft ICU 3.4
      */
-    UTEXT_PROVIDER_WRITABLE,
+    UTEXT_PROVIDER_WRITABLE = 3,
     /**
      * There is meta data associated with the text.
      * @see Replaceable::hasMetaData()
      * @draft ICU 3.4
      */
-    UTEXT_PROVIDER_HAS_META_DATA
+    UTEXT_PROVIDER_HAS_META_DATA = 4
 };
 
 /**
