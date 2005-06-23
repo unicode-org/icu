@@ -147,6 +147,9 @@
 			<File
 				RelativePath="strtst.c">
 			</File>
+			<File
+				RelativePath="trnstst.c">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

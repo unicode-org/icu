@@ -32,7 +32,7 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBCTESTFW) $(LIBICUTOOLUTIL) $(LIBICUIO) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = iotest.o strtst.o filetst.o
+OBJECTS = iotest.o strtst.o filetst.o trnstst.o
 
 DEPS = $(OBJECTS:.o=.d)
 

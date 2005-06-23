@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.h
@@ -23,6 +23,9 @@ addStringTest(TestNode** root);
 
 U_CFUNC void
 addFileTest(TestNode** root);
+
+U_CFUNC void
+addTranslitTest(TestNode** root);
 
 U_CDECL_BEGIN
 extern const UChar NEW_LINE[];
