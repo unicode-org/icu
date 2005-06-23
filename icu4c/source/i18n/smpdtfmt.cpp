@@ -539,7 +539,9 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*hKz*/ UCAL_HOUR, UCAL_HOUR, UCAL_ZONE_OFFSET,
     /*Yeu*/ UCAL_YEAR_WOY, UCAL_DOW_LOCAL, UCAL_EXTENDED_YEAR,
     /*gAZ*/ UCAL_JULIAN_DAY, UCAL_MILLISECONDS_IN_DAY, UCAL_ZONE_OFFSET,
-        /*v*/   UCAL_ZONE_OFFSET
+    /*v*/   UCAL_ZONE_OFFSET,
+    /*c*/   UCAL_DAY_OF_WEEK,
+    /*L*/   UCAL_MONTH,
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -553,7 +555,9 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*hKz*/ UDAT_HOUR1_FIELD, UDAT_HOUR0_FIELD, UDAT_TIMEZONE_FIELD,
     /*Yeu*/ UDAT_YEAR_WOY_FIELD, UDAT_DOW_LOCAL_FIELD, UDAT_EXTENDED_YEAR_FIELD,
     /*gAZ*/ UDAT_JULIAN_DAY_FIELD, UDAT_MILLISECONDS_IN_DAY_FIELD, UDAT_TIMEZONE_RFC_FIELD,
-        /*v*/   UDAT_TIMEZONE_GENERIC_FIELD
+    /*v*/   UDAT_TIMEZONE_GENERIC_FIELD,
+    /*c*/   UDAT_STANDALONE_DAY_FIELD,
+    /*L*/   UDAT_STANDALONE_MONTH_FIELD,
 };
 
 //----------------------------------------------------------------------
