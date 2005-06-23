@@ -233,7 +233,7 @@ ufile_flush_translit(UFILE *f)
         return;
 #endif
 
-    u_file_write_flush(NULL, 0, f, TRUE);
+    u_file_write_flush(NULL, 0, f, FALSE, TRUE);
 }
 
 
@@ -290,10 +290,11 @@ u_fputc(UChar32      uc,
 
 
 U_CAPI int32_t U_EXPORT2
-u_file_write_flush(    const UChar     *chars,
-                   int32_t        count,
-                   UFILE         *f,
-                   UBool         flush)
+u_file_write_flush(const UChar *chars,
+                   int32_t     count,
+                   UFILE       *f,
+                   UBool       flushIO,
+                   UBool       flushTranslit)
 {
     /* Set up conversion parameters */
     UErrorCode  status       = U_ZERO_ERROR;
@@ -305,31 +306,32 @@ u_file_write_flush(    const UChar     *chars,
     int32_t     written      = 0;
     int32_t     numConverted = 0;
 
-    if (!f->fFile) {
-        int32_t charsLeft = (int32_t)(f->str.fLimit - f->str.fPos);
-        if (flush && charsLeft > count) {
-            count++;
-        }
-        written = ufmt_min(count, charsLeft);
-        u_strncpy(f->str.fPos, chars, written);
-        f->str.fPos += written;
-        return written;
-    }
-
     if (count < 0) {
         count = u_strlen(chars);
     }
-    mySourceEnd     = chars + count;
 
 #if !UCONFIG_NO_TRANSLITERATION
     if((f->fTranslit) && (f->fTranslit->translit))
     {
         /* Do the transliteration */
-        mySource = u_file_translit(f, chars, &count, flush);
+        mySource = u_file_translit(f, chars, &count, flushTranslit);
         sourceAlias = mySource;
-        mySourceEnd = mySource + count;
     }
 #endif
+
+    /* Write to a string. */
+    if (!f->fFile) {
+        int32_t charsLeft = (int32_t)(f->str.fLimit - f->str.fPos);
+        if (flushIO && charsLeft > count) {
+            count++;
+        }
+        written = ufmt_min(count, charsLeft);
+        u_strncpy(f->str.fPos, mySource, written);
+        f->str.fPos += written;
+        return written;
+    }
+
+    mySourceEnd = mySource + count;
 
     /* Perform the conversion in a loop */
     do {
@@ -342,7 +344,7 @@ u_file_write_flush(    const UChar     *chars,
                 &mySource,
                 mySourceEnd,
                 NULL,
-                flush,
+                flushIO,
                 &status);
         } else { /*weiv: do the invariant conversion */
             u_UCharsToChars(mySource, myTarget, count);
@@ -372,7 +374,7 @@ u_file_write(    const UChar     *chars,
              int32_t        count,
              UFILE         *f)
 {
-    return u_file_write_flush(chars,count,f,FALSE);
+    return u_file_write_flush(chars,count,f,FALSE,FALSE);
 }
 
 

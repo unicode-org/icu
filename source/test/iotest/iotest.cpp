@@ -767,6 +767,7 @@ U_CDECL_END
 static void addAllTests(TestNode** root) {
     addFileTest(root);
     addStringTest(root);
+    addTranslitTest(root);
 
 #if !UCONFIG_NO_FORMATTING
     addTest(root, &DataDrivenPrintf, "datadriv/DataDrivenPrintf");
