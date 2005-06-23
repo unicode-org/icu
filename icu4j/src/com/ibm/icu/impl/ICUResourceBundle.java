@@ -455,8 +455,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                 fillinIsAvailable[0] = false;
             }
         }
-        // determine in which locale (if any) the currently relevant 'default'
-        // is
+        // determine in which locale (if any) the currently relevant 'default' is
         do {
             try {
                 ICUResourceBundle irb = r.get(resName);
@@ -484,9 +483,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             try {
                 ICUResourceBundle irb = r.get(resName);
                 /* UResourceBundle urb = */irb.get(kwVal);
-                fullBase = irb.getULocale(); // If the get() completed, we have
-                                             // the full base locale
-
+                fullBase = irb.getULocale(); 
+                // If the get() completed, we have the full base locale
                 // If we fell back to an ancestor of the old 'default',
                 // we need to re calculate the "default" keyword.
                 if ((fullBase != null) && ((resDepth) > defDepth)) {
@@ -509,8 +507,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             // couldn't find requested resource. Fall back to default.
             kwVal = defStr; // Fall back to default.
             parent = new ULocale(baseLoc);
-            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName,
-                    parent);
+            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
             resDepth = 0;
             // determine in which locale (if any) the named resource is located
             do {
@@ -524,7 +521,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                     // If the fetched item (urb) is in a different locale than our outer locale (r/fullBase)
                     // then we are in a 'fallback' situation. treat as a missing resource situation.
                     if(!fullBase.toString().equals(urb.getLocale().toString())) {
-                    	fullBase = null; // fallback condition. Loop and try again.
+                        fullBase = null; // fallback condition. Loop and try again.
                     }
 
                     // If we fell back to an ancestor of the old 'default',
@@ -546,18 +543,15 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
         if (fullBase == null) {
             throw new MissingResourceException(
-                    "Could not find locale containing requested or default keyword.",
-                    baseName, keyword + "=" + kwVal);
+                "Could not find locale containing requested or default keyword.",
+                baseName, keyword + "=" + kwVal);
         }
 
-        if (defStr.equals(kwVal) && // if default was requested and
-                (resDepth <= defDepth)) { // default was set in same locale or
-                                          // child
-            return fullBase; // Keyword value is default - no keyword needed in
-                             // locale
+        if (defStr.equals(kwVal) // if default was requested and
+            && resDepth <= defDepth) { // default was set in same locale or child
+            return fullBase; // Keyword value is default - no keyword needed in locale
         } else {
-            return new ULocale(fullBase.toString() + "@" + keyword + "="
-                    + kwVal);
+            return new ULocale(fullBase.toString() + "@" + keyword + "=" + kwVal);
         }
     }
 
@@ -568,27 +562,22 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * within the tree. (i.e. "collations")
      * @internal ICU 3.0
      */
-    public static final String[] getKeywordValues(String baseName,
-            String keyword) {
+    public static final String[] getKeywordValues(String baseName, String keyword) {
         Set keywords = new HashSet();
         ULocale locales[] = createULocaleList(baseName, ICU_DATA_CLASS_LOADER);
         int i;
 
         for (i = 0; i < locales.length; i++) {
             try {
-                UResourceBundle b = UResourceBundle.getBundleInstance(baseName,
-                        locales[i]);
+                UResourceBundle b = UResourceBundle.getBundleInstance(baseName, locales[i]);
                 // downcast to ICUResourceBundle?
-                ICUResourceBundle irb = (ICUResourceBundle) (b
-                        .getObject(keyword));
+                ICUResourceBundle irb = (ICUResourceBundle) (b.getObject(keyword));
                 Enumeration e = irb.getKeys();
                 Object s;
                 while (e.hasMoreElements()) {
                     s = e.nextElement();
-                    if ((s instanceof String) && !DEFAULT_TAG.equals(s)) { // don't
-                                                                           // add
-                                                                           // 'default'
-                                                                           // items
+                    if ((s instanceof String) && !DEFAULT_TAG.equals(s)) {
+                        // don't add 'default' items
                         keywords.add(s);
                     }
                 }
@@ -598,7 +587,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                 // ignore the err - just skip that resource
             }
         }
-        return (String[]) keywords.toArray(new String[0]);
+        return (String[])keywords.toArray(new String[0]);
     }
 
     /**
@@ -628,16 +617,15 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
         if (result == null) {
             throw new MissingResourceException(
-                    "Can't find resource for bundle "
-                            + this.getClass().getName() + ", key " + getType(),
-                    path, getKey());
+                "Can't find resource for bundle "
+                + this.getClass().getName() + ", key " + getType(),
+                path, getKey());
         }
         return result;
     }
 
     // will throw type mismatch exception if the resource is not a string
-    public String getStringWithFallback(String path)
-            throws MissingResourceException {
+    public String getStringWithFallback(String path) throws MissingResourceException {
         return getWithFallback(path).getString();
     }
 
@@ -657,7 +645,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     public static UResourceBundle getBundleInstance(String baseName,
             String localeName, boolean disableFallback) {
         return instantiateBundle(baseName, localeName, ICU_DATA_CLASS_LOADER,
-                disableFallback);
+            disableFallback);
     }
 
     /**
@@ -672,8 +660,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Return a set of the locale names supported by a collection of resource
      * bundles.
      * 
-     * @param bundlePrefix
-     *            the prefix of the resource bundles to use.
+     * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getAvailableLocaleNameSet(String bundlePrefix) {
         return getAvailEntry(bundlePrefix).getLocaleNameSet();
@@ -691,8 +678,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Return a set of all the locale names supported by a collection of
      * resource bundles.
      * 
-     * @param bundlePrefix
-     *            the prefix of the resource bundles to use.
+     * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getFullLocaleNameSet(String bundlePrefix) {
         return getAvailEntry(bundlePrefix).getFullLocaleNameSet();
@@ -714,6 +700,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     public static final ULocale[] getAvailableULocales(String baseName) {
         return getAvailEntry(baseName).getULocaleList();
     }
+
     /**
      * Get the set of ULocales installed the base bundle.
      * @return the list of available locales
@@ -731,7 +718,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     public static final Locale[] getAvailableLocales(String baseName) {
         return getAvailEntry(baseName).getLocaleList();
     }
-    /**
+
+   /**
      * Get the set of Locales installed the base bundle.
      * @return the list of available locales
      * @draft ICU 3.0
@@ -806,11 +794,13 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     public Locale getLocale() {
         return getULocale().toLocale();
     }
+
     // this method is declared in ResourceBundle class
     // so cannot change the signature
     protected Object handleGetObject(String key) {
         return handleGetObjectImpl(key, this);
     }
+
     // To facilitate XPath style aliases we need a way to pass the reference
     // to requested locale. The only way I could figure out is to implement
     // the look up logic here. This has a disadvantage that if the client
@@ -826,12 +816,13 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             }
             if (obj == null)
                 throw new MissingResourceException(
-                        "Can't find resource for bundle "
-                                + this.getClass().getName() + ", key " + key,
-                        this.getClass().getName(), key);
+                    "Can't find resource for bundle "
+                    + this.getClass().getName() + ", key " + key,
+                    this.getClass().getName(), key);
         }
         return obj;
     }
+
     private Object resolveObject(String key, ICUResourceBundle requested) {
         if (getType() == STRING) {
             return getString();
@@ -855,10 +846,12 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     protected ICUResourceBundle handleGet(int index, ICUResourceBundle requested) {
         return null;
     }
+
     protected ICUResourceBundle handleGet(String key,
             ICUResourceBundle requested) {
         return null;
     }
+
     protected String[] handleGetStringArray() {
         return null;
     }
@@ -921,55 +914,51 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             final String baseName, final ClassLoader root) {
 
         ArrayList list = (ArrayList) java.security.AccessController
-                .doPrivileged(new java.security.PrivilegedAction() {
-                    public Object run() {
-                        // WebSphere class loader will return null for a raw
-                        // directory name without trailing slash
-                        String bn = baseName.endsWith("/")
-                                ? baseName
-                                : baseName + "/";
+            .doPrivileged(new java.security.PrivilegedAction() {
+                public Object run() {
+                    // WebSphere class loader will return null for a raw
+                    // directory name without trailing slash
+                    String bn = baseName.endsWith("/")
+                        ? baseName
+                        : baseName + "/";
 
-                        // look for prebuilt indices first
-                        try {
-                            InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX);
-                            if (s != null) {
-                                ArrayList list = new ArrayList();
-                                BufferedReader br = new BufferedReader( new InputStreamReader(s, "ASCII"));
-                                String line;
-                                while ((line = br.readLine()) != null) {
-                                    if (line.length() != 0 && !line.startsWith("#")) {
-                                        list.add(line);
-                                    }
+                    // look for prebuilt indices first
+                    try {
+                        InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX + ".txt");
+                        if (s != null) {
+                            ArrayList list = new ArrayList();
+                            BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
+                            String line;
+                            while ((line = br.readLine()) != null) {
+                                if (line.length() != 0 && !line.startsWith("#")) {
+                                    list.add(line);
                                 }
-                                return list;
                             }
-                        } catch (IOException e) {
-                            // swallow it
-                        }
-
-                        URL url = root.getResource(bn);
-                        URLHandler handler = URLHandler.get(url);
-                        if (handler != null) {
-                            final ArrayList list = new ArrayList();
-                            URLVisitor v = new URLVisitor() {
-                                private Pattern p = Pattern.compile(".*\\.res");
-                                public void visit(String s) {
-                                    if (p.matcher(s).matches()
-                                            && !"res_index.res".equals(s)) {
-                                        list
-                                                .add(s.substring(0,
-                                                        s.length() - 4)); // strip
-                                                                          // '.res'
-                                    }
-                                }
-                            };
-                            handler.guide(v, false);
                             return list;
                         }
-
-                        return null;
+                    } catch (IOException e) {
+                        // swallow it
                     }
-                });
+
+                    URL url = root.getResource(bn);
+                    URLHandler handler = URLHandler.get(url);
+                    if (handler != null) {
+                        final ArrayList list = new ArrayList();
+                        URLVisitor v = new URLVisitor() {
+                            private Pattern p = Pattern.compile(".*\\.res");
+                            public void visit(String s) {
+                                if (p.matcher(s).matches() && !"res_index.res".equals(s)) {
+                                    list.add(s.substring(0, s.length() - 4)); // strip '.res'
+                                }
+                            }
+                        };
+                        handler.guide(v, false);
+                        return list;
+                    }
+
+                    return null;
+                }
+            });
 
         return list;
     }
@@ -986,16 +975,14 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
     private static Set createLocaleNameSet(String baseName) {
         try {
-            String[] locales = createLocaleNameArray(baseName,
-                    ICU_DATA_CLASS_LOADER);
+            String[] locales = createLocaleNameArray(baseName, ICU_DATA_CLASS_LOADER);
 
             HashSet set = new HashSet();
             set.addAll(Arrays.asList(locales));
             return Collections.unmodifiableSet(set);
         } catch (MissingResourceException e) {
             if (DEBUG) {
-                System.out.println("couldn't find index for bundleName: "
-                        + baseName);
+                System.out.println("couldn't find index for bundleName: " + baseName);
                 Thread.dumpStack();
             }
         }
