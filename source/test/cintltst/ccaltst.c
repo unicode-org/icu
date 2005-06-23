@@ -274,7 +274,7 @@ static void TestCalendar()
     }
     
     ucal_getTimeZoneDisplayName(caldef, UCAL_SHORT_DST, "en_US", result, resultlength, &status);
-    u_uastrcpy(tzdname, "PT");
+    u_uastrcpy(tzdname, "PDT");
     if(u_strcmp(tzdname, result) != 0){
         log_err("FAIL: got the wrong time zone(SHORT_DST) display name %s, wanted %s\n", austrdup(result), austrdup(tzdname));
     }
@@ -286,7 +286,7 @@ static void TestCalendar()
     }
 
     ucal_getTimeZoneDisplayName(caldef, UCAL_SHORT_STANDARD, "en_US", result, resultlength, &status);
-    u_uastrcpy(tzdname, "PT");
+    u_uastrcpy(tzdname, "PST");
     if(u_strcmp(tzdname, result) != 0){
         log_err("FAIL: got the wrong time zone(SHORT_STANDARD) display name %s, wanted %s\n", austrdup(result), austrdup(tzdname));
     }
