@@ -1417,7 +1417,7 @@ ga{
             }
         }
     }
-    localPatternChars{"RbMLkUnsSElFtTauKcBeyrAC"}
+    localPatternChars{"RbMLkUnsSElFtTauKcBeyrACvdz"}
     zoneStrings{
         {
             "Europe/Belfast",

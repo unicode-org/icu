@@ -554,7 +554,7 @@ root{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
-    localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZ"}
+    localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZvcL"}
     zoneStrings{
         {
             "",

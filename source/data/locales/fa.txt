@@ -524,7 +524,7 @@ fa{
         Yiii{"یی"}
         Zyyy{"مشترک"}
     }
-    Version{"1.42"}
+    Version{"1.43"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -478,5 +478,5 @@ eo{
             }
         }
     }
-    localPatternChars{"GjMtkHmslTDUSnahKzJdugAZ"}
+    localPatternChars{"GjMtkHmslTDUSnahKzJdugAZvcL"}
 }
