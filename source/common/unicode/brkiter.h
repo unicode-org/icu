@@ -261,6 +261,23 @@ public:
      */
     virtual const CharacterIterator& getText(void) const = 0;
 
+
+    /**
+      *  Get a UText for the text being analyzed.
+      *  The returned UText is a shallow clone of the UText used internally
+      *  by the break iterator implementation.  It can safely be used to
+      *  access the text without impacting any break iterator operations,
+      *  but the underlying text itself must not be altered.
+      *
+      * @param fillIn A UText to be filled in.  If NULL, a new UText will be
+      *           allocated to hold the result.
+      * @status   receives any error codes.
+      * @return   The current UText for this break iterator.  If an input
+      *           UText was provided, it will always be returned.
+      * @draft ICU 3.4
+      */
+     virtual UText *getUText(UText *fillIn, UErrorCode &status) const = 0;
+
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
@@ -270,12 +287,19 @@ public:
     virtual void  setText(const UnicodeString &text) = 0;
 
     /**
-     * Change the text over which this operates. The boundary iteration position is
-     * reset to the start.
+     * Reset the break iterator to operate over the text represented by 
+     * the UText.  The iterator position is reset to the start.
+     *
+     * This function makes a shallow clone of the supplied UText.  This means
+     * that the caller is free to immediately close or otherwise reuse the
+     * Utext that was passed as a parameter, but that the underlying text itself
+     * must not be altered while being referenced by the break iterator.
+     *
      * @param text The UText used to change the text.
-     * @stable ICU 2.0
+     * @status   receives any error codes.
+     * @draft ICU 3.4
      */
-    //virtual void  setText(UText &text) = 0;
+    virtual void  setText(UText *text, UErrorCode &status) = 0;
 
     /**
      * Change the text over which this operates. The text boundary is
