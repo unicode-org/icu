@@ -18,7 +18,7 @@
 
  /**
   * \file
-  * \brief C API: Constants for Win32 platform
+  * \brief Configuration constants for the Windows platform
   */
   
 /* Define the platform we're on. */
