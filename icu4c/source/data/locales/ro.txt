@@ -457,5 +457,5 @@ ro{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

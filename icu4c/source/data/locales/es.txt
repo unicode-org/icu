@@ -1906,7 +1906,7 @@ es{
             }
         }
     }
-    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
         {
             "America/Halifax",

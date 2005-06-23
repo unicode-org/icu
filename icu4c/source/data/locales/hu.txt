@@ -1615,5 +1615,5 @@ hu{
         }
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

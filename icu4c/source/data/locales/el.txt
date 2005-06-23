@@ -1473,5 +1473,5 @@ el{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

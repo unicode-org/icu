@@ -397,5 +397,5 @@ et{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

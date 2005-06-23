@@ -568,7 +568,7 @@ th{
                 "H' นาฬิกา 'm' นาที 'ss' วินาที'",
                 "H' นาฬิกา 'm' นาที'",
                 "H:mm:ss",
-                "H:mm",
+                "h:mm a",
                 "EEEE'ที่ 'd MMMM G yyyy",
                 "d MMMM yyyy",
                 "d MMM yyyy",
@@ -686,5 +686,5 @@ th{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

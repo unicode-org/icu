@@ -644,7 +644,7 @@ sr{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
             "Europe/Belgrade",

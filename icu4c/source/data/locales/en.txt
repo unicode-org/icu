@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: /work/cldr/common/main/en.xml
+// * Source File: ../../../cldr/common/main/en.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: /work/icu/source/data/xml/main/en.xml
+ *  ICU <specials> source: ./xml/main/en.xml
  */
 en{
     Countries{
@@ -2154,6 +2154,14 @@ en{
             "Shanghai",
         }
         {
+            "Europe/Dublin",
+            "Greenwich Mean Time",
+            "GMT",
+            "Irish Summer Time",
+            "IST",
+            "Dublin",
+        }
+        {
             "Europe/Paris",
             "Central European Standard Time",
             "CEST",
@@ -2165,13 +2173,11 @@ en{
         }
         {
             "Europe/London",
-            "British Standard Time",
+            "Greenwich Mean Time",
+            "GMT",
+            "British Summer Time",
             "BST",
-            "British Daylight Time",
-            "BDT",
             "London",
-            "British Time",
-            "BT",
         }
         {
             "Asia/Jerusalem",

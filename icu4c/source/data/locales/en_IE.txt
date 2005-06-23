@@ -33,14 +33,4 @@ en_IE{
             }
         }
     }
-    zoneStrings{
-        {
-            "Europe/Dublin",
-            "Greenwich Mean Time",
-            "GMT",
-            "Irish Summer Time",
-            "IST",
-            "Dublin",
-        }
-    }
 }

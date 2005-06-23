@@ -1829,7 +1829,7 @@ ko{
             }
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
             "America/Halifax",

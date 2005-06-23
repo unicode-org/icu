@@ -1716,7 +1716,7 @@ da{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE 'den' d. MMMM yyyy",
+                "EEEE 'den' dd. MMM yyyy",
                 "d. MMM yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
@@ -1811,7 +1811,7 @@ da{
             }
         }
     }
-    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
         {
             "America/Halifax",
