@@ -545,7 +545,7 @@ static UText * U_CALLCONV
 //  Clone.  This is a generic copy-the-utext-by-value clone function that can be
 //          used as-is with some utext types, and as helper by other clones. 
 //
-noopTextClone(UText * dest, const UText * src, UBool deep, UErrorCode * status) {
+noopTextClone(UText * dest, const UText * src,  UBool /*deep*/, UErrorCode * status) {
     if (U_FAILURE(*status)) {
         return NULL;
     }
@@ -955,7 +955,7 @@ repTextLength(UText *ut) {
 
 
 static UBool U_CALLCONV
-repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
+repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) {
     const Replaceable *rep=(const Replaceable *)ut->context;
     int32_t start;          // index of the start of the chunk to be loaded
     int32_t limit;          // index of the end+1 of the chunk to be loaded.
@@ -1167,7 +1167,7 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) {
         ut->providerProperties |=I32_FLAG(UTEXT_PROVIDER_HAS_META_DATA);
     }
 
-    ut->clone      = noopTextClone;
+    ut->clone      = repTextClone;
     ut->length     = repTextLength;
     ut->access     = repTextAccess;
     ut->extract    = repTextExtract;
@@ -1221,12 +1221,6 @@ unistrTextClone(UText * /* dest */, const UText * /*src*/, UBool /*deep*/, UErro
     return NULL;
 }
 
-static int32_t U_CALLCONV
-unistrTextGetProperties(UText * /*t*/) {
-    return
-        I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS)|
-        I32_FLAG(UTEXT_PROVIDER_WRITABLE);
-}
 
 static int32_t U_CALLCONV
 unistrTextLength(UText *t) {
@@ -1391,9 +1385,10 @@ U_CDECL_BEGIN
 
 
 static UText * U_CALLCONV
-ucstrTextClone(UText * /* dest */, const UText * /*src*/, UBool /*deep*/, UErrorCode * /*status*/) {
+ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) {
+    UText *clone = noopTextClone(dest, src, deep, status);
 // TODO:  fix this.
-    return NULL;
+    return clone;
 }
 
 
@@ -1552,7 +1547,7 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status) 
     }
     ut = utext_setup(ut, 0, status);
     if (U_SUCCESS(*status)) {
-        ut->clone      = noopTextClone;
+        ut->clone      = ucstrTextClone;
         ut->length     = ucstrTextLength;
         ut->access     = ucstrTextAccess;
         ut->extract    = ucstrTextExtract;
