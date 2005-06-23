@@ -16,7 +16,7 @@
 
 /**
  * \file 
- * \brief C API: Deprecated macros for 16-bit Unicode handling
+ * \brief C API: Deprecated macros for Unicode string handling
  */
 
 /**
