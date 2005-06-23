@@ -594,5 +594,5 @@ ar{
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
 }

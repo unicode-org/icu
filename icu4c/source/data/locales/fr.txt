@@ -1873,7 +1873,7 @@ fr{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
-    localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZ"}
+    localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
             "America/Vancouver",

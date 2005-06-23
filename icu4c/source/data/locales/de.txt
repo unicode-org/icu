@@ -1908,7 +1908,7 @@ de{
         quotationEnd{"‘"}
         quotationStart{"‚"}
     }
-    localPatternChars{"GjMtkHmsSEDFwWahKzJeugAZ"}
+    localPatternChars{"GjMtkHmsSEDFwWahKzJeugAZvcL"}
     zoneStrings{
         {
             "Europe/Berlin",

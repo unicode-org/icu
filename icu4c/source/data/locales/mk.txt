@@ -1123,5 +1123,5 @@ mk{
             }
         }
     }
-    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
 }
