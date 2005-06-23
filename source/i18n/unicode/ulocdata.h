@@ -56,7 +56,7 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
 #ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for representing the measurement systems.
- * @stable ICU 2.8
+ * @draft ICU 2.8
  */
 typedef enum UMeasurementSystem {
     UMS_SI,     /** Measurement system specified by SI otherwise known as Metric system. */
@@ -67,14 +67,15 @@ typedef enum UMeasurementSystem {
 
 /**
  * Returns the measurement system used in the locale specified by the localeID.
+ * Please note that this API will change in ICU 3.6 and will use an ulocdata object.
  *
  * @param localeID      The id of the locale for which the measurement system to be retrieved.
  * @param status        Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return UMeasurementSystem the measurement system used in the locale.
- * @stable ICU 2.8
+ * @draft ICU 2.8
  */
-U_STABLE UMeasurementSystem U_EXPORT2
+U_DRAFT UMeasurementSystem U_EXPORT2
 ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
 
 /**
@@ -84,15 +85,16 @@ ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
  * the values are rounded off.
  * So for A4 size paper the height and width are 297 mm and 210 mm repectively, 
  * and for US letter size the height and width are 279 mm and 216 mm respectively.
+ * Please note that this API will change in ICU 3.6 and will use an ulocdata object.
  *
  * @param localeID      The id of the locale for which the paper size information to be retrieved.
  * @param height        A pointer to int to recieve the height information.
  * @param width         A pointer to int to recieve the width information.
  * @param status        Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @stable ICU 2.8
+ * @draft ICU 2.8
  */
-U_STABLE void U_EXPORT2
+U_DRAFT void U_EXPORT2
 ulocdata_getPaperSize(const char *localeID, int32_t *height, int32_t *width, UErrorCode *status);
 
 #endif
