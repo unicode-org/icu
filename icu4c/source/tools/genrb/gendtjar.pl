@@ -169,7 +169,14 @@ sub getPlatform{
 sub createJar{
     local($jar, $jarFile, $tempDir, $dirToJar, $verbose) = @_;
     chdir($tempDir);
-    $command = "$jar cvf $jarFile -C $tempDir $dirToJar";
+    $command="";
+    print "INFO: Creating $jarFile\n";
+    if(defined $verbose){
+        $command = "$jar cvf $jarFile -C $tempDir $dirToJar";
+    }else{
+        $command = "$jar cf $jarFile -C $tempDir $dirToJar";
+    }
+    
     cmd($command, $verbose);
 }
 #-----------------------------------------------------------------------
@@ -222,7 +229,7 @@ sub convertData{
 
     }
     chdir("..");
-    print "INFO: \nDONE\n";
+    print "INFO: DONE\n";
 }
 #-----------------------------------------------------------------------
 sub convertTestData{
