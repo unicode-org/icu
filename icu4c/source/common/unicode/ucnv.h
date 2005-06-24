@@ -410,7 +410,7 @@ ucnv_openCCSID(int32_t codepage,
  * <p>The packageName and converterName must point to an ICU udata object, as defined by
  *   <code> udata_open( packageName, "cnv", converterName, err) </code> or equivalent.
  * Typically, packageName will refer to a (.dat) file, or to a package registered with
- * udata_setAppData().</p>
+ * udata_setAppData(). Using a full file or directory pathname for packageName is deprecated.</p>
  * 
  * <p>The name will NOT be looked up in the alias mechanism, nor will the converter be
  * stored in the converter cache or the alias table. The only way to open further converters
