@@ -276,7 +276,7 @@ typedef unsigned int uint32_t;
 #else
 #define U_ALIGN_CODE(val)
 #endif
-      
+
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
