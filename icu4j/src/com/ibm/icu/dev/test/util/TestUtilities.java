@@ -98,7 +98,7 @@ public class TestUtilities extends TestFmwk {
         logln("Getting Scripts");
         UnicodeMap scripts = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
         UnicodeMap.Composer composer = new UnicodeMap.Composer() {
-			public Object compose(Object a, Object b) {
+			public Object compose(int codePoint, Object a, Object b) {
 				return a.toString() + "_" + b.toString();
 			}       	
         };
@@ -110,7 +110,7 @@ public class TestUtilities extends TestFmwk {
         	Object comp = composed.getValue(i);
         	Object gc = map1.getValue(i);
         	Object sc = scripts.getValue(i);
-        	if (!comp.equals(composer.compose(gc, sc))) {
+        	if (!comp.equals(composer.compose(null, gc, sc))) {
         		errln("Failed compose at: " + i);
         	}
         	if (!last.equals(comp)) {
