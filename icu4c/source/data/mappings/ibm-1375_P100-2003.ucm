@@ -1,11 +1,11 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2004, International Business Machines
+# *   Copyright (C) 1995-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Apr 13 2004)
+# File created by rptp2ucm (compiled on Jun 21 2005)
 # from source files F204055F.RPMAP100 and 055FF204.TPMAP100
 #
 <code_set_name>               "ibm-1375_P100-2003"
@@ -150,132 +150,34 @@ CHARMAP
 <U007D> \x7D |0
 <U007E> \x7E |0
 <U007F> \x7F |0
-<U0080> \x1A |2
-<U0081> \x1A |2
-<U0082> \x1A |2
-<U0083> \x1A |2
-<U0084> \x1A |2
-<U0085> \x1A |2
-<U0086> \x1A |2
-<U0087> \x1A |2
-<U0088> \x1A |2
-<U0089> \x1A |2
-<U008A> \x1A |2
-<U008B> \x1A |2
-<U008C> \x1A |2
-<U008D> \x1A |2
-<U008E> \x1A |2
-<U008F> \x1A |2
-<U0090> \x1A |2
-<U0091> \x1A |2
-<U0092> \x1A |2
-<U0093> \x1A |2
-<U0094> \x1A |2
-<U0095> \x1A |2
-<U0096> \x1A |2
-<U0097> \x1A |2
-<U0098> \x1A |2
-<U0099> \x1A |2
-<U009A> \x1A |2
-<U009B> \x1A |2
-<U009C> \x1A |2
-<U009D> \x1A |2
-<U009E> \x1A |2
-<U009F> \x1A |2
-<U00A0> \x1A |2
-<U00A1> \x1A |2
-<U00A2> \x1A |2
-<U00A3> \x1A |2
-<U00A4> \x1A |2
-<U00A5> \x1A |2
-<U00A6> \x1A |2
 <U00A7> \xA1\xB1 |0
 <U00A8> \xC6\xD8 |0
-<U00A9> \x1A |2
-<U00AA> \x1A |2
-<U00AB> \x1A |2
-<U00AC> \x1A |2
-<U00AD> \x1A |2
-<U00AE> \x1A |2
 <U00AF> \xA1\xC2 |0
 <U00B0> \xA2\x58 |0
 <U00B1> \xA1\xD3 |0
-<U00B2> \x1A |2
-<U00B3> \x1A |2
-<U00B5> \x1A |2
 <U00B7> \xA1\x50 |0
-<U00B8> \x1A |2
-<U00B9> \x1A |2
-<U00BA> \x1A |2
-<U00BB> \x1A |2
-<U00BC> \x1A |2
-<U00BD> \x1A |2
-<U00BE> \x1A |2
-<U00BF> \x1A |2
 <U00C0> \x88\x59 |0
 <U00C1> \x88\x57 |0
-<U00C2> \x1A |2
-<U00C3> \x1A |2
-<U00C4> \x1A |2
-<U00C5> \x1A |2
-<U00C6> \x1A |2
-<U00C7> \x1A |2
 <U00C8> \x88\x5D |0
 <U00C9> \x88\x5B |0
 <U00CA> \x88\x66 |0
-<U00CB> \x1A |2
-<U00CC> \x1A |2
-<U00CD> \x1A |2
-<U00CE> \x1A |2
-<U00CF> \x1A |2
-<U00D0> \x1A |2
-<U00D1> \x1A |2
 <U00D2> \x88\x61 |0
 <U00D3> \x88\x5F |0
-<U00D4> \x1A |2
-<U00D5> \x1A |2
-<U00D6> \x1A |2
 <U00D7> \xA1\xD1 |0
-<U00D8> \x1A |2
-<U00D9> \x1A |2
-<U00DA> \x1A |2
-<U00DB> \x1A |2
-<U00DC> \x1A |2
-<U00DD> \x1A |2
-<U00DE> \x1A |2
-<U00DF> \x1A |2
 <U00E0> \x88\x6A |0
 <U00E1> \x88\x68 |0
-<U00E2> \x1A |2
-<U00E3> \x1A |2
-<U00E4> \x1A |2
-<U00E5> \x1A |2
-<U00E6> \x1A |2
-<U00E7> \x1A |2
 <U00E8> \x88\x6F |0
 <U00E9> \x88\x6D |0
 <U00EA> \x88\xA7 |0
-<U00EB> \x1A |2
 <U00EC> \x88\x73 |0
 <U00ED> \x88\x71 |0
-<U00EE> \x1A |2
-<U00EF> \x1A |2
-<U00F0> \x1A |2
-<U00F1> \x1A |2
 <U00F2> \x88\x77 |0
 <U00F3> \x88\x75 |0
-<U00F4> \x1A |2
-<U00F5> \x1A |2
-<U00F6> \x1A |2
 <U00F7> \xA1\xD2 |0
 <U00F8> \xC8\xFB |0
 <U00F9> \x88\x7B |0
 <U00FA> \x88\x79 |0
-<U00FB> \x1A |2
 <U00FC> \x88\xA2 |0
-<U00FD> \x1A |2
-<U00FE> \x1A |2
-<U00FF> \x1A |2
 <U0100> \x88\x56 |0
 <U0101> \x88\x67 |0
 <U0112> \x88\x5A |0
@@ -303,8 +205,7 @@ CHARMAP
 <U0254> \xC8\xF8 |0
 <U025B> \xC8\xF7 |0
 <U0261> \x88\xA8 |0
-<U026A> \xA1\x48 |2
-<U026A> \xC8\xFE |3
+<U026A> \xC8\xFE |0
 <U0275> \xC8\xF9 |0
 <U0283> \xC8\xF5 |0
 <U028A> \xC8\xFD |0
