@@ -13,7 +13,7 @@ en_IE{
             "Irish Pound",
         }
     }
-    Version{"1.29"}
+    Version{"1.30"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -343,7 +343,7 @@ lt{
     Scripts{
         Latn{"Latin"}
     }
-    Version{"1.44"}
+    Version{"1.45"}
     calendar{
         gregorian{
             AmPmMarkers{

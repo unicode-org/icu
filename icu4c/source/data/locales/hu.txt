@@ -1443,7 +1443,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.48"}
+    Version{"1.49"}
     calendar{
         buddhist{
             eras{
