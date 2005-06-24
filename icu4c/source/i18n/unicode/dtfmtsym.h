@@ -193,6 +193,15 @@ public:
     void setEras(const UnicodeString* eras, int32_t count);
 
     /**
+     * Gets era name strings. For example: "Anno Domini" and "Before Christ".
+     *
+     * @param count    Filled in with length of the array.
+     * @return         the era name strings.
+     * @draft ICU 3.4
+     */
+    const UnicodeString* getEraNames(int32_t& count) const;
+
+    /**
      * Gets month strings. For example: "January", "February", etc.
      * @param count Filled in with length of the array.
      * @return the month strings. (DateFormatSymbols retains ownership.)
@@ -226,6 +235,47 @@ public:
      */
     void setShortMonths(const UnicodeString* shortMonths, int32_t count);
 
+    enum DtContextType {
+        /**
+         * Selector for format date context
+         * @draft ICU 3.4
+         */
+         FORMAT = 0,
+       /**
+         * Selector for standalone date context
+         * @draft ICU 3.4
+         */
+         STANDALONE = 1
+    };
+
+    enum DtWidthType {
+        /**
+         * Selector for wide strings
+         * @draft ICU 3.4
+         */
+         WIDE = 4,
+       /**
+         * Selector for abbreviated strings
+         * @draft ICU 3.4
+         */
+         ABBREVIATED = 3,
+       /**
+         * Selector for narrow strings
+         * @draft ICU 3.4
+         */
+         NARROW = 5
+    };
+
+    /**
+     * Gets month strings by width and context. For example: "January", "February", etc.
+     * @param count Filled in with length of the array.
+     * @param context The day formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @return the month strings. (DateFormatSymbols retains ownership.)
+     * @draft ICU 3.4
+     */
+    const UnicodeString* getMonths(int32_t& count, DtContextType context, DtWidthType width) const;
+
     /**
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
      * @param count        Filled in with length of the array.
@@ -233,6 +283,7 @@ public:
      * @stable ICU 2.0
      */
     const UnicodeString* getWeekdays(int32_t& count) const;
+
 
     /**
      * Sets weekday strings. For example: "Sunday", "Monday", etc.
@@ -257,6 +308,16 @@ public:
      * @stable ICU 2.0
      */
     void setShortWeekdays(const UnicodeString* shortWeekdays, int32_t count);
+
+    /**
+     * Gets weekday strings by width and context. For example: "Sunday", "Monday", etc.
+     * @param count   Filled in with length of the array.
+     * @param context The day formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @return the month strings. (DateFormatSymbols retains ownership.)
+     * @draft ICU 3.4
+     */
+    const UnicodeString* getWeekdays(int32_t& count, DtContextType context, DtWidthType width) const;
 
     /**
      * Gets AM/PM strings. For example: "AM" and "PM".
@@ -348,6 +409,12 @@ private:
     int32_t         fErasCount;
 
     /**
+     * Era name strings. For example: "Anno Domini" and "Before Christ".
+     */
+    UnicodeString*  fEraNames;
+    int32_t         fEraNamesCount;
+
+    /**
      * Month strings. For example: "January", "February", etc.
      */
     UnicodeString*  fMonths;
@@ -360,6 +427,30 @@ private:
     int32_t         fShortMonthsCount;
 
     /**
+     * Narrow month strings. For example: "J", "F", etc.
+     */
+    UnicodeString*  fNarrowMonths;
+    int32_t         fNarrowMonthsCount;
+
+    /**
+     * Standalone Month strings. For example: "January", "February", etc.
+     */
+    UnicodeString*  fStandaloneMonths;
+    int32_t         fStandaloneMonthsCount;
+
+    /**
+     * Standalone Short month strings. For example: "Jan", "Feb", etc.
+     */
+    UnicodeString*  fStandaloneShortMonths;
+    int32_t         fStandaloneShortMonthsCount;
+
+    /**
+     * Standalone Narrow month strings. For example: "J", "F", etc.
+     */
+    UnicodeString*  fStandaloneNarrowMonths;
+    int32_t         fStandaloneNarrowMonthsCount;
+
+    /**
      * Weekday strings. For example: "Sunday", "Monday", etc.
      */
     UnicodeString*  fWeekdays;
@@ -370,6 +461,30 @@ private:
      */
     UnicodeString*  fShortWeekdays;
     int32_t         fShortWeekdaysCount;
+
+    /**
+     * Narrow weekday strings. For example: "Sun", "Mon", etc.
+     */
+    UnicodeString*  fNarrowWeekdays;
+    int32_t         fNarrowWeekdaysCount;
+
+    /**
+     * Standalone Weekday strings. For example: "Sunday", "Monday", etc.
+     */
+    UnicodeString*  fStandaloneWeekdays;
+    int32_t         fStandaloneWeekdaysCount;
+
+    /**
+     * Standalone Short weekday strings. For example: "Sun", "Mon", etc.
+     */
+    UnicodeString*  fStandaloneShortWeekdays;
+    int32_t         fStandaloneShortWeekdaysCount;
+
+    /**
+     * Standalone Narrow weekday strings. For example: "Sun", "Mon", etc.
+     */
+    UnicodeString*  fStandaloneNarrowWeekdays;
+    int32_t         fStandaloneNarrowWeekdaysCount;
 
     /**
      * Ampm strings. For example: "AM" and "PM".
