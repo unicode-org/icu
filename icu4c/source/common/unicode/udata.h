@@ -371,13 +371,13 @@ typedef enum UDataFileAccess {
 /**
  * This function may be called to control how ICU loads data. It must be called
  * before any ICU data is loaded, including application data loaded with ures/ResourceBundle or
- * udata APIs. 
- * @param fa The type of file access to be used
+ * udata APIs. It should be called before u_init.
+ * @param access The type of file access to be used
  * @see UDataFileAccess
  * @draft ICU 3.4 
  */
 U_DRAFT void U_EXPORT2
-udata_setFileAccess(UDataFileAccess fa);
+udata_setFileAccess(UDataFileAccess access);
 
 U_CDECL_END
 
