@@ -278,8 +278,9 @@ void TestProperty()
       ICU 2.2 currVersionArray = {0x21, 0x40, 0x04, 0x04};
       ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
       ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
+      ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};
     */
-    UVersionInfo currVersionArray = {0x29, 0x80, 0x00, 0x04};
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x04};
     UVersionInfo currUCAVersionArray = {4, 1, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
