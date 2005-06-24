@@ -970,7 +970,7 @@ addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
       if(isSpecial(CE) && getCETag(CE) == CONTRACTION_TAG && isSpecial(newCE) && getCETag(newCE) == SPEC_PROC_TAG && addPrefixes) {
         addSpecial(context, buffer, bufLen, newCE, leftIndex, rightIndex, status);
       }
-      if(rightIndex-leftIndex > 1) {
+      if(contractions && rightIndex-leftIndex > 1) {
             uset_addString(contractions, buffer+leftIndex, rightIndex-leftIndex);
             if(expansions && isSpecial(CE) && getCETag(CE) == EXPANSION_TAG) {
               uset_addString(expansions, buffer+leftIndex, rightIndex-leftIndex);
@@ -992,10 +992,12 @@ addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
           if(isSpecial(newCE) && (getCETag(newCE) == CONTRACTION_TAG || getCETag(newCE) == SPEC_PROC_TAG)) {
               addSpecial(context, buffer, bufLen, newCE, leftIndex, rightIndex, status);
           } else {
-              uset_addString(contractions, buffer+leftIndex, rightIndex-leftIndex);
-              if(expansions && isSpecial(newCE) && getCETag(newCE) == EXPANSION_TAG) {
-                uset_addString(expansions, buffer+leftIndex, rightIndex-leftIndex);
-              }
+            if(contractions) {
+                uset_addString(contractions, buffer+leftIndex, rightIndex-leftIndex);
+            }
+            if(expansions && isSpecial(newCE) && getCETag(newCE) == EXPANSION_TAG) {
+              uset_addString(expansions, buffer+leftIndex, rightIndex-leftIndex);
+            }
           }
           UCharOffset++;
       }
@@ -1010,10 +1012,12 @@ addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
           if(isSpecial(newCE) && (getCETag(newCE) == CONTRACTION_TAG || getCETag(newCE) == SPEC_PROC_TAG)) {
               addSpecial(context, buffer, bufLen, newCE, leftIndex, rightIndex+1, status);
           } else {
+            if(contractions) {
               uset_addString(contractions, buffer+leftIndex, rightIndex+1-leftIndex);
-              if(expansions && isSpecial(newCE) && getCETag(newCE) == EXPANSION_TAG) {
-                uset_addString(expansions, buffer+leftIndex, rightIndex+1-leftIndex);
-              }
+            }
+            if(expansions && isSpecial(newCE) && getCETag(newCE) == EXPANSION_TAG) {
+              uset_addString(expansions, buffer+leftIndex, rightIndex+1-leftIndex);
+            }
           }
           UCharOffset++;
       }
@@ -1033,7 +1037,7 @@ _processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE)
     UBool addPrefixes = ((contContext *)context)->addPrefixes;
     UChar contraction[internalBufferSize];
     if(isSpecial(CE)) {
-      if(contractions && ((getCETag(CE) == SPEC_PROC_TAG && addPrefixes) || getCETag(CE) == CONTRACTION_TAG)) {
+      if(((getCETag(CE) == SPEC_PROC_TAG && addPrefixes) || getCETag(CE) == CONTRACTION_TAG)) {
         while(start < limit && U_SUCCESS(*status)) {
             // if there are suppressed contractions, we don't 
             // want to add them.
@@ -1096,7 +1100,6 @@ ucol_getContractions( const UCollator *coll,
  * @param conts the set to hold the result
  * @param addPrefixes add the prefix contextual elements to contractions
  * @param status to hold the error code
- * @return the size of the contraction set
  *
  * @draft ICU 3.4
  */
@@ -1115,7 +1118,9 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
         return;
     }
 
-    uset_clear(contractions);
+    if(contractions) {
+      uset_clear(contractions);
+    }
     if(expansions) {
       uset_clear(expansions);
     }
