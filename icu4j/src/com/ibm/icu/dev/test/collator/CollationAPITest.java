@@ -18,6 +18,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 import java.util.MissingResourceException;
 
@@ -1051,4 +1052,97 @@ public class CollationAPITest extends TestFmwk {
           warnln("Could not load the locale data.");
         }
     }    
+
+    private void
+    doSetsTest(UnicodeSet ref, UnicodeSet set, String inSet, String outSet) {
+        
+        set.clear();
+        set.applyPattern(inSet);
+        
+        if(!ref.containsAll(set)) {
+            err("Some stuff from "+inSet+" is not present in the set\n");            
+        }
+        
+        set.clear();
+        set.applyPattern(outSet);
+        if(!ref.containsNone(set)) {
+            err("Some stuff from "+outSet+" is present in the set\n");
+        }
+    }
+    
+    public void TestGetContractions() {
+        /*        static struct {
+         const char* locale;
+         const char* inConts;
+         const char* outConts;
+         const char* inExp;
+         const char* outExp;
+         const char* unsafeCodeUnits;
+         const char* safeCodeUnits;
+         }
+         */
+        String tests[][] = {
+                { "ru", 
+                    "[{\u0474\u030F}{\u0475\u030F}{\u04D8\u0308}{\u04D9\u0308}{\u04E8\u0308}{\u04E9\u0308}]", 
+                    "[{\u0430\u0306}{\u0410\u0306}{\u0430\u0308}{\u0410\u0306}{\u0433\u0301}{\u0413\u0301}]",
+                    "[\u00e6]",
+                    "[a]",
+                    "[\u0474\u0475\u04d8\u04d9\u04e8\u04e9]",
+                    "[aAbB\u0430\u0410\u0433\u0413]"
+                },
+                { "uk",
+                    "[{\u0474\u030F}{\u0475\u030F}{\u04D8\u0308}{\u04D9\u0308}{\u04E8\u0308}{\u04E9\u0308}"+ 
+                    "{\u0430\u0306}{\u0410\u0306}{\u0430\u0308}{\u0410\u0306}{\u0433\u0301}{\u0413\u0301}]",
+                    "[]",
+                    "[\u00e6]",
+                    "[a]",
+                    "[\u0474\u0475\u04D8\u04D9\u04E8\u04E9\u0430\u0410\u0433\u0413]",
+                    "[aAbBxv]",
+                },
+                { "sh",
+                    "[{C\u0301}{C\u030C}{C\u0341}{DZ\u030C}{Dz\u030C}{D\u017D}{D\u017E}{lj}{nj}]",
+                    "[{\u309d\u3099}{\u30fd\u3099}]",
+                    "[\u00e6]",
+                    "[a]",
+                    "[nlcdzNLCDZ]",
+                    "[jabv]"
+                },
+                { "ja",
+                    "[{\u3053\u3099\u309D}{\u3053\u3099\u309D\u3099}{\u3053\u3099\u309E}{\u3053\u3099\u30FC}{\u3053\u309D}{\u3053\u309D\u3099}{\u3053\u309E}{\u3053\u30FC}{\u30B3\u3099\u30FC}{\u30B3\u3099\u30FD}{\u30B3\u3099\u30FD\u3099}{\u30B3\u3099\u30FE}{\u30B3\u30FC}{\u30B3\u30FD}{\u30B3\u30FD\u3099}{\u30B3\u30FE}]",
+                    "[{\u30FD\u3099}{\u309D\u3099}{\u3053\u3099}{\u30B3\u3099}{lj}{nj}]",
+                    "[\u30FE\u00e6]",
+                    "[a]",
+                    "[\u3099]",
+                    "[]"
+                }
+        };
+        
+        
+        
+        
+        RuleBasedCollator coll = null;
+        int i = 0;
+        UnicodeSet conts = new UnicodeSet();
+        UnicodeSet exp = new UnicodeSet();
+        UnicodeSet set = new UnicodeSet();
+        
+        for(i = 0; i < tests.length; i++) {
+            try {
+                log("Testing locale: "+ tests[i][0]+"\n");
+                coll = (RuleBasedCollator)Collator.getInstance(new ULocale(tests[i][0]));
+                coll.getContractionsAndExpansions(conts, exp, true);
+                log("Contractions "+conts.size()+":\n"+conts.toPattern(true)+"\n");
+                doSetsTest(conts, set, tests[i][1], tests[i][2]);
+                log("Expansions "+exp.size()+":\n"+exp.toPattern(true)+"\n");
+                doSetsTest(exp, set, tests[i][3], tests[i][4]);
+                
+                // No unsafe set in ICU4J
+                //noConts = ucol_getUnsafeSet(coll, conts, &status);
+                //doSetsTest(conts, set, tests[i][5], tests[i][6]);
+                //log_verbose("Unsafes "+conts.size()+":\n"+conts.toPattern(true)+"\n");
+            } catch (Exception e) {
+                errln("Unhandled exception: "+ e.toString());
+            }
+        }
+    }
 }
