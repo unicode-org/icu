@@ -101,7 +101,7 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
     UErrorCode localStatus = U_ZERO_ERROR;
 
     if (U_FAILURE(*status))
-        return NULL;
+        return 0;
 
     delimiter = ures_getStringByKey(uld->bundle, delimiterKeys[type], &len, &localStatus);
     if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
