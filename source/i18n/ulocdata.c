@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2004, International Business Machines                        *
+* Copyright (C) 2003-2005, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -16,45 +16,99 @@
 
 #include "unicode/ulocdata.h"
 
-#define EXEMPLAR_CHARS      "ExemplarCharacters"
 #define MEASUREMENT_SYSTEM  "MeasurementSystem"
 #define PAPER_SIZE          "PaperSize"
 
-U_CAPI USet* U_EXPORT2 
-ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
-                        uint32_t options, UErrorCode *status){
+U_CAPI ULocaleData* U_EXPORT2
+ulocdata_open(const char *localeID, UErrorCode *status)
+{
+   ULocaleData *uld;
+ 
+   if (U_FAILURE(*status)) {
+       return NULL;
+   }
+
+   uld = (ULocaleData *)uprv_malloc(sizeof(ULocaleData));
+   if (uld == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return(NULL);
+   }
+
     
-    UResourceBundle *bundle = NULL;
+   uld->noSubstitute = FALSE;
+   uld->bundle = ures_open(NULL, localeID, status);
+
+   if (U_FAILURE(*status)) {
+      uprv_free(uld);
+      return NULL;
+   }
+
+   return uld;
+}
+
+U_CAPI void U_EXPORT2
+ulocdata_close(ULocaleData *uld)
+{
+    if ( uld != NULL ) {
+       ures_close(uld->bundle);
+       uprv_free(uld);
+    } 
+}
+
+U_CAPI USet* U_EXPORT2
+ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn, 
+                        uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status){
+    
+    const char* exemplarSetTypes[] = { "ExemplarCharacters", "AuxExemplarCharacters" };
     const UChar *exemplarChars = NULL;
     int32_t len = 0;
     UErrorCode localStatus = U_ZERO_ERROR;
 
-    if (U_FAILURE(*status)){
+    if (U_FAILURE(*status))
         return NULL;
-    }
     
-    bundle = ures_open(NULL, localeID, status);
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-    
-    exemplarChars = ures_getStringByKey(bundle, EXEMPLAR_CHARS, &len, &localStatus);
+    exemplarChars = ures_getStringByKey(uld->bundle, exemplarSetTypes[extype], &len, &localStatus);
     if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
         *status = localStatus;
     }
     
-    if(fillIn != NULL){
+    if(fillIn != NULL)
         uset_applyPattern(fillIn, exemplarChars, len, 
                           USET_IGNORE_SPACE | options, status);
-    }else{
+    else
         fillIn = uset_openPatternOptions(exemplarChars, len,
                                          USET_IGNORE_SPACE | options, status);
-    }
     
-    ures_close(bundle);
-
     return fillIn;
 
+}
+
+U_CAPI int32_t U_EXPORT2
+ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, 
+                      UChar *result, int32_t resultLength, UErrorCode *status){
+
+    /* TODO: fix this function */
+
+    const char* delimiterKeys[] =  { "delimiters/quotationStart",
+                                     "delimiters/quotationEnd",
+                                     "delimiters/alternateQuotationStart",
+                                     "delimiters/alternateQuotationEnd" };
+
+    int32_t len = 0;
+    const UChar *delimiter = NULL;
+    UErrorCode localStatus = U_ZERO_ERROR;
+
+    if (U_FAILURE(*status))
+        return NULL;
+
+    delimiter = ures_getStringByKey(uld->bundle, delimiterKeys[type], &len, &localStatus);
+    if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
+        *status = localStatus;
+    }
+    
+    u_strncpy(result,delimiter,resultLength);
+
+    return len;
 }
 
 U_CAPI UMeasurementSystem U_EXPORT2
