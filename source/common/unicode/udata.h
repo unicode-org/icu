@@ -377,7 +377,7 @@ typedef enum UDataFileAccess {
  * @draft ICU 3.4 
  */
 U_DRAFT void U_EXPORT2
-udata_setFileAccess(UDataFileAccess access);
+udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
 
 U_CDECL_END
 
