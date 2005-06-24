@@ -2266,8 +2266,10 @@ static void TestGetLocale(void) {
 static void TestNonexistentLanguageExemplars(void) {
     /* JB 4068 - Nonexistent language */
     UErrorCode ec = U_ZERO_ERROR;
-    USet *nothing = ulocdata_getExemplarSet(NULL, "qqq", 0, &ec);
+    ULocaleData *uld = ulocdata_open("qqq",&ec);
+    USet *nothing = ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec);
     uset_close(nothing);
+    ulocdata_close(uld);
     if (ec != U_USING_DEFAULT_WARNING) {
         log_err("Exemplar set for \"qqq\", expecting U_USING_DEFAULT_WARNING, but got %s\n",
             u_errorName(ec));

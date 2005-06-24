@@ -1064,10 +1064,12 @@ void TransliteratorRoundTripTest::TestHan() {
     //        the implementation.  Once USet gets the missing API, switch back
     //        to using that.
     USet       *USetExemplars = NULL;
+    ULocaleData *uld = ulocdata_open("zh",&status);
     USetExemplars = uset_open(0, 0);
-    USetExemplars = ulocdata_getExemplarSet(USetExemplars, "zh", 0, &status);
+    USetExemplars = ulocdata_getExemplarSet(uld, USetExemplars, 0, ULOCDATA_ES_STANDARD, &status);
     ASSERT_SUCCESS(status);
     UnicodeSet *exemplars = (UnicodeSet *)USetExemplars;
+    ulocdata_close(uld);
 
     UnicodeString source;
     UChar32       c;

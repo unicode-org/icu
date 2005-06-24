@@ -988,10 +988,12 @@ static void VerifyTranslation(void) {
 
             /* test that the scripts are a superset of exemplar characters. */
            {
-                USet *exemplarSet =  ulocdata_getExemplarSet(NULL,currLoc, 0, &errorCode);
+                ULocaleData *uld = ulocdata_open(currLoc,&errorCode);
+                USet *exemplarSet =  ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &errorCode);
                 /* test if exemplar characters are part of script code */
                 findSetMatch(scripts, numScripts, exemplarSet, currLoc);
                 uset_close(exemplarSet);
+                ulocdata_close(uld);
             }
 
            /* test that the paperSize API works */
@@ -1061,8 +1063,10 @@ static void TestExemplarSet(void){
         log_verbose("%s\n", locale);
         for (k=0; k<2; ++k) {
             uint32_t option = (k==0) ? 0 : USET_CASE_INSENSITIVE;
-            USet* exemplarSet = ulocdata_getExemplarSet(NULL, locale, option, &ec);
+            ULocaleData *uld = ulocdata_open(locale,&ec); 
+            USet* exemplarSet = ulocdata_getExemplarSet(uld,NULL, option, ULOCDATA_ES_STANDARD, &ec);
             uset_close(exemplarSets[k]);
+            ulocdata_close(uld);
             exemplarSets[k] = exemplarSet;
             if (!assertSuccess("ulocaledata_getExemplarSet", &ec)) goto END;
 
