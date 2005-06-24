@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 
+U_NAMESPACE_BEGIN
 struct PairInfo;
 
 /**
@@ -42,5 +43,7 @@ class U_LAYOUT_API KernTable
    */
   void process(LEGlyphStorage& storage);
 };
+
+U_NAMESPACE_END
 
 #endif

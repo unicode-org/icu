@@ -13,6 +13,8 @@
 
 #define DEBUG 0
 
+U_NAMESPACE_BEGIN
+
 struct PairInfo {
   le_uint32 key;   // sigh, MSVC compiler gags on union here
   le_int16  value; // fword, kern value in funits
@@ -188,3 +190,6 @@ void KernTable::process(LEGlyphStorage& storage)
     storage.adjustPosition(storage.getGlyphCount(), adjust, 0, success);
   }
 }
+
+U_NAMESPACE_END
+
