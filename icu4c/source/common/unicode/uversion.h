@@ -186,10 +186,11 @@ u_getVersion(UVersionInfo versionArray);
  * version 4 - ICU 2.2 - tracking UCA changes, ignore completely ignorables 
  * in contractions, ignore primary ignorables after shifted 
  * version 5 - ICU 2.8 - changed implicit generation code
+ * version 6 - ICU 3.4 - with the UCA 4.1, Thai tag is no longer generated or used
  * This value may change in the subsequent releases of ICU
  * @stable ICU 2.4
  */
-#define UCOL_RUNTIME_VERSION 5
+#define UCOL_RUNTIME_VERSION 6
 
 /** Builder code version. When this is different, same tailoring might result
  * in assigning different collation elements to code points                  
@@ -197,11 +198,13 @@ u_getVersion(UVersionInfo versionArray);
  * closure. However, the tailorings should probably get same CEs assigned    
  * version 5 - ICU 2.2 - fixed some bugs, renamed some indirect values.      
  * version 6 - ICU 2.8 - fixed bug in builder that allowed 0xFF in primary values
+ * version 7 - ICU 3.4 - with the UCA 4.1 Thai tag is no longer processed, complete ignorables
+ *                       now break contractions
  * Backward compatible with the old rules. 
  * This value may change in the subsequent releases of ICU
  * @stable ICU 2.4
  */
-#define UCOL_BUILDER_VERSION 6
+#define UCOL_BUILDER_VERSION 7
 
 /** *** Removed *** Instead we use the data we read from FractionalUCA.txt
  * This is the version of FractionalUCA.txt tailoring rules
