@@ -293,7 +293,7 @@ static void U_CALLCONV DataDrivenPrintf(void)
                     uFileBufferLenReturned = u_fprintf_u(testFile, format, i64);
                     break;
                 case 0x73:  // 's' char *
-                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cBuffer, argument, sizeof(cBuffer));
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, cBuffer);
                     uFileBufferLenReturned = u_fprintf_u(testFile, format, cBuffer);
                     break;
