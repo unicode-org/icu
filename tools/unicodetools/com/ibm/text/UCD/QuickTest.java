@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/06/21 21:28:31 $
-* $Revision: 1.5 $
+* $Date: 2005/06/24 23:51:52 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -16,12 +16,87 @@ package com.ibm.text.UCD;
 import java.util.*;
 import java.io.*;
 
+import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
+	
+	public static class Length {
+		String title;
+		int bytesPerCodeUnit;
+		int longestCodePoint = -1;
+		int longestLength = 0;
+		UnicodeSet longestSet = new UnicodeSet();
+		Length(String title, int bytesPerCodeUnit) {
+			this.title = title;
+			this.bytesPerCodeUnit = bytesPerCodeUnit;
+		}
+		void add(int codePoint, int codeUnitLength) {
+			if (codeUnitLength > longestLength) {
+				longestCodePoint = codePoint;
+				longestLength = codeUnitLength;
+				longestSet.clear();
+				longestSet.add(codePoint);
+				System.out.println(title + " \t(" + codeUnitLength*bytesPerCodeUnit + " bytes, "
+						+ codeUnitLength + " code units) \t"
+						+ Default.ucd().getCodeAndName(codePoint));				
+			} else if (codeUnitLength == longestLength) {
+				longestSet.add(codePoint);
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		getLengths("NFC", Default.nfc());
+		getLengths("NFD", Default.nfd());
+		getLengths("NFKC", Default.nfkc());
+		getLengths("NFKD", Default.nfkd());
+		System.out.println("Done");
+	}
+	
+	static final int skip = (1<<UCD.UNASSIGNED) | (1<<UCD.PRIVATE_USE) | (1<<UCD.SURROGATE);
+	/**
+	 * 
+	 */
+	private static void getLengths(String title, Normalizer normalizer) throws IOException {
+		System.out.println();
+		Length utf8Len = new Length(title + "\tUTF8", 1);
+		Length utf16Len = new Length(title + "\tUTF16", 1);
+		Length utf32Len = new Length(title + "\tUTF32", 1);
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			int type = Default.ucd().getCategoryMask(i);
+			if ((type & skip) != 0) continue;
+			String norm = normalizer.normalize(i);
+			utf8Len.add(i, getUTF8Length(norm));
+			utf16Len.add(i, norm.length());
+			utf32Len.add(i, UTF16.countCodePoint(norm));
+		}
+		UnicodeSet common = new UnicodeSet(utf8Len.longestSet)
+			.retainAll(utf16Len.longestSet)
+			.retainAll(utf32Len.longestSet);
+		if (common.size() > 0) {
+			UnicodeSetIterator it = new UnicodeSetIterator(common);
+			it.next();
+			System.out.println("Common Exemplar: " + Default.ucd().getCodeAndName(it.codepoint));
+		}
+	}
+
+	static ByteArrayOutputStream utf8baos;
+	static Writer utf8bw;
+	static int getUTF8Length(String source) throws IOException {
+		if (utf8bw == null) {
+			utf8baos = new ByteArrayOutputStream();
+			utf8bw = new OutputStreamWriter(utf8baos, "UTF-8");
+		}
+		utf8baos.reset();
+		utf8bw.write(source);
+		utf8bw.flush();
+		return utf8baos.size();
+	}
 	static final void test() {
 		String test2 = "ab\u263ac";
 		StringTokenizer st = new StringTokenizer(test2, "\u263a");
