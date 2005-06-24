@@ -1577,8 +1577,8 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
 }
 
 
-U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess fa)
+U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess access, UErrorCode *status)
 {
-    gDataFileAccess = fa;
+    gDataFileAccess = access;
 }
 
