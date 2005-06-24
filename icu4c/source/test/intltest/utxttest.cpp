@@ -120,7 +120,7 @@ void UTextTest::TestString(const UnicodeString &s) {
 
     // Do the test itself
     status = U_ZERO_ERROR;
-    ut = utext_openUTF8(NULL, (uint8_t *)u8String, -1, &status);
+    ut = utext_openUTF8(NULL, u8String, -1, &status);
     TEST_SUCCESS(status);
     TestAccess(sa, ut, cpCount, u8Map);
     utext_close(ut);
@@ -144,7 +144,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //  Check the length from the UText
     //
     int expectedLen = cpMap[cpCount].nativeIdx;
-    int utlen = ut->length(ut);
+    int utlen = ut->nativeLength(ut);
     TEST_ASSERT(expectedLen == utlen);
 
     //

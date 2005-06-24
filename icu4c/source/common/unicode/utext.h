@@ -87,9 +87,9 @@
  *
  * When an index position is returned from a UText function, it will be
  * a native index to the underlying text.  In the case of multi-unit characters,
- * it will  always refer to the first position, never to the interior.  This
- * is essentially the same thing as saying that a returned index will always
- * point to a boundary between characters.
+ * it will  always refer to the first position of the character,
+ * never to the interior.  This is essentially the same thing as saying that
+ * a returned index will always point to a boundary between characters.
  *
  * When a native index is supplied to a UText function, all indices that
  * refer to any part of a multi-unit character representation are considered
@@ -98,7 +98,7 @@
  * 
  * It is possible to test whether a native index is on a code point boundary
  * by doing a utext_setNativeIndex() followed by a utext_getNativeIndex().
- * If the index is returned unchanged, it is on a code point boundary.  If
+ * If the index is returned unchanged, it was on a code point boundary.  If
  * an adjusted index is returned, the original index referred to the
  * interior of a character.
  *
@@ -178,7 +178,7 @@ utext_close(UText *ut);
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openUTF8(UText *ut, const uint8_t *s, int32_t length, UErrorCode *status);
+utext_openUTF8(UText *ut, const char *s, int32_t length, UErrorCode *status);
 
 
 /**
@@ -203,38 +203,38 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status);
 /**
  * Open a writable UText for a non-const UnicodeString. 
  * 
- * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
- *               If non-NULL, must refer to an initialized UText struct, which will then
- *               be reset to reference the specified input string.
- * @param s      A UnicodeString.
+ * @param ut      Pointer to a UText struct.  If NULL, a new UText will be created.
+ *                 If non-NULL, must refer to an initialized UText struct, which will then
+ *                 be reset to reference the specified input string.
+ * @param s       A UnicodeString.
  * @param status Errors are returned here.
- * @return       Pointer to the UText.  If a UText was supplied as input, this
- *               will always be used and returned.
+ * @return        Pointer to the UText.  If a UText was supplied as input, this
+ *                 will always be used and returned.
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openUnicodeString(UText *t, UnicodeString *s, UErrorCode *status);
+utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
 
 
 /**
  * Open a UText for a const UnicodeString.   The resulting UText will not be writable.
  * 
- * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ * @param ut    Pointer to a UText struct.  If NULL, a new UText will be created.
  *               If non-NULL, must refer to an initialized UText struct, which will then
  *               be reset to reference the specified input string.
- * @param s      A UnicodeString to be wrapped.
+ * @param s      A const UnicodeString to be wrapped.
  * @param status Errors are returned here.
  * @return       Pointer to the UText.  If a UText was supplied as input, this
  *               will always be used and returned.
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openConstUnicodeString(UText *t, const UnicodeString *s, UErrorCode *status);
+utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *status);
 
 
 /**
  * Open a writable UText implementation for an ICU Replaceable object.
- * @param t      Pointer to a UText struct.  If NULL, a new UText will be created.
+ * @param ut    Pointer to a UText struct.  If NULL, a new UText will be created.
  *               If non-NULL, must refer to an already existing UText, which will then
  *               be reset to reference the specified replaceable text.
  * @param rep    A Replaceable text object.
@@ -245,7 +245,7 @@ utext_openConstUnicodeString(UText *t, const UnicodeString *s, UErrorCode *statu
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *status);
+utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
 
 #endif
 
@@ -267,6 +267,11 @@ utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *status);
   *
   *  A shallow clone operation will not fail, barring truly exceptional conditions such
   *  as memory allocation failures.
+  *
+  *  A UText and its clone may be safely concurrently accessed by separate threads.
+  *  This is true for both shallow and deep clones.
+  *  It is the responsibility of the Text Provider to ensure that this thread safety
+  *  constraint is met.
   *
   *  @param dest   A UText struct to be filled in with the result of the clone operation,
   *                or NULL if the clone function should heap-allocate a new UText struct.
@@ -363,6 +368,7 @@ utext_current32(UText *ut);
  * advance the position to the first index following the character.
  * Returns U_SENTINEL (-1) if the position is at the end of the
  * text.
+ * This is a post-increment operation
  *
  * An inline macro version of this function, UTEXT_NEXT32(), 
  * is available for performance critical use.
@@ -381,6 +387,7 @@ utext_next32(UText *ut);
  *  index precedes the current position, and return that character.
  *  This is a pre-decrement operation.
  *  Returns U_SENTINEL (-1) if the position is at the start of the  text.
+ *  This is a pre-decrement operation.
  *
  * An inline macro version of this function, UTEXT_PREVIOUS32(), 
  * is available for performance critical use.
@@ -672,7 +679,7 @@ utext_replace(UText *ut,
  *
  * @param ut           The UText representing the text to be operated on.
  * @param nativeStart  The native index of the start of the region to be copied or moved
- * @param nativeLimit  The native index of the character following the region to be replaced.
+ * @param nativeLimit  The native index of the character position following the region to be copied.
  * @param destIndex    The native destination index to which the source substring is copied or moved.
  * @param move         If TRUE, then the substring is moved, not copied/duplicated.
  * @param status       receives any error status.  Possible errors include U_NO_WRITE_PERMISSION
@@ -803,6 +810,12 @@ enum {
   *  A shallow clone operation must not fail except for truly exceptional conditions such
   *  as memory allocation failures.
   *
+  *  A UText and its clone may be safely concurrently accessed by separate threads.
+  *  This is true for both shallow and deep clones.
+  *  It is the responsibility of the Text Provider to ensure that this thread safety
+  *  constraint is met.
+
+  *
   *  @param dest   A UText struct to be filled in with the result of the clone operation,
   *                or NULL if the clone function should heap-allocate a new UText struct.
   *  @param src    The UText to be cloned.
@@ -920,10 +933,10 @@ UTextExtract(UText *ut,
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextReplace(UText *t,
+UTextReplace(UText *ut,
              int32_t nativeStart, int32_t nativeLimit,
              const UChar *replacementText, int32_t replacmentLength,
-             UErrorCode *pErrorCode);
+             UErrorCode *status);
 
 /**
  * Function type declaration for UText.copy().
@@ -954,11 +967,11 @@ UTextReplace(UText *t,
  * @draft ICU 3.4
  */
 typedef void U_CALLCONV
-UTextCopy(UText *t,
+UTextCopy(UText *ut,
           int32_t nativeStart, int32_t nativeLimit,
           int32_t nativeDest,
           UBool move,
-          UErrorCode *pErrorCode);
+          UErrorCode *status);
 
 /**
  * Function type declaration for UText.mapOffsetToNative().
@@ -1126,7 +1139,7 @@ struct UText {
      * @see UTextLength
      * @draft ICU 3.4
      */
-    UTextNativeLength *length;
+    UTextNativeLength *nativeLength;
 
     /**
      * (public) Function pointer for UTextAccess.
@@ -1174,7 +1187,7 @@ struct UText {
      * @see UTextMapNativeIndexToUTF16
      * @draft ICU 3.4
      */
-    UTextMapNativeIndexToUTF16 *mapIndexToUTF16;
+    UTextMapNativeIndexToUTF16 *mapNativeIndexToUTF16;
 
     /**
      * (public) Function pointer for UTextClose.
@@ -1193,7 +1206,7 @@ struct UText {
  *  If the supplied UText is already open, the provider's close function will be called
  *  so that the struct can be reused by the open that is in progress.
  *
- * @param utxt pointer to a UText struct to be re-used, or null if a new UText
+ * @param ut   pointer to a UText struct to be re-used, or null if a new UText
  *             should be allocated.
  * @param extraSpace The amount of additional space to be allocated as part
  *             of this UText, for use by types of providers that require
@@ -1203,7 +1216,7 @@ struct UText {
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_setup(UText *utxt, int32_t extraSpace, UErrorCode *status);
+utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 
 /**
   * @internal
