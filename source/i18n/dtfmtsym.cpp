@@ -363,6 +363,14 @@ DateFormatSymbols::getEras(int32_t &count) const
 }
 
 const UnicodeString*
+DateFormatSymbols::getEraNames(int32_t &count) const
+{
+    // TODO : Fill in era names properly.
+    count = fEraNamesCount;
+    return fEraNames;
+}
+
+const UnicodeString*
 DateFormatSymbols::getMonths(int32_t &count) const
 {
     count = fMonthsCount;
@@ -377,6 +385,14 @@ DateFormatSymbols::getShortMonths(int32_t &count) const
 }
 
 const UnicodeString*
+DateFormatSymbols::getMonths(int32_t &count, DtContextType context, DtWidthType width ) const
+{
+    // TODO : Make this version use context and width properly
+    count = fMonthsCount;
+    return fMonths;
+}
+
+const UnicodeString*
 DateFormatSymbols::getWeekdays(int32_t &count) const
 {
     count = fWeekdaysCount;
@@ -388,6 +404,14 @@ DateFormatSymbols::getShortWeekdays(int32_t &count) const
 {
     count = fShortWeekdaysCount;
     return fShortWeekdays;
+}
+
+const UnicodeString*
+DateFormatSymbols::getWeekdays(int32_t &count, DtContextType context, DtWidthType width) const
+{
+    // TODO : Make this version use context and width properly
+    count = fWeekdaysCount;
+    return fWeekdays;
 }
 
 const UnicodeString*
@@ -576,14 +600,32 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     /* In case something goes wrong, initialize all of the data to NULL. */
     fEras = NULL;
     fErasCount = 0;
+    fEraNames = NULL;
+    fEraNamesCount = 0;
     fMonths = NULL;
     fMonthsCount=0;
     fShortMonths = NULL;
     fShortMonthsCount=0;
+    fNarrowMonths = NULL;
+    fNarrowMonthsCount=0;
+    fStandaloneMonths = NULL;
+    fStandaloneMonthsCount=0;
+    fStandaloneShortMonths = NULL;
+    fStandaloneShortMonthsCount=0;
+    fStandaloneNarrowMonths = NULL;
+    fStandaloneNarrowMonthsCount=0;
     fWeekdays = NULL;
     fWeekdaysCount=0;
     fShortWeekdays = NULL;
     fShortWeekdaysCount=0;
+    fNarrowWeekdays = NULL;
+    fNarrowWeekdaysCount=0;
+    fStandaloneWeekdays = NULL;
+    fStandaloneWeekdaysCount=0;
+    fStandaloneShortWeekdays = NULL;
+    fStandaloneShortWeekdaysCount=0;
+    fStandaloneNarrowWeekdays = NULL;
+    fStandaloneNarrowWeekdaysCount=0;
     fAmPms = NULL;
     fAmPmsCount=0;
     fZoneStringsRowCount = 0;
