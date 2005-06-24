@@ -25,7 +25,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
  * @author Davis
  */
 // TODO Optimize using range map
-public final class UnicodeMap implements Cloneable {
+public final class UnicodeMap implements Cloneable, Lockable {
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
@@ -86,6 +86,7 @@ public final class UnicodeMap implements Cloneable {
         that.transitions = (int[]) transitions.clone();
         that.values = (Object[]) values.clone();
         that.availableValues = new LinkedHashSet(availableValues);
+        that.locked = false;
         return that;
     }
     
@@ -238,7 +239,8 @@ public final class UnicodeMap implements Cloneable {
         }
         int limitIndex = baseIndex + 1;
         // cases are (a) value is already set
-        if (areEqual(values[baseIndex], value)) return this;        
+        if (areEqual(values[baseIndex], value)) return this;
+        if (locked) throw new UnsupportedOperationException("Attempt to modify locked object");
         if (errorOnReset && values[baseIndex] != null) {
         	throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
         			+ " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
@@ -381,19 +383,37 @@ public final class UnicodeMap implements Cloneable {
         }
         return this;
     }
-    
+
+    /**
+     * Add all the (main) values from a Unicode property
+     * @param prop the property to add to the map
+     * @return this (for chaining)
+     */
+    public UnicodeMap putAll(UnicodeMap prop) {
+        // TODO optimize
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            _put(i, prop.getValue(i));
+        }
+        return this;
+    }
+
     /**
      * Set the currently unmapped Unicode code points to the given value.
      * @param value the value to set
      * @return this (for chaining)
      */
     public UnicodeMap setMissing(Object value) {
-    	staleAvailableValues = true;
-    	availableValues.add(value);
-        for (int i = 0; i < length; ++i) {
-            if (values[i] == null) values[i] = value;
-        }
-        return this;
+    	// fast path, if value not yet present
+    	if (!getAvailableValues().contains(value)) {
+        	staleAvailableValues = true;
+	    	availableValues.add(value);
+	        for (int i = 0; i < length; ++i) {
+	            if (values[i] == null) values[i] = value;
+	        }
+	        return this;
+	    } else {
+	    	return putAll(getSet(null), value);
+	    }
     }
     /**
      * Returns the set associated with a given value. Deposits into
@@ -458,14 +478,15 @@ public final class UnicodeMap implements Cloneable {
     }
     
     public interface Composer {
-    	Object compose(Object a, Object b);
+    	Object compose(int codePoint, Object a, Object b);
     }
     
     public UnicodeMap composeWith(UnicodeMap other, Composer composer) {
     	for (int i = 0; i <= 0x10FFFF; ++i) {
     		Object v1 = getValue(i);
     		Object v2 = other.getValue(i);
-    		put(i, composer.compose(v1, v2));
+    		Object v3 = composer.compose(i, v1, v2);
+    		if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
     	}
     	return this;
     }
@@ -554,7 +575,7 @@ public final class UnicodeMap implements Cloneable {
 	/**
 	 * @return Returns the errorOnReset.
 	 */
-	public boolean isErrorOnReset() {
+	public boolean getErrorOnReset() {
 		return errorOnReset;
 	}
 	/**
@@ -562,5 +583,22 @@ public final class UnicodeMap implements Cloneable {
 	 */
 	public void setErrorOnReset(boolean errorOnReset) {
 		this.errorOnReset = errorOnReset;
+	}
+
+	private boolean locked;
+	/* (non-Javadoc)
+	 * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
+	 */
+	public boolean isLocked() {
+		// TODO Auto-generated method stub
+		return locked;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ibm.icu.dev.test.util.Lockable#lock()
+	 */
+	public Object lock() {
+		locked = true;
+		return this;
 	}
 }

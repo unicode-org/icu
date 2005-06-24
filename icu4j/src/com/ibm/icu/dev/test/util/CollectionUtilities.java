@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.test.util;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,5 +40,24 @@ public final class CollectionUtilities {
 	    	m.remove(item);
 	    }
 	    return m;
+	}
+	
+	public Object getFirst(Collection c) {
+		Iterator it = c.iterator();
+		if (!it.hasNext()) return null;
+		return it.next();
+	}
+	
+	public static Object getBest(Collection c, Comparator comp, int direction) {
+		Iterator it = c.iterator();
+		if (!it.hasNext()) return null;
+		Object bestSoFar = it.next();
+		while (it.hasNext()) {
+			Object item = it.next();
+			if (comp.compare(item, bestSoFar) == direction) {
+				bestSoFar = item;
+			}
+		}
+		return bestSoFar;
 	}
 }

@@ -1009,7 +1009,40 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 */    }
     
     public static class UnicodeMapProperty extends BaseProperty {
+    	/*
+    	 * Example of usage:
+    	 * new UnicodeProperty.UnicodeMapProperty() {
+        	{
+        		unicodeMap = new UnicodeMap();
+        		unicodeMap.setErrorOnReset(true);
+        		unicodeMap.put(0xD, "CR");
+        		unicodeMap.put(0xA, "LF");
+        		UnicodeProperty cat = getProperty("General_Category");
+        		UnicodeSet temp = cat.getSet("Line_Separator")
+				.addAll(cat.getSet("Paragraph_Separator"))
+				.addAll(cat.getSet("Control"))
+				.addAll(cat.getSet("Format"))
+				.remove(0xD).remove(0xA).remove(0x200C).remove(0x200D);
+        		unicodeMap.putAll(temp, "Control");
+        		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
+        		unicodeMap.putAll(graphemeExtend,"Extend");
+        		UnicodeProperty hangul = getProperty("Hangul_Syllable_Type");
+        		unicodeMap.putAll(hangul.getSet("L"),"L");
+        		unicodeMap.putAll(hangul.getSet("V"),"V");
+        		unicodeMap.putAll(hangul.getSet("T"),"T");
+        		unicodeMap.putAll(hangul.getSet("LV"),"LV");
+        		unicodeMap.putAll(hangul.getSet("LVT"),"LVT");
+        		unicodeMap.setMissing("Other");
+        	}
+        }.setMain("Grapheme_Cluster_Break", "GCB", UnicodeProperty.ENUMERATED, version)
+    	 */
         protected UnicodeMap unicodeMap;
+        
+        public UnicodeMapProperty set(UnicodeMap map) {
+        	unicodeMap = map;
+        	return this;
+        }
+
         protected String _getValue(int codepoint) {
             return (String) unicodeMap.getValue(codepoint);
         }
