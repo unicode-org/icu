@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and      *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -19,11 +19,24 @@ public final class LocaleData {
     private static final String EXEMPLAR_CHARS      = "ExemplarCharacters";
     private static final String MEASUREMENT_SYSTEM  = "MeasurementSystem";
     private static final String PAPER_SIZE          = "PaperSize";
+    private boolean noSubstitute;
+    private ICUResourceBundle bundle;
+
+    public static final int ES_STANDARD = 0;
+    public static final int ES_AUXILIARY = 1;
+    public static final int ES_COUNT = 2;
     
+    public static final int QUOTATION_START = 0;
+    public static final int QUOTATION_END = 1;
+    public static final int ALT_QUOTATION_START = 2;
+    public static final int ALT_QUOTATION_END = 3;
+    public static final int DELIMITER_COUNT = 4;
+
     // private constructor to prevent default construction
     ///CLOVER:OFF
     private LocaleData(){}
     ///CLOVER:ON
+
     /**
      * Returns the set of exemplar characters for a locale.
      *
@@ -47,6 +60,92 @@ public final class LocaleData {
         return new UnicodeSet(pattern, UnicodeSet.IGNORE_SPACE | options);
     }
     
+    /**
+     * Returns the set of exemplar characters for a locale.
+     *
+     * @param options   Bitmask for options to apply to the exemplar pattern.
+     *                  Specify zero to retrieve the exemplar set as it is
+     *                  defined in the locale data.  Specify
+     *                  UnicodeSet.CASE to retrieve a case-folded exemplar
+     *                  set.  See {@link UnicodeSet#applyPattern(String,
+     *                  int)} for a complete list of valid options.  The
+     *                  IGNORE_SPACE bit is always set, regardless of the
+     *                  value of 'options'.
+     * @param extype      The type of exemplar set to be retrieved,
+     *                  ES_STANDARD or ES_AUXILIARY
+     * @return          The set of exemplar characters for the given locale.
+     * @draft ICU 3.4
+     * @deprecated      This is a draft API and might change in a future release of ICU.
+     */
+    public static UnicodeSet getExemplarSet(int options, int extype) {
+    // Nothing here yet...
+        return new UnicodeSet();
+    }
+
+    /**
+     * Gets the LocaleData object associated with the ULocale specified in locale
+     *
+     * @param locale    Locale with thich the locale data object is associated.
+     * @return          A locale data object.
+     * @draft ICU 3.4
+     */
+    public static final LocaleData getInstance(ULocale locale) {
+    // Nothing here yet...
+       return new LocaleData();
+    }
+
+    /**
+     * Gets the LocaleData object associated with the default locale
+     *
+     * @return          A locale data object.
+     * @draft ICU 3.4
+     */
+    public static final LocaleData getInstance() {
+    // Nothing here yet...
+       return new LocaleData();
+    }
+
+    /**
+     * Sets the "no substitute" behavior of this locale data object.
+     *
+     * @param setting	Value for the no substitute behavior.  If TRUE,
+     *                  methods of this locale data object will return
+     *                  an error when no data is available for that method,
+     *                  given the locale ID supplied to the constructor.
+     * @draft ICU 3.4
+     */
+    public void setNoSubstitute(boolean setting) {
+    // Nothing here yet...
+    }
+
+    /**
+     * Gets the "no substitute" behavior of this locale data object.
+     *
+     * @return          Value for the no substitute behavior.  If TRUE,
+     *                  methods of this locale data object will return
+     *                  an error when no data is available for that method,
+     *                  given the locale ID supplied to the constructor.
+     * @draft ICU 3.4
+     */
+    public boolean getNoSubstitute() {
+    // Nothing here yet...
+       return false;
+    }
+
+    /**
+     * Retrieves a delimiter string from the locale data.
+     *
+     * @param type      The type of delimiter string desired.  Currently,
+     *                  the valid choices are QUOTATION_START, QUOTATION_END,
+     *                  ALT_QUOTATION_START, or ALT_QUOTATION_END.
+     * @return          The desired delimiter string.
+     * @draft ICU 3.4
+     */
+    public String getDelimiter( int type ) {
+    // Nothing here yet...
+       return "";
+    }
+
     /**
      * Enumeration for representing the measurement systems.
      * @stable ICU 2.8
