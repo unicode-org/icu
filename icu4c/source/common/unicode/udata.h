@@ -373,6 +373,7 @@ typedef enum UDataFileAccess {
  * before any ICU data is loaded, including application data loaded with ures/ResourceBundle or
  * udata APIs. It should be called before u_init.
  * @param access The type of file access to be used
+ * @param status Error code.
  * @see UDataFileAccess
  * @draft ICU 3.4 
  */
