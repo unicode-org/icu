@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -90,7 +90,7 @@ fileSize(FILE *f) {
  * @see UDataSwapFn
  * @see udata_openSwapper
  * @see udata_openSwapperForInputData
- * @draft ICU 2.8
+ * @internal ICU 2.8
  */
 static int32_t
 udata_swap(const UDataSwapper *ds,
