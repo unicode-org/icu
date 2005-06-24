@@ -238,7 +238,7 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.39"}
+    Version{"1.40"}
     calendar{
         gregorian{
             AmPmMarkers{

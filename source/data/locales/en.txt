@@ -10,6 +10,7 @@
  *  ICU <specials> source: ./xml/main/en.xml
  */
 en{
+    AuxExemplarCharacters{"[áà éè íì óò úù âêîôû æœ äëïöüÿ āēīōū ăĕĭŏŭ åø çñß]"}
     Countries{
         001{"World"}
         002{"Africa"}
@@ -1971,7 +1972,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.71"}
+    Version{"1.72"}
     calendar{
         gregorian{
             DateTimePatterns{

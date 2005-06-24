@@ -10,6 +10,7 @@
  *  ICU <specials> source: ./xml/main/fi.xml
  */
 fi{
+    AuxExemplarCharacters{"[à á ã æ è é ë ï ô õ ø ü œ ç č ñ ř]"}
     Countries{
         001{"maailma"}
         002{"Afrikka"}
@@ -1867,7 +1868,7 @@ fi{
             traditional{"perinteinen järjestys"}
         }
     }
-    Version{"1.55"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{

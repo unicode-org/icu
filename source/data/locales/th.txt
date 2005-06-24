@@ -557,7 +557,7 @@ th{
         Latn{"ลาติน"}
         Thai{"ไทย"}
     }
-    Version{"1.49"}
+    Version{"1.50"}
     boundaries{
         line{"line_th"}
         word{"word_th"}

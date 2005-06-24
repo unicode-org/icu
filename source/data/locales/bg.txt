@@ -1393,7 +1393,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.50"}
+    Version{"1.51"}
     calendar{
         gregorian{
             AmPmMarkers{

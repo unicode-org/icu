@@ -10,6 +10,7 @@
  *  ICU <specials> source: ./xml/main/root.xml
  */
 root{
+    AuxExemplarCharacters{"[]"}
     Currencies{
         EUR{
             "€",
@@ -65,7 +66,7 @@ root{
         297,
         210,
     }
-    Version{"1.51"}
+    Version{"1.52"}
     boundaries{
         grapheme{"char"}
         line{"line"}

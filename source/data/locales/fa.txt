@@ -10,6 +10,7 @@
  *  ICU <specials> source: ./xml/main/fa.xml
  */
 fa{
+    AuxExemplarCharacters{"[\u0656\u0670]"}
     Countries{
         AD{"آندورا"}
         AE{"امارات متحده‌ی عربی"}

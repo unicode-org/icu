@@ -1712,7 +1712,7 @@ fr{
     Variants{
         REVISED{"Révisé"}
     }
-    Version{"1.60"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
