@@ -29,12 +29,14 @@ DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 DISTRIBUTE_GROUP_DOC   = NO
 TAB_SIZE               = 8
-ALIASES                = "draft=\par ICU_Draft:\n" \
-                         "stable=\par ICU_Stable:\n" \
-                         "deprecated=\par ICU_Deprecated:\n" \
-                         "obsolete=\par ICU_Obsolete:\n" \
-                         "system=\par ICU_System:\n" \
-                         "internal=\par ICU_Internal:\n"
+ALIASES                = "memo=\par Note:\n" \
+                         "draft=\par Draft: \n This API may be changed in the future versions and was introduced in \n" \
+                         "stable=\par Stable:\n" \
+                         "deprecated=\par Deprecated:\n" \
+                         "obsolete=\par Obsolete:\n" \
+                         "system=\par System:\n Do not use unless you know what you are doing. \n" \
+                         "internal=\par Internal:\n Do not use. This API is for interal use only. \n" \
+
 OPTIMIZE_OUTPUT_FOR_C  = YES
 OPTIMIZE_OUTPUT_JAVA   = NO
 SUBGROUPING            = YES
