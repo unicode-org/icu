@@ -896,7 +896,7 @@ public final class CollationElementIterator
      */
     private static final int CE_CJK_IMPLICIT_TAG_ = 9;
     private static final int CE_IMPLICIT_TAG_ = 10;
-    private static final int CE_SPEC_PROC_TAG_ = 11;
+    static final int CE_SPEC_PROC_TAG_ = 11;
     /**
      * This is a 3 byte primary with starting secondaries and tertiaries.
      * It fits in a single 32 bit CE and is used instead of expansion to save
