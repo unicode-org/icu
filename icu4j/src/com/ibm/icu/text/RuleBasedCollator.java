@@ -20,8 +20,10 @@ import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.StringUCharacterIterator;
 import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
@@ -724,6 +726,159 @@ public final class RuleBasedCollator extends Collator
         }
     }
 
+    private class contContext {
+        RuleBasedCollator coll;
+        UnicodeSet contractions;
+        UnicodeSet expansions;
+        UnicodeSet removedContractions;
+        boolean addPrefixes;       
+        contContext(RuleBasedCollator coll, UnicodeSet contractions, UnicodeSet expansions, 
+                UnicodeSet removedContractions, boolean addPrefixes) {
+            this.coll = coll;
+            this.contractions = contractions;
+            this.expansions = expansions;
+            this.removedContractions = removedContractions;
+            this.addPrefixes = addPrefixes;
+        }
+    }
+    
+    private void
+    addSpecial(contContext c, StringBuffer buffer, int CE)
+    {
+        StringBuffer b = new StringBuffer();
+        int offset = (CE & 0xFFFFFF) - c.coll.m_contractionOffset_;
+        int newCE = c.coll.m_contractionCE_[offset];
+        // we might have a contraction that ends from previous level
+        if(newCE != CollationElementIterator.CE_NOT_FOUND_) {
+            if(isSpecial(CE) && getTag(CE) == CollationElementIterator.CE_CONTRACTION_TAG_ 
+                    && isSpecial(newCE) && getTag(newCE) == CollationElementIterator.CE_SPEC_PROC_TAG_ 
+                    && c.addPrefixes) {
+                addSpecial(c, buffer, newCE);
+            }
+            if(buffer.length() > 1) {
+                if(c.contractions != null) {
+                    c.contractions.add(buffer.toString());
+                }
+                if(c.expansions != null && isSpecial(CE) && getTag(CE) == CollationElementIterator.CE_EXPANSION_TAG_) {
+                    c.expansions.add(buffer.toString());
+                }
+            }
+        }    
+        
+        offset++;
+        // check whether we're doing contraction or prefix
+        if(getTag(CE) == CollationElementIterator.CE_SPEC_PROC_TAG_ && c.addPrefixes) {
+            while(c.coll.m_contractionIndex_[offset] != 0xFFFF) {
+                b.delete(0, b.length());
+                b.append(buffer);
+                newCE = c.coll.m_contractionCE_[offset];
+                b.insert(0, c.coll.m_contractionIndex_[offset]);
+                if(isSpecial(newCE) && (getTag(newCE) == CollationElementIterator.CE_CONTRACTION_TAG_ || getTag(newCE) == CollationElementIterator.CE_SPEC_PROC_TAG_)) {
+                    addSpecial(c, b, newCE);
+                } else {
+                    if(c.contractions != null) {
+                        c.contractions.add(b.toString());
+                    }
+                    if(c.expansions != null && isSpecial(newCE) && getTag(newCE) == CollationElementIterator.CE_EXPANSION_TAG_) {
+                        c.expansions.add(b.toString());
+                    }
+                }
+                offset++;
+            }
+        } else if(getTag(CE) == CollationElementIterator.CE_CONTRACTION_TAG_) {
+            while(c.coll.m_contractionIndex_[offset] != 0xFFFF) {
+                b.delete(0, b.length());
+                b.append(buffer);
+                newCE = c.coll.m_contractionCE_[offset];
+                b.append(c.coll.m_contractionIndex_[offset]);
+                if(isSpecial(newCE) && (getTag(newCE) == CollationElementIterator.CE_CONTRACTION_TAG_ || getTag(newCE) == CollationElementIterator.CE_SPEC_PROC_TAG_)) {
+                    addSpecial(c, b, newCE);
+                } else {
+                    if(c.contractions != null) {
+                        c.contractions.add(b.toString());
+                    }
+                    if(c.expansions != null && isSpecial(newCE) && getTag(newCE) == CollationElementIterator.CE_EXPANSION_TAG_) {
+                        c.expansions.add(b.toString());
+                    }
+                }
+                offset++;
+            }
+        }
+    }
+    
+    private
+    void processSpecials(contContext c) 
+    {
+        int internalBufferSize = 512;
+        TrieIterator trieiterator 
+        = new TrieIterator(c.coll.m_trie_);
+        RangeValueIterator.Element element = new RangeValueIterator.Element();
+        while (trieiterator.next(element)) {
+            int start = element.start;
+            int limit = element.limit;
+            int CE = element.value;
+            StringBuffer contraction = new StringBuffer(internalBufferSize);
+            
+            if(isSpecial(CE)) {
+                if(((getTag(CE) == CollationElementIterator.CE_SPEC_PROC_TAG_ && c.addPrefixes) || getTag(CE) == CollationElementIterator.CE_CONTRACTION_TAG_)) {
+                    while(start < limit) {
+                        // if there are suppressed contractions, we don't 
+                        // want to add them.
+                        if(c.removedContractions != null && c.removedContractions.contains(start)) {
+                            start++;
+                            continue;
+                        }
+                        // we start our contraction from middle, since we don't know if it
+                        // will grow toward right or left
+                        contraction.append((char) start);
+                        addSpecial(c, contraction, CE);
+                        start++;
+                    }
+                } else if(c.expansions != null && getTag(CE) == CollationElementIterator.CE_EXPANSION_TAG_) {
+                    while(start < limit) {
+                        c.expansions.add(start++);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Gets unicode sets containing contractions and/or expansions of a collator
+     * @param contractions if not null, set to contain contractions
+     * @param expansions if not null, set to contain expansions
+     * @param addPrefixes add the prefix contextual elements to contractions
+     * @throws Exception 
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public void
+    getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,
+            boolean addPrefixes) throws Exception {
+        if(contractions != null) {
+            contractions.clear();
+        }
+        if(expansions != null) {
+            expansions.clear();
+        }
+        int rulesLen = 0;
+        String rules = getRules();
+        try {
+            CollationRuleParser src = new CollationRuleParser(rules);
+            contContext c = new contContext(RuleBasedCollator.UCA_, 
+                    contractions, expansions, src.m_removeSet_, addPrefixes);
+            
+            // Add the UCA contractions
+            processSpecials(c);
+            // This is collator specific. Add contractions from a collator
+            c.coll = this;
+            c.removedContractions =  null;
+            processSpecials(c);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    
     /**
      * <p>
      * Get a Collation key for the argument String source from this
