@@ -14,6 +14,8 @@
 *   created by: Ram Viswanadha
 */
 
+#include "cmemory.h"
+#include "unicode/ustring.h"
 #include "unicode/ulocdata.h"
 
 #define MEASUREMENT_SYSTEM  "MeasurementSystem"
