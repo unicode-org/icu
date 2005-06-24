@@ -61,7 +61,7 @@ utext_moveIndex32(UText *ut, int32_t delta) {
 
 U_DRAFT int32_t U_EXPORT2
 utext_nativeLength(UText *ut) {
-    return ut->length(ut);
+    return ut->nativeLength(ut);
 }
 
 
@@ -92,7 +92,7 @@ utext_setNativeIndex(UText *ut, int32_t index) {
         // Reverse iterations may suffer slightly.
         ut->access(ut, index, TRUE, &ut->chunk);
     } else if(ut->chunk.nonUTF16Indexes) {
-        ut->chunk.offset=ut->mapIndexToUTF16(ut, index);
+        ut->chunk.offset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
         ut->chunk.offset=index-ut->chunk.nativeStart;
         // Our convention is that the index must always be on a code point boundary.
@@ -214,7 +214,7 @@ utext_next32From(UText *ut, int32_t index) {
         }
         offset = chunk->offset;
     } else if(chunk->nonUTF16Indexes) {
-        offset=ut->mapIndexToUTF16(ut, index);
+        offset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
         offset = index - chunk->nativeStart;
     }
@@ -248,7 +248,7 @@ utext_previous32From(UText *ut, int32_t index) {
         }
         offset = chunk->offset;
     } else if(chunk->nonUTF16Indexes) {
-        offset=ut->mapIndexToUTF16(ut, index);
+        offset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
         offset = index - chunk->nativeStart;
     }
@@ -857,7 +857,7 @@ utf8TextMapIndexToUTF16(UText *ut, int32_t index) {
 
 
 U_DRAFT UText * U_EXPORT2
-utext_openUTF8(UText *ut, const uint8_t *s, int32_t length, UErrorCode *status) {
+utext_openUTF8(UText *ut, const char *s, int32_t length, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return NULL;
     }
@@ -872,19 +872,19 @@ utext_openUTF8(UText *ut, const uint8_t *s, int32_t length, UErrorCode *status) 
     }
     ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_NON_UTF16_INDEXES);
 
-    ut->clone      = noopTextClone;
-    ut->length     = utf8TextLength;
-    ut->access     = utf8TextAccess;
-    ut->extract    = utf8TextExtract;
-    ut->mapOffsetToNative = utf8TextMapOffsetToNative;
-    ut->mapIndexToUTF16   = utf8TextMapIndexToUTF16;
+    ut->clone         = noopTextClone;
+    ut->nativeLength  = utf8TextLength;
+    ut->access        = utf8TextAccess;
+    ut->extract       = utf8TextExtract;
+    ut->mapOffsetToNative     = utf8TextMapOffsetToNative;
+    ut->mapNativeIndexToUTF16 = utf8TextMapIndexToUTF16;
 
     ut->context=s;
     if(length>=0) {
         ut->b=length;
     } else {
         // TODO:  really undesirable to do this scan upfront.
-        ut->b=(int32_t)uprv_strlen((const char *)s);
+        ut->b=(int32_t)uprv_strlen(s);
     }
 
     return ut;
@@ -1167,12 +1167,12 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) {
         ut->providerProperties |=I32_FLAG(UTEXT_PROVIDER_HAS_META_DATA);
     }
 
-    ut->clone      = repTextClone;
-    ut->length     = repTextLength;
-    ut->access     = repTextAccess;
-    ut->extract    = repTextExtract;
-    ut->replace    = repTextReplace;
-    ut->copy       = repTextCopy;
+    ut->clone        = repTextClone;
+    ut->nativeLength = repTextLength;
+    ut->access       = repTextAccess;
+    ut->extract      = repTextExtract;
+    ut->replace      = repTextReplace;
+    ut->copy         = repTextCopy;
 
     ut->context=rep;
     return ut;
@@ -1356,14 +1356,14 @@ U_DRAFT UText * U_EXPORT2
 utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     ut = utext_setup(ut, 0, status);
     if (U_SUCCESS(*status)) {
-        ut->clone      = unistrTextClone;
-        ut->length     = unistrTextLength;
-        ut->access     = unistrTextAccess;
-        ut->extract    = unistrTextExtract;
-        ut->replace    = unistrTextReplace;
-        ut->copy       = unistrTextCopy;
+        ut->clone        = unistrTextClone;
+        ut->nativeLength = unistrTextLength;
+        ut->access       = unistrTextAccess;
+        ut->extract      = unistrTextExtract;
+        ut->replace      = unistrTextReplace;
+        ut->copy         = unistrTextCopy;
 
-        ut->context     = s;
+        ut->context      = s;
         ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS)|
                                  I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     }
@@ -1547,12 +1547,12 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status) 
     }
     ut = utext_setup(ut, 0, status);
     if (U_SUCCESS(*status)) {
-        ut->clone      = ucstrTextClone;
-        ut->length     = ucstrTextLength;
-        ut->access     = ucstrTextAccess;
-        ut->extract    = ucstrTextExtract;
-        ut->replace    = NULL;
-        ut->copy       = NULL;
+        ut->clone        = ucstrTextClone;
+        ut->nativeLength = ucstrTextLength;
+        ut->access       = ucstrTextAccess;
+        ut->extract      = ucstrTextExtract;
+        ut->replace      = NULL;
+        ut->copy         = NULL;
 
         ut->context               = s;
         ut->providerProperties    = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS);
