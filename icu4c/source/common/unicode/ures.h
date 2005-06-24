@@ -141,10 +141,11 @@ typedef enum {
  * their corresponding keys.
  * Note that the caller is responsible of calling <TT>ures_close</TT> on each succesfully
  * opened resource bundle.
- * @param path    string containing the full path pointing to the directory
- *                where the resources reside followed by the package name
- *                e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
- *                if NULL, ICU default data files will be used.
+ * @param packageName   The packageName and locale together point to an ICU udata object, 
+ *                      as defined by <code> udata_open( packageName, "res", locale, err) </code> 
+ *                      or equivalent.  Typically, packageName will refer to a (.dat) file, or to
+ *                      a package registered with udata_setAppData(). Using a full file or directory
+ *                      pathname for packageName is deprecated. If NULL, ICU data will be used.
  * @param locale  specifies the locale for which we want to open the resource
  *                if NULL, the default locale will be used. If strlen(locale) == 0
  *                root locale will be used.
@@ -164,7 +165,7 @@ typedef enum {
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle*  U_EXPORT2 
-ures_open(const char*    path,
+ures_open(const char*    packageName,
           const char*  locale, 
           UErrorCode*     status);
 
@@ -172,10 +173,11 @@ ures_open(const char*    path,
 /** This function does not care what kind of localeID is passed in. It simply opens a bundle with 
  *  that name. Fallback mechanism is disabled for the new bundle. If the requested bundle contains
  *  an %%ALIAS directive, the results are undefined.
- * @param path    string containing the full path pointing to the directory
- *                where the resources reside followed by the package name
- *                e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
- *                if NULL, ICU default data files will be used.
+ * @param packageName   The packageName and locale together point to an ICU udata object, 
+ *                      as defined by <code> udata_open( packageName, "res", locale, err) </code> 
+ *                      or equivalent.  Typically, packageName will refer to a (.dat) file, or to
+ *                      a package registered with udata_setAppData(). Using a full file or directory
+ *                      pathname for packageName is deprecated. If NULL, ICU data will be used.
  * @param locale  specifies the locale for which we want to open the resource
  *                if NULL, the default locale will be used. If strlen(locale) == 0
  *                root locale will be used.
@@ -186,7 +188,7 @@ ures_open(const char*    path,
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle* U_EXPORT2 
-ures_openDirect(const char* path, 
+ures_openDirect(const char* packageName, 
                 const char* locale, 
                 UErrorCode* status);
 
@@ -195,8 +197,11 @@ ures_openDirect(const char* path,
  * This path will be converted to char * using the default converter,
  * then ures_open() is called.
  *
- * @param path    string containing the full path pointing to the directory
- *                where the resources reside followed by the package name
+ * @param packageName   The packageName and locale together point to an ICU udata object, 
+ *                      as defined by <code> udata_open( packageName, "res", locale, err) </code> 
+ *                      or equivalent.  Typically, packageName will refer to a (.dat) file, or to
+ *                      a package registered with udata_setAppData(). Using a full file or directory
+ *                      pathname for packageName is deprecated. If NULL, ICU data will be used.
  * @param locale  specifies the locale for which we want to open the resource
  *                if NULL, the default locale will be used. If strlen(locale) == 0
  *                root locale will be used.
@@ -206,7 +211,7 @@ ures_openDirect(const char* path,
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle* U_EXPORT2 
-ures_openU(const UChar* path, 
+ures_openU(const UChar* packageName, 
            const char* locale, 
            UErrorCode* status);
 
@@ -308,8 +313,11 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
  * TODO need to revisit usefulness of this function
  *      and usage model for fillIn parameters without knowing sizeof(UResourceBundle)
  * @param r The resourcebundle to open
- * @param path String containing the full path pointing to the directory
- *             where the resources reside followed by the package name
+ * @param packageName   The packageName and locale together point to an ICU udata object, 
+ *                      as defined by <code> udata_open( packageName, "res", locale, err) </code> 
+ *                      or equivalent.  Typically, packageName will refer to a (.dat) file, or to
+ *                      a package registered with udata_setAppData(). Using a full file or directory
+ *                      pathname for packageName is deprecated. If NULL, ICU data will be used.
  * @param localeID specifies the locale for which we want to open the resource
  * @param status The error code
  * @return a newly allocated resource bundle or NULL if it doesn't exist.
@@ -317,7 +325,7 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
  */
 U_INTERNAL void U_EXPORT2 
 ures_openFillIn(UResourceBundle *r, 
-                const char* path,
+                const char* packageName,
                 const char* localeID, 
                 UErrorCode* status);
 
@@ -706,13 +714,13 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 /**
  * Create a string enumerator, owned by the caller, of all locales located within 
  * the specified resource tree.
- * @param path path to the tree, such as (NULL) or U_ICUDATA_ALIAS or  or "ICUDATA-coll"
+ * @param packageName name of the tree, such as (NULL) or U_ICUDATA_ALIAS or  or "ICUDATA-coll"
  * This call is similar to uloc_getAvailable().
  * @param status error code
  * @draft ICU 3.2
  */
 U_DRAFT UEnumeration* U_EXPORT2
-ures_openAvailableLocales(const char *path, UErrorCode *status);
+ures_openAvailableLocales(const char *packageName, UErrorCode *status);
 
 
 #endif /*_URES*/
