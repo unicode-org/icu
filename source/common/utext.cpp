@@ -35,7 +35,7 @@ utext_access(UText *ut, int32_t index, UBool forward) {
 
 
 U_DRAFT UBool U_EXPORT2
-utext_moveIndex(UText *ut, int32_t delta) {
+utext_moveIndex32(UText *ut, int32_t delta) {
     UBool retval = TRUE;
     if(delta>0) {
         do {
@@ -60,7 +60,7 @@ utext_moveIndex(UText *ut, int32_t delta) {
 
 
 U_DRAFT int32_t U_EXPORT2
-utext_length(UText *ut) {
+utext_nativeLength(UText *ut) {
     return ut->length(ut);
 }
 
@@ -73,7 +73,7 @@ utext_isLengthExpensive(const UText *ut) {
 
 
 U_DRAFT int32_t U_EXPORT2
-utext_getIndex(UText *ut) {
+utext_getNativeIndex(UText *ut) {
     if(!ut->chunk.nonUTF16Indexes || ut->chunk.offset==0) {
         return ut->chunk.nativeStart+ut->chunk.offset;
     } else {
@@ -84,7 +84,7 @@ utext_getIndex(UText *ut) {
 
 
 U_DRAFT void U_EXPORT2
-utext_setIndex(UText *ut, int32_t index) {
+utext_setNativeIndex(UText *ut, int32_t index) {
     if(index<ut->chunk.nativeStart || ut->chunk.nativeLimit<index) {
         // The desired position is outside of the current chunk.  
         // Access the new position.  Assume a forward iteration from here,
@@ -136,7 +136,7 @@ utext_current32(UText *ut) {
 U_DRAFT UChar32 U_EXPORT2
 utext_char32At(UText *ut, int32_t nativeIndex) {
     UChar32 c = U_SENTINEL;
-    utext_setIndex(ut, nativeIndex);
+    utext_setNativeIndex(ut, nativeIndex);
     if (nativeIndex >= 0 && nativeIndex < ut->chunk.nativeLimit) {
         c = ut->chunk.contents[ut->chunk.offset];
     }
@@ -277,7 +277,7 @@ utext_extract(UText *ut,
 
 
 U_DRAFT UBool U_EXPORT2
-utext_isWriteble(const UText *ut)
+utext_isWritable(const UText *ut)
 {
     UBool b = (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_WRITABLE)) != 0;
     return b;
@@ -621,7 +621,7 @@ U_CDECL_END
 
 
 static const UText noopText={
-    UTEXT_INITIALZIER_HEAD,
+    UTEXT_INITIALIZER_HEAD,
     noopTextClone,
     noopTextLength,
     noopTextAccess,
