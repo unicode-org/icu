@@ -202,7 +202,7 @@ class GenerateStringPrep implements UCD_Types {
 		UnicodeMap scripts = ToolUnicodePropertySource.make("").getProperty("script").getUnicodeMap();
 		UnicodeMap blocks = ToolUnicodePropertySource.make("").getProperty("block").getUnicodeMap();
 		UnicodeMap.Composer myCompose = new UnicodeMap.Composer() {
-			public Object compose(Object a, Object b) {
+			public Object compose(int codePoint, Object a, Object b) {
 				return a + "\t" + b;
 			}
 		};

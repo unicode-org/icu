@@ -1,0 +1,1 @@
+::[[:control:][:default_ignorable_code_point:]-[:whitespace:]] any-hex;
