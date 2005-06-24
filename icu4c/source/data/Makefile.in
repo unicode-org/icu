@@ -379,7 +379,7 @@ $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(BINDIR)/gencnval$(EXEEXT)
 	$(INVOKE) $(BINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # uidna.spp
-$(BUILDDIR)/uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(BINDIR)/gensprep$(EXEEXT) $(BUILDDIR)/uprops.icu $(BUILDDIR)/unames.icu $(BUILDDIR)/pnames.icu
+$(BUILDDIR)/uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(BINDIR)/gensprep$(EXEEXT) $(BUILDDIR)/unames.icu $(BUILDDIR)/pnames.icu
 	$(INVOKE) $(BINDIR)/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
