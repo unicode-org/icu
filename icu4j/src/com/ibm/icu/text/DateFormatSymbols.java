@@ -75,6 +75,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // EXTENDED_YEAR.  Two options: 1. Make sure resource data is
     // correct; 2. Make code add in 'u' at end if len == 17.
 
+    // Constants for context
+    public static final int FORMAT = 0;
+    public static final int STANDALONE = 1;
+
+    // Constants for width
+    public static final int WIDE = 4;
+    public static final int ABBREVIATED = 3;
+    public static final int NARROW = 5;
+
     /**
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the default locale.
@@ -126,6 +135,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     String eras[] = null;
 
     /**
+     * Era name strings. For example: "Anno Domini" and "Before Christ".  An array of 2 strings,
+     * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
+     * @serial
+     */
+    String eraNames[] = null;
+
+    /**
      * Month strings. For example: "January", "February", etc.  An array
      * of 13 strings (some calendars have 13 months), indexed by
      * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
@@ -141,6 +157,41 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String shortMonths[] = null;
+
+    /**
+     * Narrow month strings. For example: "J", "F", etc.  An array of
+     * 13 strings (some calendars have 13 months), indexed by
+     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+
+     * @serial
+     */
+    String narrowMonths[] = null;
+
+    /**
+     * Standalone month strings. For example: "January", "February", etc.  An array
+     * of 13 strings (some calendars have 13 months), indexed by
+     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+     * @serial
+     */
+    String standaloneMonths[] = null;
+
+    /**
+     * Standalone short month strings. For example: "Jan", "Feb", etc.  An array of
+     * 13 strings (some calendars have 13 months), indexed by
+     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+
+     * @serial
+     */
+    String standaloneShortMonths[] = null;
+
+    /**
+     * Standalone narrow month strings. For example: "J", "F", etc.  An array of
+     * 13 strings (some calendars have 13 months), indexed by
+     * <code>Calendar.JANUARY</code>, <code>Calendar.FEBRUARY</code>, etc.
+
+     * @serial
+     */
+    String standaloneNarrowMonths[] = null;
 
     /**
      * Weekday strings. For example: "Sunday", "Monday", etc.  An array
@@ -159,6 +210,42 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String shortWeekdays[] = null;
+
+    /**
+     * Narrow weekday strings. For example: "S", "M", etc.  An array
+     * of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
+     * <code>Calendar.MONDAY</code>, etc.
+     * The element <code>narrowWeekdays[0]</code> is ignored.
+     * @serial
+     */
+    String narrowWeekdays[] = null;
+
+    /**
+     * Standalone weekday strings. For example: "Sunday", "Monday", etc.  An array
+     * of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
+     * <code>Calendar.MONDAY</code>, etc.
+     * The element <code>standaloneWeekdays[0]</code> is ignored.
+     * @serial
+     */
+    String standaloneWeekdays[] = null;
+
+    /**
+     * Standalone short weekday strings. For example: "Sun", "Mon", etc.  An array
+     * of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
+     * <code>Calendar.MONDAY</code>, etc.
+     * The element <code>standaloneShortWeekdays[0]</code> is ignored.
+     * @serial
+     */
+    String standaloneShortWeekdays[] = null;
+
+    /**
+     * Standalone narrow weekday strings. For example: "S", "M", etc.  An array
+     * of 8 strings, indexed by <code>Calendar.SUNDAY</code>,
+     * <code>Calendar.MONDAY</code>, etc.
+     * The element <code>standaloneNarrowWeekdays[0]</code> is ignored.
+     * @serial
+     */
+    String standaloneNarrowWeekdays[] = null;
 
     /**
      * AM and PM strings. For example: "AM" and "PM".  An array of
@@ -240,11 +327,34 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Gets era name strings. For example: "Anno Domini" and "Before Christ".
+     * @return the era strings.
+     * @draft ICU 3.4
+     */
+    public String[] getEraNames() {
+    // TODO: Fill the era names in appropriately.  Just a placeholder right now.
+        return duplicate(eraNames);
+    }
+
+    /**
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
      * @stable ICU 2.0
      */
     public String[] getMonths() {
+        return duplicate(months);
+    }
+
+    /**
+     * Gets month strings. For example: "January", "February", etc.
+     * @param context    The month context, FORMAT or STANDALONE.
+     * @param width      The width or the returned month string,
+     *                   either WIDE, ABBREVIATED, or NARROW.
+     * @return the month strings.
+     * @draft ICU 3.4
+     */
+    public String[] getMonths(int context, int width) {
+    // TODO: Make this actually do something, just a placeholder right now.
         return duplicate(months);
     }
 
@@ -282,6 +392,20 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public String[] getWeekdays() {
+        return duplicate(weekdays);
+    }
+
+    /**
+     * Gets weekday strings. For example: "Sunday", "Monday", etc.
+     * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
+     * <code>Calendar.MONDAY</code>, etc. to index the result array.
+     * @param context    Weekday context, either FORMAT or STANDALONE.
+     * @param width      Width of strings to be returned, either
+     *                   WIDE, ABBREVIATED, or NARROW
+     * @draft ICU 3.4
+     */
+    public String[] getWeekdays(int context, int width) {
+    // TODO: Make this actually do something, just a placeholder right now.
         return duplicate(weekdays);
     }
 
