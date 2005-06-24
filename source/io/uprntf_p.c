@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -225,16 +225,11 @@ u_printf_string_handler(const u_printf_stream_handler  *handler,
 
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
+    if (info->fPrecision != -1 && info->fPrecision < len) {
+        len = info->fPrecision;
+    }
 
-    /* precision takes precedence over width */
-    /* determine if the string should be truncated */
-    if(info->fPrecision != -1 && len > info->fPrecision) {
-        written = handler->write(context, s, info->fPrecision);
-    }
-    /* determine if the string should be padded */
-    else {
-        written = handler->pad_and_justify(context, info, s, len);
-    }
+    written = handler->pad_and_justify(context, info, s, len);
 
     /* clean up */
     if (gNullStr != s && buffer != s) {
@@ -766,16 +761,12 @@ u_printf_ustring_handler(const u_printf_stream_handler  *handler,
 
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
+    if (info->fPrecision != -1 && info->fPrecision < len) {
+        len = info->fPrecision;
+    }
 
-    /* precision takes precedence over width */
-    /* determine if the string should be truncated */
-    if(info->fPrecision != -1 && len > info->fPrecision) {
-        written = handler->write(context, arg, info->fPrecision);
-    }
-    else {
-        /* determine if the string should be padded */
-        written = handler->pad_and_justify(context, info, arg, len);
-    }
+    /* determine if the string should be padded */
+    written = handler->pad_and_justify(context, info, arg, len);
 
     return written;
 }

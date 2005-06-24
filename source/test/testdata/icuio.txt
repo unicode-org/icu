@@ -1,6 +1,6 @@
 //*****************************************************************************
 //
-//  Copyright (C) 2004, International Business Machines
+//  Copyright (C) 2004-2005, International Business Machines
 //  Corporation and others.  All Rights Reserved.
 //
 //  file name:  icuio.txt
@@ -36,6 +36,18 @@ icuio {
         printf {
             Headers { "format", "result", "argumentType", "argument" }
             Cases {
+                { "%5.3S", "  abc", "S", "abcde" }
+                { "%-5.3S", "abc  ", "S", "abcde" }
+                { "%5.3S", "  abc", "S", "abcdef" }
+                { "%-5.3S", "abc  ", "S", "abcdef" }
+                { "%5.3S", "    a", "S", "a" }
+                { "%-5.3S", "a    ", "S", "a" }
+                { "%5.3s", "  abc", "s", "abcde" }
+                { "%-5.3s", "abc  ", "s", "abcde" }
+                { "%5.3s", "  abc", "s", "abcdef" }
+                { "%-5.3s", "abc  ", "s", "abcdef" }
+                { "%5.3s", "    a", "s", "a" }
+                { "%-5.3s", "a    ", "s", "a" }
                 { "%e", "1.200000e+000", "d", "1.2" }
                 { "%e", "1.234568e+006", "d", "1234567.89" }
                 { "%E", "1.234568E+006", "d", "1234567.89" }
