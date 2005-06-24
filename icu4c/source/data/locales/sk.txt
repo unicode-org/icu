@@ -1307,7 +1307,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.44"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

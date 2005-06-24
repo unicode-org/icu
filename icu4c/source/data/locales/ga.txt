@@ -1348,7 +1348,7 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             AmPmMarkers{

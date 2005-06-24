@@ -1787,7 +1787,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.51"}
+    Version{"1.52"}
     calendar{
         gregorian{
             AmPmMarkers{

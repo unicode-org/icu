@@ -1651,7 +1651,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.60"}
+    Version{"1.61"}
     boundaries{
         word{"word_ja"}
     }

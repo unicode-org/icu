@@ -396,7 +396,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.47"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
