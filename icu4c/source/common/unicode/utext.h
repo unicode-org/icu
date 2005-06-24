@@ -21,29 +21,29 @@
  * \file
  * \brief C API: Abstract Unicode Text API
  *
- * Text Access API provides a means to allow text that is stored in alternative
+ * The Text Access API provides a means to allow text that is stored in alternative
  * formats to work with ICU services.  ICU normally operates on text that is
- * stored utf-16 format, in (UChar *) arrays for the C APIs or as type
+ * stored UTF-16 format, in (UChar *) arrays for the C APIs or as type
  * UnicodeString for C++ APIs.
  *
- * ICU Text Access allows other formats, such as utf-8 or non-contiguous
- * utf-16 strings, to be placed a UText wrapper and then passed to ICU services.
+ * ICU Text Access allows other formats, such as UTF-8 or non-contiguous
+ * UTF-16 strings, to be placed in a UText wrapper and then passed to ICU services.
  *
  * There are three general classes of usage for UText:
  *
  *     Application Level Use.  This is the simplest usage - applications would
  *     use one of the utext_open() functions on their input text, and pass
- *     the rsulting UText to the desired ICU service.
+ *     the resulting UText to the desired ICU service.
  *
  *     Second is usage in ICU Services, such as break iteration, that will need to
- *     operate on input presented to them as a UText.  These implemenations
+ *     operate on input presented to them as a UText.  These implementations
  *     will need to use the iteration and related UText functions to gain
- *     access to the acutal text.
+ *     access to the actual text.
  *
  *     The third class of UText users are "text providers."  These are the
  *     UText implementations for the various text storage formats.  An application
  *     or system with a unique text storage format can implement a set of
- *     UText provider functions for that format, which will then allow other
+ *     UText provider functions for that format, which will then allow
  *     ICU services to operate on that format.
  *
  *
@@ -55,28 +55,28 @@
  *    UChar32  c;
  *    UText    *ut = whatever();
  *
- *    for (c=utext_next32From(ut, 0); c!=U_SENTINEL; c=utext_next32(ut)) {
- *       // do whatever the codepoint c here.
+ *    for (c=utext_next32From(ut, 0); c>=0; c=utext_next32(ut)) {
+ *       // do whatever with the codepoint c here.
  *    }
  * \endcode
  *
- * And here is similar code to iterate in the revese direction, from the end
+ * And here is similar code to iterate in the reverse direction, from the end
  * of the text towards the beginning.
  *
  * \code
  *    UChar32  c;
  *    UText    *ut = whatever();
- *    int      textLength = utext_length(ut);
- *    for (c=utext_previous32From(ut, textLength); c!=U_SENTINEL; c=utext_previous32(ut)) {
- *       // do whatever the codepoint c here.
+ *    int      textLength = utext_nativeLength(ut);
+ *    for (c=utext_previous32From(ut, textLength); c>=0; c=utext_previous32(ut)) {
+ *       // do whatever with the codepoint c here.
  *    }
  * \endcode
  *
  * <em>Characters and Indexing</em>
  *
  * Indexing into text by UText functions is nearly always in terms of the native
- * indexing of the underlying text storage.  The storage format could be utf-8
- * or utf-32, for example.  When coding to the UText access API, no assumptions
+ * indexing of the underlying text storage.  The storage format could be UTF-8
+ * or UTF-32, for example.  When coding to the UText access API, no assumptions
  * can be made regarding the size of characters, or how far an index
  * may move when iterating between characters.
  *
@@ -86,19 +86,19 @@
  *
  *
  * When an index position is returned from a UText function, it will be
- * a native index to the underlying text.  In the case of multi-unit characers,
- * tt will  always refer to the first position, never to the interior.  This
+ * a native index to the underlying text.  In the case of multi-unit characters,
+ * it will  always refer to the first position, never to the interior.  This
  * is essentially the same thing as saying that a returned index will always
  * point to a boundary between characters.
  *
  * When a native index is supplied to a UText function, all indices that
  * refer to any part of a multi-unit character representation are considered
- * to be equivalent.  In the case of multi-unit characers, an incoming index
+ * to be equivalent.  In the case of multi-unit characters, an incoming index
  * will be logically normalized to refer to the start of the character.
  * 
  * It is possible to test whether a native index is on a code point boundary
- * by doing a utext_setIndex() followed by a utext_getIndex().
- * If the index returns unchanged, it was on a code point boundary.  If
+ * by doing a utext_setNativeIndex() followed by a utext_getNativeIndex().
+ * If the index is returned unchanged, it is on a code point boundary.  If
  * an adjusted index is returned, the original index referred to the
  * interior of a character.
  *
@@ -146,7 +146,7 @@ typedef struct UTextChunk UTextChunk; /**< C typedef for struct UTextChunk. @dra
   *
   * @param ut  The UText to be closed.
   * @return    NULL if the UText struct was deleted by the close.  If the UText struct
-  *            was orginally provided by the caller to the open function, it is
+  *            was originally provided by the caller to the open function, it is
   *            returned by this function, and may be safely used again in
   *            a subsequent utext_open.
   *
@@ -160,17 +160,17 @@ utext_close(UText *ut);
  * Open a read-only UText implementation for UTF-8 strings.
  * 
  * \htmlonly
- * Any invalid utf-8 in the input will be handled in this way:
- * a sequence of bytes that has the form of a trunctated, but otherwise valid,
- * utf-8 sequence will be replaced by a single unicode replacement character, \uFFFD. 
+ * Any invalid UTF-8 in the input will be handled in this way:
+ * a sequence of bytes that has the form of a truncated, but otherwise valid,
+ * UTF-8 sequence will be replaced by a single unicode replacement character, \uFFFD. 
  * Any other illegal bytes will each be replaced by a \uFFFD.
  * \endhtmlonly
  * 
  * @param ut     Pointer to a UText struct.  If NULL, a new UText will be created.
  *               If non-NULL, must refer to an initialized UText struct, which will then
  *               be reset to reference the specified UTF-8 string.
- * @param s      A utf-8 string
- * @param length The length of the utf-8 string in bytes, or -1 if the string is
+ * @param s      A UTF-8 string
+ * @param length The length of the UTF-8 string in bytes, or -1 if the string is
  *               zero terminated.
  * @param status Errors are returned here.
  * @return       A pointer to the UText.  If a pre-allocated UText was provided, it
@@ -261,7 +261,7 @@ utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *status);
   *  and be prepared to handle failures.
   *
   *  A shallow clone replicates only the UText data structures; it does not make
-  *  a copy of the underlying text.  Shallow clones can be used as an efficent way to 
+  *  a copy of the underlying text.  Shallow clones can be used as an efficient way to 
   *  have multiple iterators active in a single text string that is not being
   *  modified.
   *
@@ -276,6 +276,7 @@ utext_openReplaceable(UText *t, Replaceable *rep, UErrorCode *status);
   *                will be returned if the text provider is unable to clone the
   *                original text.
   *  @return       The newly created clone, or NULL if the clone operation failed.
+  *  @draft ICU 3.4
   */
 U_DRAFT UText * U_EXPORT2
 utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
@@ -289,7 +290,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
 
 /**
   * Get the length of the text.  Depending on the characteristics
-  * of the underlying text represenation, this may be expensive.  
+  * of the underlying text representation, this may be expensive.  
   * @see  utext_isLengthExpensive()
   *
   *
@@ -299,7 +300,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
   * @draft ICU 3.4
   */
 U_DRAFT int32_t U_EXPORT2
-utext_length(UText *ut);
+utext_nativeLength(UText *ut);
 
 /**
  *  Return TRUE if calculating the length of the text could be expensive.
@@ -311,7 +312,7 @@ utext_length(UText *ut);
  *  be expensive to report it.
  *
  * @param ut the text to be accessed.
- * @return TRUE if determining the lenght of the text could be time consuming.
+ * @return TRUE if determining the length of the text could be time consuming.
  * @draft ICU 3.4
  */
 U_DRAFT UBool U_EXPORT2
@@ -322,13 +323,13 @@ utext_isLengthExpensive(const UText *ut);
  * or U_SENTINEL (-1) if it is out of bounds.
  *
  * If the specified index points to the interior of a multi-unit
- * character - one of the trail bytes of a utf-8 sequence, for example -
+ * character - one of the trail bytes of a UTF-8 sequence, for example -
  * the complete code point will be returned.
  *
  * The iteration position will be set to the start of the returned code point.
  *
  * This function is roughly equivalent to the the sequence
- *    utext_setIndex(index);
+ *    utext_setNativeIndex(index);
  *    utext_current32();
  * (There is a difference if the index is out of bounds by being less than zero)
  * 
@@ -422,7 +423,7 @@ utext_next32From(UText *ut, int32_t nativeIndex);
   * begin a backwards iteration.
   *
   * @param ut the text to be accessed.
-  * @param nativeIndex Iteration index in the native units of the thext provider.
+  * @param nativeIndex Iteration index in the native units of the text provider.
   * @return Code point preceding the one at the initial index,
   *         or U_SENTINEL (-1) if it is out of bounds.
   *
@@ -444,7 +445,7 @@ utext_previous32From(UText *ut, int32_t nativeIndex);
   * @draft ICU 3.4
   */
 U_DRAFT int32_t U_EXPORT2
-utext_getIndex(UText *ut);
+utext_getNativeIndex(UText *ut);
 
 /**
   * Set the current iteration position to the nearest code point
@@ -458,11 +459,11 @@ utext_getIndex(UText *ut);
   * rather than setIndex().
   * <p/>
   * Moving the index position to an adjacent character is best done
-  * with utext_next32(), utext_previous32() or utext_moveIndex().
+  * with utext_next32(), utext_previous32() or utext_moveIndex32().
   * Attempting to do direct arithmetic on the index position is
   * complicated by the fact that the size (in native units) of a
   * character depends on the underlying representation of the character
-  * (utf-8, utf-16, utf-32, arbitrary codepage), and is not
+  * (UTF-8, UTF-16, UTF-32, arbitrary codepage), and is not
   * easily knowable.
   *
   * @param ut the text to be accessed.
@@ -470,7 +471,7 @@ utext_getIndex(UText *ut);
   * @draft ICU 3.4
   */
 U_DRAFT void U_EXPORT2
-utext_setIndex(UText *ut, int32_t nativeIndex);
+utext_setNativeIndex(UText *ut, int32_t nativeIndex);
 
 /**
   * Move the iterator postion by delta code points.  The number of code points
@@ -479,8 +480,8 @@ utext_setIndex(UText *ut, int32_t nativeIndex);
   * <p/>
   * The index is moved by <code>delta</code> code points
   * forward or backward, but no further backward than to 0 and
-  * no further forward than to length().
-  * The resulting index value will be in between 0 and length(), inclusive.
+  * no further forward than to utext_nativeLength().
+  * The resulting index value will be in between 0 and length, inclusive.
   * <p/>
   * Because the index is kept in the native units of the text provider, the
   * actual numeric amount by which the index moves depends on the
@@ -493,14 +494,14 @@ utext_setIndex(UText *ut, int32_t nativeIndex);
   * @draft ICU 3.4
   */
 U_DRAFT UBool U_EXPORT2
-utext_moveIndex(UText *ut, int32_t delta);
+utext_moveIndex32(UText *ut, int32_t delta);
 
 
 /**
  *
  * Extract text from a UText into a UChar buffer.  The range of text to be extracted
  * is specified in the native indices of the UText provider.  These may not necessarily
- * be utf-16 indices.
+ * be UTF-16 indices.
  * <p/>
  * The size (number of 16 bit UChars) in the data to be extracted is returned.  The
  * full number of UChars is returned, even when the extracted text is truncated
@@ -515,7 +516,7 @@ utext_moveIndex(UText *ut, int32_t delta);
  * @param  nativeLimit the native string index of the position following the last
  *               character to extract.  If the specified limit is greater than the length
  *               of the text, the limit will be trimmed back to the text length.
- * @param  dest  the UChar (utf-16) buffer into which the extracted text is placed
+ * @param  dest  the UChar (UTF-16) buffer into which the extracted text is placed
  * @param  destCapacity  The size, in UChars, of the destination buffer.  May be zero
  *               for precomputing the required size.
  * @param  status receives any error status.
@@ -553,6 +554,7 @@ utext_extract(UText *ut,
  *
  * Get the code point at the current iteration position of the UText, and
  * advance the position to the first index following the character.
+ * This is a post-increment operation.
  * Returns U_SENTINEL (-1) if the position is at the end of the
  * text.
  *
@@ -583,7 +585,7 @@ utext_extract(UText *ut,
 /************************************************************************************
  *
  *   Functions related to writing or modifying the text.
- *   These will work only with modifiable UTexts.  Attemting to
+ *   These will work only with modifiable UTexts.  Attempting to
  *   modify a read-only UText will return an error status.
  *
  ************************************************************************************/
@@ -600,7 +602,7 @@ utext_extract(UText *ut,
  *
  */
 U_DRAFT UBool U_EXPORT2
-utext_isWriteble(const UText *ut);
+utext_isWritable(const UText *ut);
 
 
 /**
@@ -704,10 +706,10 @@ utext_copy(UText *ut,
   *
   *  UText provider implementations surface their text in the form of UTextChunks.
   *
-  *  If the native form of the text if utf-16, a chunk will typically refer back to the
+  *  If the native form of the text if UTF-16, a chunk will typically refer back to the
   *   original native text storage.  If the native format is something else, chunks
   *   will typically refer to a buffer maintained by the provider that contains
-  *   some amount input that has been converted to utf-16 (UChar) form.
+  *   some amount input that has been converted to UTF-16 (UChar) form.
   *
   * @draft ICU 3.4
   */  
@@ -732,6 +734,9 @@ struct UTextChunk {
 
     /** Unused. */
     UBool       padding1, padding2, padding3;
+
+    /** Unused. */
+    int32_t     padInt1, padInt2;
 
     /** Contains sizeof(UTextChunk) and allows the future addition of fields. */
     int32_t     sizeOfStruct;
@@ -791,7 +796,7 @@ enum {
   *  and be prepared to handle failures.
   *
   *  A shallow clone replicates only the UText data structures; it does not make
-  *  a copy of the underlying text.  Shallow clones can be used as an efficent way to 
+  *  a copy of the underlying text.  Shallow clones can be used as an efficient way to 
   *  have multiple iterators active in a single text string that is not being
   *  modified.
   *
@@ -814,7 +819,7 @@ UTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
 
 
 /**
- * Function type declaration for UText.length().
+ * Function type declaration for UText.nativeLength().
  *
  * @param ut the UText to get the length of.
  * @return the length, in the native units of the original text string.
@@ -830,6 +835,10 @@ UTextNativeLength(UText *ut);
  *  position will be left at the requested index.  If the index is out
  *  of bounds, the iteration position will be left at the start or end
  *  of the string, as appropriate.
+ *
+ *  Chunks must begin and end on code point boundaries.  A single code point
+ *  comprised of multiple storage units must never span a chunk boundary.
+ *
  *
  * @param ut          the UText being accessed.
  * @param nativeIndex Requested index of the text to be accessed.
@@ -853,7 +862,7 @@ UTextAccess(UText *ut, int32_t nativeIndex, UBool forward, UTextChunk *chunk);
  *
  * Extract text from a UText into a UChar buffer.  The range of text to be extracted
  * is specified in the native indices of the UText provider.  These may not necessarily
- * be utf-16 indices.
+ * be UTF-16 indices.
  * <p/>
  * The size (number of 16 bit UChars) in the data to be extracted is returned.  The
  * full amount is returned, even when the specified buffer size is smaller.
@@ -865,7 +874,7 @@ UTextAccess(UText *ut, int32_t nativeIndex, UBool forward, UTextChunk *chunk);
  * @param  nativeStart   the native index of the first characer to extract.
  * @param  nativeLimit   the native string index of the position following the last
  *                       character to extract.
- * @param  dest          the UChar (utf-16) buffer into which the extracted text is placed
+ * @param  dest          the UChar (UTF-16) buffer into which the extracted text is placed
  * @param  destCapacity  The size, in UChars, of the destination buffer.  May be zero
  *                       for precomputing the required size.
  * @param  status        receives any error status.
@@ -927,7 +936,7 @@ UTextReplace(UText *t,
  * The text to be copied or moved is inserted at destIndex;
  * it does not replace or overwrite any existing text.
  *
- * This function need only be implemeted for UText types that support writing.
+ * This function need only be implemented for UText types that support writing.
  *
  * When using this function, there should be only a single UText opened onto the
  * underlying native text string.  The function is responsible for updating the
@@ -954,9 +963,9 @@ UTextCopy(UText *t,
 /**
  * Function type declaration for UText.mapOffsetToNative().
  * Map from a UChar offset within the current text chunk within the UText to
- *  the corresponding native index in the orginal source text.
+ *  the corresponding native index in the original source text.
  *
- * This is required only for text providers that do not use native utf-16 indexes.
+ * This is required only for text providers that do not use native UTF-16 indexes.
  *
  * TODO:  specify behavior with out-of-bounds offset?  Shouldn't ever occur.
  *
@@ -975,7 +984,7 @@ UTextMapOffsetToNative(UText *ut, int32_t offset);
  * Function type declaration for UText.mapIndexToUTF16().
  * Map from a native index to a UChar offset within a text chunk
  *
- * This function is required only for text providers that do not use native utf-16 indexes.
+ * This function is required only for text providers that do not use native UTF-16 indexes.
  *
  * @param ut          The UText containing the text chunk.
  * @param nativeIndex Absolute (native) text index, chunk->start<=index<=chunk->limit.
@@ -986,7 +995,7 @@ UTextMapOffsetToNative(UText *ut, int32_t offset);
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextMapIndexToUTF16(UText *ut, int32_t nativeIndex);
+UTextMapNativeIndexToUTF16(UText *ut, int32_t nativeIndex);
 
 
 /**
@@ -1013,7 +1022,7 @@ UTextClose(UText *ut);
 /**
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
-  *                  text  (utf-8, noncontiugous utf-16, whatever.)
+  *                  text  (UTF-8, noncontiguous UTF-16, whatever.)
   *
   *                  Applications that are using predefined types of text providers
   *                  to pass text data to ICU services will have no need to view the
@@ -1058,6 +1067,13 @@ struct UText {
 
     /**
      *     (private)  Magic.  Try to detect when we are handed junk.
+     *                        utext_openXYZ() functions take an initialized,
+     *                        but not necessarily open, UText struct as an,
+     *                        optional fill-in parameter.  This magic field
+     *                        is used to check for that initialization.
+     *                        Text provider close functions must NOT clear
+     *                        the magic field because that would prevent
+     *                        reuse of the UText struct.
      * @internal
      */
     uint32_t       magic;
@@ -1088,7 +1104,7 @@ struct UText {
 
 
 
-    /**  desciptor for the text chunk that includes or is adjacent to
+    /**  descriptor for the text chunk that includes or is adjacent to
       *  the current iteration position.
       *   @draft ICU 3.4
       */
@@ -1153,12 +1169,12 @@ struct UText {
     UTextMapOffsetToNative *mapOffsetToNative;
 
     /**
-     * (public) Function pointer for UTextMapIndexToUTF16.
+     * (public) Function pointer for UTextMapNativeIndexToUTF16.
      *
-     * @see UTextMapIndexToUTF16
+     * @see UTextMapNativeIndexToUTF16
      * @draft ICU 3.4
      */
-    UTextMapIndexToUTF16 *mapIndexToUTF16;
+    UTextMapNativeIndexToUTF16 *mapIndexToUTF16;
 
     /**
      * (public) Function pointer for UTextClose.
@@ -1173,8 +1189,8 @@ struct UText {
 /**
  *  Common function for use by Text Provider implementations to allocate and/or initialize
  *  a new UText struct.  To be called in the implementation of utext_open() functions.
- *  If the suppliec utxt parameter is null, a new UText struct will be allocated on the heap.
- *  If the supplied UText is already open, the provider's clsoe function will be called
+ *  If the supplied UText parameter is null, a new UText struct will be allocated on the heap.
+ *  If the supplied UText is already open, the provider's close function will be called
  *  so that the struct can be reused by the open that is in progress.
  *
  * @param utxt pointer to a UText struct to be re-used, or null if a new UText
@@ -1184,9 +1200,10 @@ struct UText {
  *             additional storage.
  * @param status Errors are returned here.
  * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
+ * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-UTextSetup(UText *utxt, int32_t extraSpace, UErrorCode *status);
+utext_setup(UText *utxt, int32_t extraSpace, UErrorCode *status);
 
 /**
   * @internal
@@ -1208,6 +1225,7 @@ enum {
                   0,                   /* limit         */ \
                   FALSE,               /* nonUTF16idx   */ \
                   FALSE, FALSE, FALSE, /* padding1,2,3  */ \
+                  0, 0,                /* padInt1, 2    */ \
                   sizeof(UTextChunk)                       \
 }               
 
@@ -1219,7 +1237,7 @@ enum {
  *
  * @internal
  */
-#define UTEXT_INITIALZIER_HEAD  \
+#define UTEXT_INITIALIZER_HEAD  \
                   NULL,                 /* context       */ \
                   NULL, NULL, NULL,     /* p, q, r       */ \
                   NULL,                 /* pExtra        */ \
@@ -1241,7 +1259,7 @@ enum {
  * @draft ICU 3.4
  */
 #define UTEXT_INITIALIZER {                                \
-                  UTEXT_INITIALZIER_HEAD,                  \
+                  UTEXT_INITIALIZER_HEAD,                  \
                   NULL,                 /* clone ()     */ \
                   NULL,                 /* length ()    */ \
                   NULL,                 /* access ()    */ \

@@ -99,7 +99,7 @@ static void TestAPI(void) {
         TEST_SUCCESS(status);
         TEST_ASSERT(utb != NULL);
         TEST_ASSERT(utb != uta);
-        len = utext_length(uta);
+        len = utext_nativeLength(uta);
         TEST_ASSERT(len == u_strlen(uString));
         utext_close(uta);
         utext_close(utb);
@@ -120,7 +120,7 @@ static void TestAPI(void) {
         TEST_SUCCESS(status);
         b = utext_isLengthExpensive(uta);
         TEST_ASSERT(b==TRUE);
-        len = utext_length(uta);
+        len = utext_nativeLength(uta);
         TEST_ASSERT(len == u_strlen(uString));
         b = utext_isLengthExpensive(uta);
         TEST_ASSERT(b==FALSE);
@@ -148,26 +148,26 @@ static void TestAPI(void) {
 
         c = utext_previous32From(uta, 2);
         TEST_ASSERT(c==uString[1]);
-        i = utext_getIndex(uta);
+        i = utext_getNativeIndex(uta);
         TEST_ASSERT(i == 1);
 
-        utext_setIndex(uta, 0);
-        b = utext_moveIndex(uta, 1);
+        utext_setNativeIndex(uta, 0);
+        b = utext_moveIndex32(uta, 1);
         TEST_ASSERT(b==TRUE);
-        i = utext_getIndex(uta);
+        i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==1);
 
-        b = utext_moveIndex(uta, u_strlen(uString)-1);
+        b = utext_moveIndex32(uta, u_strlen(uString)-1);
         TEST_ASSERT(b==TRUE);
-        i = utext_getIndex(uta);
+        i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==u_strlen(uString));
 
-        b = utext_moveIndex(uta, 1);
+        b = utext_moveIndex32(uta, 1);
         TEST_ASSERT(b==FALSE);
-        i = utext_getIndex(uta);
+        i = utext_getNativeIndex(uta);
         TEST_ASSERT(i==u_strlen(uString));
 
-        utext_setIndex(uta, 0);
+        utext_setNativeIndex(uta, 0);
         c = UTEXT_NEXT32(uta);
         TEST_ASSERT(c==uString[0]);
         c = utext_current32(uta);
@@ -224,7 +224,7 @@ static void TestAPI(void) {
         uta = utext_openUChars(NULL, uString, -1, &status);
         TEST_SUCCESS(status);
 
-        b = utext_isWriteble(uta);
+        b = utext_isWritable(uta);
         TEST_ASSERT(b == FALSE);
 
         b = utext_hasMetaData(uta);
