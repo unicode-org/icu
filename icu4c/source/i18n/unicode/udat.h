@@ -673,7 +673,21 @@ typedef enum UDateFormatSymbolType {
     /** The AM/PM names, for example AM */
     UDAT_AM_PMS,
     /** The localized characters */
-    UDAT_LOCALIZED_CHARS
+    UDAT_LOCALIZED_CHARS,
+    /** The long era names, for example Anno Domini */
+    UDAT_ERA_NAMES,
+    /** The narrow month names, for example F */
+    UDAT_NARROW_MONTHS,
+    /** The narrow weekday names, for example N */
+    UDAT_NARROW_WEEKDAYS,
+    /** Standalone context versions of months */
+    UDAT_STANDALONE_MONTHS,
+    UDAT_STANDALONE_SHORT_MONTHS,
+    UDAT_STANDALONE_NARROW_MONTHS,
+    /** Standalone context versions of weekdays */
+    UDAT_STANDALONE_WEEKDAYS,
+    UDAT_STANDALONE_SHORT_WEEKDAYS,
+    UDAT_STANDALONE_NARROW_WEEKDAYS
 } UDateFormatSymbolType;
 
 struct UDateFormatSymbols;
