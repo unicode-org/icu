@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -25,7 +25,8 @@ public class TestAll extends TestGroup {
                   new String[] { 
                       "TestIDNA", 
                       "TestStringPrep",
-                      "TestIDNARef" 
+                      "TestIDNARef",
+                      "IDNAConformanceTest",
                   },
                   "StringPrep and IDNA test"
               );
