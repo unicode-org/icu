@@ -1081,7 +1081,7 @@ void MultithreadTest::TestThreadedIntl()
     int i;
     UnicodeString theErr;
     UBool   haveDisplayedInfo[kFormatThreadThreads];
-    static const int32_t PATIENCE_SECONDS = 30;
+    static const int32_t PATIENCE_SECONDS = 45;
 
     //
     //  Create and start the test threads
