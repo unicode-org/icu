@@ -64,7 +64,6 @@ static void TestAPI(void) {
         UText           utLoc = UTEXT_INITIALIZER;
         const char *    cString = "Hello, World";
         UChar           uString[]  = {0x41, 0x42, 0x43, 0};
-        char           *utf8String;
         UText          *uta;
         UText          *utb;
         UChar           c;
@@ -76,8 +75,7 @@ static void TestAPI(void) {
         utb = utext_close(uta); 
         TEST_ASSERT(utb == NULL);
 
-        utf8String = cString;
-        uta = utext_openUTF8(&utLoc, utf8String, -1, &status);
+        uta = utext_openUTF8(&utLoc, cString, -1, &status);
         TEST_SUCCESS(status);
         TEST_ASSERT(uta == &utLoc);
 
