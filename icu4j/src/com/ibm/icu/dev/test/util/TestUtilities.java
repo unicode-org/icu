@@ -110,7 +110,7 @@ public class TestUtilities extends TestFmwk {
         	Object comp = composed.getValue(i);
         	Object gc = map1.getValue(i);
         	Object sc = scripts.getValue(i);
-        	if (!comp.equals(composer.compose(null, gc, sc))) {
+        	if (!comp.equals(composer.compose(i, gc, sc))) {
         		errln("Failed compose at: " + i);
         	}
         	if (!last.equals(comp)) {
