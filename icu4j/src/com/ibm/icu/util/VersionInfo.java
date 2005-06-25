@@ -442,8 +442,8 @@ public final class VersionInfo
         UNICODE_4_0_1 = getInstance(4, 0, 1, 0);
         UNICODE_4_1   = getInstance(4, 1, 0, 0);
         ICU_VERSION = getInstance(3, 4, 0, 0);
-        UCOL_RUNTIME_VERSION = getInstance(5);
-        UCOL_BUILDER_VERSION = getInstance(6);
+        UCOL_RUNTIME_VERSION = getInstance(6);
+        UCOL_BUILDER_VERSION = getInstance(7);
         UCOL_TAILORINGS_VERSION = getInstance(1);
     }
 
