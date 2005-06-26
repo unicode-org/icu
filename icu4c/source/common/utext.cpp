@@ -113,6 +113,11 @@ utext_setNativeIndex(UText *ut, int32_t index) {
 U_DRAFT UChar32 U_EXPORT2
 utext_current32(UText *ut) {
     UChar32  c = U_SENTINEL;
+    if (ut->chunk.offset==ut->chunk.length) {
+        // Current position is just off the end of the chunk.
+        // Can also happen at startup, with a zero length chunk at zero offset.
+        ut->access(ut, ut->chunk.nativeLimit, TRUE, &ut->chunk);
+    }
     if (ut->chunk.offset < ut->chunk.length) {
         c = ut->chunk.contents[ut->chunk.offset];
         if (U16_IS_SURROGATE(c)) {
@@ -429,7 +434,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
             *ut = emptyText;
             ut->flags |= UTEXT_HEAP_ALLOCATED;
             if (spaceRequired>0) {
-                ut->extraSize = spaceRequired;
+                ut->extraSize = extraSpace;
                 ut->pExtra    = &((ExtendedUText *)ut)->extension;
             }
         }
@@ -461,6 +466,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
             } else {
                 ut->extraSize = extraSpace;
+                ut->flags |= UTEXT_EXTRA_HEAP_ALLOCATED;
             }
         }
     }
