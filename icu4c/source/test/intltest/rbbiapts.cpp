@@ -21,6 +21,7 @@
 #include "rbbidata.h"
 #include "cstring.h"
 #include "unicode/ustring.h"
+#include "unicode/utext.h"
 
 /**
  * API Test the RuleBasedBreakIterator class
@@ -291,6 +292,58 @@ void RBBIAPITest::TestGetSetAdoptText()
     if(rb->following(11) != BreakIterator::DONE) {
         errln((UnicodeString)"ERROR:4 error in adoptText ");
     }
+
+    // UText API
+    //
+    //   Quick test to see if UText is working at all.
+    //
+    const char *s1 = "hello world";
+    const char *s2 = "see ya";
+    //                012345678901
+
+    status = U_ZERO_ERROR;
+    UText *ut = utext_openUTF8(NULL, s1, -1, &status);
+    wordIter1->setText(ut, status);
+    TEST_ASSERT_SUCCESS(status);
+
+    int32_t pos;
+    pos = wordIter1->first();
+    TEST_ASSERT(pos==0);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==5);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==6);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==11);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==UBRK_DONE);
+
+    status = U_ZERO_ERROR;
+    UText *ut2 = utext_openUTF8(NULL, s2, -1, &status);
+    TEST_ASSERT_SUCCESS(status);
+    wordIter1->setText(ut2, status);
+    TEST_ASSERT_SUCCESS(status);
+
+    pos = wordIter1->first();
+    TEST_ASSERT(pos==0);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==3);
+    pos = wordIter1->next();
+    TEST_ASSERT(pos==4);
+
+    pos = wordIter1->last();
+    TEST_ASSERT(pos==6);
+    pos = wordIter1->previous();
+    TEST_ASSERT(pos==4);
+    pos = wordIter1->previous();
+    TEST_ASSERT(pos==3);
+    pos = wordIter1->previous();
+    TEST_ASSERT(pos==0);
+    pos = wordIter1->previous();
+    TEST_ASSERT(pos==UBRK_DONE);
+
+    utext_close(ut);
+    utext_close(ut2);
 
     delete wordIter1;
     delete charIter1;
