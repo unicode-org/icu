@@ -1410,7 +1410,7 @@ MessageFormat::copyAndFixQuotes(const UnicodeString& source,
 NumberFormat* 
 MessageFormat::createIntegerFormat(const Locale& locale, UErrorCode& status) const {
     NumberFormat *temp = NumberFormat::createInstance(locale, status);
-    if (temp->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    if (temp != NULL && temp->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
         DecimalFormat *temp2 = (DecimalFormat*) temp;
         temp2->setMaximumFractionDigits(0);
         temp2->setDecimalSeparatorAlwaysShown(FALSE);

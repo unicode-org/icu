@@ -32,7 +32,7 @@
 #include "cintltst.h"
 #include "cbiapts.h"
 
-#define TEST_ASSET_SUCCESS(status) {if (U_FAILURE(status)) { \
+#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
 log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
@@ -604,7 +604,7 @@ static void TestBreakIteratorStatusVec() {
 
 
     bi = ubrk_openRules(rules, -1, testString, -1, NULL, &status);
-    TEST_ASSET_SUCCESS(status);
+    TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(bi != NULL);
 
     /* The TEST_ASSERT above should change too... */
@@ -614,7 +614,7 @@ static void TestBreakIteratorStatusVec() {
 
         memset(vals, -1, sizeof(vals));
         numVals = ubrk_getRuleStatusVec(bi, vals, 10, &status);
-        TEST_ASSET_SUCCESS(status);
+        TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(numVals == 2);
         TEST_ASSERT(vals[0] == 100);
         TEST_ASSERT(vals[1] == 300);
@@ -644,13 +644,19 @@ static void TestBreakIteratorUText(void) {
 
 
     UText *ut = utext_openUTF8(NULL, UTF8Str, -1, &status);
-    TEST_ASSET_SUCCESS(status);
+    TEST_ASSERT_SUCCESS(status);
 
     bi = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
-    TEST_ASSET_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
 
     ubrk_setUText(bi, ut, &status);
-    TEST_ASSET_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
 
     pos = ubrk_first(bi);
     TEST_ASSERT(pos == 0);

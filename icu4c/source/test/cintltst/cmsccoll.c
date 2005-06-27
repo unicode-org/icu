@@ -4643,6 +4643,7 @@ TestThaiSortKey(void)
   UCollator *coll = ucol_open("th", &status);
   if(U_FAILURE(status)) {
     log_err("Could not open a collator, exiting (%s)\n", u_errorName(status));
+    return;
   }
 
   keyLen = ucol_getSortKey(coll, &yamakan, 1, key, 256);
