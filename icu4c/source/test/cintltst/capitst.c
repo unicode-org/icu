@@ -1960,6 +1960,7 @@ TestGetContractionsAndUnsafes(void)
 
 
     uset_close(conts);
+    uset_close(exp);
     uset_close(set);
 }
 
