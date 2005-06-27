@@ -521,6 +521,12 @@ u_fgets(UChar        *s,
                 if (CAN_HAVE_COMBINED_STRING_DELIMITER(*alias)) {
                     currDelim = *alias;
                 }
+                else {
+                    currDelim = 1;  /* This isn't a newline, but it's used to say
+                                    that we should break later. We've checked all
+                                    possible newline combinations even across buffer
+                                    boundaries. */
+                }
                 count++;
                 *(sItr++) = *(alias++);
             }
