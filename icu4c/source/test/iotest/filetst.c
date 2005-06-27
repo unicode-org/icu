@@ -703,6 +703,74 @@ static void TestfgetsNewLineHandling(void) {
     u_fclose(myFile);
 }
 
+static void TestLineCount(const char *prefixLine, const char *line, int32_t numRepititions) {
+    UChar buffer[64];
+    UChar expectedBuffer[64];
+    int32_t lineLen = strlen(line);
+    UChar *returnedUCharBuffer;
+    int32_t repetitions;
+    UFILE *myFile = NULL;
+    FILE *stdFile = fopen(STANDARD_TEST_FILE, "wb");
+
+    if (stdFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
+    /* Write a prefix line and then write a bunch of lines */
+    fwrite(prefixLine, strlen(prefixLine), 1, stdFile);
+    for (repetitions = 0; repetitions < numRepititions; repetitions++) {
+        fwrite(line, lineLen, 1, stdFile);
+    }
+    fclose(stdFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "rb", NULL, NULL);
+    if (myFile == NULL) {
+        log_err("Can't read test file.\n");
+        return;
+    }
+
+    /* Read the prefix line. This can make sure that a Windows newline is either on a boundary or before it. */
+    u_uastrncpy(expectedBuffer, prefixLine, (int32_t)strlen(prefixLine)+1);
+    returnedUCharBuffer = u_fgets(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
+    if (u_strcmp(returnedUCharBuffer, expectedBuffer) != 0) {
+        log_err("prefix buffer is different. prefix=\"%s\"\n", prefixLine);
+        return;
+    }
+
+    u_uastrncpy(expectedBuffer, line, (int32_t)strlen(line)+1);
+    for (repetitions = 0; ; repetitions++) {
+        UChar *returnedUCharBuffer;
+
+        u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
+        returnedUCharBuffer = u_fgets(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
+
+        if (!returnedUCharBuffer) {
+            /* returned NULL. stop. */
+            break;
+        }
+        if (u_strcmp(buffer, expectedBuffer) != 0) {
+            log_err("buffers are different at count %d\n", repetitions);
+        }
+        if (buffer[u_strlen(buffer)+1] != 0xBEEF) {
+            log_err("u_fgets wrote too much\n");
+        }
+    }
+    if (repetitions != numRepititions) {
+        log_err("got wrong number of lines. got=%d expected=%d\n", repetitions, numRepititions);
+    }
+    u_fclose(myFile);
+}
+
+static void TestfgetsNewLineCount(void) {
+    /* This makes sure that lines are correctly handled between buffer boundaries. */
+    TestLineCount("\n", "\n", 1024);    /* Unix newlines */
+    TestLineCount("\r\n", "\r\n", 1024);/* Windows newlines */
+    TestLineCount("a\r\n", "\r\n", 1024);/* Windows newlines offset by 1 byte */
+    TestLineCount("\r\n", "a\r\n", 1024);/* Windows newlines offset with data */
+    TestLineCount("\n", "a\n", 1024);    /* Unix newlines offset with data */
+    TestLineCount("\n", "\r\n", 1024);  /* a mixed number of lines. */
+}
+
 
 static void TestCodepage(void) {
     UFILE *myFile = NULL;
@@ -1292,6 +1360,7 @@ addFileTest(TestNode** root) {
     addTest(root, &TestFileReadBuffering, "file/TestFileReadBuffering");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
+    addTest(root, &TestfgetsNewLineCount, "file/TestfgetsNewLineCount");
     addTest(root, &TestCodepage, "file/TestCodepage");
 #if !UCONFIG_NO_FORMATTING
     addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
