@@ -503,11 +503,11 @@ u_fgets(UChar        *s,
         alias = str->fPos;
 
         /* Find how much to copy */
-        if (dataSize < n) {
+        if (dataSize < (n - count)) {
             limit = str->fLimit;
         }
         else {
-            limit = alias + n;
+            limit = alias + (n - count);
         }
 
         if (!currDelim) {
