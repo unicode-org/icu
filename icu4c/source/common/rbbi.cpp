@@ -1398,12 +1398,12 @@ private:
     virtual UChar32       first32(void)                          {U_ASSERT(FALSE); return 0;};
     virtual UChar         last(void)                             {U_ASSERT(FALSE); return 0;};
     virtual UChar32       last32(void)                           {U_ASSERT(FALSE); return 0;};
-    virtual UChar32       setIndex32(int32_t position)           {U_ASSERT(FALSE); return 0;};
+    virtual UChar32       setIndex32(int32_t)                    {U_ASSERT(FALSE); return 0;};
     virtual UChar         current(void) const                    {U_ASSERT(FALSE); return 0;};
     virtual UChar         next(void)                             {U_ASSERT(FALSE); return 0;};
     virtual UChar         previous(void)                         {U_ASSERT(FALSE); return 0;};
-    virtual int32_t       move32(int32_t delta, EOrigin origin)  {U_ASSERT(FALSE); return 0;};
-    virtual void          getText(UnicodeString&  result)        {U_ASSERT(FALSE);};
+    virtual int32_t       move32(int32_t, EOrigin)               {U_ASSERT(FALSE); return 0;};
+    virtual void          getText(UnicodeString        &)        {U_ASSERT(FALSE);};
 };
 
 
@@ -1581,7 +1581,7 @@ UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const
         fText->getDynamicClassID() == CharacterIteratorUT::getStaticClassID()) 
     {
         CharacterIteratorUT *utcr = (CharacterIteratorUT *)fText;
-        result = utext_clone(result, utcr->fUText, FALSE, &status);
+        result = utext_clone(fillIn, utcr->fUText, FALSE, &status);
     }
     return result;
 }
