@@ -739,8 +739,6 @@ static void TestLineCount(const char *prefixLine, const char *line, int32_t numR
 
     u_uastrncpy(expectedBuffer, line, (int32_t)strlen(line)+1);
     for (repetitions = 0; ; repetitions++) {
-        UChar *returnedUCharBuffer;
-
         u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
         returnedUCharBuffer = u_fgets(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
 
@@ -769,6 +767,45 @@ static void TestfgetsNewLineCount(void) {
     TestLineCount("\r\n", "a\r\n", 1024);/* Windows newlines offset with data */
     TestLineCount("\n", "a\n", 1024);    /* Unix newlines offset with data */
     TestLineCount("\n", "\r\n", 1024);  /* a mixed number of lines. */
+}
+
+static void TestFgetsLineBuffering(void) {
+    UChar buffer[2003]; /* Use a non-power of 2 or 10 */
+    UChar *returnedUCharBuffer;
+    int32_t repetitions;
+    UFILE *myFile = NULL;
+    FILE *stdFile = fopen(STANDARD_TEST_FILE, "wb");
+
+    if (stdFile == NULL) {
+        log_err("Can't write test file.\n");
+        return;
+    }
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
+
+    /* Write one very long line */
+    for (repetitions = 0; repetitions < ((sizeof(buffer)/sizeof(buffer[0]))*2); repetitions++) {
+        fwrite(repetitions ? "1" : "2", 1, 1, stdFile);
+    }
+    fclose(stdFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "rb", NULL, NULL);
+    if (myFile == NULL) {
+        log_err("Can't read test file.\n");
+        return;
+    }
+
+    /* Read part of one very long line */
+    returnedUCharBuffer = u_fgets(buffer, (sizeof(buffer)/sizeof(buffer[0]))-1, myFile);
+    if (u_strlen(returnedUCharBuffer) != ((sizeof(buffer)/sizeof(buffer[0]))-2)) {
+        log_err("Line is wrong length. Got %d. Expected %d.\n",
+            u_strlen(returnedUCharBuffer), ((sizeof(buffer)/sizeof(buffer[0]))-2));
+    }
+    /* We better not read too much */
+    if (buffer[(sizeof(buffer)/sizeof(buffer[0]))-1] != 0xBEEF) {
+        log_err("Too much data was written\n");
+    }
+
+    u_fclose(myFile);
 }
 
 
@@ -1361,6 +1398,7 @@ addFileTest(TestNode** root) {
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
     addTest(root, &TestfgetsNewLineCount, "file/TestfgetsNewLineCount");
+    addTest(root, &TestFgetsLineBuffering, "file/TestFgetsLineBuffering");
     addTest(root, &TestCodepage, "file/TestCodepage");
 #if !UCONFIG_NO_FORMATTING
     addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
