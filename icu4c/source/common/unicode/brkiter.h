@@ -271,7 +271,7 @@ public:
       *
       * @param fillIn A UText to be filled in.  If NULL, a new UText will be
       *           allocated to hold the result.
-      * @status   receives any error codes.
+      * @param status receives any error codes.
       * @return   The current UText for this break iterator.  If an input
       *           UText was provided, it will always be returned.
       * @draft ICU 3.4
@@ -296,7 +296,7 @@ public:
      * must not be altered while being referenced by the break iterator.
      *
      * @param text The UText used to change the text.
-     * @status   receives any error codes.
+     * @param status receives any error codes.
      * @draft ICU 3.4
      */
     virtual void  setText(UText *text, UErrorCode &status) = 0;
