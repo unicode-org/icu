@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -28,6 +28,7 @@
 #include "unicode/ubrk.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
+#include "unicode/utext.h"
 #include "cintltst.h"
 #include "cbiapts.h"
 
@@ -41,6 +42,7 @@ static void TestBreakIteratorSafeClone(void);
 static void TestBreakIteratorRules(void);
 static void TestBreakIteratorRuleError(void);
 static void TestBreakIteratorStatusVec(void);
+static void TestBreakIteratorUText(void);
 
 void addBrkIterAPITest(TestNode** root);
 
@@ -51,6 +53,7 @@ void addBrkIterAPITest(TestNode** root)
     addTest(root, &TestBreakIteratorRules, "tstxtbd/cbiapts/TestBreakIteratorRules");
     addTest(root, &TestBreakIteratorRuleError, "tstxtbd/cbiapts/TestBreakIteratorRuleError");
     addTest(root, &TestBreakIteratorStatusVec, "tstxtbd/cbiapts/TestBreakIteratorStatusVec");
+    addTest(root, &TestBreakIteratorUText, "tstxtbd/cbiapts/TestBreakIteratorUText");
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
@@ -624,6 +627,49 @@ static void TestBreakIteratorStatusVec() {
 
     ubrk_close(bi);
 }
+
+
+/*
+ *  static void TestBreakIteratorUText(void);
+ *
+ *         Test that ubrk_setUText() is present and works for a simple case.
+ */
+static void TestBreakIteratorUText(void) {
+    const char *UTF8Str = "A\xc3\x85Z ARing";  /* c3 85 is utf-8 for A with a ring on top */
+                      /*   0  1   2 34567890  */
+
+    UErrorCode      status = U_ZERO_ERROR;
+    UBreakIterator *bi     = NULL;
+    int32_t         pos    = 0;
+
+
+    UText *ut = utext_openUTF8(NULL, UTF8Str, -1, &status);
+    TEST_ASSET_SUCCESS(status);
+
+    bi = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
+    TEST_ASSET_SUCCESS(status);
+
+    ubrk_setUText(bi, ut, &status);
+    TEST_ASSET_SUCCESS(status);
+
+    pos = ubrk_first(bi);
+    TEST_ASSERT(pos == 0);
+
+    pos = ubrk_next(bi);
+    TEST_ASSERT(pos == 4);
+
+    pos = ubrk_next(bi);
+    TEST_ASSERT(pos == 5);
+
+    pos = ubrk_next(bi);
+    TEST_ASSERT(pos == 10);
+
+    pos = ubrk_next(bi);
+    TEST_ASSERT(pos == UBRK_DONE);
+    ubrk_close(bi);
+    utext_close(bi);
+}
+
 
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
