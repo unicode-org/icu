@@ -185,7 +185,7 @@
  */
 
 /** The possible types of text boundaries.  @stable ICU 2.0 */
-typedef enum  {
+typedef enum UBreakIteratorType {
   /** Character breaks  @stable ICU 2.0 */
   UBRK_CHARACTER,
   /** Word breaks @stable ICU 2.0 */
@@ -223,7 +223,7 @@ typedef enum  {
  *  than for single individual values.
  *  @stable ICU 2.2
 */
-typedef enum  {
+typedef enum UWordBreak {
     /** Tag value for "words" that do not fit into any of other categories. 
      *  Includes spaces and most punctuation. */
     UBRK_WORD_NONE           = 0,
@@ -256,7 +256,7 @@ typedef enum  {
  *  than for single individual values.
  *  @stable ICU 2.8
 */
-typedef enum  {
+typedef enum ULineBreakTag {
     /** Tag value for soft line breaks, positions at which a line break
       *  is acceptable but not required                */
     UBRK_LINE_SOFT            = 0,
@@ -278,7 +278,7 @@ typedef enum  {
  *  than for single individual values.
  *  @stable ICU 2.8
 */
-typedef enum  {
+typedef enum USentenceBreakTag {
     /** Tag value for for sentences  ending with a sentence terminator
       * ('.', '?', '!', etc.) character, possibly followed by a
       * hard separator (CR, LF, PS, etc.)

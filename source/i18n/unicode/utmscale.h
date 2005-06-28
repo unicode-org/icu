@@ -192,7 +192,7 @@
  *
  * @draft ICU 3.2
  */
-typedef enum  {
+typedef enum UDateTimeScale {
     /**
      * Used in the JDK. Data is a Java <code>long</code> (<code>int64_t</code>). Value
      * is milliseconds since January 1, 1970.
@@ -281,7 +281,7 @@ typedef enum  {
  *
  * @draft ICU 3.2
  */
-typedef enum  {
+typedef enum UTimeScaleValue {
     /**
      * The constant used to select the units vale
      * for a time scale.

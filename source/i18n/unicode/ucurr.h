@@ -61,7 +61,7 @@ ucurr_forLocale(const char* locale,
  * @see ucurr_getName
  * @stable ICU 2.6
  */
-typedef enum {
+typedef enum UCurrNameStyle {
     /**
      * Selector for ucurr_getName indicating a symbolic name for a
      * currency, such as "$" for USD.
@@ -170,7 +170,7 @@ ucurr_getRoundingIncrement(const UChar* currency,
  * @see ucurr_openCurrencies
  * @draft ICU 3.2
  */
-typedef enum {
+typedef enum UCurrCurrencyType {
     /**
      * Select all ISO-4217 currency codes.
      * @draft ICU 3.2

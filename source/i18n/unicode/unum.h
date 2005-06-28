@@ -130,7 +130,7 @@ typedef void* UNumberFormat;
 /** The possible number format styles. 
  *  @stable ICU 2.0
  */
-typedef enum  {
+typedef enum UNumberFormatStyle {
     /**
      * Decimal format defined by pattern 
      * @draft ICU 3.0
@@ -170,7 +170,7 @@ typedef enum  {
 /** The possible number format rounding modes. 
  *  @stable ICU 2.0
  */
-typedef enum  {
+typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_CEILING,
     UNUM_ROUND_FLOOR,
     UNUM_ROUND_DOWN,
@@ -183,7 +183,7 @@ typedef enum  {
 /** The possible number format pad positions. 
  *  @stable ICU 2.0
  */
-typedef enum {
+typedef enum UNumberFormatPadPosition {
     UNUM_PAD_BEFORE_PREFIX,
     UNUM_PAD_AFTER_PREFIX,
     UNUM_PAD_BEFORE_SUFFIX,
@@ -518,7 +518,7 @@ U_CAPI int32_t U_EXPORT2
 unum_countAvailable(void);
 
 /** The possible UNumberFormat numeric attributes @stable ICU 2.0 */
-typedef enum {
+typedef enum UNumberFormatAttribute {
   /** Parse integers only */
   UNUM_PARSE_INT_ONLY,
   /** Use grouping separator */
@@ -649,7 +649,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             double                 newValue);
 
 /** The possible UNumberFormat text attributes @stable ICU 2.0*/
-typedef enum {
+typedef enum UNumberFormatTextAttribute {
   /** Positive prefix */
   UNUM_POSITIVE_PREFIX,
   /** Positive suffix */
@@ -754,7 +754,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
  * Constants for specifying a number format symbol.
  * @stable ICU 2.0
  */
-typedef enum {
+typedef enum UNumberFormatSymbol {
   /** The decimal separator */
   UNUM_DECIMAL_SEPARATOR_SYMBOL,
   /** The grouping separator */

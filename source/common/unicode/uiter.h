@@ -46,7 +46,7 @@ typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharItera
  * @see UCharIterator
  * @stable ICU 2.1
  */
-typedef enum  {
+typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
 } UCharIteratorOrigin;
 

@@ -207,7 +207,7 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
  * For details see Unicode Technical Report 15.
  * @stable ICU 2.0
  */
-typedef enum  {
+typedef enum UNormalizationCheckResult {
   /** 
    * Indicates that string is not in the normalized format
    */
