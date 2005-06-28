@@ -46,7 +46,7 @@ typedef struct URegularExpression URegularExpression;
  * Constants for Regular Expression Match Modes.
  * @stable ICU 2.4
  */
-typedef enum URegexpFlag{
+typedef enum {
     /** Forces normalization of pattern and strings. 
     Not implemented yet, just a placeholder, hence draft. 
     @draft ICU 2.4 */

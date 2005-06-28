@@ -546,7 +546,7 @@ operator delete[](void * /*p*/) {
  * Error codes should be tested using U_FAILURE() and U_SUCCESS().
  * @stable ICU 2.0
  */
-typedef enum UErrorCode {
+typedef enum {
     /* The ordering of U_ERROR_INFO_START Vs U_USING_FALLBACK_WARNING looks weird
      * and is that way because VC++ debugger displays first encountered constant,
      * which is not the what the code is used for
