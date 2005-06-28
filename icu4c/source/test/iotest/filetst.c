@@ -1387,6 +1387,38 @@ static void TestVargs(void) {
 }
 #endif
 
+static void TestUnicodeFormat(void)
+{
+	/* Make sure that invariant conversion doesn't happen on the _u formats. */
+    UChar myUString[256];
+	UFILE *myFile;
+	static const UChar TEST_STR[] = { 0x03BC, 0x0025, 0x0024, 0};
+	static const UChar EXPECTED_STR[] = { 0x03BC, 0x03BC, 0x0025, 0x0024, 0};
+	static const UChar PERCENT_S[] = { 0x03BC, 0x0025, 0x0053, 0};
+
+	u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+	u_fprintf_u(myFile, PERCENT_S, TEST_STR);
+	u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+	u_fscanf_u(myFile, PERCENT_S, myUString);
+	u_fclose(myFile);
+	if (u_strcmp(TEST_STR, myUString) != 0) {
+        log_err("u_fscanf_u doesn't work.\n");
+	}
+}
+
+
 U_CFUNC void
 addFileTest(TestNode** root) {
 #if !UCONFIG_NO_FORMATTING
@@ -1408,4 +1440,5 @@ addFileTest(TestNode** root) {
     addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
     addTest(root, &TestVargs, "file/TestVargs");
 #endif
+    addTest(root, &TestUnicodeFormat, "file/TestUnicodeFormat");
 }
