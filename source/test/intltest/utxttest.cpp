@@ -37,6 +37,8 @@ UTextTest::UTextTest() {
 UTextTest::~UTextTest() {
 }
 
+
+
 void
 UTextTest::runIndexedTest(int32_t index, UBool exec,
                                       const char* &name, char* /*par*/) {
@@ -47,8 +49,79 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
+//
+// Quick and dirty random number generator.
+//   (don't use library so that results are portable.
+static uint32_t m_seed = 1;
+static uint32_t m_rand()
+{
+    m_seed = m_seed * 1103515245 + 12345;
+    return (uint32_t)(m_seed/65536) % 32768;
+}
+
+
 void  UTextTest::TextTest() {
+    int32_t i, j;
+
     TestString("abcd\\U00010001xyz");
+
+    // Test simple strings of lengths 1 to 60, looking for glitches at buffer boundaries
+    UnicodeString s;
+    for (i=1; i<60; i++) {
+        s.truncate(0);
+        for (j=0; j<i; j++) {
+            if (j+0x30 == 0x5c) {
+                // backslash.  Needs to be escaped
+                s.append((UChar)0x5c);
+            }
+            s.append(UChar(j+0x30));
+        }
+        TestString(s);
+    }
+
+   // Test strings with odd-aligned supplementary chars,
+   //    looking for glitches at buffer boundaries
+    for (i=1; i<60; i++) {
+        s.truncate(0);
+        s.append((UChar)0x41);
+        for (j=0; j<i; j++) {
+            s.append(UChar32(j+0x11000));
+        }
+        TestString(s);
+    }
+
+    // String of chars of randomly varying size in utf-8 representation.
+    //   Exercise the mapping, and the varying sized buffer.
+    //
+    s.truncate(0);
+    UChar32  c1 = 0;
+    UChar32  c2 = 0x100;
+    UChar32  c3 = 0xa000;
+    UChar32  c4 = 0x11000;
+    for (i=0; i<1000; i++) {
+        int len8 = m_rand()%4 + 1;
+        switch (len8) {
+            case 1: 
+                c1 = (c1+1)%0x80;
+                // don't put 0 into string (0 terminated strings for some tests)
+                // don't put '\', will cause unescape() to fail.
+                if (c1==0x5c || c1==0) {
+                    c1++;
+                }
+                s.append(c1);
+                break;
+            case 2:
+                s.append(c2++);
+                break;
+            case 3:
+                s.append(c3++);
+                break;
+            case 4:
+                s.append(c4++);
+                break;
+        }
+    }
+    TestString(s);
 }
 
 //
@@ -60,13 +133,16 @@ void  UTextTest::TextTest() {
 
 
 void UTextTest::TestString(const UnicodeString &s) {
-    int32_t         i;
-    int32_t         j;
-    UChar32     c;
-    int32_t         cpCount = 0;
-    UErrorCode  status = U_ZERO_ERROR;
+    int32_t       i;
+    int32_t       j;
+    UChar32       c;
+    int32_t       cpCount = 0;
+    UErrorCode    status  = U_ZERO_ERROR;
+    UText        *ut      = NULL;
+    int32_t       saLen;
 
     UnicodeString sa = s.unescape();
+    saLen = sa.length();
 
     //
     // Build up the mapping between code points and UTF-16 code unit indexes.
@@ -84,20 +160,51 @@ void UTextTest::TestString(const UnicodeString &s) {
 
 
     // UChar * test, null term
+    status = U_ZERO_ERROR;
+    UChar *buf = new UChar[saLen+1];
+    sa.extract(buf, saLen+1, status);
+    TEST_SUCCESS(status);
+    ut = utext_openUChars(NULL, buf, -1, &status);
+    TEST_SUCCESS(status);
+    TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
+    delete [] buf;
 
     // UChar * test, with length
+    status = U_ZERO_ERROR;
+    buf = new UChar[saLen+1];
+    sa.extract(buf, saLen+1, status);
+    TEST_SUCCESS(status);
+    ut = utext_openUChars(NULL, buf, saLen, &status);
+    TEST_SUCCESS(status);
+    TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
+    delete [] buf;
 
-    // const UChar * test, null term
-
-
-    // const UChar * test, length
 
     // UnicodeString test
-    UText *ut;
+    status = U_ZERO_ERROR;
     ut = utext_openUnicodeString(NULL, &sa, &status);
     TEST_SUCCESS(status);
     TestAccess(sa, ut, cpCount, cpMap);
     utext_close(ut);
+
+
+    // Const UnicodeString test
+    status = U_ZERO_ERROR;
+    ut = utext_openConstUnicodeString(NULL, &sa, &status);
+    TEST_SUCCESS(status);
+    TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
+
+
+    // Replaceable test.  (UnicodeString inherits Replaceable)
+    status = U_ZERO_ERROR;
+    ut = utext_openReplaceable(NULL, &sa, &status);
+    TEST_SUCCESS(status);
+    // TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
+
 
     //
     // UTF-8 test
@@ -125,11 +232,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     TestAccess(sa, ut, cpCount, u8Map);
     utext_close(ut);
 
-    // UTF-32 test
 
-    // Code Page test
-
-    // Replaceable test
 
 	delete []cpMap;
 	delete []u8Map;
