@@ -433,6 +433,12 @@ static void TestfgetsBuffers(void) {
     }
 
     u_fputc(0x3BC, myFile);
+	if (u_fputc(0x110000, myFile) != U_EOF) {
+        log_err("u_fputc should return U_EOF for 0x110000.\n");
+	}
+	if (u_fputc((UChar32)0xFFFFFFFFu, myFile) != U_EOF) {
+        log_err("u_fputc should return U_EOF for 0xFFFFFFFF.\n");
+	}
     u_fputc(0xFF41, myFile);
     u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
