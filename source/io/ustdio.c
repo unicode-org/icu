@@ -283,9 +283,9 @@ u_fputc(UChar32      uc,
 
     U16_APPEND(buf, idx, sizeof(buf)/sizeof(*buf), uc, isError);
     if (isError) {
-        return EOF;
+        return U_EOF;
     }
-    return u_file_write(buf, idx, f) == idx ? uc : EOF;
+    return u_file_write(buf, idx, f) == idx ? uc : U_EOF;
 }
 
 
