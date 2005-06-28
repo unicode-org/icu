@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -34,7 +34,7 @@
  * It does not turn off legacy conversion because that is necessary
  * for ICU to work on EBCDIC platforms (for the default converter).
  * If you want "only collation" and do not build for EBCDIC,
- * then you can #define UCONFIG_NO_LEGACY_CONVERSION 1 as well.
+ * then you can define UCONFIG_NO_LEGACY_CONVERSION 1 as well.
  *
  * @stable ICU 2.4
  */
