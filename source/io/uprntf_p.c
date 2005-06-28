@@ -1311,14 +1311,12 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                 /* read the width from the argument list */
                 info->fWidth = va_arg(ap, int32_t);
             }
-            else {
-                /* handle positional parameter */
-            }
+            /* else handle positional parameter */
 
             /* if it's negative, take the absolute value and set left alignment */
             if(info->fWidth < 0) {
-                info->fWidth     *= -1;
-                info->fLeft     = TRUE;
+                info->fWidth *= -1; /* Make positive */
+                info->fLeft = TRUE;
             }
         }
 
@@ -1328,9 +1326,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                 /* read the precision from the argument list */
                 info->fPrecision = va_arg(ap, int32_t);
             }
-            else {
-                /* handle positional parameter */
-            }
+            /* else handle positional parameter */
 
             /* if it's negative, set it to zero */
             if(info->fPrecision < 0)
