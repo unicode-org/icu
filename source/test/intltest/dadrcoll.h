@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -51,6 +51,7 @@ private:
   TestDataModule *driver;
   UErrorCode status;
   UVector sequences;
+  RuleBasedCollator *UCA; // needed for opening collators from binary images
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
