@@ -231,7 +231,7 @@ CNV_FILES_SHORT = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 -include $(LOCSRCDIR)/reslocal.mk
 -include $(COLSRCDIR)/collocal.mk
 -include $(RBNFSRCDIR)/rbnflocal.mk
--include $(TRANSLITSRCDIR)/translocal.mk
+-include $(TRANSLITSRCDIR)/trnslocal.mk
 ifdef GENRB_SOURCE
 RES_SRC= root.txt $(GENRB_SOURCE) $(GENRB_ALIAS_SOURCE) $(GENRB_SOURCE_LOCAL)
 RES_SRC_FILES = $(RES_SRC:%=$(LOCSRCDIR)/%)
