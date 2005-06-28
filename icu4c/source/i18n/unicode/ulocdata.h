@@ -45,20 +45,20 @@ typedef struct ULocaleData {
 /** The possible types of exemplar character sets.
   * @draft ICU 3.4
   */
-typedef enum  {
-     ULOCDATA_ES_STANDARD,      /** Basic set */
-     ULOCDATA_ES_AUXILIARY,     /** Auxiliary set */
-     ULOCDATA_ES_COUNT          
+typedef enum ULocaleDataExemplarSetType {
+     ULOCDATA_ES_STANDARD,      /* Basic set */
+     ULOCDATA_ES_AUXILIARY,     /* Auxiliary set */
+     ULOCDATA_ES_COUNT
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
   * @draft ICU 3.4
   */
-typedef enum {
-     ULOCDATA_QUOTATION_START,     /** Quotation start */
-     ULOCDATA_QUOTATION_END,       /** Quotation end */
-     ULOCDATA_ALT_QUOTATION_START, /** Alternate quotation start */
-     ULOCDATA_ALT_QUOTATION_END,   /** Alternate quotation end */
+typedef enum ULocaleDataDelimiterType {
+     ULOCDATA_QUOTATION_START,     /* Quotation start */
+     ULOCDATA_QUOTATION_END,       /* Quotation end */
+     ULOCDATA_ALT_QUOTATION_START, /* Alternate quotation start */
+     ULOCDATA_ALT_QUOTATION_END,   /* Alternate quotation end */
      ULOCDATA_DELIMITER_COUNT
 } ULocaleDataDelimiterType;
 
@@ -160,7 +160,7 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, UChar *re
  * Enumeration for representing the measurement systems.
  * @draft ICU 2.8
  */
-typedef enum {
+typedef enum UMeasurementSystem {
     UMS_SI,     /** Measurement system specified by SI otherwise known as Metric system. */
     UMS_US,     /** Measurement system followed in the United States of America. */ 
     UMS_LIMIT

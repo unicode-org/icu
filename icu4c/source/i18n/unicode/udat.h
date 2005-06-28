@@ -139,7 +139,7 @@ typedef void* UDateFormat;
 /** The possible date/time format styles 
  *  @stable ICU 2.6
  */
-typedef enum {
+typedef enum UDateFormatStyle {
     /** Full style */
     UDAT_FULL,
     /** Long style */
@@ -162,7 +162,7 @@ typedef enum {
  * defined by DateFormat and UDateFormat.
  * @draft ICU 3.0
  */
-typedef enum {
+typedef enum UDateFormatField {
     /**
      * FieldPosition and UFieldPosition selector for 'G' field alignment,
      * corresponding to the UCAL_ERA field.
@@ -659,7 +659,7 @@ udat_applyPattern(            UDateFormat     *format,
  * The possible types of date format symbols 
  * @stable ICU 2.6
  */
-typedef enum {
+typedef enum UDateFormatSymbolType {
     /** The era names, for example AD */
     UDAT_ERAS,
     /** The month names, for example February */

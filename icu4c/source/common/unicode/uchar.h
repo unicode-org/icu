@@ -171,7 +171,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.1
  */
-typedef enum  {
+typedef enum UProperty {
     /*  See note !!.  Comments of the form "Binary property Dash",
         "Enumerated property Script", "Double property Numeric_Value",
         and "String property Age" are read by genpname. */
@@ -575,7 +575,8 @@ typedef enum  {
  * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
  * @stable ICU 2.0
  */
-typedef enum {
+typedef enum UCharCategory
+{
     /** See note !!.  Comments of the form "Cn" are read by genpname. */
 
     /** Non-category for unassigned and non-character code points. @stable ICU 2.0 */
@@ -760,7 +761,7 @@ typedef enum {
  * This specifies the language directional property of a character set.
  * @stable ICU 2.0
  */
-typedef enum  {
+typedef enum UCharDirection {
     /** See note !!.  Comments of the form "EN" are read by genpname. */
 
     /** L @stable ICU 2.0 */
@@ -1249,7 +1250,7 @@ typedef enum UBlockCode UBlockCode;
  * @see u_getIntPropertyValue
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum UEastAsianWidth {
     U_EA_NEUTRAL,   /*[N]*/ /*See note !!*/
     U_EA_AMBIGUOUS, /*[A]*/
     U_EA_HALFWIDTH, /*[H]*/
@@ -1274,7 +1275,7 @@ typedef enum  {
  * @see u_charName
  * @stable ICU 2.0
  */
-typedef enum  {
+typedef enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
     U_EXTENDED_CHAR_NAME,
@@ -1294,7 +1295,7 @@ typedef enum  {
  * @see u_getPropertyValueName()
  * @stable ICU 2.4
  */
-typedef enum {
+typedef enum UPropertyNameChoice {
     U_SHORT_PROPERTY_NAME,
     U_LONG_PROPERTY_NAME,
     U_PROPERTY_NAME_CHOICE_COUNT
@@ -1306,7 +1307,7 @@ typedef enum {
  * @see UCHAR_DECOMPOSITION_TYPE
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum UDecompositionType {
     U_DT_NONE,              /*[none]*/ /*See note !!*/
     U_DT_CANONICAL,         /*[can]*/
     U_DT_COMPAT,            /*[com]*/
@@ -1334,7 +1335,7 @@ typedef enum  {
  * @see UCHAR_JOINING_TYPE
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum UJoiningType {
     U_JT_NON_JOINING,       /*[U]*/ /*See note !!*/
     U_JT_JOIN_CAUSING,      /*[C]*/
     U_JT_DUAL_JOINING,      /*[D]*/
@@ -1350,7 +1351,7 @@ typedef enum  {
  * @see UCHAR_JOINING_GROUP
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum UJoiningGroup {
     U_JG_NO_JOINING_GROUP,
     U_JG_AIN,
     U_JG_ALAPH,
@@ -1414,7 +1415,7 @@ typedef enum  {
  * @see UCHAR_GRAPHEME_CLUSTER_BREAK
  * @draft ICU 3.4
  */
-typedef enum  {
+typedef enum UGraphemeClusterBreak {
     U_GCB_OTHER,            /*[XX]*/ /*See note !!*/
     U_GCB_CONTROL,          /*[CN]*/
     U_GCB_CR,               /*[CR]*/
@@ -1435,7 +1436,7 @@ typedef enum  {
  * @see UCHAR_WORD_BREAK
  * @draft ICU 3.4
  */
-typedef enum  {
+typedef enum UWordBreakValues {
     U_WB_OTHER,             /*[XX]*/ /*See note !!*/
     U_WB_ALETTER,           /*[LE]*/
     U_WB_FORMAT,            /*[FO]*/
@@ -1453,7 +1454,7 @@ typedef enum  {
  * @see UCHAR_SENTENCE_BREAK
  * @draft ICU 3.4
  */
-typedef enum  {
+typedef enum USentenceBreak {
     U_SB_OTHER,             /*[XX]*/ /*See note !!*/
     U_SB_ATERM,             /*[AT]*/
     U_SB_CLOSE,             /*[CL]*/
@@ -1474,7 +1475,7 @@ typedef enum  {
  * @see UCHAR_LINE_BREAK
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum ULineBreak {
     U_LB_UNKNOWN,           /*[XX]*/ /*See note !!*/
     U_LB_AMBIGUOUS,         /*[AI]*/
     U_LB_ALPHABETIC,        /*[AL]*/
@@ -1522,7 +1523,7 @@ typedef enum  {
  * @see UCHAR_NUMERIC_TYPE
  * @stable ICU 2.2
  */
-typedef enum  {
+typedef enum UNumericType {
     U_NT_NONE,              /*[None]*/ /*See note !!*/
     U_NT_DECIMAL,           /*[de]*/
     U_NT_DIGIT,             /*[di]*/
@@ -1536,7 +1537,7 @@ typedef enum  {
  * @see UCHAR_HANGUL_SYLLABLE_TYPE
  * @stable ICU 2.6
  */
-typedef enum  {
+typedef enum UHangulSyllableType {
     U_HST_NOT_APPLICABLE,   /*[NA]*/ /*See note !!*/
     U_HST_LEADING_JAMO,     /*[L]*/
     U_HST_VOWEL_JAMO,       /*[V]*/
