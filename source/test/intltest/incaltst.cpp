@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -9,6 +9,7 @@
 #include "unicode/utypes.h"
 #include "string.h"
 #include "unicode/locid.h"
+#include "japancal.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -426,7 +427,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     
     UDate aDate = 999932400000.0; 
     SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yy G"), Locale("en_US@calendar=japanese"), status);
-    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yy G"), Locale("en_US@calendar=gregorian"), status);
+    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
     CHECK(status, "creating date format instance");
     if(!fmt) { 
         errln("Coudln't create en_US instance");
@@ -482,6 +483,38 @@ void IntlCalendarTest::TestJapaneseFormat() {
                 otherDate + ", " + str3 + " = " + CalendarTest::calToStr(*cal2) );
         } else {
             logln("Parsed OK: " + expected);
+        }
+        delete fmt;
+    }
+    
+    // Test parse with missing era (should default to current era, heisei)
+    // Test parse with incomplete information
+    logln("Testing parse w/ missing era...");
+    fmt = new SimpleDateFormat(UnicodeString("y"), Locale("ja_JP@calendar=japanese"), status);
+    CHECK(status, "creating date format instance");
+    if(!fmt) { 
+        errln("Coudln't create en_US instance");
+    } else {
+        UErrorCode s2 = U_ZERO_ERROR;
+        cal2->clear();
+        UnicodeString str("1");
+        logln(UnicodeString() + "Test Year: " + str);
+        ParsePosition p=0;
+        aDate = fmt->parse(str, p);
+        str.remove();
+        fmt2->format(aDate, str);
+        logln(UnicodeString() + "as Gregorian Calendar: " + str);
+
+        cal2->setTime(aDate, s2);
+        int32_t gotYear = cal2->get(UCAL_YEAR, s2);
+        int32_t gotEra = cal2->get(UCAL_ERA, s2);
+        int32_t expectYear = 1;
+        int32_t expectEra = JapaneseCalendar::kCurrentEra;
+        if((gotYear!=1) || (gotEra != expectEra)) {
+            errln(UnicodeString("parse '1' of 'y' as Japanese Calendar, expected year ") + expectYear + 
+                UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
+        } else {            
+            logln(UnicodeString() + " year: " + gotYear + ", era: " + gotEra);
         }
         delete fmt;
     }
