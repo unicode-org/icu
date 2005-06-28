@@ -131,6 +131,7 @@ RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
                     UErrorCode &status) : dataIsOwned(TRUE)
 {
   ucollator = ucol_openBinary(bin, length, base->ucollator, &status);
+  urulestring = NULL;
 }
 
 void
