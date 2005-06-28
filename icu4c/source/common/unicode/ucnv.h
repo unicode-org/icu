@@ -810,7 +810,7 @@ ucnv_getStarters(const UConverter* converter,
  * @see ucnv_getUnicodeSet
  * @stable ICU 2.6
  */
-typedef enum  {
+typedef enum UConverterUnicodeSet {
     /** Select the set of roundtrippable Unicode code points. @stable ICU 2.6 */
     UCNV_ROUNDTRIP_SET,
     /** Number of UConverterUnicodeSet selectors. @stable ICU 2.6 */
