@@ -1377,6 +1377,22 @@ utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
 }
 
 
+
+U_DRAFT UText * U_EXPORT2
+utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *status) {
+    ut = utext_setup(ut, 0, status);
+    if (U_SUCCESS(*status)) {
+        ut->clone        = unistrTextClone;
+        ut->nativeLength = unistrTextLength;
+        ut->access       = unistrTextAccess;
+        ut->extract      = unistrTextExtract;
+
+        ut->context      = s;
+        ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS);
+    }
+    return ut;
+}
+
 //------------------------------------------------------------------------------
 //
 //     UText implementation for const UChar * strings 
@@ -1567,6 +1583,7 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status) 
         }
         ut->a                     = length;
         ut->chunk.contents        = s;
+        ut->chunk.length          = length;
         ut->chunk.nativeStart     = 0;
         ut->chunk.nativeLimit     = length>=0? length : 0;
         ut->chunk.nonUTF16Indexes = FALSE;
