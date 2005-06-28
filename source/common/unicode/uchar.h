@@ -171,7 +171,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.1
  */
-typedef enum UProperty {
+typedef enum  {
     /*  See note !!.  Comments of the form "Binary property Dash",
         "Enumerated property Script", "Double property Numeric_Value",
         and "String property Age" are read by genpname. */
@@ -575,8 +575,7 @@ typedef enum UProperty {
  * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
  * @stable ICU 2.0
  */
-typedef enum UCharCategory
-{
+typedef enum {
     /** See note !!.  Comments of the form "Cn" are read by genpname. */
 
     /** Non-category for unassigned and non-character code points. @stable ICU 2.0 */
@@ -761,7 +760,7 @@ typedef enum UCharCategory
  * This specifies the language directional property of a character set.
  * @stable ICU 2.0
  */
-typedef enum UCharDirection {
+typedef enum  {
     /** See note !!.  Comments of the form "EN" are read by genpname. */
 
     /** L @stable ICU 2.0 */
@@ -1250,7 +1249,7 @@ typedef enum UBlockCode UBlockCode;
  * @see u_getIntPropertyValue
  * @stable ICU 2.2
  */
-typedef enum UEastAsianWidth {
+typedef enum  {
     U_EA_NEUTRAL,   /*[N]*/ /*See note !!*/
     U_EA_AMBIGUOUS, /*[A]*/
     U_EA_HALFWIDTH, /*[H]*/
@@ -1275,7 +1274,7 @@ typedef enum UEastAsianWidth {
  * @see u_charName
  * @stable ICU 2.0
  */
-typedef enum UCharNameChoice {
+typedef enum  {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
     U_EXTENDED_CHAR_NAME,
@@ -1295,7 +1294,7 @@ typedef enum UCharNameChoice {
  * @see u_getPropertyValueName()
  * @stable ICU 2.4
  */
-typedef enum UPropertyNameChoice {
+typedef enum {
     U_SHORT_PROPERTY_NAME,
     U_LONG_PROPERTY_NAME,
     U_PROPERTY_NAME_CHOICE_COUNT
@@ -1307,7 +1306,7 @@ typedef enum UPropertyNameChoice {
  * @see UCHAR_DECOMPOSITION_TYPE
  * @stable ICU 2.2
  */
-typedef enum UDecompositionType {
+typedef enum  {
     U_DT_NONE,              /*[none]*/ /*See note !!*/
     U_DT_CANONICAL,         /*[can]*/
     U_DT_COMPAT,            /*[com]*/
@@ -1335,7 +1334,7 @@ typedef enum UDecompositionType {
  * @see UCHAR_JOINING_TYPE
  * @stable ICU 2.2
  */
-typedef enum UJoiningType {
+typedef enum  {
     U_JT_NON_JOINING,       /*[U]*/ /*See note !!*/
     U_JT_JOIN_CAUSING,      /*[C]*/
     U_JT_DUAL_JOINING,      /*[D]*/
@@ -1351,7 +1350,7 @@ typedef enum UJoiningType {
  * @see UCHAR_JOINING_GROUP
  * @stable ICU 2.2
  */
-typedef enum UJoiningGroup {
+typedef enum  {
     U_JG_NO_JOINING_GROUP,
     U_JG_AIN,
     U_JG_ALAPH,
@@ -1415,7 +1414,7 @@ typedef enum UJoiningGroup {
  * @see UCHAR_GRAPHEME_CLUSTER_BREAK
  * @draft ICU 3.4
  */
-typedef enum UGraphemeClusterBreak {
+typedef enum  {
     U_GCB_OTHER,            /*[XX]*/ /*See note !!*/
     U_GCB_CONTROL,          /*[CN]*/
     U_GCB_CR,               /*[CR]*/
@@ -1436,7 +1435,7 @@ typedef enum UGraphemeClusterBreak {
  * @see UCHAR_WORD_BREAK
  * @draft ICU 3.4
  */
-typedef enum UWordBreakValues {
+typedef enum  {
     U_WB_OTHER,             /*[XX]*/ /*See note !!*/
     U_WB_ALETTER,           /*[LE]*/
     U_WB_FORMAT,            /*[FO]*/
@@ -1454,7 +1453,7 @@ typedef enum UWordBreakValues {
  * @see UCHAR_SENTENCE_BREAK
  * @draft ICU 3.4
  */
-typedef enum USentenceBreak {
+typedef enum  {
     U_SB_OTHER,             /*[XX]*/ /*See note !!*/
     U_SB_ATERM,             /*[AT]*/
     U_SB_CLOSE,             /*[CL]*/
@@ -1475,7 +1474,7 @@ typedef enum USentenceBreak {
  * @see UCHAR_LINE_BREAK
  * @stable ICU 2.2
  */
-typedef enum ULineBreak {
+typedef enum  {
     U_LB_UNKNOWN,           /*[XX]*/ /*See note !!*/
     U_LB_AMBIGUOUS,         /*[AI]*/
     U_LB_ALPHABETIC,        /*[AL]*/
@@ -1523,7 +1522,7 @@ typedef enum ULineBreak {
  * @see UCHAR_NUMERIC_TYPE
  * @stable ICU 2.2
  */
-typedef enum UNumericType {
+typedef enum  {
     U_NT_NONE,              /*[None]*/ /*See note !!*/
     U_NT_DECIMAL,           /*[de]*/
     U_NT_DIGIT,             /*[di]*/
@@ -1537,7 +1536,7 @@ typedef enum UNumericType {
  * @see UCHAR_HANGUL_SYLLABLE_TYPE
  * @stable ICU 2.6
  */
-typedef enum UHangulSyllableType {
+typedef enum  {
     U_HST_NOT_APPLICABLE,   /*[NA]*/ /*See note !!*/
     U_HST_LEADING_JAMO,     /*[L]*/
     U_HST_VOWEL_JAMO,       /*[V]*/
