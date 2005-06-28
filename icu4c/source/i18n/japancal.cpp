@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003-2004, International Business Machines Corporation and         *
+* Copyright (C) 2003-2005, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -363,7 +363,7 @@ int32_t JapaneseCalendar::handleGetExtendedYear()
     year = internalGet(UCAL_EXTENDED_YEAR, 1);
   } else {
     // Subtract one because year starts at 1
-    year = internalGet(UCAL_YEAR) + kEraInfo[internalGet(UCAL_ERA)].year - 1;
+    year = internalGet(UCAL_YEAR) + kEraInfo[internalGet(UCAL_ERA, kCurrentEra)].year - 1;
   }
   return year;
   
