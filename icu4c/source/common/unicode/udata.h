@@ -353,7 +353,7 @@ udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
  * @see udata_setFileAccess
  * @draft ICU 3.4
  */
-typedef enum UDataFileAccess {
+typedef enum  {
     /** ICU does not access the file system for data loading. */
     UDATA_NO_FILES,
     /** ICU only loads data from packages, not from single files. */

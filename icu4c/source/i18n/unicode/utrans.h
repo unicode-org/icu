@@ -73,7 +73,7 @@ typedef void* UTransliterator;
  * B to A when operating in the reverse direction.
  * @stable ICU 2.0
  */
-typedef enum UTransDirection {
+typedef enum  {
     
     /**
      * UTRANS_FORWARD means from &lt;source&gt; to &lt;target&gt; for a

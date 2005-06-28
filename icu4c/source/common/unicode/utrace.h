@@ -37,7 +37,7 @@ U_CDECL_BEGIN
  * @see utrace_setLevel
  * @stable ICU 2.8
  */
-typedef enum UTraceLevel {
+typedef enum  {
     /** Disable all tracing  @stable ICU 2.8*/
     UTRACE_OFF=-1,
     /** Trace error conditions only  @stable ICU 2.8*/
@@ -56,7 +56,7 @@ typedef enum UTraceLevel {
  *  These are the ICU functions that will be traced when tracing is enabled.
  *  @stable ICU 2.8
  */
-typedef enum UTraceFunctionNumber {
+typedef enum  {
     UTRACE_FUNCTION_START=0,
     UTRACE_U_INIT=UTRACE_FUNCTION_START,
     UTRACE_U_CLEANUP,

@@ -26,7 +26,7 @@
  *
  * @stable ICU 2.2
  */
-typedef enum UScriptCode {
+typedef enum  {
       USCRIPT_INVALID_CODE = -1,
       USCRIPT_COMMON       =  0 , /* Zyyy */
       USCRIPT_INHERITED    =  1,  /* Qaai */
