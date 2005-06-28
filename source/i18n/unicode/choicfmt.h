@@ -65,7 +65,7 @@ class MessageFormat;
  * 
  * <p>or equivalently,</p>
  * 
- * <pre>    0#are no files|1#is one file|1&lt;are many files</pre>
+ * \htmlonly<pre>    0#are no files|1#is one file|1&lt;are many files</pre>\endhtmlonly
  * 
  * <p>The pattern consists of a number or <em>range specifiers</em>
  * separated by vertical bars '|' (U+007C). There is no
@@ -156,7 +156,7 @@ class MessageFormat;
  * <p><strong>Notes</strong></p>
  * 
  * <p>The first limit value does not define a range boundary. For
- * example, in the pattern &quot;<code>1.0#a|2.0#b</code>&quot;, the
+ * example, in the pattern \htmlonly&quot;<code>1.0#a|2.0#b</code>&quot;\endhtmlonly, the
  * intervals are [-Inf, 2.0) and [2.0, +Inf].  It appears that the first
  * interval should be [1.0, 2.0).  However, since all values that are too
  * small are mapped to range zero, the first interval is effectively

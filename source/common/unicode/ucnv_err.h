@@ -122,14 +122,14 @@ typedef struct UConverter UConverter;
  */
 #define UCNV_ESCAPE_C         "C"
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Decimal escape (&amp;#DDDD;)
- * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Decimal escape (&amp;#DDDD;)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
+ * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_XML_DEC   "D"
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Hex escape (&amp;#xXXXX;)
- * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Hex escape (&amp;#xXXXX;)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
+ * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_XML_HEX   "X"
@@ -340,17 +340,17 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          \\U00023456</li>
  *        <li>UCNV_ESCAPE_XML_DEC: Substitues the  ILLEGAL SEQUENCE with the decimal 
- *          representation in the format  &amp;#DDDDDDDD;, e.g. "&amp;#65534;&amp;#172;&amp;#51454;"). 
+ *          representation in the format \htmlonly&amp;#DDDDDDDD;, e.g. "&amp;#65534;&amp;#172;&amp;#51454;")\endhtmlonly. 
  *          In the Event the converter doesn't support the characters {&amp;,#}[0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          &amp;#144470; and Zero padding is ignored.</li>
  *        <li>UCNV_ESCAPE_XML_HEX:Substitues the  ILLEGAL SEQUENCE with the decimal 
- *          representation in the format  &amp;#xXXXX; e.g. "&amp;#xFFFE;&amp;#x00AC;&amp;#xC8FE;"). 
+ *          representation in the format \htmlonly&amp;#xXXXX; e.g. "&amp;#xFFFE;&amp;#x00AC;&amp;#xC8FE;")\endhtmlonly. 
  *          In the Event the converter doesn't support the characters {&,#,x}[0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
- *          &amp;#x23456;</li>
+ *          \htmlonly&amp;#x23456;\endhtmlonly</li>
  *        </ul>
  * @param fromUArgs Information about the conversion in progress
  * @param codeUnits Points to 'length' UChars of the concerned Unicode sequence
