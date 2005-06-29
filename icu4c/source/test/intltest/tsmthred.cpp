@@ -1109,7 +1109,7 @@ void MultithreadTest::TestThreadedIntl()
         /*  Spin until the test threads  complete. */
         stillRunning = FALSE;
         endTime = Calendar::getNow();
-        if ((((int32_t)(endTime - startTime)%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND) > PATIENCE_SECONDS) {
+        if (((int32_t)(endTime - startTime)/U_MILLIS_PER_SECOND) > PATIENCE_SECONDS) {
             errln("Patience exceeded. Test is taking too long.");
             return;
         }
