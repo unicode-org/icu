@@ -214,7 +214,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             year = internalGet(EXTENDED_YEAR, 1);
         } else {
             // Subtract one because year starts at 1
-            year = internalGet(YEAR) + ERAS[internalGet(ERA) * 3] - 1;
+            year = internalGet(YEAR) + ERAS[internalGet(ERA, CURRENT_ERA) * 3] - 1;
         }
         return year;
     }
