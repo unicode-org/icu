@@ -24,6 +24,8 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-release        build release libraries [default=yes]"
 ac_help="$ac_help
+  --enable-draft         enable draft APIs [default=yes]"
+ac_help="$ac_help
   --enable-renaming       add a version suffix to symbols [default=yes]"
 ac_help="$ac_help
   --enable-tracing        enable function and data tracing [default=yes]"
@@ -956,57 +958,6 @@ else
   fi
 fi
 
-for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
-   'extern "C" void std::exit (int) throw (); using std::exit;' \
-   'extern "C" void std::exit (int); using std::exit;' \
-   'extern "C" void exit (int) throw ();' \
-   'extern "C" void exit (int);' \
-   'void exit (int);'
-do
-  cat > conftest.$ac_ext <<EOF
-#line 970 "configure"
-#include "confdefs.h"
-#include <stdlib.h>
-$ac_declaration
-int main() {
-exit (42);
-; return 0; }
-EOF
-if { (eval echo configure:978: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
-  :
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  continue
-fi
-rm -f conftest*
-  cat > conftest.$ac_ext <<EOF
-#line 988 "configure"
-#include "confdefs.h"
-$ac_declaration
-int main() {
-exit (42);
-; return 0; }
-EOF
-if { (eval echo configure:995: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
-  rm -rf conftest*
-  break
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-done
-if test -n "$ac_declaration"; then
-  echo '#ifdef __cplusplus' >>confdefs.h
-  echo $ac_declaration      >>confdefs.h
-  echo '#endif'             >>confdefs.h
-fi
-
-
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   if test -f $ac_dir/install-sh; then
@@ -1237,100 +1188,15 @@ host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
-echo $ac_n "checking for Cygwin environment""... $ac_c" 1>&6
-echo "configure:1242: checking for Cygwin environment" >&5
-if eval "test \"`echo '$''{'ac_cv_cygwin'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  cat > conftest.$ac_ext <<EOF
-#line 1247 "configure"
-#include "confdefs.h"
 
-int main() {
-
-#ifndef __CYGWIN__
-#define __CYGWIN__ __CYGWIN32__
-#endif
-return __CYGWIN__;
-; return 0; }
-EOF
-if { (eval echo configure:1258: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
-  rm -rf conftest*
-  ac_cv_cygwin=yes
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  ac_cv_cygwin=no
-fi
-rm -f conftest*
-rm -f conftest*
-fi
-
-echo "$ac_t""$ac_cv_cygwin" 1>&6
-CYGWIN=
-test "$ac_cv_cygwin" = yes && CYGWIN=yes
-echo $ac_n "checking for mingw32 environment""... $ac_c" 1>&6
-echo "configure:1275: checking for mingw32 environment" >&5
-if eval "test \"`echo '$''{'ac_cv_mingw32'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  cat > conftest.$ac_ext <<EOF
-#line 1280 "configure"
-#include "confdefs.h"
-
-int main() {
-return __MINGW32__;
-; return 0; }
-EOF
-if { (eval echo configure:1287: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
-  rm -rf conftest*
-  ac_cv_mingw32=yes
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  ac_cv_mingw32=no
-fi
-rm -f conftest*
-rm -f conftest*
-fi
-
-echo "$ac_t""$ac_cv_mingw32" 1>&6
-MINGW32=
-test "$ac_cv_mingw32" = yes && MINGW32=yes
-
-
-echo $ac_n "checking for executable suffix""... $ac_c" 1>&6
-echo "configure:1306: checking for executable suffix" >&5
-if eval "test \"`echo '$''{'ac_cv_exeext'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
-  ac_cv_exeext=.exe
-else
-  rm -f conftest*
-  echo 'int main () { return 0; }' > conftest.$ac_ext
-  ac_cv_exeext=
-  if { (eval echo configure:1316: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-    for file in conftest.*; do
-      case $file in
-      *.c | *.o | *.obj) ;;
-      *) ac_cv_exeext=`echo $file | sed -e s/conftest//` ;;
-      esac
-    done
-  else
-    { echo "configure: error: installation or configuration problem: compiler cannot create executables." 1>&2; exit 1; }
-  fi
-  rm -f conftest*
-  test x"${ac_cv_exeext}" = x && ac_cv_exeext=no
-fi
-fi
-
-EXEEXT=""
-test x"${ac_cv_exeext}" != xno && EXEEXT=${ac_cv_exeext}
-echo "$ac_t""${ac_cv_exeext}" 1>&6
+echo $ac_n "checking checking for executable suffix""... $ac_c" 1>&6
+echo "configure:1194: checking checking for executable suffix" >&5
+case "${host}" in
+    *-*-cygwin*|*-*-mingw*)  EXEEXT=.exe ;;
+    *)      EXEEXT="" ;;
+esac
 ac_exeext=$EXEEXT
+echo "$ac_t""$EXEEXT" 1>&6
 
 
 
@@ -1802,6 +1668,25 @@ fi
 echo "$ac_t""$enabled" 1>&6
 
 
+echo $ac_n "checking whether to enable draft APIs""... $ac_c" 1>&6
+echo "configure:1673: checking whether to enable draft APIs" >&5
+enabled=yes
+U_DEFAULT_SHOW_DRAFT=1
+# Check whether --enable-draft or --disable-draft was given.
+if test "${enable_draft+set}" = set; then
+  enableval="$enable_draft"
+   case "${enableval}" in
+         no) enabled=no; U_DEFAULT_SHOW_DRAFT=0 ;;
+         *) ;;
+    esac
+fi
+
+echo "$ac_t""$enabled" 1>&6
+if test "$U_DEFAULT_SHOW_DRAFT" = 0; then
+    CPPFLAGS="$CPPFLAGS -DU_SHOW_DRAFT_API"
+fi
+
+
 # Extract the first word of "ranlib", so it can be a program name with args.
 set dummy ranlib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
@@ -2267,7 +2152,7 @@ fi
 
 GENCCODE_ASSEMBLY=
 case "${host}" in
-i*86-*-*bsd*|i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*)
+i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*|i*86-*-solaris*)
     if test "$GCC" = yes; then
                 GENCCODE_ASSEMBLY="-a gcc"
     fi ;;
@@ -4082,9 +3967,13 @@ case "${host}" in
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
-			ICUDATA_CHAR="e" ;;
+			if test "${ICU_ENABLE_ASCII_STRINGS}" != "1"; then
+				ICUDATA_CHAR="e"
+			fi ;;
 	*-*-os400*)	platform=OS400
-			ICUDATA_CHAR="e" ;;
+			if test "${ICU_ENABLE_ASCII_STRINGS}" != "1"; then
+				ICUDATA_CHAR="e"
+			fi ;;
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-beos)		platform=U_BEOS ;;
@@ -4367,6 +4256,7 @@ s%@ENABLE_SHARED@%$ENABLE_SHARED%g
 s%@ENABLE_STATIC@%$ENABLE_STATIC%g
 s%@ENABLE_DEBUG@%$ENABLE_DEBUG%g
 s%@ENABLE_RELEASE@%$ENABLE_RELEASE%g
+s%@U_DEFAULT_SHOW_DRAFT@%$U_DEFAULT_SHOW_DRAFT%g
 s%@RANLIB@%$RANLIB%g
 s%@AR@%$AR%g
 s%@U_DISABLE_RENAMING@%$U_DISABLE_RENAMING%g
