@@ -110,6 +110,45 @@ static const char* fldName(UCalendarDateFields f) {
     }
 }
 
+
+
+// from CalendarTest::calToStr - but doesn't modify contents.
+void ucal_dump(const Calendar &cal) {
+    cal.dump();
+}
+
+void Calendar::dump() const {
+  int i;
+  fprintf(stderr, "@calendar=%s, timeset=%c, fieldset=%c, allfields=%c, virtualset=%c, t=%.2f",
+    getType(), fIsTimeSet?'y':'n',  fAreFieldsSet?'y':'n',  fAreAllFieldsSet?'y':'n',  
+        fAreFieldsVirtuallySet?'y':'n',
+        fTime);
+  
+  // can add more things here: DST, zone, etc.
+  fprintf(stderr, "\n");
+  for(i = 0;i<UCAL_FIELD_COUNT;i++) {
+    int n;
+    const char *f = fldName((UCalendarDateFields)i);
+    fprintf(stderr, "  %25s: %-11ld", f, fFields[i]);
+    if(fStamp[i] == kUnset) {
+        fprintf(stderr, " (unset) ");
+    } else if(fStamp[i] == kInternallySet) { 
+        fprintf(stderr, " (internally set) ");
+    //} else if(fStamp[i] == kInternalDefault) { 
+    //    fprintf(stderr, " (internal default) ");
+    } else {
+        fprintf(stderr, " %%%d ", fStamp[i]);
+    }
+    fprintf(stderr, "\n");
+    
+  }
+}
+
+U_CFUNC void ucal_dump(UCalendar* cal) {
+    ucal_dump( *((Calendar*)cal)  );
+}
+
+
 #endif
 
 static const char * const gCalendarKeywords[] = {
@@ -947,6 +986,7 @@ Calendar::clear()
         fIsSet[i]     = FALSE; // Remove later
     }
     fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = FALSE;
+    // fTime is not 'cleared' - may be used if no fields are set.
 }
 
 // -------------------------------------
@@ -2433,7 +2473,7 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
   }
 
 #if defined (U_DEBUG_CAL) 
-  fprintf(stderr, "%s:%d - bf= %s - y=%d\n", __FILE__, __LINE__, fldName(bestField), year);
+  fprintf(stderr, "%s:%d: bestField= %s - y=%d\n", __FILE__, __LINE__, fldName(bestField), year);
 #endif 
 
   // Get the Julian day of the day BEFORE the start of this year.
