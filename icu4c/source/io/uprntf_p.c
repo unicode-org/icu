@@ -260,16 +260,9 @@ u_printf_char_handler(const u_printf_stream_handler  *handler,
 
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
+    /* precision is ignored when handling a char */
 
-    /* precision takes precedence over width */
-    /* determine if the string should be truncated */
-    if(info->fPrecision != -1 && len > info->fPrecision) {
-        written = handler->write(context, s, info->fPrecision);
-    }
-    else {
-        /* determine if the string should be padded */
-        written = handler->pad_and_justify(context, info, s, len);
-    }
+    written = handler->pad_and_justify(context, info, s, len);
 
     return written;
 }
@@ -781,20 +774,12 @@ u_printf_uchar_handler(const u_printf_stream_handler  *handler,
     int32_t written = 0;
     UChar arg = (UChar)(args[0].int64Value);
 
-
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
+    /* precision is ignored when handling a uchar */
 
-    /* precision takes precedence over width */
-    /* determine if the char should be printed */
-    if(info->fPrecision != -1 && info->fPrecision < 1) {
-        /* write nothing */
-        written = 0;
-    }
-    else {
-        /* determine if the string should be padded */
-        written = handler->pad_and_justify(context, info, &arg, 1);
-    }
+    /* determine if the string should be padded */
+    written = handler->pad_and_justify(context, info, &arg, 1);
 
     return written;
 }
