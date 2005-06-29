@@ -708,6 +708,9 @@ udata_swapPackage(const UDataSwapper *ds,
                 table[itemCount-1].length+=(uint32_t)delta;
             }
 
+            /* Save the offset before we sort the TOC. */
+            offset=table[0].inOffset;
+            /* sort the TOC entries */
             uprv_sortArray(table, (int32_t)itemCount, (int32_t)sizeof(ToCEntry),
                            compareToCEntries, outBytes, FALSE, pErrorCode);
 
@@ -717,7 +720,6 @@ udata_swapPackage(const UDataSwapper *ds,
              */
 
             /* assign outOffset values */
-            offset=table[0].inOffset;
             for(i=0; i<itemCount; ++i) {
                 table[i].outOffset=offset;
                 offset+=table[i].length;
