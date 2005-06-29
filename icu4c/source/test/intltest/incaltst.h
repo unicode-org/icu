@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,6 +29,7 @@ public:
 
     void TestJapanese(void);
     void TestJapaneseFormat(void);
+    void TestJapanese3860(void);
 
  protected:
     // Test a Gregorian-Like calendar
