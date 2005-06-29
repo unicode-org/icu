@@ -363,7 +363,7 @@ int32_t JapaneseCalendar::handleGetExtendedYear()
     year = internalGet(UCAL_EXTENDED_YEAR, 1);
   } else {
     // Subtract one because year starts at 1
-    year = internalGet(UCAL_YEAR) + kEraInfo[internalGet(UCAL_ERA, kCurrentEra)].year - 1;
+    year = internalGet(UCAL_YEAR) + kEraInfo[internalGetEra()].year - 1;
   }
   return year;
   
@@ -383,9 +383,9 @@ void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status
   // Note that if the year is == the current era year, then we use
   // the binary search to handle the month/dom comparison.
 #ifdef U_DEBUG_JCAL
-  fprintf(stderr, "==  %d:%d \n", era, year);
+  fprintf(stderr, "==  %d \n", year);
 #endif
-
+    
   if (year > kEraInfo[kCurrentEra].year) {
     low = kCurrentEra;
 #ifdef U_DEBUG_JCAL
