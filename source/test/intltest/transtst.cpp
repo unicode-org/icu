@@ -1608,7 +1608,14 @@ void TransliteratorTest::TestRemove(void) {
     }
     
     expect(*t, "Able bodied baker's cats", "Ale odied ker's ts");
+    
+    // extra test for RemoveTransliterator::clone(), which at one point wasn't
+    // duplicating the filter
+    Transliterator* t2 = t->clone();
+    expect(*t2, "Able bodied baker's cats", "Ale odied ker's ts");
+    
     delete t;
+    delete t2;
 }
 
 void TransliteratorTest::TestToRules(void) {

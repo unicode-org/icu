@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "remtrans.h"
+#include "unicode/unifilt.h"
 
 static const UChar CURR_ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65, 0x00}; /* "Any-Remove" */
 
@@ -45,7 +46,11 @@ RemoveTransliterator::RemoveTransliterator() : Transliterator(::CURR_ID, 0) {}
 RemoveTransliterator::~RemoveTransliterator() {}
 
 Transliterator* RemoveTransliterator::clone(void) const {
-    return new RemoveTransliterator();
+    Transliterator* result = new RemoveTransliterator();
+    if (getFilter() != 0) {
+        result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
+    }
+    return result;
 }
 
 void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
