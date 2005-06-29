@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,8 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
+import java.text.ParsePosition;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -137,6 +139,32 @@ public class JapaneseTest extends CalendarTest {
         }
         }
     }
+    }
+    
+    public void Test3860()
+    {
+        ULocale loc = new ULocale("ja_JP@calendar=japanese");
+        Calendar cal = new JapaneseCalendar(loc);
+        DateFormat enjformat = cal.getDateTimeFormat(0,0,new ULocale("en_JP@calendar=japanese"));
+        DateFormat format = cal.getDateTimeFormat(0,0,loc);
+        ((SimpleDateFormat)format).applyPattern("y.M.d");  // Note: just 'y' doesn't work here.
+        ParsePosition pos = new ParsePosition(0);
+        Date aDate = format.parse("1.1.9", pos); // after the start of heisei accession.  Jan 1, 1H wouldn't work  because it is actually showa 64
+        String inEn = enjformat.format(aDate);
+        
+        cal.clear();
+        cal.setTime(aDate);
+        int gotYear = cal.get(Calendar.YEAR);
+        int gotEra = cal.get(Calendar.ERA);
+        
+        int expectYear = 1;
+        int expectEra = JapaneseCalendar.CURRENT_ERA;
+        
+        if((gotYear != expectYear) || (gotEra != expectEra)) {
+            errln("Expected year " + expectYear + ", era " + expectEra +", but got year " + gotYear + " and era " + gotEra + ", == " + inEn);
+        } else {            
+            logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
+        }
     }
 }
 
