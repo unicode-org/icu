@@ -146,6 +146,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
+				RelativePath=".\filestrm.c">
+			</File>
+			<File
 				RelativePath=".\propsvec.c">
 			</File>
 			<File
@@ -179,6 +182,9 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath=".\filestrm.h">
+			</File>
 			<File
 				RelativePath=".\propsvec.h">
 			</File>
