@@ -27,8 +27,6 @@
 
 #include "unicode/utypes.h"
 
-#if !defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO
-
 typedef struct _FileStream FileStream;
 
 U_CAPI FileStream* U_EXPORT2
@@ -103,6 +101,4 @@ T_FileStream_stderr(void);
 U_CAPI UBool U_EXPORT2
 T_FileStream_remove(const char* fileName);
 
-#endif /* !UCONFIG_NO_FILE_IO */
 #endif /* _FILESTRM*/
-

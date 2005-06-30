@@ -21,16 +21,44 @@
 #include "udatamem.h"
 #include "umapfile.h"
 
+#if U_ICU_VERSION_MAJOR_NUM>3 || (U_ICU_VERSION_MAJOR_NUM==3 && U_ICU_VERSION_MINOR_NUM>4)
+#   error Time bomb: After ICU 3.4 move the definition of UCONFIG_NO_FILE_IO to uconfig.h. Use Jitterbug 4614.
+#endif
+
+/**
+ * \def UCONFIG_NO_FILE_IO
+ * This switch turns off all file access in the common library
+ * where file access is only used for data loading.
+ * ICU data must then be provided in the form of a data DLL (or with an
+ * equivalent way to link to the data residing in an executable,
+ * as in building a combined library with both the common library's code and
+ * the data), or via udata_setCommonData().
+ * Application data must be provided via udata_setAppData() or by using
+ * "open" functions that take pointers to data, for example ucol_openBinary().
+ *
+ * File access is not used at all in the i18n library.
+ *
+ * File access cannot be turned off for the icuio library or for the ICU
+ * test suites and ICU tools.
+ *
+ * @draft ICU 3.6
+ */
+#ifndef UCONFIG_NO_FILE_IO
+#   define UCONFIG_NO_FILE_IO 0
+#endif
 
 /* memory-mapping base definitions ------------------------------------------ */
 
-
+/* MAP_NONE: no memory mapping, no file access at all */
+#define MAP_NONE        0
 #define MAP_WIN32       1
 #define MAP_POSIX       2
-#define MAP_FILE_STREAM 3
+#define MAP_STDIO       3
 #define MAP_390DLL      4
 
-#ifdef U_WINDOWS
+#if UCONFIG_NO_FILE_IO
+#   define MAP_IMPLEMENTATION MAP_NONE
+#elif defined(U_WINDOWS)
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER
@@ -81,16 +109,16 @@
 #       define MAP_IMPLEMENTATION MAP_POSIX
 #   endif
 
-#else /* unknown platform, no memory map implementation: use FileStream/uprv_malloc() instead */
+#else /* unknown platform, no memory map implementation: use stdio.h and uprv_malloc() instead */
 
-#   include "filestrm.h"
+#   include <stdio.h>
 #   include "cmemory.h"
 
     typedef void *MemoryMap;
 
 #   define IS_MAP(map) ((map)!=NULL)
 
-#   define MAP_IMPLEMENTATION MAP_FILE_STREAM
+#   define MAP_IMPLEMENTATION MAP_STDIO
 
 #endif
 
@@ -103,7 +131,17 @@
  *                           functions used by the rest of the implementation.*
  *                                                                            *
  *----------------------------------------------------------------------------*/
-#if MAP_IMPLEMENTATION==MAP_WIN32
+#if MAP_IMPLEMENTATION==MAP_NONE
+    UBool
+    uprv_mapFile(UDataMemory *pData, const char *path) {
+        UDataMemory_init(pData); /* Clear the output struct. */
+        return FALSE;            /* no file access */
+    }
+
+    void uprv_unmapFile(UDataMemory *pData) {
+        /* nothing to do */
+    }
+#elif MAP_IMPLEMENTATION==MAP_WIN32
     UBool
     uprv_mapFile(
          UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
@@ -209,42 +247,56 @@
 
 
 
-#elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
+#elif MAP_IMPLEMENTATION==MAP_STDIO
+    /* copy of the filestrm.c/T_FileStream_size() implementation */
+    static int32_t
+    umap_fsize(FILE *f) {
+        int32_t savedPos = ftell(f);
+        int32_t size = 0;
+
+        /*Changes by Bertrand A. D. doesn't affect the current position
+        goes to the end of the file before ftell*/
+        fseek(f, 0, SEEK_END);
+        size = (int32_t)ftell(f);
+        fseek(f, savedPos, SEEK_SET);
+        return size;
+    }
+
     UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
-        FileStream *file;
+        FILE *file;
         int32_t fileLength;
         void *p;
 
         UDataMemory_init(pData); /* Clear the output struct.        */
         /* open the input file */
-        file=T_FileStream_open(path, "rb");
+        file=fopen(path, "rb");
         if(file==NULL) {
             return FALSE;
         }
 
         /* get the file length */
-        fileLength=T_FileStream_size(file);
-        if(T_FileStream_error(file) || fileLength<=20) {
-            T_FileStream_close(file);
+        fileLength=umap_fsize(file);
+        if(ferror(file) || fileLength<=20) {
+            fclose(file);
             return FALSE;
         }
 
         /* allocate the memory to hold the file data */
         p=uprv_malloc(fileLength);
         if(p==NULL) {
-            T_FileStream_close(file);
+            fclose(file);
             return FALSE;
         }
 
         /* read the file */
-        if(fileLength!=T_FileStream_read(file, p, fileLength)) {
+        if(fileLength!=fread(p, 1, fileLength, file)) {
             uprv_free(p);
-            T_FileStream_close(file);
+            fclose(file);
             return FALSE;
         }
 
-        T_FileStream_close(file);
+        fclose(file);
         pData->map=p;
         pData->pHeader=(const DataHeader *)p;
         pData->mapAddr=p;
@@ -446,5 +498,3 @@
 #else
 #   error MAP_IMPLEMENTATION is set incorrectly
 #endif
-
-
