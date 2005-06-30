@@ -1,5 +1,5 @@
 #!/usr/bin/qsh
-#   Copyright (C) 2000-2004, International Business Machines
+#   Copyright (C) 2000-2005, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -17,7 +17,7 @@
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP'
-data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
+data_directories='icu/source/data/brkitr/ icu/source/data/locales/ icu/source/data/coll/ icu/source/data/rbnf/ icu/source/data/mappings/ icu/source/data/misc/ icu/source/data/translit/ icu/source/data/unidata/ icu/source/test/testdata/'
 
 usage()
 {
@@ -35,6 +35,12 @@ if [ ! -r $1 ]; then
   exit
 fi
 # set up a few variables
+
+for directory in $data_directories; do
+    if [ -d $directory ]; then
+        data_files="$data_files $directory*"
+    fi
+done
 
 echo ""
 echo "Extracting from $1 ..."
@@ -91,7 +97,6 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
           cut -f2-4 -d ' '|\
           tr 'A-Z' 'a-z'`;
 #    echo "bom8 is" $bom8 "for" $file
-#    bom8=`head -c 3 $file|od -t x1|head -n 1|cut -d ' ' -f2-4`;
     #Find a converted UTF-8 BOM
     if [ "$bom8" = "057 08b 0ab" -o "$bom8" = "57 8b ab" ]
     then
