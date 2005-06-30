@@ -1094,7 +1094,6 @@ repTextExtract(UText *ut,
                UErrorCode *status) {
     const Replaceable *rep=(const Replaceable *)ut->context;
     int32_t  length=rep->length();
-    int32_t  lengthToExtract = length;
 
     if(U_FAILURE(*status)) {
         return 0;
