@@ -224,6 +224,22 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 fi
             fi
             ;;
+        *-*ibm-openedition*|*-*-os390*)
+            OLD_CFLAGS="${CFLAGS}"
+            OLD_CXXFLAGS="${CXXFLAGS}"
+            OLD_LDFLAGS="${LDFLAGS}"
+            CFLAGS="${CFLAGS} -Wc,lp64,expo"
+            CXXFLAGS="${CXXFLAGS} -Wc,lp64,expo"
+            LDFLAGS="${LDFLAGS} -Wl,lp64"
+            AC_TRY_RUN(int main(void) {return 0;},
+               ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no,
+ENABLE_64BIT_LIBS=no)
+            if test "$ENABLE_64BIT_LIBS" = no; then
+                CFLAGS="${OLD_CFLAGS}"
+                CXXFLAGS="${OLD_CXXFLAGS}"
+                LDFLAGS="${OLD_LDFLAGS}"
+            fi
+            ;;
         *)
             ENABLE_64BIT_LIBS=no
             ;;
