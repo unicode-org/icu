@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -254,7 +254,8 @@ U_INTERNAL UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
  * @internal
  */
 #ifndef U_MAX_PTR
-#  ifdef OS390
+#  if defined(OS390) && !defined(_LP64)
+    /* We have 31-bit pointers. */
 #    define U_MAX_PTR(base) ((void *)0x7fffffff)
 #  elif defined(OS400)
 /*
