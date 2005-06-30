@@ -256,22 +256,22 @@ void UTextTest::TestString(const UnicodeString &s) {
 void UTextTest::TestCMR(const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *u16Map) {
     TEST_ASSERT(utext_isWritable(ut) == TRUE);
 
-    int  srcLengthType;      // Loop variables for selecting the postion and length
-    int  srcPosType;         //   of the block to operate on within the source text.
+    int  srcLengthType;       // Loop variables for selecting the postion and length
+    int  srcPosType;          //   of the block to operate on within the source text.
     int  destPosType; 
 
-    int  srcIndex;           // Code Point indexes of the block to operate on for
-    int  srcLength;          //   a specific test.
+    int  srcIndex  = 0;       // Code Point indexes of the block to operate on for
+    int  srcLength = 0;       //   a specific test.
 
-    int  destIndex;          // Code point index of the destination for a copy/move test.
+    int  destIndex = 0;       // Code point index of the destination for a copy/move test.
 
-    int32_t  nativeStart;    // Native unit indexes for a test.
-    int32_t  nativeLimit;
-    int32_t  nativeDest;
+    int32_t  nativeStart = 0; // Native unit indexes for a test.
+    int32_t  nativeLimit = 0;
+    int32_t  nativeDest  = 0;
 
-    int32_t  u16Start;       // UTF-16 indexes for a test.
-    int32_t  u16Limit;       //   used when performing the same operation in a Unicode String
-    int32_t  u16Dest;
+    int32_t  u16Start    = 0; // UTF-16 indexes for a test.
+    int32_t  u16Limit    = 0; //   used when performing the same operation in a Unicode String
+    int32_t  u16Dest     = 0;
 
     // Iterate over a whole series of source index, length and a target indexes.
     // This is done with code point indexes; these will be later translated to native
