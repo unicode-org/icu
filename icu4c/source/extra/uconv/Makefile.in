@@ -122,7 +122,7 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-%.$(SECTION): $(srcdir)/%.$(SECTION).in $(srcdir)/pkgdata.inc.in
+%.$(SECTION): $(srcdir)/%.$(SECTION).in $(srcdir)/pkgdata.inc
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -139,7 +139,7 @@ endif
 package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
 	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(BINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
-$(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
+$(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
 	@-$(RMV) $@
 	@for file in $(RESFILES:$(RESDIR)/%.res=%.res); do \
