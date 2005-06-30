@@ -536,22 +536,32 @@ resetChunk(UTextChunk *chunk, int32_t index) {
     } 
 }
 
+
+//
+// invalidateChunk   Reset a chunk to have no contents, so that the next call
+//                   to access will new data to load.
+//                   This is needed when copy/move/replace operate directly on the
+//                   backing text, potentially putting it out of sync with the
+//                   contents in the chunk.
+//
+static void
+invalidateChunk(UTextChunk *chunk) {
+    chunk->length = 0;
+    chunk->nativeLimit = 0;
+    chunk->nativeStart = 0;
+    chunk->offset = 0;
+}
         
 
 
-//------------------------------------------------------------------------------
-//
-// No-Op UText implementation for illegal input 
-//
-//------------------------------------------------------------------------------
 U_CDECL_BEGIN
 
-static UText * U_CALLCONV
 //
 //  Clone.  This is a generic copy-the-utext-by-value clone function that can be
 //          used as-is with some utext types, and as helper by other clones. 
 //
-noopTextClone(UText * dest, const UText * src,  UBool /*deep*/, UErrorCode * status) {
+static UText * U_CALLCONV
+shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
     if (U_FAILURE(*status)) {
         return NULL;
     }
@@ -594,50 +604,7 @@ noopTextClone(UText * dest, const UText * src,  UBool /*deep*/, UErrorCode * sta
 }
 
 
-static int32_t U_CALLCONV
-noopTextLength(UText * /* t */) {
-    return 0;
-}
-
-static UBool U_CALLCONV
-noopTextAccess(UText * /* t */, int32_t /* index */, UBool /* forward*/,
-               UTextChunk * /* chunk */) {
-    return FALSE;
-}
-
-static int32_t U_CALLCONV
-noopTextExtract(UText * /* t */,
-                int32_t /* start */, int32_t /* limit */,
-                UChar * /* dest */, int32_t /* destCapacity */,
-                UErrorCode * /* pErrorCode */) {
-    return 0;
-}
-
-static int32_t U_CALLCONV
-noopTextMapOffsetToNative(UText * /* t */, int32_t /* offset */) {
-    return 0;
-}
-
-static int32_t U_CALLCONV
-noopTextMapIndexToUTF16(UText * /* t */, int32_t /* index */) {
-    return 0;
-}
-
 U_CDECL_END
-
-
-static const UText noopText={
-    UTEXT_INITIALIZER_HEAD,
-    noopTextClone,
-    noopTextLength,
-    noopTextAccess,
-    noopTextExtract,
-    NULL, // replace
-    NULL, // copy
-    noopTextMapOffsetToNative,
-    noopTextMapIndexToUTF16,
-    NULL  // close
-};
 
 
 
@@ -859,6 +826,42 @@ utf8TextMapIndexToUTF16(UText *ut, int32_t index) {
     return offset;
 }
 
+static UText * U_CALLCONV
+utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) 
+{
+    // First do a generic shallow clone.  Does everything needed for the UText struct itself.
+    dest = shallowTextClone(dest, src, status);
+
+    // For deep clones, make a copy of the string.
+    //  The copied storage is owned by the newly created clone.
+    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //    it.
+    //
+    if (deep && U_SUCCESS(*status)) {
+        int32_t  len = src->b;
+        char *copyStr = (char *)uprv_malloc(len+1);
+        if (copyStr == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            uprv_memcpy(copyStr, src->context, len+1);
+            dest->context = copyStr;
+            dest->p       = copyStr;
+        }
+    }
+    return dest;
+}
+
+
+static void U_CALLCONV
+utf8TextClose(UText *ut) {
+    // Most of the work of close is done by the generic UText framework close.
+    // All that needs to be done here is delete the Replaceable if the UText
+    //  owns it.  This occurs if the UText was created by cloning.
+    char *s = (char *)ut->p;
+    uprv_free(s);
+    ut->p = NULL;
+}
+
 
 
 
@@ -878,12 +881,13 @@ utext_openUTF8(UText *ut, const char *s, int32_t length, UErrorCode *status) {
     }
     ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_NON_UTF16_INDEXES);
 
-    ut->clone         = noopTextClone;
+    ut->clone         = utf8TextClone;
     ut->nativeLength  = utf8TextLength;
     ut->access        = utf8TextAccess;
     ut->extract       = utf8TextExtract;
     ut->mapOffsetToNative     = utf8TextMapOffsetToNative;
     ut->mapNativeIndexToUTF16 = utf8TextMapIndexToUTF16;
+    ut->close         = utf8TextClose;
 
     ut->context=s;
     if(length>=0) {
@@ -902,11 +906,6 @@ U_CDECL_END
 
 
 
-/* UText implementation wrapper for Replaceable (read/write) ---------------- */
-
-
-
-
 
 //------------------------------------------------------------------------------
 //
@@ -918,10 +917,6 @@ U_CDECL_END
 //------------------------------------------------------------------------------
 
 
- /*
- * TODO: use a flag in RepText to support readonly strings?
- *       -> omit UTEXT_PROVIDER_WRITABLE
- */
 
 // minimum chunk size for this implementation: 3
 // to allow for possible trimming for code point boundaries
@@ -941,15 +936,31 @@ U_CDECL_BEGIN
 static UText * U_CALLCONV
 repTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
     // First do a generic shallow clone.  Does everything needed for the UText struct itself.
-    dest = noopTextClone(dest, src, deep, status);
+    dest = shallowTextClone(dest, src, status);
 
+    // For deep clones, make a copy of the Replaceable.
+    //  The copied Replaceable storage is owned by the newly created UText clone.
+    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //    it.
+    //
     if (deep && U_SUCCESS(*status)) {
         const Replaceable *replSrc = (const Replaceable *)src->context;
         dest->context = replSrc->clone();
+        dest->p       = dest->context;
     }
     return dest;
 }
 
+
+static void U_CALLCONV
+repTextClose(UText *ut) {
+    // Most of the work of close is done by the generic UText framework close.
+    // All that needs to be done here is delete the Replaceable if the UText
+    //  owns it.  This occurs if the UText was created by cloning.
+    Replaceable *rep = (Replaceable *)ut->p;
+    delete rep;
+    ut->p = NULL;
+}
 
 
 static int32_t U_CALLCONV
@@ -963,8 +974,6 @@ repTextLength(UText *ut) {
 static UBool U_CALLCONV
 repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) {
     const Replaceable *rep=(const Replaceable *)ut->context;
-    int32_t start;          // index of the start of the chunk to be loaded
-    int32_t limit;          // index of the end+1 of the chunk to be loaded.
     int32_t length=rep->length();   // Full length of the input text (bigger than a chunk)
 
 
@@ -1022,21 +1031,31 @@ repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) 
             ut->chunk.offset = 0;
             return FALSE;
         }
-        limit = index;
-        if (limit>length) {
-            limit = length;
+
+        // Figure out the bounds of the chunk to extract for reverse iteration.
+        // Need to worry about chunk not splitting surrogate pairs, and while still 
+        // containing the data we need.
+        // Fix by requesting a chunk that includes an extra UChar at the end.
+        // If this turns out to be a lead surrogate, we can lop it off and still have
+        //   the data we wanted.
+        ut->chunk.nativeStart = index + 1 - REP_TEXT_CHUNK_SIZE;
+        if (ut->chunk.nativeStart < 0) {
+            ut->chunk.nativeStart = 0;
         }
-        start=limit-REP_TEXT_CHUNK_SIZE;
-        if(start<0) {
-            start=0;
+
+        ut->chunk.nativeLimit = index + 1;
+        if (ut->chunk.nativeLimit > length) {
+            ut->chunk.nativeLimit = length;
         }
     }
+
+    // Extract the new chunk of text from the Replaceable source.
     ReplExtra *ex = (ReplExtra *)ut->pExtra;
     // UnicodeString with its buffer a writable alias to the chunk buffer
     UnicodeString buffer(ex->s, 0 /*buffer length*/, REP_TEXT_CHUNK_SIZE /*buffer capacity*/); 
     rep->extractBetween(ut->chunk.nativeStart, ut->chunk.nativeLimit, buffer);
 
-    ut->chunk.contents = ex->s;
+    ut->chunk.contents  = ex->s;
     ut->chunk.length    = ut->chunk.nativeLimit - ut->chunk.nativeStart;
     ut->chunk.offset    = index - ut->chunk.nativeStart;
 
@@ -1045,13 +1064,17 @@ repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) 
     if (ut->chunk.nativeLimit < length &&
         U16_IS_LEAD(ex->s[ut->chunk.length-1])) {
             ut->chunk.length--;
+            ut->chunk.nativeLimit--;
+            if (ut->chunk.offset > ut->chunk.length) {
+                ut->chunk.offset = ut->chunk.length;
+            }
         }
-
 
     // if the first UChar in the chunk could be the trailing half of a surrogate pair,
     // trim it off.
     if(ut->chunk.nativeStart>0 && U16_IS_TRAIL(ex->s[0])) {
         ++(ut->chunk.contents);
+        ++(ut->chunk.nativeStart);
         --(ut->chunk.length);
         --(ut->chunk.offset);
     }
@@ -1070,7 +1093,8 @@ repTextExtract(UText *ut,
                UChar *dest, int32_t destCapacity,
                UErrorCode *status) {
     const Replaceable *rep=(const Replaceable *)ut->context;
-    int32_t length=rep->length();
+    int32_t  length=rep->length();
+    int32_t  lengthToExtract = length;
 
     if(U_FAILURE(*status)) {
         return 0;
@@ -1084,7 +1108,7 @@ repTextExtract(UText *ut,
     }
     length=limit-start;
     if(length>destCapacity) {
-        length=destCapacity;
+        limit = start + destCapacity;
     }
     UnicodeString buffer(dest, 0, destCapacity); // writable alias
     rep->extractBetween(start, limit, buffer);
@@ -1107,37 +1131,66 @@ repTextReplace(UText *ut,
         return 0;
     }
     oldLength=rep->length(); // will subtract from new length
-    if(start<0 || start>limit || oldLength<limit) {
+    if(start<0 || start>limit ) {
         *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
-    // prepare
-    UnicodeString buffer((UBool)(length<0), src, length); // read-only alias
-    // replace
-    rep->handleReplaceBetween(start, limit, buffer);
-    // post-processing
-    return rep->length()-oldLength;
-    // never invalidate the chunk because we have a copy of the characters
+
+    if (start > oldLength) {
+        start = oldLength;
+    }
+    if (limit > oldLength) {
+        limit = oldLength;
+    }
+
+    // Do the actual replace operation using methods of the Replaceable class
+    UnicodeString replStr((UBool)(length<0), src, length); // read-only alias
+    rep->handleReplaceBetween(start, limit, replStr);
+    int32_t newLength = rep->length();
+    int32_t lengthDelta = newLength - oldLength;
+
+    // Is the UText chunk buffer OK?
+    if (ut->chunk.nativeLimit > start) {
+        // this replace operation may have impacted the current chunk.
+        // invalidate it, which will force a reload on the next access.
+        invalidateChunk(&ut->chunk);
+    }
+
+    // set the iteration position to the end of the newly inserted replacement text.
+    int32_t newIndexPos = limit + lengthDelta;
+    repTextAccess(ut, newIndexPos, TRUE, &ut->chunk);
+
+    return lengthDelta;
 }
+
 
 static void U_CALLCONV
 repTextCopy(UText *ut,
-            int32_t start, int32_t limit,
-            int32_t destIndex,
-            UBool move,
-            UErrorCode *status) {
+                int32_t start, int32_t limit,
+                int32_t destIndex,
+                UBool move,
+                UErrorCode *status) 
+{
     Replaceable *rep=(Replaceable *)ut->context;
     int32_t length=rep->length();
 
     if(U_FAILURE(*status)) {
         return;
     }
-    if( start<0 || start>limit || length<limit ||
-        destIndex<0 || length<destIndex ||
-        (start<destIndex && destIndex<limit)
-    ) {
+    if( start<0 || start>limit ||  destIndex<0 || 
+        (start<destIndex && destIndex<limit) ) 
+    {
         *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return;
+    }
+    if (destIndex > length) {
+        destIndex = length;
+    }
+    if (limit > length) {
+        limit = length;
+    }
+    if (start > length) {
+        start = length;
     }
     if(move) {
         // move: copy to destIndex, then replace original with nothing
@@ -1152,13 +1205,37 @@ repTextCopy(UText *ut,
         // copy
         rep->copy(start, limit, destIndex);
     }
-    // never invalidate the chunk because we have a copy of the characters
+
+    // If the change to the text touched the region in the chunk buffer,
+    //  invalidate the buffer.
+    int32_t firstAffectedIndex = destIndex;
+    if (move && start<firstAffectedIndex) {
+        firstAffectedIndex = start;
+    }
+    if (firstAffectedIndex < ut->chunk.nativeLimit) {
+        // changes may have affected range covered by the chunk
+        invalidateChunk(&ut->chunk);
+    }
+
+    // Put iteration position at the newly inserted (moved) block,
+    int32_t  nativeIterIndex = destIndex + limit - start;
+    if (move && destIndex>start) {
+        // moved a block of text towards the end of the string.
+        nativeIterIndex = destIndex;
+    }
+
+    // Set position, reload chunk if needed.
+    repTextAccess(ut, nativeIterIndex, TRUE, &ut->chunk);
 }
 
 
 
+
+
+
 U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) {
+utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) 
+{
     if(U_FAILURE(*status)) {
         return NULL;
     }
@@ -1179,6 +1256,7 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status) {
     ut->extract      = repTextExtract;
     ut->replace      = repTextReplace;
     ut->copy         = repTextCopy;
+    ut->close        = repTextClose;
 
     ut->context=rep;
     return ut;
@@ -1195,36 +1273,46 @@ U_CDECL_END
 
 //------------------------------------------------------------------------------
 //
-//     UText implementation for UnicodeString (read/write) 
+//     UText implementation for UnicodeString (read/write)  and
+//                    for const UnicodeString (read only)
+//             (same implementation, only the flags are different)
 //
 //         Use of UText data members:
 //            context    pointer to UnicodeString
+//            p          pointer to UnicodeString IF this UText owns the string
+//                       and it must be deleted on close().  NULL otherwise.
 //
 //------------------------------------------------------------------------------
 
 U_CDECL_BEGIN
 
- /*
- * TODO: use a flag in UText to support readonly strings?
- *       -> omit UTEXT_PROVIDER_WRITABLE
- */
 
 static UText * U_CALLCONV
-unistrTextClone(UText * /* dest */, const UText * /*src*/, UBool /*deep*/, UErrorCode * /*status*/) {
-// TODO:  fix this.
-#if 0
-    UText *t2=(UText *)uprv_malloc(sizeof(UText));
-    if(t2!=NULL) {
-        *t2=*t;
-        t2->context=((const UnicodeString *)t->context)->clone();
-        if(t2->context==NULL) {
-            uprv_free(t2);
-            t2=NULL;
-        }
+unistrTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
+    // First do a generic shallow clone.  Does everything needed for the UText struct itself.
+    dest = shallowTextClone(dest, src, status);
+
+    // For deep clones, make a copy of the UnicodeSring.
+    //  The copied UnicodeString storage is owned by the newly created UText clone.
+    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //    the UText.
+    //
+    if (deep && U_SUCCESS(*status)) {
+        const UnicodeString *srcString = (const UnicodeString *)src->context;
+        dest->context = new UnicodeString(*srcString);
+        dest->p       = dest->context;
     }
-    return t2;
-#endif
-    return NULL;
+    return dest;
+}
+    
+static void U_CALLCONV
+unistrTextClose(UText *ut) {
+    // Most of the work of close is done by the generic UText framework close.
+    // All that needs to be done here is delete the UnicodeString if the UText
+    //  owns it.  This occurs if the UText was created by cloning.
+    UnicodeString *str = (UnicodeString *)ut->p;
+    delete str;
+    ut->p = NULL;
 }
 
 
@@ -1241,6 +1329,7 @@ unistrTextAccess(UText *ut, int32_t index, UBool  forward, UTextChunk *chunk) {
 
     if (chunk->nativeLimit != length) {
         // This chunk is not yet set up.  Do it now.
+        // TODO:  probably simplify things to move this into the open operation.
         chunk->contents        = us->getBuffer();
         chunk->length          = length;
         chunk->nativeStart     = 0;
@@ -1295,11 +1384,11 @@ unistrTextExtract(UText *t,
 }
 
 static int32_t U_CALLCONV
-unistrTextReplace(UText *t,
+unistrTextReplace(UText *ut,
                   int32_t start, int32_t limit,
                   const UChar *src, int32_t length,
                   UErrorCode *pErrorCode) {
-    UnicodeString *us=(UnicodeString *)t->context;
+    UnicodeString *us=(UnicodeString *)ut->context;
     int32_t oldLength;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -1309,36 +1398,57 @@ unistrTextReplace(UText *t,
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
     oldLength=us->length(); // will subtract from new length
-    if(start<0 || start>limit || oldLength<limit) {
+    if(start<0 || start>limit) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
 
+    if (start>oldLength) {
+        start = oldLength;
+    }
+    if (limit>oldLength) {
+        limit = oldLength;
+    }
+
     // replace
     us->replace(start, limit-start, src, length);
+    int32_t newLength = us->length();
 
-    // TODO: update chunk, set our iteration position.
-    return us->length()-oldLength;
+    // Update the chunk description.
+    ut->chunk.contents    = us->getBuffer();
+    ut->chunk.length      = newLength;
+    ut->chunk.nativeLimit = newLength;
+
+    // Set iteration position to the point just following the newly inserted text.
+    int32_t lengthDelta = newLength - oldLength;
+    ut->chunk.offset = limit + lengthDelta;
+
+    return lengthDelta;
 }
 
 static void U_CALLCONV
-unistrTextCopy(UText *t,
+unistrTextCopy(UText *ut,
                int32_t start, int32_t limit,
                int32_t destIndex,
                UBool move,
                UErrorCode *pErrorCode) {
-    UnicodeString *us=(UnicodeString *)t->context;
+    UnicodeString *us=(UnicodeString *)ut->context;
     int32_t length=us->length();
 
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
-    if( start<0 || start>limit || length<limit ||
-        destIndex<0 || length<destIndex ||
+    if( start<0 || start>limit || destIndex<0 ||
         (start<destIndex && destIndex<limit)
     ) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return;
+    }
+    if (limit>length) {
+        limit = length;
+    }
+    if (destIndex>length) {
+        destIndex = length;
     }
     if(move) {
         // move: copy to destIndex, then replace original with nothing
@@ -1352,7 +1462,21 @@ unistrTextCopy(UText *t,
         // copy
         us->copy(start, limit, destIndex);
     }
-    // TODO: update chunk description, set iteration position.
+    
+    // update chunk description, set iteration position.
+    ut->chunk.contents = us->getBuffer();
+    if (move==FALSE) {
+        // copy operation, string length grows
+        ut->chunk.length += limit-start;
+        ut->chunk.nativeLimit = ut->chunk.length;
+    }
+
+    // Iteration position to end of the newly inserted text.
+    ut->chunk.offset = destIndex+limit-start;
+    if (move && destIndex>start) {  //TODO:  backwards? check.
+        ut->chunk.offset = destIndex;
+    }
+
 }
 
 U_CDECL_END
@@ -1368,6 +1492,7 @@ utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
         ut->extract      = unistrTextExtract;
         ut->replace      = unistrTextReplace;
         ut->copy         = unistrTextCopy;
+        ut->close        = unistrTextClose;
 
         ut->context      = s;
         ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS)|
@@ -1386,6 +1511,7 @@ utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *stat
         ut->nativeLength = unistrTextLength;
         ut->access       = unistrTextAccess;
         ut->extract      = unistrTextExtract;
+        ut->close        = unistrTextClose;
 
         ut->context      = s;
         ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS);
@@ -1408,10 +1534,46 @@ U_CDECL_BEGIN
 
 static UText * U_CALLCONV
 ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) {
-    UText *clone = noopTextClone(dest, src, deep, status);
-// TODO:  fix this.
-    return clone;
+    // First do a generic shallow clone.  
+    dest = shallowTextClone(dest, src, status);
+
+    // For deep clones, make a copy of the string.
+    //  The copied storage is owned by the newly created clone.
+    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //    it.
+    //
+    if (deep && U_SUCCESS(*status)) {
+        int32_t  len = utext_nativeLength(dest);
+
+        // The cloned string IS going to be NUL terminated, whether or not the orginal was.
+        const UChar *srcStr = (const UChar *)src->context;
+        UChar *copyStr = (UChar *)uprv_malloc((len+1) * sizeof(UChar));
+        if (copyStr == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            int i;
+            for (i=0; i<len; i++) {
+                copyStr[i] = srcStr[i];
+            }
+            copyStr[len] = 0;
+            dest->context = copyStr;
+            dest->p       = copyStr;
+        }
+    }
+    return dest;
 }
+
+
+static void U_CALLCONV
+ucstrTextClose(UText *ut) {
+    // Most of the work of close is done by the generic UText framework close.
+    // All that needs to be done here is delete the Replaceable if the UText
+    //  owns it.  This occurs if the UText was created by cloning.
+    UChar *s = (UChar *)ut->p;
+    uprv_free(s);
+    ut->p = NULL;
+}
+
 
 
 static int32_t U_CALLCONV
@@ -1575,6 +1737,7 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status) 
         ut->extract      = ucstrTextExtract;
         ut->replace      = NULL;
         ut->copy         = NULL;
+        ut->close        = ucstrTextClose;
 
         ut->context               = s;
         ut->providerProperties    = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS);
@@ -1583,9 +1746,9 @@ utext_openUChars(UText *ut, const UChar *s, int32_t length, UErrorCode *status) 
         }
         ut->a                     = length;
         ut->chunk.contents        = s;
-        ut->chunk.length          = length;
         ut->chunk.nativeStart     = 0;
         ut->chunk.nativeLimit     = length>=0? length : 0;
+        ut->chunk.length          = ut->chunk.nativeLimit;
         ut->chunk.nonUTF16Indexes = FALSE;
     }
     return ut;

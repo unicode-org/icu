@@ -18,16 +18,19 @@
 #include <unicode/ustring.h>
 #include "utxttest.h"
 
-UBool  gFailed = FALSE;
+static UBool  gFailed = FALSE;
+static int    gTestNum = 0;
+
+
 #define TEST_ASSERT(x) \
-   {if ((x)==FALSE) {errln("Test failure in file %s at line %d\n", __FILE__, __LINE__);\
+{if ((x)==FALSE) {errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__);\
                      gFailed = TRUE;\
    }}
 
 
 #define TEST_SUCCESS(status) \
-   {if (U_FAILURE(status)) {errln("Test failure in file %s at line %d. Error = \"%s\"\n", \
-       __FILE__, __LINE__, u_errorName(status)); \
+{if (U_FAILURE(status)) {errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
+       gTestNum, __FILE__, __LINE__, u_errorName(status)); \
        gFailed = TRUE;\
    }}
 
@@ -36,7 +39,6 @@ UTextTest::UTextTest() {
 
 UTextTest::~UTextTest() {
 }
-
 
 
 void
@@ -187,6 +189,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     ut = utext_openUnicodeString(NULL, &sa, &status);
     TEST_SUCCESS(status);
     TestAccess(sa, ut, cpCount, cpMap);
+    TestCMR(sa, ut, cpCount, cpMap, cpMap);
     utext_close(ut);
 
 
@@ -202,7 +205,8 @@ void UTextTest::TestString(const UnicodeString &s) {
     status = U_ZERO_ERROR;
     ut = utext_openReplaceable(NULL, &sa, &status);
     TEST_SUCCESS(status);
-    // TestAccess(sa, ut, cpCount, cpMap);
+    TestAccess(sa, ut, cpCount, cpMap);
+    TestCMR(sa, ut, cpCount, cpMap, cpMap);
     utext_close(ut);
 
 
@@ -239,9 +243,268 @@ void UTextTest::TestString(const UnicodeString &s) {
 	delete []u8String;
 }
 
+//  TestCMR   test Copy, Move and Replace operations.
+//              us         UnicodeString containing the test text.
+//              ut         UText containing the same test text.
+//              cpCount    number of code points in the test text.
+//              nativeMap  Mapping from code points to native indexes for the UText.
+//              u16Map     Mapping from code points to UTF-16 indexes, for use with teh UnicodeString.
+//
+//     This function runs a whole series of opertions on each incoming UText.
+//     The UText is deep-cloned prior to each operation, so that the original UText remains unchanged.
+//     
+void UTextTest::TestCMR(const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *u16Map) {
+    TEST_ASSERT(utext_isWritable(ut) == TRUE);
+
+    int  srcLengthType;      // Loop variables for selecting the postion and length
+    int  srcPosType;         //   of the block to operate on within the source text.
+    int  destPosType; 
+
+    int  srcIndex;           // Code Point indexes of the block to operate on for
+    int  srcLength;          //   a specific test.
+
+    int  destIndex;          // Code point index of the destination for a copy/move test.
+
+    int32_t  nativeStart;    // Native unit indexes for a test.
+    int32_t  nativeLimit;
+    int32_t  nativeDest;
+
+    int32_t  u16Start;       // UTF-16 indexes for a test.
+    int32_t  u16Limit;       //   used when performing the same operation in a Unicode String
+    int32_t  u16Dest;
+
+    // Iterate over a whole series of source index, length and a target indexes.
+    // This is done with code point indexes; these will be later translated to native
+    //   indexes using the cpMap.
+    for (srcLengthType=1; srcLengthType<=3; srcLengthType++) {
+        switch (srcLengthType) {
+            case 1: srcLength = 1; break;
+            case 2: srcLength = 5; break;
+            case 3: srcLength = cpCount / 3;
+        }
+        for (srcPosType=1; srcPosType<=5; srcPosType++) {
+            switch (srcPosType) {
+                case 1: srcIndex = 0; break;
+                case 2: srcIndex = 1; break;
+                case 3: srcIndex = cpCount - srcLength; break;
+                case 4: srcIndex = cpCount - srcLength - 1; break;
+                case 5: srcIndex = cpCount / 2; break;
+            }
+            if (srcIndex < 0 || srcIndex + srcLength > cpCount) {
+                // filter out bogus test cases - 
+                //   those with a source range that falls of an edge of the string.
+                continue;
+            }
+
+            //
+            // Copy and move tests.
+            //   iterate over a variety of destination positions.
+            //
+            for (destPosType=1; destPosType<=4; destPosType++) {
+                switch (destPosType) {
+                    case 1: destIndex = 0; break;
+                    case 2: destIndex = 1; break;
+                    case 3: destIndex = srcIndex - 1; break;
+                    case 4: destIndex = srcIndex + srcLength + 1; break;
+                    case 5: destIndex = cpCount-1; break;
+                    case 6: destIndex = cpCount; break;
+                }
+                if (destIndex<0 || destIndex>cpCount) {
+                    // filter out bogus test cases.
+                    continue;
+                }
+
+                nativeStart = nativeMap[srcIndex].nativeIdx;
+                nativeLimit = nativeMap[srcIndex+srcLength].nativeIdx;
+                nativeDest  = nativeMap[destIndex].nativeIdx;
+
+                u16Start    = u16Map[srcIndex].nativeIdx;
+                u16Limit    = u16Map[srcIndex+srcLength].nativeIdx;
+                u16Dest     = u16Map[destIndex].nativeIdx;
+
+                gFailed = FALSE;
+                TestCopyMove(us, ut, FALSE,
+                    nativeStart, nativeLimit, nativeDest,
+                    u16Start, u16Limit, u16Dest);
+
+                TestCopyMove(us, ut, TRUE,
+                    nativeStart, nativeLimit, nativeDest,
+                    u16Start, u16Limit, u16Dest);
+
+                if (gFailed) {
+                    return;
+                }
+            }
+
+            //
+            //  Replace tests.
+            //
+            UnicodeString fullRepString("This is an arbitrary string that will be used as replacement text");
+            for (int32_t replStrLen=0; replStrLen<20; replStrLen++) {
+                UnicodeString repStr(fullRepString, 0, replStrLen);
+                TestReplace(us, ut,
+                    nativeStart, nativeLimit,
+                    u16Start, u16Limit,
+                    repStr);
+                if (gFailed) {
+                    return;
+                }
+            }
+
+        }
+    }
+
+}
+
+//
+//   TestCopyMove    run a single test case for utext_copy.
+//                   Test cases are created in TestCMR and dispatched here for execution.
+//
+void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
+                    int32_t nativeStart, int32_t nativeLimit, int32_t nativeDest,
+                    int32_t u16Start, int32_t u16Limit, int32_t u16Dest) 
+{
+    UErrorCode      status   = U_ZERO_ERROR;
+    UText          *targetUT = NULL;
+    gTestNum++;
+    gFailed = FALSE;
+
+    //
+    //  clone the UText.  The test will be run in the cloned copy
+    //  so that we don't alter the original.
+    //
+    targetUT = utext_clone(NULL, ut, TRUE, &status);
+    TEST_SUCCESS(status);
+    UnicodeString targetUS(us);    // And copy the reference string.
+
+    // do the test operation first in the reference
+    targetUS.copy(u16Start, u16Limit, u16Dest);
+    if (move) {
+        // delete out the source range.
+        if (u16Limit < u16Dest) {
+            targetUS.removeBetween(u16Start, u16Limit);
+        } else {
+            int32_t amtCopied = u16Limit - u16Start;
+            targetUS.removeBetween(u16Start+amtCopied, u16Limit+amtCopied);
+        }
+    }
+
+    // Do the same operation in the UText under test
+    utext_copy(targetUT, nativeStart, nativeLimit, nativeDest, move, &status);
+    if (nativeDest > nativeStart && nativeDest < nativeLimit) {
+        TEST_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+    } else {
+        TEST_SUCCESS(status);
+
+        // Compare the results of the two parallel tests
+        int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
+        int32_t  uti = 0;    // UText position, native index.
+        int32_t  cpi;        // char32 position (code point index) 
+        UChar32  usc;        // code point from Unicode String
+        UChar32  utc;        // code point from UText
+        utext_setNativeIndex(targetUT, 0);
+        for (cpi=0; ; cpi++) {
+            usc = targetUS.char32At(usi);
+            utc = utext_next32(targetUT);
+            if (utc < 0) {
+                break;
+            }
+            TEST_ASSERT(uti == usi);
+            TEST_ASSERT(utc == usc);
+            usi = targetUS.moveIndex32(usi, 1);
+            uti = utext_getNativeIndex(targetUT);
+            if (gFailed) {
+                goto cleanupAndReturn;
+            }
+        }
+        int32_t expectedNativeLength = utext_nativeLength(ut);
+        if (move == FALSE) {
+            expectedNativeLength += nativeLimit - nativeStart;
+        }
+        uti = utext_getNativeIndex(targetUT);
+        TEST_ASSERT(uti == expectedNativeLength);
+    }
+
+cleanupAndReturn:
+    utext_close(targetUT);
+}
+    
+
+//
+//  TestReplace   Test a single Replace operation.
+//
+void UTextTest::TestReplace(
+            const UnicodeString &us,     // reference UnicodeString in which to do the replace 
+            UText         *ut,                // UnicodeText object under test.
+            int32_t       nativeStart,        // Range to be replaced, in UText native units. 
+            int32_t       nativeLimit,
+            int32_t       u16Start,           // Range to be replaced, in UTF-16 units
+            int32_t       u16Limit,           //    for use in the reference UnicodeString.
+            const UnicodeString &repStr)      // The replacement string
+{
+    UErrorCode      status   = U_ZERO_ERROR;
+    UText          *targetUT = NULL;
+    gTestNum++;
+    gFailed = FALSE;
+
+    //
+    //  clone the target UText.  The test will be run in the cloned copy
+    //  so that we don't alter the original.
+    //
+    targetUT = utext_clone(NULL, ut, TRUE, &status);
+    TEST_SUCCESS(status);
+    UnicodeString targetUS(us);    // And copy the reference string.
+
+    //
+    // Do the replace operation in the Unicode String, to 
+    //   produce a reference result.
+    //
+    targetUS.replace(u16Start, u16Limit-u16Start, repStr);
+
+    //
+    // Do the replace on the UText under test
+    //
+    const UChar *rs = repStr.getBuffer();
+    int32_t  rsLen = repStr.length();
+    int32_t actualDelta = utext_replace(targetUT, nativeStart, nativeLimit, rs, rsLen, &status);
+    int32_t expectedDelta = repStr.length() - (nativeLimit - nativeStart);
+    TEST_ASSERT(actualDelta == expectedDelta);
+
+    //
+    // Compare the results
+    //
+    int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
+    int32_t  uti = 0;    // UText position, native index.
+    int32_t  cpi;        // char32 position (code point index) 
+    UChar32  usc;        // code point from Unicode String
+    UChar32  utc;        // code point from UText
+    int32_t  expectedNativeLength = 0;
+    utext_setNativeIndex(targetUT, 0);
+    for (cpi=0; ; cpi++) {
+        usc = targetUS.char32At(usi);
+        utc = utext_next32(targetUT);
+        if (utc < 0) {
+            break;
+        }
+        TEST_ASSERT(uti == usi);
+        TEST_ASSERT(utc == usc);
+        usi = targetUS.moveIndex32(usi, 1);
+        uti = utext_getNativeIndex(targetUT);
+        if (gFailed) {
+            goto cleanupAndReturn;
+        }
+    }
+    expectedNativeLength = utext_nativeLength(ut) + expectedDelta;
+    uti = utext_getNativeIndex(targetUT);
+    TEST_ASSERT(uti == expectedNativeLength);
+
+cleanupAndReturn:
+    utext_close(targetUT);
+}
 
 void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap) {
     UErrorCode  status = U_ZERO_ERROR;
+    gTestNum++;
 
     //
     //  Check the length from the UText
