@@ -500,12 +500,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\filestrm.c">
-			</File>
-			<File
-				RelativePath=".\filestrm.h">
-			</File>
-			<File
 				RelativePath=".\locmap.c">
 			</File>
 			<File
@@ -1760,14 +1754,16 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>

@@ -23,8 +23,6 @@
 
 #include "filestrm.h"
 
-#if !defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO
-
 #include "cmemory.h"
 
 #include <stdio.h>
@@ -170,7 +168,7 @@ T_FileStream_size(FileStream* fileStream)
     /*Changes by Bertrand A. D. doesn't affect the current position
     goes to the end of the file before ftell*/
     fseek((FILE*)fileStream, 0, SEEK_END);
-    size = ftell((FILE*)fileStream);
+    size = (int32_t)ftell((FILE*)fileStream);
     fseek((FILE*)fileStream, savedPos, SEEK_SET);
     return size;
 }
@@ -225,6 +223,3 @@ U_CAPI UBool U_EXPORT2
 T_FileStream_remove(const char* fileName){
     return (remove(fileName) == 0);
 }
-
-#endif /* !UCONFIG_NO_FILE_IO */
-
