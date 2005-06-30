@@ -1,7 +1,7 @@
 
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -159,6 +159,7 @@ void test_FieldPosition( void )
 
 void test_Formattable( void )
 {
+    UErrorCode status = U_ZERO_ERROR;
     Formattable* ftp = new Formattable();
     if (!ftp || !(ftp->getType() == Formattable::kLong) || !(ftp->getLong() == 0)) {
         it_errln("*** Formattable constructor or getType or getLong");
@@ -169,6 +170,13 @@ void test_Formattable( void )
     fta.setLong(1); ftb.setLong(2);
     if ((fta != ftb) || !(fta == ftb)) {
         it_logln("FT setLong, operator== and operator!= tested.");
+        status = U_ZERO_ERROR;
+        fta.getLong(&status);
+        if ( status == U_INVALID_FORMAT_ERROR){
+            it_errln("*** FT getLong(UErrorCode* status) failed on real Long");
+        } else {
+            it_logln("FT getLong(UErrorCode* status) tested.");
+        }
     }else{
         it_errln("*** Formattable setLong or operator== or !=");
     }
@@ -185,22 +193,52 @@ void test_Formattable( void )
     }else{
         it_errln("*** FT set- or getDouble");
     }
-
+    
+    fta.getDate(status = U_ZERO_ERROR);
+    if (status != U_INVALID_FORMAT_ERROR){
+        it_errln("*** FT getDate with status should fail on non-Date");
+    }
     fta.setDate( 4.0 );
     if ((fta.getType() == Formattable::kDate) && (fta.getDate() == 4.0)) {
-        it_logln("FT set- and getDate tested.");
+        it_logln("FT set- and getDate tested.");	  
+        status = U_ZERO_ERROR;
+        fta.getDate(status);
+        if ( status == U_INVALID_FORMAT_ERROR){
+            it_errln("*** FT getDate with status failed on real Date");
+        } else {
+            it_logln("FT getDate with status tested.");
+        }
     }else{
         it_errln("*** FT set- or getDate");
     }
 
-    fta.setString("abc");
-    UnicodeString res;
-    if ((fta.getType() == Formattable::kString) && (fta.getString(res) == "abc")) {
-        it_logln("FT set- and getString tested.");
-    }else{
-        it_errln("*** FT set- or getString");
+    status = U_ZERO_ERROR;
+    fta.getLong(&status);
+    if (status != U_INVALID_FORMAT_ERROR){
+        it_errln("*** FT getLong(UErrorCode* status) should fail on non-Long");
     }
 
+    fta.setString("abc");
+    const Formattable ftc(fta);
+    UnicodeString res;
+
+    {
+        UBool t;
+        t = (fta.getType() == Formattable::kString) 
+            && (fta.getString(res) == "abc")
+            && (fta.getString() == "abc");
+        res = fta.getString(status = U_ZERO_ERROR);
+        t = t && (status != U_INVALID_FORMAT_ERROR && res == "abc");
+        res = ftc.getString(status = U_ZERO_ERROR);
+        t = t && (status != U_INVALID_FORMAT_ERROR && res == "abc");
+        ftc.getString(res,status = U_ZERO_ERROR);
+        t = t && (status != U_INVALID_FORMAT_ERROR && res == "abc"); 
+        if (t) {
+            it_logln("FT set- and getString tested.");
+        }else{
+            it_errln("*** FT set- or getString");
+        }
+    }
 
     UnicodeString ucs = "unicode-string";
     UnicodeString* ucs_ptr = new UnicodeString("pointed-to-unicode-string");
@@ -237,11 +275,28 @@ void test_Formattable( void )
         }
         if (same) {
             it_logln("FT getArray tested");
+            res_array = ft_arr.getArray( res_cnt, status = U_ZERO_ERROR);
+            if (status == U_INVALID_FORMAT_ERROR){
+                it_errln("*** FT getArray with status failed on real array");
+            } else {
+                it_logln("FT getArray with status tested on real array");
+            }
         }else{
             it_errln("*** FT getArray comparison");
         }
     }else{
         it_errln(UnicodeString("*** FT getArray count res_cnt=") + res_cnt + UnicodeString("ft_cnt=") + ft_cnt);
+    }
+    
+    res_array = fta.getArray(res_cnt, status = U_ZERO_ERROR);
+    if (status == U_INVALID_FORMAT_ERROR){
+        if (res_cnt == 0 && res_array == NULL){
+            it_logln("FT getArray with status tested on non array");
+        } else {
+            it_errln("*** FT getArray with status return values are not consistent");
+        }
+    } else {
+        it_errln("*** FT getArray with status should fail on non-array");
     }
 
 

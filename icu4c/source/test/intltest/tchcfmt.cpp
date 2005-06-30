@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -392,6 +392,14 @@ TestChoiceFormat::TestComplexExample( void )
     res1 = form_pat.format( arg_double, str, fpos );
     it_logln(UnicodeString("ChoiceFormat format:") + res1);
     if (res1 != "third") it_errln("***  ChoiceFormat format (double, ...) result!");
+
+    str = "";
+    fpos = 0;
+    status = U_ZERO_ERROR;
+    int64_t arg_64 = 3;
+    res1 = form_pat.format( arg_64, str, fpos );
+    it_logln(UnicodeString("ChoiceFormat format:") + res1);
+    if (res1 != "third") it_errln("***  ChoiceFormat format (int64_t, ...) result!");
 
     str = "";
     fpos = 0;

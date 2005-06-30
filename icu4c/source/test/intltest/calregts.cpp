@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -539,6 +539,9 @@ void CalendarRegressionTest::dowTest(UBool lenient)
         errln("FAIL: actual minimum differs from minimum");
     }
     if(cal->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
+        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
+    }
+    if(cal->getActualMinimum(Calendar::DAY_OF_WEEK) != min) {
         errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK) differs from minimum");
     }
     if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
