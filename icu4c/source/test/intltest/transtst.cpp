@@ -669,6 +669,14 @@ void TransliteratorTest::TestFiltering(void) {
     } else {
         logln(UnicodeString("FAIL: \"") + s + "\", wanted \"" + exp + "\"");
     }
+    
+    // ICU4C ONLY. Do not find Transliterator.orphanFilter() in ICU4J.
+    UnicodeFilter *f = hex->orphanFilter();
+    if (f == NULL){
+        errln("FAIL: orphanFilter() should get a UnicodeFilter");
+    } else {
+        delete f;
+    }
     delete hex;
 }
 

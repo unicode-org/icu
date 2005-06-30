@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -154,6 +154,14 @@ static void TestAPI() {
         return;
     }
     expect(set, "0123456789ABCDEFabcdef", "GHIjkl{bc}", NULL);
+
+    /* [ab] */
+    uset_clear(set);
+    uset_addAllCodePoints(set, STR_ab, STR_ab_LEN);
+    expect(set, "ab", "def{ab}", NULL);
+    if (uset_containsAllCodePoints(set, STR_bc, STR_bc_LEN)){
+        log_err("set should not conatin all characters of \"bc\" \n");
+    }
 
     /* [] */
     set2 = uset_open(1, 1);

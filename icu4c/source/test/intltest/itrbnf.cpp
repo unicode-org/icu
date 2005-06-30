@@ -231,6 +231,14 @@ IntlTestRBNF::TestAPI() {
       logln("Formatted 4, expected " + expected + " got " + result);
   }
 
+  result.remove();
+  FieldPosition pos;
+  formatter->format((int64_t)4, result, pos, status = U_ZERO_ERROR);
+  if(result != expected) {
+      errln("Formatted 4 int64_t, expected " + expected + " got " + result);
+  } else {
+      logln("Formatted 4 int64_t, expected " + expected + " got " + result);
+  }
 
   // clean up
   logln("Cleaning up");
@@ -1522,10 +1530,17 @@ IntlTestRBNF::TestLocalizations(void)
                     Locale locale0("en__VALLEY@turkey=gobblegobble");
                     Locale locale1("de_DE_FOO");
                     Locale locale2("ja_JP");
-                    logln(formatter0.getRuleSetDisplayName(0, locale0));
-                    logln(formatter0.getRuleSetDisplayName(0, locale1));
-                    logln(formatter0.getRuleSetDisplayName(0, locale2));
-                    // TODO: check against intended result
+                    UnicodeString name = formatter0.getRuleSetName(0);
+                    if ( formatter0.getRuleSetDisplayName(0, locale0) == "Main"
+                      && formatter0.getRuleSetDisplayName(0, locale1) == "das Main"
+                      && formatter0.getRuleSetDisplayName(0, locale2) == "%main"
+                      && formatter0.getRuleSetDisplayName(name, locale0) == "Main"
+                      && formatter0.getRuleSetDisplayName(name, locale1) == "das Main"
+                      && formatter0.getRuleSetDisplayName(name, locale2) == "%main"){
+                          logln("getRuleSetDisplayName tested");
+                    }else {
+                        errln("failed to getRuleSetDisplayName");
+                    }
                 }
 
                 for (i = 0; i < formatter0.getNumberOfRuleSetDisplayNameLocales(); ++i) {

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -70,6 +70,11 @@
      * Test ucol_safeClone ()
      **/    
     void TestSafeClone(void);
+
+    /**
+     * Test ucol_cloneBinary(), ucol_openBinary()
+     **/
+    void TestCloneBinary(void);
 
     /**
      * Test getting bounds for a sortkey

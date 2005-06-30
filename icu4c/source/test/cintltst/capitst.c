@@ -114,6 +114,7 @@ void addCollAPITest(TestNode** root)
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
+    addTest(root, &TestCloneBinary, "tscoll/capitst/TestCloneBinary");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
     addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
@@ -756,6 +757,56 @@ void TestSafeClone() {
     free(test2);
 }
 
+void TestCloneBinary(){
+    UErrorCode err = U_ZERO_ERROR;
+    UCollator * col = ucol_open("en_US", &err);
+    UCollator * c;
+    int32_t size;
+    uint8_t * buffer;
+
+    if (U_FAILURE(err)) {
+      log_data_err("Couldn't open collator. Error: %s\n", u_errorName(err));
+      return;
+    }
+
+    size = ucol_cloneBinary(col, NULL, 0, &err);
+    if(U_FAILURE(err)) {
+        log_err("ucol_cloneBinary - couldn't check size. Error: %s\n", u_errorName(err));
+      return;
+    }
+
+    buffer = (uint8_t *) malloc(size);
+    ucol_cloneBinary(col, buffer, size, &err);
+    if(U_FAILURE(err)) {
+      log_err("ucol_cloneBinary - couldn't clone.. Error: %s\n", u_errorName(err));
+      free(buffer);
+      return;
+    }
+    
+    /* hwo to check binary result ? */
+    
+    c = ucol_openBinary(buffer, size, col, &err);
+    if(U_FAILURE(err)) {
+      log_err("ucol_openBinary failed. Error: %s\n", u_errorName(err));
+    } else {
+        UChar t[] = {0x41, 0x42, 0x43, 0};  /* ABC */
+        uint8_t  *k1, *k2;
+        int l1, l2;
+        l1 = ucol_getSortKey(col, t, -1, NULL,0);
+        l2 = ucol_getSortKey(c, t, -1, NULL,0);
+        k1 = (uint8_t *) malloc(sizeof(uint8_t) * l1);
+        k2 = (uint8_t *) malloc(sizeof(uint8_t) * l2);
+        ucol_getSortKey(col, t, -1, k1, l1);
+        ucol_getSortKey(col, t, -1, k2, l2);
+        if (strcmp(k1,k2) != 0){
+            log_err("ucol_openBinary - new collator should equal to old one\n");
+        };
+        free(k1);
+        free(k2);
+    }
+    free(buffer);
+    return;
+}
 /*
 ----------------------------------------------------------------------------
  ctor -- Tests the getSortKey

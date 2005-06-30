@@ -76,6 +76,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(27,TestCases);
 
         CASE(28,TestCurrencyNames);
+        CASE(29,TestCurrencyAmount);
+        CASE(30,TestCurrencyUnit);
 
         default: name = ""; break;
     }
@@ -108,6 +110,19 @@ NumberFormatTest::TestAPI(void)
       errln("Yuck... Formatted a duck... As a number!");
     } else {
       status = U_ZERO_ERROR;
+    }
+
+    result.remove();
+    int64_t ll = 12;
+    test->format(ll, result);
+    if (result != "12.00"){
+        errln("format int64_t error");
+    }
+    result.remove();
+    FieldPosition pos2;
+    test->format(ll, result, pos2);
+    if (result != "12.00"){
+        errln("format int64_t error");
     }
 
     delete test;  
@@ -1456,6 +1471,43 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // TODO add more tests later
 }
 
+void NumberFormatTest::TestCurrencyUnit(void){
+    UErrorCode ec = U_ZERO_ERROR;
+    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    CurrencyUnit cu(USD, ec);
+    assertSuccess("CurrencyUnit", ec);
+
+    const UChar * r = cu.getISOCurrency(); // who is the buffer owner ?
+    assertEquals("getISOCurrency()", USD, r);
+
+    CurrencyUnit cu2(cu);
+    if (!(cu2 == cu)){
+        errln("CurrencyUnit copy constructed object should be same");
+    }
+
+    CurrencyUnit * cu3 = (CurrencyUnit *)cu.clone();
+    if (!(*cu3 == cu)){
+        errln("CurrencyUnit cloned object should be same");
+    }
+}
+
+void NumberFormatTest::TestCurrencyAmount(void){
+    UErrorCode ec = U_ZERO_ERROR;
+    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    CurrencyAmount ca(9, USD, ec);
+    assertSuccess("CurrencyAmount", ec);
+
+    CurrencyAmount ca2(ca);
+    if (!(ca2 == ca)){
+        errln("CurrencyAmount copy constructed object should be same");
+    }
+    
+    CurrencyAmount *ca3 = (CurrencyAmount *)ca.clone();
+    if (!(ca2 == ca)){
+        errln("CurrencyAmount cloned object should be same");
+    }
+}
+
 void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     Locale locDefault;
     Locale locBad("x-crazy_ZZ_MY_SPECIAL_ADMINISTRATION_REGION_NEEDS_A_SPECIAL_VARIANT_WITH_A_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_LONG_NAME");
@@ -1990,6 +2042,7 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
         assertSuccess("ucurr_forLocale", ec);
         fmt.setCurrency(curr, ec);
         assertSuccess("DecimalFormat::setCurrency", ec);
+        fmt.setCurrency(curr); //Deprecated variant, for coverage only
     }
     UnicodeString s;
     fmt.format(value, s);
