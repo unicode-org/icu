@@ -38,6 +38,19 @@ private:
 
     void TestString(const UnicodeString &s);
     void TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap);
+    void TestCMR   (const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *utf16Map);
+    void TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
+                    int32_t nativeStart, int32_t nativeLimit, int32_t nativeDest,
+                    int32_t u16Start, int32_t u16Limit, int32_t u16Dest);
+    void TestReplace(const UnicodeString &us,  // reference UnicodeString in which to do the replace 
+            UText         *ut,                 // UnicodeText object under test.
+            int32_t       nativeStart,         // Range to be replaced, in UText native units. 
+            int32_t       nativeLimit,
+            int32_t       u16Start,            // Range to be replaced, in UTF-16 units
+            int32_t       u16Limit,            //    for use in the reference UnicodeString.
+            const UnicodeString &repStr);      // The replacement string
+
+
 };
 
 
