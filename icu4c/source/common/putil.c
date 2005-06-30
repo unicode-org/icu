@@ -99,7 +99,7 @@
 #   include <Folders.h>
 #   include <MacTypes.h>
 #   include <TextUtils.h>
-#   define ICU_PREVENT_USER_DATA_OVERRIDE 1
+#   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif defined(OS390)
 #include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif defined(U_AIX)
@@ -1372,7 +1372,7 @@ u_getDataDirectory(void) {
     }
 
     /*
-    When ICU_PREVENT_USER_DATA_OVERRIDE is defined, users aren't allowed to
+    When ICU_NO_USER_DATA_OVERRIDE is defined, users aren't allowed to
     override ICU's data with the ICU_DATA environment variable. This prevents
     problems where multiple custom copies of ICU's specific version of data
     are installed on a system. Either the application must define the data
@@ -1384,7 +1384,7 @@ u_getDataDirectory(void) {
     There may also be some platforms where environment variables
     are not allowed.
     */
-#   if !defined(ICU_PREVENT_USER_DATA_OVERRIDE)
+#   if !defined(ICU_NO_USER_DATA_OVERRIDE) && (!defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO)
     /* First try to get the environment variable */
     path=getenv("ICU_DATA");
 #   endif
