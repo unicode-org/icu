@@ -11,7 +11,7 @@
 *   indentation:4
 *
 *   created on: 2003Oct21
-*   created by: Ram Viswanadha
+*   created by: Ram Viswanadha,John Emmons
 */
 
 #include "cmemory.h"
@@ -57,6 +57,18 @@ ulocdata_close(ULocaleData *uld)
     } 
 }
 
+U_CAPI void U_EXPORT2
+ulocdata_setNoSubstitute(ULocaleData *uld, UBool setting)
+{
+   uld->noSubstitute = setting;
+}
+
+U_CAPI UBool U_EXPORT2
+ulocdata_getNoSubstitute(ULocaleData *uld)
+{
+   return uld->noSubstitute;
+}
+
 U_CAPI USet* U_EXPORT2
 ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn, 
                         uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status){
@@ -70,9 +82,17 @@ ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
         return NULL;
     
     exemplarChars = ures_getStringByKey(uld->bundle, exemplarSetTypes[extype], &len, &localStatus);
-    if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
+    if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
+        localStatus = U_MISSING_RESOURCE_ERROR;
+    }
+       
+    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
+                                   localStatus != U_USING_FALLBACK_WARNING )) {
         *status = localStatus;
     }
+    
+    if (U_FAILURE(*status))
+        return NULL;
     
     if(fillIn != NULL)
         uset_applyPattern(fillIn, exemplarChars, len, 
@@ -89,13 +109,13 @@ U_CAPI int32_t U_EXPORT2
 ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, 
                       UChar *result, int32_t resultLength, UErrorCode *status){
 
-    /* TODO: fix this function */
+    const char* delimiterKeys[] =  { "quotationStart",
+                                     "quotationEnd",
+                                     "alternateQuotationStart",
+                                     "alternateQuotationEnd" };
 
-    const char* delimiterKeys[] =  { "delimiters/quotationStart",
-                                     "delimiters/quotationEnd",
-                                     "delimiters/alternateQuotationStart",
-                                     "delimiters/alternateQuotationEnd" };
-
+ 
+    UResourceBundle *delimiterBundle;
     int32_t len = 0;
     const UChar *delimiter = NULL;
     UErrorCode localStatus = U_ZERO_ERROR;
@@ -103,11 +123,34 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
     if (U_FAILURE(*status))
         return 0;
 
-    delimiter = ures_getStringByKey(uld->bundle, delimiterKeys[type], &len, &localStatus);
-    if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
+    delimiterBundle = ures_getByKey(uld->bundle, "delimiters", NULL, &localStatus);
+
+    if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
+        localStatus = U_MISSING_RESOURCE_ERROR;
+    }
+
+    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
+                                   localStatus != U_USING_FALLBACK_WARNING )) {
+        *status = localStatus;
+    }
+
+    if (U_FAILURE(*status))
+        return 0;
+
+    delimiter = ures_getStringByKey(delimiterBundle, delimiterKeys[type], &len, &localStatus);
+
+    if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
+        localStatus = U_MISSING_RESOURCE_ERROR;
+    }
+
+    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
+                                   localStatus != U_USING_FALLBACK_WARNING )) {
         *status = localStatus;
     }
     
+    if (U_FAILURE(*status))
+        return 0;
+
     u_strncpy(result,delimiter,resultLength);
 
     return len;
