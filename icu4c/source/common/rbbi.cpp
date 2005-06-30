@@ -1422,7 +1422,7 @@ private:
 // provides the '32' flavored code point access, not UChar access.
 //
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CharacterIteratorUT);
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CharacterIteratorUT)
 
 CharacterIteratorUT::CharacterIteratorUT(UText *ut) {
     UErrorCode status = U_ZERO_ERROR;
