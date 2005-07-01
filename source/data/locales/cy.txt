@@ -1,0 +1,157 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../cldr/common/main/cy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/main/cy.xml
+ */
+cy{
+    Countries{
+        GB{"Prydain Fawr"}
+    }
+    Currencies{
+        BRL{
+            "BRL",
+            "Real Brasil",
+        }
+        CNY{
+            "CNY",
+            "Yuan Renminbi Tseina",
+        }
+        EUR{
+            "EUR",
+            "Ewro",
+        }
+        GBP{
+            "£",
+            "Punt Sterling Prydain",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "Rwpî India",
+        }
+        JPY{
+            "¥",
+            "Yen Siapan",
+        }
+        RUB{
+            "RUB",
+            "Rwbl Rwsia",
+        }
+        USD{
+            "$",
+            "Doler yr UDA",
+        }
+    }
+    ExemplarCharacters{"[a-z âäáàêëéèîïíìôöóòûüúùŵẅẃẁŷÿýỳ]"}
+    Languages{
+        ar{"Arabeg"}
+        cy{"Cymraeg"}
+        de{"Almaeneg"}
+        en{"Saesneg"}
+        es{"Sbaeneg"}
+        fr{"Ffrangeg"}
+        hi{"Hindi"}
+        it{"Eidaleg"}
+        ja{"Siapaneeg"}
+        pt{"Portiwgaleg"}
+        ru{"Rwsieg"}
+        zh{"Tseineeg"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    Scripts{
+        Latn{"Lladin"}
+    }
+    Version{"1.23"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Llun",
+                        "Maw",
+                        "Mer",
+                        "Iau",
+                        "Gwen",
+                        "Sad",
+                    }
+                    wide{
+                        "Dydd Sul",
+                        "Dydd Llun",
+                        "Dydd Mawrth",
+                        "Dydd Mercher",
+                        "Dydd Iau",
+                        "Dydd Gwener",
+                        "Dydd Sadwrn",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "L",
+                        "M",
+                        "M",
+                        "I",
+                        "G",
+                        "S",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ion",
+                        "Chwef",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Meh",
+                        "Gorff",
+                        "Awst",
+                        "Medi",
+                        "Hyd",
+                        "Tach",
+                        "Rhag",
+                    }
+                    wide{
+                        "Ionawr",
+                        "Chwefror",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Mehefin",
+                        "Gorffenaf",
+                        "Awst",
+                        "Medi",
+                        "Hydref",
+                        "Tachwedd",
+                        "Rhagfyr",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "C",
+                        "M",
+                        "E",
+                        "M",
+                        "M",
+                        "G",
+                        "A",
+                        "M",
+                        "H",
+                        "T",
+                        "R",
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+*.plg
+genrb
+genrb.[0-9]
+derb_*
+derb
+derb.[0-9]
