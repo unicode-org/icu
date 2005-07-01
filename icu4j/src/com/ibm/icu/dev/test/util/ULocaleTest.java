@@ -1122,7 +1122,8 @@ public class ULocaleTest extends TestFmwk {
     /*1*/ { "en", "true" },
     /*2*/ { "en", "false" },
     /*3*/ {  null, "false" },
-    /*4*/ {  "es", "true" }, };
+    /*4*/ {  "es", "true" }, 
+    /*5*/ { "de", "true" }};
     
     private static final String ACCEPT_LANGUAGE_HTTP[] = { 
                     /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
@@ -1139,7 +1140,8 @@ public class ULocaleTest extends TestFmwk {
                                "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                                "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                                "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
-                               "es"};
+                               "es",
+                        /*5*/ "de;q=.9, fr;q=.9, xxx-yyy, sr;q=.8"};
     
     
     public void TestAcceptLanguage() {
