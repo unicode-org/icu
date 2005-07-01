@@ -11,7 +11,6 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
@@ -20,13 +19,9 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import java.lang.reflect.*;
 import java.util.Locale;
-import java.io.*;
-import java.util.Date;
-import java.util.MissingResourceException;
 import java.util.Iterator;
 import java.util.Hashtable;
 
@@ -1120,4 +1115,94 @@ public class ULocaleTest extends TestFmwk {
 
     //Hashtables for storing expected display of keys/types of locale in English and Chinese
     private static Hashtable[] h = new Hashtable[2];
+    
+    private static final String ACCEPT_LANGUAGE_TESTS[][]  =  {
+    /*#      result    valid? */
+    /*0*/ { "mt_MT", "true" },
+    /*1*/ { "en", "true" },
+    /*2*/ { "en", "false" },
+    /*3*/ {  null, "false" },
+    /*4*/ {  "es", "true" }, };
+    
+    private static final String ACCEPT_LANGUAGE_HTTP[] = { 
+                    /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
+                    /*1*/ "ja;q=0.5, en;q=0.8, tlh",
+                    /*2*/ "en-wf, de-lx;q=0.8",
+                    /*3*/ "mga-ie;q=0.9, tlh",
+                    /*4*/ "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                          "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
+                               "es"};
+    
+    
+    public void TestAcceptLanguage() {
+        for(int i = 0 ; i < (ACCEPT_LANGUAGE_HTTP.length); i++) {
+            Boolean expectBoolean = new Boolean(ACCEPT_LANGUAGE_TESTS[i][1]);
+            String expectLocale=ACCEPT_LANGUAGE_TESTS[i][0];
+            
+           logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
+            
+            boolean r[] = { false };
+            ULocale n = ULocale.acceptLanguage(ACCEPT_LANGUAGE_HTTP[i], r);
+            if((n==null)&&(expectLocale!=null)) {
+                errln("result was null! line #" + i);
+                continue;
+            }
+            if(((n==null)&&(expectLocale==null)) || (n.toString().equals(expectLocale))) {
+                logln(" locale: OK." );
+            } else {
+                errln("expected " + expectLocale + " but got " + n.toString());
+            }
+            if(expectBoolean.equals(new Boolean(r[0]))) {
+                logln(" bool: OK.");
+            } else {
+                errln("bool: not OK, was " + new Boolean(r[0]).toString() + " expected " + expectBoolean.toString());
+            }
+        }
+    }
+    
+  
+    
+/**
+ * static void TestAcceptLanguage(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UAcceptResult outResult;
+  UEnumeration *available;
+  char tmp[200];
+  int i;
+  int32_t rc = 0;
+  
+      for(i=0;i<numTests;i++) {
+    outResult = -3;
+    status=U_ZERO_ERROR;
+    log_verbose("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+
+    available = ures_openAvailableLocales(tests[i].icuSet, &status);
+    tmp[0]=0;
+    rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
+    uenum_close(available);
+    log_verbose(" got %s, %d [%s]\n", tmp[0]?tmp:"(EMPTY)", outResult, u_errorName(status));
+    if(outResult != tests[i].res) {
+      log_err("FAIL: #%d: expected outResult of %d but got %d\n", i, tests[i].res, outResult);
+      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+    }
+    if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
+      log_err("FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
+      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+    }
+  }
+}
+
+ */
+    
 }
