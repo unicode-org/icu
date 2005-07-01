@@ -391,13 +391,9 @@ static void TestSprintfFormat(void) {
 
     TestSPrintFormat("%8c", (char)'e', "%8c", (char)'e');
     TestSPrintFormat("%-8c", (char)'e', "%-8c", (char)'e');
-    TestSPrintFormat("%5.3c", (char)'e', "%5.3c", (char)'e');
-    TestSPrintFormat("%-5.3c", (char)'e', "%-5.3c", (char)'e');
 
     TestSPrintFormat("%8C", (UChar)0x65, "%8c", (char)'e');
     TestSPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)'e');
-    TestSPrintFormat("%5.3C", (UChar)0x65, "%5.3c", (char)'e');
-    TestSPrintFormat("%-5.3C", (UChar)0x65, "%-5.3c", (char)'e');
 
     TestSPrintFormat("%f", 1.23456789, "%f", 1.23456789);
     TestSPrintFormat("%f", 12345.6789, "%f", 12345.6789);

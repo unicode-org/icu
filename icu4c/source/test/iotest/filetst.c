@@ -1083,13 +1083,9 @@ static void TestFprintfFormat(void) {
 
     TestFPrintFormat("%8c", (char)'e', "%8c", (char)'e');
     TestFPrintFormat("%-8c", (char)'e', "%-8c", (char)'e');
-    TestFPrintFormat("%5.3c", (char)'e', "%5.3c", (char)'e');
-    TestFPrintFormat("%-5.3c", (char)'e', "%-5.3c", (char)'e');
 
     TestFPrintFormat("%8C", (UChar)0x65, "%8c", (char)'e');
     TestFPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)'e');
-    TestFPrintFormat("%5.3C", (UChar)0x65, "%5.3c", (char)'e');
-    TestFPrintFormat("%-5.3C", (UChar)0x65, "%-5.3c", (char)'e');
 
     TestFPrintFormat("%f", 1.23456789, "%f", 1.23456789);
     TestFPrintFormat("%f", 12345.6789, "%f", 12345.6789);
@@ -1403,7 +1399,6 @@ static void TestUnicodeFormat(void)
     UChar myUString[256];
 	UFILE *myFile;
 	static const UChar TEST_STR[] = { 0x03BC, 0x0025, 0x0024, 0};
-	static const UChar EXPECTED_STR[] = { 0x03BC, 0x03BC, 0x0025, 0x0024, 0};
 	static const UChar PERCENT_S[] = { 0x03BC, 0x0025, 0x0053, 0};
 
 	u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
