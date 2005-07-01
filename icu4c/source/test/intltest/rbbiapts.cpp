@@ -297,8 +297,8 @@ void RBBIAPITest::TestGetSetAdoptText()
     //
     //   Quick test to see if UText is working at all.
     //
-    const char *s1 = "hello world";
-    const char *s2 = "see ya";
+    const char *s1 = "\x68\x65\x6C\x6C\x6F\x20\x77\x6F\x72\x6C\x64"; /* "hello world" in UTF-8 */
+    const char *s2 = "\x73\x65\x65\x20\x79\x61"; /* "see ya" in UTF-8 */
     //                012345678901
 
     status = U_ZERO_ERROR;

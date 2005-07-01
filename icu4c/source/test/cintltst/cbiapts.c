@@ -635,7 +635,7 @@ static void TestBreakIteratorStatusVec() {
  *         Test that ubrk_setUText() is present and works for a simple case.
  */
 static void TestBreakIteratorUText(void) {
-    const char *UTF8Str = "A\xc3\x85Z ARing";  /* c3 85 is utf-8 for A with a ring on top */
+    const char *UTF8Str = "\x41\xc3\x85\x5A\x20\x41\x52\x69\x6E\x67";  /* c3 85 is utf-8 for A with a ring on top */
                       /*   0  1   2 34567890  */
 
     UErrorCode      status = U_ZERO_ERROR;
