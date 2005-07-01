@@ -2804,7 +2804,6 @@ static void TestFromUCountPending(){
         {{ 0xdbc4, 0xde34, 0xd900},3,3},
     };
     int i;
-    UConverterFromUCallback *oldFromUAction= NULL;
     UConverter* cnv = ucnv_openPackage(loadTestData(&status), "test3", &status);
     if(U_FAILURE(status)){
         log_err("Could not create converter for test3. Error: %s\n", u_errorName(status));
