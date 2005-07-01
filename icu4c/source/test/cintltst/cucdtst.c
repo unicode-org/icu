@@ -3161,6 +3161,7 @@ caseFoldingLineFn(void *context,
         which=CF_TURKIC;
         break;
     default:
+        which=0;
         break; /* won't happen because of test above */
     }
 
