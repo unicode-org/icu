@@ -43,11 +43,13 @@ UTextTest::~UTextTest() {
 
 void
 UTextTest::runIndexedTest(int32_t index, UBool exec,
-                                      const char* &name, char* /*par*/) {
+                          const char* &name, char* /*par*/) {
     switch (index) {
         case 0: name = "TextTest";
-            if(exec) TextTest();                         break;
-        default: name = ""; break;
+            if (exec) TextTest();    break;
+        case 1: name = "ErrorTest";
+            if (exec) ErrorTest();   break;
+        default: name = "";          break;
     }
 }
 
@@ -62,10 +64,23 @@ static uint32_t m_rand()
 }
 
 
+//
+//   TextTest()
+//
+//       Top Level function for UText testing.
+//       Specifies the strings to be tested, with the acutal testing itself
+//       being carried out in another function, TestString().
+//
 void  UTextTest::TextTest() {
     int32_t i, j;
 
     TestString("abcd\\U00010001xyz");
+    TestString("");
+
+    // Supplementary chars at start or end
+    TestString("\\U00010001");
+    TestString("abc\\U00010001");
+    TestString("\\U00010001abc");
 
     // Test simple strings of lengths 1 to 60, looking for glitches at buffer boundaries
     UnicodeString s;
@@ -126,14 +141,11 @@ void  UTextTest::TextTest() {
     TestString(s);
 }
 
-//
-//  mapping between native indexes and code points.
-//     native indexes could be utf-8, utf-16, utf32, or some code page.
-//     The general purpose UText test funciton takes an array of these as
-//     expected contents of the text being accessed.
-//
 
-
+//
+//  TestString()     Run a suite of UText tests on a string.
+//                   The test string is unescaped before use.
+//
 void UTextTest::TestString(const UnicodeString &s) {
     int32_t       i;
     int32_t       j;
@@ -147,7 +159,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     saLen = sa.length();
 
     //
-    // Build up the mapping between code points and UTF-16 code unit indexes.
+    // Build up a mapping between code points and UTF-16 code unit indexes.
     //
     m *cpMap = new m[sa.length() + 1];
     j = 0;
@@ -161,7 +173,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     cpMap[j].nativeIdx = i;   // position following the last char in utf-16 string.    
 
 
-    // UChar * test, null term
+    // UChar * test, null terminated
     status = U_ZERO_ERROR;
     UChar *buf = new UChar[saLen+1];
     sa.extract(buf, saLen+1, status);
@@ -502,6 +514,11 @@ cleanupAndReturn:
     utext_close(targetUT);
 }
 
+//
+//  TestAccess()    Test the read only access functions on a UText.
+//                  The text is accessed in a variety of ways, and compared with
+//                  the reference UnicodeString.
+//
 void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap) {
     UErrorCode  status = U_ZERO_ERROR;
     gTestNum++;
@@ -711,7 +728,11 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
 
     status = U_ZERO_ERROR;
     len = utext_extract(ut, 0, utlen, NULL, 0, &status);
-    TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR)
+    if (utlen == 0) {
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+    } else {
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+    }
     TEST_ASSERT(len == expectedLen);
 
     status = U_ZERO_ERROR;
@@ -731,6 +752,176 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     }
 
     delete buf;
+}
+
+
+
+//
+//  ErrorTest()    Check various error and edge cases.
+//
+void UTextTest::ErrorTest() 
+{
+    // Close of an unitialized UText.  Shouldn't blow up.
+    {
+        UText  ut;  
+        memset(&ut, 0, sizeof(UText));
+        utext_close(&ut);
+        utext_close(NULL);
+    }
+
+    // Double-close of a UText.  Shouldn't blow up.  UText should still be usable.
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UText ut = UTEXT_INITIALIZER;
+        UnicodeString s("Hello, World");
+        UText *ut2 = utext_openUnicodeString(&ut, &s, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(ut2 == &ut);
+
+        UText *ut3 = utext_close(&ut);
+        TEST_ASSERT(ut3 == &ut);
+
+        UText *ut4 = utext_close(&ut);
+        TEST_ASSERT(ut4 == &ut);
+
+        utext_openUnicodeString(&ut, &s, &status);
+        TEST_SUCCESS(status);
+        utext_close(&ut);
+    }
+
+    // Re-use of a UText, chaining through each of the types of UText
+    //   (If it doesn't blow up, and doesn't leak, it's probably working fine)
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UText ut = UTEXT_INITIALIZER;
+        UText  *utp;
+        UnicodeString s1("Hello, World");
+        UChar s2[] = {(UChar)0x41, (UChar)0x42, (UChar)0};
+        char  *s3 = "\x66\x67\x68";
+
+        utp = utext_openUnicodeString(&ut, &s1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utp == &ut);
+
+        utp = utext_openConstUnicodeString(&ut, &s1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utp == &ut);
+
+        utp = utext_openUTF8(&ut, s3, -1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utp == &ut);
+
+        utp = utext_openUChars(&ut, s2, -1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utp == &ut);
+
+        utp = utext_close(&ut);
+        TEST_ASSERT(utp == &ut);
+
+        utp = utext_openUnicodeString(&ut, &s1, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(utp == &ut);
+    }
+
+    //
+    //  UTF-8 with malformed sequences.
+    //    These should come through as the Unicode replacement char, \ufffd
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UText *ut = NULL;
+        char *badUTF8 = "\x41\x81\x42\xf0\x81\x81\x43";   
+        UChar32  c;
+
+        ut = utext_openUTF8(NULL, badUTF8, -1, &status);
+        TEST_SUCCESS(status);
+        c = utext_char32At(ut, 1);
+        TEST_ASSERT(c == 0xfffd);
+        c = utext_char32At(ut, 3);
+        TEST_ASSERT(c == 0xfffd);
+        c = utext_char32At(ut, 5);
+        TEST_ASSERT(c == 0xfffd);
+        c = utext_char32At(ut, 6);
+        TEST_ASSERT(c == 0x43);
+
+        UChar buf[10];
+        int n = utext_extract(ut, 0, 9, buf, 10, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(n==5);
+        TEST_ASSERT(buf[1] == 0xfffd);
+        TEST_ASSERT(buf[3] == 0xfffd);
+        TEST_ASSERT(buf[2] == 0x42);
+    }
+
+
+    //
+    //  isLengthExpensive - does it make the exptected transitions after
+    //                      getting the length of a nul terminated string?
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString sa("Hello, this is a string");
+        UBool  isExpensive;
+
+        UChar sb[100];
+        memset(sb, 0x20, sizeof(sb));
+        sb[99] = 0;
+
+        UText *uta = utext_openUnicodeString(NULL, &sa, &status);
+        TEST_SUCCESS(status);
+        isExpensive = utext_isLengthExpensive(uta);
+        TEST_ASSERT(isExpensive == FALSE);
+        utext_close(uta);
+
+        UText *utb = utext_openUChars(NULL, sb, -1, &status);
+        TEST_SUCCESS(status);
+        isExpensive = utext_isLengthExpensive(utb);
+        TEST_ASSERT(isExpensive == TRUE);
+        int32_t  len = utext_nativeLength(utb);
+        TEST_ASSERT(len == 99);
+        isExpensive = utext_isLengthExpensive(utb);
+        TEST_ASSERT(isExpensive == FALSE);
+        utext_close(utb);
+    }
+
+    //
+    // get/set native index to positions not on code point boundaries.
+    //
+    {
+        char *u8str =         "\xc8\x81\xe1\x82\x83\xf1\x84\x85\x86";
+        int32_t startMap[] = {   0,  0,  2,  2,  2,  5,  5,  5,  5,  9,  9};
+
+
+        UErrorCode status = U_ZERO_ERROR;
+        UText *ut = utext_openUTF8(NULL, u8str, -1, &status);
+        TEST_SUCCESS(status);
+
+        int32_t i;
+        int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
+        for (i=0; i<startMapLimit; i++) {
+            utext_setNativeIndex(ut, i);
+            int32_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == startMap[i]);
+        }
+        utext_close(ut);
+
+        //  Similar test, with utf16 instead of utf8
+        UnicodeString u16str("\\u1000\\U00011000\\u2000\\U00022000");
+        int32_t start16Map[]  ={ 0,     1,   1,    3,     4,  4,     6,  6};
+        u16str = u16str.unescape();
+        status = U_ZERO_ERROR;
+        ut = utext_openUnicodeString(NULL, &u16str, &status);
+        TEST_SUCCESS(status);
+
+        startMapLimit = sizeof(start16Map) / sizeof(int32_t);
+        for (i=0; i<startMapLimit; i++) {
+            utext_setNativeIndex(ut, i);
+            int32_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == start16Map[i]);
+        }
+        utext_close(ut);
+    }
+
 
 }
 

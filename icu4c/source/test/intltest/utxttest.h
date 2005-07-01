@@ -29,6 +29,7 @@ public:
 
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
     void TextTest();
+    void ErrorTest();
 
 private:
     struct m {                              // Map between native indices & code points.
