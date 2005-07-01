@@ -2641,7 +2641,7 @@ public final class ULocale implements Serializable {
         private int localeType;
         private Type(int type) { localeType = type; }
     }
-
+    
     
     /**
     * NullPointerException is thrown if acceptLanguageList or availableLocales is
@@ -2657,7 +2657,34 @@ public final class ULocale implements Serializable {
 
     public static ULocale acceptLanguage(String acceptLanguageList, ULocale[]
     availableLocales, boolean[] fallback) {
-    
+        /**
+         * @internal ICU 3.4
+         * @deprecated this is an internal class
+         */
+        class ULocaleAcceptLanguageQ implements Comparable {
+            private double q;
+            private double serial;
+            public ULocaleAcceptLanguageQ(double theq, int theserial) {
+                q = theq;
+                serial = theserial;
+            }
+            public int compareTo(Object o) {
+                ULocaleAcceptLanguageQ other = (ULocaleAcceptLanguageQ) o;
+                if(q > other.q) { // reverse - to sort in descending order
+                    return -1;
+                } else if(q < other.q) {
+                    return 1;
+                }
+                if(serial < other.serial) {
+                    return -1;
+                } else if(serial > other.serial) {
+                    return 1;
+                } else {
+                    return 0; // same object
+                }
+            }
+        }
+
         // 1st: parse out the acceptLanguageList into an array
         
         TreeMap map = new TreeMap();
@@ -2703,7 +2730,9 @@ public final class ULocale implements Serializable {
             }
 
             String loc = acceptLanguageList.substring(n,paramEnd).trim();
-            map.put(new Double(1.0-q), new ULocale(canonicalize(loc))); // sort in reverse order..   1.0, 0.9, 0.8 .. etc
+            int serial = map.size();
+            ULocaleAcceptLanguageQ entry = new ULocaleAcceptLanguageQ(q,serial);
+            map.put(entry, new ULocale(canonicalize(loc))); // sort in reverse order..   1.0, 0.9, 0.8 .. etc
             n = itemEnd; // get next item. (n++ will skip over delimiter)
         }
         
@@ -2713,8 +2742,7 @@ public final class ULocale implements Serializable {
         // 3. call the real function
         return acceptLanguage(acceptList, availableLocales, fallback);
     }
-
-
+    
    /**
     * @draft ICU 3.4
     * @deprecated This is a draft API and might change in a future release of ICU.
@@ -2726,13 +2754,12 @@ public final class ULocale implements Serializable {
         int i,j;
         int maxLen = -1;
         String acceptFallbacks[] = new String[acceptLanguageList.length];
-        for(i=0;i<acceptLanguageList.length;i++) {            
+        for(i=0;i<acceptLanguageList.length;i++) {       
             for(j=0;j<availableLocales.length;j++) {
                 if(availableLocales[j].equals(acceptLanguageList[i])) {
                     if(fallback != null) {
                         fallback[0]=true;
                     }
-//                    System.out.println("exact match: " + acceptLanguageList[i]);
                     return acceptLanguageList[i];
                 }
             
@@ -2742,27 +2769,23 @@ public final class ULocale implements Serializable {
                 
                 if(len>maxLen) {
                     maxLen = len;
-//                    System.out.println("maxLen now " + maxLen);
                 }
             }
             Locale loc = acceptLanguageList[i].toLocale();
             String parent = LocaleUtility.fallback(loc).toString();
             acceptFallbacks[i] = parent;
-//            System.out.println("new fallback " + parent);
         }
         
-        // OK, no direct one. 
+        // OK, no direct match. 
         for(maxLen--;maxLen>0;maxLen--) {
             for(i=0;i<acceptFallbacks.length;i++) {
                 if(acceptFallbacks[i]!=null) {
                     if(acceptFallbacks[i].length() == maxLen) {
-//                    System.out.println("Trying " + i + " - " + acceptFallbacks[i]);
                         for(j=0;j<availableLocales.length;j++) {
                             if(availableLocales[j].equals(acceptFallbacks[i])) {
                                 if(fallback != null) {
                                     fallback[0]=false;
                                 }
-//                                System.out.println("fallback match: " + acceptLanguageList[i]);
                                 return new ULocale(acceptFallbacks[i]);
                             }
                         
