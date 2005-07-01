@@ -612,8 +612,12 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     switch (patternCharIndex) {
     
     // for any "G" symbol, write out the appropriate era string
+    // "GGGG" is wide era name, anything else is abbreviated name
     case UDAT_ERA_FIELD:
-        _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
+        if (count >= 4)
+           _appendSymbol(appendTo, value, fSymbols->fEraNames, fSymbols->fEraNamesCount);
+        else
+           _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
         break;
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
@@ -630,13 +634,35 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "MMMM", write out the whole month name, for "MMM", write out the month
     // abbreviation, for "M" or "MM", write out the month as a number with the
     // appropriate number of digits
+    // for "MMMMM", use the narrow form
     case UDAT_MONTH_FIELD:
-        if (count >= 4) 
+        if (count == 5) 
+            _appendSymbol(appendTo, value, fSymbols->fNarrowMonths,
+                          fSymbols->fNarrowMonthsCount);
+        else if (count == 4) 
             _appendSymbol(appendTo, value, fSymbols->fMonths,
                           fSymbols->fMonthsCount);
         else if (count == 3) 
             _appendSymbol(appendTo, value, fSymbols->fShortMonths,
                           fSymbols->fShortMonthsCount);
+        else 
+            zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
+        break;
+
+    // for "LLLL", write out the whole month name, for "LLL", write out the month
+    // abbreviation, for "L" or "LL", write out the month as a number with the
+    // appropriate number of digits
+    // for "LLLLL", use the narrow form
+    case UDAT_STANDALONE_MONTH_FIELD:
+        if (count == 5) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneNarrowMonths,
+                          fSymbols->fStandaloneNarrowMonthsCount);
+        else if (count == 4) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneMonths,
+                          fSymbols->fStandaloneMonthsCount);
+        else if (count == 3) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneShortMonths,
+                          fSymbols->fStandaloneShortMonthsCount);
         else 
             zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
         break;
@@ -668,14 +694,34 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         break;
 
-    // for "EEEE", write out the day-of-the-week name; otherwise, use the abbreviation
+    // for "EEE", write out the abbreviated day-of-the-week name
+    // for "EEEE", write out the wide day-of-the-week name
+    // for "EEEEE", use the narrow day-of-the-week name
     case UDAT_DAY_OF_WEEK_FIELD:
-        if (count >= 4) 
+        if (count == 5) 
+            _appendSymbol(appendTo, value, fSymbols->fNarrowWeekdays,
+                          fSymbols->fNarrowWeekdaysCount);
+        else if (count == 4) 
             _appendSymbol(appendTo, value, fSymbols->fWeekdays,
                           fSymbols->fWeekdaysCount);
-        else 
+        else if (count == 3) 
             _appendSymbol(appendTo, value, fSymbols->fShortWeekdays,
                           fSymbols->fShortWeekdaysCount);
+        break;
+
+    // for "ccc", write out the abbreviated day-of-the-week name
+    // for "cccc", write out the wide day-of-the-week name
+    // for "ccccc", use the narrow day-of-the-week name
+    case UDAT_STANDALONE_DAY_FIELD:
+        if (count == 5) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneNarrowWeekdays,
+                          fSymbols->fStandaloneNarrowWeekdaysCount);
+        else if (count == 4) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneWeekdays,
+                          fSymbols->fStandaloneWeekdaysCount);
+        else if (count == 3) 
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneShortWeekdays,
+                          fSymbols->fStandaloneShortWeekdaysCount);
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
