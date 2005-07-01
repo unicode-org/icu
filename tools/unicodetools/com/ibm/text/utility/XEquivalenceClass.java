@@ -132,6 +132,15 @@ public class XEquivalenceClass {
 		return Collections.unmodifiableSet(aPartitionSet);
 	}
 	
+	public Set getEquivalenceSets() {
+		Set result = new HashSet();
+		for (Iterator it = toPartitionSet.keySet().iterator(); it.hasNext();) {
+			Object item = it.next();
+			Set partition = (Set) toPartitionSet.get(item);
+			result.add(Collections.unmodifiableSet(partition));
+		}
+		return result;	
+	}
 	/**
 	 * returns true iff a is equivalent to b (or a.equals b)
 	 *
