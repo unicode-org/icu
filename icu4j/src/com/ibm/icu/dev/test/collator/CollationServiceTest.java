@@ -344,4 +344,82 @@ public class CollationServiceTest extends TestFmwk {
             assertEquals("getFunctionalEquivalent(zh_Hans)", "zh", equiv.toString());
         }
     }
+    
+    public void TestGetFunctionalEquivalent() {
+        String kw[] = Collator.getKeywords();
+        final String DATA[] = { 
+                          "de", "de", "t",
+                          "de@collation=direct", "de", "t",
+                          "de@collation=traditional", "de", "t",
+                          "de@collation=gb2312han", "de", "t",
+                          "de@collation=stroke", "de", "t",
+                          "de@collation=pinyin", "de", "t",
+                          "de@collation=phonebook", "de@collation=phonebook", "t",
+                          "de@collation=big5han", "de", "t",
+                          "de_AT", "de", "t",
+                          "de_AT@collation=direct", "de", "t",
+                          "de_AT@collation=traditional", "de", "t",
+                          "de_AT@collation=gb2312han", "de", "t",
+                          "de_AT@collation=stroke", "de", "t",
+                          "de_AT@collation=pinyin", "de", "t",
+                          "de_AT@collation=phonebook", "de@collation=phonebook", "t",
+                          "de_AT@collation=big5han", "de", "t",
+                          "nl", "root", "t",
+                          "nl@collation=direct", "root", "t",
+                          "nl_BE", "root", "t",
+                          "nl_BE@collation=direct", "root", "t",
+                          "nl_BE@collation=traditional", "root", "t",
+                          "nl_BE@collation=gb2312han", "root", "t",
+                          "nl_BE@collation=stroke", "root", "t",
+                          "nl_BE@collation=pinyin", "root", "t",
+                          "nl_BE@collation=big5han", "root", "t",
+                          "nl_BE@collation=phonebook", "root", "t",
+                          "en_US_VALLEYGIRL","en","f"
+                        };
+        final int DATA_COUNT=(DATA.length/3);
+        
+        for(int i=0;i<DATA_COUNT;i++) {
+            boolean isAvailable[] = new boolean[1];
+            ULocale input = new ULocale(DATA[(i*3)+0]);
+            ULocale expect = new ULocale(DATA[(i*3)+1]);
+            boolean expectAvailable = DATA[(i*3)+2].equals("t");
+            ULocale actual = Collator.getFunctionalEquivalent(kw[0],input,isAvailable);
+            if(!actual.equals(expect) || (expectAvailable!=isAvailable[0])) {
+                errln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + new Boolean(isAvailable[0]) + ", " +
+                        "expected " + expect + " avail " + new Boolean(expectAvailable));
+            } else {
+                logln("#" + i + ": Collator.getFunctionalEquivalent(" + input + ")=" + actual + ", avail " + new Boolean(isAvailable[0]));
+            }
+        }
+    }
+
+//    public void PrintFunctionalEquivalentList() {
+//        ULocale[] locales = Collator.getAvailableULocales();
+//        String[] keywords = Collator.getKeywords();
+//        logln("Collation");
+//        logln("Possible keyword=values pairs:");
+//        for (int i = 0; i < Collator.getKeywords().length; ++i) {
+//                String[] values = Collator.getKeywordValues(keywords[i]);
+//                for (int j = 0; j < values.length; ++j) {
+//                        System.out.println(keywords[i] + "=" + values[j]);
+//                }
+//        }
+//        logln("Differing Collators:");
+//        boolean[] isAvailable = {true};
+//        for (int k = 0; k < locales.length; ++k) {
+//                logln(locales[k].getDisplayName(ULocale.ENGLISH) + " [" +locales[k] + "]");
+//                for (int i = 0; i < Collator.getKeywords().length; ++i) {
+//                        ULocale base = Collator.getFunctionalEquivalent(keywords[i],locales[k]);
+//                        String[] values = Collator.getKeywordValues(keywords[i]);
+//                        for (int j = 0; j < Collator.getKeywordValues(keywords[i]).length;++j) {                          
+//                                ULocale other = Collator.getFunctionalEquivalent(keywords[i], 
+//                                        new ULocale(locales[k] + "@" + keywords[i] + "=" + values[j]),
+//                                        isAvailable);
+//                                if (isAvailable[0] && !other.equals(base)) {
+//                                        logln("\t" + keywords[i] + "=" + values[j] + ";\t" + base + ";\t" + other);
+//                                }
+//                        }
+//                }
+//        }
+//    }
 }
