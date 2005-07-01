@@ -1556,6 +1556,14 @@ compareIterNoIndexes(UCharIterator *iter1, const char *n1,
     UChar32 c1, c2;
     UErrorCode errorCode;
 
+    /* code coverage for unorm_it.c/unormIteratorGetIndex() */
+    if(
+        iter2->getIndex(iter2, UITER_START)!=0 ||
+        iter2->getIndex(iter2, UITER_LENGTH)!=UITER_UNKNOWN_INDEX
+    ) {
+        log_err("UNormIterator.getIndex() failed\n");
+    }
+
     /* set into the middle */
     iter1->move(iter1, middle, UITER_ZERO);
     iter2->move(iter2, middle, UITER_ZERO);
