@@ -1,12 +1,11 @@
 ## -*-makefile-*-
 ## OS400-specific setup (for cross build)
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
 
-DEFS+=-DOS400
 THREADSCPPFLAGS = -D_MULTI_THREADED
 
 ## Commands to compile
