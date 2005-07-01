@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -260,6 +260,35 @@ UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UE
 // #endif
 //     }
 //   }
+
+    return fFillin;
+}
+
+UResourceBundle* CalendarData::getByKey3(const char *key, const char *contextKey, const char *subKey, UErrorCode& status) {
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
+
+    if(fBundle) {
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: //\n");
+#endif
+        fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, contextKey, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/%s/%s -> %s - from MAIN %s\n", this, key, contextKey, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+    }
+    if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+        status = U_ZERO_ERROR; // retry with fallback (gregorian)
+        fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, contextKey, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/%s/%s -> %s - from FALLBACK %s\n",this, key, contextKey, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
+#endif
+    }
 
     return fFillin;
 }
