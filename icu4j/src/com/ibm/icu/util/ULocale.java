@@ -2643,7 +2643,8 @@ public final class ULocale implements Serializable {
     }
     
     
-    /**
+  /**
+    * Based on a HTTP formatted list of acceptable locales, determine an available locale for the user.
     * NullPointerException is thrown if acceptLanguageList or availableLocales is
     * null.  If fallback is non-null, it will contain true if a fallback locale (one
     * not in the acceptLanguageList) was returned.  The value on entry is ignored. 
@@ -2651,6 +2652,10 @@ public final class ULocale implements Serializable {
     * if a ROOT locale was used as a fallback (because nothing else in
     * availableLocales matched).  No ULocale array element should be null; behavior
     * is undefined if this is the case.
+    * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
+    * @param availableLocales list of available locales. One of these will be returned.
+    * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
+    * @return one of the locales from the availableLocales list, or null if none match
     * @draft ICU 3.4
     * @deprecated This is a draft API and might change in a future release of ICU.
     */
@@ -2744,6 +2749,18 @@ public final class ULocale implements Serializable {
     }
     
    /**
+    * Based on a list of acceptable locales, determine an available locale for the user.
+    * NullPointerException is thrown if acceptLanguageList or availableLocales is
+    * null.  If fallback is non-null, it will contain true if a fallback locale (one
+    * not in the acceptLanguageList) was returned.  The value on entry is ignored. 
+    * ULocale will be one of the locales in availableLocales, or the ROOT ULocale if
+    * if a ROOT locale was used as a fallback (because nothing else in
+    * availableLocales matched).  No ULocale array element should be null; behavior
+    * is undefined if this is the case.
+    * @param acceptLanguageList list of acceptable locales
+    * @param availableLocales list of available locales. One of these will be returned.
+    * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
+    * @return one of the locales from the availableLocales list, or null if none match
     * @draft ICU 3.4
     * @deprecated This is a draft API and might change in a future release of ICU.
     */
@@ -2800,6 +2817,18 @@ public final class ULocale implements Serializable {
     }
 
    /**
+    * Based on a HTTP formatted list of acceptable locales, determine an available locale for the user.
+    * NullPointerException is thrown if acceptLanguageList or availableLocales is
+    * null.  If fallback is non-null, it will contain true if a fallback locale (one
+    * not in the acceptLanguageList) was returned.  The value on entry is ignored. 
+    * ULocale will be one of the locales in availableLocales, or the ROOT ULocale if
+    * if a ROOT locale was used as a fallback (because nothing else in
+    * availableLocales matched).  No ULocale array element should be null; behavior
+    * is undefined if this is the case.
+    * This function will choose a locale from the ULocale.getAvailableLocales() list as available.
+    * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
+    * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
+    * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
     * @draft ICU 3.4
     * @deprecated This is a draft API and might change in a future release of ICU.
     */
@@ -2810,6 +2839,18 @@ public final class ULocale implements Serializable {
     }
 
    /**
+    * Based on an ordered array of acceptable locales, determine an available locale for the user.
+    * NullPointerException is thrown if acceptLanguageList or availableLocales is
+    * null.  If fallback is non-null, it will contain true if a fallback locale (one
+    * not in the acceptLanguageList) was returned.  The value on entry is ignored. 
+    * ULocale will be one of the locales in availableLocales, or the ROOT ULocale if
+    * if a ROOT locale was used as a fallback (because nothing else in
+    * availableLocales matched).  No ULocale array element should be null; behavior
+    * is undefined if this is the case.
+    * This function will choose a locale from the ULocale.getAvailableLocales() list as available.
+    * @param acceptLanguageList ordered array of acceptable locales (preferred are listed first)
+    * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
+    * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
     * @draft ICU 3.4
     * @deprecated This is a draft API and might change in a future release of ICU.
     */
