@@ -436,6 +436,8 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
             if (spaceRequired>0) {
                 ut->extraSize = extraSpace;
                 ut->pExtra    = &((ExtendedUText *)ut)->extension;
+                uprv_memset(ut->pExtra, 0, extraSpace);  // Purify whines about copying untouched extra [buffer]
+                                                         //  space when cloning, so init it now.
             }
         }
     } else {
@@ -467,6 +469,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
             } else {
                 ut->extraSize = extraSpace;
                 ut->flags |= UTEXT_EXTRA_HEAP_ALLOCATED;
+                uprv_memset(ut->pExtra, 0, extraSpace);
             }
         }
     }
@@ -613,7 +616,10 @@ U_CDECL_END
 //     UText implementation for UTF-8 strings (read-only) 
 //
 //         Use of UText data members:
-//            context    pointer to UTF-8 string
+//              context    pointer to UTF-8 string
+//              utext.b  is the input string length (bytes).
+//              utext.p  pointer to allocated utf-8 string if owned by this utext (after a clone)
+//              utext.q  pointer to the filled part of the Map array.
 //
 //      TODO:  make creation of the index mapping array lazy.
 //             Create it for a chunk the first time the user asks for an index.
@@ -638,9 +644,6 @@ struct UTF8Extra {
     int32_t map[UTF8_TEXT_CHUNK_SIZE+2];
 };
 
-//  utext.b  is the input string length (bytes).
-//  utext.q  pointer to the filled part of the Map array.
-//
 //     because backwards iteration fills the buffers starting at the end and
 //     working towards the front, the filled part of the buffers may not begin
 //     at the start of the available storage for the buffers.
@@ -679,12 +682,12 @@ utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
             return FALSE;
         }
 
-        chunk->nativeStart=index;
         c=s8[index];
         if(c<=0x7f) {
             // get a run of ASCII characters.
             // Even if we don't fill the buffer, we will stop with the first
             //   non-ascii char, so that the buffer can use utf-16 indexing.
+            chunk->nativeStart=index;
             u16buf[0]=(UChar)c;
             for(i=1, ++index;
                 i<UTF8_TEXT_CHUNK_SIZE && index<length && (c=s8[index])<=0x7f;
@@ -696,6 +699,7 @@ utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
         } else {
             // get a chunk of characters starting with a non-ASCII one
             U8_SET_CP_START(s8, 0, index);  // put utf-8 index at first byte of char, if not there already.
+            chunk->nativeStart=index;
             for(i=0;  i<UTF8_TEXT_CHUNK_SIZE && index<length;  ) {
                 //  i     is utf-16 index into chunk buffer.
                 //  index is utf-8 index into original string
@@ -724,10 +728,10 @@ utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
             return FALSE;
         }
 
-        chunk->nativeLimit=index;
         c=s8[index-1];
         if(c<=0x7f) {
             // get a chunk of ASCII characters.  Don't build the index map
+            chunk->nativeLimit=index;
             i=UTF8_TEXT_CHUNK_SIZE;
             do {
                 u16buf[--i]=(UChar)c;
@@ -739,6 +743,7 @@ utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
             if(index<length) {
                 U8_SET_CP_START(s8, 0, index);
             }
+            chunk->nativeLimit=index;
             i=UTF8_TEXT_CHUNK_SIZE;
             map[i]=index;    // map position for char following the last one in the buffer.
             do {
@@ -781,6 +786,80 @@ utf8TextAccess(UText *ut, int32_t index, UBool forward, UTextChunk *chunk) {
     }
 }
 
+
+//
+//  This is a slightly modified copy of u_strFromUTF8,
+//     Inserts a Replacement Char rather than failing on invalid UTF-8
+//     Removes unnecessary features.
+//
+static UChar* 
+utext_strFromUTF8(UChar *dest,             
+              int32_t destCapacity,
+              int32_t *pDestLength,
+              const char* src, 
+              int32_t srcLength,        // required.  NUL terminated not supported.
+              UErrorCode *pErrorCode
+              )
+{
+
+    UChar *pDest = dest;
+    UChar *pDestLimit = dest+destCapacity;
+    UChar32 ch=0;
+    int32_t index = 0;
+    int32_t reqLength = 0;
+    uint8_t* pSrc = (uint8_t*) src;
+
+         
+    while((index < srcLength)&&(pDest<pDestLimit)){
+        ch = pSrc[index++];
+        if(ch <=0x7f){
+            *pDest++=(UChar)ch;
+        }else{
+            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, -1);
+            if(ch<0){
+                ch = 0xfffd;
+            }
+            if(ch<=0xFFFF){
+                *(pDest++)=(UChar)ch;
+            }else{
+                *(pDest++)=UTF16_LEAD(ch);
+                if(pDest<pDestLimit){
+                    *(pDest++)=UTF16_TRAIL(ch);
+                }else{
+                    reqLength++;
+                    break;
+                }
+            }
+        }
+    }
+    /* donot fill the dest buffer just count the UChars needed */
+    while(index < srcLength){
+        ch = pSrc[index++];
+        if(ch <= 0x7f){
+            reqLength++;
+        }else{
+            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, -1);
+            if(ch<0){
+                ch = 0xfffd;
+            }
+            reqLength+=UTF_CHAR_LENGTH(ch);
+        }
+    }
+
+    reqLength+=(int32_t)(pDest - dest);
+
+    if(pDestLength){
+        *pDestLength = reqLength;
+    }
+
+    /* Terminate the buffer */
+    u_terminateUChars(dest,destCapacity,reqLength,pErrorCode);
+
+    return dest;
+}
+
+
+
 static int32_t U_CALLCONV
 utf8TextExtract(UText *ut,
                 int32_t start, int32_t limit,
@@ -791,17 +870,23 @@ utf8TextExtract(UText *ut,
     }
     if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
-    if(start<0 || start>limit || ut->b<limit) {
+    if(start<0 || start>limit) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
+    if (limit>ut->b) {
+        limit = ut->b;
+    }
+    if (start>ut->b) {
+        start = ut->b;
+    }
     int32_t destLength=0;
-    u_strFromUTF8(dest, destCapacity, &destLength,
+    utext_strFromUTF8(dest, destCapacity, &destLength,
                     (const char *)ut->context+start, limit-start,
                     pErrorCode);
     return destLength;
-    // TODO: if U_INVALID|ILLEGAL_CHAR_FOUND, extract text anyway and use SUB for illegal sequences?
 }
 
 // Assume nonUTF16Indexes and 0<=offset<=chunk->length
@@ -822,6 +907,19 @@ utf8TextMapIndexToUTF16(UText *ut, int32_t index) {
     U_ASSERT(index>=ut->chunk.nativeStart && index<=ut->chunk.nativeLimit);
     while(index>map[offset]) {
         ++offset;
+    }
+    if (index<map[offset]) {
+        // index was to a trail byte of a multi-byte utf-8 char.
+        // The loop above advaned offset to the start of the following char, now
+        //  offset must be backed up to the start of the utf-16 char into which
+        //  the utf-8 index pointed.
+        offset--;
+        if (offset>0 && map[offset] == map[offset-1]) {
+            // index was to a utf-8 trail byte of a supplemenary char.
+            //   Offset now points to the trail surrogate (one in back of the following char)
+            //   Back offset up one more time to get to the utf-16 lead surrogate.
+            offset--;
+        }
     }
     return offset;
 }
