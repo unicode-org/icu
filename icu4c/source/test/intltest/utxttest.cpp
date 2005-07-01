@@ -797,7 +797,7 @@ void UTextTest::ErrorTest()
         UText  *utp;
         UnicodeString s1("Hello, World");
         UChar s2[] = {(UChar)0x41, (UChar)0x42, (UChar)0};
-        char  *s3 = "\x66\x67\x68";
+        const char  *s3 = "\x66\x67\x68";
 
         utp = utext_openUnicodeString(&ut, &s1, &status);
         TEST_SUCCESS(status);
@@ -830,7 +830,7 @@ void UTextTest::ErrorTest()
     {
         UErrorCode status = U_ZERO_ERROR;
         UText *ut = NULL;
-        char *badUTF8 = "\x41\x81\x42\xf0\x81\x81\x43";   
+        const char *badUTF8 = "\x41\x81\x42\xf0\x81\x81\x43";   
         UChar32  c;
 
         ut = utext_openUTF8(NULL, badUTF8, -1, &status);
@@ -888,8 +888,8 @@ void UTextTest::ErrorTest()
     // get/set native index to positions not on code point boundaries.
     //
     {
-        char *u8str =         "\xc8\x81\xe1\x82\x83\xf1\x84\x85\x86";
-        int32_t startMap[] = {   0,  0,  2,  2,  2,  5,  5,  5,  5,  9,  9};
+        const char *u8str =         "\xc8\x81\xe1\x82\x83\xf1\x84\x85\x86";
+        int32_t startMap[] =        {   0,  0,  2,  2,  2,  5,  5,  5,  5,  9,  9};
 
 
         UErrorCode status = U_ZERO_ERROR;
