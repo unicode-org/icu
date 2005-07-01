@@ -77,9 +77,14 @@ public final class LocaleData {
      * @draft ICU 3.4
      * @deprecated      This is a draft API and might change in a future release of ICU.
      */
-    public static UnicodeSet getExemplarSet(int options, int extype) {
-    // Nothing here yet...
-        return new UnicodeSet();
+    public UnicodeSet getExemplarSet(int options, int extype) {
+        String [] exemplarSetTypes = { "ExemplarCharacters", "AuxExemplarCharacters" };
+        ICUResourceBundle stringBundle = bundle.get(exemplarSetTypes[extype]);
+
+        if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
+           return null;
+
+        return new UnicodeSet(stringBundle.getString(), UnicodeSet.IGNORE_SPACE | options);
     }
 
     /**
@@ -90,8 +95,10 @@ public final class LocaleData {
      * @draft ICU 3.4
      */
     public static final LocaleData getInstance(ULocale locale) {
-    // Nothing here yet...
-       return new LocaleData();
+       LocaleData ld = new LocaleData();
+       ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale );
+       ld.noSubstitute = false;
+       return ld;
     }
 
     /**
@@ -101,8 +108,7 @@ public final class LocaleData {
      * @draft ICU 3.4
      */
     public static final LocaleData getInstance() {
-    // Nothing here yet...
-       return new LocaleData();
+       return LocaleData.getInstance(ULocale.getDefault());
     }
 
     /**
@@ -115,7 +121,7 @@ public final class LocaleData {
      * @draft ICU 3.4
      */
     public void setNoSubstitute(boolean setting) {
-    // Nothing here yet...
+       noSubstitute = setting;
     }
 
     /**
@@ -128,8 +134,7 @@ public final class LocaleData {
      * @draft ICU 3.4
      */
     public boolean getNoSubstitute() {
-    // Nothing here yet...
-       return false;
+       return noSubstitute;
     }
 
     /**
@@ -142,8 +147,18 @@ public final class LocaleData {
      * @draft ICU 3.4
      */
     public String getDelimiter( int type ) {
-    // Nothing here yet...
-       return "";
+
+        String [] delimiterTypes = { "quotationStart", 
+                                     "quotationEnd", 
+                                     "alternateQuotationStart", 
+                                     "alternateQuotationEnd" };
+
+        ICUResourceBundle stringBundle = bundle.get("delimiters").get(delimiterTypes[type]);
+
+        if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
+           return null;
+
+        return new String (stringBundle.getString());
     }
 
     /**
