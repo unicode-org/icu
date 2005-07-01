@@ -596,6 +596,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Constructs a currency object for the given ISO 4217 3-letter
      * code.  This constructor assumes that the code is valid.
      * 
+     * @param theISOCode The iso code used to construct the currency.
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
