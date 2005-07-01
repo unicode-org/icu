@@ -2605,7 +2605,7 @@ static void TestXPath(void) {
 }
 static void TestCLDRStyleAliases(void) {
     UErrorCode status = U_ZERO_ERROR;
-    UResourceBundle *rb = NULL, *alias = NULL, *a3=NULL, *a4=NULL, *a5=NULL, *a6=NULL, *a=NULL;
+    UResourceBundle *rb = NULL, *alias = NULL, *a=NULL;
     int32_t i, len;
     char resource[256];
     const UChar *result = NULL;
