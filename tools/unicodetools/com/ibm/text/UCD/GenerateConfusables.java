@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateConfusables.java,v $
-* $Date: 2005/06/24 23:51:52 $
-* $Revision: 1.3 $
+* $Date: 2005/07/01 22:10:00 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.text.UCD.GenerateConfusables.WholeScript.UnicodeSetToScript;
 import com.ibm.text.utility.Utility;
 import com.ibm.text.utility.XEquivalenceClass;
 import com.sun.corba.se.connection.GetEndPointInfoAgainException;
@@ -64,6 +66,37 @@ public class GenerateConfusables {
 			System.out.println("Done");
 		}
 	}
+	/**
+	 * 
+	 */
+	static UnicodeSet _Non_IICore;
+	
+	private static UnicodeSet getNonIICore() {	
+		//Main + IICore + (Ext-A intersect Chinese)
+		//blk; n/a       ; CJK_Unified_Ideographs
+		//blk; n/a       ; CJK_Unified_Ideographs_Extension_A
+		//blk; n/a       ; CJK_Unified_Ideographs_Extension_B
+
+		if (_Non_IICore == null) {
+			// stuff to remove
+			_Non_IICore = ups.getSet("block=CJK_Unified_Ideographs_Extension_A");
+			_Non_IICore.addAll(ups.getSet("block=CJK_Unified_Ideographs_Extension_B"));
+			_Non_IICore.removeAll(UNASSIGNED); // remove unassigned
+			// stuff to restore
+			UnicodeMap um = Default.ucd().getHanValue("kIICore");
+			um.put(0x34E4, "2.1");
+			um.put(0x3007, "2.1");
+			_Non_IICore.removeAll(um.getSet("2.1"));
+			// add Chinese?
+		}
+		return _Non_IICore;
+//		for (Iterator it = um.getAvailableValues().iterator(); it.hasNext();) {
+//			Object value = it.next();
+//			UnicodeSet set = um.getSet(value);
+//			System.out.println(value + "\t" + set);
+//		}
+	}
+	
 	static PrintWriter log;
 	static final String ARROW = "\u2192";
 	static UnicodeProperty.Factory ups = ToolUnicodePropertySource.make(""); // ICUPropertyFactory.make();
@@ -83,7 +116,7 @@ public class GenerateConfusables {
 	static String indir = "C:\\Unicode-CVS2\\draft\\reports\\tr36\\data\\source\\";
 	static String outdir = "C:\\Unicode-CVS2\\draft\\reports\\tr36\\data\\";
 	
-	static Comparator codepointComparator = new UTF16.StringComparator();
+	static Comparator codepointComparator = new UTF16.StringComparator(true,false,0);
 
 	static UnicodeSet setsToAbbreviate = new UnicodeSet("[" +
 			"\\u3400-\\u4DB5" +
@@ -166,8 +199,7 @@ public class GenerateConfusables {
 					additions.getSet(null).complement()).retainAll(propNFKCSet);
 
 			getIdentifierSet();
-			notInXID = new UnicodeSet(IDNOutputSet)
-					.removeAll(xidPlus);
+			notInXID = new UnicodeSet(IDNOutputSet).removeAll(xidPlus);
 			removals.putAll(notInXID, PROHIBITED + NOT_IN_XID);
 			removalSet = removals.getSet(null).complement();
 
@@ -225,6 +257,7 @@ public class GenerateConfusables {
 			lowerIsBetter.putAll(inputSet_lenient, MARK_INPUT_LENIENT);
 			lowerIsBetter.putAll(inputSet_strict, MARK_INPUT_STRICT);
 			lowerIsBetter.putAll(remainingOutputSet, MARK_OUTPUT);
+			lowerIsBetter.putAll(remainingOutputSet, MARK_ASCII);
 			lowerIsBetter.setMissing(MARK_NOT_NFC);
 			
 			lowerIsBetter.lock();
@@ -252,7 +285,7 @@ public class GenerateConfusables {
 					return "remap-to-" + Utility.hex(b.toString());
 				}
 			};
-			reviews.composeWith(remap, composer2);
+			//reviews.composeWith(remap, composer2);
 			removals2 = new UnicodeMap().putAll(removals);
 			removals2.putAll(ups.getSet("XID_Continue=TRUE").complement(),
 					PROHIBITED + NOT_IN_XID);
@@ -342,6 +375,7 @@ public class GenerateConfusables {
 				throw (RuntimeException) new RuntimeException(
 						"Failure on line " + line).initCause(e);
 			}
+			removals.putAll(getNonIICore(), "~IICore");
 			br.close();
 		}
 		
@@ -367,8 +401,8 @@ public class GenerateConfusables {
 			//reviews.putAll(UNASSIGNED, "");
 			out.print("\uFEFF");
 			out.println("# Review List for IDN");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("");
 
 			UnicodeSet fullSet = reviews.getSet("").complement();
@@ -423,8 +457,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(outdir, "idnchars.txt");
 
 			out.println("# Recommended Identifier Profiles for IDN");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 
 			out.println("");
 			out.println("# Output Characters");
@@ -456,10 +490,9 @@ public class GenerateConfusables {
 			bf.setValueSource("nonstarting");
 			bf.showSetNames(out, nonstarting);
 
-			out.println("");
+			//out.println("");
 
-			showRemapped(out,
-					"Characters remapped on input (in GUIs)", remap);
+			//showRemapped(out, "Characters remapped on input in GUIs -- Not required by profile!", remap);
 
 			out.close();
 		}
@@ -494,8 +527,8 @@ public class GenerateConfusables {
 					"xidmodifications.txt");
 
 			out.println("# Security Profile for General Identifiers");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("");
 
 			out.println("# Characters restricted");
@@ -516,7 +549,7 @@ public class GenerateConfusables {
 			bf.setValueSource("addition");
 			bf.showSetNames(out, additions.getSet(null).complement());
 
-			showRemapped(out, "Characters remapped on input", remap);
+			//showRemapped(out, "Characters remapped on input", remap);
 
 			out.close();
 			
@@ -525,11 +558,13 @@ public class GenerateConfusables {
 				public Object compose(int codePoint, Object a, Object b) {
 					if (b == null) return null;
 					String x = (String)b;
-					if (!IDNOutputSet.contains(codePoint)) {
-						return "~IDNA";
-					}
-					if (!xidPlus.contains(codePoint)) {
-						return "~Unicode Identifier";
+					if (false) {
+						if (!IDNOutputSet.contains(codePoint)) {
+							return "~IDNA";
+						}
+						if (!xidPlus.contains(codePoint)) {
+							return "~Unicode Identifier";
+						}
 					}
 					if (x.startsWith(PROHIBITED)) x = x.substring(PROHIBITED.length());
 					//if (!propNFKCSet.contains(codePoint)) x += "*";
@@ -542,11 +577,15 @@ public class GenerateConfusables {
 				}				
 			};
 			someRemovals.composeWith(removals, myComposer);
+			UnicodeSet nonIDNA = new UnicodeSet(IDNOutputSet).addAll(IDNInputSet).complement();
+			someRemovals.putAll(nonIDNA, "~IDNA");
+			someRemovals.putAll(new UnicodeSet(xidPlus).complement(), "~Unicode Identifier");
+			someRemovals.putAll(UNASSIGNED, null); // clear extras
 			//someRemovals = removals;
 			out = BagFormatter.openUTF8Writer(outdir, "draft-restrictions.txt");
 			out.println("# Characters restricted in domain names");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("#");
 			out.println("# This file contains a draft list of characters for use in");
 			out.println("#     UTR #36: Unicode Security Considerations");
@@ -568,6 +607,9 @@ public class GenerateConfusables {
 			out.println("#   do not fit the specification of identifiers given in");
 			out.println("#      UAX #31: Identifier and Pattern Syntax");
 			out.println("#      http://unicode.org/reports/tr31/");
+			out.println("# - Characters listed as ~IICore are restricted because they are Ideographic,");
+			out.println("#   but not part of the IICore set defined by the IRG as the minimal set");
+			out.println("#   of required ideographs for East Asian use.");
 			out.println("# - The files in this directory are 'live', and may change at any time.");
 			out.println("#   Please include the above Revision number in your feedback.");
 			
@@ -715,19 +757,29 @@ public class GenerateConfusables {
 	}
 	
 	private static boolean isMixedScript(String source) {
+		return getSingleScript(source) != UScript.INVALID_CODE;
+	}
+
+	/*
+	 * Returns UScript.INVALID_CODE if mixed script, otherwise the script
+	 */
+	private static int getSingleScript(String source) {
 		int lastScript = UScript.INVALID_CODE;
 		int cp;
 		for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
 			cp = UTF16.charAt(source, i);
 			int script = UScript.getScript(cp);
 			if (script == UScript.COMMON || script == UScript.INHERITED) {
-				if (XIDContinueSet.contains(cp)) continue; // skip if not identifier
+				if (XIDContinueSet.contains(cp)) {
+					if (lastScript == UScript.INVALID_CODE) lastScript = script;
+					continue; // skip if not identifier
+				}
 				script = UScript.COMMON;
 			}
 			if (lastScript == UScript.INVALID_CODE) lastScript = script;
-			else if (script != lastScript) return true;
+			else if (script != lastScript) return UScript.INVALID_CODE;
 		}
-		return false;
+		return lastScript;
 	}
 
 	/**
@@ -1067,19 +1119,19 @@ public class GenerateConfusables {
 		public void writeSource(String directory, String filename) throws IOException {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.println("# Source File for IDN Confusables");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("");
 			dataMixedAnycase.writeSource(out);
 			out.close();
 		}
 		
-		public void write(String directory, String filename, boolean appendFile, boolean skipNFKEquivs) throws IOException {
+		public void writeSourceOrder(String directory, String filename, boolean appendFile, boolean skipNFKEquivs) throws IOException {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.print('\uFEFF');
 			out.println("# Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("");
 
 			if (appendFile) {
@@ -1087,17 +1139,27 @@ public class GenerateConfusables {
 				Utility.appendFile("com/ibm/text/UCD/confusablesHeader.txt", 
 						Utility.UTF8_WINDOWS, out, replacements);
 			}
-			writeData(out, dataSingleLowercase, "SL", "Single-Script, Lowercase Confusables", skipNFKEquivs);
-			writeData(out, dataSingleAnycase, "SA", "Single-Script, Anycase Confusables", skipNFKEquivs);
-			writeData(out, dataMixedLowercase, "ML", "Mixed-Script, Lowercase Confusables", skipNFKEquivs);
-			writeData(out, dataMixedAnycase, "MA", "Mixed-Script, Anycase Confusables", skipNFKEquivs);
+			writeSourceOrder(out, dataSingleLowercase, "SL", "Single-Script, Lowercase Confusables", skipNFKEquivs);
+			writeSourceOrder(out, dataSingleAnycase, "SA", "Single-Script, Anycase Confusables", skipNFKEquivs);
+			writeSourceOrder(out, dataMixedLowercase, "ML", "Mixed-Script, Lowercase Confusables", skipNFKEquivs);
+			writeSourceOrder(out, dataMixedAnycase, "MA", "Mixed-Script, Anycase Confusables", skipNFKEquivs);
 			out.close();
 		}
 		/**
 		 * @param skipNFKEquivs TODO
 		 * 
 		 */
-		private void writeData(PrintWriter out, MyEquivalenceClass data, String tag, String title, boolean skipNFKEquivs) {
+		private void writeSourceOrder(PrintWriter out, MyEquivalenceClass data, String tag, String title, boolean skipNFKEquivs) {
+			// first get all the sets. Then get the best paradigm from each. Then sort.
+//			Set setOfSets = data.getEquivalenceSets();
+//			Map orderedResults = new TreeMap(betterTargetIsLess);
+//			for (Iterator it = setOfSets.iterator(); it.hasNext();) {
+//				Set setOfEquivs = (Set) it.next();
+//				Object item = CollectionUtilities.getBest(setOfEquivs, betterTargetIsLess, -1);
+//				
+//			}
+			//int c = codepointComparator.compare("\uFFFF", "\uD800\uDC00");
+			//System.out.println("Code Point Compare: " + c);
 			Set items = data.getOrderedExplicitItems();
 			out.println();
 			out.println("# " + title);
@@ -1256,36 +1318,78 @@ public class GenerateConfusables {
 			}				
 		}
 
+		static class MyCollectionFilter implements CollectionUtilities.Filter {
+			UnicodeSet outputAllowed;
+			int minLength;
+			public boolean matches(Object o) {
+				String item = (String)o;
+				if (!outputAllowed.containsAll(item)) return false;
+				int len = UTF16.countCodePoint(item);
+				if (len < minLength) minLength = len;
+				return true;
+			}				
+		};
 		/**
+		 * @param script TODO
 		 * @throws IOException
 		 * 
 		 */
-		public void writeSummary(String outdir, String string, boolean outputOnly) throws IOException {
-			PrintWriter out = BagFormatter.openUTF8Writer(outdir, string);
+		public void writeSummary(String outdir, String filename, boolean outputOnly, UnicodeSet script) throws IOException {
+			PrintWriter out = BagFormatter.openUTF8Writer(outdir, filename);
+			UnicodeSet representable = new UnicodeSet();
 			out.print('\uFEFF');
 			out.println("# Summary: Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.3 $");
-			out.println("# $Date: 2005/06/24 23:51:52 $");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
 			out.println("");
 			MyEquivalenceClass data = dataMixedAnycase;
 			Set items = data.getOrderedExplicitItems();
-			for (Iterator it = items.iterator(); it.hasNext();) {
-				System.out.println(Default.ucd().getCodeAndName((String)it.next()));
-			}
+//			for (Iterator it = items.iterator(); it.hasNext();) {
+//				System.out.println(Default.ucd().getCodeAndName((String)it.next()));
+//			}
 			int count = 0;
 			UnicodeSet preferredID = getIdentifierSet();
 			String lastTarget = "";
-			UnicodeSet outputAllowed = IdentifierInfo.getIdentifierInfo().remainingOutputSet;
 			Set itemsSeen = new HashSet();
 			Set equivalents = new TreeSet(betterTargetIsLess);
+			MyCollectionFilter myFilter = new MyCollectionFilter();
+			myFilter.outputAllowed= new UnicodeSet("[[\u0021-\u007E]-[:letter:]]")
+			.addAll(IdentifierInfo.getIdentifierInfo().remainingOutputSet)
+			.addAll(IdentifierInfo.getIdentifierInfo().inputSet_strict);
+			
 			for (Iterator it = items.iterator(); it.hasNext();) {
 				String target = (String) it.next();
 				if (itemsSeen.contains(target)) continue;
+				equivalents.clear();
+				equivalents.addAll(data.getEquivalences(target));
+				itemsSeen.addAll(equivalents);
+				if (outputOnly) { // remove non-output
+					myFilter.minLength = 1000;
+					CollectionUtilities.retainAll(equivalents, myFilter);
+					if (equivalents.size() <= 1) continue;
+					if (myFilter.minLength > 1) continue;
+					if (!equivalents.contains(target)) { // select new target if needed
+						target = (String) equivalents.iterator().next();
+					}
+				}
+				scriptTest:
+				if (script != null) {
+					// see if at least one item contains the target script
+					for (Iterator it2 = equivalents.iterator(); it2.hasNext();) {
+						String item = (String) it2.next();
+						if (script.containsAll(item)) {
+							target = item;
+							for (Iterator it3 = equivalents.iterator(); it3.hasNext();) {
+								representable.addAll((String)it3.next());
+							}
+							break scriptTest;
+						}
+					}
+					continue; // skip this one
+				}
 				out.println();
 				out.println(getStatus(target) + "\t" + "(\u200E " + target + " \u200E)\t" + Utility.hex(target) + "\t " + Default.ucd().getName(target));
 				//if (UTF16.hasMoreCodePointsThan(source,1)) continue;
-				equivalents.clear();
-				equivalents.addAll(data.getEquivalences(target));
 				for (Iterator it2 = equivalents.iterator(); it2.hasNext();) {					
 					String source = (String) it2.next();
 					if (source.equals(target)) continue;
@@ -1306,10 +1410,54 @@ public class GenerateConfusables {
 			out.println();
 			out.println("# total : " + count);
 			out.println();
-
+			if (script != null) {
+				out.println();
+				out.println("# Base Letters Representable with Script");
+				out.println();
+				representable.removeAll(script);
+				BagFormatter bf = new BagFormatter();
+				bf.setValueSource(ups.getProperty("script"));
+				bf.setShowLiteral(bf.toHTMLControl);
+				bf.showSetNames(out, representable);
+			}
 			out.close();
 		}
+		
 
+
+		public void writeWholeScripts(String outdir, String filename) throws IOException {
+			WholeScript wsLower = new WholeScript(
+					new UnicodeSet(IdentifierInfo.getIdentifierInfo().remainingOutputSet)
+					.removeAll(new UnicodeSet("[A-Z]")), "L");
+			WholeScript wsAny = new WholeScript(
+					new UnicodeSet(IdentifierInfo.getIdentifierInfo().remainingOutputSet)
+					.addAll(IdentifierInfo.getIdentifierInfo().inputSet_strict), "A");
+			MyEquivalenceClass data = dataMixedAnycase;
+			Set items = data.getOrderedExplicitItems();
+			Set itemsSeen = new HashSet();
+			for (Iterator it = items.iterator(); it.hasNext();) {
+				String target = (String) it.next();
+				if (itemsSeen.contains(target)) continue;
+				Set equivalents = data.getEquivalences(target);
+				itemsSeen.addAll(equivalents);
+				wsAny.addEquivalents(equivalents);
+				wsLower.addEquivalents(equivalents);
+			}
+			PrintWriter out = BagFormatter.openUTF8Writer(outdir, filename);
+			out.print('\uFEFF');
+			out.println("# Summary: Whole-Script Confusables");
+			out.println("# $Revision: 1.4 $");
+			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("");
+			out.println("# Lowercase Only");
+			out.println("");
+			wsLower.write(out);
+			out.println("");
+			out.println("# Any-Case");
+			out.println("");
+			wsAny.write(out);
+			out.close();
+		}
 		/**
 		 * 
 		 */
@@ -1321,10 +1469,177 @@ public class GenerateConfusables {
 			if (val == MARK_INPUT_LENIENT.intValue()) return "[L]";
 			if (val == MARK_INPUT_STRICT.intValue()) return "[I]";
 			if (val == MARK_OUTPUT.intValue()) return "[O]";
+			if (val == MARK_ASCII.intValue()) return "[A]";
+			
 			return "?";
 		}
 	}
+
+	static class WholeScript {
+		private static UnicodeSet commonAndInherited = new UnicodeSet("[[:script=common:][:script=inherited:]]");
+		private UnicodeSet filterSet;
+		private UnicodeSet[] script_representables = new UnicodeSet[UScript.CODE_LIMIT];
+		private UnicodeSet[] script_set = new UnicodeSet[UScript.CODE_LIMIT];
+		private BagFormatter bf = new BagFormatter();
+		private String label;
+		{
+			for (int i = 0; i < UScript.CODE_LIMIT; ++i) {
+				script_representables[i] = new UnicodeSet();
+				script_set[i] = new UnicodeSet("[:script=" + UScript.getName(i) + ":]"); // ugly hack
+			}
+			bf.setValueSource(ups.getProperty("script"));
+			bf.setShowLiteral(bf.toHTMLControl);
+			bf.setLabelSource(UnicodeLabel.NULL);
+		}
+		WholeScript(UnicodeSet filterSet, String label) {
+			this.filterSet = filterSet;
+			this.label = label;
+			finished = false;
+		}
+		void addEquivalents(Set set) {
+			finished = false;
+			// if we have y ~ x, and both are single scripts
+			// that means that x can be represented in script(y), 
+			// and y can be represented in script(x).
+			for (Iterator it = set.iterator(); it.hasNext();) {
+				String item1 = (String)it.next();
+				if (!filterSet.containsAll(item1)) continue;
+				int script1 = getSingleScript(item1);
+				if (script1 == UScript.INVALID_CODE) continue;
+				for (Iterator it2 = set.iterator(); it2.hasNext();) {
+					String item2 = (String)it2.next();
+					if (!filterSet.containsAll(item2)) continue;
+					int script2 = getSingleScript(item2);
+					if (script2 == UScript.INVALID_CODE || script2 == script1) continue;						
+					script_representables[script1].addAll(item2).removeAll(commonAndInherited);
+				}
+			}
+		}
+		
+		static class UnicodeSetToScript {
+			public int getScript() {
+				return script;
+			}
+			public UnicodeSetToScript setScript(int script) {
+				this.script = script;
+				return this;
+			}
+			public UnicodeSet getSet() {
+				return set;
+			}
+			public UnicodeSetToScript setSet(UnicodeSet set) {
+				this.set = set;
+				return this;
+			}
+			private UnicodeSet set;
+			private int script;
+		}
+		
+		UnicodeSetToScript[][] scriptToUnicodeSetToScript;
+		UnicodeSet[] fastReject;
+		boolean finished = false;
+		
+		void finish() {
+			if (finished) return;
+			for (int j = 0; j < UScript.CODE_LIMIT; ++j) {
+				if (j == UScript.COMMON || j == UScript.INHERITED) continue;
+				if (script_representables[j].size() == 0) continue;
+				UnicodeSet accept = new UnicodeSet();
+				List curr = new ArrayList();
+				for (int k = 0; k < UScript.CODE_LIMIT; ++k) {
+					if (k == UScript.COMMON || k == UScript.INHERITED) continue;
+					if (script_representables[k].size() == 0) continue;
+
+					if (script_set[j].containsNone(script_representables[k])) continue;					
+					UnicodeSet items = new UnicodeSet(script_set[j]).retainAll(script_representables[k]);
+					UnicodeSetToScript uss = new UnicodeSetToScript().setScript(k).setSet(items);
+					curr.add(uss);
+				}
+				scriptToUnicodeSetToScript[j] = (UnicodeSetToScript[]) curr.toArray(new UnicodeSetToScript[curr.size()]);
+				fastReject[j] = accept.complement();
+			}
+			finished = true;
+		}
+		
+		void write(PrintWriter out) throws IOException {
+			for (int j = 0; j < UScript.CODE_LIMIT; ++j) {
+				if (j == UScript.COMMON || j == UScript.INHERITED) continue;
+				if (script_representables[j].size() == 0) continue;
+				for (int k = 0; k < UScript.CODE_LIMIT; ++k) {
+					if (k == UScript.COMMON || k == UScript.INHERITED) continue;
+					if (script_representables[k].size() == 0) continue;
+
+					if (script_set[j].containsNone(script_representables[k])) continue;					
+					UnicodeSet items = new UnicodeSet(script_set[j]).retainAll(script_representables[k]);
+					String sname = UScript.getShortName(j) + "; " + UScript.getShortName(k) + "; " + label;
+					String name = UScript.getName(j) + "; " + UScript.getName(k);
+					out.println("# " + name + ": " + items.toPattern(false));
+					out.println("");
+					bf.setValueSource(sname);
+					bf.showSetNames(out, items);
+					out.println("");
+				}
+			}
+		}
+		/*
+		 * for this routine, we don't care what the targetScripts are,
+		 * just whether there is at least one whole-script confusable.
+		 */ 
+		boolean hasWholeScriptConfusable(String givenString, BitSet resultingScripts) {
+			int givenScript = getSingleScript(givenString);
+			if (givenScript == UScript.INVALID_CODE) {
+				throw new IllegalArgumentException("Not single script string");
+			}
+			UnicodeSet givenSet = new UnicodeSet()
+				.addAll(givenString)
+				.removeAll(commonAndInherited);
+			return hasWholeScriptConfusable(givenScript, givenSet, resultingScripts);
+		}
+		
 		/**
+		 * 
+		 */
+		private boolean hasWholeScriptConfusable(int givenScript, UnicodeSet givenSet, BitSet resultingScripts) {
+			resultingScripts.clear();
+			if (fastReject[givenScript].containsSome(givenSet)) return false;
+			UnicodeSetToScript[] possibles = scriptToUnicodeSetToScript[givenScript];
+			for (int i = 0; i < possibles.length; ++i) {				
+				if (possibles[i].set.containsAll(givenSet)) {
+					resultingScripts.set(possibles[i].script);
+				}
+			}
+			return resultingScripts.isEmpty();
+		}
+		/*
+		 * for this routine, we don't care what the targetScripts are,
+		 * just whether there is at least one whole-script confusable.
+		 */ 
+		boolean hasMixedScriptConfusable(String givenString) {
+//			UnicodeSet givenSet = new UnicodeSet()
+//			.addAll(givenString)
+//			.removeAll(commonAndInherited);
+//			BitSet givenScripts = getScriptsIn(givenString);
+//			for (int i = 0; i < givenScripts.length(); ++i) {
+//				;
+//			}
+//			UnicodeSet givenSet = new UnicodeSet()
+//				.addAll(givenString)
+//				.removeAll(commonAndInherited);
+//			resultingScripts.clear();
+//			if (fastReject[givenScript].containsSome(givenSet)) return false;
+//			UnicodeSetToScript[] possibles = scriptToUnicodeSets[givenScript];
+//			for (int i = 0; i < possibles.length; ++i) {				
+//				if (possibles[i].set.containsAll(givenSet)) {
+//					resultingScripts.set(possibles[i].script);
+//				}
+//			}
+//			return resultingScripts.isEmpty();
+			return true;
+		}
+
+	}
+	
+	/**
 		 * @throws IOException
 	 * 
 	 */
@@ -1434,12 +1749,15 @@ public class GenerateConfusables {
 		DataSet ds = new DataSet();
 		ds.addUnicodeMap(nfcMap, "nfc", "nfc");
 		ds.close("*");
-		ds.write(outdir, "new-decomp.txt", false, false);
+		//ds.write(outdir, "new-decomp.txt", false, false);
 		total.addAll(ds);
 		total.close("*");
-		total.writeSummary(outdir, "confusablesSummary.txt", false);
-		total.writeSummary(outdir, "confusablesSummaryOutput.txt", true);
-		total.write(outdir, "confusables.txt", false, false);
+		total.writeSummary(outdir, "confusablesSummary.txt", false, null);
+		total.writeSummary(outdir, "confusablesSummaryIdentifier.txt", true, null);
+		//total.writeSummary(outdir, "confusablesSummaryCyrillic.txt", true, 
+		//		new UnicodeSet("[[:script=Cyrillic:][:script=common:][:script=inherited:]]"));
+		total.writeWholeScripts(outdir, "confusablesWholeScript.txt");
+		total.writeSourceOrder(outdir, "confusables.txt", false, false);
 		//DataSet clean = total.clean();
 		//clean.write(outdir, "confusables.txt", true);		
 	}
@@ -1586,9 +1904,11 @@ public class GenerateConfusables {
 		MARK_NFC = new Integer(40),
 		MARK_INPUT_LENIENT = new Integer(30),
 		MARK_INPUT_STRICT = new Integer(20),
-		MARK_OUTPUT = new Integer(10);
+		MARK_OUTPUT = new Integer(10),
+		MARK_ASCII = new Integer(10);
 
 	static _BetterTargetIsLess betterTargetIsLess = new _BetterTargetIsLess();
+	
 	static class _BetterTargetIsLess implements Comparator {
 		IdentifierInfo info = IdentifierInfo.getIdentifierInfo();
 		
