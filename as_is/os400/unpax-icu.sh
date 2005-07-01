@@ -17,7 +17,7 @@
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP'
-data_directories='icu/source/data/brkitr/ icu/source/data/locales/ icu/source/data/coll/ icu/source/data/rbnf/ icu/source/data/mappings/ icu/source/data/misc/ icu/source/data/translit/ icu/source/data/unidata/ icu/source/test/testdata/'
+data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 usage()
 {
@@ -36,25 +36,30 @@ if [ ! -r $1 ]; then
 fi
 # set up a few variables
 
-for directory in $data_directories; do
-    if [ -d $directory ]; then
-        data_files="$data_files $directory*"
-    fi
-done
-
 echo ""
 echo "Extracting from $1 ..."
 echo ""
+
+# determine which directories in the data_files list
+# are included in the provided archive
+for data_dir in $data_files
+do
+    if (pax -f $1 $data_dir >/dev/null 2>&1)
+    then
+        ebcdic_data="$ebcdic_data `echo $data_dir`";
+    fi
+done
+
 # extract everything as iso-8859-1 except these directories
-pax -C 819 -rcvf $1 $data_files
+pax -C 819 -rcvf $1 $ebcdic_data
 
 # extract files while converting them to EBCDIC
 echo ""
 echo "Extracting files which must be in ibm-37 ..."
 echo ""
-pax -C 37 -rvf $1 $data_files
+pax -C 37 -rvf $1 $ebcdic_data
 
-if [ $# -gt 1 ]; then 
+if [ $# -gt 1 ]; then
   if [ $2 -eq strip ]; then
     echo ""
     echo "Stripping hex 0d characters ..."
