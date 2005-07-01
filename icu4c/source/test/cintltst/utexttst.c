@@ -62,7 +62,7 @@ static void TestAPI(void) {
     /* Open    */
     {
         UText           utLoc = UTEXT_INITIALIZER;
-        const char *    cString = "Hello, World";
+        const char *    cString = "\x61\x62\x63\x64";
         UChar           uString[]  = {0x41, 0x42, 0x43, 0};
         UText          *uta;
         UText          *utb;
