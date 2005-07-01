@@ -765,29 +765,29 @@ void TestCloneBinary(){
     uint8_t * buffer;
 
     if (U_FAILURE(err)) {
-      log_data_err("Couldn't open collator. Error: %s\n", u_errorName(err));
-      return;
+        log_data_err("Couldn't open collator. Error: %s\n", u_errorName(err));
+        return;
     }
 
     size = ucol_cloneBinary(col, NULL, 0, &err);
     if(U_FAILURE(err)) {
         log_err("ucol_cloneBinary - couldn't check size. Error: %s\n", u_errorName(err));
-      return;
+        return;
     }
 
     buffer = (uint8_t *) malloc(size);
     ucol_cloneBinary(col, buffer, size, &err);
     if(U_FAILURE(err)) {
-      log_err("ucol_cloneBinary - couldn't clone.. Error: %s\n", u_errorName(err));
-      free(buffer);
-      return;
+        log_err("ucol_cloneBinary - couldn't clone.. Error: %s\n", u_errorName(err));
+        free(buffer);
+        return;
     }
-    
+
     /* hwo to check binary result ? */
-    
+
     c = ucol_openBinary(buffer, size, col, &err);
     if(U_FAILURE(err)) {
-      log_err("ucol_openBinary failed. Error: %s\n", u_errorName(err));
+        log_err("ucol_openBinary failed. Error: %s\n", u_errorName(err));
     } else {
         UChar t[] = {0x41, 0x42, 0x43, 0};  /* ABC */
         uint8_t  *k1, *k2;
