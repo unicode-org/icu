@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -296,6 +296,20 @@ public:
      * @internal
      */
     UResourceBundle* getByKey2(const char *key, const char *subKey, UErrorCode& status);
+
+    /**
+     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+     * data is located in:   "calendar/key/contextKey/subKey"
+     * for example,  calendar/dayNames/standalone/narrow
+     * The ResourceBundle C++ API should NOT be used because it is too slow for a low level API.
+     *
+     * @param key Resource key to data
+     * @param contextKey Resource key to data
+     * @param subKey Resource key to data
+     * @param status Error Status
+     * @internal
+     */
+    UResourceBundle* getByKey3(const char *key, const char *contextKey, const char *subKey, UErrorCode& status);
 
     ~CalendarData();
 
