@@ -1503,7 +1503,7 @@ void NumberFormatTest::TestCurrencyAmount(void){
     }
     
     CurrencyAmount *ca3 = (CurrencyAmount *)ca.clone();
-    if (!(ca2 == ca)){
+    if (!(*ca3 == ca)){
         errln("CurrencyAmount cloned object should be same");
     }
 }
