@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
+import com.ibm.icu.impl.LocaleUtility;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 
@@ -2640,4 +2641,160 @@ public final class ULocale implements Serializable {
         private int localeType;
         private Type(int type) { localeType = type; }
     }
+
+    
+    /**
+    * NullPointerException is thrown if acceptLanguageList or availableLocales is
+    * null.  If fallback is non-null, it will contain true if a fallback locale (one
+    * not in the acceptLanguageList) was returned.  The value on entry is ignored. 
+    * ULocale will be one of the locales in availableLocales, or the ROOT ULocale if
+    * if a ROOT locale was used as a fallback (because nothing else in
+    * availableLocales matched).  No ULocale array element should be null; behavior
+    * is undefined if this is the case.
+    * @draft ICU 3.4
+    * @deprecated This is a draft API and might change in a future release of ICU.
+    */
+
+    public static ULocale acceptLanguage(String acceptLanguageList, ULocale[]
+    availableLocales, boolean[] fallback) {
+    
+        // 1st: parse out the acceptLanguageList into an array
+        
+        TreeMap map = new TreeMap();
+        
+        final int l = acceptLanguageList.length();
+        int n;
+        int last=-1;
+        for(n=0;n<l;n++) {
+            int itemEnd = acceptLanguageList.indexOf(',',n);
+            if(itemEnd == -1) {
+                itemEnd = l;
+            }
+            int paramEnd = acceptLanguageList.indexOf(';',n);
+            double q = 1.0;
+ 
+            if((paramEnd != -1) && (paramEnd < itemEnd)) {
+                /* semicolon (;) is closer than end (,) */
+                int t = paramEnd + 1;
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                if(acceptLanguageList.charAt(t)=='q') {
+                    t++;
+                }
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                if(acceptLanguageList.charAt(t)=='=') {
+                    t++;
+                }
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                try {
+                    String val = acceptLanguageList.substring(t,itemEnd).trim();
+                    q = Double.parseDouble(val);
+                } catch (NumberFormatException nfe) {
+                    q = 1.0;
+                }
+            } else {
+                q = 1.0; //default
+                paramEnd = itemEnd;
+            }
+
+            String loc = acceptLanguageList.substring(n,paramEnd).trim();
+            map.put(new Double(1.0-q), new ULocale(canonicalize(loc))); // sort in reverse order..   1.0, 0.9, 0.8 .. etc
+            n = itemEnd; // get next item. (n++ will skip over delimiter)
+        }
+        
+        // 2. pull out the map 
+        ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
+        
+        // 3. call the real function
+        return acceptLanguage(acceptList, availableLocales, fallback);
+    }
+
+
+   /**
+    * @draft ICU 3.4
+    * @deprecated This is a draft API and might change in a future release of ICU.
+    */
+
+    public static ULocale acceptLanguage(ULocale[] acceptLanguageList, ULocale[]
+    availableLocales, boolean[] fallback) {
+        // fallbacklist
+        int i,j;
+        int maxLen = -1;
+        String acceptFallbacks[] = new String[acceptLanguageList.length];
+        for(i=0;i<acceptLanguageList.length;i++) {            
+            for(j=0;j<availableLocales.length;j++) {
+                if(availableLocales[j].equals(acceptLanguageList[i])) {
+                    if(fallback != null) {
+                        fallback[0]=true;
+                    }
+//                    System.out.println("exact match: " + acceptLanguageList[i]);
+                    return acceptLanguageList[i];
+                }
+            
+                String avail = availableLocales[j].toString();
+                
+                int len = avail.length();
+                
+                if(len>maxLen) {
+                    maxLen = len;
+//                    System.out.println("maxLen now " + maxLen);
+                }
+            }
+            Locale loc = acceptLanguageList[i].toLocale();
+            String parent = LocaleUtility.fallback(loc).toString();
+            acceptFallbacks[i] = parent;
+//            System.out.println("new fallback " + parent);
+        }
+        
+        // OK, no direct one. 
+        for(maxLen--;maxLen>0;maxLen--) {
+            for(i=0;i<acceptFallbacks.length;i++) {
+                if(acceptFallbacks[i]!=null) {
+                    if(acceptFallbacks[i].length() == maxLen) {
+//                    System.out.println("Trying " + i + " - " + acceptFallbacks[i]);
+                        for(j=0;j<availableLocales.length;j++) {
+                            if(availableLocales[j].equals(acceptFallbacks[i])) {
+                                if(fallback != null) {
+                                    fallback[0]=false;
+                                }
+//                                System.out.println("fallback match: " + acceptLanguageList[i]);
+                                return new ULocale(acceptFallbacks[i]);
+                            }
+                        
+                        }
+                        String parent = LocaleUtility.fallback(new Locale(acceptFallbacks[i].toString())).toString();
+                        acceptFallbacks[i] = parent;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+   /**
+    * @draft ICU 3.4
+    * @deprecated This is a draft API and might change in a future release of ICU.
+    */
+
+    public static ULocale acceptLanguage(String acceptLanguageList, boolean[] fallback) {
+        return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
+                				fallback);
+    }
+
+   /**
+    * @draft ICU 3.4
+    * @deprecated This is a draft API and might change in a future release of ICU.
+    */
+
+    public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[]
+    fallback) {
+        return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
+				fallback);
+    }    
+    
 }
