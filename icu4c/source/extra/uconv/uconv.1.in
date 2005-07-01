@@ -2,11 +2,11 @@
 .\"
 .\" uconv.1: manual page for the uconv utility.
 .\"
-.\" Copyright (C) 2000-2003 IBM, Inc. and others.
+.\" Copyright (C) 2000-2005 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH UCONV 1 "2003-dec-22" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH UCONV 1 "2005-jul-1" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B uconv
 \- convert data from one encoding to another
@@ -431,12 +431,12 @@ inaccurate or unavailable, in which case
 .BR uconv
 will report the offset in the output stream at which the error
 occured.
-.SH FILES
-.TP 15
-.B @thepkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
-Compiled resource bundle containing localized messages printed
-by
-.BR uconv .
+.\" .SH FILES
+.\" .TP 15
+.\" .B @pkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
+.\" Compiled resource bundle containing localized messages printed
+.\" by
+.\" .BR uconv .
 .SH AUTHORS
 Jonas Utterstroem
 .br
@@ -444,8 +444,6 @@ Yves Arrouye
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2003 IBM, Inc. and others.
+Copyright (C) 2000-2005 IBM, Inc. and others.
 .SH SEE ALSO
-.BR convrtrs.txt (5)
-.br
 .BR iconv (1)
