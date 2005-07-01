@@ -449,6 +449,7 @@ testTrieRanges(const char *testName,
                const CheckRange checkRanges[], int32_t countCheckRanges,
                UBool dataIs32, UBool latin1Linear) {
     UTrieGetFoldingOffset *getFoldingOffset;
+    UNewTrieGetFoldedValue *getFoldedValue;
     const CheckRange *enumRanges;
     UNewTrie *newTrie;
     UTrie trie={ 0 };
@@ -498,13 +499,24 @@ testTrieRanges(const char *testName,
 
     if(dataIs32) {
         getFoldingOffset=_testFoldingOffset32;
+        getFoldedValue=_testFoldedValue32;
     } else {
         getFoldingOffset=_testFoldingOffset16;
+        getFoldedValue=_testFoldedValue16;
+    }
+
+    /*
+     * code coverage for utrie.c/defaultGetFoldedValue(),
+     * pick some combination of parameters for selecting the UTrie defaults
+     */
+    if(!dataIs32 && latin1Linear) {
+        getFoldingOffset=NULL;
+        getFoldedValue=NULL;
     }
 
     errorCode=U_ZERO_ERROR;
     length=utrie_serialize(newTrie, storageHolder.storage, sizeof(storageHolder.storage),
-                           dataIs32 ? _testFoldedValue32 : _testFoldedValue16,
+                           getFoldedValue,
                            (UBool)!dataIs32,
                            &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -541,7 +553,9 @@ testTrieRanges(const char *testName,
         log_err("error: utrie_unserialize() failed, %s\n", u_errorName(errorCode));
         return;
     }
-    trie.getFoldingOffset=getFoldingOffset;
+    if(getFoldingOffset!=NULL) {
+        trie.getFoldingOffset=getFoldingOffset;
+    }
 
     if(dataIs32!=(trie.data32!=NULL)) {
         log_err("error: trie serialization (%s) did not preserve 32-bitness\n", testName);
