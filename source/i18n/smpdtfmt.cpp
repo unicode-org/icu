@@ -704,7 +704,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         else if (count == 4) 
             _appendSymbol(appendTo, value, fSymbols->fWeekdays,
                           fSymbols->fWeekdaysCount);
-        else if (count == 3) 
+        else
             _appendSymbol(appendTo, value, fSymbols->fShortWeekdays,
                           fSymbols->fShortWeekdaysCount);
         break;
@@ -719,9 +719,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         else if (count == 4) 
             _appendSymbol(appendTo, value, fSymbols->fStandaloneWeekdays,
                           fSymbols->fStandaloneWeekdaysCount);
-        else if (count == 3) 
+        else if (count == 3)
             _appendSymbol(appendTo, value, fSymbols->fStandaloneShortWeekdays,
                           fSymbols->fStandaloneShortWeekdaysCount);
+        else
+            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
