@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -17,14 +18,16 @@ import com.ibm.icu.lang.UCharacter;
 public class TestIdentifiers {
 
 	public static void main(String[] args) throws IOException {
-		String[] tests = { "MOPE", "VOP", "scope", "ibm", "vop", "toys-я-us", "1iνе", "back" };
+		String[] tests = { "SØS", "façade", "MOPE", "VOP", "scope", "ibm", "vop",
+				"toys-я-us", "1iνе", "back", "boгing" };
 		TestIdentifiers ti = new TestIdentifiers("L");
 		TestIdentifiers tiany = new TestIdentifiers("A");
 		for (int i = 0; i < tests.length; ++i) {
 			System.out.print(tests[i]);
-			ti.testItem(tests[i]);
 			String folded = UCharacter.foldCase(tests[i], true);
-			if (!folded.equals(tests[i])) {
+			if (folded.equals(tests[i])) {
+				ti.testItem(tests[i]);
+			} else {
 				System.out.print("\t");
 				tiany.testItem(tests[i]);
 				System.out.print(folded);
@@ -34,6 +37,7 @@ public class TestIdentifiers {
 	}
 	
 	void testItem(String test) {
+		test = Normalizer.normalize(test, Normalizer.DECOMP_COMPAT);
 		BitSet scripts = new BitSet();
 		System.out.print("\t" + caseType + "\t");
 		boolean foundProblem = false;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateConfusables.java,v $
-* $Date: 2005/07/02 01:42:51 $
-* $Revision: 1.5 $
+* $Date: 2005/07/02 21:24:46 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -32,6 +32,8 @@ import java.util.TreeSet;
 
 import javax.transaction.xa.Xid;
 
+import sun.jdbc.odbc.ee.CommonDataSource;
+
 import com.ibm.icu.dev.demo.translit.InfoDialog;
 import com.ibm.icu.dev.test.util.ArrayComparator;
 import com.ibm.icu.dev.test.util.BagFormatter;
@@ -49,6 +51,7 @@ import com.ibm.text.UCD.GenerateConfusables.WholeScript.UnicodeSetToScript;
 import com.ibm.text.utility.Utility;
 import com.ibm.text.utility.XEquivalenceClass;
 import com.sun.corba.se.connection.GetEndPointInfoAgainException;
+import com.ibm.icu.dev.test.util.CollectionUtilities;
 
 public class GenerateConfusables {
 	public static boolean EXCLUDE_CONFUSABLE_COMPAT = true;
@@ -428,8 +431,8 @@ public class GenerateConfusables {
 			//reviews.putAll(UNASSIGNED, "");
 			out.print("\uFEFF");
 			out.println("# Review List for IDN");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("");
 
 			UnicodeSet fullSet = reviews.getSet("").complement();
@@ -484,8 +487,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(outdir, "idnchars.txt");
 
 			out.println("# Recommended Identifier Profiles for IDN");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 
 			out.println("");
 			out.println("# Output Characters");
@@ -554,8 +557,8 @@ public class GenerateConfusables {
 					"xidmodifications.txt");
 
 			out.println("# Security Profile for General Identifiers");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("");
 
 			out.println("# Characters restricted");
@@ -611,8 +614,8 @@ public class GenerateConfusables {
 			//someRemovals = removals;
 			out = BagFormatter.openUTF8Writer(outdir, "draft-restrictions.txt");
 			out.println("# Characters restricted in domain names");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("#");
 			out.println("# This file contains a draft list of characters for use in");
 			out.println("#     UTR #36: Unicode Security Considerations");
@@ -1146,8 +1149,8 @@ public class GenerateConfusables {
 		public void writeSource(String directory, String filename) throws IOException {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.println("# Source File for IDN Confusables");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("");
 			dataMixedAnycase.writeSource(out);
 			out.close();
@@ -1157,8 +1160,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.print('\uFEFF');
 			out.println("# Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("");
 
 			if (appendFile) {
@@ -1366,8 +1369,8 @@ public class GenerateConfusables {
 			UnicodeSet representable = new UnicodeSet();
 			out.print('\uFEFF');
 			out.println("# Summary: Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
 			out.println("");
 			MyEquivalenceClass data = dataMixedAnycase;
 			Set items = data.getOrderedExplicitItems();
@@ -1453,16 +1456,34 @@ public class GenerateConfusables {
 
 
 		public void writeWholeScripts(String outdir, String filename) throws IOException {
+			UnicodeSet commonAndInherited = new UnicodeSet(
+			"[[:script=common:][:script=inherited:]]");
+
 			WholeScript wsLower = new WholeScript(
 					new UnicodeSet(IdentifierInfo.getIdentifierInfo().remainingOutputSet)
 					.removeAll(new UnicodeSet("[A-Z]")), "L");
 			WholeScript wsAny = new WholeScript(
 					new UnicodeSet(IdentifierInfo.getIdentifierInfo().remainingOutputSet)
 					.addAll(IdentifierInfo.getIdentifierInfo().inputSet_strict), "A");
-			MyEquivalenceClass data = dataMixedAnycase;
-			Set items = data.getOrderedExplicitItems();
+
+			MyEquivalenceClass data = new MyEquivalenceClass();
+			for (Iterator it = dataMixedAnycase.getSamples().iterator(); it.hasNext();) {
+				String target = (String) it.next();
+				Set equivalents = dataMixedAnycase.getEquivalences(target);
+				boolean first = true;
+				for (Iterator it2 = equivalents.iterator(); it2.hasNext();) {
+					String cleaned = CollectionUtilities.remove((String)it2.next(), commonAndInherited);
+					if (cleaned.length() == 0) continue;
+					if (first) {
+						target = cleaned;
+						first = false;
+					} else {
+						data.add(target, cleaned);
+					}
+				}
+			}
 			Set itemsSeen = new HashSet();
-			for (Iterator it = items.iterator(); it.hasNext();) {
+			for (Iterator it = data.getOrderedExplicitItems().iterator(); it.hasNext();) {
 				String target = (String) it.next();
 				if (itemsSeen.contains(target)) continue;
 				Set equivalents = data.getEquivalences(target);
@@ -1473,8 +1494,12 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(outdir, filename);
 			out.print('\uFEFF');
 			out.println("# Summary: Whole-Script Confusables");
-			out.println("# $Revision: 1.5 $");
-			out.println("# $Date: 2005/07/02 01:42:51 $");
+			out.println("# $Revision: 1.6 $");
+			out.println("# $Date: 2005/07/02 21:24:46 $");
+			out.println("# This data is used for determining whether a strings is a");
+			out.println("# whole-script or mixed-script confusable.");
+			out.println("# The mappings here ignore common and inherited script characters,");
+			out.println("# such as accents.");
 			out.println("");
 			out.println("# Lowercase Only");
 			out.println("");
