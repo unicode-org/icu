@@ -730,7 +730,10 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
-            buf.append(formatData.eras[value]);
+            if (count >= 4)
+               buf.append(formatData.eraNames[value]);
+            else
+               buf.append(formatData.eras[value]);
             break;
         case 1: // 'y' - YEAR
             /* According to the specification, if the number of pattern letters ('y') is 2,
@@ -745,7 +748,9 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(buf, value, count, maxIntCount);
             break;
         case 2: // 'M' - MONTH
-            if (count >= 4)
+            if (count == 5) 
+                buf.append(formatData.narrowMonths[value]);
+            else if (count == 4)
                 buf.append(formatData.months[value]);
             else if (count == 3)
                 buf.append(formatData.shortMonths[value]);
@@ -849,6 +854,26 @@ public class SimpleDateFormat extends DateFormat {
                 buf.append(sign);
                 zeroPaddingNumber(buf, value, 4, 4);
             }
+            break;
+        case 25: // 'c' - STANDALONE DAY
+            if (count == 5) 
+                buf.append(formatData.standaloneNarrowWeekdays[value]);
+            else if (count == 4)
+                buf.append(formatData.standaloneWeekdays[value]);
+            else if (count == 3)
+                buf.append(formatData.standaloneShortWeekdays[value]);
+            else
+                zeroPaddingNumber(buf, value, 1, maxIntCount);
+            break;
+        case 26: // 'L' - STANDALONE MONTH
+            if (count == 5) 
+                buf.append(formatData.standaloneNarrowMonths[value]);
+            else if (count == 4)
+                buf.append(formatData.standaloneMonths[value]);
+            else if (count == 3)
+                buf.append(formatData.standaloneShortMonths[value]);
+            else
+                zeroPaddingNumber(buf, value+1, count, maxIntCount);
             break;
         default:
             // case 3: // 'd' - DATE
