@@ -751,7 +751,13 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // load the first data item
     UResourceBundle *erasMain = calData.getByKey(gErasTag, status);
     UResourceBundle *eras = ures_getByKeyWithFallback(erasMain, gAbbreviatedTag, NULL, &status);
+    UErrorCode oldStatus = status;
     UResourceBundle *eraNames = ures_getByKeyWithFallback(erasMain, gNamesWideTag, NULL, &status);
+    if ( status == U_MISSING_RESOURCE_ERROR ) { // Workaround because eras/wide was omitted from CLDR 1.3
+       status = oldStatus;
+       eraNames = ures_getByKeyWithFallback(erasMain, gAbbreviatedTag, NULL, &status);
+    }
+
     UResourceBundle *lsweekdaysData = NULL; // Data closed by calData
     UResourceBundle *weekdaysData = NULL; // Data closed by calData
     UResourceBundle *narrowWeekdaysData = NULL; // Data closed by calData
