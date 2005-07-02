@@ -79,6 +79,28 @@ public class CalendarData {
             
         }       
     }
+
+    /**
+     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+     * data is located in:   "calendar/key/contextKey/subKey"
+     * for example,  calendar/dayNames/stand-alone/narrow
+     *
+     * @param key Resource key to data
+     * @param contextKey Resource key to data
+     * @param subKey Resource key to data
+     * @internal
+     */
+    public ICUResourceBundle get(String key, String contextKey, String subKey) {
+        try {
+            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/" + contextKey + "/" + subKey);
+        } catch(MissingResourceException m) {
+            if(fFallbackType != null) {
+                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/" + contextKey + "/" + subKey);
+            }
+            throw m;
+            
+        }       
+    }
     
     public String[] getStringArray(String key) {
         return get(key).getStringArray();
@@ -86,6 +108,10 @@ public class CalendarData {
 
     public String[] getStringArray(String key, String subKey) {
         return get(key, subKey).getStringArray();
+    }
+
+    public String[] getStringArray(String key, String contextKey, String subKey) {
+        return get(key, contextKey, subKey).getStringArray();
     }
     public String[] getEras(String subkey){
         ICUResourceBundle bundle = get("eras/"+subkey);

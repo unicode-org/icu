@@ -354,8 +354,36 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @draft ICU 3.4
      */
     public String[] getMonths(int context, int width) {
-    // TODO: Make this actually do something, just a placeholder right now.
-        return duplicate(months);
+        String [] returnValue = null;
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    returnValue = months;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = shortMonths;
+                    break;
+                 case NARROW :
+                    returnValue = narrowMonths;
+                    break;
+              }
+              break;
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    returnValue = standaloneMonths;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = standaloneShortMonths;
+                    break;
+                 case NARROW :
+                    returnValue = standaloneNarrowMonths;
+                    break;
+              }
+              break;
+        }
+        return duplicate(returnValue);
     }
 
     /**
@@ -405,8 +433,36 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @draft ICU 3.4
      */
     public String[] getWeekdays(int context, int width) {
-    // TODO: Make this actually do something, just a placeholder right now.
-        return duplicate(weekdays);
+        String [] returnValue = null;
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    returnValue = weekdays;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = shortWeekdays;
+                    break;
+                 case NARROW :
+                    returnValue = narrowWeekdays;
+                    break;
+              }
+              break;
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    returnValue = standaloneWeekdays;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = standaloneShortWeekdays;
+                    break;
+                 case NARROW :
+                    returnValue = standaloneNarrowWeekdays;
+                    break;
+              }
+              break;
+        }
+        return duplicate(returnValue);
     }
 
     /**
@@ -535,10 +591,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (obj == null || getClass() != obj.getClass()) return false;
         DateFormatSymbols that = (DateFormatSymbols) obj;
         return (Utility.arrayEquals(eras, that.eras)
+                && Utility.arrayEquals(eraNames, that.eraNames)
                 && Utility.arrayEquals(months, that.months)
                 && Utility.arrayEquals(shortMonths, that.shortMonths)
+                && Utility.arrayEquals(narrowMonths, that.narrowMonths)
+                && Utility.arrayEquals(standaloneMonths, that.standaloneMonths)
+                && Utility.arrayEquals(standaloneShortMonths, that.standaloneShortMonths)
+                && Utility.arrayEquals(standaloneNarrowMonths, that.standaloneNarrowMonths)
                 && Utility.arrayEquals(weekdays, that.weekdays)
                 && Utility.arrayEquals(shortWeekdays, that.shortWeekdays)
+                && Utility.arrayEquals(narrowWeekdays, that.narrowWeekdays)
+                && Utility.arrayEquals(standaloneWeekdays, that.standaloneWeekdays)
+                && Utility.arrayEquals(standaloneShortWeekdays, that.standaloneShortWeekdays)
+                && Utility.arrayEquals(standaloneNarrowWeekdays, that.standaloneNarrowWeekdays)
                 && Utility.arrayEquals(ampms, that.ampms)
                 && Utility.arrayEquals(zoneStrings, that.zoneStrings)
                 && Utility.arrayEquals(localPatternChars,
@@ -578,8 +643,49 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // getObject(). This won't be necessary if the Resource itself
         // is cached.
         eras = calData.getEras("abbreviated");
+
+        try {
+           eraNames = calData.getEras("wide");
+        }
+        catch (MissingResourceException e) {
+           eraNames = calData.getEras("abbreviated");
+        }
+
         months = calData.getStringArray("monthNames", "wide");
         shortMonths = calData.getStringArray("monthNames", "abbreviated");
+
+        try {
+           narrowMonths = calData.getStringArray("monthNames", "narrow");
+        } 
+        catch (MissingResourceException e) {
+           narrowMonths = calData.getStringArray("monthNames", "abbreviated");
+        }
+
+        try {
+           standaloneMonths = calData.getStringArray("monthNames", "stand-alone", "wide");
+        } 
+        catch (MissingResourceException e) {
+           standaloneMonths = calData.getStringArray("monthNames", "format", "wide");
+        }
+
+        try {
+           standaloneShortMonths = calData.getStringArray("monthNames", "stand-alone", "abbreviated");
+        } 
+        catch (MissingResourceException e) {
+           standaloneShortMonths = calData.getStringArray("monthNames", "format", "abbreviated");
+        }
+
+        try {
+           standaloneNarrowMonths = calData.getStringArray("monthNames", "stand-alone", "narrow");
+        } 
+        catch (MissingResourceException e) {
+           try {
+              standaloneNarrowMonths = calData.getStringArray("monthNames", "format", "narrow");
+           }
+           catch (MissingResourceException e1) {
+              standaloneNarrowMonths = calData.getStringArray("monthNames", "format", "abbreviated");
+           }
+        }
 
         String[] lWeekdays = calData.getStringArray("dayNames", "wide");
         weekdays = new String[8];
@@ -590,6 +696,55 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         shortWeekdays = new String[8];
         shortWeekdays[0] = "";  // 1-based
         System.arraycopy(sWeekdays, 0, shortWeekdays, 1, sWeekdays.length);
+
+        String [] nWeekdays = null;
+        try {
+           nWeekdays = calData.getStringArray("dayNames", "narrow");
+        }
+        catch (MissingResourceException e) {
+           nWeekdays = calData.getStringArray("dayNames", "abbreviated");
+        }
+        narrowWeekdays = new String[8];
+        narrowWeekdays[0] = "";  // 1-based
+        System.arraycopy(nWeekdays, 0, narrowWeekdays, 1, nWeekdays.length);
+
+        String [] saWeekdays = null;
+        try {
+           saWeekdays = calData.getStringArray("dayNames", "stand-alone", "wide");
+        }
+        catch (MissingResourceException e) {
+           saWeekdays = calData.getStringArray("dayNames", "format", "wide");
+        }
+        standaloneWeekdays = new String[8];
+        standaloneWeekdays[0] = "";  // 1-based
+        System.arraycopy(saWeekdays, 0, standaloneWeekdays, 1, saWeekdays.length);
+
+        String [] ssWeekdays = null;
+        try {
+           ssWeekdays = calData.getStringArray("dayNames", "stand-alone", "abbreviated");
+        }
+        catch (MissingResourceException e) {
+           ssWeekdays = calData.getStringArray("dayNames", "format", "abbreviated");
+        }
+        standaloneShortWeekdays = new String[8];
+        standaloneShortWeekdays[0] = "";  // 1-based
+        System.arraycopy(ssWeekdays, 0, standaloneShortWeekdays, 1, ssWeekdays.length);
+
+        String [] snWeekdays = null;
+        try {
+           snWeekdays = calData.getStringArray("dayNames", "stand-alone", "narrow");
+        }
+        catch (MissingResourceException e) {
+           try {
+              snWeekdays = calData.getStringArray("dayNames", "format", "narrow");
+           }
+           catch (MissingResourceException e1) {
+              snWeekdays = calData.getStringArray("dayNames", "format", "abbreviated");
+           }
+        }
+        standaloneNarrowWeekdays = new String[8];
+        standaloneNarrowWeekdays[0] = "";  // 1-based
+        System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = calData.getStringArray("AmPmMarkers");
 
@@ -684,10 +839,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     private final void copyMembers(DateFormatSymbols src, DateFormatSymbols dst)
     {
         dst.eras = duplicate(src.eras);
+        dst.eraNames = duplicate(src.eraNames);
         dst.months = duplicate(src.months);
         dst.shortMonths = duplicate(src.shortMonths);
+        dst.narrowMonths = duplicate(src.narrowMonths);
+        dst.standaloneMonths = duplicate(src.standaloneMonths);
+        dst.standaloneShortMonths = duplicate(src.standaloneShortMonths);
+        dst.standaloneNarrowMonths = duplicate(src.standaloneNarrowMonths);
         dst.weekdays = duplicate(src.weekdays);
         dst.shortWeekdays = duplicate(src.shortWeekdays);
+        dst.narrowWeekdays = duplicate(src.narrowWeekdays);
+        dst.standaloneWeekdays = duplicate(src.standaloneWeekdays);
+        dst.standaloneShortWeekdays = duplicate(src.standaloneShortWeekdays);
+        dst.standaloneNarrowWeekdays = duplicate(src.standaloneNarrowWeekdays);
         dst.ampms = duplicate(src.ampms);
         dst.zoneStrings = duplicate(src.zoneStrings);
         dst.localPatternChars = new String (src.localPatternChars);
