@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateConfusables.java,v $
-* $Date: 2005/07/01 22:10:00 $
-* $Revision: 1.4 $
+* $Date: 2005/07/02 01:42:51 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -87,7 +87,34 @@ public class GenerateConfusables {
 			um.put(0x34E4, "2.1");
 			um.put(0x3007, "2.1");
 			_Non_IICore.removeAll(um.getSet("2.1"));
+			
 			// add Chinese?
+			UnicodeSet cjk_nic = new UnicodeSet();
+			String line = null;
+			try {
+				BufferedReader br = BagFormatter.openUTF8Reader(indir, "cjk_nic.txt");
+				while (true) {
+					line = Utility.readDataLine(br);
+					if (line == null) break;
+					if (line.length() == 0) continue;
+					String[] pieces = Utility.split(line, ';');
+					// part 0 is range
+					String range = pieces[0].trim();
+					int rangeDivider = range.indexOf("..");
+					int start, end;
+					if (rangeDivider < 0) {
+						start = end = Integer.parseInt(range, 16);
+					} else {
+						start = Integer.parseInt(range.substring(0, rangeDivider), 16);
+						end = Integer.parseInt(range.substring(rangeDivider+2), 16);
+					}
+					cjk_nic.add(start, end);
+				}
+				br.close();
+			} catch (Exception e) {
+				throw (RuntimeException) new RuntimeException("Failure on line " + line).initCause(e);
+			}
+			_Non_IICore.removeAll(cjk_nic);
 		}
 		return _Non_IICore;
 //		for (Iterator it = um.getAvailableValues().iterator(); it.hasNext();) {
@@ -401,8 +428,8 @@ public class GenerateConfusables {
 			//reviews.putAll(UNASSIGNED, "");
 			out.print("\uFEFF");
 			out.println("# Review List for IDN");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 
 			UnicodeSet fullSet = reviews.getSet("").complement();
@@ -457,8 +484,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(outdir, "idnchars.txt");
 
 			out.println("# Recommended Identifier Profiles for IDN");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 
 			out.println("");
 			out.println("# Output Characters");
@@ -527,8 +554,8 @@ public class GenerateConfusables {
 					"xidmodifications.txt");
 
 			out.println("# Security Profile for General Identifiers");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 
 			out.println("# Characters restricted");
@@ -584,8 +611,8 @@ public class GenerateConfusables {
 			//someRemovals = removals;
 			out = BagFormatter.openUTF8Writer(outdir, "draft-restrictions.txt");
 			out.println("# Characters restricted in domain names");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("#");
 			out.println("# This file contains a draft list of characters for use in");
 			out.println("#     UTR #36: Unicode Security Considerations");
@@ -763,7 +790,7 @@ public class GenerateConfusables {
 	/*
 	 * Returns UScript.INVALID_CODE if mixed script, otherwise the script
 	 */
-	private static int getSingleScript(String source) {
+	public static int getSingleScript(String source) {
 		int lastScript = UScript.INVALID_CODE;
 		int cp;
 		for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
@@ -1119,8 +1146,8 @@ public class GenerateConfusables {
 		public void writeSource(String directory, String filename) throws IOException {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.println("# Source File for IDN Confusables");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 			dataMixedAnycase.writeSource(out);
 			out.close();
@@ -1130,8 +1157,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(directory, filename);
 			out.print('\uFEFF');
 			out.println("# Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 
 			if (appendFile) {
@@ -1339,8 +1366,8 @@ public class GenerateConfusables {
 			UnicodeSet representable = new UnicodeSet();
 			out.print('\uFEFF');
 			out.println("# Summary: Recommended confusable mapping for IDN");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 			MyEquivalenceClass data = dataMixedAnycase;
 			Set items = data.getOrderedExplicitItems();
@@ -1446,8 +1473,8 @@ public class GenerateConfusables {
 			PrintWriter out = BagFormatter.openUTF8Writer(outdir, filename);
 			out.print('\uFEFF');
 			out.println("# Summary: Whole-Script Confusables");
-			out.println("# $Revision: 1.4 $");
-			out.println("# $Date: 2005/07/01 22:10:00 $");
+			out.println("# $Revision: 1.5 $");
+			out.println("# $Date: 2005/07/02 01:42:51 $");
 			out.println("");
 			out.println("# Lowercase Only");
 			out.println("");
@@ -1516,7 +1543,7 @@ public class GenerateConfusables {
 			}
 		}
 		
-		static class UnicodeSetToScript {
+		public static class UnicodeSetToScript {
 			public int getScript() {
 				return script;
 			}
@@ -1535,8 +1562,8 @@ public class GenerateConfusables {
 			private int script;
 		}
 		
-		UnicodeSetToScript[][] scriptToUnicodeSetToScript;
-		UnicodeSet[] fastReject;
+		UnicodeSetToScript[][] scriptToUnicodeSetToScript = new UnicodeSetToScript[UScript.CODE_LIMIT][];
+		UnicodeSet[] fastReject = new UnicodeSet[UScript.CODE_LIMIT];
 		boolean finished = false;
 		
 		void finish() {
@@ -1562,15 +1589,13 @@ public class GenerateConfusables {
 		}
 		
 		void write(PrintWriter out) throws IOException {
+			finish();
 			for (int j = 0; j < UScript.CODE_LIMIT; ++j) {
-				if (j == UScript.COMMON || j == UScript.INHERITED) continue;
-				if (script_representables[j].size() == 0) continue;
-				for (int k = 0; k < UScript.CODE_LIMIT; ++k) {
-					if (k == UScript.COMMON || k == UScript.INHERITED) continue;
-					if (script_representables[k].size() == 0) continue;
-
-					if (script_set[j].containsNone(script_representables[k])) continue;					
-					UnicodeSet items = new UnicodeSet(script_set[j]).retainAll(script_representables[k]);
+				if (scriptToUnicodeSetToScript[j] == null) continue;			
+				for (int q = 0; q < scriptToUnicodeSetToScript[j].length; ++q) {
+					UnicodeSetToScript uss = scriptToUnicodeSetToScript[j][q];
+					int k = uss.getScript();
+					UnicodeSet items = uss.getSet();
 					String sname = UScript.getShortName(j) + "; " + UScript.getShortName(k) + "; " + label;
 					String name = UScript.getName(j) + "; " + UScript.getName(k);
 					out.println("# " + name + ": " + items.toPattern(false));
@@ -1580,61 +1605,6 @@ public class GenerateConfusables {
 					out.println("");
 				}
 			}
-		}
-		/*
-		 * for this routine, we don't care what the targetScripts are,
-		 * just whether there is at least one whole-script confusable.
-		 */ 
-		boolean hasWholeScriptConfusable(String givenString, BitSet resultingScripts) {
-			int givenScript = getSingleScript(givenString);
-			if (givenScript == UScript.INVALID_CODE) {
-				throw new IllegalArgumentException("Not single script string");
-			}
-			UnicodeSet givenSet = new UnicodeSet()
-				.addAll(givenString)
-				.removeAll(commonAndInherited);
-			return hasWholeScriptConfusable(givenScript, givenSet, resultingScripts);
-		}
-		
-		/**
-		 * 
-		 */
-		private boolean hasWholeScriptConfusable(int givenScript, UnicodeSet givenSet, BitSet resultingScripts) {
-			resultingScripts.clear();
-			if (fastReject[givenScript].containsSome(givenSet)) return false;
-			UnicodeSetToScript[] possibles = scriptToUnicodeSetToScript[givenScript];
-			for (int i = 0; i < possibles.length; ++i) {				
-				if (possibles[i].set.containsAll(givenSet)) {
-					resultingScripts.set(possibles[i].script);
-				}
-			}
-			return resultingScripts.isEmpty();
-		}
-		/*
-		 * for this routine, we don't care what the targetScripts are,
-		 * just whether there is at least one whole-script confusable.
-		 */ 
-		boolean hasMixedScriptConfusable(String givenString) {
-//			UnicodeSet givenSet = new UnicodeSet()
-//			.addAll(givenString)
-//			.removeAll(commonAndInherited);
-//			BitSet givenScripts = getScriptsIn(givenString);
-//			for (int i = 0; i < givenScripts.length(); ++i) {
-//				;
-//			}
-//			UnicodeSet givenSet = new UnicodeSet()
-//				.addAll(givenString)
-//				.removeAll(commonAndInherited);
-//			resultingScripts.clear();
-//			if (fastReject[givenScript].containsSome(givenSet)) return false;
-//			UnicodeSetToScript[] possibles = scriptToUnicodeSets[givenScript];
-//			for (int i = 0; i < possibles.length; ++i) {				
-//				if (possibles[i].set.containsAll(givenSet)) {
-//					resultingScripts.set(possibles[i].script);
-//				}
-//			}
-//			return resultingScripts.isEmpty();
-			return true;
 		}
 
 	}
