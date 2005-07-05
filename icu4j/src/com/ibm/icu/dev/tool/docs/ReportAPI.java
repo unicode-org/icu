@@ -322,6 +322,7 @@ public class ReportAPI {
             pw.println("<head>");
             pw.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
             pw.println("<title>" + title + "</title>");
+            pw.println("<!-- Copyright " + year + ", IBM, All Rights Reserved. -->");
             pw.println("</head>");
             pw.println("<body>");
 
