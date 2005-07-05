@@ -437,8 +437,9 @@ public abstract class UResourceBundle extends ResourceBundle{
             if(b==null){
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
-                    b = instantiateICUResource(baseName, localeName.substring(0, i), root);
-                    if(b!=null && b.getULocale().equals(localeName)){
+                    String temp = localeName.substring(0, i);
+                    b = instantiateICUResource(baseName, temp, root);
+                    if(b!=null && b.getULocale().equals(temp)){
                         b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
                     }
                 }else{

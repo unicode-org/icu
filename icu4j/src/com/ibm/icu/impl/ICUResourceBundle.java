@@ -160,13 +160,20 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      */
     public static final int INT_VECTOR = 14;
 
-    public static final int FROM_FALLBACK = 1, FROM_ROOT = 2, FROM_DEFAULT = 3;
+    public static final int FROM_FALLBACK = 1, FROM_ROOT = 2, FROM_DEFAULT = 3, FROM_LOCALE = 4;
 
     private int loadingStatus = -1;
 
     public void setLoadingStatus(int newStatus) {
         loadingStatus = newStatus;
     }
+    /**
+     * Returns the loading status of a particular resource. 
+     * 
+     * @return FROM_FALLBACK if the resource is fetched from fallback bundle
+     *         FROM_ROOT if the resource is fetched from root bundle.
+     *         FROM_DEFAULT if the resource is fetched from the default locale.
+     */
     public int getLoadingStatus() {
         return loadingStatus;
     }
@@ -343,6 +350,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                                 + this.getClass().getName() + ", key "
                                 + getKey(), this.getClass().getName(), getKey());
         }
+        setLoadingStatus(obj, requested.getLocaleID());
         return obj;
     }
     // abstract UResourceBundle handleGetInt(int index);
@@ -364,7 +372,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         if (obj == null) {
             obj = (ICUResourceBundle) getParent();
             if (obj != null) {
-                //call the get method to recursively
+                //call the get method to recursively fetch the resource
                 obj = obj.getImpl(key, table, requested);
             }
             if (obj == null) {
@@ -375,9 +383,23 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                                 + key, this.getClass().getName(), key);
             }
         }
+        setLoadingStatus(obj, requested.getLocaleID());
         return obj;
     }
 
+    private void setLoadingStatus(ICUResourceBundle bundle, String requestedLocale){
+       String locale = bundle.getLocaleID(); 
+       if(locale.equals("root")){
+           bundle.setLoadingStatus(FROM_ROOT);
+           return;
+       }
+       if(locale.equals(requestedLocale)){
+           bundle.setLoadingStatus(FROM_LOCALE);
+       }else{
+           bundle.setLoadingStatus(FROM_FALLBACK);
+       }
+    } 
+    
     /**
      * Returns the string in a given resource at the specified index.
      *
@@ -1086,6 +1108,9 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             // if not try the parent bundle
             actualBundle = (ICUResourceBundle) actualBundle.getParent();
 
+        }
+        if(sub != null){
+            setLoadingStatus(sub, requested.getLocaleID());
         }
         return sub;
     }
