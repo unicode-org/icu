@@ -202,7 +202,6 @@ class CECalendar extends Calendar {
     protected int handleComputeMonthStart(int eyear,
                                           int emonth,
                                           boolean useMonth) {
-
         return ceToJD(eyear, emonth, 0, jdEpochOffset);
     }
 
@@ -234,7 +233,10 @@ class CECalendar extends Calendar {
         if (_year < 0) { // dlf: this is what the test says to do
             era   = GregorianCalendar.BC;
             ceyear = 1 - _year;
+        } else {
+            ceyear = _year;
         }
+
         internalSet(MONTH, _month);
         internalSet(DAY_OF_MONTH, _day);
         internalSet(DAY_OF_YEAR, (30 * _month) + _day);
