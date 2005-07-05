@@ -143,6 +143,10 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
   // due to the JDK 1.4 incorporation of historical time zones.
   //java.util.Calendar grego = java.util.Calendar.getInstance();
   Calendar *grego = Calendar::createInstance(gcl, status);
+  if (U_FAILURE(status)) {
+    dataerrln("Error calling Calendar::createInstance"); 
+    return;
+  }
 
   int32_t tz1 = cal.get(UCAL_ZONE_OFFSET,status);
   int32_t tz2 = grego -> get (UCAL_ZONE_OFFSET, status);

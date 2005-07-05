@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -173,7 +173,10 @@ void ParsePositionTest::TestFieldPosition_example()
 
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
-    failure(status, "NumberFormat::createInstance");
+    if (failure(status, "NumberFormat::createInstance")){
+        delete nf;
+        return;
+    };
 
     if(nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
         errln("NumberFormat::createInstance returned unexpected class type");

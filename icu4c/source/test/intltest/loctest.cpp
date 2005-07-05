@@ -1815,11 +1815,11 @@ void LocaleTest::TestGetLocale(void) {
 #if !UCONFIG_NO_FORMATTING
     req = "fr_FR_NICE";
     DecimalFormat* dec = (DecimalFormat*)
-        NumberFormat::createInstance(Locale::createFromName(req), ec);
-    U_ASSERT(dec->getDynamicClassID() == DecimalFormat::getStaticClassID());
+    NumberFormat::createInstance(Locale::createFromName(req), ec);
     if (U_FAILURE(ec)) {
         errln("FAIL: NumberFormat::createInstance failed");
     } else {
+        U_ASSERT(dec->getDynamicClassID() == DecimalFormat::getStaticClassID());
         valid = dec->getLocale(ULOC_VALID_LOCALE, ec);
         actual = dec->getLocale(ULOC_ACTUAL_LOCALE, ec);
         if (U_FAILURE(ec)) {
@@ -1847,25 +1847,28 @@ void LocaleTest::TestGetLocale(void) {
     SimpleDateFormat* dat = (SimpleDateFormat*)
         DateFormat::createDateInstance(DateFormat::kDefault,
                                        Locale::createFromName(req));
-    U_ASSERT(dat != 0);
-    U_ASSERT(dat->getDynamicClassID() == SimpleDateFormat::getStaticClassID());
-    valid = dat->getLocale(ULOC_VALID_LOCALE, ec);
-    actual = dat->getLocale(ULOC_ACTUAL_LOCALE, ec);
-    if (U_FAILURE(ec)) {
-        errln("FAIL: SimpleDateFormat::getLocale() failed");
+    if (dat == 0){
+        dataerrln("Error calling DateFormat::createDateInstance()");
     } else {
-        _checklocs("SimpleDateFormat", req, valid, actual);
-    }
+        U_ASSERT(dat->getDynamicClassID() == SimpleDateFormat::getStaticClassID());
+        valid = dat->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = dat->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: SimpleDateFormat::getLocale() failed");
+        } else {
+            _checklocs("SimpleDateFormat", req, valid, actual);
+        }
     
-    const DateFormatSymbols* sym = dat->getDateFormatSymbols();
-    U_ASSERT(sym != 0);
-    valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
-    actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
-    if (U_FAILURE(ec)) {
-        errln("FAIL: DateFormatSymbols::getLocale() failed");
-    } else {
-        _checklocs("DateFormatSymbols", req, valid, actual);
-    }        
+        const DateFormatSymbols* sym = dat->getDateFormatSymbols();
+        U_ASSERT(sym != 0);
+        valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: DateFormatSymbols::getLocale() failed");
+        } else {
+            _checklocs("DateFormatSymbols", req, valid, actual);
+        }        
+    }
     delete dat;
 #endif
 

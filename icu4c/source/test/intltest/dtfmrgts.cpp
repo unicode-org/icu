@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -69,8 +69,15 @@ void DateFormatRegressionTest::Test4029195(void)
     logln((UnicodeString) "today: " + today);
 
     SimpleDateFormat *sdf = (SimpleDateFormat*) DateFormat::createDateInstance();
-    failure(status, "SimpleDateFormat::createDateInstance");
+    if (failure(status, "SimpleDateFormat::createDateInstance")) {
+        return;
+    }
     UnicodeString pat;
+    if(sdf == NULL){
+        dataerrln("Error calling DateFormat::createDateTimeInstance");
+        return;
+    }
+
     pat = sdf->toPattern(pat);
     logln("pattern: " + pat);
     UnicodeString fmtd;
@@ -114,6 +121,11 @@ void DateFormatRegressionTest::Test4052408(void)
 
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::SHORT,
                                                 DateFormat::SHORT, Locale::getUS());
+    if (fmt == NULL) {
+        dataerrln("Error calling DateFormat::createDateTimeInstance");
+        return;
+    }
+
     UDate dt = date(97, UCAL_MAY, 3, 8, 55);
     UnicodeString str;
     str = fmt->format(dt, str);
@@ -329,6 +341,12 @@ void DateFormatRegressionTest::Test4060212(void)
     UnicodeString myString;
     DateFormat *fmt = DateFormat::createDateTimeInstance( DateFormat::FULL,
                                                             DateFormat::LONG);
+    if (fmt == NULL) {
+        dataerrln("Error calling DateFormat::createDateTimeInstance");
+        delete formatter;
+        return;
+    }
+
     myString = fmt->format( myDate, myString);
     logln( myString );
 
@@ -417,7 +435,16 @@ void DateFormatRegressionTest::Test4065240(void)
         TimeZone::adoptDefault(TimeZone::createTimeZone("EST"));
         curDate = date(98, 0, 1);
         shortdate = DateFormat::createDateInstance(DateFormat::SHORT);
+        if (shortdate == NULL){
+            dataerrln("Error calling DateFormat::createDateInstance");
+            return;
+        }
+
         fulldate = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG);
+        if (fulldate == NULL){
+            dataerrln("Error calling DateFormat::createDateTimeInstance");
+            return;
+        }
         strShortDate = "The current date (short form) is ";
         UnicodeString temp;
         temp = shortdate->format(curDate, temp);
@@ -454,7 +481,6 @@ void DateFormatRegressionTest::Test4065240(void)
     failure(status, "Locale::setDefault");
     TimeZone::setDefault(*saveZone);
     //}
-
     delete shortdate;
     delete fulldate;
     delete saveZone;
@@ -478,7 +504,14 @@ void DateFormatRegressionTest::Test4071441(void)
 {
     DateFormat *fmtA = DateFormat::createInstance();
     DateFormat *fmtB = DateFormat::createInstance();
-    
+
+    if (fmtA == NULL || fmtB == NULL){
+        dataerrln("Error calling DateFormat::createInstance");
+        delete fmtA;
+        delete fmtB;
+        return;
+    }
+
     // {sfb} Is it OK to cast away const here?
     Calendar *calA = (Calendar*) fmtA->getCalendar();
     Calendar *calB = (Calendar*) fmtB->getCalendar();
@@ -1197,6 +1230,11 @@ void DateFormatRegressionTest::Test714(void)
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::NONE,
                                                          DateFormat::MEDIUM,
                                                          Locale::getUS());
+    if (fmt == NULL) {
+        dataerrln("Error calling DateFormat::createDateTimeInstance");
+        return;
+    }
+
     UnicodeString s;
         UnicodeString tests = 
           (UnicodeString) "7:25:43 AM" ;
@@ -1284,6 +1322,15 @@ void DateFormatRegressionTest::Test1684(void)
   UnicodeString pattern("yyyy MM WW EEE","");
   Calendar *cal = new GregorianCalendar(status);
   SimpleDateFormat *sdf = new SimpleDateFormat(pattern,status);
+  if (U_FAILURE(status)) {
+    dataerrln("Error constructing SimpleDateFormat");
+    for(i=0;i<kTest1684Count;i++) {
+        delete tests[i];
+    }
+    delete cal;
+    delete sdf;
+    return;
+  }
   cal->setFirstDayOfWeek(UCAL_SUNDAY);
   cal->setMinimalDaysInFirstWeek(1);
 
@@ -1368,7 +1415,7 @@ void DateFormatRegressionTest::Test1684(void)
   } else {
     logln(info);
   }
-  
+
   for(i=0;i<kTest1684Count;i++) {
     delete tests[i];
   }

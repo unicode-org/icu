@@ -620,6 +620,11 @@ NumberFormatTest::TestCurrency(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(Locale::getCanadaFrench(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error calling NumberFormat::createCurrencyInstance()");
+        return;
+    }
+
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
     if (!(s=="1,50 $"))
@@ -763,6 +768,11 @@ NumberFormatTest::TestRounding487(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error calling NumberFormat::createInstance()");
+        return;
+    }
+
     roundingTest(*nf, 0.00159999, 4, "0.0016");
     roundingTest(*nf, 0.00995, 4, "0.01");
 
@@ -1742,6 +1752,10 @@ void NumberFormatTest::TestCases() {
             delete ref;
             ref = new DecimalFormat(tok,
                       new DecimalFormatSymbols(Locale::getUS(), ec), ec);
+            if (U_FAILURE(ec)) {
+                dataerrln("Error constructing DecimalFormat");
+                goto error;
+            }
             break;
         case 1:
             // loc= <locale>

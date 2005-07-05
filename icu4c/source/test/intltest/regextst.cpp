@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1489,7 +1489,11 @@ void RegexTest::Extended() {
     UnicodeString   testFlags;     // the flags   for a test.
     UnicodeString   matchString;   // The marked up string to be used as input
 
-
+    if (U_FAILURE(status)){
+        dataerrln("Construct RegexMatcher() error.");
+        delete [] testData;
+        return;
+    }
 
     //
     //  Loop over the test data file, once per line.
@@ -1812,6 +1816,10 @@ void RegexTest::PerlTests() {
     //     One line per match, capture group one is the desired data.
     //
     RegexPattern* linePat = RegexPattern::compile("(.+?)[\\r\\n]+", 0, pe, status);
+    if (U_FAILURE(status)) {
+        dataerrln("RegexPattern::compile() error");
+        return;
+    }
     RegexMatcher* lineMat = linePat->matcher(testDataString, status);
 
     //
