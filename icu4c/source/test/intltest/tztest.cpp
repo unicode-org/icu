@@ -799,7 +799,7 @@ void TimeZoneTest::TestCustomParse()
     {
         UnicodeString id(kData[i].customId);
         int32_t exp = kData[i].expectedOffset;
-
+/*
         { // for no data test Jitterbug 4354
             UErrorCode success = U_ZERO_ERROR;
             NumberFormat* numberFormat = NumberFormat::createInstance(success);
@@ -809,6 +809,7 @@ void TimeZoneTest::TestCustomParse()
             }
             delete numberFormat;
         }
+        */
 
         TimeZone *zone = TimeZone::createTimeZone(id);
         UnicodeString   itsID, temp;

@@ -1151,6 +1151,9 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
 
         UErrorCode success = U_ZERO_ERROR;
         numberFormat = NumberFormat::createInstance(success);
+        if(U_FAILURE(success)){
+            return NULL;
+        }
         numberFormat->setParseIntegerOnly(TRUE);
 
     
