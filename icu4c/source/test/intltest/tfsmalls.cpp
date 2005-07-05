@@ -88,6 +88,10 @@ void test_FieldPosition_example( void )
 
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
+    if (U_FAILURE(status)) {
+        it_dataerrln("NumberFormat::createInstance() error");
+        return;
+    }
     fmt->setDecimalSeparatorAlwaysShown(TRUE);
     
     const int32_t tempLen = 20;

@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -100,15 +100,18 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     }
 
 // ======= Test equality
-
+if (per_fr != NULL && cur_fr != NULL)
+{
     logln("Testing equality operator");
     
     if( *per_fr == *cur_fr || ! ( *per_fr != *cur_fr) ) {
         errln("ERROR: == failed");
     }
+}
 
 // ======= Test various format() methods
-
+if (cur_fr != NULL)
+{
     logln("Testing various format() methods");
 
     double d = -10456.0037;
@@ -144,12 +147,14 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
         errln("ERROR: format(Formattable [long]) failed");
     }
     logln((UnicodeString) "" + fL.getLong() + " formatted to " + res6);
-
+}
 
 // ======= Test parse()
-
+if (fr != NULL)
+{
     logln("Testing parse()");
 
+    double d = -10456.0037;
     UnicodeString text("-10,456.0037");
     Formattable result1, result2, result3;
     ParsePosition pos(0), pos01(0);
@@ -174,10 +179,11 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
         errln("ERROR: Roundtrip failed (via parse()) for " + text);
     }
     logln(text + " parsed into " + (int32_t) result3.getDouble());
-
+}
 
 // ======= Test getters and setters
-
+if (fr != NULL && def != NULL)
+{
     logln("Testing getters and setters");
 
     int32_t count = 0;
@@ -217,7 +223,7 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     if(fr->getMinimumFractionDigits() != def->getMinimumFractionDigits() ) {
         errln("ERROR: setMinimumFractionDigits() failed");
     }
-
+}
 
 // ======= Test getStaticClassID()
 
@@ -315,60 +321,65 @@ IntlTestNumberFormatAPI::testRegistration()
     NumberFormat::unregister(key, status); // restore for other tests
     NumberFormat* f5 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
     UNumberFormat* uf5 = unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(),NULL, &status);
-    
-    float n = 1234.567f;
-    UnicodeString res0, res1, res2, res3, res4, res5;
-    UChar ures3[50];
-    UChar ures4[50];
-    UChar ures5[50];
-    
-    f0->format(n, res0);
-    f1->format(n, res1);
-    f2->format(n, res2);
-    f3->format(n, res3);
-    f4->format(n, res4);
-    f5->format(n, res5);
 
-    unum_formatDouble(uf3, n, ures3, 50, NULL, &status);
-    unum_formatDouble(uf4, n, ures4, 50, NULL, &status);
-    unum_formatDouble(uf5, n, ures5, 50, NULL, &status);
-
-    logln((UnicodeString)"f0 swap int: " + res0);
-    logln((UnicodeString)"f1 src int: " + res1);
-    logln((UnicodeString)"f2 src cur: " + res2);
-    logln((UnicodeString)"f3 reg cur: " + res3);
-    logln((UnicodeString)"f4 reg int: " + res4);
-    logln((UnicodeString)"f5 unreg cur: " + res5);
-    log("uf3 reg cur: ");
-    logln(ures3);
-    log("uf4 reg int: ");
-    logln(ures4);
-    log("uf5 ureg cur: ");
-    logln(ures5);
-    
-    if (f3 == f3a) {
-        errln("did not get new instance from service");
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating instnaces.");
+        return;
     } else {
-        delete f3a;
-    }
-    if (res3 != res0) {
-        errln("registered service did not match");
-    }
-    if (res4 != res1) {
-        errln("registered service did not inherit");
-    }
-    if (res5 != res2) {
-        errln("unregistered service did not match original");
-    }
+        float n = 1234.567f;
+        UnicodeString res0, res1, res2, res3, res4, res5;
+        UChar ures3[50];
+        UChar ures4[50];
+        UChar ures5[50];
 
-    if (res0 != ures3) {
-        errln("registered service did not match / unum");
-    }
-    if (res1 != ures4) {
-        errln("registered service did not inherit / unum");
-    }
-    if (res2 != ures5) {
-        errln("unregistered service did not match original / unum");
+        f0->format(n, res0);
+        f1->format(n, res1);
+        f2->format(n, res2);
+        f3->format(n, res3);
+        f4->format(n, res4);
+        f5->format(n, res5);
+
+        unum_formatDouble(uf3, n, ures3, 50, NULL, &status);
+        unum_formatDouble(uf4, n, ures4, 50, NULL, &status);
+        unum_formatDouble(uf5, n, ures5, 50, NULL, &status);
+
+        logln((UnicodeString)"f0 swap int: " + res0);
+        logln((UnicodeString)"f1 src int: " + res1);
+        logln((UnicodeString)"f2 src cur: " + res2);
+        logln((UnicodeString)"f3 reg cur: " + res3);
+        logln((UnicodeString)"f4 reg int: " + res4);
+        logln((UnicodeString)"f5 unreg cur: " + res5);
+        log("uf3 reg cur: ");
+        logln(ures3);
+        log("uf4 reg int: ");
+        logln(ures4);
+        log("uf5 ureg cur: ");
+        logln(ures5);
+
+        if (f3 == f3a) {
+            errln("did not get new instance from service");
+        } else {
+            delete f3a;
+        }
+        if (res3 != res0) {
+            errln("registered service did not match");
+        }
+        if (res4 != res1) {
+            errln("registered service did not inherit");
+        }
+        if (res5 != res2) {
+            errln("unregistered service did not match original");
+        }
+
+        if (res0 != ures3) {
+            errln("registered service did not match / unum");
+        }
+        if (res1 != ures4) {
+            errln("registered service did not inherit / unum");
+        }
+        if (res2 != ures5) {
+            errln("unregistered service did not match original / unum");
+        }
     }
 
     unum_close(uf5);

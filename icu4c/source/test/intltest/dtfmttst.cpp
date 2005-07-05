@@ -165,6 +165,13 @@ DateFormatTest::TestEquals()
 {
     DateFormat* fmtA = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL);
     DateFormat* fmtB = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL);
+    if ( fmtA == NULL || fmtB == NULL){
+        dataerrln("Error calling DateFormat::createDateTimeInstance");
+        delete fmtA;
+        delete fmtB;
+        return;
+    }
+
     if (!(*fmtA == *fmtB)) errln((UnicodeString)"FAIL");
     delete fmtA;
     delete fmtB;
@@ -517,6 +524,11 @@ DateFormatTest::TestCzechMonths459()
 {
     UErrorCode status = U_ZERO_ERROR;
     DateFormat* fmt = DateFormat::createDateInstance(DateFormat::FULL, Locale("cs", "", ""));
+    if (fmt == NULL){
+        dataerrln("Error calling DateFormat::createDateInstance()");
+        return;
+    }
+
     UnicodeString pattern;
     logln((UnicodeString)"Pattern " + ((SimpleDateFormat*) fmt)->toPattern(pattern));
     UDate june = date(97, UCAL_JUNE, 15);
@@ -589,6 +601,10 @@ DateFormatTest::TestDayOfYearPattern195()
     UDate expected = date(year, month, day);
     logln((UnicodeString)"Test Date: " + dateToString(today));
     SimpleDateFormat* sdf = (SimpleDateFormat*)DateFormat::createDateInstance();
+    if (sdf == NULL){
+        dataerrln("Error calling DateFormat::createDateInstance()");
+        return;
+    }
     tryPattern(*sdf, today, 0, expected);
     tryPattern(*sdf, today, "G yyyy DDD", expected);
     delete sdf;
@@ -665,6 +681,10 @@ DateFormatTest::TestBadInput135()
             for (int32_t k = 0; k < looks_length;++k) {
                 DateFormat::EStyle timeLook = looks[k];
                 DateFormat *df = DateFormat::createDateTimeInstance(dateLook, timeLook);
+                if (df == NULL){
+                    dataerrln("Error calling DateFormat::createDateTimeInstance()");
+                    continue;
+                }
                 UnicodeString prefix = UnicodeString(text) + ", " + dateLook + "/" + timeLook + ": ";
                 //try {
                     UDate when = df->parse(text, status);
@@ -968,6 +988,13 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PDT" );
     logln((UnicodeString)"Date set to : " + dateToString(testDate));
     UnicodeString out; 
+    if (dfUS == NULL || dfFrench == NULL){
+        dataerrln("Error calling DateFormat::createDateTimeInstance)");
+        delete dfUS;
+        delete dfFrench;
+        return;
+    }
+
     dfFrench->format(testDate, out);
     logln((UnicodeString)"Date Formated with French Locale " + out);
     if (!(out == expectedFRENCH))

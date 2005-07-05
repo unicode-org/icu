@@ -234,6 +234,8 @@ void it_infoln( void );
 void it_err(void);
 void it_err( UnicodeString message );
 void it_errln( UnicodeString message );
+void it_dataerr( UnicodeString message );
+void it_dataerrln( UnicodeString message );
 
 /**
  * This is a variant of cintltst/ccolltst.c:CharsToUChars().

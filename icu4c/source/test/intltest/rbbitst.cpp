@@ -2408,7 +2408,7 @@ RBBILineMonkey::RBBILineMonkey()
 {
     UErrorCode  status = U_ZERO_ERROR;
 
-    fSets    = new UVector(status);
+    fSets  = new UVector(status);
 
     fBK    = new UnicodeSet("[\\p{Line_Break=BK}]", status);
     fCR    = new UnicodeSet("[\\p{Line_break=CR}]", status);
@@ -2445,6 +2445,13 @@ RBBILineMonkey::RBBILineMonkey()
     fID    = new UnicodeSet("[\\p{Line_break=ID}]", status);
     fSA    = new UnicodeSet("[\\p{Line_break=SA}]", status);
     fXX    = new UnicodeSet("[\\p{Line_break=XX}]", status);
+
+    if (U_FAILURE(status)) {
+        deferredStatus = status;
+        fCharBI = NULL;
+        fNumberMatcher = NULL;
+        return;
+    }
 
     fAL->addAll(*fXX);     // Default behavior for XX is identical to AL
     fAL->addAll(*fAI);     // Default behavior for AI is identical to AL
@@ -3264,6 +3271,9 @@ void RBBITest::TestLineBreaks(void)
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
         RBBILineMonkey monkey;
+        if (U_FAILURE(monkey.deferredStatus)) {
+            continue;
+        }
 
         const int EXPECTEDSIZE = 50;
         int expected[EXPECTEDSIZE];

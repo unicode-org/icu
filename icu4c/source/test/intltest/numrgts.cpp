@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -380,7 +380,10 @@ NumberFormatRegressionTest::assignFloatValue(float returnfloat)
     logln(UnicodeString(" VALUE ") + returnfloat);
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nfcommon =  NumberFormat::createCurrencyInstance(Locale::getUS(), status);
-    failure(status, "NumberFormat::createCurrencyInstance", Locale::getUS());
+    if (failure(status, "NumberFormat::createCurrencyInstance", Locale::getUS())){
+        delete nfcommon;
+        return returnfloat;
+    }
     nfcommon->setGroupingUsed(FALSE);
 
     UnicodeString stringValue;
@@ -451,7 +454,10 @@ void NumberFormatRegressionTest::Test4071492 (void)
     double x = 0.00159999;
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
-    failure(status, "NumberFormat::createInstance", Locale::getUS());
+    if (failure(status, "NumberFormat::createInstance", Locale::getUS())) {
+        delete nf;
+        return;
+    }
     nf->setMaximumFractionDigits(4);
     UnicodeString out;
     FieldPosition pos(FieldPosition::DONT_CARE);
@@ -956,7 +962,10 @@ void NumberFormatRegressionTest::Test4071005 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::getCanadaFrench(), status);
-    failure(status, "NumberFormat::createNumberInstance", Locale::getCanadaFrench());
+    if (failure(status, "NumberFormat::createNumberInstance", Locale::getCanadaFrench())){
+        delete formatter;
+        return;
+    };
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1018,7 +1027,10 @@ void NumberFormatRegressionTest::Test4071014 (void)
     char loc[256]={0};
     uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
-    failure(status, "NumberFormat::createNumberInstance", loc);
+    if (failure(status, "NumberFormat::createNumberInstance", loc)){
+        delete formatter;
+        return;
+    }
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
 
@@ -1081,7 +1093,10 @@ void NumberFormatRegressionTest::Test4071859 (void)
     char loc[256]={0};
     uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
-    failure(status, "NumberFormat::createNumberInstance");
+    if (failure(status, "NumberFormat::createNumberInstance")){
+        delete formatter;
+        return;
+    };
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1170,6 +1185,12 @@ void NumberFormatRegressionTest::Test4098741(void)
     //try {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createPercentInstance(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error calling NumberFormat::createPercentInstance");
+        delete fmt;
+        return;
+    }
+
         fmt->setMaximumFractionDigits(20);
         UnicodeString temp;
         logln(fmt->format(.001, temp));
@@ -1845,7 +1866,10 @@ void NumberFormatRegressionTest::Test4145457() {
     //try {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nff = NumberFormat::createInstance(status);
-    failure(status, "NumberFormat::createInstance");
+    if (failure(status, "NumberFormat::createInstance")){
+        delete nff;
+        return;
+    };
     if(nff->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
         errln("DecimalFormat needed to continue");
         return;
@@ -2080,7 +2104,10 @@ static double _u_abs(double a) { return a<0?-a:a; }
 void NumberFormatRegressionTest::Test4167494(void) {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::getUS(), status);
-    failure(status, "NumberFormat::createInstance");
+    if (failure(status, "NumberFormat::createInstance")){
+        delete fmt;
+        return;
+    };
 
     double a = DBL_MAX * 0.99; // DBL_MAX itself overflows to +Inf
     UnicodeString s;
@@ -2113,7 +2140,10 @@ void NumberFormatRegressionTest::Test4167494(void) {
 void NumberFormatRegressionTest::Test4170798(void) {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
-    failure(status, "NumberFormat::createInstance");
+    if (failure(status, "NumberFormat::createInstance")){
+        delete nf;
+        return;
+    };
     if(nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
         errln("DecimalFormat needed to continue");
         return;
@@ -2377,7 +2407,10 @@ void NumberFormatRegressionTest::Test4212072(void) {
 void NumberFormatRegressionTest::Test4216742(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = (DecimalFormat*) NumberFormat::createInstance(Locale::getUS(), status);
-    failure(status, "createInstance", Locale::getUS());
+    if (failure(status, "createInstance", Locale::getUS())){
+        delete fmt;
+        return;
+    };
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
     int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0]));
     for (int i=0; i<DATA_length; ++i) {
@@ -2416,7 +2449,10 @@ void NumberFormatRegressionTest::Test4217661(void) {
     int D_length = (int)(sizeof(D) / sizeof(D[0]));
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::getUS(), status);
-    failure(status, "createInstance", Locale::getUS());
+    if (failure(status, "createInstance", Locale::getUS())){
+        delete fmt;
+        return;
+    };
     fmt->setMaximumFractionDigits(2);
     for (int i=0; i<D_length; i++) {
         UnicodeString s;
@@ -2434,7 +2470,10 @@ void NumberFormatRegressionTest::Test4217661(void) {
 void NumberFormatRegressionTest::Test4161100(void) {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
-    failure(status, "createInstance", Locale::getUS());
+    if (failure(status, "createInstance", Locale::getUS())){
+        delete nf;
+        return;
+    };
     nf->setMinimumFractionDigits(1);
     nf->setMaximumFractionDigits(1);
     double a = -0.09;

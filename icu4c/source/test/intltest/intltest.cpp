@@ -480,6 +480,17 @@ void it_errln( UnicodeString message )
         IntlTest::gTest->errln( message );
 }
 
+void it_dataerr( UnicodeString message )
+{
+    if (IntlTest::gTest)
+        IntlTest::gTest->dataerr( message );
+}
+
+void it_dataerrln( UnicodeString message )
+{
+    if (IntlTest::gTest)
+        IntlTest::gTest->dataerrln( message );
+}
 
 IntlTest::IntlTest()
 {
@@ -898,6 +909,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     // stream out the message
     length = message.extract(0, message.length(), buffer, sizeof(buffer));
     if (length > 0) {
+        length = length > 10000 ? 10000 : length;
         fwrite(buffer, sizeof(*buffer), length, (FILE *)testoutfp);
     }
 
