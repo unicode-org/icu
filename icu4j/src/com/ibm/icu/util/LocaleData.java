@@ -22,14 +22,60 @@ public final class LocaleData {
     private boolean noSubstitute;
     private ICUResourceBundle bundle;
 
+    /**
+     * EXType for {@link #getExemplarSet(int, int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ES_STANDARD = 0;
+
+    /**
+     * EXType for {@link #getExemplarSet(int, int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ES_AUXILIARY = 1;
+
+    /**
+     * Count of EXTypes for {@link #getExemplarSet(int, int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ES_COUNT = 2;
     
+    /**
+     * Delimiter type for {@link #getDelimiter(int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int QUOTATION_START = 0;
+
+    /**
+     * Delimiter type for {@link #getDelimiter(int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int QUOTATION_END = 1;
+
+    /**
+     * Delimiter type for {@link #getDelimiter(int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ALT_QUOTATION_START = 2;
+
+    /**
+     * Delimiter type for {@link #getDelimiter(int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ALT_QUOTATION_END = 3;
+
+    /**
+     * Count of delimiter types for {@link #getDelimiter(int)}.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int DELIMITER_COUNT = 4;
 
     // private constructor to prevent default construction
@@ -93,6 +139,7 @@ public final class LocaleData {
      * @param locale    Locale with thich the locale data object is associated.
      * @return          A locale data object.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final LocaleData getInstance(ULocale locale) {
        LocaleData ld = new LocaleData();
@@ -106,6 +153,7 @@ public final class LocaleData {
      *
      * @return          A locale data object.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final LocaleData getInstance() {
        return LocaleData.getInstance(ULocale.getDefault());
@@ -119,6 +167,7 @@ public final class LocaleData {
      *                  an error when no data is available for that method,
      *                  given the locale ID supplied to the constructor.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setNoSubstitute(boolean setting) {
        noSubstitute = setting;
@@ -132,6 +181,7 @@ public final class LocaleData {
      *                  an error when no data is available for that method,
      *                  given the locale ID supplied to the constructor.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean getNoSubstitute() {
        return noSubstitute;
@@ -145,9 +195,9 @@ public final class LocaleData {
      *                  ALT_QUOTATION_START, or ALT_QUOTATION_END.
      * @return          The desired delimiter string.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public String getDelimiter( int type ) {
-
+    public String getDelimiter(int type) {
         String [] delimiterTypes = { "quotationStart", 
                                      "quotationEnd", 
                                      "alternateQuotationStart", 

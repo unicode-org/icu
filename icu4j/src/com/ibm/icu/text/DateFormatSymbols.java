@@ -76,12 +76,40 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // correct; 2. Make code add in 'u' at end if len == 17.
 
     // Constants for context
+    /**
+     * Constant for context.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int FORMAT = 0;
+
+    /**
+     * Constant for context.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int STANDALONE = 1;
 
     // Constants for width
+    /**
+     * Constant for width.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int WIDE = 4;
+
+    /**
+     * Constant for width.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int ABBREVIATED = 3;
+
+    /**
+     * Constant for width.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int NARROW = 5;
 
     /**
@@ -330,6 +358,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets era name strings. For example: "Anno Domini" and "Before Christ".
      * @return the era strings.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getEraNames() {
     // TODO: Fill the era names in appropriately.  Just a placeholder right now.
@@ -340,6 +369,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
      * @stable ICU 2.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getMonths() {
         return duplicate(months);
@@ -352,6 +382,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      *                   either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings.
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getMonths(int context, int width) {
         String [] returnValue = null;
@@ -431,6 +462,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      Width of strings to be returned, either
      *                   WIDE, ABBREVIATED, or NARROW
      * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getWeekdays(int context, int width) {
         String [] returnValue = null;
