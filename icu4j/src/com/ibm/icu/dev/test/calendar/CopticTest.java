@@ -14,6 +14,8 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.CopticCalendar;
+import com.ibm.icu.util.EthiopicCalendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -260,5 +262,35 @@ public class CopticTest extends CalendarTest
                 }
             }
         }
+    }
+
+    public void TestYear() {
+        // Gregorian Calendar
+        Calendar gCal= new GregorianCalendar();
+        Date gToday=gCal.getTime();
+        gCal.add(GregorianCalendar.MONTH,2);
+        Date gFuture=gCal.getTime();
+        DateFormat gDF = DateFormat.getDateInstance(gCal,DateFormat.FULL);
+        logln("gregorian calendar: " + gDF.format(gToday) +
+              " + 2 months = " + gDF.format(gFuture));
+
+        // Coptic Calendar
+        CopticCalendar cCal= new CopticCalendar();
+        Date cToday=cCal.getTime();
+        cCal.add(CopticCalendar.MONTH,2);
+        Date cFuture=cCal.getTime();
+        DateFormat cDF = DateFormat.getDateInstance(cCal,DateFormat.FULL);
+        logln("coptic calendar: " + cDF.format(cToday) +
+              " + 2 months = " + cDF.format(cFuture));
+
+        // EthiopicCalendar
+        EthiopicCalendar eCal= new EthiopicCalendar();
+        Date eToday=eCal.getTime();
+        eCal.add(EthiopicCalendar.MONTH,2); // add 2 months
+        eCal.setAmeteAlemEra(false);
+        Date eFuture=eCal.getTime();
+        DateFormat eDF = DateFormat.getDateInstance(eCal,DateFormat.FULL);
+        logln("ethiopic calendar: " + eDF.format(eToday) +
+              " + 2 months = " + eDF.format(eFuture));		
     }
 }
