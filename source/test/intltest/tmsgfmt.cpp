@@ -1181,9 +1181,15 @@ void TestMessageFormat::TestRBNF(void) {
     Formattable args[1];
 
     NumberFormat* numFmt = NumberFormat::createInstance(locale, ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Error calling NumberFormat::createInstance()");
+        return;
+    }
+
     for (int i = 0; i < formats_count; ++i) {
         MessageFormat* fmt = new MessageFormat(formats[i], locale, ec);
         logln((UnicodeString)"Testing format pattern: '" + formats[i] + "'");
+
         for (int j = 0; j < values_count; ++j) {
             ec = U_ZERO_ERROR;
             numFmt->parse(values[j], args[0], ec);

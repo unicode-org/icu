@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2004, International Business Machines Corporation 
+ * Copyright (c) 2003-2005, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -168,6 +168,13 @@ void CalendarCaseTest::IslamicCivil()
     };
     UnicodeString result;
     DateFormat *fmt = DateFormat::createDateInstance(DateFormat::kFull, Locale("ar_JO@calendar=islamic-civil"));
+    if (fmt == NULL) {
+        dataerrln("Error calling DateFormat::createDateInstance");
+        delete c;
+        delete fmt;
+        return;
+    }
+
     fmt->setTimeZone(*TimeZone::getGMT());
     fmt->format((UDate)2486076.5, result);
     if (result != expectedUChars) {

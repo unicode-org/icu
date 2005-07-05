@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -757,8 +757,12 @@ void MessageFormatRegressionTest::Test4118594()
     pp.setIndex(0);
     Formattable *newobjs = mf->parse(result, pp, count1);
     // newobjs now equals {new Double(3.1)}
-    if (newobjs[0].getDouble() != 3.1)
-        errln( UnicodeString("newobjs[0] = ") + newobjs[0].getDouble());
+    if (newobjs == NULL) {
+        dataerrln("Error calling MessageFormat::parse");
+    } else {
+        if (newobjs[0].getDouble() != 3.1)
+            errln( UnicodeString("newobjs[0] = ") + newobjs[0].getDouble());
+    }
 
     delete [] objs;
     delete [] newobjs;
