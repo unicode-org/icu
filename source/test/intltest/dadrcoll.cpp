@@ -210,6 +210,7 @@ DataDrivenCollatorTest::processTest(TestData *testData) {
     if(col != NULL){
       RuleBasedCollator* rbc = (RuleBasedCollator*)col;
       cloneSize = rbc->cloneBinary(NULL, 0, intStatus);
+      intStatus = U_ZERO_ERROR;
       cloneBuf = (uint8_t*) malloc(cloneSize);
       cloneSize = rbc->cloneBinary(cloneBuf, cloneSize, intStatus);
       clone = new RuleBasedCollator(cloneBuf, cloneSize, UCA, intStatus);
