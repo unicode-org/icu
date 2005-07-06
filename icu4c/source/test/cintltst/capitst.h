@@ -21,6 +21,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "cintltst.h"
+#include "callcoll.h"
 #define MAX_TOKEN_LEN 16
 
 
@@ -120,7 +121,10 @@
      */
     static void TestGetContractionsAndUnsafes(void);
 
-
+    /**
+     * Test funny stuff with open binary
+     */
+    static void TestOpenBinary(void);
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
