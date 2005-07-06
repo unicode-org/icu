@@ -1120,7 +1120,7 @@ public class ULocaleTest extends TestFmwk {
     /*#      result    valid? */
     /*0*/ { "mt_MT", "true" },
     /*1*/ { "en", "true" },
-    /*2*/ { "en", "false" },
+    /*2*/ { "en", "false" }, // fell back from en-zzz to en
     /*3*/ {  null, "false" },
     /*4*/ {  "es", "true" }, 
     /*5*/ { "de", "true" }};
@@ -1128,7 +1128,7 @@ public class ULocaleTest extends TestFmwk {
     private static final String ACCEPT_LANGUAGE_HTTP[] = { 
                     /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
                     /*1*/ "ja;q=0.5, en;q=0.8, tlh",
-                    /*2*/ "en-wf, de-lx;q=0.8",
+                    /*2*/ "en-zzz, de-lx;q=0.8",
                     /*3*/ "mga-ie;q=0.9, tlh",
                     /*4*/ "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                           "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
@@ -1169,42 +1169,4 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
-    
-  
-    
-/**
- * static void TestAcceptLanguage(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  UAcceptResult outResult;
-  UEnumeration *available;
-  char tmp[200];
-  int i;
-  int32_t rc = 0;
-  
-      for(i=0;i<numTests;i++) {
-    outResult = -3;
-    status=U_ZERO_ERROR;
-    log_verbose("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
-
-    available = ures_openAvailableLocales(tests[i].icuSet, &status);
-    tmp[0]=0;
-    rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
-    uenum_close(available);
-    log_verbose(" got %s, %d [%s]\n", tmp[0]?tmp:"(EMPTY)", outResult, u_errorName(status));
-    if(outResult != tests[i].res) {
-      log_err("FAIL: #%d: expected outResult of %d but got %d\n", i, tests[i].res, outResult);
-      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
-    }
-    if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
-      log_err("FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
-      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
-    }
-  }
-}
-
- */
-    
 }

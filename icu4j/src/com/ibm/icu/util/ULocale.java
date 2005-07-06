@@ -2769,49 +2769,27 @@ public final class ULocale implements Serializable {
     availableLocales, boolean[] fallback) {
         // fallbacklist
         int i,j;
-        int maxLen = -1;
-        String acceptFallbacks[] = new String[acceptLanguageList.length];
-        for(i=0;i<acceptLanguageList.length;i++) {       
-            for(j=0;j<availableLocales.length;j++) {
-                if(availableLocales[j].equals(acceptLanguageList[i])) {
-                    if(fallback != null) {
-                        fallback[0]=true;
-                    }
-                    return acceptLanguageList[i];
-                }
-            
-                String avail = availableLocales[j].toString();
-                
-                int len = avail.length();
-                
-                if(len>maxLen) {
-                    maxLen = len;
-                }
-            }
-            Locale loc = acceptLanguageList[i].toLocale();
-            String parent = LocaleUtility.fallback(loc).toString();
-            acceptFallbacks[i] = parent;
-        }
-        
-        // OK, no direct match. 
-        for(maxLen--;maxLen>0;maxLen--) {
-            for(i=0;i<acceptFallbacks.length;i++) {
-                if(acceptFallbacks[i]!=null) {
-                    if(acceptFallbacks[i].length() == maxLen) {
-                        for(j=0;j<availableLocales.length;j++) {
-                            if(availableLocales[j].equals(acceptFallbacks[i])) {
-                                if(fallback != null) {
-                                    fallback[0]=false;
-                                }
-                                return new ULocale(acceptFallbacks[i]);
-                            }
-                        
+        for(i=0;i<acceptLanguageList.length;i++) {
+            ULocale aLocale = acceptLanguageList[i];
+            boolean[] setFallback = fallback;
+            do {
+                for(j=0;j<availableLocales.length;j++) {
+                    if(availableLocales[j].equals(aLocale)) {
+                        if(setFallback != null) {
+                            setFallback[0]=true;
                         }
-                        String parent = LocaleUtility.fallback(new Locale(acceptFallbacks[i].toString())).toString();
-                        acceptFallbacks[i] = parent;
+                        return availableLocales[j];
                     }
                 }
-            }
+                Locale loc = aLocale.toLocale();
+                Locale parent = LocaleUtility.fallback(loc);
+                if(parent != null) {
+                    aLocale = new ULocale(parent);
+                } else {
+                    aLocale = null;
+                }
+                setFallback = null; // don't set fallback[0] for fallbacks of the acceptList
+            } while (aLocale != null);
         }
         return null;
     }
