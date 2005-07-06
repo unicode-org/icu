@@ -68,6 +68,14 @@ static UDataMemory* UCA_DATA_MEM = NULL;
 // It is cleaned in ucol_cleanup
 static const uint16_t *fcdTrieIndex=NULL;
 
+// These are values from UCA required for
+// implicit generation and supressing sort key compression
+// they should regularly be in the UCA, but if one
+// is running without UCA, it could be a problem
+static int32_t maxRegularPrimary  = 0xA0;
+static int32_t minImplicitPrimary = 0xE0;
+static int32_t maxImplicitPrimary = 0xE4;
+
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptableUCA(void * /*context*/,
@@ -344,16 +352,20 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
     if(U_FAILURE(*status)){
         return NULL;
     }
+    /*
     if(base == NULL) {
         // we don't support null base yet
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
+    */
+    // We need these and we could be running without UCA
+    uprv_uca_initImplicitConstants(0, 0, status);
     UCATableHeader *colData = (UCATableHeader *)bin;
     // do we want version check here? We're trying to figure out whether collators are compatible
-    if(uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+    if(base && (uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
         uprv_memcmp(colData->UCDVersion, base->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
-        colData->version[0] != UCOL_BUILDER_VERSION)
+        colData->version[0] != UCOL_BUILDER_VERSION))
     {
         *status = U_COLLATOR_VERSION_MISMATCH;
         return NULL;
@@ -1030,7 +1042,8 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
 U_CAPI void U_EXPORT2
 uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status) {
     // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
-    initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
+    //initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
+  initImplicitConstants(minImplicitPrimary, maxImplicitPrimary, 0x04, 0xFE, 1, 1, status);
 }
 
 U_CDECL_BEGIN
@@ -1299,6 +1312,9 @@ inline UBool collIterFCD(collIterate *collationSource) {
 /*                                                                          */
 /****************************************************************************/
 
+static uint32_t getImplicit(UChar32 cp, collIterate *collationSource);
+static uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource);
+
 /* there should be a macro version of this function in the header file */
 /* This is the first function that tries to fetch a collation element  */
 /* If it's not succesfull or it encounters a more difficult situation  */
@@ -1460,7 +1476,10 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             }
           }
       }
-    return order; /* return the CE */
+      if(order == UCOL_NOT_FOUND) {
+        order = getImplicit(ch, collationSource);
+      }
+      return order; /* return the CE */
 }
 
 /* ucol_getNextCE, out-of-line version for use from other files.   */
@@ -1814,21 +1833,25 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
           if (result > UCOL_NOT_FOUND) {
             result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
           }
-          if (result == UCOL_NOT_FOUND) {
+          if (result == UCOL_NOT_FOUND) { // Not found in master list
             if (!isAtStartPrevIterate(data) &&
               ucol_contractionEndCP(ch, data->coll)) {
                 result = UCOL_CONTRACTION;
-              }
-            else {
+            } else {
               if(coll->UCA) {
                 result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
               }
             }
-
-            if (result > UCOL_NOT_FOUND && coll->UCA) {
-              result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
+            
+            if (result > UCOL_NOT_FOUND) {
+              if(coll->UCA) {
+                result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
+              }
             }
           }
+        }
+        if(result == UCOL_NOT_FOUND) {
+          result = getPrevImplicit(ch, data);
         }
     }
     return result;
@@ -3980,7 +4003,7 @@ ucol_getSortKeyWithAllocation(const UCollator *coll,
 /* or if we run out of space while making a sortkey and want to return ASAP                                   */
 int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
     UErrorCode status = U_ZERO_ERROR;
-    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
+    //const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
     uint8_t compareSec   = (uint8_t)((strength >= UCOL_SECONDARY)?0:0xFF);
     uint8_t compareTer   = (uint8_t)((strength >= UCOL_TERTIARY)?0:0xFF);
     uint8_t compareQuad  = (uint8_t)((strength >= UCOL_QUATERNARY)?0:0xFF);
@@ -4081,7 +4104,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                       leadPrimary = 0;
                   } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
                       //(primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
-                      (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                      //(primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                      (primary1 > maxRegularPrimary && primary1 < minImplicitPrimary)) {
                   /* not compressible */
                       leadPrimary = 0;
                       currentSize+=2;
@@ -4321,7 +4345,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         UBool allocateSKBuffer,
         UErrorCode *status)
 {
-    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
+    //const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
 
     uint32_t i = 0; /* general purpose counter */
 
@@ -4538,7 +4562,8 @@ ucol_calcSortKey(const    UCollator    *coll,
                         *primaries++ = primary1;
                         leadPrimary = 0;
                     } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
-                        (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                        //(primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                       (primary1 > maxRegularPrimary && primary1 < minImplicitPrimary)) {
                     /* not compressible */
                         leadPrimary = 0;
                         *primaries++ = primary1;
@@ -4927,7 +4952,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 {
     U_ALIGN_CODE(16);
 
-    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
+    //const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
@@ -5066,7 +5091,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                       leadPrimary = 0;
                   } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
                       //(primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24)))
-                      (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                      //(primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
+                      (primary1 > maxRegularPrimary && primary1 < minImplicitPrimary)) {
                   /* not compressible */
                       leadPrimary = 0;
                       *primaries++ = primary1;
@@ -8252,10 +8278,16 @@ ucol_cloneBinary(const UCollator *coll,
     if(U_FAILURE(*status)) {
         return length;
     }
+    if(capacity < 0) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+      return length;
+    }
     if(coll->hasRealData == TRUE) {
         length = coll->image->size;
         if(length <= capacity) {
             uprv_memcpy(buffer, coll->image, length);
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
         }
     } else {
         length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
@@ -8291,6 +8323,8 @@ ucol_cloneBinary(const UCollator *coll,
 
             /* copy the collator options */
             uprv_memcpy(buffer+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
         }
     }
     return length;

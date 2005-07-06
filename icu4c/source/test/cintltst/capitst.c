@@ -124,6 +124,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestMergeSortKeys, "tscoll/capitst/TestMergeSortKeys");
     addTest(root, &TestShortString, "tscoll/capitst/TestShortString");
     addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
+    addTest(root, &TestOpenBinary, "tscoll/capitst/TestOpenBinary");
 }
 
 void TestGetSetAttr(void) {
@@ -770,10 +771,11 @@ void TestCloneBinary(){
     }
 
     size = ucol_cloneBinary(col, NULL, 0, &err);
-    if(U_FAILURE(err)) {
+    if(!size) {
         log_err("ucol_cloneBinary - couldn't check size. Error: %s\n", u_errorName(err));
         return;
     }
+    err = U_ZERO_ERROR;
 
     buffer = (uint8_t *) malloc(size);
     ucol_cloneBinary(col, buffer, size, &err);
@@ -798,7 +800,7 @@ void TestCloneBinary(){
         k2 = (uint8_t *) malloc(sizeof(uint8_t) * l2);
         ucol_getSortKey(col, t, -1, k1, l1);
         ucol_getSortKey(col, t, -1, k2, l2);
-        if (strcmp(k1,k2) != 0){
+        if (strcmp((char *)k1,(char *)k2) != 0){
             log_err("ucol_openBinary - new collator should equal to old one\n");
         };
         free(k1);
@@ -2013,6 +2015,59 @@ TestGetContractionsAndUnsafes(void)
     uset_close(conts);
     uset_close(exp);
     uset_close(set);
+}
+
+static void 
+TestOpenBinary(void) 
+{
+  UErrorCode status = U_ZERO_ERROR;
+  /*
+  char rule[] = "&h < d < c < b";
+  char *wUCA[] = { "a", "h", "d", "c", "b", "i" };
+  char *noUCA[] = {"d", "c", "b", "a", "h", "i" };
+  */
+  /* we have to use Cyrillic letters because latin-1 always gets copied */
+  char rule[] = "&\\u0452 < \\u0434 < \\u0433 < \\u0432"; /* &dje < d < g < v */
+  char *wUCA[] = { "\\u0430", "\\u0452", "\\u0434", "\\u0433", "\\u0432", "\\u0435" }; /* a, dje, d, g, v, e */
+  char *noUCA[] = {"\\u0434", "\\u0433", "\\u0432", "\\u0430", "\\u0435", "\\u0452" }; /* d, g, v, a, e, dje */
+
+  UChar uRules[256];
+  int32_t uRulesLen = u_unescape(rule, uRules, 256);
+
+  UCollator *coll = ucol_openRules(uRules, uRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+  UCollator *UCA = ucol_open("root", &status);
+  UCollator *cloneNOUCA = NULL, *cloneWUCA = NULL;
+
+  uint8_t imageBuffer[32768];
+  uint8_t *image = imageBuffer;
+  int32_t imageBufferCapacity = 32768;
+
+  int32_t imageSize = ucol_cloneBinary(coll, image, imageBufferCapacity, &status);
+  if(U_FAILURE(status)) {
+    image = (uint8_t *)malloc(imageSize*sizeof(uint8_t));
+    status = U_ZERO_ERROR;
+    imageSize = ucol_cloneBinary(coll, imageBuffer, imageSize, &status);
+  }
+
+
+  cloneWUCA = ucol_openBinary(image, imageSize, UCA, &status);
+  cloneNOUCA = ucol_openBinary(image, imageSize, NULL, &status);
+
+  genericOrderingTest(coll, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
+
+  genericOrderingTest(cloneWUCA, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
+  genericOrderingTest(cloneNOUCA, noUCA, sizeof(noUCA)/sizeof(noUCA[0]));
+
+
+
+  if(image != imageBuffer) {
+    free(image);
+  }
+  ucol_close(coll);
+  ucol_close(cloneNOUCA);
+  ucol_close(cloneWUCA);
+  ucol_close(UCA);
+
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
