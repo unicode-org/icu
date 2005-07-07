@@ -421,6 +421,18 @@ void UObjectTest::testUMemory() {
     m=n;
 }
 
+void UObjectTest::TestMFCCompatibility() {
+#if U_HAVE_DEBUG_LOCATION_NEW
+    /* Make sure that it compiles with MFC's debuggable new usage. */
+    UnicodeString *str = new(__FILE__, __LINE__) UnicodeString();
+    str->append((UChar)0x0040); // Is it usable?
+    if(str->charAt(0) != 0x0040) {
+        errln("debug new doesn't work.");
+    }
+    delete str;
+#endif
+}
+
 /* --------------- */
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
@@ -432,6 +444,7 @@ void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
     CASE(0, testIDs);
     CASE(1, testUMemory);
+    CASE(2, TestMFCCompatibility);
 
     default: name = ""; break; //needed to end loop
     }
