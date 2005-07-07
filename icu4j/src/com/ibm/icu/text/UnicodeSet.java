@@ -3239,7 +3239,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Alias for UnicodeSet.CASE, for ease of porting from C++ where ICU4C
      * also has both USET_CASE and USET_CASE_INSENSITIVE (see uset.h).
-     * @see CASE
+     * @see #CASE
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
