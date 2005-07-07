@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -83,7 +83,7 @@ getSPrepFoldingOffset(uint32_t data) {
 }
 
 /* hashes an entry  */
-static int32_t U_EXPORT2 U_CALLCONV 
+static int32_t U_CALLCONV 
 hashEntry(const UHashTok parm) {
     UStringPrepKey *b = (UStringPrepKey *)parm.pointer;
     UHashTok namekey, pathkey;
@@ -93,7 +93,7 @@ hashEntry(const UHashTok parm) {
 }
 
 /* compares two entries */
-static UBool U_EXPORT2 U_CALLCONV 
+static UBool U_CALLCONV 
 compareEntries(const UHashTok p1, const UHashTok p2) {
     UStringPrepKey *b1 = (UStringPrepKey *)p1.pointer;
     UStringPrepKey *b2 = (UStringPrepKey *)p2.pointer;

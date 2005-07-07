@@ -71,7 +71,7 @@ static const UChar kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
 
 
 U_CDECL_BEGIN
-static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
+static void U_CALLCONV RBBISetTable_deleter(void *p) {
     RBBISetTableEl *px = (RBBISetTableEl *)p;
     delete px->key;
     // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
