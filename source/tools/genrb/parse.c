@@ -650,6 +650,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
                 {
                     len = ucol_cloneBinary(coll, NULL, 0, &intStatus);
                     data = (uint8_t *)uprv_malloc(len);
+                    intStatus = U_ZERO_ERROR;
                     len = ucol_cloneBinary(coll, data, len, &intStatus);
                     /*data = ucol_cloneRuleData(coll, &len, &intStatus);*/
 
