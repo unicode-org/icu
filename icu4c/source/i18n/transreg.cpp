@@ -498,7 +498,7 @@ void Entry::setFactory(Transliterator::Factory factory,
 
 // UObjectDeleter for Hashtable::setValueDeleter
 U_CDECL_BEGIN
-static void U_EXPORT2 U_CALLCONV
+static void U_CALLCONV
 deleteEntry(void* obj) {
     delete (Entry*) obj;
 }

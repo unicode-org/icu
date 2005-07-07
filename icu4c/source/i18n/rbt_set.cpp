@@ -20,7 +20,7 @@
 #include "putilimp.h"
 
 U_CDECL_BEGIN
-static void U_EXPORT2 U_CALLCONV _deleteRule(void *rule) {
+static void U_CALLCONV _deleteRule(void *rule) {
     delete (U_NAMESPACE_QUALIFIER TransliterationRule *)rule;
 }
 U_CDECL_END
