@@ -28,6 +28,8 @@
 #include "uvector.h"
 #include "hash.h"
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 enum UXMLNodeType {
     /** Node type string (text contents), stored as a UnicodeString. */
     UXML_NODE_TYPE_STRING,
@@ -238,5 +240,6 @@ private:
 };
 
 U_NAMESPACE_END
+#endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS */
 
 #endif

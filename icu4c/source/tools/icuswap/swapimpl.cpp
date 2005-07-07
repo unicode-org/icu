@@ -38,6 +38,7 @@
 #include "ucase.h"
 #include "ubidi_props.h"
 #include "unormimp.h"
+#include "utrie.h"
 
 /* Unicode properties data swapping ----------------------------------------- */
 
