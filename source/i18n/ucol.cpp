@@ -435,15 +435,20 @@ ucol_close(UCollator *coll)
           if(coll->rules != NULL && coll->freeRulesOnClose) {
               uprv_free((UChar *)coll->rules);
           }
-          if(coll->rb != NULL) { /* pointing to read-only memory */
-              ures_close(coll->rb);
-          }
           if(coll->freeImageOnClose == TRUE) {
               uprv_free((UCATableHeader *)coll->image);
+          }
+          if(coll->resCleaner != NULL) {
+            coll->resCleaner(coll);
+          }
+#if 0
+          if(coll->rb != NULL) { /* pointing to read-only memory */
+              ures_close(coll->rb);
           }
           if(coll->elements != NULL) {
               ures_close(coll->elements);
           }
+#endif
           if(coll->latinOneCEs != NULL) {
               uprv_free(coll->latinOneCEs);
           }
@@ -700,6 +705,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->latinOneRegenTable = FALSE;
     result->latinOneFailed = FALSE;
     result->UCA = UCA;
+    result->resCleaner = NULL;
 
     ucol_updateInternalState(result, status);
 

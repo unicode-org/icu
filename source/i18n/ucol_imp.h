@@ -852,6 +852,10 @@ SortKeyGenerator(const    UCollator    *coll,
         UBool allocatePrimary,
         UErrorCode *status);
 
+typedef void U_CALLCONV
+ResourceCleaner(UCollator *coll);
+
+
 struct UCollator {
     UColOptionSet  *options;
     SortKeyGenerator *sortKeyGen;
@@ -929,6 +933,7 @@ struct UCollator {
 
     UDataInfo dataInfo;               /* Data info of UCA table */
     const UCollator *UCA;
+    ResourceCleaner *resCleaner;
 
 };
 

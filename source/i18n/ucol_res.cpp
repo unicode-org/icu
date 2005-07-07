@@ -43,6 +43,18 @@
 #include "utracimp.h"
 #include "cmemory.h"
 
+U_CDECL_BEGIN
+static void U_CALLCONV
+ucol_prv_closeResources(UCollator *coll) {
+  if(coll->rb != NULL) { /* pointing to read-only memory */
+      ures_close(coll->rb);
+  }
+  if(coll->elements != NULL) {
+      ures_close(coll->elements);
+  }
+}
+U_CDECL_END
+
 /****************************************************************************/
 /* Following are the open/close functions                                   */
 /*                                                                          */
@@ -176,6 +188,7 @@ clean:
 
   ures_close(binary);
   ures_close(collations); //??? we have to decide on that. Probably affects something :)
+  result->resCleaner = ucol_prv_closeResources;
   return result;
 }
 
