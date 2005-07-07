@@ -771,7 +771,7 @@ void TestCloneBinary(){
     }
 
     size = ucol_cloneBinary(col, NULL, 0, &err);
-    if(!size) {
+    if(size==0 || err!=U_BUFFER_OVERFLOW_ERROR) {
         log_err("ucol_cloneBinary - couldn't check size. Error: %s\n", u_errorName(err));
         return;
     }
