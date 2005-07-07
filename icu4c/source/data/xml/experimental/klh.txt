@@ -1,3 +1,0 @@
-klh {
-	Test { " test file " }
-}
