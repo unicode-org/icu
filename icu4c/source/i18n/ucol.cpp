@@ -363,9 +363,9 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
     uprv_uca_initImplicitConstants(0, 0, status);
     UCATableHeader *colData = (UCATableHeader *)bin;
     // do we want version check here? We're trying to figure out whether collators are compatible
-    if(base && (uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
-        uprv_memcmp(colData->UCDVersion, base->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
-        colData->version[0] != UCOL_BUILDER_VERSION))
+    if((base && (uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+        uprv_memcmp(colData->UCDVersion, base->image->UCDVersion, sizeof(UVersionInfo)) != 0)) ||
+        colData->version[0] != UCOL_BUILDER_VERSION)
     {
         *status = U_COLLATOR_VERSION_MISMATCH;
         return NULL;
