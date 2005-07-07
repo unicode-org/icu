@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -18,6 +18,8 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.Currency;
+
 import java.util.Locale;
 
 public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
@@ -45,6 +47,18 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             errln("ERROR: get/set ZeroDigit failed");
         }
 
+        char sigDigit = en.getSignificantDigit();
+        fr.setZeroDigit(sigDigit); 
+        if(fr.getSignificantDigit() != en.getSignificantDigit()) {
+            errln("ERROR: get/set SignificantDigit failed");
+        }
+
+        Currency currency = Currency.getInstance("USD");
+        fr.setCurrency(currency);
+        if (!fr.getCurrency().equals(currency)){
+            errln("ERROR: get/set Currency failed");
+        }
+        	
         char group = en.getGroupingSeparator();
         fr.setGroupingSeparator(group);
         if(fr.getGroupingSeparator() != en.getGroupingSeparator()) {

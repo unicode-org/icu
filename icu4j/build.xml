@@ -15,11 +15,12 @@
     <taskdef resource="clovertasks"/>
 
     <target name="with.clover">
+        <mkdir dir="tmp/"/>
         <clover-setup initString="tmp/icu4j.db">
             <files>
                 <exclude name="**/dev/**/*.java"/>
              </files>
-             <methodContext id="API" regexp="(.* )?public .*"/>
+             <methodContext name="API" regexp="(.* )?public .*"/>
         </clover-setup>
     </target>
 
@@ -38,17 +39,11 @@
         </clover-report>
     </target>
     <target name="clover.log" depends="with.clover">
-        <clover-log level="method">
+        <clover-log level="method" filter="private">
              <package name="com.ibm.icu.text"/>
-        </clover-log>
-        <clover-log level="method">
              <package name="com.ibm.icu.lang"/>
-        </clover-log>
-        <clover-log level="method">
              <package name="com.ibm.icu.math"/>
-        </clover-log>
-        <clover-log level="method">
-            <package name="com.ibm.icu.util"/>
+             <package name="com.ibm.icu.util"/>
         </clover-log>
     </target>
 
