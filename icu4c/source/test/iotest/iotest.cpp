@@ -25,6 +25,7 @@
 #include "iotest.h"
 #include "unicode/tstdtmod.h"
 #include "unicode/ucal.h"
+#include "putilimp.h" // for uprv_getUTCtime()
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
@@ -871,7 +872,7 @@ int main(int argc, char* argv[])
     UDate startTime, endTime;
     int32_t diffTime;
 
-    startTime = ucal_getNow();
+    startTime = uprv_getUTCtime();
 
     /* Check whether ICU will initialize without forcing the build data directory into
     *  the ICU_DATA path.  Success here means either the data dll contains data, or that
