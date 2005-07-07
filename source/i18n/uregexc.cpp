@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:   regexc.cpp
@@ -17,7 +17,8 @@
 //    uregex_openC
 //
 //----------------------------------------------------------------------------------------
-#if !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 U_CAPI URegularExpression * U_EXPORT2
 uregex_openC( const char           *pattern,
                     uint32_t        flags,
