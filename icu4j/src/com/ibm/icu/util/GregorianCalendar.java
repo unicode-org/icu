@@ -155,10 +155,13 @@ import java.util.Locale;
  * System.out.println("ZONE_OFFSET: "
  *        + (calendar.get(Calendar.ZONE_OFFSET)/(60*60*1000))); // in hours
  * System.out.println("DST_OFFSET: "
- *        + (calendar.get(Calendar.DST_OFFSET)/(60*60*1000))); // in hours
- * </pre>
+ *        + (calendar.get(Calendar.DST_OFFSET)/(60*60*1000))); // in hours</pre>
  * </blockquote>
- *
+ * <p>
+ * GregorianCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=gregorian"</code>.</p>
+
  * @see          Calendar
  * @see          TimeZone
  * @author David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu

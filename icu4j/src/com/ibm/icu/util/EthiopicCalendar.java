@@ -11,6 +11,12 @@ import java.util.Locale;
 
 /**
  * Implement the Ethiopic calendar system.
+ * <p>
+ * EthiopicCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=ethiopic"</code>.</p>
+ *
+ * @see com.ibm.icu.util.Calendar
  * @draft ICU 3.4
  * @deprecated This is a draft API and might change in a future release of ICU.
  */

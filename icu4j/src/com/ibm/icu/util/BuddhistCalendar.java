@@ -25,7 +25,14 @@ import java.util.Locale;
  * The Buddhist Calendar has only one allowable era: <code>BE</code>.  If the
  * calendar is not in lenient mode (see <code>setLenient</code>), dates before
  * 1/1/1 BE are rejected with an <code>IllegalArgumentException</code>.
- *
+ * <p>
+ * This class should not be subclassed.</p>
+ * <p>
+ * BuddhistCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=buddhist"</code>.</p>
+ * 
+ * @see com.ibm.icu.util.Calendar
  * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
