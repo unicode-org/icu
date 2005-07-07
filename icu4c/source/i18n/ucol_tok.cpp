@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,7 +31,7 @@
 #include "util.h"
 
 U_CDECL_BEGIN
-static int32_t U_EXPORT2 U_CALLCONV
+static int32_t U_CALLCONV
 uhash_hashTokens(const UHashTok k)
 {
     int32_t hash = 0;
@@ -54,7 +54,7 @@ uhash_hashTokens(const UHashTok k)
     return hash;
 }
 
-static UBool U_EXPORT2 U_CALLCONV
+static UBool U_CALLCONV
 uhash_compareTokens(const UHashTok key1, const UHashTok key2)
 {
     //uint32_t p1 = (uint32_t) key1.integer;
