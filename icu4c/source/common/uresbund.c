@@ -45,7 +45,7 @@ static UHashtable *cache = NULL;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
-static int32_t U_EXPORT2 U_CALLCONV hashEntry(const UHashTok parm) {
+static int32_t U_CALLCONV hashEntry(const UHashTok parm) {
     UResourceDataEntry *b = (UResourceDataEntry *)parm.pointer;
     UHashTok namekey, pathkey;
     namekey.pointer = b->fName;
@@ -54,7 +54,7 @@ static int32_t U_EXPORT2 U_CALLCONV hashEntry(const UHashTok parm) {
 }
 
 /* INTERNAL: compares two entries */
-static UBool U_EXPORT2 U_CALLCONV compareEntries(const UHashTok p1, const UHashTok p2) {
+static UBool U_CALLCONV compareEntries(const UHashTok p1, const UHashTok p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1.pointer;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2.pointer;
     UHashTok name1, name2, path1, path2;

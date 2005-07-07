@@ -194,7 +194,7 @@ typedef struct DataCacheElement {
  *         udata cleanup function closes the hash table; hash table in turn calls back to
  *         here for each entry.
  */
-static void  U_EXPORT2 U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
+static void U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
     DataCacheElement *p = (DataCacheElement *)pDCEl;
     udata_close(p->item);              /* unmaps storage */
     uprv_free(p->name);                /* delete the hash key string. */
