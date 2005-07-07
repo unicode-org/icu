@@ -145,7 +145,7 @@ public class CharsetMatch implements Comparable {
     /**
      * The match is based on the presence of a BOM
      * 
-     * @see getMatchType
+     * @see #getMatchType
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -155,7 +155,7 @@ public class CharsetMatch implements Comparable {
     /**
      * The match is based on the declared encoding.
      * 
-     * @see getMatchType
+     * @see #getMatchType
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -165,7 +165,7 @@ public class CharsetMatch implements Comparable {
     /**
      * The match is based on language statistics.
      *
-     * @see getMatchType
+     * @see #getMatchType
      * 
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.

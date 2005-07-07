@@ -296,7 +296,7 @@ public class CharsetDetector {
      * 
      * @return <code>true</code> if input text will be filtered.
      * 
-     * @see enableInputFilter
+     * @see #enableInputFilter
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.

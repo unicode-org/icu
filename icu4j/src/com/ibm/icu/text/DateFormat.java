@@ -333,7 +333,7 @@ public abstract class DateFormat extends UFormat {
     
     /**
      * FieldPosition selector for 'c' field alignment,
-     * corresponding to the {@link Calendar#DAY} field. 
+     * corresponding to the {@link Calendar#DAY_OF_WEEK} field. 
      * This displays the stand alone day name, if available.
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.

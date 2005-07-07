@@ -276,7 +276,7 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Convenience and compatibility override of getName that
      * requests the symbol name.
-     * @see getName
+     * @see #getName
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
@@ -288,7 +288,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Convenience and compatibility override of getName that
      * requests the symbol name.
      * @param loc the Locale for the symbol
-     * @see getName
+     * @see #getName
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
@@ -300,7 +300,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Convenience and compatibility override of getName that
      * requests the symbol name.
      * @param uloc the ULocale for the symbol
-     * @see getName
+     * @see #getName
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
