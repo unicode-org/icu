@@ -30,6 +30,7 @@
 #include "unormimp.h"
 #include "ubidi_props.h"
 #include "uprops.h"
+#include "ucase.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
