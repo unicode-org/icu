@@ -21,6 +21,8 @@
 #include "filestrm.h"
 #include "xmlparser.h"
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 // character constants
 enum {
     x_QUOT=0x22,
@@ -813,3 +815,6 @@ UXMLElement::getChildElement(const UnicodeString &name) const {
 }
 
 U_NAMESPACE_END
+
+#endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS */
+

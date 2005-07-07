@@ -401,6 +401,7 @@ parseUCARules(char *tag, uint32_t startline, const struct UString* comment, UErr
 static struct SResource *
 parseTransliterator(char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
 {
+#if !UCONFIG_NO_TRANSLITERATION
     struct SResource *result = NULL;
     struct UString   *tokenValue;
     FileStream       *file          = NULL;
@@ -469,6 +470,9 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
     T_FileStream_close(file);
 
     return result;
+#else
+    return NULL;
+#endif
 }
 
 static struct SResource *
@@ -1520,7 +1524,9 @@ static struct {
     {"include", k_type_include, parseInclude},
     {"process(uca_rules)", k_type_plugin_uca_rules, parseUCARules},
     {"process(collation)", k_type_plugin_collation, NULL},
+#if !UCONFIG_NO_TRANSLITERATION
     {"process(transliterator)", k_type_plugin_transliterator, parseTransliterator},
+#endif
     {"reserved", NULL, NULL}
 };
 
