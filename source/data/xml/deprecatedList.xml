@@ -21,6 +21,7 @@
   
   <!-- only for 3.4 -->
   <overrideDraft locale="az"/> 
+  <overrideDraft locale="az_AZ"/> 
   <overrideDraft locale="az_Cyrl"/> 
   <overrideDraft locale="uz"/> 
   <overrideDraft locale="uz_Cyrl"/>
