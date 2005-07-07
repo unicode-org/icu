@@ -10,8 +10,8 @@
 
 #include "unicode/utypes.h"
 
-#ifdef XP_CPLUSPLUS
 #if !UCONFIG_NO_TRANSLITERATION
+#ifdef XP_CPLUSPLUS
 
 #include "unicode/uobject.h"
 #include "unicode/parseerr.h"
@@ -335,7 +335,6 @@ private:
 
 U_NAMESPACE_END
 
-#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 #endif /* #ifdef XP_CPLUSPLUS */
 
 /**
@@ -350,5 +349,7 @@ U_NAMESPACE_END
  */
 U_CAPI int32_t
 utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorCode *status);
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif
