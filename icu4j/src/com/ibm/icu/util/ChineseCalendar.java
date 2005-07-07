@@ -67,7 +67,15 @@ import java.util.Locale;
  *
  * </ul>
  *
+ * <p>
+ * This class should not be subclassed.</p>
+ * <p>
+ * ChineseCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=chinese"</code>.</p>
+ *
  * @see com.ibm.icu.text.ChineseDateFormat
+ * @see com.ibm.icu.util.Calendar
  * @author Alan Liu
  * @stable ICU 2.8
  */

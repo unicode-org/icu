@@ -55,9 +55,16 @@ import java.util.Locale;
  *      <a href="http://www.faqs.org/faqs/calendars/faq/">
  *      http://www.faqs.org/faqs/calendars/faq/</a>
  * </ul>
+ *
  * <p>
+ * This class should not be subclassed.</p>
+ * <p>
+ * HebrewCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=hebrew"</code>.</p>
  *
  * @see com.ibm.icu.util.GregorianCalendar
+ * @see com.ibm.icu.util.Calendar
  *
  * @author Laura Werner
  * @author Alan Liu
@@ -840,8 +847,6 @@ public class HebrewCalendar extends Calendar {
     public String getType() {
         return "hebrew";
     }
-
-    
 
     /*
     private static CalendarFactory factory;

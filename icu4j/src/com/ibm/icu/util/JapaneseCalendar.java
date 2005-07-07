@@ -33,7 +33,14 @@ import java.util.Locale;
  * may change in the future as we add more historical data.  Use the predefined
  * constants rather than using actual, absolute numbers.
  * <p>
+ * This class should not be subclassed.</p>
+ * <p>
+ * JapaneseCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=japanese"</code>.</p>
+ *
  * @see com.ibm.icu.util.GregorianCalendar
+ * @see com.ibm.icu.util.Calendar
  *
  * @author Laura Werner
  * @author Alan Liu

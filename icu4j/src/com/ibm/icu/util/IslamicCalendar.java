@@ -61,8 +61,14 @@ import java.util.Locale;
  * fixed-cycle civil calendar is used.  However, if <code>setCivil(false)</code>
  * is called, an approximation of the true lunar calendar will be used.
  * <p>
+ * This class should not be subclassed.</p>
+ * <p>
+ * IslamicCalendar usually should be instantiated using 
+ * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
+ * with the tag <code>"@calendar=islamic"</code> or <code>"@calendar=islamic-civil"</code>.</p>
  *
  * @see com.ibm.icu.util.GregorianCalendar
+ * @see com.ibm.icu.util.Calendar
  *
  * @author Laura Werner
  * @author Alan Liu

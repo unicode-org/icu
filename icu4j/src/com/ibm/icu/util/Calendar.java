@@ -59,13 +59,21 @@ import java.util.Set;
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
  * class method, <code>getInstance</code>, for getting a generally useful
  * object of this type. <code>Calendar</code>'s <code>getInstance</code> method
- * returns a <code>GregorianCalendar</code> object whose
+ * returns a calendar of a type appropriate to the locale, whose
  * time fields have been initialized with the current date and time:
  * <blockquote>
- * <pre>
- * Calendar rightNow = Calendar.getInstance();
- * </pre>
+ * <pre>Calendar rightNow = Calendar.getInstance()</pre>
  * </blockquote>
+ *
+ * <p>When a <code>ULocale</code> is used by <code>getInstance</code>, its
+ * '<code>calendar</code>' tag and value are retrieved if present.  If a recognized
+ * value is supplied, a calendar is provided and configured as appropriate.
+ * Currently recognized tags are "buddhist", "chinese", "coptic", "ethiopic", 
+ * "gregorian", "hebrew", "islamic", "islamic-civil", and "japanese".  For
+ * example: <blockquote>
+ * <pre>Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=japanese"));</pre>
+ * </blockquote> will return an instance of JapaneseCalendar (using en_US conventions for
+ * minimum days in first week, start day of week, et cetera).
  *
  * <p>A <code>Calendar</code> object can produce all the time field values
  * needed to implement the date-time formatting for a particular language and
@@ -130,8 +138,7 @@ import java.util.Set;
  * MONTH + WEEK_OF_MONTH + DAY_OF_WEEK
  * MONTH + DAY_OF_WEEK_IN_MONTH + DAY_OF_WEEK
  * DAY_OF_YEAR
- * DAY_OF_WEEK + WEEK_OF_YEAR
- * </pre>
+ * DAY_OF_WEEK + WEEK_OF_YEAR</pre>
  * </blockquote>
  *
  * For the time of day:
@@ -139,8 +146,7 @@ import java.util.Set;
  * <blockquote>
  * <pre>
  * HOUR_OF_DAY
- * AM_PM + HOUR
- * </pre>
+ * AM_PM + HOUR</pre>
  * </blockquote>
  *
  * <p>
@@ -1596,7 +1602,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     }
 
     /**
-     * Gets a calendar using the default time zone and specified locale.
+     * Gets a calendar using the default time zone and specified locale.  
      * @param locale the ulocale for the week data
      * @return a Calendar.
      * @draft ICU 3.2
