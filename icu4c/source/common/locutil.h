@@ -12,6 +12,9 @@
 #include "unicode/utypes.h"
 #include "hash.h"
 
+#if !UCONFIG_NO_SERVICE || !UCONFIG_NO_TRANSLITERATION
+
+
 U_NAMESPACE_BEGIN
 
 // temporary utility functions, till I know where to find them
@@ -28,5 +31,7 @@ public:
 
 U_NAMESPACE_END
 
+
+#endif
 
 #endif

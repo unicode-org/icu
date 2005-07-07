@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -203,11 +203,13 @@ UObject *UObjectTest::testClass(UObject *obj,
 
 #define UOBJTEST_TEST_INTERNALS 0   /* do NOT test Internal things - their functions aren't exported on Win32 */
 
+#if !UCONFIG_NO_SERVICE
 /* The whole purpose of this class is to expose the constructor, and gain access to the superclasses RTTI. */
 class TestLocaleKeyFactory : public LocaleKeyFactory {
 public:
     TestLocaleKeyFactory(int32_t coverage) : LocaleKeyFactory(coverage) {}
 };
+#endif
 
 void UObjectTest::testIDs()
 {
@@ -215,7 +217,7 @@ void UObjectTest::testIDs()
     UErrorCode status = U_ZERO_ERROR;
     static const UChar SMALL_STR[] = {0x51, 0x51, 0x51, 0}; // "QQQ"
 
-#if !UCONFIG_NO_TRANSLITERATION && !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_TRANSLITERATION || !UCONFIG_NO_FORMATTING
     UParseError parseError;
 #endif
    

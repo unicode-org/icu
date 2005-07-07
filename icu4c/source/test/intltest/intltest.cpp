@@ -35,6 +35,10 @@
 #include "cmemory.h"
 #include "uoptions.h"
 
+#include "putilimp.h" // for uprv_getUTCtime()
+#include "unicode/locid.h"
+
+
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
 #include "Files.h"
@@ -983,7 +987,7 @@ main(int argc, char* argv[])
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    startTime = Calendar::getNow();
+    startTime = uprv_getUTCtime();
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -1222,7 +1226,7 @@ main(int argc, char* argv[])
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
-    endTime = Calendar::getNow();
+    endTime = uprv_getUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
         ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
