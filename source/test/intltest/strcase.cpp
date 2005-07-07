@@ -493,6 +493,7 @@ StringCaseTest::TestCasing() {
     }
     delete driver;
 
+#if !UCONFIG_NO_BREAK_ITERATION
     // more tests for API coverage
     status=U_ZERO_ERROR;
     input=UNICODE_STRING_SIMPLE("sTrA\\u00dfE").unescape();
@@ -500,4 +501,5 @@ StringCaseTest::TestCasing() {
     if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
         errln("UnicodeString::toTitle(NULL) failed");
     }
+#endif
 }
