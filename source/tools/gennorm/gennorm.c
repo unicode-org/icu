@@ -161,7 +161,7 @@ main(int argc, char* argv[]) {
         "gennorm writes a dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
         " because UCONFIG_NO_NORMALIZATION is set, \n"
         "see icu/source/common/unicode/uconfig.h\n");
-    generateData(destDir);
+    generateData(destDir, options[CSOURCE].doesOccur);
 
 #else
 

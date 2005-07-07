@@ -1941,6 +1941,11 @@ generateData(const char *dataDir, UBool csource) {
 #endif
 
     if(csource) {
+#if UCONFIG_NO_NORMALIZATION
+    /* no csource for dummy mode..? */
+    fprintf(stderr, "gennorm error: UCONFIG_NO_NORMALIZATION is on in csource mode.\n");
+    exit(1);
+#else
         /* write .c file for hardcoded data */
         UTrie normTrie2={ NULL }, fcdTrie2={ NULL }, auxTrie2={ NULL };
         FILE *f;
@@ -2021,6 +2026,7 @@ generateData(const char *dataDir, UBool csource) {
                 "\n};\n\n");
             fclose(f);
         }
+#endif
     } else {
         /* write the data */
         pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
