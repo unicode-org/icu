@@ -2307,6 +2307,26 @@ public final class UCharacterTest extends TestFmwk
         assertEquals("UCharacter.forDigit ", "7", String.valueOf(ch1));
         char ch2 = UCharacter.forDigit(17, 20);
         assertEquals("UCharacter.forDigit ", "h", String.valueOf(ch2));
+
+        //Jitterbug 4451, for coverage
+		for (int i = 0x0041; i < 0x005B; i++) {
+			if (!UCharacter.isJavaLetter(i))
+				errln("FAIL \\u" + hex(i) + " expected to be a letter");
+			if (!UCharacter.isJavaIdentifierStart(i))
+				errln("FAIL \\u" + hex(i) + " expected to be a Java identifier start character");
+			if (!UCharacter.isJavaLetterOrDigit(i))
+				errln("FAIL \\u" + hex(i) + " expected not to be a Java letter");
+			if (!UCharacter.isJavaIdentifierPart(i))
+				errln("FAIL \\u" + hex(i) + " expected to be a Java identifier part character");
+		}
+		char[] spaces = {'\t','\n','\f','\r',' '};
+		for (int i = 0; i < spaces.length; i++){
+			if (!UCharacter.isSpace(spaces[i]))
+				errln("FAIL \\u" + hex(spaces[i]) + " expected to be a Java space");
+		}
+		if (!UCharacter.getStringPropertyValue(UProperty.AGE,'\u3400',0).equals("3.0.0.0")){
+			errln("FAIL \\u3400 expected to be 3.0.0.0");
+		}
     }
 
     public void TestCasePropsDummy() {

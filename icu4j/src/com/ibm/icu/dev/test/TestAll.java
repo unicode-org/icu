@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -36,7 +36,8 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.bigdec.DiagBigDecimal", // not a group
                   "com.ibm.icu.dev.test.impl.TestAll",
                   "com.ibm.icu.dev.test.stringprep.TestAll",
-                  "com.ibm.icu.dev.test.timescale.TestAll"
+                  "com.ibm.icu.dev.test.timescale.TestAll",
+				  "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector"
               },
               "All tests in ICU");
     }

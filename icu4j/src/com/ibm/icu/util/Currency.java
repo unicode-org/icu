@@ -305,7 +305,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getSymbol(ULocale uloc) {
-	return getName(uloc, SYMBOL_NAME, null);
+	return getName(uloc, SYMBOL_NAME, new boolean[1]);
     }
 
     /**

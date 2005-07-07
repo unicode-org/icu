@@ -3082,7 +3082,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated (Java)
      */
     public static boolean isJavaLetterOrDigit(int cp) {
-	return isJavaLetterOrDigit(cp);
+	return isJavaIdentifierPart(cp);
     }
 
     /**
