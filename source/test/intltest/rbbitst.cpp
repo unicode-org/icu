@@ -23,7 +23,7 @@
 #include "unicode/uniset.h"
 #include "unicode/regex.h"        // TODO: make conditional on regexp being built.
 #include "unicode/ustring.h"
-
+#include "unicode/utext.h"
 #include "intltest.h"
 #include "rbbitst.h"
 #include <string.h>
@@ -3343,6 +3343,7 @@ void RBBITest::TestMonkey(char *params) {
     int32_t        seed      = 1;
     UnicodeString  breakType = "all";
     Locale         locale("en");
+    UBool          useUText  = FALSE;
 
     if (quick == FALSE) {
         loopCount = 10000;
@@ -3360,7 +3361,15 @@ void RBBITest::TestMonkey(char *params) {
             p = m.replaceFirst("", status);
         }
 
-        m.reset(p);
+        RegexMatcher u(" *utext", p, 0, status);
+        if (u.find()) {
+            useUText = TRUE;
+            u.reset();
+            p = u.replaceFirst("", status);
+        }
+
+
+        // m.reset(p);
         if (RegexMatcher("\\S", p, 0, status).find()) {
             // Each option is stripped out of the option string as it is processed.
             // All options have been checked.  The option string should have been completely emptied..
@@ -3377,7 +3386,11 @@ void RBBITest::TestMonkey(char *params) {
         RBBICharMonkey  m;
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "char", seed, loopCount);
+            RunMonkey(bi, m, "char", seed, loopCount, useUText);
+            if (breakType == "all" && useUText==FALSE) {
+                // Also run a quick test with UText when "all" is specified
+                RunMonkey(bi, m, "char", seed, loopCount, TRUE);
+            }
         }
         else {
             errln("Creation of character break iterator failed %s", u_errorName(status));
@@ -3390,7 +3403,7 @@ void RBBITest::TestMonkey(char *params) {
         RBBIWordMonkey  m;
         BreakIterator  *bi = BreakIterator::createWordInstance(locale, status);
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "word", seed, loopCount);
+            RunMonkey(bi, m, "word", seed, loopCount, useUText);
         }
         else {
             errln("Creation of word break iterator failed %s", u_errorName(status));
@@ -3406,7 +3419,7 @@ void RBBITest::TestMonkey(char *params) {
             loopCount = loopCount / 5;   // Line break runs slower than the others.
         }
         if (U_SUCCESS(status)) {
-            RunMonkey(bi, m, "line", seed, loopCount);
+            RunMonkey(bi, m, "line", seed, loopCount, useUText);
         }
         else {
             errln("Creation of line break iterator failed %s", u_errorName(status));
@@ -3427,7 +3440,8 @@ void RBBITest::TestMonkey(char *params) {
 //       seed    - Seed for starting random number generator (parameter from user)
 //       numIterations
 //
-void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed, int32_t numIterations) {
+void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed, 
+                         int32_t numIterations, UBool useUText) {
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
@@ -3511,7 +3525,18 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
         // Find the break positions using forward iteration
         memset(forwardBreaks, 0, sizeof(forwardBreaks));
-        bi->setText(testText);
+        if (useUText) {
+            UErrorCode status = U_ZERO_ERROR;
+            UText *testUText = utext_openReplaceable(NULL, &testText, &status);
+            // testUText = utext_openUnicodeString(testUText, &testText, &status);
+            bi->setText(testUText, status);
+            TEST_ASSERT_SUCCESS(status);
+            utext_close(testUText);   // The break iterator does a shallow clone of the UText
+                                      //  This UText can be closed immediately, so long as the
+                                      //  testText string continues to exist.
+        } else {
+            bi->setText(testText);
+        }
         for (i=bi->first(); i != BreakIterator::DONE; i=bi->next()) {
             if (i < 0 || i > testText.length()) {
                 errln("%s break monkey test: Out of range value returned by breakIterator::next()", name);
