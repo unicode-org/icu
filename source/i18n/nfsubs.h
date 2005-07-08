@@ -481,7 +481,7 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, fixdesc(description), status), denominator(_denominator) 
     {
         ldenominator = util64_fromDouble(denominator);
-        UChar LTLT[] = { 0x003c, 0x003c };
+        UChar LTLT[] = { 0x003c, 0x003c, 0 };
         withZeros = description.endsWith(LTLT);
     }
     
