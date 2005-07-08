@@ -19,6 +19,8 @@
 #include "unicode/ustring.h"
 #include "unicode/decimfmt.h"
 #include "unicode/udata.h"
+#include "testutil.h"
+
 //#include "llong.h"
 
 #include <string.h>
@@ -61,6 +63,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(13, TestSmallValues);
         TESTCASE(14, TestLocalizations);
         TESTCASE(15, TestAllLocales);
+        TESTCASE(16, TestHebrewFraction);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -72,22 +75,31 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 
 #if U_HAVE_RBNF
 
+void IntlTestRBNF::TestHebrewFraction() {
+    // this is the expected output for 123.45, with no '<' in it.
+    UChar text[] = { 
+        0x05de, 0x05d0, 0x05d4,0x0020, 
+        0x05e2, 0x05e9, 0x05e8, 0x05d9, 0x05dd, 0x0020,
+        0x05d5, 0x05e9, 0x05dc, 0x05d5, 0x05e9, 0x0020, 
+        0x05e0, 0x05e7, 0x05d5, 0x05d3, 0x05d4, 0x0020,
+        0x05d0, 0x05e8, 0x05d1, 0x05e2, 0x05d9, 0x05dd, 0x0020,
+        0x05d5, 0x05d7, 0x05de, 0x05e9, 0x0000,
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IW", status);
+    UnicodeString expected(text);
+    UnicodeString result;
+    formatter->format(123.450000, result);
+    if (result != expected) {
+        errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+    }
+    delete formatter;
+}
+
 void 
 IntlTestRBNF::TestAPI() {
   // This test goes through the APIs that were not tested before. 
   // These tests are too small to have separate test classes/functions
-
-#if 0 // debug
-    {
-        UErrorCode status = U_ZERO_ERROR;
-        RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IW", status);
-        logln("Testing format(double)");
-        UnicodeString result;
-        formatter->format(123.450000, result);
-        logln(result);
-        delete formatter;
-    }
-#endif
 
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
