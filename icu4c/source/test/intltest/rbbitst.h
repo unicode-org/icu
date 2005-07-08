@@ -116,7 +116,8 @@ private:
      **/
     void doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestData &td);
 
-    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed, int32_t loopCount);
+    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed,
+        int32_t loopCount, UBool useUText);
 
 };
 

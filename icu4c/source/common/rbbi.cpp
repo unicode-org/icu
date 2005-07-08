@@ -563,15 +563,25 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     // to carry out this operation
 
     if (fData->fSafeFwdTable != NULL) {
-        /// todo synwee
         // new rule syntax
         fText->setIndex(offset);
-        // move backwards one codepoint to prepare for moving forwards to a
-        // safe point.
-        // this handles offset being between a supplementary character
-        // TODO:  would it be better to just check for being in the middle of a surrogate pair,
+
+        int32_t newOffset = fText->getIndex();  
+        if (newOffset != offset) {
+            // Will come here if specified offset was not a code point boundary AND
+            //   the underlying implmentation is using UText, which snaps any non-code-point-boundary
+            //   indices to the containing code point.
+            // For breakitereator::preceding only, these non-code-point indices need to be moved
+            //   up to refer to the following codepoint.
+            fText->next32();
+            offset = fText->getIndex();
+        }
+
+        // TODO:  (synwee) would it be better to just check for being in the middle of a surrogate pair,
         //        rather than adjusting the position unconditionally?
         //        (Change would interact with safe rules.)
+        // TODO:  change RBBI behavior for off-boundary indices to match that of UText?
+        //        affects only preceding(), seems cleaner, but is slightly different.
         fText->previous32();
         handleNext(fData->fSafeFwdTable);
         int32_t result = fText->getIndex();
@@ -1472,11 +1482,14 @@ UBool CharacterIteratorUT::operator==(const ForwardCharacterIterator& that) cons
 
 UChar CharacterIteratorUT::setIndex(int32_t position) {
     pos = position;
-    if (pos > end) {
+    if (pos < 0) {
+        pos = 0;
+    } else if (pos > end) {
         pos = end;
     }
     utext_setNativeIndex(fUText, pos);
-    return 0xffff;  // RBBI doesn't use return value, and UText can't return a UChar easily.
+    pos = utext_getNativeIndex(fUText);  // because utext snaps to code point boundary.
+    return 0x0000ffff;  // RBBI doesn't use return value, and UText can't return a UChar easily.
 }
 
 UChar32 CharacterIteratorUT::previous32(void) {
@@ -1504,7 +1517,7 @@ UChar32 CharacterIteratorUT::next32(void) {
 UBool CharacterIteratorUT::hasNext() {
     // What would really be best for RBBI is a hasNext32()
     UBool result = TRUE;
-    if (pos >= end-1) { 
+    if (pos >= end) { 
         result  = FALSE;
     }
     return result;
