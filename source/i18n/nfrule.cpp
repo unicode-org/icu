@@ -54,6 +54,7 @@ static const UChar gNine = 0x0039;
 static const UChar gSpace = 0x0020;
 static const UChar gSlash = 0x002f;
 static const UChar gGreaterThan = 0x003e;
+static const UChar gLessThan = 0x003c;
 static const UChar gComma = 0x002c;
 static const UChar gDot = 0x002e;
 static const UChar gTick = 0x0027;
@@ -420,8 +421,17 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
         // otherwise the substitution token ends with the same character
         // it began with
     } else {
-        subEnd = ruleText.indexOf(ruleText.charAt(subStart), subStart + 1);
-    }
+        UChar c = ruleText.charAt(subStart);
+        subEnd = ruleText.indexOf(c, subStart + 1);
+        // special case for '<%foo<<'
+        if (c == gLessThan && subEnd != -1 && subEnd < ruleText.length() - 1 && ruleText.charAt(subEnd+1) == c) {
+            // ordinals use "=#,##0==%abbrev=" as their rule.  Notice that the '==' in the middle
+            // occurs because of the juxtaposition of two different rules.  The check for '<' is a hack
+            // to get around this.  Having the duplicate at the front would cause problems with
+            // rules like "<<%" to format, say, percents...
+            ++subEnd;
+        }
+   }
 
     // if we don't find the end of the token (i.e., if we're on a single,
     // unmatched token character), create a null substitution positioned
