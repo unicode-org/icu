@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfsubs.cpp
@@ -935,6 +935,120 @@ AbsoluteValueSubstitution::getDynamicClassID() const {
 //===================================================================
 // NumeratorSubstitution
 //===================================================================
+
+void
+NumeratorSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const {
+    // perform a transformation on the number being formatted that
+    // is dependent on the type of substitution this is
+
+    double numberToFormat = transformNumber(number);
+    int64_t longNF = util64_fromDouble(numberToFormat);
+
+    const NFRuleSet* ruleSet = getRuleSet();
+    if (withZeros && ruleSet != NULL) {
+        // if there are leading zeros in the decimal expansion then emit them
+        int64_t nf =longNF;
+        int32_t len = toInsertInto.length();
+        while ((nf *= 10) < denominator) {
+            toInsertInto.insert(pos + getPos(), (UChar)0x0020);
+            ruleSet->format((int64_t)0, toInsertInto, pos + getPos());
+        }
+        pos += toInsertInto.length() - len;
+    }
+
+    // if the result is an integer, from here on out we work in integer
+    // space (saving time and memory and preserving accuracy)
+    if (numberToFormat == longNF && ruleSet != NULL) {
+        ruleSet->format(longNF, toInsertInto, pos + getPos());
+
+        // if the result isn't an integer, then call either our rule set's
+        // format() method or our DecimalFormat's format() method to
+        // format the result
+    } else {
+        if (ruleSet != NULL) {
+            ruleSet->format(numberToFormat, toInsertInto, pos + getPos());
+        } else {
+            UErrorCode status = U_ZERO_ERROR;
+            UnicodeString temp;
+            getNumberFormat()->format(numberToFormat, temp, status);
+            toInsertInto.insert(pos + getPos(), temp);
+        }
+    }
+}
+
+UBool 
+NumeratorSubstitution::doParse(const UnicodeString& text, 
+                               ParsePosition& parsePosition,
+                               double baseValue,
+                               double upperBound,
+                               UBool /*lenientParse*/,
+                               Formattable& result) const
+{
+    // we don't have to do anything special to do the parsing here,
+    // but we have to turn lenient parsing off-- if we leave it on,
+    // it SERIOUSLY messes up the algorithm
+
+    // if withZeros is true, we need to count the zeros
+    // and use that to adjust the parse result
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t zeroCount = 0;
+    UnicodeString workText(text);
+
+    if (withZeros) {
+        ParsePosition workPos(1);
+        Formattable temp;
+        int32_t digit;
+
+        while (workText.length() > 0 && workPos.getIndex() != 0) {
+            workPos.setIndex(0);
+            getRuleSet()->parse(workText, workPos, 1, temp); // parse zero or nothing at all
+            digit = temp.getLong(status);
+            if (workPos.getIndex() == 0) {
+                // we failed, either there were no more zeros, or the number was formatted with digits
+                // either way, we're done
+                break;
+            }
+
+            ++zeroCount;
+            parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
+            workText.remove(0, workPos.getIndex());
+            while (workText.length() > 0 && workText.charAt(0) == 0x0020) {
+                workText.remove(0, 1);
+                parsePosition.setIndex(parsePosition.getIndex() + 1);
+            }
+        }
+
+        workText = text;
+        workText.remove(0, (int32_t)parsePosition.getIndex()); // arrgh!
+        parsePosition.setIndex(0);
+    }
+
+    // we've parsed off the zeros, now let's parse the rest from our current position
+    NFSubstitution::doParse(workText, parsePosition, withZeros ? 1 : baseValue, upperBound, FALSE, result);
+
+    if (withZeros) {
+        // any base value will do in this case.  is there a way to
+        // force this to not bother trying all the base values?
+
+        // compute the 'effective' base and prescale the value down
+        int64_t n = result.getLong();
+        int64_t d = 1;
+        int32_t pow = 0;
+        while (d <= n) {
+            d *= 10;
+            ++pow;
+        }
+        // now add the zeros
+        while (zeroCount > 0) {
+            d *= 10;
+            --zeroCount;
+        }
+        // d is now our true denominator
+        result.setDouble((double)n/(double)d);
+    }
+
+    return TRUE;
+}
 
 UBool
 NumeratorSubstitution::operator==(const NFSubstitution& rhs) const
