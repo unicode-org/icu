@@ -77,6 +77,18 @@ IntlTestRBNF::TestAPI() {
   // This test goes through the APIs that were not tested before. 
   // These tests are too small to have separate test classes/functions
 
+#if 0 // debug
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IW", status);
+        logln("Testing format(double)");
+        UnicodeString result;
+        formatter->format(123.450000, result);
+        logln(result);
+        delete formatter;
+    }
+#endif
+
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
       = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getUS(), status);
