@@ -305,13 +305,40 @@ static void TestBreakIteratorCAPI()
     
  
     /*---- */
-/*Testing ubrk_open and ubrk_close()*/
+    /*Testing ubrk_open and ubrk_close()*/
    log_verbose("\nTesting open and close for us locale\n");
     b = ubrk_open(UBRK_WORD, "fr_FR", text, u_strlen(text), &status);
     if (U_FAILURE(status)) {
         log_err("ubrk_open for word returned NULL: %s\n", myErrorName(status));
     }
     ubrk_close(b);
+
+    /* Test setText and setUText */
+    {
+        UChar s1[] = {0x41, 0x42, 0x20, 0};
+        UChar s2[] = {0x41, 0x42, 0x43, 0x44, 0x45, 0};
+        UText *ut = NULL;
+        UBreakIterator *b;
+        int i;
+
+        log_verbose("\nTesting ubrk_setText() and ubrk_setUText()\n");
+        status = U_ZERO_ERROR;
+        b = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        ubrk_setText(b, s1, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        ubrk_first(b);
+        i = ubrk_next(b);
+        TEST_ASSERT(i == 2);
+        ut = utext_openUChars(ut, s2, -1, &status);
+        ubrk_setUText(b, ut, &status);
+        TEST_ASSERT_SUCCESS(status);
+        i = ubrk_next(b);
+        TEST_ASSERT(i == 5);
+
+        ubrk_close(b);
+        utext_close(ut);
+    }
 
     ubrk_close(word);
     ubrk_close(sentence);
