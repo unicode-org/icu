@@ -21,7 +21,7 @@
 #include "filestrm.h"
 #include "xmlparser.h"
 
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
 
 // character constants
 enum {

@@ -28,7 +28,7 @@
 #include "uvector.h"
 #include "hash.h"
 
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
 
 enum UXMLNodeType {
     /** Node type string (text contents), stored as a UnicodeString. */

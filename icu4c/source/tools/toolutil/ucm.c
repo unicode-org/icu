@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,6 +34,8 @@
 #include "uparse.h"
 #include "ucm.h"
 #include <stdio.h>
+
+#if !UCONFIG_NO_CONVERSION
 
 /* -------------------------------------------------------------------------- */
 
@@ -1175,3 +1177,5 @@ ucm_readTable(UCMFile *ucm, FileStream* convFile,
         *pErrorCode=U_INVALID_TABLE_FORMAT;
     }
 }
+#endif
+

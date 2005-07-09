@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -8,6 +8,8 @@
 
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log, UErrorCode &status)
 {
@@ -166,3 +168,4 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
   }
 }
 
+#endif

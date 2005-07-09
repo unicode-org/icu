@@ -1,12 +1,14 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 /* Created by weiv 05/09/2002 */
 
 #include "unicode/testdata.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 TestData::TestData(const char* name)
 : name(name),
@@ -137,4 +139,6 @@ UBool RBTestData::nextCase(const DataMap *& nextCase, UErrorCode &status)
     return FALSE;
   }
 }
+
+#endif
 
