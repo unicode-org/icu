@@ -481,8 +481,7 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, fixdesc(description), status), denominator(_denominator) 
     {
         ldenominator = util64_fromDouble(denominator);
-        UChar LTLT[] = { 0x003c, 0x003c, 0 };
-        withZeros = description.endsWith(LTLT);
+        withZeros = description.endsWith(LTLT, 2);
     }
     
     virtual UBool operator==(const NFSubstitution& rhs) const;
@@ -503,8 +502,9 @@ public:
     virtual UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
+    static const UChar LTLT[2];
     static UnicodeString fixdesc(const UnicodeString& desc) {
-      if (desc.endsWith("<<")) {
+      if (desc.endsWith(LTLT, 2)) {
         UnicodeString result(desc, 0, desc.length()-1);
         return result;
       }
