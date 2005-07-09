@@ -77,21 +77,54 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 
 void IntlTestRBNF::TestHebrewFraction() {
     // this is the expected output for 123.45, with no '<' in it.
-    UChar text[] = { 
-        0x05de, 0x05d0, 0x05d4,0x0020, 
+    UChar text1[] = { 
+        0x05de, 0x05d0, 0x05d4, 0x0020, 
         0x05e2, 0x05e9, 0x05e8, 0x05d9, 0x05dd, 0x0020,
         0x05d5, 0x05e9, 0x05dc, 0x05d5, 0x05e9, 0x0020, 
         0x05e0, 0x05e7, 0x05d5, 0x05d3, 0x05d4, 0x0020,
         0x05d0, 0x05e8, 0x05d1, 0x05e2, 0x05d9, 0x05dd, 0x0020,
         0x05d5, 0x05d7, 0x05de, 0x05e9, 0x0000,
     };
+    UChar text2[] = { 
+        0x05DE, 0x05D0, 0x05D4, 0x0020, 
+        0x05E2, 0x05E9, 0x05E8, 0x05D9, 0x05DD, 0x0020, 
+        0x05D5, 0x05E9, 0x05DC, 0x05D5, 0x05E9, 0x0020, 
+        0x05E0, 0x05E7, 0x05D5, 0x05D3, 0x05D4, 0x0020, 
+        0x05D0, 0x05E4, 0x05E1, 0x0020, 
+        0x05D0, 0x05E4, 0x05E1, 0x0020, 
+        0x05D0, 0x05E8, 0x05D1, 0x05E2, 0x05D9, 0x05DD, 0x0020, 
+        0x05D5, 0x05D7, 0x05DE, 0x05E9, 0x0000,
+    };
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IW", status);
-    UnicodeString expected(text);
+    RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IL", status);
     UnicodeString result;
-    formatter->format(123.450000, result);
-    if (result != expected) {
-        errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+    Formattable parseResult;
+    ParsePosition pp(0);
+    {
+        UnicodeString expected(text1);
+        formatter->format(123.45, result);
+        if (result != expected) {
+            errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+        } else {
+            formatter->parse(result, parseResult, pp);
+            if (parseResult.getDouble() != 123.45) {
+                errln("expected 123.45 but got: %g", parseResult.getDouble());
+            }
+        }
+    }
+    {
+        UnicodeString expected(text2);
+        result.remove();
+        formatter->format(123.0045, result);
+        if (result != expected) {
+            errln((UnicodeString)"expected '" + TestUtility::hex(expected) + "'\nbut got: '" + TestUtility::hex(result) + "'");
+        } else {
+            pp.setIndex(0);
+            formatter->parse(result, parseResult, pp);
+            if (parseResult.getDouble() != 123.0045) {
+                errln("expected 123.0045 but got: %g", parseResult.getDouble());
+            }
+        }
     }
     delete formatter;
 }

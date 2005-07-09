@@ -681,7 +681,8 @@ ModulusSubstitution::doParse(const UnicodeString& text,
         ruleToUse->doParse(text, parsePosition, FALSE, upperBound, result);
 
         if (parsePosition.getIndex() != 0) {
-            double tempResult = result.getDouble();
+            UErrorCode status = U_ZERO_ERROR;
+            double tempResult = result.getDouble(status);
             tempResult = composeRuleValue(tempResult, baseValue);
             result.setDouble(tempResult);
         }
@@ -881,7 +882,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
                 }
                 if (fmt) {
                     fmt->parse(workText, temp, workPos);
-                    digit = temp.getLong();
+                    digit = temp.getLong(status);
                 }
             }
 
@@ -950,7 +951,7 @@ NumeratorSubstitution::doSubstitution(double number, UnicodeString& toInsertInto
         int64_t nf =longNF;
         int32_t len = toInsertInto.length();
         while ((nf *= 10) < denominator) {
-            toInsertInto.insert(pos + getPos(), (UChar)0x0020);
+            toInsertInto.insert(pos + getPos(), gSpace);
             ruleSet->format((int64_t)0, toInsertInto, pos + getPos());
         }
         pos += toInsertInto.length() - len;
@@ -997,12 +998,10 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
     if (withZeros) {
         ParsePosition workPos(1);
         Formattable temp;
-        int32_t digit;
 
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
             getRuleSet()->parse(workText, workPos, 1, temp); // parse zero or nothing at all
-            digit = temp.getLong(status);
             if (workPos.getIndex() == 0) {
                 // we failed, either there were no more zeros, or the number was formatted with digits
                 // either way, we're done
@@ -1012,14 +1011,14 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
             ++zeroCount;
             parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
             workText.remove(0, workPos.getIndex());
-            while (workText.length() > 0 && workText.charAt(0) == 0x0020) {
+            while (workText.length() > 0 && workText.charAt(0) == gSpace) {
                 workText.remove(0, 1);
                 parsePosition.setIndex(parsePosition.getIndex() + 1);
             }
         }
 
         workText = text;
-        workText.remove(0, (int32_t)parsePosition.getIndex()); // arrgh!
+        workText.remove(0, (int32_t)parsePosition.getIndex());
         parsePosition.setIndex(0);
     }
 
@@ -1031,7 +1030,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
         // force this to not bother trying all the base values?
 
         // compute the 'effective' base and prescale the value down
-        int64_t n = result.getLong();
+        int64_t n = result.getLong(status); // force conversion!
         int64_t d = 1;
         int32_t pow = 0;
         while (d <= n) {
@@ -1064,6 +1063,8 @@ NumeratorSubstitution::getDynamicClassID() const {
     return getStaticClassID();
 }
 
+const UChar NumeratorSubstitution::LTLT[] = { 0x003c, 0x003c };
+        
 //===================================================================
 // NullSubstitution
 //===================================================================
