@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -52,7 +52,6 @@ u_growAnyBufferFromStatic(void *context,
 #define _STACK_BUFFER_CAPACITY 1000
 #define _BUFFER_CAPACITY_MULTIPLIER 2
 
-#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 /* helper function */
 static wchar_t* 
 _strToWCS(wchar_t *dest, 
@@ -62,6 +61,7 @@ _strToWCS(wchar_t *dest,
            int32_t srcLength,
            UErrorCode *pErrorCode){
 
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     char stackBuffer [_STACK_BUFFER_CAPACITY];
     char* tempBuf = stackBuffer;
     int32_t tempBufCapacity = _STACK_BUFFER_CAPACITY;
@@ -214,8 +214,11 @@ cleanup:
     u_releaseDefaultConverter(conv);
 
     return dest;
-}
+#else
+    *pErrorCode = U_UNSUPPORTED_ERROR;
+    return NULL;
 #endif
+}
 
 U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
@@ -224,7 +227,7 @@ u_strToWCS(wchar_t *dest,
            const UChar *src, 
            int32_t srcLength,
            UErrorCode *pErrorCode){
-    
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     /* args check */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
@@ -262,9 +265,13 @@ u_strToWCS(wchar_t *dest,
     
 #endif
 
+#else
+    *pErrorCode = U_UNSUPPORTED_ERROR;
+    return NULL;
+#endif
 }
 
-#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
 /* helper function */
 static UChar* 
 _strFromWCS( UChar   *dest,
@@ -469,6 +476,9 @@ cleanup:
 }
 #endif
 
+
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
              int32_t destCapacity, 
@@ -516,3 +526,5 @@ u_strFromWCS(UChar   *dest,
 #endif
 
 }
+
+#endif
