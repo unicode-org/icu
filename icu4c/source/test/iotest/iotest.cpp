@@ -925,7 +925,7 @@ int main(int argc, char* argv[])
     DataDrivenLogger::cleanUp();
     u_cleanup();
 
-    endTime = ucal_getNow();
+    endTime = uprv_getUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
         ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),

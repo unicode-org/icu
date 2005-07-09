@@ -1395,6 +1395,7 @@ static void TestVargs(void) {
 
 static void TestUnicodeFormat(void)
 {
+#if !UCONFIG_NO_FORMATTING
 	/* Make sure that invariant conversion doesn't happen on the _u formats. */
     UChar myUString[256];
 	UFILE *myFile;
@@ -1421,6 +1422,7 @@ static void TestUnicodeFormat(void)
 	if (u_strcmp(TEST_STR, myUString) != 0) {
         log_err("u_fscanf_u doesn't work.\n");
 	}
+#endif
 }
 
 
@@ -1444,6 +1446,6 @@ addFileTest(TestNode** root) {
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
     addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
     addTest(root, &TestVargs, "file/TestVargs");
-#endif
     addTest(root, &TestUnicodeFormat, "file/TestUnicodeFormat");
+#endif
 }
