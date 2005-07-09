@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -10,6 +10,8 @@
 #include "unicode/resbund.h"
 #include "hash.h"
 #include <stdlib.h>
+
+#if !UCONFIG_NO_CONVERSION
 
 int32_t 
 DataMap::utoi(const UnicodeString &s) const
@@ -218,3 +220,5 @@ const int32_t* RBDataMap::getIntArray(int32_t& count, const char* key, UErrorCod
     return NULL;
   }
 }
+#endif
+
