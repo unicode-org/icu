@@ -885,17 +885,26 @@ void UTextTest::ErrorTest()
     }
 
     //
-    // get/set native index to positions not on code point boundaries.
+    // Index to positions not on code point boundaries.
     //
     {
         const char *u8str =         "\xc8\x81\xe1\x82\x83\xf1\x84\x85\x86";
         int32_t startMap[] =        {   0,  0,  2,  2,  2,  5,  5,  5,  5,  9,  9};
+        int32_t nextMap[]  =        {   2,  2,  5,  5,  5,  9,  9,  9,  9,  9,  9};
+        int32_t prevMap[]  =        {   0,  0,  0,  0,  0,  2,  2,  2,  2,  5,  5};
+        UChar32  c32Map[] =    {0x201, 0x201, 0x1083, 0x1083, 0x1083, 0x044146, 0x044146, 0x044146, 0x044146, -1, -1}; 
+        UChar32  pr32Map[] =   {    -1,   -1,  0x201,  0x201,  0x201,   0x1083,   0x1083,   0x1083,   0x1083, 0x044146, 0x044146}; 
+
+        // extractLen is the size, in UChars, of what will be extracted between index and index+1.
+        //  is zero when both index positions lie within the same code point.
+        int32_t  exLen[] =          {   0,  1,   0,  0,  1,  0,  0,  0,  2,  0,  0};
 
 
         UErrorCode status = U_ZERO_ERROR;
         UText *ut = utext_openUTF8(NULL, u8str, -1, &status);
         TEST_SUCCESS(status);
 
+        // Check setIndex
         int32_t i;
         int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
         for (i=0; i<startMapLimit; i++) {
@@ -903,6 +912,51 @@ void UTextTest::ErrorTest()
             int32_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
+
+        // Check char32At
+        for (i=0; i<startMapLimit; i++) {
+            UChar32 c32 = utext_char32At(ut, i);
+            TEST_ASSERT(c32 == c32Map[i]);
+            int32_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == startMap[i]);
+        }
+
+        // Check utext_next32From
+        for (i=0; i<startMapLimit; i++) {
+            UChar32 c32 = utext_next32From(ut, i);
+            TEST_ASSERT(c32 == c32Map[i]);
+            int32_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == nextMap[i]);
+        }
+        
+        // check utext_previous32From
+        for (i=0; i<startMapLimit; i++) {
+            UChar32 c32 = utext_previous32From(ut, i);
+            TEST_ASSERT(c32 == pr32Map[i]);
+            int32_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == prevMap[i]);
+        }
+
+        // check Extract
+        //   Extract from i to i+1, which may be zero or one code points,
+        //     depending on whether the indices straddle a cp boundary.
+        for (i=0; i<startMapLimit; i++) {
+            UChar buf[3];
+            status = U_ZERO_ERROR;
+            int32_t  extractedLen = utext_extract(ut, i, i+1, buf, 3, &status);
+            TEST_SUCCESS(status);
+            TEST_ASSERT(extractedLen == exLen[i]);
+            if (extractedLen > 0) {
+                UChar32  c32;
+                U16_GET(buf, 0, 0, extractedLen, c32);
+                TEST_ASSERT(c32 == c32Map[i]);
+            }
+        }
+
+
+
+
+
         utext_close(ut);
 
         //  Similar test, with utf16 instead of utf8
