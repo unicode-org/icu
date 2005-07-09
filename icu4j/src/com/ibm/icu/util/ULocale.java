@@ -2769,6 +2769,9 @@ public final class ULocale implements Serializable {
     availableLocales, boolean[] fallback) {
         // fallbacklist
         int i,j;
+        if(fallback != null) {
+            fallback[0]=true;
+        }
         for(i=0;i<acceptLanguageList.length;i++) {
             ULocale aLocale = acceptLanguageList[i];
             boolean[] setFallback = fallback;
@@ -2776,7 +2779,7 @@ public final class ULocale implements Serializable {
                 for(j=0;j<availableLocales.length;j++) {
                     if(availableLocales[j].equals(aLocale)) {
                         if(setFallback != null) {
-                            setFallback[0]=true;
+                            setFallback[0]=false; // first time with this locale - not a fallback.
                         }
                         return availableLocales[j];
                     }
@@ -2788,7 +2791,7 @@ public final class ULocale implements Serializable {
                 } else {
                     aLocale = null;
                 }
-                setFallback = null; // don't set fallback[0] for fallbacks of the acceptList
+                setFallback = null; // Do not set fallback in later iterations
             } while (aLocale != null);
         }
         return null;
