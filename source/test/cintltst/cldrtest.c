@@ -1135,6 +1135,7 @@ static void TestExemplarSet(void){
 }
 
 static void TestCurrencyList(void){
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
     int32_t structLocaleCount, currencyCount;
     UEnumeration *en = ucurr_openISOCurrencies(UCURR_ALL, &errorCode);
@@ -1165,6 +1166,7 @@ static void TestCurrencyList(void){
     }
     ures_close(currencies);
     uenum_close(en);
+#endif
 }
 
 #define TESTCASE(name) addTest(root, &name, "tsutil/cldrtest/" #name)
@@ -1177,5 +1179,7 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestConsistentCountryInfo);
     TESTCASE(VerifyTranslation);
     TESTCASE(TestExemplarSet);
+#if !UCONFIG_NO_FORMATTING
     TESTCASE(TestCurrencyList);
+#endif
 }
