@@ -32,6 +32,7 @@
 #include "unicode/uclean.h"
 #include "unicode/ucal.h"
 #include "uoptions.h"
+#include "putilimp.h" /* for uprv_getUTCtime() */
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
@@ -119,7 +120,7 @@ int main(int argc, const char* const argv[])
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    startTime = ucal_getNow();
+    startTime = uprv_getUTCtime();
 
     argv2 = (const char**) malloc(sizeof(char*) * argc);
     if (argv2 == NULL) {
@@ -264,7 +265,7 @@ int main(int argc, const char* const argv[])
 
     free((void*)argv2);
 
-    endTime = ucal_getNow();
+    endTime = uprv_getUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
         ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),

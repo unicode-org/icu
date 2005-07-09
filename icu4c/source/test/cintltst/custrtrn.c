@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2004, International Business Machines Corporation and
+ * Copyright (c) 2001-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -462,6 +462,7 @@ static const uint16_t src16WithNulls[] = {
 
 };
 static void Test_UChar_WCHART_API(void){
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     UErrorCode err = U_ZERO_ERROR;
     const UChar* uSrc = src16j;
     int32_t uSrcLen = sizeof(src16j)/2;
@@ -669,10 +670,14 @@ static void Test_UChar_WCHART_API(void){
                     u_errorName(err), wDestLen, buffer[3]);
         }
     }
+#else
+	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+#endif
 } 
 
 static void Test_widestrs()
 {
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
         wchar_t ws[100];
         UChar rts[100];
         int32_t wcap = sizeof(ws) / sizeof(*ws);
@@ -707,10 +712,14 @@ static void Test_widestrs()
         if(wl != rtl){
             log_err("u_strFromWCS: wcs = %S, wl = %d,rts = %s, rtl = %d!\n", wcs, wl, u_austrcpy(astr, rts), rtl);
         }
+#else
+	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+#endif
 }
 
 static void
 Test_WCHART_LongString(){
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     UErrorCode status = U_ZERO_ERROR;
     const char* testdatapath=loadTestData(&status);
     UResourceBundle *theBundle = ures_open(testdatapath, "testtypes", &status);
@@ -767,6 +776,8 @@ Test_WCHART_LongString(){
     free(uDest);
     /* close the bundle */
     ures_close(theBundle);    
-    
+#else
+	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+#endif
 }
 
