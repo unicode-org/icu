@@ -401,7 +401,6 @@ parseUCARules(char *tag, uint32_t startline, const struct UString* comment, UErr
 static struct SResource *
 parseTransliterator(char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
 {
-#if !UCONFIG_NO_TRANSLITERATION
     struct SResource *result = NULL;
     struct UString   *tokenValue;
     FileStream       *file          = NULL;
@@ -461,8 +460,11 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
     pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (size + 1));
     uprv_memset(pTarget, 0, size*U_SIZEOF_UCHAR);
 
+#if !UCONFIG_NO_TRANSLITERATION
     size = utrans_stripRules(pSource, size, pTarget, status);
-
+#else
+    fprintf(stderr, " Warning: writing empty transliteration data ( UCONFIG_NO_TRANSLITERATION ) \n");
+#endif
     result = string_open(bundle, tag, pTarget, size, NULL, status);
 
     ucbuf_close(ucbuf);
@@ -470,9 +472,6 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
     T_FileStream_close(file);
 
     return result;
-#else
-    return NULL;
-#endif
 }
 
 static struct SResource *
@@ -1524,9 +1523,7 @@ static struct {
     {"include", k_type_include, parseInclude},
     {"process(uca_rules)", k_type_plugin_uca_rules, parseUCARules},
     {"process(collation)", k_type_plugin_collation, NULL},
-#if !UCONFIG_NO_TRANSLITERATION
     {"process(transliterator)", k_type_plugin_transliterator, parseTransliterator},
-#endif
     {"reserved", NULL, NULL}
 };
 

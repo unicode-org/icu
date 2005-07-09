@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -11,6 +11,9 @@
 
 #include "unicode/resbund.h"
 #include "unicode/testtype.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 
 U_NAMESPACE_BEGIN
 class Hashtable;
@@ -130,6 +133,8 @@ public:
 
   // ... etc ...
 };
+
+#endif
 
 #endif
 

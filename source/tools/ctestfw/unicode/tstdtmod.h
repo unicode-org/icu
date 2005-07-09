@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -17,6 +17,8 @@
 #include "unicode/testdata.h"
 #include "unicode/datamap.h"
 #include "unicode/testlog.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 /* This class abstracts the actual organization of the  
  * data for data driven tests                           
@@ -111,3 +113,5 @@ private:
 
 
 #endif
+#endif
+

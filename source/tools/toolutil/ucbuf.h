@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2001, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,8 @@
 
 #include "unicode/ucnv.h"
 #include "filestrm.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #ifndef UCBUF_H
 #define UCBUF_H 1
@@ -191,3 +193,5 @@ U_CAPI const char* U_EXPORT2
 ucbuf_resolveFileName(const char* inputDir, const char* fileName, char* target, int32_t* len, UErrorCode* status);
 
 #endif
+#endif
+
