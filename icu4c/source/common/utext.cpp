@@ -142,8 +142,11 @@ U_DRAFT UChar32 U_EXPORT2
 utext_char32At(UText *ut, int32_t nativeIndex) {
     UChar32 c = U_SENTINEL;
     utext_setNativeIndex(ut, nativeIndex);
-    if (nativeIndex >= 0 && nativeIndex < ut->chunk.nativeLimit) {
+    if (ut->chunk.offset < ut->chunk.length) {
         c = ut->chunk.contents[ut->chunk.offset];
+        if (c >= 0xd800) {
+            c = utext_current32(ut);
+        }
     }
     return c;
 }
@@ -242,29 +245,29 @@ next32return:
 
 U_DRAFT UChar32 U_EXPORT2
 utext_previous32From(UText *ut, int32_t index) {
-    int32_t     offset;   // index into the chunk buffer containing the desired char.
     UTextChunk *chunk = &ut->chunk;
     UChar32     c     = U_SENTINEL;
 
     if(index<=chunk->nativeStart || index>chunk->nativeLimit) {
+        // Requested native index is outside of the current chunk.
         if(!ut->access(ut, index, FALSE, chunk)) {
             // no chunk available here
             goto prev32return;
         }
-        offset = chunk->offset;
     } else if(chunk->nonUTF16Indexes) {
-        offset=ut->mapNativeIndexToUTF16(ut, index);
+        chunk->offset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
-        offset = index - chunk->nativeStart;
+        chunk->offset = index - chunk->nativeStart;
     }
 
-    offset--;
-    c = chunk->contents[offset];
-    chunk->offset = offset;
-    if (U16_IS_SURROGATE(c)) {
-        c = utext_current32(ut);  // get supplementary char if not unpaired surrogate,
-                                  //  and adjust offset to start.
+    if (chunk->offset>0) {
+        (chunk->offset)--;
+        c = chunk->contents[chunk->offset];
+        if (U16_IS_SURROGATE(c)) {
+            c = utext_current32(ut);  // get supplementary char if not unpaired surrogate,
+        }                             //  and adjust chunk->offset to start.
     }
+
 prev32return:
     return c;
 }
@@ -882,6 +885,31 @@ utf8TextExtract(UText *ut,
     if (start>ut->b) {
         start = ut->b;
     }
+
+    // adjust the incoming indexes to land on code point boundaries if needed.
+    //    adjust by no more than three, because that is the largest number of trail bytes
+    //    in a well formed UTF8 character.
+    const uint8_t *buf = (const uint8_t *)ut->context;
+    int i;
+    if (start < ut->chunk.nativeLimit) {
+        for (i=0; i<3; i++) {
+            if (U8_IS_LEAD(buf[start]) || start==0) {
+                break;
+            }
+            start--;
+        }
+    }
+
+    if (limit < ut->chunk.nativeLimit) {
+        for (i=0; i<3; i++) {
+            if (U8_IS_LEAD(buf[limit]) || limit==0) {
+                break;
+            }
+            limit--;
+        }
+    }
+
+    // Do the actual extract.
     int32_t destLength=0;
     utext_strFromUTF8(dest, destCapacity, &destLength,
                     (const char *)ut->context+start, limit-start,
@@ -910,7 +938,7 @@ utf8TextMapIndexToUTF16(UText *ut, int32_t index) {
     }
     if (index<map[offset]) {
         // index was to a trail byte of a multi-byte utf-8 char.
-        // The loop above advaned offset to the start of the following char, now
+        // The loop above advanced offset to the start of the following char, now
         //  offset must be backed up to the start of the utf-16 char into which
         //  the utf-8 index pointed.
         offset--;
