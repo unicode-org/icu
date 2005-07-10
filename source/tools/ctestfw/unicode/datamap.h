@@ -12,7 +12,6 @@
 #include "unicode/resbund.h"
 #include "unicode/testtype.h"
 
-#if !UCONFIG_NO_CONVERSION
 
 
 U_NAMESPACE_BEGIN
@@ -134,7 +133,6 @@ public:
   // ... etc ...
 };
 
-#endif
 
 #endif
 

@@ -14,7 +14,6 @@
 #include "unicode/tstdtmod.h"
 #include "unicode/datamap.h"
 
-#if !UCONFIG_NO_CONVERSION
 
  /** This is the class that abstracts one of the tests in a data file 
   *  It is usually instantiated using TestDataModule::CreateTestData method 
@@ -108,6 +107,5 @@ public:
   virtual UBool nextCase(const DataMap *& nextCase, UErrorCode &status);
 };
 
-#endif
 #endif
 
