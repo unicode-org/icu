@@ -52,6 +52,7 @@ u_growAnyBufferFromStatic(void *context,
 #define _STACK_BUFFER_CAPACITY 1000
 #define _BUFFER_CAPACITY_MULTIPLIER 2
 
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 /* helper function */
 static wchar_t* 
 _strToWCS(wchar_t *dest, 
@@ -61,7 +62,7 @@ _strToWCS(wchar_t *dest,
            int32_t srcLength,
            UErrorCode *pErrorCode){
 
-#if defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
     char stackBuffer [_STACK_BUFFER_CAPACITY];
     char* tempBuf = stackBuffer;
     int32_t tempBufCapacity = _STACK_BUFFER_CAPACITY;
@@ -221,6 +222,7 @@ cleanup:
     return NULL;
 #endif
 }
+#endif
 
 U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
@@ -229,7 +231,7 @@ u_strToWCS(wchar_t *dest,
            const UChar *src, 
            int32_t srcLength,
            UErrorCode *pErrorCode){
-#if defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+
     /* args check */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
@@ -267,15 +269,9 @@ u_strToWCS(wchar_t *dest,
     
 #endif
 
-#else
-    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)){
-        *pErrorCode = U_UNSUPPORTED_ERROR;
-    }
-    return NULL;
-#endif
 }
 
-#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 /* helper function */
 static UChar* 
 _strFromWCS( UChar   *dest,
@@ -285,6 +281,7 @@ _strFromWCS( UChar   *dest,
              int32_t srcLength,
              UErrorCode *pErrorCode){
 
+#if (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
     int32_t retVal =0, count =0 ;
     UConverter* conv = NULL;
     UChar* pTarget = NULL;
@@ -477,10 +474,14 @@ cleanup:
     u_releaseDefaultConverter(conv);
 
     return dest;
+#else
+    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)){
+        *pErrorCode = U_UNSUPPORTED_ERROR;
+    }
+    return NULL;
+#endif
 }
 #endif
-
-
 
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
@@ -490,7 +491,6 @@ u_strFromWCS(UChar   *dest,
              int32_t srcLength,
              UErrorCode *pErrorCode)
 {
-#if defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
 
     /* args check */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
@@ -529,11 +529,4 @@ u_strFromWCS(UChar   *dest,
 
 #endif
 
-
-#else
-    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)){
-        *pErrorCode = U_UNSUPPORTED_ERROR;
-    }
-    return NULL;
-#endif
 }
