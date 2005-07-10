@@ -18,7 +18,6 @@
 #include "unicode/datamap.h"
 #include "unicode/testlog.h"
 
-#if !UCONFIG_NO_CONVERSION
 
 /* This class abstracts the actual organization of the  
  * data for data driven tests                           
@@ -112,6 +111,5 @@ private:
 };
 
 
-#endif
 #endif
 

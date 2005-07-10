@@ -8,7 +8,6 @@
 
 #include "unicode/testdata.h"
 
-#if !UCONFIG_NO_CONVERSION
 
 TestData::TestData(const char* name)
 : name(name),
@@ -140,5 +139,4 @@ UBool RBTestData::nextCase(const DataMap *& nextCase, UErrorCode &status)
   }
 }
 
-#endif
 
