@@ -155,26 +155,25 @@ utext_char32At(UText *ut, int32_t nativeIndex) {
 U_DRAFT UChar32 U_EXPORT2
 utext_next32(UText *ut) {
     UTextChunk   *chunk  = &ut->chunk;
-    int32_t       offset = chunk->offset;
     UChar32       c      = U_SENTINEL;
 
-    if (offset >= chunk->length) {
+    if (chunk->offset >= chunk->length) {
         if (ut->access(ut, chunk->nativeLimit, TRUE, chunk) == FALSE) {
             goto next32_return;
         }
-        offset = chunk->offset;
     }
             
-    c = chunk->contents[offset++];
+    c = chunk->contents[chunk->offset++];
     if (U16_IS_SURROGATE(c)) {
         // looking at a surrogate.  Could be unpaired, need to be careful.
         // Speed doesn't matter, will be very rare.
+        chunk->offset--;
         c =  utext_current32(ut);
+        chunk->offset++;
         if (U_IS_SUPPLEMENTARY(c)) {
-            offset++;
+            chunk->offset++;
         }
     }
-    chunk->offset = offset;
 
 next32_return:
     return c;
@@ -211,7 +210,6 @@ prev32_return:
 
 U_DRAFT UChar32 U_EXPORT2
 utext_next32From(UText *ut, int32_t index) {
-    int32_t       offset;   // index into the chunk buffer containing the desired char.
     UTextChunk   *chunk  = &ut->chunk;
     UChar32       c      = U_SENTINEL;
 
@@ -220,24 +218,18 @@ utext_next32From(UText *ut, int32_t index) {
             // no chunk available here
             goto next32return;
         }
-        offset = chunk->offset;
     } else if(chunk->nonUTF16Indexes) {
-        offset=ut->mapNativeIndexToUTF16(ut, index);
+        chunk->offset = ut->mapNativeIndexToUTF16(ut, index);
     } else {
-        offset = index - chunk->nativeStart;
+        chunk->offset = index - chunk->nativeStart;
     }
 
-    c = chunk->contents[offset++];
+    c = chunk->contents[chunk->offset++];
     if (U16_IS_SURROGATE(c)) {
-        // Surrogate code unit.  Could be pointing at either half of a pair, or at
-        //   an unpaired surrogate.  Let utext_current() do the work.  Speed doesn't matter.
-        chunk->offset = offset;
-        c = utext_current32(ut);  
-        if (U_IS_SUPPLEMENTARY(c)) {
-            offset++;
-        }
+        // Surrogate code unit.  Speed doesn't matter, let plain next32() do the work.
+        chunk->offset--;  // undo the ++, above.
+        c = utext_next32(ut);  
     }
-    chunk->offset = offset;
 next32return:
     return c;
 }
@@ -247,6 +239,7 @@ U_DRAFT UChar32 U_EXPORT2
 utext_previous32From(UText *ut, int32_t index) {
     UTextChunk *chunk = &ut->chunk;
     UChar32     c     = U_SENTINEL;
+    UChar32     startingChar;
 
     if(index<=chunk->nativeStart || index>chunk->nativeLimit) {
         // Requested native index is outside of the current chunk.
@@ -260,12 +253,21 @@ utext_previous32From(UText *ut, int32_t index) {
         chunk->offset = index - chunk->nativeStart;
     }
 
-    if (chunk->offset>0) {
-        (chunk->offset)--;
-        c = chunk->contents[chunk->offset];
-        if (U16_IS_SURROGATE(c)) {
-            c = utext_current32(ut);  // get supplementary char if not unpaired surrogate,
-        }                             //  and adjust chunk->offset to start.
+    if (chunk->offset<=0) {
+        // already at the start of text.  Return U_SENTINEL.
+        goto prev32return;
+    }
+
+    // Do the operation assuming that there are no surrogates involved, either
+    // at the starting position or at  the previous position.  Fast, common case.
+    startingChar = chunk->contents[chunk->offset];
+    (chunk->offset)--;
+    c = chunk->contents[chunk->offset];
+
+    // Check for surrogates, do the operation over if there are any.
+    if (U16_IS_SURROGATE(startingChar) || U16_IS_SURROGATE(c)) {
+        utext_setNativeIndex(ut, index);  // setIndex() handles case of initial index on a trail surrogate
+        c = utext_previous32(ut);         // previous32() handles case of previous char being a supplementary.
     }
 
 prev32return:
@@ -1492,10 +1494,14 @@ unistrTextExtract(UText *t,
     if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
-    if(start<0 || start>limit || length<limit) {
+    if(start<0 || start>limit) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
+
+    start = start<length ? us->getChar32Start(start) : length;
+    limit = limit<length ? us->getChar32Start(limit) : length;
+
     length=limit-start;
     if (destCapacity>0 && dest!=NULL) {
         int32_t trimmedLength = length;
@@ -1528,12 +1534,8 @@ unistrTextReplace(UText *ut,
         return 0;
     }
 
-    if (start>oldLength) {
-        start = oldLength;
-    }
-    if (limit>oldLength) {
-        limit = oldLength;
-    }
+    start = start<oldLength ? us->getChar32Start(start) : oldLength;
+    limit = limit<oldLength ? us->getChar32Start(limit) : oldLength;
 
     // replace
     us->replace(start, limit-start, src, length);
