@@ -16,6 +16,8 @@
 #include "unicode/utimer.h"
 #include "ucbuf.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 U_NAMESPACE_USE
 // Use the TESTCASE macro in subclasses of IntlTest.  Define the
 // runIndexedTest method in this fashion:
@@ -156,5 +158,6 @@ public:
     static const char gUsageString[];
 };
 
+#endif
 #endif
 
