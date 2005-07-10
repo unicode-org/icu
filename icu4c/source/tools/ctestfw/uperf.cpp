@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if !UCONFIG_NO_CONVERSION
 static const char delim = '/';
 static int32_t execCount = 0;
 UPerfTest* UPerfTest::gTest = NULL;
@@ -466,4 +467,4 @@ UPerfTest::~UPerfTest(){
     ucbuf_close(ucharBuf);
 }
 
-
+#endif
