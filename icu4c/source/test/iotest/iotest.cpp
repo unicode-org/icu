@@ -24,8 +24,7 @@
 #include "ustr_cnv.h"
 #include "iotest.h"
 #include "unicode/tstdtmod.h"
-#include "unicode/ucal.h"
-#include "putilimp.h" // for uprv_getUTCtime()
+#include "putilimp.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>

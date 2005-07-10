@@ -1179,7 +1179,5 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestConsistentCountryInfo);
     TESTCASE(VerifyTranslation);
     TESTCASE(TestExemplarSet);
-#if !UCONFIG_NO_FORMATTING
     TESTCASE(TestCurrencyList);
-#endif
 }
