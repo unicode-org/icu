@@ -9,7 +9,6 @@
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
 
-#if !UCONFIG_NO_CONVERSION
 
 TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log, UErrorCode &status)
 {
@@ -73,7 +72,7 @@ RBTestDataModule::RBTestDataModule(const char* name, TestLog& log, UErrorCode& s
     fNumberOfTests = ures_getSize(fTestData);
     fInfoRB = ures_getByKey(fModuleBundle, "Info", NULL, &status);
     if(status != U_ZERO_ERROR) {
-      log.errln("Unable to initalize test data - missing mandatory description resources!");
+      log.errln(UNICODE_STRING_SIMPLE("Unable to initalize test data - missing mandatory description resources!"));
       fDataTestValid = FALSE;
     } else {
       fInfo = new RBDataMap(fInfoRB, status);
@@ -158,7 +157,7 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
     if (testBundle == NULL) {
         testBundle = ures_openDirect(icu_data, bundleName, &status);
         if (status != U_ZERO_ERROR) {
-            fLog.errln(UnicodeString("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName));
+            fLog.errln(UNICODE_STRING_SIMPLE("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName, -1, US_INV));
             fDataTestValid = FALSE;
         }
     }
@@ -168,4 +167,3 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
   }
 }
 
-#endif
