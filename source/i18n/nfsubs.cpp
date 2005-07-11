@@ -900,6 +900,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
         }
         delete fmt;
 
+        result = dl.fCount == 0 ? 0 : dl.getDouble();
         result = composeRuleValue(result, baseValue);
         resVal.setDouble(result);
         return TRUE;
