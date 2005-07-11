@@ -342,6 +342,9 @@ i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*|i*86-*-solaris*)
         dnl We're using gcc, and the simple -a gcc command line works for genccode
         GENCCODE_ASSEMBLY="-a gcc"
     fi ;;
+sparc-*-solaris*)
+    GENCCODE_ASSEMBLY="-a sun"
+    ;;
 esac
 AC_SUBST(GENCCODE_ASSEMBLY)
 
