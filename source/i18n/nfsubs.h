@@ -489,6 +489,7 @@ public:
     virtual int64_t transformNumber(int64_t number) const { return number * ldenominator; }
     virtual double transformNumber(double number) const { return uprv_round(number * denominator); }
     
+    virtual void doSubstitution(int64_t /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
     virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     virtual UBool doParse(const UnicodeString& text, 
         ParsePosition& parsePosition,

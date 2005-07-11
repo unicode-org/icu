@@ -899,7 +899,6 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
         }
         delete fmt;
-        result = dl.fCount == 0 ? 0 : dl.getDouble();
 
         result = composeRuleValue(result, baseValue);
         resVal.setDouble(result);
@@ -938,41 +937,41 @@ AbsoluteValueSubstitution::getDynamicClassID() const {
 //===================================================================
 
 void
-NumeratorSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const {
+NumeratorSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t apos) const {
     // perform a transformation on the number being formatted that
     // is dependent on the type of substitution this is
 
     double numberToFormat = transformNumber(number);
     int64_t longNF = util64_fromDouble(numberToFormat);
 
-    const NFRuleSet* ruleSet = getRuleSet();
-    if (withZeros && ruleSet != NULL) {
+    const NFRuleSet* aruleSet = getRuleSet();
+    if (withZeros && aruleSet != NULL) {
         // if there are leading zeros in the decimal expansion then emit them
         int64_t nf =longNF;
         int32_t len = toInsertInto.length();
         while ((nf *= 10) < denominator) {
-            toInsertInto.insert(pos + getPos(), gSpace);
-            ruleSet->format((int64_t)0, toInsertInto, pos + getPos());
+            toInsertInto.insert(apos + getPos(), gSpace);
+            aruleSet->format((int64_t)0, toInsertInto, apos + getPos());
         }
-        pos += toInsertInto.length() - len;
+        apos += toInsertInto.length() - len;
     }
 
     // if the result is an integer, from here on out we work in integer
     // space (saving time and memory and preserving accuracy)
-    if (numberToFormat == longNF && ruleSet != NULL) {
-        ruleSet->format(longNF, toInsertInto, pos + getPos());
+    if (numberToFormat == longNF && aruleSet != NULL) {
+        aruleSet->format(longNF, toInsertInto, apos + getPos());
 
         // if the result isn't an integer, then call either our rule set's
         // format() method or our DecimalFormat's format() method to
         // format the result
     } else {
-        if (ruleSet != NULL) {
-            ruleSet->format(numberToFormat, toInsertInto, pos + getPos());
+        if (aruleSet != NULL) {
+            aruleSet->format(numberToFormat, toInsertInto, apos + getPos());
         } else {
             UErrorCode status = U_ZERO_ERROR;
             UnicodeString temp;
             getNumberFormat()->format(numberToFormat, temp, status);
-            toInsertInto.insert(pos + getPos(), temp);
+            toInsertInto.insert(apos + getPos(), temp);
         }
     }
 }
