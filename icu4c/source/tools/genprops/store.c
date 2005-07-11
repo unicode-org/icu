@@ -264,6 +264,13 @@ exitStore() {
     exitAdditionalProperties();
 }
 
+static uint32_t printNumericTypeValueError(Props *p) {
+    fprintf(stderr, "genprops error: unable to encode numeric type & value %d  %ld/%lu E%d\n",
+            (int)p->numericType, (long)p->numericValue, (unsigned long)p->denominator, p->exponent);
+    exit(U_ILLEGAL_ARGUMENT_ERROR);
+    return 0;
+}
+
 /* store a character's properties ------------------------------------------- */
 
 extern uint32_t
@@ -271,87 +278,80 @@ makeProps(Props *p) {
     uint32_t den;
     int32_t type, value, exp;
 
-    do { /* pseudo-loop to allow break instead of goto */
-        /* encode numeric type & value */
-        type=p->numericType;
-        value=p->numericValue;
-        den=p->denominator;
-        exp=p->exponent;
+    /* encode numeric type & value */
+    type=p->numericType;
+    value=p->numericValue;
+    den=p->denominator;
+    exp=p->exponent;
 
-        if(den!=0) {
-            /* fraction */
-            if( type!=U_NT_NUMERIC ||
-                value<-1 || value==0 || value>UPROPS_FRACTION_MAX_NUM ||
-                den<UPROPS_FRACTION_MIN_DEN || UPROPS_FRACTION_MAX_DEN<den ||
-                exp!=0
-            ) {
-                break;
-            }
-            type=UPROPS_NT_FRACTION;
+    if(den!=0) {
+        /* fraction */
+        if( type!=U_NT_NUMERIC ||
+            value<-1 || value==0 || value>UPROPS_FRACTION_MAX_NUM ||
+            den<UPROPS_FRACTION_MIN_DEN || UPROPS_FRACTION_MAX_DEN<den ||
+            exp!=0
+        ) {
+            return printNumericTypeValueError(p);
+        }
+        type=UPROPS_NT_FRACTION;
 
-            if(value==-1) {
-                value=0;
-            }
-            den-=UPROPS_FRACTION_DEN_OFFSET;
-            value=(value<<UPROPS_FRACTION_NUM_SHIFT)|den;
-        } else if(exp!=0) {
-            /* very large value */
-            if( type!=U_NT_NUMERIC ||
-                value<1 || 9<value ||
-                exp<UPROPS_LARGE_MIN_EXP || UPROPS_LARGE_MAX_EXP_EXTRA<exp
-            ) {
-                break;
-            }
-            type=UPROPS_NT_LARGE;
+        if(value==-1) {
+            value=0;
+        }
+        den-=UPROPS_FRACTION_DEN_OFFSET;
+        value=(value<<UPROPS_FRACTION_NUM_SHIFT)|den;
+    } else if(exp!=0) {
+        /* very large value */
+        if( type!=U_NT_NUMERIC ||
+            value<1 || 9<value ||
+            exp<UPROPS_LARGE_MIN_EXP || UPROPS_LARGE_MAX_EXP_EXTRA<exp
+        ) {
+            return printNumericTypeValueError(p);
+        }
+        type=UPROPS_NT_LARGE;
 
-            if(exp<=UPROPS_LARGE_MAX_EXP) {
-                /* 1..9 * 10^(2..17) */
-                exp-=UPROPS_LARGE_EXP_OFFSET;
-            } else {
-                /* 1 * 10^(18..33) */
-                if(value!=1) {
-                    break;
-                }
-                value=0;
-                exp-=UPROPS_LARGE_EXP_OFFSET_EXTRA;
-            }
-            value=(value<<UPROPS_LARGE_MANT_SHIFT)|exp;
-        } else if(value>UPROPS_MAX_SMALL_NUMBER) {
-            /* large value */
-            if(type!=U_NT_NUMERIC) {
-                break;
-            }
-            type=UPROPS_NT_LARGE;
-
-            /* split the value into mantissa and exponent, base 10 */
-            while((value%10)==0) {
-                value/=10;
-                ++exp;
-            }
-            if(value>9) {
-                break;
-            }
-
+        if(exp<=UPROPS_LARGE_MAX_EXP) {
+            /* 1..9 * 10^(2..17) */
             exp-=UPROPS_LARGE_EXP_OFFSET;
-            value=(value<<UPROPS_LARGE_MANT_SHIFT)|exp;
-        } else if(value<0) {
-            /* unable to encode negative values, other than fractions -1/x */
-            break;
+        } else {
+            /* 1 * 10^(18..33) */
+            if(value!=1) {
+                return printNumericTypeValueError(p);
+            }
+            value=0;
+            exp-=UPROPS_LARGE_EXP_OFFSET_EXTRA;
+        }
+        value=(value<<UPROPS_LARGE_MANT_SHIFT)|exp;
+    } else if(value>UPROPS_MAX_SMALL_NUMBER) {
+        /* large value */
+        if(type!=U_NT_NUMERIC) {
+            return printNumericTypeValueError(p);
+        }
+        type=UPROPS_NT_LARGE;
 
-        /* } else normal value=0..0xff { */
+        /* split the value into mantissa and exponent, base 10 */
+        while((value%10)==0) {
+            value/=10;
+            ++exp;
+        }
+        if(value>9) {
+            return printNumericTypeValueError(p);
         }
 
-        /* encode the properties */
-        return
-            (uint32_t)p->generalCategory |
-            ((uint32_t)type<<UPROPS_NUMERIC_TYPE_SHIFT) |
-            ((uint32_t)value<<UPROPS_NUMERIC_VALUE_SHIFT);
-    } while(0);
+        exp-=UPROPS_LARGE_EXP_OFFSET;
+        value=(value<<UPROPS_LARGE_MANT_SHIFT)|exp;
+    } else if(value<0) {
+        /* unable to encode negative values, other than fractions -1/x */
+        return printNumericTypeValueError(p);
 
-    fprintf(stderr, "genprops error: unable to encode numeric type & value %d  %ld/%lu E%d\n",
-            (int)p->numericType, (long)p->numericValue, (unsigned long)p->denominator, p->exponent);
-    exit(U_ILLEGAL_ARGUMENT_ERROR);
-    return 0;
+    /* } else normal value=0..0xff { */
+    }
+
+    /* encode the properties */
+    return
+        (uint32_t)p->generalCategory |
+        ((uint32_t)type<<UPROPS_NUMERIC_TYPE_SHIFT) |
+        ((uint32_t)value<<UPROPS_NUMERIC_VALUE_SHIFT);
 }
 
 extern void
