@@ -122,14 +122,14 @@ static const IndicClassTable::CharClass gujrCharClasses[] =
 
 static const IndicClassTable::CharClass oryaCharClasses[] =
 {
-    _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
+    _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0B10 - 0B1F
     _ct, _ct, _ct, _ct, _bb, _ct, _ct, _ct, _bb, _xx, _ct, _ct, _bb, _bb, _bb, _pb, // 0B20 - 0B2F
-    _rv, _xx, _bb, _bb, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _r2, _da, // 0B30 - 0B3F
+    _rb, _xx, _bb, _bb, _xx, _ct, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _r2, _da, // 0B30 - 0B3F
     _dr, _db, _db, _db, _xx, _xx, _xx, _l1, _s1, _xx, _xx, _s2, _s3, _vr, _xx, _xx, // 0B40 - 0B4F
     _xx, _xx, _xx, _xx, _xx, _xx, _m2, _m2, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 0B50 - 0B5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0B60 - 0B6F
-    _xx                                                                             // 0B70
+    _xx, _ct                                                                        // 0B70 - 0B71
 };
 
 static const IndicClassTable::CharClass tamlCharClasses[] =
@@ -230,7 +230,7 @@ static const IndicClassTable punjClassTable = {0x0A00, 0x0A74, 2, PUNJ_SCRIPT_FL
 
 static const IndicClassTable gujrClassTable = {0x0A80, 0x0AEF, 2, GUJR_SCRIPT_FLAGS, gujrCharClasses, NULL};
 
-static const IndicClassTable oryaClassTable = {0x0B00, 0x0B70, 3, ORYA_SCRIPT_FLAGS, oryaCharClasses, oryaSplitTable};
+static const IndicClassTable oryaClassTable = {0x0B00, 0x0B71, 3, ORYA_SCRIPT_FLAGS, oryaCharClasses, oryaSplitTable};
 
 static const IndicClassTable tamlClassTable = {0x0B80, 0x0BF2, 3, TAML_SCRIPT_FLAGS, tamlCharClasses, tamlSplitTable};
 
