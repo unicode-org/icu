@@ -53,6 +53,7 @@ root
         tag4 { ROOT4 } 
         tag9 { ROOT9 } 
         tag12 { ROOT12 } 
+	tag1 { ROOT1 }
     }
 
     string_in_Root_te { ROOT }
