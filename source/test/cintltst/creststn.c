@@ -174,6 +174,7 @@ static void TestDecodedBundle(void);
 static void TestGetKeywordValues(void);
 static void TestGetFunctionalEquivalent(void);
 static void TestCLDRStyleAliases(void);
+static void TestFallbackCodes(void);
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -201,7 +202,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
     addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath"); 
     addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
-
+    addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");    
 }
 
 
@@ -2648,3 +2649,39 @@ static void TestCLDRStyleAliases(void) {
   ures_close(rb);
 }
 
+static void TestFallbackCodes(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  const char *testdatapath=loadTestData(&status);
+
+  UResourceBundle *res = ures_open(testdatapath, "te_IN", &status);
+
+  UResourceBundle *r = NULL, *fall = NULL;
+
+  r = ures_getByKey(res, "tagged_array_in_Root_te_te_IN", r, &status);
+
+  status = U_ZERO_ERROR;
+  fall = ures_getByKeyWithFallback(r, "tag2", fall, &status);
+
+  if(status != U_ZERO_ERROR) {
+    log_err("Expected error code to be U_ZERO_ERROR, got %s\n", u_errorName(status));
+    status = U_ZERO_ERROR;
+  }
+
+  fall = ures_getByKeyWithFallback(r, "tag7", fall, &status);
+
+  if(status != U_USING_FALLBACK_WARNING) {
+    log_err("Expected error code to be U_USING_FALLBACK_WARNING, got %s\n", u_errorName(status));
+  }
+  status = U_ZERO_ERROR;
+
+  fall = ures_getByKeyWithFallback(r, "tag1", fall, &status);
+
+  if(status != U_USING_DEFAULT_WARNING) {
+    log_err("Expected error code to be U_USING_DEFAULT_WARNING, got %s\n", u_errorName(status));
+  }
+  status = U_ZERO_ERROR;
+
+  ures_close(fall);
+  ures_close(r);
+  ures_close(res);
+}
