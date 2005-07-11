@@ -1404,6 +1404,12 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
             /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
             if(res != RES_BOGUS) {
               /* check if resB->fResPath gives the right name here */
+                if(uprv_strcmp(dataEntry->fName, uloc_getDefault())==0 || uprv_strcmp(dataEntry->fName, kRootLocaleName)==0) {
+                    *status = U_USING_DEFAULT_WARNING;
+                } else {
+                    *status = U_USING_FALLBACK_WARNING;
+                }
+
                 fillIn = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, fillIn, status);
             } else {
                 *status = U_MISSING_RESOURCE_ERROR;
