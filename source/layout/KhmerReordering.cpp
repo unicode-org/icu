@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
  *
  * This file is a modification of the ICU file IndicReordering.cpp
  * by Jens Herden and Javier Sola for Khmer language 
@@ -20,9 +20,11 @@ enum
     C_SIGN_ZWNJ     = 0x200C,
     C_SIGN_ZWJ      = 0x200D,
     C_DOTTED_CIRCLE = 0x25CC,
+    C_RO            = 0x179A,
     C_VOWEL_AA      = 0x17B6,
     C_SIGN_NIKAHIT  = 0x17C6,
-    C_VOWEL_E       = 0x17C1
+    C_VOWEL_E       = 0x17C1,
+    C_COENG         = 0x17D2
 };
 
 
@@ -398,7 +400,7 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         // write a pre vowel or the pre part of a split vowel first
         // and look out for coeng + ro. RO is the only vowel of type 2, and
         // therefore the only one that requires saving space before the base.
-        coengRo = 0;  // There is no Coeng Ro, if found this value will change
+        coengRo = -1;  // There is no Coeng Ro, if found this value will change
         for (i = prev; i < syllable; i += 1) {
             charClass = classTable->getCharClass(chars[i]);
             
@@ -427,10 +429,9 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         }
         
         // write coeng + ro if found
-        if (coengRo > 0) {
-            output.writeChar(chars[coengRo], coengRo, &tagPref[0]);
-            i = coengRo + 1;
-            output.writeChar(chars[i], i, &tagPref[0]);
+        if (coengRo > -1) {
+            output.writeChar(C_COENG, coengRo, &tagPref[0]);
+            output.writeChar(C_RO, coengRo + 1, &tagPref[0]);
         }
         
         // shall we add a dotted circle?
@@ -451,7 +452,7 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
             
             // skip coeng + ro, it was already processed
-            if (i > 0 && i == coengRo) {
+            if (i == coengRo) {
                 i += 1;
                 continue;
             }
