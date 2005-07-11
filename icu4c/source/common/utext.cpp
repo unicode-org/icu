@@ -239,7 +239,6 @@ U_DRAFT UChar32 U_EXPORT2
 utext_previous32From(UText *ut, int32_t index) {
     UTextChunk *chunk = &ut->chunk;
     UChar32     c     = U_SENTINEL;
-    UChar32     startingChar;
 
     if(index<=chunk->nativeStart || index>chunk->nativeLimit) {
         // Requested native index is outside of the current chunk.
@@ -250,7 +249,15 @@ utext_previous32From(UText *ut, int32_t index) {
     } else if(chunk->nonUTF16Indexes) {
         chunk->offset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
+        // This chunk uses UTF-16 indexing.  Index into it.
         chunk->offset = index - chunk->nativeStart;
+        // put offset onto a code point boundary if it isn't there already.
+        if (index>ut->chunk.nativeStart && index < ut->chunk.nativeLimit) {
+            c = chunk->contents[chunk->offset];
+            if (U16_TRAIL(c)) {
+                utext_current32(ut);  // force index to the start of the curent code point.
+            }
+        }
     }
 
     if (chunk->offset<=0) {
@@ -258,16 +265,13 @@ utext_previous32From(UText *ut, int32_t index) {
         goto prev32return;
     }
 
-    // Do the operation assuming that there are no surrogates involved, either
-    // at the starting position or at  the previous position.  Fast, common case.
-    startingChar = chunk->contents[chunk->offset];
-    (chunk->offset)--;
+    // Do the operation assuming that there are no surrogates involved.  Fast, common case.
+    chunk->offset--;
     c = chunk->contents[chunk->offset];
 
-    // Check for surrogates, do the operation over if there are any.
-    if (U16_IS_SURROGATE(startingChar) || U16_IS_SURROGATE(c)) {
-        utext_setNativeIndex(ut, index);  // setIndex() handles case of initial index on a trail surrogate
-        c = utext_previous32(ut);         // previous32() handles case of previous char being a supplementary.
+    // Check for the char being a surrogate, get the whole char if it is.
+    if (U16_IS_SURROGATE(c)) {
+        c =  utext_current32(ut);
     }
 
 prev32return:
@@ -1104,6 +1108,14 @@ repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) 
     const Replaceable *rep=(const Replaceable *)ut->context;
     int32_t length=rep->length();   // Full length of the input text (bigger than a chunk)
 
+    // clip the requested index to the limits of the text.
+    if (index<0) {
+        index = 0;
+    }
+    if (index>length) {
+        index = length;
+    }
+
 
     /*
      * Compute start/limit boundaries around index, for a segment of text
@@ -1127,9 +1139,6 @@ repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) 
             return FALSE;
         }
 
-        if (index<0) {
-            index = 0;
-        }
         ut->chunk.nativeLimit = index + REP_TEXT_CHUNK_SIZE - 1;
         // Going forward, so we want to have the buffer with stuff at and beyond
         //   the requested index.  The -1 gets us one code point before the
@@ -1145,9 +1154,6 @@ repTextAccess(UText *ut, int32_t index, UBool forward, UTextChunk* /* chunk*/ ) 
         }
     } else {
         // Reverse iteration.  Fill buffer with data preceding the requested index.
-        if(index<0) {
-            index = 0;
-        }
         if (index>ut->chunk.nativeStart && index<=ut->chunk.nativeLimit) {
             // Requested position already in buffer.
             ut->chunk.offset = index - ut->chunk.nativeStart;
@@ -1229,10 +1235,27 @@ repTextExtract(UText *ut,
     if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
     }
-    if(start<0 || start>limit || length<limit) {
+    if(start<0 || start>limit) {
         *status=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
+    if (start>length) {
+        start=length;
+    }
+    if (limit>length) {
+        limit=length;
+    }
+
+    // adjust start, limit if they point to trail half of surrogates
+    if (start<length && U16_IS_TRAIL(rep->charAt(start)) &&
+        U_IS_SUPPLEMENTARY(rep->char32At(start))){
+            start--;
+    }
+    if (limit<length && U16_IS_TRAIL(rep->charAt(limit)) &&
+        U_IS_SUPPLEMENTARY(rep->char32At(limit))){
+            limit--;
+    }
+
     length=limit-start;
     if(length>destCapacity) {
         limit = start + destCapacity;
