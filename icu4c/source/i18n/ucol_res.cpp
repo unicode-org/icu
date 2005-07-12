@@ -91,10 +91,12 @@ ucol_open_internal(const char *loc,
   // if there is a keyword, we pick it up and try to get elements
   if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
     // no keyword. we try to find the default setting, which will give us the keyword value
-    UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, status);
-    if(U_SUCCESS(*status)) {
+    UErrorCode intStatus = U_ZERO_ERROR;
+    // finding default value does not affect collation fallback status
+    UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, &intStatus);
+    if(U_SUCCESS(intStatus)) {
       int32_t defaultKeyLen = 0;
-      const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
+      const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, &intStatus);
       u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
       keyBuffer[defaultKeyLen] = 0;
     } else {
