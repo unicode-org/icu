@@ -402,7 +402,15 @@ public class TestData {
           new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
           true, true, false
         ),
-
+        new ErrorCase( new char[]{
+            0x0077, 0x0077, 0x0077, 0x002e, // www. 
+             // zero length label
+            0x002e, 0x0063, 0x006f, 0x006d, // com. 
+          },
+          "www..com",
+          new StringPrepParseException("",StringPrepParseException.ZERO_LENGTH_LABEL),
+          true, true, false
+        ),
     };
 
 

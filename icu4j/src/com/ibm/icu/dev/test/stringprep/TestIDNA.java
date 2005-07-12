@@ -521,9 +521,7 @@ public class TestIDNA extends TestFmwk {
     "com".  (The zero-length root label described in [STD13], which can
     be explicit as in "www.example.com." or implicit as in
     "www.example.com", is not considered a label in this specification.)
-     so this test is wrong. The conformance test also tests whether an exception is thrown
-     when the API is given a zero-length lable.
-    *
+    */
     public void TestRootLabelSeparator() throws Exception{
         String www = "www.";
         String com = ".com."; //root label separator
@@ -575,7 +573,7 @@ public class TestIDNA extends TestFmwk {
         }
 
     }
-    */
+    
     
     private static final int loopCount = 100;
     private static final int maxCharCount = 15;
