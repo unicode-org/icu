@@ -1841,7 +1841,7 @@ int_getDefaultCodepage()
     return codepage;
 
 #elif defined(XP_MAC)
-    return "ibm-1275"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
+    return "macintosh"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
 #elif defined(U_WINDOWS)
     static char codepage[64];
@@ -1858,7 +1858,27 @@ int_getDefaultCodepage()
 
     /* Check setlocale before the environment variables
        because the application may have set it first */
-    /* setlocale needs "" and not NULL for Linux and Solaris */
+
+    /* Use setlocale in a nice way.
+       Maybe the application used setlocale already.
+       Normally this won't work. */
+    localeName = setlocale(LC_CTYPE, NULL);
+    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
+        /* strip the locale name and look at the suffix only */
+        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
+        codesetName[sizeof(codesetName)-1] = 0;
+        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
+           *euro = 0;
+        }
+        /* if we can find the codset name from setlocale, return that. */
+        if (*name) {
+            return name;
+        }
+    }
+    /* else "C" was probably returned. That's underspecified. */
+
+    /* Use setlocale a little more forcefully.
+       The application didn't use setlocale */
     localeName = setlocale(LC_CTYPE, "");
     if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
         /* strip the locale name and look at the suffix only */
@@ -1872,6 +1892,7 @@ int_getDefaultCodepage()
             return name;
         }
     }
+    /* else "C" or something like it was returned. That's still underspecified. */
 
 #if U_HAVE_NL_LANGINFO_CODESET
     if (*codesetName) {
