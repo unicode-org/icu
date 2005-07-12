@@ -194,6 +194,13 @@ static inline UBool isLDHChar(UChar ch){
     return FALSE;
 }
 
+// We should add this to utypes.c
+#if U_ICU_VERSION_MAJOR_NUM>3 || (U_ICU_VERSION_MAJOR_NUM==3 && U_ICU_VERSION_MINOR_NUM>4)
+#   error Time bomb: After ICU 3.4 move the definition of utypes.h and fix the TODO in _uIDNAErrorName definition.
+#else
+#   define U_IDNA_ZERO_LENGTH_LABEL_ERROR U_IDNA_ERROR_LIMIT
+#endif
+
 static int32_t 
 _internal_toASCII(const UChar* src, int32_t srcLength, 
                   UChar* dest, int32_t destCapacity,
@@ -228,7 +235,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     if(srcLength == -1){
         srcLength = u_strlen(src);
     }
-
+    
     // step 1 
     for( j=0;j<srcLength;j++){
         if(src[j] > 0x7F){
@@ -259,6 +266,10 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     }
     // error bail out
     if(U_FAILURE(*status)){
+        goto CLEANUP;
+    }
+    if(b1Len == 0){
+        *status = U_IDNA_ZERO_LENGTH_LABEL_ERROR;
         goto CLEANUP;
     }
 
@@ -677,16 +688,19 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
     for(;;){
 
         labelLen = getNextSeparator(labelStart,remainingLen, &delimiter,&done);
+        labelReqLength = 0;
+        if(!(labelLen==0 && done)){// make sure this is not a root label separator.
         
-        labelReqLength = _internal_toASCII( labelStart, labelLen, 
-                                            currentDest, remainingDestCapacity, 
-                                            options, nameprep, 
-                                            parseError, status);
-
-        if(*status == U_BUFFER_OVERFLOW_ERROR){
-            
-            *status = U_ZERO_ERROR; // reset error
-            remainingDestCapacity = 0;
+            labelReqLength = _internal_toASCII( labelStart, labelLen, 
+                                                currentDest, remainingDestCapacity, 
+                                                options, nameprep, 
+                                                parseError, status);
+    
+            if(*status == U_BUFFER_OVERFLOW_ERROR){
+                
+                *status = U_ZERO_ERROR; // reset error
+                remainingDestCapacity = 0;
+            }
         }
 
     
@@ -763,6 +777,9 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
         labelLen = getNextSeparator(labelStart,remainingLen, &delimiter,&done);
         
+        if(labelLen==0 && done==FALSE){ 
+            *status = U_IDNA_ZERO_LENGTH_LABEL_ERROR;
+        }
         labelReqLength = _internal_toUnicode(labelStart, labelLen, 
                                              currentDest, remainingDestCapacity, 
                                              options, nameprep, 

@@ -29,6 +29,7 @@
 #include "idnaref.h"
 #include "nptrans.h"
 #include "unicode/putil.h"
+#include "idnaconf.h"
 
 static UChar unicodeIn[][41] ={
     { 
@@ -387,6 +388,17 @@ static struct ErrorCases{
       TRUE, TRUE, FALSE
     },
     { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, // www. 
+        // zero length label
+        0x002e, 0x0063, 0x006f, 0x006d, // com. 
+        0x0000
+      },
+      "www..com",
+      U_IDNA_ERROR_LIMIT, //TODO: Fix this to U_IDNA_ZERO_LENGTH_LABEL_ERROR, in 3.6
+      TRUE, TRUE, FALSE
+    },
+    { 
       {0},
       NULL,
       U_ILLEGAL_ARGUMENT_ERROR,
@@ -662,9 +674,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     }
 
     if(status != expectedStatus){
-        errln( "Did not get the expected error for"+
+        errln( "Did not get the expected error for "+
                 UnicodeString(testName)+
-                "null terminated source. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                " null terminated source. Expected: " +UnicodeString(u_errorName(expectedStatus))
                 + " Got: "+ UnicodeString(u_errorName(status))
                 + " Source: " + prettify(UnicodeString(src))
                );
@@ -696,9 +708,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
         }
         //testing query string
         if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_ERROR){
-                errln( "Did not get the expected error for"+
+                errln( "Did not get the expected error for "+
                     UnicodeString(testName)+
-                    "null terminated source with options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                    " null terminated source with options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
                     + " Got: "+ UnicodeString(u_errorName(status))
                     + " Source: " + prettify(UnicodeString(src))
                    );
@@ -724,9 +736,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     }
 
     if(status != expectedStatus){
-        errln( "Did not get the expected error for"+
+        errln( "Did not get the expected error for "+
                     UnicodeString(testName)+
-                    "with source length. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                    " with source length. Expected: " +UnicodeString(u_errorName(expectedStatus))
                     + " Got: "+ UnicodeString(u_errorName(status))
                     + " Source: " + prettify(UnicodeString(src))
                    );
@@ -751,9 +763,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
         }
         //testing query string
         if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_ERROR){
-            errln( "Did not get the expected error for"+
+            errln( "Did not get the expected error for "+
                     UnicodeString(testName)+
-                    "with source length and options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                    " with source length and options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
                     + " Got: "+ UnicodeString(u_errorName(status))
                     + " Source: " + prettify(UnicodeString(src))
                    );
@@ -780,9 +792,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
         }
         //testing query string
         if(status != expectedStatus){
-            errln( "Did not get the expected error for"+
+            errln( "Did not get the expected error for "+
                         UnicodeString(testName)+
-                        "null terminated source with options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                        " null terminated source with options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
                         + " Got: "+ UnicodeString(u_errorName(status))
                         + " Source: " + prettify(UnicodeString(src))
                        );
@@ -807,9 +819,9 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
         }
         //testing query string
         if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_ERROR){
-            errln( "Did not get the expected error for"+
+            errln( "Did not get the expected error for "+
                         UnicodeString(testName)+
-                        "with source length and options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
+                        " with source length and options set. Expected: " +UnicodeString(u_errorName(expectedStatus))
                         + " Got: "+ UnicodeString(u_errorName(status))
                         + " Source: " + prettify(UnicodeString(src))
                        );
@@ -1429,6 +1441,17 @@ void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 10: name = "TestRefIDNA"; if(exec) TestRefIDNA(); break;
         case 11: name = "TestIDNAMonkeyTest"; if(exec) TestIDNAMonkeyTest(); break;
         case 12: name = "TestConformance"; if(exec) TestConformance();break;
+        case 13: 
+            {
+                name = "TestConformanceTestVectors";
+                if(exec){
+                    logln("TestSuite IDNA conf----"); logln();
+                    IdnaConfTest test;
+                    const char* name = "idnaconf";
+                    test.runIndexedTest(0,TRUE,name);
+                }
+                break;
+            }
         default: name = ""; break; /*needed to end loop*/
     }
 }
@@ -1712,6 +1735,7 @@ void TestIDNA::TestRefIDNA(){
                             );
     testChaining("idnaref_toASCII",idnaref_toASCII, "idnaref_toUnicode", idnaref_toUnicode);
 }
+
 
 void TestIDNA::TestDataFile(){
      testData(*this);
