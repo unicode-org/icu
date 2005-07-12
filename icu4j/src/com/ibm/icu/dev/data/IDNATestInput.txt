@@ -1,4 +1,15 @@
 =====
+desc: Copyright 2003-2005 http://idnconnect.jdna.jp/testbed.html 
+namebase: <00ED>dn
+nameutf8: ??dn
+namezone: xn--dn-mja
+failzone1: 
+failzone2: 
+token: 25029153
+passfail: pass
+type: toascii
+
+=====
 desc: 1-1-1 Has one IDN
 namebase: <00ED>dn
 nameutf8: ??dn
@@ -637,7 +648,7 @@ passfail: pass
 type: tounicode
 
 =====
-desc: 3-3-1 Old prefix; should not display as Unicode
+desc: 3-3-1 Old prefix; should not display as Unicode;<icu> ICU will treat this as ASCII. This sequence is not explicitly prohibited by the RFC.</icu>
 namebase: iesg--dn-mja
 nameutf8: iesg--dn-mja
 namezone: 
@@ -648,7 +659,7 @@ passfail: fail
 type: tounicode
 
 =====
-desc: 3-3-2 Old prefix; should not display as Unicode
+desc: 3-3-2 Old prefix; should not display as Unicode;<icu> ICU will treat this as ASCII. This sequence is not explicitly prohibited by the RFC.</icu>
 namebase: iesgdn-mja
 nameutf8: iesgdn-mja
 namezone: 
@@ -659,7 +670,7 @@ passfail: fail
 type: tounicode
 
 =====
-desc: 3-3-3 Old prefix; should not display as Unicode
+desc: 3-3-3 Old prefix; should not display as Unicode;<icu> ICU will treat this as ASCII. This sequence is not explicitly prohibited by the RFC.</icu>
 namebase: bq--dn-mja
 nameutf8: bq--dn-mja
 namezone: 
@@ -774,7 +785,7 @@ passfail: fail
 type: tounicode
 
 =====
-desc: 3-8-1 Should show the Unicode <00ED>4dn
+desc: 3-8-1 Should show the Unicode <00ED>4dn ; <icu> Changed namebase and nameutf8 from xn--4dn-lla to xn--4dn-qma </icu>
 namebase: xn--4dn-qma
 nameutf8: xn--4dn-qma
 namezone: <00ED>4dn
@@ -1013,7 +1024,7 @@ passfail: pass
 type: toascii
 
 =====
-desc: 4-3-1 Spacing UseSTD3ASCIIRules
+desc: 4-3-1 If UseSTD3ASCIIRules: Spacing; <icu> \u0020 is prohibited from the output only when UseSTD3ASCIIRules is set </icu>
 namebase: <2000><00ED>dn
 nameutf8: ?????dn
 namezone: 
