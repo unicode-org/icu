@@ -67,6 +67,14 @@ sub main(){
         $ENV{'LD_LIBRARY_PATH'} = $libpath;
         
         #print ("#####  LD_LIBRARY_PATH = $ENV{'LD_LIBRARY_PATH'}\n");
+    }elsif($platform eq "darwin"){ 
+        $icuBinDir .= "/source/bin";
+        $icuLibDir = abs_path($icuBinDir."/../lib");
+        $path .=":$icuBinDir:$icuLibDir";
+        
+        $libpath = $ENV{'DYLD_LIBRARY_PATH'}.":$icuLibDir";
+        $ENV{'DYLD_LIBRARY_PATH'} = $libpath;
+        
         
     }elsif($platform eq "MSWin32"){
         $icuBinDir =$icuRootDir."/bin";
@@ -119,7 +127,7 @@ sub buildICU{
     unlink($icuBuildDir."../"); 
     unlink($icuTestDataDir."../"); 
     
-    if($platform eq "cygwin"){
+    if(($platform eq "cygwin")||($platform eq "darwin")){
         # make all in ICU
         cmd("make all", $verbose);
         chdir($icuSrcDataDir);
