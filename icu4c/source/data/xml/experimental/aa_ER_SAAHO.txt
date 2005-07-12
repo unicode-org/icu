@@ -1,50 +1,21 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/aa_ER_SAAHO.xml
 // *
 // ***************************************************************************
-// * Afar language locale for Eritrea (Saaho Dialect).
-// * Contributed by :
-// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-// *    Afar terms provided by Mohamed Obakar <loubak@6sens.com> of the
-// *    Afar Civilization Researcher, Melka Werer Research Center.
-
-aa_ER_SAAHO {
-    Version{ "x0.1" }
-
-
-    // Measurement { "Metric" }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns {
-        "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;-\u00A4#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    // PaperSize {
-    //    Height { "297" }
-    //    Width { "210" }
-    //    Units { "mm" }
-    // }
+/**
+ *  ICU <specials> source: ./xml/main/aa_ER_SAAHO.xml
+ */
+aa_ER_SAAHO{
+    Version{"1.16"}
     calendar{
         gregorian{
             dayNames{
                 format{
                     abbreviated{
-                        //"Aca", // Too many days, and this doesn't look right.
                         "Nab",
                         "San",
                         "Sal",

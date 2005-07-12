@@ -1,21 +1,17 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/ka_GE.xml
 // *
 // ***************************************************************************
-
+/**
+ *  ICU <specials> source: ./xml/main/ka_GE.xml
+ */
 ka_GE{
-    Version{ "x0.3" }
-    DateTimePatterns{
-        "hh:mm:ss aa",
-        "H:mm:ss",
-        "H:mm:ss",
-        "HH:mm:ss",
-        "yyyy '\u10EC\u10DA\u10D8\u10E1' dd MM",
-        "yyyy '\u10EC\u10DA\u10D8\u10E1' dd MM, EEEE",
-        "dd.MM.yyyy",
-        "dd.MM.yy",
-        "{1} {0}",
-    }
+    /**
+     * Draft
+     */
+    Version{"1.18"}
 }

@@ -1,39 +1,46 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/gez_ER.xml
 // *
 // ***************************************************************************
-// * Ge'ez language locale for Eritrea.
-// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-
-gez_ER{ 
-    Version{ "x0.1" }
-    // Measurement { "Metric" }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns {
-        "#\u12C8##0.###;-#\u12C8##0.###",
-        "\u00A4#\u12C8##0.00;-\u00A4#\u12C8##0.00",
-        "#\u12C8##0%",
+/**
+ *  ICU <specials> source: ./xml/main/gez_ER.xml
+ */
+gez_ER{
+    Currencies{
+        ERN{
+            "$",
+            "ERN",
+        }
+        USD{
+            "US$",
+            "የአሜሪካን ዶላር",
+        }
+    }
+    NumberElements{
+        ".",
+        "ወ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
         "#E0",
     }
-
-    // Currency display names
-    Currencies {
-        ERN { "$", "ERN" }
-    }
+    Version{"1.18"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -41,7 +48,7 @@ gez_ER{
                 "h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE\u1365 dd MMMM \u1218\u12D3\u120D\u1275 yyyy G",
+                "EEEE፥ dd MMMM መዓልት yyyy G",
                 "dd MMMM yyyy",
                 "dd-MMM-yyyy",
                 "dd/MM/yy",

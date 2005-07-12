@@ -1,104 +1,49 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/syr.xml
 // *
 // ***************************************************************************
-// There are two major dialects of Aramaic, Western (also refered to as
-// palastinian dialect, the dialect of EESHO (Jesus)) and Eastern (also
-// referred to as "Syriac dialect").
-// "Syriac" is a dialect of Aramaic, NOT a language.
-//
-// Above information found from on-line research [grhoten 2004-Feb-04]
-
+/**
+ *  ICU <specials> source: ./xml/main/syr.xml
+ */
 syr{
-    Version{ "x0.2" }
-    AmPmMarkers{
-        "\u0729.\u071B",
-        "\u0712.\u071B"
+    Countries{
+        SY{"ܣܘܪܝܝܐ"}
     }
-    collations {
-        standard {
-            Version { "1.0" }
-            Sequence { 
-                "[normalization on]"
-            }
+    Currencies{
+        SYP{
+            "ل.س.‏",
+            "SYP",
         }
     }
-    Countries {
-        SY { "\u0723\u0718\u072A\u071D\u071D\u0710" }
+    ExemplarCharacters{"[܀-܍܏-݊ݍ-ݏ‌‍]"}
+    Languages{
+        syr{"ܣܘܪܝܝܐ"}
     }
-    Currencies {
-        SYP { "\u0644.\u0633.\u200F", "SYP" }
+    LocaleScript{
+        "Syrc",
     }
-    DayNames{
-        "\u071A\u0715\u00A0\u0712\u072B\u0712\u0710",
-        "\u072C\u072A\u071D\u0722\u00A0\u0712\u072B\u0712\u0710",
-        "\u072C\u0720\u072C\u0710\u00A0\u0712\u072B\u0712\u0710",
-        "\u0710\u072A\u0712\u0725\u0710\u00A0\u0712\u072B\u0712\u0710",
-        "\u071A\u0721\u072B\u0710\u00A0\u0712\u072B\u0712\u0710",
-        "\u0725\u072A\u0718\u0712\u072C\u0710",
-        "\u072B\u0712\u072C\u0710"
-    }
-    DayAbbreviations{
-        "\u070F\u0710\u00A0\u070F\u0712\u072B",
-        "\u070F\u0712\u00A0\u070F\u0712\u072B",
-        "\u070F\u0713\u00A0\u070F\u0712\u072B",
-        "\u070F\u0715\u00A0\u070F\u0712\u072B",
-        "\u070F\u0717\u00A0\u070F\u0712\u072B",
-        "\u070F\u0725\u072A\u0718\u0712",
-        "\u070F\u072B\u0712"
-    }
-    Languages {
-        syr { "\u0723\u0718\u072A\u071D\u071D\u0710" }
-    }
-    LocaleScript:array { "Syrc" }
-    ExemplarCharacters{ "[[:Syrc:]\u200c\u200d\u200f\u200e]"}
-    MonthNames{
-        "\u071F\u0722\u0718\u0722\u00A0\u0710\u071A\u072A\u071D",
-        "\u072B\u0712\u071B",
-        "\u0710\u0715\u072A",
-        "\u0722\u071D\u0723\u0722",
-        "\u0710\u071D\u072A",
-        "\u071A\u0719\u071D\u072A\u0722",
-        "\u072C\u0721\u0718\u0719",
-        "\u0710\u0712",
-        "\u0710\u071D\u0720\u0718\u0720",
-        "\u072C\u072B\u072A\u071D\u00A0\u0729\u0715\u071D\u0721",
-        "\u072C\u072B\u072A\u071D\u00A0\u0710\u071A\u072A\u071D",
-        "\u071F\u0722\u0718\u0722\u00A0\u0729\u0715\u071D\u0721",
-    }
-
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221e",
-//        "\ufffd",
-//    }
+    Version{"1.16"}
     calendar{
         gregorian{
             monthNames{
                 format{
                     abbreviated{
-                        "\u070F\u071F\u0722\u00A0\u070F\u0712",
-                        "\u072B\u0712\u071B",
-                        "\u0710\u0715\u072A",
-                        "\u0722\u071D\u0723\u0722",
-                        "\u0710\u071D\u072A",
-                        "\u071A\u0719\u071D\u072A\u0722",
-                        "\u072C\u0721\u0718\u0719",
-                        "\u0710\u0712",
-                        "\u0710\u071D\u0720\u0718\u0720",
-                        "\u070F\u072C\u072B\u00A0\u070F\u0710",
-                        "\u070F\u072C\u072B\u00A0\u070F\u0712",
-                        "\u070F\u071F\u0722\u00A0\u070F\u0710",
+                        "܏ܟܢ ܏ܒ",
+                        "ܫܒܛ",
+                        "ܐܕܪ",
+                        "ܢܝܣܢ",
+                        "ܐܝܪ",
+                        "ܚܙܝܪܢ",
+                        "ܬܡܘܙ",
+                        "ܐܒ",
+                        "ܐܝܠܘܠ",
+                        "܏ܬܫ ܏ܐ",
+                        "܏ܬܫ ܏ܒ",
+                        "܏ܟܢ ܏ܐ",
                     }
                 }
             }
