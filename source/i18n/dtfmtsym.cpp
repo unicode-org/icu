@@ -425,7 +425,7 @@ DateFormatSymbols::getShortMonths(int32_t &count) const
 const UnicodeString*
 DateFormatSymbols::getMonths(int32_t &count, DtContextType context, DtWidthType width ) const
 {
-    UnicodeString *returnValue;
+    UnicodeString *returnValue = NULL;
 
     switch (context) {
        case FORMAT :
@@ -481,7 +481,7 @@ DateFormatSymbols::getShortWeekdays(int32_t &count) const
 const UnicodeString*
 DateFormatSymbols::getWeekdays(int32_t &count, DtContextType context, DtWidthType width) const
 {
-    UnicodeString *returnValue;
+    UnicodeString *returnValue = NULL;
     switch (context) {
        case FORMAT :
           switch(width) {
