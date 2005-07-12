@@ -151,7 +151,9 @@ public class IDNAReference {
             processOut = new StringBuffer(srcIter.getText());
         }
         int poLen = processOut.length();
-        
+        if(poLen==0){
+            throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+        }
         StringBuffer dest = new StringBuffer();
         
         // reset the variable to verify if output of prepare is ASCII or not
@@ -240,8 +242,12 @@ public class IDNAReference {
         int oldSepIndex = 0;
         for(;;){
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            UCharacterIterator iter = UCharacterIterator.getInstance(new String(srcArr,oldSepIndex,sepIndex-oldSepIndex));
-            result.append(convertToASCII(iter,options));
+            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
+            //make sure this is not a root label separator.
+            if(!(label.length()==0 && sepIndex==srcArr.length)){
+                UCharacterIterator iter = UCharacterIterator.getInstance(label);
+                result.append(convertToASCII(iter,options));
+            }
             if(sepIndex==srcArr.length){
                 break;
             }
@@ -373,7 +379,11 @@ public class IDNAReference {
         int oldSepIndex=0;
         for(;;){
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            UCharacterIterator iter = UCharacterIterator.getInstance(new String(srcArr,oldSepIndex,sepIndex-oldSepIndex));
+            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
+            if(label.length()==0 && sepIndex!=srcArr.length ){
+                throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+            }
+            UCharacterIterator iter = UCharacterIterator.getInstance(label);
             result.append(convertToUnicode(iter,options));
             if(sepIndex==srcArr.length){
                 break;

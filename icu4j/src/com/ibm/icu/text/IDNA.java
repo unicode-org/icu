@@ -8,6 +8,7 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -87,7 +88,7 @@ public final class IDNA {
            namePrep = new StringPrep(stream);
            stream.close();
         }catch (IOException e){
-            throw new RuntimeException(e.toString());
+            throw new MissingResourceException(e.toString(),"","");
         }
     }
     
@@ -513,11 +514,16 @@ public final class IDNA {
         int oldSepIndex=0;
         for(;;){
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            UCharacterIterator iter = UCharacterIterator.getInstance(new String(srcArr,oldSepIndex,sepIndex-oldSepIndex));
-            result.append(convertToASCII(iter,options));
+            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
+            //make sure this is not a root label separator.
+            if(!(label.length()==0 && sepIndex==srcArr.length)){
+                UCharacterIterator iter = UCharacterIterator.getInstance(label);
+                result.append(convertToASCII(iter,options));
+            }
             if(sepIndex==srcArr.length){
                 break;
             }
+            
             // increment the sepIndex to skip past the separator
             sepIndex++;
             oldSepIndex = sepIndex;
@@ -807,7 +813,11 @@ public final class IDNA {
         int oldSepIndex=0;
         for(;;){
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
-            UCharacterIterator iter = UCharacterIterator.getInstance(new String(srcArr,oldSepIndex,sepIndex-oldSepIndex));
+            String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
+            if(label.length()==0 && sepIndex!=srcArr.length ){
+                throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+            }
+            UCharacterIterator iter = UCharacterIterator.getInstance(label);
             result.append(convertToUnicode(iter,options));
             if(sepIndex==srcArr.length){
                 break;
