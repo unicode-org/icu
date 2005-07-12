@@ -3,18 +3,21 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../../ICU4J/cldr/common/main/en_UM.xml
+// * Source File: ../../../../ICU4J/cldr/common/main/lo_LA.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: ./xml/main/en_UM.xml
- */
-en_UM{
+lo_LA{
     NumberPatterns{
         "#,##0.###",
-        "¤#,##0.00;(¤#,##0.00)",
+        "¤#,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.17"}
+    Version{"1.19"}
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"'"}
+        quotationStart{"'"}
+    }
 }
