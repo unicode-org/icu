@@ -479,14 +479,13 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                             output.writeChar(chars[i], i, &tagPstf[0]);
                             i += 1;
                             output.writeChar(chars[i], i, &tagPstf[0]);
-                            break;
                         }
                         else {
                             output.writeChar(chars[i], i, &tagBlwf[0]);
                             i += 1;
                             output.writeChar(chars[i], i, &tagBlwf[0]);
-                            break;
                         }
+                        break;
                     }
                     // if a shifter is followed by an above vowel change the shifter to below form,
                     // an above vowel can have two possible positions i + 1 or i + 3 
@@ -494,25 +493,14 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                     // and there is an extra rule for C_VOWEL_AA + C_SIGN_NIKAHIT also for two
                     // different positions, right after the shifter or after a vowel (Unicode 4)
                     if ( (charClass & KhmerClassTable::CF_SHIFTER) && (i + 1 < syllable) ) {
-                        if (classTable->getCharClass(chars[i + 1]) & KhmerClassTable::CF_ABOVE_VOWEL ) {
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
-                            break;
-                        }
-                        if (i + 2 < syllable && 
-                            ( (classTable->getCharClass(chars[i + 1]) & KhmerClassTable::CF_CLASS_MASK) == C_VOWEL_AA) &&
-                            ( (classTable->getCharClass(chars[i + 2]) & KhmerClassTable::CF_CLASS_MASK) == C_SIGN_NIKAHIT) ) 
-                        {
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
-                            break;
-                        }
-                        if (i + 3 < syllable && (classTable->getCharClass(chars[i + 3]) & KhmerClassTable::CF_ABOVE_VOWEL) ) 
-                        {
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
-                            break;
-                        }
-                        if (i + 4 < syllable && 
-                            ( (classTable->getCharClass(chars[i + 3]) & KhmerClassTable::CF_CLASS_MASK) == C_VOWEL_AA) &&
-                            ( (classTable->getCharClass(chars[i + 4]) & KhmerClassTable::CF_CLASS_MASK) == C_SIGN_NIKAHIT) ) 
+                        if ((classTable->getCharClass(chars[i + 1]) & KhmerClassTable::CF_ABOVE_VOWEL)
+                            || (i + 2 < syllable
+                                && ( (classTable->getCharClass(chars[i + 1]) & KhmerClassTable::CF_CLASS_MASK) == C_VOWEL_AA)
+                                && ( (classTable->getCharClass(chars[i + 2]) & KhmerClassTable::CF_CLASS_MASK) == C_SIGN_NIKAHIT))
+                            || (i + 3 < syllable && (classTable->getCharClass(chars[i + 3]) & KhmerClassTable::CF_ABOVE_VOWEL))
+                            || (i + 4 < syllable
+                                && ( (classTable->getCharClass(chars[i + 3]) & KhmerClassTable::CF_CLASS_MASK) == C_VOWEL_AA)
+                                && ( (classTable->getCharClass(chars[i + 4]) & KhmerClassTable::CF_CLASS_MASK) == C_SIGN_NIKAHIT) ) ) 
                         {
                             output.writeChar(chars[i], i, &tagBlwf[0]);
                             break;
