@@ -89,7 +89,7 @@
  * accordingly. UTF-16 was the default.</p>
  *
  * <p>This concept has been abandoned.
- * A lot of the ICU source code assumes UChar srings are in UTF-16.
+ * A lot of the ICU source code assumes UChar strings are in UTF-16.
  * This is especially true for low-level code like
  * conversion, normalization, and collation.
  * The utf.h header enforces the default of UTF-16.
