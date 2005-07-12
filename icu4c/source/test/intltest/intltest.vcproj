@@ -563,6 +563,12 @@
 			Name="idna"
 			Filter="*.c,*.h">
 			<File
+				RelativePath=".\idnaconf.cpp">
+			</File>
+			<File
+				RelativePath=".\idnaconf.h">
+			</File>
+			<File
 				RelativePath=".\idnaref.cpp">
 			</File>
 			<File
