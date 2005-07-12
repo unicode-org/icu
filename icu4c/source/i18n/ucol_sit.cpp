@@ -1030,10 +1030,8 @@ static UBool U_CALLCONV
 _processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE) 
 {
     UErrorCode *status = ((contContext *)context)->status;
-    USet *contractions = ((contContext *)context)->conts;
     USet *expansions = ((contContext *)context)->expansions;
     USet *removed = ((contContext *)context)->removedContractions;
-    const UCollator *coll = ((contContext *)context)->coll;
     UBool addPrefixes = ((contContext *)context)->addPrefixes;
     UChar contraction[internalBufferSize];
     if(isSpecial(CE)) {
@@ -1088,7 +1086,6 @@ ucol_getContractions( const UCollator *coll,
                   USet *contractions,
                   UErrorCode *status)
 {
-  int32_t noConts = 0;
   ucol_getContractionsAndExpansions(coll, contractions, NULL, FALSE, status);
   return uset_getItemCount(contractions);
 }

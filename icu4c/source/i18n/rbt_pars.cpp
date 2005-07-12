@@ -876,7 +876,6 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     status = U_ZERO_ERROR;
 
     UBool parsingIDs = TRUE;
-    UBool inBeginEndBlock = FALSE;
     int32_t ruleCount = 0;
     
     if (dataVector == NULL)
