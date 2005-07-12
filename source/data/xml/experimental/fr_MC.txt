@@ -1,33 +1,17 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/fr_MC.xml
 // *
 // ***************************************************************************
- 
+/**
+ *  ICU <specials> source: ./xml/main/fr_MC.xml
+ */
 fr_MC{
-    Version{ "x0.3" }
-    calendar{
-        gregorian{
-            DateTimeElements:intvector {
-                2,
-                1,
-            }
-        }
-    }
-    NumberElements { 
-        ",",
-        "\u00A0",  // &nbsp;
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-        ",",
-        "+",
-    }
+    /**
+     * Draft
+     */
+    Version{"1.20"}
 }

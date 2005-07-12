@@ -1,39 +1,101 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/aa.xml
 // *
 // ***************************************************************************
-// * Afar language locale.
-// * Contributed by :
-// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-// *    Afar terms provided by Mohamed Obakar <loubak@6sens.com> of the
-// *    Afar Civilization Researcher, Melka Werer Research Center.
-
-aa {
-    Version{ "x0.1" }
-    // Currency display names
-    Currencies {
-        DJF { "FD", "DJF" }
-        ERN { "$", "ERN" }
+/**
+ *  ICU <specials> source: ./xml/main/aa.xml
+ */
+aa{
+    Countries{
+        BR{"Brazil"}
+        CN{"China"}
+        DE{"Germany"}
+        DJ{"Yabuuti"}
+        ER{"Eretria"}
+        ET{"Otobbia"}
+        FR{"France"}
+        GB{"United Kingdom"}
+        IN{"India"}
+        IT{"Italy"}
+        JP{"Japan"}
+        RU{"Russia"}
+        US{"United States"}
     }
-    ExemplarCharacters{ "[a-z]" }
-    LocaleScript:array{ "Latn" }
-    Languages { 
-        aa { "Qafar" }
+    Currencies{
+        BRL{
+            "BRL",
+            "Brazilian Real",
+        }
+        CNY{
+            "CNY",
+            "Chinese Yuan Renminbi",
+        }
+        DJF{
+            "FD",
+            "DJF",
+        }
+        ERN{
+            "$",
+            "ERN",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        GBP{
+            "£",
+            "British Pound Sterling",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "Indian Rupee",
+        }
+        JPY{
+            "¥",
+            "Japanese Yen",
+        }
+        RUB{
+            "RUB",
+            "Russian Ruble",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
     }
-    Countries { 
-        DJ { "Yabuuti" }
-        ER { "Eretria" }
-        ET { "Otobbia" }
+    ExemplarCharacters{"[a-z]"}
+    Languages{
+        aa{"Qafar"}
+        ar{"Arabic"}
+        de{"German"}
+        en{"English"}
+        es{"Spanish"}
+        fr{"French"}
+        hi{"Hindi"}
+        it{"Italian"}
+        ja{"Japanese"}
+        pt{"Portuguese"}
+        ru{"Russian"}
+        zh{"Chinese"}
     }
+    LocaleScript{
+        "Latn",
+    }
+    Scripts{
+        Latn{"Latin"}
+    }
+    Version{"1.20"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "saaku",
                 "carra",
             }
-            DateTimeElements:intvector { 
+            DateTimeElements:intvector{
                 7,
                 1,
             }
@@ -69,10 +131,23 @@ aa {
                         "Sabti",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "A",
+                        "E",
+                        "T",
+                        "A",
+                        "K",
+                        "G",
+                        "S",
+                    }
+                }
             }
             eras{
-                "Yaasuusuk Duma",
-                "Yaasuusuk Wadir"
+                abbreviated{
+                    "Yaasuusuk Duma",
+                    "Yaasuusuk Wadir",
+                }
             }
             monthNames{
                 format{
@@ -103,6 +178,22 @@ aa {
                         "Diteli",
                         "Ximoli",
                         "Kaxxa Garablu",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Q",
+                        "N",
+                        "C",
+                        "A",
+                        "C",
+                        "Q",
+                        "Q",
+                        "L",
+                        "W",
+                        "D",
+                        "X",
+                        "K",
                     }
                 }
             }

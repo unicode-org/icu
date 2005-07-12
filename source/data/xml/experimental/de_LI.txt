@@ -1,13 +1,16 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/de_LI.xml
 // *
 // ***************************************************************************
-
+/**
+ *  ICU <specials> source: ./xml/main/de_LI.xml
+ */
 de_LI{
-    Version{ "x0.2" }
-    NumberElements { 
+    NumberElements{
         ".",
         "'",
         ";",
@@ -16,10 +19,10 @@ de_LI{
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-        ".",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
+    Version{"1.19"}
 }

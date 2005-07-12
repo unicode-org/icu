@@ -1,66 +1,45 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2003-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/haw.xml
 // *
 // ***************************************************************************
-// Hawaiian language
-// Based on data from Keola Donaghy, University of Hawaii
-// Submitted by Deborah Goldsmith, Apple Computer, Inc.
-
-haw {
-    Version { "x0.2" } 
-    collations {
-        standard {
-            Version { "1.1" }
-            Sequence {
-                "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
-                "&a <<< A"
-                "&e <<< E"
-                "&i <<< I"
-                "&o <<< O"
-                "&u <<< U"
-                "&h <<< H"
-                "&k <<< K"
-                "&l <<< L"
-                "&m <<< M"
-                "&n <<< N"
-                "&p <<< P"
-                "&w <<< W"
-                // This is the real alphabet
-                //"&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
-                // or maybe
-                //"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
-            }
-        }
+/**
+ *  ICU <specials> source: ./xml/main/haw.xml
+ */
+haw{
+    Countries{
+        AU{"Nūhōlani"}
+        CA{"Kanakā"}
+        CN{"Kina"}
+        DE{"Kelemānia"}
+        DK{"Kenemaka"}
+        ES{"Kepania"}
+        FR{"Palani"}
+        GB{"Aupuni Mōʻī Hui Pū ʻIa"}
+        GR{"Helene"}
+        IE{"ʻIlelani"}
+        IL{"ʻIseraʻela"}
+        IN{"ʻĪnia"}
+        IT{"ʻĪkālia"}
+        JP{"Iāpana"}
+        MX{"Mekiko"}
+        NL{"Hōlani"}
+        NZ{"Aotearoa"}
+        PH{"ʻĀina Pilipino"}
+        RU{"Lūkia"}
+        US{"ʻAmelika Hui Pū ʻIa"}
     }
-    Countries {
-        AU { "N\u016bh\u014dlani" }
-        CA { "Kanak\u0101" }
-        CN { "Kina" }
-        DE { "Kelem\u0101nia" }
-        DK { "Kenemaka" }
-        ES { "Kepania" }
-        FR { "Palani" }
-        GB { "Aupuni M\u014d\u02bb\u012b Hui P\u016b \u02bbIa" }
-        GR { "Helene" }
-        IE { "\u02bbIlelani" }
-        IL { "\u02bbIsera\u02bbela" }
-        IN { "\u02bb\u012ania" }
-        IT { "\u02bb\u012ak\u0101lia" }
-        JP { "I\u0101pana" }
-        MX { "Mekiko" }
-        NL { "H\u014Dlani" }
-        NZ { "Aotearoa" }
-        PH { "\u02bb\u0100ina Pilipino" }
-        RU { "L\u016bkia" }
-        US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
+    ExemplarCharacters{"[āēīōūaeiouhklmnpwʻ]"}
+    Languages{
+        haw{"ʻōlelo Hawaiʻi"}
     }
-    ExemplarCharacters{"[\u0101\u0113\u012B\u014D\u016Baeiouhklmnpw\u02BB]"}
-    Languages {
-        haw { "\u02bb\u014dlelo Hawai\u02bbi" }
+    LocaleScript{
+        "Latn",
     }
-    LocaleScript:array{ "Latn" }
+    Version{"1.15"}
     calendar{
         gregorian{
             dayNames{
@@ -75,13 +54,13 @@ haw {
                         "P6",
                     }
                     wide{
-                        "L\u0101pule",
-                        "Po\u02bbakahi",
-                        "Po\u02bbalua",
-                        "Po\u02bbakolu",
-                        "Po\u02bbah\u0101",
-                        "Po\u02bbalima",
-                        "Po\u02bbaono",
+                        "Lāpule",
+                        "Poʻakahi",
+                        "Poʻalua",
+                        "Poʻakolu",
+                        "Poʻahā",
+                        "Poʻalima",
+                        "Poʻaono",
                     }
                 }
             }
@@ -91,29 +70,29 @@ haw {
                         "Ian.",
                         "Pep.",
                         "Mal.",
-                        "\u02bbAp.",
+                        "ʻAp.",
                         "Mei",
                         "Iun.",
                         "Iul.",
-                        "\u02bbAu.",
+                        "ʻAu.",
                         "Kep.",
-                        "\u02bbOk.",
+                        "ʻOk.",
                         "Now.",
-                        "Kek."
+                        "Kek.",
                     }
                     wide{
                         "Ianuali",
                         "Pepeluali",
                         "Malaki",
-                        "\u02bbApelila",
+                        "ʻApelila",
                         "Mei",
                         "Iune",
                         "Iulai",
-                        "\u02bbAukake",
+                        "ʻAukake",
                         "Kepakemapa",
-                        "\u02bbOkakopa",
+                        "ʻOkakopa",
                         "Nowemapa",
-                        "Kekemapa"
+                        "Kekemapa",
                     }
                 }
             }

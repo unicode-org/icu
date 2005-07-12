@@ -1,29 +1,27 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2003-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/haw_US.xml
 // *
 // ***************************************************************************
-// Hawaiian US locale
-// Based on data from Keola Donaghy, University of Hawaii
-// Submitted by Deborah Goldsmith, Apple Computer, Inc.
-
-haw_US { 
-    Version { "x0.2" } 
-
-    MeasurementSystem:int{ 1 } // US system
-    // the PaperSize units are in mm
-    // these values are not exact .. they are rounded off
-    PaperSize:intvector{
-        279, // height
-        216  // width 
-    }
-    NumberPatterns { 
-        "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+/**
+ *  ICU <specials> source: ./xml/main/haw_US.xml
+ */
+haw_US{
+    MeasurementSystem:int{1}
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;(¤#,##0.00)",
         "#,##0%",
         "#E0",
     }
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.15"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -1,40 +1,95 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../../ICU4J/cldr/common/main/sid.xml
 // *
 // ***************************************************************************
-// * Sidama language locale.
-// * Contributed by :
-// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-// *    Sidama terms provided by Dessalegn Garsamo Gabbiso <gabbiso2001@yahoo.com>
-// *    of the National University of Ireland, Dublin and A.H. Weno
-// *    <bus1hwa@east-01.novell.leeds.ac.uk>.
-
-sid {
-    Version{ "x0.1" }
-    Countries { 
-        ET { "Itiyoophiya" }
+/**
+ *  ICU <specials> source: ./xml/main/sid.xml
+ */
+sid{
+    Countries{
+        BR{"Brazil"}
+        CN{"China"}
+        DE{"Germany"}
+        ET{"Itiyoophiya"}
+        FR{"France"}
+        GB{"United Kingdom"}
+        IN{"India"}
+        IT{"Italy"}
+        JP{"Japan"}
+        RU{"Russia"}
+        US{"United States"}
     }
-    // Currency display names
-    Currencies {
-        ETB { "$", "ETB" }
+    Currencies{
+        BRL{
+            "BRL",
+            "Brazilian Real",
+        }
+        CNY{
+            "CNY",
+            "Chinese Yuan Renminbi",
+        }
+        ETB{
+            "$",
+            "ETB",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        GBP{
+            "£",
+            "British Pound Sterling",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "Indian Rupee",
+        }
+        JPY{
+            "¥",
+            "Japanese Yen",
+        }
+        RUB{
+            "RUB",
+            "Russian Ruble",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
     }
-    Languages {
-        sid { "Sidaamu Afo" }
+    ExemplarCharacters{"[a-z]"}
+    Languages{
+        ar{"Arabic"}
+        de{"German"}
+        en{"English"}
+        es{"Spanish"}
+        fr{"French"}
+        hi{"Hindi"}
+        it{"Italian"}
+        ja{"Japanese"}
+        pt{"Portuguese"}
+        ru{"Russian"}
+        sid{"Sidaamu Afo"}
+        zh{"Chinese"}
     }
-    ExemplarCharacters{ "[a-z]" }
-    LocaleScript:array{ "Latn" }
-    // Sidama also uses a lunar calendar, when the Gregorian calendar is used
-    // it is used unmodified:
-    // TODO: Get translations for the lunar calendar when the calendar becomes available in ICU.
+    LocaleScript{
+        "Latn",
+    }
+    Scripts{
+        Latn{"Latin"}
+    }
+    Version{"1.19"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "soodo",
                 "hawwaro",
             }
-            DateTimeElements:intvector { 
+            DateTimeElements:intvector{
                 7,
                 1,
             }
@@ -52,7 +107,6 @@ sid {
             dayNames{
                 format{
                     abbreviated{
-                        //"Aca", // Too many days, and this doesn't look right.
                         "Sam",
                         "San",
                         "Mak",
@@ -62,7 +116,6 @@ sid {
                         "Qid",
                     }
                     wide{
-                        //"Qubee", // Too many days, and this doesn't look right.
                         "Sambata",
                         "Sanyo",
                         "Maakisanyo",
@@ -72,10 +125,23 @@ sid {
                         "Qidaame",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "S",
+                        "M",
+                        "R",
+                        "H",
+                        "A",
+                        "Q",
+                    }
+                }
             }
             eras{
-                "YIA", // Yesus ilama albaani",
-                "YIG", // Yesus ilama gedensaani"
+                abbreviated{
+                    "YIA",
+                    "YIG",
+                }
             }
             monthNames{
                 format{
@@ -106,6 +172,22 @@ sid {
                         "October",
                         "November",
                         "December",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
