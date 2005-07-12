@@ -1,18 +1,20 @@
 # Copyright (c) 2005 International Business Machines 
 # Corporation and others. All Rights Reserved.
 # suffix matches
-*.jar
-*.zip
-*.gz
+*.brk
 *.bz2
-*.vcproj
-*.sln
-*.sxw
-*.sxd
+*.csproj
 *.gif
+*.gz
+*.ico
+*.jar
 *.jpg
 *.png
-*.brk
+*.sln
+*.sxd
+*.sxw
+*.vcproj
+*.zip
 # ICU4C files that don't need an IBM copyright
 icu/as_is/os400/configure
 icu/debian/changelog
