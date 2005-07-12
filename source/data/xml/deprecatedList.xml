@@ -20,9 +20,15 @@
   <overrideDraft locale="sr_Cyrl"/>
   
   <!-- only for 3.4 -->
+  <overrideDraft locale="as"/> 
+  <overrideDraft locale="as_IN"/> 
   <overrideDraft locale="az"/> 
   <overrideDraft locale="az_AZ"/> 
   <overrideDraft locale="az_Cyrl"/> 
+  <overrideDraft locale="sh_CS"/> 
+  <overrideDraft locale="sr_CS"/> 
+  <overrideDraft locale="sr_Cyrl_CS"/> 
+  <overrideDraft locale="sr_Latn_CS"/> 
   <overrideDraft locale="uz"/> 
   <overrideDraft locale="uz_Cyrl"/>
   <overrideDraft locale="uz_Latn"/>
