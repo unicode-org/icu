@@ -122,7 +122,7 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET_STUB_NAME).$(SECTION): $(srcdir)/$(TARGET_STUB_NAME).$(SECTION).in $(srcdir)/pkgdata.inc
+$(TARGET_STUB_NAME).$(SECTION): $(srcdir)/$(TARGET_STUB_NAME).$(SECTION).in pkgdata.inc
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$(TARGET_STUB_NAME).$(SECTION) CONFIG_HEADERS= $(SHELL) ./config.status
 
