@@ -20,18 +20,8 @@
 class IdnaConfTest: public IntlTest {
 public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
-    IdnaConfTest(){
-        base = NULL;
-        len = 0;
-        curOffset = 0;
-
-        type = option = passfail = -1;
-        namebase.setToBogus();
-        namezone.setToBogus();
-    }
-    ~IdnaConfTest(){
-        delete [] base;
-    }
+    IdnaConfTest();
+    virtual ~IdnaConfTest();
 private:
     void Test(void);
 
