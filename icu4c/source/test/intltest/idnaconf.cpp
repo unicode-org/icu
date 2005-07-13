@@ -22,22 +22,35 @@
 
 #include "idnaconf.h"
 
-static UChar C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
-static UChar C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone 
-static UChar C_NAMEBASE[] = {0x6E, 0x61, 0x6D, 0x65, 0x62, 0x61, 0x73, 0x65, 0}; // namebase 
-static UChar C_NAMEUTF8[] = {0x6E, 0x61, 0x6D, 0x65, 0x75, 0x74, 0x66, 0x38, 0}; // nameutf8 
+static const UChar C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
+static const UChar C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone 
+static const UChar C_NAMEBASE[] = {0x6E, 0x61, 0x6D, 0x65, 0x62, 0x61, 0x73, 0x65, 0}; // namebase 
+static const UChar C_NAMEUTF8[] = {0x6E, 0x61, 0x6D, 0x65, 0x75, 0x74, 0x66, 0x38, 0}; // nameutf8 
 
-static UChar C_TYPE[] = {0x74, 0x79, 0x70, 0x65, 0}; // type
-static UChar C_TOASCII[]  =  {0x74, 0x6F, 0x61, 0x73, 0x63, 0x69, 0x69, 0};       // toascii
-static UChar C_TOUNICODE[] = {0x74, 0x6F, 0x75, 0x6E, 0x69, 0x63, 0x6F, 0x64, 0x65, 0}; // tounicode
+static const UChar C_TYPE[] = {0x74, 0x79, 0x70, 0x65, 0}; // type
+static const UChar C_TOASCII[]  =  {0x74, 0x6F, 0x61, 0x73, 0x63, 0x69, 0x69, 0};       // toascii
+static const UChar C_TOUNICODE[] = {0x74, 0x6F, 0x75, 0x6E, 0x69, 0x63, 0x6F, 0x64, 0x65, 0}; // tounicode
 
-static UChar C_PASSFAIL[] = {0x70, 0x61, 0x73, 0x73, 0x66, 0x61, 0x69, 0x6C, 0}; // passfail
-static UChar C_PASS[] = {0x70, 0x61, 0x73, 0x73, 0}; // pass
-static UChar C_FAIL[] = {0x66, 0x61, 0x69, 0x6C, 0}; // fail
+static const UChar C_PASSFAIL[] = {0x70, 0x61, 0x73, 0x73, 0x66, 0x61, 0x69, 0x6C, 0}; // passfail
+static const UChar C_PASS[] = {0x70, 0x61, 0x73, 0x73, 0}; // pass
+static const UChar C_FAIL[] = {0x66, 0x61, 0x69, 0x6C, 0}; // fail
 
-static UChar C_DESC[] = {0x64, 0x65, 0x73, 0x63, 0}; // desc
-static UChar C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44, 
+static const UChar C_DESC[] = {0x64, 0x65, 0x73, 0x63, 0}; // desc
+static const UChar C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44, 
        0x33, 0x41, 0x53, 0x43, 0x49, 0x49, 0x52, 0x75, 0x6C, 0x65, 0x73, 0}; // UseSTD3ASCIIRules
+
+IdnaConfTest::IdnaConfTest(){
+    base = NULL;
+    len = 0;
+    curOffset = 0;
+
+    type = option = passfail = -1;
+    namebase.setToBogus();
+    namezone.setToBogus();
+}
+IdnaConfTest::~IdnaConfTest(){
+    delete [] base;
+}
 
 
 /* this function is modified from RBBITest::ReadAndConvertFile() 
@@ -46,7 +59,7 @@ static UChar C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44,
 bool IdnaConfTest::ReadAndConvertFile(){
     
     char * source = NULL;
-    int    source_len;
+    size_t source_len;
 
     // read the test data file to memory
     FILE* f    = NULL;
@@ -118,7 +131,6 @@ bool IdnaConfTest::ReadAndConvertFile(){
 int IdnaConfTest::isNewlineMark(){
     static const UChar LF        = 0x0a;
     static const UChar CR        = 0x0d;
-    static const UChar BACKSLASH = 0x5c;
     UChar c = base[curOffset];
     // CR LF
     if ( c == CR && curOffset + 1 < len && base[curOffset + 1] == LF){
@@ -323,7 +335,7 @@ void IdnaConfTest::Test(void){
 
 
 
-void IdnaConfTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par){
+void IdnaConfTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/){
     switch (index) {
         TESTCASE(0,Test);
         default: name = ""; break;
