@@ -318,25 +318,25 @@ static void TestBreakIteratorCAPI()
         UChar s1[] = {0x41, 0x42, 0x20, 0};
         UChar s2[] = {0x41, 0x42, 0x43, 0x44, 0x45, 0};
         UText *ut = NULL;
-        UBreakIterator *b;
-        int i;
+        UBreakIterator *bb;
+        int j;
 
         log_verbose("\nTesting ubrk_setText() and ubrk_setUText()\n");
         status = U_ZERO_ERROR;
-        b = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
+        bb = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
         TEST_ASSERT_SUCCESS(status);
-        ubrk_setText(b, s1, -1, &status);
+        ubrk_setText(bb, s1, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        ubrk_first(b);
-        i = ubrk_next(b);
-        TEST_ASSERT(i == 2);
+        ubrk_first(bb);
+        j = ubrk_next(bb);
+        TEST_ASSERT(j == 2);
         ut = utext_openUChars(ut, s2, -1, &status);
-        ubrk_setUText(b, ut, &status);
+        ubrk_setUText(bb, ut, &status);
         TEST_ASSERT_SUCCESS(status);
-        i = ubrk_next(b);
-        TEST_ASSERT(i == 5);
+        j = ubrk_next(bb);
+        TEST_ASSERT(j == 5);
 
-        ubrk_close(b);
+        ubrk_close(bb);
         utext_close(ut);
     }
 
