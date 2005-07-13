@@ -1065,7 +1065,7 @@
     <!-- Target for builing Utilities Jar for CLDR -->
 
     <target name="cldrUtil" depends="init" description="build Utilities for CLDR">
-        <javac includes="com/ibm/icu/dev/test/util/BagFormatter.java,com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/util/SortedBag.java,com/ibm/icu/dev/test/util/Relation*.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/test/util/ArrayComparator.java,com/ibm/icu/dev/test/util/FileUtilities.java"
+        <javac includes="com/ibm/icu/dev/test/util/*.java,com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/tool/UOption.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             source="${icu4j.javac.source}"
@@ -1074,7 +1074,7 @@
             debug="on" deprecation="off"/>
         <jar jarfile="utilities.jar"
             compress="true"
-            includes="com/ibm/icu/dev/test/util/BagFormatter*.class,com/ibm/icu/dev/test/util/SortedBag*.class,com/ibm/icu/dev/test/util/Relation*.class, com/ibm/icu/dev/test/util/ICUPropertyFactory*.class, com/ibm/icu/dev/test/util/Unicode*.class, com/ibm/icu/dev/test/util/Tabber*.class,com/ibm/icu/dev/test/util/ArrayComparator*.class,com/ibm/icu/dev/test/util/ListSet*.class, com/ibm/icu/dev/test/util/Visitor*.class,com/ibm/icu/dev/test/TestFmwk*.class,com/ibm/icu/dev/test/AbstractTest*.class,com/ibm/icu/dev/test/TestLog*.class,com/ibm/icu/dev/tool/UOption*.class, com/ibm/icu/dev/test/util/FileUtilities*.class"
+            includes="com/ibm/icu/dev/test/util/*.class,com/ibm/icu/dev/test/TestFmwk*.class,com/ibm/icu/dev/test/AbstractTest*.class,com/ibm/icu/dev/test/TestLog*.class,com/ibm/icu/dev/tool/UOption*.class"
             basedir="${build.dir}"
             manifest="${cldr.util.manifest}"/>
      </target>
