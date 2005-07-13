@@ -1008,7 +1008,7 @@ static const struct CurrencyList {
     ((typeToMatch) == UCURR_ALL || ((variable) & (typeToMatch)) == (typeToMatch))
 
 static int32_t U_CALLCONV
-ucurr_countCurrencyList(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucurr_countCurrencyList(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     UCurrencyContext *myContext = (UCurrencyContext *)(enumerator->context);
     uint32_t currType = myContext->currType;
     int32_t count = 0;
@@ -1046,7 +1046,7 @@ ucurr_nextCurrencyList(UEnumeration *enumerator,
 }
 
 static void U_CALLCONV
-ucurr_resetCurrencyList(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucurr_resetCurrencyList(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     ((UCurrencyContext *)(enumerator->context))->listIdx = 0;
 }
 
