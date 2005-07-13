@@ -348,45 +348,6 @@ utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
     return src->clone(dest, src, deep, status);
 }
 
-U_DRAFT UBool U_EXPORT2
-utext_compare(UText *ut, const UChar *s, int32_t length, UBool codePointOrder) {
-    int32_t segLength, result;
-
-    if(length<0) {
-        length=u_strlen(s);
-    }
-    if(length==0) {
-        return 0;
-    }
-    for(;;) {
-        // compare starting from the current position in the current chunk
-        segLength=ut->chunk.length-ut->chunk.offset;
-        if(segLength>length) {
-            segLength=length;
-        }
-        result=u_strCompare(
-            ut->chunk.contents+ut->chunk.offset, segLength,
-            s, length,
-            codePointOrder);
-        ut->chunk.offset+=segLength;
-        if(result!=0) {
-            return result;
-        }
-
-        // compare the next chunk
-        s+=segLength;
-        length-=segLength;
-        if(length==0) {
-            return 0;
-        }
-
-        if(!ut->access(ut, ut->chunk.nativeLimit, TRUE, &ut->chunk)) {
-            // the text ends before the string does
-            return -1;
-        }
-    }
-    return 0;
-}
 
 
 //------------------------------------------------------------------------------
@@ -507,7 +468,7 @@ utext_close(UText *ut) {
     }
     ut->flags &= ~UTEXT_OPEN;
 
-    // If we (the famework) allocated the UText or subsidiary storage,
+    // If we (the framework) allocated the UText or subsidiary storage,
     //   delete it.
     if (ut->flags & UTEXT_EXTRA_HEAP_ALLOCATED) {
         uprv_free(ut->pExtra);
@@ -987,7 +948,7 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
 static void U_CALLCONV
 utf8TextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
-    // All that needs to be done here is delete the Replaceable if the UText
+    // All that needs to be done here is to delete the UTF8 string if the UText
     //  owns it.  This occurs if the UText was created by cloning.
     char *s = (char *)ut->p;
     uprv_free(s);
@@ -1044,7 +1005,8 @@ U_CDECL_END
 //     UText implementation wrapper for Replaceable (read/write) 
 //
 //         Use of UText data members:
-//            context    pointer to Replaceable
+//            context    pointer to Replaceable.
+//            p          pointer to Replaceable if it is owned by the UText.
 //
 //------------------------------------------------------------------------------
 
