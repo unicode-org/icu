@@ -1007,7 +1007,9 @@ unorm_getUnicodeVersion(UVersionInfo *versionInfo, UErrorCode *pErrorCode){
 
 U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
+#if !UNORM_HARDCODE_DATA
     UErrorCode errorCode=U_ZERO_ERROR;
+#endif
     if( fillSet!=NULL && (uint32_t)c<=0x10ffff &&
 #if !UNORM_HARDCODE_DATA
         _haveData(errorCode) &&
@@ -1505,7 +1507,9 @@ _findNextStarter(const UChar *src, const UChar *limit,
 U_CAPI int32_t U_EXPORT2
 unorm_getDecomposition(UChar32 c, UBool compat,
                        UChar *dest, int32_t destCapacity) {
+#if !UNORM_HARDCODE_DATA
     UErrorCode errorCode=U_ZERO_ERROR;
+#endif
     if( (uint32_t)c<=0x10ffff &&
 #if !UNORM_HARDCODE_DATA
         _haveData(errorCode) &&
