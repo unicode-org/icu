@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -117,6 +117,11 @@ public class UtilityTest extends TestFmwk {
         
         ByteArrayWrapper y = new ByteArrayWrapper(ba, 3);
         ByteArrayWrapper z = new ByteArrayWrapper(bb, 3);
+
+        
+        if (!y.toString().equals("00 01 02")){
+            errln("FAIL: test toString : Failed!");
+        }
         
         // test equality
         if (!x.equals(y) || !x.equals(z))

@@ -153,4 +153,93 @@ public class LocaleDataTest extends TestFmwk{
         assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
                    equalCount > 0 && equalCount < availableLocales.length);
     }
+    public void TestExemplarSet2(){
+        int equalCount = 0;
+        for(int i=0; i<availableLocales.length; i++){
+            ULocale locale = availableLocales[i];
+            LocaleData ld = LocaleData.getInstance(locale);
+            UnicodeSet exemplarSets[] = new UnicodeSet[4];
+
+            for (int k=0; k<2; ++k) {
+                int option = (k==0) ? 0 : UnicodeSet.CASE;
+                for(int h=0; h<2; ++h){
+                	int type = (h==0) ? LocaleData.ES_STANDARD : LocaleData.ES_AUXILIARY;
+                	
+                	UnicodeSet exemplarSet = ld.getExemplarSet(option, type);
+                	exemplarSets[k*2+h] = exemplarSet;
+                	
+                	int[] code = UScript.getCode(locale);
+	                if(code != null){
+	                    UnicodeSet[] sets = new UnicodeSet[code.length];
+	                    // create the UnicodeSets for the script
+	                    for(int j=0; j < code.length; j++){
+	                        sets[j] = new UnicodeSet("[:" + UScript.getShortName(code[j]) + ":]");
+	                    }
+	                    boolean existsInScript = false;
+	                    UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
+	                    // iterate over the 
+	                    while (!existsInScript && iter.nextRange()) {
+	                        if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
+	                            for(int j=0; j<sets.length; j++){
+	                                if(sets[j].contains(iter.codepoint, iter.codepointEnd)){
+	                                    existsInScript = true;
+	                                    break;
+	                                }
+	                            }
+	                        } else {
+	                            for(int j=0; j<sets.length; j++){
+	                                if(sets[j].contains(iter.string)){
+	                                    existsInScript = true;
+	                                    break;
+	                                }
+	                            }
+	                        }
+	                    }
+	                	// TODO: How to verify LocaleData.ES_AUXILIARY ???
+	                    if(existsInScript == false && h == 0){
+	                        errln("ExemplarSet containment failed for locale,option,type : "+ locale + ", " + option + ", " + type);
+	                    }
+	                }else{
+	                    if(locale.toString().indexOf(("in"))<0){
+	                        errln("UScript.getCode returned null for locale,option,type : "+ locale + ", " + option + ", " + type); 
+	                    }
+                }
+                }
+            }
+            // This is expensive, so only do it if it will be visible
+            if (isVerbose()) {
+                logln(locale.toString() + " exemplar(ES_STANDARD)" + exemplarSets[0]);
+                logln(locale.toString() + " exemplar(ES_AUXILIARY) " + exemplarSets[1]);
+                logln(locale.toString() + " exemplar(case-folded,ES_STANDARD) " + exemplarSets[2]);
+                logln(locale.toString() + " exemplar(case-folded,ES_AUXILIARY) " + exemplarSets[3]);
+            }
+            assertTrue(locale.toString() + " case-folded is a superset",
+                       exemplarSets[2].containsAll(exemplarSets[0]));
+            assertTrue(locale.toString() + " case-folded is a superset",
+                    exemplarSets[3].containsAll(exemplarSets[1]));
+            if (exemplarSets[2].equals(exemplarSets[0])) {
+                ++equalCount;
+            }
+            if (exemplarSets[3].equals(exemplarSets[1])) {
+                ++equalCount;
+            }
+        }
+        // Note: The case-folded set should sometimes be a strict superset
+        // and sometimes be equal.
+        assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
+                   equalCount > 0 && equalCount < availableLocales.length * 2);
+    }
+    public void TestCoverage(){
+    	LocaleData ld = LocaleData.getInstance();
+    	boolean t = ld.getNoSubstitute();
+    	ld.setNoSubstitute(t);
+    	assertEquals("LocaleData get/set NoSubstitute",
+    			t,
+				ld.getNoSubstitute());
+    
+    	logln(ld.getDelimiter(LocaleData.QUOTATION_START));
+    	logln(ld.getDelimiter(LocaleData.QUOTATION_END));
+    	logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_START));
+    	logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));    	
+    }
 }

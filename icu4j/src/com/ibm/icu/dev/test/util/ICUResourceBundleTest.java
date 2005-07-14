@@ -71,10 +71,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
         bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());
-        if(bundle instanceof ICUResourceBundle && bundle.getULocale().equals("root")){
+        if(bundle instanceof ICUResourceBundle && bundle.getULocale().equals("en_US")){
             logln("wrapper mechanism works for bogus locale");
         }else{
-            logln("wrapper mechanism failed for bogus locale");
+            errln("wrapper mechanism failed for bogus locale.");
         }
 
         try{
@@ -941,6 +941,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_ROOT) 
                     + " Got: " + getLSString(status));
         }
+    }
+    public void TestCoverage(){
+    	UResourceBundle bundle;
+    	bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME);
+    	if (bundle == null){
+    		errln("UResourceBundle.getBundleInstance(String baseName) failed");
+    	}
     }
 }
 

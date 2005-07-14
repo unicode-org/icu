@@ -212,7 +212,23 @@ public class CopticTest extends CalendarTest
                 errln("could not create CopticCalendar with Locale");
             }
         }
-
+        
+        {                                                                                       
+            // new CopticCalendar(TimeZone, Locale)                                             
+            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault(),Locale.getDefault()); 
+            if(cal == null){                                                                    
+                errln("could not create CopticCalendar with TimeZone, Locale");                 
+            }                                                                                   
+        }                                                                                       
+                                                                                                
+        {                                                                                       
+            // new CopticCalendar(TimeZone, ULocale)                                            
+            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault(),ULocale.getDefault());
+            if(cal == null){                                                                    
+                errln("could not create CopticCalendar with TimeZone, ULocale");                
+            }                                                                                   
+        }                                                                                       
+        
         {
             // new CopticCalendar(Date)
             CopticCalendar cal = new CopticCalendar(new Date());

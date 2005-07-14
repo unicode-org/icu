@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.util.Locale;
 import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.TreeMap;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -978,6 +979,23 @@ public class ULocaleTest extends TestFmwk {
                 }
             }
         }
+    	ULocale loc1 = new ULocale("en_US_BROOKLYN");
+    	ULocale loc2 = new ULocale("en","US","BROOKLYN");
+    	if (!loc2.equals(loc1)){
+    		errln("ULocale.ULocale(String a, String b, String c)");
+    	}
+    	
+    	ULocale loc3 = new ULocale("en_US");
+    	ULocale loc4 = new ULocale("en","US");
+    	if (!loc4.equals(loc3)){
+    		errln("ULocale.ULocale(String a, String b)");
+    	}
+    	
+    	ULocale loc5 = (ULocale) loc4.clone();
+    	if (!loc5.equals(loc4)){
+    		errln("ULocale.clone should get the same ULocale");
+    	}
+    	ULocale.getISOCountries();	// To check the result ?!
     }
 
     public void TestBamBm() {
@@ -1169,4 +1187,112 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
-}
+    
+    private ULocale[] StringToULocaleArray(String acceptLanguageList){
+    	//following code is copied from 
+    	//ULocale.acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, boolean[] fallback)
+        class ULocaleAcceptLanguageQ implements Comparable {
+            private double q;
+            private double serial;
+            public ULocaleAcceptLanguageQ(double theq, int theserial) {
+                q = theq;
+                serial = theserial;
+            }
+            public int compareTo(Object o) {
+                ULocaleAcceptLanguageQ other = (ULocaleAcceptLanguageQ) o;
+                if(q > other.q) { // reverse - to sort in descending order
+                    return -1;
+                } else if(q < other.q) {
+                    return 1;
+                }
+                if(serial < other.serial) {
+                    return -1;
+                } else if(serial > other.serial) {
+                    return 1;
+                } else {
+                    return 0; // same object
+                }
+            }
+        }
+
+        // 1st: parse out the acceptLanguageList into an array
+        
+        TreeMap map = new TreeMap();
+        
+        final int l = acceptLanguageList.length();
+        int n;
+        int last=-1;
+        for(n=0;n<l;n++) {
+            int itemEnd = acceptLanguageList.indexOf(',',n);
+            if(itemEnd == -1) {
+                itemEnd = l;
+            }
+            int paramEnd = acceptLanguageList.indexOf(';',n);
+            double q = 1.0;
+ 
+            if((paramEnd != -1) && (paramEnd < itemEnd)) {
+                /* semicolon (;) is closer than end (,) */
+                int t = paramEnd + 1;
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                if(acceptLanguageList.charAt(t)=='q') {
+                    t++;
+                }
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                if(acceptLanguageList.charAt(t)=='=') {
+                    t++;
+                }
+                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                    t++;
+                }
+                try {
+                    String val = acceptLanguageList.substring(t,itemEnd).trim();
+                    q = Double.parseDouble(val);
+                } catch (NumberFormatException nfe) {
+                    q = 1.0;
+                }
+            } else {
+                q = 1.0; //default
+                paramEnd = itemEnd;
+            }
+
+            String loc = acceptLanguageList.substring(n,paramEnd).trim();
+            int serial = map.size();
+            ULocaleAcceptLanguageQ entry = new ULocaleAcceptLanguageQ(q,serial);
+            map.put(entry, new ULocale(ULocale.canonicalize(loc))); // sort in reverse order..   1.0, 0.9, 0.8 .. etc
+            n = itemEnd; // get next item. (n++ will skip over delimiter)
+        }
+        
+        // 2. pull out the map 
+        ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
+    	return acceptList;
+    }
+	
+    public void TestAcceptLanguage2() {
+        for(int i = 0 ; i < (ACCEPT_LANGUAGE_HTTP.length); i++) {
+            Boolean expectBoolean = new Boolean(ACCEPT_LANGUAGE_TESTS[i][1]);
+            String expectLocale=ACCEPT_LANGUAGE_TESTS[i][0];
+            
+           logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
+            
+            boolean r[] = { false };
+            ULocale n = ULocale.acceptLanguage(StringToULocaleArray(ACCEPT_LANGUAGE_HTTP[i]), r);
+            if((n==null)&&(expectLocale!=null)) {
+                errln("result was null! line #" + i);
+                continue;
+            }
+            if(((n==null)&&(expectLocale==null)) || (n.toString().equals(expectLocale))) {
+                logln(" locale: OK." );
+            } else {
+                errln("expected " + expectLocale + " but got " + n.toString());
+            }
+            if(expectBoolean.equals(new Boolean(r[0]))) {
+                logln(" bool: OK.");
+            } else {
+                errln("bool: not OK, was " + new Boolean(r[0]).toString() + " expected " + expectBoolean.toString());
+            }
+        }
+    }}

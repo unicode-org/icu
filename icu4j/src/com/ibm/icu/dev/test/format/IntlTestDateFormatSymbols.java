@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -42,6 +42,60 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         {
             logln(month[i]);
         }
+    }
+
+    public void TestGetMonths2()
+    {
+        DateFormatSymbols symbol;
+        symbol=new DateFormatSymbols(Locale.getDefault());
+
+        int[] context = {DateFormatSymbols.STANDALONE, DateFormatSymbols.FORMAT};
+        int[] width = {DateFormatSymbols.WIDE, DateFormatSymbols.ABBREVIATED, DateFormatSymbols.NARROW};
+        
+        for (int i = 0; i < context.length; i++) {
+			for (int j = 0; j < width.length; j++) {
+				String[] month =symbol.getMonths(context[i],width[j]);
+		        int cnt = month.length;
+
+		        logln("size = " + cnt);
+
+		        for (int k = 0; k < month.length; k++) {
+		            logln(month[k]);
+				}
+			}
+		}
+    }
+    
+    public void TestGetWeekdays2(){
+        DateFormatSymbols symbol;
+        symbol=new DateFormatSymbols(Locale.getDefault());
+
+        int[] context = {DateFormatSymbols.STANDALONE, DateFormatSymbols.FORMAT};
+        int[] width = {DateFormatSymbols.WIDE, DateFormatSymbols.ABBREVIATED, DateFormatSymbols.NARROW};
+        
+        for (int i = 0; i < context.length; i++) {
+			for (int j = 0; j < width.length; j++) {
+				String[] wd =symbol.getWeekdays(context[i],width[j]);
+		        int cnt = wd.length;
+
+		        logln("size = " + cnt);
+
+		        for (int k = 0; k < wd.length; k++) {
+		            logln(wd[k]);
+				}
+			}
+		}
+    	
+    }
+    
+    public void TestGetEraNames(){
+        DateFormatSymbols symbol;
+        symbol=new DateFormatSymbols(Locale.getDefault());
+        String[] s = symbol.getEraNames();
+        for (int i = 0; i < s.length; i++) {
+			logln(s[i]);
+		}
+    	
     }
 
     // Test the API of DateFormatSymbols; primarily a simple get/set set.
