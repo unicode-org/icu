@@ -284,6 +284,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         private String searchName;
         private ULocale defaultLocale;
         private int hashCodeCache;
+        ///CLOVER:OFF
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -332,7 +333,8 @@ public abstract class UResourceBundle extends ResourceBundle{
                 throw new InternalError();
             }
         }
-        public void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
+        ///CLOVER:ON
+        private void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
             this.searchName = searchName;
             hashCodeCache = searchName.hashCode();
             this.defaultLocale = defaultLocale;
@@ -346,9 +348,11 @@ public abstract class UResourceBundle extends ResourceBundle{
                 hashCodeCache ^= root.hashCode();
             }
         }
-        public void clear() {
+        ///CLOVER:OFF
+        private void clear() {
             setKeyValues(null, "", null);
         }
+        ///CLOVER:ON
     }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
