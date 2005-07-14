@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -17,20 +17,11 @@ void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, UBool exec, const
 {
     if (exec) logln("TestSuite DateFormatSymbols");
     switch (index) {
-        case 0: name = "DateFormatSymbols test"; 
-                if (exec) {
-                    logln("DateFormatSymbols test---"); logln("");
-                    testSymbols(/*par*/);
-                }
-                break;
-
-        case 1: name = "TestGetMonths"; 
-                if (exec) {
-                    logln("TestGetMonths test---"); logln("");
-                    TestGetMonths();
-                }
-                break;
-
+        TESTCASE(0,TestSymbols);
+        TESTCASE(1,TestGetMonths);
+        TESTCASE(2,TestGetMonths2);
+        TESTCASE(3,TestGetWeekdays2);
+        TESTCASE(4,TestGetEraNames);
         default: name = ""; break;
     }
 }
@@ -59,10 +50,82 @@ void IntlTestDateFormatSymbols::TestGetMonths()
     delete symbol;
 }
 
+void IntlTestDateFormatSymbols::TestGetMonths2()
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    DateFormatSymbols *symbol;
+
+    symbol=new DateFormatSymbols(Locale::getDefault(), status);
+
+    DateFormatSymbols::DtContextType context[] = {DateFormatSymbols::STANDALONE, DateFormatSymbols::FORMAT};
+    DateFormatSymbols::DtWidthType width[] = {DateFormatSymbols::WIDE, DateFormatSymbols::ABBREVIATED, DateFormatSymbols::NARROW};
+
+    for (int32_t i = 0; i < 2; i++) {
+		for (int32_t j = 0; j < 3; j++) {
+            int32_t cnt;
+			const UnicodeString * month = symbol->getMonths(cnt,context[i],width[j]);
+
+		    logln((UnicodeString)"size = " + cnt);
+
+		    for (int32_t k = 0; k < cnt; k++) {
+		        logln(month[k]);
+			}
+		}
+	}
+    delete symbol;
+}
+
+void IntlTestDateFormatSymbols::TestGetWeekdays2()
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    DateFormatSymbols *symbol;
+
+    symbol=new DateFormatSymbols(Locale::getDefault(), status);
+
+    DateFormatSymbols::DtContextType context[] = {DateFormatSymbols::STANDALONE, DateFormatSymbols::FORMAT};
+    DateFormatSymbols::DtWidthType width[] = {DateFormatSymbols::WIDE, DateFormatSymbols::ABBREVIATED, DateFormatSymbols::NARROW};
+
+    for (int32_t i = 0; i < 2; i++) {
+		for (int32_t j = 0; j < 3; j++) {
+            int32_t cnt;
+			const UnicodeString * wd = symbol->getWeekdays(cnt,context[i],width[j]);
+
+		    logln((UnicodeString)"size = " + cnt);
+
+		    for (int32_t k = 0; k < cnt; k++) {
+		        logln(wd[k]);
+			}
+		}
+	}
+    delete symbol;
+}
+
+
+void IntlTestDateFormatSymbols::TestGetEraNames()
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    int32_t cnt;
+    const UnicodeString* name;
+    DateFormatSymbols *symbol;
+
+    symbol=new DateFormatSymbols(Locale::getDefault(), status);
+
+    name=symbol->getEraNames(cnt);
+
+    logln((UnicodeString)"size = " + cnt);
+
+    for (int32_t i=0; i<cnt; ++i)
+    {
+        logln(name[i]);
+    }
+
+    delete symbol;
+}
+
 /**
  * Test the API of DateFormatSymbols; primarily a simple get/set set.
  */
-void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
+void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 

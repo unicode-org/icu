@@ -414,6 +414,13 @@ void UObjectTest::testUMemory() {
     // destroy object and delete space manually
     p->~UnicodeString(); 
     UnicodeString::operator delete(p, stackMemory); 
+
+    // Jitterbug 4452, for coverage
+    UnicodeString *pa = new UnicodeString[2];
+    if ( !pa[0].isEmpty() || !pa[1].isEmpty()){
+        errln("constructor used with array new did not work right");
+    }
+    delete [] pa;
 #endif
 
     // try to call the compiler-generated UMemory::operator=(class UMemory const &)
@@ -429,7 +436,7 @@ void UObjectTest::TestMFCCompatibility() {
     if(str->charAt(0) != 0x0040) {
         errln("debug new doesn't work.");
     }
-    delete str;
+    UnicodeString::operator delete(str, __FILE__, __LINE__);
 #endif
 }
 

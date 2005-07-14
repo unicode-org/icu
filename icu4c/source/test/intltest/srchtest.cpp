@@ -1,6 +1,6 @@
 /*
 *****************************************************************************
-* Copyright (C) 2001-2004, International Business Machines orporation  
+* Copyright (C) 2001-2005, International Business Machines orporation  
 * and others. All Rights Reserved.
 ****************************************************************************/
 
@@ -150,6 +150,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(32, TestContractionCanonical)
         CASE(33, TestUClassID)
         CASE(34, TestSubclass)
+        CASE(35, TestCoverage)
         default: name = ""; break;
     }
 }
@@ -2269,6 +2270,38 @@ void StringSearchTest::TestSubclass()
     }
     if (search.previous(status) != USEARCH_DONE) {
         errln("Error should have reached the start of the iteration");
+    }
+}
+
+void StringSearchTest::TestCoverage(){
+    class StubSearchIterator:public SearchIterator{
+    public:
+        StubSearchIterator(){}
+        virtual void setOffset(int32_t position, UErrorCode &status) {};
+        virtual int32_t getOffset(void) const {return 0;};
+        virtual SearchIterator* safeClone(void) const {return NULL;};
+        virtual int32_t handleNext(int32_t position, UErrorCode &status){return 0;};
+        virtual int32_t handlePrev(int32_t position, UErrorCode &status) {return 0;};
+        virtual inline UClassID getDynamicClassID() const {
+            static char classID = 0;
+            return (UClassID)&classID; 
+        }
+    };
+    StubSearchIterator stub1, stub2;
+
+    if (stub1 != stub2){
+        errln("new StubSearchIterator should same");
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    stub2.setText(UnicodeString("ABC"), status);
+    if (U_FAILURE(status)) {
+        errln("Error: SearchIterator::SetText");
+    }
+
+    stub1 = stub2;
+    if (stub1 != stub2){
+        errln("SearchIterator::operator =  assigned object should same");
     }
 }
 

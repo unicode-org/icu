@@ -20,6 +20,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
+#include "unicode/uclean.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -69,6 +70,7 @@ static void TestICUDataName(void);
 static void TestSwapData(void);
 static void PointerTableOfContents(void);
 static void SetBadCommonData(void);
+static void TestUDataFileAccess(void);
 
 
 void addUDataTest(TestNode** root);
@@ -88,6 +90,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestSwapData, "udatatst/TestSwapData" );
     addTest(root, &PointerTableOfContents, "udatatst/PointerTableOfContents" );
     addTest(root, &SetBadCommonData, "udatatst/SetBadCommonData" );
+    addTest(root, &TestUDataFileAccess, "udatatst/TestUDataFileAccess" );
 }
 
 #if 0
@@ -446,6 +449,42 @@ cleanupAndReturn:
     }
     free(filePath);
     return;
+}
+
+    
+static void TestUDataFileAccess(){
+    UErrorCode status=U_ZERO_ERROR;
+
+    /** UDATA_NO_FILES, ICU does not access the file system for data loading. */
+    u_cleanup();
+    udata_setFileAccess(UDATA_NO_FILES,&status);
+    u_init(&status);
+
+    /** UDATA_ONLY_PACKAGES, ICU only loads data from packages, not from single files. */
+    u_cleanup();
+    udata_setFileAccess(UDATA_ONLY_PACKAGES,&status);
+    u_init(&status);
+
+    /** UDATA_PACKAGES_FIRST, ICU loads data from packages first, and only from single files
+        if the data cannot be found in a package. */
+    u_cleanup();
+    udata_setFileAccess(UDATA_PACKAGES_FIRST,&status);
+    u_init(&status);
+    
+
+    /** UDATA_FILES_FIRST, ICU looks for data in single files first, then in packages. (default) */
+    u_cleanup();
+    udata_setFileAccess(UDATA_FILES_FIRST,&status);
+    u_init(&status);
+
+    /** An alias for the default access mode. */
+    u_cleanup();
+    udata_setFileAccess(UDATA_DEFAULT_ACCESS,&status);
+    u_init(&status);
+
+    if(U_FAILURE(status)){
+        log_err(u_errorName(status));
+    }
 }
 
 

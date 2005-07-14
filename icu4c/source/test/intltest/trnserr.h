@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2001-2004, International Business Machines Corporation and
+ * Copyright (c) 2001-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -42,6 +42,10 @@ public:
     void TestRBTErrors(void);
 
     //void TestHexToUniErrors(void);
+
+    // JitterBug 4452, for coverage.  The reason to put this method here is 
+    //  this class is comparable smaller than other Transliterator*Test classes
+    void TestCoverage(void);
 
 };
 

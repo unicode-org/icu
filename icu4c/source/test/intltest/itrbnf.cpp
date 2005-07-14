@@ -180,6 +180,12 @@ IntlTestRBNF::TestAPI() {
         if(!(ruleCtorResult == *formatter)) {
           errln("Formatter constructed from the original rules should be semantically equivalent to the original!");
         }
+        
+        // Jitterbug 4452, for coverage
+        RuleBasedNumberFormat nf(spelloutRules, (UnicodeString)"", Locale::getUS(), perror, status);
+        if(!(nf == *formatter)) {
+          errln("Formatter constructed from the original rules should be semantically equivalent to the original!");
+        }
       }
       ures_close(en);
     }
@@ -291,6 +297,16 @@ IntlTestRBNF::TestAPI() {
   result.remove();
   FieldPosition pos;
   formatter->format((int64_t)4, result, pos, status = U_ZERO_ERROR);
+  if(result != expected) {
+      errln("Formatted 4 int64_t, expected " + expected + " got " + result);
+  } else {
+      logln("Formatted 4 int64_t, expected " + expected + " got " + result);
+  }
+
+  //Jitterbug 4452, for coverage
+  result.remove();
+  FieldPosition pos2;
+  formatter->format((int64_t)4, formatter->getRuleSetName(0), result, pos2, status = U_ZERO_ERROR);
   if(result != expected) {
       errln("Formatted 4 int64_t, expected " + expected + " got " + result);
   } else {

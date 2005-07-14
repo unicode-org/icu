@@ -342,6 +342,12 @@ void RBBIAPITest::TestGetSetAdoptText()
     pos = wordIter1->previous();
     TEST_ASSERT(pos==UBRK_DONE);
 
+    status = U_ZERO_ERROR;
+    UText *gut2 = utext_openUnicodeString(NULL,NULL,&status);
+    wordIter1->getUText(gut2, status);
+    TEST_ASSERT_SUCCESS(status);
+    utext_close(gut2);
+
     utext_close(ut);
     utext_close(ut2);
 

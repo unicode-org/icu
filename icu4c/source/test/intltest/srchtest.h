@@ -1,6 +1,6 @@
 /****************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2001, International Business Machines Corporation and others
+ * Copyright (c) 2001-2005, International Business Machines Corporation and others
  * All Rights Reserved.
  ***************************************************************************/
 
@@ -87,6 +87,7 @@ private:
     void TestContractionCanonical();
     void TestUClassID();
     void TestSubclass();
+    void TestCoverage();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

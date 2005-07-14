@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -47,6 +47,7 @@
 #include "ucaconf.h"
 #include "svccoll.h"
 #include "cmemory.h"
+//#include "rndmcoll.h"
 
 #define TESTCLASS(n,classname)        \
     case n:                           \
@@ -87,6 +88,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(18, UCAConformanceTest);
       TESTCLASS(19, CollationServiceTest);
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
+      //TESTCLASS(21, RandomCollator);
 
       default: name = ""; break;
     }
