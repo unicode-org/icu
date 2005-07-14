@@ -78,6 +78,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(28,TestCurrencyNames);
         CASE(29,TestCurrencyAmount);
         CASE(30,TestCurrencyUnit);
+        CASE(31,TestCoverage);
 
         default: name = ""; break;
     }
@@ -118,15 +119,41 @@ NumberFormatTest::TestAPI(void)
     if (result != "12.00"){
         errln("format int64_t error");
     }
-    result.remove();
-    FieldPosition pos2;
-    test->format(ll, result, pos2);
-    if (result != "12.00"){
-        errln("format int64_t error");
-    }
 
     delete test;  
   }
+}
+
+void 
+NumberFormatTest::TestCoverage(void){
+    class StubNumberForamt :public NumberFormat{
+    public:
+        StubNumberForamt(){};
+        virtual UnicodeString& format(double number,UnicodeString& appendTo,FieldPosition& pos) const {
+            return appendTo;
+        }
+        virtual UnicodeString& format(int32_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+            return appendTo.append(UChar('3'));
+        }
+        virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+            return NumberFormat::format(number, appendTo, pos);
+        }
+        virtual void parse(const UnicodeString& text,
+                        Formattable& result,
+                        ParsePosition& parsePosition) const {}
+        virtual UClassID getDynamicClassID(void) const {
+             static char classID = 0;
+             return (UClassID)&classID; 
+        }
+        virtual Format* clone() const {return NULL;}
+    } stub;
+    
+    UnicodeString agent("agent");
+    FieldPosition pos;
+    int64_t num = 4;
+    if (stub.format(num, agent, pos) != UnicodeString("agent3")){
+        errln("NumberFormat::format(int64, UnicodString&, FieldPosition&) should delegate to (int32, ,)");
+    };
 }
 
 // Test various patterns
@@ -1510,6 +1537,11 @@ void NumberFormatTest::TestCurrencyAmount(void){
     CurrencyAmount ca2(ca);
     if (!(ca2 == ca)){
         errln("CurrencyAmount copy constructed object should be same");
+    }
+
+    ca2=ca;
+    if (!(ca2 == ca)){
+        errln("CurrencyAmount assigned object should be same");
     }
     
     CurrencyAmount *ca3 = (CurrencyAmount *)ca.clone();

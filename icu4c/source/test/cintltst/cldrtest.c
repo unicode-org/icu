@@ -1140,6 +1140,39 @@ static void TestExemplarSet(void){
     }
 }
 
+static void TestCoverage(void){
+    ULocaleDataDelimiterType types[] = {
+     ULOCDATA_QUOTATION_START,     /* Quotation start */
+     ULOCDATA_QUOTATION_END,       /* Quotation end */
+     ULOCDATA_ALT_QUOTATION_START, /* Alternate quotation start */
+     ULOCDATA_ALT_QUOTATION_END,   /* Alternate quotation end */
+     ULOCDATA_DELIMITER_COUNT
+    };
+    int i;
+    UBool sub;
+    UErrorCode status = U_ZERO_ERROR;
+    ULocaleData *uld = ulocdata_open(uloc_getDefault(), &status);
+
+    if(U_FAILURE(status)){
+        log_err("ulocdata_open error");
+        return;
+    }
+
+
+    for(i = 0; i < ULOCDATA_DELIMITER_COUNT; i++){
+        UErrorCode status = U_ZERO_ERROR;
+        UChar result[32] = {0,};
+        ulocdata_getDelimiter(uld, types[i], result, 32, &status);
+        if (U_FAILURE(status)){
+            log_err("ulocdata_getgetDelimiter error with type %d", types[i]);
+        }
+    }
+
+    sub = ulocdata_getNoSubstitute(uld);
+    ulocdata_setNoSubstitute(uld,sub);
+    ulocdata_close(uld);
+}
+
 static void TestCurrencyList(void){
 #if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1186,4 +1219,5 @@ void addCLDRTest(TestNode** root)
     TESTCASE(VerifyTranslation);
     TESTCASE(TestExemplarSet);
     TESTCASE(TestCurrencyList);
+    TESTCASE(TestCoverage);
 }
