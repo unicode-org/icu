@@ -242,6 +242,7 @@ static void TestAPI(void) {
                    &status);
         TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
+        utext_close(uta);
     }
 
 
