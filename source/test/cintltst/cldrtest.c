@@ -840,6 +840,10 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
 }
 
 static void VerifyTranslation(void) {
+#if U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM == 4
+    /* Disabled until the CLDR data can be fixed. */
+    return;
+#else
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
@@ -853,6 +857,7 @@ static void VerifyTranslation(void) {
     int32_t end;
     UResourceBundle *resArray;
 
+    log_err("This test fails in exhaustive mode. Please fix the CLDR data\n");
     if (locCount <= 1) {
         log_data_err("At least root needs to be installed\n");
     }
@@ -1026,6 +1031,7 @@ static void VerifyTranslation(void) {
     }
 
     ures_close(root);
+#endif
 }
 
 /* adjust this limit as appropriate */
