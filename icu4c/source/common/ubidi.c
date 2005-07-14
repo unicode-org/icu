@@ -286,7 +286,7 @@ getDirProps(UBiDi *pBiDi) {
     int32_t i=0, i0, i1, length=pBiDi->length;
     Flags flags=0;      /* collect all directionalities in the text */
     UChar32 uchar;
-    DirProp dirProp, paraDirDefault;
+    DirProp dirProp = 0, paraDirDefault = 0; /* initialize to avoid compiler warnings */
     UBool isDefaultLevel=IS_DEFAULT_LEVEL(pBiDi->paraLevel);
     UBool paraLevelStillDefault=FALSE;  /* flag for real value not set */
 
