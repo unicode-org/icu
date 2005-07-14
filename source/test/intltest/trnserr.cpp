@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2001-2004, International Business Machines Corporation and
+ * Copyright (c) 2001-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -43,6 +43,7 @@ TransliteratorErrorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(0,TestTransliteratorErrors);
         TESTCASE(1, TestUnicodeSetErrors);
         TESTCASE(2, TestRBTErrors);
+        TESTCASE(3, TestCoverage);
         //TESTCASE(3, TestUniToHexErrors);
         //TESTCASE(4, TestHexToUniErrors);
         // TODO: Add a subclass to test clone().
@@ -263,5 +264,24 @@ void TransliteratorErrorTest::TestRBTErrors() {
 //    }
 //    delete t;
 //}
+
+void TransliteratorErrorTest::TestCoverage() {
+    class StubTransliterator: public Transliterator{
+    public:
+        StubTransliterator(): Transliterator(UNICODE_STRING_SIMPLE("Any-Null"), 0) {}
+        virtual void handleTransliterate(Replaceable& ,UTransPosition& offsets,UBool) const {
+            offsets.start = offsets.limit;
+        }
+
+        virtual UClassID getDynamicClassID() const{
+            static char classID = 0;
+            return (UClassID)&classID; 
+        }
+    } stub;
+
+    if (stub.clone() != 0){
+        errln("FAIL: default Transliterator::clone() should retrun 0");
+    }
+}
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */

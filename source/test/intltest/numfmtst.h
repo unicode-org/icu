@@ -28,6 +28,9 @@ class NumberFormatTest: public CalendarTimeZoneTest {
      * Test APIs (to increase code coverage)
      */   
     void TestAPI(void);
+
+    void TestCoverage(void);
+
     /**
      * Test the handling of quotes
      **/
