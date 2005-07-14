@@ -3220,7 +3220,8 @@ void RBBITest::TestLineBreaks(void)
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
-    UChar         str[50];
+    const int32_t  STRSIZE = 50;
+    UChar         str[STRSIZE];
     static const char *strlist[] =
     {
      "\\u0668\\u192b\\u002f\\u2034\\ufe39\\u00b4\\u0cc8\\u2571\\u200b\\u003f",
@@ -3268,7 +3269,13 @@ void RBBITest::TestLineBreaks(void)
     }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
-        u_unescape(strlist[loop], str, 20);
+        int32_t t = u_unescape(strlist[loop], str, STRSIZE);
+        if (t >= STRSIZE) {
+            TEST_ASSERT(FALSE);
+            continue;
+        }
+
+    
         UnicodeString ustr(str);
         RBBILineMonkey monkey;
         if (U_FAILURE(monkey.deferredStatus)) {
