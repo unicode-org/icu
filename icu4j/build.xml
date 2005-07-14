@@ -1006,13 +1006,22 @@
      -->    
     <target name="copyStringPrepData" depends="init">
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-            <patternset includes="**/*.spp"/>
+            <patternset>
+                <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
+                <include name="**/*.spp"/>
+                <include name="**/ubidi.icu"/>
+                <include name="**/ucase.icu"/>
+                <include name="**/unorm.icu"/>
+                <include name="**/uprops.icu"/>
+                <include name="**/pnames.icu"/>
+                <include name="**/unames.icu"/>
+            </patternset>
         </unjar>
     </target>
 
     <target name="stringPrep" depends="init,normalizer,copyStringPrepData" description="modular build of stringprep services">
         <javac includes="com/ibm/icu/text/*StringPrep*.java,com/ibm/icu/text/*IDNA*.java,com/ibm/icu/impl/*StringPrep*.java"
-            excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
+            excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java, com/ibm/icu/impl/Calendar*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             source="${icu4j.javac.source}"
@@ -1078,5 +1087,6 @@
             basedir="${build.dir}"
             manifest="${cldr.util.manifest}"/>
      </target>
-          
+     <!--Target for building jars -->
+     <target name="distJars" depends="jarSrc, jar, jarDocs" />    
 </project>
