@@ -1229,10 +1229,10 @@ main(int argc, char* argv[])
     endTime = uprv_getUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
-        ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
-        ((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
-        ((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
-        (diffTime%U_MILLIS_PER_SECOND));
+        (int)((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
+        (int)((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
+        (int)((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
+        (int)(diffTime%U_MILLIS_PER_SECOND));
     return major.getErrors();
 }
 
