@@ -785,7 +785,7 @@ void TestCloneBinary(){
         return;
     }
 
-    /* hwo to check binary result ? */
+    /* how to check binary result ? */
 
     c = ucol_openBinary(buffer, size, col, &err);
     if(U_FAILURE(err)) {
@@ -807,7 +807,8 @@ void TestCloneBinary(){
         free(k2);
     }
     free(buffer);
-    return;
+    ucol_close(c);
+    ucol_close(col);
 }
 /*
 ----------------------------------------------------------------------------

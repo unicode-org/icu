@@ -700,7 +700,7 @@ static void TestBreakIteratorUText(void) {
     pos = ubrk_next(bi);
     TEST_ASSERT(pos == UBRK_DONE);
     ubrk_close(bi);
-    utext_close(bi);
+    utext_close(ut);
 }
 
 
