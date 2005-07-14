@@ -238,6 +238,34 @@ public class TimeScaleAPITest extends TestFmwk
         	logln("PASS: UniversalTimeScale.toBigDecimal failed as expected");
         }
     }
+
+    public void TestToBigDecimalTrunc()
+    {
+        BigDecimal bigZero = new BigDecimal(0);
+        BigDecimal result;
+        
+        try {
+            result = UniversalTimeScale.toBigDecimalTrunc(bigZero, -1);
+            errln("toBigDecimalTrunc(bigZero, -1) did not throw IllegalArgumentException.");
+        } catch (IllegalArgumentException iae) {
+        	logln("PASS: UniversalTimeScale.toBigDecimalTrunc failed as expected");
+        }
+        
+        for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
+            try {
+                result = UniversalTimeScale.toBigDecimalTrunc(bigZero, scale);
+            } catch (IllegalArgumentException iae) {
+                errln("toBigDecimalTrunc(bigZero, " + scale + ") threw IllegalArgumentException.");
+            }
+        }
+        
+        try {
+            result = UniversalTimeScale.toBigDecimalTrunc(bigZero, UniversalTimeScale.MAX_SCALE);
+            errln("toBigDecimalTrunc(bigZero, MAX_SCALE) did not throw IllegalArgumetException.");
+        } catch (IllegalArgumentException iae) {
+        	logln("PASS: UniversalTimeScale.toBigDecimalTrunc failed as expected");
+        }
+    }
     
     public void TestToBigDecimalFromLong()
     {

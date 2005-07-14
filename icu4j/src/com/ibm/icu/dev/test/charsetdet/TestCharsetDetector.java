@@ -244,6 +244,16 @@ public class TestCharsetDetector extends TestFmwk
         if (! m.getName().equals("UTF-16LE")) {
             errln("Encoding detection failure: expected UTF-16LE, got " + m.getName());
         }
+
+        // Jitterbug 4451, for coverage
+        int confidence = m.getConfidence(); 
+        if(confidence != 100){
+            errln("Did not get the expected confidence level " + confidence);
+        }
+        int matchType = m.getMatchType();
+        if(matchType != 0){
+            errln("Did not get the expected matchType level " + matchType);
+        }
 }
     
     public void TestDetection()

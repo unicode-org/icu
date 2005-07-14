@@ -48,7 +48,7 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
 
         char sigDigit = en.getSignificantDigit();
-        fr.setZeroDigit(sigDigit); 
+        fr.setSignificantDigit(sigDigit); 
         if(fr.getSignificantDigit() != en.getSignificantDigit()) {
             errln("ERROR: get/set SignificantDigit failed");
         }

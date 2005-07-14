@@ -151,6 +151,18 @@ public class CurrencyTest extends TestFmwk {
         // TODO add more tests later
     }
 
+    public void TestCoverage() {
+        Currency usd = Currency.getInstance("USD");
+        if (!noData()) {
+        assertEquals("USD.getSymbol()",
+                "$",
+                usd.getSymbol());
+        }
+        assertEquals("USD.getLocale()",
+        		ULocale.ROOT,
+				usd.getLocale(null));
+    }
+
     public void TestCurrencyKeyword() {
     ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
     Currency currency = Currency.getInstance(locale);
