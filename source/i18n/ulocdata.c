@@ -134,8 +134,10 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
         *status = localStatus;
     }
 
-    if (U_FAILURE(*status))
+    if (U_FAILURE(*status)){
+        ures_close(delimiterBundle);
         return 0;
+    }
 
     delimiter = ures_getStringByKey(delimiterBundle, delimiterKeys[type], &len, &localStatus);
 
@@ -148,11 +150,15 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
         *status = localStatus;
     }
     
-    if (U_FAILURE(*status))
+    if (U_FAILURE(*status)){
+        ures_close(delimiterBundle);
+        ures_close(delimiter);
         return 0;
+    }
+        
 
     u_strncpy(result,delimiter,resultLength);
-
+    ures_close(delimiterBundle);
     return len;
 }
 
