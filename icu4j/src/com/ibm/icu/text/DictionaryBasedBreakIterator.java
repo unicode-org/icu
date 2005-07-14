@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -104,26 +104,26 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator_Old {
     protected RuleBasedBreakIterator_Old.Builder makeBuilder() {
         return new Builder();
     }
-
-/** @internal */
-public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
-super.writeTablesToFile(file, littleEndian);
-
-DataOutputStream out = new DataOutputStream(file);
-
-// --- write index to fields (there's only one entry, but this allows subclassing of this class)
-writeSwappedInt((short)8, out, littleEndian);
-writeSwappedInt((short)(categoryFlags.length + 3 & 0x0f), out, littleEndian);
-
-for (int i = 0; i < categoryFlags.length; i++)
-    out.writeBoolean(categoryFlags[i]);
-switch (categoryFlags.length % 4) {
-    case 1: out.write(0);
-    case 2: out.write(0);
-    case 3: out.write(0);
-    default: break;
-}
-}
+    
+    /** @internal */
+    public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
+        super.writeTablesToFile(file, littleEndian);
+        
+        DataOutputStream out = new DataOutputStream(file);
+        
+        // --- write index to fields (there's only one entry, but this allows subclassing of this class)
+        writeSwappedInt((short)8, out, littleEndian);
+        writeSwappedInt((short)(categoryFlags.length + 3 & 0x0f), out, littleEndian);
+        
+        for (int i = 0; i < categoryFlags.length; i++)
+            out.writeBoolean(categoryFlags[i]);
+        switch (categoryFlags.length % 4) {
+            case 1: out.write(0);
+            case 2: out.write(0);
+            case 3: out.write(0);
+            default: break;
+        }
+    }
 
     /** @stable ICU 2.0 */
     public void setText(CharacterIterator newText) {

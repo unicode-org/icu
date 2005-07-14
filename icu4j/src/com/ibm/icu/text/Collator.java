@@ -358,7 +358,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
          * @draft ICU 3.2
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public Collator createCollator(ULocale loc) {
             return createCollator(loc.toLocale());
@@ -375,7 +375,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @return the newly created collator.
          * @stable ICU 2.6
          */
-        public Collator createCollator(Locale loc) {
+         public Collator createCollator(Locale loc) {
             return createCollator(ULocale.forLocale(loc));
         }
 
@@ -398,7 +398,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
          * @draft ICU 3.2
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
             if (visible()) {
