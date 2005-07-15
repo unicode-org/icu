@@ -1046,7 +1046,7 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
      * Supply parameters for generating implicit CEs
      */
 U_CAPI void U_EXPORT2
-uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status) {
+uprv_uca_initImplicitConstants(int32_t, int32_t, UErrorCode *status) {
     // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
     //initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
   initImplicitConstants(minImplicitPrimary, maxImplicitPrimary, 0x04, 0xFE, 1, 1, status);
