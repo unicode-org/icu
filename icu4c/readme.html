@@ -29,7 +29,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.4
     ReadMe</h1>
 
-    <p>Version: 2005-June-06<br>
+    <p>Version: 2005-July-15<br>
      Copyright &copy; 1997-2005 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -72,7 +72,7 @@
         <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
         <ul class="TOC">
-          <li><a href="#ImportantNotesCPlusPlus">Using ICU in a Multithreaded
+          <li><a href="#ImportantNotesMultithreaded">Using ICU in a Multithreaded
           Environment</a></li>
 
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
@@ -90,9 +90,6 @@
 
           <li><a href="#PlatformDependenciesImpl">Platform Dependent
           Implementations</a></li>
-
-          <li><a href="#PlatformDependenciesBuildOrder">Build Order Without
-          Using ICU's Makefiles</a></li>
         </ul>
       </li>
     </ul>
@@ -225,20 +222,14 @@
     "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.4
     download page</a>.</p>
 
-    <h3><a name="News_putil_h" id="News_putil_h">Changes to putil.h and
-    utypes.h</a></h3>
+    <h3><a name="News_u_init" id="News_u_init">Changes to thread safety
+    initialization and data loading</a></h3>
 
-    <p>Starting in ICU 3.2, the unicode/utypes.h and unicode/putil.h headers
-    are no longer circularly dependent on each other. This means that if you
-    use any of the functions from unicode/putil.h and only included
-    unicode/utypes.h, you will now have to include unicode/putil.h too. No
-    stable API functions have been removed from these headers, but some
-    internal function declarations (marked with @internal) have been moved to
-    internal headers.</p>
-
-    <p>This change was announced on the icu mailing list, and it was done to
-    fix some header dependency issues that appeared while trying to make some
-    changes to the utf.h header macros.</p>
+    <p>Previously, in order to ensure that ICU was thread safe, applications
+    had to use u_init() before using ICU in multiple threads. This requirement
+    is no longer needed. Please refer to the readme section called <a
+    href="#ImportantNotesMultithreaded">Using ICU in a Multithreaded
+    Environment</a> for details.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -517,14 +508,6 @@
       </tr>
 
       <tr>
-        <td>Windows 2000 with Cygwin</td>
-
-        <td>Microsoft Visual C++ 6.0</td>
-
-        <td>Reference platform</td>
-      </tr>
-
-      <tr>
         <td>Windows XP</td>
 
         <td>Microsoft Visual C++ .NET 2003 (7.1)</td>
@@ -566,22 +549,6 @@
       </tr>
 
       <tr>
-        <td>Windows XP with Cygwin</td>
-
-        <td>Microsoft Visual C++ .NET 2002 (7.0)</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>Windows 2000/XP</td>
-
-        <td>Microsoft Visual C++ 6.0</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
         <td>Red Hat Linux 7.2</td>
 
         <td>gcc 2.96</td>
@@ -598,10 +565,25 @@
       </tr>
 
       <tr>
+        <td>Windows 2000/XP with Cygwin</td>
+
+        <td>Microsoft Visual C++ 6.0</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Windows XP with Cygwin</td>
+
+        <td>Microsoft Visual C++ .NET 2002 (7.0)</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
         <td>Mac OS X (10.2)</td>
 
-        <td>gcc 3.1<br>
-         (Developer Tools, July 2002)</td>
+        <td>gcc 3.1</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -623,14 +605,6 @@
       </tr>
 
       <tr>
-        <td>FreeBSD 4.8</td>
-
-        <td>gcc 2.95.4</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
         <td>AIX 5.1.0 L</td>
 
         <td>Visual Age C++ 5.0</td>
@@ -639,9 +613,9 @@
       </tr>
 
       <tr>
-        <td>z/OS 1.3</td>
+        <td>FreeBSD 4.8</td>
 
-        <td>cxx 1.3</td>
+        <td>gcc 2.95.4</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -650,6 +624,14 @@
         <td>i5/OS (OS/400 iSeries) V5R3</td>
 
         <td>iCC</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>z/OS 1.4</td>
+
+        <td>cxx 1.4</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -682,6 +664,14 @@
         <td>Windows 98</td>
 
         <td>Microsoft Visual C++ 6.0</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>MinGW</td>
+
+        <td>gcc</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -761,7 +751,7 @@
     <p>Building International Components for Unicode requires:</p>
 
     <ul>
-      <li>Microsoft NT 4.0 and above, or Windows 98 and above</li>
+      <li>Microsoft Windows 2000 or above</li>
 
       <li>Microsoft Visual C++ 2003</li>
 
@@ -1298,7 +1288,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     products. Usually only the libraries need to be considered for
     packaging.</p>
 
-    <p>On UNIX, you should have used "<tt>gmake install</tt>" to make it easier
+    <p>On UNIX, you should use "<tt>gmake install</tt>" to make it easier
     to develop and package ICU. The bin, lib and include directories are needed
     to develop applications that use ICU. These directories will be created
     relative to the "<tt>--prefix=</tt><i>dir</i>" configure option (See the <a
@@ -1432,8 +1422,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <h2><a name="ImportantNotes" href="#ImportantNotes" id=
     "ImportantNotes">Important Notes About Using ICU</a></h2>
 
-    <h3><a name="ImportantNotesCPlusPlus" href="#ImportantNotesCPlusPlus" id=
-    "ImportantNotesCPlusPlus">Using ICU in a Multithreaded Environment</a></h3>
+    <h3><a name="ImportantNotesMultithreaded" href="#ImportantNotesMultithreaded" id=
+    "ImportantNotesMultithreaded">Using ICU in a Multithreaded Environment</a></h3>
 
     <p>Some versions of ICU require calling the <code>u_init()</code> function
     from <code>uclean.h</code> to ensure that ICU is initialized properly. In
@@ -1603,18 +1593,11 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     "ImportantNotesWindowsPath">Changing your PATH</a></h4>
 
     <ul>
-      <li><strong>Windows 2000</strong>: Use the System Icon in the Control
+      <li><strong>Windows 2000/XP</strong>: Use the System Icon in the Control
       Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
       button. Select the variable PATH in the lower box, and select the lower
       "Edit..." button. In the "Variable Value" box, append the string
       ";<i>&lt;ICU&gt;</i>\bin" to the end of the path string. If there is
-      nothing there, just type in "<i>&lt;ICU&gt;</i>\bin". Click the Set
-      button, then the OK button.</li>
-
-      <li><strong>Windows NT</strong>: Use the System Icon in the Control
-      Panel. Pick the "Environment" tab, and select the variable PATH in the
-      lower box. In the "value" box, append the string
-      ";<i>&lt;ICU&gt;</i>\bin" at the end of the path string. If there is
       nothing there, just type in "<i>&lt;ICU&gt;</i>\bin". Click the Set
       button, then the OK button.</li>
 
@@ -1651,8 +1634,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     rpath also means that when building a new version of ICU you should not
     have an older version installed in the same place as the new version's
     installation directory, as the older libraries will used during the build,
-    instead of the new ones, likely leading to an incorrectly build ICU. (This
-    is the proper behavior of rpath.)</p>
+    instead of the new ones, likely leading to an incorrectly build ICU. This
+    is the proper behavior of rpath.</p>
 
     <h2><a name="PlatformDependencies" href="#PlatformDependencies" id=
     "PlatformDependencies">Platform Dependencies</a></h2>
@@ -1805,63 +1788,6 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       of the scope of these files. When the source code gets updated in the
       future, these #ifdef's can cause testing problems for your platform.</li>
     </ul>
-
-    <h3><a name="PlatformDependenciesBuildOrder" href=
-    "#PlatformDependenciesBuildOrder" id="PlatformDependenciesBuildOrder">Build
-    Order Without Using ICU's Makefiles</a></h3>
-
-    <p>It is possible to build each library individually without our Makefiles.
-    They must be built in the following order:<br>
-    </p>
-
-    <ol>
-      <li>stubdata</li>
-
-      <li>common</li>
-
-      <li>i18n</li>
-
-      <li>toolutil</li>
-
-      <li>makeconv</li>
-
-      <li>gencnval</li>
-
-      <li>genprops</li>
-
-      <li>gencase</li>
-
-      <li>gennames</li>
-
-      <li>genpname</li>
-
-      <li>gennorm</li>
-
-      <li>gensprep</li>
-
-      <li>genbrk</li>
-
-      <li>genuca</li>
-
-      <li>genrb</li>
-
-      <li>genccode</li>
-
-      <li>gencmn</li>
-
-      <li>pkgdata</li>
-
-      <li>makedata (a project on Windows, or source/data/Makefile on UNIX)</li>
-
-      <li>layout (optional)</li>
-
-      <li>layoutex (optional)</li>
-
-      <li>ctestfw, intltest, iotest and cintltst, if you want to run the test
-      suite.</li>
-
-      <li>uconv, icuswap, derb and icuio can also be optionally built.</li>
-    </ol>
     <hr>
 
     <p>Copyright &copy; 1997-2005 International Business Machines Corporation
