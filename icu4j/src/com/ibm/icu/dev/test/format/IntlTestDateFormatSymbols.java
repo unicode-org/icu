@@ -53,17 +53,17 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         int[] width = {DateFormatSymbols.WIDE, DateFormatSymbols.ABBREVIATED, DateFormatSymbols.NARROW};
         
         for (int i = 0; i < context.length; i++) {
-			for (int j = 0; j < width.length; j++) {
-				String[] month =symbol.getMonths(context[i],width[j]);
-		        int cnt = month.length;
+            for (int j = 0; j < width.length; j++) {
+                String[] month =symbol.getMonths(context[i],width[j]);
+                int cnt = month.length;
 
-		        logln("size = " + cnt);
+                logln("size = " + cnt);
 
-		        for (int k = 0; k < month.length; k++) {
-		            logln(month[k]);
-				}
-			}
-		}
+                for (int k = 0; k < month.length; k++) {
+                    logln(month[k]);
+                }
+            }
+        }
     }
     
     public void TestGetWeekdays2(){
@@ -74,18 +74,18 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         int[] width = {DateFormatSymbols.WIDE, DateFormatSymbols.ABBREVIATED, DateFormatSymbols.NARROW};
         
         for (int i = 0; i < context.length; i++) {
-			for (int j = 0; j < width.length; j++) {
-				String[] wd =symbol.getWeekdays(context[i],width[j]);
-		        int cnt = wd.length;
+            for (int j = 0; j < width.length; j++) {
+                String[] wd =symbol.getWeekdays(context[i],width[j]);
+                int cnt = wd.length;
 
-		        logln("size = " + cnt);
+                logln("size = " + cnt);
 
-		        for (int k = 0; k < wd.length; k++) {
-		            logln(wd[k]);
-				}
-			}
-		}
-    	
+                for (int k = 0; k < wd.length; k++) {
+                    logln(wd[k]);
+                }
+            }
+        }
+        
     }
     
     public void TestGetEraNames(){
@@ -93,9 +93,9 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         symbol=new DateFormatSymbols(Locale.getDefault());
         String[] s = symbol.getEraNames();
         for (int i = 0; i < s.length; i++) {
-			logln(s[i]);
-		}
-    	
+            logln(s[i]);
+        }
+        
     }
 
     // Test the API of DateFormatSymbols; primarily a simple get/set set.

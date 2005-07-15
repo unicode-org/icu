@@ -209,13 +209,13 @@ public class EthiopicTest extends CalendarTest
     public void TestJD(){
         int jd = EthiopicCalendar.EthiopicToJD(1567,8,9);
         Integer[] l = EthiopicCalendar.getDateFromJD(jd);
-    	if (l[0].intValue() == 1567 &&
-    		l[1].intValue() == 8 &&
-			l[2].intValue() == 9){
-    		logln("EthiopicCalendar.getDateFromJD tested");
-    	} else {
-    		errln("EthiopicCalendar.getDateFromJD failed");
-    	}
+        if (l[0].intValue() == 1567 &&
+            l[1].intValue() == 8 &&
+            l[2].intValue() == 9){
+            logln("EthiopicCalendar.getDateFromJD tested");
+        } else {
+            errln("EthiopicCalendar.getDateFromJD failed");
+        }
     }
 
     public void TestCoverage() {

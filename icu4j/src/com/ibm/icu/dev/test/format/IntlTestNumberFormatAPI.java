@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -17,7 +17,12 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.ULocale;
+
 import java.util.Locale;
+import java.util.Set;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.ParseException;
@@ -197,5 +202,24 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 //        catch (Exception e) {
 //            errln("ERROR: Couldn't create a DecimalFormat");
 //        }
+    }
+    
+    // Jitterbug 4451, for coverage
+    public void TestCoverage(){
+        class StubNumberFormat extends NumberFormat{
+            public void run(){
+                String p = NumberFormat.getPattern(ULocale.getDefault().toLocale(),0);
+                if (!p.equals(NumberFormat.getPattern(ULocale.getDefault(),0))){
+                    errln("NumberFormat.getPattern(Locale, int) should delegate to (ULocale,)");
+                }
+            }
+            public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            public Number parse(String text, ParsePosition parsePosition) {return null;}
+        }
+        new StubNumberFormat().run();
     }
 }

@@ -979,23 +979,23 @@ public class ULocaleTest extends TestFmwk {
                 }
             }
         }
-    	ULocale loc1 = new ULocale("en_US_BROOKLYN");
-    	ULocale loc2 = new ULocale("en","US","BROOKLYN");
-    	if (!loc2.equals(loc1)){
-    		errln("ULocale.ULocale(String a, String b, String c)");
-    	}
-    	
-    	ULocale loc3 = new ULocale("en_US");
-    	ULocale loc4 = new ULocale("en","US");
-    	if (!loc4.equals(loc3)){
-    		errln("ULocale.ULocale(String a, String b)");
-    	}
-    	
-    	ULocale loc5 = (ULocale) loc4.clone();
-    	if (!loc5.equals(loc4)){
-    		errln("ULocale.clone should get the same ULocale");
-    	}
-    	ULocale.getISOCountries();	// To check the result ?!
+        ULocale loc1 = new ULocale("en_US_BROOKLYN");
+        ULocale loc2 = new ULocale("en","US","BROOKLYN");
+        if (!loc2.equals(loc1)){
+            errln("ULocale.ULocale(String a, String b, String c)");
+        }
+        
+        ULocale loc3 = new ULocale("en_US");
+        ULocale loc4 = new ULocale("en","US");
+        if (!loc4.equals(loc3)){
+            errln("ULocale.ULocale(String a, String b)");
+        }
+        
+        ULocale loc5 = (ULocale) loc4.clone();
+        if (!loc5.equals(loc4)){
+            errln("ULocale.clone should get the same ULocale");
+        }
+        ULocale.getISOCountries();	// To check the result ?!
     }
 
     public void TestBamBm() {
@@ -1189,8 +1189,8 @@ public class ULocaleTest extends TestFmwk {
     }
     
     private ULocale[] StringToULocaleArray(String acceptLanguageList){
-    	//following code is copied from 
-    	//ULocale.acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, boolean[] fallback)
+        //following code is copied from 
+        //ULocale.acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, boolean[] fallback)
         class ULocaleAcceptLanguageQ implements Comparable {
             private double q;
             private double serial;
@@ -1268,9 +1268,9 @@ public class ULocaleTest extends TestFmwk {
         
         // 2. pull out the map 
         ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
-    	return acceptList;
+        return acceptList;
     }
-	
+    
     public void TestAcceptLanguage2() {
         for(int i = 0 ; i < (ACCEPT_LANGUAGE_HTTP.length); i++) {
             Boolean expectBoolean = new Boolean(ACCEPT_LANGUAGE_TESTS[i][1]);
