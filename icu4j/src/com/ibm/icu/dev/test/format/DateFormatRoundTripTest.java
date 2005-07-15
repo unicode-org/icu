@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -150,7 +150,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
         // patterns we have, but it may be a problem later.
     
         boolean hasEra = (pat.indexOf("G") != -1);
-        boolean hasZone = (pat.indexOf("z") != -1);
+        boolean hasZone = (pat.indexOf("Z") != -1) || (pat.indexOf("z") != -1);
     
         // Because patterns contain incomplete data representing the Date,
         // we must be careful of how we do the roundtrip.  We start with
