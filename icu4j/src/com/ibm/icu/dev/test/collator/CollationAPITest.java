@@ -1071,7 +1071,7 @@ public class CollationAPITest extends TestFmwk {
         }
     }
     
-    public void TestGetContractions() {
+    public void TestGetContractions()throws Exception {
         /*        static struct {
          const char* locale;
          const char* inConts;
@@ -1128,22 +1128,18 @@ public class CollationAPITest extends TestFmwk {
         UnicodeSet set = new UnicodeSet();
         
         for(i = 0; i < tests.length; i++) {
-            try {
-                log("Testing locale: "+ tests[i][0]+"\n");
-                coll = (RuleBasedCollator)Collator.getInstance(new ULocale(tests[i][0]));
-                coll.getContractionsAndExpansions(conts, exp, true);
-                log("Contractions "+conts.size()+":\n"+conts.toPattern(true)+"\n");
-                doSetsTest(conts, set, tests[i][1], tests[i][2]);
-                log("Expansions "+exp.size()+":\n"+exp.toPattern(true)+"\n");
-                doSetsTest(exp, set, tests[i][3], tests[i][4]);
-                
-                // No unsafe set in ICU4J
-                //noConts = ucol_getUnsafeSet(coll, conts, &status);
-                //doSetsTest(conts, set, tests[i][5], tests[i][6]);
-                //log_verbose("Unsafes "+conts.size()+":\n"+conts.toPattern(true)+"\n");
-            } catch (Exception e) {
-                errln("Unhandled exception: "+ e.toString());
-            }
+            logln("Testing locale: "+ tests[i][0]);
+            coll = (RuleBasedCollator)Collator.getInstance(new ULocale(tests[i][0]));
+            coll.getContractionsAndExpansions(conts, exp, true);
+            logln("Contractions "+conts.size()+":\n"+conts.toPattern(true));
+            doSetsTest(conts, set, tests[i][1], tests[i][2]);
+            logln("Expansions "+exp.size()+":\n"+exp.toPattern(true));
+            doSetsTest(exp, set, tests[i][3], tests[i][4]);
+            
+            // No unsafe set in ICU4J
+            //noConts = ucol_getUnsafeSet(coll, conts, &status);
+            //doSetsTest(conts, set, tests[i][5], tests[i][6]);
+            //log_verbose("Unsafes "+conts.size()+":\n"+conts.toPattern(true)+"\n");
         }
     }
 }
