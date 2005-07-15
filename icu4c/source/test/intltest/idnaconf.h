@@ -30,9 +30,9 @@ private:
     int len ;
     int curOffset;
 
-    bool  ReadAndConvertFile();
+    UBool  ReadAndConvertFile();
     int isNewlineMark();
-    bool ReadOneLine(UnicodeString&);
+    UBool ReadOneLine(UnicodeString&);
 
     // for parsing one test record
     UnicodeString id;   // for debug & error output
