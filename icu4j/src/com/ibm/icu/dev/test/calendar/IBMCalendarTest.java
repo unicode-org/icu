@@ -14,6 +14,7 @@ import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.*;
 
@@ -39,7 +40,7 @@ public class IBMCalendarTest extends CalendarTest {
      */
     public void TestWeekend() {
         SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd yyyy G HH:mm:ss.SSS");
-        
+
         // NOTE
         // This test tests for specific locale data.  This is probably okay
         // as far as US data is concerned, but if the Arabic/Bahrain data
@@ -133,7 +134,7 @@ public class IBMCalendarTest extends CalendarTest {
      * Run a test of a quasi-Gregorian calendar.  This is a calendar
      * that behaves like a Gregorian but has different year/era mappings.
      * The int[] data array should have the format:
-     * 
+     *
      * { era, year, gregorianYear, month, dayOfMonth, ... }
      */
     void quasiGregorianTest(Calendar cal, int[] data) {
@@ -196,22 +197,22 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     public void TestBuddhistCoverage() {
-    {    
+    {
         // new BuddhistCalendar(ULocale)
         BuddhistCalendar cal = new BuddhistCalendar(ULocale.getDefault());
-        if(cal == null){        
+        if(cal == null){
             errln("could not create BuddhistCalendar with ULocale");
         }
     }
-    
-    {    
+
+    {
         // new BuddhistCalendar(TimeZone,ULocale)
         BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(),ULocale.getDefault());
-        if(cal == null){        
+        if(cal == null){
             errln("could not create BuddhistCalendar with TimeZone ULocale");
         }
-    }    
-    
+    }
+
     {
         // new BuddhistCalendar(TimeZone)
         BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
@@ -219,7 +220,7 @@ public class IBMCalendarTest extends CalendarTest {
             errln("could not create BuddhistCalendar with TimeZone");
         }
     }
-    
+
     {
         // new BuddhistCalendar(Locale)
         BuddhistCalendar cal = new BuddhistCalendar(Locale.getDefault());
@@ -325,7 +326,7 @@ public class IBMCalendarTest extends CalendarTest {
         cal.set(2004, Calendar.JANUARY, 1);
         doLimitsTest(new GregorianCalendar(), null, cal.getTime(), -10);
     }
-    
+
     /**
      * Test behavior of fieldDifference around leap years.  Also test a large
      * field difference to check binary search.
@@ -391,13 +392,13 @@ public class IBMCalendarTest extends CalendarTest {
         // In pass one, change the first day of week so that the weeks
         // shift in August 2001.  In pass two, change the minimal days
         // in the first week so that the weeks shift in August 2001.
-        //     August 2001     
+        //     August 2001
         // Su Mo Tu We Th Fr Sa
         //           1  2  3  4
         //  5  6  7  8  9 10 11
         // 12 13 14 15 16 17 18
         // 19 20 21 22 23 24 25
-        // 26 27 28 29 30 31   
+        // 26 27 28 29 30 31
         for (int pass=0; pass<2; ++pass) {
             if (pass==0) {
                 cal.setFirstDayOfWeek(Calendar.WEDNESDAY);
@@ -511,13 +512,13 @@ public class IBMCalendarTest extends CalendarTest {
             }
         }
 
-        //      July 2001            August 2001           January 2002    
+        //      July 2001            August 2001           January 2002
         // Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
         //  1  2  3  4  5  6  7            1  2  3  4         1  2  3  4  5
         //  8  9 10 11 12 13 14   5  6  7  8  9 10 11   6  7  8  9 10 11 12
         // 15 16 17 18 19 20 21  12 13 14 15 16 17 18  13 14 15 16 17 18 19
         // 22 23 24 25 26 27 28  19 20 21 22 23 24 25  20 21 22 23 24 25 26
-        // 29 30 31              26 27 28 29 30 31     27 28 29 30 31      
+        // 29 30 31              26 27 28 29 30 31     27 28 29 30 31
         TestData[] tests = {
             new TestData(2001, 8,  6,  2001,8,2,Calendar.MONDAY,    "2001 08 02 Mon", null),
             new TestData(2001, 8,  7,  2001,8,2,Calendar.TUESDAY,   "2001 08 02 Tue", null),
@@ -682,32 +683,32 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     public void TestComparable() {
-	GregorianCalendar c0 = new GregorianCalendar();
-	GregorianCalendar c1 = new GregorianCalendar();
-	c1.add(Calendar.DAY_OF_MONTH, 1);
-	if (c0.compareTo(c1) >= 0) {
-	    errln("calendar " + c0 + " not < " + c1);
-	}
-	c0.add(Calendar.MONTH, 1);
-	if (c0.compareTo(c1) <= 0) {
-	    errln("calendar " + c0 + " not > " + c1);
-	}
-
-	c0.setTimeInMillis(c1.getTimeInMillis());
-	if (c0.compareTo(c1) != 0) {
-	    errln("calendar " + c0 + " not == " + c1);
-	}
-
-	// coverage
-	try {
-	    c0.compareTo((Object)null);
-	    errln("calendar.compareTo didn't object to null arg");
-	}
-	catch (NullPointerException npe) {
-		logln("PASS: calendar.compareTo objected to null arg");
-	}
+    GregorianCalendar c0 = new GregorianCalendar();
+    GregorianCalendar c1 = new GregorianCalendar();
+    c1.add(Calendar.DAY_OF_MONTH, 1);
+    if (c0.compareTo(c1) >= 0) {
+        errln("calendar " + c0 + " not < " + c1);
     }
-	    
+    c0.add(Calendar.MONTH, 1);
+    if (c0.compareTo(c1) <= 0) {
+        errln("calendar " + c0 + " not > " + c1);
+    }
+
+    c0.setTimeInMillis(c1.getTimeInMillis());
+    if (c0.compareTo(c1) != 0) {
+        errln("calendar " + c0 + " not == " + c1);
+    }
+
+    // coverage
+    try {
+        c0.compareTo((Object)null);
+        errln("calendar.compareTo didn't object to null arg");
+    }
+    catch (NullPointerException npe) {
+        logln("PASS: calendar.compareTo objected to null arg");
+    }
+    }
+
     /**
      * Miscellaneous tests to increase coverage.
      */
@@ -754,7 +755,7 @@ public class IBMCalendarTest extends CalendarTest {
             /*int x=*/ cal.getWeekendTransition(weekendCease);
         } catch (IllegalArgumentException e) {}
         /*int x=*/ cal.isWeekend(new Date());
-        
+
         // new GregorianCalendar(ULocale)
         GregorianCalendar gcal = new GregorianCalendar(ULocale.getDefault());
         if(gcal==null){
@@ -762,12 +763,37 @@ public class IBMCalendarTest extends CalendarTest {
         } else {
             logln("Calendar display name: " + gcal.getDisplayName(ULocale.getDefault()));
         }
-        
+
         //cover getAvailableULocales
         final ULocale[] locales = Calendar.getAvailableULocales();
         long count = locales.length;
         if (count == 0)
             errln("getAvailableULocales return empty list");
         logln("" + count + " available ulocales in Calendar.");
+
+        // Jitterbug 4451, for coverage
+        class StubCalendar extends Calendar{
+            protected int handleGetLimit(int field, int limitType) {return 0;}
+            protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {return 0;}
+            protected int handleGetExtendedYear() {return 0;}
+            public void run(){
+                if (Calendar.gregorianPreviousMonthLength(2000,2) != 29){
+                    errln("Year 2000 Feb should have 29 days.");
+                }
+                long millis = Calendar.julianDayToMillis(Calendar.MAX_JULIAN);
+                if(millis != Calendar.MAX_MILLIS){
+                    errln("Did not get the expected value from julianDayToMillis. Got:" + millis);
+                }
+                DateFormat df = handleGetDateFormat("",Locale.getDefault());
+                if (!df.equals(handleGetDateFormat("",ULocale.getDefault()))){
+                    errln ("Calendar.handleGetDateFormat(String, Locale) should delegate to ( ,ULocale)");
+                }
+                if (!getType().equals("gregorian")){
+                    errln ("Calendar.getType() should be 'gregorian'");
+                }
+            }
+        }
+        StubCalendar stub = new StubCalendar();
+        stub.run();
     }
 }

@@ -1,12 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.StringPrepParseException;
 
 /**
  * @author ram
@@ -191,6 +192,12 @@ public class TestStringPrep extends TestFmwk {
             }
         }catch(Exception e){
             errln("Got unexpected exception: " + e.toString());
+        }
+    }
+    
+    public void TestCoverage(){
+        if (new StringPrepParseException("coverage", 0, "", 0,0) == null){
+            errln("Construct StringPrepParseException(String, int, String, int, int)");
         }
     }
     

@@ -1112,6 +1112,24 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+    
+    public void TestCoverage(){
+        class StubTimeZone extends TimeZone{
+            public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {return 0;}
+            public void setRawOffset(int offsetMillis) {}
+            public int getRawOffset() {return 0;}
+            public boolean useDaylightTime() {return false;}
+            public boolean inDaylightTime(Date date) {return false;}
+        } 
+        StubTimeZone stub = new StubTimeZone();
+        StubTimeZone stub2 = (StubTimeZone) stub.clone();
+        if (stub.getDSTSavings() != 0){
+            errln("TimeZone.getDSTSavings() should return 0");
+        }
+        if (!stub.hasSameRules(stub2)){
+            errln("TimeZone.clone() object should hasSameRules");
+        }
+    }
 }
 
 //eof

@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2005 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
@@ -167,5 +167,17 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 //        catch (Exception e) {
 //            errln("ERROR: Couldn't create a SimpleDateFormat");
 //        }
+    }
+    
+    // Jitterbug 4451, for coverage
+    public void TestCoverage(){
+        class StubDateFormat extends SimpleDateFormat{
+            public void run(){
+                if (!zeroPaddingNumber(12, 4, 6).equals("0012")){
+                    errln("SimpleDateFormat(zeroPaddingNumber(long , int , int )");
+                }
+            }
+        }
+        new StubDateFormat().run();
     }
 }

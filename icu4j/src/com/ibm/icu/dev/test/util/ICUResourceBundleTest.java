@@ -39,10 +39,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 //URL url = loader.getResource("LocaleElements_en.class");
                 //File file = new File(url.getPath());
                 URL url = (URL)en.nextElement();
-		if (url == null) {
-		    warnln("could not load resource data");
-		    return;
-		}
+        if (url == null) {
+            warnln("could not load resource data");
+            return;
+        }
                 File file = new File(url.getPath());
                 File[] files = file.listFiles();
                 if(files!=null){
@@ -53,11 +53,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }catch(SecurityException ex) {
             warnln("could not load resource data: " + ex);
-	}catch(NullPointerException ex) {
-	    // thrown by ibm 1.4.2 windows jvm security manager
-	    warnln("could not load resource data: " + ex);
+    }catch(NullPointerException ex) {
+        // thrown by ibm 1.4.2 windows jvm security manager
+        warnln("could not load resource data: " + ex);
         }catch(Exception ex){
-	    ex.printStackTrace();
+        ex.printStackTrace();
             errln("Unexpected exception: "+ ex);
         }
     }
@@ -769,14 +769,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
               "t",    "hi@collation=direct",      "hi@collation=direct",
               "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
               "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi",
-		      "t",    "de_DE@collation=pinyin",      "de", /* bug 4582 tests */
-	  	      "f",    "de_DE_BONN@collation=pinyin", "de",
-	  	      "t",    "nl",                          "root",
-	  	      "t",    "nl_NL",                       "root",
-	  	      "f",    "nl_NL_EEXT",                  "root",
-	  	      "t",    "nl@collation=stroke",         "root",
-	  	      "t",    "nl_NL@collation=stroke",      "root",
-	  	      "f",    "nl_NL_EEXT@collation=stroke", "root",	  
+              "t",    "de_DE@collation=pinyin",      "de", /* bug 4582 tests */
+              "f",    "de_DE_BONN@collation=pinyin", "de",
+              "t",    "nl",                          "root",
+              "t",    "nl_NL",                       "root",
+              "f",    "nl_NL_EEXT",                  "root",
+              "t",    "nl@collation=stroke",         "root",
+              "t",    "nl_NL@collation=stroke",      "root",
+              "f",    "nl_NL_EEXT@collation=stroke", "root",	  
            };
 
        String F_STR = "f";
@@ -943,11 +943,34 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
     public void TestCoverage(){
-    	UResourceBundle bundle;
-    	bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME);
-    	if (bundle == null){
-    		errln("UResourceBundle.getBundleInstance(String baseName) failed");
-    	}
+        UResourceBundle bundle;
+        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME);
+        if (bundle == null){
+            errln("UResourceBundle.getBundleInstance(String baseName) failed");
+        }
+        bundle = null;
+        bundle = UResourceBundle.getBundleInstance(ULocale.getDefault());
+        if (bundle == null){
+            errln("UResourceBundle.getBundleInstance(ULocale) failed");
+            return;
+        } 
+        if (new UResourceTypeMismatchException("coverage") == null){
+            errln("Create UResourceTypeMismatchException error");
+        }
+        class Stub extends UResourceBundle{
+            public ULocale getULocale() {return ULocale.ROOT;}
+            protected String getLocaleID() {return null;}
+            protected String getBaseName() {return null;}
+            protected UResourceBundle getParent() {return null;}
+            protected void setLoadingStatus(int newStatus) {}
+            public Enumeration getKeys() {return null;}
+            protected Object handleGetObject(String key) {return null;}
+        }
+        Stub stub = new Stub();
+        
+        if (!stub.getLocale().equals(ULocale.ROOT.toLocale())){
+            errln("UResourceBundle.getLoclae(Locale) should delegate to (ULocale)");
+        }
     }
 }
 

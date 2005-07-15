@@ -58,7 +58,7 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         if (!fr.getCurrency().equals(currency)){
             errln("ERROR: get/set Currency failed");
         }
-        	
+            
         char group = en.getGroupingSeparator();
         fr.setGroupingSeparator(group);
         if(fr.getGroupingSeparator() != en.getGroupingSeparator()) {
