@@ -429,7 +429,7 @@ ucol_sit_calculateWholeLocale(CollatorSpec *s) {
 
 U_CAPI void U_EXPORT2
 ucol_prepareShortStringOpen( const char *definition,
-                          UBool forceDefaults,
+                          UBool,
                           UParseError *parseError,
                           UErrorCode *status)
 {
