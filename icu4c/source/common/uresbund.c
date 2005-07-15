@@ -743,8 +743,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                  * aliastest resource should finally have the sequence, not collation elements.
                  */
                 UResourceDataEntry *dataEntry = mainRes->fData;
-                char path[URES_MAX_BUFFER_SIZE];
-                char *pathBuf = path, *myPath = pathBuf;
+                char stackPath[URES_MAX_BUFFER_SIZE];
+                char *pathBuf = stackPath, *myPath = pathBuf;
                 if(uprv_strlen(keyPath) > URES_MAX_BUFFER_SIZE) {
                   pathBuf = (char *)uprv_malloc((uprv_strlen(keyPath)+1)*sizeof(char));
                   if(pathBuf == NULL) {
@@ -779,7 +779,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
                 }
-                if(pathBuf != path) {
+                if(pathBuf != stackPath) {
                   uprv_free(pathBuf);
                 }
               }
