@@ -56,7 +56,7 @@ IdnaConfTest::~IdnaConfTest(){
 /* this function is modified from RBBITest::ReadAndConvertFile() 
  *
  */
-bool IdnaConfTest::ReadAndConvertFile(){
+UBool IdnaConfTest::ReadAndConvertFile(){
     
     char * source = NULL;
     size_t source_len;
@@ -152,7 +152,7 @@ int IdnaConfTest::isNewlineMark(){
  * lines from the physical lines.
  *
  */
-bool IdnaConfTest::ReadOneLine(UnicodeString& buf){
+UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
     if ( !(curOffset < len) ) return false; // stream end
 
     static const UChar BACKSLASH = 0x5c;
