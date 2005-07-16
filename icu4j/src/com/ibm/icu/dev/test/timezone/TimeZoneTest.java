@@ -1038,7 +1038,7 @@ public class TimeZoneTest extends TestFmwk
         "Mexico/General", "America/Mexico_City",
         "NZ", "Pacific/Auckland",
         "NZ-CHAT", "Pacific/Chatham",
-        "Navajo", "America/Denver",
+        "Navajo", "America/Shiprock", /* fixed from Mark's original */
         "PRC", "Asia/Shanghai",
         "PST8PDT", "America/Los_Angeles",
         "Pacific/Samoa", "Pacific/Pago_Pago",

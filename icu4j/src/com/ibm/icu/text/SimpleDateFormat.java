@@ -11,6 +11,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -25,6 +26,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+
+import com.ibm.icu.impl.LocaleUtility;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -244,6 +247,8 @@ public class SimpleDateFormat extends DateFormat {
      */
     private DateFormatSymbols formatData;
 
+    private transient boolean formatDataIsValid;
+
     /**
      * We map dates with two-digit years into the century starting at
      * <code>defaultCenturyStart</code>, which may be any date.  May
@@ -327,6 +332,9 @@ public class SimpleDateFormat extends DateFormat {
     {
         this.pattern = pattern;
         this.formatData = new DateFormatSymbols(loc);
+        this.formatDataIsValid = 
+            LocaleUtility.isFallbackOf(formatData.getLocale(ULocale.ACTUAL_LOCALE).getBaseName(),
+                                       loc.getBaseName());
         initialize(loc);
     }
 
@@ -802,57 +810,121 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 17: // 'z' - ZONE_OFFSET
         case 24: // 'v' - TIMEZONE_GENERIC
-            int zoneIndex
-                = formatData.getZoneIndex (cal.getTimeZone().getID());
-            if (zoneIndex == -1)
-                {
-                    // For time zones that have no names, use strings
-                    // GMT+hours:minutes and GMT-hours:minutes.
-                    // For instance, France time zone uses GMT+01:00.
-                    value = cal.get(Calendar.ZONE_OFFSET) +
-                        cal.get(Calendar.DST_OFFSET);
-
-                    if (value < 0)
-                        {
-                            buf.append(GMT_MINUS);
-                            value = -value; // suppress the '-' sign for text display.
+            String tzid = cal.getTimeZone().getID();
+            int zoneIndex = -1;
+            if (patternCharIndex == 17 || formatDataIsValid) {
+                zoneIndex = formatData.getZoneIndex(tzid);
+            }
+            if (zoneIndex == -1) {
+                if (formatDataIsValid && patternCharIndex == 24) { // 'v'
+                    // no format data, see if we have an Olson ID
+                    String ntzid = ZoneMeta.getCanonicalID(tzid);
+                    if (ntzid != null) {
+                        String res = ntzid.substring(ntzid.lastIndexOf('/')+1);
+                        for (int ix = -1;;) {
+                            ix = res.indexOf('_', ix+1);
+                            if (ix < 0) {
+                                break;
+                            }
+                            res = res.substring(0, ix) + " " + res.substring(ix+1);
                         }
-                    else
-                        buf.append(GMT_PLUS);
-                    zeroPaddingNumber(buf, (int)(value/millisPerHour), 2, 2);
-                    buf.append(':');
-                    zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
+                        buf.append(res);
+
+                        // now get country code.  first get the code...
+                        String displayCountry = ZoneMeta.getCountryDisplayNameForID
+                            (tzid, formatData.getLocale(ULocale.VALID_LOCALE));
+                        if (displayCountry != null) {
+                            buf.append(" (" + displayCountry + ")");
+                        }
+                        break; // early return
+                    }
                 }
-            else {
+
+                // For time zones that have no names, use strings
+                // GMT+hours:minutes and GMT-hours:minutes.
+                // For instance, France time zone uses GMT+01:00.
+                value = cal.get(Calendar.ZONE_OFFSET) +
+                    cal.get(Calendar.DST_OFFSET);
+                
+                if (value < 0) {
+                    buf.append(GMT_MINUS);
+                    value = -value; // suppress the '-' sign for text display.
+                } else {
+                    buf.append(GMT_PLUS);
+                }
+                zeroPaddingNumber(buf, (int)(value/millisPerHour), 2, 2);
+                buf.append(':');
+                zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
+            } else {
                 String[] zs = formatData.zoneStrings[zoneIndex];
 
-                int ix;
-                if (patternCharIndex == 24 && zs.length >= 7) {
-                    ix = count < 4 ? 6 : 5;
-                    if (zs.length > 7) {
-                        ix += 1;
+                String res = null;
+                if (patternCharIndex == 24) { // 'v'
+                    if (zs.length >= 7) { // have generic strings
+                        int ix = count < 4 ? 6 : 5;
+                        if (zs.length > 7) {
+                            ix += 1;
+                        }
+                        res = zs[ix];
+                    } else if (zs.length == 6) { // have city string
+                        res = zs[5];
+                    } else { 
+                        ULocale locale = formatData.getLocale(ULocale.VALID_LOCALE);
+                        String cc = ZoneMeta.getSingleCountryDisplayName(tzid, locale);
+                        if (cc != null) { // have single country string
+                            res = cc;
+                        } else { // use tail
+                            res = res.substring(res.lastIndexOf('/')+1);
+                            for (int ix = -1;;) {
+                                ix = res.indexOf('_', ix+1);
+                                if (ix < 0) {
+                                    break;
+                                }
+                                res = res.substring(0, ix) + " " + res.substring(ix+1);
+                            }
+                            res += " (" + ZoneMeta.getCountryDisplayNameForID(tzid, locale) + ")";
+                        }
                     }
                 } else {
-                    ix = count < 4 ? 2 : 1;
+                    int ix = count < 4 ? 2 : 1;
                     if (cal.get(Calendar.DST_OFFSET) != 0) {
                         ix += 2;
                     }
+                    res = zs[ix];
                 }
-                buf.append(zs[ix]);
+                buf.append(res);
             }
             break;
         case 23: // 'Z' - TIMEZONE_RFC
             {
-                char sign = '+';
-                value = (cal.get(Calendar.ZONE_OFFSET) +
-                         cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
-                if (value < 0) {
-                    value = -value;
-                    sign = '-';
+                if (count < 5) {
+                    // 'short' (standard Java) form, must use ASCII digits
+                    char sign = '+';
+                    value = (cal.get(Calendar.ZONE_OFFSET) +
+                             cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
+                    if (value < 0) {
+                        value = -value;
+                        sign = '-';
+                    }
+                    value = (value / 3) * 5 + (value % 60); // minutes => KKmm
+                    buf.append(sign);
+                    buf.append(new DecimalFormat("0000").format(value));
+                } else { // dlf use 5 since existing tests use 4
+                    // long form, localized GMT pattern
+                    // not in 3.4 locale data, need to add, so use same default as for general time zone names
+                    value = cal.get(Calendar.ZONE_OFFSET) +
+                        cal.get(Calendar.DST_OFFSET);
+
+                    if (value < 0) {
+                        buf.append(GMT_MINUS);
+                        value = -value; // suppress the '-' sign for text display.
+                    } else {
+                        buf.append(GMT_PLUS);
+                    }
+                    zeroPaddingNumber(buf, (int)(value/millisPerHour), 2, 2);
+                    buf.append(':');
+                    zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
                 }
-                value = (value / 3) * 5 + (value % 60); // minutes => KKmm
-                buf.append(sign);
-                zeroPaddingNumber(buf, value, 4, 4);
             }
             break;
         case 25: // 'c' - STANDALONE DAY

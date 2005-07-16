@@ -217,8 +217,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700", "Pacific Time","Wednesday","August"
-            
-            
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -425,6 +423,276 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Locale en = new Locale("en", "", "");
         expect(XDATA, en);
     }
+
+    public void TestGenericTimeZoneDisplayName() {
+        TimeZone[] tzs = {
+            TimeZone.getTimeZone("America/Fort_Wayne"), 
+            TimeZone.getTimeZone("Australia/Melbourne"),
+            TimeZone.getTimeZone("PST"),
+        };
+
+        ULocale[] locales = {
+            ULocale.US,
+            ULocale.CHINA,
+            new ULocale("bg"),
+            new ULocale("hi"),
+        };
+
+        for (int i = 0; i < tzs.length; ++i) {
+            TimeZone tz = tzs[i];
+            for (int j = 0; j < locales.length; ++j) {
+                ULocale locale = locales[j];
+                Calendar cal = new GregorianCalendar(locale);
+                cal.setTimeZone(tz);
+                SimpleDateFormat sdf = new SimpleDateFormat("vvvv", locale);
+                logln(tz.getID() + "/" + locale.getDisplayName() + " --> " + sdf.format(cal));
+            }
+        }
+    }
+
+    /* not for 3.4 yet
+    public void TestGenericTimeZoneDisplayNameFallback() {
+        Calendar cal = new GregorianCalendar();
+        long daylightDate = new Date(2005, 7, 1).getTime(); // aug 1
+        long standardDate = new Date(2005, 0, 1).getTime(); // jan 1
+
+        for (int i = 0; i < fallbackTests.length; ++i) {
+            String[] info = fallbackTests[i];
+            ULocale l = new ULocale(info[0]);
+            TimeZone tz = TimeZone.getTimeZone(info[1]);
+            long time = (info[2].equals("daylight") == (info[1].indexOf("Australia") == -1)) 
+                ? daylightDate 
+                : standardDate;
+            SimpleDateFormat fmt = new SimpleDateFormat(info[3], l);
+            cal.setTimeInMillis(time);
+            cal.setTimeZone(tz);
+            String result = fmt.format(cal);
+            if (!result.equals(info[4])) {
+                errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" + 
+                      info[4] + "' but got: '" + result + "'");
+            }
+        }
+    }
+    */
+
+    private static final String[][] fallbackTests  = {
+        { "en", "America/Los_Angeles", "daylight", "z", "PDT" },
+        { "en", "America/Los_Angeles", "daylight", "zzzz", "Pacific Daylight Time" },
+        { "en", "America/Los_Angeles", "standard", "z", "PST" },
+        { "en", "America/Los_Angeles", "standard", "zzzz", "Pacific Standard Time" },
+        { "en", "America/Los_Angeles", "standard", "v", "PT" },
+        { "en", "America/Los_Angeles", "standard", "vvvv", "Pacific Time" },
+        { "en", "America/Los_Angeles", "standard", "Z", "-0800" },
+        { "en", "America/Los_Angeles", "standard", "ZZZZ", "GMT-07:00" },
+
+        { "en", "America/Argentina/Buenos_Aires", "daylight", "z", "GMT-03:00" },
+        { "en", "America/Argentina/Buenos_Aires", "daylight", "zzzz", "GMT-03:00" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "z", "GMT-03:00" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "zzzz", "GMT-03:00" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "v", "Buenos Aires (Argentina)" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "vvvv", "Buenos Aires (Argentina)" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "Z", "-0300" },
+        { "en", "America/Argentina/Buenos_Aires", "standard", "ZZZZ", "GMT-03:00" },
+
+        { "en", "America/Buenos_Aires", "daylight", "z", "GMT-03:00" },
+        { "en", "America/Buenos_Aires", "daylight", "zzzz", "GMT-03:00" },
+        { "en", "America/Buenos_Aires", "standard", "z", "GMT-03:00" },
+        { "en", "America/Buenos_Aires", "standard", "zzzz", "GMT-03:00" },
+        { "en", "America/Buenos_Aires", "standard", "v", "Buenos Aires (Argentina)" },
+        { "en", "America/Buenos_Aires", "standard", "vvvv", "Buenos Aires (Argentina)" },
+        { "en", "America/Buenos_Aires", "standard", "Z", "-0300" },
+        { "en", "America/Buenos_Aires", "standard", "ZZZZ", "GMT-03:00" },
+
+        { "en", "America/Havana", "daylight", "z", "GMT-04:00" },
+        { "en", "America/Havana", "daylight", "zzzz", "GMT-04:00" },
+        { "en", "America/Havana", "standard", "z", "GMT-05:00" },
+        { "en", "America/Havana", "standard", "zzzz", "GMT-05:00" },
+        { "en", "America/Havana", "standard", "v", "Cuba" },
+        { "en", "America/Havana", "standard", "vvvv", "Cuba" },
+        { "en", "America/Havana", "standard", "Z", "-0500" },
+        { "en", "America/Havana", "standard", "ZZZZ", "GMT-04:00" },
+
+        { "en", "Australia/ACT", "daylight", "z", "GMT-11:00" },
+        { "en", "Australia/ACT", "daylight", "zzzz", "GMT-11:00" },
+        { "en", "Australia/ACT", "standard", "z", "GMT-10:00" },
+        { "en", "Australia/ACT", "standard", "zzzz", "GMT-10:00" },
+        { "en", "Australia/ACT", "standard", "v", "Sydney (Australia)" },
+        { "en", "Australia/ACT", "standard", "vvvv", "Sydney (Australia)" },
+        { "en", "Australia/ACT", "standard", "Z", "+1000" },
+        { "en", "Australia/ACT", "standard", "ZZZZ", "GMT-11:00" },
+
+        { "en", "Australia/Sydney", "daylight", "z", "GMT-11:00" },
+        { "en", "Australia/Sydney", "daylight", "zzzz", "GMT-11:00" },
+        { "en", "Australia/Sydney", "standard", "z", "GMT-10:00" },
+        { "en", "Australia/Sydney", "standard", "zzzz", "GMT-10:00" },
+        { "en", "Australia/Sydney", "standard", "v", "Sydney (Australia)" },
+        { "en", "Australia/Sydney", "standard", "vvvv", "Sydney (Australia)" },
+        { "en", "Australia/Sydney", "standard", "Z", "+1000" },
+        { "en", "Australia/Sydney", "standard", "ZZZZ", "GMT-11:00" },
+
+        { "bg", "America/Los_Angeles", "daylight", "z", "PDT" },
+        { "bg", "America/Los_Angeles", "daylight", "zzzz", "\u0422\u0438\u0445\u043e\u043e\u043a\u0435\u0430\u043d\u0441\u043a\u0430 \u043b\u044f\u0442\u043d\u0430 \u0447\u0430\u0441\u043e\u0432\u0430 \u0437\u043e\u043d\u0430" },
+        { "bg", "America/Los_Angeles", "standard", "z", "PST" },
+        { "bg", "America/Los_Angeles", "standard", "zzzz", "\u0422\u0438\u0445\u043e\u043e\u043a\u0435\u0430\u043d\u0441\u043a\u0430 \u0447\u0430\u0441\u043e\u0432\u0430 \u0437\u043e\u043d\u0430" },
+        { "bg", "America/Los_Angeles", "standard", "v", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441 (\u0421\u0410\u0429)" },
+        { "bg", "America/Los_Angeles", "standard", "vvvv", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441 (\u0421\u0410\u0429)" },
+        { "bg", "America/Los_Angeles", "standard", "Z", "-0800" },
+        { "bg", "America/Los_Angeles", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0700" },
+
+        { "bg", "America/Argentina/Buenos_Aires", "daylight", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Argentina/Buenos_Aires", "daylight", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "v", "\u0411\u0443\u0435\u043d\u043e\u0441 \u0410\u0439\u0440\u0435\u0441 (\u0410\u0440\u0436\u0435\u043d\u0442\u0438\u043d\u0430)" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "vvvv", "\u0411\u0443\u0435\u043d\u043e\u0441 \u0410\u0439\u0440\u0435\u0441 (\u0410\u0440\u0436\u0435\u043d\u0442\u0438\u043d\u0430)" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "Z", "-0300" },
+        { "bg", "America/Argentina/Buenos_Aires", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+
+        { "bg", "America/Buenos_Aires", "daylight", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Buenos_Aires", "daylight", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Buenos_Aires", "standard", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Buenos_Aires", "standard", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+        { "bg", "America/Buenos_Aires", "standard", "v", "\u0411\u0443\u0435\u043d\u043e\u0441 \u0410\u0439\u0440\u0435\u0441 (\u0410\u0440\u0436\u0435\u043d\u0442\u0438\u043d\u0430)" },
+        { "bg", "America/Buenos_Aires", "standard", "vvvv", "\u0411\u0443\u0435\u043d\u043e\u0441 \u0410\u0439\u0440\u0435\u0441 (\u0410\u0440\u0436\u0435\u043d\u0442\u0438\u043d\u0430)" },
+        { "bg", "America/Buenos_Aires", "standard", "Z", "-0300" },
+        { "bg", "America/Buenos_Aires", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300" },
+
+        { "bg", "America/Havana", "daylight", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0400" },
+        { "bg", "America/Havana", "daylight", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0400" },
+        { "bg", "America/Havana", "standard", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0500" },
+        { "bg", "America/Havana", "standard", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0500" },
+        { "bg", "America/Havana", "standard", "v", "\u041a\u0443\u0431\u0430" },
+        { "bg", "America/Havana", "standard", "vvvv", "\u041a\u0443\u0431\u0430" },
+        { "bg", "America/Havana", "standard", "Z", "-0500" },
+        { "bg", "America/Havana", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0400" },
+
+        { "bg", "Australia/ACT", "daylight", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+        { "bg", "Australia/ACT", "daylight", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+        { "bg", "Australia/ACT", "standard", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1000" },
+        { "bg", "Australia/ACT", "standard", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1000" },
+        { "bg", "Australia/ACT", "standard", "v", "\u0421\u0438\u0434\u043d\u0438 (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)" },
+        { "bg", "Australia/ACT", "standard", "vvvv", "\u0421\u0438\u0434\u043d\u0438 (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)" },
+        { "bg", "Australia/ACT", "standard", "Z", "+1000" },
+        { "bg", "Australia/ACT", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+
+        { "bg", "Australia/Sydney", "daylight", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+        { "bg", "Australia/Sydney", "daylight", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+        { "bg", "Australia/Sydney", "standard", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1000" },
+        { "bg", "Australia/Sydney", "standard", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1000" },
+        { "bg", "Australia/Sydney", "standard", "v", "\u0421\u0438\u0434\u043d\u0438 (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)" },
+        { "bg", "Australia/Sydney", "standard", "vvvv", "\u0421\u0438\u0434\u043d\u0438 (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)" },
+        { "bg", "Australia/Sydney", "standard", "Z", "+1000" },
+        { "bg", "Australia/Sydney", "standard", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-1100" },
+
+
+        { "hi", "America/Los_Angeles", "daylight", "z", "GMT-\u0966\u096d:\u0966\u0966" },
+        { "hi", "America/Los_Angeles", "daylight", "zzzz", "GMT-\u0966\u096d:\u0966\u0966" },
+        { "hi", "America/Los_Angeles", "standard", "z", "GMT-\u0966\u096e:\u0966\u0966" },
+        { "hi", "America/Los_Angeles", "standard", "zzzz", "GMT-\u0966\u096e:\u0966\u0966" },
+        { "hi", "America/Los_Angeles", "standard", "v", "Los Angeles (\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0930\u093f\u0915\u093e)" },
+        { "hi", "America/Los_Angeles", "standard", "vvvv", "Los Angeles (\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0930\u093f\u0915\u093e)" },
+        { "hi", "America/Los_Angeles", "standard", "Z", "-0800" },
+        { "hi", "America/Los_Angeles", "standard", "ZZZZ", "GMT-\u0966\u096d:\u0966\u0966" },
+
+        { "hi", "America/Argentina/Buenos_Aires", "daylight", "z", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Argentina/Buenos_Aires", "daylight", "zzzz", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "z", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "zzzz", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "v", "Buenos Aires (\u0905\u0930\u094d\u091c\u0947\u0928\u094d\u091f\u0940\u0928\u093e)" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "vvvv", "Buenos Aires (\u0905\u0930\u094d\u091c\u0947\u0928\u094d\u091f\u0940\u0928\u093e)" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "Z", "-0300" },
+        { "hi", "America/Argentina/Buenos_Aires", "standard", "ZZZZ", "GMT-\u0966\u0969:\u0966\u0966" },
+
+        { "hi", "America/Buenos_Aires", "daylight", "z", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Buenos_Aires", "daylight", "zzzz", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Buenos_Aires", "standard", "z", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Buenos_Aires", "standard", "zzzz", "GMT-\u0966\u0969:\u0966\u0966" },
+        { "hi", "America/Buenos_Aires", "standard", "v", "Buenos Aires (\u0905\u0930\u094d\u091c\u0947\u0928\u094d\u091f\u0940\u0928\u093e)" },
+        { "hi", "America/Buenos_Aires", "standard", "vvvv", "Buenos Aires (\u0905\u0930\u094d\u091c\u0947\u0928\u094d\u091f\u0940\u0928\u093e)" },
+        { "hi", "America/Buenos_Aires", "standard", "Z", "-0300" },
+        { "hi", "America/Buenos_Aires", "standard", "ZZZZ", "GMT-\u0966\u0969:\u0966\u0966" },
+
+        { "hi", "America/Havana", "daylight", "z", "GMT-\u0966\u096a:\u0966\u0966" },
+        { "hi", "America/Havana", "daylight", "zzzz", "GMT-\u0966\u096a:\u0966\u0966" },
+        { "hi", "America/Havana", "standard", "z", "GMT-\u0966\u096b:\u0966\u0966" },
+        { "hi", "America/Havana", "standard", "zzzz", "GMT-\u0966\u096b:\u0966\u0966" },
+        { "hi", "America/Havana", "standard", "v", "\u0915\u094d\u092f\u0942\u092c\u093e" },
+        { "hi", "America/Havana", "standard", "vvvv", "\u0915\u094d\u092f\u0942\u092c\u093e" },
+        { "hi", "America/Havana", "standard", "Z", "-0500" },
+        { "hi", "America/Havana", "standard", "ZZZZ", "GMT-\u0966\u096a:\u0966\u0966" },
+
+        { "hi", "Australia/ACT", "daylight", "z", "GMT-\u0967\u0967:\u0966\u0966" },
+        { "hi", "Australia/ACT", "daylight", "zzzz", "GMT-\u0967\u0967:\u0966\u0966" },
+        { "hi", "Australia/ACT", "standard", "z", "GMT-\u0967\u0966:\u0966\u0966" },
+        { "hi", "Australia/ACT", "standard", "zzzz", "GMT-\u0967\u0966:\u0966\u0966" },
+        { "hi", "Australia/ACT", "standard", "v", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)" },
+        { "hi", "Australia/ACT", "standard", "vvvv", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)" },
+        { "hi", "Australia/ACT", "standard", "Z", "+1000" },
+        { "hi", "Australia/ACT", "standard", "ZZZZ", "GMT-\u0967\u0967:\u0966\u0966" },
+
+        { "hi", "Australia/Sydney", "daylight", "z", "GMT-\u0967\u0967:\u0966\u0966" },
+        { "hi", "Australia/Sydney", "daylight", "zzzz", "GMT-\u0967\u0967:\u0966\u0966" },
+        { "hi", "Australia/Sydney", "standard", "z", "GMT-\u0967\u0966:\u0966\u0966" },
+        { "hi", "Australia/Sydney", "standard", "zzzz", "GMT-\u0967\u0966:\u0966\u0966" },
+        { "hi", "Australia/Sydney", "standard", "v", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)" },
+        { "hi", "Australia/Sydney", "standard", "vvvv", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)" },
+        { "hi", "Australia/Sydney", "standard", "Z", "+1000" },
+        { "hi", "Australia/Sydney", "standard", "ZZZZ", "GMT-\u0967\u0967:\u0966\u0966" },
+
+        { "as", "America/Los_Angeles", "daylight", "z", "GMT-07:00" },
+        { "as", "America/Los_Angeles", "daylight", "zzzz", "GMT-07:00" },
+        { "as", "America/Los_Angeles", "standard", "z", "GMT-08:00" },
+        { "as", "America/Los_Angeles", "standard", "zzzz", "GMT-08:00" },
+        { "as", "America/Los_Angeles", "standard", "v", "Los Angeles (US)" },
+        { "as", "America/Los_Angeles", "standard", "vvvv", "Los Angeles (US)" },
+        { "as", "America/Los_Angeles", "standard", "Z", "-0800" },
+        { "as", "America/Los_Angeles", "standard", "ZZZZ", "GMT-07:00" },
+
+        { "as", "America/Argentina/Buenos_Aires", "daylight", "z", "GMT-03:00" },
+        { "as", "America/Argentina/Buenos_Aires", "daylight", "zzzz", "GMT-03:00" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "z", "GMT-03:00" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "zzzz", "GMT-03:00" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "v", "Buenos Aires (AR)" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "vvvv", "Buenos Aires (AR)" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "Z", "-0300" },
+        { "as", "America/Argentina/Buenos_Aires", "standard", "ZZZZ", "GMT-03:00" },
+
+        { "as", "America/Buenos_Aires", "daylight", "z", "GMT-03:00" },
+        { "as", "America/Buenos_Aires", "daylight", "zzzz", "GMT-03:00" },
+        { "as", "America/Buenos_Aires", "standard", "z", "GMT-03:00" },
+        { "as", "America/Buenos_Aires", "standard", "zzzz", "GMT-03:00" },
+        { "as", "America/Buenos_Aires", "standard", "v", "Buenos Aires (AR)" },
+        { "as", "America/Buenos_Aires", "standard", "vvvv", "Buenos Aires (AR)" },
+        { "as", "America/Buenos_Aires", "standard", "Z", "-0300" },
+        { "as", "America/Buenos_Aires", "standard", "ZZZZ", "GMT-03:00" },
+
+        { "as", "America/Havana", "daylight", "z", "GMT-04:00" },
+        { "as", "America/Havana", "daylight", "zzzz", "GMT-04:00" },
+        { "as", "America/Havana", "standard", "z", "GMT-05:00" },
+        { "as", "America/Havana", "standard", "zzzz", "GMT-05:00" },
+        { "as", "America/Havana", "standard", "v", "CU" },
+        { "as", "America/Havana", "standard", "vvvv", "CU" },
+        { "as", "America/Havana", "standard", "Z", "-0500" },
+        { "as", "America/Havana", "standard", "ZZZZ", "GMT-04:00" },
+
+        { "as", "Australia/ACT", "daylight", "z", "GMT-11:00" },
+        { "as", "Australia/ACT", "daylight", "zzzz", "GMT-11:00" },
+        { "as", "Australia/ACT", "standard", "z", "GMT-10:00" },
+        { "as", "Australia/ACT", "standard", "zzzz", "GMT-10:00" },
+        { "as", "Australia/ACT", "standard", "v", "Sydney (AU)" },
+        { "as", "Australia/ACT", "standard", "vvvv", "Sydney (AU)" },
+        { "as", "Australia/ACT", "standard", "Z", "+1000" },
+        { "as", "Australia/ACT", "standard", "ZZZZ", "GMT-11:00" },
+
+        { "as", "Australia/Sydney", "daylight", "z", "GMT-11:00" },
+        { "as", "Australia/Sydney", "daylight", "zzzz", "GMT-11:00" },
+        { "as", "Australia/Sydney", "standard", "z", "GMT-10:00" },
+        { "as", "Australia/Sydney", "standard", "zzzz", "GMT-10:00" },
+        { "as", "Australia/Sydney", "standard", "v", "Sydney (AU)" },
+        { "as", "Australia/Sydney", "standard", "vvvv", "Sydney (AU)" },
+        { "as", "Australia/Sydney", "standard", "Z", "+1000" },
+        { "as", "Australia/Sydney", "standard", "ZZZZ", "GMT-11:00" },
+    };
 
     /**
      * Verify that strings which contain incomplete specifications are parsed
