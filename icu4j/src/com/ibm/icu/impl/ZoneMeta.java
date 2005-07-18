@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -287,15 +288,28 @@ public final class ZoneMeta {
             if (LocaleUtility.isFallbackOf(rblocname, locale.getBaseName())) {  
                 // dlf: need a utility on ULocale for this
                 // only valid data, don't fallback through default
-                ICUResourceBundle csb = rb.get("Countries");
-                ICUResourceBundle cb = csb.get(country_code);
-                country = cb.getString();
+                try {
+                    ICUResourceBundle csb = rb.get("Countries");
+                    ICUResourceBundle cb = csb.get(country_code);
+                    country = cb.getString();
+                }
+                catch (MissingResourceException e) {
+                    // assume it is not available.
+                }
             }
         }
         
-        if (country != null && info[2] != null) { // single country
-            return displayRegion(country, locale);
+        // This is not behavior specified in tr35, but behavior added by Mark.  TR35 says to display the country _only_ if there is a localization.
+        if (info[2] != null) { // single country
+            if (country != null)
+                return displayRegion(country, locale);
+            else if (country_code != null) {
+                return displayRegion(country_code, locale);
+            }
         }
+//         if (country != null && info[2] != null) { // single country
+//             return displayRegion(country, locale);
+//         }
 
         String city = tzid.substring(tzid.lastIndexOf('/')+1);
         int n;
@@ -310,6 +324,10 @@ public final class ZoneMeta {
         }
 
         if (country == null) {
+            if (country_code == null) {
+
+                return city; // early return, can't use fallback format without a country
+            }
             country = country_code;
         }
 
@@ -386,7 +404,7 @@ public final class ZoneMeta {
         { "cy", "+HHmm;-HHmm" },
         { "el", "+HHmm;-HHmm" },
         { "hr", "+HHmm;-HHmm" },
-        { "ja", "+HHmm;-HHmm", null, "{0}\u6642\u9593", "{0} ({1})\u00e6\u2122\u201a\u00e9\u2013\u201c" },
+        { "ja", "+HHmm;-HHmm", null, "{0}\u6642\u9593", "{0} ({1})\u6642\u9593" },
         { "nn", "+HH.mm;-HH.mm" },
         { "sk", "+HHmm;-HHmm" },
         { "sl", "+HHmm;-HHmm" },
