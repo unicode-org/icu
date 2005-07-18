@@ -368,7 +368,7 @@ static void TestNewFormatAndParseAPI(void)
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value = 0.0;
+    int32_t value = 0;
     UChar ret[30];
     UParseError parseError;
     UMessageFormat* fmt = NULL;
@@ -432,7 +432,7 @@ static void TestNewFormatAndParseAPI(void)
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
-    if(value!=7.00 && u_strcmp(str,ret)!=0)
+    if(value!=7 && u_strcmp(str,ret)!=0)
         log_err("FAIL: Error in parseMessage on test#5 \n");
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
@@ -474,7 +474,7 @@ static void TestSampleFormatAndParseWithError(void)
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value = 0.0;
+    int32_t value = 0;
     UChar ret[30];
     UParseError parseError;
 
@@ -528,7 +528,7 @@ static void TestSampleFormatAndParseWithError(void)
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
-    if(value!=7.00 && u_strcmp(str,ret)!=0)
+    if(value!=7 && u_strcmp(str,ret)!=0)
         log_err("FAIL: Error in parseMessage on test#5 \n");
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
@@ -568,7 +568,7 @@ static void TestSampleFormatAndParse()
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value = 0.0;
+    int32_t value = 0;
     UChar ret[30];
 
     ctest_setTimeZone(NULL, &status);
@@ -621,7 +621,7 @@ static void TestSampleFormatAndParse()
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
-    if(value!=7.00 && u_strcmp(str,ret)!=0)
+    if(value!=7 && u_strcmp(str,ret)!=0)
         log_err("FAIL: Error in parseMessage on test#5 \n");
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
