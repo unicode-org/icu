@@ -90,13 +90,13 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
 /**
  * Private constructor for use of TransliteratorAlias
  */
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& newID,
                                               UVector& list,
                                               UnicodeFilter* adoptedFilter,
                                               int32_t anonymousRBTs,
                                               UParseError& /*parseError*/,
                                               UErrorCode& status) :
-    Transliterator(ID, adoptedFilter),
+    Transliterator(newID, adoptedFilter),
     trans(0), numAnonymousRBTs(anonymousRBTs)
 {
     init(list, UTRANS_FORWARD, FALSE, status);
