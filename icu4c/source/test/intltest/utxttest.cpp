@@ -851,6 +851,7 @@ void UTextTest::ErrorTest()
         TEST_ASSERT(buf[1] == 0xfffd);
         TEST_ASSERT(buf[3] == 0xfffd);
         TEST_ASSERT(buf[2] == 0x42);
+        utext_close(ut);
     }
 
 

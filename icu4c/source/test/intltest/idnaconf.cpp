@@ -121,10 +121,12 @@ UBool IdnaConfTest::ReadAndConvertFile(){
         len = dest_len;
         base = dest;
         delete [] source;
+        ucnv_close(conv);
         return TRUE;    // The buffer will owned by caller.
     }
     errln("UConverter error: %s", u_errorName(status));
     delete [] source;
+    ucnv_close(conv);
     return FALSE;
 }
 
