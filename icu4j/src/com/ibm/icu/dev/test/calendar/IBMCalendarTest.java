@@ -796,4 +796,52 @@ public class IBMCalendarTest extends CalendarTest {
         StubCalendar stub = new StubCalendar();
         stub.run();
     }
+
+    // Tests for jb 4541
+    public void TestJB4541() {
+        ULocale loc = new ULocale("en_US");
+
+        // !!! Shouldn't we have an api like this?
+        // !!! Question: should this reflect those actually available in this copy of ICU, or 
+        // the list of types we assume is available?
+        // String[] calTypes = Calendar.getAvailableTypes();
+        final String[] calTypes = {
+            "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
+            "islamic", "islamic-civil", "japanese",
+        };
+        
+        // constructing a DateFormat with a locale indicating a calendar type should construct a
+        // date format appropriate to that calendar
+        final Date time = new Date();
+        for (int i = 0; i < calTypes.length; ++i) {
+            ULocale aLoc = loc.setKeywordValue("calendar", calTypes[i]);
+            logln("key: " + aLoc.getDisplayKeyword("calendar") + " val: " + aLoc.getDisplayKeywordValue("calendar"));
+
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL,
+                                                           aLoc);
+
+            logln("df type: " + df.getClass().getName());
+
+            Calendar cal = df.getCalendar();
+            // todo, what about variants of calendars, we have a type for islamic-civil, should we also have a type
+            // for variants of other calendars?
+            assertEquals("calendar types", cal.getType(), calTypes[i].equals("islamic-civil") ? "islamic" : calTypes[i]);
+            DateFormat df2 = cal.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, ULocale.US);
+            assertEquals("format results", df.format(time), df2.format(time));
+        }
+
+        // dateFormat.setCalendar should throw exception if wrong format for calendar
+        if (false) {
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, 
+                                                           DateFormat.FULL, 
+                                                           new ULocale("en_US@calendar=chinese"));
+
+            logln("dateformat type: " + df.getClass().getName());
+
+            Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=chinese"));
+                                                
+            logln("calendar type: " + cal.getClass().getName());
+        }
+    }
 }
