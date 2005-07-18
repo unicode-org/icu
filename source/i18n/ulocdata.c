@@ -140,6 +140,7 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
     }
 
     delimiter = ures_getStringByKey(delimiterBundle, delimiterKeys[type], &len, &localStatus);
+    ures_close(delimiterBundle);
 
     if ( (localStatus == U_USING_DEFAULT_WARNING) && uld->noSubstitute ) {
         localStatus = U_MISSING_RESOURCE_ERROR;
@@ -151,14 +152,10 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
     }
     
     if (U_FAILURE(*status)){
-        ures_close(delimiterBundle);
-        ures_close(delimiter);
         return 0;
     }
         
-
     u_strncpy(result,delimiter,resultLength);
-    ures_close(delimiterBundle);
     return len;
 }
 
