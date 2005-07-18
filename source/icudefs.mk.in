@@ -3,7 +3,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2004, International Business Machines Corporation and others.
+# Copyright (C) 2000-2005, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -216,7 +216,7 @@ LIBICUTOOLUTIL= -L$(LIBDIR) -l$(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)$(TOOLUTIL_S
 LIBICUIO=       -L$(LIBDIR) -l$(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)$(IO_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
 
 # Invoke, set library path for all ICU libraries.
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBDIR):$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)$(LIBDIR):$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 
 # Platform-specific setup
 include @platform_make_fragment@
