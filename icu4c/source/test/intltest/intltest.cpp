@@ -499,7 +499,7 @@ void it_dataerrln( UnicodeString message )
 IntlTest::IntlTest()
 {
     caller = NULL;
-    path = NULL;
+    testPath = NULL;
     LL_linestart = TRUE;
     errorCount = 0;
     dataErrorCount = 0;
@@ -528,12 +528,12 @@ UBool IntlTest::callTest( IntlTest& testToBeCalled, char* par )
 {
     execCount--; // correct a previously assumed test-exec, as this only calls a subtest
     testToBeCalled.setCaller( this );
-    return testToBeCalled.runTest( path, par );
+    return testToBeCalled.runTest( testPath, par );
 }
 
 void IntlTest::setPath( char* pathVal )
 {
-    this->path = pathVal;
+    this->testPath = pathVal;
 }
 
 UBool IntlTest::setVerbose( UBool verboseVal )
@@ -589,10 +589,10 @@ UBool IntlTest::runTest( char* name, char* par )
     if (name)
         pos = strchr( name, delim ); // check if name contains path (by looking for '/')
     if (pos) {
-        path = pos+1;   // store subpath for calling subtest
+        testPath = pos+1;   // store subpath for calling subtest
         *pos = 0;       // split into two strings
     }else{
-        path = NULL;
+        testPath = NULL;
     }
 
     if (!name || (name[0] == 0) || (strcmp(name, "*") == 0)) {

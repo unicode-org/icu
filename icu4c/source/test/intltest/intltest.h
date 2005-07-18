@@ -179,20 +179,20 @@ protected:
     virtual UBool callTest( IntlTest& testToBeCalled, char* par );
 
 
-    UBool      verbose;
-    UBool      no_err_msg;
-    UBool      quick;
-    UBool      leaks;
-    UBool      warn_on_missing_data;
+    UBool       verbose;
+    UBool       no_err_msg;
+    UBool       quick;
+    UBool       leaks;
+    UBool       warn_on_missing_data;
 
 private:
-    UBool      LL_linestart;
+    UBool       LL_linestart;
     int32_t     LL_indentlevel;
 
     int32_t     errorCount;
     int32_t     dataErrorCount;
     IntlTest*   caller;
-    char*       path;           // specifies subtests
+    char*       testPath;           // specifies subtests
 
     //FILE *testoutfp;
     void *testoutfp;
