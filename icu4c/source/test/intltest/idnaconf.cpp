@@ -68,7 +68,7 @@ UBool IdnaConfTest::ReadAndConvertFile(){
     const char *path = IntlTest::getSourceTestData(status);
     if (U_FAILURE(status)) {
         errln("%s", u_errorName(status));
-        return false;
+        return FALSE;
     }
 
     const char* name = "idna_conf.txt";     // test data file
@@ -81,14 +81,14 @@ UBool IdnaConfTest::ReadAndConvertFile(){
 
     if (f == NULL){
         errln("fopen error on %s", name);
-        return false;
+        return FALSE;
     }
 
     fseek( f, 0, SEEK_END);
     if ((source_len = ftell(f)) <= 0){
         errln("Error reading test data file.");
         fclose(f);
-        return false;
+        return FALSE;
     }
 
     source = new char[source_len];
@@ -97,7 +97,7 @@ UBool IdnaConfTest::ReadAndConvertFile(){
         errln("Error reading test data file.");
         delete [] source;
         fclose(f);
-        return false;
+        return FALSE;
     }
     fclose(f);
 
@@ -121,11 +121,11 @@ UBool IdnaConfTest::ReadAndConvertFile(){
         len = dest_len;
         base = dest;
         delete [] source;
-        return true;    // The buffer will owned by caller.
+        return TRUE;    // The buffer will owned by caller.
     }
     errln("UConverter error: %s", u_errorName(status));
     delete [] source;
-    return false;
+    return FALSE;
 }
 
 int IdnaConfTest::isNewlineMark(){
@@ -153,7 +153,7 @@ int IdnaConfTest::isNewlineMark(){
  *
  */
 UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
-    if ( !(curOffset < len) ) return false; // stream end
+    if ( !(curOffset < len) ) return FALSE; // stream end
 
     static const UChar BACKSLASH = 0x5c;
     buf.remove();
@@ -173,7 +173,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
         buf.append(c);
         curOffset++;
     }
-    return true;
+    return TRUE;
 }
 
 //
@@ -188,11 +188,11 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
  */
 void IdnaConfTest::ExplainCodePointTag(UnicodeString& buf){
     buf.append((UChar)0);    // add a terminal NULL
-    UChar* base = buf.getBuffer(buf.length());
-    UChar* p = base;
+    UChar* bufBase = buf.getBuffer(buf.length());
+    UChar* p = bufBase;
     while (*p != 0){
         if ( *p != 0x3C){    // <
-            *base++ = *p++;
+            *bufBase++ = *p++;
         } else {
             p++;    // skip <
             UChar32 cp = 0;
@@ -208,14 +208,14 @@ void IdnaConfTest::ExplainCodePointTag(UnicodeString& buf){
             }
             p++;    // skip >
             if (U_IS_BMP(cp)){
-                *base++ = cp;
+                *bufBase++ = cp;
             } else {
-                *base++ = U16_LEAD(cp);
-                *base++ = U16_TRAIL(cp);
+                *bufBase++ = U16_LEAD(cp);
+                *bufBase++ = U16_TRAIL(cp);
             }
         }
     }
-    *base = 0;  // close our buffer
+    *bufBase = 0;  // close our buffer
     buf.releaseBuffer();
 }
 
@@ -282,7 +282,7 @@ void IdnaConfTest::Test(void){
     UnicodeString value;
 
     // skip everything before the first "=====" and "=====" itself
-    for (;true;){
+    for (;;){
         ReadOneLine(s);
         if (s.compare(C_TAG, -1) == 0){   //"====="
             break;
