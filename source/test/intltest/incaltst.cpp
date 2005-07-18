@@ -638,6 +638,7 @@ void IntlCalendarTest::TestJapanese3860()
 #endif
     delete cal2;
     delete cal;
+    delete fmt2;
 }
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
