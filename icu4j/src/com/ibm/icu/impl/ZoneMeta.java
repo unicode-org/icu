@@ -19,6 +19,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -168,6 +171,45 @@ public final class ZoneMeta {
         }
     }
 
+
+    // translation of appendix j
+    // A) "Canonicalize the olson ID"
+    // --> map the passed-in id to an olson id.
+    //     A.1) if there is no such id, goto C (GMT)
+    //
+    // B) "If there is an exact translation in the resolved locale, use it"
+    // --> get the zone info data for this locale.  check to see if it came from a
+    // fallback of this locale (and didn't go up the defaultLocale chain).  (note: record this as 'IS_VALID')
+    //     B.1) if it did, check to see that the requested form is available (long/short, generic/standard/daylight)
+    //        B.1.a) if it is, return it.
+    //
+    // C) "For non-wall-time, use GMT format"
+    // --> if not generic, look up GMT format, translation, and hours, format the offset value, and return.
+    //
+    // D) "If there is an exemplar city, use the region format"
+    // --> look up the exemplar city, and if found, look up region format, format the city, and return.
+    //
+    // E) "If there is a country for the time zone..."
+    // --> the time zone is not associated with 'no country' (note: record this as 'COUNTRY_CODE')
+    // "and a translation in the locale for the country name..."
+    // --> if IS_VALID (see B) and there is a translation for the country (note: record this as 'COUNTRY')
+    // "and the country has one modern time zone or is in the singleCountries list..."
+    // --> if the info is marked true for this time zone
+    // "use it with the region format"
+    // --> look up the region format, format the country, and return.
+    //
+    // F) "If it is a perpetual alias..."
+    // --> no idea what this means, so skip
+    //
+    // G) "Fall back to the raw Olson ID, using the fallback format
+    // --> convert the tail of the time zone id to a city string as described (note: record this as 'CITY')
+    //    G.1 if (COUNTRY is null) set COUNTRY to COUNTRY_CODE 
+    //    G.2 else format the city and country using the fallback format, and return.
+    //    
+    // H) "Else use the (possibly multi-offset) GMT format
+    // --> else no country?  but we've fallen back to the raw olson id... how do we reach this point?
+    // --> also, it sounds like i'd need to examine the GMT format string to see if it is multi-offset or not
+
     private static String[] getCanonicalInfo(String id) {
         if (canonicalMap == null) {
             Map m = new HashMap();
@@ -190,14 +232,14 @@ public final class ZoneMeta {
 
     /**
      * Return the canonical id for this tzid, which might be the id itself.
-     * If there is no canonical id for it, return null.
+     * If there is no canonical id for it, return the passed-in id.
      */
     public static String getCanonicalID(String tzid) {
         String[] info = getCanonicalInfo(tzid);
         if (info != null) {
             return info[0];
         }
-        return null;
+        return tzid;
     }
 
     /**
@@ -227,57 +269,135 @@ public final class ZoneMeta {
     }
 
     /**
-     * Given a country code, return the display name in the provided locale, or null if
-     * there is no localization for the country code.
+     * Handle fallbacks for generic time (rules E.. G)
      */
-    public static String getCountryDisplayNameForCode(String cc, ULocale locale) {
-        ICUResourceBundle rb = 
-            (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        ICUResourceBundle countries = rb.get("Countries");
-        ICUResourceBundle country = countries.get(cc);
-        String displayName = country.getString();
+    public static String displayFallback(String tzid, ULocale locale) {
+        String[] info = getCanonicalInfo(tzid);
+        if (info == null) {
+            return null; // error
+        }
 
-        return displayName;
-    }
+        String country_code = info[1];
+
+        String country = null;
+        if (country_code != null) {
+            ICUResourceBundle rb = 
+                (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            String rblocname = rb.getULocale().getBaseName();
+            if (LocaleUtility.isFallbackOf(rblocname, locale.getBaseName())) {  
+                // dlf: need a utility on ULocale for this
+                // only valid data, don't fallback through default
+                ICUResourceBundle csb = rb.get("Countries");
+                ICUResourceBundle cb = csb.get(country_code);
+                country = cb.getString();
+            }
+        }
         
-    /**
-     * Looks up the country code from the time zone id, then looks up the display
-     * name for the country code, and defaults to the country code if the display
-     * name is not available.  If there's no country code at all, return null.
-     */
-    public static String getCountryDisplayNameForID(String tzid, ULocale locale) {
-        String cc = getCanonicalCountry(tzid);
-        if (cc != null) {
-            String displayName = getCountryDisplayNameForCode(cc, locale);
-            if (displayName != null) {
-                cc = displayName;
+        if (country != null && info[2] != null) { // single country
+            return displayRegion(country, locale);
+        }
+
+        String city = tzid.substring(tzid.lastIndexOf('/')+1);
+        int n;
+        if ((n = city.indexOf('_')) != -1) {
+            char[] chars = city.toCharArray();
+            for (; n < chars.length; ++n) {
+                if (chars[n] == '_') {
+                    chars[n] = ' ';
+                }
+            }
+            city = new String(chars);
+        }
+
+        if (country == null) {
+            country = country_code;
+        }
+
+        String flbPat = getTZLocalizationInfo(locale, FALLBACK_FORMAT);
+        MessageFormat mf = new MessageFormat(flbPat);
+
+        return mf.format(new Object[] { city, country });
+    }
+
+    public static String displayRegion(String cityOrCountry, ULocale locale) {
+        String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
+        MessageFormat mf = new MessageFormat(regPat);
+        return mf.format(new Object[] { cityOrCountry });
+    }
+
+    public static String displayGMT(long value, ULocale locale) {
+        String msgpat = getTZLocalizationInfo(locale, GMT);
+        String dtepat = getTZLocalizationInfo(locale, HOUR);
+        
+        int n = dtepat.indexOf(';');
+        if (n != -1) {
+            if (value < 0) {
+                value = - value;
+                dtepat = dtepat.substring(n+1);
+            } else {
+                dtepat = dtepat.substring(0, n);
             }
         }
 
-        return cc;
+        final long mph = 3600000;
+        final long mpm = 60000;
+
+        SimpleDateFormat sdf = new SimpleDateFormat(dtepat, locale);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String res = sdf.format(new Long(value));
+        MessageFormat mf = new MessageFormat(msgpat);
+        res = mf.format(new Object[] { res });
+        return res;
     }
 
+    public static final int
+        PREFIX = 0,
+        HOUR = 1,
+        GMT = 2,
+        REGION_FORMAT = 3,
+        FALLBACK_FORMAT = 4;
+     
     /**
-     * If we meet the criteria of tr35 appendix j rule 5, return the display name, otherwise
-     * return null.
+     * Get the index'd tz datum for this locale.  Index must be one of the 
+     * values PREFIX, HOUR, GMT, REGION_FORMAT, FALLBACK_FORMAT
      */
-    public static String getSingleCountryDisplayName(String tzid, ULocale locale) {
-        // tr 35 appendix j rule 5 interpreted:
-        // if 
-        //    the canonical time zone id is associated with a non-empty country code string, and
-        //    the locale data has a translation for this country code, and
-        //    either 
-        //       the country code has only one locale id associated with it, or
-        //       the time zone id is in the single countries list
-        // then
-        //    return the translation of the country code
-        
-        String cc = getSingleCountry(tzid);
-        if (cc != null) {
-            return getCountryDisplayNameForCode(cc, locale);
+    public static String getTZLocalizationInfo(ULocale locale, int index) {
+        String baseName = locale.getBaseName();
+        for (int i = 0; i < TZ_LOCALIZATION_INFO.length; ++i) {
+            String[] info = TZ_LOCALIZATION_INFO[i];
+            String prefix = info[PREFIX];
+            if (prefix == null
+                || (index < info.length
+                    && info[index] != null
+                    && baseName.indexOf(prefix) == 0)) {
+
+                return info[index];
+            }
         }
-        return null;
+
+        throw new InternalError(); // should never get here
     }
+
+    // temporary for icu4j 3.4
+    // locale, hour, gmt, region, fallback
+    private static final String[][] TZ_LOCALIZATION_INFO = {
+        { "am", "+HHmm;-HHmm" },
+        { "bg", "+HHmm;-HHmm", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447{0}" },
+        { "cy", "+HHmm;-HHmm" },
+        { "el", "+HHmm;-HHmm" },
+        { "hr", "+HHmm;-HHmm" },
+        { "ja", "+HHmm;-HHmm", null, "{0}\u6642\u9593", "{0} ({1})\u00e6\u2122\u201a\u00e9\u2013\u201c" },
+        { "nn", "+HH.mm;-HH.mm" },
+        { "sk", "+HHmm;-HHmm" },
+        { "sl", "+HHmm;-HHmm" },
+        { "sr", "+HHmm;-HHmm" },
+        { "sv", "+HH.mm;-HH.mm", "GMT" },
+        { "th", "+HHmm;-HHmm" },
+        { "uk", "+HHmm;-HHmm" },
+        { "zh_Hant", "+HH:mm;-HH:mm" },
+        { "zh", "+HHmm;-HHmm" },
+        { null, "+HH:mm;-HH:mm", "GMT{0}", "{0}", "{0} ({1})" }
+    };
 
     private static Set getValidIDs() {
         // Construct list of time zones that are valid, according
