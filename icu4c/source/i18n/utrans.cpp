@@ -64,14 +64,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID U_EXPORT2 getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
 protected:
 
