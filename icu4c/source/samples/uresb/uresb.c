@@ -95,9 +95,9 @@ main(int argc, char* argv[]) {
             "error in command line argument \"%s\"\n",
             argv[-argc]);
     }
-    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+    if(argc<2 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
-            "usage: %s [-options]\n",
+            "usage: %s [-options] locale(s)\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -139,7 +139,7 @@ main(int argc, char* argv[]) {
     }
 
     if(options[6].doesOccur) {
-      VERBOSE = TRUE;
+        VERBOSE = TRUE;
     }
 
     outerr = u_finit(stderr, locale, encoding);
@@ -149,7 +149,7 @@ main(int argc, char* argv[]) {
         status = U_ZERO_ERROR;
         arg = getLongPathname(argv[i]);
 
-        printf("uresb: processing file \"%s\" in path \"%s\"\n", arg, resPath);
+        u_fprintf(out, "uresb: processing file \"%s\" in path \"%s\"\n", arg, resPath);
         bundle = ures_open(resPath, arg, &status);
         if(U_SUCCESS(status)) {
             u_fprintf(out, "%s\n", arg);

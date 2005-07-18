@@ -1,8 +1,9 @@
-## Copyright (c) 2001-2003 International Business Machines
+## Copyright (c) 2001-2005 International Business Machines
 ## Corporation and others. All Rights Reserved.
-TARGETS = uresb_en.res uresb_root.res uresb_sr.res
+PACKAGE_NAME = uresb
+TARGETS = en.res root.res sr.res
 GENRB = ..\..\..\bin\genrb.exe
-GENRBOPT = -s. -d. --package-name uresb  
+GENRBOPT = -s . -d .
 
 all : $(TARGETS)
     @echo All targets are up to date
@@ -10,13 +11,12 @@ all : $(TARGETS)
 clean : 
     -erase $(TARGETS)
 
-
-uresb_en.res : en.txt
+en.res : en.txt
     $(GENRB) $(GENRBOPT) $?
 
-uresb_root.res : root.txt
+root.res : root.txt
     $(GENRB) $(GENRBOPT) $?
 
-uresb_sr.res : sr.txt
+sr.res : sr.txt
     $(GENRB) $(GENRBOPT) --encoding cp1251 $?
 
