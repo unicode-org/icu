@@ -1526,6 +1526,7 @@ void NumberFormatTest::TestCurrencyUnit(void){
     if (!(*cu3 == cu)){
         errln("CurrencyUnit cloned object should be same");
     }
+    delete cu3;
 }
 
 void NumberFormatTest::TestCurrencyAmount(void){
@@ -1548,6 +1549,7 @@ void NumberFormatTest::TestCurrencyAmount(void){
     if (!(*ca3 == ca)){
         errln("CurrencyAmount cloned object should be same");
     }
+    delete ca3;
 }
 
 void NumberFormatTest::TestSymbolsWithBadLocale(void) {
