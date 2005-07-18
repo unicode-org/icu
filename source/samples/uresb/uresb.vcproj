@@ -94,10 +94,7 @@
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"
-				CommandLine="copy $(InputPath) ..\..\..\bin
-"
-				Outputs="..\..\..\bin\$(InputName).exe"/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icuiod.lib icutud.lib"

@@ -73,6 +73,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugrep", "..\ugrep\ugrep.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uresb", "..\uresb\uresb.vcproj", "{5AD1AEF5-E13B-4411-BDD8-FF735FADAE1B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{AB75D6BC-660C-4225-A601-CC40294E775E} = {AB75D6BC-660C-4225-A601-CC40294E775E}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ustring", "..\ustring\ustring.vcproj", "{3A28CC89-98B6-4E9E-B688-DF5651819759}"
