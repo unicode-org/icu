@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -82,6 +82,8 @@ public:
     void TestHistorical(void);
 
     void TestEquivalentIDs(void);
+
+    void TestAliasedNames(void);
 
     static const UDate INTERVAL;
 
