@@ -451,40 +451,60 @@ cleanupAndReturn:
     return;
 }
 
+static char *safeGetICUDataDirectory() {
+    const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
+    char *retStr = NULL;
+    if (dataDir != NULL) {
+        retStr = (char *)malloc(strlen(dataDir)+1);
+        strcpy(retStr, dataDir);
+    }
+    return retStr;
+}
     
 static void TestUDataFileAccess(){
-    UErrorCode status=U_ZERO_ERROR;
+    UErrorCode status;
+    char            *icuDataDir;
+    icuDataDir = safeGetICUDataDirectory();   /* save icu data dir, so we can put it back
+                                               *  after doing u_cleanup().                */
 
     /** UDATA_NO_FILES, ICU does not access the file system for data loading. */
+    status=U_ZERO_ERROR;
     u_cleanup();
     udata_setFileAccess(UDATA_NO_FILES,&status);
     u_init(&status);
+    if(U_FAILURE(status) && *icuDataDir == 0){
+        log_data_err("udata_setFileAccess(UDATA_NO_FILES) failed with ICU_DATA=\"\" err=%s\n", u_errorName(status));
+    }
 
     /** UDATA_ONLY_PACKAGES, ICU only loads data from packages, not from single files. */
+    status=U_ZERO_ERROR;
     u_cleanup();
     udata_setFileAccess(UDATA_ONLY_PACKAGES,&status);
     u_init(&status);
 
     /** UDATA_PACKAGES_FIRST, ICU loads data from packages first, and only from single files
         if the data cannot be found in a package. */
+    status=U_ZERO_ERROR;
     u_cleanup();
     udata_setFileAccess(UDATA_PACKAGES_FIRST,&status);
     u_init(&status);
-    
 
     /** UDATA_FILES_FIRST, ICU looks for data in single files first, then in packages. (default) */
+    status=U_ZERO_ERROR;
     u_cleanup();
     udata_setFileAccess(UDATA_FILES_FIRST,&status);
     u_init(&status);
 
     /** An alias for the default access mode. */
+    status=U_ZERO_ERROR;
     u_cleanup();
     udata_setFileAccess(UDATA_DEFAULT_ACCESS,&status);
+    u_setDataDirectory(icuDataDir);
     u_init(&status);
-
     if(U_FAILURE(status)){
-        log_err(u_errorName(status));
+        log_err("%s\n", u_errorName(status));
     }
+    free(icuDataDir);
 }
 
 
