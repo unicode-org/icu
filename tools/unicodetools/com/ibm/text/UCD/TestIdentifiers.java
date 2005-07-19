@@ -7,6 +7,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
@@ -72,7 +73,7 @@ public class TestIdentifiers {
 
 	TestIdentifiers(String caseType) throws IOException {
 		this.caseType = caseType;
-		loadFile(caseType);
+		loadWholeScriptConfusables(caseType);
 	}
 
 	private static class UnicodeSetToScript {
@@ -101,8 +102,47 @@ public class TestIdentifiers {
 
 	UnicodeSetToScript[][] scriptToUnicodeSetToScript = new UnicodeSetToScript[UScript.CODE_LIMIT][];
 	UnicodeSet[] fastReject = new UnicodeSet[UScript.CODE_LIMIT];
+	
+	UnicodeMap idnChars = new UnicodeMap();
+	UnicodeSet nonstarting = new UnicodeSet();
+	
+	void loadIdentifiers() throws IOException {
+		BufferedReader br = BagFormatter.openUTF8Reader(indir,
+				"idnchars.txt");
+		String line = null;
+		try {
+			while (true) {
+				line = Utility.readDataLine(br);
+				if (line == null)
+					break;
+				if (line.length() == 0)
+					continue;
+				String[] pieces = Utility.split(line, ';');
+				// part 0 is range
+				String range = pieces[0].trim();
+				int rangeDivider = range.indexOf("..");
+				int start, end;
+				if (rangeDivider < 0) {
+					start = end = Integer.parseInt(range, 16);
+				} else {
+					start = Integer.parseInt(range.substring(0, rangeDivider),
+							16);
+					end = Integer.parseInt(range.substring(rangeDivider + 2),
+							16);
+				}
+				// part 1 is script1
+				String type = pieces[1].trim().intern();
+				if (type.equals("nonstarting")) nonstarting.add(start,end);
+				else idnChars.putAll(start, end, type);
+			}
+		} catch (Exception e) {
+			throw (RuntimeException) new RuntimeException("Failure on line "
+					+ line).initCause(e);
+		}
+		br.close();
+	}
 
-	void loadFile(String filterType) throws IOException {
+	void loadWholeScriptConfusables(String filterType) throws IOException {
 		UnicodeSet[][] script_script_set = new UnicodeSet[UScript.CODE_LIMIT][UScript.CODE_LIMIT];
 		for (int i = 0; i < UScript.CODE_LIMIT; ++i) {
 			script_script_set[i] = new UnicodeSet[UScript.CODE_LIMIT];
