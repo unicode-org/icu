@@ -448,7 +448,7 @@ public final class UnicodeMap implements Cloneable, Lockable {
     		// retain them in the availableValues
     		Set temp = new HashSet();
             for (int i = 0; i < length - 1; ++i) {
-                temp.add(values[i]);
+                if (values[i] != null) temp.add(values[i]);
             }
             availableValues.retainAll(temp);
             staleAvailableValues = false;
