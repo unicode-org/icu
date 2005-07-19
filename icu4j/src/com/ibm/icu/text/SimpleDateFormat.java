@@ -333,9 +333,6 @@ public class SimpleDateFormat extends DateFormat {
     {
         this.pattern = pattern;
         this.formatData = new DateFormatSymbols(loc);
-        this.formatDataIsValid = 
-            LocaleUtility.isFallbackOf(formatData.getLocale(ULocale.ACTUAL_LOCALE).getBaseName(),
-                                       loc.getBaseName());
         initialize(loc);
     }
 
@@ -357,6 +354,7 @@ public class SimpleDateFormat extends DateFormat {
     {
         this.pattern = pattern;
         this.formatData = (DateFormatSymbols) formatData.clone();
+
         initialize(loc);
     }
 
@@ -461,6 +459,9 @@ public class SimpleDateFormat extends DateFormat {
     private void initialize(ULocale loc) {
         // time zone formatting
         locale = loc;
+        this.formatDataIsValid = 
+            LocaleUtility.isFallbackOf(formatData.getLocale(ULocale.ACTUAL_LOCALE).getBaseName(),
+                                       loc.getBaseName());
 
         // The format object must be constructed using the symbols for this zone.
         // However, the calendar should use the current default TimeZone.
