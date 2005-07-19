@@ -1,0 +1,21 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../cldr/common/main/hy_AM.xml
+// *
+// ***************************************************************************
+hy_AM{
+    Version{"1.27"}
+    calendar{
+        gregorian{
+            eras{
+                abbreviated{
+                    "Ք․Ա․",
+                    "Ք․Ե․",
+                }
+            }
+        }
+    }
+}
