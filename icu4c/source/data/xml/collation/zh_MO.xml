@@ -10,14 +10,10 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.3 $"/>
-		<generation date="$Date: 2005/06/07 23:38:01 $"/>
+		<version number="$Revision: 1.4 $"/>
+		<generation date="$Date: 2005/07/19 21:45:14 $"/>
 		<language type="zh"/> 
 		<territory type="MO"/> 
 	</identity>
-	
-	<collations>
-		<default type="traditional"/>
-	</collations>
 </ldml>
 
