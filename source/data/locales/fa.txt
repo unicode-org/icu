@@ -533,14 +533,14 @@ fa{
                 "ب.ظ.",
             }
             DateTimePatterns{
-                "H:mm:ss (zzzz)",
-                "H:mm:ss (zz)",
+                "HH:mm:ss (z)",
+                "HH:mm:ss (z)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d MMMM yyyy G",
+                "EEEE، d MMMM yyyy",
                 "d MMMM yyyy",
-                "yyyy/M/d",
-                "yy/M/d G",
+                "yyyy/MM/d",
+                "yyyy/MM/d",
                 "{1} {0}",
             }
             dayNames{

@@ -1716,7 +1716,7 @@ da{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE 'den' dd. MMM yyyy",
+                "EEEE 'den' d. MMMM yyyy",
                 "d. MMM yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
