@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+
 public final class CollectionUtilities {
 	/**
 	 * Utility like Arrays.asList()
@@ -59,5 +62,35 @@ public final class CollectionUtilities {
 			}
 		}
 		return bestSoFar;
+	}
+	
+	public interface Filter {
+		boolean matches(Object o);
+	}
+
+	public static Collection removeAll(Collection c, Filter f) {
+		for (Iterator it = c.iterator(); it.hasNext();) {
+			Object item = it.next();
+			if (f.matches(item)) it.remove();
+		}
+		return c;
+	}
+	
+	public static Collection retainAll(Collection c, Filter f) {
+		for (Iterator it = c.iterator(); it.hasNext();) {
+			Object item = it.next();
+			if (!f.matches(item)) it.remove();
+		}
+		return c;
+	}
+	
+	public static String remove(String source, UnicodeSet removals) {
+		StringBuffer result = new StringBuffer();
+		int cp;
+		for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
+			cp = UTF16.charAt(source, i);
+			if (!removals.contains(cp)) UTF16.append(result, cp);
+		}
+		return result.toString();
 	}
 }
