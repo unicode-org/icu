@@ -124,30 +124,37 @@ NumberFormatTest::TestAPI(void)
   }
 }
 
+class StubNumberForamt :public NumberFormat{
+public:
+    StubNumberForamt(){};
+    virtual UnicodeString& format(double number,UnicodeString& appendTo,FieldPosition& pos) const {
+        return appendTo;
+    }
+    virtual UnicodeString& format(int32_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+        return appendTo.append((UChar)0x0033);
+    }
+    virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+        return NumberFormat::format(number, appendTo, pos);
+    }
+    virtual UnicodeString& format(const Formattable& , UnicodeString& appendTo, FieldPosition& , UErrorCode& ) const {
+        return appendTo;
+    }
+    virtual void parse(const UnicodeString& text,
+                    Formattable& result,
+                    ParsePosition& parsePosition) const {}
+    virtual void parse( const UnicodeString& text,
+                        Formattable& result,
+                        UErrorCode& status) const {}
+    virtual UClassID getDynamicClassID(void) const {
+        static char classID = 0;
+        return (UClassID)&classID; 
+    }
+    virtual Format* clone() const {return NULL;}
+};
+
 void 
 NumberFormatTest::TestCoverage(void){
-    class StubNumberForamt :public NumberFormat{
-    public:
-        StubNumberForamt(){};
-        virtual UnicodeString& format(double number,UnicodeString& appendTo,FieldPosition& pos) const {
-            return appendTo;
-        }
-        virtual UnicodeString& format(int32_t number,UnicodeString& appendTo,FieldPosition& pos) const {
-            return appendTo.append(UChar('3'));
-        }
-        virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const {
-            return NumberFormat::format(number, appendTo, pos);
-        }
-        virtual void parse(const UnicodeString& text,
-                        Formattable& result,
-                        ParsePosition& parsePosition) const {}
-        virtual UClassID getDynamicClassID(void) const {
-             static char classID = 0;
-             return (UClassID)&classID; 
-        }
-        virtual Format* clone() const {return NULL;}
-    } stub;
-    
+    StubNumberForamt stub;
     UnicodeString agent("agent");
     FieldPosition pos;
     int64_t num = 4;
