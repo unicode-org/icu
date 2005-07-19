@@ -1,10 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
+
+import java.util.Date;
+
+import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.util.VersionInfo;
 
 public class ScriptIDModuleWriter extends ScriptModuleWriter
 {
@@ -17,10 +22,16 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     {
         int minScript = scriptData.getMinValue();
         int maxScript = scriptData.getMaxValue();
+        int verMajor  = VersionInfo.ICU_VERSION.getMajor();
+        int verMinor  = VersionInfo.ICU_VERSION.getMinor();
         
         openFile(fileName);
-        writeHeader("__LESCRIPTS_H", includeFiles);
-        output.println(scriptPreamble);
+        writeHeader("__LESCRIPTS_H", includeFiles, scriptBrief);
+
+        MessageFormat format = new MessageFormat(scriptPreamble);
+        Object args[] = {new Integer(verMajor), new Integer(verMinor)};
+
+        output.println(format.format(args));
         
         for (int script = minScript; script <= maxScript; script += 1) {
             output.print("    ");
@@ -49,10 +60,16 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     {
         int minLanguage = languageData.getMinValue();
         int maxLanguage = languageData.getMaxValue();
+        int verMajor    = VersionInfo.ICU_VERSION.getMajor();
+        int verMinor    = VersionInfo.ICU_VERSION.getMinor();
         
         openFile(fileName);
-        writeHeader("__LELANGUAGES_H", includeFiles);
-        output.println(languagePreamble);
+        writeHeader("__LELANGUAGES_H", includeFiles, languageBrief);
+
+        MessageFormat format = new MessageFormat(languagePreamble);
+        Object args[] = {new Integer(verMajor), new Integer(verMinor)};
+
+        output.println(format.format(args));
         
         for (int language = minLanguage; language <= maxLanguage; language += 1) {
             output.print("    ");
@@ -82,12 +99,20 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     private static final String scriptPreamble = 
     "/**\n" +
     " * Constants for Unicode script values, generated using\n" +
-    " * ICU4J's <code>UScript</code> class.\n" +
+    " * ICU4J''s <code>UScript</code> class.\n" +
     " *\n" +
-    " * @draft ICU 2.6\n" +
+    " * @draft ICU {0}.{1}\n" +
     " */\n" +
     "\n" +
-    "enum ScriptCodes {";
+    "enum ScriptCodes '{'";
+    
+    private static final String scriptBrief =
+    "/**\n" +
+    " * \\file\n" + 
+    " * \\brief C++ API: Constants for Unicode script values\n" +
+    " */\n" +
+    "\n";
+
     
     private static final String languagePreamble = 
     "/**\n" +
@@ -95,11 +120,18 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
     " * this is just a list of languages which the LayoutEngine\n" +
     " * supports.\n" +
     " *\n" +
-    " * @draft ICU 2.6\n" +
+    " * @draft ICU {0}.{1}\n" +
     " */\n" +
     "\n" +
-    "enum LanguageCodes {";
+    "enum LanguageCodes '{'";
     
+    private static final String languageBrief =
+        "/**\n" +
+        " * \\file\n" + 
+        " * \\brief C++ API: List of language codes for LayoutEngine\n" +
+        " */\n" +
+        "\n";
+
     private static final String postamble =
     "};\n";
 }

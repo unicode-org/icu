@@ -42,6 +42,11 @@ public class ModuleWriter
 
     public void writeHeader(String define, String[] includeFiles)
     {
+        writeHeader(define, includeFiles, null);
+    }
+    
+    public void writeHeader(String define, String[] includeFiles, String brief)
+    {
         MessageFormat format = new MessageFormat(moduleHeader);
         Object args[] = {new Date(System.currentTimeMillis())};
 
@@ -68,7 +73,11 @@ public class ModuleWriter
             output.println();
         }
         
-        output.print(moduleBegin);
+        if (brief != null) {
+            output.print(brief);
+        }
+        
+        output.println(moduleBegin);
     }
 
     public void writeTrailer() {
@@ -101,7 +110,7 @@ public class ModuleWriter
         " */\n" +
         "\n";
 
-    protected static final String moduleBegin = "U_NAMESPACE_BEGIN\n\n";
+    protected static final String moduleBegin = "U_NAMESPACE_BEGIN\n";
 
     protected static final String moduleTrailer = "U_NAMESPACE_END\n";
 
