@@ -816,126 +816,72 @@ public class SimpleDateFormat extends DateFormat {
         case 17: // 'z' - ZONE_OFFSET
         case 24: // 'v' - TIMEZONE_GENERIC 
             {
-            String res = null;
-            boolean isGeneric = patternCharIndex == 24;
-
-            String tzid = ZoneMeta.getCanonicalID(cal.getTimeZone().getID());
-
-            String[] zs = null;
-            if (tzid !=null && formatDataIsValid) {
-                int zoneIndex = formatData.getZoneIndex(tzid);
-                if (zoneIndex != -1) {
-                    zs = formatData.zoneStrings[zoneIndex];
-                }
-            }
-
-            if (zs != null) {
-                if (isGeneric) {
-                    if (zs.length >= 7) { // have generic strings
-                        int ix = count < 4 ? 6 : 5;
-                        if (zs.length > 7) {
-                            ix += 1;
-                        }
-                        res = zs[ix];
-                    } else if (zs.length == 6) { // have city string
-                        res = ZoneMeta.displayRegion(zs[5], locale);
-                    } 
-                } else {
-                    int ix = count < 4 ? 2 : 1;
-                    if (cal.get(Calendar.DST_OFFSET) != 0) {
-                        ix += 2;
-                    }
-                    res = zs[ix];
-                }
-            }
-
-            if (res == null) {
-                // note, tr35 does not describe the special case for 'no country' implemented below, this is from discussion with Mark
-                if (tzid == null || !isGeneric || ZoneMeta.getCanonicalCountry(tzid) == null) {
-                    long offset = cal.get(Calendar.ZONE_OFFSET) +
-                        cal.get(Calendar.DST_OFFSET);
-                    res = ZoneMeta.displayGMT(offset, locale);
-                } else { 
-                    res = ZoneMeta.displayFallback(tzid, locale);
-                }
-            }
-
-            buf.append(res);
-                
-            /*
-            int zoneIndex = -1;
-            if (patternCharIndex == 17 || formatDataIsValid) {
-                zoneIndex = formatData.getZoneIndex(tzid);
-            }
-            if (zoneIndex == -1) {
-                if (patternCharIndex == 24) { // 'v'
-                    // no format data, see if we have an Olson ID
-                    String ntzid = ZoneMeta.getCanonicalID(tzid);
-                    if (ntzid != null) {
-                        buf.append(ZoneMeta.displayFallback(ntzid, formatDataIsValid, locale));
-                        break; // early return
-                    }
-                }
-
-                // long form, localized GMT pattern
-                value = cal.get(Calendar.ZONE_OFFSET) +
-                    cal.get(Calendar.DST_OFFSET);
-                
-                buf.append(ZoneMeta.displayGMT(tzid, value, locale));
-            } else {
-                String[] zs = formatData.zoneStrings[zoneIndex];
-
                 String res = null;
-                if (patternCharIndex == 24) { // 'v'
-                    if (zs.length >= 7) { // have generic strings
-                        int ix = count < 4 ? 6 : 5;
-                        if (zs.length > 7) {
-                            ix += 1;
+                boolean isGeneric = patternCharIndex == 24;
+
+                String tzid = ZoneMeta.getCanonicalID(cal.getTimeZone().getID());
+
+                String[] zs = null;
+                if (tzid !=null && formatDataIsValid) {
+                    int zoneIndex = formatData.getZoneIndex(tzid);
+                    if (zoneIndex != -1) {
+                        zs = formatData.zoneStrings[zoneIndex];
+                    }
+                }
+
+                if (zs != null) {
+                    if (isGeneric) {
+                        if (zs.length >= 7) { // have generic strings
+                            int ix = count < 4 ? 6 : 5;
+                            if (zs.length > 7) {
+                                ix += 1;
+                            }
+                            res = zs[ix];
+                        } else if (zs.length == 6) { // have city string
+                            res = ZoneMeta.displayRegion(zs[5], locale);
+                        } 
+                    } else {
+                        int ix = count < 4 ? 2 : 1;
+                        if (cal.get(Calendar.DST_OFFSET) != 0) {
+                            ix += 2;
                         }
                         res = zs[ix];
-                    } else if (zs.length == 6) { // have city string
-                        res = ZoneMeta.displayRegion(zs[5], locale);
-                    } else { 
-                        String cc = ZoneMeta.getSingleCountryDisplayName(tzid, locale);
-                        if (cc != null) { // have single country string
-                            res = ZoneMeta.displayRegion(cc, locale);
-                        } else { // use tail
-                            res = ZoneMeta.displayFallback(tzid, true, locale);
-                        }
                     }
-                } else {
-                    int ix = count < 4 ? 2 : 1;
-                    if (cal.get(Calendar.DST_OFFSET) != 0) {
-                        ix += 2;
-                    }
-                    res = zs[ix];
                 }
+
+                if (res == null) {
+                    // note, tr35 does not describe the special case for 'no country' implemented below, this is from discussion with Mark
+                    if (tzid == null || !isGeneric || ZoneMeta.getCanonicalCountry(tzid) == null) {
+                        long offset = cal.get(Calendar.ZONE_OFFSET) +
+                            cal.get(Calendar.DST_OFFSET);
+                        res = ZoneMeta.displayGMT(offset, locale);
+                    } else { 
+                        res = ZoneMeta.displayFallback(tzid, locale);
+                    }
+                }
+
                 buf.append(res);
-            } 
-*/
-
-
             } break;
         case 23: // 'Z' - TIMEZONE_RFC
             {
                 if (count < 4) {
                     // 'short' (standard Java) form, must use ASCII digits
+                    long val= (cal.get(Calendar.ZONE_OFFSET) +
+                           cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
                     char sign = '+';
-                    value = (cal.get(Calendar.ZONE_OFFSET) +
-                             cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
-                    if (value < 0) {
-                        value = -value;
+                    if (val < 0) {
+                        val = -val;
                         sign = '-';
                     }
-                    value = (value / 3) * 5 + (value % 60); // minutes => KKmm
+                    val = (val / 3) * 5 + (val % 60); // minutes => KKmm
                     buf.append(sign);
-                    buf.append(new DecimalFormat("0000").format(value));
+                    buf.append(new DecimalFormat("0000").format(val));
                 } else {
                     // long form, localized GMT pattern
                     // not in 3.4 locale data, need to add, so use same default as for general time zone names
-                    value = cal.get(Calendar.ZONE_OFFSET) +
+                    long val = cal.get(Calendar.ZONE_OFFSET) +
                         cal.get(Calendar.DST_OFFSET);
-                    buf.append(ZoneMeta.displayGMT(value, locale));
+                    buf.append(ZoneMeta.displayGMT(val, locale));
                 }
             }
             break;

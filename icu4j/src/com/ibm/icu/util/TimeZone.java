@@ -551,6 +551,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static synchronized TimeZone getTimeZone(String ID) {
+        // (not for 3.4) ID = ZoneMeta.getCanonicalID(ID);
         return JDKTimeZone.wrap(java.util.TimeZone.getTimeZone(ID));
     }
 
