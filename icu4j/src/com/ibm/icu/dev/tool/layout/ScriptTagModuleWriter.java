@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -48,8 +48,7 @@ public class ScriptTagModuleWriter extends ScriptModuleWriter
     public void writeHeaderFile(String fileName)
     {
         openFile(fileName);
-        writeHeader("__SCRIPTANDLANGUAGES_H", hIncludes);
-        output.println(hPreamble);
+        writeHeader("__SCRIPTANDLANGUAGES_H", hIncludes, hPreamble);
         
         writeTagValueHeader(scriptData, "Script");
         
@@ -110,7 +109,8 @@ public class ScriptTagModuleWriter extends ScriptModuleWriter
     "/**\n" +
     " * \\file\n" +
     " * \\internal\n" +
-    " */\n";
+    " */\n" +
+    "\n";
     
     private static final String hScriptPostamble =
     "\n" +
