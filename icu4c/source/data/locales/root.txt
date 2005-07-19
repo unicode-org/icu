@@ -110,7 +110,49 @@ root{
                 "*",
             }
         }
+        coptic{
+            monthNames{
+                format{
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+            }
+        }
         default{"gregorian"}
+        ethiopic{
+            monthNames{
+                format{
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AM",
@@ -545,48 +587,6 @@ root{
                 default{"format"}
                 format{
                     default{"wide"}
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Tout",
-                        "Baba",
-                        "Hator",
-                        "Kiahk",
-                        "Toba",
-                        "Amshir",
-                        "Baramhat",
-                        "Baramouda",
-                        "Bashans",
-                        "Paona",
-                        "Epep",
-                        "Mesra",
-                        "Nasie",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Meskerem",
-                        "Tekemt",
-                        "Hedar",
-                        "Tahsas",
-                        "Ter",
-                        "Yekatit",
-                        "Megabit",
-                        "Miazia",
-                        "Genbot",
-                        "Sene",
-                        "Hamle",
-                        "Nehasse",
-                        "Pagumen",
-                    }
                 }
             }
         }

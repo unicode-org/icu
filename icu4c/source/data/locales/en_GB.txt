@@ -35,8 +35,6 @@ en_GB{
             "British Summer Time",
             "BST",
             "London",
-            "British Time",
-            "BT",
         }
     }
 }
