@@ -829,6 +829,7 @@ public class SimpleDateFormat extends DateFormat {
                     }
                 }
 
+                String city = null;
                 if (zs != null) {
                     if (isGeneric) {
                         if (zs.length >= 7) { // have generic strings
@@ -838,7 +839,7 @@ public class SimpleDateFormat extends DateFormat {
                             }
                             res = zs[ix];
                         } else if (zs.length == 6) { // have city string
-                            res = ZoneMeta.displayRegion(zs[5], locale);
+                            city = zs[5];
                         } 
                     } else {
                         int ix = count < 4 ? 2 : 1;
@@ -856,7 +857,7 @@ public class SimpleDateFormat extends DateFormat {
                             cal.get(Calendar.DST_OFFSET);
                         res = ZoneMeta.displayGMT(offset, locale);
                     } else { 
-                        res = ZoneMeta.displayFallback(tzid, locale);
+                        res = ZoneMeta.displayFallback(tzid, city, locale);
                     }
                 }
 

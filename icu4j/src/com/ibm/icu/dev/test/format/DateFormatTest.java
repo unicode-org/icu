@@ -527,8 +527,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "z", "BST", "Europe/London" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "British Summer Time", "Europe/London" },
     // icu en.txt has exemplar city for this time zone
-        { "en", "Europe/London", "2004-07-15T00:00:00Z", "v", "London", "Europe/London" },
-        { "en", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "London", "Europe/London" },
+        { "en", "Europe/London", "2004-07-15T00:00:00Z", "v", "United Kingdom", "Europe/London" },
+        { "en", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "United Kingdom", "Europe/London" },
 
         /* ibm JDK 1.4.2 doesn't support this timezone id
         { "en", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -647,8 +647,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "PDT", "America/Los_Angeles" },
         { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\u592a\u5e73\u6d0b\u590f\u4ee4\u65f6\u95f4", "America/Los_Angeles" },
     // icu zh.txt has exemplar city for this time zone
-        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u6d1b\u6749\u77f6", "America/Los_Angeles" },
-        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u6d1b\u6749\u77f6", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u6d1b\u6749\u77f6 (\u7f8e\u56fd)", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u6d1b\u6749\u77f6 (\u7f8e\u56fd)", "America/Los_Angeles" },
 
         /* JDK 1.5 doesn't support this time zone id
         { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -839,8 +839,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "PDT", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\u0422\u0438\u0445\u043e\u043e\u043a\u0435\u0430\u043d\u0441\u043a\u0430 \u043b\u044f\u0442\u043d\u0430 \u0447\u0430\u0441\u043e\u0432\u0430 \u0437\u043e\u043d\u0430", "America/Los_Angeles" },
     // icu bg.txt has exemplar city for this time zone
-        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441", "America/Los_Angeles" },
-        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441", "America/Los_Angeles" },
+        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441 (\u0421\u0410\u0429)", "America/Los_Angeles" },
+        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u041b\u043e\u0441 \u0410\u043d\u0436\u0435\u043b\u0438\u0441 (\u0421\u0410\u0429)", "America/Los_Angeles" },
 
         /* JDK 1.5 doesn't support this time zone id
         { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -939,8 +939,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\u592a\u5e73\u6d0b\u590f\u6642\u9593", "America/Los_Angeles" },
     // icu ja.txt has exemplar city for this time zone
     // we use the region format for this case, and so append \u6642\u9593 to the result, i.e. this translates as "Los Angeles Time"
-        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9\u6642\u9593", "America/Los_Angeles" },
-        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9\u6642\u9593", "America/Los_Angeles" },
+        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9 (\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD)\u6642\u9593", "America/Los_Angeles" },
+        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9 (\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD)\u6642\u9593", "America/Los_Angeles" },
 
         /* JDK 1.5 doesn't support this time zone id
         { "ja", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
