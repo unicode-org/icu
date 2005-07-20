@@ -251,7 +251,7 @@ static const IndicClassTable * const indicClassTables[] = {
     &bengClassTable, /* 'beng' (BENGALI) */
     NULL,            /* 'bopo' (BOPOMOFO) */
     NULL,            /* 'cher' (CHEROKEE) */
-    NULL,            /* 'qaac' (COPTIC) */
+    NULL,            /* 'copt' (COPTIC) */
     NULL,            /* 'cyrl' (CYRILLIC) */
     NULL,            /* 'dsrt' (DESERET) */
     &devaClassTable, /* 'deva' (DEVANAGARI) */
@@ -298,7 +298,14 @@ static const IndicClassTable * const indicClassTables[] = {
     NULL,            /* 'shaw' (SHAVIAN) */
     NULL,            /* 'tale' (TAI_LE) */
     NULL,            /* 'ugar' (UGARITIC) */
-    NULL             /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
+    NULL,            /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
+    NULL,            /* 'bugi' (BUGINESE) */
+    NULL,            /* 'glag' (GLAGOLITIC) */
+    NULL,            /* 'khar' (KHAROSHTHI) *
+    NULL,            /* 'sylo' (SYLOTI_NAGRI) */
+    NULL,            /* 'talu' (NEW_TAI_LUE) */
+    NULL,            /* 'tfng' (TIFINAGH) */
+    NULL             /* 'xpeo' (OLD_PERSIAN) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
