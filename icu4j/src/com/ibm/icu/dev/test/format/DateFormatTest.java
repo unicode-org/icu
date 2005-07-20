@@ -496,6 +496,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "America/Havana", "2004-07-15T00:00:00Z", "v", "Cuba", "America/Havana" },
         { "en", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "Cuba", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "en", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "en", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
         { "en", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+11:00", "+11:00" },
@@ -506,7 +507,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+10:00", "+10:00" },
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (Australia)", "Australia/Sydney" },
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (Australia)", "Australia/Sydney" },
-
+        */
         { "en", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "en", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
         { "en", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", "GMT+11:00", "+11:00" },
@@ -591,6 +592,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "de", "America/Havana", "2004-07-15T00:00:00Z", "v", "Kuba", "America/Havana" },
         { "de", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "Kuba", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "de", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "de", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
         { "de", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+11:00", "+11:00" },
@@ -601,6 +603,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "de", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+10:00", "+10:00" },
         { "de", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (Australien)", "Australia/Sydney" },
         { "de", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (Australien)", "Australia/Sydney" },
+        */
 
         { "de", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "de", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
@@ -687,6 +690,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u53e4\u5df4", "America/Havana" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u53e4\u5df4", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
@@ -698,6 +702,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // icu zh.txt does not have info for this time zone
         { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (\u6fb3\u5927\u5229\u4e9a)", "Australia/Sydney" },
         { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (\u6fb3\u5927\u5229\u4e9a)", "Australia/Sydney" },
+        */
 
         { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
@@ -783,6 +788,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u0915\u094d\u092f\u0942\u092c\u093e", "America/Havana" },
         { "hi", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u0915\u094d\u092f\u0942\u092c\u093e", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "hi", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "hi", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+\u0967\u0967:\u0966\u0966", "+11:00" },
         { "hi", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+\u0967\u0967:\u0966\u0966", "+11:00" },
@@ -793,6 +799,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+\u0967\u0966:\u0966\u0966", "+10:00" },
         { "hi", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)", "Australia/Sydney" },
         { "hi", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (\u0911\u0938\u094d\u091f\u094d\u0930\u0947\u0932\u093f\u092f\u093e)", "Australia/Sydney" },
+        */
 
         { "hi", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "hi", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+\u0967\u0967:\u0966\u0966", "+11:00" },
@@ -879,6 +886,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "bg", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u041a\u0443\u0431\u0430", "America/Havana" },
         { "bg", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u041a\u0443\u0431\u0430", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+1100", "+11:00" },
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+1100", "+11:00" },
@@ -890,6 +898,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // icu bg.txt does not have info for this time zone
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)", "Australia/Sydney" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (\u0410\u0432\u0441\u0442\u0440\u0430\u043b\u0438\u044f)", "Australia/Sydney" },
+        */
 
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+1100", "+11:00" },
@@ -979,6 +988,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u30ad\u30e5\u30fc\u30d0\u6642\u9593", "America/Havana" },
         { "ja", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u30ad\u30e5\u30fc\u30d0\u6642\u9593", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "ja", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "ja", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
         { "ja", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
@@ -990,6 +1000,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // icu ja.txt does not have info for this time zone
         { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
         { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
+        */
 
         { "ja", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "ja", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
@@ -1075,6 +1086,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "as", "America/Havana", "2004-07-15T00:00:00Z", "v", "CU", "America/Havana" },
         { "as", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "CU", "America/Havana" },
 
+        /* ibm JDK 1.4.1 doesn't support this timezone id
         { "as", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "as", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
         { "as", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+11:00", "+11:00" },
@@ -1085,6 +1097,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "as", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+10:00", "+10:00" },
         { "as", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Sydney (AU)", "Australia/Sydney" },
         { "as", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Sydney (AU)", "Australia/Sydney" },
+        */
 
         { "as", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "as", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
