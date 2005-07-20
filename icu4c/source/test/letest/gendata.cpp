@@ -62,58 +62,6 @@ const char *header =
     "#include \"letest.h\"\n"
     "\n";
 
-#if 0
-char *scriptNames[] =
-{
-      "USCRIPT_COMMON",      /* Zyyy */
-      "USCRIPT_INHERITED",   /* Qaai */
-      "USCRIPT_ARABIC",      /* Arab */
-      "USCRIPT_ARMENIAN",    /* Armn */
-      "USCRIPT_BENGALI",     /* Beng */
-      "USCRIPT_BOPOMOFO",    /* Bopo */
-      "USCRIPT_CHEROKEE",    /* Cher */
-      "USCRIPT_COPTIC",      /* Copt=Qaac */
-      "USCRIPT_CYRILLIC",    /* Cyrl (Cyrs) */
-      "USCRIPT_DESERET",     /* Dsrt */
-      "USCRIPT_DEVANAGARI",  /* Deva */
-      "USCRIPT_ETHIOPIC",    /* Ethi */
-      "USCRIPT_GEORGIAN",    /* Geor (Geon, Geoa) */
-      "USCRIPT_GOTHIC",      /* Goth */
-      "USCRIPT_GREEK",       /* Grek */
-      "USCRIPT_GUJARATI",    /* Gujr */
-      "USCRIPT_GURMUKHI",    /* Guru */
-      "USCRIPT_HAN",         /* Hani */
-      "USCRIPT_HANGUL",      /* Hang */
-      "USCRIPT_HEBREW",      /* Hebr */
-      "USCRIPT_HIRAGANA",    /* Hira */
-      "USCRIPT_KANNADA",     /* Knda */
-      "USCRIPT_KATAKANA",    /* Kana */
-      "USCRIPT_KHMER",       /* Khmr */
-      "USCRIPT_LAO",         /* Laoo */
-      "USCRIPT_LATIN",       /* Latn (Latf, Latg) */
-      "USCRIPT_MALAYALAM",   /* Mlym */
-      "USCRIPT_MONGOLIAN",   /* Mong */
-      "USCRIPT_MYANMAR",     /* Mymr */
-      "USCRIPT_OGHAM",       /* Ogam */
-      "USCRIPT_OLD_ITALIC",  /* Ital */
-      "USCRIPT_ORIYA",       /* Orya */
-      "USCRIPT_RUNIC",       /* Runr */
-      "USCRIPT_SINHALA",     /* Sinh */
-      "USCRIPT_SYRIAC",      /* Syrc (Syrj, Syrn, Syre) */
-      "USCRIPT_TAMIL",       /* Taml */
-      "USCRIPT_TELUGU",      /* Telu */
-      "USCRIPT_THAANA",      /* Thaa */
-      "USCRIPT_THAI",        /* Thai */
-      "USCRIPT_TIBETAN",     /* Tibt */
-      "USCRIPT_UCAS",        /* Cans */
-      "USCRIPT_YI",          /* Yiii */
-      "USCRIPT_TAGALOG",     /* Tglg */
-      "USCRIPT_HANUNOO",     /* Hano */
-      "USCRIPT_BUHID",       /* Buhd */
-      "USCRIPT_TAGBANWA"     /* Tagb */
-};
-#endif
-
 LEUnicode devaText[] =
 {
     0x0936, 0x094d, 0x0930, 0x0940, 0x092e, 0x0926, 0x094d, 0x0020,
