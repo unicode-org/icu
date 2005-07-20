@@ -1,9 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
+ *
+ * Generated on: 07/19/2005 01:01:08 PM PDT
  */
 
 #include "LETypes.h"
@@ -20,7 +22,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     bengScriptTag, /* 'beng' (BENGALI) */
     bopoScriptTag, /* 'bopo' (BOPOMOFO) */
     cherScriptTag, /* 'cher' (CHEROKEE) */
-    qaacScriptTag, /* 'qaac' (COPTIC) */
+    coptScriptTag, /* 'copt' (COPTIC) */
     cyrlScriptTag, /* 'cyrl' (CYRILLIC) */
     dsrtScriptTag, /* 'dsrt' (DESERET) */
     devaScriptTag, /* 'deva' (DEVANAGARI) */
@@ -67,7 +69,14 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     shawScriptTag, /* 'shaw' (SHAVIAN) */
     taleScriptTag, /* 'tale' (TAI_LE) */
     ugarScriptTag, /* 'ugar' (UGARITIC) */
-    hrktScriptTag  /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
+    hrktScriptTag, /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
+    bugiScriptTag, /* 'bugi' (BUGINESE) */
+    glagScriptTag, /* 'glag' (GLAGOLITIC) */
+    kharScriptTag, /* 'khar' (KHAROSHTHI) */
+    syloScriptTag, /* 'sylo' (SYLOTI_NAGRI) */
+    taluScriptTag, /* 'talu' (NEW_TAI_LUE) */
+    tfngScriptTag, /* 'tfng' (TIFINAGH) */
+    xpeoScriptTag  /* 'xpeo' (OLD_PERSIAN) */
 };
 
 const LETag OpenTypeLayoutEngine::languageTags[] = {

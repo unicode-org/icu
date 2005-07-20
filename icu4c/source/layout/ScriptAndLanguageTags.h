@@ -1,9 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
+ *
+ * Generated on: 07/19/2005 01:01:08 PM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -11,12 +13,12 @@
 
 #include "LETypes.h"
 
-U_NAMESPACE_BEGIN
-
 /**
  * \file
  * \internal
  */
+
+U_NAMESPACE_BEGIN
 
 const LETag zyyyScriptTag = 0x7A797979; /* 'zyyy' (COMMON) */
 const LETag qaaiScriptTag = 0x71616169; /* 'qaai' (INHERITED) */
@@ -25,7 +27,7 @@ const LETag armnScriptTag = 0x61726D6E; /* 'armn' (ARMENIAN) */
 const LETag bengScriptTag = 0x62656E67; /* 'beng' (BENGALI) */
 const LETag bopoScriptTag = 0x626F706F; /* 'bopo' (BOPOMOFO) */
 const LETag cherScriptTag = 0x63686572; /* 'cher' (CHEROKEE) */
-const LETag qaacScriptTag = 0x71616163; /* 'qaac' (COPTIC) */
+const LETag coptScriptTag = 0x636F7074; /* 'copt' (COPTIC) */
 const LETag cyrlScriptTag = 0x6379726C; /* 'cyrl' (CYRILLIC) */
 const LETag dsrtScriptTag = 0x64737274; /* 'dsrt' (DESERET) */
 const LETag devaScriptTag = 0x64657661; /* 'deva' (DEVANAGARI) */
@@ -73,6 +75,13 @@ const LETag shawScriptTag = 0x73686177; /* 'shaw' (SHAVIAN) */
 const LETag taleScriptTag = 0x74616C65; /* 'tale' (TAI_LE) */
 const LETag ugarScriptTag = 0x75676172; /* 'ugar' (UGARITIC) */
 const LETag hrktScriptTag = 0x68726B74; /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
+const LETag bugiScriptTag = 0x62756769; /* 'bugi' (BUGINESE) */
+const LETag glagScriptTag = 0x676C6167; /* 'glag' (GLAGOLITIC) */
+const LETag kharScriptTag = 0x6B686172; /* 'khar' (KHAROSHTHI) */
+const LETag syloScriptTag = 0x73796C6F; /* 'sylo' (SYLOTI_NAGRI) */
+const LETag taluScriptTag = 0x74616C75; /* 'talu' (NEW_TAI_LUE) */
+const LETag tfngScriptTag = 0x74666E67; /* 'tfng' (TIFINAGH) */
+const LETag xpeoScriptTag = 0x7870656F; /* 'xpeo' (OLD_PERSIAN) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
