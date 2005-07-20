@@ -172,45 +172,6 @@ public final class ZoneMeta {
         }
     }
 
-
-    // translation of appendix j
-    // A) "Canonicalize the olson ID"
-    // --> map the passed-in id to an olson id.
-    //     A.1) if there is no such id, goto C (GMT)
-    //
-    // B) "If there is an exact translation in the resolved locale, use it"
-    // --> get the zone info data for this locale.  check to see if it came from a
-    // fallback of this locale (and didn't go up the defaultLocale chain).  (note: record this as 'IS_VALID')
-    //     B.1) if it did, check to see that the requested form is available (long/short, generic/standard/daylight)
-    //        B.1.a) if it is, return it.
-    //
-    // C) "For non-wall-time, use GMT format"
-    // --> if not generic, look up GMT format, translation, and hours, format the offset value, and return.
-    //
-    // D) "If there is an exemplar city, use the region format"
-    // --> look up the exemplar city, and if found, look up region format, format the city, and return.
-    //
-    // E) "If there is a country for the time zone..."
-    // --> the time zone is not associated with 'no country' (note: record this as 'COUNTRY_CODE')
-    // "and a translation in the locale for the country name..."
-    // --> if IS_VALID (see B) and there is a translation for the country (note: record this as 'COUNTRY')
-    // "and the country has one modern time zone or is in the singleCountries list..."
-    // --> if the info is marked true for this time zone
-    // "use it with the region format"
-    // --> look up the region format, format the country, and return.
-    //
-    // F) "If it is a perpetual alias..."
-    // --> no idea what this means, so skip
-    //
-    // G) "Fall back to the raw Olson ID, using the fallback format
-    // --> convert the tail of the time zone id to a city string as described (note: record this as 'CITY')
-    //    G.1 if (COUNTRY is null) set COUNTRY to COUNTRY_CODE 
-    //    G.2 else format the city and country using the fallback format, and return.
-    //    
-    // H) "Else use the (possibly multi-offset) GMT format
-    // --> else no country?  but we've fallen back to the raw olson id... how do we reach this point?
-    // --> also, it sounds like i'd need to examine the GMT format string to see if it is multi-offset or not
-
     private static String[] getCanonicalInfo(String id) {
         if (canonicalMap == null) {
             Map m = new HashMap();
@@ -272,7 +233,7 @@ public final class ZoneMeta {
     /**
      * Handle fallbacks for generic time (rules E.. G)
      */
-    public static String displayFallback(String tzid, ULocale locale) {
+    public static String displayFallback(String tzid, String city, ULocale locale) {
         String[] info = getCanonicalInfo(tzid);
         if (info == null) {
             return null; // error
@@ -307,20 +268,19 @@ public final class ZoneMeta {
                 return displayRegion(country_code, locale);
             }
         }
-//         if (country != null && info[2] != null) { // single country
-//             return displayRegion(country, locale);
-//         }
 
-        String city = tzid.substring(tzid.lastIndexOf('/')+1);
-        int n;
-        if ((n = city.indexOf('_')) != -1) {
-            char[] chars = city.toCharArray();
-            for (; n < chars.length; ++n) {
-                if (chars[n] == '_') {
-                    chars[n] = ' ';
+        if (city == null) {
+            city = tzid.substring(tzid.lastIndexOf('/')+1);
+            int n;
+            if ((n = city.indexOf('_')) != -1) {
+                char[] chars = city.toCharArray();
+                for (; n < chars.length; ++n) {
+                    if (chars[n] == '_') {
+                        chars[n] = ' ';
+                    }
                 }
+                city = new String(chars);
             }
-            city = new String(chars);
         }
 
         if (country == null) {
