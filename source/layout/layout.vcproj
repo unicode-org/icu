@@ -284,6 +284,9 @@
 				RelativePath=".\MarkToMarkPosnSubtables.cpp">
 			</File>
 			<File
+				RelativePath=".\MirroredCharData.cpp">
+			</File>
+			<File
 				RelativePath=".\MorphTables.cpp">
 			</File>
 			<File

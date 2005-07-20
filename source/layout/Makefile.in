@@ -105,6 +105,7 @@ MarkArrays.o \
 MarkToBasePosnSubtables.o \
 MarkToLigaturePosnSubtables.o \
 MarkToMarkPosnSubtables.o \
+MirroredCharData.o \
 MPreFixups.o \
 MultipleSubstSubtables.o \
 OpenTypeUtilities.o \
