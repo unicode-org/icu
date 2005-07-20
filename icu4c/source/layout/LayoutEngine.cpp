@@ -43,28 +43,6 @@ const LEUnicode32 DefaultCharMapper::controlChars[] = {
 
 const le_int32 DefaultCharMapper::controlCharsCount = ARRAY_SIZE(controlChars);
 
-const LEUnicode32 DefaultCharMapper::mirroredChars[] = {
-    0x0028, 0x0029, // ascii paired punctuation
-    0x003c, 0x003e,
-    0x005b, 0x005d,
-    0x007b, 0x007d,
-    0x2045, 0x2046, // math symbols (not complete)
-    0x207d, 0x207e,
-    0x208d, 0x208e,
-    0x2264, 0x2265,
-    0x3008, 0x3009, // chinese paired punctuation
-    0x300a, 0x300b,
-    0x300c, 0x300d,
-    0x300e, 0x300f,
-    0x3010, 0x3011,
-    0x3014, 0x3015,
-    0x3016, 0x3017,
-    0x3018, 0x3019,
-    0x301a, 0x301b
-};
-
-const le_int32 DefaultCharMapper::mirroredCharsCount = ARRAY_SIZE(mirroredChars);
-
 LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
 {
     if (fFilterControls) {
@@ -76,12 +54,10 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
     }
 
     if (fMirror) {
-        le_int32 index = OpenTypeUtilities::search((le_uint32) ch, (le_uint32 *)mirroredChars, mirroredCharsCount);
+        le_int32 index = OpenTypeUtilities::search((le_uint32) ch, (le_uint32 *)DefaultCharMapper::mirroredChars, DefaultCharMapper::mirroredCharsCount);
 
         if (mirroredChars[index] == ch) {
-            le_int32 mirrorOffset = ((index & 1) == 0) ? 1 : -1;
-
-            return mirroredChars[index + mirrorOffset];
+            return DefaultCharMapper::srahCderorrim[index];
         }
     }
 
