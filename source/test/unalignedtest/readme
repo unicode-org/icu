@@ -1,0 +1,27 @@
+Copyright (c) 2002-2003, International Business Machines Corporation and others. All Rights Reserved.
+Unalignedtest
+=============
+
+This is a test to find if ICU is 64 bit clean. This test runs cintltst and intltest through gdb and produces SIGBUS fault
+whenever the kernel encounters a unaligned trap. 
+
+Build and Usage
+==================
+To build this test:
+
+i)   Build and test ICU
+
+ii)  cd to <icu>/source and run the following command to build the Makefile
+CONFIG_FILES=./test/unalignedtest/Makefile CONFIG_HEADERS= ./config.status
+
+iii) cd to <icu>/source/test/unalignedtest and run 'make' to build the executable
+
+iv) For testing cintltst run 'make check-cintltst'
+
+v) For testing intltest run 'make check-intltest'
+
+vi) To find out if any of the tools are performing unaligned traps:
+	a) cd to <icu>/source/data
+	b) run 'make clean'
+	c) run 'env LEAK_CHECKER="<icu>/source/test/unalignedtest/unalignedtest -b" make' 
+

@@ -1,0 +1,391 @@
+# Copyright (c) 2002-2004  International Business Machines Corporation and
+# others. All Rights Reserved.
+#
+#  file:  line.txt
+#
+#         Line Breaking Rules
+#         Implement default line breaking as defined by Unicode TR 14.
+#
+
+
+#
+#  Character Classes defined by TR 14.
+#
+
+!!chain;
+!!LBCMNoChain;
+!!lookAheadHardBreak;
+
+$AI = [:LineBreak =  Ambiguous:];
+$AL = [:LineBreak =  Alphabetic:];
+$BA = [:LineBreak =  Break_After:];
+$BB = [:LineBreak =  Break_Before:];
+$BK = [:LineBreak =  Mandatory_Break:];
+$B2 = [:LineBreak =  Break_Both:];
+$CB = [:LineBreak =  Contingent_Break:];
+$CL = [:LineBreak =  Close_Punctuation:];
+$CM = [:LineBreak =  Combining_Mark:];
+$CR = [:LineBreak =  Carriage_Return:];
+$EX = [:LineBreak =  Exclamation:];
+$GL = [:LineBreak =  Glue:];
+$HY = [:LineBreak =  Hyphen:];
+$ID = [:LineBreak =  Ideographic:];
+$IN = [:LineBreak =  Inseperable:];
+$IS = [:LineBreak =  Infix_Numeric:];
+$LF = [:LineBreak =  Line_Feed:];
+$NL = [:LineBreak =  Next_Line:];
+$NS = [:LineBreak =  Nonstarter:];
+$NU = [:LineBreak =  Numeric:];
+$OP = [:LineBreak =  Open_Punctuation:];
+$PO = [:LineBreak =  Postfix_Numeric:];
+$PR = [:LineBreak =  Prefix_Numeric:];
+$QU = [:LineBreak =  Quotation:];
+$SA = [:LineBreak =  Complex_Context:];
+$SG = [:LineBreak =  Surrogate:];
+$SP = [:LineBreak =  Space:];
+$SY = [:LineBreak =  Break_Symbols:];
+$WJ = [:LineBreak =  Word_Joiner:];
+$XX = [:LineBreak =  Unknown:];
+$ZW = [:LineBreak =  ZWSpace:];
+
+
+#
+# Korean Syllable Definitions
+#
+$L   = [:Hangul_Syllable_Type = L:];
+$V   = [:Hangul_Syllable_Type = V:];
+$T   = [:Hangul_Syllable_Type = T:];
+
+$LV  = [:Hangul_Syllable_Type = LV:];
+$LVT = [:Hangul_Syllable_Type = LVT:];
+
+$HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
+
+#
+#  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width),
+#                               SA  (South East Asian: Thai, Lao, Khmer)
+#                               XX  (Unknown, unassigned)
+#                         as $AL  (Alphabetic)
+#
+$ALPlus = $AL | $AI | $SA | $XX;
+
+#
+#  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
+#
+$ALcm = $ALPlus $CM*;
+$BAcm = $BA $CM*;
+$BBcm = $BB $CM*;
+$B2cm = $B2 $CM*;
+$CLcm = $CL $CM*;
+$EXcm = $EX $CM*;
+$GLcm = $GL $CM*;
+$HYcm = $HY $CM*;
+$IDcm = ($ID | $HangulSyllable) $CM*;
+$INcm = $IN $CM*;
+$IScm = $IS $CM*;
+$NScm = $NS $CM*;
+$NUcm = $NU $CM*;
+$OPcm = $OP $CM*;
+$POcm = $PO $CM*;
+$PRcm = $PR $CM*;
+$QUcm = $QU $CM*;
+$SPcm = $SP $CM*;
+$SYcm = $SY $CM*;
+$WJcm = $WJ $CM*;
+
+#
+#  Each class of character can stand by itself as an unbroken token, with trailing combining stuff
+#
+$ALPlus $CM+;
+$BA $CM+;
+$BB $CM+;
+$B2 $CM+;
+$CL $CM+;
+$EX $CM+;
+$GL $CM+;
+$HY $CM+;
+$ID $CM+;
+$IN $CM+;
+$IS $CM+;
+$NS $CM+;
+$NU $CM+;
+$OP $CM+;
+$PO $CM+;
+$PR $CM+;
+$QU $CM+;
+$SP $CM+;
+$SY $CM+;
+$WJ $CM+;
+
+## -------------------------------------------------
+
+!!forward;
+
+#
+#  Rule LB 3
+$LB3Breaks = [$BK $CR $LF $NL];
+$LB3NonBreaks = [^$BK $CR $LF $NL];
+$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
+
+$LB3NonBreaks?     $LB3Breaks {100};
+$LB5NonBreaks $CM* $LB3Breaks {100};
+$CR $LF {100};
+
+# LB 4         x SP
+#              x ZW
+$ZW [$SP $ZW];
+$LB5NonBreaks $CM* [$SP $ZW];
+
+# LB 5         Break after zero width space
+$LB5Breaks = [$LB3Breaks $ZW];
+
+# LB 6
+#
+# Korean Syllable Definitions
+#
+
+($HangulSyllable) $CM*;
+
+# LB 7     Combining marks.      $SP $CM needs to behave like $ID.
+#                                X   $CM needs to behave like X, where X is not $SP.   
+#                                $CM not covered by the above needs to behave like $AL   
+#                                
+$LB5NonBreaks $CM+;    #  Stick together any combining sequences that don't match other rules.
+
+# LB 8
+$LB5NonBreaks $CM* $CL;
+$LB5NonBreaks $CM* $EX;
+$LB5NonBreaks $CM* $IS;
+$LB5NonBreaks $CM* $SY;
+
+# LB 9
+$OPcm $SP* .?;
+$OPcm $SP* $LB5NonBreaks $CM*;
+
+# LB 10
+$QUcm $SP* $OPcm;
+
+# LB 11
+$CLcm $SP* $NScm;
+
+# LB 11a
+($B2cm)+;
+
+# LB 11b
+$LB5NonBreaks $CM* ($GLcm | $WJcm);
+($GLcm | $WJcm) .?;
+
+# LB 12
+$LB12NonBreaks = [$LB5NonBreaks - $SP];
+
+# LB 14
+$LB12NonBreaks $CM* $QUcm+ .?;
+$LB12NonBreaks $CM* $QUcm+ $LB5NonBreaks $CM*;
+$SP $CM+            $QUcm+ .?;                      # LB7a  SP CM+ behaves as ID
+$SP $CM+            $QUcm+ $LB5NonBreaks $CM*;
+
+$QUcm $LB3NonBreaks?;
+$QUcm $LB5NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
+
+# LB 14a
+$LB14NonBreaks = [$LB12NonBreaks - $CB];
+$LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
+
+# LB 15
+$LB14CanBreakAfter ($BAcm | $HYcm | $NScm);
+$BBcm [^$CB];
+$BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;
+
+# LB 16
+$ALcm    $INcm;
+$CM+     $INcm;     #  by rule 7c, any otherwise unattached CM behaves as AL
+$IDcm    $INcm;
+$SP $CM+ $INcm;     # by rule 7a, $SP $CM behaves like ID
+$INcm    $INcm;
+$NUcm    $INcm;
+
+
+# $LB 17
+($IDcm | $SP $CM+) $POcm;
+$ALcm+ $NUcm;       # includes $LB19
+$CM+   $NUcm;       # Rule 7c
+$NUcm $ALcm+;
+
+# LB 18
+$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm | $SYcm)* $CLcm? $POcm?;
+$PRcm $ALcm;
+$PRcm $IDcm;
+
+# LB 19
+$CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
+$IScm $ALcm;
+
+#
+#  Reverse Rules.
+#
+## -------------------------------------------------
+
+!!reverse;
+
+$CM+ $ALPlus;
+$CM+ $BA;
+$CM+ $BB;
+$CM+ $B2;
+$CM+ $CL;
+$CM+ $EX;
+$CM+ $GL;
+$CM+ $HY;
+$CM+ $ID;
+$CM+ $IN;
+$CM+ $IS;
+$CM+ $NS;
+$CM+ $NU;
+$CM+ $OP;
+$CM+ $PO;
+$CM+ $PR;
+$CM+ $QU;
+$CM+ $SP;
+$CM+ $SY;
+$CM+ $WJ;
+
+# LB 3
+
+$LB3Breaks $LB3NonBreaks;
+$LB3Breaks $CM* $LB5NonBreaks;
+$LF $CR;
+
+# LB 4         x SP
+#              x ZW
+[$SP $ZW] $LB3NonBreaks;
+[$SP $ZW] $CM* $LB5NonBreaks;
+
+# LB 5 Break after zero width space
+
+# LB 6 Jamo is treated like an alphabet
+
+$BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
+$CM* $BackHangulSyllable;
+
+# LB 7 Combining marks.
+#    $SP $CM needs to behave like $ID.
+#    X   $CM needs to behave like X, where X is not $SP.
+#    $CM not covered by the above needs to behave like $AL
+# Stick together any combining sequences that don't match other rules.
+$CM+ $LB5NonBreaks;
+
+# LB 8
+$CL $CM* $LB5NonBreaks;
+$EX $CM* $LB5NonBreaks;
+$IS $CM* $LB5NonBreaks;
+$SY $CM* $LB5NonBreaks;
+
+# LB 9
+$LB5NonBreaks $SP* $CM* $OP;
+
+# LB 10
+$CM* $OP $SP* $CM* $QU;
+
+# LB 11
+$CM* $NS $SP* $CM* $CL;
+
+# LB 11a
+($CM* $B2)+;
+
+# LB 11b
+$CM* ($GL | $WJ) $CM* $LB5NonBreaks;
+$CM* $LB5NonBreaks $CM* ($GL | $WJ);
+. $CM* ($GL | $WJ);
+
+# LB 12
+
+# LB 14
+$CM* $QU $CM* $LB12NonBreaks;
+$CM* $QU $CM+ $SP;
+$CM* $LB5NonBreaks $CM* $QU;
+
+# LB 14a
+$BackLB14CanBreakAfter = ($CM* [$LB14NonBreaks - $CM]) | ($CM+ $SP);
+
+# LB 15
+$CM* ($BA | $HY | $NS) $BackLB14CanBreakAfter;
+($CM* ($BA | $HY | $NS))+ $CM+ / $LB5Breaks;
+[$CR $LF $BK $NL $ZW] $CM* $BB;
+$CM* [^$CB $CR $LF $BK $NL $ZW] $CM* $BB;
+
+# LB 16
+$CM* $IN $CM* $ALPlus;
+# by rule 7c, any otherwise unattached CM behaves as AL
+$CM* $IN $CM+ / $LB5Breaks;
+
+$CM* $IN $CM* ($ID | $CM $SP);
+$CM* $IN $CM* $IN;
+$CM* $IN $CM* $NU;
+
+# $LB 17
+$CM* $PO $CM* ($ID | $CM $SP);
+$CM* $NU ($CM* $ALPlus)+; # includes $LB19
+$CM* $NU $CM+ / $LB5Breaks;        # Rule 7c
+
+$CM* $ALPlus $CM* $NU;
+
+# LB 18
+($CM* $PO)? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* $PR)?;
+$CM* $ALPlus $CM* $PR;
+$CM* ($ID | $BackHangulSyllable) $CM* $PR;
+
+# LB 19
+$CM* $ALPlus $CM* $ALPlus;
+# The $CM* is from rule 7C, and unattached CM is treated as AL
+$CM* $ALPlus $CM* $IS;
+$CM* $ALPlus $CM+ / $LB5Breaks;
+
+## problem state table can't handle lookahead when it is at the
+## start of the string, currently handled in the rbbi code
+## todo fix this
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+# LB 6
+$V+ $L;
+
+# LB 7
+$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
+$CM+ $SP / .;
+
+# LB 9
+$SP+ $CM* $OP;
+
+# LB 10
+$SP+ $CM* $QU;
+
+# LB 11
+$SP+ $CM* $CL;
+
+# LB 18
+($CM* ($IS | $SY))+ $CM* $NU;
+$CL $CM* ($NU | $IS | $SY);
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# LB 6
+$V+ $T;
+
+# LB 7
+[^$BK $CR $LF $NL $ZW $SP] $CM+;
+$SP $CM+ / [^$CM];
+
+# LB 9
+$OP $CM* $SP+;
+
+# LB 10
+$QU $CM* $SP+;
+
+# LB 11
+$CL $CM* $SP+;
+
+# LB 18
+$CM* $PRcm? ($OPcm | $HYcm)? $NU;

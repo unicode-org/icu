@@ -1,0 +1,85 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/or.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/or.xml
+ */
+or{
+    Countries{
+        IN{"ଭାରତ"}
+    }
+    ExemplarCharacters{"[ଁଂଃଅଆଇଈଉଊଋଌଏଐଓଔକଖଗଘଙଚଛଜଝଞଟଠଡଢଣତଥଦଧନପଫବଭମଯରଲଳଵଶଷସହ଼ଽାିୀୁୂୃେୈୋୌ୍ୖୗଡ଼ଢ଼ୟୠୡ୰ୱ]"}
+    Languages{
+        or{"ଓଡ଼ିଆ"}
+    }
+    LocaleScript{
+        "Orya",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "୦",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    /**
+     * Draft
+     */
+    Version{"1.0"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "ରବି",
+                        "ସୋମ",
+                        "ମଙ୍ଗଳ",
+                        "ବୁଧ",
+                        "ଗୁରୁ",
+                        "ଶୁକ୍ର",
+                        "ଶନି",
+                    }
+                    wide{
+                        "ରବିବାର",
+                        "ସୋମବାର",
+                        "ମଙ୍ଗଳବାର",
+                        "ବୁଧବାର",
+                        "ଗୁରୁବାର",
+                        "ଶୁକ୍ରବାର",
+                        "ଶନିବାର",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "ଜାନୁଆରୀ",
+                        "ଫେବ୍ରୁୟାରୀ",
+                        "ମାର୍ଚ୍ଚ",
+                        "ଅପ୍ରେଲ",
+                        "ମେ",
+                        "ଜୁନ",
+                        "ଜୁଲାଇ",
+                        "ଅଗଷ୍ଟ",
+                        "ସେପ୍ଟେମ୍ବର",
+                        "ଅକ୍ଟୋବର",
+                        "ନଭେମ୍ବର",
+                        "ଡିସେମ୍ବର",
+                    }
+                }
+            }
+        }
+    }
+}

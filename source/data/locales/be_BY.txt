@@ -1,0 +1,17 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/be_BY.xml
+// *
+// ***************************************************************************
+be_BY{
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤#,##0;-¤#,##0",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
+}

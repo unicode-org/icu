@@ -1,0 +1,20 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/collation/ml.xml
+// *
+// ***************************************************************************
+ml{
+    /**
+     * Draft
+     */
+    Version{"1.2"}
+    collations{
+        standard{
+            Sequence{" [normalization on ]&ല<വ&ഴ<റ&ഹ<ഃ<ം"}
+            Version{"1.0"}
+        }
+    }
+}

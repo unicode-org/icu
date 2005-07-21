@@ -1,0 +1,391 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/lt.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/lt.xml
+ */
+lt{
+    Countries{
+        AD{"Andora"}
+        AE{"Jungtiniai Arabų Emyratai"}
+        AF{"Afganistanas"}
+        AG{"Antigva ir Barbuda"}
+        AI{"Angvila"}
+        AL{"Albanija"}
+        AM{"Armėnija"}
+        AN{"Nyderlandų Antilai"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Argentina"}
+        AS{"Amerikos Samoa"}
+        AT{"Austrija"}
+        AU{"Australija"}
+        AW{"Aruba"}
+        AZ{"Azerbaidžanas"}
+        BA{"Bosnija ir Hercegovina"}
+        BB{"Barbadosas"}
+        BD{"Bangladešas"}
+        BE{"Belgija"}
+        BF{"Burkina Fasas"}
+        BG{"Bulgarija"}
+        BH{"Bahreinas"}
+        BI{"Burundis"}
+        BJ{"Beninas"}
+        BM{"Bermudai"}
+        BN{"Brunėjus"}
+        BO{"Bolivija"}
+        BR{"Brazilija"}
+        BS{"Bahamai"}
+        BT{"Butanas"}
+        BV{"Bouvet sala"}
+        BW{"Botsvana"}
+        BY{"Baltarusija"}
+        BZ{"Belizas"}
+        CA{"Kanada"}
+        CC{"Kokosų salos"}
+        CD{"Kongo Demokratinė Respublika"}
+        CF{"Centrinės Afrikos Respublika"}
+        CG{"Kongas"}
+        CH{"Šveicarija"}
+        CI{"Kot d’Ivuar"}
+        CK{"Kuko salos"}
+        CL{"Čilė"}
+        CM{"Kamerūnas"}
+        CN{"Kinija"}
+        CO{"Kolumbija"}
+        CR{"Kosta Rika"}
+        CU{"Kuba"}
+        CV{"Žaliojo Kyšulio salos"}
+        CX{"Kalėdų sala"}
+        CY{"Kipras"}
+        CZ{"Čekijos respublika"}
+        DE{"Vokietija"}
+        DJ{"Džibutis"}
+        DK{"Danija"}
+        DM{"Dominika"}
+        DO{"Dominikos Respublika"}
+        DZ{"Alžyras"}
+        EC{"Ekvadoras"}
+        EE{"Estija"}
+        EG{"Egiptas"}
+        EH{"Vakarų Sachara"}
+        ER{"Eritrėja"}
+        ES{"Ispanija"}
+        ET{"Etiopija"}
+        FI{"Suomija"}
+        FJ{"Fidžis"}
+        FK{"Folklendo salos (Malvinai)"}
+        FM{"Mikronezijos Federacinės Valstijos"}
+        FO{"Farerų salos"}
+        FR{"Prancūzija"}
+        GA{"Gabonas"}
+        GB{"Didžioji Britanija"}
+        GD{"Grenada"}
+        GE{"Gruzija"}
+        GF{"Prancūzijos Gviana"}
+        GH{"Gana"}
+        GI{"Gibraltaras"}
+        GL{"Grenlandija"}
+        GM{"Gambija"}
+        GN{"Gvinėja"}
+        GP{"Gvadelupė"}
+        GQ{"Ekvatorinė Gvinėja"}
+        GR{"Graikija"}
+        GS{"Rytų Džordžija ir Rytų Sandwich salos"}
+        GT{"Gvatemala"}
+        GU{"Guamas"}
+        GW{"Gvinėja-Bisau"}
+        GY{"Gviana"}
+        HK{"Kinijos S.A.R.Honkongas"}
+        HM{"Heard ir McDonald salos"}
+        HN{"Hondūras"}
+        HR{"Kroatija"}
+        HT{"Haitis"}
+        HU{"Vengrija"}
+        ID{"Indonezija"}
+        IE{"Airija"}
+        IL{"Izraelis"}
+        IN{"Indija"}
+        IO{"Britų Indijos vandenyno teritorija"}
+        IQ{"Irakas"}
+        IR{"Irano"}
+        IS{"Islandija"}
+        IT{"Italija"}
+        JM{"Jamaika"}
+        JO{"Jordanija"}
+        JP{"Japonija"}
+        KE{"Kenija"}
+        KG{"Kirgiztanas"}
+        KH{"Kambodža"}
+        KI{"Kiribatis"}
+        KM{"Komorai"}
+        KN{"Sent Kitsas ir Nevis"}
+        KP{"Šiaurės Korėja"}
+        KR{"Pietų Korėja"}
+        KW{"Kuveitas"}
+        KY{"Kaimanų salos"}
+        KZ{"Kazachstanas"}
+        LA{"Laoso Liaudies Demokratinė Respublika"}
+        LB{"Libanas"}
+        LC{"Šventoji Liucija"}
+        LI{"Lichtenšteinas"}
+        LK{"Šri Lanka"}
+        LR{"Liberija"}
+        LS{"Lesotas"}
+        LT{"Lietuva"}
+        LU{"Liuksemburgas"}
+        LV{"Latvija"}
+        LY{"Libijos Arabų Džamahirija"}
+        MA{"Marokas"}
+        MC{"Monakas"}
+        MD{"Moldovos Respublika"}
+        MG{"Madagaskaras"}
+        MH{"Maršalo salos"}
+        MK{"Makedonijos Respublika"}
+        ML{"Malis"}
+        MM{"Mjanma"}
+        MN{"Mongolija"}
+        MO{"Kinijos S.A.R. Makao"}
+        MP{"Šiaurinės Marianos salos"}
+        MQ{"Martinika"}
+        MR{"Mauritanija"}
+        MS{"Montserat"}
+        MT{"Malta"}
+        MU{"Mauricijus"}
+        MV{"Maldivai"}
+        MW{"Malavis"}
+        MX{"Meksika"}
+        MY{"Malaizija"}
+        MZ{"Mozambikas"}
+        NA{"Namibija"}
+        NC{"Naujoji Kaledonija"}
+        NE{"Nigeris"}
+        NF{"Norfolko sala"}
+        NG{"Nigerija"}
+        NI{"Nikaragva"}
+        NL{"Nyderlandai"}
+        NO{"Norvegija"}
+        NP{"Nepalas"}
+        NR{"Nauru"}
+        NU{"Niujė"}
+        NZ{"Naujoji Zelandija"}
+        OM{"Omanas"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Prancūzų Polinezija"}
+        PG{"Papua Naujoji Gvinėja"}
+        PH{"Filipinai"}
+        PK{"Pakistanas"}
+        PL{"Lenkija"}
+        PM{"Sen Pjeras ir Mikelonas"}
+        PN{"Pitkernas"}
+        PR{"Puerto Rikas"}
+        PS{"Palestinos teritorija"}
+        PT{"Portugalija"}
+        PW{"Palau"}
+        PY{"Paragvajus"}
+        QA{"Kataras"}
+        RE{"Rejunjonas"}
+        RO{"Rumunija"}
+        RU{"Rusijos Federacija"}
+        RW{"Ruanda"}
+        SA{"Saudo Arabija"}
+        SB{"Saliamono salos"}
+        SC{"Seišeliai"}
+        SD{"Sudanas"}
+        SE{"Švedija"}
+        SG{"Singapūras"}
+        SH{"Šventoji Elena"}
+        SI{"Slovėnija"}
+        SJ{"Svalbardo ir Jan Majen salos"}
+        SK{"Slovakia"}
+        SL{"Siera Leonė"}
+        SM{"San Marinas"}
+        SN{"Senegalas"}
+        SO{"Somalis"}
+        SP{"Serbia"}
+        SR{"Surinamas"}
+        ST{"San Tomė ir Principė"}
+        SV{"El Salvadoras"}
+        SY{"Sirija"}
+        SZ{"Svazilendas"}
+        TC{"Turks ir Kaikos salos"}
+        TD{"Čadas"}
+        TF{"Prancūzų pietinės teritorijos"}
+        TG{"Togas"}
+        TH{"Tailandas"}
+        TJ{"Tadžikija"}
+        TK{"Tokelau"}
+        TL{"Rytų Timoras"}
+        TM{"Turkmėnistanas"}
+        TN{"Tunisas"}
+        TO{"Tonga"}
+        TR{"Turkija"}
+        TT{"Trinidadas ir Tobagas"}
+        TV{"Tuvalu"}
+        TZ{"Tanzanija"}
+        UA{"Ukraina"}
+        UG{"Uganda"}
+        UM{"JAV antraeilės teritorijos salos"}
+        US{"United States"}
+        UY{"Urugvajus"}
+        UZ{"Uzbekija"}
+        VA{"Vatikano Miesto Valstija"}
+        VC{"Šventasis Vincentas ir Grenadinai"}
+        VE{"Venesuela"}
+        VG{"Britų Virginijos salos"}
+        VI{"JAV Virginijos salos"}
+        VN{"Vietnamas"}
+        VU{"Vanuatu"}
+        WF{"Valiso ir Futuna salos"}
+        WS{"Samoa"}
+        YE{"Jemenas"}
+        YT{"Majotė"}
+        YU{"Jugoslavija"}
+        ZA{"Pietų Afrika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabvė"}
+    }
+    Currencies{
+        LTL{
+            "Lt",
+            "LTL",
+        }
+    }
+    ExemplarCharacters{"[a-z ą ę į ų ė ū č š ž]"}
+    Languages{
+        ar{"Arabų"}
+        bg{"Bulgarų"}
+        cs{"Čekijos"}
+        da{"Danų"}
+        de{"Vokiečių"}
+        el{"Graikų"}
+        en{"Anglų"}
+        es{"Ispanų"}
+        et{"Estų"}
+        fi{"Suomių"}
+        fr{"Prancūzų"}
+        he{"Hebrajų"}
+        hr{"Kroatų"}
+        hu{"Vengrų"}
+        it{"Italų"}
+        ja{"Japonų"}
+        ko{"Korėjiečių"}
+        lt{"Lietuvių"}
+        lv{"Latvių"}
+        nl{"Olandų"}
+        no{"Norvegų"}
+        pl{"Lenkų"}
+        pt{"Portugalų"}
+        ro{"Rumunų"}
+        ru{"Rusų"}
+        sk{"Slovakų"}
+        sl{"Slovėnų"}
+        sv{"Švedų"}
+        tr{"Turkų"}
+        zh{"Kinų"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "yyyy 'm.' MMMM d 'd.',EEEE",
+                "yyyy 'm.' MMMM d 'd.'",
+                "yyyy.MM.dd",
+                "yyyy.MM.dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sk",
+                        "Pr",
+                        "An",
+                        "Tr",
+                        "Kt",
+                        "Pn",
+                        "Št",
+                    }
+                    wide{
+                        "Sekmadienis",
+                        "Pirmadienis",
+                        "Antradienis",
+                        "Trečiadienis",
+                        "Ketvirtadienis",
+                        "Penktadienis",
+                        "Šeštadienis",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "pr.Kr.",
+                    "po.Kr.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Sau",
+                        "Vas",
+                        "Kov",
+                        "Bal",
+                        "Geg",
+                        "Bir",
+                        "Lie",
+                        "Rgp",
+                        "Rgs",
+                        "Spa",
+                        "Lap",
+                        "Grd",
+                    }
+                    wide{
+                        "Sausio",
+                        "Vasario",
+                        "Kovo",
+                        "Balandžio",
+                        "Gegužės",
+                        "Birželio",
+                        "Liepos",
+                        "Rugpjūčio",
+                        "Rugsėjo",
+                        "Spalio",
+                        "Lapkričio",
+                        "Gruodžio",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+}

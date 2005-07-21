@@ -1,0 +1,443 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/sr_Latn.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/sr_Latn.xml
+ */
+sr_Latn{
+    Countries{
+        AD{"Andora"}
+        AE{"Ujedinjeni Arapski Emirati"}
+        AF{"Avganistan"}
+        AG{"Antigva i Barbuda"}
+        AI{"Angvila"}
+        AL{"Albanija"}
+        AM{"Armenija"}
+        AN{"Holandski Antili"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Argentina"}
+        AS{"Američka Samoa"}
+        AT{"Austrija"}
+        AU{"Australija"}
+        AW{"Aruba"}
+        AZ{"Azerbejdžan"}
+        BA{"Bosna i Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladeš"}
+        BE{"Belgija"}
+        BF{"Burkina Faso"}
+        BG{"Bugarska"}
+        BH{"Bahrein"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunej"}
+        BO{"Bolivija"}
+        BR{"Brazil"}
+        BS{"Bahami"}
+        BT{"Butan"}
+        BV{"Buve Ostrva"}
+        BW{"Bocvana"}
+        BY{"Belorusija"}
+        BZ{"Belise"}
+        CA{"Kanada"}
+        CC{"Kokos (Keling) Ostrva"}
+        CD{"Demokratska Republika Kongo"}
+        CF{"Centralno Afrička Republika"}
+        CG{"Kongo"}
+        CH{"Švajcarska"}
+        CI{"Obala Slonovače"}
+        CK{"Kukova Ostrva"}
+        CL{"Čile"}
+        CM{"Kamerun"}
+        CN{"Kina"}
+        CO{"Kolumbija"}
+        CR{"Kostarika"}
+        CU{"Kuba"}
+        CV{"Kape Verde"}
+        CX{"Uskršnja Ostrva"}
+        CY{"Kipar"}
+        CZ{"Češka"}
+        DE{"Nemačka"}
+        DJ{"Džibuti"}
+        DK{"Danska"}
+        DM{"Dominika"}
+        DO{"Dominikanska Republika"}
+        DZ{"Alžir"}
+        EC{"Ekvador"}
+        EE{"Estonija"}
+        EG{"Egipat"}
+        EH{"Zapadna Sahara"}
+        ER{"Eritreja"}
+        ES{"Španija"}
+        ET{"Etiopija"}
+        FI{"Finska"}
+        FJ{"Fidži"}
+        FK{"Folklendska Ostrva"}
+        FM{"Mikronezija"}
+        FO{"Farska Ostrva"}
+        FR{"Francuska"}
+        GA{"Gabon"}
+        GB{"Velika Britanija"}
+        GD{"Grenada"}
+        GE{"Gruzija"}
+        GF{"Francuska Gvajana"}
+        GH{"Gana"}
+        GI{"Gibraltar"}
+        GL{"Grenland"}
+        GM{"Gambija"}
+        GN{"Gvineja"}
+        GP{"Gvadelupe"}
+        GQ{"Ekvatorijalna Gvineja"}
+        GR{"Grčka"}
+        GS{"Južna Džordžija i Južna Sendvič Ostrva"}
+        GT{"Gvatemala"}
+        GU{"Guam"}
+        GW{"Gvineja-Bisao"}
+        GY{"Gvajana"}
+        HK{"Hong Kong (S. A. R. Kina)"}
+        HM{"Herd i Mekdonald Ostrva"}
+        HN{"Honduras"}
+        HR{"Hrvatska"}
+        HT{"Haiti"}
+        HU{"Mađarska"}
+        ID{"Indonezija"}
+        IE{"Irska"}
+        IL{"Izrael"}
+        IN{"Indija"}
+        IO{"British Indian Ocean Territory"}
+        IQ{"Irak"}
+        IR{"Iran"}
+        IS{"Island"}
+        IT{"Italija"}
+        JM{"Jamajka"}
+        JO{"Jordan"}
+        JP{"Japan"}
+        KE{"Kenija"}
+        KG{"Kirgistan"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komorska Ostrva"}
+        KN{"Sent Kits i Nevis"}
+        KP{"Severna Koreja"}
+        KR{"Južna Koreja"}
+        KW{"Kuvajt"}
+        KY{"Kajmanska Ostrva"}
+        KZ{"Kazahstan"}
+        LA{"Laos"}
+        LB{"Liban"}
+        LC{"Sent Lucija"}
+        LI{"Lihtenštajn"}
+        LK{"Šrilanka"}
+        LR{"Liberija"}
+        LS{"Lesoto"}
+        LT{"Litvanija"}
+        LU{"Luksemburg"}
+        LV{"Letonija"}
+        LY{"Libija"}
+        MA{"Maroko"}
+        MC{"Monako"}
+        MD{"Moldavija"}
+        MG{"Madagaskar"}
+        MH{"Maršalska Ostrva"}
+        MK{"Makedonija"}
+        ML{"Mali"}
+        MM{"Mijanmar"}
+        MN{"Mongolija"}
+        MO{"Makao (S. A. R. Kina)"}
+        MP{"Severna Marijanska Ostrva"}
+        MQ{"Martinik"}
+        MR{"Mauritanija"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauricius"}
+        MV{"Maldivi"}
+        MW{"Malavi"}
+        MX{"Meksiko"}
+        MY{"Malezija"}
+        MZ{"Mozambik"}
+        NA{"Namibija"}
+        NC{"Nova Kaledonija"}
+        NE{"Niger"}
+        NF{"Norfolk Ostrvo"}
+        NG{"Nigerija"}
+        NI{"Nikaragva"}
+        NL{"Holandija"}
+        NO{"Norveška"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Novi Zeland"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Francuska Polinezija"}
+        PG{"Papua Nova Gvineja"}
+        PH{"Filipini"}
+        PK{"Pakistan"}
+        PL{"Poljska"}
+        PM{"Sen Pjer i Mikelon"}
+        PN{"Pitcairn"}
+        PR{"Porto Riko"}
+        PS{"Palestinska Teritorija"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paragvaj"}
+        QA{"Katar"}
+        RE{"Rejunion"}
+        RO{"Rumunija"}
+        RU{"Rusija"}
+        RW{"Ruanda"}
+        SA{"Saudijska Arabija"}
+        SB{"Solomon Islands"}
+        SC{"Sejšeli"}
+        SD{"Sudan"}
+        SE{"Švedska"}
+        SG{"Singapur"}
+        SH{"Saint Helena"}
+        SI{"Slovenija"}
+        SJ{"Svalbard i Jan Majen"}
+        SK{"Slovačka"}
+        SL{"Sijera Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalija"}
+        SR{"Surinam"}
+        ST{"Sao Tome i Principe"}
+        SV{"Salvador"}
+        SY{"Sirija"}
+        SZ{"Svazilend"}
+        TC{"Turks i Kajkos Ostrva"}
+        TD{"Čad"}
+        TF{"Francuske Južne Teritorije"}
+        TG{"Togo"}
+        TH{"Tajland"}
+        TJ{"Tadžikistan"}
+        TK{"Tokelau"}
+        TL{"Timor-Leste"}
+        TM{"Turkmenistan"}
+        TN{"Tunis"}
+        TO{"Tonga"}
+        TR{"Turska"}
+        TT{"Trinidad i Tobago"}
+        TV{"Tuvalu"}
+        TW{"Tajvan"}
+        TZ{"Tanzanija"}
+        UA{"Ukrajina"}
+        UG{"Uganda"}
+        UM{"Manja Udaljena Ostrva SAD"}
+        US{"Sjedinjene Američke Države"}
+        UY{"Urugvaj"}
+        UZ{"Uzbekistan"}
+        VA{"Vatikan"}
+        VC{"Sent Vinsent i Grenadini"}
+        VE{"Venecuela"}
+        VG{"Britanska Devičanska Ostrva"}
+        VI{"S.A.D. Devičanska Ostrva"}
+        VN{"Vijetnam"}
+        VU{"Vanuatu"}
+        WF{"Valis i Futuna"}
+        WS{"Samoa"}
+        YE{"Jemen"}
+        YT{"Mayotte"}
+        YU{"Jugoslavija"}
+        ZA{"Južna Afrika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabve"}
+    }
+    Currencies{
+        YUN{
+            "Din",
+            "YUN",
+        }
+    }
+    ExemplarCharacters{"[a-p r-v z đ ć č ž š {lj} {nj} {dž}]"}
+    Languages{
+        af{"Afrikanerski"}
+        ar{"Arapski"}
+        be{"Beloruski"}
+        bg{"Bugarski"}
+        br{"Bretonski"}
+        ca{"Katalonski"}
+        co{"Korzikanski"}
+        cs{"Češki"}
+        da{"Danski"}
+        de{"Nemački"}
+        el{"Grčki"}
+        en{"Engleski"}
+        es{"Španski"}
+        et{"Estonski"}
+        eu{"Baskijski"}
+        fa{"Persijski"}
+        fi{"Finski"}
+        fr{"Francuski"}
+        ga{"Irski"}
+        he{"Hebrejski"}
+        hr{"Hrvatski"}
+        hu{"Mađarski"}
+        hy{"Armenski"}
+        id{"Indonezijski"}
+        is{"Islandski"}
+        it{"Italijanski"}
+        ja{"Japanski"}
+        ka{"Gruzijski"}
+        km{"Kmerski"}
+        ko{"Korejski"}
+        ku{"Kurdski"}
+        ky{"Kirgiski"}
+        la{"Latinski"}
+        lt{"Litvanski"}
+        lv{"Letonski"}
+        mk{"Makedonski"}
+        mn{"Mongolski"}
+        mo{"Moldavski"}
+        my{"Burmanski"}
+        nl{"Holandski"}
+        no{"Norveški"}
+        pl{"Poljski"}
+        pt{"Portugalski"}
+        rm{"Reto-Romanski"}
+        ro{"Rumunski"}
+        ru{"Ruski"}
+        sh{"Srpsko-Hrvatski"}
+        sk{"Slovački"}
+        sl{"Slovenački"}
+        sq{"Albanski"}
+        sr{"Srpski"}
+        sv{"Švedski"}
+        sw{"Svahili"}
+        tr{"Turski"}
+        uk{"Ukrajnski"}
+        vi{"Vijetnamski"}
+        yi{"Jidiš"}
+        zh{"Kineski"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    Scripts{
+        Arab{"arapsko pismo"}
+        Armn{"jermensko pismo"}
+        Beng{"bengalsko pismo"}
+        Brai{"Brajevo pismo"}
+        Cher{"Čeroki"}
+        Copt{"koptičko pismo"}
+        Cyrl{"Ćirilica"}
+        Deva{"Devanagari"}
+        Dsrt{"Dezeret"}
+        Ethi{"etiopsko pismo"}
+        Geor{"gruzijsko pismo"}
+        Goth{"Gotika"}
+        Grek{"grčko pismo"}
+        Hebr{"hebrejsko pismo"}
+        Hira{"Hiragana"}
+        Hrkt{"Katakana ili Hiragana"}
+        Kana{"Katakana"}
+        Latn{"Latinica"}
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, dd. MMMM yyyy.",
+                "EEEE, d.MM.yyyy.",
+                "dd.MM.yyyy.",
+                "d.M.yy.",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sre",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
+                    }
+                    wide{
+                        "nedelja",
+                        "ponedeljak",
+                        "utorak",
+                        "sreda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "p. n. e.",
+                    "n. e.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    narrow{
+                        "j",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "j",
+                        "j",
+                        "a",
+                        "s",
+                        "o",
+                        "n",
+                        "d",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "mart",
+                        "april",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avgust",
+                        "septembar",
+                        "oktobar",
+                        "novembar",
+                        "decembar",
+                    }
+                }
+            }
+        }
+    }
+}

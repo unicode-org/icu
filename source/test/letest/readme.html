@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="Copyright"
+ content="Copyright (c) 2001-2003, International Business Machines Corporation and others. All Rights Reserved.">
+  <meta name="Author" content="Eric Mader">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
+  <title>Readme file for letest and gendata</title>
+</head>
+<body>
+<h2> What are letest and gendata?</h2>
+letest is a program you can use to verify that you have built and
+installed the ICU LayoutEngine correctly. The test is not comprehensive,
+it just verifies that the results of laying out some Devanagari, Arabic
+and Thai text are as expected. Once this test has passed, you can use
+the ICU LayoutEngine in your application knowing that it has been
+correctly installed and that the basic functionality is in place.
+<p>gendata is a program that is used by the ICU team to build the
+source file testdata.cpp, which contains the expected results of running
+letest. Unless you have changed your copy of the LayoutEngine and want
+to validate the changes on other platforms, there's no reason for you
+to run this program. </p>
+<p>(The ICU team first runs a Windows application which uses the ICU
+LayoutEngine to display the text that letest uses. Once it has been
+verified that the text is displayed correctly, gendata is run to produce
+testdata.cpp, and then letest is run on Windows to verify that letest
+still works with the new data.) <br>
+&nbsp; </p>
+<h2> How do I build letest?</h2>
+First, you need to build ICU, including the LayoutEngine.
+<p>On Windows, the layout project should be listed as a dependency of
+all, so layout will build when you build all. If it doesn't for some
+reason, just select the layout project in the project toolbar and build
+it. </p>
+<p>On UNIX systems, you need to add the "--enable-layout=yes" option
+when you invoke the runConfigureICU script. When you've done that,
+layout should build when you do "make all install" </p>
+<p>To build letest on Windows, just open the letest project in
+&lt;icu&gt;\source\test\letest and build it. On UNIX systems, connect to
+&lt;top-build-dir&gt;/test/letest and do "make all" <br>
+&nbsp; </p>
+<h2> How do I run letest?</h2>
+Before you can run letest, you'll need to get the fonts it uses. For
+legal reasons, we can't include them with ICU, but you can download them
+from the web. To do this, you'll need access to a computer running
+Windows. Here's how to get the fonts:
+<p>Download the 1.3 version of the JDK from the<a
+ href="http://www.ibm.com/java"> IBM developerWorks Java technology zone</a>
+page. From this page, follow the "Tools and products" link on the left
+hand side, and then the link for the "IBM Developer Kit for Linux", or
+the "IBM Developer Kit for Windows(R), Release 1.3.0". You'll need to
+register with them if you haven't downloaded before. Download and
+install the "Runtime Environment Package." You'll need two fonts from
+this package. If you've let the installer use it's defaults, the fonts
+will be in C:\Program Files\IBM\Java13\jre\lib\fonts. The files you want
+are "LucidaSansRegular.ttf" and "Thonburi.ttf" Copy these font files to
+the directory from which you'll run letest.<br>
+</p>
+<p>Next is the Hindi font. Go to the&nbsp; NCST site and download&nbsp;<a
+ href="http://rohini.ncst.ernet.in/indix/download/font/raghu.ttf">
+raghu.ttf</a>. Be sure to look at the&nbsp;<a
+ href="http://rohini.ncst.ernet.in/indix/download/font/README"> README</a>
+file before you download the font. You can download raghu.ttf into the
+directory from which you'll run letest.<br>
+</p>
+<p>There's still one more font to get, the Code2000 Unicode font.Go to
+James Kass' &nbsp;<a href="http://home.att.net/%7Ejameskass/">Unicode
+Support In Your Browser</a> page and click on the link that says "Click
+Here to download Code2000 shareware demo Unicode font." This will
+download a .ZIP file which contains CODE2000.TTF and CODE2000.HTM.
+Expand this .ZIP file and put the CODE2000.TTF file in the directory
+from which you'll run letest.<br>
+</p>
+<p><span style="font-weight: bold;">Note:</span> The Code2000 font is
+shareware. If you want to use it for longer than a trial period, you
+should send a shareware fee to James. Directions for how to do this are
+in CODE2000.HTM.</p>
+<p>That's it! Now all you have to do is run letest (CTRL+F5 in Visual
+C++, or "./letest" in UNIX) If&nbsp; everything's OK you should see
+something like this: </p>
+<blockquote><tt>Test 0, font = raghu.ttf... passed.</tt> <br>
+  <tt>Test 1, font = CODE2000.TTF... passed.</tt> <br>
+  <tt>Test 2, font = LucidaSansRegular.ttf... passed.</tt> <br>
+  <tt>Test 3, font = Thonburi.ttf... passed.</tt></blockquote>
+</body>
+</html>

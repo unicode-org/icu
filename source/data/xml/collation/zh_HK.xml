@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
+	<identity>
+		<version number="2.0"/>
+		<generation date="2004-08-25" />
+		<language type="zh" /> 
+		<territory type="HK" /> 
+	</identity>
+	<characters>
+	</characters>
+	<collations>
+		<default type="traditional"/>
+	</collations>
+</ldml>

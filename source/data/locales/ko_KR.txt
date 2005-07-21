@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/ko_KR.xml
+// *
+// ***************************************************************************
+ko_KR{
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤#,##0.00;-¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "a hh'시' mm'분' ss'초' z",
+                "a hh'시' mm'분' ss'초'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'년' M'월' d'일' EEEE",
+                "yyyy'년' M'월' d'일'",
+                "yyyy. MM. dd",
+                "yy. MM. dd",
+                "{1} {0}",
+            }
+        }
+    }
+}

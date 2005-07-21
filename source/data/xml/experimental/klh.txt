@@ -1,0 +1,3 @@
+klh {
+	Test { " test file " }
+}

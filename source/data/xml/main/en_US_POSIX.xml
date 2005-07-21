@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
+	<identity>
+		<version number="1.0"/>
+		<generation date="2004-11-11" />
+		<language type="en" /> 
+    <territory type="US" /> 
+    <variant type="POSIX" /> 
+	</identity>
+  <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+    <icu:boundaries>
+      <icu:word icu:class="RuleBased" icu:import="word_POSIX"/>
+    </icu:boundaries>
+  </special>
+</ldml>

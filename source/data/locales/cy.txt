@@ -1,0 +1,82 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/cy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/cy.xml
+ */
+cy{
+    Countries{
+        GB{"Prydain Fawr"}
+    }
+    ExemplarCharacters{"[a-z âäáàêëéèîïíìôöóòûüúùŵẅẃẁŷÿýỳ]"}
+    Languages{
+        cy{"Cymraeg"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Llun",
+                        "Maw",
+                        "Mer",
+                        "Iau",
+                        "Gwen",
+                        "Sad",
+                    }
+                    wide{
+                        "Dydd Sul",
+                        "Dydd Llun",
+                        "Dydd Mawrth",
+                        "Dydd Mercher",
+                        "Dydd Iau",
+                        "Dydd Gwener",
+                        "Dydd Sadwrn",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ion",
+                        "Chwef",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Meh",
+                        "Gorff",
+                        "Awst",
+                        "Medi",
+                        "Hyd",
+                        "Tach",
+                        "Rhag",
+                    }
+                    wide{
+                        "Ionawr",
+                        "Chwefror",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Mehefin",
+                        "Gorffenaf",
+                        "Awst",
+                        "Medi",
+                        "Hydref",
+                        "Tachwedd",
+                        "Rhagfyr",
+                    }
+                }
+            }
+        }
+    }
+}

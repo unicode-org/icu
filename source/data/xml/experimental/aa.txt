@@ -1,0 +1,111 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Afar language locale.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Afar terms provided by Mohamed Obakar <loubak@6sens.com> of the
+// *    Afar Civilization Researcher, Melka Werer Research Center.
+
+aa {
+    Version{ "x0.1" }
+    // Currency display names
+    Currencies {
+        DJF { "FD", "DJF" }
+        ERN { "$", "ERN" }
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript:array{ "Latn" }
+    Languages { 
+        aa { "Qafar" }
+    }
+    Countries { 
+        DJ { "Yabuuti" }
+        ER { "Eretria" }
+        ET { "Otobbia" }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "saaku",
+                "carra",
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM dd, yyyy",
+                "dd MMMM yyyy",
+                "dd-MMM-yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Aca",
+                        "Etl",
+                        "Tal",
+                        "Arb",
+                        "Kam",
+                        "Gum",
+                        "Sab",
+                    }
+                    wide{
+                        "Acaada",
+                        "Etleeni",
+                        "Talaata",
+                        "Arbaqa",
+                        "Kamiisi",
+                        "Gumqata",
+                        "Sabti",
+                    }
+                }
+            }
+            eras{
+                "Yaasuusuk Duma",
+                "Yaasuusuk Wadir"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Qun",
+                        "Nah",
+                        "Cig",
+                        "Agd",
+                        "Cax",
+                        "Qas",
+                        "Qad",
+                        "Leq",
+                        "Way",
+                        "Dit",
+                        "Xim",
+                        "Kax",
+                    }
+                    wide{
+                        "Qunxa Garablu",
+                        "Naharsi Kudo",
+                        "Ciggilta Kudo",
+                        "Agda Baxisso",
+                        "Caxah Alsa",
+                        "Qasa Dirri",
+                        "Qado Dirri",
+                        "Leqeeni",
+                        "Waysu",
+                        "Diteli",
+                        "Ximoli",
+                        "Kaxxa Garablu",
+                    }
+                }
+            }
+        }
+    }
+}

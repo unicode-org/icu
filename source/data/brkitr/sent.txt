@@ -1,0 +1,150 @@
+#
+#   Copyright (C) 2002-2004, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  sent.txt
+#
+#   ICU Sentence Break Rules
+#      See Unicode Standard Annex #29.
+#      These rules are based on TR 29 version 4.0.0
+#
+
+
+#
+# Character categories as defined in TR 29
+#
+$Sep     = [\u000a \u000d \u0085 \u2028 \u2029];
+$Format  = [[:Format:] - [:Grapheme_Extend:]];
+$Sp      = [[:Whitespace:] - $Sep];
+$Lower   = [[:Lowercase:]];
+$Upper   = [[:TitleCase_Letter:] [:Uppercase:]];
+$OLetter = [[:Alphabetic:] [:name = HEBREW PUNCTUATION GERESH:] - [$Lower $Upper]];
+$Numeric = [:LineBreak = Numeric:];
+
+$ATerm = [.];
+
+$Term  = [:STerm:];
+
+$Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
+           [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
+
+
+
+# Define extended forms of the character classes,
+#   incorporate grapheme cluster + format chars.
+
+$Extend     = [[:Grapheme_Extend = TRUE:]];
+$ATermEx    = $ATerm   $Extend* $Format*;
+$NumericEx  = $Numeric $Extend* $Format*;
+$UpperEx    = $Upper   $Extend* $Format*;
+$TermEx     = $Term    $Extend* $Format*;
+
+#
+#  $SepSeq keeps together CRLF as a separator.  (CRLF is a grapheme cluster)
+#
+$SepSeq  = $Sep | \u000d\u000a;
+
+# $InteriorChars are those that never trigger a following break.
+$InteriorChars = [^$Term $ATerm $Sep];   #Note:  includes Extend and Format chars
+
+## -------------------------------------------------
+
+!!forward;
+
+# Rule 6.  Match an ATerm (.) that does not cause a break because a number immediately follows it.
+$NumberFollows = $InteriorChars* $ATermEx $NumericEx;
+
+
+# Rule 7.  $UppersSurround   Match a no-break sentence fragment containing a . surrounded by Uppers
+$UppersSurround = $InteriorChars* $UpperEx $ATermEx $UpperEx;
+
+# Rule 8   Matches a sentence fragment containing "." that should not cause a sentence break,
+#          because a lower case word follows the period.
+$LowerWordFollows  = $InteriorChars* $ATermEx $Close* $Sp* [^$OLetter $Upper $Lower $Sep]* $Lower;
+
+# Rules 3, 9, 10, 11
+#                       Matches a simple sentence, or the trailing part of a complex sentence,
+#                       where a simple sentence contains no interior "."s.
+$TermEndSequence   = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq?;
+$EndSequence       = $InteriorChars* $SepSeq?;
+
+# Put them all together.
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $TermEndSequence{0};   # status = UBRK_SENTENCE_TERM
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence{100};     # status = UBRK_SENTENCE_SEP
+
+## -------------------------------------------------
+
+!!reverse;
+
+# rule 6
+
+$RULE6 = $Numeric $Format* $Extend* $ATerm;
+
+# rule 7
+
+$RULE7 = $Upper $Format* $Extend* $ATerm $Format* $Extend* $Upper;
+
+# rule 8
+
+$RULE8 = $Lower ($Format* $Extend* [^$OLetter $Upper $Lower $Sep])* 
+             ($Format* $Extend* $Sp)* ($Format* $Extend* $Close)*
+             $Format* $Extend* $ATerm;
+
+# rule 9, 10, 11
+
+# $CR $LF
+$End = $Sep | \u000a\u000d
+       | $Format* $Extend* $Sp* $Format* $Extend* $Close* $Format* 
+		 $Extend* ($Term | $ATerm)
+	   | $Sep $Format* $Extend* $Sp* $Format* $Extend* $Close* $Format* 
+		 $Extend* ($Term | $ATerm);
+	
+# rule 12
+
+$RULE12 = [^$Sep $Term $ATerm];
+
+$Join = ($RULE6 | $RULE7 | $RULE8 | $RULE12)*;
+
+$End;
+
+$End? $Join [$RULE12 - $Sp - $Close];
+
+# forces a break at the beginning of text "$Sp blah blah blah"
+# remember the break iterators takes the longest match
+$End? $Join $Sp / [^$Term $ATerm $Sp $Close];
+
+# forces a break at the beginning of text "$Close blah blah blah"
+$End? $Join $Close / [^$Term $ATerm $Close];
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+# rule 4
+$Extend+ [^$Extend];
+
+# rule 7
+$Extend* $ATerm $Format* $Extend* $Upper;
+
+# rule 8
+($Extend* $Term)+ ($Extend* $Sp $Format*)* ($Extend* $Close $Format*)* $Extend* $ATerm;
+
+# rule 11
+($Extend* $Sp $Format*)* ($Extend* $Close $Format*)*;
+($Extend* $Sp $Format*)* ($Extend* $Close $Format*)* $Extend* ($Term | $ATerm);
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 7
+
+$ATerm $Extend* $Format* $Upper;
+
+# rule 8
+
+$Lower .;
+
+# rule 11
+
+($Close $Extend* $Format*)* ($Sp $Extend* $Format*)*;
