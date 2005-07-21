@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -8,35 +8,20 @@
 #include "OpenTypeTables.h"
 #include "ArabicShaping.h"
 #include "LEGlyphStorage.h"
+#include "ClassDefinitionTables.h"
 
 U_NAMESPACE_BEGIN
 
-enum {
-    _c_ = ArabicShaping::ST_NOSHAPE_DUAL,
-    _d_ = ArabicShaping::ST_DUAL,
-    _n_ = ArabicShaping::ST_NONE,
-    _r_ = ArabicShaping::ST_RIGHT,
-    _t_ = ArabicShaping::ST_TRANSPARENT,
-    _x_ = ArabicShaping::ST_NOSHAPE_NONE
-};
-
+// This table maps Unicode joining types to
+// ShapeTypes.
 const ArabicShaping::ShapeType ArabicShaping::shapeTypes[] =
 {
-    _t_, _t_, _t_, _t_, _t_, _t_, _x_, _x_, _x_, _x_, _x_, _n_, _x_, _x_, _x_, _n_,   // 0x610 - 0x61f
-    _x_, _n_, _r_, _r_, _r_, _r_, _d_, _r_, _d_, _r_, _d_, _d_, _d_, _d_, _d_, _r_,   // 0x620 - 0x62f
-    _r_, _r_, _r_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _x_, _x_, _x_, _x_, _x_,   // 0x630 - 0x63f
-    _c_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _r_, _d_, _d_, _t_, _t_, _t_, _t_, _t_,   // 0x640 - 0x64f
-    _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _x_, _x_, _x_, _x_, _x_, _x_, _x_,   // 0x650 - 0x65f
-    _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _d_, _d_,   // 0x660 - 0x66f
-    _t_, _r_, _r_, _r_, _n_, _r_, _r_, _r_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x670 - 0x67f
-    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_,   // 0x680 - 0x68f
-    _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x690 - 0x69f
-    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x6a0 - 0x6af
-    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x6b0 - 0x6bf
-    _r_, _d_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _d_, _r_, _d_, _r_,   // 0x6c0 - 0x6cf
-    _d_, _d_, _r_, _r_, _n_, _r_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _x_, _t_, _t_,   // 0x6d0 - 0x6df
-    _t_, _t_, _t_, _t_, _t_, _n_, _n_, _t_, _t_, _n_, _t_, _t_, _t_, _t_, _r_, _r_,   // 0x6e0 - 0x6ef
-    _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _d_, _d_, _d_, _n_, _n_, _d_    // 0x6f0 - 0x6ff
+    ArabicShaping::ST_NOSHAPE_NONE, // [U]
+    ArabicShaping::ST_NOSHAPE_DUAL, // [C]
+    ArabicShaping::ST_DUAL,         // [D]
+    ArabicShaping::ST_LEFT,         // [L]
+    ArabicShaping::ST_RIGHT,        // [R]
+    ArabicShaping::ST_TRANSPARENT   // [T]
 };
 
 /*
@@ -48,21 +33,14 @@ const ArabicShaping::ShapeType ArabicShaping::shapeTypes[] =
 */
 ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
 {
-    if (c >= 0x0610 && c <= 0x206f) {
-        if (c < 0x0700) {
-            return shapeTypes[c - 0x0610];
-        } else if (c == 0x200c) {   // ZWNJ
-            return ST_NOSHAPE_NONE;
-        } else if (c == 0x200d) {   // ZWJ
-            return ST_NOSHAPE_DUAL;
-        } else if (c >= 0x202a && c <= 0x202e) { // LRE - RLO
-            return ST_TRANSPARENT;
-        } else if (c >= 0x206a && c <= 0x206f) { // Inhibit Symmetric Swapping - Nominal Digit Shapes
-            return ST_TRANSPARENT;
-        }
+    const ClassDefinitionTable *joiningTypes = (const ClassDefinitionTable *) ArabicShaping::shapingTypeTable;
+    le_int32 joiningType = joiningTypes->getGlyphClass(c);
+
+    if (joiningType >= 0 && joiningType < ArabicShaping::JT_COUNT) {
+        return ArabicShaping::shapeTypes[joiningType];
     }
 
-    return ST_NOSHAPE_NONE;
+    return ArabicShaping::ST_NOSHAPE_NONE;
 }
 
 static const LETag isolFeatureTag = LE_ISOL_FEATURE_TAG;

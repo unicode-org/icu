@@ -112,6 +112,7 @@ OpenTypeUtilities.o \
 PairPositioningSubtables.o \
 ScriptAndLanguage.o \
 ScriptAndLanguageTags.o \
+ShapingTypeData.o \
 SinglePositioningSubtables.o \
 SingleSubstitutionSubtables.o \
 SubstitutionLookups.o \
