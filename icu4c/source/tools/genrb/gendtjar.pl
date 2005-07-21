@@ -217,15 +217,15 @@ sub copyData{
     local($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir) =@_;
     print("INFO: Copying $tempDir/icudata.jar to $icu4jDir/src/$icu4jImpl\n");
     copy("$tempDir/icudata.jar", "$icu4jDir/src/$icu4jImpl"); 
-    print("INFO: Copying $tempDir/testData.jar $icu4jDir/src/$icu4jDevDataDir\n");
-    copy("$tempDir/testData.jar","$icu4jDir/src/$icu4jDevDataDir");
+    print("INFO: Copying $tempDir/testdata.jar $icu4jDir/src/$icu4jDevDataDir\n");
+    copy("$tempDir/testdata.jar","$icu4jDir/src/$icu4jDevDataDir");
 }
 #-----------------------------------------------------------------------
 sub convertData{
     local($icuDataDir, $icuswap, $tempDir, $icu4jDataDir)  =@_;
     my $dir = $tempDir."/".$icu4jDataDir;
     # create the temp directory
-    mkpath("$tempDir/$icu4jDataDir");
+    mkpath($dir) ;
     # cd to the temp directory
     chdir($tempDir);
     my $endian = checkPlatformEndianess();
@@ -251,14 +251,17 @@ sub convertData{
                $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
                $item=~/cnvalias\.icu/ || $item=~/$\.lst/);
         if(-d "$icuDataDir/$item"){
-            convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir./$item/");
+            convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir/$item/");
             next;
         }
         if($endianess eq "l"){
            $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
            cmd($command, $verbose);
         }else{
-           copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$item");
+           $rc = copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$item");
+           if($rc==1){
+             #die "ERROR: Could not copy $icuDataDir/$item to $tempDir/$icu4jDataDir/$item, $!";
+           }
         }
 
     }
@@ -270,17 +273,17 @@ sub convertTestData{
     local($icuDataDir, $icuswap, $tempDir, $icu4jDataDir)  =@_;
     my $dir = $tempDir."/".$icu4jDataDir;
     # create the temp directory
-    mkpath("$tempDir/$icu4jDataDir");
+    mkpath($dir);
     # cd to the temp directory
     chdir($tempDir);
     my $op = $icuswap;
     print "INFO: {Command: $op $icuDataDir/*.*}\n";
     my @list;
-    opendir(DIR,$icuDataDir);
+    opendir(DIR,$icuDataDir) or die "ERROR: Could not open the $icuDataDir directory for reading $!";
     #print $icuDataDir;
     @list =  readdir(DIR);
     closedir(DIR);
-
+    my $endian = checkPlatformEndianess();
     $i=0;
     # now convert
     foreach $item (@list){
@@ -292,8 +295,13 @@ sub convertTestData{
         if($item =~ /^testdata_/){
             $file = $item;
             $file =~ s/testdata_//g;
-            $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
-            cmd($command, $verbose);
+            if($endianess eq "l"){ 
+                $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
+                cmd($command, $verbose);
+            }else{
+                print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
+                copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$file");
+            }
         }
 
     }
