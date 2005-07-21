@@ -233,7 +233,7 @@ isPNameAcceptable(void* /*context*/,
         info->formatVersion[0] == PNAME_FORMAT_VERSION;
 }
 
-static UBool U_CALLCONV pname_cleanup() {
+static UBool U_CALLCONV pname_cleanup(void) {
     if (UDATA) {
         udata_close(UDATA);
         UDATA = NULL;
