@@ -2273,27 +2273,28 @@ void StringSearchTest::TestSubclass()
     }
 }
 
+class StubSearchIterator:public SearchIterator{
+public:
+    StubSearchIterator(){}
+    virtual void setOffset(int32_t position, UErrorCode &status) {};
+    virtual int32_t getOffset(void) const {return 0;};
+    virtual SearchIterator* safeClone(void) const {return NULL;};
+    virtual int32_t handleNext(int32_t position, UErrorCode &status){return 0;};
+    virtual int32_t handlePrev(int32_t position, UErrorCode &status) {return 0;};
+    virtual UClassID getDynamicClassID() const {
+        static char classID = 0;
+        return (UClassID)&classID; 
+    }
+};
+
 void StringSearchTest::TestCoverage(){
-    class StubSearchIterator:public SearchIterator{
-    public:
-        StubSearchIterator(){}
-        virtual void setOffset(int32_t position, UErrorCode &status) {};
-        virtual int32_t getOffset(void) const {return 0;};
-        virtual SearchIterator* safeClone(void) const {return NULL;};
-        virtual int32_t handleNext(int32_t position, UErrorCode &status){return 0;};
-        virtual int32_t handlePrev(int32_t position, UErrorCode &status) {return 0;};
-        virtual inline UClassID getDynamicClassID() const {
-            static char classID = 0;
-            return (UClassID)&classID; 
-        }
-    };
     StubSearchIterator stub1, stub2;
+    UErrorCode status = U_ZERO_ERROR;
 
     if (stub1 != stub2){
-        errln("new StubSearchIterator should same");
+        errln("new StubSearchIterator should be equal");
     }
 
-    UErrorCode status = U_ZERO_ERROR;
     stub2.setText(UnicodeString("ABC"), status);
     if (U_FAILURE(status)) {
         errln("Error: SearchIterator::SetText");
@@ -2301,7 +2302,7 @@ void StringSearchTest::TestCoverage(){
 
     stub1 = stub2;
     if (stub1 != stub2){
-        errln("SearchIterator::operator =  assigned object should same");
+        errln("SearchIterator::operator =  assigned object should be equal");
     }
 }
 
