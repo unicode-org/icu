@@ -58,7 +58,7 @@ sub main(){
     
     $path=$ENV{'PATH'};
     
-    if($platform eq "cygwin"){
+    if($platform eq "cygwin" ){
         $icuBinDir .= "/source/bin";
         $icuLibDir = abs_path($icuBinDir."/../lib");
         $path .=":$icuBinDir:$icuLibDir";
@@ -67,6 +67,16 @@ sub main(){
         $ENV{'LD_LIBRARY_PATH'} = $libpath;
         
         #print ("#####  LD_LIBRARY_PATH = $ENV{'LD_LIBRARY_PATH'}\n");
+    
+    }elsif($platform eq "aix"){
+    
+        $icuBinDir .= "/source/bin";
+        $icuLibDir = abs_path($icuBinDir."/../lib");
+        $path .=":$icuBinDir:$icuLibDir";
+
+        $libpath = $ENV{'LIBPATH'}.":$icuLibDir";
+        $ENV{'LIBPATH'} = $libpath;
+        #print ("#####  LIBPATH = $ENV{'LIBPATH'}\n");
     }elsif($platform eq "darwin"){ 
         $icuBinDir .= "/source/bin";
         $icuLibDir = abs_path($icuBinDir."/../lib");
@@ -74,8 +84,7 @@ sub main(){
         
         $libpath = $ENV{'DYLD_LIBRARY_PATH'}.":$icuLibDir";
         $ENV{'DYLD_LIBRARY_PATH'} = $libpath;
-        
-        
+       
     }elsif($platform eq "MSWin32"){
         $icuBinDir =$icuRootDir."/bin";
         $path .=$icuBinDir;
@@ -135,6 +144,13 @@ sub buildICU{
         chdir($icuTestDataDir."../../");
         #print($icuTestDataDir."../../\n");
         cmd("make", $verbose);
+    }elsif($platform eq "aix"){
+        # make all in ICU
+        cmd("gmake all", $verbose);
+        chdir($icuSrcDataDir);
+        cmd("gmake uni-core-data", $verbose);
+        chdir($icuTestDataDir."../../");
+        cmd("gmake", $verbose);
     }elsif($platform eq "MSWin32"){
         #devenv.com $projectFileName \/build $configurationName > \"$cLogFile\" 2>&1
         cmd("devenv.com allinone/allinone.sln /useenv /build Debug", $verbose);
@@ -212,14 +228,20 @@ sub convertData{
     mkpath("$tempDir/$icu4jDataDir");
     # cd to the temp directory
     chdir($tempDir);
-
+    my $endian = checkPlatformEndianess();
     my @list;
     opendir(DIR,$icuDataDir);
     #print $icuDataDir;
     @list =  readdir(DIR);
     closedir(DIR);
     my $op = $icuswap;
-    print "INFO: {Command: $op $icuDataDir/*.*}\n";
+    
+    if($endianess eq "l"){
+        print "INFO: {Command: $op $icuDataDir/*.*}\n";
+    }else{
+       print "INFO: {Command: copy($icuDataDir/*.*, $tempDir/$icu4jDataDir/*)}\n";
+    } 
+    
     $i=0;
     # now convert
     foreach $item (@list){
@@ -232,8 +254,12 @@ sub convertData{
             convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir./$item/");
             next;
         }
-        $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
-        cmd($command, $verbose);
+        if($endianess eq "l"){
+           $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
+           cmd($command, $verbose);
+        }else{
+           copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$item");
+        }
 
     }
     chdir("..");
