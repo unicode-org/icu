@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -55,6 +55,8 @@ void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs,
 {
     TTGlyphID *ttGlyphs = LE_NEW_ARRAY(TTGlyphID, count);
     le_int32  *dx = LE_NEW_ARRAY(le_int32, count);
+    float     *ps = LE_NEW_ARRAY(float, count * 2 + 2);
+    le_int32   out = 0;
     RECT clip;
 
     clip.top    = 0;
@@ -63,13 +65,15 @@ void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs,
     clip.right  = width;
 
     for (le_int32 g = 0; g < count; g += 1) {
-        ttGlyphs[g] = (TTGlyphID) LE_GET_GLYPH(glyphs[g]);
+        TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyphs[g]);
 
-        if (ttGlyphs[g] == 0xFFFF || ttGlyphs[g] == 0xFFFE) {
-            ttGlyphs[g] = 0x0002;
+        if (ttGlyph < 0xFFFE) {
+            ttGlyphs[out] = ttGlyph;
+            dx[out] = (le_int32) (positions[g * 2 + 2] - positions[g * 2]);
+            ps[out * 2] = positions[g * 2];
+            ps[out * 2 + 1] = positions[g * 2 + 1];
+            out += 1;
         }
-
-        dx[g] = (le_int32) (positions[g * 2 + 2] - positions[g * 2]);
     }
 
     le_int32 dyStart, dyEnd;
@@ -78,11 +82,11 @@ void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs,
 
     dyStart = dyEnd = 0;
 
-    while (dyEnd < count) {
-        float yOffset = positions[dyStart * 2 + 1];
-        float xOffset = positions[dyStart * 2];
+    while (dyEnd < out) {
+        float yOffset = ps[dyStart * 2 + 1];
+        float xOffset = ps[dyStart * 2];
 
-        while (dyEnd < count && yOffset == positions[dyEnd * 2 + 1]) {
+        while (dyEnd < out && yOffset == ps[dyEnd * 2 + 1]) {
             dyEnd += 1;
         }
 
@@ -92,6 +96,7 @@ void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs,
         dyStart = dyEnd;
     }
 
+    LE_DELETE_ARRAY(ps);
     LE_DELETE_ARRAY(dx);
     LE_DELETE_ARRAY(ttGlyphs);
 }
