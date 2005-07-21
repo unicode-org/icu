@@ -226,7 +226,7 @@ static UnicodeSet *nxCache[_NORM_OPTIONS_SETS_MASK+1]={ NULL };
 U_CDECL_BEGIN
 
 static UBool U_CALLCONV
-unorm_cleanup() {
+unorm_cleanup(void) {
     int32_t i;
 
 #if !UNORM_HARDCODE_DATA

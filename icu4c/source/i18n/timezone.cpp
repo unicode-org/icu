@@ -107,7 +107,7 @@ static UnicodeString* OLSON_IDS = 0;
 #endif
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV timeZone_cleanup()
+static UBool U_CALLCONV timeZone_cleanup(void)
 {
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     delete []OLSON_IDS;

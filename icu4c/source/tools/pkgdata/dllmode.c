@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -151,7 +151,10 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                          "\t  echo $$file >> $@; \\\n"
                                          "\tdone;\n\n");
     }
-    
+ 
+    sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
+    T_FileStream_writeLine(makefile, tmp);
+
     pkg_mak_writeAssemblyHeader(makefile, o);
 
     sprintf(tmp,"$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME)_dat.c\n"
@@ -184,9 +187,6 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
 #endif
 
-    sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
-    T_FileStream_writeLine(makefile, tmp);
-    
     T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 #ifdef OS400
     T_FileStream_writeLine(makefile, "$(ALLDATAOBJ) ");
