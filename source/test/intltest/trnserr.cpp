@@ -265,22 +265,24 @@ void TransliteratorErrorTest::TestRBTErrors() {
 //    delete t;
 //}
 
+class StubTransliterator: public Transliterator{
+public:
+    StubTransliterator(): Transliterator(UNICODE_STRING_SIMPLE("Any-Null"), 0) {}
+    virtual void handleTransliterate(Replaceable& ,UTransPosition& offsets,UBool) const {
+        offsets.start = offsets.limit;
+    }
+
+    virtual UClassID getDynamicClassID() const{
+        static char classID = 0;
+        return (UClassID)&classID; 
+    }
+};
+
 void TransliteratorErrorTest::TestCoverage() {
-    class StubTransliterator: public Transliterator{
-    public:
-        StubTransliterator(): Transliterator(UNICODE_STRING_SIMPLE("Any-Null"), 0) {}
-        virtual void handleTransliterate(Replaceable& ,UTransPosition& offsets,UBool) const {
-            offsets.start = offsets.limit;
-        }
+    StubTransliterator stub;
 
-        virtual UClassID getDynamicClassID() const{
-            static char classID = 0;
-            return (UClassID)&classID; 
-        }
-    } stub;
-
-    if (stub.clone() != 0){
-        errln("FAIL: default Transliterator::clone() should retrun 0");
+    if (stub.clone() != NULL){
+        errln("FAIL: default Transliterator::clone() should return NULL");
     }
 }
 
