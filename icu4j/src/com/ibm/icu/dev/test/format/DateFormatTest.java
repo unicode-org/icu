@@ -591,6 +591,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "de", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "GMT-04:00", "-4:00" },
         { "de", "America/Havana", "2004-07-15T00:00:00Z", "v", "Kuba", "America/Havana" },
         { "de", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "Kuba", "America/Havana" },
+        // added to test proper fallback of country name
+        { "de_CH", "America/Havana", "2004-07-15T00:00:00Z", "v", "Kuba", "America/Havana" },
+        { "de_CH", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "Kuba", "America/Havana" },
 
         /* ibm JDK 1.4.1 doesn't support this timezone id
         { "de", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },

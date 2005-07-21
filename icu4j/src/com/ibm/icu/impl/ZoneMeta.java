@@ -247,20 +247,15 @@ public final class ZoneMeta {
                 (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
             String rblocname = rb.getULocale().getBaseName();
             if (LocaleUtility.isFallbackOf(rblocname, locale.getBaseName())) {  
-                // dlf: need a utility on ULocale for this
-                // only valid data, don't fallback through default
-                try {
-                    ICUResourceBundle csb = rb.get("Countries");
-                    ICUResourceBundle cb = csb.get(country_code);
-                    country = cb.getString();
-                }
-                catch (MissingResourceException e) {
-                    // assume it is not available.
+                country = ULocale.getDisplayCountry("xx_" + country_code, locale);
+                if (country != null && country.length() == 0) {
+                    country = null;
                 }
             }
         }
         
-        // This is not behavior specified in tr35, but behavior added by Mark.  TR35 says to display the country _only_ if there is a localization.
+        // This is not behavior specified in tr35, but behavior added by Mark.  
+        // TR35 says to display the country _only_ if there is a localization.
         if (info[2] != null) { // single country
             if (country != null)
                 return displayRegion(country, locale);

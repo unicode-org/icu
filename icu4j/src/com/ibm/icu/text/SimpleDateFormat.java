@@ -838,7 +838,8 @@ public class SimpleDateFormat extends DateFormat {
                                 ix += 1;
                             }
                             res = zs[ix];
-                        } else if (zs.length == 6) { // have city string
+                        }
+                        if ((res == null || res.length() == 0) && zs.length >= 6) { // get city string
                             city = zs[5];
                         } 
                     } else {
@@ -850,8 +851,9 @@ public class SimpleDateFormat extends DateFormat {
                     }
                 }
 
-                if (res == null) {
-                    // note, tr35 does not describe the special case for 'no country' implemented below, this is from discussion with Mark
+                if (res == null || res.length() == 0) {
+                    // note, tr35 does not describe the special case for 'no country' 
+                    // implemented below, this is from discussion with Mark
                     if (tzid == null || !isGeneric || ZoneMeta.getCanonicalCountry(tzid) == null) {
                         long offset = cal.get(Calendar.ZONE_OFFSET) +
                             cal.get(Calendar.DST_OFFSET);
