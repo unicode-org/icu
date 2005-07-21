@@ -320,6 +320,9 @@
 				RelativePath=".\SegmentSingleProcessor.cpp">
 			</File>
 			<File
+				RelativePath=".\ShapingTypeData.cpp">
+			</File>
+			<File
 				RelativePath=".\SimpleArrayProcessor.cpp">
 			</File>
 			<File
