@@ -240,7 +240,7 @@ sub convertData{
     @list =  readdir(DIR);
     closedir(DIR);
     my $op = $icuswap;
-    print "####### $endian ############\n";
+    #print "####### $endian ############\n";
     if($endian eq "l"){
         print "INFO: {Command: $op $icuDataDir/*.*}\n";
     }else{
