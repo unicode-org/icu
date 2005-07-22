@@ -1,6 +1,6 @@
 ## -*-sh-*-
 ## BEGIN of icu-config-bottom.
-## Copyright (c) 2002-2004, International Business Machines Corporation and
+## Copyright (c) 2002-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
@@ -14,7 +14,7 @@ fi
 
 ## The actual code of icu-config goes here.
 
-ME=`basename $0`
+ME=`basename "$0"`
 
 allflags()
 {
