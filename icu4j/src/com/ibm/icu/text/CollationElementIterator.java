@@ -290,7 +290,7 @@ public final class CollationElementIterator
                 // surrogate leads are handled as special ces
                 result = nextSpecial(m_collator_, result, ch);
             }
-            if (result == CE_NOT_FOUND_) {
+            if (result == CE_NOT_FOUND_ && RuleBasedCollator.UCA_ != null) {
                 // couldn't find a good CE in the tailoring
                 // if we got here, the codepoint MUST be over 0xFF - so we look
                 // directly in the UCA
@@ -300,6 +300,10 @@ public final class CollationElementIterator
                     result = nextSpecial(RuleBasedCollator.UCA_, result, ch);
                 }
             }
+        }
+        if(result == CE_NOT_FOUND_) { 
+            // maybe there is no UCA, unlikely in Java, but ported for consistency
+            result = nextImplicit(ch); 
         }
         return result;
     }
@@ -370,15 +374,20 @@ public final class CollationElementIterator
                     result = CE_CONTRACTION_;
                 }
                 else {
-                    result
-                         = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
+                    if(RuleBasedCollator.UCA_ != null) {
+                        result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
+                    }
                 }
 
                 if (RuleBasedCollator.isSpecial(result)) {
-                    result = previousSpecial(RuleBasedCollator.UCA_,
-                                             result, ch);
+                    if(RuleBasedCollator.UCA_ != null) {                    
+                        result = previousSpecial(RuleBasedCollator.UCA_, result, ch);
+                    }
                 }
             }
+        }
+        if(result == CE_NOT_FOUND_) {
+            result = previousImplicit(ch);
         }
         return result;
     }
@@ -1625,7 +1634,7 @@ public final class CollationElementIterator
     private int nextContraction(RuleBasedCollator collator, int ce)
     {
         backupInternalState(m_utilSpecialBackUp_);
-        int entryce = CE_NOT_FOUND_;
+        int entryce = collator.m_contractionCE_[getContractionOffset(collator, ce)]; //CE_NOT_FOUND_;
         while (true) {
             int entryoffset = getContractionOffset(collator, ce);
             int offset = entryoffset;

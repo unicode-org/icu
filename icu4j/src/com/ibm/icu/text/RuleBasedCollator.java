@@ -1713,6 +1713,14 @@ public final class RuleBasedCollator extends Collator
 //    
     static final byte SORT_LEVEL_TERMINATOR_ = 1;
 
+//  These are values from UCA required for
+//  implicit generation and supressing sort key compression
+//  they should regularly be in the UCA, but if one
+//  is running without UCA, it could be a problem
+     static final int maxRegularPrimary  = 0xA0;
+     static final int minImplicitPrimary = 0xE0;
+     static final int maxImplicitPrimary = 0xE4;
+
 
     // block to initialise character property database
     static
@@ -1737,7 +1745,8 @@ public final class RuleBasedCollator extends Collator
             iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_);
 
             // called before doing canonical closure for the UCA.
-            iimpCEGen_ = new ImplicitCEGenerator(iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
+         	iimpCEGen_ = new ImplicitCEGenerator(minImplicitPrimary, maxImplicitPrimary);
+            //iimpCEGen_ = new ImplicitCEGenerator(iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
             iUCA_.init();
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
             iUCA_.m_rules_ = (String)rb.getObject("UCARules");
@@ -2406,12 +2415,13 @@ public final class RuleBasedCollator extends Collator
                             leadPrimary = 0;
                         }
                         else if (p1 < BYTE_FIRST_NON_LATIN_PRIMARY_
-                              || (p1
-                    > (RuleBasedCollator.UCA_CONSTANTS_.LAST_NON_VARIABLE_[0]
-                                                                 >>> 24)
-                                && p1
-                    < (RuleBasedCollator.UCA_CONSTANTS_.FIRST_IMPLICIT_[0]
-                                                                    >>> 24))) {
+                              || (p1 > maxRegularPrimary
+                    //> (RuleBasedCollator.UCA_CONSTANTS_.LAST_NON_VARIABLE_[0]
+                    //                                              >>> 24)
+                                && p1 < minImplicitPrimary
+                    //< (RuleBasedCollator.UCA_CONSTANTS_.FIRST_IMPLICIT_[0]
+                    //                                              >>> 24)
+                    )) {
                                 // not compressible
                                 leadPrimary = 0;
                                 m_utilBytes1_ = append(m_utilBytes1_,
