@@ -301,7 +301,7 @@ static const IndicClassTable * const indicClassTables[] = {
     NULL,            /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
     NULL,            /* 'bugi' (BUGINESE) */
     NULL,            /* 'glag' (GLAGOLITIC) */
-    NULL,            /* 'khar' (KHAROSHTHI) *
+    NULL,            /* 'khar' (KHAROSHTHI) */
     NULL,            /* 'sylo' (SYLOTI_NAGRI) */
     NULL,            /* 'talu' (NEW_TAI_LUE) */
     NULL,            /* 'tfng' (TIFINAGH) */
