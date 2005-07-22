@@ -834,9 +834,9 @@ public class SimpleDateFormat extends DateFormat {
                 // 2: short standard
                 // 3: long daylight
                 // 4: short daylight
-                // 5: city              OR  5: long generic
-                // 6: long generic          6: short generic
-                // 7: short generic
+                // 5: city         OR   5: long generic    OR   5: city
+                //                      6: short generic        6: long generic 
+                //                                              7: short generic
                 String city = null;
                 if (zs != null) {
                     if (isGeneric) {
@@ -844,8 +844,8 @@ public class SimpleDateFormat extends DateFormat {
                         if (zs.length > 7) {
                           ix += 1;
                         }
-                        res = getZoneArrayValue(zs,ix);
-                        if (res == null) {
+                        if (zs.length > 6) res = getZoneArrayValue(zs,ix);
+                        if (zs.length == 6 || zs.length == 8) {
                             city = getZoneArrayValue(zs, 5);
                         } 
                     } else {
