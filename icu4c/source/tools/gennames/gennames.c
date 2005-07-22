@@ -1177,7 +1177,7 @@ findToken(uint8_t *s, int16_t length) {
 
     for(i=0; i<(int16_t)tokenCount; ++i) {
         token=tokens[i];
-        if(token!=-1 && length==words[token].length && 0==uprv_memcmp(s, words[token].s, length)) {
+        if(token>=0 && length==words[token].length && 0==uprv_memcmp(s, words[token].s, length)) {
             return i;
         }
     }
