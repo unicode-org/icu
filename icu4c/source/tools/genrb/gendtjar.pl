@@ -35,9 +35,14 @@ sub main(){
              "--jar=s" => \$jarDir,
              "--icu4j-root=s" => \$icu4jDir,
              "--version=s" => \$version,
-             "--verbose"   => \$verbose
+             "--verbose"   => \$verbose,
+             "--help"      => \$help
              );
     $cwd = abs_path(getcwd);
+    
+    if($help){
+        usage();
+    }
     unless (defined $icuRootDir){
         $icuRootDir =abs_path($cwd."/../../..");
     }
@@ -235,8 +240,8 @@ sub convertData{
     @list =  readdir(DIR);
     closedir(DIR);
     my $op = $icuswap;
-    
-    if($endianess eq "l"){
+    print "####### $endian ############\n";
+    if($endian eq "l"){
         print "INFO: {Command: $op $icuDataDir/*.*}\n";
     }else{
        print "INFO: {Command: copy($icuDataDir/*.*, $tempDir/$icu4jDataDir/*)}\n";
@@ -254,7 +259,7 @@ sub convertData{
             convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir/$item/");
             next;
         }
-        if($endianess eq "l"){
+        if($endian eq "l"){
            $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
            cmd($command, $verbose);
         }else{
@@ -343,6 +348,7 @@ Options:
         --icu4j-root=<directory>
         --version=<ICU4C version>
         --verbose
+        --help
 e.g:
 gendtjar.pl --icu-root=\\work\\icu --jar=\\jdk1.4.1\\bin --icu4j-root=\\work\\icu4j --version=3.0
 END
