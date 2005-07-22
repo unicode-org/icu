@@ -828,26 +828,32 @@ public class SimpleDateFormat extends DateFormat {
                         zs = formatData.zoneStrings[zoneIndex];
                     }
                 }
-
+                // The zoneStrings have the following format:
+                // 0: time zone ID
+                // 1: long standard
+                // 2: short standard
+                // 3: long daylight
+                // 4: short daylight
+                // 5: city              OR  5: long generic
+                // 6: long generic          6: short generic
+                // 7: short generic
                 String city = null;
                 if (zs != null) {
                     if (isGeneric) {
-                        if (zs.length >= 7) { // have generic strings
-                            int ix = count < 4 ? 6 : 5;
-                            if (zs.length > 7) {
-                                ix += 1;
-                            }
-                            res = zs[ix];
-                        }
-                        if ((res == null || res.length() == 0) && zs.length >= 6) { // get city string
-                            city = zs[5];
+                    	int ix = count < 4 ? 6 : 5;
+                    	if (zs.length > 7) {
+                          ix += 1;
+                    	}
+                    	res = getZoneArrayValue(zs,ix);
+                        if (res == null) {
+                            city = getZoneArrayValue(zs, 5);
                         } 
                     } else {
                         int ix = count < 4 ? 2 : 1;
                         if (cal.get(Calendar.DST_OFFSET) != 0) {
                             ix += 2;
                         }
-                        res = zs[ix];
+                        res = getZoneArrayValue(zs, ix);
                     }
                 }
 
@@ -937,6 +943,20 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
+	 * Internal method. Returns null if the value of an array is empty, or if the
+	 * index is out of bounds
+	 */
+	private String getZoneArrayValue(String[] zs, int ix) {
+		if (ix >= 0 && ix < zs.length) {
+			String result = zs[ix];
+			if (result != null && result.length() != 0) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	/**
      * Internal high-speed method.  Reuses a StringBuffer for results
      * instead of creating a String on the heap for each call.
      * @internal
@@ -1272,6 +1292,7 @@ public class SimpleDateFormat extends DateFormat {
             if (j == 5 && (zs.length ==6 || zs.length >= 8)) { // skip city name if we have it
                 continue;
             }
+            if (zs[j].length() == 0) continue; // SKIP over empty zone strings
             // Checking long and short zones [1 & 2],
             // and long and short daylight [3 & 4],
             // and long and short generic [6 & 7]

@@ -75,20 +75,30 @@ public class TestCLDRVsICU extends TestFmwk {
     //Locale oLocale = Locale.ENGLISH; // TODO Drop once ICU4J has ULocale everywhere
     //static PrintWriter log;
     SAXParser SAX;
-    static String MATCH;
+    static Matcher LOCALE_MATCH, TEST_MATCH, ZONE_MATCH;
     static String CLDR_DIRECTORY;
     static {
-        MATCH = System.getProperty("XML_MATCH");
-        if (MATCH == null) MATCH = ".*";
-        else System.out.println("Resetting MATCH:" + MATCH);
+        LOCALE_MATCH = setEnvironmentRegex("XML_MATCH", ".*");
+        TEST_MATCH = setEnvironmentRegex("TEST_MATCH", ".*");
+        ZONE_MATCH = setEnvironmentRegex("ZONE_MATCH", ".*");
 
         // WARNING: THIS IS TEMPORARY UNTIL I GET THE FILES STRAIGHTENED OUT
         CLDR_DIRECTORY = System.getProperty("CLDR_DIRECTORY");
         if (CLDR_DIRECTORY == null) CLDR_DIRECTORY = "C:\\Unicode-CVS2\\cldr\\";
-        else System.out.println("Resetting TEST Directory:" + MATCH);
+        else System.out.println("Resetting TEST Directory:" + LOCALE_MATCH);
     }
     
-    public static void main(String[] args) throws Exception {
+    /**
+	 * 
+	 */
+	private static Matcher setEnvironmentRegex(String key, String defaultValue) {
+		String temp = System.getProperty(key);
+        if (temp == null) temp = defaultValue;
+        else System.out.println("Resetting " + key + ":" + temp);
+        return Pattern.compile(temp).matcher("");
+	}
+
+	public static void main(String[] args) throws Exception {
 
     	new TestCLDRVsICU().run(args);
     }
@@ -103,10 +113,10 @@ public class TestCLDRVsICU extends TestFmwk {
         addLocales(Collator.getAvailableULocales(), s);
         
         // filter, to make tracking down bugs easier
-        Matcher m = Pattern.compile(MATCH).matcher("");
+        
         for (Iterator it = s.iterator(); it.hasNext();) {
         	String locale = (String)it.next();
-        	if (!m.reset(locale).matches()) continue;
+        	if (!LOCALE_MATCH.reset(locale).matches()) continue;
             _test(locale);
         }
     }
@@ -221,10 +231,15 @@ public class TestCLDRVsICU extends TestFmwk {
     }
 
     public void addHandler(String name, Handler handler) {
+        if (!TEST_MATCH.reset(name).matches()) handler = new NullHandler();
         handler.setName(name);
         RegisteredHandlers.put(name, handler);
     }
     Map RegisteredHandlers = new HashMap();
+    
+    class NullHandler extends Handler {
+		void handleResult(ULocale currentLocale, String value) throws Exception {}        
+    }
 
     // ============ Statics for Date/Number Support ============
 
@@ -398,6 +413,7 @@ public class TestCLDRVsICU extends TestFmwk {
                     	parse = attributeValue;
                     }
                 }
+                if (!ZONE_MATCH.reset(zone).matches()) return;
                 Date dateValue = iso.parse(date);
                 SimpleDateFormat field = new SimpleDateFormat(pattern, locale);
                 field.setTimeZone(TimeZone.getTimeZone(zone));
