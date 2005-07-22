@@ -840,11 +840,11 @@ public class SimpleDateFormat extends DateFormat {
                 String city = null;
                 if (zs != null) {
                     if (isGeneric) {
-                    	int ix = count < 4 ? 6 : 5;
-                    	if (zs.length > 7) {
+                        int ix = count < 4 ? 6 : 5;
+                        if (zs.length > 7) {
                           ix += 1;
-                    	}
-                    	res = getZoneArrayValue(zs,ix);
+                        }
+                        res = getZoneArrayValue(zs,ix);
                         if (res == null) {
                             city = getZoneArrayValue(zs, 5);
                         } 
@@ -943,20 +943,20 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-	 * Internal method. Returns null if the value of an array is empty, or if the
-	 * index is out of bounds
-	 */
-	private String getZoneArrayValue(String[] zs, int ix) {
-		if (ix >= 0 && ix < zs.length) {
-			String result = zs[ix];
-			if (result != null && result.length() != 0) {
-				return result;
-			}
-		}
-		return null;
-	}
+     * Internal method. Returns null if the value of an array is empty, or if the
+     * index is out of bounds
+     */
+    private String getZoneArrayValue(String[] zs, int ix) {
+        if (ix >= 0 && ix < zs.length) {
+            String result = zs[ix];
+            if (result != null && result.length() != 0) {
+                return result;
+            }
+        }
+        return null;
+    }
 
-	/**
+    /**
      * Internal high-speed method.  Reuses a StringBuffer for results
      * instead of creating a String on the heap for each call.
      * @internal
