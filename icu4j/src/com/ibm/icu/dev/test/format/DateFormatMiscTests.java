@@ -123,45 +123,35 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
      * @bug 4117335
      */
     public void Test4117335() {
-        //char bcC[] = {0x7D00, 0x5143, 0x524D};
-        String bc = "\u7D00\u5143\u524D";
-        String ad = "\u897f\u66a6";
-        //char adC[] = {0x897F, 0x66A6};
-        String jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
-        //char jstLongC[] = {0x65e5, 0x672c, 0x6a19, 0x6e96, 0x6642}; //The variable is never used
-        String jstShort = "JST";
-    
+        final String bc = "\u7D00\u5143\u524D";
+        final String ad = "\u897f\u66a6";
+        final String jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
+        final String jstShort = "JST";
+        final String tzID = "Asia/Tokyo";
+
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);
         final String[] eras = symbols.getEras();
-        //int eraCount = eras.length; //The variable is never used
-        logln("BC = " + eras[0]);
-        if (!eras[0].equals(bc)) {
-            errln("*** Should have been " + bc);
-        }
-    
-        logln("AD = " + eras[1]);
-        if (!eras[1].equals(ad)) {
-            errln("*** Should have been " + ad);
-        }
-    
+
+        assertEquals("BC =", bc, eras[0]);
+        assertEquals("AD =", ad, eras[1]);
+
+        // don't use hard-coded index!
         final String zones[][] = symbols.getZoneStrings();
-        int index = 5;
-        //int rowCount = zones.length, colCount = zones[0].length; //The variable is never used
-        logln("Long zone name = " + zones[index][1]);
-        if (!zones[index][1].equals(jstLong)) {
-            errln("*** Should have been " + jstLong);
+        int index = -1;
+        for (int i = 0; i < zones.length; ++i) {
+            if (tzID.equals(zones[i][0])) {
+                index = i;
+                break;
+            }
         }
-        logln("Short zone name = " + zones[index][2]);
-        if (!zones[index][2].equals(jstShort)) {
-            errln("*** Should have been " + jstShort);
-        }
-        logln("Long zone name = " + zones[index][3]);
-        if (!zones[index][3].equals(jstLong)) {
-            errln("*** Should have been " + jstLong +" instead of "+zones[0][3]);
-        }
-        logln("SHORT zone name = " + zones[index][4]);
-        if (!zones[index][4].equals(jstShort)) {
-            errln("*** Should have been " + jstShort);
+
+        if (index == -1) {
+            errln("could not find " + tzID);
+        } else {
+            assertEquals("Long zone name = ", jstLong, zones[index][1]);
+            assertEquals("Short zone name = ", jstShort, zones[index][2]);
+            assertEquals("Long zone name (3) = ", jstLong, zones[index][3]);
+            assertEquals("Short zone name (4) = ", jstShort, zones[index][4]);
         }
     }
 }
