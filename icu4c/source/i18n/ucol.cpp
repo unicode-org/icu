@@ -2676,7 +2676,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       /* This should handle contractions */
       collIterateState state;
       backupState(source, &state);
-      uint32_t firstCE = UCOL_NOT_FOUND;
+      uint32_t firstCE = *(coll->contractionCEs + ((UChar *)coll->image+getContractOffset(CE) - coll->contractionIndex)); //UCOL_NOT_FOUND;
       const UChar *UCharOffset;
       UChar schar, tchar;
 
