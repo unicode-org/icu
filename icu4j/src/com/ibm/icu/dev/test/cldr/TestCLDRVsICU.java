@@ -78,24 +78,31 @@ public class TestCLDRVsICU extends TestFmwk {
     static Matcher LOCALE_MATCH, TEST_MATCH, ZONE_MATCH;
     static String CLDR_DIRECTORY;
     static {
-        LOCALE_MATCH = setEnvironmentRegex("XML_MATCH", ".*");
-        TEST_MATCH = setEnvironmentRegex("TEST_MATCH", ".*");
-        ZONE_MATCH = setEnvironmentRegex("ZONE_MATCH", ".*");
+        System.out.println();
+        LOCALE_MATCH = getEnvironmentRegex("XML_MATCH", ".*");
+        TEST_MATCH = getEnvironmentRegex("TEST_MATCH", ".*");
+        ZONE_MATCH = getEnvironmentRegex("ZONE_MATCH", ".*"); // example
 
         // WARNING: THIS IS TEMPORARY UNTIL I GET THE FILES STRAIGHTENED OUT
-        CLDR_DIRECTORY = System.getProperty("CLDR_DIRECTORY");
-        if (CLDR_DIRECTORY == null) CLDR_DIRECTORY = "C:\\Unicode-CVS2\\cldr\\";
-        else System.out.println("Resetting TEST Directory:" + LOCALE_MATCH);
+        CLDR_DIRECTORY = getEnvironmentString("CLDR_DIRECTORY", "C:\\Unicode-CVS2\\cldr\\");
+        System.out.println();
     }
     
     /**
 	 * 
 	 */
-	private static Matcher setEnvironmentRegex(String key, String defaultValue) {
+	private static Matcher getEnvironmentRegex(String key, String defaultValue) {
+        return Pattern.compile(getEnvironmentString(key, defaultValue)).matcher("");
+	}
+
+	/**
+	 * 
+	 */
+	private static String getEnvironmentString(String key, String defaultValue) {
 		String temp = System.getProperty(key);
         if (temp == null) temp = defaultValue;
-        else System.out.println("Resetting " + key + ":" + temp);
-        return Pattern.compile(temp).matcher("");
+        else System.out.print("-D" + key + "=\"" + temp + "\" ");
+		return temp;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -421,6 +428,7 @@ public class TestCLDRVsICU extends TestFmwk {
                 // SKIP PARSE FOR NOW
                 result = result.trim(); // HACK because of SAX
                 if (!temp.equals(result)) {
+                    temp = field.format(dateValue).trim(); // call again for debugging
                     errln("Zone Format: Locale: " + locale 
                     		+ ", \tZone: " + zone
                     		+ ", \tDate: " + date

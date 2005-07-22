@@ -240,6 +240,9 @@ public final class ZoneMeta {
         }
 
         String country_code = info[1];
+        if (country_code == null) {
+        	return null; // error!   
+        }
 
         String country = null;
         if (country_code != null) {
@@ -248,42 +251,18 @@ public final class ZoneMeta {
             String rblocname = rb.getULocale().getBaseName();
             if (LocaleUtility.isFallbackOf(rblocname, locale.getBaseName())) {  
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
-                if (country != null && country.length() == 0) {
-                    country = null;
-                }
             }
+            if (country == null || country.length() == 0) country = country_code;
         }
         
         // This is not behavior specified in tr35, but behavior added by Mark.  
         // TR35 says to display the country _only_ if there is a localization.
         if (info[2] != null) { // single country
-            if (country != null)
-                return displayRegion(country, locale);
-            else if (country_code != null) {
-                return displayRegion(country_code, locale);
-            }
+            return displayRegion(country, locale);
         }
 
         if (city == null) {
-            city = tzid.substring(tzid.lastIndexOf('/')+1);
-            int n;
-            if ((n = city.indexOf('_')) != -1) {
-                char[] chars = city.toCharArray();
-                for (; n < chars.length; ++n) {
-                    if (chars[n] == '_') {
-                        chars[n] = ' ';
-                    }
-                }
-                city = new String(chars);
-            }
-        }
-
-        if (country == null) {
-            if (country_code == null) {
-
-                return city; // early return, can't use fallback format without a country
-            }
-            country = country_code;
+            city = tzid.substring(tzid.lastIndexOf('/')+1).replace('_',' ');
         }
 
         String flbPat = getTZLocalizationInfo(locale, FALLBACK_FORMAT);
