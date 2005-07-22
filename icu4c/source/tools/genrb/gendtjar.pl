@@ -300,11 +300,11 @@ sub convertTestData{
         if($item =~ /^testdata_/){
             $file = $item;
             $file =~ s/testdata_//g;
-            if($endianess eq "l"){ 
+            if($endian eq "l"){ 
                 $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
                 cmd($command, $verbose);
             }else{
-                print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
+                #print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
                 copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$file");
             }
         }
