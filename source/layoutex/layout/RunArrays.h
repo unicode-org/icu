@@ -92,7 +92,9 @@ public:
 
     /**
      * Reset the limit indices array. This method sets the number of entries in the
-     * limit indices array to zero. It does not delete the arrays.
+     * limit indices array to zero. It does not delete the array.
+     *
+     * Note: Subclass arrays will also be reset and not deleted.
      *
      * @draft ICU 3.6
      */
