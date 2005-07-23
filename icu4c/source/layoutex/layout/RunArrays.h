@@ -91,6 +91,14 @@ public:
     inline le_int32 getCount() const;
 
     /**
+     * Reset the limit indices array. This method sets the number of entries in the
+     * limit indices array to zero. It does not delete the arrays.
+     *
+     * @draft ICU 3.6
+     */
+    inline void reset();
+
+    /**
      * Get the last limit index. This is the number of characters in
      * the text.
      *
@@ -230,6 +238,11 @@ inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
 inline le_int32 RunArray::getCount() const
 {
     return fCount;
+}
+
+inline void RunArray::reset()
+{
+    fCount = 0;
 }
 
 inline le_int32 RunArray::getLimit(le_int32 run) const
