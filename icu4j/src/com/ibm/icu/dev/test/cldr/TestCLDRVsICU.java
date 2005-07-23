@@ -58,14 +58,19 @@ import com.ibm.icu.text.UnicodeSet;
  * This is a file that runs the CLDR tests for ICU4J, to verify that ICU4J implements them
  * correctly.
  * WARNING: 
- * 1. for this to work right, you have to set the CLDR directory correctly, using
+ * 1. for this to work right, you have to have downloaded the CLDR data, and
+ * then set the CLDR directory correctly, using
  * -DCLDR_DIRECTORY=<top level of cldr>
  * 2. You probably also need to increase memory, eg with -Xmx512m
  * 3. For speed, you should also use -DCLDR_DTD_CACHE=C:\cldrcache\, where
  * C:\cldrcache\ is a temp directory to keep the program from hitting the net for
  * each file access.
- * 4. You may use -DXML_MATCH="de.*" (or whatever regex you want) to just
- * test certain locales.
+ * 4. You may use other environment variables to narrow what you test. Eg
+ * -DXML_MATCH=".*" -DTEST_MATCH="zone.*" -DZONE_MATCH="(?!America/Argentina).*" 
+ *   a. -DXML_MATCH="de.*" (or whatever regex you want) to just
+ *   test certain locales.
+ *   b. -DTEST_MATCH="zone.*" (or whatever regex you want) to just test collation, numbers, etc.
+ *   c. -DZONE_MATCH=".*Moscow.*" (to only test certain zones)
  * @author medavis
  */
 public class TestCLDRVsICU extends TestFmwk {
