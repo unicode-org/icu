@@ -171,6 +171,11 @@ public class TestCLDRVsICU extends TestFmwk {
             settings.put(attributeName, attributeValue);
         }
         void checkResult(String value) {
+            if ("true".equals(settings.get("draft"))) {
+                return; // skip draft
+            } else {
+            	int x = 1; // for debug stopping
+            }
         	ULocale ul = new ULocale("xx");
             try {
                 for (int i = 0; i < currentLocales.size(); ++i) {
@@ -333,8 +338,9 @@ public class TestCLDRVsICU extends TestFmwk {
                     result = result.trim(); // HACK because of SAX
                     if (!temp.equals(result)) {
                         errln("Number: Locale: " + locale
-                        		+ ",\tType: " + attributeValue
-                        		+ ",\tCLDR: <" + result + ">, ICU: <" + temp + ">");
+                        		+ ", \tType: " + attributeValue
+                                + ", \tDraft: " + settings.get("draft")
+                        		+ ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
                     }
 
                 }
@@ -369,9 +375,10 @@ public class TestCLDRVsICU extends TestFmwk {
                 result = result.trim(); // HACK because of SAX
                 if (!temp.equals(result)) {
                     errln("DateTime: Locale: " + locale 
-                    		+ ",\tDate: " + DateFormatNames[dateFormat]
-							+ ",\tTime: " + DateFormatNames[timeFormat]
-                    		+ ",\tCLDR: <" + result + ">, ICU: <" + temp + ">");
+                    		+ ", \tDate: " + DateFormatNames[dateFormat]
+                            + ", \tTime: " + DateFormatNames[timeFormat]
+                            + ", \tDraft: " + settings.get("draft")
+                    		+ ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
                 }
             }
 
@@ -433,6 +440,7 @@ public class TestCLDRVsICU extends TestFmwk {
                     		+ ", \tZone: " + zone
                     		+ ", \tDate: " + date
 							+ ", \tField: " + pattern
+                            + ", \tDraft: " + settings.get("draft")
                     		+ ", \tCLDR: <" + result
 							+ ">, \tICU: <" + temp + ">");
                 }

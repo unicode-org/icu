@@ -18,7 +18,10 @@ import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.util.ULocale;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -780,6 +783,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         ampms = calData.getStringArray("AmPmMarkers");
 
+/*  THE FOLLOWING DOESN'T WORK; A COUNTRY LOCALE WITH ONE ZONE BLOCKS THE LANGUAGE LOCALE
         // These really do use rb and not calData
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
         // hack around class cast problem
@@ -794,6 +798,28 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             }
             zoneStrings[i] = strings;
         }
+*/        
+        // severe HACK; these should be in a named table.
+        Map results = new LinkedHashMap();
+        for (ULocale tempLocale = desiredLocale; tempLocale != null; tempLocale = tempLocale.getFallback()) {
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, tempLocale);
+            ICUResourceBundle zoneObject = rb.get("zoneStrings");
+            for(int i =0; i< zoneObject.getSize(); i++){
+                ICUResourceBundle zoneArr = zoneObject.get(i);
+                String[] strings = new String[zoneArr.getSize()];
+                for(int j=0; j<zoneArr.getSize(); j++){
+                    strings[j]=zoneArr.get(j).getString();
+                }
+                if (!results.containsKey(strings[0]))results.put(strings[0], strings); // only add if we don't have already
+            }
+        }
+        zoneStrings = new String[results.size()][];
+        int i = 0;
+        for (Iterator it = results.keySet().iterator(); it.hasNext();) {
+            zoneStrings[i++] = (String[]) results.get(it.next());
+        }
+        
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
         localPatternChars = rb.getString("localPatternChars");
 
         // TODO: obtain correct actual/valid locale later
