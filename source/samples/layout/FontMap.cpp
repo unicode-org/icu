@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1998-2003, International Business Machines Corporation and   *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -66,10 +66,10 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
             continue;
         }
 
-        uscript_getCode(scriptName, &scriptCode, 1, &scriptStatus);
+        le_int32 fillCount = uscript_getCode(scriptName, &scriptCode, 1, &scriptStatus);
 
-        if (U_FAILURE(scriptStatus) || scriptStatus == U_USING_FALLBACK_WARNING ||
-            scriptStatus == U_USING_DEFAULT_WARNING) {
+        if (U_FAILURE(scriptStatus) || fillCount <= 0 ||
+            scriptStatus == U_USING_FALLBACK_WARNING || scriptStatus == U_USING_DEFAULT_WARNING) {
             sprintf(errorMessage, "The script name %s is invalid.", line);
             fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
             status = LE_ILLEGAL_ARGUMENT_ERROR;
