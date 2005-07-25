@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -137,7 +137,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (LE_FAILURE(fontStatus)) {
             ReleaseDC(hwnd, hdc);
-            return 0;
+            return -1;
         }
 
         context = new Context();
@@ -321,7 +321,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case IDM_HELP_ABOUTLAYOUTSAMPLE:
             MessageBox(hwnd, TEXT("Windows Layout Sample 0.1\n")
-                             TEXT("Copyright (C) 1998-2002 By International Business Machines Corporation and others.\n")
+                             TEXT("Copyright (C) 1998-2005 By International Business Machines Corporation and others.\n")
                              TEXT("Author: Eric Mader"),
                        szAppName, MB_ICONINFORMATION | MB_OK);
             return 0;
@@ -334,7 +334,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         context = (Context *) GetWindowLong(hwnd, 0);
 
-        if (context->paragraph != NULL) {
+        if (context != NULL && context->paragraph != NULL) {
             delete context->paragraph;
         }
 
