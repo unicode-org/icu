@@ -37,7 +37,7 @@ public class CharsetMatch implements Comparable {
      * CAUTION:  if the source of the byte data was an InputStream, a Reader
      * can be created for only one matching char set using this method.  If more 
      * than one charset needs to be tried, the caller will need to reset
-     * the InputStream and create InputStreamReaders itself, based on the Char Set name.
+     * the InputStream and create InputStreamReaders itself, based on the charset name.
      *
      * @return the Reader for the Unicode character data.
      *
@@ -58,8 +58,6 @@ public class CharsetMatch implements Comparable {
             return null;
         }
     }
-    
-    
 
     /**
      * Create a Java String from Unicode character data corresponding
@@ -74,6 +72,7 @@ public class CharsetMatch implements Comparable {
         return getString(-1);
 
     }
+
     /**
      * Create a Java String from Unicode character data corresponding
      * to the original byte data supplied to the Charset detect operation.
@@ -129,65 +128,61 @@ public class CharsetMatch implements Comparable {
     }
     
 
-    /*
-     * Match type flag bits. A bit will be set for each
-     * reason that contributes to the match.
-     */
-    
     /**
-     * The match is based on the the encoding scheme.
-     * 
+     * Bit flag indicating the match is based on the the encoding scheme.
+     *
+     * @see #getMatchType
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public final int ENCODING_SCHEME    = 1;
     
     /**
-     * The match is based on the presence of a BOM
+     * Bit flag indicating the match is based on the presence of a BOM.
      * 
      * @see #getMatchType
-     *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public final int BOM                = 2;
     
     /**
-     * The match is based on the declared encoding.
+     * Bit flag indicating he match is based on the declared encoding.
      * 
      * @see #getMatchType
-     *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public final int DECLARED_ENCODING  = 4;
     
     /**
-     * The match is based on language statistics.
+     * Bit flag indicating the match is based on language statistics.
      *
      * @see #getMatchType
-     * 
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public final int LANG_STATISTICS    = 8;
     
     /**
-     * Return indications of what it was about input data that 
+     * Return flags indicating what it was about the input data 
      * that caused this charset to be considered as a possible match.
+     * The result is a bitfield containing zero or more of the flags
+     * ENCODING_SCHEME, BOM, DECLARED_ENCODING, and LANG_STATISTICS.
+     * A result of zero means no information is available.
      * <p>
-     * TODO: create a list of enum-like constants for the possible types of matches.
-     * 
+     * Note: currently, this method always returns zero.
+     * <p>
+     *
      * @return the type of match found for this charset.
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getMatchType() {
+//      TODO: create a list of enum-like constants for common combinations of types of matches.
         return 0;
     }
- 
-    
 
     /**
      * Get the name of the detected charset.  
@@ -223,10 +218,16 @@ public class CharsetMatch implements Comparable {
     
     
     /**
-     * Comparison function, for java.lang.Comparable
-     * Comparison is based on the match confidence value, which conveniently
+     * Compare to other CharsetMatch objects.
+     * Comparison is based on the match confidence value, which 
      *   allows CharsetDetector.detectAll() to order its results. 
      *
+     * @param o the CharsetMatch object to compare against.
+     * @return  a negative integer, zero, or a positive integer as the 
+     *          confidence level of this CharsetMatch
+     *		is less than, equal to, or greater than that of
+     *          the argument.
+     * @throws ClassCastException if the argument is not a CharsetMatch.
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
@@ -240,8 +241,6 @@ public class CharsetMatch implements Comparable {
         }
         return compareResult;
     }
-    
-    
     
     /**
      *  Constructor.  Implementation internal
@@ -276,6 +275,4 @@ public class CharsetMatch implements Comparable {
 
     private InputStream         fInputStream = null;  // User's input stream, or null if the user
                                                       //   gave us a byte array.
-    
-
 }

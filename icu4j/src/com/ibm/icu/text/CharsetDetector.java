@@ -16,7 +16,6 @@ import java.util.Arrays;
 
 
 /**
- *
  * <code>CharsetDetector</code> provides a facility for detecting the
  * charset or encoding of character data in an unknown format.
  * The input data can either be from an input stream or an array of bytes.
@@ -34,21 +33,20 @@ import java.util.Arrays;
  * in the language are needed.  The detection process will attempt to
  * ignore html or xml style markup that could otherwise obscure the content.
  * <p/>
- * <b>Question:</b>Should we have getters corresponding to the setters for inut text
- * and declared encoding?
- * <p/>
- * <b>A thought:</b>  If we were to create our own type of Java Reader, we could defer
- * figuring out an actual charset for data that starts out with too much English
- *  only ASCII until the user actually read through to something that didn't look
- * like 7 bit English.  If  nothing else ever appeared, we would never need to
- *  actually choose the "real" charset.  All assuming that the application just
- *   wants the data, and doesn't care about a char set name.
- *
  * @draft ICU 3.4
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class CharsetDetector {
 
+//   Question: Should we have getters corresponding to the setters for inut text
+//   and declared encoding?
+
+//   A thought: If we were to create our own type of Java Reader, we could defer
+//   figuring out an actual charset for data that starts out with too much English
+//   only ASCII until the user actually read through to something that didn't look
+//   like 7 bit English.  If  nothing else ever appeared, we would never need to
+//   actually choose the "real" charset.  All assuming that the application just
+//   wants the data, and doesn't care about a char set name.
 
     /**
      *   Constructor
@@ -161,13 +159,13 @@ public class CharsetDetector {
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
-     * *
-     * TODO:  A better implementation would be to copy the detect loop from
-     *        detectAll(), and cut it short as soon as a match with a high confidence
-     *        is found.  This is something to be done later, after things are otherwise
-     *        working.
      */
     public CharsetMatch detect() {
+//   TODO:  A better implementation would be to copy the detect loop from
+//          detectAll(), and cut it short as soon as a match with a high confidence
+//          is found.  This is something to be done later, after things are otherwise
+//          working.
+
         return detectAll()[0];
      }
     
@@ -435,13 +433,13 @@ public class CharsetDetector {
     byte[]               fRawInput;     // Original, untouched input bytes.
                                         //  If user gave us a byte array, this is it.
                                         //  If user gave us a stream, it's read to a 
-    //   buffer here.
+                                        //  buffer here.
     int                  fRawLength;    // Length of data in fRawInput array.
     
-     InputStream         fInputStream;  // User's input stream, or null if the user
+    InputStream          fInputStream;  // User's input stream, or null if the user
                                         //   gave us a byte array.
      
-     boolean             fStripTags =   // If true, setText() will strip tags from input text.
+    boolean              fStripTags =   // If true, setText() will strip tags from input text.
                            false;
     
     
