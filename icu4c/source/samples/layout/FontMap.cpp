@@ -23,6 +23,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
     : fPointSize(pointSize), fFontCount(0), fAscent(0), fDescent(0), fLeading(0), fGUISupport(guiSupport)
 {
     le_int32 defaultFont = -1, i, script;
+    le_bool haveFonts = FALSE;
 
     for (i = 0; i < scriptCodeCount; i += 1) {
         fFontIndices[i] = -1;
@@ -63,6 +64,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
 
         if (strcmp(scriptName, "DEFAULT") == 0) {
             defaultFont = getFontIndex(fontName);
+            haveFonts = TRUE;
             continue;
         }
 
@@ -72,9 +74,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
             scriptStatus == U_USING_FALLBACK_WARNING || scriptStatus == U_USING_DEFAULT_WARNING) {
             sprintf(errorMessage, "The script name %s is invalid.", line);
             fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
-            status = LE_ILLEGAL_ARGUMENT_ERROR;
-            fclose(file);
-            return;
+            continue;
         }
 
         script = (le_int32) scriptCode;
@@ -85,6 +85,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
         }
 
         fFontIndices[script] = getFontIndex(fontName);
+        haveFonts = TRUE;
     }
 
     if (defaultFont >= 0) {
@@ -93,6 +94,12 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
                 fFontIndices[script] = defaultFont;
             }
         }
+    }
+
+    if (! haveFonts) {
+        sprintf(errorMessage, "The font map file %s does not contain any valid scripts.", fileName);
+        fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
+        status = LE_ILLEGAL_ARGUMENT_ERROR;
     }
 
     fclose(file);
