@@ -1,0 +1,118 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../cldr/common/main/az.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/main/az.xml
+ */
+az{
+    Countries{
+        AZ{"Azərbaycan"}
+    }
+    Currencies{
+        AZM{
+            "man.",
+            "Manat",
+        }
+    }
+    ExemplarCharacters{"[a-vx-zçəğıİöşü]"}
+    Languages{
+        az{"azərbaycanca"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.24"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "B.",
+                        "B.e.",
+                        "Ç.a.",
+                        "Ç.",
+                        "C.a.",
+                        "C.",
+                        "Ş.",
+                    }
+                    wide{
+                        "bazar",
+                        "bazar ertəsi",
+                        "çərşənbə axşam",
+                        "çərşənbə",
+                        "cümə axşamı",
+                        "cümə axşamı",
+                        "şənbə",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "e.ə.",
+                    "b.e.",
+                }
+                wide{
+                    "eramızdan əvvəl",
+                    "bizim eramızın",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "yan",
+                        "fev",
+                        "mar",
+                        "apr",
+                        "may",
+                        "iyn",
+                        "iyl",
+                        "avq",
+                        "sen",
+                        "okt",
+                        "noy",
+                        "dek",
+                    }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "İyun",
+                        "İyul",
+                        "Avqust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+}
