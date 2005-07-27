@@ -58,7 +58,7 @@ LIBSICU = $(STATIC_PREFIX)$(ICUPREFIX)
 A = lib
 
 ## An import library is needed for z/OS and MSVC
-IMPORT_LIB_EXT = .lib
+#IMPORT_LIB_EXT = .lib
 
 LIBPREFIX=
 
