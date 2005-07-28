@@ -33,6 +33,7 @@ U_NAMESPACE_BEGIN
 #define _sb  (CC_STRESS_MARK | CF_POS_BELOW)
 #define _iv  (CC_INDEPENDENT_VOWEL)
 #define _i2  (CC_INDEPENDENT_VOWEL_2)
+#define _i3  (CC_INDEPENDENT_VOWEL_3)
 #define _ct  (CC_CONSONANT | CF_CONSONANT)
 #define _cn  (CC_CONSONANT_WITH_NUKTA | CF_CONSONANT)
 #define _nu  (CC_NUKTA)
@@ -44,6 +45,7 @@ U_NAMESPACE_BEGIN
 #define _lm  (_dv | CF_LENGTH_MARK)
 #define _l1  (CC_SPLIT_VOWEL_PIECE_1 | CF_POS_BEFORE)
 #define _a1  (CC_SPLIT_VOWEL_PIECE_1 | CF_POS_ABOVE)
+#define _b2  (CC_SPLIT_VOWEL_PIECE_2 | CF_POS_BELOW)
 #define _r2  (CC_SPLIT_VOWEL_PIECE_2 | CF_POS_AFTER)
 #define _m2  (CC_SPLIT_VOWEL_PIECE_2 | CF_LENGTH_MARK)
 #define _m3  (CC_SPLIT_VOWEL_PIECE_3 | CF_LENGTH_MARK)
@@ -100,10 +102,10 @@ static const IndicClassTable::CharClass bengCharClasses[] =
 static const IndicClassTable::CharClass punjCharClasses[] =
 {
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _xx, _iv, // 0A00 - 0A0F
-    _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0A10 - 0A1F
+    _iv, _xx, _xx, _i3, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0A10 - 0A1F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _bb, // 0A20 - 0A2F
     _vt, _xx, _ct, _cn, _xx, _bb, _cn, _xx, _ct, _bb, _xx, _xx, _nu, _xx, _dr, _dl, // 0A30 - 0A3F
-    _dr, _db, _db, _xx, _xx, _xx, _xx, _da, _da, _xx, _xx, _da, _da, _vr, _xx, _xx, // 0A40 - 0A4F
+    _dr, _b2, _db, _xx, _xx, _xx, _xx, _da, _da, _xx, _xx, _a1, _da, _vr, _xx, _xx, // 0A40 - 0A4F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _cn, _cn, _cn, _ct, _xx, _cn, _xx, // 0A50 - 0A5F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0A60 - 0A6F
     _ma, _ma, _xx, _xx, _xx                                                         // 0A70 - 0A74
