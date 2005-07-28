@@ -27,16 +27,17 @@ U_NAMESPACE_BEGIN
 #define CC_STRESS_MARK            2U
 #define CC_INDEPENDENT_VOWEL      3U
 #define CC_INDEPENDENT_VOWEL_2    4U
-#define CC_CONSONANT              5U
-#define CC_CONSONANT_WITH_NUKTA   6U
-#define CC_NUKTA                  7U
-#define CC_DEPENDENT_VOWEL        8U
-#define CC_SPLIT_VOWEL_PIECE_1    9U
-#define CC_SPLIT_VOWEL_PIECE_2   10U
-#define CC_SPLIT_VOWEL_PIECE_3   11U
-#define CC_VIRAMA                12U
-#define CC_ZERO_WIDTH_MARK       13U
-#define CC_COUNT                 14U
+#define CC_INDEPENDENT_VOWEL_3    5U
+#define CC_CONSONANT              6U
+#define CC_CONSONANT_WITH_NUKTA   7U
+#define CC_NUKTA                  8U
+#define CC_DEPENDENT_VOWEL        9U
+#define CC_SPLIT_VOWEL_PIECE_1   10U
+#define CC_SPLIT_VOWEL_PIECE_2   11U
+#define CC_SPLIT_VOWEL_PIECE_3   12U
+#define CC_VIRAMA                13U
+#define CC_ZERO_WIDTH_MARK       14U
+#define CC_COUNT                 15U
 
 // Character class flags
 #define CF_CLASS_MASK    0x0000FFFFU
