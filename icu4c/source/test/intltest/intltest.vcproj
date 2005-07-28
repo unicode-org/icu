@@ -255,6 +255,12 @@
 				RelativePath=".\regcoll.h">
 			</File>
 			<File
+				RelativePath=".\rndmcoll.cpp">
+			</File>
+			<File
+				RelativePath=".\rndmcoll.h">
+			</File>
+			<File
 				RelativePath=".\srchtest.cpp">
 			</File>
 			<File
