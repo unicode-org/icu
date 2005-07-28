@@ -88,7 +88,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(18, UCAConformanceTest);
       TESTCLASS(19, CollationServiceTest);
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
-      //TESTCLASS(21, RandomCollator);
+      TESTCLASS(21, RandomCollator);
 
       default: name = ""; break;
     }
