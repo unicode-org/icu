@@ -185,6 +185,18 @@ static const IndicClassTable::CharClass mlymCharClasses[] =
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0D60 - 0D6F
 };
+ 
+static const IndicClassTable::CharClass sinhCharClasses[] =
+{
+    _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, // 0D80 - 0D8F
+    _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _ct, _ct, _ct, _ct, _ct, _ct, // 0D90 - 0D9F
+    _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0DA0 - 0DAF
+    _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _xx, _xx, // 0DB0 - 0DBF
+    _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _vr, _xx, _xx, _xx, _xx, _dr, // 0DC0 - 0DCF
+    _dr, _dr, _da, _da, _db, _xx, _db, _xx, _dr, _dl, _s1, _dl, _s2, _s3, _s4, _dr, // 0DD0 - 0DDF
+    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0DE0 - 0DEF
+    _xx, _xx, _dr, _dr, _xx                                                         // 0DF0 - 0DF4
+};
 
 //
 // Split matra tables
@@ -198,10 +210,13 @@ static const SplitMatra tamlSplitTable[] = {{0x0BC6, 0x0BBE}, {0x0BC7, 0x0BBE}, 
 static const SplitMatra teluSplitTable[] = {{0x0C46, 0x0C56}};
 
 static const SplitMatra kndaSplitTable[] = {{0x0CBF, 0x0CD5}, {0x0CC6, 0x0CD5}, {0x0CC6, 0x0CD6}, {0x0CC6, 0x0CC2},
-                                   {0x0CC6, 0x0CC2, 0x0CD5}};
+                                            {0x0CC6, 0x0CC2, 0x0CD5}};
 
 static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, {0x0D46, 0x0D57}};
 
+ 
+static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, {0x0DD9, 0x0DCF,0x0DCA},
+                                            {0x0DD9, 0x0DDF}};
 //
 // Script Flags
 //
@@ -218,6 +233,7 @@ static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, 
 #define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | 3)
 #define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | 3)
 #define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+#define SINH_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
 
 //
 // Indic Class Tables
@@ -239,6 +255,8 @@ static const IndicClassTable teluClassTable = {0x0C00, 0x0C6F, 3, TELU_SCRIPT_FL
 static const IndicClassTable kndaClassTable = {0x0C80, 0x0CEF, 4, KNDA_SCRIPT_FLAGS, kndaCharClasses, kndaSplitTable};
 
 static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
+
+static const IndicClassTable sinhClassTable = {0x0D80, 0x0DF4, 3, SINH_SCRIPT_FLAGS, sinhCharClasses, sinhSplitTable};
 
 //
 // IndicClassTable addresses
@@ -277,7 +295,7 @@ static const IndicClassTable * const indicClassTables[] = {
     NULL,            /* 'ital' (OLD-ITALIC) */
     &oryaClassTable, /* 'orya' (ORIYA) */
     NULL,            /* 'runr' (RUNIC) */
-    NULL,            /* 'sinh' (SINHALA) */
+    &sinhClassTable, /* 'sinh' (SINHALA) */
     NULL,            /* 'syrc' (SYRIAC) */
     &tamlClassTable, /* 'taml' (TAMIL) */
     &teluClassTable, /* 'telu' (TELUGU) */

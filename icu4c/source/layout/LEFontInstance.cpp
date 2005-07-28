@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2004, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -71,12 +71,9 @@ LEGlyphID LEFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *map
 {
     LEUnicode32 mappedChar = mapper->mapChar(ch);
 
-    if (mappedChar == 0xFFFE || mappedChar == 0xFFFF) {
+    if (mappedChar == 0xFFFE || mappedChar == 0xFFFF ||
+        mappedChar == 0x200C || mappedChar == 0x200D) {
         return 0xFFFF;
-    }
-
-    if (mappedChar == 0x200C || mappedChar == 0x200D) {
-        return 1;
     }
 
     return mapCharToGlyph(mappedChar);
