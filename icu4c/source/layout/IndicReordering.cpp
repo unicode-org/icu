@@ -35,6 +35,9 @@ private:
     LEUnicode fLengthMark;
     le_int32  fLengthMarkIndex;
 
+    LEUnicode fVirama;
+    le_int32  fViramaIndex;
+
     const LETag *fMatraTags;
     
     le_int32 fMPreOutIndex;
@@ -56,6 +59,9 @@ private:
         if (IndicClassTable::isLengthMark(matraClass)) {
             fLengthMark = matra;
             fLengthMarkIndex = matraIndex;
+        } else if (IndicClassTable::isVirama(matraClass)) {
+            fVirama = matra;
+            fViramaIndex = matraIndex;
         } else {
             switch (matraClass & CF_POS_MASK) {
             case CF_POS_BEFORE:
@@ -89,8 +95,8 @@ public:
     ReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
         : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
           fMpre(0), fMpreIndex(0), fMbelow(0), fMbelowIndex(0), fMabove(0), fMaboveIndex(0),
-          fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fMatraTags(NULL),
-          fMPreOutIndex(-1), fMPreFixups(mpreFixups),
+          fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fVirama(0), fViramaIndex(0),
+          fMatraTags(NULL), fMPreOutIndex(-1), fMPreFixups(mpreFixups),
           fVMabove(0), fVMpost(0), fVMIndex(0), fVMTags(NULL),
           fSMabove(0), fSMbelow(0), fSMIndex(0), fSMTags(NULL)
     {
@@ -104,7 +110,7 @@ public:
 
     void reset()
     {
-        fMpre = fMbelow = fMabove = fMpost = fLengthMark = 0;
+        fMpre = fMbelow = fMabove = fMpost = fLengthMark = fVirama = 0;
         fMPreOutIndex = -1;
         
         fVMabove = fVMpost  = 0;
@@ -202,6 +208,14 @@ public:
     {
         if (fMPreFixups != NULL && fMPreOutIndex >= 0) {
             fMPreFixups->add(fOutIndex, fMPreOutIndex);
+        }
+    }
+
+    // Handles virama in Sinhala split vowels.
+    void writeVirama()
+    {
+        if (fVirama != 0) {
+            writeChar(fVirama, fViramaIndex, fMatraTags);
         }
     }
 
@@ -442,6 +456,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             output.writeLengthMark();
+            output.writeVirama();
 
             if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {
                 output.writeVMabove();
@@ -632,6 +647,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             output.writeLengthMark();
+            output.writeVirama();
 
             // write reph
             if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {

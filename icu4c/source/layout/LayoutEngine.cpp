@@ -443,6 +443,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
         case guruScriptCode:
         case tamlScriptCode:
         case teluScriptCode:
+        case sinhScriptCode:
             result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
             break;
 
@@ -495,6 +496,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             case guruScriptCode:
             case tamlScriptCode:
             case teluScriptCode:
+            case sinhScriptCode:
             {
                 result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
                 break;
