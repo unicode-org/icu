@@ -878,7 +878,7 @@ void TransliteratorIDParser::init(UErrorCode &status) {
         special_inverses = NULL;
     }
     umtx_unlock(&LOCK);
-    delete special_inverses;
+    delete special_inverses; /*null instance*/
 
     ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, transliterator_cleanup);
 }
