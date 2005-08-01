@@ -326,7 +326,8 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     // Prefight operation?  Just return the size
     //
-    int32_t totalSize = headerSize + ds->readUInt32(rbbiDH->fLength);
+    int32_t breakDataLength = ds->readUInt32(rbbiDH->fLength);
+    int32_t totalSize = headerSize + breakDataLength;
     if (length < 0) {
         return totalSize;
     }
@@ -334,15 +335,12 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     // Check that length passed in is consistent with length from RBBI data header.
     //
-    if (length > 0) {
-        length -= headerSize;
-        if ((uint32_t)length < ds->readUInt32(rbbiDH->fLength)) {
-            udata_printError(ds, "ubrk_swap(): too few bytes (%d after ICU Data header) for break data.\n",
-                             length);
-            *status=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
+    if (length < totalSize) {
+        udata_printError(ds, "ubrk_swap(): too few bytes (%d after ICU Data header) for break data.\n",
+                            breakDataLength);
+        *status=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
         }
-    }
 
 
     //
@@ -362,7 +360,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //    when originally created.  Any unused space between items needs to be zero.
     //
     if (inBytes != outBytes) {
-       uprv_memset(outBytes, 0, length);
+        uprv_memset(outBytes, 0, breakDataLength);
     }
 
     //
