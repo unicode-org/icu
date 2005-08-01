@@ -997,7 +997,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     if(sourceLength==-1) {
         sourceLength=u_strlen(source);
     }
-    if(sourceLength==0) {
+    if(sourceLength<=0) {
         return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
