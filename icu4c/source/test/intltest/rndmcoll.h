@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -22,6 +22,7 @@ public:
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     virtual ~RandomCollatorTest(){}
     void Test();
+    void Test2();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
