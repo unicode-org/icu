@@ -435,7 +435,6 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
             fRB->fRules.extractBetween(n->fFirstPos, n->fLastPos, n->fText);
             break;
         }
-        break;
 
     case doSlash:
         // Scanned a '/', which identifies a look-ahead break position in a rule.

@@ -873,7 +873,6 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
 
     int32_t            state           = START_STATE;
     int32_t            category;
-    int32_t            lastCategory    = 0;
     int32_t            result          = fText->getIndex();
     int32_t            lookaheadStatus = 0;
     int32_t            lookaheadResult = 0;
@@ -899,9 +898,6 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             break;
         }
 
-        // save the last character's category and look up the current
-        // character's category
-        lastCategory = category;
         UTRIE_GET16(&fData->fTrie, c, category);
 
         // Check the dictionary bit in the character's category.
