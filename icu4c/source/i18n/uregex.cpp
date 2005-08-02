@@ -1091,7 +1091,7 @@ uregex_split(   URegularExpression      *regexp,
     if (requiredCapacity != NULL) {
         *requiredCapacity = destIdx;
     }
-    if (*requiredCapacity > destCapacity) {
+    if (destIdx > destCapacity) {
         *status = U_BUFFER_OVERFLOW_ERROR;
     }
     return i+1;
