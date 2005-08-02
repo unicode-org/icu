@@ -349,7 +349,7 @@ U_CFUNC void ucnv_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
-    UChar32 ch, ch2;
+    UChar32 ch;
     int16_t indexToWrite;
     char temp[4];
 
@@ -394,7 +394,6 @@ lowsurrogate:
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             ++mySource;
                             ch=UTF16_GET_PAIR_VALUE(ch, trail);
-                            ch2 = 0;
                             /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {
@@ -466,7 +465,7 @@ U_CFUNC void ucnv_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * ar
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
-    UChar32 ch, ch2;
+    UChar32 ch;
     int32_t offsetNum, nextSourceIndex;
     int16_t indexToWrite;
     char temp[4];
@@ -522,7 +521,6 @@ lowsurrogate:
                             ++mySource;
                             ++nextSourceIndex;
                             ch=UTF16_GET_PAIR_VALUE(ch, trail);
-                            ch2 = 0;
                             /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {

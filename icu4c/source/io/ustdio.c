@@ -299,7 +299,6 @@ u_file_write_flush(const UChar *chars,
     /* Set up conversion parameters */
     UErrorCode  status       = U_ZERO_ERROR;
     const UChar *mySource    = chars;
-    const UChar *sourceAlias = chars;
     const UChar *mySourceEnd;
     char        charBuffer[UFILE_CHARBUFFER_SIZE];
     char        *myTarget   = charBuffer;
@@ -315,7 +314,6 @@ u_file_write_flush(const UChar *chars,
     {
         /* Do the transliteration */
         mySource = u_file_translit(f, chars, &count, flushTranslit);
-        sourceAlias = mySource;
     }
 #endif
 
@@ -336,7 +334,6 @@ u_file_write_flush(const UChar *chars,
     /* Perform the conversion in a loop */
     do {
         status     = U_ZERO_ERROR;
-        sourceAlias = mySource;
         if(f->fConverter != NULL) { /* We have a valid converter */
             ucnv_fromUnicode(f->fConverter,
                 &myTarget,

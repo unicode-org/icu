@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -50,8 +50,6 @@ static char gDecimal = 0;
 /* Only for 32 bit numbers. Ignore the negative sign. */
 static const char LONG_MIN_REP[] = "2147483648";
 static const char I64_MIN_REP[] = "9223372036854775808";
-
-static const int64_t I64_MIN_VALUE = U_INT64_MIN;
 
 enum {
     LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1, //Ignore the NULL at the end
