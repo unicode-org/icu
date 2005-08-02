@@ -28,7 +28,7 @@
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
-#if defined(U_LINUX) || defined(U_CYGWIN)
+#if defined(U_LINUX) || defined(U_CYGWIN) || defined(U_DARWIN)
 #define USE_SSTREAM 1
 #include <sstream>
 #else
