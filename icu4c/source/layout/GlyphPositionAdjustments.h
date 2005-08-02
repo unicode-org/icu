@@ -223,7 +223,7 @@ inline void GlyphPositionAdjustments::Adjustment::adjustYAdvance(float yAdjustme
 inline GlyphPositionAdjustments::EntryExitPoint::EntryExitPoint()
     : fFlags(0)
 {
-    fEntryPoint.fX = fEntryPoint.fY = fExitPoint.fX = fEntryPoint.fY = 0;
+    fEntryPoint.fX = fEntryPoint.fY = fExitPoint.fX = fExitPoint.fY = 0;
 }
 
 inline GlyphPositionAdjustments::EntryExitPoint::~EntryExitPoint()
