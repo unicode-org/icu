@@ -155,6 +155,10 @@ Transliterator::Transliterator(const Transliterator& other) :
     }
 }
 
+Transliterator* Transliterator::clone() const {
+    return NULL;
+}
+
 /**
  * Assignment operator.
  */
