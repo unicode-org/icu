@@ -1609,7 +1609,8 @@ void RandomCollatorTest::Test(){
 
 
     static const int CONSTRUCT_RANDOM_COUNT = 10;
-    for (int i=0; i < CONSTRUCT_RANDOM_COUNT; i++){
+    int i;
+    for (i=0; i < CONSTRUCT_RANDOM_COUNT; i++){
         const char * rule = test_rule.get_a_string();
         logln("\n-----------------------------------%d\n",i);
         logln(UnicodeString(rule, strlen(rule)));
@@ -1619,16 +1620,10 @@ void RandomCollatorTest::Test(){
         Collator * c = new RuleBasedCollator(newRule,status);
 
         if (U_FAILURE(status)) {
-            errln( "Could not create Collator for rules at %d. Error: %s\n", i, u_errorName(status));
-        //    //fwrite(rule, sizeof(rule),1,stderr);
+            errln( "Could not create Collator for rules at %d. Error: %s\nRule is: %s\n", i, u_errorName(status), rule);
             return;
         }
 
-        ////if (!coll_test(*c)){
-        ////    errln( "RandomCollatorTest Collation object test failed.");
-        ////    errln(rule);
-        ////    return;
-        ////}
         delete c;
     }
 }
