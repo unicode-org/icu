@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -46,11 +46,15 @@ public:
     static Paragraph *paragraphFactory(const char *fileName, const LEFontInstance *font, GUISupport *guiSupport);
 
 private:
-    ParagraphLayout *fParagraphLayout;
+    ParagraphLayout **fParagraphLayout;
 
-    le_int32         fLineCount;
-    le_int32         fLinesMax;
-    le_int32         fLinesGrow;
+    le_int32          fParagraphCount;
+    le_int32          fParagraphMax;
+    le_int32          fParagraphGrow;
+    
+    le_int32          fLineCount;
+    le_int32          fLinesMax;
+    le_int32          fLinesGrow;
 
     const ParagraphLayout::Line **fLines;
           LEUnicode *fChars;
