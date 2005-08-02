@@ -373,7 +373,7 @@ public:
      * @see #registerInstance
      * @stable ICU 2.0
      */
-    virtual Transliterator* clone() const { return 0; }
+    virtual Transliterator* clone() const;
 
     /**
      * Transliterates a segment of a string, with optional filtering.
