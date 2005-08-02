@@ -1181,8 +1181,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                         break;
                     }
                 }
-                break;
-
             }
             break;
 
