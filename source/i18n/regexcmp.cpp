@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2004 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2005 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -2958,8 +2958,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             
             // End of look-ahead ops should always be consumed by the processing at
             //  the URX_LA_START op.
-            U_ASSERT(FALSE);
-            break;
+            // U_ASSERT(FALSE);
+            // break;
             
         case URX_LB_START:
             {
@@ -3235,18 +3235,12 @@ static const UChar      chCR        = 0x0d;      // New lines, for terminating c
 static const UChar      chLF        = 0x0a;
 static const UChar      chNEL       = 0x85;      //    NEL newline variant
 static const UChar      chLS        = 0x2028;    //    Unicode Line Separator
-static const UChar      chApos      = 0x27;      //  single quote, for quoted chars.
 static const UChar      chPound     = 0x23;      // '#', introduces a comment.
 static const UChar      chE         = 0x45;      // 'E'
 static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
-static const UChar      chLParen    = 0x28;
-static const UChar      chRParen    = 0x29;
 static const UChar      chLBracket  = 0x5b;
 static const UChar      chRBracket  = 0x5d;
 static const UChar      chRBrace    = 0x7d;
-static const UChar      chUpperN    = 0x4E;
-static const UChar      chLowerP    = 0x70;
-static const UChar      chUpperP    = 0x50;
 
 
 //------------------------------------------------------------------------------
@@ -3425,7 +3419,6 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
 UnicodeSet *RegexCompile::scanSet() {
     UnicodeSet    *uset = NULL;
     ParsePosition  pos;
-    int            startPos;
     int            i;
 
     if (U_FAILURE(*fStatus)) {
@@ -3433,7 +3426,6 @@ UnicodeSet *RegexCompile::scanSet() {
     }
 
     pos.setIndex(fScanIndex);
-    startPos = fScanIndex;
     UErrorCode localStatus = U_ZERO_ERROR;
     uint32_t   usetFlags = 0;
     if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
