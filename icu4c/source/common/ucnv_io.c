@@ -193,7 +193,7 @@ static uint32_t gAliasListSize;
 static uint32_t gUntaggedConvArraySize;
 static uint32_t gTaggedAliasArraySize;
 static uint32_t gTaggedAliasListsSize;
-static uint32_t gStringTableSize;
+/*static uint32_t gStringTableSize;*/
 
 #define GET_STRING(idx) (const char *)(gStringTable + (idx))
 
@@ -225,7 +225,7 @@ static UBool U_CALLCONV ucnv_io_cleanup(void)
     gUntaggedConvArraySize   = 0;
     gTaggedAliasArraySize    = 0;
     gTaggedAliasListsSize    = 0;
-    gStringTableSize         = 0;
+    /*gStringTableSize         = 0;*/
 
     gConverterList = NULL;
     gTagList = NULL;
@@ -282,7 +282,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             gTaggedAliasArraySize   = ((const uint32_t *)(table))[5];
             gTaggedAliasListsSize   = ((const uint32_t *)(table))[6];
             reservedSize1           = ((const uint32_t *)(table))[7];   /* reserved */
-            gStringTableSize        = ((const uint32_t *)(table))[8];
+            /*gStringTableSize        = ((const uint32_t *)(table))[8];*/
 
             currOffset = tableStart * (sizeof(uint32_t)/sizeof(uint16_t)) + (sizeof(uint32_t)/sizeof(uint16_t));
             gConverterList = table + currOffset;

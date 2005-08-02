@@ -164,12 +164,12 @@ typedef UColAttributeValue UCollationStrength;
  * @stable ICU 2.0
  */
 typedef enum {
-     /** Attribute for direction of secondary weights - used in French.\ 
+     /** Attribute for direction of secondary weights - used in French.
       * Acceptable values are UCOL_ON, which results in secondary weights
       * being considered backwards and UCOL_OFF which treats secondary
       * weights in the order they appear.*/
      UCOL_FRENCH_COLLATION, 
-     /** Attribute for handling variable elements.\ 
+     /** Attribute for handling variable elements.
       * Acceptable values are UCOL_NON_IGNORABLE (default)
       * which treats all the codepoints with non-ignorable 
       * primary weights in the same way,
@@ -178,7 +178,7 @@ typedef enum {
       * to be ignored on primary level and moved to the quaternary 
       * level.*/
      UCOL_ALTERNATE_HANDLING, 
-     /** Controls the ordering of upper and lower case letters.\ 
+     /** Controls the ordering of upper and lower case letters.
       * Acceptable values are UCOL_OFF (default), which orders
       * upper and lower case letters in accordance to their tertiary
       * weights, UCOL_UPPER_FIRST which forces upper case letters to 
@@ -186,45 +186,41 @@ typedef enum {
       * the opposite. */
      UCOL_CASE_FIRST, 
      /** Controls whether an extra case level (positioned before the third
-      * level) is generated or not.\ Acceptable values are UCOL_OFF (default), 
+      * level) is generated or not. Acceptable values are UCOL_OFF (default), 
       * when case level is not generated, and UCOL_ON which causes the case
-      * level to be generated.\ Contents of the case level are affected by
-      * the value of UCOL_CASE_FIRST attribute.\ A simple way to ignore 
+      * level to be generated. Contents of the case level are affected by
+      * the value of UCOL_CASE_FIRST attribute. A simple way to ignore 
       * accent differences in a string is to set the strength to UCOL_PRIMARY
       * and enable case level. */
      UCOL_CASE_LEVEL,
      /** Controls whether the normalization check and necessary normalizations
-      * are performed.\ When set to UCOL_OFF (default) no normalization check
-      * is performed.\ The correctness of the result is guaranteed only if the 
-      * input data is in so-called FCD form (see users manual for more info).\ 
-      * When set to UCOL_ON, an incremental check is performed to see whether the input data
-      * is in the FCD form.\ If the data is not in the FCD form, incremental 
-      * NFD normalization is performed. */
+      * are performed. When set to UCOL_OFF (default) no normalization check
+      * is performed. The correctness of the result is guaranteed only if the 
+      * input data is in so-called FCD form (see users manual for more info).
+      * When set to UCOL_ON, an incremental check is performed to see whether
+      * the input data is in the FCD form. If the data is not in the FCD form,
+      * incremental NFD normalization is performed. */
      UCOL_NORMALIZATION_MODE, 
      /** An alias for UCOL_NORMALIZATION_MODE attribute */
      UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
-     /** The strength attribute.\ Can be either UCOL_PRIMARY, UCOL_SECONDARY,
-      * UCOL_TERTIARY, UCOL_QUATERNARY or UCOL_IDENTICAL.\ The usual strength
-      * for most locales (except Japanese) is tertiary.\ Quaternary strength 
+     /** The strength attribute. Can be either UCOL_PRIMARY, UCOL_SECONDARY,
+      * UCOL_TERTIARY, UCOL_QUATERNARY or UCOL_IDENTICAL. The usual strength
+      * for most locales (except Japanese) is tertiary. Quaternary strength 
       * is useful when combined with shifted setting for alternate handling
       * attribute and for JIS x 4061 collation, when it is used to distinguish
       * between Katakana  and Hiragana (this is achieved by setting the 
-      * UCOL_HIRAGANA_QUATERNARY mode to on.\ Otherwise, quaternary level
+      * UCOL_HIRAGANA_QUATERNARY mode to on. Otherwise, quaternary level
       * is affected only by the number of non ignorable code points in
-      * the string.\ Identical strength is rarely useful, as it amounts 
+      * the string. Identical strength is rarely useful, as it amounts 
       * to codepoints of the NFD form of the string. */
      UCOL_STRENGTH,  
-     /** when turned on, this attribute 
-      * positions Hiragana before all  
-      * non-ignorables on quaternary level
-      * This is a sneaky way to produce JIS
-      * sort order */     
+     /** When turned on, this attribute positions Hiragana before all  
+      * non-ignorables on quaternary level This is a sneaky way to produce JIS
+      * sort order */
      UCOL_HIRAGANA_QUATERNARY_MODE,
-     /** when turned on, this attribute 
-      * generates a collation key
-      * for the numeric value of substrings
-      * of digits. This is a way to get '100' 
-      * to sort AFTER '2'.*/          
+     /** When turned on, this attribute generates a collation key
+      * for the numeric value of substrings of digits.
+      * This is a way to get '100' to sort AFTER '2'. */
      UCOL_NUMERIC_COLLATION, 
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
@@ -277,7 +273,7 @@ ucol_open(const char *loc, UErrorCode *status);
  *                    occurred during parsing. This argument can currently be set
  *                    to NULL, but at users own risk. Please provide a real structure.
  * @param status A pointer to an UErrorCode to receive any errors
- * @return A pointer to a UCollator.\ It is not guaranteed that NULL be returned in case
+ * @return A pointer to a UCollator. It is not guaranteed that NULL be returned in case
  *         of error - please use status argument to check for errors.
  * @see ucol_open
  * @see ucol_safeClone
@@ -368,8 +364,8 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
 
 /** 
  * Close a UCollator.
- * Once closed, a UCollator should not be used.\ Every open collator should
- * be closed.\ Otherwise, a memory leak will result.
+ * Once closed, a UCollator should not be used. Every open collator should
+ * be closed. Otherwise, a memory leak will result.
  * @param coll The UCollator to close.
  * @see ucol_open
  * @see ucol_openRules

@@ -287,7 +287,7 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_LOAD);
 
-    if (err == NULL || U_FAILURE (*err)) {
+    if (U_FAILURE (*err)) {
         UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
