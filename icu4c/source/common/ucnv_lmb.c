@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_lmb.cpp
@@ -1016,9 +1016,8 @@ static UChar32
 _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                          UErrorCode*   err)
 {
-     UChar32 uniChar = 0;    /* an output UNICODE char */
-     ulmbcs_byte_t   CurByte; /* A byte from the input stream */
-     const char * saveSource;
+    UChar32 uniChar = 0;    /* an output UNICODE char */
+    ulmbcs_byte_t   CurByte; /* A byte from the input stream */
 
     /* error check */
     if (args->source >= args->sourceLimit)
@@ -1027,7 +1026,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
         return 0xffff;
     }
     /* Grab first byte & save address for error recovery */
-    CurByte = *((ulmbcs_byte_t  *) (saveSource = args->source++));
+    CurByte = *((ulmbcs_byte_t  *) (args->source++));
    
     /*
     * at entry of each if clause:
@@ -1046,7 +1045,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
     ||  CurByte == ULMBCS_HT || CurByte == ULMBCS_CR 
     ||  CurByte == ULMBCS_LF || CurByte == ULMBCS_123SYSTEMRANGE)
     {
-      uniChar = CurByte;
+		uniChar = CurByte;
     }
     else  
     {
