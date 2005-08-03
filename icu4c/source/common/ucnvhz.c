@@ -304,11 +304,10 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int32_t mySourceLength = (int32_t)(args->sourceLimit - args->source);
     int32_t length=0;
     uint32_t targetUniChar = 0x0000;
-    UChar32 mySourceChar = 0x0000,c=0x0000;
+    UChar32 mySourceChar = 0x0000;
     UConverterDataHZ *myConverterData=(UConverterDataHZ*)args->converter->extraInfo;
     UBool isTargetUCharDBCS = (UBool) myConverterData->isTargetUCharDBCS;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
-    UBool isEscapeAppended =FALSE;
     int len =0;
     const char* escSeq=NULL;
     
@@ -324,7 +323,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         targetUniChar = missingCharMarker;
         if (myTargetIndex < targetLength){
             
-            c=mySourceChar = (UChar) mySource[mySourceIndex++];
+            mySourceChar = (UChar) mySource[mySourceIndex++];
             
 
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -353,13 +352,13 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                         len =ESC_LEN;
                         escSeq = SB_ESCAPE;
                         CONCAT_ESCAPE_MACRO(args, myTargetIndex, targetLength, escSeq,err,len,mySourceIndex);
-                        myConverterData->isEscapeAppended =isEscapeAppended =TRUE;
+                        myConverterData->isEscapeAppended = TRUE;
                     }
                     else{ /* Shifting from a single byte to double byte mode*/
                         len =ESC_LEN;
                         escSeq = DB_ESCAPE;
                         CONCAT_ESCAPE_MACRO(args, myTargetIndex, targetLength, escSeq,err,len,mySourceIndex);
-                        myConverterData->isEscapeAppended =isEscapeAppended =TRUE;
+                        myConverterData->isEscapeAppended = TRUE;
                         
                     }
                 }
