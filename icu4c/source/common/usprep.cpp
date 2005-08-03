@@ -799,7 +799,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
             return FALSE;
         }
     }
-    if(b2Len <= destCapacity){
+    if(b2Len>0 && b2Len <= destCapacity){
         uprv_memmove(dest,b2, b2Len*U_SIZEOF_UCHAR);
     }
 

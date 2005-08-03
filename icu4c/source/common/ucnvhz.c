@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -148,7 +148,8 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataHZ* myData=(UConverterDataHZ*)(args->converter->extraInfo);
-       
+    tempBuf[0]=0; 
+    tempBuf[1]=0;
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -261,9 +262,17 @@ SAVE_STATE:
                     *err = U_ILLEGAL_CHAR_FOUND;
                 }
                 if(myData->isStateDBCS){
-                    args->converter->toUBytes[0] = (uint8_t)(tempBuf[0]-0x80);
-                    args->converter->toUBytes[1] = (uint8_t)(tempBuf[1]-0x80);
-                    args->converter->toULength=2;
+                    /* this should never occur since isStateDBCS is set to true 
+                     * only after tempBuf[0] and tempBuf[1]
+                     * are set to the input ..  just to please BEAM 
+                     */
+                    if(tempBuf[0]==0 || tempBuf[1]==0){
+                        *err = U_INTERNAL_PROGRAM_ERROR;
+                    }else{
+                        args->converter->toUBytes[0] = (uint8_t)(tempBuf[0]-0x80);
+                        args->converter->toUBytes[1] = (uint8_t)(tempBuf[1]-0x80);
+                        args->converter->toULength=2;
+                    }
                 }
                 else{
                     args->converter->toUBytes[0] = (uint8_t)mySourceChar;
