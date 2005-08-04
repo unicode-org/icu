@@ -6,26 +6,43 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 /**
  * Class for mapping Unicode characters to values
- * Much smaller storage than using HashMap.
+ * Much smaller storage than using HashMap, and much faster and more compact than
+ * a list of UnicodeSets.
  * @author Davis
  */
-// TODO Optimize using range map
-public final class UnicodeMap implements Cloneable, Lockable {
+
+public final class UnicodeMap implements Cloneable, Lockable, Externalizable {
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
@@ -33,11 +50,12 @@ public final class UnicodeMap implements Cloneable, Lockable {
     private int length = 2;
     private int[] transitions = {0,0x110000,0,0,0,0,0,0,0,0};
     private Object[] values = new Object[10];
-    private boolean errorOnReset = false;
     
     private LinkedHashSet availableValues = new LinkedHashSet();
-    boolean staleAvailableValues = false;
+    private transient boolean staleAvailableValues = false;
 
+    private transient boolean errorOnReset = false;
+    private transient boolean locked;
     private int lastIndex = 0;
     
     /* Boilerplate */
@@ -453,7 +471,7 @@ public final class UnicodeMap implements Cloneable, Lockable {
             availableValues.retainAll(temp);
             staleAvailableValues = false;
     	}
-    	if (result == null) result = new ArrayList(1);
+    	if (result == null) result = new ArrayList(availableValues.size());
         result.addAll(availableValues);
         return result;
     }
@@ -585,7 +603,6 @@ public final class UnicodeMap implements Cloneable, Lockable {
 		this.errorOnReset = errorOnReset;
 	}
 
-	private boolean locked;
 	/* (non-Javadoc)
 	 * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
 	 */
@@ -601,4 +618,241 @@ public final class UnicodeMap implements Cloneable, Lockable {
 		locked = true;
 		return this;
 	}
+    
+    static final boolean DEBUG_WRITE = false;
+    
+    // TODO Fix to serialize more than just strings.
+    // Only if all the items are strings will we do the following compression
+    // Otherwise we'll just use Java Serialization, bulky as it is
+    public void writeExternal(ObjectOutput out1) throws IOException {
+        DataOutputCompressor sc = new DataOutputCompressor(out1);
+        // if all objects are strings
+        Collection availableValues = getAvailableValues();
+        boolean allStrings = allAreString(availableValues);
+        sc.writeBoolean(allStrings);
+        Map object_index = new LinkedHashMap();
+        if (allAreString(availableValues)) {
+            sc.writeStringSet(new TreeSet(availableValues), object_index);
+        } else {
+            sc.writeCollection(availableValues, object_index);           
+        }
+        sc.writeUInt(length);
+        int lastTransition = -1;
+        int lastValueNumber = 0;
+        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
+        for (int i = 0; i < length; ++i) {
+            int valueNumber = ((Integer)object_index.get(values[i])).intValue();
+            if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + valueNumber);
+            
+            int deltaTransition = transitions[i] - lastTransition;
+            lastTransition = transitions[i];
+            int deltaValueNumber = valueNumber - lastValueNumber;
+            lastValueNumber = valueNumber;
+            
+            deltaValueNumber <<= 1; // make room for one bit
+            boolean canCombine = deltaTransition == 1;
+            if (canCombine) deltaValueNumber |= 1;
+            sc.writeInt(deltaValueNumber);
+            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + deltaValueNumber);
+            if (!canCombine) {
+            	sc.writeUInt(deltaTransition);           	
+            	if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
+            }
+        }
+        sc.flush();
+    }
+
+    /**
+     * 
+     */
+    private boolean allAreString(Collection availableValues2) {
+        //if (true) return false;
+        for (Iterator it = availableValues2.iterator(); it.hasNext();) {
+            if (!(it.next() instanceof String)) return false;
+        }
+        return true;
+    }
+
+    public void readExternal(ObjectInput in1) throws IOException, ClassNotFoundException {
+        DataInputCompressor sc = new DataInputCompressor(in1);
+        boolean allStrings = sc.readBoolean();
+        Object[] valuesList;
+        availableValues = new LinkedHashSet();
+        if (allStrings) {
+            valuesList = sc.readStringSet(availableValues);
+        } else {
+            valuesList = sc.readCollection(availableValues);            
+        }
+        length = sc.readUInt();
+        transitions = new int[length];
+        if (DEBUG_WRITE) System.out.println("Trans count: " + length);
+        values = new Object[length];
+        int currentTransition = -1;
+        int currentValue = 0;
+        int deltaTransition;
+        for (int i = 0; i < length; ++i) {
+            int temp = sc.readInt();
+            if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + temp);
+            boolean combined = (temp & 1) != 0;
+            temp >>= 1;
+            values[i] = valuesList[currentValue += temp];
+            if (!combined) {
+                deltaTransition = sc.readUInt();
+                if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
+            } else {
+                deltaTransition = 1;
+            }
+            transitions[i] = currentTransition += deltaTransition; // delta value
+            if (DEBUG_WRITE) System.out.println("Trans: " + transitions[i] + ",\t" + currentValue);
+        }
+    }
+
+    /**
+     * 
+     */
+    static int findCommon(String last, String s) {
+        int minLen = Math.min(last.length(), s.length());
+        for (int i = 0; i < minLen; ++i) {
+            if (last.charAt(i) != s.charAt(i)) return i;
+        }
+        return minLen;
+    }
+
+
+//    /**
+//     * @param sc
+//     * @throws IOException
+//     * 
+//     */
+//    private void showSize(String title, ObjectOutput out, StreamCompressor sc) throws IOException {
+//        sc.showSize(this, title, out);
+//    }
+//    //public void readObject(ObjectInputStream in) throws IOException {
+//    public static class StreamCompressor {
+//    	transient byte[] buffer = new byte[1];
+//        transient StringBuffer stringBuffer = new StringBuffer();
+//        
+//        transient byte[] readWriteBuffer = new byte[8];
+//        int position = 0;
+//        DataOutput out;
+//        DataInput in;
+//
+//        /**
+//         * Format is:
+//         * @throws IOException
+//         */
+//        public void writeInt(int i) throws IOException {
+//            while (true) {
+//                if (position == readWriteBuffer.length) {
+//                	out.write(readWriteBuffer);
+//                    position = 0;
+//                }
+//            	if ((i & ~0x7F) == 0) {
+//                    readWriteBuffer[position++] = (byte)i;
+//                    break;
+//                }
+//                readWriteBuffer[position++] = (byte)(0x80 | i);
+//                i >>>= 7;
+//            }
+//        }
+//		/**
+//		 * @throws IOException
+//		 * 
+//		 */
+//		public int readNInt(ObjectInput in) throws IOException {
+//			int result = readInt(in);
+//            boolean negative = (result & 1) != 0;
+//            result >>>= 1;
+//            if (negative) result = ~result;
+//            return result;
+//		}
+//		/**
+//		 * @throws IOException
+//		 * 
+//		 */
+//		public void writeNInt(int input) throws IOException {
+//            int flag = 0;
+//            if (input < 0) {
+//                input = ~input;
+//                flag = 1;
+//            }
+//			input = (input << 1) | flag;
+//			writeInt(out, input);
+//		}
+//		/**
+//		 * @throws IOException
+//		 * 
+//		 */
+//		public void flush() throws IOException {
+//            out.write(readWriteBuffer);
+//            position = 0;
+//		}
+//        
+//        int readPosition = readWriteBuffer.length;
+//        
+//		public int readInt(ObjectInput in) throws IOException {
+//            int result = 0;
+//            int offset = 0;
+//            while (true) {
+//                if (readPosition == readWriteBuffer.length) {
+//                	in.read(readWriteBuffer);
+//                    readPosition = 0;
+//                }
+//                //in.read(buffer);
+//                int input = readWriteBuffer[readPosition++]; // buffer[0];
+//                result |= (input & 0x7F) << offset;
+//                if ((input & 0x80) == 0) {
+//                    return result;
+//                }
+//                offset += 7;
+//            }  
+//        }
+//
+//        /**
+//         * @throws IOException
+//         * 
+//         */
+//        public void writeString(String s) throws IOException {
+//            writeInt(UTF16.countCodePoint(s));
+//            writeCodePoints(s);
+//        }
+//        /**
+//		 * 
+//		 */
+//		private void writeCodePoints(String s) throws IOException {
+//			int cp = 0;
+//            for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+//                cp = UTF16.charAt(s, i);
+//                writeInt(cp);
+//            }
+//		}
+//		/**
+//         * @throws IOException
+//         * 
+//         */
+//        public String readString() throws IOException {
+//            int len = readInt(in);
+//            return readCodePoints(in, len);
+//        }
+//		/**
+//		 * 
+//		 */
+//		private String readCodePoints(int len) throws IOException {
+//			stringBuffer.setLength(0);
+//            for (int i = 0; i < len; ++i) {
+//            	int cp = readInt(in);
+//                UTF16.append(stringBuffer, cp);
+//            }
+//            return stringBuffer.toString();
+//		}
+//		/**
+//		 * @param this
+//		 * @throws IOException
+//		 * 
+//		 */
+//		private void showSize(UnicodeMap map, String title, ObjectOutput out) throws IOException {
+//		    out.flush();
+//			System.out.println(title + ": " + (map.debugOut.size() + position));
+//		}
+//    }
 }

@@ -8,8 +8,11 @@ package com.ibm.icu.dev.test.util;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -130,8 +133,101 @@ public class TestUtilities extends TestFmwk {
          // TODO: the following is not being reached
         new UnicodeSetBoilerplate().run(args);       
     }
+    
+    public void TestCollectionUtilitySpeed() {
+        HashSet hs1 = new HashSet();
+        HashSet hs2 = new HashSet();
+        int size = 100000;
+        int iterations = 100;
+        String prefix = "abcde";
+        String postfix = "abcde";
+        int start1 = 0; // 1 for some, 0 for all
+        for (int i = 0; i < size; i += 2) hs1.add(prefix + String.valueOf(i) + postfix);
+        for (int i = start1; i < size; i += 2) hs2.add(prefix + String.valueOf(i) + postfix);
+        TreeSet ts1 = new TreeSet(hs1);
+        TreeSet ts2 = new TreeSet(hs2);
+        CollectionUtilities.containsAll(hs1, hs2);
+        CollectionUtilities.containsAll(ts1, ts2);
+        long start, end;
+        boolean temp = false;
+        start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) temp = CollectionUtilities.containsAll(hs1, hs2);
+        end = System.currentTimeMillis();
+        logln(temp + " " + (end - start)/1000.0);
+        start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) temp = CollectionUtilities.containsAll(ts1, ts2);
+        end = System.currentTimeMillis();
+        logln(temp + " " + (end - start)/1000.0);
+    }
+    
+    public void TestCollectionUtilities() {
+		String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; // 
+        int resultMask = 0;
+		for (int i = 0; i < test.length; ++i) {
+			Collection a = new TreeSet(Arrays.asList(test[i]));
+			for (int j = 0; j < test.length; ++j) {
+				Collection b = new TreeSet(Arrays.asList(test[j]));
+				int relation = CollectionUtilities.getContainmentRelation(a, b);
+                resultMask |= (1 << relation);
+				switch (relation) {
+				case CollectionUtilities.ALL_EMPTY:
+					checkContainment(a.size() == 0 && b.size() == 0, a, relation, b);
+					break;
+				case CollectionUtilities.NOT_A_SUPERSET_B:
+					checkContainment(a.size() == 0 && b.size() != 0, a, relation, b);
+					break;
+				case CollectionUtilities.NOT_A_DISJOINT_B:
+					checkContainment(a.equals(b) && a.size() != 0, a, relation, b);
+					break;
+				case CollectionUtilities.NOT_A_SUBSET_B:
+					checkContainment(a.size() != 0 && b.size() == 0, a, relation, b);
+					break;
+                case CollectionUtilities.A_PROPER_SUBSET_OF_B:
+                    checkContainment(b.containsAll(a) && !a.equals(b), a, relation, b);
+                    break;
+                case CollectionUtilities.A_PROPER_DISJOINT_B:
+                    checkContainment(!CollectionUtilities.containsSome(a, b) && a.size() != 0 && b.size() != 0, a, relation, b);
+                    break;
+                case CollectionUtilities.A_PROPER_SUPERSET_B:
+                    checkContainment(a.containsAll(b) && !a.equals(b), a, relation, b);
+                break;
+                case CollectionUtilities.A_PROPER_OVERLAPS_B:
+                    checkContainment(!b.containsAll(a) && !a.containsAll(b) && CollectionUtilities.containsSome(a, b), a, relation, b);
+                break;
+				}
+			}
+		}
+        if (resultMask != 0xFF) {
+            String missing = "";
+            for (int i = 0; i < 8; ++i) {
+            	if ((resultMask & (1 << i)) == 0) {
+                    if (missing.length() != 0) missing += ", ";
+                    missing += RelationName[i];
+                }
+            }
+            errln("Not all ContainmentRelations checked: " + missing);
+        }
+	}
 
-    private void checkNext(int limit) {
+    static final String[] RelationName = {"ALL_EMPTY",
+    		"NOT_A_SUPERSET_B",
+            "NOT_A_DISJOINT_B",
+            "NOT_A_SUBSET_B",
+            "A_PROPER_SUBSET_OF_B",
+            "A_PROPER_DISJOINT_B",
+            "A_PROPER_SUPERSET_B",
+            "A_PROPER_OVERLAPS_B"};
+
+    /**
+	 *  
+	 */
+	private void checkContainment(boolean c, Collection a, int relation, Collection b) {
+		if (!c) {
+			errln("Fails relation: " + a + " \t" + RelationName[relation] + " \t" + b);
+        }		
+	}
+
+	private void checkNext(int limit) {
         logln("Comparing nextRange");
         UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
         Map map3 = new TreeMap();

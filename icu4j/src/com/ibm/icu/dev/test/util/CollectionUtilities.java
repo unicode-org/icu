@@ -11,9 +11,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 public final class CollectionUtilities {
 	/**
@@ -83,7 +89,164 @@ public final class CollectionUtilities {
 		}
 		return c;
 	}
+    
+    public static boolean containsSome(Collection a, Collection b) {
+        // fast paths
+        if (a.size() == 0 || b.size() == 0) return false;
+        if (a == b) return true; // must test after size test.
+
+        if (a instanceof SortedSet && b instanceof SortedSet) {
+            SortedSet aa = (SortedSet) a;
+            SortedSet bb = (SortedSet) b;
+            aa.containsAll(null);
+            Comparator bbc = bb.comparator();
+            Comparator aac = aa.comparator();
+            if (bbc == null) {
+            	if (aac == null) {
+                    Iterator ai = aa.iterator();
+                    Iterator bi = bb.iterator();
+                    Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
+                    Comparable bo = (Comparable) bi.next();
+                    while (true) {
+                        int rel = ao.compareTo(bo);
+                        if (rel < 0) {
+                            if (!ai.hasNext()) return false;
+                            ao = (Comparable) ai.next();
+                        } else if (rel > 0) {
+                            if (!bi.hasNext()) return false;
+                            bo = (Comparable) bi.next();
+                        } else {
+                                return true;  
+                        }
+                    }
+                }
+            } else if (bbc.equals(a)) {
+                Iterator ai = aa.iterator();
+                Iterator bi = bb.iterator();
+                Object ao = ai.next(); // these are ok, since the sizes are != 0
+                Object bo = bi.next();
+                while (true) {
+                    int rel = aac.compare(ao, bo);
+                    if (rel < 0) {
+                        if (!ai.hasNext()) return false;
+                        ao = ai.next();
+                    } else if (rel > 0)  {
+                        if (!bi.hasNext()) return false;
+                        bo = bi.next();
+                    } else {
+                        return true;  
+                    }
+                }
+            }           
+        }
+    	for (Iterator it = a.iterator(); it.hasNext();) {
+    		if (b.contains(it.next())) return true;
+        }
+        return false;
+    }
+    
+    public static boolean containsAll(Collection a, Collection b) {
+        // fast paths
+        if (a == b) return true;
+        if (b.size() == 0) return true;
+        if (a.size() == 0) return false;
+
+        if (a instanceof SortedSet && b instanceof SortedSet) {
+            SortedSet aa = (SortedSet) a;
+            SortedSet bb = (SortedSet) b;
+            Comparator bbc = bb.comparator();
+            Comparator aac = aa.comparator();
+            if (bbc == null) {
+                if (aac == null) {
+                    Iterator ai = aa.iterator();
+                    Iterator bi = bb.iterator();
+                    Comparable ao = (Comparable) ai.next(); // these are ok, since the sizes are != 0
+                    Comparable bo = (Comparable) bi.next();
+                    while (true) {
+                        int rel = ao.compareTo(bo);
+                        if (rel == 0) {
+                            if (!bi.hasNext()) return true;
+                            if (!ai.hasNext()) return false;
+                            bo = (Comparable) bi.next();
+                            ao = (Comparable) ai.next();
+                        } else if (rel < 0) {
+                            if (!ai.hasNext()) return false;
+                            ao = (Comparable) ai.next();
+                        } else {
+                            return false;  
+                        }
+                    }
+                }
+            } else if (bbc.equals(a)) {
+                Iterator ai = aa.iterator();
+                Iterator bi = bb.iterator();
+                Object ao = ai.next(); // these are ok, since the sizes are != 0
+                Object bo = bi.next();
+                while (true) {
+                    int rel = aac.compare(ao, bo);
+                    if (rel == 0) {
+                        if (!bi.hasNext()) return true;
+                        if (!ai.hasNext()) return false;
+                        bo = bi.next();
+                        ao = ai.next();
+                    } else if (rel < 0) {
+                        if (!ai.hasNext()) return false;
+                        ao = ai.next();
+                    } else {
+                        return false;  
+                    }
+                }
+            }           
+        }
+        return a.containsAll(b);
+    }
 	
+    public static boolean containsNone(Collection a, Collection b) {
+        return !containsSome(a, b);
+    }
+    
+    /**
+     * Returns an int with bits set.
+     * Bit 4: a - b != {}
+     * Bit 2: a * b != {}  // * is intersects
+     * Bit 1: b - a != {}
+     * Thus the bits can be used to get the following relations, plus
+     * for A_SUPERSET_B, use (x & NOT_A_SUPERSET_B) == 0
+     * for A_SUBSET_B, use (x & NOT_A_SUBSET_B) == 0
+     * for A_EQUALS_B, use (x & A_PROPER_DISJOINT_B) == 0
+     * for A_DISJOINT_B, use (x & NOT_A_DISJOINT_B) == 0
+     * for A_OVERLAPS_B, use (x & NOT_A_DISJOINT_B) == 1
+     */
+    static final int
+        // ContainmentRelation
+        ALL_EMPTY = 0,
+        NOT_A_SUPERSET_B = 1,
+        NOT_A_DISJOINT_B = 2,
+        NOT_A_SUBSET_B = 4,
+        A_PROPER_SUBSET_OF_B = NOT_A_DISJOINT_B | NOT_A_SUPERSET_B,
+        A_PROPER_DISJOINT_B = NOT_A_SUBSET_B | NOT_A_SUPERSET_B,
+        A_PROPER_SUPERSET_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B,
+        A_PROPER_OVERLAPS_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B | NOT_A_SUPERSET_B;
+    
+    public static int getContainmentRelation(Collection a, Collection b) {
+        if (a.size() == 0) {
+        	return (b.size() == 0) ? ALL_EMPTY : NOT_A_SUPERSET_B;
+        } else if (b.size() == 0) {
+        	return NOT_A_SUBSET_B;
+        }
+        int result = 0;
+        // WARNING: one might think that the following can be short-circuited, by looking at
+        // the sizes of a and b. However, this would fail in general, where a different comparator is being
+        // used in the two collections. Unfortunately, there is no failsafe way to test for that.
+        for (Iterator it = a.iterator(); result != 6 && it.hasNext();) {
+            result |= (b.contains(it.next())) ? NOT_A_DISJOINT_B : NOT_A_SUBSET_B;
+        }
+        for (Iterator it = b.iterator(); (result & 3) != 3 && it.hasNext();) {
+            result |= (a.contains(it.next())) ? NOT_A_DISJOINT_B : NOT_A_SUPERSET_B;
+        }
+        return result;
+    }
+
 	public static String remove(String source, UnicodeSet removals) {
 		StringBuffer result = new StringBuffer();
 		int cp;
@@ -93,4 +256,144 @@ public final class CollectionUtilities {
 		}
 		return result.toString();
 	}
+    
+    public static String prettyPrint(UnicodeSet uset, Comparator comp, Comparator spaceComparator, boolean compressRanges) {
+        Appender result = new Appender(compressRanges, spaceComparator);
+        // make sure that comparison separates all strings, even canonically equivalent ones
+        Comparator comp2 = new MultiComparator(new Comparator[] {comp, new UTF16.StringComparator(true,false,0)});
+        Set ordering = new TreeSet(comp2);
+        for (UnicodeSetIterator it = new UnicodeSetIterator(uset); it.next();) {
+            ordering.add(it.getString());
+        }
+        result.append("[");
+        for (Iterator it = ordering.iterator(); it.hasNext();) {
+            result.appendUnicodeSetItem((String) it.next());
+        }
+        result.flushLast();
+        result.append("]");
+        return result.toString();
+    }
+    
+    private static class Appender {
+        private boolean first = true;
+        private StringBuffer target = new StringBuffer();
+        private int firstCodePoint = -2;
+        private int lastCodePoint = -2;
+        private boolean compressRanges;
+        private Comparator spaceComp;
+        private String lastString = "";
+
+        public Appender(boolean compressRanges, Comparator spaceComp) {
+            this.compressRanges = compressRanges;
+            this.spaceComp = spaceComp;
+        }
+        Appender appendUnicodeSetItem(String s) {
+            int cp;
+            if (UTF16.hasMoreCodePointsThan(s, 1)) {
+                flushLast();
+                addSpace(s);
+                target.append("{");
+                for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+                    appendQuoted(cp = UTF16.charAt(s, i));
+                }
+                target.append("}");
+                lastString = s;
+            } else {
+                if (!compressRanges)
+                    flushLast();
+                cp = UTF16.charAt(s, 0);
+                if (cp == lastCodePoint + 1) {
+                    lastCodePoint = cp; // continue range
+                } else { // start range
+                    flushLast();
+                    firstCodePoint = lastCodePoint = cp;
+                }
+            }
+            return this;
+        }
+        /**
+         * 
+         */
+        private void addSpace(String s) {
+            if (first) {
+                first = false;
+            } else if (spaceComp.compare(s, lastString) != 0) {
+                target.append(' ');
+            }
+        }
+        
+        private void flushLast() {
+            if (lastCodePoint >= 0) {
+                addSpace(UTF16.valueOf(firstCodePoint));
+                if (firstCodePoint != lastCodePoint) {
+                    appendQuoted(firstCodePoint);
+                    target.append(firstCodePoint + 1 == lastCodePoint ? ' ' : '-');
+                }
+                appendQuoted(lastCodePoint);
+                lastString = UTF16.valueOf(lastCodePoint);
+                firstCodePoint = lastCodePoint = -2;
+            }
+        }
+        Appender appendQuoted(int codePoint) {
+            switch (codePoint) {
+            case '[': // SET_OPEN:
+            case ']': // SET_CLOSE:
+            case '-': // HYPHEN:
+            case '^': // COMPLEMENT:
+            case '&': // INTERSECTION:
+            case '\\': //BACKSLASH:
+            case '{':
+            case '}':
+            case '$':
+            case ':':
+                target.append('\\');
+                break;
+            default:
+                // Escape whitespace
+                if (UCharacterProperty.isRuleWhiteSpace(codePoint)) {
+                    target.append('\\');
+                } else { // if it is a non-spacing mark, add extra space
+                    int type = UCharacter.getType(codePoint);
+                    if (type == UCharacter.NON_SPACING_MARK || type == UCharacter.ENCLOSING_MARK) {
+                        target.append(' ');
+                    }
+
+                }
+                break;
+            }
+            UTF16.append(target, codePoint);
+            return this;
+        }        
+        Appender append(String s) {
+            target.append(s);
+            return this;
+        }
+        public String toString() {
+            return target.toString();
+        }
+    }
+    
+    static class MultiComparator implements Comparator {
+        private Comparator[] comparators;
+    
+        public MultiComparator (Comparator[] comparators) {
+            this.comparators = comparators;
+        }
+    
+        /* Lexigraphic compare. Returns the first difference
+         * @return zero if equal. Otherwise +/- (i+1) 
+         * where i is the index of the first comparator finding a difference
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(Object arg0, Object arg1) {
+            for (int i = 0; i < comparators.length; ++i) {
+                int result = comparators[i].compare(arg0, arg1);
+                if (result == 0) continue;
+                if (result > 0) return i+1;
+                return -(i+1);
+            }
+            return 0;
+        }
+    }
+
 }
