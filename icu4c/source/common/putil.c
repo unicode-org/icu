@@ -1810,6 +1810,27 @@ The leftmost codepage (.xxx) wins.
 
 }
 
+#if U_POSIX_LOCALE
+static const char*  
+getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapacity) {
+    char *name = NULL;
+    char *variant = NULL;
+
+    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
+        name = uprv_strncpy(buffer, name+1, buffCapacity);
+        buffer[buffCapacity-1] = 0;
+        if ((variant = (uprv_strchr(name, '@'))) != NULL) {
+            /* TODO: Map platform dependent variants to ICU keywords. */
+            *variant = 0;
+        }
+        /* if we can find the codset name from setlocale, return that. */
+        if (*name) {
+            return name;
+        }
+    }
+    return NULL;
+}
+#endif
 
 static const char*  
 int_getDefaultCodepage()
@@ -1850,9 +1871,8 @@ int_getDefaultCodepage()
 
 #elif U_POSIX_LOCALE
     static char codesetName[100];
-    char *name = NULL;
-    char *euro = NULL;
     const char *localeName = NULL;
+    const char *name = NULL;
 
     uprv_memset(codesetName, 0, sizeof(codesetName));
 
@@ -1863,34 +1883,20 @@ int_getDefaultCodepage()
        Maybe the application used setlocale already.
        Normally this won't work. */
     localeName = setlocale(LC_CTYPE, NULL);
-    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
-        /* strip the locale name and look at the suffix only */
-        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
-        codesetName[sizeof(codesetName)-1] = 0;
-        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
-           *euro = 0;
-        }
-        /* if we can find the codset name from setlocale, return that. */
-        if (*name) {
-            return name;
-        }
+    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    if (name) {
+        /* if we can find the codeset name from setlocale, return that. */
+        return name;
     }
     /* else "C" was probably returned. That's underspecified. */
 
     /* Use setlocale a little more forcefully.
        The application didn't use setlocale */
     localeName = setlocale(LC_CTYPE, "");
-    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
-        /* strip the locale name and look at the suffix only */
-        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
-        codesetName[sizeof(codesetName)-1] = 0;
-        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
-           *euro = 0;
-        }
-        /* if we can find the codset name from setlocale, return that. */
-        if (*name) {
-            return name;
-        }
+    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    if (name) {
+        /* if we can find the codeset name from setlocale, return that. */
+        return name;
     }
     /* else "C" or something like it was returned. That's still underspecified. */
 
@@ -1898,8 +1904,9 @@ int_getDefaultCodepage()
     if (*codesetName) {
         uprv_memset(codesetName, 0, sizeof(codesetName));
     }
-    /* When available, check nl_langinfo first because it usually gives more
-       useful names. It depends on LC_CTYPE and not LANG or LC_ALL */
+    /* When available, check nl_langinfo because it usually gives more
+       useful names. It depends on LC_CTYPE and not LANG or LC_ALL.
+       nl_langinfo may use the same buffer as setlocale. */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
@@ -1911,27 +1918,19 @@ int_getDefaultCodepage()
 #endif
 
     /* Try a locale specified by the user.
-       This is usually underspecified and usually checked by setlocale already. */
-    if (*codesetName) {
-        uprv_memset(codesetName, 0, sizeof(codesetName));
-    }
+       This is usually underspecified and usually checked by setlocale already.
+       We're getting desperate to find something useful.
+     */
     localeName = uprv_getPOSIXID();
-    if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
-        /* strip the locale name and look at the suffix only */
-        name = uprv_strncpy(codesetName, name+1, sizeof(codesetName));
-        codesetName[sizeof(codesetName)-1] = 0;
-        if ((euro = (uprv_strchr(name, '@'))) != NULL) {
-           *euro = 0;
-        }
-        /* if we can find the codset name, return that. */
-        if (*name) {
-            return name;
-        }
+    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    if (name) {
+        /* if we can find the codeset name, return that. */
+        return name;
     }
 
     if (*codesetName == 0)
     {
-        /* if the table lookup failed, return US ASCII (ISO 646). */
+        /* Everything failed. Return US ASCII (ISO 646). */
         uprv_strcpy(codesetName, "US-ASCII");
     }
     return codesetName;
