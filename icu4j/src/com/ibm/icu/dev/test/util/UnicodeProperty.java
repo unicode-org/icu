@@ -36,6 +36,14 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     private String firstNameAlias = null;
     private int type;
     private Map valueToFirstValueAlias = null;
+    
+    /*
+Name: Unicode_1_Name
+Name: ISO_Comment
+Name: Name
+Name: Unicode_1_Name
+     *
+     */
 
     public static final int UNKNOWN = 0,
         BINARY = 2, EXTENDED_BINARY = 3,
@@ -49,6 +57,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         EXTENDED_MASK = 1,
         CORE_MASK = ~EXTENDED_MASK,
         BINARY_MASK = (1<<BINARY) | (1<<EXTENDED_BINARY),
+        STRING_MASK = (1<<STRING) | (1<<EXTENDED_STRING),
         STRING_OR_MISC_MASK = (1<<STRING) | (1<<EXTENDED_STRING)
             | (1<<MISC) | (1<<EXTENDED_MISC),
         ENUMERATED_OR_CATALOG_MASK = (1<<ENUMERATED) | (1<<EXTENDED_ENUMERATED)
@@ -322,9 +331,13 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
     protected UnicodeMap _getUnicodeMap() {
         UnicodeMap result = new UnicodeMap();
+        HashMap myIntern = new HashMap();
         for (int i = 0; i <= 0x10FFFF; ++i) {
             //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
-            result.put(i, getValue(i));
+            String value = getValue(i);
+            String iValue = (String) myIntern.get(value);
+            if (iValue == null) myIntern.put(value, iValue = value);
+            result.put(i, iValue);
         }
         if (DEBUG && CHECK_NAME.equals(getName())) {
             System.out.println(getName() + ":\t" + getClass().getName()
