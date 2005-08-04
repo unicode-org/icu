@@ -1583,7 +1583,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           /* if the previous token was also a reset, */
           /*this means that we have two consecutive resets */
           /* and we want to remove the previous one if empty*/
-          if(ListList[src->resultLen-1].first == NULL) {
+          if(src->resultLen > 0 && ListList[src->resultLen-1].first == NULL) {
             src->resultLen--;
           }
         }
