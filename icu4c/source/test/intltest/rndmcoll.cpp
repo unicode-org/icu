@@ -235,6 +235,10 @@ class Buffer_byte{
     byte * current;
     int buffer_size; // size unit is byte
 
+public:
+    inline int content_size(){return current - start;} // size unit is byte
+
+private:
     inline void expand(int add_size = 100){ // size unit is byte
         int new_size = buffer_size + add_size;
 
@@ -259,8 +263,6 @@ public:
     ~Buffer_byte(){
         free(start);
     }
-
-    int content_size(){return current - start;} // size unit is byte
 
     inline void reset(){
         start != NULL ? memset(start, 0, buffer_size) : 0;
@@ -292,12 +294,9 @@ public:
         type & operator [] (int i) { return operator&()[i];}\
         operator type *(){return operator&();}\
         int content_size(){return buf.content_size() / sizeof(type);}\
-    };
+    }
     
 class Node;
-//typedef BUFFER<char> Buffer_char;
-//typedef BUFFER<int> Buffer_int;
-//typedef BUFFER<Node *> Buffer_pNode;
 BUFFER(char, Buffer_char);
 BUFFER(int, Buffer_int);
 BUFFER(Node *, Buffer_pNode);
@@ -308,27 +307,9 @@ BUFFER(Node *, Buffer_pNode);
     */
 class LiteralToEscape{
 public:
-    // Return a null-terminate c-string. The buffer is owned by callee.
-    char * operator()(const char * literal /*c-string*/){
-        str.reset();
-        for(;*literal != 0; literal++){
-            append(*literal);
-        }
-        close_quoting();    // P4 exception, to close whole quoting
-        return str;
-    }
-
     enum CHOICE {YES, NO, RAND};
     enum ESCAPE_FORM {BSLASH_ONLY, QUOTE_ONLY, QUOTE_AND_BSLAH, RAND_ESC};
-    LiteralToEscape(CHOICE escape_literal = RAND,
-        CHOICE two_quotes_escape = RAND,
-        ESCAPE_FORM escape_form = RAND_ESC):
-        escape_literal(escape_literal),
-        two_quotes_escape(two_quotes_escape),
-        escape_form(escape_form),
-        is_quoting(FALSE){}
 private:
-    Buffer_char str;
     class Bool{ // assigned or random value
     public:
         operator UBool() {   // conversion operator
@@ -342,11 +323,22 @@ private:
     private:
         CHOICE tag;
     };
+public:
+    LiteralToEscape(CHOICE escapeLiteral = RAND,
+        CHOICE twoQuotesEscape = RAND,
+        ESCAPE_FORM escapeForm = RAND_ESC):
+        escape_form(escapeForm),
+        escape_literal(escapeLiteral),
+        two_quotes_escape(twoQuotesEscape),
+        is_quoting(FALSE){}
+private:
+    Buffer_char str;
     ESCAPE_FORM escape_form;
-    UBool quote_escape;
-    UBool bslash_escape;
     Bool escape_literal;
     Bool two_quotes_escape;
+    UBool quote_escape;
+    UBool bslash_escape;
+    UBool is_quoting;
 
     void set_options(){
         ESCAPE_FORM t = escape_form == RAND_ESC ? (ESCAPE_FORM) (rand()%3) : escape_form;
@@ -359,6 +351,28 @@ private:
                     bslash_escape = TRUE; quote_escape = TRUE;  break;
                 default:
                     ;// error
+        }
+    }
+
+    void reset(){
+        str.reset();
+        is_quoting = FALSE;
+    }
+
+    inline void open_quoting(){ 
+        if(is_quoting){
+            // do nothing
+        } else {
+            str.append('\'');
+            is_quoting = TRUE;
+        }
+    }
+    inline void close_quoting(){
+        if(is_quoting){
+            str.append('\'');
+            is_quoting = FALSE;
+        } else {
+            // do nothing
         }
     }
 
@@ -404,27 +418,15 @@ private:
         }
     }
 
-    void reset(){
+public:
+    // Return a null-terminate c-string. The buffer is owned by callee.
+    char * operator()(const char * literal /*c-string*/){
         str.reset();
-        is_quoting = FALSE;
-    }
-
-    UBool is_quoting;
-    inline void open_quoting(){ 
-        if(is_quoting){
-            // do nothing
-        } else {
-            str.append('\'');
-            is_quoting = TRUE;
+        for(;*literal != 0; literal++){
+            append(*literal);
         }
-    }
-    inline void close_quoting(){
-        if(is_quoting){
-            str.append('\'');
-            is_quoting = FALSE;
-        } else {
-            // do nothing
-        }
+        close_quoting();    // P4 exception, to close whole quoting
+        return str;
     }
 };
 
@@ -439,7 +441,7 @@ enum TokenType {STRING, VAR, NUMBER, WEIGHT, STREAM_END, ERROR, QUESTION_MARK,RA
 class Scanner{
 public:
     // source [in] null-terminated c-string
-    Scanner(const char *const source/*c-string*/):source(source), working(source), history(source){
+    Scanner(const char *source/*c-string*/):source(source), working(source), history(source){
     }
 
     char tokenBuffer[50];   //null terminated c-string. LIMITATION & ASSUMPTION here
@@ -575,7 +577,7 @@ public:
         return tokenType;
     }
 
-    inline UBool ungetToken(){
+    inline void ungetToken(){
         working = history;
     }
     inline void dumpCurrentPoint(){
@@ -590,9 +592,9 @@ public:
         printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     }
 private:
-    const char *const source;
-    const char * history;
+    const char * source;
     const char * working;
+    const char * history;
     char * p_b;
     enum StateType {START, IN_NUM, IN_VAR, IN_QUOTE,  IN_BSLASH, IN_STRING, DONE};
 };//class Scanner
@@ -609,6 +611,20 @@ public:
     * It's a mapping table between 'variable name' and its 'active Node object'
     */
 class NodeSymbolTable{
+private:
+    Buffer_int   names;         // indexes in name_buffer
+    Buffer_pNode refs;
+    Buffer_char  name_buffer;   // var names storage space
+    int get_var_name_index(const char *const var_name){
+        int len = names.content_size();
+        for (int i=0; i< len; i++){
+            if (strcmp(var_name, &name_buffer + names[i]) == 0){
+                return i;
+            }
+        }
+        return -1;
+    }
+
 public:
     UBool is_var_exist(const char *const var_name /*c-string*/){
         return get_var_name_index(var_name) == -1? FALSE : TRUE;
@@ -660,19 +676,6 @@ public:
         }
         refs.reset();
     }
-private:
-    Buffer_int   names;         // indexes in name_buffer
-    Buffer_pNode refs;
-    Buffer_char  name_buffer;   // var names storage space
-    int get_var_name_index(const char *const var_name){
-        int len = names.content_size();
-        for (int i=0; i< len; i++){
-            if (strcmp(var_name, &name_buffer + names[i]) == 0){
-                return i;
-            }
-        }
-        return -1;
-    }
 };
 
 
@@ -690,13 +693,6 @@ private:
 
 class VariableNode : public Node {
 public:
-    virtual const char* getTargetString(){
-        link();
-        if (var_ref == NULL) {
-            return "";  // constant string has global life-cycle
-        }
-        return var_ref->getTargetString();
-    }
     VariableNode(const char * var_name, NodeSymbolTable * symbols):symbols(*symbols){
         this->var_name.append_array(var_name, strlen(var_name) + 1);
         this->var_ref = NULL;
@@ -707,6 +703,13 @@ public:
             return var_ref != NULL;
         }
         return TRUE;
+    }
+    virtual const char* getTargetString(){
+        link();
+        if (var_ref == NULL) {
+            return "";  // constant string has global life-cycle
+        }
+        return var_ref->getTargetString();
     }
 private:
     Buffer_char var_name;
@@ -729,14 +732,16 @@ private:
 };
 
 class MagicNode : public Node {
-public:
-    virtual const char* getTargetString(){
-        return "aaa";
-        return l(select_an_string());
-    }
 private:
     LiteralToEscape l;
     Buffer_char str;
+    // randomly select a char from a set
+    char select_an_char(){
+        static const char *const set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]&<";
+        static const int len = strlen(set);
+        int i = rand()%len;
+        return set[i];
+    }
     // compose a string with lenght {1, 5}
     const char * select_an_string(){
         int r = rand();
@@ -750,12 +755,10 @@ private:
         str.append(0);
         return &str;
     }
-    // randomly select a char from a set
-    char select_an_char(){
-        static const char *const set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]&<";
-        static const int len = strlen(set);
-        int i = rand()%len;
-        return set[i];
+public:
+    virtual const char* getTargetString(){
+        return "aaa";
+        return l(select_an_string());
     }
 };
         
@@ -790,6 +793,15 @@ private:
 };
 
 class RepeatNode : public Node {
+private:
+    Node * item;
+    Buffer_char str;
+    int min_count;
+    int max_count;
+    int select_a_count(){
+        int t = max_count - min_count + 1;
+        return min_count + rand()%(t);
+    }
 public:
     virtual const char* getTargetString(){
         str.reset();
@@ -808,15 +820,6 @@ public:
     }
     virtual ~RepeatNode(){
         delete item; // We assume its space is got from heap
-    }
-private:
-    Node * item;
-    Buffer_char str;
-    int min_count;
-    int max_count;
-    int select_a_count(){
-        int t = max_count - min_count + 1;
-        return min_count + rand()%(t);
     }
 };
 class AlternationNode : public Node {
@@ -895,12 +898,6 @@ private:
 
 
 class Parser{
-public:
-    Parser(const char * source, NodeSymbolTable * symbols):s(source), symbols(*symbols){
-    }
-    UBool parse(){
-        return rules();
-    }
 private:
     Scanner s;
     TokenType token;
@@ -916,48 +913,37 @@ private:
         }
     }
 
-    UBool rules(){
-        symbols.reset();
-        token = s.getNextToken();
-        while (rule()){
-        }
-        if (token == STREAM_END){
+    UBool weight(int & w){
+        if (token == WEIGHT){
+            w = atoi(s.tokenBuffer);
+            match(WEIGHT);
             return TRUE;
-        } else {
-            s.dumpCurrentPoint();
-            return FALSE;
-        }
-    }
-
-    UBool rule(){
-        if (token == VAR){
-            Buffer_char name;
-            name.append_array(s.tokenBuffer, strlen(s.tokenBuffer));
-            name.append(0);
-            match(VAR);
-
-            if (match(EQ)){
-                Node * t = NULL;
-                if(defination(t)){
-                    symbols.put_var(name, t);
-                    return match(SEMI);
-                }
-            }
         }
         return FALSE;
     }
 
-    UBool defination(Node* &node /*in,out*/){
+    // get a 'simple node'
+    UBool simple(Node* &node /*out*/){
         if (node != NULL) return FALSE;
         //assert node == NULL
-        if (simple(node)){
-            if (token == WEIGHT){
-                return alternation2(node);
-            } else {
-                return alternation1(node);
-            }
+        switch(token){
+            case LPAR:
+                match(LPAR);
+                if(defination(node) && match(RPAR)){
+                    return TRUE;
+                }
+                return FALSE;
+            case VAR:
+                node = new VariableNode(s.tokenBuffer, &symbols);
+                match(VAR);
+                return TRUE;
+            case STRING:
+                node = new LiteralNode(s.tokenBuffer);
+                match(STRING);
+                return TRUE;
+            default:
+                return FALSE;
         }
-        return FALSE;
     }
 
     UBool alternation2(Node * &node /*in,out*/){
@@ -1010,71 +996,6 @@ FAIL:
         return FALSE;
     }
 
-    UBool weight(int & w){
-        if (token == WEIGHT){
-            w = atoi(s.tokenBuffer);
-            match(WEIGHT);
-            return TRUE;
-        }
-        return FALSE;
-    }
-
-    UBool alternation1(Node * &node){
-        if (!sequence(node)){
-            return FALSE;
-        }
-
-        if (token == BAR){ // detected a real alternation1, create it.
-            return alternation1_open(node);
-        } else { // just something with higher precedence, not a alternation1
-            return TRUE;
-        }
-    }
-
-    UBool alternation1_open(Node * &node){
-        if (node == NULL) return FALSE;
-        // assert node != NULL, and node is sequence or simpler thing
-
-        Alternation1Node * t = new Alternation1Node();
-        t->append(node);
-
-        node = NULL;        // Logically, it has nothing
-        Node * temp = NULL; // We can use 'node' as temp variable, but its name is uncomfortable
-
-        // We can use either recursion (linking node) or loop (plain array) to create the list
-        // Here, we chosse loop (plain array).
-        while (token == BAR){
-            match(BAR);
-            if(sequence(temp)){
-                t->append(temp);
-                temp = NULL;
-            } else {
-                goto FAIL;
-            }
-        }
-
-        if (token == SEMI || token == RPAR){
-            node = t;
-            return TRUE;
-        }
-FAIL:
-        delete t;
-        return FALSE;
-    }
-
-
-    UBool sequence(Node* &node){
-        if (!item(node)) {
-            return FALSE;
-        }
-
-        if (token == VAR || token == STRING || token == LPAR){ // maybe an item
-            return sequence_open(node);
-        } else { // just something with higher precedence.
-            return TRUE;
-        }
-    }
-
     UBool sequence_open(Node* &node){
         if (node == NULL) return FALSE;
         // assert node != NULL, and node is item (simple, repeat, or short-alt)
@@ -1102,54 +1023,6 @@ FAIL:
         delete t;
         return FALSE;
 
-    }
-
-    UBool item(Node *& node /*out*/){
-        if (node != NULL){
-            // assert node is simple
-            // go on
-        } else {
-            if (simple(node)){
-                // go on
-            } else {
-                return FALSE;
-            }
-        }
-
-        // assert node != NULL, node is simple
-        switch (token){
-            case RANG_START:
-                return repeat(node);
-            case QUESTION_MARK:
-                return short_alt(node);
-            default:
-                return TRUE;  // bare simple
-        }
-    }
-
-
-    // get a 'simple node'
-    UBool simple(Node* &node /*out*/){
-        if (node != NULL) return FALSE;
-        //assert node == NULL
-        switch(token){
-            case LPAR:
-                match(LPAR);
-                if(defination(node) && match(RPAR)){
-                    return TRUE;
-                }
-                return FALSE;
-            case VAR:
-                node = new VariableNode(s.tokenBuffer, &symbols);
-                match(VAR);
-                return TRUE;
-            case STRING:
-                node = new LiteralNode(s.tokenBuffer);
-                match(STRING);
-                return TRUE;
-            default:
-                return FALSE;
-        }
     }
 
     //upgrade a 'simple node' to 'repeat node'
@@ -1199,10 +1072,150 @@ FAIL:
         node = NULL;
         return FALSE;
     }
+
+    UBool item(Node *& node /*out*/){
+        if (node != NULL){
+            // assert node is simple
+            // go on
+        } else {
+            if (simple(node)){
+                // go on
+            } else {
+                return FALSE;
+            }
+        }
+
+        // assert node != NULL, node is simple
+        switch (token){
+            case RANG_START:
+                return repeat(node);
+            case QUESTION_MARK:
+                return short_alt(node);
+            default:
+                return TRUE;  // bare simple
+        }
+    }
+
+
+    UBool sequence(Node* &node){
+        if (!item(node)) {
+            return FALSE;
+        }
+
+        if (token == VAR || token == STRING || token == LPAR){ // maybe an item
+            return sequence_open(node);
+        } else { // just something with higher precedence.
+            return TRUE;
+        }
+    }
+
+    UBool alternation1_open(Node * &node){
+        if (node == NULL) return FALSE;
+        // assert node != NULL, and node is sequence or simpler thing
+
+        Alternation1Node * t = new Alternation1Node();
+        t->append(node);
+
+        node = NULL;        // Logically, it has nothing
+        Node * temp = NULL; // We can use 'node' as temp variable, but its name is uncomfortable
+
+        // We can use either recursion (linking node) or loop (plain array) to create the list
+        // Here, we chosse loop (plain array).
+        while (token == BAR){
+            match(BAR);
+            if(sequence(temp)){
+                t->append(temp);
+                temp = NULL;
+            } else {
+                goto FAIL;
+            }
+        }
+
+        if (token == SEMI || token == RPAR){
+            node = t;
+            return TRUE;
+        }
+FAIL:
+        delete t;
+        return FALSE;
+    }
+
+    UBool alternation1(Node * &node){
+        if (!sequence(node)){
+            return FALSE;
+        }
+
+        if (token == BAR){ // detected a real alternation1, create it.
+            return alternation1_open(node);
+        } else { // just something with higher precedence, not a alternation1
+            return TRUE;
+        }
+    }
+
+
+    UBool defination(Node* &node /*in,out*/){
+        if (node != NULL) return FALSE;
+        //assert node == NULL
+        if (simple(node)){
+            if (token == WEIGHT){
+                return alternation2(node);
+            } else {
+                return alternation1(node);
+            }
+        }
+        return FALSE;
+    }
+
+    UBool rule(){
+        if (token == VAR){
+            Buffer_char name;
+            name.append_array(s.tokenBuffer, strlen(s.tokenBuffer));
+            name.append(0);
+            match(VAR);
+
+            if (match(EQ)){
+                Node * t = NULL;
+                if(defination(t)){
+                    symbols.put_var(name, t);
+                    return match(SEMI);
+                }
+            }
+        }
+        return FALSE;
+    }
+
+    UBool rules(){
+        symbols.reset();
+        token = s.getNextToken();
+        while (rule()){
+        }
+        if (token == STREAM_END){
+            return TRUE;
+        } else {
+            s.dumpCurrentPoint();
+            return FALSE;
+        }
+    }
+
+public:
+    Parser(const char * source, NodeSymbolTable * symbols):s(source), symbols(*symbols){
+    }
+    UBool parse(){
+        return rules();
+    }
 }; // class Parser
 
 class RandomLanguageGenerator{
 public:
+    void put_magic(const char *const magic_name, Node *const magic_ref){
+        symbols.put_var(magic_name, magic_ref);
+    }
+
+    // Return a null-terminated c-string. The buffer is owned by callee.
+    const char * get_a_string(){
+        return root->getTargetString();
+    }
+
     //NOTE: start cannot be a magic node
     RandomLanguageGenerator(const char *const bnf_definition, 
                             const char *const start,
@@ -1219,14 +1232,6 @@ public:
         put_magic(magic_name, magic_ref);
     }
 
-    void put_magic(const char *const magic_name, Node *const magic_ref){
-        symbols.put_var(magic_name, magic_ref);
-    }
-
-    // Return a null-terminated c-string. The buffer is owned by callee.
-    const char * get_a_string(){
-        return root->getTargetString();
-    }
 private:
     Node * root;
     NodeSymbolTable symbols;
@@ -1361,7 +1366,7 @@ UBool TestSequenceNode(){
     n.append(n1);
     n.append(n2);
     const char * r = n.getTargetString();
-    char * s = "abc , s";
+    const char * s = "abc , s";
 
     UBool pass = strcmp(s,r) == 0;
 
@@ -1551,7 +1556,7 @@ void RandomCollatorTest::Test2(){
 }
 
 
-void RandomCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par){
+void RandomCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* ){
     if (exec) logln("TestSuite RandomCollatorTest: ");
     switch (index) {
         TESTCASE(0, Test);
