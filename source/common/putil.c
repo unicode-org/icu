@@ -1811,24 +1811,66 @@ The leftmost codepage (.xxx) wins.
 }
 
 #if U_POSIX_LOCALE
+/*
+Due to various platform differences, one platform may specify a charset,
+when they really mean a different charset. Remap the names so that they are
+compatible with ICU.
+*/
+static const char*
+remapPlatformDependentCodepage(const char *locale, const char *name) {
+    if (*locale == 0) {
+        /* Make sure that an empty locale is handled the same way. */
+        locale = NULL;
+    }
+#if defined(U_AIX)
+    if (uprv_strcmp(name, "IBM-943") == 0) {
+        /* Use the ASCII compatible ibm-943 */
+        name = "Shift-JIS";
+    }
+    else if (uprv_strcmp(name, "IBM-1252") == 0) {
+        /* Use the windows-1252 that contains the Euro */
+        name = "IBM-5348";
+    }
+#elif defined(U_SOLARIS)
+    if (locale != NULL && uprv_strcmp(name, "EUC") == 0) {
+        /* Solaris underspecifies the "EUC" name. */
+        if (uprv_strcmp(locale, "zh_CN") == 0) {
+            name = "EUC-CN";
+        }
+        else if (uprv_strcmp(locale, "zh_TW") == 0) {
+            name = "EUC-TW";
+        }
+        else if (uprv_strcmp(locale, "ko_KR") == 0) {
+            name = "EUC-KR";
+        }
+    }
+#endif
+    /* return NULL when "" is passed in */
+    if (*name == 0) {
+        name = NULL;
+    }
+    return name;
+}
+
 static const char*  
-getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapacity) {
-    char *name = NULL;
+getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapacity)
+{
+    char localeBuf[100];
+    const char *name = NULL;
     char *variant = NULL;
 
     if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
+        uprv_strncpy(buffer, localeName, uprv_min(sizeof(localeBuf), name-localeName));
+        localeBuf[sizeof(localeBuf)-1] = 0; /* ensure NULL termination */
         name = uprv_strncpy(buffer, name+1, buffCapacity);
-        buffer[buffCapacity-1] = 0;
+        buffer[buffCapacity-1] = 0; /* ensure NULL termination */
         if ((variant = (uprv_strchr(name, '@'))) != NULL) {
             /* TODO: Map platform dependent variants to ICU keywords. */
             *variant = 0;
         }
-        /* if we can find the codset name from setlocale, return that. */
-        if (*name) {
-            return name;
-        }
+        name = remapPlatformDependentCodepage(localeBuf, name);
     }
-    return NULL;
+    return name;
 }
 #endif
 
@@ -1883,7 +1925,9 @@ int_getDefaultCodepage()
        Maybe the application used setlocale already.
        Normally this won't work. */
     localeName = setlocale(LC_CTYPE, NULL);
+    puts(localeName);
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    puts(name);
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
         return name;
@@ -1893,13 +1937,16 @@ int_getDefaultCodepage()
     /* Use setlocale a little more forcefully.
        The application didn't use setlocale */
     localeName = setlocale(LC_CTYPE, "");
+    puts(localeName);
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
+    puts(name);
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
         return name;
     }
     /* else "C" or something like it was returned. That's still underspecified. */
 
+    puts(localeName);
 #if U_HAVE_NL_LANGINFO_CODESET
     if (*codesetName) {
         uprv_memset(codesetName, 0, sizeof(codesetName));
@@ -1910,6 +1957,9 @@ int_getDefaultCodepage()
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
+            puts(codeset);
+            codeset = remapPlatformDependentCodepage(NULL, codeset);
+            puts(codeset);
             uprv_strncpy(codesetName, codeset, sizeof(codesetName));
             codesetName[sizeof(codesetName)-1] = 0;
             return codesetName;
@@ -1927,6 +1977,7 @@ int_getDefaultCodepage()
         /* if we can find the codeset name, return that. */
         return name;
     }
+    puts(localeName);
 
     if (*codesetName == 0)
     {
