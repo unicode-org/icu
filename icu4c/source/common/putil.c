@@ -1925,9 +1925,7 @@ int_getDefaultCodepage()
        Maybe the application used setlocale already.
        Normally this won't work. */
     localeName = setlocale(LC_CTYPE, NULL);
-    puts(localeName);
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
-    puts(name);
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
         return name;
@@ -1937,16 +1935,13 @@ int_getDefaultCodepage()
     /* Use setlocale a little more forcefully.
        The application didn't use setlocale */
     localeName = setlocale(LC_CTYPE, "");
-    puts(localeName);
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
-    puts(name);
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
         return name;
     }
     /* else "C" or something like it was returned. That's still underspecified. */
 
-    puts(localeName);
 #if U_HAVE_NL_LANGINFO_CODESET
     if (*codesetName) {
         uprv_memset(codesetName, 0, sizeof(codesetName));
@@ -1957,9 +1952,7 @@ int_getDefaultCodepage()
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
-            puts(codeset);
             codeset = remapPlatformDependentCodepage(NULL, codeset);
-            puts(codeset);
             uprv_strncpy(codesetName, codeset, sizeof(codesetName));
             codesetName[sizeof(codesetName)-1] = 0;
             return codesetName;
@@ -1977,7 +1970,6 @@ int_getDefaultCodepage()
         /* if we can find the codeset name, return that. */
         return name;
     }
-    puts(localeName);
 
     if (*codesetName == 0)
     {
