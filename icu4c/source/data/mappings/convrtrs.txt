@@ -707,7 +707,7 @@ ibm-4909_P100-1999 { UTR22* }   ibm-4909 { IBM* } # ISO Greek (w/ euro update), 
 # cp is usually used to denote IBM in Java, and that is why we don't do that anymore.
 # The windows-* aliases mean windows codepages.
 ibm-5346_P100-1998 { UTR22* }   ibm-5346 { IBM* } windows-1250 { IANA* JAVA* WINDOWS* } cp1250 { WINDOWS JAVA } # Windows Latin2 (w/ euro update)
-ibm-5347_P100-1998 { UTR22* }   ibm-5347 { IBM* } windows-1251 { IANA* JAVA* WINDOWS* } cp1251 { WINDOWS JAVA } # Windows Cyrillic (w/ euro update)
+ibm-5347_P100-1998 { UTR22* }   ibm-5347 { IBM* } windows-1251 { IANA* JAVA* WINDOWS* } cp1251 { WINDOWS JAVA } ANSI1251 # Windows Cyrillic (w/ euro update). ANSI1251 is from Solaris
 ibm-5348_P100-1997 { UTR22* }   ibm-5348 { IBM* } windows-1252 { IANA* JAVA* WINDOWS* } cp1252 { JAVA }         # Windows Latin1 (w/ euro update)
 ibm-5349_P100-1998 { UTR22* }   ibm-5349 { IBM* } windows-1253 { IANA* JAVA* WINDOWS* } cp1253 { JAVA }         # Windows Greek (w/ euro update)
 ibm-5350_P100-1998 { UTR22* }   ibm-5350 { IBM* } windows-1254 { IANA* JAVA* WINDOWS* } cp1254 { JAVA }         # Windows Turkish (w/ euro update)
