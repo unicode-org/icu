@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -902,7 +902,7 @@ final class CollationRuleParser
                     // if the previous token was also a reset, this means that
                     // we have two consecutive resets and we want to remove the
                     // previous one if empty
-                    if (m_listHeader_[m_resultLength_ - 1].m_first_ == null) {
+                    if (m_resultLength_ > 0 && m_listHeader_[m_resultLength_ - 1].m_first_ == null) {
                         m_resultLength_ --;
                     }
                 }
