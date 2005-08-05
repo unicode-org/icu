@@ -1818,7 +1818,7 @@ compatible with ICU.
 */
 static const char*
 remapPlatformDependentCodepage(const char *locale, const char *name) {
-    if (*locale == 0) {
+    if (locale != NULL && *locale == 0) {
         /* Make sure that an empty locale is handled the same way. */
         locale = NULL;
     }
@@ -1865,7 +1865,6 @@ getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapaci
         name = uprv_strncpy(buffer, name+1, buffCapacity);
         buffer[buffCapacity-1] = 0; /* ensure NULL termination */
         if ((variant = (uprv_strchr(name, '@'))) != NULL) {
-            /* TODO: Map platform dependent variants to ICU keywords. */
             *variant = 0;
         }
         name = remapPlatformDependentCodepage(localeBuf, name);
