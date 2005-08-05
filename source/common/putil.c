@@ -1822,6 +1822,9 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         /* Make sure that an empty locale is handled the same way. */
         locale = NULL;
     }
+    if (name == NULL) {
+        return NULL;
+    }
 #if defined(U_AIX)
     if (uprv_strcmp(name, "IBM-943") == 0) {
         /* Use the ASCII compatible ibm-943 */
@@ -1950,8 +1953,8 @@ int_getDefaultCodepage()
        nl_langinfo may use the same buffer as setlocale. */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
+        codeset = remapPlatformDependentCodepage(NULL, codeset);
         if (codeset != NULL) {
-            codeset = remapPlatformDependentCodepage(NULL, codeset);
             uprv_strncpy(codesetName, codeset, sizeof(codesetName));
             codesetName[sizeof(codesetName)-1] = 0;
             return codesetName;
