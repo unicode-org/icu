@@ -1863,8 +1863,9 @@ getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapaci
     char *variant = NULL;
 
     if (localeName != NULL && (name = (uprv_strchr(localeName, '.'))) != NULL) {
-        uprv_strncpy(buffer, localeName, uprv_min(sizeof(localeBuf), name-localeName));
-        localeBuf[sizeof(localeBuf)-1] = 0; /* ensure NULL termination */
+        size_t localeCapacity = uprv_min(sizeof(localeBuf), (name-localeName)+1);
+        uprv_strncpy(localeBuf, localeName, localeCapacity);
+        localeBuf[localeCapacity-1] = 0; /* ensure NULL termination */
         name = uprv_strncpy(buffer, name+1, buffCapacity);
         buffer[buffCapacity-1] = 0; /* ensure NULL termination */
         if ((variant = (uprv_strchr(name, '@'))) != NULL) {
