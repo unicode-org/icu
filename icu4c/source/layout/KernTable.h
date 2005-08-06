@@ -13,13 +13,15 @@
 #endif
 
 #include "LETypes.h"
-#include "LEFontInstance.h"
-#include "LEGlyphStorage.h"
+//#include "LEFontInstance.h"
+//#include "LEGlyphStorage.h"
 
 #include <stdio.h>
 
 U_NAMESPACE_BEGIN
 struct PairInfo;
+class  LEFontInstance;
+class  LEGlyphStorage;
 
 /**
  * Windows type 0 kerning table support only for now.

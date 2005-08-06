@@ -26,37 +26,49 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
 
-static const LETag emptyTag = 0x00000000;
+#define ccmpFeatureTag LE_CCMP_FEATURE_TAG
+#define ligaFeatureTag LE_LIGA_FEATURE_TAG
+#define cligFeatureTag LE_CLIG_FEATURE_TAG
+#define kernFeatureTag LE_KERN_FEATURE_TAG
+#define markFeatureTag LE_MARK_FEATURE_TAG
+#define mkmkFeatureTag LE_MKMK_FEATURE_TAG
 
-static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
-static const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
-static const LETag cligFeatureTag = LE_CLIG_FEATURE_TAG;
-static const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
-static const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
-static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+// 'dlig' not used at the moment
+#define dligFeatureTag 0x646C6967
 
-static const LETag dligFeatureTag = 0x646C6967; // 'dlig' not used at the moment
-static const LETag paltFeatureTag = 0x70616C74; // 'palt'
+// 'palt'
+#define paltFeatureTag 0x70616C74
 
-// default has no ligatures, that's what java does.  this is the minimal set.
-static const LETag minimalFeatures[] = {ccmpFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
+#define ccmpFeatureMask 0x80000000U
+#define ligaFeatureMask 0x40000000U
+#define cligFeatureMask 0x20000000U
+#define kernFeatureMask 0x10000000U
+#define paltFeatureMask 0x08000000U
+#define markFeatureMask 0x04000000U
+#define mkmkFeatureMask 0x02000000U
 
-// kerning (kern, palt following adobe recommendation for cjk 'kerning') but no ligatures.
-static const LETag kernFeatures[] = {ccmpFeatureTag, kernFeatureTag, paltFeatureTag, 
-				     markFeatureTag, mkmkFeatureTag, emptyTag};
+#define minimalFeatures     (ccmpFeatureMask | markFeatureMask | mkmkFeatureMask)
+#define ligaFeatures        (ligaFeatureMask | cligFeatureMask | minimalFeatures)
+#define kernFeatures        (kernFeatureMask | paltFeatureMask | minimalFeatures)
+#define kernAndLigaFeatures (ligaFeatures    | kernFeatures)
+ 
+static const FeatureMap featureMap[] =
+{
+    {ccmpFeatureTag, ccmpFeatureMask},
+    {ligaFeatureTag, ligaFeatureMask},
+    {cligFeatureTag, cligFeatureMask}, 
+	{kernFeatureTag, kernFeatureMask},
+    {paltFeatureTag, paltFeatureMask},
+    {markFeatureTag, markFeatureMask},
+    {mkmkFeatureTag, mkmkFeatureMask}
+};
 
-// ligatures (liga, clig) but no kerning.  omit dlig for now.
-static const LETag ligaFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, markFeatureTag, 
-				     mkmkFeatureTag, emptyTag};
-
-// kerning and ligatures.
-static const LETag kernAndLigaFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, 
-					    kernFeatureTag, paltFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
-
+static const le_int32 featureMapCount = LE_ARRAY_SIZE(featureMap);
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
-    : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fFeatureList(minimalFeatures), fFeatureOrder(NULL),
+    : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fFeatureMask(minimalFeatures),
+      fFeatureMap(featureMap), fFeatureMapCount(featureMapCount), fFeatureOrder(FALSE),
       fGSUBTable(gsubTable), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
     static const le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
@@ -66,9 +78,9 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
     // todo: switch to more flags and bitfield rather than list of feature tags?
     switch (typoFlags) {
     case 0: break; // default
-    case 1: fFeatureList = kernFeatures; break;
-    case 2: fFeatureList = ligaFeatures; break;
-    case 3: fFeatureList = kernAndLigaFeatures; break;
+    case 1: fFeatureMask = kernFeatures; break;
+    case 2: fFeatureMask = ligaFeatures; break;
+    case 3: fFeatureMask = kernAndLigaFeatures; break;
     default: break;
     }
 
@@ -149,7 +161,7 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_i
     glyphStorage.allocateAuxData(success);
 
     for (le_int32 i = 0; i < outCharCount; i += 1) {
-        glyphStorage.setAuxData(i, (void *) fFeatureList, success);
+        glyphStorage.setAuxData(i, fFeatureMask, success);
     }
 
     return outCharCount;
@@ -176,7 +188,8 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
     }
 
     if (fGSUBTable != NULL) {
-        count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter, fFeatureOrder);
+        count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter,
+                                    fFeatureMap, fFeatureMapCount, fFeatureOrder);
     }
 
     return count;
@@ -265,7 +278,8 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         }
 #endif
 
-        fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance, fFeatureOrder);
+        fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance,
+                            fFeatureMap, fFeatureMapCount, fFeatureOrder);
 
         float xAdjust = 0, yAdjust = 0;
 

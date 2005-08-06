@@ -32,8 +32,6 @@
 
 U_NAMESPACE_BEGIN
 
-#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
-
 const LEUnicode32 DefaultCharMapper::controlChars[] = {
     0x0009, 0x000A, 0x000D,
     /*0x200C, 0x200D,*/ 0x200E, 0x200F,
@@ -41,7 +39,7 @@ const LEUnicode32 DefaultCharMapper::controlChars[] = {
     0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F
 };
 
-const le_int32 DefaultCharMapper::controlCharsCount = ARRAY_SIZE(controlChars);
+const le_int32 DefaultCharMapper::controlCharsCount = LE_ARRAY_SIZE(controlChars);
 
 LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
 {
@@ -86,11 +84,18 @@ CharSubstitutionFilter::~CharSubstitutionFilter()
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 
-static const LETag emptyTag = 0x00000000;
+#define ccmpFeatureTag  LE_CCMP_FEATURE_TAG
 
-static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+#define ccmpFeatureMask 0x80000000U
 
-static const LETag canonFeatures[] = {ccmpFeatureTag, emptyTag};
+#define canonFeatures (ccmpFeatureMask)
+
+static const FeatureMap canonFeatureMap[] =
+{
+    {ccmpFeatureTag, ccmpFeatureMask}
+};
+
+static const le_int32 canonFeatureMapCount = LE_ARRAY_SIZE(canonFeatureMap);
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
   : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode),
@@ -187,14 +192,14 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 
         for (i = 0; i < count; i += 1, out += dir) {
             glyphStorage[out] = (LEGlyphID) inChars[i];
-            glyphStorage.setAuxData(out, (void *) canonFeatures, success);
+            glyphStorage.setAuxData(out, canonFeatures, success);
         }
 
 		if (reordered != NULL) {
 			LE_DELETE_ARRAY(reordered);
 		}
 
-        outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, NULL);
+        outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE);
 
         out = (rightToLeft? count - 1 : 0);
 

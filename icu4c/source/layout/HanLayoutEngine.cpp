@@ -13,30 +13,43 @@
 #include "HanLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
 #include "LEGlyphStorage.h"
+#include "OpenTypeTables.h"
 
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HanOpenTypeLayoutEngine)
 
+#define loclFeatureTag LE_LOCL_FEATURE_TAG
+#define smplFeatureTag LE_SMPL_FEATURE_TAG
+#define tradFeatureTag LE_TRAD_FEATURE_TAG
+
+#define loclFeatureMask 0x80000000U
+#define smplFeatureMask 0x40000000U
+#define tradFeatureMask 0x20000000U
+
+static const FeatureMap featureMap[] =
+{
+    {loclFeatureTag, loclFeatureMask},
+    {smplFeatureTag, smplFeatureMask},
+    {tradFeatureTag, tradFeatureMask}
+};
+
+static const le_int32 featureMapCount = LE_ARRAY_SIZE(featureMap);
+
+#define features (loclFeatureMask)
+
 HanOpenTypeLayoutEngine::HanOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
-    // nothing else to do...
+    fFeatureMap      = featureMap;
+    fFeatureMapCount = featureMapCount;
 }
 
 HanOpenTypeLayoutEngine::~HanOpenTypeLayoutEngine()
 {
     // nothing to do
 }
-
-static const LETag emptyTag = 0x00000000;
-
-static const LETag loclFeatureTag = LE_LOCL_FEATURE_TAG;
-static const LETag smplFeatureTag = LE_SMPL_FEATURE_TAG;
-static const LETag tradFeatureTag = LE_TRAD_FEATURE_TAG;
-
-static const LETag features[] = {loclFeatureTag, emptyTag};
 
 le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
         LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
@@ -62,7 +75,7 @@ le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], l
     // flag from the language tag lookups, so we can use these features
     // with the default LangSys...
     for (le_int32 i = 0; i < count; i += 1) {
-        glyphStorage.setAuxData(i, (void *) features, success);
+        glyphStorage.setAuxData(i, features, success);
     }
 
     return count;
