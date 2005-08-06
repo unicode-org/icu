@@ -59,13 +59,11 @@ public:
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                       le_bool rightToLeft, LEGlyphStorage &glyphStorage);
 
-    static const LETag *getFeatureOrder();
+    static const FeatureMap *getFeatureMap(le_int32 &count);
 
 private:
     // forbid instantiation
     ArabicShaping();
-
-    static const LETag tagArray[];
 
     static ShapeType getShapeType(LEUnicode c);
 

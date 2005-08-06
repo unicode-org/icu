@@ -12,8 +12,6 @@
 
 U_NAMESPACE_BEGIN
 
-#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
-
 // Split matra table indices
 #define _x1  (1 << CF_INDEX_SHIFT)
 #define _x2  (2 << CF_INDEX_SHIFT)

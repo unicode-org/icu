@@ -43,59 +43,80 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ArabicShaping::ST_NOSHAPE_NONE;
 }
 
-static const LETag isolFeatureTag = LE_ISOL_FEATURE_TAG;
-static const LETag initFeatureTag = LE_INIT_FEATURE_TAG;
-static const LETag mediFeatureTag = LE_MEDI_FEATURE_TAG;
-static const LETag finaFeatureTag = LE_FINA_FEATURE_TAG;
-static const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
-static const LETag msetFeatureTag = LE_MSET_FEATURE_TAG;
-static const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
-static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
-static const LETag rligFeatureTag = LE_RLIG_FEATURE_TAG;
-static const LETag caltFeatureTag = LE_CALT_FEATURE_TAG;
-static const LETag dligFeatureTag = LE_DLIG_FEATURE_TAG;
-static const LETag cswhFeatureTag = LE_CSWH_FEATURE_TAG;
-static const LETag cursFeatureTag = LE_CURS_FEATURE_TAG;
-static const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
-static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+#define isolFeatureTag LE_ISOL_FEATURE_TAG
+#define initFeatureTag LE_INIT_FEATURE_TAG
+#define mediFeatureTag LE_MEDI_FEATURE_TAG
+#define finaFeatureTag LE_FINA_FEATURE_TAG
+#define ligaFeatureTag LE_LIGA_FEATURE_TAG
+#define msetFeatureTag LE_MSET_FEATURE_TAG
+#define markFeatureTag LE_MARK_FEATURE_TAG
+#define ccmpFeatureTag LE_CCMP_FEATURE_TAG
+#define rligFeatureTag LE_RLIG_FEATURE_TAG
+#define caltFeatureTag LE_CALT_FEATURE_TAG
+#define dligFeatureTag LE_DLIG_FEATURE_TAG
+#define cswhFeatureTag LE_CSWH_FEATURE_TAG
+#define cursFeatureTag LE_CURS_FEATURE_TAG
+#define kernFeatureTag LE_KERN_FEATURE_TAG
+#define mkmkFeatureTag LE_MKMK_FEATURE_TAG
 
-static const LETag emptyTag       = 0x00000000; // ''
+// NOTE:
+// The isol, fina, init and medi features must be
+// defined in the above order, and have masks that
+// are all in the same nibble.
+#define isolFeatureMask 0x80000000U
+#define finaFeatureMask 0x40000000U
+#define initFeatureMask 0x20000000U
+#define mediFeatureMask 0x10000000U
+#define ccmpFeatureMask 0x08000000U
+#define rligFeatureMask 0x04000000U
+#define caltFeatureMask 0x02000000U
+#define ligaFeatureMask 0x01000000U
+#define dligFeatureMask 0x00800000U
+#define cswhFeatureMask 0x00400000U
+#define msetFeatureMask 0x00200000U
+#define cursFeatureMask 0x00100000U
+#define kernFeatureMask 0x00080000U
+#define markFeatureMask 0x00040000U
+#define mkmkFeatureMask 0x00020000U
 
-static const LETag featureOrder[] = 
-{
-    ccmpFeatureTag, isolFeatureTag, finaFeatureTag, mediFeatureTag, initFeatureTag, rligFeatureTag,
-    caltFeatureTag, ligaFeatureTag, dligFeatureTag, cswhFeatureTag, msetFeatureTag, cursFeatureTag,
-    kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag
+#define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
+
+#define SHAPE_MASK 0xF0000000U
+
+static const FeatureMap featureMap[] = {
+    {ccmpFeatureTag, ccmpFeatureMask},
+    {isolFeatureTag, isolFeatureMask},
+    {finaFeatureTag, finaFeatureMask},
+    {mediFeatureTag, mediFeatureMask},
+    {initFeatureTag, initFeatureMask},
+    {rligFeatureTag, rligFeatureMask},
+    {caltFeatureTag, caltFeatureMask},
+    {ligaFeatureTag, ligaFeatureMask},
+    {dligFeatureTag, dligFeatureMask},
+    {cswhFeatureTag, cswhFeatureMask},
+    {msetFeatureTag, msetFeatureMask},
+    {cursFeatureTag, cursFeatureMask},
+    {kernFeatureTag, kernFeatureMask},
+    {markFeatureTag, markFeatureMask},
+    {mkmkFeatureTag, mkmkFeatureMask}
 };
 
-const LETag ArabicShaping::tagArray[] =
+const FeatureMap *ArabicShaping::getFeatureMap(le_int32 &count)
 {
-    isolFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
-        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
+    count = LE_ARRAY_SIZE(featureMap);
 
-    finaFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
-        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
-
-    initFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
-        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
-
-    mediFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
-        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag
-};
-
-#define TAGS_PER_GLYPH ((sizeof ArabicShaping::tagArray / sizeof ArabicShaping::tagArray[0]) / 4)
-
-const LETag *ArabicShaping::getFeatureOrder()
-{
-    return featureOrder;
+    return featureMap;
 }
 
 void ArabicShaping::adjustTags(le_int32 outIndex, le_int32 shapeOffset, LEGlyphStorage &glyphStorage)
 {
     LEErrorCode success = LE_NO_ERROR;
-    const LETag *glyphTags = (const LETag *) glyphStorage.getAuxData(outIndex, success);
+    FeatureMask featureMask = (FeatureMask) glyphStorage.getAuxData(outIndex, success);
+    FeatureMask shape = featureMask & SHAPE_MASK;
 
-    glyphStorage.setAuxData(outIndex, (void *) &glyphTags[TAGS_PER_GLYPH * shapeOffset], success);
+    shape >>= shapeOffset;
+
+    glyphStorage.setAuxData(outIndex, ((featureMask & ~SHAPE_MASK) | shape), success);
 }
 
 void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
@@ -152,7 +173,7 @@ void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 char
         LEUnicode c = chars[in];
         ShapeType t = getShapeType(c);
 
-        glyphStorage.setAuxData(out, (void *) tagArray, success);
+        glyphStorage.setAuxData(out, ISOL_FEATURES, success);
 
         if ((t & MASK_TRANSPARENT) != 0) {
             continue;
