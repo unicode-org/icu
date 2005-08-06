@@ -1,7 +1,4 @@
-
 /*
- * %W% %E%
- *
  * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
@@ -145,21 +142,37 @@ private:
 
 protected:
     /**
-     * A list of "default" features. The default characterProcessing method
-     * will apply all of these tags to every glyph.
+     * A set of "default" features. The default characterProcessing method
+     * will apply all of these features to every glyph.
      *
      * @internal
      */
-    const LETag *fFeatureList;
+    FeatureMask fFeatureMask;
 
     /**
-     * A list of tags in the order in which the features in
-     * the font should be applied, as opposed to using the
-     * order of the lookups in the font.
+     * A set of mappings from feature tags to feature masks. These may
+     * be in the order in which the featues should be applied, but they
+     * don't need to be.
      *
      * @internal
      */
-    const LETag *fFeatureOrder;
+    const FeatureMap *fFeatureMap;
+
+    /**
+     * The length of the feature map.
+     *
+     * @internal
+     */
+    le_int32 fFeatureMapCount;
+
+    /**
+     * <code>TRUE</code> if the features in the
+     * feature map are in the order in which they
+     * must be applied.
+     *
+     * @internal
+     */
+    le_bool fFeatureOrder;
 
     /**
      * The address of the GSUB table.

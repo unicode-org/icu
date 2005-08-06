@@ -26,8 +26,8 @@ struct GlyphDefinitionTableHeader;
 struct GlyphSubstitutionTableHeader : public GlyphLookupTableHeader
 {
     le_int32    process(LEGlyphStorage &glyphStorage, le_bool rightToLeft, LETag scriptTag, LETag languageTag,
-                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                 const LEGlyphFilter *filter = NULL, const LETag *featureOrder = NULL) const;
+                        const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEGlyphFilter *filter,
+                        const FeatureMap *featureMap, le_int32 featureMapCount, le_bool featureOrder) const;
 };
 
 enum GlyphSubstitutionSubtableTypes

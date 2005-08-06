@@ -6,6 +6,8 @@
  */
 
 #include "KernTable.h"
+#include "LEFontInstance.h"
+#include "LEGlyphStorage.h"
 
 #include "LESwaps.h"
 

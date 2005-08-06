@@ -1,7 +1,6 @@
-
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -266,6 +265,14 @@ struct LEPoint
  */
 typedef struct LEPoint LEPoint;
 #endif
+
+
+/**
+ * A convenience macro to get the length of an array.
+ *
+ * @internal
+ */
+#define LE_ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #ifdef LE_USE_CMEMORY
 /**

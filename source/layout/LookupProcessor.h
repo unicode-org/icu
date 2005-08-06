@@ -33,9 +33,6 @@ struct LookupTable;
 
 class LookupProcessor : public UMemory {
 public:
-    static const LETag notSelected;
-    static const LETag defaultFeature;
-
     le_int32 process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustments *glyphPositionAdjustments,
                  le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance) const;
 
@@ -49,19 +46,18 @@ public:
     virtual ~LookupProcessor();
 
 protected:
-    LookupProcessor(const char *baseAddress,
+     LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-        LETag scriptTag, LETag languageTag, const LETag *featureOrder);
+        LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures);
 
-    LookupProcessor();
+   LookupProcessor();
 
-    le_int32 selectLookups(const FeatureTable *featureTable, LETag featureTag, le_int32 order);
+    le_int32 selectLookups(const FeatureTable *featureTable, FeatureMask featureMask, le_int32 order);
 
     const LookupListTable   *lookupListTable;
     const FeatureListTable  *featureListTable;
 
-    LETag                   *lookupSelectArray;
-    LETag                   requiredFeatureTag;
+    FeatureMask            *lookupSelectArray;
 
     le_uint16               *lookupOrderArray;
     le_uint32               lookupOrderCount;

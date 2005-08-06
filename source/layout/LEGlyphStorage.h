@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LEInsertionList.h
  *
- * @draft ICU 3.0
+ * @draft ICU 3.6
  */
 class U_LAYOUT_API LEGlyphStorage : public UObject, protected LEInsertionCallback
 {
@@ -67,7 +67,7 @@ private:
      *
      * @internal
      */
-    void     **fAuxData;
+    le_uint32 *fAuxData;
 
 
     /**
@@ -115,11 +115,15 @@ public:
      * Allocates an empty <code>LEGlyphStorage</code> object. You must call
      * <code>allocateGlyphArray, allocatePositions and allocateAuxData</code>
      * to allocate the data.
+     *
+     * @draft ICU 3.0
      */
     LEGlyphStorage();
 
     /**
      * The destructor. This will deallocate all of the arrays.
+     *
+     * @draft ICU 3.0
      */
     ~LEGlyphStorage();
 
@@ -245,7 +249,7 @@ public:
      *
      * @return the size of the auxillary data array.
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.6
      */
     le_int32 allocateAuxData(LEErrorCode &success);
 
@@ -255,9 +259,9 @@ public:
      * @param auxData the auxillary data array will be copied to this address
      * @param success set to an error code if the data cannot be copied
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.6
      */
-    void getAuxData(void *auxData[], LEErrorCode &success) const;
+    void getAuxData(le_uint32 auxData[], LEErrorCode &success) const;
 
     /**
      * Get the glyph ID for a particular glyph.
@@ -292,9 +296,9 @@ public:
      *
      * @return the auxillary data
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.6
      */
-    void *getAuxData(le_int32 glyphIndex, LEErrorCode &success) const;
+    le_uint32 getAuxData(le_int32 glyphIndex, LEErrorCode &success) const;
 
     /**
      * This operator allows direct access to the glyph array
@@ -393,9 +397,9 @@ public:
      * @param auxData the new auxillary data
      * @param success will be set to an error code if the auxillary data cannot be set.
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.6
      */
-    void setAuxData(le_int32 glyphIndex, void *auxData, LEErrorCode &success);
+    void setAuxData(le_int32 glyphIndex, le_uint32 auxData, LEErrorCode &success);
 
     /**
      * Delete the glyph array and replace it with the one

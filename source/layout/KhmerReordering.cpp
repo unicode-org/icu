@@ -8,6 +8,7 @@
  */
 
 #include "LETypes.h"
+#include "OpenTypeTables.h"
 #include "KhmerReordering.h"
 #include "LEGlyphStorage.h"
 
@@ -143,14 +144,14 @@ public:
         // nothing to do here...
     }
 
-    void writeChar(LEUnicode ch, le_uint32 charIndex, const LETag *charTags)
+    void writeChar(LEUnicode ch, le_uint32 charIndex, FeatureMask charFeatures)
     {
         LEErrorCode success = LE_NO_ERROR;
 
         fOutChars[fOutIndex] = ch;
 
         fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
-        fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
+        fGlyphStorage.setAuxData(fOutIndex, charFeatures, success);
 
         fOutIndex += 1;
     }
@@ -162,102 +163,74 @@ public:
 };
 
 
-static const LETag emptyTag       = 0x00000000; // ''
 //TODO remove unused flags
-//static const LETag nuktFeatureTag = LE_NUKT_FEATURE_TAG;
-//static const LETag akhnFeatureTag = LE_AKHN_FEATURE_TAG;
-//static const LETag rphfFeatureTag = LE_RPHF_FEATURE_TAG;
-static const LETag blwfFeatureTag = LE_BLWF_FEATURE_TAG;
-//static const LETag halfFeatureTag = LE_HALF_FEATURE_TAG;
-static const LETag pstfFeatureTag = LE_PSTF_FEATURE_TAG;
-//static const LETag vatuFeatureTag = LE_VATU_FEATURE_TAG;
-static const LETag presFeatureTag = LE_PRES_FEATURE_TAG;
-static const LETag blwsFeatureTag = LE_BLWS_FEATURE_TAG;
-static const LETag abvsFeatureTag = LE_ABVS_FEATURE_TAG;
-static const LETag pstsFeatureTag = LE_PSTS_FEATURE_TAG;
-//static const LETag halnFeatureTag = LE_HALN_FEATURE_TAG;
+#define nuktFeatureTag LE_NUKT_FEATURE_TAG
+#define akhnFeatureTag LE_AKHN_FEATURE_TAG
+#define rphfFeatureTag LE_RPHF_FEATURE_TAG
+#define blwfFeatureTag LE_BLWF_FEATURE_TAG
+#define halfFeatureTag LE_HALF_FEATURE_TAG
+#define pstfFeatureTag LE_PSTF_FEATURE_TAG
+#define vatuFeatureTag LE_VATU_FEATURE_TAG
+#define presFeatureTag LE_PRES_FEATURE_TAG
+#define blwsFeatureTag LE_BLWS_FEATURE_TAG
+#define abvsFeatureTag LE_ABVS_FEATURE_TAG
+#define pstsFeatureTag LE_PSTS_FEATURE_TAG
+#define halnFeatureTag LE_HALN_FEATURE_TAG
 
-static const LETag blwmFeatureTag = LE_BLWM_FEATURE_TAG;
-static const LETag abvmFeatureTag = LE_ABVM_FEATURE_TAG;
-static const LETag distFeatureTag = LE_DIST_FEATURE_TAG;
+#define blwmFeatureTag LE_BLWM_FEATURE_TAG
+#define abvmFeatureTag LE_ABVM_FEATURE_TAG
+#define distFeatureTag LE_DIST_FEATURE_TAG
 
-static const LETag prefFeatureTag = LE_PREF_FEATURE_TAG;
-static const LETag abvfFeatureTag = LE_ABVF_FEATURE_TAG;
-static const LETag cligFeatureTag = LE_CLIG_FEATURE_TAG;
-static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+#define prefFeatureTag LE_PREF_FEATURE_TAG
+#define abvfFeatureTag LE_ABVF_FEATURE_TAG
+#define cligFeatureTag LE_CLIG_FEATURE_TAG
+#define mkmkFeatureTag LE_MKMK_FEATURE_TAG
+
+#define prefFeatureMask 0x80000000U
+#define blwfFeatureMask 0x40000000U
+#define abvfFeatureMask 0x20000000U
+#define pstfFeatureMask 0x10000000U 
+#define presFeatureMask 0x08000000U
+#define blwsFeatureMask 0x04000000U
+#define abvsFeatureMask 0x02000000U
+#define pstsFeatureMask 0x01000000U
+#define cligFeatureMask 0x00800000U
+#define distFeatureMask 0x00400000U
+#define blwmFeatureMask 0x00200000U
+#define abvmFeatureMask 0x00100000U
+#define mkmkFeatureMask 0x00080000U
+
+#define tagPref    (prefFeatureMask | presFeatureMask | cligFeatureMask | distFeatureMask)
+#define tagAbvf    (abvfFeatureMask | abvsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | mkmkFeatureMask)
+#define tagPstf    (blwfFeatureMask | blwsFeatureMask | prefFeatureMask | presFeatureMask | pstfFeatureMask | pstsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask)
+#define tagBlwf    (blwfFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask | mkmkFeatureMask)
+#define tagDefault (prefFeatureMask | blwfFeatureMask | presFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | blwmFeatureMask | mkmkFeatureMask)
+
+
 
 // These are in the order in which the features need to be applied
 // for correct processing
-static const LETag featureOrder[] =
+static const FeatureMap featureMap[] =
 {
     // Shaping features
-    prefFeatureTag, blwfFeatureTag, abvfFeatureTag, pstfFeatureTag, 
-    presFeatureTag, blwsFeatureTag, abvsFeatureTag, pstsFeatureTag,
-    cligFeatureTag, 
+    {prefFeatureTag, prefFeatureMask},
+    {blwfFeatureTag, blwfFeatureMask},
+    {abvfFeatureTag, abvfFeatureMask},
+    {pstfFeatureTag, pstfFeatureMask}, 
+    {presFeatureTag, presFeatureMask},
+    {blwsFeatureTag, blwsFeatureMask},
+    {abvsFeatureTag, abvsFeatureMask},
+    {pstsFeatureTag, pstsFeatureMask},
+    {cligFeatureTag, cligFeatureMask},
     
     // Positioning features
-    distFeatureTag, blwmFeatureTag, abvmFeatureTag, mkmkFeatureTag,
-    emptyTag
+    {distFeatureTag, distFeatureMask},
+    {blwmFeatureTag, blwmFeatureMask},
+    {abvmFeatureTag, abvmFeatureMask},
+    {mkmkFeatureTag, mkmkFeatureMask},
 };
 
-static const LETag tagPref[] = 
-{
-    prefFeatureTag, presFeatureTag, 
-    cligFeatureTag, 
-    
-    // Positioning features
-    distFeatureTag, 
-    emptyTag
-};
-
-static const LETag tagAbvf[] = 
-{
-    abvfFeatureTag, abvsFeatureTag, 
-    cligFeatureTag, 
-    
-    // Positioning features
-    distFeatureTag, abvmFeatureTag, mkmkFeatureTag,
-    emptyTag
-};
-
-static const LETag tagPstf[] = 
-{
-    blwfFeatureTag, blwsFeatureTag, 
-    prefFeatureTag, presFeatureTag, 
-    
-    pstfFeatureTag, pstsFeatureTag, 
-    cligFeatureTag, 
-    
-    // Positioning features
-    distFeatureTag, blwmFeatureTag, 
-    emptyTag
-};
-
-static const LETag tagBlwf[] = 
-{
-    blwfFeatureTag, blwsFeatureTag, 
-    cligFeatureTag, 
-    
-    // Positioning features
-    distFeatureTag, blwmFeatureTag, mkmkFeatureTag,
-    emptyTag
-};
-
-
-// TODO do we need all of them?
-static const LETag tagDefault[] = 
-{
-    // Shaping feature
-    prefFeatureTag, blwfFeatureTag, /*abvfFeatureTag,*/ /*pstfFeatureTag, */
-    presFeatureTag, blwsFeatureTag, /*abvsFeatureTag,*/ /*pstsFeatureTag,*/
-    cligFeatureTag, 
-    
-    // Positioning features
-    distFeatureTag, abvmFeatureTag, blwmFeatureTag, mkmkFeatureTag,
-    emptyTag
-};
-
-
+static const le_int32 featureMapCount = LE_ARRAY_SIZE(featureMap);
 
 // The stateTable is used to calculate the end (the length) of a well
 // formed Khmer Syllable. 
@@ -350,9 +323,11 @@ static const le_int8 khmerStateTable[][KhmerClassTable::CC_COUNT] =
 };         
 
 
-const LETag *KhmerReordering::getFeatureOrder()
+const FeatureMap *KhmerReordering::getFeatureMap(le_int32 &count)
 {
-    return featureOrder;
+    count = featureMapCount;
+
+    return featureMap;
 }
 
 
@@ -407,13 +382,13 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             // if a split vowel, write the pre part. In Khmer the pre part
             // is the same for all split vowels, same glyph as pre vowel C_VOWEL_E
             if (charClass & KhmerClassTable::CF_SPLIT_VOWEL) {
-                output.writeChar(C_VOWEL_E, i, &tagPref[0]);
+                output.writeChar(C_VOWEL_E, i, tagPref);
                 break; // there can be only one vowel
             }
             
             // if a vowel with pos before write it out
             if (charClass & KhmerClassTable::CF_POS_BEFORE) {
-                output.writeChar(chars[i], i, &tagPref[0]);
+                output.writeChar(chars[i], i, tagPref);
                 break; // there can be only one vowel 
             }
             
@@ -430,8 +405,8 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         
         // write coeng + ro if found
         if (coengRo > -1) {
-            output.writeChar(C_COENG, coengRo, &tagPref[0]);
-            output.writeChar(C_RO, coengRo + 1, &tagPref[0]);
+            output.writeChar(C_COENG, coengRo, tagPref);
+            output.writeChar(C_RO, coengRo + 1, tagPref);
         }
         
         // shall we add a dotted circle?
@@ -439,7 +414,7 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         // a character that has the Dotted circle flag (a character that cannot be a base)
         // then write a dotted circle
         if (classTable->getCharClass(chars[prev]) & KhmerClassTable::CF_DOTTED_CIRCLE) {
-            output.writeChar(C_DOTTED_CIRCLE, prev, &tagDefault[0]);        
+            output.writeChar(C_DOTTED_CIRCLE, prev, tagDefault);        
         }        
 
         // copy what is left to the output, skipping before vowels and coeng Ro if they are present
@@ -459,15 +434,15 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             
             switch (charClass & KhmerClassTable::CF_POS_MASK) {
                 case KhmerClassTable::CF_POS_ABOVE :
-                    output.writeChar(chars[i], i, &tagAbvf[0]);
+                    output.writeChar(chars[i], i, tagAbvf);
                     break;
                 
                 case KhmerClassTable::CF_POS_AFTER :
-                    output.writeChar(chars[i], i, &tagPstf[0]);
+                    output.writeChar(chars[i], i, tagPstf);
                     break;
                 
                 case KhmerClassTable::CF_POS_BELOW :
-                    output.writeChar(chars[i], i, &tagBlwf[0]);
+                    output.writeChar(chars[i], i, tagBlwf);
                     break;
                 
                 default:
@@ -476,14 +451,14 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                     if ( (charClass & KhmerClassTable::CF_COENG) && i + 1 < syllable ) {
                         if ( (classTable->getCharClass(chars[i + 1]) & KhmerClassTable::CF_CLASS_MASK) 
                               == KhmerClassTable::CC_CONSONANT3) {
-                            output.writeChar(chars[i], i, &tagPstf[0]);
+                            output.writeChar(chars[i], i, tagPstf);
                             i += 1;
-                            output.writeChar(chars[i], i, &tagPstf[0]);
+                            output.writeChar(chars[i], i, tagPstf);
                         }
                         else {
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
+                            output.writeChar(chars[i], i, tagBlwf);
                             i += 1;
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
+                            output.writeChar(chars[i], i, tagBlwf);
                         }
                         break;
                     }
@@ -502,13 +477,13 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                                 && ( (classTable->getCharClass(chars[i + 3]) & KhmerClassTable::CF_CLASS_MASK) == C_VOWEL_AA)
                                 && ( (classTable->getCharClass(chars[i + 4]) & KhmerClassTable::CF_CLASS_MASK) == C_SIGN_NIKAHIT) ) ) 
                         {
-                            output.writeChar(chars[i], i, &tagBlwf[0]);
+                            output.writeChar(chars[i], i, tagBlwf);
                             break;
                         }
                         
                     }
                     // default - any other characters
-                    output.writeChar(chars[i], i, &tagDefault[0]);
+                    output.writeChar(chars[i], i, tagDefault);
                     break;
             } // switch
         } // for

@@ -450,9 +450,6 @@
 				RelativePath=".\HanLayoutEngine.h">
 			</File>
 			<File
-				RelativePath=".\HindiFeatureTags.h">
-			</File>
-			<File
 				RelativePath=".\IndicLayoutEngine.h">
 			</File>
 			<File

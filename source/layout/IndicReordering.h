@@ -132,7 +132,7 @@ public:
 
     static void adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage);
 
-    static const LETag *getFeatureOrder();
+    static const FeatureMap *getFeatureMap(le_int32 &count);
 
 private:
     // do not instantiate

@@ -37,14 +37,16 @@ ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fon
                         le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
-    /**/ fFeatureOrder = ArabicShaping::getFeatureOrder();
+    fFeatureMap = ArabicShaping::getFeatureMap(fFeatureMapCount);
+    fFeatureOrder = TRUE;
 }
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
 						       le_int32 typoFlags)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
-    // fFeatureOrder = ArabicShaping::getFeatureOrder();
+    fFeatureMap = ArabicShaping::getFeatureMap(fFeatureMapCount);
+    //fFeatureOrder = TRUE;
 }
 
 ArabicOpenTypeLayoutEngine::~ArabicOpenTypeLayoutEngine()

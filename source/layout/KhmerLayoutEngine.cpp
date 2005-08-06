@@ -1,6 +1,5 @@
 
 /*
- *
  * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
  *
  * This file is a modification of the ICU file IndicLayoutEngine.cpp
@@ -22,14 +21,16 @@ KhmerOpenTypeLayoutEngine::KhmerOpenTypeLayoutEngine(const LEFontInstance *fontI
                     le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
-    fFeatureOrder = KhmerReordering::getFeatureOrder();
+    fFeatureMap   = KhmerReordering::getFeatureMap(fFeatureMapCount);
+    fFeatureOrder = TRUE;
 }
 
 KhmerOpenTypeLayoutEngine::KhmerOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
 						     le_int32 typoFlags)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
-    fFeatureOrder = KhmerReordering::getFeatureOrder();
+    fFeatureMap   = KhmerReordering::getFeatureMap(fFeatureMapCount);
+    fFeatureOrder = TRUE;
 }
 
 KhmerOpenTypeLayoutEngine::~KhmerOpenTypeLayoutEngine()
