@@ -523,6 +523,7 @@ ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
 macos-2566-10.2 { UTR22* }      # This uses supplementary characters.
                         Big5-HKSCS { IANA* JAVA* }
                         big5hk { JAVA }
+                        hkbig5 # from HP-UX 11i
                         HKSCS-BIG5  # From http://www.openi18n.org/localenameguide/
                         # big5-hkscs:unicode3.0 # This is actually post 3.0 data, which has different mappings
 ibm-1375_P100-2003 { UTR22* }   # IBM's interpretation of Windows' Taiwan Big-5 w/ HKSCS extensions
