@@ -324,17 +324,17 @@ void LEGlyphStorage::getAuxData(le_uint32 auxData[], LEErrorCode &success) const
 le_uint32 LEGlyphStorage::getAuxData(le_int32 glyphIndex, LEErrorCode &success) const
 {
     if (LE_FAILURE(success)) {
-        return NULL;
+        return 0;
     }
 
     if (fAuxData == NULL) {
         success = LE_NO_LAYOUT_ERROR;
-        return NULL;
+        return 0;
     }
     
     if (glyphIndex < 0 || glyphIndex >= fGlyphCount) {
         success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
-        return NULL;
+        return 0;
     }
 
     return fAuxData[glyphIndex];
