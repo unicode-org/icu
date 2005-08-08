@@ -13,6 +13,41 @@
 
 U_NAMESPACE_BEGIN
 
+#define initFeatureTag LE_INIT_FEATURE_TAG
+#define nuktFeatureTag LE_NUKT_FEATURE_TAG
+#define akhnFeatureTag LE_AKHN_FEATURE_TAG
+#define rphfFeatureTag LE_RPHF_FEATURE_TAG
+#define blwfFeatureTag LE_BLWF_FEATURE_TAG
+#define halfFeatureTag LE_HALF_FEATURE_TAG
+#define pstfFeatureTag LE_PSTF_FEATURE_TAG
+#define vatuFeatureTag LE_VATU_FEATURE_TAG
+#define presFeatureTag LE_PRES_FEATURE_TAG
+#define blwsFeatureTag LE_BLWS_FEATURE_TAG
+#define abvsFeatureTag LE_ABVS_FEATURE_TAG
+#define pstsFeatureTag LE_PSTS_FEATURE_TAG
+#define halnFeatureTag LE_HALN_FEATURE_TAG
+
+#define blwmFeatureTag LE_BLWM_FEATURE_TAG
+#define abvmFeatureTag LE_ABVM_FEATURE_TAG
+#define distFeatureTag LE_DIST_FEATURE_TAG
+
+#define rphfFeatureMask 0x80000000U
+#define blwfFeatureMask 0x40000000U
+#define halfFeatureMask 0x20000000U
+#define pstfFeatureMask 0x10000000U
+#define nuktFeatureMask 0x08000000U
+#define akhnFeatureMask 0x04000000U
+#define vatuFeatureMask 0x02000000U
+#define presFeatureMask 0x01000000U
+#define blwsFeatureMask 0x00800000U
+#define abvsFeatureMask 0x00400000U
+#define pstsFeatureMask 0x00200000U
+#define halnFeatureMask 0x00100000U
+#define blwmFeatureMask 0x00080000U
+#define abvmFeatureMask 0x00040000U
+#define distFeatureMask 0x00020000U
+#define initFeatureMask 0x00010000U
+
 class ReorderingOutput : public UMemory {
 private:
     le_int32   fOutIndex;
@@ -129,11 +164,15 @@ public:
         fOutIndex += 1;
     }
 
-    le_bool noteMatra(const IndicClassTable *classTable, LEUnicode matra, le_uint32 matraIndex, FeatureMask matraFeatures)
+    le_bool noteMatra(const IndicClassTable *classTable, LEUnicode matra, le_uint32 matraIndex, FeatureMask matraFeatures, le_bool wordStart)
     {
         IndicClassTable::CharClass matraClass = classTable->getCharClass(matra);
 
         fMatraFeatures  = matraFeatures;
+
+        if (wordStart) {
+            fMatraFeatures |= initFeatureMask;
+        }
 
         if (IndicClassTable::isMatra(matraClass)) {
             if (IndicClassTable::isSplitMatra(matraClass)) {
@@ -294,39 +333,6 @@ enum
     C_DOTTED_CIRCLE = 0x25CC
 };
 
-#define nuktFeatureTag LE_NUKT_FEATURE_TAG
-#define akhnFeatureTag LE_AKHN_FEATURE_TAG
-#define rphfFeatureTag LE_RPHF_FEATURE_TAG
-#define blwfFeatureTag LE_BLWF_FEATURE_TAG
-#define halfFeatureTag LE_HALF_FEATURE_TAG
-#define pstfFeatureTag LE_PSTF_FEATURE_TAG
-#define vatuFeatureTag LE_VATU_FEATURE_TAG
-#define presFeatureTag LE_PRES_FEATURE_TAG
-#define blwsFeatureTag LE_BLWS_FEATURE_TAG
-#define abvsFeatureTag LE_ABVS_FEATURE_TAG
-#define pstsFeatureTag LE_PSTS_FEATURE_TAG
-#define halnFeatureTag LE_HALN_FEATURE_TAG
-
-#define blwmFeatureTag LE_BLWM_FEATURE_TAG
-#define abvmFeatureTag LE_ABVM_FEATURE_TAG
-#define distFeatureTag LE_DIST_FEATURE_TAG
-
-#define rphfFeatureMask 0x80000000U
-#define blwfFeatureMask 0x40000000U
-#define halfFeatureMask 0x20000000U
-#define pstfFeatureMask 0x10000000U
-#define nuktFeatureMask 0x08000000U
-#define akhnFeatureMask 0x04000000U
-#define vatuFeatureMask 0x02000000U
-#define presFeatureMask 0x01000000U
-#define blwsFeatureMask 0x00800000U
-#define abvsFeatureMask 0x00400000U
-#define pstsFeatureMask 0x00200000U
-#define halnFeatureMask 0x00100000U
-#define blwmFeatureMask 0x00080000U
-#define abvmFeatureMask 0x00040000U
-#define distFeatureMask 0x00020000U
-
 // TODO: Find better names for these!
 #define tagArray4 (nuktFeatureMask | akhnFeatureMask | vatuFeatureMask | presFeatureMask | blwsFeatureMask | abvsFeatureMask | pstsFeatureMask | halnFeatureMask | blwmFeatureMask | abvmFeatureMask | distFeatureMask)
 #define tagArray3 (pstfFeatureMask | tagArray4)
@@ -336,6 +342,7 @@ enum
 
 static const FeatureMap featureMap[] =
 {
+    {initFeatureTag, initFeatureMask},
     {nuktFeatureTag, nuktFeatureMask},
     {akhnFeatureTag, akhnFeatureMask},
     {rphfFeatureTag, rphfFeatureMask},
@@ -413,6 +420,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
     ReorderingOutput output(outChars, glyphStorage, mpreFixups);
     le_int32 i, prev = 0;
+    le_bool lastInWord = FALSE;
 
     while (prev < charCount) {
         le_int32 syllable = findSyllable(classTable, chars, prev, charCount);
@@ -432,12 +440,17 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
         matra = markStart - 1;
 
-        while (output.noteMatra(classTable, chars[matra], matra, tagArray1) && matra != prev) {
+        while (output.noteMatra(classTable, chars[matra], matra, tagArray1, !lastInWord) && matra != prev) {
             matra -= 1;
         }
 
+        lastInWord = TRUE;
+
         switch (classTable->getCharClass(chars[prev]) & CF_CLASS_MASK) {
         case CC_RESERVED:
+            lastInWord = FALSE;
+            /* fall through */
+
         case CC_INDEPENDENT_VOWEL:
         case CC_ZERO_WIDTH_MARK:
             for (i = prev; i < syllable; i += 1) {
