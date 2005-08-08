@@ -513,9 +513,11 @@ public final class ULocale implements Serializable {
     }
 
     private static String[] _countries;
+    private static String[] _deprecatedCountries;
+    private static String[] _replacementCountries;
     private static String[] _obsoleteCountries;
     private static String[] _countries3;
-    private static String[] _obsoleteCountries3;
+    private static String[] _obsoleteCountries3;  
 
     // Avoid initializing country tables unless we have to.
     private static void initCountryTables() {    
@@ -561,10 +563,19 @@ public final class ULocale implements Serializable {
                 "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
                 "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
                 "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
-            };
-    
+            };	
+
+            /* this table is used for 3 letter codes */
             String[] tempObsoleteCountries = {
-                "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
+                "FX",  "RO",  "TP",  "ZR",  /* obsolete country codes */      
+            };
+            
+            String[] tempDeprecatedCountries = {
+               "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" /* deprecated country list */
+            };
+            String[] tempReplacementCountries = {
+           /*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
+               "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "CS", "CD",   /* replacement country codes */      
             };
     
             /* This list MUST contain a three-letter code for every two-letter code in
@@ -640,6 +651,8 @@ public final class ULocale implements Serializable {
             synchronized (ULocale.class) {
                 if (_countries == null) {
                     _countries = tempCountries;
+                    _deprecatedCountries = tempDeprecatedCountries;
+                    _replacementCountries = tempReplacementCountries;
                     _obsoleteCountries = tempObsoleteCountries;
                     _countries3 = tempCountries3;
                     _obsoleteCountries3 = tempObsoleteCountries3;
@@ -1530,7 +1543,7 @@ public final class ULocale implements Serializable {
             }
 
             return blen;
-        }
+        }	  
 
         /**
          * Advance index past country.
@@ -2162,6 +2175,21 @@ public final class ULocale implements Serializable {
                         return table.getStringWithFallback(item);
                     }
                     catch (MissingResourceException e) {
+                        
+                        if(subtableName==null){
+                            try{
+                                // may be a deprecated code
+                                String currentName = null;
+                                if(tableName.equals("Countries")){
+                                    currentName = getCurrentCountryID(item);
+                                }else if(tableName.equals("Languages")){
+                                    currentName = getCurrentLanguageID(item);
+                                }
+                                return table.getStringWithFallback(currentName);
+                            }catch (MissingResourceException ex){/* fall through*/}
+                        }
+                        
+                        // still can't figure out ?.. try the fallback mechanism
                         String fallbackLocale = table.getWithFallback("Fallback").getString();
                         if (fallbackLocale.length() == 0) {
                             fallbackLocale = "root";
@@ -2173,7 +2201,7 @@ public final class ULocale implements Serializable {
                         bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, 
                                                                                       fallbackLocale);
 //                          System.out.println("fallback from " + table.getULocale() + " to " + fallbackLocale + 
-//                                             ", got bundle " + bundle.getULocale());
+//                                             ", got bundle " + bundle.getULocale());                      
                     }
                 }
             }
@@ -2229,13 +2257,31 @@ public final class ULocale implements Serializable {
      */
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
         return getDisplayLanguageInternal(localeID, displayLocale.localeID);
+    }	 
+
+    static String getCurrentCountryID(String oldID){
+        initCountryTables();
+        int offset = findIndex(_deprecatedCountries, oldID);
+        if (offset >= 0) {
+            return _replacementCountries[offset];
+        }
+        return oldID;
     }
+    static String getCurrentLanguageID(String oldID){
+        initLanguageTables();
+        int offset = findIndex(_obsoleteLanguages, oldID);
+        if (offset >= 0) {
+            return _replacementLanguages[offset];
+        }
+        return oldID;        
+    }
+	
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayLanguageInternal(String localeID, String displayLocaleID) {
         return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocaleID);
     }
-    
+ 
     /**
      * Returns this locale's script localized for display in the default locale.
      * @return the localized script name.
@@ -2336,7 +2382,7 @@ public final class ULocale implements Serializable {
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayCountryInternal(String localeID, String displayLocaleID) {
-        return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocaleID);
+        return getTableString("Countries", null,  new IDParser(localeID).getCountry(), displayLocaleID);
     }
     
     /**
