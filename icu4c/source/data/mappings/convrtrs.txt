@@ -285,7 +285,7 @@ ibm-367_P100-1995 { UTR22* }    ibm-367 { IBM* } IBM367 { IANA* }   # This is AS
 # Central Europe
 ibm-912_P100-1995 { UTR22* }
                         ibm-912 { IBM* JAVA }
-                        iso-8859-2 { MIME* IANA JAVA* WINDOWS }
+                        ISO-8859-2 { MIME* IANA JAVA* WINDOWS }
                         ISO_8859-2:1987 { IANA* WINDOWS JAVA }
                         latin2 { IANA WINDOWS JAVA }
                         csISOLatin2 { IANA WINDOWS JAVA }
@@ -299,7 +299,7 @@ ibm-912_P100-1995 { UTR22* }
 # Maltese Esperanto
 ibm-913_P100-2000 { UTR22* }
                         ibm-913 { IBM* JAVA }
-                        iso-8859-3 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-3 { MIME* IANA WINDOWS JAVA* }
                         ISO_8859-3:1988 { IANA* WINDOWS JAVA }
                         latin3 { IANA JAVA WINDOWS }
                         csISOLatin3 { IANA WINDOWS }
@@ -313,7 +313,7 @@ ibm-913_P100-2000 { UTR22* }
 # Baltic
 ibm-914_P100-1995 { UTR22* }
                         ibm-914 { IBM* JAVA }
-                        iso-8859-4 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-4 { MIME* IANA WINDOWS JAVA* }
                         latin4 { IANA WINDOWS JAVA }
                         csISOLatin4 { IANA WINDOWS JAVA }
                         iso-ir-110 { IANA WINDOWS JAVA }
@@ -327,7 +327,7 @@ ibm-914_P100-1995 { UTR22* }
 # Cyrillic
 ibm-915_P100-1995 { UTR22* }
                         ibm-915 { IBM* JAVA }
-                        iso-8859-5 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-5 { MIME* IANA WINDOWS JAVA* }
                         cyrillic { IANA WINDOWS JAVA }
                         csISOLatinCyrillic { IANA WINDOWS JAVA }
                         iso-ir-144 { IANA WINDOWS JAVA }
@@ -344,7 +344,7 @@ ibm-915_P100-1995 { UTR22* }
 # -E requires the client to handle the ISO 6429 bidirectional controls
 ibm-1089_P100-1995 { UTR22* }
                         ibm-1089 { IBM* JAVA }
-                        iso-8859-6 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-6 { MIME* IANA WINDOWS JAVA* }
                         arabic { IANA WINDOWS JAVA }
                         csISOLatinArabic { IANA WINDOWS JAVA }
                         iso-ir-127 { IANA WINDOWS JAVA }
@@ -361,7 +361,7 @@ ibm-1089_P100-1995 { UTR22* }
 # ISO Greek (with euro update). This is really ISO_8859-7:2003
 ibm-9005_X100-2005 { UTR22* }
                         ibm-9005 { IBM* }
-                        iso-8859-7 { MIME* IANA WINDOWS }
+                        ISO-8859-7 { MIME* IANA WINDOWS }
                         greek { IANA WINDOWS }
                         greek8 { IANA WINDOWS }
                         ELOT_928 { IANA WINDOWS }
@@ -375,7 +375,7 @@ ibm-9005_X100-2005 { UTR22* }
 # JDK 1.5 has these aliases.
 ibm-813_P100-1995 { UTR22* }
                         ibm-813 { IBM* JAVA }
-                        iso-8859-7 { JAVA* }
+                        ISO-8859-7 { JAVA* }
                         greek { JAVA }
                         greek8 { JAVA }
                         ELOT_928 { JAVA }
@@ -394,7 +394,7 @@ ibm-813_P100-1995 { UTR22* }
 # -E requires the client to handle the ISO 6429 bidirectional controls
 ibm-916_P100-1995 { UTR22* }
                         ibm-916 { IBM* JAVA }
-                        iso-8859-8 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-8 { MIME* IANA WINDOWS JAVA* }
                         hebrew { IANA WINDOWS JAVA }
                         csISOLatinHebrew { IANA WINDOWS JAVA }
                         iso-ir-138 { IANA WINDOWS JAVA }
@@ -409,7 +409,7 @@ ibm-916_P100-1995 { UTR22* }
 # Turkish
 ibm-920_P100-1995 { UTR22* }
                         ibm-920 { IBM* JAVA }
-                        iso-8859-9 { MIME* IANA WINDOWS JAVA* }
+                        ISO-8859-9 { MIME* IANA WINDOWS JAVA* }
                         latin5 { IANA WINDOWS JAVA }
                         csISOLatin5 { IANA JAVA }
                         iso-ir-148 { IANA WINDOWS JAVA }
@@ -421,18 +421,40 @@ ibm-920_P100-1995 { UTR22* }
                         windows-28599 { WINDOWS* }
                         ECMA-128    # IANA doesn't have this alias 6/24/2002
 
+# Nordic languages
+iso-8859_10-1998 { UTR22* } ISO-8859-10 { MIME* IANA* }
+                        iso-ir-157 { IANA }
+                        l6 { IANA }
+                        ISO_8859-10:1992 { IANA }
+                        csISOLatin6 { IANA }
+                        latin6 { IANA }
+
+# Thai
+# Be warned. There several iso-8859-11 codepage variants, and they are all incompatible.
+# ISO-8859-11 is a superset of TIS-620. The difference is that ISO-8859-11 contains the C1 control codes.
+iso-8859_11-2001 { UTR22* } ISO-8859-11
+                        thai8 # HP-UX alias. HP-UX says TIS-620, but it's closer to ISO-8859-11.
+
 # iso-8859-13, PC Baltic (w/o euro update)
 ibm-921_P100-1995 { UTR22* }
                         ibm-921 { IBM* }
-                        iso-8859-13 { IANA* MIME* JAVA* }
+                        ISO-8859-13 { IANA* MIME* JAVA* }
                         8859_13 { JAVA }
                         cp921
                         921
 
+# Celtic
+iso-8859_14-1998 { UTR22* } ISO-8859-14 { IANA* }
+                        iso-ir-199 { IANA }
+                        ISO_8859-14:1998 { IANA }
+                        latin8 { IANA }
+                        iso-celtic { IANA }
+                        l8 { IANA }
+
 # Latin 9
 ibm-923_P100-1998 { UTR22* }
                         ibm-923 { IBM* JAVA }
-                        iso-8859-15 { IANA* MIME* WINDOWS JAVA* }
+                        ISO-8859-15 { IANA* MIME* WINDOWS JAVA* }
                         Latin-9 { IANA WINDOWS }
                         l9 { WINDOWS }
                         8859_15 { JAVA }
@@ -668,8 +690,8 @@ ibm-874_P100-1995 { UTR22* }    # Thai PC (w/o euro update).
                         ibm-874 { IBM* JAVA }
                         ibm-9066 { IBM }    # Yes ibm-874 == ibm-9066. ibm-1161 has the euro update.
                         cp874 { JAVA* }
-                        TIS-620 { IANA* JAVA }  # This actually separate from ibm-874, which is similar to this table
-                        tis620.2533 { JAVA }    # This actually separate from ibm-874, which is similar to this table
+                        TIS-620 { IANA* JAVA }  # This is actually separate from ibm-874, which is similar to this table
+                        tis620.2533 { JAVA }    # This is actually separate from ibm-874, which is similar to this table
                         eucTH               # eucTH is an unusual alias from Solaris.  eucTH has fewer mappings than TIS620
 
 ibm-1162_P100-1999 { UTR22* }   # Thai (w/ euro update)
