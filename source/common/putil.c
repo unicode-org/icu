@@ -1847,6 +1847,15 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
             name = "EUC-KR";
         }
     }
+#elif defined(U_DARWIN)
+    if (locale == NULL && *name == 0) {
+        /*
+        No locale was specified, and an empty name was passed in.
+        This usually indicates that nl_langinfo didn't return valid information.
+        Mac OS X uses UTF-8 by default (especially the locale data and console).
+        */
+        name = "UTF-8";
+    }
 #endif
     /* return NULL when "" is passed in */
     if (*name == 0) {
