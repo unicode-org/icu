@@ -14,6 +14,7 @@
 #define __PARAGRAPH_H
 
 #include "unicode/utypes.h"
+#include "unicode/ubidi.h"
 
 #include "layout/LEFontInstance.h"
 #include "layout/ParagraphLayout.h"
@@ -46,6 +47,8 @@ public:
     static Paragraph *paragraphFactory(const char *fileName, const LEFontInstance *font, GUISupport *guiSupport);
 
 private:
+    void addLine(const ParagraphLayout::Line *line);
+
     ParagraphLayout **fParagraphLayout;
 
     le_int32          fParagraphCount;
@@ -63,6 +66,7 @@ private:
     le_int32         fAscent;
     le_int32         fWidth;
     le_int32         fHeight;
+    UBiDiLevel       fParagraphLevel;
 };
 
 inline le_int32 Paragraph::getLineHeight()

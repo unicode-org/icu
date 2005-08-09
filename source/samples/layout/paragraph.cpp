@@ -78,7 +78,7 @@ static void subsetFontRuns(const FontRuns *fontRuns, le_int32 start, le_int32 li
 Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns *fontRuns, LEErrorCode &status)
   : fParagraphLayout(NULL), fParagraphCount(0), fParagraphMax(PARA_GROW), fParagraphGrow(PARA_GROW),
     fLineCount(0), fLinesMax(LINE_GROW), fLinesGrow(LINE_GROW), fLines(NULL), fChars(NULL),
-    fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1)
+    fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1), fParagraphLevel(UBIDI_DEFAULT_LTR)
 {
     static const LEUnicode separators[] = {CH_LF, CH_CR, CH_LSEP, CH_PSEP};
 
@@ -89,8 +89,6 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
     le_int32 ascent  = 0;
     le_int32 descent = 0;
     le_int32 leading = 0;
-
-    UBiDiLevel paragraphLevel = UBIDI_DEFAULT_LTR;
 
 	LocaleRuns *locales = NULL;
     FontRuns fr(0);
@@ -107,49 +105,48 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
     while (*pStart != 0) {
         LEUnicode *pEnd = u_strpbrk(pStart, separators);
         le_int32 pAscent, pDescent, pLeading;
+        ParagraphLayout *paragraphLayout = NULL;
 
         if (pEnd == NULL) {
             pEnd = &fChars[charCount];
         }
 
-        if (pEnd == pStart) {
-            pEnd = skipLineEnd(pEnd);
+        if (pEnd != pStart) {
+            subsetFontRuns(fontRuns, pStart - fChars, pEnd - fChars, &fr);
+
+            paragraphLayout = new ParagraphLayout(pStart, pEnd - pStart, &fr, NULL, NULL, locales, fParagraphLevel, FALSE, status);
+
+            if (LE_FAILURE(status)) {
+                break; // return? something else?
+            }
+
+            if (fParagraphLevel == UBIDI_DEFAULT_LTR) {
+                fParagraphLevel = paragraphLayout->getParagraphLevel();
+            }
+
+            pAscent  = paragraphLayout->getAscent();
+            pDescent = paragraphLayout->getDescent();
+            pLeading = paragraphLayout->getLeading();
+
+            if (pAscent > ascent) {
+                ascent = pAscent;
+            }
+
+            if (pDescent > descent) {
+                descent = pDescent;
+            }
+
+            if (pLeading > leading) {
+                leading = pLeading;
+            }
         }
-
-        subsetFontRuns(fontRuns, pStart - fChars, pEnd - fChars, &fr);
-
-        ParagraphLayout *paragraphLayout = new ParagraphLayout(pStart, pEnd - pStart, &fr, NULL, NULL, locales, paragraphLevel, FALSE, status);
 
         if (fParagraphCount >= fParagraphMax) {
             fParagraphLayout = (ParagraphLayout **) LE_GROW_ARRAY(fParagraphLayout, fParagraphMax + fParagraphGrow);
             fParagraphMax += fParagraphGrow;
         }
 
-        if (LE_FAILURE(status)) {
-            break; // return? something else?
-        }
-
         fParagraphLayout[fParagraphCount++] = paragraphLayout;
-
-        if (paragraphLevel == UBIDI_DEFAULT_LTR) {
-            paragraphLevel = paragraphLayout->getParagraphLevel();
-        }
-
-        pAscent  = paragraphLayout->getAscent();
-        pDescent = paragraphLayout->getDescent();
-        pLeading = paragraphLayout->getLeading();
-
-        if (pAscent > ascent) {
-            ascent = pAscent;
-        }
-
-        if (pDescent > descent) {
-            descent = pDescent;
-        }
-
-        if (pLeading > leading) {
-            leading = pLeading;
-        }
 
         if (*pEnd == 0) {
             break;
@@ -173,6 +170,16 @@ Paragraph::~Paragraph()
     LE_DELETE_ARRAY(fChars);
 }
 
+void Paragraph::addLine(const ParagraphLayout::Line *line)
+{
+    if (fLineCount >= fLinesMax) {
+        fLines = (const ParagraphLayout::Line **) LE_GROW_ARRAY(fLines, fLinesMax + fLinesGrow);
+        fLinesMax += fLinesGrow;
+    }
+
+    fLines[fLineCount++] = line;
+}
+
 void Paragraph::breakLines(le_int32 width, le_int32 height)
 {
     fHeight = height;
@@ -186,31 +193,26 @@ void Paragraph::breakLines(le_int32 width, le_int32 height)
 
     float lineWidth = (float) (width - 2 * MARGIN);
     const ParagraphLayout::Line *line;
-    le_int32 li;
 
     // Free the old LineInfo's...
-    for (li = 0; li < fLineCount; li += 1) {
+    for (le_int32 li = 0; li < fLineCount; li += 1) {
         delete fLines[li];
     }
 
-    li = 0;
+    fLineCount = 0;
 
     for (le_int32 p = 0; p < fParagraphCount; p += 1) {
         ParagraphLayout *paragraphLayout = fParagraphLayout[p];
 
-        paragraphLayout->reflow();
-        while ((line = paragraphLayout->nextLine(lineWidth)) != NULL) {
-            // grow the line array, if we need to.
-            if (li >= fLinesMax) {
-                fLines = (const ParagraphLayout::Line **) LE_GROW_ARRAY(fLines, fLinesMax + fLinesGrow);
-                fLinesMax += fLinesGrow;
+        if (paragraphLayout != NULL) {
+            paragraphLayout->reflow();
+            while ((line = paragraphLayout->nextLine(lineWidth)) != NULL) {
+                addLine(line);
             }
-
-            fLines[li++] = line;
+        } else {
+            addLine(NULL);
         }
     }
-
-    fLineCount = li;
 }
 
 void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 lastLine)
@@ -222,24 +224,27 @@ void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 las
 
     for (li = firstLine; li <= lastLine; li += 1) {
         const ParagraphLayout::Line *line = fLines[li];
-        le_int32 runCount = line->countRuns();
-        le_int32 run;
 
-		if (fParagraphLayout[0]->getParagraphLevel() == UBIDI_RTL) {
-			le_int32 lastX = line->getWidth();
+        if (line != NULL) {
+            le_int32 runCount = line->countRuns();
+            le_int32 run;
 
-			x = (fWidth - lastX - MARGIN);
-		}
+		    if (fParagraphLevel == UBIDI_RTL) {
+			    le_int32 lastX = line->getWidth();
+
+			    x = (fWidth - lastX - MARGIN);
+		    }
 
 
-        for (run = 0; run < runCount; run += 1) {
-            const ParagraphLayout::VisualRun *visualRun = line->getVisualRun(run);
-            le_int32 glyphCount = visualRun->getGlyphCount();
-            const LEFontInstance *font = visualRun->getFont();
-            const LEGlyphID *glyphs = visualRun->getGlyphs();
-            const float *positions = visualRun->getPositions();
+            for (run = 0; run < runCount; run += 1) {
+                const ParagraphLayout::VisualRun *visualRun = line->getVisualRun(run);
+                le_int32 glyphCount = visualRun->getGlyphCount();
+                const LEFontInstance *font = visualRun->getFont();
+                const LEGlyphID *glyphs = visualRun->getGlyphs();
+                const float *positions = visualRun->getPositions();
 
-            surface->drawGlyphs(font, glyphs, glyphCount, positions, x, y, fWidth, fHeight);
+                surface->drawGlyphs(font, glyphs, glyphCount, positions, x, y, fWidth, fHeight);
+            }
         }
 
         y += fLineHeight;
