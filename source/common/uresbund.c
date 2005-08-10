@@ -821,9 +821,17 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         if(resB->fVersion != NULL) {
             uprv_free(resB->fVersion);
         }
+        /* 
+           weiv: if stack object was passed in, it doesn't really need to be reinited,
+           since the purpose of initing is to remove stack junk. However, at this point 
+           we would not do anything to an allocated object, so stack object should be
+           treated the same
+        */
+        /*
         if(ures_isStackObject(resB) != FALSE) {
             ures_initStackObject(resB);
         }
+        */
         if(parent != resB) {
             ures_freeResPath(resB);
         }
