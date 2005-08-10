@@ -203,6 +203,8 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath"); 
     addTest(root, &TestCLDRStyleAliases,      "tsutil/creststn/TestCLDRStyleAliases");
     addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");    
+    addTest(root, &TestStackReuse,            "tsutil/creststn/TestStackReuse");
+
 }
 
 
@@ -2684,4 +2686,17 @@ static void TestFallbackCodes(void) {
   ures_close(fall);
   ures_close(r);
   ures_close(res);
+}
+
+static void TestStackReuse(void) {
+    UResourceBundle table;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UResourceBundle *rb = ures_open(NULL, "en_US", &errorCode);
+    const char* tableKey = "Types";
+    const char* subTableKey = "collation";
+    ures_initStackObject(&table);
+    ures_getByKeyWithFallback(rb, tableKey, &table, &errorCode);
+    if (subTableKey != NULL) {
+        ures_getByKeyWithFallback(&table,subTableKey, &table, &errorCode);
+    }
 }
