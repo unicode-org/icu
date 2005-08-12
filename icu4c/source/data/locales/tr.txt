@@ -1695,4 +1695,334 @@ tr{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    zoneStrings{
+        {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Güney Kutbu",
+        }
+        {
+            "Australia/Melbourne",
+            "",
+            "",
+            "",
+            "",
+            "Melborn",
+        }
+        {
+            "Australia/Sydney",
+            "",
+            "",
+            "",
+            "",
+            "Sidney",
+        }
+        {
+            "America/Halifax",
+            "Atlantik Standart Saati",
+            "",
+            "Atlantik Yaz Saati",
+            "",
+            "Halifax",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundland Standart Saati",
+            "",
+            "Newfoundland Yaz Saati",
+            "",
+            "St Johns",
+        }
+        {
+            "Africa/Kinshasa",
+            "",
+            "",
+            "",
+            "",
+            "Kinşasa",
+        }
+        {
+            "Africa/Lubumbashi",
+            "",
+            "",
+            "",
+            "",
+            "Lubumbaşi",
+        }
+        {
+            "Asia/Kashgar",
+            "",
+            "",
+            "",
+            "",
+            "Kaşgar",
+        }
+        {
+            "Asia/Urumqi",
+            "",
+            "",
+            "",
+            "",
+            "Urumçi",
+        }
+        {
+            "Asia/Chongqing",
+            "",
+            "",
+            "",
+            "",
+            "Çunking",
+        }
+        {
+            "Asia/Shanghai",
+            "Çin Standart Saati",
+            "",
+            "Çin Standart Saati",
+            "",
+            "Şangay",
+        }
+        {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Kanarya",
+        }
+        {
+            "Africa/Ceuta",
+            "",
+            "",
+            "",
+            "",
+            "Septe",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londra",
+        }
+        {
+            "Asia/Jakarta",
+            "",
+            "",
+            "",
+            "",
+            "Cakarta",
+        }
+        {
+            "Asia/Aqtau",
+            "",
+            "",
+            "",
+            "",
+            "Şevçenko",
+        }
+        {
+            "Asia/Oral",
+            "",
+            "",
+            "",
+            "",
+            "Uralsk",
+        }
+        {
+            "Asia/Aqtobe",
+            "",
+            "",
+            "",
+            "",
+            "Aktyubinsk",
+        }
+        {
+            "Asia/Qyzylorda",
+            "",
+            "",
+            "",
+            "",
+            "Kızıl-Orda",
+        }
+        {
+            "Asia/Almaty",
+            "",
+            "",
+            "",
+            "",
+            "Almatı",
+        }
+        {
+            "Asia/Hovd",
+            "",
+            "",
+            "",
+            "",
+            "Kobdo",
+        }
+        {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Ulanbator",
+        }
+        {
+            "Asia/Choibalsan",
+            "",
+            "",
+            "",
+            "",
+            "Çoybalsan",
+        }
+        {
+            "America/Mexico_City",
+            "",
+            "",
+            "",
+            "",
+            "Meksiko City",
+        }
+        {
+            "America/Cancun",
+            "",
+            "",
+            "",
+            "",
+            "Kankun",
+        }
+        {
+            "Asia/Kuching",
+            "",
+            "",
+            "",
+            "",
+            "Kuçing",
+        }
+        {
+            "Pacific/Marquesas",
+            "",
+            "",
+            "",
+            "",
+            "Markiz",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azor Adaları",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lizbon",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskova",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Kamçatka",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hawaii Standart Saati",
+            "",
+            "Hawaii Standart Saati",
+            "",
+            "Honolulu",
+        }
+        {
+            "America/Anchorage",
+            "Alaska Standart Saati",
+            "",
+            "Alaska Yaz Saati",
+            "",
+            "Anchorage",
+        }
+        {
+            "America/Los_Angeles",
+            "Pasifik Standart Saati",
+            "",
+            "Pasifik Yaz Saati",
+            "",
+            "Los Angeles",
+        }
+        {
+            "America/Phoenix",
+            "ABD Sıradağlar Standart Saati",
+            "",
+            "ABD Sıradağlar Standart Saati",
+            "",
+            "Phoenix",
+        }
+        {
+            "America/Denver",
+            "ABD Sıradağlar Standart Saati",
+            "",
+            "ABD Sıradağlar Yaz Saati",
+            "",
+            "Denver",
+        }
+        {
+            "America/Chicago",
+            "Merkezi Standart Saati",
+            "",
+            "Merkezi Yaz Saati",
+            "",
+            "Şikago",
+        }
+        {
+            "America/Indianapolis",
+            "Doğu Standart Saati",
+            "",
+            "Doğu Standart Saati",
+            "",
+            "Indianapolis",
+        }
+        {
+            "America/New_York",
+            "Doğu Standart Saati",
+            "",
+            "Doğu Yaz Saati",
+            "",
+            "New York",
+        }
+        {
+            "Asia/Samarkand",
+            "",
+            "",
+            "",
+            "",
+            "Semerkand",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Taşkent",
+        }
+    }
 }

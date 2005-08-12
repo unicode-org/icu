@@ -41,6 +41,10 @@
     <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/> 
     <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
     <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
+    <alias from="in" to="id" /> 
+    <alias from="in_ID" to="id_ID" /> 
+    <alias from="iw" to="he" /> 
+    <alias from="iw_IL" to="he_IL" /> 
   </deprecates> 
 
   <!-- locale aliases (main) -->
@@ -54,7 +58,8 @@
     <alias from="jw" to="jv"/> 
     <alias from="no" to="nb"/> 
     <alias from="no_NO" to="nb_NO"/> 
-    <alias from="no_NO_NY" to="nn_NO" /> 
+    <alias from="no_NO_NY" to="nn_NO" />
+    <alias from="en_RH" to="en_ZW" />    
     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
     <aliasLocale locale="az_AZ" /> 
     <aliasLocale locale="sh" /> 

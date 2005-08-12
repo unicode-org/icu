@@ -19,6 +19,7 @@
 #include "cintltst.h"
 #include "cstring.h"
 #include "uparse.h"
+#include "uresimp.h"
 
 #include "unicode/putil.h"
 #include "unicode/ubrk.h"
@@ -218,7 +219,12 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetLocale);
     TESTCASE(TestDisplayNameWarning);
     TESTCASE(TestNonexistentLanguageExemplars);
-    TESTCASE(TestAcceptLanguage);
+    TESTCASE(TestCalendar);
+    TESTCASE(TestDateFormat);
+    TESTCASE(TestCollation);
+    TESTCASE(TestULocale);
+    TESTCASE(TestUResourceBundle);
+    TESTCASE(TestDisplayName); 
 }
 
 
@@ -2337,3 +2343,266 @@ static void TestAcceptLanguage(void) {
     }
   }
 }
+static const char* LOCALE_ALIAS[][2] = {
+        {"in", "id"},
+        {"in_ID", "id_ID"},
+        {"iw", "he"},
+        {"iw_IL", "he_IL"},
+        {"ji", "yi"},
+        {"en_BU", "en_MM"},
+        {"en_DY", "en_BJ"},
+        {"en_HV", "en_BF"},
+        {"en_NH", "en_VU"},
+        {"en_RH", "en_ZW"},
+        {"en_TP", "en_TL"},
+        {"en_ZR", "en_CD"}
+};
+static UBool isLocaleAvailable(UResourceBundle* resIndex, const char* loc){
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t len = 0;
+    ures_getStringByKey(resIndex, loc,&len, &status);
+    if(U_FAILURE(status)){
+        return FALSE; 
+    }
+    return TRUE;
+}
+static void TestCalendar() {
+    int i;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
+        return;
+    }
+    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+	    UCalendar* c1 = NULL;
+	    UCalendar* c2 = NULL;
+                    
+        /*Test function "getLocale(ULocale.VALID_LOCALE)"*/
+	    const char* l1 = ucal_getLocaleByType(c1, ULOC_VALID_LOCALE, &status);
+	    const char* l2 = ucal_getLocaleByType(c2, ULOC_VALID_LOCALE, &status);
+        
+        if(!isLocaleAvailable(resIndex, newLoc)){
+            continue;
+        }
+        c1 = ucal_open(NULL, -1, oldLoc, UCAL_GREGORIAN, &status);
+	    c2 = ucal_open(NULL, -1, newLoc, UCAL_GREGORIAN, &status);
+                    
+        if (strcmp(newLoc,l1)!=0 || strcmp(l1,l2)!=0 || status!=U_ZERO_ERROR) {
+            log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
+        }
+ 	    log_verbose("ucal_getLocaleByType old:%s   new:%s\n", l1, l2);
+        ucal_close(c1);
+	    ucal_close(c2);
+    }
+    ures_close(resIndex);
+}
+static void TestDateFormat() {
+    int i;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
+        return;
+    }
+    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+	    UDateFormat* df1 = NULL;
+	    UDateFormat* df2 = NULL;
+        const char* l1 = NULL;
+        const char* l2 = NULL;
+
+        if(!isLocaleAvailable(resIndex, newLoc)){
+            continue;
+        }
+        df1 = udat_open(UDAT_FULL, UDAT_FULL,oldLoc, NULL, 0, NULL, -1, &status);
+	    df2 = udat_open(UDAT_FULL, UDAT_FULL,newLoc, NULL, 0, NULL, -1, &status);
+        if(U_FAILURE(status)){
+            log_err("Creation of date format failed  %s\n", u_errorName(status));
+            return;
+        }        
+        /*Test function "getLocale"*/
+        l1 = udat_getLocaleByType(df1, ULOC_VALID_LOCALE, &status);
+        l2 = udat_getLocaleByType(df2, ULOC_VALID_LOCALE, &status);
+        if(U_FAILURE(status)){
+            log_err("Fetching the locale by type failed.  %s\n", u_errorName(status));
+        }
+        if (strcmp(newLoc,l1)!=0 || strcmp(l1,l2)!=0) {
+            log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
+        }
+	    log_verbose("udat_getLocaleByType old:%s   new:%s\n", l1, l2);
+	    udat_close(df1);
+	    udat_close(df2);
+    }
+    ures_close(resIndex);
+}
+static void TestCollation() {
+    int i;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
+        return;
+    }
+    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+	    UErrorCode status = U_ZERO_ERROR;
+	    UCollator* c1 = NULL;
+	    UCollator* c2 = NULL;
+        const char* l1 = NULL;
+        const char* l2 = NULL;
+        if(!isLocaleAvailable(resIndex, newLoc)){
+            continue;
+        }
+        if(U_FAILURE(status)){
+            log_err("Creation of collators failed  %s\n", u_errorName(status));
+            return;
+        }
+        c1 = ucol_open(oldLoc, &status);
+	    c2 = ucol_open(newLoc, &status);
+        l1 = ucol_getLocaleByType(c1, ULOC_VALID_LOCALE, &status);
+        l2 = ucol_getLocaleByType(c2, ULOC_VALID_LOCALE, &status);
+        if(U_FAILURE(status)){
+            log_err("Fetching the locale names failed failed  %s\n", u_errorName(status));
+        }        
+        if (strcmp(newLoc,l1)!=0 || strcmp(l1,l2)!=0) {
+           log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
+        }
+	    log_verbose("ucol_getLocaleByType old:%s   new:%s\n", l1, l2);
+	    ucol_close(c1);
+	    ucol_close(c2);
+    }
+    ures_close(resIndex);
+}
+static void  TestULocale() {
+    int i;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
+        return;
+    }
+    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+        UErrorCode status = U_ZERO_ERROR;
+        UChar name1[256], name2[256];
+	    char names1[256], names2[256];
+        int32_t capacity = 256;
+        if(!isLocaleAvailable(resIndex, newLoc)){
+            continue;
+        }
+	    uloc_getDisplayName(oldLoc, ULOC_US, name1, capacity, &status);
+        if(U_FAILURE(status)){
+            log_err("uloc_getDisplayName(%s) failed %s\n", oldLoc, u_errorName(status));
+        }
+        
+	    uloc_getDisplayName(newLoc, ULOC_US, name2, capacity, &status);
+        if(U_FAILURE(status)){
+            log_err("uloc_getDisplayName(%s) failed %s\n", newLoc, u_errorName(status));
+        }
+
+        if (u_strcmp(name1, name2)!=0) {
+            log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
+        }
+	    u_austrcpy(names1, name1);
+	    u_austrcpy(names2, name2);
+	    log_verbose("uloc_getDisplayName old:%s   new:%s\n", names1, names2);
+    }
+    ures_close(resIndex);
+
+}
+static void TestUResourceBundle() {
+	const char* us1;
+    const char* us2;
+	int32_t length = 0;
+
+	UResourceBundle* rb1 = NULL;
+	UResourceBundle* rb2 = NULL;
+	UErrorCode status = U_ZERO_ERROR;
+    int i;
+    UResourceBundle *resIndex = NULL;
+    if(U_FAILURE(status)){
+        log_err("Could not open res_index.res. Exiting. Error: %s\n", u_errorName(status));
+        return;
+    }
+    resIndex = ures_open(NULL,"res_index", &status);
+	for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+	    
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+        if(!isLocaleAvailable(resIndex, newLoc)){
+            continue;
+        }
+        rb1 = ures_open(NULL, oldLoc, &status);
+	    if (U_FAILURE(U_ZERO_ERROR)) {
+            log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
+	    }
+
+		us1 = ures_getLocale(rb1, &status);
+	    
+	    status = U_ZERO_ERROR;
+	    rb2 = ures_open(NULL, newLoc, &status);
+        if (U_FAILURE(U_ZERO_ERROR)) {
+            log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
+	    } 
+		us2 = ures_getLocale(rb2, &status);
+	    
+        if (strcmp(us1,newLoc)!=0 || strcmp(us1,us2)!=0 ) {
+		    log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
+	    }
+
+	    log_verbose("ures_getStringByKey old:%s   new:%s\n", us1, us2);
+	    ures_close(rb1);
+	    rb1 = NULL;
+	    ures_close(rb2);
+	    rb2 = NULL;
+    }
+    ures_close(resIndex);
+}    
+static void TestDisplayName() {
+    
+    UChar oldCountry[256] = {'\0'};
+    UChar newCountry[256] = {'\0'};
+    UChar oldLang[256] = {'\0'};
+    UChar newLang[256] = {'\0'};
+    char country[256] ={'\0'}; 
+    char language[256] ={'\0'};
+    int32_t capacity = 256;
+    int i =0;
+    int j=0;
+    for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
+        const char* oldLoc = LOCALE_ALIAS[i][0];
+        const char* newLoc = LOCALE_ALIAS[i][1];
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t available = uloc_countAvailable();
+
+        for(j=0; j<available; j++){
+            
+            const char* dispLoc = uloc_getAvailable(j);
+            int32_t oldCountryLen = uloc_getDisplayCountry(oldLoc,dispLoc, oldCountry, capacity, &status);
+            int32_t newCountryLen = uloc_getDisplayCountry(newLoc, dispLoc, newCountry, capacity, &status);
+            int32_t oldLangLen = uloc_getDisplayLanguage(oldLoc, dispLoc, oldLang, capacity, &status);
+            int32_t newLangLen = uloc_getDisplayLanguage(newLoc, dispLoc, newLang, capacity, &status );
+            
+            int32_t countryLen = uloc_getCountry(newLoc, country, capacity, &status);
+            int32_t langLen  = uloc_getLanguage(newLoc, language, capacity, &status);
+            //there is a display name for the current country ID               
+            if(countryLen != newCountryLen ){
+                if(u_strncmp(oldCountry,newCountry,oldCountryLen)!=0){
+                    log_err("uloc_getDisplayCountry() failed for %s in display locale %s \n", oldLoc, dispLoc);
+                }
+            }
+            //there is a display name for the current lang ID               
+            if(langLen!=newLangLen){
+                if(u_strncmp(oldLang,newLang,oldLangLen)){
+                    log_err("uloc_getDisplayLanguage() failed for %s in display locale %s \n", oldLoc, dispLoc);                }
+            }
+        }
+    }
+}
+

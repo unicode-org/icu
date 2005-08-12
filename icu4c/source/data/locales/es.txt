@@ -1909,6 +1909,22 @@ es{
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Polo Sur ",
+        }
+        {
+            "America/Cordoba",
+            "",
+            "",
+            "",
+            "",
+            "Córdoba",
+        }
+        {
             "America/Halifax",
             "Hora estándar del Atlántico",
             "AST",
@@ -1925,6 +1941,14 @@ es{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Pascua",
+        }
+        {
             "Asia/Shanghai",
             "Hora estándar de China",
             "CTT",
@@ -1933,12 +1957,28 @@ es{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Canarias",
+        }
+        {
             "Europe/Paris",
             "Hora estándar de Europa Central",
             "CET",
             "Hora de verano de Europa Central",
             "CEST",
             "París",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londres",
         }
         {
             "Asia/Jerusalem",
@@ -1965,12 +2005,76 @@ es{
             "Casablanca",
         }
         {
+            "America/Mexico_City",
+            "",
+            "",
+            "",
+            "",
+            "Ciudad de México ",
+        }
+        {
+            "America/Merida",
+            "",
+            "",
+            "",
+            "",
+            "Mérida",
+        }
+        {
+            "America/Cancun",
+            "",
+            "",
+            "",
+            "",
+            "Cancún",
+        }
+        {
+            "Pacific/Tahiti",
+            "",
+            "",
+            "",
+            "",
+            "Tahití",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lisboa",
+        }
+        {
             "Europe/Bucharest",
             "Hora estándar de Europa del Este",
             "EET",
             "Hora de verano de Europa del Este",
             "EEST",
             "Bucarest",
+        }
+        {
+            "Europe/Kaliningrad",
+            "",
+            "",
+            "",
+            "",
+            "Kaliningrado",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moscú",
+        }
+        {
+            "Asia/Yekaterinburg",
+            "",
+            "",
+            "",
+            "",
+            "Yekaterinburgo",
         }
         {
             "Pacific/Honolulu",

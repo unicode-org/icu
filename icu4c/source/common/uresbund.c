@@ -1353,6 +1353,20 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
 
   return result;
 }
+U_INTERNAL const UChar* U_EXPORT2 
+ures_getStringByKeyWithFallback(const UResourceBundle *resB, 
+                                const char* inKey, 
+                                int32_t* len,
+                                UErrorCode *status) {
+
+    UResourceBundle stack;
+    const UChar* retVal = NULL;
+    ures_initStackObject(&stack);
+    ures_getByKeyWithFallback(resB, inKey, &stack, status);
+    retVal = ures_getString(&stack, len, status);
+    ures_close(&stack);
+    return retVal;
+}
 
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_getByKeyWithFallback(const UResourceBundle *resB, 

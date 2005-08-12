@@ -712,6 +712,27 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 
 
 /**
+ * Get a String with multi-level fallback. Normally only the top level resources will
+ * fallback to its parent. This performs fallback on subresources. For example, when a table
+ * is defined in a resource bundle and a parent resource bundle, normally no fallback occurs
+ * on the sub-resources because the table is defined in the current resource bundle, but this
+ * function can perform fallback on the sub-resources of the table.
+ * @param resB              a resource
+ * @param inKey             a key associated with the requested resource
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @internal ICU 3.4
+ * @draft ICU 3.4
+ */
+U_INTERNAL const UChar* U_EXPORT2 
+ures_getStringByKeyWithFallback(const UResourceBundle *resB, 
+                          const char* inKey,  
+                          int32_t* len,
+                          UErrorCode *status);
+/**
  * Create a string enumerator, owned by the caller, of all locales located within 
  * the specified resource tree.
  * @param packageName name of the tree, such as (NULL) or U_ICUDATA_ALIAS or  or "ICUDATA-coll"

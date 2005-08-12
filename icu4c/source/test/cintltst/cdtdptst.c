@@ -267,10 +267,17 @@ void TestCzechMonths459()
     }
     d = udat_parse(fmt, juneStr, u_strlen(juneStr), &pos, &status);
     date = myDateFormat(fmt, d);
-    if(u_strcmp(myDateFormat(fmt, june), myDateFormat(fmt, d) ) !=0)
-        log_err("Error in handling the czech month june\n");
-    else
-        log_verbose("Pass: Date = %s (czech month June)\n", aescstrdup(date, -1));
+
+    if(U_SUCCESS(status)){
+        UChar* out1 = myDateFormat(fmt, june);
+        UChar* out2 = myDateFormat(fmt, d);
+        if(u_strcmp(out1, out2) !=0)
+            log_err("Error in handling the czech month june\n");
+        else
+            log_verbose("Pass: Date = %s (czech month June)\n", aescstrdup(date, -1));
+    }else{
+        log_err("udat_parse failed. Error. %s\n",u_errorName(status));
+    }
     pos=0;
     d = udat_parse(fmt, julyStr, u_strlen(julyStr), &pos, &status);
     date = myDateFormat(fmt, d);

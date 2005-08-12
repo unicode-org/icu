@@ -1814,6 +1814,14 @@ da{
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Sydpolen",
+        }
+        {
             "America/Halifax",
             "Atlantic-normaltid",
             "AST",
@@ -1830,6 +1838,14 @@ da{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Påskeøen",
+        }
+        {
             "Asia/Shanghai",
             "Kinesisk normaltid",
             "CTT",
@@ -1838,12 +1854,28 @@ da{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "De Kanariske Øer",
+        }
+        {
             "Europe/Paris",
             "Mellemeuropæisk normaltid",
             "CET",
             "Mellemeuropæisk sommertid",
             "CEST",
             "Paris",
+        }
+        {
+            "America/Godthab",
+            "",
+            "",
+            "",
+            "",
+            "Nuuk",
         }
         {
             "Asia/Jerusalem",
@@ -1870,12 +1902,28 @@ da{
             "Casablanca",
         }
         {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lissabon",
+        }
+        {
             "Europe/Bucharest",
             "Østeuropæisk normaltid",
             "EET",
             "Østeuropæisk sommertid",
             "EEST",
             "Bukarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskva",
         }
         {
             "Pacific/Honolulu",
