@@ -1616,4 +1616,14 @@ hu{
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    zoneStrings{
+        {
+            "Europe/Paris",
+            "",
+            "",
+            "",
+            "",
+            "Paris",
+        }
+    }
 }

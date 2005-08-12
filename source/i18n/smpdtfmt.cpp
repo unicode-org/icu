@@ -575,6 +575,24 @@ _appendSymbol(UnicodeString& dst,
     dst += symbols[value];
 }
 
+//---------------------------------------------------------------------
+inline void SimpleDateFormat::appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
+    int32_t value = cal.get(UCAL_ZONE_OFFSET, status) +
+    cal.get(UCAL_DST_OFFSET, status);
+
+    if (value < 0) {
+        appendTo += gGmtMinus;
+        value = -value; // suppress the '-' sign for text display.
+    }else{
+        appendTo += gGmtPlus;
+    }
+
+    zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
+    appendTo += (UChar)0x003A /*':'*/;
+    zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
+}
+
+//---------------------------------------------------------------------
 void
 SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             UChar ch,
@@ -752,35 +770,27 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         UnicodeString str;
         int32_t zoneIndex = fSymbols->getZoneIndex(cal.getTimeZone().getID(str));
         if (zoneIndex == -1) {
-          value = cal.get(UCAL_ZONE_OFFSET, status) +
-            cal.get(UCAL_DST_OFFSET, status);
-
-          if (value < 0) {
-            appendTo += gGmtMinus;
-            value = -value; // suppress the '-' sign for text display.
-          }
-          else
-            appendTo += gGmtPlus;
-
-          zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
-          appendTo += (UChar)0x003A /*':'*/;
-          zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
+            appendGMT(appendTo, cal, status);
         }
         else {
-          int ix;
-          int zsrc = fSymbols->fZoneStringsColCount;
-                  if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD && zsrc >= 7) {
-                          ix = count < 4 ? 6 : 5;
-                          if (zsrc > 7) {
-                                  ix += 1;
-                          }
-                  } else {
-                          ix = count < 4 ? 2 : 1;
-                          if (cal.get(UCAL_DST_OFFSET, status) != 0) {
-                                  ix += 2;
-                          }
-                  }
-          appendTo += fSymbols->fZoneStrings[zoneIndex][ix];
+            int ix;
+            int zsrc = fSymbols->fZoneStringsColCount;
+            if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD && zsrc >= 7) {
+                    ix = count < 4 ? 6 : 5;
+                    if (zsrc > 7) {
+                            ix += 1;
+                    }
+            } else {
+                    ix = count < 4 ? 2 : 1;
+                    if (cal.get(UCAL_DST_OFFSET, status) != 0) {
+                            ix += 2;
+                    }
+            }
+            if(fSymbols->fZoneStrings[zoneIndex][ix].length()==0){
+                appendGMT(appendTo, cal, status);
+            }else{
+                appendTo += fSymbols->fZoneStrings[zoneIndex][ix];
+            }
         }
       }
     break;

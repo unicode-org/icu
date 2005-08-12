@@ -311,7 +311,8 @@ DateFormatMiscTests::test4117335()
     UnicodeString jstLong(jstLongC, 5, 5);
 
     UnicodeString jstShort = "JST";
-
+    
+    UnicodeString tzID = "Asia/Tokyo";
     
     UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::getJapan(), status);
@@ -338,25 +339,32 @@ DateFormatMiscTests::test4117335()
 
     int32_t rowCount, colCount;
     const UnicodeString **zones = symbols->getZoneStrings(rowCount, colCount);
-    int pos = 5;
-    logln(UnicodeString("Long zone name = ") + zones[pos][1]);
-    if (zones[pos][1] != jstLong) {
-        errln("*** Should have been " + prettify(jstLong)+ " but it is: " + prettify(zones[pos][1]));
+    //don't hard code the index .. compute it.
+    int32_t index = -1;
+    for (int32_t i = 0; i < rowCount; ++i) {
+        if (tzID == (zones[i][0])) {
+            index = i;
+            break;
+        }
+    }
+    logln(UnicodeString("Long zone name = ") + zones[index][1]);
+    if (zones[index][1] != jstLong) {
+        errln("*** Should have been " + prettify(jstLong)+ " but it is: " + prettify(zones[index][1]));
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("Short zone name = ") + zones[pos][2]);
-    if (zones[pos][2] != jstShort) {
-        errln("*** Should have been " + prettify(jstShort) + " but it is: " + prettify(zones[pos][2]));
+    logln(UnicodeString("Short zone name = ") + zones[index][2]);
+    if (zones[index][2] != jstShort) {
+        errln("*** Should have been " + prettify(jstShort) + " but it is: " + prettify(zones[index][2]));
         //throw new Exception("Error in short TZ name");
     }
-    logln(UnicodeString("Long zone name = ") + zones[pos][3]);
-    if (zones[pos][3] != jstLong) {
-        errln("*** Should have been " + prettify(jstLong) + " but it is: " + prettify(zones[pos][3]));
+    logln(UnicodeString("Long zone name = ") + zones[index][3]);
+    if (zones[index][3] != jstLong) {
+        errln("*** Should have been " + prettify(jstLong) + " but it is: " + prettify(zones[index][3]));
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("SHORT zone name = ") + zones[pos][4]);
-    if (zones[pos][4] != jstShort) {
-        errln("*** Should have been " + prettify(jstShort)+ " but it is: " + prettify(zones[pos][4]));
+    logln(UnicodeString("SHORT zone name = ") + zones[index][4]);
+    if (zones[index][4] != jstShort) {
+        errln("*** Should have been " + prettify(jstShort)+ " but it is: " + prettify(zones[index][4]));
         //throw new Exception("Error in short TZ name");
     }
     delete symbols;

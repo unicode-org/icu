@@ -1902,6 +1902,38 @@ sv{
     }
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Sydpolen",
+        }
+        {
+            "Antarctica/DumontDUrville",
+            "",
+            "",
+            "",
+            "",
+            "Dumont d'Urville",
+        }
+        {
+            "America/Argentina/ComodRivadavia",
+            "",
+            "",
+            "",
+            "",
+            "Comod. Rivadavia",
+        }
+        {
+            "America/Sao_Paulo",
+            "",
+            "",
+            "",
+            "",
+            "São Paulo",
+        }
+        {
             "America/Halifax",
             "Atlantic, normaltid",
             "AST",
@@ -1918,6 +1950,14 @@ sv{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Påskön",
+        }
+        {
             "Asia/Shanghai",
             "Kina, normaltid",
             "CTT",
@@ -1926,12 +1966,28 @@ sv{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Kanarieöarna",
+        }
+        {
             "Europe/Paris",
             "Centraleuropa, normaltid",
             "CET",
             "Centraleuropa, sommartid",
             "CEST",
             "Paris",
+        }
+        {
+            "America/Godthab",
+            "",
+            "",
+            "",
+            "",
+            "Godthåb",
         }
         {
             "Asia/Jerusalem",
@@ -1950,6 +2006,14 @@ sv{
             "Tokyo",
         }
         {
+            "Asia/Almaty",
+            "",
+            "",
+            "",
+            "",
+            "Alma-Ata",
+        }
+        {
             "Africa/Casablanca",
             "Greenwichtid",
             "GMT",
@@ -1958,12 +2022,116 @@ sv{
             "Casablanca",
         }
         {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Ulan Bator",
+        }
+        {
+            "Asia/Choibalsan",
+            "",
+            "",
+            "",
+            "",
+            "Tjoibalsan",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azorerna",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lissabon",
+        }
+        {
             "Europe/Bucharest",
             "Östeuropa, normaltid",
             "EET",
             "Östeuropa, sommartid",
             "EEST",
             "Bukarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskva",
+        }
+        {
+            "Asia/Yekaterinburg",
+            "",
+            "",
+            "",
+            "",
+            "Jekaterinburg",
+        }
+        {
+            "Asia/Krasnoyarsk",
+            "",
+            "",
+            "",
+            "",
+            "Krasnojarsk",
+        }
+        {
+            "Asia/Yakutsk",
+            "",
+            "",
+            "",
+            "",
+            "Jakutsk",
+        }
+        {
+            "Asia/Sakhalin",
+            "",
+            "",
+            "",
+            "",
+            "Sachalin",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Kamtjatka",
+        }
+        {
+            "Asia/Anadyr",
+            "",
+            "",
+            "",
+            "",
+            "Anadir",
+        }
+        {
+            "Europe/Uzhgorod",
+            "",
+            "",
+            "",
+            "",
+            "Uzjgorod",
+        }
+        {
+            "Europe/Zaporozhye",
+            "",
+            "",
+            "",
+            "",
+            "Zaporozjzja",
         }
         {
             "Pacific/Honolulu",
@@ -2006,6 +2174,14 @@ sv{
             "Denver",
         }
         {
+            "America/North_Dakota/Center",
+            "",
+            "",
+            "",
+            "",
+            "North Dakota",
+        }
+        {
             "America/Chicago",
             "Central, normaltid",
             "CST",
@@ -2028,6 +2204,14 @@ sv{
             "Eastern, sommartid",
             "EDT",
             "New York",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Tasjkent",
         }
     }
 }

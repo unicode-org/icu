@@ -1913,6 +1913,30 @@ it{
     }
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Polo Sud",
+        }
+        {
+            "America/Cordoba",
+            "",
+            "",
+            "",
+            "",
+            "Cordova",
+        }
+        {
+            "America/Sao_Paulo",
+            "",
+            "",
+            "",
+            "",
+            "San Paolo",
+        }
+        {
             "America/Halifax",
             "Ora Standard Atlantico",
             "AST",
@@ -1929,6 +1953,14 @@ it{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Pasqua",
+        }
+        {
             "Asia/Shanghai",
             "Ora Standard Cina",
             "CTT",
@@ -1937,12 +1969,36 @@ it{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Canarie",
+        }
+        {
             "Europe/Paris",
             "Ora Standard Centrale Europeo",
             "CET",
             "Ora Legale Centrale Europeo",
             "CEST",
             "Parigi",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londra",
+        }
+        {
+            "Asia/Jakarta",
+            "",
+            "",
+            "",
+            "",
+            "Giacarta",
         }
         {
             "Asia/Jerusalem",
@@ -1969,12 +2025,52 @@ it{
             "Casablanca",
         }
         {
+            "Africa/Timbuktu",
+            "",
+            "",
+            "",
+            "",
+            "Timbuctu",
+        }
+        {
+            "America/Mexico_City",
+            "",
+            "",
+            "",
+            "",
+            "Città del Messico",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azzorre",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lisbona",
+        }
+        {
             "Europe/Bucharest",
             "Ora Standard Europa Orientale",
             "EET",
             "Ora Legale Europa Orientale",
             "EEST",
             "Bucarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Mosca",
         }
         {
             "Pacific/Honolulu",
@@ -2039,6 +2135,14 @@ it{
             "Ora Legale Orientale",
             "EDT",
             "New York",
+        }
+        {
+            "Asia/Samarkand",
+            "",
+            "",
+            "",
+            "",
+            "Samarcanda",
         }
     }
 }

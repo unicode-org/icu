@@ -790,6 +790,11 @@ private:
      * as appropriate.
      */
     int32_t      subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal) const;
+    
+    /**
+     * append the gmt string
+     */
+    inline void appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
 
     /**
      * Used to map pattern characters to Calendar field identifiers.

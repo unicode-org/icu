@@ -2046,6 +2046,38 @@ fi{
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Etelänapa",
+        }
+        {
+            "Antarctica/DumontDUrville",
+            "",
+            "",
+            "",
+            "",
+            "Dumont d'Urville",
+        }
+        {
+            "America/Argentina/ComodRivadavia",
+            "",
+            "",
+            "",
+            "",
+            "Comodoro Rivadavia",
+        }
+        {
+            "America/Sao_Paulo",
+            "",
+            "",
+            "",
+            "",
+            "São Paulo",
+        }
+        {
             "America/Halifax",
             "Kanadan Atlantin normaaliaika",
             "AST",
@@ -2062,6 +2094,14 @@ fi{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Pääsiäissaari",
+        }
+        {
             "Asia/Shanghai",
             "Kiinan normaaliaika",
             "CTT",
@@ -2070,12 +2110,28 @@ fi{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Kanariansaaret",
+        }
+        {
             "Europe/Paris",
             "Keski-Euroopan normaaliaika",
             "CET",
             "Keski-Euroopan kesäaika",
             "CEST",
             "Pariisi",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Lontoo",
         }
         {
             "Asia/Jerusalem",
@@ -2102,12 +2158,108 @@ fi{
             "Casablanca",
         }
         {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Ulan Bator",
+        }
+        {
+            "America/Cancun",
+            "",
+            "",
+            "",
+            "",
+            "Cancún",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azorit",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lissabon",
+        }
+        {
             "Europe/Bucharest",
             "Itä-Euroopan normaaliaika",
             "EET",
             "Itä-Euroopan kesäaika",
             "EEST",
             "Bukarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskova",
+        }
+        {
+            "Asia/Yekaterinburg",
+            "",
+            "",
+            "",
+            "",
+            "Jekaterinburg",
+        }
+        {
+            "Asia/Krasnoyarsk",
+            "",
+            "",
+            "",
+            "",
+            "Krasnojarsk",
+        }
+        {
+            "Asia/Yakutsk",
+            "",
+            "",
+            "",
+            "",
+            "Jakutsk",
+        }
+        {
+            "Asia/Sakhalin",
+            "",
+            "",
+            "",
+            "",
+            "Sahalin",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Kamtšatka",
+        }
+        {
+            "Europe/Uzhgorod",
+            "",
+            "",
+            "",
+            "",
+            "Užgorod",
+        }
+        {
+            "Europe/Kiev",
+            "",
+            "",
+            "",
+            "",
+            "Kiova",
         }
         {
             "Pacific/Honolulu",
@@ -2150,6 +2302,14 @@ fi{
             "Denver",
         }
         {
+            "America/North_Dakota/Center",
+            "",
+            "",
+            "",
+            "",
+            "keskinen North Dakota",
+        }
+        {
             "America/Chicago",
             "Yhdysvaltain keskinen normaaliaika>",
             "CST",
@@ -2172,6 +2332,14 @@ fi{
             "Yhdysvaltain itäinen kesäaika",
             "EDT",
             "New York",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Taškent",
         }
     }
 }
