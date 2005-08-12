@@ -2688,15 +2688,20 @@ static void TestFallbackCodes(void) {
   ures_close(res);
 }
 
+/* This test will crash if this doesn't work. Results don't need testing. */
 static void TestStackReuse(void) {
     UResourceBundle table;
     UErrorCode errorCode = U_ZERO_ERROR;
     UResourceBundle *rb = ures_open(NULL, "en_US", &errorCode);
-    const char* tableKey = "Types";
-    const char* subTableKey = "collation";
-    ures_initStackObject(&table);
-    ures_getByKeyWithFallback(rb, tableKey, &table, &errorCode);
-    if (subTableKey != NULL) {
-        ures_getByKeyWithFallback(&table,subTableKey, &table, &errorCode);
+
+    if(U_FAILURE(errorCode)) {
+        log_err("Could not load en_US locale. status=%s\n",myErrorName(errorCode));
+        return;
     }
+    ures_initStackObject(&table);
+    ures_getByKeyWithFallback(rb, "Types", &table, &errorCode);
+    ures_getByKeyWithFallback(&table, "collation", &table, &errorCode);
+    ures_close(rb);
+    ures_close(&table);
 }
+
