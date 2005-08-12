@@ -1591,6 +1591,22 @@ cs{
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Jižní pól",
+        }
+        {
+            "America/Cordoba",
+            "",
+            "",
+            "",
+            "",
+            "Kordoba",
+        }
+        {
             "America/Halifax",
             "Atlantický standardní čas",
             "AST",
@@ -1599,12 +1615,52 @@ cs{
             "Halifax",
         }
         {
+            "Asia/Kashgar",
+            "",
+            "",
+            "",
+            "",
+            "Kašghar",
+        }
+        {
+            "Pacific/Galapagos",
+            "",
+            "",
+            "",
+            "",
+            "Galapágy",
+        }
+        {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Kanárské ostrovy",
+        }
+        {
             "Europe/Paris",
             "Středoevropský standardní čas",
             "CET",
             "Středoevropský letní čas",
             "CEST",
             "Paříž",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londýn",
+        }
+        {
+            "Asia/Jakarta",
+            "",
+            "",
+            "",
+            "",
+            "Jakarta",
         }
         {
             "Asia/Jerusalem",
@@ -1631,12 +1687,116 @@ cs{
             "Casablanca",
         }
         {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Ulánbátar",
+        }
+        {
+            "America/Tijuana",
+            "",
+            "",
+            "",
+            "",
+            "Tichuana",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azorské ostrovy",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lisabon",
+        }
+        {
             "Europe/Bucharest",
             "Východoevropský standardní čas",
             "EET",
             "Východoevropský letní čas",
             "EEST",
             "Bukurešť",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskva",
+        }
+        {
+            "Asia/Yekaterinburg",
+            "",
+            "",
+            "",
+            "",
+            "Jekatěrinburg",
+        }
+        {
+            "Asia/Krasnoyarsk",
+            "",
+            "",
+            "",
+            "",
+            "Krasnojarsk",
+        }
+        {
+            "Asia/Yakutsk",
+            "",
+            "",
+            "",
+            "",
+            "Jakutsk",
+        }
+        {
+            "Asia/Sakhalin",
+            "",
+            "",
+            "",
+            "",
+            "Sachalin",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Kamčatka",
+        }
+        {
+            "Europe/Uzhgorod",
+            "",
+            "",
+            "",
+            "",
+            "Užhorod",
+        }
+        {
+            "Europe/Kiev",
+            "",
+            "",
+            "",
+            "",
+            "Kyjev",
+        }
+        {
+            "Europe/Zaporozhye",
+            "",
+            "",
+            "",
+            "",
+            "Záporoží",
         }
         {
             "Pacific/Honolulu",
@@ -1701,6 +1861,14 @@ cs{
             "Východní letní čas",
             "EDT",
             "New York",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Taškent",
         }
     }
 }

@@ -289,7 +289,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             for(loop = 0; loop < DEPTH; ++loop) {
                 if (loop > 0)  {
                     d[loop] = fmt->parse(s[loop-1], status);
-                    failure(status, "fmt->parse", s[loop-1]);
+                    failure(status, "fmt->parse", s[loop-1]+" in locale: " + origLocale.getName());
                     status = U_ZERO_ERROR; /* any error would have been reported */
                 }
 

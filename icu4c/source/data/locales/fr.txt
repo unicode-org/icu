@@ -1876,6 +1876,54 @@ fr{
     localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Pôle Sud",
+        }
+        {
+            "Antarctica/DumontDUrville",
+            "",
+            "",
+            "",
+            "",
+            "Dumont d'Urville",
+        }
+        {
+            "Antarctica/McMurdo",
+            "",
+            "",
+            "",
+            "",
+            "Mac Murdo",
+        }
+        {
+            "America/Argentina/ComodRivadavia",
+            "",
+            "",
+            "",
+            "",
+            "Comodoro Rivadavia",
+        }
+        {
+            "Australia/Adelaide",
+            "",
+            "",
+            "",
+            "",
+            "Adélaïde",
+        }
+        {
+            "America/Manaus",
+            "",
+            "",
+            "",
+            "",
+            "Manaos",
+        }
+        {
             "America/Vancouver",
             "Heure normale du Pacifique",
             "HNP",
@@ -1936,12 +1984,36 @@ fr{
             "HT",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Île de Pâques",
+        }
+        {
+            "Asia/Kashgar",
+            "",
+            "",
+            "",
+            "",
+            "Kachgar",
+        }
+        {
             "Asia/Shanghai",
             "Heure normale de Chine",
             "HNC",
             "Heure avancée de Chine",
             "HAC",
             "Shanghai",
+        }
+        {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Îles Canaries",
         }
         {
             "Europe/Paris",
@@ -1952,6 +2024,14 @@ fr{
             "Paris",
             "Heure de l’Europe centrale",
             "HEC",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londres",
         }
         {
             "Asia/Jerusalem",
@@ -1970,12 +2050,172 @@ fr{
             "Tokyo",
         }
         {
+            "Asia/Aqtau",
+            "",
+            "",
+            "",
+            "",
+            "Chevtchenko",
+        }
+        {
+            "Asia/Oral",
+            "",
+            "",
+            "",
+            "",
+            "Ouralsk",
+        }
+        {
+            "Asia/Aqtobe",
+            "",
+            "",
+            "",
+            "",
+            "Aktioubinsk",
+        }
+        {
+            "Asia/Almaty",
+            "",
+            "",
+            "",
+            "",
+            "Alma Ata",
+        }
+        {
+            "Africa/Timbuktu",
+            "",
+            "",
+            "",
+            "",
+            "Tombouctou",
+        }
+        {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Oulan-Bator",
+        }
+        {
+            "Asia/Choibalsan",
+            "",
+            "",
+            "",
+            "",
+            "Tchoïbalsan",
+        }
+        {
+            "America/Mexico_City",
+            "",
+            "",
+            "",
+            "",
+            "Mexico",
+        }
+        {
+            "Pacific/Marquesas",
+            "",
+            "",
+            "",
+            "",
+            "Marquises",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Açores",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lisbonne",
+        }
+        {
             "Europe/Bucharest",
             "Heure normale de l’Europe de l’Est",
             "HEE",
             "Heure avancée de l’Europe de l’Est",
             "HAEE",
             "Bucarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moscou",
+        }
+        {
+            "Asia/Yekaterinburg",
+            "",
+            "",
+            "",
+            "",
+            "Ekaterinbourg",
+        }
+        {
+            "Asia/Novosibirsk",
+            "",
+            "",
+            "",
+            "",
+            "Novossibirsk",
+        }
+        {
+            "Asia/Irkutsk",
+            "",
+            "",
+            "",
+            "",
+            "Irkoutsk",
+        }
+        {
+            "Asia/Yakutsk",
+            "",
+            "",
+            "",
+            "",
+            "Iakoutsk",
+        }
+        {
+            "Asia/Sakhalin",
+            "",
+            "",
+            "",
+            "",
+            "Sakhaline",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Kamtchatka",
+        }
+        {
+            "Europe/Uzhgorod",
+            "",
+            "",
+            "",
+            "",
+            "Oujgorod",
+        }
+        {
+            "Europe/Zaporozhye",
+            "",
+            "",
+            "",
+            "",
+            "Zaporojie",
         }
         {
             "Pacific/Honolulu",
@@ -2046,6 +2286,14 @@ fr{
             "Indianapolis",
             "Heure de l’Est (ÉUA)",
             "HE (ÉUA)",
+        }
+        {
+            "America/Detroit",
+            "",
+            "",
+            "",
+            "",
+            "Détroit",
         }
         {
             "America/New_York",

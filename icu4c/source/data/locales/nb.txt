@@ -1909,12 +1909,60 @@ nb{
     }
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Sydpolen",
+        }
+        {
+            "America/St_Johns",
+            "",
+            "",
+            "",
+            "",
+            "St. John's",
+        }
+        {
+            "America/Godthab",
+            "",
+            "",
+            "",
+            "",
+            "Godthåb",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azorene",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lisboa",
+        }
+        {
             "Europe/Bucharest",
             "Eastern European Standard Time",
             "EET",
             "Eastern European Daylight Time",
             "EEST",
             "Bucuresti",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskva",
         }
     }
 }

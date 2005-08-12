@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -98,5 +98,15 @@ static void setUpDataTable(void);
 static void cleanUpDataTable(void);
 /*static void displayDataTable(void);*/
 static void TestAcceptLanguage(void);
+
+/**
+ * test locale aliases 
+*/
+static void TestCalendar(void); 
+static void TestDateFormat(void);
+static void TestCollation(void);
+static void TestULocale(void);
+static void TestUResourceBundle(void);
+static void TestDisplayName(void);
 
 #endif

@@ -852,7 +852,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsRowCount = ures_getSize(zoneArray);
-    fZoneStringsColCount = ures_getSize(zoneRow);
+    fZoneStringsColCount = 8;
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     /* test for NULL */
     if (fZoneStrings == 0) {

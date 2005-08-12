@@ -647,12 +647,100 @@ sr{
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Јужни пол",
+        }
+        {
+            "Africa/Lubumbashi",
+            "",
+            "",
+            "",
+            "",
+            "Лумумбаши",
+        }
+        {
+            "Asia/Shanghai",
+            "",
+            "",
+            "",
+            "",
+            "Шангај",
+        }
+        {
             "Europe/Belgrade",
             "Централно Европско Време",
             "CET",
             "Централно Европско Време",
             "CET",
             "Belgrade",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Москва",
+        }
+        {
+            "Asia/Krasnoyarsk",
+            "",
+            "",
+            "",
+            "",
+            "Краснојарск",
+        }
+        {
+            "Asia/Kamchatka",
+            "",
+            "",
+            "",
+            "",
+            "Камчатка",
+        }
+        {
+            "Asia/Anadyr",
+            "",
+            "",
+            "",
+            "",
+            "Анадир",
+        }
+        {
+            "Europe/Uzhgorod",
+            "",
+            "",
+            "",
+            "",
+            "Ужгород",
+        }
+        {
+            "Europe/Kiev",
+            "",
+            "",
+            "",
+            "",
+            "Кијев",
+        }
+        {
+            "Europe/Zaporozhye",
+            "",
+            "",
+            "",
+            "",
+            "Запорожје",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Ташкент",
         }
     }
 }

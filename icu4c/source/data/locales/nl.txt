@@ -1990,6 +1990,94 @@ nl{
     }
     zoneStrings{
         {
+            "Antarctica/South_Pole",
+            "",
+            "",
+            "",
+            "",
+            "Zuidpool",
+        }
+        {
+            "Antarctica/DumontDUrville",
+            "",
+            "",
+            "",
+            "",
+            "Dumont d'Urville",
+        }
+        {
+            "America/Argentina/Rio_Gallegos",
+            "",
+            "",
+            "",
+            "",
+            "Río Gallegos",
+        }
+        {
+            "America/Argentina/ComodRivadavia",
+            "",
+            "",
+            "",
+            "",
+            "Comodora Rivadavia",
+        }
+        {
+            "America/Cordoba",
+            "",
+            "",
+            "",
+            "",
+            "Córdoba",
+        }
+        {
+            "America/Porto_Velho",
+            "",
+            "",
+            "",
+            "",
+            "Pôrto Velho",
+        }
+        {
+            "America/Cuiaba",
+            "",
+            "",
+            "",
+            "",
+            "Cuiabá",
+        }
+        {
+            "America/Belem",
+            "",
+            "",
+            "",
+            "",
+            "Belém",
+        }
+        {
+            "America/Sao_Paulo",
+            "",
+            "",
+            "",
+            "",
+            "São Paulo",
+        }
+        {
+            "America/Maceio",
+            "",
+            "",
+            "",
+            "",
+            "Maceió",
+        }
+        {
+            "America/Montreal",
+            "",
+            "",
+            "",
+            "",
+            "Montréal",
+        }
+        {
             "America/Halifax",
             "Atlantic-standaardtijd",
             "AST",
@@ -2006,6 +2094,14 @@ nl{
             "St. Johns",
         }
         {
+            "Pacific/Easter",
+            "",
+            "",
+            "",
+            "",
+            "Paaseiland",
+        }
+        {
             "Asia/Shanghai",
             "Chinese standaardtijd",
             "CTT",
@@ -2014,12 +2110,28 @@ nl{
             "Shanghai",
         }
         {
+            "Atlantic/Canary",
+            "",
+            "",
+            "",
+            "",
+            "Canarische Eilanden",
+        }
+        {
             "Europe/Paris",
             "Midden-Europese standaardtijd",
             "CET",
             "Midden-Europese zomertijd",
             "CEST",
             "Parijs",
+        }
+        {
+            "Europe/London",
+            "",
+            "",
+            "",
+            "",
+            "Londen",
         }
         {
             "Asia/Jerusalem",
@@ -2046,12 +2158,84 @@ nl{
             "Casablanca",
         }
         {
+            "Africa/Timbuktu",
+            "",
+            "",
+            "",
+            "",
+            "Timboektoe",
+        }
+        {
+            "Asia/Ulaanbaatar",
+            "",
+            "",
+            "",
+            "",
+            "Ulaanbaator",
+        }
+        {
+            "America/Mazatlan",
+            "",
+            "",
+            "",
+            "",
+            "Mazatlán",
+        }
+        {
+            "America/Mexico_City",
+            "",
+            "",
+            "",
+            "",
+            "Mexico Stad",
+        }
+        {
+            "America/Merida",
+            "",
+            "",
+            "",
+            "",
+            "Mérida",
+        }
+        {
+            "America/Cancun",
+            "",
+            "",
+            "",
+            "",
+            "Cancún",
+        }
+        {
+            "Atlantic/Azores",
+            "",
+            "",
+            "",
+            "",
+            "Azoren",
+        }
+        {
+            "Europe/Lisbon",
+            "",
+            "",
+            "",
+            "",
+            "Lissabon",
+        }
+        {
             "Europe/Bucharest",
             "Oost-Europese standaardtijd",
             "EET",
             "Oost-Europese zomertijd",
             "EEST",
             "Boekarest",
+        }
+        {
+            "Europe/Moscow",
+            "",
+            "",
+            "",
+            "",
+            "Moskou",
         }
         {
             "Pacific/Honolulu",
@@ -2116,6 +2300,14 @@ nl{
             "Eastern-zomertijd",
             "EDT",
             "New York",
+        }
+        {
+            "Asia/Tashkent",
+            "",
+            "",
+            "",
+            "",
+            "Tasjkent",
         }
     }
 }

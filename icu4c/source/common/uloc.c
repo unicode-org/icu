@@ -31,6 +31,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "unicode/ures.h"
 
 #include "putilimp.h"
 #include "ustr_imp.h"
@@ -172,6 +173,12 @@ static const char * const LANGUAGES[] = {
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
+};
+static const char* DEPRECATED_LANGUAGES[]={
+    "in", "iw", "ji", "jw", NULL, NULL
+};
+static const char* REPLACEMENT_LANGUAGES[]={
+    "id", "he", "yi", "jv", NULL, NULL
 };
 
 /**
@@ -371,6 +378,14 @@ NULL,
 NULL
 };
 
+static const char* DEPRECATED_COUNTRIES[] ={
+    "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR", NULL, NULL /* deprecated country list */
+};
+static const char*  REPLACEMENT_COUNTRIES[] = {
+/*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
+    "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "CS", "CD", NULL, NULL  /* replacement country codes */      
+};
+    
 /**
  * Table of 3-letter country codes.
  *
@@ -1124,6 +1139,22 @@ _copyCount(char *dest, int32_t destCapacity, const char *src) {
     }
 }
 
+U_CFUNC const char* 
+uloc_getCurrentCountryID(const char* oldID){
+    int32_t offset = _findIndex(DEPRECATED_COUNTRIES, oldID);
+    if (offset >= 0) {
+        return REPLACEMENT_COUNTRIES[offset];
+    }
+    return oldID;
+}
+U_CFUNC const char* 
+uloc_getCurrentLanguageID(const char* oldID){
+    int32_t offset = _findIndex(DEPRECATED_LANGUAGES, oldID);
+    if (offset >= 0) {
+        return REPLACEMENT_LANGUAGES[offset];
+    }
+    return oldID;        
+}
 /*
  * the internal functions _getLanguage(), _getCountry(), _getVariant()
  * avoid duplicating code to handle the earlier locale ID pieces
@@ -1989,153 +2020,110 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
                               int32_t *pLength,
                               UErrorCode *pErrorCode)
 {
-    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
-    UResourceBundle *rb, table;
-    const UChar *item;
+/*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
+    UResourceBundle *rb=NULL, table, subTable;
+    const UChar *item=NULL;
     UErrorCode errorCode;
     char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
     int32_t efnLen =0;
     const UChar* ef = NULL;
     UBool overrideExplicitFallback = FALSE;
-    for(;;) {
-        /*
-         * open the bundle for the current locale
-         * this falls back through the locale's chain to root
-         */
-        errorCode=U_ZERO_ERROR;
-        rb=ures_open(path, locale, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            /* total failure, not even root could be opened */
-            *pErrorCode=errorCode;
-            return NULL;
-        } else if(errorCode==U_USING_DEFAULT_WARNING ||
-                  (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
-        ) {
-            /* set the "strongest" error code (success->fallback->default->failure) */
-            *pErrorCode=errorCode;
-        }
 
-        /*
-         * try to open the requested table
-         * this falls back through the locale's chain to root, but not through the default locale
-         */
-        errorCode=U_ZERO_ERROR;
-        ures_initStackObject(&table);
-        ures_getByKey(rb, tableKey, &table, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            /* no such table anywhere in this fallback chain */
-            ures_close(rb);
-            *pErrorCode=errorCode;
-            return NULL;
-        } else if(errorCode==U_USING_DEFAULT_WARNING ||
-                  (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
-        ) {
-            /* set the "strongest" error code (success->fallback->default->failure) */
-            *pErrorCode=errorCode;
-        }
-
-        /* check if the fallback token is set */
-        ef = ures_getStringByKey(&table, "Fallback", &efnLen, &errorCode);
-        if(U_SUCCESS(errorCode)){
-            /* set the fallback chain */
-            u_UCharsToChars(ef, explicitFallbackName, efnLen);
-            /* null terminate the buffer */
-            explicitFallbackName[efnLen]=0;
-        }else if(errorCode==U_USING_DEFAULT_WARNING ||
-              (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
-        ) {
-            /* set the "strongest" error code (success->fallback->default->failure) */
-            *pErrorCode=errorCode;
-        }
-
-        /* try to open the requested item in the table */
-        errorCode=U_ZERO_ERROR;
-        if(subTableKey == NULL){
-            item=ures_getStringByKey(&table, itemKey, pLength, &errorCode);
-        }else{
-            UResourceBundle subTable;
-            ures_initStackObject(&subTable);
-            ures_getByKey(&table, subTableKey, &subTable, &errorCode);
-            item = ures_getStringByKey(&subTable, itemKey, pLength, &errorCode);
-            ures_close(&subTable);
-        }
-        if(U_SUCCESS(errorCode)) {
-            /* if the item for the key is empty ... override the explicit fall back set */
-            if(item[0]==0 && efnLen > 0){
-                overrideExplicitFallback = TRUE;
-            }else{
-                /* we got the requested item! */
-                ures_close(&table);
-                ures_close(rb);
-
-                if(errorCode==U_USING_DEFAULT_WARNING ||
-                   (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
-                ) {
-                    /* set the "strongest" error code (success->fallback->default->failure) */
-                    *pErrorCode=errorCode;
-                }
-
-                /*
-                 * It is safe to close the bundle and still return the
-                 * string pointer because resource bundles are
-                 * cached until u_cleanup().
-                 */
-                return item;
-            }
-        }
-
-        /*
-         * We get here if the item was not found.
-         * We will follow the chain to the parent locale bundle and look in
-         * the table there.
-         */
-
-        /* get the real locale ID for this table */
-        errorCode=U_ZERO_ERROR;
-        locale=ures_getLocale(&table, &errorCode);
-        /* keep table and rb open until we are done using the locale string owned by the table bundle */
-        if(U_FAILURE(errorCode)) {
-            /* error getting the locale ID for an open RB - should never happen */
-            ures_close(&table);
-            ures_close(rb);
-            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
-            return NULL;
-        }
-
-        if(*locale==0 || 0==uprv_strcmp(locale, _kRootName) || 0==uprv_strcmp(locale,explicitFallbackName)) {
-            /* end of fallback; even root does not have the requested item either */
-            ures_close(&table);
-            ures_close(rb);
-            *pErrorCode=U_MISSING_RESOURCE_ERROR;
-            return NULL;
-        }
-
-        /* could not find the table, or its item, try to fall back to a different RB and table */
-        errorCode=U_ZERO_ERROR;
-        if(efnLen > 0 && overrideExplicitFallback == FALSE){
-            /* continue the fallback lookup with the explicit fallback that is requested */
-            locale = explicitFallbackName;
-        }else{
-            uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), &errorCode);
-            if(U_FAILURE(errorCode) || errorCode==U_STRING_NOT_TERMINATED_WARNING) {
-                /* error getting the parent locale ID - should never happen */
-                *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
-                return NULL;
-            }
-
-            /* continue the fallback lookup with the parent locale ID */
-            locale=localeBuffer;
-
-            /* adjust error code as we fall back */
-            if (uprv_strlen(locale) == 0)   /* Falling back to root locale? */
-                  *pErrorCode = U_USING_DEFAULT_WARNING;
-            else if (*pErrorCode != U_USING_DEFAULT_WARNING)
-                  *pErrorCode = U_USING_FALLBACK_WARNING;
-        }
-        /* done with the locale string - ready to close table and rb */
-        ures_close(&table);
-        ures_close(rb);
+    /*
+     * open the bundle for the current locale
+     * this falls back through the locale's chain to root
+     */
+    errorCode=U_ZERO_ERROR;
+    rb=ures_open(path, locale, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        /* total failure, not even root could be opened */
+        *pErrorCode=errorCode;
+        return NULL;
+    } else if(errorCode==U_USING_DEFAULT_WARNING ||
+                (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+    ) {
+        /* set the "strongest" error code (success->fallback->default->failure) */
+        *pErrorCode=errorCode;
     }
+
+    for(;;){
+        ures_initStackObject(&table);
+        ures_initStackObject(&subTable);
+        ures_getByKeyWithFallback(rb, tableKey, &table, &errorCode);
+        if (subTableKey != NULL) {
+            /*
+            ures_getByKeyWithFallback(&table,subTableKey, &subTable, &errorCode);
+            item = ures_getStringByKeyWithFallback(&subTable, itemKey, pLength, &errorCode);
+            if(U_FAILURE(errorCode)){
+                *pErrorCode = errorCode;
+            }
+            
+            break;*/
+            
+            ures_getByKeyWithFallback(&table,subTableKey, &table, &errorCode);
+        }
+        if(U_SUCCESS(errorCode)){
+            item = ures_getStringByKeyWithFallback(&table, itemKey, pLength, &errorCode);
+            if(U_FAILURE(errorCode)){
+                const char* replacement = NULL;
+                *pErrorCode = errorCode; /*save the errorCode*/
+                errorCode = U_ZERO_ERROR;
+                /* may be a deprecated code */
+                if(uprv_strcmp(tableKey, "Countries")==0){
+                    replacement =  uloc_getCurrentCountryID(itemKey);
+                }else if(uprv_strcmp(tableKey, "Languages")==0){
+                    replacement =  uloc_getCurrentLanguageID(itemKey);
+                }
+                /*pointer comparison is ok since uloc_getCurrentCountryID & uloc_getCurrentLanguageID return the key itself is replacement is not found*/
+                if(replacement!=NULL && itemKey != replacement){
+                    item = ures_getStringByKeyWithFallback(&table, replacement, pLength, &errorCode);
+                    if(U_SUCCESS(errorCode)){
+                        *pErrorCode = errorCode;
+                        break;
+                    }
+                }
+            }else{
+                break;
+            }
+        }
+        
+        if(U_FAILURE(errorCode)){    
+
+            /* still can't figure out ?.. try the fallback mechanism */
+            int32_t len = 0;
+            const UChar* fallbackLocale =  NULL;
+            *pErrorCode = errorCode;
+            errorCode = U_ZERO_ERROR;
+
+            fallbackLocale = ures_getStringByKeyWithFallback(&table, "Fallback", &len, &errorCode);
+            if(U_FAILURE(errorCode)){
+               *pErrorCode = errorCode;
+                break;
+            }
+            
+            u_UCharsToChars(fallbackLocale, explicitFallbackName, len);
+            
+            /* guard against recursive fallback */
+            if(uprv_strcmp(explicitFallbackName, locale)==0){
+                *pErrorCode = U_INTERNAL_PROGRAM_ERROR;
+                break;
+            }
+            ures_close(rb);
+            rb = ures_open(NULL, explicitFallbackName, &errorCode);
+            if(U_FAILURE(errorCode)){
+                *pErrorCode = errorCode;
+                break;
+            }
+            /* succeeded in opening the fallback bundle .. continue and try to fetch the item */
+        }else{
+            break;
+        }
+    }
+    /* done with the locale string - ready to close table and rb */
+    ures_close(&subTable);
+    ures_close(&table);
+    ures_close(rb);
+    return item;
 }
 
 static int32_t
