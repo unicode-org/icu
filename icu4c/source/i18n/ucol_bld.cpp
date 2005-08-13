@@ -333,7 +333,7 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
   //if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */ 
     lh->pos[0] = 0;
     t1 = lh->baseCE;
-    t2 = lh->baseContCE;
+    t2 = lh->baseContCE & UCOL_REMOVE_CONTINUATION;
     lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
     lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
@@ -341,7 +341,7 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
     primaryCE = uprv_uca_getImplicitFromRaw(uprv_uca_getRawFromImplicit(primaryCE)+1);
 
     t1 = primaryCE & UCOL_PRIMARYMASK | 0x0505;
-    t2 = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+    t2 = (primaryCE << 16) & UCOL_PRIMARYMASK; // | UCOL_CONTINUATION_MARKER;
 
     lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
@@ -350,12 +350,12 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
   //} else if(lh->baseCE == UCOL_RESET_TOP_VALUE && lh->baseContCE == 0) {
     lh->pos[0] = 0;
     t1 = lh->baseCE;
-    t2 = lh->baseContCE;
+    t2 = lh->baseContCE&UCOL_REMOVE_CONTINUATION;
     lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
     lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
     t1 = lh->nextCE;
-    t2 = lh->nextContCE;
+    t2 = lh->nextContCE&UCOL_REMOVE_CONTINUATION;
     lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
     lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
