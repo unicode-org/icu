@@ -179,7 +179,7 @@ int  main(int argc, char **argv) {
 #if UCONFIG_NO_BREAK_ITERATION
 
     UNewDataMemory *pData;
-    char msg[2048], folder[2048], name[32];
+    char msg[1024], folder[2048], name[256];
     char *basename;
     int length;
 
