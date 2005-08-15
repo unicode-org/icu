@@ -606,6 +606,12 @@
 			Name="locales &amp; resources"
 			Filter="">
 			<File
+				RelativePath=".\aliastst.cpp">
+			</File>
+			<File
+				RelativePath=".\aliastst.h">
+			</File>
+			<File
 				RelativePath=".\loctest.cpp">
 			</File>
 			<File
