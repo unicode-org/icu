@@ -86,7 +86,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 
 #define ccmpFeatureTag  LE_CCMP_FEATURE_TAG
 
-#define ccmpFeatureMask 0x80000000U
+#define ccmpFeatureMask 0x80000000UL
 
 #define canonFeatures (ccmpFeatureMask)
 

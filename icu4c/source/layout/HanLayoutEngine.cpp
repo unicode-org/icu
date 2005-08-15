@@ -23,9 +23,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HanOpenTypeLayoutEngine)
 #define smplFeatureTag LE_SMPL_FEATURE_TAG
 #define tradFeatureTag LE_TRAD_FEATURE_TAG
 
-#define loclFeatureMask 0x80000000U
-#define smplFeatureMask 0x40000000U
-#define tradFeatureMask 0x20000000U
+#define loclFeatureMask 0x80000000UL
+#define smplFeatureMask 0x40000000UL
+#define tradFeatureMask 0x20000000UL
 
 static const FeatureMap featureMap[] =
 {

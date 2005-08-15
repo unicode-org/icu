@@ -186,19 +186,19 @@ public:
 #define cligFeatureTag LE_CLIG_FEATURE_TAG
 #define mkmkFeatureTag LE_MKMK_FEATURE_TAG
 
-#define prefFeatureMask 0x80000000U
-#define blwfFeatureMask 0x40000000U
-#define abvfFeatureMask 0x20000000U
-#define pstfFeatureMask 0x10000000U 
-#define presFeatureMask 0x08000000U
-#define blwsFeatureMask 0x04000000U
-#define abvsFeatureMask 0x02000000U
-#define pstsFeatureMask 0x01000000U
-#define cligFeatureMask 0x00800000U
-#define distFeatureMask 0x00400000U
-#define blwmFeatureMask 0x00200000U
-#define abvmFeatureMask 0x00100000U
-#define mkmkFeatureMask 0x00080000U
+#define prefFeatureMask 0x80000000UL
+#define blwfFeatureMask 0x40000000UL
+#define abvfFeatureMask 0x20000000UL
+#define pstfFeatureMask 0x10000000UL 
+#define presFeatureMask 0x08000000UL
+#define blwsFeatureMask 0x04000000UL
+#define abvsFeatureMask 0x02000000UL
+#define pstsFeatureMask 0x01000000UL
+#define cligFeatureMask 0x00800000UL
+#define distFeatureMask 0x00400000UL
+#define blwmFeatureMask 0x00200000UL
+#define abvmFeatureMask 0x00100000UL
+#define mkmkFeatureMask 0x00080000UL
 
 #define tagPref    (prefFeatureMask | presFeatureMask | cligFeatureMask | distFeatureMask)
 #define tagAbvf    (abvfFeatureMask | abvsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | mkmkFeatureMask)

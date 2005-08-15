@@ -31,22 +31,22 @@ U_NAMESPACE_BEGIN
 #define abvmFeatureTag LE_ABVM_FEATURE_TAG
 #define distFeatureTag LE_DIST_FEATURE_TAG
 
-#define rphfFeatureMask 0x80000000U
-#define blwfFeatureMask 0x40000000U
-#define halfFeatureMask 0x20000000U
-#define pstfFeatureMask 0x10000000U
-#define nuktFeatureMask 0x08000000U
-#define akhnFeatureMask 0x04000000U
-#define vatuFeatureMask 0x02000000U
-#define presFeatureMask 0x01000000U
-#define blwsFeatureMask 0x00800000U
-#define abvsFeatureMask 0x00400000U
-#define pstsFeatureMask 0x00200000U
-#define halnFeatureMask 0x00100000U
-#define blwmFeatureMask 0x00080000U
-#define abvmFeatureMask 0x00040000U
-#define distFeatureMask 0x00020000U
-#define initFeatureMask 0x00010000U
+#define rphfFeatureMask 0x80000000UL
+#define blwfFeatureMask 0x40000000UL
+#define halfFeatureMask 0x20000000UL
+#define pstfFeatureMask 0x10000000UL
+#define nuktFeatureMask 0x08000000UL
+#define akhnFeatureMask 0x04000000UL
+#define vatuFeatureMask 0x02000000UL
+#define presFeatureMask 0x01000000UL
+#define blwsFeatureMask 0x00800000UL
+#define abvsFeatureMask 0x00400000UL
+#define pstsFeatureMask 0x00200000UL
+#define halnFeatureMask 0x00100000UL
+#define blwmFeatureMask 0x00080000UL
+#define abvmFeatureMask 0x00040000UL
+#define distFeatureMask 0x00020000UL
+#define initFeatureMask 0x00010000UL
 
 class ReorderingOutput : public UMemory {
 private:
