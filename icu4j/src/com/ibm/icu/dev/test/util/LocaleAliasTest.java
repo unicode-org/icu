@@ -187,7 +187,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
                String oldLang = oldLoc.getDisplayLanguage(available[j]);
                String newLang = newLoc.getDisplayLanguage(available[j]);
                
-               //there is a display name for the current country ID               
+               // is  there  display name for the current country ID               
                if(!newCountry.equals(newLoc.getCountry())){
                    if(!oldCountry.equals(newCountry)){
                        errln("getCountry() failed for "+ oldLoc +" oldCountry= "+ prettify(oldCountry) +" newCountry = "+prettify(newCountry)+ " in display locale "+ available[j].toString());
