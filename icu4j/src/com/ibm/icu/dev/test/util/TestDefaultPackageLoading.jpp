@@ -1,0 +1,41 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2005, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+import java.util.MissingResourceException;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.UResourceBundle;
+
+/**
+ * @author ram
+ */
+public class TestDefaultPackageLoading extends TestFmwk{
+    public static void main(String[] args){
+        new TestDefaultPackageLoading().run(args);
+    }
+    public void TestResourceBundleLoading(){
+        try{
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("TestData", "en");
+            String aaa = bundle.getString("aaa");
+            if(!aaa.equals("testcircularalias/aab")){
+                errln("Did not get the expected data");
+            }
+        }catch (MissingResourceException ex){
+            errln("could not load data "+ex.getMessage());
+        }
+    }
+    public void TestResFileLoading(){
+        try{
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("", "te");
+            String aaa = bundle.getString("string_only_in_te");
+            if(!aaa.equals("TE")){
+                errln("Did not get the expected data");
+            }
+        }catch (MissingResourceException ex){
+            errln("could not load data "+ex.getMessage());
+        }
+    }
+}
