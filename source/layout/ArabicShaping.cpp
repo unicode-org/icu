@@ -63,25 +63,25 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
 // The isol, fina, init and medi features must be
 // defined in the above order, and have masks that
 // are all in the same nibble.
-#define isolFeatureMask 0x80000000U
-#define finaFeatureMask 0x40000000U
-#define initFeatureMask 0x20000000U
-#define mediFeatureMask 0x10000000U
-#define ccmpFeatureMask 0x08000000U
-#define rligFeatureMask 0x04000000U
-#define caltFeatureMask 0x02000000U
-#define ligaFeatureMask 0x01000000U
-#define dligFeatureMask 0x00800000U
-#define cswhFeatureMask 0x00400000U
-#define msetFeatureMask 0x00200000U
-#define cursFeatureMask 0x00100000U
-#define kernFeatureMask 0x00080000U
-#define markFeatureMask 0x00040000U
-#define mkmkFeatureMask 0x00020000U
+#define isolFeatureMask 0x80000000UL
+#define finaFeatureMask 0x40000000UL
+#define initFeatureMask 0x20000000UL
+#define mediFeatureMask 0x10000000UL
+#define ccmpFeatureMask 0x08000000UL
+#define rligFeatureMask 0x04000000UL
+#define caltFeatureMask 0x02000000UL
+#define ligaFeatureMask 0x01000000UL
+#define dligFeatureMask 0x00800000UL
+#define cswhFeatureMask 0x00400000UL
+#define msetFeatureMask 0x00200000UL
+#define cursFeatureMask 0x00100000UL
+#define kernFeatureMask 0x00080000UL
+#define markFeatureMask 0x00040000UL
+#define mkmkFeatureMask 0x00020000UL
 
 #define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
 
-#define SHAPE_MASK 0xF0000000U
+#define SHAPE_MASK 0xF0000000UL
 
 static const FeatureMap featureMap[] = {
     {ccmpFeatureTag, ccmpFeatureMask},
