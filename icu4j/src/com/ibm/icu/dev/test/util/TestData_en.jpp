@@ -1,0 +1,35 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2005, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+import java.util.ListResourceBundle;
+import com.ibm.icu.impl.ICUListResourceBundle;
+
+/**
+ * @author ram
+ */
+
+public class TestData_en extends ListResourceBundle {
+    public TestData_en() {
+        
+  }
+  private static Object[][] data = new Object[][] { 
+              {
+                  "aaa",
+                 "testcircularalias/aab",
+              },
+              {
+                  "aab",
+                  "testcircularalias/aac",
+              },
+              {
+                  "aac",
+                  "testcircularalias/aaa",
+              } 
+  };
+  protected Object[][] getContents(){
+      return data;
+  }
+}
