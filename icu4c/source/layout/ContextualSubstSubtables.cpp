@@ -324,7 +324,9 @@ le_uint32 ChainingContextualSubstitutionSubtable::process(const LookupProcessor 
     }
 }
 
-#define emptyFeatureList 0x00000000U
+// NOTE: This could be a #define, but that seems to confuse
+// the Visual Studio .NET 2003 compiler...
+static const FeatureMask emptyFeatureList = 0x00000000UL;
 
 le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
                                                               const LEFontInstance *fontInstance) const

@@ -39,13 +39,13 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
 // 'palt'
 #define paltFeatureTag 0x70616C74
 
-#define ccmpFeatureMask 0x80000000U
-#define ligaFeatureMask 0x40000000U
-#define cligFeatureMask 0x20000000U
-#define kernFeatureMask 0x10000000U
-#define paltFeatureMask 0x08000000U
-#define markFeatureMask 0x04000000U
-#define mkmkFeatureMask 0x02000000U
+#define ccmpFeatureMask 0x80000000UL
+#define ligaFeatureMask 0x40000000UL
+#define cligFeatureMask 0x20000000UL
+#define kernFeatureMask 0x10000000UL
+#define paltFeatureMask 0x08000000UL
+#define markFeatureMask 0x04000000UL
+#define mkmkFeatureMask 0x02000000UL
 
 #define minimalFeatures     (ccmpFeatureMask | markFeatureMask | mkmkFeatureMask)
 #define ligaFeatures        (ligaFeatureMask | cligFeatureMask | minimalFeatures)
