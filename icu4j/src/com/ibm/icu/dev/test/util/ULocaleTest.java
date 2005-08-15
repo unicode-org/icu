@@ -1295,4 +1295,12 @@ public class ULocaleTest extends TestFmwk {
                 errln("bool: not OK, was " + new Boolean(r[0]).toString() + " expected " + expectBoolean.toString());
             }
         }
-    }}
+    }
+    public void TestJB3962(){
+        ULocale loc = new ULocale("de_CH");
+        String disp = loc.getDisplayName(ULocale.GERMAN);
+        if(!disp.equals("Deutsch (Schweiz)")){
+            errln("Did not get the expected display name for de_CH locale. Got: "+ prettify(disp));
+        }
+    }
+}
