@@ -546,7 +546,6 @@
     <target name="check" depends="tests" description="run standard icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
         <jvmarg value="-ea"/>  <!-- enable assertion checks -->
-        <arg value="-w"/>
         <arg value="-n"/>
         <classpath>
             <pathelement path="${java.class.path}/"/>
@@ -1088,5 +1087,47 @@
             manifest="${cldr.util.manifest}"/>
      </target>
      <!--Target for building jars -->
-     <target name="distJars" depends="jarSrc, jar, jarDocs" />    
+     <target name="distJars" depends="jarSrc, jar, jarDocs" />   
+     
+     <!-- Target for checking the loading of bundles from the default package.
+          This is hack to get around Eclipse's build problems. 
+     -->
+    <target name="testDefPac" depends="buildmangle, tests" if="version.1.4">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-d"/>
+            <arg value="VERSION_${ant.java.version}"/>
+            <arg value="-in"/>
+            <arg value="${src.dir}/com/ibm/icu/dev/test/util/TestDefaultPackageLoading.jpp"/>
+            <arg value="-out"/>
+            <arg value="${src.dir}/TestDefaultPackageLoading.java"/>
+        </java>
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-d"/>
+            <arg value="VERSION_${ant.java.version}"/>
+            <arg value="-in"/>
+            <arg value="${src.dir}/com/ibm/icu/dev/test/util/TestData_en.jpp"/>
+            <arg value="-out"/>
+            <arg value="${src.dir}/TestData_en.java"/>
+        </java>
+        <javac includes="TestData_en.java, TestDefaultPackageLoading.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on" deprecation="off"/>
+        <copy file="${build.dir}/com/ibm/icu/dev/data/testdata/te.res"
+            todir="${build.dir}/"/>
+        <!--run the tests -->
+        <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
+            <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
 </project>
