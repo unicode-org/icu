@@ -1,5 +1,5 @@
 /************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation *
+ * Copyright (C) 1996-2005, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
  ************************************************************************
  *  2003-nov-07   srl       Port from Java
@@ -1488,13 +1488,14 @@ UnicodeString CalendarAstronomer::Horizon::toString() const
 
 void CalendarCache::createCache(CalendarCache** cache, UErrorCode& status) {
   ucln_i18n_registerCleanup(UCLN_I18N_ASTRO_CALENDAR, calendar_astro_cleanup);
-  *cache = new CalendarCache(32, status);
   if(cache == NULL) {
     status = U_MEMORY_ALLOCATION_ERROR;
-  }
-  if(U_FAILURE(status)) {
-    delete *cache;
-    *cache = NULL;
+  } else {
+    *cache = new CalendarCache(32, status);
+    if(U_FAILURE(status)) {
+      delete *cache;
+      *cache = NULL;
+    }
   }
 }
 
@@ -1522,7 +1523,6 @@ int32_t CalendarCache::get(CalendarCache** cache, int32_t key, UErrorCode &statu
 }
 
 void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErrorCode &status) {
-
   if(U_FAILURE(status)) {
     return;
   }

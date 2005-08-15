@@ -604,7 +604,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
 
         // successful end of init()
         return *this;
-    } while(0);
+    } while(0); /*loop doesn't iterate*/
 
     // when an error occurs, then set this object to "bogus" (there is no UErrorCode here)
     setToBogus();
@@ -1107,13 +1107,13 @@ const Locale &
 Locale::getLocale(int locid)
 {
     Locale *localeCache = getLocaleCache();
-    U_ASSERT(locid < eMAX_LOCALES);
+    U_ASSERT((locid < eMAX_LOCALES)&&(locid>=0));
     if (localeCache == NULL) {
         // Failure allocating the locale cache.
         //   The best we can do is return a NULL reference.
         locid = 0;
     }
-    return localeCache[locid];
+    return localeCache[locid]; /*operating on NULL*/
 }
 
 /*
