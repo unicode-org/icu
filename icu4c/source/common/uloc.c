@@ -2978,11 +2978,11 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                         if(len>0) {
                             uprv_strncpy(result, l, uprv_min(len, resultAvailable));
                         }
-                        for(i=0;i<acceptListCount;i++) {
-                            uprv_free(fallbackList[i]);
+                        for(j=0;j<acceptListCount;j++) {
+                            uprv_free(fallbackList[j]);
                         }
                         uprv_free(fallbackList);
-                        return u_terminateChars(result, resultAvailable, len, status);   
+                        return u_terminateChars(result, resultAvailable, len, status);
                     }
                 }
                 uenum_reset(availableLocales, status);    
