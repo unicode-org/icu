@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
 
@@ -197,18 +198,26 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
      * Gets the full name of the resource with suffix.
      */
     public static String getFullName(String baseName, String localeName){
-        if(baseName.indexOf('.')==-1){
-            if(baseName.charAt(baseName.length()-1)!= '/'){
-                return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
+        if(baseName==null || baseName.length()==0){
+            if(localeName.length()==0){
+                return ULocale.getDefault().toString()+ICU_RESOURCE_SUFFIX;   
             }else{
-                return baseName+localeName+ICU_RESOURCE_SUFFIX;   
+                return localeName+ICU_RESOURCE_SUFFIX;
             }
         }else{
-            baseName = baseName.replace('.','/');
-            if(localeName.length()==0){
-                return baseName+ICU_RESOURCE_SUFFIX;   
+            if(baseName.indexOf('.')==-1){
+                if(baseName.charAt(baseName.length()-1)!= '/'){
+                    return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
+                }else{
+                    return baseName+localeName+ICU_RESOURCE_SUFFIX;   
+                }
             }else{
-                return baseName+"_"+localeName+ICU_RESOURCE_SUFFIX;
+                baseName = baseName.replace('.','/');
+                if(localeName.length()==0){
+                    return baseName+ICU_RESOURCE_SUFFIX;   
+                }else{
+                    return baseName+"_"+localeName+ICU_RESOURCE_SUFFIX;
+                }
             }
         }
     }
