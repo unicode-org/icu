@@ -1119,6 +1119,8 @@
             debug="on" deprecation="off"/>
         <copy file="${build.dir}/com/ibm/icu/dev/data/testdata/te.res"
             todir="${build.dir}/"/>
+        <move file="${build.dir}/com/ibm/icu/dev/data/testdata/te.res"
+            tofile="${build.dir}/com/ibm/icu/dev/data/TestData_te.res"/>
         <!--run the tests -->
         <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
