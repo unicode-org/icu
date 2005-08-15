@@ -38,4 +38,16 @@ public class TestDefaultPackageLoading extends TestFmwk{
             errln("could not load data "+ex.getMessage());
         }
     }
+    public void TestJB3767(){
+        try{
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.TestData", "te");
+            String aaa = bundle.getString("string_only_in_te");
+            if(!aaa.equals("TE")){
+                errln("Did not get the expected data");
+            }
+        }catch (MissingResourceException ex){
+            errln("could not load data "+ex.getMessage());
+        }
+    }
+    
 }
