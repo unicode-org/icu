@@ -152,8 +152,11 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
     le_int32 count, order = 0;
     le_int32 featureReferences = 0;
-    const FeatureTable *featureTable = 0;
+    const FeatureTable *featureTable = NULL;
     LETag featureTag;
+
+    const FeatureTable *requiredFeatureTable = 0;
+    LETag requiredFeatureTag = 0x00000000U;
 
     // Count the total number of lookups referenced by all features. This will
     // be the maximum number of entries in the lookupOrderArray. We can't use
@@ -166,26 +169,33 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
         featureReferences += SWAPW(featureTable->lookupCount);
     }
 
-    lookupOrderArray = LE_NEW_ARRAY(le_uint16, featureReferences);
-
     if (requiredFeatureIndex != 0xFFFF) {
-        featureTable = featureListTable->getFeatureTable(requiredFeatureIndex, &featureTag);
-        order += selectLookups(featureTable, 0xFFFFFFFF, order);
+        requiredFeatureTable = featureListTable->getFeatureTable(requiredFeatureIndex, &requiredFeatureTag);
+        featureReferences += SWAPW(featureTable->lookupCount);
     }
 
-    if (orderFeatures && (order > 1)) {
-        OpenTypeUtilities::sort(lookupOrderArray, order);
-    }
+    lookupOrderArray = LE_NEW_ARRAY(le_uint16, featureReferences);
 
     for (le_int32 f = 0; f < featureMapCount; f += 1) {
         FeatureMap fm = featureMap[f];
         count = 0;
 
+        // If this is the required feature, add its lookups
+        if (requiredFeatureTag == fm.tag) {
+            count += selectLookups(requiredFeatureTable, fm.mask, order);
+        }
+
         if (orderFeatures) {
+            // If we added lookups from the required feature, sort them
+            if (count > 1) {
+                OpenTypeUtilities::sort(lookupOrderArray, order);
+            }
+
             for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
                 le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
  
                 // don't add the required feature to the list more than once...
+                // TODO: Do we need this check? (Spec. says required feature won't be in feature list...)
                 if (featureIndex == requiredFeatureIndex) {
                     continue;
                 }
@@ -207,9 +217,14 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
                 le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
  
                 // don't add the required feature to the list more than once...
+                // NOTE: This check is commented out because the spec. says that
+                // the required feature won't be in the feature list, and because
+                // any duplicate entries will be removed below.
+#if 0
                 if (featureIndex == requiredFeatureIndex) {
                     continue;
                 }
+#endif
 
                 featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
 
