@@ -6,7 +6,11 @@
  */
 import java.util.ListResourceBundle;
 import com.ibm.icu.impl.ICUListResourceBundle;
-
+/*
+ * Eclipse expects the java files in a package-like directory structure to have a package declaration at the top of the file.
+ * To fool Eclipse this file has an "jpp" extention. The ant build script copies this file to the default package and renames it
+ * before building.
+ */ 
 /**
  * @author ram
  */
