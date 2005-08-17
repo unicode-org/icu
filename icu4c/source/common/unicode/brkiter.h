@@ -88,125 +88,21 @@ typedef const void* URegistryKey;
  * stored as a base character and a diacritical mark. What users
  * consider to be a character can differ between languages.
  * <P>
- * This is the interface for all text boundaries.
- * <P>
- * Examples:
- * <P>
- * Helper function to output text
- * <pre>
- * \code
- *    void printTextRange( BreakIterator& iterator, int32_t start, int32_t end )
- *    {
- *        UnicodeString textBuffer, temp;
- *        CharacterIterator *strIter = iterator.createText();
- *        strIter->getText(temp);
- *        cout << " " << start << " " << end << " |"
- *             << temp.extractBetween(start, end, textBuffer)
- *             << "|" << endl;
- *        delete strIter;
- *    }
- * \endcode
- * </pre>
- * Print each element in order:
- * <pre>
- * \code
- *    void printEachForward( BreakIterator& boundary)
- *    {
- *       int32_t start = boundary.first();
- *       for (int32_t end = boundary.next();
- *         end != BreakIterator::DONE;
- *         start = end, end = boundary.next())
- *         {
- *             printTextRange( boundary, start, end );
- *         }
- *    }
- * \endcode
- * </pre>
- * Print each element in reverse order:
- * <pre>
- * \code
- *    void printEachBackward( BreakIterator& boundary)
- *    {
- *       int32_t end = boundary.last();
- *       for (int32_t start = boundary.previous();
- *         start != BreakIterator::DONE;
- *         end = start, start = boundary.previous())
- *         {
- *             printTextRange( boundary, start, end );
- *         }
- *    }
- * \endcode
- * </pre>
- * Print first element
- * <pre>
- * \code
- *    void printFirst(BreakIterator& boundary)
- *    {
- *        int32_t start = boundary.first();
- *        int32_t end = boundary.next();
- *        printTextRange( boundary, start, end );
- *    }
- * \endcode
- * </pre>
- * Print last element
- * <pre>
- *  \code
- *    void printLast(BreakIterator& boundary)
- *    {
- *        int32_t end = boundary.last();
- *        int32_t start = boundary.previous();
- *        printTextRange( boundary, start, end );
- *    }
- * \endcode
- * </pre>
- * Print the element at a specified position
- * <pre>
- * \code
- *    void printAt(BreakIterator &boundary, int32_t pos )
- *    {
- *        int32_t end = boundary.following(pos);
- *        int32_t start = boundary.previous();
- *        printTextRange( boundary, start, end );
- *    }
- * \endcode
- * </pre>
- * Creating and using text boundaries
- * <pre>
- * \code
- *       void BreakIterator_Example( void )
- *       {
- *           BreakIterator* boundary;
- *           UnicodeString stringToExamine("Aaa bbb ccc. Ddd eee fff.");
- *           cout << "Examining: " << stringToExamine << endl;
+ * The text boundary positions are found according to the rules
+ * described in Unicode Standard Annex #29, Text Boundaries, and
+ * Unicode Standard Annex #14, Line Breaking Properties.  These
+ * are available at http://www.unicode.org/reports/tr14/ and
+ * http://www.unicode.org/reports/tr29/.
+ * <p/>
+ * In addition to the C++ API defined in this header file, a
+ * plain C API with equivalent functionality is defined in the
+ * file ubrk.h
+ * <p/>
+ * Code snippits illustrating the use of the Break Iterator APIs
+ * are available in the ICU User Guide, 
+ * http://icu.sourceforge.net/userguide/boundaryAnalysis.html
+ * and in the sample program icu/source/samples/break/break.cpp"
  *
- *           //print each sentence in forward and reverse order
- *           boundary = BreakIterator::createSentenceInstance( Locale::US );
- *           boundary->setText(stringToExamine);
- *           cout << "----- forward: -----------" << endl;
- *           printEachForward(*boundary);
- *           cout << "----- backward: ----------" << endl;
- *           printEachBackward(*boundary);
- *           delete boundary;
- *
- *           //print each word in order
- *           boundary = BreakIterator::createWordInstance();
- *           boundary->setText(stringToExamine);
- *           cout << "----- forward: -----------" << endl;
- *           printEachForward(*boundary);
- *           //print first element
- *           cout << "----- first: -------------" << endl;
- *           printFirst(*boundary);
- *           //print last element
- *           cout << "----- last: --------------" << endl;
- *           printLast(*boundary);
- *           //print word at charpos 10
- *           cout << "----- at pos 10: ---------" << endl;
- *           printAt(*boundary, 10 );
- *
- *           delete boundary;
- *       }
- * \endcode
- * </pre>
  */
 class U_COMMON_API BreakIterator : public UObject {
 public:
