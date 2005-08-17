@@ -137,6 +137,20 @@ static void TestHeapFunctions() {
     utrace_getFunctions(&traceContext, &traceEntryFunc, &traceExitFunc, &traceDataFunc);
     traceLevel = utrace_getLevel();
 
+    /* Verify that ICU can be cleaned up and reinitialized successfully.
+     *  Failure here usually means that some ICU service didn't clean up successfully,
+     *  probably because some earlier test accidently left something open. */
+    u_cleanup();
+    utrace_setFunctions(traceContext, traceEntryFunc, traceExitFunc, traceDataFunc);
+    utrace_setLevel(traceLevel);
+    status = U_ZERO_ERROR;
+    u_setDataDirectory(icuDataDir);
+    u_init(&status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     /* Can not set memory functions if ICU is already initialized */
     u_setMemoryFunctions(&gContext, myMemAlloc, myMemRealloc, myMemFree, &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
@@ -287,6 +301,20 @@ static void TestMutexFunctions() {
     utrace_getFunctions(&traceContext, &traceEntryFunc, &traceExitFunc, &traceDataFunc);
     traceLevel = utrace_getLevel();
 
+    /* Verify that ICU can be cleaned up and reinitialized successfully.
+     *  Failure here usually means that some ICU service didn't clean up successfully,
+     *  probably because some earlier test accidently left something open. */
+    u_cleanup();
+    utrace_setFunctions(traceContext, traceEntryFunc, traceExitFunc, traceDataFunc);
+    utrace_setLevel(traceLevel);
+    status = U_ZERO_ERROR;
+    u_setDataDirectory(icuDataDir);
+    u_init(&status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     /* Can not set mutex functions if ICU is already initialized */
     u_setMutexFunctions(&gContext, myMutexInit, myMutexDestroy, myMutexLock, myMutexUnlock, &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
@@ -410,14 +438,31 @@ static void TestIncDecFunctions() {
     const void      *traceContext;
     int32_t          traceLevel;
 
+    /* Save ICU's data dir and tracing functions so that they can be resored 
+       after cleanup and reinit.  */
+    dataDir = safeGetICUDataDirectory();
+    utrace_getFunctions(&traceContext, &traceEntryFunc, &traceExitFunc, &traceDataFunc);
+    traceLevel = utrace_getLevel();
+
+    /* Verify that ICU can be cleaned up and reinitialized successfully.
+     *  Failure here usually means that some ICU service didn't clean up successfully,
+     *  probably because some earlier test accidently left something open. */
+    u_cleanup();
+    utrace_setFunctions(traceContext, traceEntryFunc, traceExitFunc, traceDataFunc);
+    utrace_setLevel(traceLevel);
+    status = U_ZERO_ERROR;
+    u_setDataDirectory(dataDir);
+    u_init(&status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     /* Can not set mutex functions if ICU is already initialized */
     u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
 
-    /* Un-initialize ICU */
-    dataDir = safeGetICUDataDirectory();
-    utrace_getFunctions(&traceContext, &traceEntryFunc, &traceExitFunc, &traceDataFunc);
-    traceLevel = utrace_getLevel();
+    /* Clean up ICU */
     u_cleanup();
     utrace_setFunctions(traceContext, traceEntryFunc, traceExitFunc, traceDataFunc);
     utrace_setLevel(traceLevel);
