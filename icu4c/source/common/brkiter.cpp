@@ -32,6 +32,7 @@
 #include "servloc.h"
 #include "locbased.h"
 #include "uresimp.h"
+#include "uassert.h"
 
 // *****************************************************************************
 // class BreakIterator
@@ -51,8 +52,10 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     int32_t size;
     const UChar* brkfname = NULL;
-    UResourceBundle brkRulesStack, brkNameStack;
-    UResourceBundle *brkRules = &brkRulesStack, *brkName = &brkNameStack;
+    UResourceBundle brkRulesStack;
+    UResourceBundle brkNameStack;
+    UResourceBundle *brkRules = &brkRulesStack;
+    UResourceBundle *brkName  = &brkNameStack;
     BreakIterator *result = NULL;
     
     if (U_FAILURE(status))
@@ -71,6 +74,13 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
         brkName = ures_getByKeyWithFallback(brkRules, type, brkName, &status);
         // Get the actual string
         brkfname = ures_getString(brkName, &size, &status);
+        U_ASSERT(size<sizeof(fnbuff));
+        if (size>=sizeof(fnbuff)) {
+            size=0;
+            if (U_SUCCESS(status)) {
+                status = U_BUFFER_OVERFLOW_ERROR;
+            }
+        }
 
         // Use the string if we found it
         if (U_SUCCESS(status) && brkfname) {
@@ -104,6 +114,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
 #endif
         if (U_SUCCESS(localStatus)) {
 #if 0
+            // TODO:  if this code is ever enabled, need to add a bounds check for fnbuff.
             u_UCharsToChars(brkfname, fnbuff, size);
             fnbuff[size] = '\0';
 #endif
