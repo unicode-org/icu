@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -41,9 +41,10 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstanc
     }
 
     default:
-        // Unknown format, set the anchor point to (0, 0)
-        anchor.fX = 0;
-        anchor.fY = 0;
+        // unknown format: just use x, y coordinate, like format 1...
+        const Format1AnchorTable *f1 = (const Format1AnchorTable *) this;
+
+        f1->getAnchor(fontInstance, anchor);
         break;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -64,6 +64,11 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
     Offset anchorTableOffset = SWAPW(mark2Record->mark2AnchorTableOffsetArray[markClass]);
     const AnchorTable *anchorTable = (const AnchorTable *) ((char *) mark2Array + anchorTableOffset);
     LEPoint mark2Anchor, markAdvance, pixels;
+
+    if (anchorTableOffset == 0) {
+        // this seems to mean that the marks don't attach...
+        return 0;
+    }
 
     anchorTable->getAnchor(mark2Glyph, fontInstance, mark2Anchor);
 
