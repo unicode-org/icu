@@ -457,14 +457,17 @@ le_bool ParagraphLayout::isComplex(const LEUnicode chars[], le_int32 count)
     UErrorCode scriptStatus = U_ZERO_ERROR;
     UScriptCode scriptCode  = USCRIPT_INVALID_CODE;
     UScriptRun *sr = uscript_openRun(chars, count, &scriptStatus);
+    le_bool result = FALSE;
 
     while (uscript_nextRun(sr, NULL, NULL, &scriptCode)) {
         if (isComplex(scriptCode)) {
-            return TRUE;
+            result = TRUE;
+            break;
         }
     }
 
-    return FALSE;
+    uscript_closeRun(sr);
+    return result;
 }
 
 le_int32 ParagraphLayout::getAscent() const
