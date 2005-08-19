@@ -1194,8 +1194,11 @@ void RuleBasedBreakIterator::makeRuleStatusValid() {
             }
         }
     }
-    U_ASSERT(fLastStatusIndexValid == TRUE);
-    U_ASSERT(fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fData->fStatusMaxIdx);
+    // TODO:  Status tags are broken for DictionaryBasedBreakIterator.  Bug 4730.
+    if (this->getDynamicClassID() == RuleBasedBreakIterator::getStaticClassID()) {
+        U_ASSERT(fLastStatusIndexValid == TRUE);
+        U_ASSERT(fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fData->fStatusMaxIdx);
+    }
 }
 
 
