@@ -356,9 +356,66 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
-    
-
                              
+    private static final int ROOT_MISSING = 0;
+    private static final int ROOT_ICU = 1;
+    private static final int ROOT_JAVA = 2;
+    
+    private static SoftReference ROOT_CACHE;
+    
+    private static int getRootType(String baseName, ClassLoader root)
+    {
+        Map m = null;
+        Integer rootType;
+        
+        if (ROOT_CACHE != null) {
+            m = (Map) ROOT_CACHE.get();
+        }
+        
+        if (m == null) {
+            m = new HashMap();
+            ROOT_CACHE = new SoftReference(m);
+        }
+
+        rootType = (Integer) m.get(baseName);
+        
+        if (rootType == null) {
+            String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
+            UResourceBundle b = instantiateICUResource(baseName, rootLocale, root);
+            int rt = ROOT_ICU;
+            
+            if (b == null) {
+                rt = ROOT_JAVA;
+                
+                try {
+                    b = new ResourceBundleWrapper(baseName, rootLocale, root);
+                } catch (MissingResourceException mre) {
+                    rt = ROOT_MISSING;
+                }
+            }
+            
+            rootType = new Integer(rt);
+            m.put(baseName, rootType);
+        }
+        
+        return rootType.intValue();
+    }
+    
+    private static void setRootType(String baseName, int rootType)
+    {
+        Integer rt = new Integer(rootType);
+        Map m = null;
+        
+        if (ROOT_CACHE != null) {
+            m = (Map) ROOT_CACHE.get();
+        } else {
+            m = new HashMap();
+            ROOT_CACHE = new SoftReference(m);
+        }
+        
+        m.put(baseName, rt);
+    }
+    
     /**
      * Loads a new resource bundle for the give base name, locale and class loader.
      * Optionally will disable loading of fallback bundles.
@@ -372,33 +429,52 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeName, ClassLoader root, boolean disableFallback){
-        // first try to create an ICUResourceBundle
-        // the expectation is that most client using 
-        // this interface will open an *.res file
+    protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeName, ClassLoader root, boolean disableFallback)
+    {
         UResourceBundle b = null;
-        if(disableFallback){
-            ULocale defaultLocale = ULocale.getDefault();
-            String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-            cacheKey.setKeyValues(root, fullName, defaultLocale);
-            b = loadFromCache(cacheKey);
-            if(b==null){
-                b =  ICUResourceBundle.createBundle(baseName, localeName, root);
+        int rootType = getRootType(baseName, root);
+        
+        switch (rootType)
+        {
+        case ROOT_ICU:
+            if(disableFallback) {
+                ULocale defaultLocale = ULocale.getDefault();
+                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
+                
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
-                addToCache(cacheKey, b);
+                b = loadFromCache(cacheKey);
+                
+                if (b == null) {
+                    b = ICUResourceBundle.createBundle(baseName, localeName, root);
+                    cacheKey.setKeyValues(root, fullName, defaultLocale);
+                    addToCache(cacheKey, b);
+                }
+            } else {
+                b = instantiateICUResource(baseName, localeName, root);
             }
-        }else{
-            b = instantiateICUResource(baseName,localeName,root);
+            
+            return b;
+            
+        case ROOT_JAVA:
+            return new ResourceBundleWrapper(baseName, localeName, root);
+            
+        default:
+            b = instantiateICUResource(baseName, localeName, root);
+        
+            if (b == null) {
+                b = new ResourceBundleWrapper(baseName, localeName, root);
+                
+                if (b == null){
+                    throw new MissingResourceException("Could not find the bundle ", baseName, localeName);   
+                } else {
+                    setRootType(baseName, ROOT_JAVA);
+                }
+            } else {
+                setRootType(baseName, ROOT_ICU);
+            }
+
+            return b;
         }
-        if(b==null){
-           // we can't find an *.res file .. so fallback to
-           // Java ResourceBundle loadeing 
-           b = new ResourceBundleWrapper(baseName, localeName, root);
-        }
-        if(b==null){
-            throw new MissingResourceException("Could not find the bundle ", baseName,localeName );   
-        }
-        return b;
     }
     
     /**
@@ -418,12 +494,13 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     //  recursively build bundle
-    protected static UResourceBundle instantiateICUResource(String baseName,String localeID, ClassLoader root){
+    protected static UResourceBundle instantiateICUResource(String baseName, String localeID, ClassLoader root){
         ULocale defaultLocale = ULocale.getDefault();
         String localeName = ULocale.getBaseName(localeID);
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         cacheKey.setKeyValues(root, fullName, defaultLocale);
         UResourceBundle b = loadFromCache(cacheKey);
+        
         // here we assume that java type resource bundle organization
         // is required then the base name contains '.' else 
         // the resource organization is of ICU type
@@ -433,12 +510,14 @@ public abstract class UResourceBundle extends ResourceBundle{
         //
         final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
         final String defaultID = ULocale.getDefault().toString();
+        
         if(localeName.equals("")){
             localeName = rootLocale;   
         }
         if (b == null) {
             b = ICUResourceBundle.createBundle(baseName, localeName, root);
-            if(b==null){
+            
+            if(b == null){
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
                     String temp = localeName.substring(0, i);
@@ -460,16 +539,19 @@ public abstract class UResourceBundle extends ResourceBundle{
                     }
                 }
             }else{
+                UResourceBundle parent = null;
                 localeName = b.getLocaleID();
                 int i = localeName.lastIndexOf('_');
+                
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
                 addToCache(cacheKey, b);
-                UResourceBundle parent = null;
+                
                 if (i != -1) {
                     parent = instantiateICUResource(baseName, localeName.substring(0, i), root);
                 }else{
                     parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
                 }
+                
                 if(!b.equals(parent)){
                     b.setParent(parent);
                 }
