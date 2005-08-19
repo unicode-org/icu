@@ -510,88 +510,6 @@ void RBBITest::TestMaiyamok()
     delete e;
 }
 
-void RBBITest::TestThaiWordBreak() {
-    UErrorCode status = U_ZERO_ERROR;
-    BITestData   thaiWordSelection(status);
-
-    ADD_DATACHUNK(thaiWordSelection, NULL, 0, status);           // Break at start of data
-
-
-    // @suwit -- Thai sample data from GVT Guideline
-    // start
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E2B\\u0E19\\u0E36\\u0E48\\u0E07", 0, status); //5
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E04\\u0E33", 0, status); //7
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E17\\u0E22", 0, status); //10
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E2A\\u0E32\\u0E21\\u0E32\\u0E23\\u0E16", 0, status); //16
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E1B\\u0E23\\u0E30\\u0E01\\u0E2D\\u0E1A", 0, status); //22
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E14\\u0E49\\u0E27\\u0E22", 0, status);  //26
-    ADD_DATACHUNK(thaiWordSelection, "\\u0e2b\\u0e25\\u0e32\\u0e22", 0, status);  //30
-    ADD_DATACHUNK(thaiWordSelection, "\\u0e1e\\u0e22\\u0e32\\u0e07\\u0e04\\u0e4c", 0, status);  //36
-
-    // @suwit - end of changes
-
-    /*  remove the old data sample because Thai translation of the Wizard of Oz is not good testcase for wordbreak API.
-
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E1A\\u0E17", 0, status); //2
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E35\\u0E48", 0, status); //5
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E51", 0, status); //6
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E1E\\u0E32\\u0E22\\u0E38", 0, status); //10
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E0B\\u0E42\\u0E04\\u0E25\\u0E19", 0, status); //16
-    ADD_DATACHUNK(thaiWordSelection, "\\u000D\\u000A", 0, status); //18
-
-    // This is the correct result
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E14\\u0E42\\u0E23\\u0E18\\u0E35", 0, status); //24
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22", 0, status); //29
-
-    // and this is what the dictionary does...
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E14", 0, status); // 20
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E23\\u0E18\\u0E35\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22", 0, status); //29
-
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E2D\\u0E22\\u0E39\\u0E48", 0, status); //33
-
-    // This is the correct result
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E48\\u0E32\\u0E21", 0, status); //37
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E01\\u0E25\\u0E32\\u0E07", 0, status); //41
-
-    // and this is what the dictionary does
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E48\\u0E32\\u0E21\\u0E01\\u0E25\\u0E32\\u0E07", 0, status); //41
-
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E38\\u0E48\\u0E07", 0, status); //45
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E43\\u0E2B\\u0E0D\\u0E48", 0, status); //49
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E43\\u0E19", 0, status); //51
-
-    // This is the correct result
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E04\\u0E19\\u0E0B\\u0E31\\u0E2A", 0, status); //57
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E01\\u0E31\\u0E1A", 0, status); //60
-
-    // and this is what the dictionary does
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E04\\u0E19", 0, status); // 54
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E0B\\u0E31\\u0E2A\\u0E01\\u0E31\\u0E1A", 0, status); //60
-
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E25\\u0E38\\u0E07", 0, status); //63
-
-    // This is the correct result
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E40\\u0E2E\\u0E19\\u0E23\\u0E35", 0, status); //68
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E0A\\u0E32\\u0E27", 0, status); //71
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E23\\u0E48", 0, status); //74
-    //ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E25\\u0E30", 0, status); //77
-
-    // and this is what the dictionary does
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E40\\u0E2E", 0, status); // 65
-    ADD_DATACHUNK(thaiWordSelection, "\\u0E19\\u0E23\\u0E35\\u0E0A\\u0E32\\u0E27\\u0E44\\u0E23\\u0E48\\u0E41\\u0E25\\u0E30", 0, status); //77
-    */
-
-    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(
-        Locale("th"), status);
-    if (U_FAILURE(status))
-    {
-        errln("Failed to create the BreakIterator for Thai locale in TestThaiWordBreak.\n");
-        return;
-    }
-
-    generalIteratorTest(*e, thaiWordSelection);
-    delete e;
-}
 
 
 void RBBITest::TestBug3818() {
@@ -679,8 +597,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestEndBehaviour();                       break;
         case 8: name = "TestMixedThaiLineBreak";
              if(exec) TestMixedThaiLineBreak();                break;
-        case 9: name = "TestThaiWordBreak";
-             if(exec) TestThaiWordBreak();                     break;
+        case 9: name = "spare";
+             /*if(exec) spare(); */                            break;
         case 10: name = "TestThaiLineBreak";
              if(exec) TestThaiLineBreak();                     break;
         case 11: name = "TestMaiyamok";
@@ -1282,6 +1200,9 @@ void RBBITest::TestExtended() {
     tp.srcLine        = new UVector32(status);
     tp.srcCol         = new UVector32(status);
 
+    RegexMatcher      localeMatcher("<locale *([\\p{L}\\p{Nd}_]*) *>", 0, status);
+    TEST_ASSERT_SUCCESS(status);
+
 
     //
     //  Open and read the test data file.
@@ -1335,6 +1256,7 @@ void RBBITest::TestExtended() {
     int32_t    tagValue = 0;       // The numeric value of a <nnn> tag.
 
     for (charIdx = 0; charIdx < len; ) {
+        status = U_ZERO_ERROR;
         UChar  c = testString.charAt(charIdx);
         charIdx++;
         if (c == CH_CR && charIdx<len && testString.charAt(charIdx) == CH_LF) {
@@ -1395,6 +1317,17 @@ void RBBITest::TestExtended() {
                 charIdx += 6;
                 break;
             }
+            // <locale  loc_name>
+            localeMatcher.reset(testString);
+            if (localeMatcher.lookingAt(charIdx-1, status)) {
+                UnicodeString localeName = localeMatcher.group(1, status);
+                char localeName8[100];
+                localeName.extract(0, localeName.length(), localeName8, sizeof(localeName8), 0);
+                locale = Locale::createFromName(localeName8);
+                charIdx += localeMatcher.group(0, status).length();
+                TEST_ASSERT_SUCCESS(status);
+                break;
+            }
             if (testString.compare(charIdx-1, 6, "<data>") == 0) {
                 parseState = PARSE_DATA;
                 charIdx += 5;
@@ -1432,7 +1365,7 @@ void RBBITest::TestExtended() {
                 tp.srcCol ->addElement(column, status);
 
                 parseState = PARSE_TAG;
-                charIdx += 7;
+                charIdx += 6;
 
                 // RUN THE TEST!
                 executeTest(&tp);

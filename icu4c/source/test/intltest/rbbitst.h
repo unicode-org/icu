@@ -60,7 +60,6 @@ public:
     void TestThaiLineBreak();
     void TestMixedThaiLineBreak();
     void TestMaiyamok();
-    void TestThaiWordBreak();
     void TestMonkey(char *params);
 
     void TestExtended();
