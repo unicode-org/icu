@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -62,8 +62,8 @@ typedef struct {
 typedef struct {
   uint32_t *endExpansionCE;
   UBool    *isV;
-  int       position;
-  int       size;
+  int32_t   position;
+  int32_t   size;
   uint8_t   maxLSize;
   uint8_t   maxVSize;
   uint8_t   maxTSize;
@@ -72,8 +72,8 @@ typedef struct {
 typedef struct {
   uint32_t *endExpansionCE;
   uint8_t  *expansionCESize;
-  int      position;
-  int      size;
+  int32_t   position;
+  int32_t   size;
 } MaxExpansionTable;
 
 typedef struct {
