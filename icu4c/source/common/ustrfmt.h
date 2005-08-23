@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -11,7 +11,7 @@
 #include "unicode/utypes.h"
 
 U_CAPI char* U_EXPORT2 
-uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint);
+uprv_dtostr(double value, char *buffer, int32_t maximumDigits,UBool fixedPoint);
 U_CAPI int32_t U_EXPORT2
 uprv_itou (UChar * buffer, int32_t capacity, uint32_t i, uint32_t radix, int32_t minwidth);
 

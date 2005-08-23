@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 U_CAPI char*  U_EXPORT2
-uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint)
+uprv_dtostr(double value, char *buffer, int32_t maximumDigits,UBool fixedPoint)
 {
     char *itrPtr = buffer + 1;  /* skip '-' or a number before the decimal */
     char *startPtr;

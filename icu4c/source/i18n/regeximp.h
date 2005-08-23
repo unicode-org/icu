@@ -1,5 +1,5 @@
 // 
-//   Copyright (C) 2002-2004 International Business Machines Corporation 
+//   Copyright (C) 2002-2005 International Business Machines Corporation 
 //   and others. All rights reserved.  
 //
 //   file:  regeximp.h
@@ -326,7 +326,7 @@ inline void  Regex8BitSet::add(UChar32 c) {
 
 inline void Regex8BitSet::init(const UnicodeSet *s) {
     if (s != NULL) {
-        for (int i=0; i<=255; i++) {
+        for (int32_t i=0; i<=255; i++) {
             if (s->contains(i)) {
                 this->add(i);
             }

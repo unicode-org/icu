@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrlist.h
@@ -36,7 +36,7 @@ protected:
     uint32_t fCount;
     uint32_t fCapacity;
 public:
-    NFRuleList(int capacity = 10) 
+    NFRuleList(uint32_t capacity = 10) 
         : fStuff(capacity ? (NFRule**)uprv_malloc(capacity * sizeof(NFRule*)) : NULL)
         , fCount(0)
         , fCapacity(capacity) {};
