@@ -1,7 +1,7 @@
 //
 //  rbbirb.h
 //
-//  Copyright (C) 2002-2004, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2005, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for several classes from the
@@ -84,7 +84,7 @@ public:
 #else
     // A do-nothing inline function for non-debug builds.  Member funcs can't be empty
     //  or the call sites won't compile.
-    int  fFakeField;
+    int32_t fFakeField;
     #define rbbiSymtablePrint() fFakeField=0; 
 #endif
 

@@ -1,7 +1,7 @@
 //
 //  rbbiscan.h
 //
-//  Copyright (C) 2002-2003, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2005, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for class RBBIRuleScanner
@@ -102,8 +102,8 @@ private:
     int32_t                       fNextIndex;        // Index of the next character, which
                                                      //   is the first character not yet scanned.
     UBool                         fQuoteMode;        // Scan is in a 'quoted region'
-    int                           fLineNum;          // Line number in input file.
-    int                           fCharNum;          // Char position within the line.
+    int32_t                       fLineNum;          // Line number in input file.
+    int32_t                       fCharNum;          // Char position within the line.
     UChar32                       fLastChar;         // Previous char, needed to count CR-LF
                                                      //   as a single line, not two.
 
@@ -116,12 +116,12 @@ private:
                                                      //   parsing.  index by p[state][char-class]
 
     uint16_t                      fStack[kStackSize];  // State stack, holds state pushes
-    int                           fStackPtr;           //  and pops as specified in the state
+    int32_t                       fStackPtr;           //  and pops as specified in the state
                                                        //  transition rules.
 
     RBBINode                      *fNodeStack[kStackSize]; // Node stack, holds nodes created
                                                            //  during the parse of a rule
-    int                            fNodeStackPtr;
+    int32_t                        fNodeStackPtr;
 
 
     UBool                          fReverseRule;     // True if the rule currently being scanned
