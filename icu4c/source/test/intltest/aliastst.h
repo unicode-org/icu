@@ -12,11 +12,11 @@
 
 class LocaleAliasTest: public IntlTest {
 public:
-	void TestCalendar();
-	void TestDateFormat();
-	void TestCollation();
-	void TestULocale();
-	void TestUResourceBundle();
+    void TestCalendar();
+    void TestDateFormat();
+    void TestCollation();
+    void TestULocale();
+    void TestUResourceBundle();
     void TestDisplayName(); 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     LocaleAliasTest();
@@ -24,7 +24,7 @@ public:
 private:
     UResourceBundle* resIndex;
     UBool isLocaleAvailable(const char*);
-	Locale defLocale; 
+    Locale defLocale; 
 };
 
 #endif
