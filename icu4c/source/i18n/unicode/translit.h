@@ -606,8 +606,8 @@ protected:
      * [<code>pos.start</code>, <code>pos.limit</code>) without
      * applying the filter. End user code should call <code>
      * transliterate()</code> instead of this method. Subclass code
-     * should call <code>filteredTransliterate()</code> instead of
-     * this method.<p>
+     * and wrapping transliterators should call
+	 * <code>filteredTransliterate()</code> instead of this method.<p>
      *
      * @param text the buffer holding transliterated and
      * untransliterated text
@@ -628,7 +628,8 @@ protected:
                                      UTransPosition& pos,
                                      UBool incremental) const = 0;
 
-    /**
+public:
+	/**
      * Transliterate a substring of text, as specified by index, taking filters
      * into account.  This method is for subclasses that need to delegate to
      * another transliterator, such as CompoundTransliterator.
@@ -642,9 +643,6 @@ protected:
     virtual void filteredTransliterate(Replaceable& text,
                                        UTransPosition& index,
                                        UBool incremental) const;
-
-    friend class CompoundTransliterator; // for filteredTransliterate()
-    friend class AnyTransliterator; // for filteredTransliterate()
 
 private:
 
@@ -982,7 +980,7 @@ public:
                                 Token context);
 
     /**
-     * Registers a instance <tt>obj</tt> of a subclass of
+     * Registers an instance <tt>obj</tt> of a subclass of
      * <code>Transliterator</code> with the system.  When
      * <tt>createInstance()</tt> is called with an ID string that is
      * equal to <tt>obj->getID()</tt>, then <tt>obj->clone()</tt> is
@@ -999,6 +997,22 @@ public:
      * @stable ICU 2.0
      */
     static void U_EXPORT2 registerInstance(Transliterator* adoptedObj);
+
+	/**
+	 * Registers an ID string as an alias of another ID string.
+	 * That is, after calling this function, <tt>createInstance(aliasID)</tt>
+	 * will return the same thing as <tt>createInstance(realID)</tt>.
+	 * This is generally used to create shorter, more mnemonic aliases
+	 * for long compound IDs.
+	 *
+	 * @param aliasID The new ID being registered.
+	 * @param realID The ID that the new ID is to be an alias for.
+	 * This can be a compound ID and can include filters and should
+	 * refer to transliterators that have already been registered with
+	 * the framework, although this isn't checked.
+	 */
+	static void U_EXPORT2 registerAlias(const UnicodeString& aliasID,
+										const UnicodeString& realID);
 
 protected:
 
@@ -1019,6 +1033,11 @@ protected:
      * @internal
      */
     static void _registerInstance(Transliterator* adoptedObj);
+
+	/**
+	 * @internal
+	 */
+	static void _registerAlias(const UnicodeString& aliasID, const UnicodeString& realID);
 
     /**
      * Register two targets as being inverses of one another.  For
