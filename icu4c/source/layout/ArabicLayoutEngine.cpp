@@ -46,6 +46,12 @@ ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fon
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
     fFeatureMap = ArabicShaping::getFeatureMap(fFeatureMapCount);
+
+    // NOTE: We don't need to set fFeatureOrder to TRUE here
+    // because this constructor is only called by the constructor
+    // for UnicodeArabicOpenTypeLayoutEngine, which uses a pre-built
+    // GSUB table that has the features in the correct order.
+
     //fFeatureOrder = TRUE;
 }
 
