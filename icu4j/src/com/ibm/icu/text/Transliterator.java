@@ -1124,7 +1124,7 @@ public abstract class Transliterator {
      * characters
      * @stable ICU 2.0
      */
-    protected void filteredTransliterate(Replaceable text,
+    public void filteredTransliterate(Replaceable text,
                                          Position index,
                                          boolean incremental) {
         filteredTransliterate(text, index, incremental, false);
@@ -1671,6 +1671,17 @@ public abstract class Transliterator {
      */
     static void registerInstance(Transliterator trans, boolean visible) {
         registry.put(trans.getID(), trans, visible);
+    }
+
+    /**
+     * Register an ID as an alias of another ID.  Instantiating
+     * alias ID produces the same result as instantiating the original ID.
+     * This is generally used to create short aliases of compound IDs.
+     * @param aliasID The new ID being registered.
+     * @param realID The existing ID that the new ID should be an alias of.
+     */
+    public static void registerAlias(String aliasID, String realID) {
+        registry.put(aliasID, realID, true);
     }
 
     /**

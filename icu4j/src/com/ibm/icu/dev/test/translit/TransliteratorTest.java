@@ -3184,6 +3184,48 @@ the ::BEGIN/::END stuff)
         expect(reversed2, "xy XY XYZ yz YZ", "xy abc xaba yz aba");
     }
 
+    public void TestRegisterAlias() {
+        String longID = "Lower;[aeiou]Upper";
+        String shortID = "Any-CapVowels";
+        String reallyShortID = "CapVowels";
+
+        Transliterator.registerAlias(shortID, longID);
+
+        Transliterator t1 = Transliterator.getInstance(longID);
+        Transliterator t2 = Transliterator.getInstance(reallyShortID);
+
+        if (!t1.getID().equals(longID))
+            errln("Transliterator instantiated with long ID doesn't have long ID");
+        if (!t2.getID().equals(reallyShortID))
+            errln("Transliterator instantiated with short ID doesn't have short ID");
+
+        if (!t1.toRules(true).equals(t2.toRules(true)))
+            errln("Alias transliterators aren't the same");
+
+        Transliterator.unregister(shortID);
+
+        try {
+            t1 = Transliterator.getInstance(shortID);
+            errln("Instantiation with short ID succeeded after short ID was unregistered");
+        }
+        catch (IllegalArgumentException e) {
+        }
+
+        // try the same thing again, but this time with something other than
+        // an instance of CompoundTransliterator
+        String realID = "Latin-Greek";
+        String fakeID = "Latin-dlgkjdflkjdl";
+        Transliterator.registerAlias(fakeID, realID);
+
+        t1 = Transliterator.getInstance(realID);
+        t2 = Transliterator.getInstance(fakeID);
+
+        if (!t1.toRules(true).equals(t2.toRules(true)))
+            errln("Alias transliterators aren't the same");
+
+        Transliterator.unregister(fakeID);
+    }
+
     //======================================================================
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
