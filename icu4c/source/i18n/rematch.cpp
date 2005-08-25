@@ -271,7 +271,7 @@ int32_t RegexMatcher::end(UErrorCode &err) const {
 
 
 
-int32_t RegexMatcher::end(int group, UErrorCode &err) const {
+int32_t RegexMatcher::end(int32_t group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
         return -1;
     }
@@ -793,7 +793,7 @@ int32_t  RegexMatcher::split(const UnicodeString &input,
     //
     // Loop through the input text, searching for the delimiter pattern
     //
-    int i;
+    int32_t i;
     int32_t numCaptureGroups = fPattern->fGroupMap->size();
     for (i=0; ; i++) {
         if (i>=destCapacity-1) {
@@ -859,7 +859,7 @@ int32_t RegexMatcher::start(UErrorCode &status) const {
 
 
 
-int32_t RegexMatcher::start(int group, UErrorCode &status) const {
+int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return -1;
     }
@@ -911,7 +911,7 @@ REStackFrame *RegexMatcher::resetStack() {
     fStack->removeAllElements();
 
     int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, fDeferredStatus);
-    int i;
+    int32_t i;
     for (i=0; i<fPattern->fFrameSize; i++) {
         iFrame[i] = -1;
     }
@@ -1049,7 +1049,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     {
         printf("MatchAt(startIdx=%d)\n", startIdx);
         printf("Original Pattern: ");
-        int i;
+        int32_t i;
         for (i=0; i<fPattern->fPattern.length(); i++) {
             printf("%c", fPattern->fPattern.charAt(i));
         }
