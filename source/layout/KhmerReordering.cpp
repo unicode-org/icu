@@ -163,19 +163,12 @@ public:
 };
 
 
-//TODO remove unused flags
-#define nuktFeatureTag LE_NUKT_FEATURE_TAG
-#define akhnFeatureTag LE_AKHN_FEATURE_TAG
-#define rphfFeatureTag LE_RPHF_FEATURE_TAG
 #define blwfFeatureTag LE_BLWF_FEATURE_TAG
-#define halfFeatureTag LE_HALF_FEATURE_TAG
 #define pstfFeatureTag LE_PSTF_FEATURE_TAG
-#define vatuFeatureTag LE_VATU_FEATURE_TAG
 #define presFeatureTag LE_PRES_FEATURE_TAG
 #define blwsFeatureTag LE_BLWS_FEATURE_TAG
 #define abvsFeatureTag LE_ABVS_FEATURE_TAG
 #define pstsFeatureTag LE_PSTS_FEATURE_TAG
-#define halnFeatureTag LE_HALN_FEATURE_TAG
 
 #define blwmFeatureTag LE_BLWM_FEATURE_TAG
 #define abvmFeatureTag LE_ABVM_FEATURE_TAG

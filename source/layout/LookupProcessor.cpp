@@ -155,7 +155,7 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
     const FeatureTable *featureTable = NULL;
     LETag featureTag;
 
-    const FeatureTable *requiredFeatureTable = 0;
+    const FeatureTable *requiredFeatureTable = NULL;
     LETag requiredFeatureTag = 0x00000000U;
 
     // Count the total number of lookups referenced by all features. This will

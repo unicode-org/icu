@@ -16,6 +16,7 @@
 #include "IndicLayoutEngine.h"
 #include "KhmerLayoutEngine.h"
 #include "ThaiLayoutEngine.h"
+#include "TibetanLayoutEngine.h"
 #include "GXLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
 #include "CharSubstitutionFilter.h"
@@ -475,6 +476,10 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
                 break;
             }
 
+            break;
+
+        case tibtScriptCode:
+             result = new TibetanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
             break;
 
         case khmrScriptCode:
