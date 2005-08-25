@@ -1240,6 +1240,20 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
     registry->put(adoptedPrototype, TRUE);
 }
 
+void U_EXPORT2 Transliterator::registerAlias(const UnicodeString& aliasID,
+											 const UnicodeString& realID) {
+    umtx_init(&registryMutex);
+    Mutex lock(&registryMutex);
+    if (HAVE_REGISTRY) {
+        _registerAlias(aliasID, realID);
+    }
+}
+
+void Transliterator::_registerAlias(const UnicodeString& aliasID,
+									const UnicodeString& realID) {
+	registry->put(aliasID, realID, TRUE);
+}
+
 /**
  * Unregisters a transliterator or class.  This may be either
  * a system transliterator or a user transliterator or class.
