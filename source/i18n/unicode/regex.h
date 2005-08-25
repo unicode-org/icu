@@ -652,7 +652,7 @@ public:
     *    @return the start position of substring matched by the specified group.
     *    @stable ICU 2.4
     */
-    virtual int32_t start(int group, UErrorCode &status) const;
+    virtual int32_t start(int32_t group, UErrorCode &status) const;
 
 
    /**
@@ -680,7 +680,7 @@ public:
     *              Return -1 if the capture group exists in the pattern but was not part of the match.
     *    @stable ICU 2.4
     */
-    virtual int32_t end(int group, UErrorCode &status) const;
+    virtual int32_t end(int32_t group, UErrorCode &status) const;
 
 
    /**
