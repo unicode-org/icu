@@ -775,21 +775,22 @@ private:
     /**
      * Given a canonical time zone id, return the row index in our symbols for that id,
      * or -1 if none found.
-     */
+     *
     int32_t      getTimeZoneIndex(const UnicodeString& id) const;
-
+     */
     /**
      * Given text, a start in the text, and a row index, return the column index that
      * of the zone name that matches (case insensitive) at start, or 0 if none matches.
-     */
+     *
     int32_t      matchZoneString(const UnicodeString& text, int32_t start, int32_t zi) const;
+    */
 
     /**
      * Given text, a start in the text, and a calendar, return the next offset in the text
      * after matching the zone string.  If we fail to match, return 0.  Update the calendar
      * as appropriate.
      */
-    int32_t      subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal) const;
+    int32_t      subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal, UErrorCode& status) const;
     
     /**
      * append the gmt string

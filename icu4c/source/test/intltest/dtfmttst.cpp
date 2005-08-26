@@ -54,6 +54,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(23,TestGreekMay);
         TESTCASE(24,TestGenericTime);
         TESTCASE(25,TestGenericTimeZoneOrder);
+        TESTCASE(26,TestTimeZoneStringsAPI);
         default: name = ""; break;
     }
 }
@@ -1492,6 +1493,57 @@ void DateFormatTest::TestGenericTimeZoneOrder() {
   expect(XDATA, XDATA_length, en);
 }
 
+void DateFormatTest::TestTimeZoneStringsAPI() {
+    // Verify data
+    UErrorCode status  = U_ZERO_ERROR;
+    DateFormatSymbols symbols(Locale::getUS(), status);
+    StringEnumeration* keys = symbols.createZoneStringIDs(status);
+    if(U_FAILURE(status)){
+        errln("Could not create the StringEnumeration for Locale::getUS(). Error: %s", u_errorName(status)); 
+        return;
+    }
+    const UnicodeString* key = NULL;
+
+    while( (key = keys->snext(status))!=NULL){ 
+        logln(prettify(*key)); 
+    }
+    if(U_FAILURE(status)){
+        errln("Could not iterate over the StringEnumeration. Error: %s", u_errorName(status)); 
+        return;
+    }
+    UnicodeString expectedKey("America/Los_Angeles");
+    UnicodeString expectedStrs[DateFormatSymbols::TIMEZONE_COUNT];
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("PT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("PST");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("PDT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Pacific Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Pacific Standard Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Pacific Daylight Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("Los Angeles");
+    for(int32_t i=0; i<DateFormatSymbols::TIMEZONE_COUNT; i++){
+        UnicodeString result;
+        result = symbols.getZoneString(expectedKey, (DateFormatSymbols::TimeZoneTranslationType)i, result,status);
+        if(U_FAILURE(status)){
+            errln("Could not retrieve display name. Error: %s", u_errorName(status)); 
+            return;
+        }
+        if(expectedStrs[i] != result){
+            errln("Did not get the expected string. Expected: "+expectedStrs[i]+ UnicodeString(" Got: ") + result ); 
+        }
+    }
+    expectedKey.setTo("America/Phoenix",0);
+    UnicodeString exemplarCity("San Francisco");
+    UnicodeString result;
+    symbols.setZoneString(expectedKey,DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY, exemplarCity, status);
+    if(U_FAILURE(status)){
+        errln("setZoneString() did not succeed. Error: %s", u_errorName(status)); 
+        return;
+    }    
+    result = symbols.getZoneString(expectedKey, DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY, result,status);
+    if(result != exemplarCity){ 
+        errln("setZoneString() did not succeed. Expected: " + exemplarCity + " Got: " + result); 
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
