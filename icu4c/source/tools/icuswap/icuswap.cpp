@@ -31,28 +31,13 @@
 #include "uarrsort.h"
 #include "ucmndata.h"
 #include "udataswp.h"
+#include "swapimpl.h"
 #include "toolutil.h"
 #include "uoptions.h"
-
-/* swapping implementations in common */
-
-#include "uresdata.h"
-#include "ucnv_io.h"
-#include "uprops.h"
-#include "ucase.h"
-#include "ubidi_props.h"
-#include "ucol_swp.h"
-#include "ucnv_bld.h"
-#include "unormimp.h"
-#include "sprpimpl.h"
-#include "propname.h"
-#include "rbbidata.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-/* swapping implementations in i18n */
 
 /* definitions */
 
@@ -81,37 +66,13 @@ fileSize(FILE *f) {
 }
 
 /**
- * Identifies and then transforms the ICU data piece in-place, or determines
- * its length. See UDataSwapFn.
- * This function handles .dat data packages as well as single data pieces
- * and internally dispatches to per-type swap functions.
- * Sets a U_UNSUPPORTED_ERROR if the data format is not recognized.
- *
- * @see UDataSwapFn
- * @see udata_openSwapper
- * @see udata_openSwapperForInputData
- * @internal ICU 2.8
- */
-static int32_t
-udata_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode);
-
-/**
  * Swap an ICU .dat package, including swapping of enclosed items.
  */
 U_CFUNC int32_t U_CALLCONV
-udata_swapPackage(const UDataSwapper *ds,
+udata_swapPackage(const char *inFilename, const char *outFilename,
+                  const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode);
-
-/*
- * udata_swapPackage() needs to rename ToC name entries from the old package
- * name to the new one.
- * We store the filenames here, and udata_swapPackage() will extract the
- * package names.
- */
-static const char *inFilename, *outFilename;
 
 U_CDECL_BEGIN
 static void U_CALLCONV
@@ -148,6 +109,7 @@ main(int argc, char *argv[]) {
     int rc;
 
     UDataSwapper *ds;
+    const UDataInfo *pInfo;
     UErrorCode errorCode;
     uint8_t outCharset;
     UBool outIsBigEndian;
@@ -196,10 +158,6 @@ main(int argc, char *argv[]) {
 
     in=out=NULL;
     data=NULL;
-
-    /* udata_swapPackage() needs the filenames */
-    inFilename=argv[1];
-    outFilename=argv[2];
 
     /* open the input file, get its length, allocate memory for it, read the file */
     in=fopen(argv[1], "rb");
@@ -254,13 +212,40 @@ main(int argc, char *argv[]) {
     ds->printError=printError;
     ds->printErrorContext=stderr;
 
-    length=udata_swap(ds, data, length, data, &errorCode);
-    udata_closeSwapper(ds);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "%s: udata_swap(\"%s\") failed - %s\n",
-                pname, argv[1], u_errorName(errorCode));
-        rc=4;
-        goto done;
+    /* speculative cast, protected by the following length check */
+    pInfo=(const UDataInfo *)((const char *)data+4);
+
+    if( length>=20 &&
+        pInfo->dataFormat[0]==0x43 &&   /* dataFormat="CmnD" */
+        pInfo->dataFormat[1]==0x6d &&
+        pInfo->dataFormat[2]==0x6e &&
+        pInfo->dataFormat[3]==0x44
+    ) {
+        /*
+         * swap the .dat package
+         * udata_swapPackage() needs to rename ToC name entries from the old package
+         * name to the new one.
+         * We pass it the filenames, and udata_swapPackage() will extract the
+         * package names.
+         */
+        length=udata_swapPackage(argv[1], argv[2], ds, data, length, data, &errorCode);
+        udata_closeSwapper(ds);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "%s: udata_swapPackage(\"%s\") failed - %s\n",
+                    pname, argv[1], u_errorName(errorCode));
+            rc=4;
+            goto done;
+        }
+    } else {
+        /* swap the data, which is not a .dat package */
+        length=udata_swap(ds, data, length, data, &errorCode);
+        udata_closeSwapper(ds);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "%s: udata_swap(\"%s\") failed - %s\n",
+                    pname, argv[1], u_errorName(errorCode));
+            rc=4;
+            goto done;
+        }
     }
 
     out=fopen(argv[2], "wb");
@@ -293,127 +278,6 @@ done:
         free(data);
     }
     return rc;
-}
-
-/* swap the data ------------------------------------------------------------ */
-
-static const struct {
-    uint8_t dataFormat[4];
-    UDataSwapFn *swapFn;
-} swapFns[]={
-    { { 0x52, 0x65, 0x73, 0x42 }, ures_swap },          /* dataFormat="ResB" */
-#if !UCONFIG_NO_LEGACY_CONVERSION
-    { { 0x63, 0x6e, 0x76, 0x74 }, ucnv_swap },          /* dataFormat="cnvt" */
-    { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases },   /* dataFormat="CvAl" */
-#endif
-    { { 0x43, 0x6d, 0x6e, 0x44 }, udata_swapPackage },  /* dataFormat="CmnD" */
-#if !UCONFIG_NO_IDNA
-    { { 0x53, 0x50, 0x52, 0x50 }, usprep_swap },        /* dataFormat="SPRP" */
-#endif
-    /* insert data formats here, descending by expected frequency of occurrence */
-    { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
-
-    { { UCASE_FMT_0, UCASE_FMT_1, UCASE_FMT_2, UCASE_FMT_3 },
-                                  ucase_swap },         /* dataFormat="cAsE" */
-
-    { { UBIDI_FMT_0, UBIDI_FMT_1, UBIDI_FMT_2, UBIDI_FMT_3 },
-                                  ubidi_swap },         /* dataFormat="BiDi" */
-
-#if !UCONFIG_NO_NORMALIZATION
-    { { 0x4e, 0x6f, 0x72, 0x6d }, unorm_swap },         /* dataFormat="Norm" */
-#endif
-#if !UCONFIG_NO_COLLATION
-    { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
-    { { 0x49, 0x6e, 0x76, 0x43 }, ucol_swapInverseUCA },/* dataFormat="InvC" */
-#endif
-#if !UCONFIG_NO_BREAK_ITERATION
-    { { 0x42, 0x72, 0x6b, 0x20 }, ubrk_swap },          /* dataFormat="Brk " */
-#endif
-    { { 0x70, 0x6e, 0x61, 0x6d }, upname_swap },        /* dataFormat="pnam" */
-    { { 0x75, 0x6e, 0x61, 0x6d }, uchar_swapNames }     /* dataFormat="unam" */
-};
-
-static int32_t
-udata_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode) {
-    char dataFormatChars[4];
-    const UDataInfo *pInfo;
-    int32_t headerSize, i, swappedLength;
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    /*
-     * Preflight the header first; checks for illegal arguments, too.
-     * Do not swap the header right away because the format-specific swapper
-     * will swap it, get the headerSize again, and also use the header
-     * information. Otherwise we would have to pass some of the information
-     * and not be able to use the UDataSwapFn signature.
-     */
-    headerSize=udata_swapDataHeader(ds, inData, -1, NULL, pErrorCode);
-
-    /*
-     * If we wanted udata_swap() to also handle non-loadable data like a UTrie,
-     * then we could check here for further known magic values and structures.
-     */
-    if(U_FAILURE(*pErrorCode)) {
-        return 0; /* the data format was not recognized */
-    }
-
-    pInfo=(const UDataInfo *)((const char *)inData+4);
-
-    {
-        /* convert the data format from ASCII to Unicode to the system charset */
-        UChar u[4]={
-             pInfo->dataFormat[0], pInfo->dataFormat[1],
-             pInfo->dataFormat[2], pInfo->dataFormat[3]
-        };
-
-        if(uprv_isInvariantUString(u, 4)) {
-            u_UCharsToChars(u, dataFormatChars, 4);
-        } else {
-            dataFormatChars[0]=dataFormatChars[1]=dataFormatChars[2]=dataFormatChars[3]='?';
-        }
-    }
-
-    /* dispatch to the swap function for the dataFormat */
-    for(i=0; i<LENGTHOF(swapFns); ++i) {
-        if(0==memcmp(swapFns[i].dataFormat, pInfo->dataFormat, 4)) {
-            swappedLength=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
-
-            if(U_FAILURE(*pErrorCode)) {
-                udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x (\"%c%c%c%c\") - %s\n",
-                                 pInfo->dataFormat[0], pInfo->dataFormat[1],
-                                 pInfo->dataFormat[2], pInfo->dataFormat[3],
-                                 dataFormatChars[0], dataFormatChars[1],
-                                 dataFormatChars[2], dataFormatChars[3],
-                                 u_errorName(*pErrorCode));
-            } else if(swappedLength<(length-15)) {
-                /* swapped less than expected */
-                udata_printError(ds, "udata_swap() warning: swapped only %d out of %d bytes - data format %02x.%02x.%02x.%02x (\"%c%c%c%c\")\n",
-                                 swappedLength, length,
-                                 pInfo->dataFormat[0], pInfo->dataFormat[1],
-                                 pInfo->dataFormat[2], pInfo->dataFormat[3],
-                                 dataFormatChars[0], dataFormatChars[1],
-                                 dataFormatChars[2], dataFormatChars[3],
-                                 u_errorName(*pErrorCode));
-            }
-
-            return swappedLength;
-        }
-    }
-
-    /* the dataFormat was not recognized */
-    udata_printError(ds, "udata_swap(): unknown data format %02x.%02x.%02x.%02x (\"%c%c%c%c\")\n",
-                     pInfo->dataFormat[0], pInfo->dataFormat[1],
-                     pInfo->dataFormat[2], pInfo->dataFormat[3],
-                     dataFormatChars[0], dataFormatChars[1],
-                     dataFormatChars[2], dataFormatChars[3]);
-
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0;
 }
 
 /* swap .dat package files -------------------------------------------------- */
@@ -465,7 +329,8 @@ compareToCEntries(const void *context, const void *left, const void *right) {
 U_CDECL_END
 
 U_CFUNC int32_t U_CALLCONV
-udata_swapPackage(const UDataSwapper *ds,
+udata_swapPackage(const char *inFilename, const char *outFilename,
+                  const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode) {
     const UDataInfo *pInfo;
@@ -577,7 +442,7 @@ udata_swapPackage(const UDataSwapper *ds,
             }
         }
         if((uint32_t)length<offset) {
-            udata_printError(ds, "udata_swapPackage(): too few bytes (%d after header) for unames.icu\n",
+            udata_printError(ds, "udata_swapPackage(): too few bytes (%d after header) for a .dat package\n",
                              length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
             return 0;
