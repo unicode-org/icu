@@ -12,6 +12,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
+#include "putilimp.h"
 
 // *****************************************************************************
 // class CalendarTest
@@ -192,6 +193,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("TestJD---"); logln("");
             TestJD();
+          }
+          break;
+        case 21:
+          name = "TestMaxMin";
+          if(exec) {
+            logln("TestMaxMin---"); logln("");
+            TestMaxMin();
           }
           break;
            
@@ -1927,6 +1935,56 @@ UDate CalendarTest::minDateOfCalendar(const Calendar& cal, UBool &isGregorian, U
   return doMinDateOfCalendar(cal.clone(), isGregorian, status);
 }
 
+void CalendarTest::TestMaxMin()
+{
+    UErrorCode status;
+    Calendar *c = Calendar::createInstance("he_IL@calendar=hebrew", status);
+    if(U_FAILURE(status)) { errln("Error creating calendar"); return; }
+    enum { TMM_MIN = 0, 
+           TMM_MAX, 
+           TMM_MIN_AMIN,
+           TMM_MAX_AMIN,
+           TMM_MIN_AMAX,
+           TMM_MAX_AMAX,
+           TMM_COUNT
+    } TMMType;
+    int32_t fields[TMM_COUNT][UCAL_FIELD_COUNT];
+    int32_t i;
+    int32_t j;
+    
+    for(i=(int32_t)UCAL_ERA;i<(int32_t)UCAL_FIELD_COUNT;i++) {
+        for(j=0;j<TMM_COUNT;j+=2) {
+            fields[j+0][i] = INT32_MAX;  // odd numbered mins
+            fields[j+1][i] = INT32_MIN;  // even numbered maxes
+        }
+    }
+    for(j=0;j<(12*22);j++) {
+        for(i=(int32_t)UCAL_ERA;i<(int32_t)UCAL_FIELD_COUNT;i++) {
+            int32_t v = c->get((UCalendarDateFields)i, status);
+            int32_t min = c->getActualMinimum((UCalendarDateFields)i, status);
+            int32_t max = c->getActualMaximum((UCalendarDateFields)i, status);
+
+            fields[TMM_MIN][i] = uprv_min(fields[TMM_MIN][i], v);
+            fields[TMM_MAX][i] = uprv_max(fields[TMM_MAX][i], v);
+            fields[TMM_MIN_AMIN][i] = uprv_min(fields[TMM_MIN_AMIN][i], min);
+            fields[TMM_MAX_AMIN][i] = uprv_max(fields[TMM_MAX_AMIN][i], min);
+            fields[TMM_MIN_AMAX][i] = uprv_min(fields[TMM_MIN_AMAX][i], max);
+            fields[TMM_MAX_AMAX][i] = uprv_max(fields[TMM_MAX_AMAX][i], max);
+            
+        }
+        c->add(UCAL_MONTH,1,status);
+    }
+    logln("field\tmin\tmax\tminamin\tmaxamin\tminamax\tmaxamax\tGreatestMin\tLeastMax\n");
+    for(i=(int32_t)UCAL_ERA;i<(int32_t)UCAL_FIELD_COUNT;i++) {
+        log(fieldName((UCalendarDateFields)i));
+        for(j=0;j<TMM_COUNT;j++) {
+            log(" %03d", fields[j][i]);
+        }
+        logln("\t%d\t%d",
+            c->getGreatestMinimum((UCalendarDateFields)i),
+            c->getLeastMaximum((UCalendarDateFields)i));
+    }
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
