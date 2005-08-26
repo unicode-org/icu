@@ -33,7 +33,7 @@ TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = icuswap.o swapimpl.o
+OBJECTS = icuswap.o
 
 DEPS = $(OBJECTS:.o=.d)
 
