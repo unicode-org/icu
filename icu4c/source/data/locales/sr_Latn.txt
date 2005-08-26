@@ -633,101 +633,43 @@ sr_Latn{
         }
     }
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Južni pol",
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
         }
-        {
-            "Africa/Kinshasa",
-            "",
-            "",
-            "",
-            "",
-            "Kinšasa",
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
         }
-        {
-            "Asia/Shanghai",
-            "",
-            "",
-            "",
-            "",
-            "Šangaj",
+        "Asia:Shanghai"{
+            ec{"Šangaj"}
         }
-        {
-            "Europe/Belgrade",
-            "Centralno Evropsko Vreme",
-            "",
-            "Centralno Evropsko Vreme",
-            "",
-            "Belgrade",
+        "Europe:Belgrade"{
+            ec{"Belgrade"}
+            ld{"Centralno Evropsko Vreme"}
+            ls{"Centralno Evropsko Vreme"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsk",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamčatka",
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
         }
-        {
-            "Asia/Anadyr",
-            "",
-            "",
-            "",
-            "",
-            "Anadir",
+        "Asia:Anadyr"{
+            ec{"Anadir"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Užgorod",
+        "Europe:Uzhgorod"{
+            ec{"Užgorod"}
         }
-        {
-            "Europe/Kiev",
-            "",
-            "",
-            "",
-            "",
-            "Kijev",
+        "Europe:Kiev"{
+            ec{"Kijev"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Zaporožje",
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Taškent",
+        "Asia:Tashkent"{
+            ec{"Taškent"}
         }
     }
 }

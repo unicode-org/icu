@@ -182,13 +182,12 @@ fa_AF{
         }
     }
     zoneStrings{
-        {
-            "Asia/Kabul",
-            "وقت افغانستان",
-            "AFT",
-            "وقت افغانستان",
-            "AFT",
-            "کابل",
+        "Asia:Kabul"{
+            ec{"Kabul"}
+            ld{"وقت افغانستان"}
+            ls{"وقت افغانستان"}
+            sd{"AFT"}
+            ss{"AFT"}
         }
     }
 }

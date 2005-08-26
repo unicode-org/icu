@@ -1908,61 +1908,30 @@ nb{
         }
     }
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Sydpolen",
+        "Antarctica:South_Pole"{
+            ec{"Sydpolen"}
         }
-        {
-            "America/St_Johns",
-            "",
-            "",
-            "",
-            "",
-            "St. John's",
+        "America:St_Johns"{
+            ec{"St. John's"}
         }
-        {
-            "America/Godthab",
-            "",
-            "",
-            "",
-            "",
-            "Godthåb",
+        "America:Godthab"{
+            ec{"Godthåb"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azorene",
+        "Atlantic:Azores"{
+            ec{"Azorene"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lisboa",
+        "Europe:Lisbon"{
+            ec{"Lisboa"}
         }
-        {
-            "Europe/Bucharest",
-            "Eastern European Standard Time",
-            "EET",
-            "Eastern European Daylight Time",
-            "EEST",
-            "Bucuresti",
+        "Europe:Bucharest"{
+            ec{"Bucuresti"}
+            ld{"Eastern European Daylight Time"}
+            ls{"Eastern European Standard Time"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
     }
 }

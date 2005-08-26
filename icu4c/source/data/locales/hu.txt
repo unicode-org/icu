@@ -1617,13 +1617,10 @@ hu{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "Europe/Paris",
-            "",
-            "",
-            "",
-            "",
-            "Paris",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"közép-európai nyári idő"}
+            ls{"közép-európai idő"}
         }
     }
 }

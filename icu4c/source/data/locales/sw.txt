@@ -178,13 +178,12 @@ sw{
         }
     }
     zoneStrings{
-        {
-            "Africa/Nairobi",
-            "Saa za Africa Mashariki",
-            "EAT",
-            "Saa za Africa Mashariki",
-            "EAT",
-            "Nairobi",
+        "Africa:Nairobi"{
+            ec{"Nairobi"}
+            ld{"Saa za Africa Mashariki"}
+            ls{"Saa za Africa Mashariki"}
+            sd{"EAT"}
+            ss{"EAT"}
         }
     }
 }

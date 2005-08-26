@@ -1875,435 +1875,261 @@ fr{
     }
     localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Pôle Sud",
+        "Antarctica:South_Pole"{
+            ec{"Pôle Sud"}
         }
-        {
-            "Antarctica/DumontDUrville",
-            "",
-            "",
-            "",
-            "",
-            "Dumont d'Urville",
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
         }
-        {
-            "Antarctica/McMurdo",
-            "",
-            "",
-            "",
-            "",
-            "Mac Murdo",
+        "Antarctica:McMurdo"{
+            ec{"Mac Murdo"}
         }
-        {
-            "America/Argentina/ComodRivadavia",
-            "",
-            "",
-            "",
-            "",
-            "Comodoro Rivadavia",
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comodoro Rivadavia"}
         }
-        {
-            "Australia/Adelaide",
-            "",
-            "",
-            "",
-            "",
-            "Adélaïde",
+        "Australia:Adelaide"{
+            ec{"Adélaïde"}
         }
-        {
-            "America/Manaus",
-            "",
-            "",
-            "",
-            "",
-            "Manaos",
+        "America:Manaus"{
+            ec{"Manaos"}
         }
-        {
-            "America/Vancouver",
-            "Heure normale du Pacifique",
-            "HNP",
-            "Heure avancée du Pacifique",
-            "HAP",
-            "Vancouver",
-            "Heure du Pacifique",
-            "HP",
+        "America:Vancouver"{
+            ec{"Vancouver"}
+            ld{"Heure avancée du Pacifique"}
+            lg{"Heure du Pacifique"}
+            ls{"Heure normale du Pacifique"}
+            sd{"HAP"}
+            sg{"HP"}
+            ss{"HNP"}
         }
-        {
-            "America/Edmonton",
-            "Heure normale des Rocheuses",
-            "HNR",
-            "Heure avancée des Rocheuses",
-            "HAR",
-            "Edmonton",
-            "Heure des Rocheuses",
-            "HR",
+        "America:Edmonton"{
+            ec{"Edmonton"}
+            ld{"Heure avancée des Rocheuses"}
+            lg{"Heure des Rocheuses"}
+            ls{"Heure normale des Rocheuses"}
+            sd{"HAR"}
+            sg{"HR"}
+            ss{"HNR"}
         }
-        {
-            "America/Winnipeg",
-            "Heure normale du Centre",
-            "HNC",
-            "Heure avancée du Centre",
-            "HAC",
-            "Winnipeg",
-            "Heure du Centre",
-            "HC",
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+            ld{"Heure avancée du Centre"}
+            lg{"Heure du Centre"}
+            ls{"Heure normale du Centre"}
+            sd{"HAC"}
+            sg{"HC"}
+            ss{"HNC"}
         }
-        {
-            "America/Montreal",
-            "Heure normale de l’Est",
-            "HNE",
-            "Heure avancée de l’Est",
-            "HAE",
-            "Montréal",
-            "Heure de l’Est",
-            "HE",
+        "America:Montreal"{
+            ec{"Montréal"}
+            ld{"Heure avancée de l’Est"}
+            lg{"Heure de l’Est"}
+            ls{"Heure normale de l’Est"}
+            sd{"HAE"}
+            sg{"HE"}
+            ss{"HNE"}
         }
-        {
-            "America/Halifax",
-            "Heure normale de l’Atlantique",
-            "HNA",
-            "Heure avancée de l’Atlantique",
-            "HAA",
-            "Halifax",
-            "Heure de l’Atlantique",
-            "HA",
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Heure avancée de l’Atlantique"}
+            lg{"Heure de l’Atlantique"}
+            ls{"Heure normale de l’Atlantique"}
+            sd{"HAA"}
+            sg{"HA"}
+            ss{"HNA"}
         }
-        {
-            "America/St_Johns",
-            "Heure normale de Terre-Neuve",
-            "HNT",
-            "Heure avancée de Terre-Neuve",
-            "HAT",
-            "Saint-Jean de Terre-Neuve",
-            "Heure de Terre-Neuve",
-            "HT",
+        "America:St_Johns"{
+            ec{"Saint-Jean de Terre-Neuve"}
+            ld{"Heure avancée de Terre-Neuve"}
+            lg{"Heure de Terre-Neuve"}
+            ls{"Heure normale de Terre-Neuve"}
+            sd{"HAT"}
+            sg{"HT"}
+            ss{"HNT"}
         }
-        {
-            "Pacific/Easter",
-            "",
-            "",
-            "",
-            "",
-            "Île de Pâques",
+        "Pacific:Easter"{
+            ec{"Île de Pâques"}
         }
-        {
-            "Asia/Kashgar",
-            "",
-            "",
-            "",
-            "",
-            "Kachgar",
+        "Asia:Kashgar"{
+            ec{"Kachgar"}
         }
-        {
-            "Asia/Shanghai",
-            "Heure normale de Chine",
-            "HNC",
-            "Heure avancée de Chine",
-            "HAC",
-            "Shanghai",
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Heure avancée de Chine"}
+            ls{"Heure normale de Chine"}
+            sd{"HAC"}
+            ss{"HNC"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Îles Canaries",
+        "Atlantic:Canary"{
+            ec{"Îles Canaries"}
         }
-        {
-            "Europe/Paris",
-            "Heure normale de l’Europe centrale",
-            "HNEC",
-            "Heure avancée de l’Europe centrale",
-            "HAEC",
-            "Paris",
-            "Heure de l’Europe centrale",
-            "HEC",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"Heure avancée de l’Europe centrale"}
+            lg{"Heure de l’Europe centrale"}
+            ls{"Heure normale de l’Europe centrale"}
+            sd{"HAEC"}
+            sg{"HEC"}
+            ss{"HNEC"}
         }
-        {
-            "Europe/London",
-            "",
-            "",
-            "",
-            "",
-            "Londres",
+        "Europe:London"{
+            ec{"Londres"}
         }
-        {
-            "Asia/Jerusalem",
-            "Heure normale d’Israël",
-            "HNI",
-            "Heure avancée d’Israël",
-            "HAI",
-            "Jérusalem",
+        "Asia:Jerusalem"{
+            ec{"Jérusalem"}
+            ld{"Heure avancée d’Israël"}
+            ls{"Heure normale d’Israël"}
+            sd{"HAI"}
+            ss{"HNI"}
         }
-        {
-            "Asia/Tokyo",
-            "Heure normale du Japon",
-            "HNJ",
-            "Heure avancée du Japon",
-            "HAJ",
-            "Tokyo",
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"Heure avancée du Japon"}
+            ls{"Heure normale du Japon"}
+            sd{"HAJ"}
+            ss{"HNJ"}
         }
-        {
-            "Asia/Aqtau",
-            "",
-            "",
-            "",
-            "",
-            "Chevtchenko",
+        "Asia:Aqtau"{
+            ec{"Chevtchenko"}
         }
-        {
-            "Asia/Oral",
-            "",
-            "",
-            "",
-            "",
-            "Ouralsk",
+        "Asia:Oral"{
+            ec{"Ouralsk"}
         }
-        {
-            "Asia/Aqtobe",
-            "",
-            "",
-            "",
-            "",
-            "Aktioubinsk",
+        "Asia:Aqtobe"{
+            ec{"Aktioubinsk"}
         }
-        {
-            "Asia/Almaty",
-            "",
-            "",
-            "",
-            "",
-            "Alma Ata",
+        "Asia:Almaty"{
+            ec{"Alma Ata"}
         }
-        {
-            "Africa/Timbuktu",
-            "",
-            "",
-            "",
-            "",
-            "Tombouctou",
+        "Africa:Timbuktu"{
+            ec{"Tombouctou"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Oulan-Bator",
+        "Asia:Ulaanbaatar"{
+            ec{"Oulan-Bator"}
         }
-        {
-            "Asia/Choibalsan",
-            "",
-            "",
-            "",
-            "",
-            "Tchoïbalsan",
+        "Asia:Choibalsan"{
+            ec{"Tchoïbalsan"}
         }
-        {
-            "America/Mexico_City",
-            "",
-            "",
-            "",
-            "",
-            "Mexico",
+        "America:Mexico_City"{
+            ec{"Mexico"}
         }
-        {
-            "Pacific/Marquesas",
-            "",
-            "",
-            "",
-            "",
-            "Marquises",
+        "Pacific:Marquesas"{
+            ec{"Marquises"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Açores",
+        "Atlantic:Azores"{
+            ec{"Açores"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lisbonne",
+        "Europe:Lisbon"{
+            ec{"Lisbonne"}
         }
-        {
-            "Europe/Bucharest",
-            "Heure normale de l’Europe de l’Est",
-            "HEE",
-            "Heure avancée de l’Europe de l’Est",
-            "HAEE",
-            "Bucarest",
+        "Europe:Bucharest"{
+            ec{"Bucarest"}
+            ld{"Heure avancée de l’Europe de l’Est"}
+            ls{"Heure normale de l’Europe de l’Est"}
+            sd{"HAEE"}
+            ss{"HEE"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moscou",
+        "Europe:Moscow"{
+            ec{"Moscou"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Ekaterinbourg",
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinbourg"}
         }
-        {
-            "Asia/Novosibirsk",
-            "",
-            "",
-            "",
-            "",
-            "Novossibirsk",
+        "Asia:Novosibirsk"{
+            ec{"Novossibirsk"}
         }
-        {
-            "Asia/Irkutsk",
-            "",
-            "",
-            "",
-            "",
-            "Irkoutsk",
+        "Asia:Irkutsk"{
+            ec{"Irkoutsk"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Iakoutsk",
+        "Asia:Yakutsk"{
+            ec{"Iakoutsk"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sakhaline",
+        "Asia:Sakhalin"{
+            ec{"Sakhaline"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamtchatka",
+        "Asia:Kamchatka"{
+            ec{"Kamtchatka"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Oujgorod",
+        "Europe:Uzhgorod"{
+            ec{"Oujgorod"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Zaporojie",
+        "Europe:Zaporozhye"{
+            ec{"Zaporojie"}
         }
-        {
-            "Pacific/Honolulu",
-            "Heure normale d’Hawaï",
-            "HST",
-            "Heure avancée d’Hawaï",
-            "HDT",
-            "Honolulu",
-            "Heure d’Hawaï",
-            "HT",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Heure avancée d’Hawaï"}
+            lg{"Heure d’Hawaï"}
+            ls{"Heure normale d’Hawaï"}
+            sd{"HDT"}
+            sg{"HT"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "Heure normale de l’Alaska",
-            "HNAK",
-            "Heure avancée de l’Alaska",
-            "HAAK",
-            "Anchorage",
-            "Heure de l’Alaska",
-            "HAK",
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Heure avancée de l’Alaska"}
+            lg{"Heure de l’Alaska"}
+            ls{"Heure normale de l’Alaska"}
+            sd{"HAAK"}
+            sg{"HAK"}
+            ss{"HNAK"}
         }
-        {
-            "America/Los_Angeles",
-            "Heure normale du Pacifique (ÉUA)",
-            "HNP (ÉUA)",
-            "Heure avancée du Pacifique (ÉUA)",
-            "HAP (ÉUA)",
-            "Los Angeles",
-            "Heure du Pacifique (ÉUA)",
-            "HP (ÉUA)",
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Heure avancée du Pacifique (ÉUA)"}
+            lg{"Heure du Pacifique (ÉUA)"}
+            ls{"Heure normale du Pacifique (ÉUA)"}
+            sd{"HAP (ÉUA)"}
+            sg{"HP (ÉUA)"}
+            ss{"HNP (ÉUA)"}
         }
-        {
-            "America/Phoenix",
-            "Heure normale des Rocheuses (ÉUA)",
-            "HNR (ÉUA)",
-            "Heure avancée des Rocheuses (ÉUA)",
-            "HAR (ÉUA)",
-            "Phoenix",
-            "Heure des Rocheuses (ÉUA)",
-            "HR (ÉUA)",
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Heure avancée des Rocheuses (ÉUA)"}
+            lg{"Heure des Rocheuses (ÉUA)"}
+            ls{"Heure normale des Rocheuses (ÉUA)"}
+            sd{"HAR (ÉUA)"}
+            sg{"HR (ÉUA)"}
+            ss{"HNR (ÉUA)"}
         }
-        {
-            "America/Denver",
-            "Heure normale des Rocheuses (ÉUA)",
-            "HNR (ÉUA)",
-            "Heure avancée des Rocheuses (ÉUA)",
-            "HAR (ÉUA)",
-            "Denver",
-            "Heure des Rocheuses (ÉUA)",
-            "HR (ÉUA)",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Heure avancée des Rocheuses (ÉUA)"}
+            lg{"Heure des Rocheuses (ÉUA)"}
+            ls{"Heure normale des Rocheuses (ÉUA)"}
+            sd{"HAR (ÉUA)"}
+            sg{"HR (ÉUA)"}
+            ss{"HNR (ÉUA)"}
         }
-        {
-            "America/Chicago",
-            "Heure normale du Centre (ÉUA)",
-            "HNC (ÉUA)",
-            "Heure avancée du Centre (ÉUA)",
-            "HAC (ÉUA)",
-            "Chicago",
-            "Heure du Centre (ÉUA)",
-            "HC (ÉUA)",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Heure avancée du Centre (ÉUA)"}
+            lg{"Heure du Centre (ÉUA)"}
+            ls{"Heure normale du Centre (ÉUA)"}
+            sd{"HAC (ÉUA)"}
+            sg{"HC (ÉUA)"}
+            ss{"HNC (ÉUA)"}
         }
-        {
-            "America/Indianapolis",
-            "Heure normale de l’Est (ÉUA)",
-            "HNE (ÉUA)",
-            "Heure avancée de l’Est (ÉUA)",
-            "HAE (ÉUA)",
-            "Indianapolis",
-            "Heure de l’Est (ÉUA)",
-            "HE (ÉUA)",
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Heure avancée de l’Est (ÉUA)"}
+            lg{"Heure de l’Est (ÉUA)"}
+            ls{"Heure normale de l’Est (ÉUA)"}
+            sd{"HAE (ÉUA)"}
+            sg{"HE (ÉUA)"}
+            ss{"HNE (ÉUA)"}
         }
-        {
-            "America/Detroit",
-            "",
-            "",
-            "",
-            "",
-            "Détroit",
+        "America:Detroit"{
+            ec{"Détroit"}
         }
-        {
-            "America/New_York",
-            "Heure normale de l’Est (ÉUA)",
-            "HNE (ÉUA)",
-            "Heure avancée de l’Est (ÉUA)",
-            "HAE (ÉUA)",
-            "New York",
-            "Heure de l’Est (ÉUA)",
-            "HE (ÉUA)",
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Heure avancée de l’Est (ÉUA)"}
+            lg{"Heure de l’Est (ÉUA)"}
+            ls{"Heure normale de l’Est (ÉUA)"}
+            sd{"HAE (ÉUA)"}
+            sg{"HE (ÉUA)"}
+            ss{"HNE (ÉUA)"}
         }
     }
 }

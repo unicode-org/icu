@@ -1419,29 +1419,26 @@ ga{
     }
     localPatternChars{"RbMLkUnsSElFtTauKcBeyrACvdz"}
     zoneStrings{
-        {
-            "Europe/Belfast",
-            "Meán-Am Greenwich",
-            "MAG",
-            "Am Samhraidh na Breataine",
-            "ASB",
-            "Béal Feirste",
+        "Europe:Belfast"{
+            ec{"Béal Feirste"}
+            ld{"Am Samhraidh na Breataine"}
+            ls{"Meán-Am Greenwich"}
+            sd{"ASB"}
+            ss{"MAG"}
         }
-        {
-            "Europe/London",
-            "Meán-Am Greenwich",
-            "MAG",
-            "Am Samhraidh na Breataine",
-            "ASB",
-            "Londain",
+        "Europe:London"{
+            ec{"Londain"}
+            ld{"Am Samhraidh na Breataine"}
+            ls{"Meán-Am Greenwich"}
+            sd{"ASB"}
+            ss{"MAG"}
         }
-        {
-            "Europe/Dublin",
-            "Meán-Am Greenwich",
-            "MAG",
-            "Am Samhraidh na hÉireann",
-            "ASÉ",
-            "Baile Átha Cliath",
+        "Europe:Dublin"{
+            ec{"Baile Átha Cliath"}
+            ld{"Am Samhraidh na hÉireann"}
+            ls{"Meán-Am Greenwich"}
+            sd{"ASÉ"}
+            ss{"MAG"}
         }
     }
 }

@@ -1590,285 +1590,166 @@ cs{
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Jižní pól",
+        "Antarctica:South_Pole"{
+            ec{"Jižní pól"}
         }
-        {
-            "America/Cordoba",
-            "",
-            "",
-            "",
-            "",
-            "Kordoba",
+        "America:Cordoba"{
+            ec{"Kordoba"}
         }
-        {
-            "America/Halifax",
-            "Atlantický standardní čas",
-            "AST",
-            "Atlantický letní čas",
-            "ADT",
-            "Halifax",
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Atlantický letní čas"}
+            ls{"Atlantický standardní čas"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "Asia/Kashgar",
-            "",
-            "",
-            "",
-            "",
-            "Kašghar",
+        "Asia:Kashgar"{
+            ec{"Kašghar"}
         }
-        {
-            "Pacific/Galapagos",
-            "",
-            "",
-            "",
-            "",
-            "Galapágy",
+        "Pacific:Galapagos"{
+            ec{"Galapágy"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Kanárské ostrovy",
+        "Atlantic:Canary"{
+            ec{"Kanárské ostrovy"}
         }
-        {
-            "Europe/Paris",
-            "Středoevropský standardní čas",
-            "CET",
-            "Středoevropský letní čas",
-            "CEST",
-            "Paříž",
+        "Europe:Paris"{
+            ec{"Paříž"}
+            ld{"Středoevropský letní čas"}
+            ls{"Středoevropský standardní čas"}
+            sd{"CEST"}
+            ss{"CET"}
         }
-        {
-            "Europe/London",
-            "",
-            "",
-            "",
-            "",
-            "Londýn",
+        "Europe:London"{
+            ec{"Londýn"}
         }
-        {
-            "Asia/Jakarta",
-            "",
-            "",
-            "",
-            "",
-            "Jakarta",
+        "Asia:Jakarta"{
+            ec{"Jakarta"}
         }
-        {
-            "Asia/Jerusalem",
-            "Izraelský standardní čas",
-            "IST",
-            "Izraelský letní čas",
-            "IDT",
-            "Jeruzalém",
+        "Asia:Jerusalem"{
+            ec{"Jeruzalém"}
+            ld{"Izraelský letní čas"}
+            ls{"Izraelský standardní čas"}
+            sd{"IDT"}
+            ss{"IST"}
         }
-        {
-            "Asia/Tokyo",
-            "Japonský standardní čas",
-            "JST",
-            "Japonský standardní čas",
-            "JST",
-            "Tokio",
+        "Asia:Tokyo"{
+            ec{"Tokio"}
+            ld{"Japonský standardní čas"}
+            ls{"Japonský standardní čas"}
+            sd{"JST"}
+            ss{"JST"}
         }
-        {
-            "Africa/Casablanca",
-            "Greenwichský střední čas",
-            "GMT",
-            "Greenwichský střední čas",
-            "GMT",
-            "Casablanca",
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Greenwichský střední čas"}
+            ls{"Greenwichský střední čas"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Ulánbátar",
+        "Asia:Ulaanbaatar"{
+            ec{"Ulánbátar"}
         }
-        {
-            "America/Tijuana",
-            "",
-            "",
-            "",
-            "",
-            "Tichuana",
+        "America:Tijuana"{
+            ec{"Tichuana"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azorské ostrovy",
+        "Atlantic:Azores"{
+            ec{"Azorské ostrovy"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lisabon",
+        "Europe:Lisbon"{
+            ec{"Lisabon"}
         }
-        {
-            "Europe/Bucharest",
-            "Východoevropský standardní čas",
-            "EET",
-            "Východoevropský letní čas",
-            "EEST",
-            "Bukurešť",
+        "Europe:Bucharest"{
+            ec{"Bukurešť"}
+            ld{"Východoevropský letní čas"}
+            ls{"Východoevropský standardní čas"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Jekatěrinburg",
+        "Asia:Yekaterinburg"{
+            ec{"Jekatěrinburg"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsk",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Jakutsk",
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sachalin",
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamčatka",
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Užhorod",
+        "Europe:Uzhgorod"{
+            ec{"Užhorod"}
         }
-        {
-            "Europe/Kiev",
-            "",
-            "",
-            "",
-            "",
-            "Kyjev",
+        "Europe:Kiev"{
+            ec{"Kyjev"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Záporoží",
+        "Europe:Zaporozhye"{
+            ec{"Záporoží"}
         }
-        {
-            "Pacific/Honolulu",
-            "Havajský standardní čas",
-            "HST",
-            "Havajský standardní čas",
-            "HST",
-            "Honolulu",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Havajský standardní čas"}
+            ls{"Havajský standardní čas"}
+            sd{"HST"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "Aljašský standardní čas",
-            "AST",
-            "Aljašský letní čas",
-            "ADT",
-            "Anchorage",
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Aljašský letní čas"}
+            ls{"Aljašský standardní čas"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/Los_Angeles",
-            "Pacifický standardní čas",
-            "PST",
-            "Pacifický letní čas",
-            "PDT",
-            "Los Angeles",
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pacifický letní čas"}
+            ls{"Pacifický standardní čas"}
+            sd{"PDT"}
+            ss{"PST"}
         }
-        {
-            "America/Phoenix",
-            "Horský standardní čas",
-            "MST",
-            "Horský standardní čas",
-            "MST",
-            "Phoenix",
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Horský standardní čas"}
+            ls{"Horský standardní čas"}
+            sd{"MST"}
+            ss{"MST"}
         }
-        {
-            "America/Denver",
-            "Horský standardní čas",
-            "MST",
-            "Horský letní čas",
-            "MDT",
-            "Denver",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Horský letní čas"}
+            ls{"Horský standardní čas"}
+            sd{"MDT"}
+            ss{"MST"}
         }
-        {
-            "America/Chicago",
-            "Centrální standardní čas",
-            "CST",
-            "Centrální letní čas",
-            "CDT",
-            "Chicago",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Centrální letní čas"}
+            ls{"Centrální standardní čas"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        {
-            "America/Indianapolis",
-            "Východní standardní čas",
-            "EST",
-            "Východní standardní čas",
-            "EST",
-            "Indianapolis",
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Východní standardní čas"}
+            ls{"Východní standardní čas"}
+            sd{"EST"}
+            ss{"EST"}
         }
-        {
-            "America/New_York",
-            "Východní standardní čas",
-            "EST",
-            "Východní letní čas",
-            "EDT",
-            "New York",
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Východní letní čas"}
+            ls{"Východní standardní čas"}
+            sd{"EDT"}
+            ss{"EST"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Taškent",
+        "Asia:Tashkent"{
+            ec{"Taškent"}
         }
     }
 }

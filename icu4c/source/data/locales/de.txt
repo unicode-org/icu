@@ -1910,181 +1910,75 @@ de{
     }
     localPatternChars{"GjMtkHmsSEDFwWahKzJeugAZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Südpol",
+        "Antarctica:South_Pole"{
+            ec{"Südpol"}
         }
-        {
-            "Antarctica/Vostok",
-            "",
-            "",
-            "",
-            "",
-            "Wostok",
+        "Antarctica:Vostok"{
+            ec{"Wostok"}
         }
-        {
-            "America/St_Johns",
-            "",
-            "",
-            "",
-            "",
-            "St. John's",
+        "America:St_Johns"{
+            ec{"St. John's"}
         }
-        {
-            "Pacific/Easter",
-            "",
-            "",
-            "",
-            "",
-            "Osterinsel",
+        "Pacific:Easter"{
+            ec{"Osterinsel"}
         }
-        {
-            "Europe/Berlin",
-            "Mitteleuropäische Zeit",
-            "MEZ",
-            "Mitteleuropäische Sommerzeit",
-            "MESZ",
-            "Berlin",
+        "Europe:Berlin"{
+            ec{"Berlin"}
+            ld{"Mitteleuropäische Sommerzeit"}
+            ls{"Mitteleuropäische Zeit"}
+            sd{"MESZ"}
+            ss{"MEZ"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Kanaren",
+        "Atlantic:Canary"{
+            ec{"Kanaren"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Ulan-Bator",
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan-Bator"}
         }
-        {
-            "America/Mexico_City",
-            "",
-            "",
-            "",
-            "",
-            "Mexiko-Stadt",
+        "America:Mexico_City"{
+            ec{"Mexiko-Stadt"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azoren",
+        "Atlantic:Azores"{
+            ec{"Azoren"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lissabon",
+        "Europe:Lisbon"{
+            ec{"Lissabon"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskau",
+        "Europe:Moscow"{
+            ec{"Moskau"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Jekaterinburg",
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
         }
-        {
-            "Asia/Novosibirsk",
-            "",
-            "",
-            "",
-            "",
-            "Nowosibirsk",
+        "Asia:Novosibirsk"{
+            ec{"Nowosibirsk"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsk",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Jakutsk",
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
         }
-        {
-            "Asia/Vladivostok",
-            "",
-            "",
-            "",
-            "",
-            "Wladiwostok",
+        "Asia:Vladivostok"{
+            ec{"Wladiwostok"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sachalin",
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamtschatka",
+        "Asia:Kamchatka"{
+            ec{"Kamtschatka"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Uschgorod",
+        "Europe:Uzhgorod"{
+            ec{"Uschgorod"}
         }
-        {
-            "Europe/Kiev",
-            "",
-            "",
-            "",
-            "",
-            "Kiew",
+        "Europe:Kiev"{
+            ec{"Kiew"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Saporischja",
+        "Europe:Zaporozhye"{
+            ec{"Saporischja"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Taschkent",
+        "Asia:Tashkent"{
+            ec{"Taschkent"}
         }
     }
 }

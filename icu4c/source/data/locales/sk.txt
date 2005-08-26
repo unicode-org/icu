@@ -1416,157 +1416,62 @@ sk{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Južný pól",
+        "Antarctica:South_Pole"{
+            ec{"Južný pól"}
         }
-        {
-            "Asia/Shanghai",
-            "",
-            "",
-            "",
-            "",
-            "Šanghaj",
+        "Asia:Shanghai"{
+            ec{"Šanghaj"}
         }
-        {
-            "Pacific/Galapagos",
-            "",
-            "",
-            "",
-            "",
-            "Galapágy",
+        "Pacific:Galapagos"{
+            ec{"Galapágy"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Kanárske ostrovy",
+        "Atlantic:Canary"{
+            ec{"Kanárske ostrovy"}
         }
-        {
-            "Europe/London",
-            "",
-            "",
-            "",
-            "",
-            "Londýn",
+        "Europe:London"{
+            ec{"Londýn"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Ulanbátar",
+        "Asia:Ulaanbaatar"{
+            ec{"Ulanbátar"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azorské ostrovy",
+        "Atlantic:Azores"{
+            ec{"Azorské ostrovy"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lisabon",
+        "Europe:Lisbon"{
+            ec{"Lisabon"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Jekaterinburg",
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsko",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsko"}
         }
-        {
-            "Asia/Irkutsk",
-            "",
-            "",
-            "",
-            "",
-            "Irkutsko",
+        "Asia:Irkutsk"{
+            ec{"Irkutsko"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Jakutsko",
+        "Asia:Yakutsk"{
+            ec{"Jakutsko"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sachalin",
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamčatka",
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Užhorod",
+        "Europe:Uzhgorod"{
+            ec{"Užhorod"}
         }
-        {
-            "Europe/Kiev",
-            "",
-            "",
-            "",
-            "",
-            "Kyjev",
+        "Europe:Kiev"{
+            ec{"Kyjev"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Záporožie",
+        "Europe:Zaporozhye"{
+            ec{"Záporožie"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Taškent",
+        "Asia:Tashkent"{
+            ec{"Taškent"}
         }
     }
 }

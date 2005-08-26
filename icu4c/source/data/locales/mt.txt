@@ -813,13 +813,12 @@ mt{
         }
     }
     zoneStrings{
-        {
-            "Europe/Malta",
-            "Ħin Ċentrali Ewropew",
-            "CET",
-            "Ħin Ċentrali Ewropew tas-Sajf",
-            "CEST",
-            "Valletta",
+        "Europe:Malta"{
+            ec{"Valletta"}
+            ld{"Ħin Ċentrali Ewropew tas-Sajf"}
+            ls{"Ħin Ċentrali Ewropew"}
+            sd{"CEST"}
+            ss{"CET"}
         }
     }
 }
