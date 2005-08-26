@@ -138,6 +138,8 @@ public:
      * Further test the formatting of time zones.
      */
     virtual void TestDateFormatZone146(void);
+
+    void DateFormatTest::TestTimeZoneStringsAPI(void);
  
 public: // package
     /**
