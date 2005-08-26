@@ -149,7 +149,13 @@
 				RelativePath=".\filestrm.c">
 			</File>
 			<File
+				RelativePath=".\package.cpp">
+			</File>
+			<File
 				RelativePath=".\propsvec.c">
+			</File>
+			<File
+				RelativePath=".\swapimpl.cpp">
 			</File>
 			<File
 				RelativePath=".\toolutil.c">
@@ -186,7 +192,13 @@
 				RelativePath=".\filestrm.h">
 			</File>
 			<File
+				RelativePath=".\package.h">
+			</File>
+			<File
 				RelativePath=".\propsvec.h">
+			</File>
+			<File
+				RelativePath=".\swapimpl.h">
 			</File>
 			<File
 				RelativePath=".\toolutil.h">
