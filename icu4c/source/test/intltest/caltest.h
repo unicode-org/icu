@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2005, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -212,6 +212,9 @@ public: // package
      * @param status error code 
      */
     static UDate minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status);
+
+ public:
+    void TestMaxMin();
 
   // internal - for other test use
  public:
