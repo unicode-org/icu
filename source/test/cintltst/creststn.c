@@ -2210,22 +2210,34 @@ static void TestResourceLevelAliasing(void) {
         }
         for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
             result = ures_getStringByKey(tb, keys[i], &resultLen, &status);
+            if(U_FAILURE(status)){
+                log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
+                continue;
+            }
             uBufferLen = u_unescape(strings[i], uBuffer, 256);
             if(resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
               log_err("Didn't get correct string while accesing alias table by key (%s)\n", keys[i]);
             }
         }
         for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
-            result = ures_getStringByIndex(tb, i, &resultLen, &status);
+            result = ures_getStringByIndex(tb, i, &resultLen, &status); 
+            if(U_FAILURE(status)){
+                log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
+                continue;
+            }
             uBufferLen = u_unescape(strings[i], uBuffer, 256);
-            if(resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
+            if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
               log_err("Didn't get correct string while accesing alias table by index (%s)\n", strings[i]);
             }
         }
         for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
             result = ures_getNextString(tb, &resultLen, &key, &status);
+            if(U_FAILURE(status)){
+                log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
+                continue;
+            }
             uBufferLen = u_unescape(strings[i], uBuffer, 256);
-            if(resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
+            if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
               log_err("Didn't get correct string while iterating over alias table (%s)\n", strings[i]);
             }
         }
@@ -2235,15 +2247,23 @@ static void TestResourceLevelAliasing(void) {
         }
         for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
             result = ures_getStringByIndex(tb, i, &resultLen, &status);
+            if(U_FAILURE(status)){
+                log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
+                continue;
+            }
             uBufferLen = u_unescape(strings[i], uBuffer, 256);
-            if(resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
+            if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
               log_err("Didn't get correct string while accesing alias by index in an array (%s)\n", strings[i]);
             }
         }
         for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
             result = ures_getNextString(tb, &resultLen, &key, &status);
+            if(U_FAILURE(status)){
+                log_err("Fetching the resource with key %s failed. Error: %s\n", keys[i], u_errorName(status));
+                continue;
+            }
             uBufferLen = u_unescape(strings[i], uBuffer, 256);
-            if(resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
+            if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
               log_err("Didn't get correct string while iterating over aliases in an array (%s)\n", strings[i]);
             }
         }
@@ -2263,8 +2283,13 @@ static void TestDirectAccess(void) {
     
     char buffer[100];
     char *s;
+    const char* testdatapath=loadTestData(&status);
+    if(U_FAILURE(status)){
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
     
-    t = ures_findResource("en/zoneStrings/3/2", t, &status);
+    t = ures_findResource("/testdata/te/zoneStrings/3/2", t, &status);
     if(U_FAILURE(status)) {
         log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
@@ -2274,7 +2299,7 @@ static void TestDirectAccess(void) {
             log_err("Got a strange key, expected NULL, got %s\n", key);
         }
     }
-    t = ures_findResource("en/zoneStrings/3", t, &status);
+    t = ures_findResource("en/calendar/gregorian/DateTimePatterns/3", t, &status);
     if(U_FAILURE(status)) {
         log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;

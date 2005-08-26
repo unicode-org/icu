@@ -107,6 +107,59 @@ te
         a3{"a23"}
 	a4{"a24"}
     }    
+  zoneStrings{
+        {
+            "Pacific/Honolulu",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Daylight Time",
+            "HDT",
+            "Honolulu",
+            "Hawaii Time",
+            "HT",
+        }
+        {
+            "America/Anchorage",
+            "Alaska Standard Time",
+            "AKST",
+            "Alaska Daylight Time",
+            "AKDT",
+            "Anchorage",
+            "Alaska Time",
+            "AKT",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+            "Los Angeles",
+            "Pacific Time",
+            "PT",
+        }
+        {
+            "America/Phoenix",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+            "Phoenix",
+            "Mountain Time",
+            "MT",
+        }
+        {
+            "America/Denver",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+            "Denver",
+            "Mountain Time",
+            "MT",
+        }
+    }
+
 }
 
 //eof
