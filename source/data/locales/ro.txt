@@ -459,101 +459,41 @@ ro{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Polul Sud",
+        "Antarctica:South_Pole"{
+            ec{"Polul Sud"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Canare",
+        "Atlantic:Canary"{
+            ec{"Canare"}
         }
-        {
-            "Europe/London",
-            "",
-            "",
-            "",
-            "",
-            "Londra",
+        "Europe:London"{
+            ec{"Londra"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azore",
+        "Atlantic:Azores"{
+            ec{"Azore"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lisabona",
+        "Europe:Lisbon"{
+            ec{"Lisabona"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moscova",
+        "Europe:Moscow"{
+            ec{"Moscova"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Ekaterinburg",
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinburg"}
         }
-        {
-            "Asia/Irkutsk",
-            "",
-            "",
-            "",
-            "",
-            "Irkuțk",
+        "Asia:Irkutsk"{
+            ec{"Irkuțk"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Yakuțk",
+        "Asia:Yakutsk"{
+            ec{"Yakuțk"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sahalin",
+        "Asia:Sakhalin"{
+            ec{"Sahalin"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamciatka",
+        "Asia:Kamchatka"{
+            ec{"Kamciatka"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Zaporoje",
+        "Europe:Zaporozhye"{
+            ec{"Zaporoje"}
         }
     }
 }

@@ -34,13 +34,12 @@ en_SG{
         }
     }
     zoneStrings{
-        {
-            "Asia/Singapore",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore",
+        "Asia:Singapore"{
+            ec{"Singapore"}
+            ld{"Singapore Standard Time"}
+            ls{"Singapore Standard Time"}
+            sd{"SST"}
+            ss{"SST"}
         }
     }
 }

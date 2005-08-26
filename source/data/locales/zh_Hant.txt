@@ -1639,133 +1639,85 @@ zh_Hant{
         }
     }
     zoneStrings{
-        {
-            "America/Halifax",
-            "大西洋標準時間",
-            "",
-            "大西洋日光節約時間",
-            "",
-            "哈里法克斯",
+        "America:Halifax"{
+            ec{"哈里法克斯"}
+            ld{"大西洋日光節約時間"}
+            ls{"大西洋標準時間"}
         }
-        {
-            "America/St_Johns",
-            "紐芬蘭標準時間",
-            "",
-            "紐芬蘭日光節約時間",
-            "",
-            "聖約翰",
+        "America:St_Johns"{
+            ec{"聖約翰"}
+            ld{"紐芬蘭日光節約時間"}
+            ls{"紐芬蘭標準時間"}
         }
-        {
-            "Asia/Shanghai",
-            "中國標準時間",
-            "",
-            "中國標準時間",
-            "",
-            "上海",
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"中國標準時間"}
+            ls{"中國標準時間"}
         }
-        {
-            "Europe/Paris",
-            "中歐標準時間",
-            "",
-            "中歐日光節約時間",
-            "",
-            "巴黎",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"中歐日光節約時間"}
+            ls{"中歐標準時間"}
         }
-        {
-            "Asia/Jerusalem",
-            "以色列標準時間",
-            "",
-            "以色列日光節約時間",
-            "",
-            "耶路撒冷",
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"以色列日光節約時間"}
+            ls{"以色列標準時間"}
         }
-        {
-            "Asia/Tokyo",
-            "日本標準時間",
-            "",
-            "日本標準時間",
-            "",
-            "東京",
+        "Asia:Tokyo"{
+            ec{"東京"}
+            ld{"日本標準時間"}
+            ls{"日本標準時間"}
         }
-        {
-            "Africa/Casablanca",
-            "格林威治標準時間",
-            "",
-            "格林威治標準時間",
-            "",
-            "卡薩布蘭卡",
+        "Africa:Casablanca"{
+            ec{"卡薩布蘭卡"}
+            ld{"格林威治標準時間"}
+            ls{"格林威治標準時間"}
         }
-        {
-            "Europe/Bucharest",
-            "東歐標準時間",
-            "",
-            "東歐日光節約時間",
-            "",
-            "布加勒斯特",
+        "Europe:Bucharest"{
+            ec{"Bucharest"}
+            ld{"東歐日光節約時間"}
+            ls{"東歐標準時間"}
         }
-        {
-            "Pacific/Honolulu",
-            "夏威夷標準時間",
-            "",
-            "夏威夷標準時間",
-            "",
-            "檀香山",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"夏威夷標準時間"}
+            ls{"夏威夷標準時間"}
         }
-        {
-            "America/Anchorage",
-            "阿拉斯加標準時間",
-            "",
-            "阿拉斯加日光節約時間",
-            "",
-            "安克里治",
+        "America:Anchorage"{
+            ec{"安克里治"}
+            ld{"阿拉斯加日光節約時間"}
+            ls{"阿拉斯加標準時間"}
         }
-        {
-            "America/Los_Angeles",
-            "太平洋標準時間",
-            "",
-            "太平洋日光節約時間",
-            "",
-            "洛杉磯",
+        "America:Los_Angeles"{
+            ec{"洛杉磯"}
+            ld{"太平洋日光節約時間"}
+            ls{"太平洋標準時間"}
         }
-        {
-            "America/Phoenix",
-            "山區標準時間",
-            "",
-            "山區標準時間",
-            "",
-            "鳳凰城",
+        "America:Phoenix"{
+            ec{"鳳凰城"}
+            ld{"山區標準時間"}
+            ls{"山區標準時間"}
         }
-        {
-            "America/Denver",
-            "山區標準時間",
-            "",
-            "山區日光節約時間",
-            "",
-            "丹佛",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"山區日光節約時間"}
+            ls{"山區標準時間"}
         }
-        {
-            "America/Chicago",
-            "中部標準時間",
-            "",
-            "中部日光節約時間",
-            "",
-            "芝加哥",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"中部日光節約時間"}
+            ls{"中部標準時間"}
         }
-        {
-            "America/Indianapolis",
-            "東部標準時間",
-            "",
-            "東部標準時間",
-            "",
-            "印第安那波里斯",
+        "America:Indianapolis"{
+            ec{"印第安那波里斯"}
+            ld{"東部標準時間"}
+            ls{"東部標準時間"}
         }
-        {
-            "America/New_York",
-            "東部標準時間",
-            "",
-            "東部日光節約時間",
-            "",
-            "紐約",
+        "America:New_York"{
+            ec{"紐約"}
+            ld{"東部日光節約時間"}
+            ls{"東部標準時間"}
         }
     }
 }

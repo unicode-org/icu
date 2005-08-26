@@ -1891,133 +1891,117 @@ pt{
         }
     }
     zoneStrings{
-        {
-            "America/Halifax",
-            "Horário Padrão Atlântico",
-            "AST",
-            "Horário de Verão Atlântico",
-            "ADT",
-            "Halifax",
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Horário de Verão Atlântico"}
+            ls{"Horário Padrão Atlântico"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/St_Johns",
-            "Horário Padrão de Terra Nova",
-            "CNT",
-            "Horário de Verão de Terra Nova",
-            "CDT",
-            "St. Johns",
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"Horário de Verão de Terra Nova"}
+            ls{"Horário Padrão de Terra Nova"}
+            sd{"CDT"}
+            ss{"CNT"}
         }
-        {
-            "Asia/Shanghai",
-            "Horário Padrão da China",
-            "CTT",
-            "Horário Padrão da China",
-            "CDT",
-            "Xangai",
+        "Asia:Shanghai"{
+            ec{"Xangai"}
+            ld{"Horário Padrão da China"}
+            ls{"Horário Padrão da China"}
+            sd{"CDT"}
+            ss{"CTT"}
         }
-        {
-            "Europe/Paris",
-            "Horário Padrão Europa Central",
-            "CET",
-            "Horário de Verão Europa Central",
-            "CEST",
-            "Paris",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"Horário de Verão Europa Central"}
+            ls{"Horário Padrão Europa Central"}
+            sd{"CEST"}
+            ss{"CET"}
         }
-        {
-            "Asia/Jerusalem",
-            "Horário Padrão de Israel",
-            "IST",
-            "Horário de Verão de Israel",
-            "IDT",
-            "Jerusalém",
+        "Asia:Jerusalem"{
+            ec{"Jerusalém"}
+            ld{"Horário de Verão de Israel"}
+            ls{"Horário Padrão de Israel"}
+            sd{"IDT"}
+            ss{"IST"}
         }
-        {
-            "Asia/Tokyo",
-            "Horário Padrão do Japão",
-            "JST",
-            "Horário Padrão do Japão",
-            "JST",
-            "Tóquio",
+        "Asia:Tokyo"{
+            ec{"Tóquio"}
+            ld{"Horário Padrão do Japão"}
+            ls{"Horário Padrão do Japão"}
+            sd{"JST"}
+            ss{"JST"}
         }
-        {
-            "Africa/Casablanca",
-            "Horário do Meridiano de Greenwich",
-            "GMT",
-            "Horário do Meridiano de Greenwich",
-            "GMT",
-            "Casablanca",
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Horário do Meridiano de Greenwich"}
+            ls{"Horário do Meridiano de Greenwich"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        {
-            "Europe/Bucharest",
-            "Horário Padrão da Europa Oriental",
-            "EET",
-            "Horário de Verão da Europa Oriental",
-            "EEST",
-            "Bucareste",
+        "Europe:Bucharest"{
+            ec{"Bucareste"}
+            ld{"Horário de Verão da Europa Oriental"}
+            ls{"Horário Padrão da Europa Oriental"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Pacific/Honolulu",
-            "Horário Padrão do Havaí",
-            "HST",
-            "Horário Padrão do Havaí",
-            "HST",
-            "Honolulu",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Horário Padrão do Havaí"}
+            ls{"Horário Padrão do Havaí"}
+            sd{"HST"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "Horário Padrão do Alasca",
-            "AST",
-            "Horário de Verão do Alasca",
-            "ADT",
-            "Anchorage",
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Horário de Verão do Alasca"}
+            ls{"Horário Padrão do Alasca"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/Los_Angeles",
-            "Horário Padrão do Pacífico",
-            "PST",
-            "Horário de Verão do Pacífico",
-            "PDT",
-            "Los Angeles",
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Horário de Verão do Pacífico"}
+            ls{"Horário Padrão do Pacífico"}
+            sd{"PDT"}
+            ss{"PST"}
         }
-        {
-            "America/Phoenix",
-            "Horário Padrão Montanha",
-            "MST",
-            "Horário Padrão Montanha",
-            "MST",
-            "Phoenix",
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Horário Padrão Montanha"}
+            ls{"Horário Padrão Montanha"}
+            sd{"MST"}
+            ss{"MST"}
         }
-        {
-            "America/Denver",
-            "Horário Padrão Montanha",
-            "MST",
-            "Horário de Verão Montanha",
-            "MDT",
-            "Denver",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Horário de Verão Montanha"}
+            ls{"Horário Padrão Montanha"}
+            sd{"MDT"}
+            ss{"MST"}
         }
-        {
-            "America/Chicago",
-            "Horário Padrão Central",
-            "CST",
-            "Horário de Verão Central",
-            "CDT",
-            "Chicago",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Horário de Verão Central"}
+            ls{"Horário Padrão Central"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        {
-            "America/Indianapolis",
-            "Horário Padrão Oriental",
-            "EST",
-            "Horário Padrão Oriental",
-            "EST",
-            "Indianápolis",
+        "America:Indianapolis"{
+            ec{"Indianápolis"}
+            ld{"Horário Padrão Oriental"}
+            ls{"Horário Padrão Oriental"}
+            sd{"EST"}
+            ss{"EST"}
         }
-        {
-            "America/New_York",
-            "Horário Padrão Oriental",
-            "EST",
-            "Horário de Verão Oriental",
-            "EDT",
-            "Nova Iorque",
+        "America:New_York"{
+            ec{"Nova Iorque"}
+            ld{"Horário de Verão Oriental"}
+            ls{"Horário Padrão Oriental"}
+            sd{"EDT"}
+            ss{"EST"}
         }
     }
 }

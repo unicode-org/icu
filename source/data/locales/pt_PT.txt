@@ -113,93 +113,38 @@ pt_PT{
         quotationStart{"‘"}
     }
     zoneStrings{
-        {
-            "America/Cordoba",
-            "",
-            "",
-            "",
-            "",
-            "Córdoba",
+        "America:Cordoba"{
+            ec{"Córdoba"}
         }
-        {
-            "America/Cuiaba",
-            "",
-            "",
-            "",
-            "",
-            "Cuibá",
+        "America:Cuiaba"{
+            ec{"Cuibá"}
         }
-        {
-            "America/Araguaina",
-            "",
-            "",
-            "",
-            "",
-            "Araguaina",
+        "America:Araguaina"{
+            ec{"Araguaina"}
         }
-        {
-            "America/Bahia",
-            "",
-            "",
-            "",
-            "",
-            "Baía",
+        "America:Bahia"{
+            ec{"Baía"}
         }
-        {
-            "Europe/Madrid",
-            "",
-            "",
-            "",
-            "",
-            "Madrid",
+        "Europe:Madrid"{
+            ec{"Madrid"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Ulan Bator",
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
         }
-        {
-            "America/Cancun",
-            "",
-            "",
-            "",
-            "",
-            "Cancun",
+        "America:Cancun"{
+            ec{"Cancun"}
         }
-        {
-            "Europe/Kaliningrad",
-            "",
-            "",
-            "",
-            "",
-            "Kaliningrado",
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moscovo",
+        "Europe:Moscow"{
+            ec{"Moscovo"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sacalina",
+        "Asia:Sakhalin"{
+            ec{"Sacalina"}
         }
-        {
-            "America/North_Dakota/Center",
-            "",
-            "",
-            "",
-            "",
-            "Center",
+        "America:North_Dakota:Center"{
+            ec{"Center"}
         }
     }
 }

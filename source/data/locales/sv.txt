@@ -1901,317 +1901,186 @@ sv{
         }
     }
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Sydpolen",
+        "Antarctica:South_Pole"{
+            ec{"Sydpolen"}
         }
-        {
-            "Antarctica/DumontDUrville",
-            "",
-            "",
-            "",
-            "",
-            "Dumont d'Urville",
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
         }
-        {
-            "America/Argentina/ComodRivadavia",
-            "",
-            "",
-            "",
-            "",
-            "Comod. Rivadavia",
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comod. Rivadavia"}
         }
-        {
-            "America/Sao_Paulo",
-            "",
-            "",
-            "",
-            "",
-            "São Paulo",
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
         }
-        {
-            "America/Halifax",
-            "Atlantic, normaltid",
-            "AST",
-            "Atlantic, sommartid",
-            "ADT",
-            "Halifax",
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Atlantic, sommartid"}
+            ls{"Atlantic, normaltid"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/St_Johns",
-            "Newfoundland, normaltid",
-            "CNT",
-            "Newfoundland, sommartid",
-            "CDT",
-            "St. Johns",
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"Newfoundland, sommartid"}
+            ls{"Newfoundland, normaltid"}
+            sd{"CDT"}
+            ss{"CNT"}
         }
-        {
-            "Pacific/Easter",
-            "",
-            "",
-            "",
-            "",
-            "Påskön",
+        "Pacific:Easter"{
+            ec{"Påskön"}
         }
-        {
-            "Asia/Shanghai",
-            "Kina, normaltid",
-            "CTT",
-            "Kina, normaltid",
-            "CDT",
-            "Shanghai",
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Kina, normaltid"}
+            ls{"Kina, normaltid"}
+            sd{"CDT"}
+            ss{"CTT"}
         }
-        {
-            "Atlantic/Canary",
-            "",
-            "",
-            "",
-            "",
-            "Kanarieöarna",
+        "Atlantic:Canary"{
+            ec{"Kanarieöarna"}
         }
-        {
-            "Europe/Paris",
-            "Centraleuropa, normaltid",
-            "CET",
-            "Centraleuropa, sommartid",
-            "CEST",
-            "Paris",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"Centraleuropa, sommartid"}
+            ls{"Centraleuropa, normaltid"}
+            sd{"CEST"}
+            ss{"CET"}
         }
-        {
-            "America/Godthab",
-            "",
-            "",
-            "",
-            "",
-            "Godthåb",
+        "America:Godthab"{
+            ec{"Godthåb"}
         }
-        {
-            "Asia/Jerusalem",
-            "Israel, normaltid",
-            "IST",
-            "Israel, sommartid",
-            "IDT",
-            "Jerusalem",
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"Israel, sommartid"}
+            ls{"Israel, normaltid"}
+            sd{"IDT"}
+            ss{"IST"}
         }
-        {
-            "Asia/Tokyo",
-            "Japan, normaltid",
-            "JST",
-            "Japan, normaltid",
-            "JST",
-            "Tokyo",
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"Japan, normaltid"}
+            ls{"Japan, normaltid"}
+            sd{"JST"}
+            ss{"JST"}
         }
-        {
-            "Asia/Almaty",
-            "",
-            "",
-            "",
-            "",
-            "Alma-Ata",
+        "Asia:Almaty"{
+            ec{"Alma-Ata"}
         }
-        {
-            "Africa/Casablanca",
-            "Greenwichtid",
-            "GMT",
-            "Greenwichtid",
-            "GMT",
-            "Casablanca",
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Greenwichtid"}
+            ls{"Greenwichtid"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        {
-            "Asia/Ulaanbaatar",
-            "",
-            "",
-            "",
-            "",
-            "Ulan Bator",
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
         }
-        {
-            "Asia/Choibalsan",
-            "",
-            "",
-            "",
-            "",
-            "Tjoibalsan",
+        "Asia:Choibalsan"{
+            ec{"Tjoibalsan"}
         }
-        {
-            "Atlantic/Azores",
-            "",
-            "",
-            "",
-            "",
-            "Azorerna",
+        "Atlantic:Azores"{
+            ec{"Azorerna"}
         }
-        {
-            "Europe/Lisbon",
-            "",
-            "",
-            "",
-            "",
-            "Lissabon",
+        "Europe:Lisbon"{
+            ec{"Lissabon"}
         }
-        {
-            "Europe/Bucharest",
-            "Östeuropa, normaltid",
-            "EET",
-            "Östeuropa, sommartid",
-            "EEST",
-            "Bukarest",
+        "Europe:Bucharest"{
+            ec{"Bukarest"}
+            ld{"Östeuropa, sommartid"}
+            ls{"Östeuropa, normaltid"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
-        {
-            "Asia/Yekaterinburg",
-            "",
-            "",
-            "",
-            "",
-            "Jekaterinburg",
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsk",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        {
-            "Asia/Yakutsk",
-            "",
-            "",
-            "",
-            "",
-            "Jakutsk",
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
         }
-        {
-            "Asia/Sakhalin",
-            "",
-            "",
-            "",
-            "",
-            "Sachalin",
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamtjatka",
+        "Asia:Kamchatka"{
+            ec{"Kamtjatka"}
         }
-        {
-            "Asia/Anadyr",
-            "",
-            "",
-            "",
-            "",
-            "Anadir",
+        "Asia:Anadyr"{
+            ec{"Anadir"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Uzjgorod",
+        "Europe:Uzhgorod"{
+            ec{"Uzjgorod"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Zaporozjzja",
+        "Europe:Zaporozhye"{
+            ec{"Zaporozjzja"}
         }
-        {
-            "Pacific/Honolulu",
-            "Hawaii, normaltid",
-            "HST",
-            "Hawaii, normaltid",
-            "HST",
-            "Honolulu",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Hawaii, normaltid"}
+            ls{"Hawaii, normaltid"}
+            sd{"HST"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "Alaska, normaltid",
-            "AST",
-            "Alaska, sommartid",
-            "ADT",
-            "Anchorage",
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Alaska, sommartid"}
+            ls{"Alaska, normaltid"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/Los_Angeles",
-            "Pacific, normaltid",
-            "PST",
-            "Pacific, sommartid",
-            "PDT",
-            "Los Angeles",
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pacific, sommartid"}
+            ls{"Pacific, normaltid"}
+            sd{"PDT"}
+            ss{"PST"}
         }
-        {
-            "America/Phoenix",
-            "Mountain, normaltid",
-            "MST",
-            "Mountain, sommartid",
-            "MST",
-            "Phoenix",
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Mountain, sommartid"}
+            ls{"Mountain, normaltid"}
+            sd{"MST"}
+            ss{"MST"}
         }
-        {
-            "America/Denver",
-            "Mountain, normaltid",
-            "MST",
-            "Mountain, sommartid",
-            "MDT",
-            "Denver",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Mountain, sommartid"}
+            ls{"Mountain, normaltid"}
+            sd{"MDT"}
+            ss{"MST"}
         }
-        {
-            "America/North_Dakota/Center",
-            "",
-            "",
-            "",
-            "",
-            "North Dakota",
+        "America:North_Dakota:Center"{
+            ec{"North Dakota"}
         }
-        {
-            "America/Chicago",
-            "Central, normaltid",
-            "CST",
-            "Central, sommartid",
-            "CDT",
-            "Chicago",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Central, sommartid"}
+            ls{"Central, normaltid"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        {
-            "America/Indianapolis",
-            "Eastern, normaltid",
-            "EST",
-            "Eastern, normaltid",
-            "EST",
-            "Indianapolis",
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Eastern, normaltid"}
+            ls{"Eastern, normaltid"}
+            sd{"EST"}
+            ss{"EST"}
         }
-        {
-            "America/New_York",
-            "Eastern, normaltid",
-            "EST",
-            "Eastern, sommartid",
-            "EDT",
-            "New York",
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Eastern, sommartid"}
+            ls{"Eastern, normaltid"}
+            sd{"EDT"}
+            ss{"EST"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Tasjkent",
+        "Asia:Tashkent"{
+            ec{"Tasjkent"}
         }
     }
 }

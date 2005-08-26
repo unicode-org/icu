@@ -28,13 +28,12 @@ en_GB{
         }
     }
     zoneStrings{
-        {
-            "Europe/London",
-            "Greenwich Mean Time",
-            "GMT",
-            "British Summer Time",
-            "BST",
-            "London",
+        "Europe:London"{
+            ec{"London"}
+            ld{"British Summer Time"}
+            ls{"Greenwich Mean Time"}
+            sd{"BST"}
+            ss{"GMT"}
         }
     }
 }

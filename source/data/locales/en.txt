@@ -2086,203 +2086,182 @@ en{
         quotationStart{"‘"}
     }
     zoneStrings{
-        {
-            "America/Vancouver",
-            "Pacific Standard Time (CA)",
-            "PST (CA)",
-            "Pacific Daylight Time (CA)",
-            "PDT (CA)",
-            "Vancouver",
-            "Pacific Time (CA)",
-            "PT (CA)",
+        "America:Vancouver"{
+            ec{"Vancouver"}
+            ld{"Pacific Daylight Time (CA)"}
+            lg{"Pacific Time (CA)"}
+            ls{"Pacific Standard Time (CA)"}
+            sd{"PDT (CA)"}
+            sg{"PT (CA)"}
+            ss{"PST (CA)"}
         }
-        {
-            "America/Edmonton",
-            "Mountain Standard Time (CA)",
-            "MST (CA)",
-            "Mountain Daylight Time (CA)",
-            "MDT (CA)",
-            "Edmonton",
-            "Mountain Time (CA)",
-            "MT (CA)",
+        "America:Edmonton"{
+            ec{"Edmonton"}
+            ld{"Mountain Daylight Time (CA)"}
+            lg{"Mountain Time (CA)"}
+            ls{"Mountain Standard Time (CA)"}
+            sd{"MDT (CA)"}
+            sg{"MT (CA)"}
+            ss{"MST (CA)"}
         }
-        {
-            "America/Winnipeg",
-            "Central Standard Time (CA)",
-            "CST (CA)",
-            "Central Daylight Time (CA)",
-            "CDT (CA)",
-            "Winnipeg",
-            "Central Time (CA)",
-            "CT (CA)",
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+            ld{"Central Daylight Time (CA)"}
+            lg{"Central Time (CA)"}
+            ls{"Central Standard Time (CA)"}
+            sd{"CDT (CA)"}
+            sg{"CT (CA)"}
+            ss{"CST (CA)"}
         }
-        {
-            "America/Montreal",
-            "Eastern Standard Time (CA)",
-            "EST (CA)",
-            "Eastern Daylight Time (CA)",
-            "EDT (CA)",
-            "Montreal",
-            "Eastern Time (CA)",
-            "ET (CA)",
+        "America:Montreal"{
+            ec{"Montreal"}
+            ld{"Eastern Daylight Time (CA)"}
+            lg{"Eastern Time (CA)"}
+            ls{"Eastern Standard Time (CA)"}
+            sd{"EDT (CA)"}
+            sg{"ET (CA)"}
+            ss{"EST (CA)"}
         }
-        {
-            "America/Halifax",
-            "Atlantic Standard Time",
-            "AST",
-            "Atlantic Daylight Time",
-            "ADT",
-            "Halifax",
-            "Atlantic Time",
-            "AT",
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Atlantic Daylight Time"}
+            lg{"Atlantic Time"}
+            ls{"Atlantic Standard Time"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
         }
-        {
-            "America/St_Johns",
-            "Newfoundland Standard Time",
-            "NST",
-            "Newfoundland Daylight Time",
-            "NDT",
-            "St. John’s",
-            "Newfoundland Time",
-            "NT",
+        "America:St_Johns"{
+            ec{"St. John’s"}
+            ld{"Newfoundland Daylight Time"}
+            lg{"Newfoundland Time"}
+            ls{"Newfoundland Standard Time"}
+            sd{"NDT"}
+            sg{"NT"}
+            ss{"NST"}
         }
-        {
-            "Asia/Shanghai",
-            "China Standard Time",
-            "CST",
-            "China Daylight Time",
-            "CDT",
-            "Shanghai",
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"China Daylight Time"}
+            ls{"China Standard Time"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        {
-            "Europe/Dublin",
-            "Greenwich Mean Time",
-            "GMT",
-            "Irish Summer Time",
-            "IST",
-            "Dublin",
+        "Europe:Dublin"{
+            ec{"Dublin"}
+            ld{"Irish Summer Time"}
+            ls{"Greenwich Mean Time"}
+            sd{"IST"}
+            ss{"GMT"}
         }
-        {
-            "Europe/Paris",
-            "Central European Standard Time",
-            "CEST",
-            "Central European Daylight Time",
-            "CEDT",
-            "Paris",
-            "Central European Time",
-            "CET",
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"Central European Daylight Time"}
+            lg{"Central European Time"}
+            ls{"Central European Standard Time"}
+            sd{"CEDT"}
+            sg{"CET"}
+            ss{"CEST"}
         }
-        {
-            "Europe/London",
-            "Greenwich Mean Time",
-            "GMT",
-            "British Summer Time",
-            "BST",
-            "London",
+        "Europe:London"{
+            ec{"London"}
+            ld{"British Summer Time"}
+            ls{"Greenwich Mean Time"}
+            sd{"BST"}
+            ss{"GMT"}
         }
-        {
-            "Asia/Jerusalem",
-            "Israel Standard Time",
-            "IST",
-            "Israel Daylight Time",
-            "IDT",
-            "Jerusalem",
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"Israel Daylight Time"}
+            ls{"Israel Standard Time"}
+            sd{"IDT"}
+            ss{"IST"}
         }
-        {
-            "Asia/Tokyo",
-            "Japan Standard Time",
-            "JST",
-            "Japan Daylight Time",
-            "JDT",
-            "Tokyo",
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"Japan Daylight Time"}
+            ls{"Japan Standard Time"}
+            sd{"JDT"}
+            ss{"JST"}
         }
-        {
-            "Europe/Bucharest",
-            "Eastern European Standard Time",
-            "EET",
-            "Eastern European Daylight Time",
-            "EEST",
-            "Bucharest",
+        "Europe:Bucharest"{
+            ec{"Bucharest"}
+            ld{"Eastern European Daylight Time"}
+            ls{"Eastern European Standard Time"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Pacific/Honolulu",
-            "Hawaii Standard Time",
-            "HST",
-            "Hawaii Daylight Time",
-            "HDT",
-            "Honolulu",
-            "Hawaii Time",
-            "HT",
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Hawaii Daylight Time"}
+            lg{"Hawaii Time"}
+            ls{"Hawaii Standard Time"}
+            sd{"HDT"}
+            sg{"HT"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "Alaska Standard Time",
-            "AKST",
-            "Alaska Daylight Time",
-            "AKDT",
-            "Anchorage",
-            "Alaska Time",
-            "AKT",
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Alaska Daylight Time"}
+            lg{"Alaska Time"}
+            ls{"Alaska Standard Time"}
+            sd{"AKDT"}
+            sg{"AKT"}
+            ss{"AKST"}
         }
-        {
-            "America/Los_Angeles",
-            "Pacific Standard Time",
-            "PST",
-            "Pacific Daylight Time",
-            "PDT",
-            "Los Angeles",
-            "Pacific Time",
-            "PT",
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pacific Daylight Time"}
+            lg{"Pacific Time"}
+            ls{"Pacific Standard Time"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
         }
-        {
-            "America/Phoenix",
-            "Mountain Standard Time",
-            "MST",
-            "Mountain Daylight Time",
-            "MDT",
-            "Phoenix",
-            "Mountain Time",
-            "MT",
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Mountain Daylight Time"}
+            lg{"Mountain Time"}
+            ls{"Mountain Standard Time"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
         }
-        {
-            "America/Denver",
-            "Mountain Standard Time",
-            "MST",
-            "Mountain Daylight Time",
-            "MDT",
-            "Denver",
-            "Mountain Time",
-            "MT",
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Mountain Daylight Time"}
+            lg{"Mountain Time"}
+            ls{"Mountain Standard Time"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
         }
-        {
-            "America/Chicago",
-            "Central Standard Time",
-            "CST",
-            "Central Daylight Time",
-            "CDT",
-            "Chicago",
-            "Central Time",
-            "CT",
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Central Daylight Time"}
+            lg{"Central Time"}
+            ls{"Central Standard Time"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
         }
-        {
-            "America/Indianapolis",
-            "Eastern Standard Time",
-            "EST",
-            "Eastern Daylight Time",
-            "EDT",
-            "Indianapolis",
-            "Eastern Time",
-            "ET",
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Eastern Daylight Time"}
+            lg{"Eastern Time"}
+            ls{"Eastern Standard Time"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
         }
-        {
-            "America/New_York",
-            "Eastern Standard Time",
-            "EST",
-            "Eastern Daylight Time",
-            "EDT",
-            "New York",
-            "Eastern Time",
-            "ET",
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Eastern Daylight Time"}
+            lg{"Eastern Time"}
+            ls{"Eastern Standard Time"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
         }
     }
 }
