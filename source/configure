@@ -4250,6 +4250,7 @@ trap 'rm -fr `echo "icudefs.mk \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
+		tools/icupkg/Makefile \
 		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
 		tools/toolutil/Makefile \
@@ -4456,6 +4457,7 @@ CONFIG_FILES=\${CONFIG_FILES-"icudefs.mk \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
+		tools/icupkg/Makefile \
 		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
 		tools/toolutil/Makefile \
