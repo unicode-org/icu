@@ -1620,141 +1620,56 @@ uk{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "America/Argentina/Rio_Gallegos",
-            "",
-            "",
-            "",
-            "",
-            "Ріо-Ґалеґос",
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Ріо-Ґалеґос"}
         }
-        {
-            "America/Argentina/ComodRivadavia",
-            "",
-            "",
-            "",
-            "",
-            "Комодоро-Ривадавія",
+        "America:Argentina:ComodRivadavia"{
+            ec{"Комодоро-Ривадавія"}
         }
-        {
-            "America/Rio_Branco",
-            "",
-            "",
-            "",
-            "",
-            "Ріо-Бранко",
+        "America:Rio_Branco"{
+            ec{"Ріо-Бранко"}
         }
-        {
-            "America/Porto_Velho",
-            "",
-            "",
-            "",
-            "",
-            "Порто-Велью",
+        "America:Porto_Velho"{
+            ec{"Порто-Велью"}
         }
-        {
-            "America/Regina",
-            "",
-            "",
-            "",
-            "",
-            "Реджайна",
+        "America:Regina"{
+            ec{"Реджайна"}
         }
-        {
-            "America/Winnipeg",
-            "",
-            "",
-            "",
-            "",
-            "Вінніпеґ",
+        "America:Winnipeg"{
+            ec{"Вінніпеґ"}
         }
-        {
-            "America/Pangnirtung",
-            "",
-            "",
-            "",
-            "",
-            "Панґніртунґ",
+        "America:Pangnirtung"{
+            ec{"Панґніртунґ"}
         }
-        {
-            "Africa/Lubumbashi",
-            "",
-            "",
-            "",
-            "",
-            "Лубумбаші",
+        "Africa:Lubumbashi"{
+            ec{"Лубумбаші"}
         }
-        {
-            "Pacific/Galapagos",
-            "",
-            "",
-            "",
-            "",
-            "Ґалапагос",
+        "Pacific:Galapagos"{
+            ec{"Ґалапагос"}
         }
-        {
-            "Pacific/Yap",
-            "",
-            "",
-            "",
-            "",
-            "Яп",
+        "Pacific:Yap"{
+            ec{"Яп"}
         }
-        {
-            "Pacific/Kiritimati",
-            "",
-            "",
-            "",
-            "",
-            "Кіритиматі",
+        "Pacific:Kiritimati"{
+            ec{"Кіритиматі"}
         }
-        {
-            "Africa/Timbuktu",
-            "",
-            "",
-            "",
-            "",
-            "Тимбукту",
+        "Africa:Timbuktu"{
+            ec{"Тимбукту"}
         }
-        {
-            "Asia/Hovd",
-            "",
-            "",
-            "",
-            "",
-            "Говд",
+        "Asia:Hovd"{
+            ec{"Говд"}
         }
-        {
-            "Asia/Kuching",
-            "",
-            "",
-            "",
-            "",
-            "Кучінґ",
+        "Asia:Kuching"{
+            ec{"Кучінґ"}
         }
-        {
-            "Pacific/Gambier",
-            "",
-            "",
-            "",
-            "",
-            "Гамбер",
+        "Pacific:Gambier"{
+            ec{"Гамбер"}
         }
-        {
-            "Atlantic/Jan_Mayen",
-            "",
-            "",
-            "",
-            "",
-            "Ян-Майєн",
+        "Atlantic:Jan_Mayen"{
+            ec{"Ян-Майєн"}
         }
-        {
-            "Arctic/Longyearbyen",
-            "",
-            "",
-            "",
-            "",
-            "Лонгербюйн",
+        "Arctic:Longyearbyen"{
+            ec{"Лонгербюйн"}
         }
     }
 }

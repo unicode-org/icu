@@ -599,15 +599,12 @@ root{
     }
     localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZvcL"}
     zoneStrings{
-        {
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+        ""{
+            ec{""}
+            ld{""}
+            ls{""}
+            sd{""}
+            ss{""}
         }
     }
 }

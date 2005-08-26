@@ -406,13 +406,12 @@ ta{
         }
     }
     zoneStrings{
-        {
-            "Asia/Calcutta",
-            "இந்திய நேரப்படி",
-            "IST",
-            "இந்திய நேரப்படி",
-            "IST",
-            "Calcutta",
+        "Asia:Calcutta"{
+            ec{"Calcutta"}
+            ld{"இந்திய நேரப்படி"}
+            ls{"இந்திய நேரப்படி"}
+            sd{"IST"}
+            ss{"IST"}
         }
     }
 }

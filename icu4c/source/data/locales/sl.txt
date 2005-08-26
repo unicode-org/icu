@@ -505,101 +505,41 @@ sl{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "Antarctica/South_Pole",
-            "",
-            "",
-            "",
-            "",
-            "Južni pol",
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
         }
-        {
-            "Africa/Kinshasa",
-            "",
-            "",
-            "",
-            "",
-            "Kinšasa",
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
         }
-        {
-            "Africa/Lubumbashi",
-            "",
-            "",
-            "",
-            "",
-            "Lubumbaši",
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaši"}
         }
-        {
-            "Asia/Shanghai",
-            "",
-            "",
-            "",
-            "",
-            "Šangaj",
+        "Asia:Shanghai"{
+            ec{"Šangaj"}
         }
-        {
-            "Europe/Moscow",
-            "",
-            "",
-            "",
-            "",
-            "Moskva",
+        "Europe:Moscow"{
+            ec{"Moskva"}
         }
-        {
-            "Asia/Krasnoyarsk",
-            "",
-            "",
-            "",
-            "",
-            "Krasnojarsk",
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        {
-            "Asia/Kamchatka",
-            "",
-            "",
-            "",
-            "",
-            "Kamčatka",
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
         }
-        {
-            "Asia/Anadyr",
-            "",
-            "",
-            "",
-            "",
-            "Anadir",
+        "Asia:Anadyr"{
+            ec{"Anadir"}
         }
-        {
-            "Europe/Uzhgorod",
-            "",
-            "",
-            "",
-            "",
-            "Užgorod",
+        "Europe:Uzhgorod"{
+            ec{"Užgorod"}
         }
-        {
-            "Europe/Kiev",
-            "",
-            "",
-            "",
-            "",
-            "Kijev",
+        "Europe:Kiev"{
+            ec{"Kijev"}
         }
-        {
-            "Europe/Zaporozhye",
-            "",
-            "",
-            "",
-            "",
-            "Zaporožje",
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
         }
-        {
-            "Asia/Tashkent",
-            "",
-            "",
-            "",
-            "",
-            "Taškent",
+        "Asia:Tashkent"{
+            ec{"Taškent"}
         }
     }
 }

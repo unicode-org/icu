@@ -1831,141 +1831,124 @@ ko{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        {
-            "America/Halifax",
-            "대서양 표준시",
-            "AST",
-            "대서양 기준시",
-            "ADT",
-            "핼리팩스",
+        "America:Halifax"{
+            ec{"핼리팩스"}
+            ld{"대서양 기준시"}
+            ls{"대서양 표준시"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/St_Johns",
-            "뉴펀들랜드 표준시",
-            "CNT",
-            "뉴펀들랜드 기준시",
-            "CDT",
-            "St. Johns",
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"뉴펀들랜드 기준시"}
+            ls{"뉴펀들랜드 표준시"}
+            sd{"CDT"}
+            ss{"CNT"}
         }
-        {
-            "Asia/Shanghai",
-            "중국 표준시",
-            "CTT",
-            "중국 표준시",
-            "CDT",
-            "상하이",
+        "Asia:Shanghai"{
+            ec{"상하이"}
+            ld{"중국 표준시"}
+            ls{"중국 표준시"}
+            sd{"CDT"}
+            ss{"CTT"}
         }
-        {
-            "Europe/Paris",
-            "중부유럽 표준시",
-            "CET",
-            "중부유럽 기준시",
-            "CEST",
-            "파리",
+        "Europe:Paris"{
+            ec{"파리"}
+            ld{"중부유럽 기준시"}
+            ls{"중부유럽 표준시"}
+            sd{"CEST"}
+            ss{"CET"}
         }
-        {
-            "Asia/Jerusalem",
-            "이스라엘 표준시",
-            "IST",
-            "이스라엘 기준시",
-            "IDT",
-            "예루살렘",
+        "Asia:Jerusalem"{
+            ec{"예루살렘"}
+            ld{"이스라엘 기준시"}
+            ls{"이스라엘 표준시"}
+            sd{"IDT"}
+            ss{"IST"}
         }
-        {
-            "Asia/Tokyo",
-            "일본 표준시",
-            "JST",
-            "일본 표준시",
-            "JST",
-            "도쿄",
+        "Asia:Tokyo"{
+            ec{"도쿄"}
+            ld{"일본 표준시"}
+            ls{"일본 표준시"}
+            sd{"JST"}
+            ss{"JST"}
         }
-        {
-            "Asia/Seoul",
-            "한국표준시",
-            "KST",
-            "한국표준시",
-            "KST",
-            "서울",
+        "Asia:Seoul"{
+            ec{"서울"}
+            ld{"한국표준시"}
+            ls{"한국표준시"}
+            sd{"KST"}
+            ss{"KST"}
         }
-        {
-            "Africa/Casablanca",
-            "그리니치 표준시",
-            "GMT",
-            "그리니치 표준시",
-            "GMT",
-            "카사블랑카",
+        "Africa:Casablanca"{
+            ec{"카사블랑카"}
+            ld{"그리니치 표준시"}
+            ls{"그리니치 표준시"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        {
-            "Europe/Bucharest",
-            "동부유럽 표준시",
-            "EET",
-            "동부유럽 기준시",
-            "EEST",
-            "부쿠레슈티",
+        "Europe:Bucharest"{
+            ec{"부쿠레슈티"}
+            ld{"동부유럽 기준시"}
+            ls{"동부유럽 표준시"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        {
-            "Pacific/Honolulu",
-            "하와이 표준시",
-            "HST",
-            "하와이 표준시",
-            "HST",
-            "호놀룰루",
+        "Pacific:Honolulu"{
+            ec{"호놀룰루"}
+            ld{"하와이 표준시"}
+            ls{"하와이 표준시"}
+            sd{"HST"}
+            ss{"HST"}
         }
-        {
-            "America/Anchorage",
-            "알래스카 표준시",
-            "AST",
-            "알래스카 기준시",
-            "ADT",
-            "앵커리지",
+        "America:Anchorage"{
+            ec{"앵커리지"}
+            ld{"알래스카 기준시"}
+            ls{"알래스카 표준시"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        {
-            "America/Los_Angeles",
-            "태평양 표준시",
-            "PST",
-            "태평양 기준시",
-            "PDT",
-            "로스앤젤레스",
+        "America:Los_Angeles"{
+            ec{"로스앤젤레스"}
+            ld{"태평양 기준시"}
+            ls{"태평양 표준시"}
+            sd{"PDT"}
+            ss{"PST"}
         }
-        {
-            "America/Phoenix",
-            "산악 표준시",
-            "MST",
-            "산악 표준시",
-            "MST",
-            "피닉스",
+        "America:Phoenix"{
+            ec{"피닉스"}
+            ld{"산악 표준시"}
+            ls{"산악 표준시"}
+            sd{"MST"}
+            ss{"MST"}
         }
-        {
-            "America/Denver",
-            "산악 표준시",
-            "MST",
-            "산악 기준시",
-            "MDT",
-            "덴버",
+        "America:Denver"{
+            ec{"덴버"}
+            ld{"산악 기준시"}
+            ls{"산악 표준시"}
+            sd{"MDT"}
+            ss{"MST"}
         }
-        {
-            "America/Chicago",
-            "중부 표준시",
-            "CST",
-            "중부 기준시",
-            "CDT",
-            "시카고",
+        "America:Chicago"{
+            ec{"시카고"}
+            ld{"중부 기준시"}
+            ls{"중부 표준시"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        {
-            "America/Indianapolis",
-            "동부 표준시",
-            "EST",
-            "동부 표준시",
-            "EST",
-            "인디애나폴리스",
+        "America:Indianapolis"{
+            ec{"인디애나폴리스"}
+            ld{"동부 표준시"}
+            ls{"동부 표준시"}
+            sd{"EST"}
+            ss{"EST"}
         }
-        {
-            "America/New_York",
-            "동부 표준시",
-            "EST",
-            "동부 기준시",
-            "EDT",
-            "뉴욕",
+        "America:New_York"{
+            ec{"뉴욕"}
+            ld{"동부 기준시"}
+            ls{"동부 표준시"}
+            sd{"EDT"}
+            ss{"EST"}
         }
     }
 }

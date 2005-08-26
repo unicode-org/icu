@@ -236,13 +236,12 @@ mr{
         }
     }
     zoneStrings{
-        {
-            "Asia/Calcutta",
-            "भारतीय समय",
-            "IST",
-            "भारतीय समय",
-            "IST",
-            "Calcutta",
+        "Asia:Calcutta"{
+            ec{"Calcutta"}
+            ld{"भारतीय समय"}
+            ls{"भारतीय समय"}
+            sd{"IST"}
+            ss{"IST"}
         }
     }
 }
