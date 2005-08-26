@@ -6,3 +6,6 @@ Makefile
 *.pdb
 gencase
 gencase.[0-9]
+*.plg
+*.ncb
+*.opt
