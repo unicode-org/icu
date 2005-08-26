@@ -1277,7 +1277,7 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
   UResourceBundle *first = NULL; 
   UResourceBundle *result = fillIn;
   char *packageName = NULL;
-  char *pathToResource = NULL;
+  char *pathToResource = NULL, *save = NULL;
   char *locale = NULL, *localeEnd = NULL;
   int32_t length;
 
@@ -1286,7 +1286,7 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
   }
 
   length = (int32_t)(uprv_strlen(path)+1);
-  pathToResource = (char *)uprv_malloc(length*sizeof(char));
+  save = pathToResource = (char *)uprv_malloc(length*sizeof(char));
   /* test for NULL */
   if(pathToResource == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -1322,7 +1322,7 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
     }
     ures_close(first);
   }
-  uprv_free(pathToResource);
+  uprv_free(save);
   return result;
 }
 
@@ -2483,5 +2483,49 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 #endif
     return uloc_openKeywordList(valuesBuf, valuesIndex, status);
 }
-
+U_INTERNAL UBool U_EXPORT2
+ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
+    if(res1==NULL || res2==NULL){
+        return res1==res2; /* pointer comparision */
+    }
+    if(uprv_strcmp(res1->fKey, res2->fKey)!=0){
+        return FALSE;
+    }
+    if(uprv_strcmp(res1->fData->fName, res2->fData->fName)!=0){
+        return FALSE;
+    }
+    if(res1->fData->fPath == NULL||  res2->fData->fPath==NULL){
+        return (res1->fData->fPath == res2->fData->fPath);
+    }else{
+        if(uprv_strcmp(res1->fData->fPath, res2->fData->fPath)!=0){
+            return FALSE;
+        }
+    }
+    if(uprv_strcmp(res1->fData->fParent->fName, res2->fData->fParent->fName)!=0){
+        return FALSE;
+    }
+    if(uprv_strcmp(res1->fData->fParent->fPath, res2->fData->fParent->fPath)!=0){
+        return FALSE;
+    }
+    if(uprv_strncmp(res1->fResPath, res2->fResPath, res1->fResPathLen)!=0){
+        return FALSE;
+    }
+    if(res1->fRes != res2->fRes){
+        return FALSE;
+    }
+    return TRUE;
+}
+U_INTERNAL UResourceBundle* U_EXPORT2
+ures_clone(const UResourceBundle* res, UErrorCode* status){
+    int32_t pos = 0;
+    UResourceBundle* bundle = NULL;
+    UResourceBundle* ret = NULL;
+    if(U_FAILURE(*status) || res == NULL){
+        return NULL;
+    }
+    bundle = ures_open(res->fData->fPath, res->fData->fName, status);
+    ret = ures_findSubResource(bundle, res->fResPath, NULL, status);
+    ures_close(bundle);
+    return ret;
+}
 /* eof */
