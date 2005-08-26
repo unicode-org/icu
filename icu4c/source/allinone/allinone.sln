@@ -219,6 +219,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gencase", "..\tools\gencase
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icupkg", "..\tools\icupkg\icupkg.vcproj", "{62D4B15D-7A90-4ECB-BA19-5E021D6A21BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -353,6 +359,10 @@ Global
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Debug.Build.0 = Debug|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.ActiveCfg = Release|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.Build.0 = Release|Win32
+		{62D4B15D-7A90-4ECB-BA19-5E021D6A21BC}.Debug.ActiveCfg = Debug|Win32
+		{62D4B15D-7A90-4ECB-BA19-5E021D6A21BC}.Debug.Build.0 = Debug|Win32
+		{62D4B15D-7A90-4ECB-BA19-5E021D6A21BC}.Release.ActiveCfg = Release|Win32
+		{62D4B15D-7A90-4ECB-BA19-5E021D6A21BC}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -394,6 +394,17 @@ icu4c/source/tools/genuca/Makefile
 icu4c/source/tools/genuca/Release
 icu4c/source/tools/genuca/genuca
 icu4c/source/tools/genuca/genuca.8
+icu4c/source/tools/icupkg/*.d
+icu4c/source/tools/icupkg/*.ncb
+icu4c/source/tools/icupkg/*.o
+icu4c/source/tools/icupkg/*.opt
+icu4c/source/tools/icupkg/*.pdb
+icu4c/source/tools/icupkg/*.plg
+icu4c/source/tools/icupkg/Debug
+icu4c/source/tools/icupkg/Makefile
+icu4c/source/tools/icupkg/Release
+icu4c/source/tools/icupkg/icupkg
+icu4c/source/tools/icupkg/icupkg.[0-9]
 icu4c/source/tools/icuswap/*.d
 icu4c/source/tools/icuswap/*.ncb
 icu4c/source/tools/icuswap/*.o
