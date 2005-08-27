@@ -508,6 +508,17 @@
 "\b....\b."                       "<0>イチロー?</0>"
 
 #
+# Bug 4058    ICU Unicode Set patterns have an odd feature -
+#             A $ as the last character before the close bracket means match
+#             a \uffff, which means off the end of the string in transliterators.
+#             Doesn't make much sense for regex, but works that way anyhow.
+#
+"[\$](P|C|D);"                    "<0>$<1>P</1>;</0>"
+"[$](P|C|D);"                     "<0>\uffff<1>P</1>;</0>"
+"[$](P|C|D);"                     "$P;"
+"[$$](P|C|D);"                    "<0>$<1>P</1>;</0>"
+
+#
 #  Random debugging, Temporary
 #
 #"^(?:a?b?)*$"	                  "a--"	
