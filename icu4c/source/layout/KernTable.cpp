@@ -51,6 +51,21 @@ struct KernTableHeader {
 #define COVERAGE_CROSS 0x4
 #define COVERAGE_OVERRIDE 0x8
 
+/*
+ * This implementation has support for only one subtable, so if the font has
+ * multiple subtables, only the first will be used.  If this turns out to
+ * be a problem in practice we should add it.
+ *
+ * This also supports only version 0 of the kern table header, only
+ * Apple supports the latter.
+ *
+ * This implementation isn't careful about the kern table flags, and
+ * might invoke kerning when it is not supposed to.  That too I'm
+ * leaving for a bug fix.
+ *
+ * TODO: support multiple subtables
+ * TODO: respect header flags
+ */
 KernTable::KernTable(const LEFontInstance* font, const void* tableData) 
   : pairs(0), font(font)
 {
@@ -58,7 +73,6 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
   if (header == 0) {
 #if DEBUG
     fprintf(stderr, "no kern data\n");
-    fflush(stderr);
 #endif
     return;
   }
@@ -73,7 +87,6 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
       fprintf(stderr, "  ");
     }
   }
-  fflush(stderr);
 #endif
 
   if (header->version == 0 && SWAPW(header->nTables) > 0) {
@@ -91,7 +104,6 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
 #if DEBUG
 	fprintf(stderr, "coverage: %0.4x nPairs: %d pairs 0x%x\n", coverage, nPairs, pairs);
 	fprintf(stderr, "  searchRange: %d entrySelector: %d rangeShift: %d\n", searchRange, entrySelector, rangeShift);
-	fflush(stderr);
 
 	{
 	  // dump part of the pair list
@@ -123,7 +135,6 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
 	      }
 	    }
 	  }
-	  fflush(stderr);
 	}
 #endif
       }
@@ -136,7 +147,6 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
  * Process the glyph positions.  The positions array has two floats for each
  * glyph, plus a trailing pair to mark the end of the last glyph.
  */
-//void KernTable::process(const LEGlyphID glyphs[], float* positions, le_int32 glyphCount) 
 void KernTable::process(LEGlyphStorage& storage) 
 {
   if (pairs) {
@@ -155,12 +165,11 @@ void KernTable::process(LEGlyphStorage& storage)
       const PairInfo* p = pairs;
       const PairInfo* tp = (const PairInfo*)((char*)p + rangeShift);
       if (key > SWAPL(tp->key)) {
-	p = tp;
+          p = tp;
       }
 
 #if DEBUG
       fprintf(stderr, "binary search for %0.8x\n", key);
-      fflush(stderr);
 #endif
 
       le_uint32 probe = searchRange;
@@ -169,8 +178,7 @@ void KernTable::process(LEGlyphStorage& storage)
         tp = (const PairInfo*)((char*)p + probe);
 	le_uint32 tkey = SWAPL(tp->key);
 #if DEBUG
-	fprintf(stdout, "   %.3d (%0.8x)\n", ((char*)tp - (char*)pairs)/KERN_PAIRINFO_SIZE, tkey);
-	fflush(stdout);
+        fprintf(stdout, "   %.3d (%0.8x)\n", ((char*)tp - (char*)pairs)/KERN_PAIRINFO_SIZE, tkey);
 #endif
         if (tkey <= key) {
 	  if (tkey == key) {
