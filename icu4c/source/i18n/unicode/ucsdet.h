@@ -128,10 +128,12 @@ ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCod
  * @param encoding  an encoding for the current data obtained from
  *                  a header or declaration or other source outside
  *                  of the byte data itself.
+ * @param status    any error conditions are reported back in this variable.
+ *
  * @draft ICU 3.6
  */
 U_DRAFT void U_EXPORT2
-ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding);
+ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, UErrorCode *status);
 
 
 /**
