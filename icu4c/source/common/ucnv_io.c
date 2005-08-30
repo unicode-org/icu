@@ -8,8 +8,8 @@
 *
 *
 *  ucnv_io.c:
-*  initializes global variables and defines functions pertaining to file
-*  access, and name resolution aspect of the library.
+*  initializes global variables and defines functions pertaining to converter 
+*  name resolution aspect of the conversion code.
 *
 *   new implementation:
 *
@@ -179,23 +179,9 @@ enum {
     offsetsCount    /* length of the swapper's temporary offsets[] */
 };
 
-static const uint16_t *gConverterList = NULL;
-static const uint16_t *gTagList = NULL;
-static const uint16_t *gAliasList = NULL;
-static const uint16_t *gUntaggedConvArray = NULL;
-static const uint16_t *gTaggedAliasArray = NULL;
-static const uint16_t *gTaggedAliasLists = NULL;
-static const uint16_t *gStringTable = NULL;
+static UConverterAlias gMainTable;
 
-static uint32_t gConverterListSize;
-static uint32_t gTagListSize;
-static uint32_t gAliasListSize;
-static uint32_t gUntaggedConvArraySize;
-static uint32_t gTaggedAliasArraySize;
-static uint32_t gTaggedAliasListsSize;
-/*static uint32_t gStringTableSize;*/
-
-#define GET_STRING(idx) (const char *)(gStringTable + (idx))
+#define GET_STRING(idx) (const char *)(gMainTable.stringTable + (idx))
 
 static UBool U_CALLCONV
 isAcceptable(void *context,
@@ -219,21 +205,7 @@ static UBool U_CALLCONV ucnv_io_cleanup(void)
         gAliasData = NULL;
     }
 
-    gConverterListSize       = 0;
-    gTagListSize             = 0;
-    gAliasListSize           = 0;
-    gUntaggedConvArraySize   = 0;
-    gTaggedAliasArraySize    = 0;
-    gTaggedAliasListsSize    = 0;
-    /*gStringTableSize         = 0;*/
-
-    gConverterList = NULL;
-    gTagList = NULL;
-    gAliasList = NULL;
-    gUntaggedConvArray = NULL;
-    gTaggedAliasArray = NULL;
-    gTaggedAliasLists = NULL;
-    gStringTable = NULL;
+    uprv_memset(&gMainTable, 0, sizeof(gMainTable));
 
     return TRUE;                   /* Everything was cleaned up */
 }
@@ -275,39 +247,39 @@ haveAliasData(UErrorCode *pErrorCode) {
             gAliasData = data;
             data=NULL;
 
-            gConverterListSize      = ((const uint32_t *)(table))[1];
-            gTagListSize            = ((const uint32_t *)(table))[2];
-            gAliasListSize          = ((const uint32_t *)(table))[3];
-            gUntaggedConvArraySize  = ((const uint32_t *)(table))[4];
-            gTaggedAliasArraySize   = ((const uint32_t *)(table))[5];
-            gTaggedAliasListsSize   = ((const uint32_t *)(table))[6];
+            gMainTable.converterListSize      = ((const uint32_t *)(table))[1];
+            gMainTable.tagListSize            = ((const uint32_t *)(table))[2];
+            gMainTable.aliasListSize          = ((const uint32_t *)(table))[3];
+            gMainTable.untaggedConvArraySize  = ((const uint32_t *)(table))[4];
+            gMainTable.taggedAliasArraySize   = ((const uint32_t *)(table))[5];
+            gMainTable.taggedAliasListsSize   = ((const uint32_t *)(table))[6];
             reservedSize1           = ((const uint32_t *)(table))[7];   /* reserved */
             /*gStringTableSize        = ((const uint32_t *)(table))[8];*/
 
             currOffset = tableStart * (sizeof(uint32_t)/sizeof(uint16_t)) + (sizeof(uint32_t)/sizeof(uint16_t));
-            gConverterList = table + currOffset;
+            gMainTable.converterList = table + currOffset;
 
-            currOffset += gConverterListSize;
-            gTagList = table + currOffset;
+            currOffset += gMainTable.converterListSize;
+            gMainTable.tagList = table + currOffset;
 
-            currOffset += gTagListSize;
-            gAliasList = table + currOffset;
+            currOffset += gMainTable.tagListSize;
+            gMainTable.aliasList = table + currOffset;
 
-            currOffset += gAliasListSize;
-            gUntaggedConvArray = table + currOffset;
+            currOffset += gMainTable.aliasListSize;
+            gMainTable.untaggedConvArray = table + currOffset;
 
-            currOffset += gUntaggedConvArraySize;
-            gTaggedAliasArray = table + currOffset;
+            currOffset += gMainTable.untaggedConvArraySize;
+            gMainTable.taggedAliasArray = table + currOffset;
 
             /* aliasLists is a 1's based array, but it has a padding character */
-            currOffset += gTaggedAliasArraySize;
-            gTaggedAliasLists = table + currOffset;
+            currOffset += gMainTable.taggedAliasArraySize;
+            gMainTable.taggedAliasLists = table + currOffset;
 
-            currOffset += gTaggedAliasListsSize;
+            currOffset += gMainTable.taggedAliasListsSize;
             /* reserved */
 
             currOffset += reservedSize1;
-            gStringTable = table + currOffset;
+            gMainTable.stringTable = table + currOffset;
 
             ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
         }
@@ -327,18 +299,15 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     if(alias==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
-    } else if(*alias==0) {
-        return FALSE;
-    } else {
-        return TRUE;
     }
+    return (UBool)(*alias!=0);
 }
 
 static uint32_t getTagNumber(const char *tagname) {
-    if (gTagList) {
+    if (gMainTable.tagList) {
         uint32_t tagNum;
-        for (tagNum = 0; tagNum < gTagListSize; tagNum++) {
-            if (!uprv_stricmp(GET_STRING(gTagList[tagNum]), tagname)) {
+        for (tagNum = 0; tagNum < gMainTable.tagListSize; tagNum++) {
+            if (!uprv_stricmp(GET_STRING(gMainTable.tagList[tagNum]), tagname)) {
                 return tagNum;
             }
         }
@@ -445,7 +414,7 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
 
     /* do a binary search for the alias */
     start = 0;
-    limit = gUntaggedConvArraySize;
+    limit = gMainTable.untaggedConvArraySize;
     mid = limit;
     lastMid = UINT32_MAX;
 
@@ -455,7 +424,7 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
             break;  /* We haven't moved, and it wasn't found. */
         }
         lastMid = mid;
-        result = ucnv_compareNames(alias, GET_STRING(gAliasList[mid]));
+        result = ucnv_compareNames(alias, GET_STRING(gMainTable.aliasList[mid]));
 
         if (result < 0) {
             limit = mid;
@@ -466,10 +435,10 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
              * this alias in gAliasList is unique, but different standards
              * may map an alias to different converters.
              */
-            if (gUntaggedConvArray[mid] & UCNV_AMBIGUOUS_ALIAS_MAP_BIT) {
+            if (gMainTable.untaggedConvArray[mid] & UCNV_AMBIGUOUS_ALIAS_MAP_BIT) {
                 *pErrorCode = U_AMBIGUOUS_ALIAS_WARNING;
             }
-            return gUntaggedConvArray[mid] & UCNV_CONVERTER_INDEX_MASK;
+            return gMainTable.untaggedConvArray[mid] & UCNV_CONVERTER_INDEX_MASK;
         }
     }
 
@@ -484,9 +453,9 @@ static U_INLINE UBool
 isAliasInList(const char *alias, uint32_t listOffset) {
     if (listOffset) {
         uint32_t currAlias;
-        uint32_t listCount = gTaggedAliasLists[listOffset];
+        uint32_t listCount = gMainTable.taggedAliasLists[listOffset];
         /* +1 to skip listCount */
-        const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
+        const uint16_t *currList = gMainTable.taggedAliasLists + listOffset + 1;
         for (currAlias = 0; currAlias < listCount; currAlias++) {
             if (currList[currAlias]
                 && ucnv_compareNames(alias, GET_STRING(currList[currAlias]))==0)
@@ -518,9 +487,9 @@ findTaggedAliasListsOffset(const char *alias, const char *standard, UErrorCode *
         *pErrorCode = myErr;
     }
 
-    if (tagNum < (gTagListSize - UCNV_NUM_HIDDEN_TAGS) && convNum < gConverterListSize) {
-        listOffset = gTaggedAliasArray[tagNum*gConverterListSize + convNum];
-        if (listOffset && gTaggedAliasLists[listOffset + 1]) {
+    if (tagNum < (gMainTable.tagListSize - UCNV_NUM_HIDDEN_TAGS) && convNum < gMainTable.converterListSize) {
+        listOffset = gMainTable.taggedAliasArray[tagNum*gMainTable.converterListSize + convNum];
+        if (listOffset && gMainTable.taggedAliasLists[listOffset + 1]) {
             return listOffset;
         }
         if (myErr == U_AMBIGUOUS_ALIAS_WARNING) {
@@ -529,13 +498,13 @@ findTaggedAliasListsOffset(const char *alias, const char *standard, UErrorCode *
                at the highest standard affinity.
                This may take a while.
             */
-            for (idx = 0; idx < gTaggedAliasArraySize; idx++) {
-                listOffset = gTaggedAliasArray[idx];
+            for (idx = 0; idx < gMainTable.taggedAliasArraySize; idx++) {
+                listOffset = gMainTable.taggedAliasArray[idx];
                 if (listOffset && isAliasInList(alias, listOffset)) {
-                    uint32_t currTagNum = idx/gConverterListSize;
-                    uint32_t currConvNum = (idx - currTagNum*gConverterListSize);
-                    uint32_t tempListOffset = gTaggedAliasArray[tagNum*gConverterListSize + currConvNum];
-                    if (tempListOffset && gTaggedAliasLists[tempListOffset + 1]) {
+                    uint32_t currTagNum = idx/gMainTable.converterListSize;
+                    uint32_t currConvNum = (idx - currTagNum*gMainTable.converterListSize);
+                    uint32_t tempListOffset = gMainTable.taggedAliasArray[tagNum*gMainTable.converterListSize + currConvNum];
+                    if (tempListOffset && gMainTable.taggedAliasLists[tempListOffset + 1]) {
                         return tempListOffset;
                     }
                     /* else keep on looking */
@@ -569,8 +538,8 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
         *pErrorCode = myErr;
     }
 
-    if (tagNum < (gTagListSize - UCNV_NUM_HIDDEN_TAGS) && convNum < gConverterListSize) {
-        listOffset = gTaggedAliasArray[tagNum*gConverterListSize + convNum];
+    if (tagNum < (gMainTable.tagListSize - UCNV_NUM_HIDDEN_TAGS) && convNum < gMainTable.converterListSize) {
+        listOffset = gMainTable.taggedAliasArray[tagNum*gMainTable.converterListSize + convNum];
         if (listOffset && isAliasInList(alias, listOffset)) {
             return convNum;
         }
@@ -580,10 +549,10 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
                We search only in the requested tag, not the whole thing.
                This may take a while.
             */
-            uint32_t convStart = (tagNum)*gConverterListSize;
-            uint32_t convLimit = (tagNum+1)*gConverterListSize;
+            uint32_t convStart = (tagNum)*gMainTable.converterListSize;
+            uint32_t convLimit = (tagNum+1)*gMainTable.converterListSize;
             for (idx = convStart; idx < convLimit; idx++) {
-                listOffset = gTaggedAliasArray[idx];
+                listOffset = gMainTable.taggedAliasArray[idx];
                 if (listOffset && isAliasInList(alias, listOffset)) {
                     return idx-convStart;
                 }
@@ -603,8 +572,8 @@ U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findConverter(alias, pErrorCode);
-        if (convNum < gConverterListSize) {
-            return GET_STRING(gConverterList[convNum]);
+        if (convNum < gMainTable.converterListSize) {
+            return GET_STRING(gMainTable.converterList[convNum]);
         }
         /* else converter not found */
     }
@@ -618,7 +587,7 @@ ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
     uint32_t listOffset = myContext->listOffset;
 
     if (listOffset) {
-        value = gTaggedAliasLists[listOffset];
+        value = gMainTable.taggedAliasLists[listOffset];
     }
     return value;
 }
@@ -632,8 +601,8 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
     uint32_t listOffset = myContext->listOffset;
 
     if (listOffset) {
-        uint32_t listCount = gTaggedAliasLists[listOffset];
-        const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
+        uint32_t listCount = gMainTable.taggedAliasLists[listOffset];
+        const uint16_t *currList = gMainTable.taggedAliasLists + listOffset + 1;
 
         if (myContext->listIdx < listCount) {
             const char *myStr = GET_STRING(currList[myContext->listIdx++]);
@@ -682,7 +651,7 @@ ucnv_openStandardNames(const char *convName,
         /* When listOffset == 0, we want to acknowledge that the
            converter name and standard are okay, but there
            is nothing to enumerate. */
-        if (listOffset < gTaggedAliasListsSize) {
+        if (listOffset < gMainTable.taggedAliasListsSize) {
             UAliasContext *myContext;
 
             myEnum = uprv_malloc(sizeof(UEnumeration));
@@ -706,16 +675,16 @@ ucnv_openStandardNames(const char *convName,
     return myEnum;
 }
 
-U_CFUNC uint16_t
+static uint16_t
 ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findConverter(alias, pErrorCode);
-        if (convNum < gConverterListSize) {
+        if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
-            int32_t listOffset = gTaggedAliasArray[(gTagListSize - 1)*gConverterListSize + convNum];
+            int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
 
             if (listOffset) {
-                return gTaggedAliasLists[listOffset];
+                return gMainTable.taggedAliasLists[listOffset];
             }
             /* else this shouldn't happen. internal program error */
         }
@@ -724,19 +693,19 @@ ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode) {
     return 0;
 }
 
-U_CFUNC uint16_t
+static uint16_t
 ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t currAlias;
         uint32_t convNum = findConverter(alias, pErrorCode);
-        if (convNum < gConverterListSize) {
+        if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
-            int32_t listOffset = gTaggedAliasArray[(gTagListSize - 1)*gConverterListSize + convNum];
+            int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
 
             if (listOffset) {
-                uint32_t listCount = gTaggedAliasLists[listOffset];
+                uint32_t listCount = gMainTable.taggedAliasLists[listOffset];
                 /* +1 to skip listCount */
-                const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
+                const uint16_t *currList = gMainTable.taggedAliasLists + listOffset + 1;
 
                 for (currAlias = start; currAlias < listCount; currAlias++) {
                     aliases[currAlias] = GET_STRING(currList[currAlias]);
@@ -749,18 +718,18 @@ ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErr
     return 0;
 }
 
-U_CFUNC const char *
+static const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findConverter(alias, pErrorCode);
-        if (convNum < gConverterListSize) {
+        if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
-            int32_t listOffset = gTaggedAliasArray[(gTagListSize - 1)*gConverterListSize + convNum];
+            int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
 
             if (listOffset) {
-                uint32_t listCount = gTaggedAliasLists[listOffset];
+                uint32_t listCount = gMainTable.taggedAliasLists[listOffset];
                 /* +1 to skip listCount */
-                const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
+                const uint16_t *currList = gMainTable.taggedAliasLists + listOffset + 1;
 
                 if (n < listCount)  {
                     return GET_STRING(currList[n]);
@@ -774,11 +743,11 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     return NULL;
 }
 
-U_CFUNC uint16_t
+static uint16_t
 ucnv_io_countStandards(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
         /* Don't include the empty list */
-        return (uint16_t)(gTagListSize - UCNV_NUM_HIDDEN_TAGS);
+        return (uint16_t)(gMainTable.tagListSize - UCNV_NUM_HIDDEN_TAGS);
     }
 
     return 0;
@@ -787,8 +756,8 @@ ucnv_io_countStandards(UErrorCode *pErrorCode) {
 U_CAPI const char * U_EXPORT2
 ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
-        if (n < gTagListSize - UCNV_NUM_HIDDEN_TAGS) {
-            return GET_STRING(gTagList[n]);
+        if (n < gMainTable.tagListSize - UCNV_NUM_HIDDEN_TAGS) {
+            return GET_STRING(gMainTable.tagList[n]);
         }
         *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
     }
@@ -801,8 +770,8 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t listOffset = findTaggedAliasListsOffset(alias, standard, pErrorCode);
 
-        if (0 < listOffset && listOffset < gTaggedAliasListsSize) {
-            const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
+        if (0 < listOffset && listOffset < gMainTable.taggedAliasListsSize) {
+            const uint16_t *currList = gMainTable.taggedAliasLists + listOffset + 1;
 
             /* Get the preferred name from this list */
             if (currList[0]) {
@@ -847,8 +816,8 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findTaggedConverterNum(alias, standard, pErrorCode);
 
-        if (convNum < gConverterListSize) {
-            return GET_STRING(gConverterList[convNum]);
+        if (convNum < gMainTable.converterListSize) {
+            return GET_STRING(gMainTable.converterList[convNum]);
         }
     }
 
@@ -857,7 +826,7 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
 
 static int32_t U_CALLCONV
 ucnv_io_countAllConverters(UEnumeration *enumerator, UErrorCode *pErrorCode) {
-    return gConverterListSize;
+    return gMainTable.converterListSize;
 }
 
 static const char* U_CALLCONV
@@ -867,8 +836,8 @@ ucnv_io_nextAllConverters(UEnumeration *enumerator,
 {
     uint16_t *myContext = (uint16_t *)(enumerator->context);
 
-    if (*myContext < gConverterListSize) {
-        const char *myStr = GET_STRING(gConverterList[(*myContext)++]);
+    if (*myContext < gMainTable.converterListSize) {
+        const char *myStr = GET_STRING(gMainTable.converterList[(*myContext)++]);
         if (resultLength) {
             *resultLength = (int32_t)uprv_strlen(myStr);
         }
@@ -921,7 +890,7 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
 U_CFUNC uint16_t
 ucnv_io_countTotalAliases(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
-        return (uint16_t)gAliasListSize;
+        return (uint16_t)gMainTable.aliasListSize;
     }
     return 0;
 }
