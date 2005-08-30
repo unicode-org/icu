@@ -108,7 +108,7 @@ u_init(UErrorCode *status) {
      * available.
      */
 #if !UCONFIG_NO_CONVERSION
-    ucnv_io_countStandards(status);
+    ucnv_io_countTotalAliases(status);
 #endif
 #else
     /* Do any required init for services that don't have open operations

@@ -6,8 +6,8 @@
  *
  *
  *  ucnv_io.h:
- *  defines  variables and functions pertaining to file access, and name resolution
- *  aspect of the library
+ *  defines  variables and functions pertaining to converter name resolution
+ *  aspect of the conversion code
  */
 
 #ifndef UCNV_IO_H
@@ -24,12 +24,31 @@
 #define UCNV_NUM_RESERVED_TAGS 2
 #define UCNV_NUM_HIDDEN_TAGS 1
 
+typedef struct UConverterAlias {
+    const uint16_t *converterList;
+    const uint16_t *tagList;
+    const uint16_t *aliasList;
+    const uint16_t *untaggedConvArray;
+    const uint16_t *taggedAliasArray;
+    const uint16_t *taggedAliasLists;
+    const uint16_t *stringTable;
+
+    uint32_t converterListSize;
+    uint32_t tagListSize;
+    uint32_t aliasListSize;
+    uint32_t untaggedConvArraySize;
+    uint32_t taggedAliasArraySize;
+    uint32_t taggedAliasListsSize;
+    /*uint32_t stringTableSize;*/
+} UConverterAlias;
+
 /**
  * \var ucnv_io_stripForCompare
  * Remove the underscores, dashes and spaces from the name, and convert
  * the name to lower case.
  * @param dst The destination buffer, which is <= the buffer of name.
  * @param dst The destination buffer, which is <= the buffer of name.
+ * @see ucnv_compareNames
  * @return the destination buffer.
  */
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
@@ -59,52 +78,8 @@ U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
 
 /**
- * The count for ucnv_io_getAliases and ucnv_io_getAlias
- * @param alias The alias name to be counted
- * @param pErrorCode The error code
- * @return the alias count
- */
-U_CFUNC uint16_t
-ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode);
-
-/**
- * Search case-insensitively for a converter alias and set aliases to
- * a pointer to the list of aliases for the actual converter.
- * The first "alias" is the canonical converter name.
- * The aliases are stored consecutively, in mixed case, each NUL-terminated.
- * There are as many strings in this list as the return value specifies.
- * Returns the number of aliases including the canonical converter name,
- * or 0 if the alias is not found.
- * @param alias The canonical converter name
- * @param start 
- * @param aliases A pointer to the list of aliases for the actual converter
- * @return the number of aliases including the canonical converter name, or 0 if the alias is not found.
- */
-U_CFUNC uint16_t
-ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode);
-
-/**
- * Search case-insensitively for a converter alias and return
- * the (n)th alias.
- * Returns NULL if the alias is not found.
- * @param alias The converter alias
- * @param n The number specifies which alias to get
- * @param pErrorCode The error code
- * @return the (n)th alias and return NULL if the alias is not found.
- */
-U_CFUNC const char *
-ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
-
-/**
- * Return the number of all standard names.
- * @param pErrorCode The error code
- * @return the number of all standard names
- */
-U_CFUNC uint16_t
-ucnv_io_countStandards(UErrorCode *pErrorCode);
-
-/**
- * Return the number of all aliases (and converter names).
+ * Return the number of all aliases and converter names.
+ * This is helpful if you need a number for creating an alias table.
  * @param pErrorCode The error code
  * @return the number of all aliases
  */
@@ -112,7 +87,7 @@ U_CFUNC uint16_t
 ucnv_io_countTotalAliases(UErrorCode *pErrorCode);
 
 /**
- * Swap an ICU converter alias table. See ucnv_io.c.
+ * Swap an ICU converter alias table. See implementation for details.
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
