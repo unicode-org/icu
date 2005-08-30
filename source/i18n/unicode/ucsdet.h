@@ -117,12 +117,9 @@ ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCod
  *  The declared encoding of an input text is an encoding obtained
  *  by the user from an http header or xml declaration or similar source that
  *  can be provided as an additional hint to the charset detector.
- *  A match between a declared encoding and a possible detected encoding
- *  will raise the quality of that detected encoding by a small amount.
- * <p/>
- *  A declared encoding that is unknown to the detector service or
- *  is incompatible with the input data being analyzed will not be added
- *  to the list of possible encodings.
+ *
+ *  How and whether the declared encoding will be used during the
+ *  detection process is TBD.
  *
  * @param csd       the charset detector to be used.
  * @param encoding  an encoding for the current data obtained from
@@ -223,7 +220,9 @@ ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status);
 
 /**
  *  Get a confidence number for the quality of the match of the byte
- *  data with the charset.  Confidence numbers range from zero to 100.
+ *  data with the charset.  Confidence numbers range from zero to 100,
+ *  with 100 representing complete confidence and zero representing
+ *  no no confidence.
  *
  *  The confidence values are somewhat arbitrary.  They define an
  *  an ordering within the results for any single detection operation
