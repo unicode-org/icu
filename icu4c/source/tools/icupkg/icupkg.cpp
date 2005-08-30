@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 2005-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -60,7 +60,7 @@ static Package *
 readList(const char *filesPath, const char *listname, UBool readContents) {
     Package *listPkg;
     FILE *file;
-    char *end;
+    const char *listNameEnd;
 
     if(listname==NULL || listname[0]==0) {
         fprintf(stderr, "missing list file\n");
@@ -73,10 +73,11 @@ readList(const char *filesPath, const char *listname, UBool readContents) {
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
-    end=strchr(listname, 0);
-    if((end-listname)>4 && 0==memcmp(end-4, ".txt", 4)) {
+    listNameEnd=strchr(listname, 0);
+    if((listNameEnd-listname)>4 && 0==memcmp(listNameEnd-4, ".txt", 4)) {
         // read the list file
         char line[1024];
+        char *end;
         const char *start;
 
         file=fopen(listname, "r");
@@ -131,7 +132,7 @@ readList(const char *filesPath, const char *listname, UBool readContents) {
             }
         }
         fclose(file);
-    } else if((end-listname)>4 && 0==memcmp(end-4, ".dat", 4)) {
+    } else if((listNameEnd-listname)>4 && 0==memcmp(listNameEnd-4, ".dat", 4)) {
         // read the ICU .dat package
         listPkg->readPackage(listname);
     } else {
