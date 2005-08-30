@@ -169,6 +169,11 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
   *  filling in an array with the results.  The results are ordered with the
   *  best quality match first.
   *
+  *  Note though, that because the detection 
+  *  only looks at the start of the input data,
+  *  there is a possibility that the returned charset will fail to handle
+  *  the full set of input data.
+  *  <p/>
   *  The returned UCharsetMatch objects are owned by the UCharsetDetector.
   *  They will remain valid until the detector input is reset, or until
   *  the detector is closed.
@@ -241,7 +246,7 @@ U_DRAFT int32_t U_EXPORT2
 ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status);
 
 /**
- *  Get the ISO code for the language of the input data.
+ *  Get the RFC 3066 code for the language of the input data.
  *
  *  The Charset Detection service is intended primarily for detecting
  *  charsets, not language.  For some, but not all, charsets, a language is
@@ -264,7 +269,7 @@ ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status);
  *
  *  @param csm     The charset match object.
  *  @param status  Any error conditions are reported back in this variable.
- *  @return        The ISO code for the language of the input data.
+ *  @return        The RFC 3066 code for the language of the input data.
  *
  *  @draft ICU 3.6
  */
@@ -358,7 +363,7 @@ ucsdet_getDetectableCharsetName(const UCharsetDetector *csd, int32_t index, UErr
   *  @return TRUE if filtering is enabled.
   *  @draft ICU 3.4
   */
-U_DRAFT  UBool * U_EXPORT2
+U_DRAFT  UBool U_EXPORT2
 ucsdet_isInputFilterEnabled(const UCharsetDetector *csd);
 
 
@@ -372,7 +377,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *csd);
   *
   * @draft ICU 3.6
   */
-U_DRAFT  void U_EXPORT2
+U_DRAFT  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter);
 
 
