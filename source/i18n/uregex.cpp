@@ -963,7 +963,10 @@ static void copyString(UChar        *destBuffer,    //  Destination buffer.
             break;
         }
     }
-    destBuffer[di++] = 0;
+    if (di<destCapacity) {
+        destBuffer[di] = 0;
+    }
+    di++;
     *destIndex = di;
 }
 
