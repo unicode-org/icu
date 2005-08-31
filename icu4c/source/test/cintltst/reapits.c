@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004, International Business Machines Corporation and
+ * Copyright (c) 2004-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -40,9 +40,11 @@ log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
      UBool    success; \
      if (nulTerm) { \
          u_austrncpy(buf_inside_macro, (actual), len+1); \
+         buf_inside_macro[len+2] = 0; \
          success = (strcmp((expected), buf_inside_macro) == 0); \
      } else { \
          u_austrncpy(buf_inside_macro, (actual), len); \
+         buf_inside_macro[len+1] = 0; \
          success = (strncmp((expected), buf_inside_macro, len) == 0); \
      } \
      if (success == FALSE) { \
@@ -57,12 +59,14 @@ log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
 
 
 static void TestRegexCAPI(void);
+static void TestBug4315(void);
 
 void addURegexTest(TestNode** root);
 
 void addURegexTest(TestNode** root)
 {
     addTest(root, &TestRegexCAPI, "regex/TestRegexCAPI");
+    addTest(root, &TestBug4315,   "regex/TestBug4315");
 /*  addTest(root, &TestBreakIteratorSafeClone, "tstxtbd/cbiapts/TestBreakIteratorSafeClone"); */
 }
 
@@ -967,6 +971,54 @@ static void TestRegexCAPI(void) {
         uregex_close(re);
     }
 
+}
+
+void TestBug4315() {
+    UErrorCode		theICUError = U_ZERO_ERROR;
+    URegularExpression	*theRegEx;
+    UChar			*textBuff;
+    char			*thePattern;
+    UChar			theString[100];
+    UChar			*destFields[24];
+    int32_t			neededLength;
+
+    int32_t			wordCount = 0;
+    int32_t			destFieldsSize = 24;
+
+    thePattern	= "ck ";
+    u_uastrcpy(theString, "The quick brown fox jumped over the slow black turtle.");
+
+    /* open a regex */
+    theRegEx = uregex_openC(thePattern, 0, NULL, &theICUError);
+    TEST_ASSERT_SUCCESS(theICUError);
+
+    /* set the input string */
+    uregex_setText(theRegEx, theString, u_strlen(theString), &theICUError);
+    TEST_ASSERT_SUCCESS(theICUError);
+
+    /* split */
+    //explicitly pass NULL and 0 to force the overflow error -> this is where the
+    //   error occurs!
+    wordCount = uregex_split(theRegEx, NULL, 0, &neededLength, destFields,
+        destFieldsSize, &theICUError);
+
+    TEST_ASSERT(theICUError == U_BUFFER_OVERFLOW_ERROR);
+    TEST_ASSERT(wordCount==3);
+
+    if(theICUError == U_BUFFER_OVERFLOW_ERROR)
+    {
+        theICUError = U_ZERO_ERROR;
+        textBuff = (UChar *) malloc(sizeof(UChar) * (neededLength + 1));
+        wordCount = uregex_split(theRegEx, textBuff, u_strlen(textBuff), &neededLength,
+            destFields, destFieldsSize, &theICUError);
+        TEST_ASSERT(wordCount==3);
+        TEST_ASSERT_SUCCESS(theICUError);
+        TEST_ASSERT_STRING("The qui", destFields[0], TRUE);
+        TEST_ASSERT_STRING("brown fox jumped over the slow bla", destFields[1], TRUE);
+        TEST_ASSERT_STRING("turtle.", destFields[2], TRUE);
+        TEST_ASSERT(destFields[3] == NULL);
+        free(textBuff);
+    }
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
