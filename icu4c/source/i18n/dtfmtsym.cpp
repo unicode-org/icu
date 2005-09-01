@@ -297,13 +297,13 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     fZoneStrings = NULL;
     fZoneStringsColCount = 0;
     fZoneStringsRowCount = 0;
-    fZoneArrayBundle = NULL;
+    fResourceBundle = NULL;
     if(other.fZoneStringsHash!=NULL){
         fZoneStringsHash = createZoneStringsHash(other.fZoneStringsHash);
         fZoneIDEnumeration = other.fZoneIDEnumeration->clone();
     }else{
         UErrorCode status =U_ZERO_ERROR;
-        fZoneArrayBundle = ures_clone(other.fZoneArrayBundle, &status);
+        fResourceBundle = ures_clone(other.fResourceBundle, &status);
         // TODO: what should be done in case of error?
     }
 
@@ -368,8 +368,8 @@ void DateFormatSymbols::disposeZoneStrings()
         delete fZoneIDEnumeration; 
         fZoneIDEnumeration = NULL;
     }
-    ures_close(fZoneArrayBundle);
-    fZoneArrayBundle = NULL;
+    ures_close(fResourceBundle);
+    fResourceBundle = NULL;
 }
 
 UBool
@@ -429,7 +429,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             
             if(fZoneStringsHash == NULL || other.fZoneStringsHash == NULL){
                 // fZoneStringsHash is not initialized compare the resource bundles
-                if(ures_equal(fZoneArrayBundle, other.fZoneArrayBundle)== FALSE){
+                if(ures_equal(fResourceBundle, other.fResourceBundle)== FALSE){
                     return FALSE;
                 }
             }else{
@@ -780,8 +780,6 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     int32_t i;
     int32_t len = 0;
     const UChar *resStr;
-    static const UnicodeString colon((UChar)0x003a);
-    static const UnicodeString solidus((UChar)0x002f);
     /* In case something goes wrong, initialize all of the data to NULL. */
     fEras = NULL;
     fErasCount = 0;
@@ -818,7 +816,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fZoneStrings = NULL;
     fZoneStringsHash = NULL;
     fZoneIDEnumeration = NULL;
-    fZoneArrayBundle   = NULL;
+    fResourceBundle   = NULL;
     
       
     if (U_FAILURE(status)) return;
@@ -829,7 +827,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
      * these.
      */
     CalendarData calData(locale, type, status);
-    UResourceBundle *nonCalendarData = ures_open((char*)0, locale.getName(), &status);
+    fResourceBundle = ures_open((char*)0, locale.getName(), &status);
 
     // load the first data item
     UResourceBundle *erasMain = calData.getByKey(gErasTag, status);
@@ -847,7 +845,6 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     UResourceBundle *standaloneWeekdaysData = NULL; // Data closed by calData
     UResourceBundle *standaloneShortWeekdaysData = NULL; // Data closed by calData
     UResourceBundle *standaloneNarrowWeekdaysData = NULL; // Data closed by calData
-    fZoneArrayBundle = ures_getByKey(nonCalendarData, gZoneStringsTag, NULL, &status);
 
     U_LOCALE_BASED(locBased, *this);
     if (U_FAILURE(status))
@@ -917,7 +914,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     initField(&fAmPms, fAmPmsCount, calData.getByKey(gAmPmMarkersTag, status), status);
 
     // fastCopyFrom()/setTo() - see assignArray comments
-    resStr = ures_getStringByKey(nonCalendarData, gLocalPatternCharsTag, &len, &status);
+    resStr = ures_getStringByKey(fResourceBundle, gLocalPatternCharsTag, &len, &status);
     fLocalPatternChars.setTo(TRUE, resStr, len);
     // If the locale data does not include new pattern chars, use the defaults
     // TODO: Consider making this an error, since this may add conflicting characters.
@@ -1045,7 +1042,6 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 cleanup:
     ures_close(eras);
     ures_close(eraNames);
-    ures_close(nonCalendarData);
 }
 
 /**
@@ -1197,7 +1193,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneKeysEnumeration);
 void
 DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
     if(fZoneStringsHash == NULL){
-        initZoneStrings(fZoneArrayBundle, (const UChar *)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     if(U_FAILURE(status)){
         return;
@@ -1243,26 +1239,90 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
 }
 
 void
-DateFormatSymbols::initZoneStrings(UResourceBundle* bundle, const UChar* lastResortStrings, 
-                                   int32_t length, UErrorCode &status){
+DateFormatSymbols::initZoneStrings(UErrorCode &status){
     if(U_FAILURE(status)){
         return;
     }  
+
     if(fZoneStringsHash != NULL){
         return;
     }
     int32_t i;
-    if(bundle != NULL){
+    
+    if(fResourceBundle != NULL){
         static const UnicodeString solidus("/");
         static const UnicodeString colon(":");
-        UResourceBundle zoneItem;
+        UResourceBundle zoneArray,zoneItem;
         ures_initStackObject(&zoneItem);
+        ures_initStackObject(&zoneArray);
         fZoneStringsHash = new Hashtable(status);
         if(fZoneStringsHash==NULL){
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        TimeZoneKeysEnumeration* keysEnum = new TimeZoneKeysEnumeration(ures_getSize(bundle),status);
+        for(const UResourceBundle* rb = fResourceBundle; rb!=NULL; rb=ures_getParentBundle(rb)){
+            ures_getByKey(rb, gZoneStringsTag, &zoneArray, &status);
+            if(U_FAILURE(status)){
+                break;
+            }
+            while(ures_hasNext(&zoneArray)){
+                UErrorCode tempStatus = U_ZERO_ERROR;
+                UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+                ures_getNextResource(&zoneArray, &zoneItem, &status);
+                UnicodeString key(ures_getKey(&zoneItem));
+                key.findAndReplace(colon, solidus);
+                int32_t len = 0;
+                //fetch the strings with fine grained fallback
+                const UChar* str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_STANDARD, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_SHORT_STANDARD].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_GENERIC, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_SHORT_GENERIC].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }                
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_DAYLIGHT, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_SHORT_DAYLIGHT].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_STANDARD, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_LONG_STANDARD].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_GENERIC, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_LONG_GENERIC].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }                
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_DAYLIGHT, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_LONG_DAYLIGHT].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }
+                str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_EXEMPLAR_CITY, &len, &tempStatus);
+                if(U_SUCCESS(tempStatus)){
+                    array[TIMEZONE_EXEMPLAR_CITY].setTo(str, len);
+                }else{
+                    tempStatus = U_ZERO_ERROR;
+                }
+                // store the strings in hash
+                fZoneStringsHash->put(key, array, status);
+            }
+            ures_close(&zoneItem);
+            ures_close(&zoneArray);
+        }
+        int32_t length = fZoneStringsHash->count();
+        TimeZoneKeysEnumeration* keysEnum = new TimeZoneKeysEnumeration(length, status);
         fZoneIDEnumeration = keysEnum;
         if(fZoneIDEnumeration==NULL){
             delete fZoneStringsHash;
@@ -1270,61 +1330,14 @@ DateFormatSymbols::initZoneStrings(UResourceBundle* bundle, const UChar* lastRes
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        while(ures_hasNext(bundle)){
-            UErrorCode tempStatus = U_ZERO_ERROR;
-            UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-            ures_getNextResource(bundle, &zoneItem, &status);
-            UnicodeString key(ures_getKey(&zoneItem));
-            key.findAndReplace(colon, solidus);
-            keysEnum->put(key, status);
-            int32_t len = 0;
-            //fetch the strings with fine grained fallback
-            const UChar* str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_STANDARD, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_SHORT_STANDARD].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_GENERIC, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_SHORT_GENERIC].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }                
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_DAYLIGHT, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_SHORT_DAYLIGHT].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_STANDARD, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_LONG_STANDARD].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_GENERIC, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_LONG_GENERIC].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }                
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_DAYLIGHT, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_LONG_DAYLIGHT].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }
-            str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_EXEMPLAR_CITY, &len, &tempStatus);
-            if(U_SUCCESS(tempStatus)){
-                array[TIMEZONE_EXEMPLAR_CITY].setTo(str, len);
-            }else{
-                tempStatus = U_ZERO_ERROR;
-            }
-            // store the strings in hash
-            fZoneStringsHash->put(key, array, status);
+        int32_t pos=-1;
+        const UnicodeString* key; 
+        const UHashElement* elem = NULL;
+        while((elem = fZoneStringsHash->nextElement(pos))!= NULL){  
+            const UHashTok keyTok = elem->key;
+            key = (const UnicodeString*)keyTok.pointer;
+            keysEnum->put(*key, status);
         }
-        ures_close(&zoneItem);
     }else{
         //last resort strings
         fZoneStringsHash = new Hashtable(status);
@@ -1338,9 +1351,9 @@ DateFormatSymbols::initZoneStrings(UResourceBundle* bundle, const UChar* lastRes
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-
-        UnicodeString key(lastResortStrings[0]);
-        TimeZoneKeysEnumeration* keysEnum = new TimeZoneKeysEnumeration(ures_getSize(bundle),status);
+        int32_t length = ARRAY_LENGTH(gLastResortZoneStrings);
+        UnicodeString key(gLastResortZoneStrings[0]);
+        TimeZoneKeysEnumeration* keysEnum = new TimeZoneKeysEnumeration(length, status);
         fZoneIDEnumeration = keysEnum;
         if(fZoneIDEnumeration==NULL){
             delete fZoneStringsHash;
@@ -1352,7 +1365,7 @@ DateFormatSymbols::initZoneStrings(UResourceBundle* bundle, const UChar* lastRes
         keysEnum->put(key, status);
         int32_t j=1;
         for(i=0; i< length; ){
-            array[i++].setTo(lastResortStrings[j++]);
+            array[i++].setTo(gLastResortZoneStrings[j++]);
         }
         fZoneStringsHash->put(key, array, status);
     }
@@ -1442,7 +1455,7 @@ DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTransla
 
     if(fZoneStringsHash == NULL){
         //lazy initialization
-        initZoneStrings(fZoneArrayBundle, (const UChar *)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     if(U_FAILURE(status)){
         return result;
@@ -1462,7 +1475,7 @@ DateFormatSymbols::createZoneStringIDs(UErrorCode &status){
     }
     if(fZoneStringsHash == NULL){    
         //lazy initialization
-        initZoneStrings(fZoneArrayBundle, (const UChar *)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     return fZoneIDEnumeration->clone();
 }
@@ -1476,7 +1489,7 @@ DateFormatSymbols::setZoneString(const UnicodeString &zid, const TimeZoneTransla
                                  const UnicodeString &value, UErrorCode &status){
     if(fZoneStringsHash == NULL){
         //lazy initialization
-        initZoneStrings(fZoneArrayBundle, (const UChar *)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     if(U_FAILURE(status)){
         return;
@@ -1605,7 +1618,7 @@ DateFormatSymbols::hashCompare(Hashtable* hash1,
 UnicodeString&
 DateFormatSymbols::getZoneID(const UnicodeString& zid, UnicodeString& result, UErrorCode& status){
     if(fZoneStringsHash == NULL){
-        initZoneStrings(fZoneArrayBundle, (const UChar*)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status); 
+        initZoneStrings(status); 
     }
     if(U_FAILURE(status)){
         return result;
@@ -1636,7 +1649,7 @@ void
 DateFormatSymbols::getZoneType(const UnicodeString& zid, const UnicodeString& text, int32_t start, 
                                TimeZoneTranslationType& type, UnicodeString& value, UErrorCode& status){
     if(fZoneStringsHash == NULL){
-        initZoneStrings(fZoneArrayBundle, (const UChar*)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     if(U_FAILURE(status)){
         return;
@@ -1657,7 +1670,7 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
                                         TimeZoneTranslationType& type, UnicodeString& value,
                                         UErrorCode& status){
     if(fZoneStringsHash == NULL){
-        initZoneStrings(fZoneArrayBundle, (const UChar*)gLastResortZoneStrings, ARRAY_LENGTH(gLastResortZoneStrings), status);
+        initZoneStrings(status);
     }
     if(U_FAILURE(status)){
         return;
