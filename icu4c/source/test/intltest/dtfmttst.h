@@ -139,7 +139,7 @@ public:
      */
     virtual void TestDateFormatZone146(void);
 
-    void DateFormatTest::TestTimeZoneStringsAPI(void);
+    void TestTimeZoneStringsAPI(void);
  
 public: // package
     /**
