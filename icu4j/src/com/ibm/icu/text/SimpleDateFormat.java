@@ -816,60 +816,50 @@ public class SimpleDateFormat extends DateFormat {
         case 17: // 'z' - ZONE_OFFSET
         case 24: // 'v' - TIMEZONE_GENERIC 
             {
-                String res = null;
+                String zid;
+                String res=null;
+                zid = ZoneMeta.getCanonicalID(cal.getTimeZone().getID());
                 boolean isGeneric = patternCharIndex == 24;
-
-                String tzid = ZoneMeta.getCanonicalID(cal.getTimeZone().getID());
-
-                String[] zs = null;
-                if (tzid !=null && formatDataIsValid) {
-                    int zoneIndex = formatData.getZoneIndex(tzid);
-                    if (zoneIndex != -1) {
-                        zs = formatData.zoneStrings[zoneIndex];
-                    }
-                }
-                // The zoneStrings have the following format:
-                // 0: time zone ID
-                // 1: long standard
-                // 2: short standard
-                // 3: long daylight
-                // 4: short daylight
-                // 5: city         OR   5: long generic    OR   5: city
-                //                      6: short generic        6: long generic 
-                //                                              7: short generic
-                String city = null;
-                if (zs != null) {
-                    if (isGeneric) {
-                        int ix = count < 4 ? 6 : 5;
-                        if (zs.length > 7) {
-                          ix += 1;
+                if (zid != null) {
+                    if (patternCharIndex == TIMEZONE_GENERIC_FIELD) {
+                        if(count < 4){
+                            res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC);
+                        }else{
+                            res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC);
                         }
-                        if (zs.length > 6) res = getZoneArrayValue(zs,ix);
-                        if (zs.length == 6 || zs.length == 8) {
-                            city = getZoneArrayValue(zs, 5);
-                        } 
                     } else {
-                        int ix = count < 4 ? 2 : 1;
                         if (cal.get(Calendar.DST_OFFSET) != 0) {
-                            ix += 2;
+                            if(count < 4){
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_DAYLIGHT);
+                            }else{
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_DAYLIGHT);
+                            }
+                        }else{
+                            if(count < 4){
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_STANDARD);
+                            }else{
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_STANDARD);
+                            }
                         }
-                        res = getZoneArrayValue(zs, ix);
                     }
                 }
-
                 if (res == null || res.length() == 0) {
                     // note, tr35 does not describe the special case for 'no country' 
                     // implemented below, this is from discussion with Mark
-                    if (tzid == null || !isGeneric || ZoneMeta.getCanonicalCountry(tzid) == null) {
+                    if (zid == null || !isGeneric || ZoneMeta.getCanonicalCountry(zid) == null) {
                         long offset = cal.get(Calendar.ZONE_OFFSET) +
                             cal.get(Calendar.DST_OFFSET);
                         res = ZoneMeta.displayGMT(offset, locale);
                     } else { 
-                        res = ZoneMeta.displayFallback(tzid, city, locale);
+                        String city = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
+                        res = ZoneMeta.displayFallback(zid, city, locale);
                     }
                 }
-
-                buf.append(res);
+                if(res.length()==0){
+                    appendGMT(buf, cal);
+                }else{
+                    buf.append(res);
+                }
             } break;
         case 23: // 'Z' - TIMEZONE_RFC
             {
@@ -942,6 +932,21 @@ public class SimpleDateFormat extends DateFormat {
         }
     }
 
+    private void appendGMT(StringBuffer buf, Calendar cal){
+        int value = cal.get(Calendar.ZONE_OFFSET) +
+        cal.get(Calendar.DST_OFFSET);
+
+        if (value < 0) {
+            buf.append(GMT_MINUS);
+            value = -value; // suppress the '-' sign for text display.
+        }else{
+            buf.append(GMT_PLUS);
+        }
+
+        zeroPaddingNumber(buf, (int)(value/millisPerHour), 2, 2);
+        buf.append((char)0x003A) /*':'*/;
+        zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
+    }
     /**
      * Internal method. Returns null if the value of an array is empty, or if the
      * index is out of bounds
@@ -1285,7 +1290,7 @@ public class SimpleDateFormat extends DateFormat {
             }
         return -start;
     }
-
+/*
     private int matchZoneString(String text, int start, int zoneIndex) {
         String[] zs = formatData.zoneStrings[zoneIndex];
         for (int j = 1; j < zs.length; ++j) {
@@ -1300,9 +1305,10 @@ public class SimpleDateFormat extends DateFormat {
                 return j;
             }
         }
+ 
         return -1;
     }
-
+*/
     /**
      * find time zone 'text' matched zoneStrings and set cal
      */
@@ -1310,38 +1316,47 @@ public class SimpleDateFormat extends DateFormat {
         // At this point, check for named time zones by looking through
         // the locale data from the DateFormatZoneData strings.
         // Want to be able to parse both short and long forms.
-        int zoneIndex =
-            formatData.getZoneIndex (getTimeZone().getID());
 
+        // optimize for calendar's current time zone
         TimeZone tz = null;
-        int j = 0, i = 0;
-        if (zoneIndex != -1) {
-            j = matchZoneString(text, start, zoneIndex);
-            if (j > 0) {
-                tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-                i = zoneIndex;
+        String zid = null, value = null;
+        int type = -1;
+        zid = formatData.getZoneID(getTimeZone().getID());
+        if (zid != null) {
+            DateFormatSymbols.ZoneItem item = formatData.getZoneItem(zid, text, start);
+            if (item != null) {
+                zid = item.zid;
+                value = item.value;
+                type = item.type;
+                tz = (TimeZone) getTimeZone().clone();
             }
         }
 
+        // optimize for default time zone, assume different from caller
         if (tz == null) {
-            zoneIndex =
-                formatData.getZoneIndex (TimeZone.getDefault().getID());
-            if (zoneIndex != -1) {
-                j = matchZoneString(text, start, zoneIndex);
-                if (j > 0) {
-                    tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-                    i = zoneIndex;
+            TimeZone defaultZone = TimeZone.getDefault();
+            zid = formatData.getZoneID(defaultZone.getID());
+            if (zid != null) {
+                DateFormatSymbols.ZoneItem item = formatData.getZoneItem(zid, text, start);
+                if (item != null) {
+                    zid = item.zid;
+                    value = item.value;
+                    type = item.type;
+                    tz = defaultZone;
                 }
             }
         }
 
+        // still no luck, check all time zone strings
         if (tz == null) {
-            for (i = 0; i < formatData.zoneStrings.length; i++) {
-                j = matchZoneString(text, start, i);
-                if (j > 0) {
-                    tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
-                    break;
-                }
+            DateFormatSymbols.ZoneItem item = formatData.findZoneIDTypeValue(text, start);
+            if (item != null) {
+                zid = item.zid;
+                value = item.value;
+                type = item.type;
+            }
+            if (zid != null) {
+                tz = TimeZone.getTimeZone(zid);
             }
         }
 
@@ -1349,22 +1364,30 @@ public class SimpleDateFormat extends DateFormat {
             // always set zone offset, needed to get correct hour in wall time
             // when checking daylight savings
             cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-            if (j < 3) {
+            if (type == DateFormatSymbols.TIMEZONE_SHORT_STANDARD
+                    || type == DateFormatSymbols.TIMEZONE_LONG_STANDARD) {
                 // standard time
                 cal.set(Calendar.DST_OFFSET, 0);
-            } else if (j < 5) {
+                tz = null;
+            } else if (type == DateFormatSymbols.TIMEZONE_SHORT_DAYLIGHT
+                    || type == DateFormatSymbols.TIMEZONE_LONG_DAYLIGHT) {
                 // daylight time
-                cal.set(Calendar.DST_OFFSET, tz.getDSTSavings());
-            } else { 
+                // !!! todo - no getDSTSavings() in ICU's timezone
+                // use the correct DST SAVINGS for the zone.
+                // cal.set(UCAL_DST_OFFSET, tz->getDSTSavings());
+                cal.set(Calendar.DST_OFFSET, millisPerHour);
+                tz = null;
+            } else {
                 // either standard or daylight
-                // need to finish getting the date, then compute dst offset as appropriate
-
-                // !!! hack for api compatibility, can't modify subParse(...) so can't
-                // pass this back any other way.
+                // need to finish getting the date, then compute dst offset as
+                // appropriate
                 parsedTimeZone = tz;
             }
-            return (start + formatData.zoneStrings[i][j].length());
+            if(value != null) {
+                return start + value.length();
+            }
         }
+        // complete failure
         return 0;
     }
 
