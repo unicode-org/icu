@@ -167,20 +167,29 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 
 /**
  * Test if 2 resource bundles are equal
+ * @param res1
  * @param res2
  * @param status error code
- * @internal ICU 3.0
+ * @internal ICU 3.6
  */
 U_INTERNAL UBool U_EXPORT2
 ures_equal(const UResourceBundle* res1, const UResourceBundle* res2);
 
 /**
- * Test if 2 resource bundles are equal
- * @param res2
+ * Clones the given resource bundle
+ * @param res
  * @param status error code
- * @internal ICU 3.0
+ * @internal ICU 3.6
  */
 U_INTERNAL UResourceBundle* U_EXPORT2
-ures_clone(const UResourceBundle* res1, UErrorCode* status);
+ures_clone(const UResourceBundle* res, UErrorCode* status);
+
+/**
+ * Returns the parent bundle. Internal. DONOT close the returned bundle!!!
+ * @param res
+ * @internal ICU 3.6
+ */
+U_INTERNAL const UResourceBundle* U_EXPORT2
+ures_getParentBundle(const UResourceBundle* res);
 
 #endif /*URESIMP_H*/

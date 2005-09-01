@@ -2488,8 +2488,12 @@ ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
     if(res1==NULL || res2==NULL){
         return res1==res2; /* pointer comparision */
     }
-    if(uprv_strcmp(res1->fKey, res2->fKey)!=0){
-        return FALSE;
+    if(res1->fKey==NULL||  res2->fKey==NULL){
+        return (res1->fKey==res2->fKey);
+    }else{
+        if(uprv_strcmp(res1->fKey, res2->fKey)!=0){
+            return FALSE;
+        }
     }
     if(uprv_strcmp(res1->fData->fName, res2->fData->fName)!=0){
         return FALSE;
@@ -2524,8 +2528,19 @@ ures_clone(const UResourceBundle* res, UErrorCode* status){
         return NULL;
     }
     bundle = ures_open(res->fData->fPath, res->fData->fName, status);
-    ret = ures_findSubResource(bundle, res->fResPath, NULL, status);
-    ures_close(bundle);
+    if(res->fResPath!=NULL){
+        ret = ures_findSubResource(bundle, res->fResPath, NULL, status);
+        ures_close(bundle);
+    }else{
+        ret = bundle;
+    }
     return ret;
+}
+U_INTERNAL const UResourceBundle* U_EXPORT2
+ures_getParentBundle(const UResourceBundle* res){
+    if(res==NULL){
+        return NULL;
+        }
+    return res->fParentRes;
 }
 /* eof */
