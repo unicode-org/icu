@@ -550,12 +550,8 @@ private:
     int32_t         fZoneStringsColCount;
     StringEnumeration* fZoneIDEnumeration;
     Hashtable*         fZoneStringsHash;
-    UResourceBundle* fZoneArrayBundle;
-    struct VectorItem{
-        UnicodeString value;
-        TimeZoneTranslationType type;
-        VectorItem* next;
-    };
+    UResourceBundle* fResourceBundle;
+
     /**
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
@@ -648,7 +644,7 @@ private:
     /**
      * Initializes the zoneStrings hash and keys StringEnumeration after reading the zoneStrings resource
      */
-    void initZoneStrings(UResourceBundle* bundle, const UChar* lastResortStrings, int32_t length, UErrorCode &status);
+    void initZoneStrings(UErrorCode &status);
     /** 
      * initialzes the zoneStrings has and keys enumeration after reading the strings[][]. Required for backwards
      * compatibility of setZoneStrings method
