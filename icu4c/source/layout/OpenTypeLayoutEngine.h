@@ -220,6 +220,14 @@ protected:
     LETag fLangSysTag;
 
     /**
+     * <code>TRUE</code> if <code>mapCharsToGlyphs</code> should replace ZWJ / ZWNJ with a glyph
+     * with no contours.
+     *
+     * @internal
+     */
+    le_bool fFilterZeroWidth;
+
+    /**
      * This method does the OpenType character processing. It assigns the OpenType feature
      * tags to the characters, and may generate output characters that differ from the input
      * charcters due to insertions, deletions, or reorderings. In such cases, it will also

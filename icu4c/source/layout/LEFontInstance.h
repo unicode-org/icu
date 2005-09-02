@@ -209,13 +209,32 @@ public:
      * @param count - the number of characters
      * @param reverse - if <code>TRUE</code>, store the glyph indices in reverse order.
      * @param mapper - the character mapper.
+     * @param filterZeroWidth - <code>TRUE</code> if ZWJ / ZWNJ characters should map to a glyph w/ no contours.
      * @param glyphStorage - the object which contains the output glyph array
      *
      * @see LECharMapper
      *
-     * @draft ICU 3.0
+     * @draft ICU 3.6
      */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphStorage &glyphStorage) const;
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, le_bool filterZeroWidth, LEGlyphStorage &glyphStorage) const;
+
+    /**
+     * This method maps a single character to a glyph index, using the
+     * font's character to glyph map. The default implementation of this
+     * method calls the mapper, and then calls <code>mapCharToGlyph(mappedCh)</code>.
+     *
+     * @param ch - the character
+     * @param mapper - the character mapper
+     * @param filterZeroWidth - <code>TRUE</code> if ZWJ / ZWNJ characters should map to a glyph w/ no contours.
+     *
+     * @return the glyph index
+     *
+     * @see LECharMapper
+     *
+     * @draft ICU 3.6
+     */
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
+
 
     /**
      * This method maps a single character to a glyph index, using the
