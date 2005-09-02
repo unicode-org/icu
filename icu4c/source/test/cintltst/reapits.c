@@ -980,7 +980,8 @@ void TestBug4315() {
     const char	    *thePattern;
     UChar            theString[100];
     UChar           *destFields[24];
-    int32_t         neededLength;
+    int32_t         neededLength1;
+    int32_t         neededLength2;
 
     int32_t         wordCount = 0;
     int32_t         destFieldsSize = 24;
@@ -999,7 +1000,7 @@ void TestBug4315() {
     /* split */
     /*explicitly pass NULL and 0 to force the overflow error -> this is where the
      *  error occurs! */
-    wordCount = uregex_split(theRegEx, NULL, 0, &neededLength, destFields,
+    wordCount = uregex_split(theRegEx, NULL, 0, &neededLength1, destFields,
         destFieldsSize, &theICUError);
 
     TEST_ASSERT(theICUError == U_BUFFER_OVERFLOW_ERROR);
@@ -1008,11 +1009,12 @@ void TestBug4315() {
     if(theICUError == U_BUFFER_OVERFLOW_ERROR)
     {
         theICUError = U_ZERO_ERROR;
-        textBuff = (UChar *) malloc(sizeof(UChar) * (neededLength + 1));
-        wordCount = uregex_split(theRegEx, textBuff, u_strlen(textBuff), &neededLength,
+        textBuff = (UChar *) malloc(sizeof(UChar) * (neededLength1 + 1));
+        wordCount = uregex_split(theRegEx, textBuff, neededLength1+1, &neededLength2,
             destFields, destFieldsSize, &theICUError);
         TEST_ASSERT(wordCount==3);
         TEST_ASSERT_SUCCESS(theICUError);
+        TEST_ASSERT(neededLength1 == neededLength2);
         TEST_ASSERT_STRING("The qui", destFields[0], TRUE);
         TEST_ASSERT_STRING("brown fox jumped over the slow bla", destFields[1], TRUE);
         TEST_ASSERT_STRING("turtle.", destFields[2], TRUE);
