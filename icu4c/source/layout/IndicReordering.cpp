@@ -367,8 +367,8 @@ static const le_int8 stateTable[][CC_COUNT] =
 //   xx  vm  sm  iv  i2  i3  ct  cn  nu  dv  s1  s2  s3  vr  zw
     { 1,  1,  1,  5,  8, 11,  3,  2,  1,  5,  9,  5,  1,  1,  1}, //  0 - ground state
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  1 - exit state
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, //  2 - consonant with nukta
-    {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, -1}, //  3 - consonant
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12}, //  2 - consonant with nukta
+    {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12}, //  3 - consonant
     {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
     {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
@@ -376,7 +376,8 @@ static const le_int8 stateTable[][CC_COUNT] =
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, 10,  5, -1, -1}, //  9 - first part of split vowel
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  5, -1, -1}, // 10 - second part of split vowel
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}  // 11 - independent vowels that can take an iv
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, // 11 - independent vowels that can take an iv
+    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}  // 12 - consonant ZWJ (TODO: Take everything else that can be after a consonant?)
 };
 
 
