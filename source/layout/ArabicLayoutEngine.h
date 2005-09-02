@@ -207,13 +207,14 @@ protected:
      * @param count - the number of characters to be mapped
      * @param reverse - if <code>TRUE</code>, the output will be in reverse order
      * @param mirror - if <code>TRUE</code>, do character mirroring
+     * @param filterZeroWidth - if <code>TRUE</code> replace ZWJ / ZWNJ with a glyph with no contours.
      * @param glyphStorage - the glyph storage object. Glyph and char index arrays will be updated.
      *
      * @param success - set to an error code if the operation fails
      *
      * @internal
      */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, le_bool filterZeroWidth,
         LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**

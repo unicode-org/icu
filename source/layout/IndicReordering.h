@@ -64,6 +64,7 @@ U_NAMESPACE_BEGIN
 #define SF_REPH_AFTER_BELOW      0x40000000U
 #define SF_EYELASH_RA            0x20000000U
 #define SF_MPRE_FIXUP            0x10000000U
+#define SF_FILTER_ZERO_WIDTH     0x08000000U
 
 #define SF_POST_BASE_LIMIT_MASK  0x0000FFFFU
 #define SF_NO_POST_BASE_LIMIT    0x00007FFFU
@@ -86,6 +87,7 @@ struct IndicClassTable
     const SplitMatra *splitMatraTable;
 
     inline le_int32 getWorstCaseExpansion() const;
+    inline le_bool getFilterZeroWidth() const;
 
     CharClass getCharClass(LEUnicode ch) const;
 
@@ -126,6 +128,8 @@ class IndicReordering /* not : public UObject because all methods are static */ 
 public:
     static le_int32 getWorstCaseExpansion(le_int32 scriptCode);
 
+    static le_bool getFilterZeroWidth(le_int32 scriptCode);
+
     static le_int32 reorder(const LEUnicode *theChars, le_int32 charCount, le_int32 scriptCode,
         LEUnicode *outChars, LEGlyphStorage &glyphStorage,
         MPreFixups **outMPreFixups);
@@ -145,6 +149,11 @@ private:
 inline le_int32 IndicClassTable::getWorstCaseExpansion() const
 {
     return worstCaseExpansion;
+}
+
+inline le_bool IndicClassTable::getFilterZeroWidth() const
+{
+    return (scriptFlags & SF_FILTER_ZERO_WIDTH) != 0;
 }
 
 inline const SplitMatra *IndicClassTable::getSplitMatra(CharClass charClass) const
