@@ -52,9 +52,7 @@ enum
     _bs = TibetanClassTable::CC_BELOW_S_MARK | TibetanClassTable::CF_DOTTED_CIRCLE | TibetanClassTable::CF_POS_BELOW,
     _di = TibetanClassTable::CC_DIGIT | TibetanClassTable::CF_DIGIT,
     _pd = TibetanClassTable::CC_PRE_DIGIT_MARK | TibetanClassTable::CF_DOTTED_CIRCLE | TibetanClassTable::CF_PREDIGIT | TibetanClassTable::CF_POS_BEFORE ,
-    _bd = TibetanClassTable::CC_POST_BELOW_DIGIT_M | TibetanClassTable::CF_DOTTED_CIRCLE | TibetanClassTable::CF_POS_AFTER ,
-    
-    
+    _bd = TibetanClassTable::CC_POST_BELOW_DIGIT_M | TibetanClassTable::CF_DOTTED_CIRCLE | TibetanClassTable::CF_POS_AFTER
 };
 
 
