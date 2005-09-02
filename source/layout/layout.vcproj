@@ -353,6 +353,12 @@
 				RelativePath=".\ThaiStateTables.cpp">
 			</File>
 			<File
+				RelativePath=".\TibetanLayoutEngine.cpp">
+			</File>
+			<File
+				RelativePath=".\TibetanReordering.cpp">
+			</File>
+			<File
 				RelativePath=".\TrimmedArrayProcessor.cpp">
 			</File>
 			<File
@@ -745,6 +751,12 @@
 			</File>
 			<File
 				RelativePath=".\ThaiShaping.h">
+			</File>
+			<File
+				RelativePath=".\TibetanLayoutEngine.h">
+			</File>
+			<File
+				RelativePath=".\TibetanReordering.h">
 			</File>
 			<File
 				RelativePath=".\TrimmedArrayProcessor.h">
