@@ -976,14 +976,14 @@ static void TestRegexCAPI(void) {
 void TestBug4315() {
     UErrorCode		theICUError = U_ZERO_ERROR;
     URegularExpression	*theRegEx;
-    UChar			*textBuff;
-    char			*thePattern;
-    UChar			theString[100];
-    UChar			*destFields[24];
-    int32_t			neededLength;
+    UChar           *textBuff;
+    const char	    *thePattern;
+    UChar            theString[100];
+    UChar           *destFields[24];
+    int32_t         neededLength;
 
-    int32_t			wordCount = 0;
-    int32_t			destFieldsSize = 24;
+    int32_t         wordCount = 0;
+    int32_t         destFieldsSize = 24;
 
     thePattern	= "ck ";
     u_uastrcpy(theString, "The quick brown fox jumped over the slow black turtle.");
@@ -997,8 +997,8 @@ void TestBug4315() {
     TEST_ASSERT_SUCCESS(theICUError);
 
     /* split */
-    //explicitly pass NULL and 0 to force the overflow error -> this is where the
-    //   error occurs!
+    /*explicitly pass NULL and 0 to force the overflow error -> this is where the
+     *  error occurs! */
     wordCount = uregex_split(theRegEx, NULL, 0, &neededLength, destFields,
         destFieldsSize, &theICUError);
 
