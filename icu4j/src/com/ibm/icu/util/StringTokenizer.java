@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -300,7 +300,10 @@ public final class StringTokenizer implements Enumeration
             result = m_source_.substring(m_tokenStart_[m_tokenOffset_]);
         }
         m_tokenOffset_ ++;
-        m_nextOffset_ = m_tokenStart_[m_tokenOffset_];
+        m_nextOffset_ = -1;
+        if (m_tokenOffset_ < m_tokenSize_) {
+            m_nextOffset_ = m_tokenStart_[m_tokenOffset_];
+        }
         return result;
     }
     
