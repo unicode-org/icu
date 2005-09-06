@@ -420,6 +420,59 @@ public final class StringTokenizerTest extends TestFmwk
         }
     }
     
+    public void TestBug4423()
+    {
+        // bug 4423:  a bad interaction between countTokens() and hasMoreTokens().
+        //
+        String s1 = "This is a test";
+        StringTokenizer tzr = new StringTokenizer(s1);
+        int  tokenCount = 0;
+        
+        int t = tzr.countTokens();
+        if (t!= 4) {
+            errln("tzr.countTokens() returned " + t + ".  Expected 4");
+        }
+        while (tzr.hasMoreTokens()) {
+            String  tok = tzr.nextToken();
+            if (tok.length() == 0) {
+                errln("token with length == 0");
+            }
+            tokenCount++;
+        }
+        if (tokenCount != 4) {
+            errln("Incorrect number of tokens found = " + tokenCount);
+        }
+        
+        // Precomputed tokens arrays can grow.  Check for edge cases around
+        //  boundary where growth is forced.  Array grows in increments of 100 tokens.
+        String s2 = "";
+        for (int i=1; i<250; i++) {
+            s2 = s2 + " " + i;
+            StringTokenizer tzb = new StringTokenizer(s2);
+            int t2 = tzb.countTokens();
+            if (t2 != i) {
+                errln("tzb.countTokens() returned " + t + ".  Expected " + i);
+                break;
+            }
+            int j = 0;
+            while (tzb.hasMoreTokens()) {
+                String tok = tzb.nextToken();
+                j++;
+                if (tok.equals(Integer.toString(j)) == false) {
+                    errln("Wrong token string.  Expected \"" + j + "\", got \""
+                            + tok + "\".");
+                    break;
+                }
+            }
+            if (j != i) {
+                errln("Wrong number of tokens.  Expected " + i + ".  Got " + j
+                        + ".");
+                break;
+            }
+        }
+        
+    }
+    
     public static void main(String[] arg)
     {
         try
