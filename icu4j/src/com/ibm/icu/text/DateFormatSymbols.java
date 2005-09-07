@@ -896,45 +896,45 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, tempLocale);
             ICUResourceBundle zoneStringsBundle = bundle.getWithFallback("zoneStrings");
             for(int i=0; i<zoneStringsBundle.getSize(); i++){
-                ICUResourceBundle zoneArr = zoneStringsBundle.get(i);
-                String key = zoneArr.getKey().replaceAll(":","/");
+                ICUResourceBundle zoneTable = zoneStringsBundle.get(i);
+                String key = zoneTable.getKey().replaceAll(":","/");
                 // hack for the root zone strings
-                if(key.length()==0){
+                if(key.length()==0|| zoneTable.getType()!=ICUResourceBundle.TABLE){
                     continue;
                 }
                 String[] strings = new String[TIMEZONE_COUNT];
                 try{
-                    strings[TIMEZONE_SHORT_GENERIC] = zoneArr.getStringWithFallback(SHORT_GENERIC);
+                    strings[TIMEZONE_SHORT_GENERIC] = zoneTable.getStringWithFallback(SHORT_GENERIC);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
                 try{
-                    strings[TIMEZONE_SHORT_STANDARD] = zoneArr.getStringWithFallback(SHORT_STANDARD);
+                    strings[TIMEZONE_SHORT_STANDARD] = zoneTable.getStringWithFallback(SHORT_STANDARD);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
                 try{
-                    strings[TIMEZONE_SHORT_DAYLIGHT] = zoneArr.getStringWithFallback(SHORT_DAYLIGHT);
+                    strings[TIMEZONE_SHORT_DAYLIGHT] = zoneTable.getStringWithFallback(SHORT_DAYLIGHT);
                 }catch( MissingResourceException ex){
                     //  throw away the exception    
                 }
                 try{
-                    strings[TIMEZONE_LONG_GENERIC] = zoneArr.getStringWithFallback(LONG_GENERIC);
+                    strings[TIMEZONE_LONG_GENERIC] = zoneTable.getStringWithFallback(LONG_GENERIC);
                 }catch( MissingResourceException ex){
                     // throw away the exception                 
                 }
                 try{
-                    strings[TIMEZONE_LONG_STANDARD] = zoneArr.getStringWithFallback(LONG_STANDARD);
+                    strings[TIMEZONE_LONG_STANDARD] = zoneTable.getStringWithFallback(LONG_STANDARD);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
                 try{
-                    strings[TIMEZONE_LONG_DAYLIGHT] = zoneArr.getStringWithFallback(LONG_DAYLIGHT);
+                    strings[TIMEZONE_LONG_DAYLIGHT] = zoneTable.getStringWithFallback(LONG_DAYLIGHT);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
                 try{
-                    strings[TIMEZONE_EXEMPLAR_CITY] = zoneArr.getStringWithFallback(EXEMPLAR_CITY);
+                    strings[TIMEZONE_EXEMPLAR_CITY] = zoneTable.getStringWithFallback(EXEMPLAR_CITY);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
