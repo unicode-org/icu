@@ -1887,41 +1887,40 @@ zh{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:Rothera"{
-            ec{"罗瑟拉"}
+        "Africa:Bamako"{
+            ec{"巴马科"}
         }
-        "Antarctica:Palmer"{
-            ec{"帕默"}
+        "Africa:Casablanca"{
+            ec{"卡萨布兰卡"}
+            ld{"格林威治标准时间"}
+            ls{"格林威治标准时间"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        "Antarctica:South_Pole"{
-            ec{"南极"}
+        "Africa:Ceuta"{
+            ec{"休达"}
         }
-        "Antarctica:Mawson"{
-            ec{"莫森"}
+        "Africa:Kinshasa"{
+            ec{"金沙萨"}
         }
-        "Antarctica:Davis"{
-            ec{"戴维斯"}
+        "Africa:Lubumbashi"{
+            ec{"卢本巴希"}
         }
-        "Antarctica:Vostok"{
-            ec{"东方站"}
+        "Africa:Timbuktu"{
+            ec{"延巴克图"}
         }
-        "Antarctica:Casey"{
-            ec{"凯西"}
+        "America:Adak"{
+            ec{"艾德克岛"}
         }
-        "Antarctica:McMurdo"{
-            ec{"马克默多"}
+        "America:Anchorage"{
+            ec{"安克雷奇"}
+            ld{"阿拉斯加夏令时间"}
+            ls{"阿拉斯加标准时间"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"里奥加耶戈斯"}
-        }
-        "America:Mendoza"{
-            ec{"门多萨"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"圣胡安"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"乌斯怀亚"}
+        "America:Araguaina"{
+            ec{"阿拉瓜伊纳"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"科摩罗（群岛）"}
@@ -1929,134 +1928,91 @@ zh{
         "America:Argentina:La_Rioja"{
             ec{"拉里奥哈"}
         }
-        "America:Catamarca"{
-            ec{"卡塔马卡"}
+        "America:Argentina:Rio_Gallegos"{
+            ec{"里奥加耶戈斯"}
         }
-        "America:Jujuy"{
-            ec{"胡胡伊"}
+        "America:Argentina:San_Juan"{
+            ec{"圣胡安"}
         }
         "America:Argentina:Tucuman"{
             ec{"图库曼"}
         }
-        "America:Cordoba"{
-            ec{"科尔多瓦"}
-        }
-        "America:Buenos_Aires"{
-            ec{"布宜诺斯艾利斯"}
-        }
-        "Australia:Perth"{
-            ec{"佩思"}
-        }
-        "Australia:Darwin"{
-            ec{"达尔文"}
-        }
-        "Australia:Adelaide"{
-            ec{"阿德莱德"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"布罗肯希尔"}
-        }
-        "Australia:Melbourne"{
-            ec{"墨尔本"}
-        }
-        "Australia:Hobart"{
-            ec{"霍巴特"}
-        }
-        "Australia:Sydney"{
-            ec{"悉尼"}
-        }
-        "Australia:Brisbane"{
-            ec{"布里斯班"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"豪勋爵"}
-        }
-        "America:Rio_Branco"{
-            ec{"里奥布郎库"}
-        }
-        "America:Porto_Velho"{
-            ec{"波多韦柳"}
-        }
-        "America:Boa_Vista"{
-            ec{"博阿维斯塔"}
-        }
-        "America:Manaus"{
-            ec{"马瑙斯"}
-        }
-        "America:Cuiaba"{
-            ec{"库亚巴"}
-        }
-        "America:Campo_Grande"{
-            ec{"大坎普"}
-        }
-        "America:Belem"{
-            ec{"贝伦"}
-        }
-        "America:Araguaina"{
-            ec{"阿拉瓜伊纳"}
-        }
-        "America:Sao_Paulo"{
-            ec{"圣保罗"}
+        "America:Argentina:Ushuaia"{
+            ec{"乌斯怀亚"}
         }
         "America:Bahia"{
             ec{"巴伊亚"}
         }
-        "America:Fortaleza"{
-            ec{"福塔雷萨"}
+        "America:Belem"{
+            ec{"贝伦"}
         }
-        "America:Maceio"{
-            ec{"马塞约"}
+        "America:Boa_Vista"{
+            ec{"博阿维斯塔"}
         }
-        "America:Recife"{
-            ec{"累西腓"}
+        "America:Boise"{
+            ec{"博伊西"}
+        }
+        "America:Buenos_Aires"{
+            ec{"布宜诺斯艾利斯"}
+        }
+        "America:Campo_Grande"{
+            ec{"大坎普"}
+        }
+        "America:Cancun"{
+            ec{"坎昆"}
+        }
+        "America:Catamarca"{
+            ec{"卡塔马卡"}
+        }
+        "America:Chicago"{
+            ec{"芝加哥"}
+            ld{"中央夏令时间"}
+            ls{"中央标准时间"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "America:Chihuahua"{
+            ec{"奇瓦瓦"}
+        }
+        "America:Cordoba"{
+            ec{"科尔多瓦"}
+        }
+        "America:Cuiaba"{
+            ec{"库亚巴"}
         }
         "America:Dawson"{
             ec{"道森"}
         }
-        "America:Whitehorse"{
-            ec{"怀特霍斯"}
-        }
-        "America:Vancouver"{
-            ec{"温哥华"}
-        }
         "America:Dawson_Creek"{
             ec{"道森克里克"}
         }
-        "America:Yellowknife"{
-            ec{"耶洛奈夫"}
+        "America:Denver"{
+            ec{"丹佛"}
+            ld{"山区夏令时间"}
+            ls{"山区标准时间"}
+            sd{"MDT"}
+            ss{"MST"}
         }
-        "America:Inuvik"{
-            ec{"伊努维克"}
+        "America:Detroit"{
+            ec{"底特律"}
         }
         "America:Edmonton"{
             ec{"埃德蒙顿"}
         }
-        "America:Swift_Current"{
-            ec{"斯威夫特卡伦特"}
+        "America:Fortaleza"{
+            ec{"福塔雷萨"}
         }
-        "America:Regina"{
-            ec{"里贾纳"}
+        "America:Glace_Bay"{
+            ec{"格莱斯贝"}
         }
-        "America:Winnipeg"{
-            ec{"温尼伯"}
+        "America:Godthab"{
+            ec{"戈德霍普"}
         }
-        "America:Rainy_River"{
-            ec{"雷尼河"}
+        "America:Goose_Bay"{
+            ec{"古斯湾"}
         }
-        "America:Thunder_Bay"{
-            ec{"桑德贝"}
-        }
-        "America:Nipigon"{
-            ec{"尼皮贡"}
-        }
-        "America:Toronto"{
-            ec{"多伦多"}
-        }
-        "America:Montreal"{
-            ec{"蒙特利尔"}
-        }
-        "America:Iqaluit"{
-            ec{"伊基克"}
+        "America:Guayaquil"{
+            ec{"瓜亚基尔"}
         }
         "America:Halifax"{
             ec{"哈利法克斯"}
@@ -2065,11 +2021,120 @@ zh{
             sd{"ADT"}
             ss{"AST"}
         }
-        "America:Goose_Bay"{
-            ec{"古斯湾"}
+        "America:Hermosillo"{
+            ec{"埃莫西约"}
         }
-        "America:Glace_Bay"{
-            ec{"格莱斯贝"}
+        "America:Indiana:Knox"{
+            ec{"诺克斯"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"马伦戈"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"沃韦"}
+        }
+        "America:Indianapolis"{
+            ec{"印地安纳波利斯"}
+            ld{"东部标准时间"}
+            ls{"东部标准时间"}
+            sd{"EST"}
+            ss{"EST"}
+        }
+        "America:Inuvik"{
+            ec{"伊努维克"}
+        }
+        "America:Iqaluit"{
+            ec{"伊基克"}
+        }
+        "America:Jujuy"{
+            ec{"胡胡伊"}
+        }
+        "America:Juneau"{
+            ec{"朱诺"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"蒙蒂塞洛"}
+        }
+        "America:Los_Angeles"{
+            ec{"洛杉矶"}
+            ld{"太平洋夏令时间"}
+            ls{"太平洋标准时间"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "America:Louisville"{
+            ec{"路易(斯)维尔"}
+        }
+        "America:Maceio"{
+            ec{"马塞约"}
+        }
+        "America:Manaus"{
+            ec{"马瑙斯"}
+        }
+        "America:Mazatlan"{
+            ec{"马萨特兰"}
+        }
+        "America:Mendoza"{
+            ec{"门多萨"}
+        }
+        "America:Merida"{
+            ec{"梅里达"}
+        }
+        "America:Mexico_City"{
+            ec{"墨西哥城"}
+        }
+        "America:Monterrey"{
+            ec{"蒙特雷"}
+        }
+        "America:Montreal"{
+            ec{"蒙特利尔"}
+        }
+        "America:New_York"{
+            ec{"纽约"}
+            ld{"东部夏令时间"}
+            ls{"东部标准时间"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "America:Nipigon"{
+            ec{"尼皮贡"}
+        }
+        "America:Nome"{
+            ec{"诺母"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"森特"}
+        }
+        "America:Phoenix"{
+            ec{"凤凰城"}
+            ld{"山区标准时间"}
+            ls{"山区标准时间"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:Porto_Velho"{
+            ec{"波多韦柳"}
+        }
+        "America:Rainy_River"{
+            ec{"雷尼河"}
+        }
+        "America:Recife"{
+            ec{"累西腓"}
+        }
+        "America:Regina"{
+            ec{"里贾纳"}
+        }
+        "America:Rio_Branco"{
+            ec{"里奥布郎库"}
+        }
+        "America:Santiago"{
+            ec{"圣地亚哥"}
+        }
+        "America:Sao_Paulo"{
+            ec{"圣保罗"}
+        }
+        "America:Shiprock"{
+            ec{"舰石城"}
         }
         "America:St_Johns"{
             ec{"圣约翰"}
@@ -2078,88 +2143,92 @@ zh{
             sd{"CDT"}
             ss{"CNT"}
         }
-        "Africa:Kinshasa"{
-            ec{"金沙萨"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"卢本巴希"}
-        }
-        "Pacific:Easter"{
-            ec{"复活节岛"}
-        }
-        "America:Santiago"{
-            ec{"圣地亚哥"}
-        }
-        "Asia:Kashgar"{
-            ec{"喀什葛尔"}
-        }
-        "Asia:Urumqi"{
-            ec{"乌鲁木齐"}
-        }
-        "Asia:Chongqing"{
-            ec{"重庆"}
-        }
-        "Asia:Shanghai"{
-            ec{"上海"}
-            ld{"中国标准时间"}
-            ls{"中国标准时间"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Asia:Harbin"{
-            ec{"哈尔滨"}
-        }
-        "Pacific:Galapagos"{
-            ec{"加拉帕哥斯"}
-        }
-        "America:Guayaquil"{
-            ec{"瓜亚基尔"}
-        }
-        "Atlantic:Canary"{
-            ec{"加那利群岛"}
-        }
-        "Africa:Ceuta"{
-            ec{"休达"}
-        }
-        "Europe:Madrid"{
-            ec{"马德里"}
-        }
-        "Pacific:Yap"{
-            ec{"雅浦岛"}
-        }
-        "Pacific:Truk"{
-            ec{"特鲁克群岛"}
-        }
-        "Pacific:Ponape"{
-            ec{"波纳佩岛"}
-        }
-        "Europe:Paris"{
-            ec{"巴黎"}
-            ld{"中欧夏令时间"}
-            ls{"中欧标准时间"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:Belfast"{
-            ec{"贝尔法斯特"}
-        }
-        "Europe:London"{
-            ec{"伦敦"}
+        "America:Swift_Current"{
+            ec{"斯威夫特卡伦特"}
         }
         "America:Thule"{
             ec{"图勒"}
         }
-        "America:Godthab"{
-            ec{"戈德霍普"}
+        "America:Thunder_Bay"{
+            ec{"桑德贝"}
+        }
+        "America:Tijuana"{
+            ec{"提华纳"}
+        }
+        "America:Toronto"{
+            ec{"多伦多"}
+        }
+        "America:Vancouver"{
+            ec{"温哥华"}
+        }
+        "America:Whitehorse"{
+            ec{"怀特霍斯"}
+        }
+        "America:Winnipeg"{
+            ec{"温尼伯"}
+        }
+        "America:Yakutat"{
+            ec{"雅库茨克"}
+        }
+        "America:Yellowknife"{
+            ec{"耶洛奈夫"}
+        }
+        "Antarctica:Casey"{
+            ec{"凯西"}
+        }
+        "Antarctica:Davis"{
+            ec{"戴维斯"}
+        }
+        "Antarctica:Mawson"{
+            ec{"莫森"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"马克默多"}
+        }
+        "Antarctica:Palmer"{
+            ec{"帕默"}
+        }
+        "Antarctica:Rothera"{
+            ec{"罗瑟拉"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"南极"}
+        }
+        "Antarctica:Vostok"{
+            ec{"东方站"}
+        }
+        "Arctic:Longyearbyen"{
+            ec{"朗伊尔城"}
+        }
+        "Asia:Almaty"{
+            ec{"阿拉木图"}
+        }
+        "Asia:Anadyr"{
+            ec{"阿纳德尔"}
+        }
+        "Asia:Aqtau"{
+            ec{"阿克套"}
+        }
+        "Asia:Aqtobe"{
+            ec{"阿克托别"}
+        }
+        "Asia:Choibalsan"{
+            ec{"卓巴尔塞"}
+        }
+        "Asia:Chongqing"{
+            ec{"重庆"}
+        }
+        "Asia:Harbin"{
+            ec{"哈尔滨"}
+        }
+        "Asia:Hovd"{
+            ec{"科布多"}
+        }
+        "Asia:Irkutsk"{
+            ec{"伊尔库茨克"}
         }
         "Asia:Jakarta"{
             ec{"雅加达"}
-        }
-        "Asia:Pontianak"{
-            ec{"坤甸"}
-        }
-        "Asia:Makassar"{
-            ec{"望加锡"}
         }
         "Asia:Jayapura"{
             ec{"查亚普拉"}
@@ -2171,79 +2240,14 @@ zh{
             sd{"IDT"}
             ss{"IST"}
         }
-        "Asia:Tokyo"{
-            ec{"东京"}
-            ld{"日本标准时间"}
-            ls{"日本标准时间"}
-            sd{"JST"}
-            ss{"JST"}
+        "Asia:Kamchatka"{
+            ec{"堪察加半岛"}
         }
-        "Pacific:Enderbury"{
-            ec{"恩德贝里"}
+        "Asia:Kashgar"{
+            ec{"喀什葛尔"}
         }
-        "Asia:Aqtau"{
-            ec{"阿克套"}
-        }
-        "Asia:Aqtobe"{
-            ec{"阿克托别"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"克孜勒奥尔达"}
-        }
-        "Asia:Almaty"{
-            ec{"阿拉木图"}
-        }
-        "Africa:Casablanca"{
-            ec{"卡萨布兰卡"}
-            ld{"格林威治标准时间"}
-            ls{"格林威治标准时间"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"卡瓦加兰"}
-        }
-        "Pacific:Majuro"{
-            ec{"马朱罗"}
-        }
-        "Africa:Bamako"{
-            ec{"巴马科"}
-        }
-        "Africa:Timbuktu"{
-            ec{"延巴克图"}
-        }
-        "Asia:Hovd"{
-            ec{"科布多"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"乌兰巴托"}
-        }
-        "Asia:Choibalsan"{
-            ec{"卓巴尔塞"}
-        }
-        "America:Tijuana"{
-            ec{"提华纳"}
-        }
-        "America:Hermosillo"{
-            ec{"埃莫西约"}
-        }
-        "America:Mazatlan"{
-            ec{"马萨特兰"}
-        }
-        "America:Chihuahua"{
-            ec{"奇瓦瓦"}
-        }
-        "America:Monterrey"{
-            ec{"蒙特雷"}
-        }
-        "America:Mexico_City"{
-            ec{"墨西哥城"}
-        }
-        "America:Merida"{
-            ec{"梅里达"}
-        }
-        "America:Cancun"{
-            ec{"坎昆"}
+        "Asia:Krasnoyarsk"{
+            ec{"克拉斯诺亚尔斯克"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"吉隆坡"}
@@ -2251,29 +2255,103 @@ zh{
         "Asia:Kuching"{
             ec{"古晋"}
         }
-        "Pacific:Chatham"{
-            ec{"查塔姆"}
+        "Asia:Magadan"{
+            ec{"马加丹"}
         }
-        "Pacific:Auckland"{
-            ec{"奥克兰"}
+        "Asia:Makassar"{
+            ec{"望加锡"}
         }
-        "Pacific:Tahiti"{
-            ec{"塔希提"}
+        "Asia:Novosibirsk"{
+            ec{"新西伯利亚"}
         }
-        "Pacific:Marquesas"{
-            ec{"马克萨斯"}
+        "Asia:Omsk"{
+            ec{"鄂木斯克"}
         }
-        "Pacific:Gambier"{
-            ec{"甘比尔"}
+        "Asia:Pontianak"{
+            ec{"坤甸"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"克孜勒奥尔达"}
+        }
+        "Asia:Sakhalin"{
+            ec{"库页岛"}
+        }
+        "Asia:Samarkand"{
+            ec{"撒马尔罕"}
+        }
+        "Asia:Shanghai"{
+            ec{"上海"}
+            ld{"中国标准时间"}
+            ls{"中国标准时间"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
+        "Asia:Tashkent"{
+            ec{"塔什干"}
+        }
+        "Asia:Tokyo"{
+            ec{"东京"}
+            ld{"日本标准时间"}
+            ls{"日本标准时间"}
+            sd{"JST"}
+            ss{"JST"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"乌兰巴托"}
+        }
+        "Asia:Urumqi"{
+            ec{"乌鲁木齐"}
+        }
+        "Asia:Vladivostok"{
+            ec{"符拉迪沃斯托克"}
+        }
+        "Asia:Yakutsk"{
+            ec{"雅库茨克"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"叶卡捷林堡"}
         }
         "Atlantic:Azores"{
             ec{"亚速尔群岛"}
         }
+        "Atlantic:Canary"{
+            ec{"加那利群岛"}
+        }
+        "Atlantic:Jan_Mayen"{
+            ec{"扬马延岛"}
+        }
         "Atlantic:Madeira"{
             ec{"马德拉群岛"}
         }
-        "Europe:Lisbon"{
-            ec{"里斯本"}
+        "Australia:Adelaide"{
+            ec{"阿德莱德"}
+        }
+        "Australia:Brisbane"{
+            ec{"布里斯班"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"布罗肯希尔"}
+        }
+        "Australia:Darwin"{
+            ec{"达尔文"}
+        }
+        "Australia:Hobart"{
+            ec{"霍巴特"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"豪勋爵"}
+        }
+        "Australia:Melbourne"{
+            ec{"墨尔本"}
+        }
+        "Australia:Perth"{
+            ec{"佩思"}
+        }
+        "Australia:Sydney"{
+            ec{"悉尼"}
+        }
+        "Europe:Belfast"{
+            ec{"贝尔法斯特"}
         }
         "Europe:Bucharest"{
             ec{"布加勒斯特"}
@@ -2285,74 +2363,57 @@ zh{
         "Europe:Kaliningrad"{
             ec{"加里宁格勒"}
         }
+        "Europe:Kiev"{
+            ec{"基辅"}
+        }
+        "Europe:Lisbon"{
+            ec{"里斯本"}
+        }
+        "Europe:London"{
+            ec{"伦敦"}
+        }
+        "Europe:Madrid"{
+            ec{"马德里"}
+        }
         "Europe:Moscow"{
             ec{"莫斯科"}
+        }
+        "Europe:Paris"{
+            ec{"巴黎"}
+            ld{"中欧夏令时间"}
+            ls{"中欧标准时间"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "Europe:Samara"{
             ec{"萨马拉"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"叶卡捷林堡"}
-        }
-        "Asia:Omsk"{
-            ec{"鄂木斯克"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"新西伯利亚"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"克拉斯诺亚尔斯克"}
-        }
-        "Asia:Irkutsk"{
-            ec{"伊尔库茨克"}
-        }
-        "Asia:Yakutsk"{
-            ec{"雅库茨克"}
-        }
-        "Asia:Vladivostok"{
-            ec{"符拉迪沃斯托克"}
-        }
-        "Asia:Sakhalin"{
-            ec{"库页岛"}
-        }
-        "Asia:Magadan"{
-            ec{"马加丹"}
-        }
-        "Asia:Kamchatka"{
-            ec{"堪察加半岛"}
-        }
-        "Asia:Anadyr"{
-            ec{"阿纳德尔"}
-        }
-        "Atlantic:Jan_Mayen"{
-            ec{"扬马延岛"}
-        }
-        "Arctic:Longyearbyen"{
-            ec{"朗伊尔城"}
+        "Europe:Simferopol"{
+            ec{"辛菲罗波尔"}
         }
         "Europe:Uzhgorod"{
             ec{"乌日戈罗德"}
         }
-        "Europe:Kiev"{
-            ec{"基辅"}
-        }
-        "Europe:Simferopol"{
-            ec{"辛菲罗波尔"}
-        }
         "Europe:Zaporozhye"{
             ec{"扎波罗热"}
         }
-        "Pacific:Johnston"{
-            ec{"约翰斯顿"}
+        "Pacific:Auckland"{
+            ec{"奥克兰"}
         }
-        "Pacific:Wake"{
-            ec{"威克岛"}
+        "Pacific:Chatham"{
+            ec{"查塔姆"}
         }
-        "America:Adak"{
-            ec{"艾德克岛"}
+        "Pacific:Easter"{
+            ec{"复活节岛"}
         }
-        "America:Nome"{
-            ec{"诺母"}
+        "Pacific:Enderbury"{
+            ec{"恩德贝里"}
+        }
+        "Pacific:Galapagos"{
+            ec{"加拉帕哥斯"}
+        }
+        "Pacific:Gambier"{
+            ec{"甘比尔"}
         }
         "Pacific:Honolulu"{
             ec{"檀香山"}
@@ -2361,93 +2422,33 @@ zh{
             sd{"HST"}
             ss{"HST"}
         }
-        "America:Anchorage"{
-            ec{"安克雷奇"}
-            ld{"阿拉斯加夏令时间"}
-            ls{"阿拉斯加标准时间"}
-            sd{"ADT"}
-            ss{"AST"}
+        "Pacific:Johnston"{
+            ec{"约翰斯顿"}
         }
-        "America:Yakutat"{
-            ec{"雅库茨克"}
+        "Pacific:Kwajalein"{
+            ec{"卡瓦加兰"}
         }
-        "America:Juneau"{
-            ec{"朱诺"}
+        "Pacific:Majuro"{
+            ec{"马朱罗"}
         }
-        "America:Los_Angeles"{
-            ec{"洛杉矶"}
-            ld{"太平洋夏令时间"}
-            ls{"太平洋标准时间"}
-            sd{"PDT"}
-            ss{"PST"}
+        "Pacific:Marquesas"{
+            ec{"马克萨斯"}
         }
-        "America:Boise"{
-            ec{"博伊西"}
+        "Pacific:Ponape"{
+            ec{"波纳佩岛"}
         }
-        "America:Phoenix"{
-            ec{"凤凰城"}
-            ld{"山区标准时间"}
-            ls{"山区标准时间"}
-            sd{"MST"}
-            ss{"MST"}
+        "Pacific:Tahiti"{
+            ec{"塔希提"}
         }
-        "America:Shiprock"{
-            ec{"舰石城"}
+        "Pacific:Truk"{
+            ec{"特鲁克群岛"}
         }
-        "America:Denver"{
-            ec{"丹佛"}
-            ld{"山区夏令时间"}
-            ls{"山区标准时间"}
-            sd{"MDT"}
-            ss{"MST"}
+        "Pacific:Wake"{
+            ec{"威克岛"}
         }
-        "America:North_Dakota:Center"{
-            ec{"森特"}
+        "Pacific:Yap"{
+            ec{"雅浦岛"}
         }
-        "America:Chicago"{
-            ec{"芝加哥"}
-            ld{"中央夏令时间"}
-            ls{"中央标准时间"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
-        "America:Indiana:Knox"{
-            ec{"诺克斯"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"马伦戈"}
-        }
-        "America:Indianapolis"{
-            ec{"印地安纳波利斯"}
-            ld{"东部标准时间"}
-            ls{"东部标准时间"}
-            sd{"EST"}
-            ss{"EST"}
-        }
-        "America:Louisville"{
-            ec{"路易(斯)维尔"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"沃韦"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"蒙蒂塞洛"}
-        }
-        "America:Detroit"{
-            ec{"底特律"}
-        }
-        "America:New_York"{
-            ec{"纽约"}
-            ld{"东部夏令时间"}
-            ls{"东部标准时间"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "Asia:Samarkand"{
-            ec{"撒马尔罕"}
-        }
-        "Asia:Tashkent"{
-            ec{"塔什干"}
-        }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

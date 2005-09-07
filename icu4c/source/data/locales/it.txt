@@ -1912,14 +1912,39 @@ it{
         quotationStart{"‘"}
     }
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Polo Sud"}
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Ora Meridiano Greenwich"}
+            ls{"Ora Meridiano Greenwich"}
+            sd{"GMT"}
+            ss{"GMT"}
+        }
+        "Africa:Timbuktu"{
+            ec{"Timbuctu"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Ora Legale Alaska"}
+            ls{"Ora Standard Alaska"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Ora Legale Centrale"}
+            ls{"Ora Standard Centrale"}
+            sd{"CDT"}
+            ss{"CST"}
         }
         "America:Cordoba"{
             ec{"Cordova"}
         }
-        "America:Sao_Paulo"{
-            ec{"San Paolo"}
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Ora Legale Mountain"}
+            ls{"Ora Standard Mountain"}
+            sd{"MDT"}
+            ss{"MST"}
         }
         "America:Halifax"{
             ec{"Halifax"}
@@ -1928,6 +1953,40 @@ it{
             sd{"ADT"}
             ss{"AST"}
         }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Ora Standard Orientale"}
+            ls{"Ora Standard Orientale"}
+            sd{"EST"}
+            ss{"EST"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Ora Legale Pacifico"}
+            ls{"Ora Standard Pacifico"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "America:Mexico_City"{
+            ec{"Città del Messico"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Ora Legale Orientale"}
+            ls{"Ora Standard Orientale"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Ora Standard Mountain"}
+            ls{"Ora Standard Mountain"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:Sao_Paulo"{
+            ec{"San Paolo"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
             ld{"Ora Legale Newfoundland"}
@@ -1935,28 +1994,8 @@ it{
             sd{"CDT"}
             ss{"CNT"}
         }
-        "Pacific:Easter"{
-            ec{"Pasqua"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Ora Standard Cina"}
-            ls{"Ora Standard Cina"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Atlantic:Canary"{
-            ec{"Canarie"}
-        }
-        "Europe:Paris"{
-            ec{"Parigi"}
-            ld{"Ora Legale Centrale Europeo"}
-            ls{"Ora Standard Centrale Europeo"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:London"{
-            ec{"Londra"}
+        "Antarctica:South_Pole"{
+            ec{"Polo Sud"}
         }
         "Asia:Jakarta"{
             ec{"Giacarta"}
@@ -1968,6 +2007,16 @@ it{
             sd{"IDT"}
             ss{"IST"}
         }
+        "Asia:Samarkand"{
+            ec{"Samarcanda"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Ora Standard Cina"}
+            ls{"Ora Standard Cina"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
         "Asia:Tokyo"{
             ec{"Tokyo"}
             ld{"Ora Standard Giappone"}
@@ -1975,24 +2024,11 @@ it{
             sd{"JST"}
             ss{"JST"}
         }
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-            ld{"Ora Meridiano Greenwich"}
-            ls{"Ora Meridiano Greenwich"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "Africa:Timbuktu"{
-            ec{"Timbuctu"}
-        }
-        "America:Mexico_City"{
-            ec{"Città del Messico"}
-        }
         "Atlantic:Azores"{
             ec{"Azzorre"}
         }
-        "Europe:Lisbon"{
-            ec{"Lisbona"}
+        "Atlantic:Canary"{
+            ec{"Canarie"}
         }
         "Europe:Bucharest"{
             ec{"Bucarest"}
@@ -2001,8 +2037,24 @@ it{
             sd{"EEST"}
             ss{"EET"}
         }
+        "Europe:Lisbon"{
+            ec{"Lisbona"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+        }
         "Europe:Moscow"{
             ec{"Mosca"}
+        }
+        "Europe:Paris"{
+            ec{"Parigi"}
+            ld{"Ora Legale Centrale Europeo"}
+            ls{"Ora Standard Centrale Europeo"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "Pacific:Easter"{
+            ec{"Pasqua"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
@@ -2010,58 +2062,6 @@ it{
             ls{"Ora Standard Hawaii"}
             sd{"HST"}
             ss{"HST"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Ora Legale Alaska"}
-            ls{"Ora Standard Alaska"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Ora Legale Pacifico"}
-            ls{"Ora Standard Pacifico"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Ora Standard Mountain"}
-            ls{"Ora Standard Mountain"}
-            sd{"MST"}
-            ss{"MST"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Ora Legale Mountain"}
-            ls{"Ora Standard Mountain"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Ora Legale Centrale"}
-            ls{"Ora Standard Centrale"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Ora Standard Orientale"}
-            ls{"Ora Standard Orientale"}
-            sd{"EST"}
-            ss{"EST"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Ora Legale Orientale"}
-            ls{"Ora Standard Orientale"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "Asia:Samarkand"{
-            ec{"Samarcanda"}
         }
     }
 }

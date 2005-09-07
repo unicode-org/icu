@@ -1908,20 +1908,17 @@ nb{
         }
     }
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Sydpolen"}
+        "America:Godthab"{
+            ec{"Godthåb"}
         }
         "America:St_Johns"{
             ec{"St. John's"}
         }
-        "America:Godthab"{
-            ec{"Godthåb"}
+        "Antarctica:South_Pole"{
+            ec{"Sydpolen"}
         }
         "Atlantic:Azores"{
             ec{"Azorene"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lisboa"}
         }
         "Europe:Bucharest"{
             ec{"Bucuresti"}
@@ -1929,6 +1926,9 @@ nb{
             ls{"Eastern European Standard Time"}
             sd{"EEST"}
             ss{"EET"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisboa"}
         }
         "Europe:Moscow"{
             ec{"Moskva"}

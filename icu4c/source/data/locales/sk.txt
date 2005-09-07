@@ -1419,59 +1419,60 @@ sk{
         "Antarctica:South_Pole"{
             ec{"Južný pól"}
         }
-        "Asia:Shanghai"{
-            ec{"Šanghaj"}
-        }
-        "Pacific:Galapagos"{
-            ec{"Galapágy"}
-        }
-        "Atlantic:Canary"{
-            ec{"Kanárske ostrovy"}
-        }
-        "Europe:London"{
-            ec{"Londýn"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulanbátar"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azorské ostrovy"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lisabon"}
-        }
-        "Europe:Moscow"{
-            ec{"Moskva"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Jekaterinburg"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsko"}
-        }
         "Asia:Irkutsk"{
             ec{"Irkutsko"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Jakutsko"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sachalin"}
         }
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užhorod"}
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsko"}
         }
-        "Europe:Kiev"{
-            ec{"Kyjev"}
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
         }
-        "Europe:Zaporozhye"{
-            ec{"Záporožie"}
+        "Asia:Shanghai"{
+            ec{"Šanghaj"}
         }
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulanbátar"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutsko"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azorské ostrovy"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanárske ostrovy"}
+        }
+        "Europe:Kiev"{
+            ec{"Kyjev"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabon"}
+        }
+        "Europe:London"{
+            ec{"Londýn"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskva"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Užhorod"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Záporožie"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapágy"}
+        }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

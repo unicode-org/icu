@@ -113,38 +113,38 @@ pt_PT{
         quotationStart{"‘"}
     }
     zoneStrings{
-        "America:Cordoba"{
-            ec{"Córdoba"}
-        }
-        "America:Cuiaba"{
-            ec{"Cuibá"}
-        }
         "America:Araguaina"{
             ec{"Araguaina"}
         }
         "America:Bahia"{
             ec{"Baía"}
         }
-        "Europe:Madrid"{
-            ec{"Madrid"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulan Bator"}
-        }
         "America:Cancun"{
             ec{"Cancun"}
         }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrado"}
+        "America:Cordoba"{
+            ec{"Córdoba"}
         }
-        "Europe:Moscow"{
-            ec{"Moscovo"}
+        "America:Cuiaba"{
+            ec{"Cuibá"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center"}
         }
         "Asia:Sakhalin"{
             ec{"Sacalina"}
         }
-        "America:North_Dakota:Center"{
-            ec{"Center"}
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
+        }
+        "Europe:Madrid"{
+            ec{"Madrid"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscovo"}
         }
     }
 }

@@ -1590,11 +1590,36 @@ cs{
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Jižní pól"}
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Greenwichský střední čas"}
+            ls{"Greenwichský střední čas"}
+            sd{"GMT"}
+            ss{"GMT"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Aljašský letní čas"}
+            ls{"Aljašský standardní čas"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Centrální letní čas"}
+            ls{"Centrální standardní čas"}
+            sd{"CDT"}
+            ss{"CST"}
         }
         "America:Cordoba"{
             ec{"Kordoba"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Horský letní čas"}
+            ls{"Horský standardní čas"}
+            sd{"MDT"}
+            ss{"MST"}
         }
         "America:Halifax"{
             ec{"Halifax"}
@@ -1603,24 +1628,39 @@ cs{
             sd{"ADT"}
             ss{"AST"}
         }
-        "Asia:Kashgar"{
-            ec{"Kašghar"}
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"Východní standardní čas"}
+            ls{"Východní standardní čas"}
+            sd{"EST"}
+            ss{"EST"}
         }
-        "Pacific:Galapagos"{
-            ec{"Galapágy"}
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pacifický letní čas"}
+            ls{"Pacifický standardní čas"}
+            sd{"PDT"}
+            ss{"PST"}
         }
-        "Atlantic:Canary"{
-            ec{"Kanárské ostrovy"}
+        "America:New_York"{
+            ec{"New York"}
+            ld{"Východní letní čas"}
+            ls{"Východní standardní čas"}
+            sd{"EDT"}
+            ss{"EST"}
         }
-        "Europe:Paris"{
-            ec{"Paříž"}
-            ld{"Středoevropský letní čas"}
-            ls{"Středoevropský standardní čas"}
-            sd{"CEST"}
-            ss{"CET"}
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Horský standardní čas"}
+            ls{"Horský standardní čas"}
+            sd{"MST"}
+            ss{"MST"}
         }
-        "Europe:London"{
-            ec{"Londýn"}
+        "America:Tijuana"{
+            ec{"Tichuana"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Jižní pól"}
         }
         "Asia:Jakarta"{
             ec{"Jakarta"}
@@ -1632,6 +1672,21 @@ cs{
             sd{"IDT"}
             ss{"IST"}
         }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kašghar"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taškent"}
+        }
         "Asia:Tokyo"{
             ec{"Tokio"}
             ld{"Japonský standardní čas"}
@@ -1639,24 +1694,20 @@ cs{
             sd{"JST"}
             ss{"JST"}
         }
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-            ld{"Greenwichský střední čas"}
-            ls{"Greenwichský střední čas"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
         "Asia:Ulaanbaatar"{
             ec{"Ulánbátar"}
         }
-        "America:Tijuana"{
-            ec{"Tichuana"}
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekatěrinburg"}
         }
         "Atlantic:Azores"{
             ec{"Azorské ostrovy"}
         }
-        "Europe:Lisbon"{
-            ec{"Lisabon"}
+        "Atlantic:Canary"{
+            ec{"Kanárské ostrovy"}
         }
         "Europe:Bucharest"{
             ec{"Bukurešť"}
@@ -1665,32 +1716,33 @@ cs{
             sd{"EEST"}
             ss{"EET"}
         }
+        "Europe:Kiev"{
+            ec{"Kyjev"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabon"}
+        }
+        "Europe:London"{
+            ec{"Londýn"}
+        }
         "Europe:Moscow"{
             ec{"Moskva"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"Jekatěrinburg"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsk"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Jakutsk"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sachalin"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamčatka"}
+        "Europe:Paris"{
+            ec{"Paříž"}
+            ld{"Středoevropský letní čas"}
+            ls{"Středoevropský standardní čas"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "Europe:Uzhgorod"{
             ec{"Užhorod"}
         }
-        "Europe:Kiev"{
-            ec{"Kyjev"}
-        }
         "Europe:Zaporozhye"{
             ec{"Záporoží"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapágy"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
@@ -1698,58 +1750,6 @@ cs{
             ls{"Havajský standardní čas"}
             sd{"HST"}
             ss{"HST"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Aljašský letní čas"}
-            ls{"Aljašský standardní čas"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pacifický letní čas"}
-            ls{"Pacifický standardní čas"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Horský standardní čas"}
-            ls{"Horský standardní čas"}
-            sd{"MST"}
-            ss{"MST"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Horský letní čas"}
-            ls{"Horský standardní čas"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Centrální letní čas"}
-            ls{"Centrální standardní čas"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Východní standardní čas"}
-            ls{"Východní standardní čas"}
-            sd{"EST"}
-            ss{"EST"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Východní letní čas"}
-            ls{"Východní standardní čas"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "Asia:Tashkent"{
-            ec{"Taškent"}
         }
     }
 }

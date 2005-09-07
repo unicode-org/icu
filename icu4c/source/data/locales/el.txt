@@ -1474,4 +1474,7 @@ el{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    zoneStrings{
+        hourFormat{"+HHmm;-HHmm"}
+    }
 }

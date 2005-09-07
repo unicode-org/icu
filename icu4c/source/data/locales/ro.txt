@@ -462,35 +462,35 @@ ro{
         "Antarctica:South_Pole"{
             ec{"Polul Sud"}
         }
-        "Atlantic:Canary"{
-            ec{"Canare"}
-        }
-        "Europe:London"{
-            ec{"Londra"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azore"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lisabona"}
-        }
-        "Europe:Moscow"{
-            ec{"Moscova"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Ekaterinburg"}
-        }
         "Asia:Irkutsk"{
             ec{"Irkuțk"}
         }
-        "Asia:Yakutsk"{
-            ec{"Yakuțk"}
+        "Asia:Kamchatka"{
+            ec{"Kamciatka"}
         }
         "Asia:Sakhalin"{
             ec{"Sahalin"}
         }
-        "Asia:Kamchatka"{
-            ec{"Kamciatka"}
+        "Asia:Yakutsk"{
+            ec{"Yakuțk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azore"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canare"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabona"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscova"}
         }
         "Europe:Zaporozhye"{
             ec{"Zaporoje"}
