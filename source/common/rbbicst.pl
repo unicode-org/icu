@@ -1,5 +1,5 @@
 #**************************************************************************
-#   Copyright (C) 2002-2004 International Business Machines Corporation   *
+#   Copyright (C) 2002-2005 International Business Machines Corporation   *
 #   and others. All rights reserved.                                      *
 #**************************************************************************
 #
@@ -226,7 +226,7 @@ if ($javaOutput) {
     # Emit the constants for the actions to be performed.
     #
     $n = 1;
-    foreach $act (keys %actions) {
+    foreach $act (sort keys %actions) {
         print "    public static final int $act = $n;\n";
         $n++;
     }
@@ -307,7 +307,7 @@ else
                                 #  They have no corresponding UnicodeSet object in the state machine,
                                 #    but are handled by special case code.  So we emit no reference
                                 #    to a UnicodeSet object to them here.
-    foreach $setName (keys %charClasses) {
+    foreach $setName (sort keys %charClasses) {
         if ($setName eq "default") {
             $charClasses{$setName} = 255;}
         elsif ($setName eq "escaped") {
@@ -329,7 +329,7 @@ else
     # Emit the enum for the actions to be performed.
     #
     print "enum RBBI_RuleParseAction {\n";
-    foreach $act (keys %actions) {
+    foreach $act (sort keys %actions) {
         print "    $act,\n";
     }
     print "    rbbiLastAction};\n\n";
