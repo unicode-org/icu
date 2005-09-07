@@ -252,7 +252,7 @@ sub convertData{
     foreach $item (@list){
         next if($item eq "." || $item eq "..");
         next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/   || $item =~ /$\.cnv/ ||
-               $item=~/$\.crs/ || $item=~ /$\.txt/ || $item=~ /^zoneinfo/  ||
+               $item=~/$\.crs/ || $item=~ /$\.txt/ ||
                $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
                $item=~/cnvalias\.icu/ || $item=~/$\.lst/);
         if(-d "$icuDataDir/$item"){
