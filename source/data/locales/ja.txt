@@ -2000,47 +2000,40 @@ ja{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:Rothera"{
-            ec{"南極/ロデラ"}
+        "Africa:Bamako"{
+            ec{"アフリカ/バマコ"}
         }
-        "Antarctica:Palmer"{
-            ec{"南極/パーマー"}
+        "Africa:Casablanca"{
+            ec{"カサブランカ"}
+            ld{"グリニッジ標準時"}
+            ls{"グリニッジ標準時"}
+            sd{"GMT"}
+            ss{"GMT"}
         }
-        "Antarctica:South_Pole"{
-            ec{"南極/南極点"}
+        "Africa:Ceuta"{
+            ec{"アフリカ/セウタ"}
         }
-        "Antarctica:Syowa"{
-            ec{"南極/昭和基地"}
+        "Africa:Kinshasa"{
+            ec{"アフリカ/キンシャサ"}
         }
-        "Antarctica:Mawson"{
-            ec{"南極/モーソン"}
+        "Africa:Lubumbashi"{
+            ec{"アフリカ/ルブンバシ"}
         }
-        "Antarctica:Davis"{
-            ec{"南極/デービス"}
+        "Africa:Timbuktu"{
+            ec{"アフリカ/ティンブクトゥ"}
         }
-        "Antarctica:Vostok"{
-            ec{"南極/ボストーク"}
+        "America:Adak"{
+            ec{"アメリカ/アダック"}
         }
-        "Antarctica:Casey"{
-            ec{"南極/ケーシー"}
+        "America:Anchorage"{
+            ec{"アンカレッジ"}
+            ld{"アラスカ夏時間"}
+            ls{"アラスカ標準時"}
+            sd{"ADT"}
+            ss{"AST"}
         }
-        "Antarctica:DumontDUrville"{
-            ec{"南極/デュモンデュルビル"}
-        }
-        "Antarctica:McMurdo"{
-            ec{"南極/マクムード"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"アメリカ/アルゼンチン/リオガイェゴス"}
-        }
-        "America:Mendoza"{
-            ec{"アメリカ/メンドーサ"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"アメリカ/アルゼンチン/サンファン"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"アメリカ/アルゼンチン/ウスアイア"}
+        "America:Araguaina"{
+            ec{"アメリカ/アラグァイナ"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"アメリカ/アルゼンチン/コモドロリバダビア"}
@@ -2048,152 +2041,100 @@ ja{
         "America:Argentina:La_Rioja"{
             ec{"アメリカ/アルゼンチン/ラリオハ"}
         }
-        "America:Catamarca"{
-            ec{"アメリカ/カタマルカ"}
+        "America:Argentina:Rio_Gallegos"{
+            ec{"アメリカ/アルゼンチン/リオガイェゴス"}
         }
-        "America:Jujuy"{
-            ec{"アメリカ/フフイ"}
+        "America:Argentina:San_Juan"{
+            ec{"アメリカ/アルゼンチン/サンファン"}
         }
         "America:Argentina:Tucuman"{
             ec{"アメリカ/アルゼンチン/トゥクマン"}
         }
-        "America:Cordoba"{
-            ec{"アメリカ/コルドバ"}
-        }
-        "America:Buenos_Aires"{
-            ec{"アメリカ/ブエノスアイレス"}
-        }
-        "Australia:Perth"{
-            ec{"オーストラリア/パース"}
-        }
-        "Australia:Darwin"{
-            ec{"オーストラリア/ダーウィン"}
-        }
-        "Australia:Adelaide"{
-            ec{"オーストラリア/アデレード"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"オーストラリア/ブロークンヒル"}
-        }
-        "Australia:Melbourne"{
-            ec{"オーストラリア/メルボルン"}
-        }
-        "Australia:Hobart"{
-            ec{"オーストラリア/ホバート"}
-        }
-        "Australia:Lindeman"{
-            ec{"オーストラリア/リンデマン"}
-        }
-        "Australia:Sydney"{
-            ec{"オーストラリア/シドニー"}
-        }
-        "Australia:Brisbane"{
-            ec{"オーストラリア/ブリスベン"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"オーストラリア/ロードハウ"}
-        }
-        "America:Eirunepe"{
-            ec{"アメリカ/エイルネペ"}
-        }
-        "America:Rio_Branco"{
-            ec{"アメリカ/リオブランコ"}
-        }
-        "America:Porto_Velho"{
-            ec{"アメリカ/ポルトベリョ"}
-        }
-        "America:Boa_Vista"{
-            ec{"アメリカ/ボアビスタ"}
-        }
-        "America:Manaus"{
-            ec{"アメリカ/マナウス"}
-        }
-        "America:Cuiaba"{
-            ec{"アメリカ/クイアバ"}
-        }
-        "America:Campo_Grande"{
-            ec{"アメリカ/カンポグランデ"}
-        }
-        "America:Belem"{
-            ec{"アメリカ/ベレム"}
-        }
-        "America:Araguaina"{
-            ec{"アメリカ/アラグァイナ"}
-        }
-        "America:Sao_Paulo"{
-            ec{"アメリカ/サンパウロ"}
+        "America:Argentina:Ushuaia"{
+            ec{"アメリカ/アルゼンチン/ウスアイア"}
         }
         "America:Bahia"{
             ec{"アメリカ/バイア"}
         }
-        "America:Fortaleza"{
-            ec{"アメリカ/フォルタレザ"}
+        "America:Belem"{
+            ec{"アメリカ/ベレム"}
         }
-        "America:Maceio"{
-            ec{"アメリカ/マセイオ"}
+        "America:Boa_Vista"{
+            ec{"アメリカ/ボアビスタ"}
         }
-        "America:Recife"{
-            ec{"アメリカ/レシフェ"}
+        "America:Boise"{
+            ec{"アメリカ/ボイシ"}
         }
-        "America:Noronha"{
-            ec{"アメリカ/ノロニャ"}
-        }
-        "America:Dawson"{
-            ec{"アメリカ/ドーソン"}
-        }
-        "America:Whitehorse"{
-            ec{"アメリカ/ホワイトホース"}
-        }
-        "America:Vancouver"{
-            ec{"アメリカ/バンクーバー"}
-        }
-        "America:Dawson_Creek"{
-            ec{"アメリカ/ドーソンクリーク"}
-        }
-        "America:Yellowknife"{
-            ec{"アメリカ/イエローナイフ"}
-        }
-        "America:Inuvik"{
-            ec{"アメリカ/イヌヴィク"}
-        }
-        "America:Edmonton"{
-            ec{"アメリカ/エドモントン"}
-        }
-        "America:Swift_Current"{
-            ec{"アメリカ/スウィフトカレント"}
+        "America:Buenos_Aires"{
+            ec{"アメリカ/ブエノスアイレス"}
         }
         "America:Cambridge_Bay"{
             ec{"アメリカ/ケンブリッジベイ"}
         }
-        "America:Regina"{
-            ec{"アメリカ/レジャイナ"}
+        "America:Campo_Grande"{
+            ec{"アメリカ/カンポグランデ"}
         }
-        "America:Winnipeg"{
-            ec{"アメリカ/ウィニペグ"}
+        "America:Cancun"{
+            ec{"アメリカ/カンクン"}
         }
-        "America:Rainy_River"{
-            ec{"アメリカ/レイニーリバー"}
+        "America:Catamarca"{
+            ec{"アメリカ/カタマルカ"}
         }
-        "America:Rankin_Inlet"{
-            ec{"アメリカ/ランキン湾"}
+        "America:Chicago"{
+            ec{"シカゴ"}
+            ld{"中部夏時間"}
+            ls{"中部標準時"}
+            sd{"CDT"}
+            ss{"CST"}
         }
-        "America:Thunder_Bay"{
-            ec{"アメリカ/サンダーベイ"}
+        "America:Chihuahua"{
+            ec{"アメリカ/チワワ"}
         }
-        "America:Nipigon"{
-            ec{"アメリカ/ニピゴン"}
+        "America:Cordoba"{
+            ec{"アメリカ/コルドバ"}
         }
-        "America:Toronto"{
-            ec{"アメリカ/トロント"}
+        "America:Cuiaba"{
+            ec{"アメリカ/クイアバ"}
         }
-        "America:Montreal"{
-            ec{"アメリカ/モントリオール"}
+        "America:Danmarkshavn"{
+            ec{"アメリカ/デンマークシャウン"}
         }
-        "America:Iqaluit"{
-            ec{"アメリカ/イカルイット"}
+        "America:Dawson"{
+            ec{"アメリカ/ドーソン"}
         }
-        "America:Pangnirtung"{
-            ec{"アメリカ/パンナータング"}
+        "America:Dawson_Creek"{
+            ec{"アメリカ/ドーソンクリーク"}
+        }
+        "America:Denver"{
+            ec{"デンバー"}
+            ld{"山地夏時間"}
+            ls{"山地標準時"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "America:Detroit"{
+            ec{"アメリカ/デトロイト"}
+        }
+        "America:Edmonton"{
+            ec{"アメリカ/エドモントン"}
+        }
+        "America:Eirunepe"{
+            ec{"アメリカ/エイルネペ"}
+        }
+        "America:Fortaleza"{
+            ec{"アメリカ/フォルタレザ"}
+        }
+        "America:Glace_Bay"{
+            ec{"アメリカ/グレースベイ"}
+        }
+        "America:Godthab"{
+            ec{"アメリカ/ゴッドホープ"}
+        }
+        "America:Goose_Bay"{
+            ec{"アメリカ/グースベイ"}
+        }
+        "America:Guayaquil"{
+            ec{"アメリカ/グアヤキル"}
         }
         "America:Halifax"{
             ec{"ハリファクス"}
@@ -2202,11 +2143,135 @@ ja{
             sd{"ADT"}
             ss{"AST"}
         }
-        "America:Goose_Bay"{
-            ec{"アメリカ/グースベイ"}
+        "America:Hermosillo"{
+            ec{"アメリカ/エルモシヨ"}
         }
-        "America:Glace_Bay"{
-            ec{"アメリカ/グレースベイ"}
+        "America:Indiana:Knox"{
+            ec{"アメリカ/ノクス"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"アメリカ/インディアナ/マレンゴ"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"アメリカ/インディアナ/ビベー"}
+        }
+        "America:Indianapolis"{
+            ec{"インディアナポリス"}
+            ld{"東部標準時"}
+            ls{"東部標準時"}
+            sd{"EST"}
+            ss{"EST"}
+        }
+        "America:Inuvik"{
+            ec{"アメリカ/イヌヴィク"}
+        }
+        "America:Iqaluit"{
+            ec{"アメリカ/イカルイット"}
+        }
+        "America:Jujuy"{
+            ec{"アメリカ/フフイ"}
+        }
+        "America:Juneau"{
+            ec{"アメリカ/ジュノー"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"アメリカ/モンティチェロ"}
+        }
+        "America:Los_Angeles"{
+            ec{"ロサンゼルス"}
+            ld{"太平洋夏時間"}
+            ls{"太平洋標準時"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "America:Louisville"{
+            ec{"アメリカ/ルイスビル"}
+        }
+        "America:Maceio"{
+            ec{"アメリカ/マセイオ"}
+        }
+        "America:Manaus"{
+            ec{"アメリカ/マナウス"}
+        }
+        "America:Mazatlan"{
+            ec{"アメリカ/マサトラン"}
+        }
+        "America:Mendoza"{
+            ec{"アメリカ/メンドーサ"}
+        }
+        "America:Menominee"{
+            ec{"アメリカ/メノミニー"}
+        }
+        "America:Merida"{
+            ec{"アメリカ/メリダ"}
+        }
+        "America:Mexico_City"{
+            ec{"アメリカ/メキシコシティー"}
+        }
+        "America:Monterrey"{
+            ec{"アメリカ/モンテレイ"}
+        }
+        "America:Montreal"{
+            ec{"アメリカ/モントリオール"}
+        }
+        "America:New_York"{
+            ec{"ニューヨーク"}
+            ld{"東部夏時間"}
+            ls{"東部標準時"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "America:Nipigon"{
+            ec{"アメリカ/ニピゴン"}
+        }
+        "America:Nome"{
+            ec{"アメリカ/ノーメ"}
+        }
+        "America:Noronha"{
+            ec{"アメリカ/ノロニャ"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"アメリカ/ノースダコタ/センター"}
+        }
+        "America:Pangnirtung"{
+            ec{"アメリカ/パンナータング"}
+        }
+        "America:Phoenix"{
+            ec{"フェニックス"}
+            ld{"山地標準時"}
+            ls{"山地標準時"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:Porto_Velho"{
+            ec{"アメリカ/ポルトベリョ"}
+        }
+        "America:Rainy_River"{
+            ec{"アメリカ/レイニーリバー"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"アメリカ/ランキン湾"}
+        }
+        "America:Recife"{
+            ec{"アメリカ/レシフェ"}
+        }
+        "America:Regina"{
+            ec{"アメリカ/レジャイナ"}
+        }
+        "America:Rio_Branco"{
+            ec{"アメリカ/リオブランコ"}
+        }
+        "America:Santiago"{
+            ec{"アメリカ/サンチアゴ"}
+        }
+        "America:Sao_Paulo"{
+            ec{"アメリカ/サンパウロ"}
+        }
+        "America:Scoresbysund"{
+            ec{"アメリカ/スコレスビスン"}
+        }
+        "America:Shiprock"{
+            ec{"アメリカ/シップロック"}
         }
         "America:St_Johns"{
             ec{"セントジョンズ"}
@@ -2215,97 +2280,98 @@ ja{
             sd{"CDT"}
             ss{"CNT"}
         }
-        "Africa:Kinshasa"{
-            ec{"アフリカ/キンシャサ"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"アフリカ/ルブンバシ"}
-        }
-        "Pacific:Easter"{
-            ec{"太平洋/イースター"}
-        }
-        "America:Santiago"{
-            ec{"アメリカ/サンチアゴ"}
-        }
-        "Asia:Kashgar"{
-            ec{"アジア/カシガル"}
-        }
-        "Asia:Urumqi"{
-            ec{"アジア/ウルムチ"}
-        }
-        "Asia:Chongqing"{
-            ec{"アジア/重慶"}
-        }
-        "Asia:Shanghai"{
-            ec{"上海"}
-            ld{"中国標準時"}
-            ls{"中国標準時"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Asia:Harbin"{
-            ec{"アジア/ハルビン"}
-        }
-        "Pacific:Galapagos"{
-            ec{"太平洋/ガラパゴス"}
-        }
-        "America:Guayaquil"{
-            ec{"アメリカ/グアヤキル"}
-        }
-        "Atlantic:Canary"{
-            ec{"大西洋/カナリー"}
-        }
-        "Africa:Ceuta"{
-            ec{"アフリカ/セウタ"}
-        }
-        "Europe:Madrid"{
-            ec{"ヨーロッパ/マドリード"}
-        }
-        "Pacific:Yap"{
-            ec{"太平洋/ヤップ"}
-        }
-        "Pacific:Truk"{
-            ec{"太平洋/トラック"}
-        }
-        "Pacific:Ponape"{
-            ec{"太平洋/ポナペ"}
-        }
-        "Pacific:Kosrae"{
-            ec{"太平洋/コシャエ"}
-        }
-        "Europe:Paris"{
-            ec{"パリ"}
-            ld{"中欧夏時間"}
-            ls{"中欧標準時"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:Belfast"{
-            ec{"ヨーロッパ/ベルファスト"}
-        }
-        "Europe:London"{
-            ec{"ヨーロッパ/ロンドン"}
+        "America:Swift_Current"{
+            ec{"アメリカ/スウィフトカレント"}
         }
         "America:Thule"{
             ec{"アメリカ/チューレ"}
         }
-        "America:Godthab"{
-            ec{"アメリカ/ゴッドホープ"}
+        "America:Thunder_Bay"{
+            ec{"アメリカ/サンダーベイ"}
         }
-        "America:Scoresbysund"{
-            ec{"アメリカ/スコレスビスン"}
+        "America:Tijuana"{
+            ec{"アメリカ/ティフアナ"}
         }
-        "America:Danmarkshavn"{
-            ec{"アメリカ/デンマークシャウン"}
+        "America:Toronto"{
+            ec{"アメリカ/トロント"}
+        }
+        "America:Vancouver"{
+            ec{"アメリカ/バンクーバー"}
+        }
+        "America:Whitehorse"{
+            ec{"アメリカ/ホワイトホース"}
+        }
+        "America:Winnipeg"{
+            ec{"アメリカ/ウィニペグ"}
+        }
+        "America:Yakutat"{
+            ec{"アメリカ/ヤクタット"}
+        }
+        "America:Yellowknife"{
+            ec{"アメリカ/イエローナイフ"}
+        }
+        "Antarctica:Casey"{
+            ec{"南極/ケーシー"}
+        }
+        "Antarctica:Davis"{
+            ec{"南極/デービス"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"南極/デュモンデュルビル"}
+        }
+        "Antarctica:Mawson"{
+            ec{"南極/モーソン"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"南極/マクムード"}
+        }
+        "Antarctica:Palmer"{
+            ec{"南極/パーマー"}
+        }
+        "Antarctica:Rothera"{
+            ec{"南極/ロデラ"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"南極/南極点"}
+        }
+        "Antarctica:Syowa"{
+            ec{"南極/昭和基地"}
+        }
+        "Antarctica:Vostok"{
+            ec{"南極/ボストーク"}
+        }
+        "Arctic:Longyearbyen"{
+            ec{"北極/ロングイヤービーエン"}
+        }
+        "Asia:Almaty"{
+            ec{"アジア/アルマトイ"}
+        }
+        "Asia:Anadyr"{
+            ec{"アジア/アナジル"}
+        }
+        "Asia:Aqtau"{
+            ec{"アジア/アクタウ"}
+        }
+        "Asia:Aqtobe"{
+            ec{"アジア/アクトベ"}
+        }
+        "Asia:Choibalsan"{
+            ec{"アジア/チョイバルサン"}
+        }
+        "Asia:Chongqing"{
+            ec{"アジア/重慶"}
+        }
+        "Asia:Harbin"{
+            ec{"アジア/ハルビン"}
+        }
+        "Asia:Hovd"{
+            ec{"アジア/ホブド"}
+        }
+        "Asia:Irkutsk"{
+            ec{"アジア/イルクーツク"}
         }
         "Asia:Jakarta"{
             ec{"アジア/ジャカルタ"}
-        }
-        "Asia:Pontianak"{
-            ec{"アジア/ポンティアナク"}
-        }
-        "Asia:Makassar"{
-            ec{"アジア/マカッサル"}
         }
         "Asia:Jayapura"{
             ec{"アジア/ジャヤプラ"}
@@ -2317,88 +2383,14 @@ ja{
             sd{"IDT"}
             ss{"IST"}
         }
-        "Asia:Tokyo"{
-            ec{"東京"}
-            ld{"日本標準時"}
-            ls{"日本標準時"}
-            sd{"JST"}
-            ss{"JST"}
+        "Asia:Kamchatka"{
+            ec{"アジア/カムチャッカ"}
         }
-        "Pacific:Enderbury"{
-            ec{"太平洋/エンダベリー"}
+        "Asia:Kashgar"{
+            ec{"アジア/カシガル"}
         }
-        "Pacific:Kiritimati"{
-            ec{"太平洋/キリティマティ"}
-        }
-        "Pacific:Tarawa"{
-            ec{"太平洋/タラワ"}
-        }
-        "Asia:Aqtau"{
-            ec{"アジア/アクタウ"}
-        }
-        "Asia:Oral"{
-            ec{"アジア/オラル"}
-        }
-        "Asia:Aqtobe"{
-            ec{"アジア/アクトベ"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"アジア/キジルオルダ"}
-        }
-        "Asia:Almaty"{
-            ec{"アジア/アルマトイ"}
-        }
-        "Africa:Casablanca"{
-            ec{"カサブランカ"}
-            ld{"グリニッジ標準時"}
-            ls{"グリニッジ標準時"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"太平洋/クワゼリン"}
-        }
-        "Pacific:Majuro"{
-            ec{"太平洋/マジュロ"}
-        }
-        "Africa:Bamako"{
-            ec{"アフリカ/バマコ"}
-        }
-        "Africa:Timbuktu"{
-            ec{"アフリカ/ティンブクトゥ"}
-        }
-        "Asia:Hovd"{
-            ec{"アジア/ホブド"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"アジア/ウランバートル"}
-        }
-        "Asia:Choibalsan"{
-            ec{"アジア/チョイバルサン"}
-        }
-        "America:Tijuana"{
-            ec{"アメリカ/ティフアナ"}
-        }
-        "America:Hermosillo"{
-            ec{"アメリカ/エルモシヨ"}
-        }
-        "America:Mazatlan"{
-            ec{"アメリカ/マサトラン"}
-        }
-        "America:Chihuahua"{
-            ec{"アメリカ/チワワ"}
-        }
-        "America:Monterrey"{
-            ec{"アメリカ/モンテレイ"}
-        }
-        "America:Mexico_City"{
-            ec{"アメリカ/メキシコシティー"}
-        }
-        "America:Merida"{
-            ec{"アメリカ/メリダ"}
-        }
-        "America:Cancun"{
-            ec{"アメリカ/カンクン"}
+        "Asia:Krasnoyarsk"{
+            ec{"アジア/クラスノヤルスク"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"アジア/クアラルンプール"}
@@ -2406,29 +2398,106 @@ ja{
         "Asia:Kuching"{
             ec{"アジア/クチン"}
         }
-        "Pacific:Chatham"{
-            ec{"太平洋/チャタム"}
+        "Asia:Magadan"{
+            ec{"アジア/マガダン"}
         }
-        "Pacific:Auckland"{
-            ec{"太平洋/オークランド"}
+        "Asia:Makassar"{
+            ec{"アジア/マカッサル"}
         }
-        "Pacific:Tahiti"{
-            ec{"太平洋/タヒチ"}
+        "Asia:Novosibirsk"{
+            ec{"アジア/ノボシビルスク"}
         }
-        "Pacific:Marquesas"{
-            ec{"太平洋/マルケサス"}
+        "Asia:Omsk"{
+            ec{"アジア/オムスク"}
         }
-        "Pacific:Gambier"{
-            ec{"太平洋/ガンビア"}
+        "Asia:Oral"{
+            ec{"アジア/オラル"}
+        }
+        "Asia:Pontianak"{
+            ec{"アジア/ポンティアナク"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"アジア/キジルオルダ"}
+        }
+        "Asia:Sakhalin"{
+            ec{"アジア/サハリン"}
+        }
+        "Asia:Shanghai"{
+            ec{"上海"}
+            ld{"中国標準時"}
+            ls{"中国標準時"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
+        "Asia:Tashkent"{
+            ec{"アジア/タシケント"}
+        }
+        "Asia:Tokyo"{
+            ec{"東京"}
+            ld{"日本標準時"}
+            ls{"日本標準時"}
+            sd{"JST"}
+            ss{"JST"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"アジア/ウランバートル"}
+        }
+        "Asia:Urumqi"{
+            ec{"アジア/ウルムチ"}
+        }
+        "Asia:Vladivostok"{
+            ec{"アジア/ウラジオストク"}
+        }
+        "Asia:Yakutsk"{
+            ec{"アジア/ヤクーツク"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"アジア/エカテリンブルグ"}
         }
         "Atlantic:Azores"{
             ec{"大西洋/アゾレス"}
         }
+        "Atlantic:Canary"{
+            ec{"大西洋/カナリー"}
+        }
+        "Atlantic:Jan_Mayen"{
+            ec{"大西洋/ヤンマイエン"}
+        }
         "Atlantic:Madeira"{
             ec{"大西洋/マデイラ"}
         }
-        "Europe:Lisbon"{
-            ec{"ヨーロッパ/リスボン"}
+        "Australia:Adelaide"{
+            ec{"オーストラリア/アデレード"}
+        }
+        "Australia:Brisbane"{
+            ec{"オーストラリア/ブリスベン"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"オーストラリア/ブロークンヒル"}
+        }
+        "Australia:Darwin"{
+            ec{"オーストラリア/ダーウィン"}
+        }
+        "Australia:Hobart"{
+            ec{"オーストラリア/ホバート"}
+        }
+        "Australia:Lindeman"{
+            ec{"オーストラリア/リンデマン"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"オーストラリア/ロードハウ"}
+        }
+        "Australia:Melbourne"{
+            ec{"オーストラリア/メルボルン"}
+        }
+        "Australia:Perth"{
+            ec{"オーストラリア/パース"}
+        }
+        "Australia:Sydney"{
+            ec{"オーストラリア/シドニー"}
+        }
+        "Europe:Belfast"{
+            ec{"ヨーロッパ/ベルファスト"}
         }
         "Europe:Bucharest"{
             ec{"ブカレスト"}
@@ -2440,77 +2509,57 @@ ja{
         "Europe:Kaliningrad"{
             ec{"ヨーロッパ/カリーニングラード"}
         }
+        "Europe:Kiev"{
+            ec{"ヨーロッパ/キエフ"}
+        }
+        "Europe:Lisbon"{
+            ec{"ヨーロッパ/リスボン"}
+        }
+        "Europe:London"{
+            ec{"ヨーロッパ/ロンドン"}
+        }
+        "Europe:Madrid"{
+            ec{"ヨーロッパ/マドリード"}
+        }
         "Europe:Moscow"{
             ec{"ヨーロッパ/モスクワ"}
+        }
+        "Europe:Paris"{
+            ec{"パリ"}
+            ld{"中欧夏時間"}
+            ls{"中欧標準時"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "Europe:Samara"{
             ec{"ヨーロッパ/サマラ"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"アジア/エカテリンブルグ"}
-        }
-        "Asia:Omsk"{
-            ec{"アジア/オムスク"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"アジア/ノボシビルスク"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"アジア/クラスノヤルスク"}
-        }
-        "Asia:Irkutsk"{
-            ec{"アジア/イルクーツク"}
-        }
-        "Asia:Yakutsk"{
-            ec{"アジア/ヤクーツク"}
-        }
-        "Asia:Vladivostok"{
-            ec{"アジア/ウラジオストク"}
-        }
-        "Asia:Sakhalin"{
-            ec{"アジア/サハリン"}
-        }
-        "Asia:Magadan"{
-            ec{"アジア/マガダン"}
-        }
-        "Asia:Kamchatka"{
-            ec{"アジア/カムチャッカ"}
-        }
-        "Asia:Anadyr"{
-            ec{"アジア/アナジル"}
-        }
-        "Atlantic:Jan_Mayen"{
-            ec{"大西洋/ヤンマイエン"}
-        }
-        "Arctic:Longyearbyen"{
-            ec{"北極/ロングイヤービーエン"}
+        "Europe:Simferopol"{
+            ec{"ヨーロッパ/シンフェローポリ"}
         }
         "Europe:Uzhgorod"{
             ec{"ヨーロッパ/ウジゴロド"}
         }
-        "Europe:Kiev"{
-            ec{"ヨーロッパ/キエフ"}
-        }
-        "Europe:Simferopol"{
-            ec{"ヨーロッパ/シンフェローポリ"}
-        }
         "Europe:Zaporozhye"{
             ec{"ヨーロッパ/ザポロージェ"}
         }
-        "Pacific:Midway"{
-            ec{"太平洋/ミッドウェー"}
+        "Pacific:Auckland"{
+            ec{"太平洋/オークランド"}
         }
-        "Pacific:Johnston"{
-            ec{"太平洋/ジョンストン"}
+        "Pacific:Chatham"{
+            ec{"太平洋/チャタム"}
         }
-        "Pacific:Wake"{
-            ec{"太平洋/ウェイク"}
+        "Pacific:Easter"{
+            ec{"太平洋/イースター"}
         }
-        "America:Adak"{
-            ec{"アメリカ/アダック"}
+        "Pacific:Enderbury"{
+            ec{"太平洋/エンダベリー"}
         }
-        "America:Nome"{
-            ec{"アメリカ/ノーメ"}
+        "Pacific:Galapagos"{
+            ec{"太平洋/ガラパゴス"}
+        }
+        "Pacific:Gambier"{
+            ec{"太平洋/ガンビア"}
         }
         "Pacific:Honolulu"{
             ec{"ホノルル"}
@@ -2519,93 +2568,47 @@ ja{
             sd{"HST"}
             ss{"HST"}
         }
-        "America:Anchorage"{
-            ec{"アンカレッジ"}
-            ld{"アラスカ夏時間"}
-            ls{"アラスカ標準時"}
-            sd{"ADT"}
-            ss{"AST"}
+        "Pacific:Johnston"{
+            ec{"太平洋/ジョンストン"}
         }
-        "America:Yakutat"{
-            ec{"アメリカ/ヤクタット"}
+        "Pacific:Kiritimati"{
+            ec{"太平洋/キリティマティ"}
         }
-        "America:Juneau"{
-            ec{"アメリカ/ジュノー"}
+        "Pacific:Kosrae"{
+            ec{"太平洋/コシャエ"}
         }
-        "America:Los_Angeles"{
-            ec{"ロサンゼルス"}
-            ld{"太平洋夏時間"}
-            ls{"太平洋標準時"}
-            sd{"PDT"}
-            ss{"PST"}
+        "Pacific:Kwajalein"{
+            ec{"太平洋/クワゼリン"}
         }
-        "America:Boise"{
-            ec{"アメリカ/ボイシ"}
+        "Pacific:Majuro"{
+            ec{"太平洋/マジュロ"}
         }
-        "America:Phoenix"{
-            ec{"フェニックス"}
-            ld{"山地標準時"}
-            ls{"山地標準時"}
-            sd{"MST"}
-            ss{"MST"}
+        "Pacific:Marquesas"{
+            ec{"太平洋/マルケサス"}
         }
-        "America:Shiprock"{
-            ec{"アメリカ/シップロック"}
+        "Pacific:Midway"{
+            ec{"太平洋/ミッドウェー"}
         }
-        "America:Denver"{
-            ec{"デンバー"}
-            ld{"山地夏時間"}
-            ls{"山地標準時"}
-            sd{"MDT"}
-            ss{"MST"}
+        "Pacific:Ponape"{
+            ec{"太平洋/ポナペ"}
         }
-        "America:North_Dakota:Center"{
-            ec{"アメリカ/ノースダコタ/センター"}
+        "Pacific:Tahiti"{
+            ec{"太平洋/タヒチ"}
         }
-        "America:Chicago"{
-            ec{"シカゴ"}
-            ld{"中部夏時間"}
-            ls{"中部標準時"}
-            sd{"CDT"}
-            ss{"CST"}
+        "Pacific:Tarawa"{
+            ec{"太平洋/タラワ"}
         }
-        "America:Menominee"{
-            ec{"アメリカ/メノミニー"}
+        "Pacific:Truk"{
+            ec{"太平洋/トラック"}
         }
-        "America:Indiana:Knox"{
-            ec{"アメリカ/ノクス"}
+        "Pacific:Wake"{
+            ec{"太平洋/ウェイク"}
         }
-        "America:Indiana:Marengo"{
-            ec{"アメリカ/インディアナ/マレンゴ"}
+        "Pacific:Yap"{
+            ec{"太平洋/ヤップ"}
         }
-        "America:Indianapolis"{
-            ec{"インディアナポリス"}
-            ld{"東部標準時"}
-            ls{"東部標準時"}
-            sd{"EST"}
-            ss{"EST"}
-        }
-        "America:Louisville"{
-            ec{"アメリカ/ルイスビル"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"アメリカ/インディアナ/ビベー"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"アメリカ/モンティチェロ"}
-        }
-        "America:Detroit"{
-            ec{"アメリカ/デトロイト"}
-        }
-        "America:New_York"{
-            ec{"ニューヨーク"}
-            ld{"東部夏時間"}
-            ls{"東部標準時"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "Asia:Tashkent"{
-            ec{"アジア/タシケント"}
-        }
+        fallbackFormat{"{0} ({1})時間"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}時間"}
     }
 }

@@ -606,5 +606,36 @@ root{
             sd{""}
             ss{""}
         }
+        abbreviationFallback{"standard"}
+        fallbackFormat{"{0} ({1})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        hoursFormat{"{0}/{1}"}
+        preferenceOrdering{
+            "",
+        }
+        regionFormat{"{0}"}
+        singleCountries{
+            "Africa/Bamako",
+            "America/Godthab",
+            "America/Santiago",
+            "America/Guayaquil",
+            "",
+            "",
+            "",
+            "",
+            "Asia/Shanghai",
+            "Asia/Tashkent",
+            "Asia/Kuala_Lumpur",
+            "",
+            "",
+            "",
+            "",
+            "Europe/Madrid",
+            "Europe/Lisbon",
+            "Europe/London",
+            "Pacific/Auckland",
+            "Pacific/Tahiti",
+        }
     }
 }

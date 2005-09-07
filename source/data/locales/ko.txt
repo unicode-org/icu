@@ -1831,75 +1831,12 @@ ko{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "America:Halifax"{
-            ec{"핼리팩스"}
-            ld{"대서양 기준시"}
-            ls{"대서양 표준시"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:St_Johns"{
-            ec{"St. Johns"}
-            ld{"뉴펀들랜드 기준시"}
-            ls{"뉴펀들랜드 표준시"}
-            sd{"CDT"}
-            ss{"CNT"}
-        }
-        "Asia:Shanghai"{
-            ec{"상하이"}
-            ld{"중국 표준시"}
-            ls{"중국 표준시"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Europe:Paris"{
-            ec{"파리"}
-            ld{"중부유럽 기준시"}
-            ls{"중부유럽 표준시"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Asia:Jerusalem"{
-            ec{"예루살렘"}
-            ld{"이스라엘 기준시"}
-            ls{"이스라엘 표준시"}
-            sd{"IDT"}
-            ss{"IST"}
-        }
-        "Asia:Tokyo"{
-            ec{"도쿄"}
-            ld{"일본 표준시"}
-            ls{"일본 표준시"}
-            sd{"JST"}
-            ss{"JST"}
-        }
-        "Asia:Seoul"{
-            ec{"서울"}
-            ld{"한국표준시"}
-            ls{"한국표준시"}
-            sd{"KST"}
-            ss{"KST"}
-        }
         "Africa:Casablanca"{
             ec{"카사블랑카"}
             ld{"그리니치 표준시"}
             ls{"그리니치 표준시"}
             sd{"GMT"}
             ss{"GMT"}
-        }
-        "Europe:Bucharest"{
-            ec{"부쿠레슈티"}
-            ld{"동부유럽 기준시"}
-            ls{"동부유럽 표준시"}
-            sd{"EEST"}
-            ss{"EET"}
-        }
-        "Pacific:Honolulu"{
-            ec{"호놀룰루"}
-            ld{"하와이 표준시"}
-            ls{"하와이 표준시"}
-            sd{"HST"}
-            ss{"HST"}
         }
         "America:Anchorage"{
             ec{"앵커리지"}
@@ -1908,19 +1845,12 @@ ko{
             sd{"ADT"}
             ss{"AST"}
         }
-        "America:Los_Angeles"{
-            ec{"로스앤젤레스"}
-            ld{"태평양 기준시"}
-            ls{"태평양 표준시"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:Phoenix"{
-            ec{"피닉스"}
-            ld{"산악 표준시"}
-            ls{"산악 표준시"}
-            sd{"MST"}
-            ss{"MST"}
+        "America:Chicago"{
+            ec{"시카고"}
+            ld{"중부 기준시"}
+            ls{"중부 표준시"}
+            sd{"CDT"}
+            ss{"CST"}
         }
         "America:Denver"{
             ec{"덴버"}
@@ -1929,12 +1859,12 @@ ko{
             sd{"MDT"}
             ss{"MST"}
         }
-        "America:Chicago"{
-            ec{"시카고"}
-            ld{"중부 기준시"}
-            ls{"중부 표준시"}
-            sd{"CDT"}
-            ss{"CST"}
+        "America:Halifax"{
+            ec{"핼리팩스"}
+            ld{"대서양 기준시"}
+            ls{"대서양 표준시"}
+            sd{"ADT"}
+            ss{"AST"}
         }
         "America:Indianapolis"{
             ec{"인디애나폴리스"}
@@ -1943,12 +1873,82 @@ ko{
             sd{"EST"}
             ss{"EST"}
         }
+        "America:Los_Angeles"{
+            ec{"로스앤젤레스"}
+            ld{"태평양 기준시"}
+            ls{"태평양 표준시"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
         "America:New_York"{
             ec{"뉴욕"}
             ld{"동부 기준시"}
             ls{"동부 표준시"}
             sd{"EDT"}
             ss{"EST"}
+        }
+        "America:Phoenix"{
+            ec{"피닉스"}
+            ld{"산악 표준시"}
+            ls{"산악 표준시"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"뉴펀들랜드 기준시"}
+            ls{"뉴펀들랜드 표준시"}
+            sd{"CDT"}
+            ss{"CNT"}
+        }
+        "Asia:Jerusalem"{
+            ec{"예루살렘"}
+            ld{"이스라엘 기준시"}
+            ls{"이스라엘 표준시"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "Asia:Seoul"{
+            ec{"서울"}
+            ld{"한국표준시"}
+            ls{"한국표준시"}
+            sd{"KST"}
+            ss{"KST"}
+        }
+        "Asia:Shanghai"{
+            ec{"상하이"}
+            ld{"중국 표준시"}
+            ls{"중국 표준시"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
+        "Asia:Tokyo"{
+            ec{"도쿄"}
+            ld{"일본 표준시"}
+            ls{"일본 표준시"}
+            sd{"JST"}
+            ss{"JST"}
+        }
+        "Europe:Bucharest"{
+            ec{"부쿠레슈티"}
+            ld{"동부유럽 기준시"}
+            ls{"동부유럽 표준시"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "Europe:Paris"{
+            ec{"파리"}
+            ld{"중부유럽 기준시"}
+            ls{"중부유럽 표준시"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "Pacific:Honolulu"{
+            ec{"호놀룰루"}
+            ld{"하와이 표준시"}
+            ls{"하와이 표준시"}
+            sd{"HST"}
+            ss{"HST"}
         }
     }
 }

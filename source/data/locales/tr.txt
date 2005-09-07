@@ -1696,24 +1696,8 @@ tr{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Güney Kutbu"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melborn"}
-        }
-        "Australia:Sydney"{
-            ec{"Sidney"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantik Yaz Saati"}
-            ls{"Atlantik Standart Saati"}
-        }
-        "America:St_Johns"{
-            ec{"St Johns"}
-            ld{"Newfoundland Yaz Saati"}
-            ls{"Newfoundland Standart Saati"}
+        "Africa:Ceuta"{
+            ec{"Septe"}
         }
         "Africa:Kinshasa"{
             ec{"Kinşasa"}
@@ -1721,125 +1705,141 @@ tr{
         "Africa:Lubumbashi"{
             ec{"Lubumbaşi"}
         }
-        "Asia:Kashgar"{
-            ec{"Kaşgar"}
-        }
-        "Asia:Urumqi"{
-            ec{"Urumçi"}
-        }
-        "Asia:Chongqing"{
-            ec{"Çunking"}
-        }
-        "Asia:Shanghai"{
-            ec{"Şangay"}
-            ld{"Çin Standart Saati"}
-            ls{"Çin Standart Saati"}
-        }
-        "Atlantic:Canary"{
-            ec{"Kanarya"}
-        }
-        "Africa:Ceuta"{
-            ec{"Septe"}
-        }
-        "Europe:London"{
-            ec{"Londra"}
-        }
-        "Asia:Jakarta"{
-            ec{"Cakarta"}
-        }
-        "Asia:Aqtau"{
-            ec{"Şevçenko"}
-        }
-        "Asia:Oral"{
-            ec{"Uralsk"}
-        }
-        "Asia:Aqtobe"{
-            ec{"Aktyubinsk"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Kızıl-Orda"}
-        }
-        "Asia:Almaty"{
-            ec{"Almatı"}
-        }
-        "Asia:Hovd"{
-            ec{"Kobdo"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulanbator"}
-        }
-        "Asia:Choibalsan"{
-            ec{"Çoybalsan"}
-        }
-        "America:Mexico_City"{
-            ec{"Meksiko City"}
-        }
-        "America:Cancun"{
-            ec{"Kankun"}
-        }
-        "Asia:Kuching"{
-            ec{"Kuçing"}
-        }
-        "Pacific:Marquesas"{
-            ec{"Markiz"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azor Adaları"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lizbon"}
-        }
-        "Europe:Moscow"{
-            ec{"Moskova"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamçatka"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hawaii Standart Saati"}
-            ls{"Hawaii Standart Saati"}
-        }
         "America:Anchorage"{
             ec{"Anchorage"}
             ld{"Alaska Yaz Saati"}
             ls{"Alaska Standart Saati"}
         }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pasifik Yaz Saati"}
-            ls{"Pasifik Standart Saati"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"ABD Sıradağlar Standart Saati"}
-            ls{"ABD Sıradağlar Standart Saati"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"ABD Sıradağlar Yaz Saati"}
-            ls{"ABD Sıradağlar Standart Saati"}
+        "America:Cancun"{
+            ec{"Kankun"}
         }
         "America:Chicago"{
             ec{"Şikago"}
             ld{"Merkezi Yaz Saati"}
             ls{"Merkezi Standart Saati"}
         }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"ABD Sıradağlar Yaz Saati"}
+            ls{"ABD Sıradağlar Standart Saati"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Atlantik Yaz Saati"}
+            ls{"Atlantik Standart Saati"}
+        }
         "America:Indianapolis"{
             ec{"Indianapolis"}
             ld{"Doğu Standart Saati"}
             ls{"Doğu Standart Saati"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pasifik Yaz Saati"}
+            ls{"Pasifik Standart Saati"}
+        }
+        "America:Mexico_City"{
+            ec{"Meksiko City"}
         }
         "America:New_York"{
             ec{"New York"}
             ld{"Doğu Yaz Saati"}
             ls{"Doğu Standart Saati"}
         }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"ABD Sıradağlar Standart Saati"}
+            ls{"ABD Sıradağlar Standart Saati"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+            ld{"Newfoundland Yaz Saati"}
+            ls{"Newfoundland Standart Saati"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Güney Kutbu"}
+        }
+        "Asia:Almaty"{
+            ec{"Almatı"}
+        }
+        "Asia:Aqtau"{
+            ec{"Şevçenko"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aktyubinsk"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Çoybalsan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Çunking"}
+        }
+        "Asia:Hovd"{
+            ec{"Kobdo"}
+        }
+        "Asia:Jakarta"{
+            ec{"Cakarta"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamçatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kaşgar"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuçing"}
+        }
+        "Asia:Oral"{
+            ec{"Uralsk"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kızıl-Orda"}
+        }
         "Asia:Samarkand"{
             ec{"Semerkand"}
         }
+        "Asia:Shanghai"{
+            ec{"Şangay"}
+            ld{"Çin Standart Saati"}
+            ls{"Çin Standart Saati"}
+        }
         "Asia:Tashkent"{
             ec{"Taşkent"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulanbator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumçi"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azor Adaları"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarya"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melborn"}
+        }
+        "Australia:Sydney"{
+            ec{"Sidney"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lizbon"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskova"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Hawaii Standart Saati"}
+            ls{"Hawaii Standart Saati"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Markiz"}
         }
     }
 }

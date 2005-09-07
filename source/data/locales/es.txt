@@ -1908,11 +1908,39 @@ es{
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Polo Sur"}
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"Hora media de Greenwich"}
+            ls{"Hora media de Greenwich"}
+            sd{"GMT"}
+            ss{"GMT"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"Hora de verano de Alaska"}
+            ls{"Hora estándar de Alaska"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"Hora de verano central"}
+            ls{"Hora estándar central"}
+            sd{"CDT"}
+            ss{"CST"}
         }
         "America:Cordoba"{
             ec{"Córdoba"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Hora de verano de Montaña"}
+            ls{"Hora estándar de Montaña"}
+            sd{"MDT"}
+            ss{"MST"}
         }
         "America:Halifax"{
             ec{"Halifax"}
@@ -1921,6 +1949,40 @@ es{
             sd{"ADT"}
             ss{"AST"}
         }
+        "America:Indianapolis"{
+            ec{"Indianápolis"}
+            ld{"Hora estándar oriental"}
+            ls{"Hora estándar oriental"}
+            sd{"EST"}
+            ss{"EST"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Ángeles"}
+            ld{"Hora de verano del Pacífico"}
+            ls{"Hora estándar del Pacífico"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Ciudad de México"}
+        }
+        "America:New_York"{
+            ec{"Nueva York"}
+            ld{"Hora de verano oriental"}
+            ls{"Hora estándar oriental"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Hora estándar de Montaña"}
+            ls{"Hora estándar de Montaña"}
+            sd{"MST"}
+            ss{"MST"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
             ld{"Hora de verano de Newfoundland"}
@@ -1928,28 +1990,8 @@ es{
             sd{"CDT"}
             ss{"CNT"}
         }
-        "Pacific:Easter"{
-            ec{"Pascua"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Hora estándar de China"}
-            ls{"Hora estándar de China"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Atlantic:Canary"{
-            ec{"Canarias"}
-        }
-        "Europe:Paris"{
-            ec{"París"}
-            ld{"Hora de verano de Europa Central"}
-            ls{"Hora estándar de Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:London"{
-            ec{"Londres"}
+        "Antarctica:South_Pole"{
+            ec{"Polo Sur"}
         }
         "Asia:Jerusalem"{
             ec{"Jerusalén"}
@@ -1958,6 +2000,13 @@ es{
             sd{"IDT"}
             ss{"IST"}
         }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Hora estándar de China"}
+            ls{"Hora estándar de China"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
         "Asia:Tokyo"{
             ec{"Tokio"}
             ld{"Hora estándar de Japón"}
@@ -1965,27 +2014,11 @@ es{
             sd{"JST"}
             ss{"JST"}
         }
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-            ld{"Hora media de Greenwich"}
-            ls{"Hora media de Greenwich"}
-            sd{"GMT"}
-            ss{"GMT"}
+        "Asia:Yekaterinburg"{
+            ec{"Yekaterinburgo"}
         }
-        "America:Mexico_City"{
-            ec{"Ciudad de México"}
-        }
-        "America:Merida"{
-            ec{"Mérida"}
-        }
-        "America:Cancun"{
-            ec{"Cancún"}
-        }
-        "Pacific:Tahiti"{
-            ec{"Tahití"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lisboa"}
+        "Atlantic:Canary"{
+            ec{"Canarias"}
         }
         "Europe:Bucharest"{
             ec{"Bucarest"}
@@ -1997,11 +2030,24 @@ es{
         "Europe:Kaliningrad"{
             ec{"Kaliningrado"}
         }
+        "Europe:Lisbon"{
+            ec{"Lisboa"}
+        }
+        "Europe:London"{
+            ec{"Londres"}
+        }
         "Europe:Moscow"{
             ec{"Moscú"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"Yekaterinburgo"}
+        "Europe:Paris"{
+            ec{"París"}
+            ld{"Hora de verano de Europa Central"}
+            ls{"Hora estándar de Europa Central"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "Pacific:Easter"{
+            ec{"Pascua"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
@@ -2010,54 +2056,8 @@ es{
             sd{"HST"}
             ss{"HST"}
         }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Hora de verano de Alaska"}
-            ls{"Hora estándar de Alaska"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Ángeles"}
-            ld{"Hora de verano del Pacífico"}
-            ls{"Hora estándar del Pacífico"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Hora estándar de Montaña"}
-            ls{"Hora estándar de Montaña"}
-            sd{"MST"}
-            ss{"MST"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Hora de verano de Montaña"}
-            ls{"Hora estándar de Montaña"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Hora de verano central"}
-            ls{"Hora estándar central"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianápolis"}
-            ld{"Hora estándar oriental"}
-            ls{"Hora estándar oriental"}
-            sd{"EST"}
-            ss{"EST"}
-        }
-        "America:New_York"{
-            ec{"Nueva York"}
-            ld{"Hora de verano oriental"}
-            ls{"Hora estándar oriental"}
-            sd{"EDT"}
-            ss{"EST"}
+        "Pacific:Tahiti"{
+            ec{"Tahití"}
         }
     }
 }

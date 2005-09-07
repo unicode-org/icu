@@ -2045,125 +2045,12 @@ fi{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Etelänapa"}
-        }
-        "Antarctica:DumontDUrville"{
-            ec{"Dumont d'Urville"}
-        }
-        "America:Argentina:ComodRivadavia"{
-            ec{"Comodoro Rivadavia"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Kanadan Atlantin kesäaika"}
-            ls{"Kanadan Atlantin normaaliaika"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:St_Johns"{
-            ec{"St. Johns"}
-            ld{"Newfoundlandin kesäaika"}
-            ls{"Newfoundlandin normaaliaika"}
-            sd{"CDT"}
-            ss{"CNT"}
-        }
-        "Pacific:Easter"{
-            ec{"Pääsiäissaari"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Kiinan normaaliaika"}
-            ls{"Kiinan normaaliaika"}
-            sd{"CTT"}
-            ss{"CTT"}
-        }
-        "Atlantic:Canary"{
-            ec{"Kanariansaaret"}
-        }
-        "Europe:Paris"{
-            ec{"Pariisi"}
-            ld{"Keski-Euroopan kesäaika"}
-            ls{"Keski-Euroopan normaaliaika"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:London"{
-            ec{"Lontoo"}
-        }
-        "Asia:Jerusalem"{
-            ec{"Jerusalem"}
-            ld{"Israelin kesäaika"}
-            ls{"Israelin normaaliaika"}
-            sd{"IDT"}
-            ss{"IST"}
-        }
-        "Asia:Tokyo"{
-            ec{"Tokio"}
-            ld{"Japanin normaaliaika"}
-            ls{"Japanin normaaliaika"}
-            sd{"JST"}
-            ss{"JST"}
-        }
         "Africa:Casablanca"{
             ec{"Casablanca"}
             ld{"Greenwichin aika"}
             ls{"Greenwichin aika"}
             sd{"GMT"}
             ss{"GMT"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulan Bator"}
-        }
-        "America:Cancun"{
-            ec{"Cancún"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azorit"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lissabon"}
-        }
-        "Europe:Bucharest"{
-            ec{"Bukarest"}
-            ld{"Itä-Euroopan kesäaika"}
-            ls{"Itä-Euroopan normaaliaika"}
-            sd{"EEST"}
-            ss{"EET"}
-        }
-        "Europe:Moscow"{
-            ec{"Moskova"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Jekaterinburg"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsk"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Jakutsk"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sahalin"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamtšatka"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
-        }
-        "Europe:Kiev"{
-            ec{"Kiova"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Havaijin normaaliaika"}
-            ls{"Havaijin normaaliaika"}
-            sd{"HST"}
-            ss{"HST"}
         }
         "America:Anchorage"{
             ec{"Anchorage"}
@@ -2172,29 +2059,11 @@ fi{
             sd{"ADT"}
             ss{"AST"}
         }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Yhdysvaltain Tyynenmeren kesäaika"}
-            ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
-            sd{"PDT"}
-            ss{"PST"}
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comodoro Rivadavia"}
         }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Kalliovuorten normaaliaika"}
-            ls{"Kalliovuorten normaaliaika"}
-            sd{"MST"}
-            ss{"MST"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Kalliovuorten kesäaika"}
-            ls{"Kalliovuorten normaaliaika"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"keskinen North Dakota"}
+        "America:Cancun"{
+            ec{"Cancún"}
         }
         "America:Chicago"{
             ec{"Chicago"}
@@ -2203,12 +2072,33 @@ fi{
             sd{"CDT"}
             ss{"CST"}
         }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Kalliovuorten kesäaika"}
+            ls{"Kalliovuorten normaaliaika"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Kanadan Atlantin kesäaika"}
+            ls{"Kanadan Atlantin normaaliaika"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
         "America:Indianapolis"{
             ec{"Indianapolis"}
             ld{"Yhdysvaltain itäinen normaaliaika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
             sd{"EST"}
             ss{"EST"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Yhdysvaltain Tyynenmeren kesäaika"}
+            ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
+            sd{"PDT"}
+            ss{"PST"}
         }
         "America:New_York"{
             ec{"New York"}
@@ -2217,8 +2107,118 @@ fi{
             sd{"EDT"}
             ss{"EST"}
         }
+        "America:North_Dakota:Center"{
+            ec{"keskinen North Dakota"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Kalliovuorten normaaliaika"}
+            ls{"Kalliovuorten normaaliaika"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"Newfoundlandin kesäaika"}
+            ls{"Newfoundlandin normaaliaika"}
+            sd{"CDT"}
+            ss{"CNT"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Etelänapa"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"Israelin kesäaika"}
+            ls{"Israelin normaaliaika"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamtšatka"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sahalin"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Kiinan normaaliaika"}
+            ls{"Kiinan normaaliaika"}
+            sd{"CTT"}
+            ss{"CTT"}
+        }
         "Asia:Tashkent"{
             ec{"Taškent"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokio"}
+            ld{"Japanin normaaliaika"}
+            ls{"Japanin normaaliaika"}
+            sd{"JST"}
+            ss{"JST"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azorit"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanariansaaret"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bukarest"}
+            ld{"Itä-Euroopan kesäaika"}
+            ls{"Itä-Euroopan normaaliaika"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiova"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lissabon"}
+        }
+        "Europe:London"{
+            ec{"Lontoo"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskova"}
+        }
+        "Europe:Paris"{
+            ec{"Pariisi"}
+            ld{"Keski-Euroopan kesäaika"}
+            ls{"Keski-Euroopan normaaliaika"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Užgorod"}
+        }
+        "Pacific:Easter"{
+            ec{"Pääsiäissaari"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Havaijin normaaliaika"}
+            ls{"Havaijin normaaliaika"}
+            sd{"HST"}
+            ss{"HST"}
         }
     }
 }
