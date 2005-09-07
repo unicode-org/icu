@@ -302,32 +302,21 @@ public final class ZoneMeta {
         return res;
     }
 
-    public static final int
-        PREFIX = 0,
-        HOUR = 1,
-        GMT = 2,
-        REGION_FORMAT = 3,
-        FALLBACK_FORMAT = 4;
+    public static final String
+        HOUR = "hourFormat",
+        GMT = "gmtFormat",
+        REGION_FORMAT = "regionFormat",
+        FALLBACK_FORMAT = "fallbackFormat",
+        ZONE_STRINGS = "zoneStrings",
+        FORWARD_SLASH = "/";
      
     /**
      * Get the index'd tz datum for this locale.  Index must be one of the 
      * values PREFIX, HOUR, GMT, REGION_FORMAT, FALLBACK_FORMAT
      */
-    public static String getTZLocalizationInfo(ULocale locale, int index) {
-        String baseName = locale.getBaseName();
-        for (int i = 0; i < TZ_LOCALIZATION_INFO.length; ++i) {
-            String[] info = TZ_LOCALIZATION_INFO[i];
-            String prefix = info[PREFIX];
-            if (prefix == null
-                || (index < info.length
-                    && info[index] != null
-                    && baseName.indexOf(prefix) == 0)) {
-
-                return info[index];
-            }
-        }
-
-        throw new InternalError(); // should never get here
+    public static String getTZLocalizationInfo(ULocale locale, String format) {
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(locale);
+        return bundle.getStringWithFallback(ZONE_STRINGS+FORWARD_SLASH+format);
     }
 
     // temporary for icu4j 3.4

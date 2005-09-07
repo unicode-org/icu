@@ -303,6 +303,10 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * @draft ICU 3.0
      */
     public int getType() {
+        int type = ICUResourceBundleImpl.RES_GET_TYPE(resource);
+        if(type==TABLE32){
+            return TABLE; //Mask the table32's real type
+        }
         return type;
     }
 
@@ -786,7 +790,6 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     }
 
     //====== protected members ==============
-    protected int type = NONE;
     protected String key;
     protected int size = 1;
     protected String resPath;

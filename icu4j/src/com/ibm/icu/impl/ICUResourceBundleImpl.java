@@ -106,7 +106,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         this.localeID = localeID;
         this.ulocale = new ULocale(localeID);
     }
-    private static final int RES_GET_TYPE(long res) {
+    static final int RES_GET_TYPE(long res) {
         return (int) ((res) >> 28L);
     }
     private static final int RES_GET_OFFSET(long res) {
@@ -342,7 +342,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
                 boolean isTopLevel) {
             this.resource = resource;
             this.key = key;
-            this.type = TABLE;//Mask the table32's real type
             this.isTopLevel = isTopLevel;
             this.size = countItems();
             this.resPath = resPath;
@@ -378,7 +377,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             value = getStringValue(resource);
             this.key = key;
             this.resource = resource;
-            this.type = RES_GET_TYPE(resource);
             this.resPath = resPath;
         }
         protected String getLocaleID() {
@@ -406,7 +404,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         private ResourceInt(String key, String resPath, long resource) {
             this.key = key;
             this.resource = resource;
-            this.type = RES_GET_TYPE(resource);
             this.resPath = resPath;
         }
         protected String getLocaleID() {
@@ -470,7 +467,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         private ResourceArray(String key, String resPath, long resource) {
             this.resource = resource;
             this.key = key;
-            this.type = RES_GET_TYPE(resource);
             this.size = countItems();
             this.resPath = resPath;
         }
@@ -524,7 +520,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         public ResourceBinary(String key, String resPath, long resource) {
             this.resource = resource;
             this.key = key;
-            this.type = RES_GET_TYPE(resource);
             this.resPath = resPath;
             value = getValue();
         }
@@ -565,7 +560,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             this.key = key;
             this.resource = resource;
             this.size = 1;
-            this.type = RES_GET_TYPE(resource);
             this.resPath = resPath;
             value = getValue();
         }
