@@ -376,4 +376,7 @@ am{
             }
         }
     }
+    zoneStrings{
+        hourFormat{"+HHmm;-HHmm"}
+    }
 }

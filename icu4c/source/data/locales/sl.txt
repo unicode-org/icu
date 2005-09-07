@@ -505,41 +505,42 @@ sl{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Južni pol"}
-        }
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
         }
         "Africa:Lubumbashi"{
             ec{"Lubumbaši"}
         }
-        "Asia:Shanghai"{
-            ec{"Šangaj"}
-        }
-        "Europe:Moscow"{
-            ec{"Moskva"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsk"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamčatka"}
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
         }
         "Asia:Anadyr"{
             ec{"Anadir"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Užgorod"}
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
         }
-        "Europe:Kiev"{
-            ec{"Kijev"}
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
         }
-        "Europe:Zaporozhye"{
-            ec{"Zaporožje"}
+        "Asia:Shanghai"{
+            ec{"Šangaj"}
         }
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Europe:Kiev"{
+            ec{"Kijev"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskva"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Užgorod"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
+        }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

@@ -1620,14 +1620,20 @@ uk{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Ріо-Ґалеґос"}
+        "Africa:Lubumbashi"{
+            ec{"Лубумбаші"}
+        }
+        "Africa:Timbuktu"{
+            ec{"Тимбукту"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Комодоро-Ривадавія"}
         }
-        "America:Rio_Branco"{
-            ec{"Ріо-Бранко"}
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Ріо-Ґалеґос"}
+        }
+        "America:Pangnirtung"{
+            ec{"Панґніртунґ"}
         }
         "America:Porto_Velho"{
             ec{"Порто-Велью"}
@@ -1635,26 +1641,14 @@ uk{
         "America:Regina"{
             ec{"Реджайна"}
         }
+        "America:Rio_Branco"{
+            ec{"Ріо-Бранко"}
+        }
         "America:Winnipeg"{
             ec{"Вінніпеґ"}
         }
-        "America:Pangnirtung"{
-            ec{"Панґніртунґ"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"Лубумбаші"}
-        }
-        "Pacific:Galapagos"{
-            ec{"Ґалапагос"}
-        }
-        "Pacific:Yap"{
-            ec{"Яп"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Кіритиматі"}
-        }
-        "Africa:Timbuktu"{
-            ec{"Тимбукту"}
+        "Arctic:Longyearbyen"{
+            ec{"Лонгербюйн"}
         }
         "Asia:Hovd"{
             ec{"Говд"}
@@ -1662,14 +1656,21 @@ uk{
         "Asia:Kuching"{
             ec{"Кучінґ"}
         }
-        "Pacific:Gambier"{
-            ec{"Гамбер"}
-        }
         "Atlantic:Jan_Mayen"{
             ec{"Ян-Майєн"}
         }
-        "Arctic:Longyearbyen"{
-            ec{"Лонгербюйн"}
+        "Pacific:Galapagos"{
+            ec{"Ґалапагос"}
         }
+        "Pacific:Gambier"{
+            ec{"Гамбер"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Кіритиматі"}
+        }
+        "Pacific:Yap"{
+            ec{"Яп"}
+        }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

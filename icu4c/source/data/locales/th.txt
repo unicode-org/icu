@@ -688,116 +688,116 @@ th{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"ขั่วโลกใต้"}
-        }
-        "Antarctica:Davis"{
-            ec{"เดวิส"}
-        }
-        "Antarctica:Vostok"{
-            ec{"วอสทอก"}
-        }
-        "America:Mendoza"{
-            ec{"เมนดูซา"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"ซานจวน"}
-        }
         "America:Argentina:ComodRivadavia"{
             ec{"โคมอดริวาดาเวีย"}
         }
         "America:Argentina:La_Rioja"{
             ec{"ลาริโอจา"}
         }
-        "America:Catamarca"{
-            ec{"คาตามาร์กา"}
+        "America:Argentina:San_Juan"{
+            ec{"ซานจวน"}
         }
         "America:Argentina:Tucuman"{
             ec{"ทูคูแมน"}
         }
-        "Australia:Perth"{
-            ec{"เพิิร์ท"}
-        }
-        "Australia:Darwin"{
-            ec{"ดาร์วิน"}
-        }
-        "Australia:Adelaide"{
-            ec{"แอดิเลด"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"โบรกเคนฮิว"}
-        }
-        "Australia:Melbourne"{
-            ec{"เมลเบิร์น"}
-        }
-        "Australia:Hobart"{
-            ec{"โฮบาร์ต"}
-        }
-        "Australia:Lindeman"{
-            ec{"ลินดีแมน"}
-        }
-        "Australia:Sydney"{
-            ec{"ซิดนีย์ Sydney"}
-        }
-        "Australia:Brisbane"{
-            ec{"บริสเบน"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"ลอร์ดโฮวี"}
-        }
-        "America:Rio_Branco"{
-            ec{"ริโอบรังโก"}
+        "America:Belem"{
+            ec{"เบเลง"}
         }
         "America:Boa_Vista"{
             ec{"บัววีชตา"}
         }
-        "America:Manaus"{
-            ec{"มาเนาส์"}
-        }
-        "America:Cuiaba"{
-            ec{"กุยาบา"}
-        }
-        "America:Campo_Grande"{
-            ec{"กัมปูกรัมดี"}
-        }
-        "America:Belem"{
-            ec{"เบเลง"}
-        }
-        "America:Sao_Paulo"{
-            ec{"เซาเปาลู"}
-        }
-        "America:Fortaleza"{
-            ec{"ฟอร์ตาเลซา"}
-        }
-        "America:Maceio"{
-            ec{"มาเซโอ"}
-        }
-        "America:Recife"{
-            ec{"เรซีเฟ"}
-        }
-        "America:Whitehorse"{
-            ec{"ไวต์ฮอร์ส"}
-        }
-        "America:Vancouver"{
-            ec{"แวนคูเวอร์"}
-        }
-        "America:Yellowknife"{
-            ec{"เยลโลว์ไนฟ์"}
-        }
-        "America:Edmonton"{
-            ec{"เอดมันตัน"}
+        "America:Boise"{
+            ec{"บอยซี"}
         }
         "America:Cambridge_Bay"{
             ec{"อ่าวแคมบรืดจ์"}
         }
-        "America:Regina"{
-            ec{"ริไจนา"}
+        "America:Campo_Grande"{
+            ec{"กัมปูกรัมดี"}
         }
-        "America:Winnipeg"{
-            ec{"วินนิเพก"}
+        "America:Catamarca"{
+            ec{"คาตามาร์กา"}
+        }
+        "America:Chicago"{
+            ec{"ชิคาโก"}
+        }
+        "America:Chihuahua"{
+            ec{"ชีวาวา"}
+        }
+        "America:Cuiaba"{
+            ec{"กุยาบา"}
+        }
+        "America:Denver"{
+            ec{"เดนเวอร์"}
+        }
+        "America:Detroit"{
+            ec{"ดีทรอยต์"}
+        }
+        "America:Edmonton"{
+            ec{"เอดมันตัน"}
+        }
+        "America:Fortaleza"{
+            ec{"ฟอร์ตาเลซา"}
+        }
+        "America:Goose_Bay"{
+            ec{"กูสเบย์"}
+        }
+        "America:Halifax"{
+            ec{"แฮลิแฟกซ์"}
+        }
+        "America:Hermosillo"{
+            ec{"เอร์โมซีโย"}
+        }
+        "America:Indianapolis"{
+            ec{"อินเดียแนโพลิส"}
+        }
+        "America:Iqaluit"{
+            ec{"อีกวาลิต"}
+        }
+        "America:Los_Angeles"{
+            ec{"ลอสแองเจลิส"}
+        }
+        "America:Maceio"{
+            ec{"มาเซโอ"}
+        }
+        "America:Manaus"{
+            ec{"มาเนาส์"}
+        }
+        "America:Mendoza"{
+            ec{"เมนดูซา"}
+        }
+        "America:Merida"{
+            ec{"เมรีดา"}
+        }
+        "America:Mexico_City"{
+            ec{"เม็กซิโกซิตี"}
+        }
+        "America:Monterrey"{
+            ec{"มอนเตร์เรย์"}
+        }
+        "America:New_York"{
+            ec{"นิวยอร์ก"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"เซนเตอร์"}
         }
         "America:Rainy_River"{
             ec{"เรนนี่ริเวอร์"}
+        }
+        "America:Recife"{
+            ec{"เรซีเฟ"}
+        }
+        "America:Regina"{
+            ec{"ริไจนา"}
+        }
+        "America:Rio_Branco"{
+            ec{"ริโอบรังโก"}
+        }
+        "America:Sao_Paulo"{
+            ec{"เซาเปาลู"}
+        }
+        "America:St_Johns"{
+            ec{"เซนต์จอนส์"}
         }
         "America:Thunder_Bay"{
             ec{"ทันเดอร์เบย์"}
@@ -805,50 +805,35 @@ th{
         "America:Toronto"{
             ec{"โทรอนโต"}
         }
-        "America:Iqaluit"{
-            ec{"อีกวาลิต"}
+        "America:Vancouver"{
+            ec{"แวนคูเวอร์"}
         }
-        "America:Halifax"{
-            ec{"แฮลิแฟกซ์"}
+        "America:Whitehorse"{
+            ec{"ไวต์ฮอร์ส"}
         }
-        "America:Goose_Bay"{
-            ec{"กูสเบย์"}
+        "America:Winnipeg"{
+            ec{"วินนิเพก"}
         }
-        "America:St_Johns"{
-            ec{"เซนต์จอนส์"}
+        "America:Yellowknife"{
+            ec{"เยลโลว์ไนฟ์"}
         }
-        "Asia:Urumqi"{
-            ec{"อุรุมชี"}
+        "Antarctica:Davis"{
+            ec{"เดวิส"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"ขั่วโลกใต้"}
+        }
+        "Antarctica:Vostok"{
+            ec{"วอสทอก"}
         }
         "Asia:Chongqing"{
             ec{"ฉงชิ่ง"}
         }
-        "Asia:Shanghai"{
-            ec{"เซี่ยงไฮ้"}
-        }
         "Asia:Harbin"{
             ec{"ฮาร์บิน"}
         }
-        "Europe:Belfast"{
-            ec{"เบลฟัสต์"}
-        }
         "Asia:Jakarta"{
             ec{"จาการ์ตา"}
-        }
-        "America:Hermosillo"{
-            ec{"เอร์โมซีโย"}
-        }
-        "America:Chihuahua"{
-            ec{"ชีวาวา"}
-        }
-        "America:Monterrey"{
-            ec{"มอนเตร์เรย์"}
-        }
-        "America:Mexico_City"{
-            ec{"เม็กซิโกซิตี"}
-        }
-        "America:Merida"{
-            ec{"เมรีดา"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"กัวลาลัมเปอร์"}
@@ -856,35 +841,51 @@ th{
         "Asia:Kuching"{
             ec{"กูชิง"}
         }
-        "Asia:Yakutsk"{
-            ec{"ยาคุตสค์"}
-        }
-        "America:Los_Angeles"{
-            ec{"ลอสแองเจลิส"}
-        }
-        "America:Boise"{
-            ec{"บอยซี"}
-        }
-        "America:Denver"{
-            ec{"เดนเวอร์"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"เซนเตอร์"}
-        }
-        "America:Chicago"{
-            ec{"ชิคาโก"}
-        }
-        "America:Indianapolis"{
-            ec{"อินเดียแนโพลิส"}
-        }
-        "America:Detroit"{
-            ec{"ดีทรอยต์"}
-        }
-        "America:New_York"{
-            ec{"นิวยอร์ก"}
+        "Asia:Shanghai"{
+            ec{"เซี่ยงไฮ้"}
         }
         "Asia:Tashkent"{
             ec{"ทาชเคนต์"}
         }
+        "Asia:Urumqi"{
+            ec{"อุรุมชี"}
+        }
+        "Asia:Yakutsk"{
+            ec{"ยาคุตสค์"}
+        }
+        "Australia:Adelaide"{
+            ec{"แอดิเลด"}
+        }
+        "Australia:Brisbane"{
+            ec{"บริสเบน"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"โบรกเคนฮิว"}
+        }
+        "Australia:Darwin"{
+            ec{"ดาร์วิน"}
+        }
+        "Australia:Hobart"{
+            ec{"โฮบาร์ต"}
+        }
+        "Australia:Lindeman"{
+            ec{"ลินดีแมน"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"ลอร์ดโฮวี"}
+        }
+        "Australia:Melbourne"{
+            ec{"เมลเบิร์น"}
+        }
+        "Australia:Perth"{
+            ec{"เพิิร์ท"}
+        }
+        "Australia:Sydney"{
+            ec{"ซิดนีย์ Sydney"}
+        }
+        "Europe:Belfast"{
+            ec{"เบลฟัสต์"}
+        }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

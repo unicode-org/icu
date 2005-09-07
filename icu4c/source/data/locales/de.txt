@@ -1910,17 +1910,50 @@ de{
     }
     localPatternChars{"GjMtkHmsSEDFwWahKzJeugAZvcL"}
     zoneStrings{
+        "America:Mexico_City"{
+            ec{"Mexiko-Stadt"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
         "Antarctica:South_Pole"{
             ec{"Südpol"}
         }
         "Antarctica:Vostok"{
             ec{"Wostok"}
         }
-        "America:St_Johns"{
-            ec{"St. John's"}
+        "Asia:Kamchatka"{
+            ec{"Kamtschatka"}
         }
-        "Pacific:Easter"{
-            ec{"Osterinsel"}
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Nowosibirsk"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taschkent"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan-Bator"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Wladiwostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azoren"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanaren"}
         }
         "Europe:Berlin"{
             ec{"Berlin"}
@@ -1929,17 +1962,8 @@ de{
             sd{"MESZ"}
             ss{"MEZ"}
         }
-        "Atlantic:Canary"{
-            ec{"Kanaren"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulan-Bator"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexiko-Stadt"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azoren"}
+        "Europe:Kiev"{
+            ec{"Kiew"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
@@ -1947,38 +1971,14 @@ de{
         "Europe:Moscow"{
             ec{"Moskau"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"Jekaterinburg"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"Nowosibirsk"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsk"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Jakutsk"}
-        }
-        "Asia:Vladivostok"{
-            ec{"Wladiwostok"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sachalin"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamtschatka"}
-        }
         "Europe:Uzhgorod"{
             ec{"Uschgorod"}
-        }
-        "Europe:Kiev"{
-            ec{"Kiew"}
         }
         "Europe:Zaporozhye"{
             ec{"Saporischja"}
         }
-        "Asia:Tashkent"{
-            ec{"Taschkent"}
+        "Pacific:Easter"{
+            ec{"Osterinsel"}
         }
     }
 }

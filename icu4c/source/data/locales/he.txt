@@ -519,125 +519,161 @@ he{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
-        "Antarctica:Palmer"{
-            ec{"אמריקה/פאלמר"}
-        }
-        "America:Mendoza"{
-            ec{"אמריקה/מנדוזה"}
+        "Africa:Timbuktu"{
+            ec{"אפריקה/טימבקטו"}
         }
         "America:Argentina:San_Juan"{
             ec{"אמריקה/ארגנטינה/סאן-חואן"}
         }
-        "America:Cordoba"{
-            ec{"אמריקה/קורדובה"}
+        "America:Bahia"{
+            ec{"אמריקה/בהיאה"}
         }
         "America:Buenos_Aires"{
             ec{"בואנוס איירס"}
         }
-        "Australia:Perth"{
-            ec{"אוסטרליה/פרת'"}
+        "America:Cancun"{
+            ec{"אמריקה/קנקון"}
         }
-        "Australia:Darwin"{
-            ec{"אוסטרליה/דרווין"}
+        "America:Chicago"{
+            ec{"אמריקה/שיקגו"}
         }
-        "Australia:Adelaide"{
-            ec{"אדלייד"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"אוסטרליה/ברוקן-היל"}
-        }
-        "Australia:Melbourne"{
-            ec{"אוסטרליה/מלבורן"}
-        }
-        "Australia:Hobart"{
-            ec{"אוסטרליה/הוברט"}
-        }
-        "Australia:Sydney"{
-            ec{"אוסטרליה/סידני"}
-        }
-        "Australia:Brisbane"{
-            ec{"אוסטרליה/בריסבן"}
-        }
-        "America:Sao_Paulo"{
-            ec{"אמריקה/סאן-פאולו"}
-        }
-        "America:Bahia"{
-            ec{"אמריקה/בהיאה"}
-        }
-        "America:Vancouver"{
-            ec{"אמריקה/ונקובר"}
+        "America:Cordoba"{
+            ec{"אמריקה/קורדובה"}
         }
         "America:Dawson_Creek"{
             ec{"אמריקה/דוסון-קריק"}
         }
+        "America:Denver"{
+            ec{"אמריקה/דנוור"}
+        }
+        "America:Detroit"{
+            ec{"אמריקה/דטרויט"}
+        }
         "America:Edmonton"{
             ec{"אמריקה/אדמנטון"}
-        }
-        "America:Winnipeg"{
-            ec{"אמריקה/וויניפוג"}
-        }
-        "America:Toronto"{
-            ec{"אמריקה/טורנטו"}
-        }
-        "America:Montreal"{
-            ec{"אמריקה/מונטריאול"}
         }
         "America:Halifax"{
             ec{"אמריקה/הליפקס"}
         }
-        "America:Santiago"{
-            ec{"אמריקה/סנטיאגו"}
+        "America:Indianapolis"{
+            ec{"אינדיאנפוליס"}
         }
-        "Asia:Shanghai"{
-            ec{"אסיה/שנחאי"}
+        "America:Los_Angeles"{
+            ec{"אמריקה/לוס-אנג'לס"}
         }
-        "Pacific:Galapagos"{
-            ec{"פסיפי/גלאפגוס"}
-        }
-        "Atlantic:Canary"{
-            ec{"אטלנטי/קנרי"}
-        }
-        "Europe:Madrid"{
-            ec{"אירופה/מדריד"}
-        }
-        "Europe:Belfast"{
-            ec{"אירופה/בלפסט"}
-        }
-        "Europe:London"{
-            ec{"אירופה/לונדון"}
-        }
-        "Asia:Jakarta"{
-            ec{"אסיה/ג'קרטה"}
-        }
-        "Asia:Oral"{
-            ec{"אסיה/אורל"}
-        }
-        "Africa:Timbuktu"{
-            ec{"אפריקה/טימבקטו"}
+        "America:Louisville"{
+            ec{"אמריקה/לואיסוויל"}
         }
         "America:Mazatlan"{
             ec{"אמריקה/מזטלן"}
         }
-        "America:Monterrey"{
-            ec{"אמריקה/מונטריי"}
+        "America:Mendoza"{
+            ec{"אמריקה/מנדוזה"}
         }
         "America:Mexico_City"{
             ec{"אמריקה/מקסיקו סיטי"}
         }
-        "America:Cancun"{
-            ec{"אמריקה/קנקון"}
+        "America:Monterrey"{
+            ec{"אמריקה/מונטריי"}
+        }
+        "America:Montreal"{
+            ec{"אמריקה/מונטריאול"}
+        }
+        "America:New_York"{
+            ec{"אמריקה/ניו-יורק"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"אמריקה/צפון דקוטה/מרכז"}
+        }
+        "America:Phoenix"{
+            ec{"אמריקה/פיניקס"}
+        }
+        "America:Santiago"{
+            ec{"אמריקה/סנטיאגו"}
+        }
+        "America:Sao_Paulo"{
+            ec{"אמריקה/סאן-פאולו"}
+        }
+        "America:Shiprock"{
+            ec{"אמריקה/שיפרוק"}
+        }
+        "America:Toronto"{
+            ec{"אמריקה/טורנטו"}
+        }
+        "America:Vancouver"{
+            ec{"אמריקה/ונקובר"}
+        }
+        "America:Winnipeg"{
+            ec{"אמריקה/וויניפוג"}
+        }
+        "Antarctica:Palmer"{
+            ec{"אמריקה/פאלמר"}
+        }
+        "Asia:Jakarta"{
+            ec{"אסיה/ג'קרטה"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"קואלה לומפור"}
         }
-        "Pacific:Auckland"{
-            ec{"פסיפי/אוקלנד"}
+        "Asia:Novosibirsk"{
+            ec{"אסיה/נובוסיבירסק"}
         }
-        "Pacific:Tahiti"{
-            ec{"פסיפי/טהיטי"}
+        "Asia:Omsk"{
+            ec{"איה/אומסק"}
+        }
+        "Asia:Oral"{
+            ec{"אסיה/אורל"}
+        }
+        "Asia:Samarkand"{
+            ec{"אסיה/סמרקנד"}
+        }
+        "Asia:Shanghai"{
+            ec{"אסיה/שנחאי"}
+        }
+        "Asia:Tashkent"{
+            ec{"אסיה/טשקנט"}
+        }
+        "Atlantic:Canary"{
+            ec{"אטלנטי/קנרי"}
+        }
+        "Australia:Adelaide"{
+            ec{"אדלייד"}
+        }
+        "Australia:Brisbane"{
+            ec{"אוסטרליה/בריסבן"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"אוסטרליה/ברוקן-היל"}
+        }
+        "Australia:Darwin"{
+            ec{"אוסטרליה/דרווין"}
+        }
+        "Australia:Hobart"{
+            ec{"אוסטרליה/הוברט"}
+        }
+        "Australia:Melbourne"{
+            ec{"אוסטרליה/מלבורן"}
+        }
+        "Australia:Perth"{
+            ec{"אוסטרליה/פרת'"}
+        }
+        "Australia:Sydney"{
+            ec{"אוסטרליה/סידני"}
+        }
+        "Europe:Belfast"{
+            ec{"אירופה/בלפסט"}
+        }
+        "Europe:Kiev"{
+            ec{"אירופה/קייב"}
         }
         "Europe:Lisbon"{
             ec{"אירופה/ליסבון"}
+        }
+        "Europe:London"{
+            ec{"אירופה/לונדון"}
+        }
+        "Europe:Madrid"{
+            ec{"אירופה/מדריד"}
         }
         "Europe:Moscow"{
             ec{"אירופה/מוסקבה"}
@@ -645,53 +681,17 @@ he{
         "Europe:Samara"{
             ec{"אירופה/סמרה"}
         }
-        "Asia:Omsk"{
-            ec{"איה/אומסק"}
+        "Pacific:Auckland"{
+            ec{"פסיפי/אוקלנד"}
         }
-        "Asia:Novosibirsk"{
-            ec{"אסיה/נובוסיבירסק"}
-        }
-        "Europe:Kiev"{
-            ec{"אירופה/קייב"}
+        "Pacific:Galapagos"{
+            ec{"פסיפי/גלאפגוס"}
         }
         "Pacific:Honolulu"{
             ec{"פסיפי/הונולולו"}
         }
-        "America:Los_Angeles"{
-            ec{"אמריקה/לוס-אנג'לס"}
-        }
-        "America:Phoenix"{
-            ec{"אמריקה/פיניקס"}
-        }
-        "America:Shiprock"{
-            ec{"אמריקה/שיפרוק"}
-        }
-        "America:Denver"{
-            ec{"אמריקה/דנוור"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"אמריקה/צפון דקוטה/מרכז"}
-        }
-        "America:Chicago"{
-            ec{"אמריקה/שיקגו"}
-        }
-        "America:Indianapolis"{
-            ec{"אינדיאנפוליס"}
-        }
-        "America:Louisville"{
-            ec{"אמריקה/לואיסוויל"}
-        }
-        "America:Detroit"{
-            ec{"אמריקה/דטרויט"}
-        }
-        "America:New_York"{
-            ec{"אמריקה/ניו-יורק"}
-        }
-        "Asia:Samarkand"{
-            ec{"אסיה/סמרקנד"}
-        }
-        "Asia:Tashkent"{
-            ec{"אסיה/טשקנט"}
+        "Pacific:Tahiti"{
+            ec{"פסיפי/טהיטי"}
         }
     }
 }

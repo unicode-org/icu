@@ -633,43 +633,43 @@ sr_Latn{
         }
     }
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Južni pol"}
-        }
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
         }
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadir"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
         "Asia:Shanghai"{
             ec{"Šangaj"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taškent"}
         }
         "Europe:Belgrade"{
             ec{"Belgrade"}
             ld{"Centralno Evropsko Vreme"}
             ls{"Centralno Evropsko Vreme"}
         }
+        "Europe:Kiev"{
+            ec{"Kijev"}
+        }
         "Europe:Moscow"{
             ec{"Moskva"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnojarsk"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamčatka"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadir"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
         }
-        "Europe:Kiev"{
-            ec{"Kijev"}
-        }
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
-        }
-        "Asia:Tashkent"{
-            ec{"Taškent"}
         }
     }
 }

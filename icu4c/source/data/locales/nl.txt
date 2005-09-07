@@ -1989,90 +1989,6 @@ nl{
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     zoneStrings{
-        "Antarctica:South_Pole"{
-            ec{"Zuidpool"}
-        }
-        "Antarctica:DumontDUrville"{
-            ec{"Dumont d'Urville"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Río Gallegos"}
-        }
-        "America:Argentina:ComodRivadavia"{
-            ec{"Comodora Rivadavia"}
-        }
-        "America:Cordoba"{
-            ec{"Córdoba"}
-        }
-        "America:Porto_Velho"{
-            ec{"Pôrto Velho"}
-        }
-        "America:Cuiaba"{
-            ec{"Cuiabá"}
-        }
-        "America:Belem"{
-            ec{"Belém"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
-        }
-        "America:Maceio"{
-            ec{"Maceió"}
-        }
-        "America:Montreal"{
-            ec{"Montréal"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantic-zomertijd"}
-            ls{"Atlantic-standaardtijd"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:St_Johns"{
-            ec{"St. Johns"}
-            ld{"Newfoundland-zomertijd"}
-            ls{"Newfoundland-standaardtijd"}
-            sd{"CDT"}
-            ss{"CNT"}
-        }
-        "Pacific:Easter"{
-            ec{"Paaseiland"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Chinese standaardtijd"}
-            ls{"Chinese standaardtijd"}
-            sd{"CDT"}
-            ss{"CTT"}
-        }
-        "Atlantic:Canary"{
-            ec{"Canarische Eilanden"}
-        }
-        "Europe:Paris"{
-            ec{"Parijs"}
-            ld{"Midden-Europese zomertijd"}
-            ls{"Midden-Europese standaardtijd"}
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "Europe:London"{
-            ec{"Londen"}
-        }
-        "Asia:Jerusalem"{
-            ec{"Jeruzalem"}
-            ld{"Israëlische zomertijd"}
-            ls{"Israëlische standaardtijd"}
-            sd{"IDT"}
-            ss{"IST"}
-        }
-        "Asia:Tokyo"{
-            ec{"Tokyo"}
-            ld{"Japanse standaardtijd"}
-            ls{"Japanse standaardtijd"}
-            sd{"JST"}
-            ss{"JST"}
-        }
         "Africa:Casablanca"{
             ec{"Casablanca"}
             ld{"Greenwich Mean Time"}
@@ -2083,44 +1999,6 @@ nl{
         "Africa:Timbuktu"{
             ec{"Timboektoe"}
         }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaator"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlán"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexico Stad"}
-        }
-        "America:Merida"{
-            ec{"Mérida"}
-        }
-        "America:Cancun"{
-            ec{"Cancún"}
-        }
-        "Atlantic:Azores"{
-            ec{"Azoren"}
-        }
-        "Europe:Lisbon"{
-            ec{"Lissabon"}
-        }
-        "Europe:Bucharest"{
-            ec{"Boekarest"}
-            ld{"Oost-Europese zomertijd"}
-            ls{"Oost-Europese standaardtijd"}
-            sd{"EEST"}
-            ss{"EET"}
-        }
-        "Europe:Moscow"{
-            ec{"Moskou"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hawaï-standaardtijd"}
-            ls{"Hawaï-standaardtijd"}
-            sd{"HST"}
-            ss{"HST"}
-        }
         "America:Anchorage"{
             ec{"Anchorage"}
             ld{"Alaska-zomertijd"}
@@ -2128,26 +2006,17 @@ nl{
             sd{"ADT"}
             ss{"AST"}
         }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pacific-zomertijd"}
-            ls{"Pacific-standaardtijd"}
-            sd{"PDT"}
-            ss{"PST"}
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comodora Rivadavia"}
         }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Mountain-standaardtijd"}
-            ls{"Mountain-standaardtijd"}
-            sd{"MST"}
-            ss{"MST"}
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Río Gallegos"}
         }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Mountain-zomertijd"}
-            ls{"Mountain-standaardtijd"}
-            sd{"MDT"}
-            ss{"MST"}
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
         }
         "America:Chicago"{
             ec{"Chicago"}
@@ -2156,12 +2025,54 @@ nl{
             sd{"CDT"}
             ss{"CST"}
         }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Mountain-zomertijd"}
+            ls{"Mountain-standaardtijd"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Atlantic-zomertijd"}
+            ls{"Atlantic-standaardtijd"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
         "America:Indianapolis"{
             ec{"Indianapolis"}
             ld{"Eastern-standaardtijd"}
             ls{"Eastern-standaardtijd"}
             sd{"EST"}
             ss{"EST"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"Pacific-zomertijd"}
+            ls{"Pacific-standaardtijd"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlán"}
+        }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexico Stad"}
+        }
+        "America:Montreal"{
+            ec{"Montréal"}
         }
         "America:New_York"{
             ec{"New York"}
@@ -2170,8 +2081,97 @@ nl{
             sd{"EDT"}
             ss{"EST"}
         }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"Mountain-standaardtijd"}
+            ls{"Mountain-standaardtijd"}
+            sd{"MST"}
+            ss{"MST"}
+        }
+        "America:Porto_Velho"{
+            ec{"Pôrto Velho"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
+        "America:St_Johns"{
+            ec{"St. Johns"}
+            ld{"Newfoundland-zomertijd"}
+            ls{"Newfoundland-standaardtijd"}
+            sd{"CDT"}
+            ss{"CNT"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Zuidpool"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Jeruzalem"}
+            ld{"Israëlische zomertijd"}
+            ls{"Israëlische standaardtijd"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Chinese standaardtijd"}
+            ls{"Chinese standaardtijd"}
+            sd{"CDT"}
+            ss{"CTT"}
+        }
         "Asia:Tashkent"{
             ec{"Tasjkent"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"Japanse standaardtijd"}
+            ls{"Japanse standaardtijd"}
+            sd{"JST"}
+            ss{"JST"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulaanbaator"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azoren"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canarische Eilanden"}
+        }
+        "Europe:Bucharest"{
+            ec{"Boekarest"}
+            ld{"Oost-Europese zomertijd"}
+            ls{"Oost-Europese standaardtijd"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lissabon"}
+        }
+        "Europe:London"{
+            ec{"Londen"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskou"}
+        }
+        "Europe:Paris"{
+            ec{"Parijs"}
+            ld{"Midden-Europese zomertijd"}
+            ls{"Midden-Europese standaardtijd"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "Pacific:Easter"{
+            ec{"Paaseiland"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Hawaï-standaardtijd"}
+            ls{"Hawaï-standaardtijd"}
+            sd{"HST"}
+            ss{"HST"}
         }
     }
 }
