@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for Visual Age 5+)
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -61,7 +61,7 @@ LD_SONAME =
 GENCCODE_ASSEMBLY=-a xlc
 
 ## Shared object suffix
-#SO=	so
+SOBJ=	so
 # without the -brtl option, the library names use .a. AIX is funny that way.
 SO=	a
 ## Non-shared intermediate object suffix
@@ -81,11 +81,15 @@ STATIC_O = o
 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
 %.o: $(srcdir)/%.c
 	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+%64.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -q64 -o $@ $<
 
 %.$(STATIC_O): $(srcdir)/%.cpp
 	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+%64.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -q64 -o $@ $<
 
 
 ## Dependency rules

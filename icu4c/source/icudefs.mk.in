@@ -221,6 +221,10 @@ INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)$(LIBDIR):$(top_builddir)
 # Platform-specific setup
 include @platform_make_fragment@
 
+ifeq ($(SOBJ),)
+SOBJ = $(SO)
+endif
+
 # When shared libraries are disabled and static libraries are enabled,
 # the C++ compiler must be used to link in the libraries for the tools.
 ifneq ($(ENABLE_SHARED),YES)
