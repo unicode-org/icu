@@ -221,9 +221,16 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                      "\t$(SHLIB.c) -o $@ $(OBJECTS) $(DLL_LDFLAGS)\n\n");
 #endif
     
+#ifdef U_AIX
+    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(FINAL_SO_TARGET): $(OBJECTS) $(LISTFILES) $(DLL_DEPS)\n"
+                                     "\t$(SHLIB.c) -o $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)) $(OBJECTS) $(DLL_LDFLAGS)\n"
+                                     "\t$(AR) $(ARFLAGS) $@ $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ))\n"
+                                     "\t-$(AR) vt $@\n\n");
+#else
     T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(FINAL_SO_TARGET): $(OBJECTS) $(LISTFILES) $(DLL_DEPS)\n"
                                      "\t$(SHLIB.c) -o $@ $(OBJECTS) $(DLL_LDFLAGS)\n"
                                      "\t-ls -l $@\n\n");
+#endif
 
 #ifdef OS390
   /*
