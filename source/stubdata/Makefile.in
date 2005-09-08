@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2004, International Business Machines
+#   Copyright (C) 1999-2005, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -30,10 +30,13 @@ ifneq ($(ENABLE_STATIC),)
 TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 endif
 
+
 ifneq ($(ENABLE_SHARED),)
 SO_TARGET = $(STUBDATA_LIBDIR)$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
-ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET) $(BATCH_STUB_TARGET)
+SHARED_OBJECT = $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ))
+ALL_SO_TARGETS = $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET) $(SO_TARGET) $(BATCH_STUB_TARGET) $(SHARED_OBJECT)
 endif
+
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
@@ -123,7 +126,7 @@ $(TARGET): $(TARGET)($(STATIC_OBJECTS))
 endif
 
 ifneq ($(ENABLE_SHARED),)
-$(FINAL_SO_TARGET): $(OBJECTS)
+$(SHARED_OBJECT): $(OBJECTS)
 	$(SHLIB.c) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
