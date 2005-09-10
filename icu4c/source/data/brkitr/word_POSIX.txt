@@ -9,6 +9,8 @@
 #      These rules are based on Unicode Version 4.1, with
 #         the modification that the ':' character is removed from the MidLetter category.
 #
+# Note:  Updates to word.txt will usually need to be merged into
+#        word_POSIX.txt and word_ja.txt also.
 
 ##############################################################################
 #
@@ -37,17 +39,21 @@ $LF             = \u000a;
 $Extend         = [\p{Grapheme_Cluster_Break = Extend}];
 $Control        = [\p{Grapheme_Cluster_Break = Control}];
 
-$KatakanaEx     = $Katakana     $Extend*;
-$ALetterEx      = $ALetter      $Extend*;
-$MidLetterEx    = $MidLetter    $Extend*;
-$MidNumEx       = $MidNum       $Extend*;
-$NumericEx      = $Numeric      $Extend*;
-$ExtendNumLetEx = $ExtendNumLet $Extend*;
+#
+#  Rules 3    Grapheme Clusters behave like their first char.
+#  Rule  4    Ignore trailing Format characters  (Also see note in TR 29)
+#
+$KatakanaEx     = $Katakana     $Extend*  $Format*;
+$ALetterEx      = $ALetter      $Extend*  $Format*;
+$MidLetterEx    = $MidLetter    $Extend*  $Format*;
+$MidNumEx       = $MidNum       $Extend*  $Format*;
+$NumericEx      = $Numeric      $Extend*  $Format*;
+$ExtendNumLetEx = $ExtendNumLet $Extend*  $Format*;
 
 $Hiragana       = [:Hiragana:];
 $Ideographic    = [:IDEOGRAPHIC:];
-$HiraganaEx     = $Hiragana    $Extend*;
-$IdeographicEx  = $Ideographic $Extend*;
+$HiraganaEx     = $Hiragana     $Extend*  $Format*;
+$IdeographicEx  = $Ideographic  $Extend*  $Format*;
 
 ## -------------------------------------------------
 
@@ -57,8 +63,19 @@ $IdeographicEx  = $Ideographic $Extend*;
 # Rule 3 - don't break grapheme clusters.
 #          see character breaks.
 
-$CR $LF;
-[^$Control $CR $LF] $Extend+;
+$CR $LF $Format*;
+[^$Control $CR $LF] $Extend+ $Format*;
+[^$Control $CR $LF] $Extend* $Format+;
+
+# Rule 4 - ignore trailing format characters
+#          For the most part, trailing formats are handled by the $<whatever>Ex
+#          definitions above.  The rule here comes into play when the start of text
+#          begins with a group of Format chars, or with "word" consisting of a single
+#          char that is not in any of the listed word break categories followed by
+#          format char(s).
+.? $Format+;
+
+
 $NumericEx {100};
 $ALetterEx {200};
 $KatakanaEx {300};
@@ -67,14 +84,14 @@ $IdeographicEx {400};
 
 # rule 5
 
-$ALetterEx $Format* $ALetterEx {200};
+$ALetterEx $ALetterEx {200};
 
 # rule 6 and 7
-$ALetterEx $Format* $MidLetterEx  $Format* $ALetterEx {200};
+$ALetterEx $MidLetterEx $ALetterEx {200};
 
 # rule 8
 
-$NumericEx $Format* $NumericEx {100};
+$NumericEx $NumericEx {100};
 
 # rule 9
 
@@ -82,26 +99,26 @@ $ALetterEx $Format* $NumericEx {200};
 
 # rule 10
 
-$NumericEx $Format* $ALetterEx {200};
+$NumericEx $ALetterEx {200};
 
 # rule 11 and 12 
 
-$NumericEx $Format* $MidNumEx $Format* $NumericEx {100};
+$NumericEx $MidNumEx $NumericEx {100};
 
 # rule 13
 
-$KatakanaEx  $Format* $KatakanaEx {300};
+$KatakanaEx  $KatakanaEx {300};
 
 # rule 13a/b
 
-$ALetterEx  $Format* $ExtendNumLetEx {200};    #  (13a)
-$NumericEx  $Format* $ExtendNumLetEx {100};    #  (13a)
-$KatakanaEx $Format* $ExtendNumLetEx {300};    #  (13a)
-$ExtendNumLetEx $Format* $ExtendNumLetEx{200}; #  (13a)
+$ALetterEx      $ExtendNumLetEx {200};    #  (13a)
+$NumericEx      $ExtendNumLetEx {100};    #  (13a)
+$KatakanaEx     $ExtendNumLetEx {300};    #  (13a)
+$ExtendNumLetEx $ExtendNumLetEx{200}; #  (13a)
 
-$ExtendNumLetEx $Format* $ALetterEx  {200};    #  (13b)
-$ExtendNumLetEx $Format* $NumericEx  {100};    #  (13b)
-$ExtendNumLetEx $Format* $KatakanaEx {300};    #  (13b)
+$ExtendNumLetEx $ALetterEx  {200};    #  (13b)
+$ExtendNumLetEx $NumericEx  {100};    #  (13b)
+$ExtendNumLetEx $KatakanaEx {300};    #  (13b)
  
 
 
@@ -109,52 +126,53 @@ $ExtendNumLetEx $Format* $KatakanaEx {300};    #  (13b)
 
 !!reverse;
 
-$BackALetterEx     = $Extend* $ALetter;
-$BackNumericEx     = $Extend* $Numeric;
-$BackMidNumEx      = $Extend* $MidNum;
-$BackMidLetterEx   = $Extend* $MidLetter;
-$BackKatakanaEx    = $Extend* $Katakana;
-$BackExtendNumLetEx= $Extend* $ExtendNumLet;
+$BackALetterEx     = $Format* $Extend* $ALetter;
+$BackNumericEx     = $Format* $Extend* $Numeric;
+$BackMidNumEx      = $Format* $Extend* $MidNum;
+$BackMidLetterEx   = $Format* $Extend* $MidLetter;
+$BackKatakanaEx    = $Format* $Extend* $Katakana;
+$BackExtendNumLetEx= $Format* $Extend* $ExtendNumLet;
 
-$LF $CR;
+$Format* $LF $CR;
 
 # see character breaks
 
-$Extend* [^$Control $CR $LF];
+$Format* $Extend* [^$Control $CR $LF];
+$Format+ .?;
 
 # rule 5
 
-$BackALetterEx $Format* $BackALetterEx;
+$BackALetterEx $BackALetterEx;
 
 # rule 6 and 7
 
-$BackALetterEx $Format* $BackMidLetterEx $Format* $BackALetterEx;
+$BackALetterEx $BackMidLetterEx $BackALetterEx;
 
 
 # rule 8
 
-$BackNumericEx $Format* $BackNumericEx;
+$BackNumericEx $BackNumericEx;
 
 # rule 9
 
-$BackNumericEx  $Format* $BackALetterEx;
+$BackNumericEx $BackALetterEx;
 
 # rule 10
 
-$BackALetterEx $Format* $BackNumericEx;
+$BackALetterEx $BackNumericEx;
 
 # rule 11 and 12
 
-$BackNumericEx $Format* $BackMidNumEx $Format* $BackNumericEx;
+$BackNumericEx $BackMidNumEx $BackNumericEx;
 
 # rule 13
 
-$BackKatakanaEx $Format* $BackKatakanaEx;
+$BackKatakanaEx $BackKatakanaEx;
 
 # rules 13 a/b
 #
-($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx) $Format* $BackExtendNumLetEx; 
-$BackExtendNumLetEx $Format* ($BackALetterEx | $BackNumericEx | $BackKatakanaEx);        
+($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx) $BackExtendNumLetEx; 
+$BackExtendNumLetEx ($BackALetterEx | $BackNumericEx | $BackKatakanaEx);
 
 ## -------------------------------------------------
 
@@ -162,29 +180,23 @@ $BackExtendNumLetEx $Format* ($BackALetterEx | $BackNumericEx | $BackKatakanaEx)
 
 # rule 3
 $Extend+ [^$Extend];
+$Format+ $Extend* [^$Extend];
 $Extend+;               # comes into play when buffer _begins_ with an $Extend+.
-
-# rule 4
-$Format+ $BackALetterEx;
-$Format+ $BackNumericEx;
-$Format+ $BackMidLetterEx;
-$Format+ $BackMidNumEx;
-$Format+ $BackKatakanaEx;
-$Format+ $BackExtendNumLetEx;
+$Format+;
 
 
 # rule 6
-$MidLetter $Format* $BackALetterEx;
+$MidLetter $BackALetterEx;
 
 # rule 11
-$MidNum $Format* $BackNumericEx;
+$MidNum $BackNumericEx;
 
 ## -------------------------------------------------
 
 !!safe_forward;
 
 # rule 3
-$Extend+;
+$Extend+ $Format*;
 
 # rule 4
 $Extend* $Format+ $ALetterEx;
@@ -202,8 +214,8 @@ $Extend+ $Format* $KatakanaEx;
 $Extend+ $Format* $ExtendNumLetEx;
 
 # rule 6
-$MidLetterEx $Format* $ALetterEx;
+$MidLetterEx $ALetterEx;
 
 # rule 11
-$MidNumEx $Format* $NumericEx;
+$MidNumEx $NumericEx;
 
