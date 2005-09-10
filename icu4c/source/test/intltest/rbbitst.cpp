@@ -2051,15 +2051,15 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
 
     fSets          = new UVector(status);
 
-    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",       status);
+    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
     fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]",     status);
-    fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",  status);
+    fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]",       status);
     fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]",      status);
     fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]",       status);
+    fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]", status);
-    fExtendNumLetSet = new UnicodeSet("[\\p{General_Category = Connector_Punctuation}]", status);
-    fOtherSet      = new UnicodeSet();
+    fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
       deferredStatus = status;
       return;
@@ -2086,8 +2086,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fSets->addElement(fExtendNumLetSet, status);
 
 
-    fGCFMatcher = new RegexMatcher("\\X(?:[\\p{Format}-\\p{Grapheme_Extend}])*", 0, status);
-    fGCMatcher  = new RegexMatcher("\\X", 0, status);
+    fGCFMatcher = new RegexMatcher("\\X(?:[\\p{Word_Break = Format}])*", 0, status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2096,7 +2095,6 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
 
 void RBBIWordMonkey::setText(const UnicodeString &s) {
     fText       = &s;
-    fGCMatcher->reset(*fText);
     fGCFMatcher->reset(*fText);
 }
 
@@ -2120,15 +2118,6 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
     c3 =  fText->char32At(prevPos);
     c0 = c1 = c2 = 0;
 
-
-    // Format char after prev break?  Special case, see last Note for Word Boundaries TR.
-    //    break immdiately after the format char.
-    if (fFormatSet->contains(c3)) {
-        breakPos = fText->moveIndex32(prevPos, 1);
-        return breakPos;
-    }
-
-
     // Loop runs once per "significant" character position in the input text.
     for (;;) {
         // Move all of the positions forward in the input string.
@@ -2143,7 +2132,11 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         } else {
             p3 = fGCFMatcher->end(0, status);
             U_ASSERT(U_SUCCESS(status));
-            c3 = fText->char32At(p3);
+            if (p3<fText->length()) {
+                c3 = fText->char32At(p3);
+            } else {
+                c3 = 0;
+            }
         }
 
         if (p1 == p2) {
@@ -2231,20 +2224,11 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
                 continue;
              }
 
-
         // Rule 14.  Break found here.
         break;
     }
 
-
-    //  Rule 4 fixup,  back up before any trailing
-    //                 format characters at the end of the word.
     breakPos = p2;
-    status = U_ZERO_ERROR;
-    if  (fGCMatcher->find(p1, status)) {
-        breakPos = fGCMatcher->end(0, status);
-        U_ASSERT(U_SUCCESS(status));
-    }
     return breakPos;
 }
 
@@ -2267,7 +2251,6 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fOtherSet;
 
     delete fGCFMatcher;
-    delete fGCMatcher;
 }
 
 
