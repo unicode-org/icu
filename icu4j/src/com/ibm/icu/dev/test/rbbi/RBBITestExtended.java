@@ -1,43 +1,40 @@
 /*
  * Created on May 5, 2004
  * 
- * Copyright (C) 2004 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2005 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.ULocale;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Locale;
 
 
 /**
- * @author andy
+ * Rule based break iterator data driven test.
+ *      Perform the tests from the file rbbitst.txt.
+ *      The test data file is common to both ICU4C and ICU4J.
+ *      See the data file for a description of the tests.
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RBBITestExtended extends TestFmwk {
+    
     public static void main(String[] args)throws Exception {
         new RBBITestExtended().run(args);
     }
-
     
     
-    public RBBITestExtended() { 
+public RBBITestExtended() { 
     }
 
 
@@ -48,12 +45,12 @@ static class TestParams {
     int[]           expectedBreaks = new int[1000];
     int[]           srcLine        = new int[1000];
     int[]           srcCol         = new int[1000];
+    ULocale         currentLocale  = new ULocale("en_US");
 };
 
 
 public void TestExtended() {
 
-    String             rules;
     TestParams     tp = new TestParams();
 
 
@@ -152,28 +149,40 @@ public void TestExtended() {
                 break;
             }
            if (testString.startsWith("<word>", charIdx-1)) {
-                tp.bi = BreakIterator.getWordInstance(Locale.US);
+                tp.bi = BreakIterator.getWordInstance(tp.currentLocale);
                 charIdx += 5;
                 break;
             }
             if (testString.startsWith("<char>", charIdx-1)) {
-                tp.bi = BreakIterator.getCharacterInstance(Locale.US);
+                tp.bi = BreakIterator.getCharacterInstance(tp.currentLocale);
                 charIdx += 5;
                 break;
             }
             if (testString.startsWith("<line>", charIdx-1)) {
-                tp.bi = BreakIterator.getLineInstance(Locale.US);
+                tp.bi = BreakIterator.getLineInstance(tp.currentLocale);
                 charIdx += 5;
                 break;
             }
             if (testString.startsWith("<sent>", charIdx-1)) {
-                tp.bi = BreakIterator.getSentenceInstance(Locale.US);
+                tp.bi = BreakIterator.getSentenceInstance(tp.currentLocale);
                 charIdx += 5;
                 break;
             }
             if (testString.startsWith("<title>", charIdx-1)) {
-                tp.bi = BreakIterator.getTitleInstance(Locale.US);
+                tp.bi = BreakIterator.getTitleInstance(tp.currentLocale);
                 charIdx += 6;
+                break;
+            }
+            if (testString.startsWith("<locale ", charIdx-1)) {
+                int closeIndex = testString.indexOf(">", charIdx);
+                if (closeIndex < 0) {
+                    errln("line" + lineNum + ": missing close on <locale  tag.");
+                    break;
+                }
+                String localeName = testString.substring(charIdx+6, closeIndex);
+                localeName = localeName.trim();
+                tp.currentLocale = new ULocale(localeName);
+                charIdx = closeIndex+1;
                 break;
             }
             if (testString.startsWith("<data>", charIdx-1)) {
@@ -211,7 +220,7 @@ public void TestExtended() {
                 tp.srcCol[idx]  = column;
 
                 parseState = PARSE_TAG;
-                charIdx += 7;
+                charIdx += 6;
 
                 // RUN THE TEST!
                 executeTest(tp);
@@ -372,13 +381,13 @@ void executeTest(TestParams t) {
     prevBP = -1;
     for (bp = t.bi.first(); bp != BreakIterator.DONE; bp = t.bi.next()) {
         if (prevBP ==  bp) {
-            // Fail for lack of forward progress.
+            // Fail for lack of forward progress.currentLocale
             errln("Forward Iteration, no forward progress.  Break Pos=" + bp +
                     "  File line,col=" + t.srcLine[bp] + ", " + t.srcCol[bp]);
             break;
         }
 
-        // Check that there were we didn't miss an expected break between the last one
+        // Check that there were we didn't miss an expected break betcurrentLocaleween the last one
         //  and this one.
         for (i=prevBP+1; i<bp; i++) {
             if (t.expectedBreaks[i] != 0) {
