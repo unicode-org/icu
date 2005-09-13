@@ -140,8 +140,8 @@ public class RBBITestMonkey extends TestFmwk {
             fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
             fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
+            fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
             fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]");
-            fExtendNumLetSet = new UnicodeSet("[\\p{General_Category = Connector_Punctuation}]");
             fOtherSet        = new UnicodeSet();
 
             fOtherSet.complement();
@@ -191,13 +191,6 @@ public class RBBITestMonkey extends TestFmwk {
             c0 = c1 = c2 = 0;
             
             
-            // Format char after prev break?  Special case, see last Note for Word Boundaries TR.
-            // break immdiately after the format char.
-            if (breakPos >= 0 && fFormatSet.contains(c3) && breakPos < (fText.length() -1)) {
-                breakPos = UTF16.moveCodePointOffset(fText, breakPos, 1);
-                return breakPos;
-}
-
 
             // Loop runs once per "significant" character position in the input text.
             for (;;) {
@@ -308,14 +301,7 @@ public class RBBITestMonkey extends TestFmwk {
                 break;
             }
             
-            
-            //  Rule 4 fixup,  back up before any trailing
-            //         format characters at the end of the word.
             breakPos = p2;
-            int  t = nextGC(fText, p1);
-            if (t > p1) {
-                breakPos = t;
-            }
             return breakPos;
         }
         
