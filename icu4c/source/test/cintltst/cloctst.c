@@ -38,6 +38,7 @@
 
 static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
+static void TestLanguageExemplarsFallbacks(void);
 
 void PrintDataTable();
 
@@ -219,6 +220,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetLocale);
     TESTCASE(TestDisplayNameWarning);
     TESTCASE(TestNonexistentLanguageExemplars);
+    TESTCASE(TestLanguageExemplarsFallbacks);
     TESTCASE(TestCalendar);
     TESTCASE(TestDateFormat);
     TESTCASE(TestCollation);
@@ -2278,6 +2280,26 @@ static void TestNonexistentLanguageExemplars(void) {
             u_errorName(ec));
     }
     uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
+    ulocdata_close(uld);
+}
+
+static void TestLanguageExemplarsFallbacks(void) {
+	/* Test that en_US fallsback, but en doesn't fallback. */
+    UErrorCode ec = U_ZERO_ERROR;
+    ULocaleData *uld = ulocdata_open("en_US",&ec);
+    uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
+    if (ec != U_USING_FALLBACK_WARNING) {
+        log_err("Exemplar set for \"en_US\", expecting U_USING_FALLBACK_WARNING, but got %s\n",
+            u_errorName(ec));
+    }
+    ulocdata_close(uld);
+	ec = U_ZERO_ERROR;
+    uld = ulocdata_open("en",&ec);
+    uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
+    if (ec != U_ZERO_ERROR) {
+        log_err("Exemplar set for \"en\", expecting U_ZERO_ERROR, but got %s\n",
+            u_errorName(ec));
+    }
     ulocdata_close(uld);
 }
 
