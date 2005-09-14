@@ -1682,7 +1682,7 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
         UnicodeString* strings = (UnicodeString*)fZoneStringsHash->get(*myKey);
         if(strings != NULL){
             for(int32_t j=0; j<UTZ_MAX_DISPLAY_STRINGS_LENGTH; j++){
-                if(text.caseCompare(start, strings[j].length(), strings[j], 0)==0){
+                if(strings[j].length()>0 && text.caseCompare(start, strings[j].length(), strings[j], 0)==0){
                     type = (TimeZoneTranslationType)j;
                     value.setTo(strings[j]);
                     zid.setTo(*myKey);
