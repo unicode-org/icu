@@ -1935,19 +1935,19 @@ UDate CalendarTest::minDateOfCalendar(const Calendar& cal, UBool &isGregorian, U
   return doMinDateOfCalendar(cal.clone(), isGregorian, status);
 }
 
+typedef enum { TMM_MIN = 0, 
+    TMM_MAX, 
+    TMM_MIN_AMIN,
+    TMM_MAX_AMIN,
+    TMM_MIN_AMAX,
+    TMM_MAX_AMAX,
+    TMM_COUNT
+} TMMType;
 void CalendarTest::TestMaxMin()
 {
     UErrorCode status;
     Calendar *c = Calendar::createInstance("he_IL@calendar=hebrew", status);
     if(U_FAILURE(status)) { errln("Error creating calendar"); return; }
-    enum { TMM_MIN = 0, 
-           TMM_MAX, 
-           TMM_MIN_AMIN,
-           TMM_MAX_AMIN,
-           TMM_MIN_AMAX,
-           TMM_MAX_AMAX,
-           TMM_COUNT
-    } TMMType;
     int32_t fields[TMM_COUNT][UCAL_FIELD_COUNT];
     int32_t i;
     int32_t j;
