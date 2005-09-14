@@ -86,8 +86,7 @@ ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
         localStatus = U_MISSING_RESOURCE_ERROR;
     }
        
-    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
-                                   localStatus != U_USING_FALLBACK_WARNING )) {
+    if (localStatus != U_ZERO_ERROR) {
         *status = localStatus;
     }
     
@@ -129,8 +128,7 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
         localStatus = U_MISSING_RESOURCE_ERROR;
     }
 
-    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
-                                   localStatus != U_USING_FALLBACK_WARNING )) {
+    if (localStatus != U_ZERO_ERROR) {
         *status = localStatus;
     }
 
@@ -146,8 +144,7 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type,
         localStatus = U_MISSING_RESOURCE_ERROR;
     }
 
-    if (U_FAILURE(localStatus) || (localStatus != U_USING_DEFAULT_WARNING && 
-                                   localStatus != U_USING_FALLBACK_WARNING )) {
+    if (localStatus != U_ZERO_ERROR) {
         *status = localStatus;
     }
     
