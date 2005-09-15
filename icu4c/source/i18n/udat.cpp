@@ -35,54 +35,48 @@ udat_open(UDateFormatStyle  timeStyle,
           int32_t           patternLength,
           UErrorCode        *status)
 {
-    if(U_FAILURE(*status)) 
-    {
+    DateFormat *fmt;
+    if(U_FAILURE(*status)) {
         return 0;
     }
-    if(timeStyle != UDAT_IGNORE)
-    {
-        DateFormat *fmt;
-        if(locale == 0)
+    if(timeStyle != UDAT_IGNORE) {
+        if(locale == 0) {
             fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
                 (DateFormat::EStyle)timeStyle);
-        else
+        }
+        else {
             fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
                 (DateFormat::EStyle)timeStyle,
                 Locale(locale));
+        }
+    }
+    else {
+        UnicodeString pat((UBool)(patternLength == -1), pattern, patternLength);
 
-        if(fmt == 0) {
+        if(locale == 0) {
+            fmt = new SimpleDateFormat(pat, *status);
+        }
+        else {
+            fmt = new SimpleDateFormat(pat, Locale(locale), *status);
+        }
+    }
+
+    if(fmt == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
+
+    if(tzID != 0) {
+        TimeZone *zone = TimeZone::createTimeZone(UnicodeString((UBool)(tzIDLength == -1), tzID, tzIDLength));
+        if(zone == 0) {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            delete fmt;
             return 0;
         }
-
-        if(tzID != 0) {
-            TimeZone *zone = TimeZone::createTimeZone(UnicodeString((UBool)(tzIDLength == -1), tzID, tzIDLength));
-            if(zone == 0) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                delete fmt;
-                return 0;
-            }
-            fmt->adoptTimeZone(zone);
-        }
-
-        return (UDateFormat*)fmt;
+        fmt->adoptTimeZone(zone);
     }
-    else
-    {
-        const UnicodeString pat = UnicodeString((UBool)(patternLength == -1), pattern, patternLength);
-        UDateFormat *retVal = 0;
 
-        if(locale == 0)
-            retVal = (UDateFormat*)new SimpleDateFormat(pat, *status);
-        else
-            retVal = (UDateFormat*)new SimpleDateFormat(pat, Locale(locale), *status);
-
-        if(retVal == 0) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-        }
-        return retVal;
-    }
+    return (UDateFormat*)fmt;
 }
 
 
