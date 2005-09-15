@@ -213,9 +213,6 @@ public: // package
      */
     static UDate minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status);
 
- public:
-    void TestMaxMin();
-
   // internal - for other test use
  public:
 
