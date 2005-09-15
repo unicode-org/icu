@@ -2722,7 +2722,7 @@ TestPropertyValues(void) {
                 max);
     }
 
-    /* Script should return 0 for an invalid code point. */
+    /* Script should return USCRIPT_INVALID_CODE for an invalid code point. */
     for (i=0; i<2; ++i) {
         int32_t script;
         const char* desc;
@@ -2742,7 +2742,7 @@ TestPropertyValues(void) {
         }
         /* We don't explicitly test ec.  It should be U_FAILURE but it
            isn't documented as such. */
-        if (script != 0) {
+        if (script != (int32_t)USCRIPT_INVALID_CODE) {
             log_err("FAIL: %s = %d, exp. 0\n",
                     desc, script);
         }
