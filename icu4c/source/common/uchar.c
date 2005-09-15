@@ -806,11 +806,11 @@ u_charAge(UChar32 c, UVersionInfo versionArray) {
 U_CAPI UScriptCode U_EXPORT2
 uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
+        return USCRIPT_INVALID_CODE;
     }
     if((uint32_t)c>0x10ffff) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return USCRIPT_INVALID_CODE;
     }
 
     return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
