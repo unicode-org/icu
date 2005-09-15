@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -191,6 +191,7 @@ void Test4056591()
 
 
 /**
+ * SimpleDateFormat does not properly parse date strings without delimiters
  * @bug 4059917
  */
 void Test4059917() 
@@ -219,7 +220,7 @@ void Test4059917()
     udat_close(def);
     
     u_uastrcpy(pattern, "yyyyMMdd");
-    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,tzID,-1,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
