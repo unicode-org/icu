@@ -492,11 +492,11 @@ extern void
 storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status){
     uint16_t trieWord = 0;
 
-    trieWord += (_SPREP_TYPE_THRESHOLD + type); /* the top 4 bits contain the value */
-    if(trieWord > 0xFFFF){
+    if((int)(_SPREP_TYPE_THRESHOLD + type) > 0xFFFF){
         fprintf(stderr,"trieWord cannot contain value greater than 0xFFFF.\n");
         exit(U_ILLEGAL_CHAR_FOUND);
     }
+    trieWord = (_SPREP_TYPE_THRESHOLD + type); /* the top 4 bits contain the value */
     if(start == end){
         uint32_t savedTrieWord = utrie_get32(sprepTrie, start, NULL);
         if(savedTrieWord>0){
