@@ -45,7 +45,6 @@ The following names can be supplied as the argument for platform:
     MacOSX              Use the GNU gcc/g++ compilers on MacOS X (Darwin)
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
     Solaris             Use the Sun cc/CC compilers on Solaris
-    Solaris/W4.2        Use the Sun Workshop 4.2 CC (old) compiler on Solaris
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
     SolarisX86          Use the Sun cc/CC compilers on Solaris x86
     TRU64V5.1/CXX       Use the Compaq cxx compiler on Tru64 (OSF)
@@ -145,14 +144,6 @@ case $platform in
         RELEASE_CFLAGS="-xO4 -xlibmil"
         RELEASE_CXXFLAGS="-O4 -xlibmil"
         ;;
-    Solaris/W4.2)
-        THE_OS=SOLARIS
-        THE_COMP="Sun's CC"
-        CC=`which cc`; export CC
-        CXX=`which CC`; export CXX
-        RELEASE_CFLAGS="-xO4 -xlibmil"
-        RELEASE_CXXFLAGS="-O4 -xlibmil +d"
-        ;;
     Solaris/GCC)
         THE_OS=SOLARIS
         THE_COMP="the GNU C++"
@@ -166,8 +157,6 @@ case $platform in
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        CXX_FLAGS="-w";export CXX_FLAGS
-        C_FLAGS="-w";export C_FLAGS
         LDFLAGS="-L -lCrun";export LDFLAGS
         RELEASE_CFLAGS=-xO3
         RELEASE_CXXFLAGS=-O3
