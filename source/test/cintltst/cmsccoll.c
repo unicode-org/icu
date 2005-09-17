@@ -3296,7 +3296,7 @@ static void TestNewJapanese(void) {
 
   static const char *test2[] = {
     "\\u306f\\u309d", /* H\\u309d */
-    /*"\\u30cf\\u30fd",*/ /* K\\u30fd */
+    "\\u30cf\\u30fd", /* K\\u30fd */
     "\\u306f\\u306f", /* HH */
     "\\u306f\\u30cf", /* HK */
     "\\u30cf\\u30cf", /* KK */
@@ -4654,6 +4654,15 @@ TestThaiSortKey(void)
   ucol_close(coll);
 }
 
+static void
+TestUpperFirstQuaternary(void)
+{
+  char* tests[] = { "B", "b", "Bb", "bB" };
+  UColAttribute att[] = { UCOL_STRENGTH, UCOL_CASE_FIRST };
+  UColAttributeValue attVals[] = { UCOL_QUATERNARY, UCOL_UPPER_FIRST };
+  genericLocaleStarterWithOptions("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]));
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4718,6 +4727,7 @@ void addMiscCollTest(TestNode** root)
     /*TEST(TestMoreBefore);*/
     TEST(TestTailorNULL);
     TEST(TestThaiSortKey);
+    TEST(TestUpperFirstQuaternary);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
