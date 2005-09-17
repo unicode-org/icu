@@ -518,6 +518,12 @@ public class CollationMiscTest extends TestFmwk {
             else if (attrs[i].equals("NumericCollation")) {
                 coll.setNumericCollation(((Boolean)values[i]).booleanValue());
             }
+            else if (attrs[i].equals("UpperFirst")) {
+                coll.setUpperCaseFirst(((Boolean)values[i]).booleanValue());
+            }
+            else if (attrs[i].equals("LowerFirst")) {
+                coll.setLowerCaseFirst(((Boolean)values[i]).booleanValue());
+            }
         }
         
         genericOrderingTest(coll, s);
@@ -2106,4 +2112,12 @@ public class CollationMiscTest extends TestFmwk {
         genericLocaleStarter(new Locale("zh"), test2);
     }
 
+    public void
+    TestUpperFirstQuaternary()
+    {
+      String tests[] = { "B", "b", "Bb", "bB" };
+      String[] att = { "strength", "UpperFirst" };
+      Object attVals[] = { new Integer(Collator.QUATERNARY), new Boolean(true) };
+      genericLocaleStarterWithOptions(new Locale("root"), tests, att, attVals);
+    }
 }
