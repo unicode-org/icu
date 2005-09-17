@@ -4672,9 +4672,10 @@ ucol_calcSortKey(const    UCollator    *coll,
                 if (tertiary == tertiaryCommon && notIsContinuation) {
                   ++count3;
                 } else {
-                  if((tertiary > tertiaryCommon && tertiaryCommon == UCOL_COMMON3_NORMAL)
-                    || (tertiary <= tertiaryCommon && tertiaryCommon == UCOL_COMMON3_UPPERFIRST)) {
+                  if(tertiary > tertiaryCommon && tertiaryCommon == UCOL_COMMON3_NORMAL) {
                     tertiary += tertiaryAddition;
+                  } else if(tertiary <= tertiaryCommon && tertiaryCommon == UCOL_COMMON3_UPPERFIRST) {
+                    tertiary -= tertiaryAddition;
                   }
                   if (count3 > 0) {
                     if ((tertiary > tertiaryCommon)) {
