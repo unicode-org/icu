@@ -36,12 +36,15 @@
 ******************************************************************************
 */
 
-#ifndef PTX
-
 /* Define _XOPEN_SOURCE for Solaris and friends. */
 /* NetBSD needs it to be >= 4 */
 #ifndef _XOPEN_SOURCE
+#if __STDC_VERSION__ >= 199901L
+/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 */
+#define _XOPEN_SOURCE 600
+#else
 #define _XOPEN_SOURCE 4
+#endif
 #endif
 
 /* Define __USE_POSIX and __USE_XOPEN for Linux and glibc. */
@@ -51,8 +54,6 @@
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
 #endif
-
-#endif /* PTX */
 
 /* include ICU headers */
 #include "unicode/utypes.h"
