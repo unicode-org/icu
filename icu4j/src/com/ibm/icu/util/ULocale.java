@@ -745,7 +745,7 @@ public final class ULocale implements Serializable {
         if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
             result = defaultULocale;
         } else {
-            result = new ULocale(unpackLocale(loc), loc);
+            result = new ULocale(loc.toString(), loc);
         }
         return result;
     }
