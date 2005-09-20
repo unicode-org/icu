@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -277,7 +277,7 @@ uprv_isInvariantUString(const UChar *s, int32_t length) {
 /* UDataSwapFn implementations used in udataswp.c ------- */
 
 /* convert ASCII to EBCDIC and verify that all characters are invariant */
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_ebcdicFromAscii(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
                      UErrorCode *pErrorCode) {
