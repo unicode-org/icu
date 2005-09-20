@@ -266,7 +266,7 @@ udata_printError(const UDataSwapper *ds,
  * Swap invariant char * strings ASCII->EBCDIC.
  * @internal
  */
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_ebcdicFromAscii(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
                      UErrorCode *pErrorCode);
