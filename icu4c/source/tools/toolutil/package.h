@@ -106,6 +106,10 @@ public:
     void listItems(FILE *file);
 
 private:
+    void enumDependencies(Item *pItem);
+
+    static void checkDependency(void *context, const char *itemName, const char *targetName);
+
     /*
      * Allocate a string in inStrings or outStrings.
      * The length does not include the terminating NUL.
