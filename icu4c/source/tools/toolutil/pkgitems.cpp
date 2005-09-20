@@ -53,8 +53,6 @@ printError(void *context, const char *fmt, va_list args) {
 
 typedef void U_CALLCONV CheckDependency(void *context, const char *itemName, const char *targetName);
 
-U_CDECL_END
-
 static uint16_t
 readSwapUInt16(uint16_t x) {
     return (uint16_t)((x<<8)|(x>>8));
@@ -66,7 +64,7 @@ readSwapUInt16(uint16_t x) {
  * assemble the target item name from the source item name, an ID
  * and a prefix
  */
-static void
+static void U_CALLCONV
 checkDependency(const char *itemName, const char *id, const char *suffix,
                 CheckDependency check, void *context,
                 UErrorCode *pErrorCode) {
@@ -99,6 +97,8 @@ checkDependency(const char *itemName, const char *id, const char *suffix,
 
     check(context, itemName, target);
 }
+
+U_CDECL_END
 
 // get dependencies from resource bundles ---------------------------------- ***
 
@@ -162,10 +162,9 @@ ures_enumDependencies(const UDataSwapper *ds,
         // for the top-level %%ALIAS string fall through to URES_ALIAS
     case URES_ALIAS:
         {
-            char localeID[32], target[200];
+            char localeID[32];
             const uint16_t *p16;
-            const char *itemLocaleID;
-            int32_t i, stringLength, targetLength;
+            int32_t i, stringLength;
             uint16_t u16, ored16;
 
             stringLength=udata_readInt32(ds, (int32_t)*p);
@@ -408,7 +407,6 @@ ucnv_enumDependencies(const UDataSwapper *ds,
                       CheckDependency check, void *context,
                       UErrorCode *pErrorCode) {
     uint32_t staticDataSize;
-    int32_t size;
 
     const UConverterStaticData *inStaticData;
 
@@ -527,15 +525,17 @@ getDataFormat(const uint8_t dataFormat[4]) {
 
 // enumerate dependencies of a package item -------------------------------- ***
 
+U_NAMESPACE_BEGIN
+
 void
 Package::enumDependencies(Item *pItem) {
     const UDataInfo *pInfo;
     const uint8_t *inBytes;
-    int32_t format, length, infoLength, headerLength;
+    int32_t format, length, infoLength, itemHeaderLength;
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    pInfo=getDataInfo(pItem->data,pItem->length, infoLength, headerLength, &errorCode);
+    pInfo=getDataInfo(pItem->data,pItem->length, infoLength, itemHeaderLength, &errorCode);
     if(U_FAILURE(errorCode)) {
         return; // should not occur because readFile() checks headers
     }
@@ -556,8 +556,8 @@ Package::enumDependencies(Item *pItem) {
         ds->printError=printError;
         ds->printErrorContext=stderr;
 
-        inBytes=pItem->data+headerLength;
-        length=pItem->length-headerLength;
+        inBytes=pItem->data+itemHeaderLength;
+        length=pItem->length-itemHeaderLength;
 
         switch(format) {
         case FMT_RES:
@@ -577,3 +577,4 @@ Package::enumDependencies(Item *pItem) {
         }
     }
 }
+U_NAMESPACE_END
