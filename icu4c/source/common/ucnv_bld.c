@@ -1259,7 +1259,13 @@ ucnv_swap(const UDataSwapper *ds,
         inMBCSHeader=(const _MBCSHeader *)inBytes;
         outMBCSHeader=(_MBCSHeader *)outBytes;
 
-        if(!(inMBCSHeader->version[0]==4 || inMBCSHeader->version[1]>=1)) {
+        if(0<=length && length<sizeof(_MBCSHeader)) {
+            udata_printError(ds, "ucnv_swap(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table\n",
+                                length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+        if(!(inMBCSHeader->version[0]==4 && inMBCSHeader->version[1]>=1)) {
             udata_printError(ds, "ucnv_swap(): unsupported _MBCSHeader.version %d.%d\n",
                              inMBCSHeader->version[0], inMBCSHeader->version[1]);
             *pErrorCode=U_UNSUPPORTED_ERROR;
@@ -1275,7 +1281,7 @@ ucnv_swap(const UDataSwapper *ds,
         mbcsHeader.flags=               ds->readUInt32(inMBCSHeader->flags);
         mbcsHeader.fromUBytesLength=    ds->readUInt32(inMBCSHeader->fromUBytesLength);
 
-        extOffset=(int32_t)mbcsHeader.flags>>8;
+        extOffset=(int32_t)(mbcsHeader.flags>>8);
         outputType=(uint8_t)mbcsHeader.flags;
 
         /* make sure that the output type is known */
