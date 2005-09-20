@@ -43,7 +43,7 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 DEFS += -DU_TOOLUTIL_IMPLEMENTATION
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = filestrm.o package.o propsvec.o swapimpl.o toolutil.o unewdata.o \
+OBJECTS = filestrm.o package.o pkgitems.o propsvec.o swapimpl.o toolutil.o unewdata.o \
 ucm.o ucmstate.o uoptions.o uparse.o \
 ucbuf.o xmlparser.o writesrc.o
 

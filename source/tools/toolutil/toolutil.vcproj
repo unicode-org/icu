@@ -152,6 +152,9 @@
 				RelativePath=".\package.cpp">
 			</File>
 			<File
+				RelativePath=".\pkgitems.cpp">
+			</File>
+			<File
 				RelativePath=".\propsvec.c">
 			</File>
 			<File
@@ -193,6 +196,9 @@
 			</File>
 			<File
 				RelativePath=".\package.h">
+			</File>
+			<File
+				RelativePath=".\pkg_imp.h">
 			</File>
 			<File
 				RelativePath=".\propsvec.h">
