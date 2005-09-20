@@ -155,6 +155,7 @@ LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 # Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
 MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+SHARED_OBJECT = $(FINAL_SO_TARGET)
 
 ##  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 # Prefix for the ICU library names
