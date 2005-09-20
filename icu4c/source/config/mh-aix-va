@@ -81,15 +81,11 @@ STATIC_O = o
 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
 %.o: $(srcdir)/%.c
 	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
-%64.o: $(srcdir)/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -q64 -o $@ $<
 
 %.$(STATIC_O): $(srcdir)/%.cpp
 	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
-%64.o: $(srcdir)/%.cpp
-	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -q64 -o $@ $<
 
 
 ## Dependency rules
