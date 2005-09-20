@@ -26,6 +26,9 @@ UNICODE_VERSION=4.1
 !ENDIF
 !MESSAGE ICU data make path is $(ICUMAKE)
 
+# Suffixes for data files
+.SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
+
 ICUOUT=$(ICUMAKE)\out
 
 #  the prefix "icudt21_" for use in filenames
@@ -146,13 +149,19 @@ ICU_PACKAGE_MODE=-m dll
 # instead of building everything from scratch.
 ICUDATA_SOURCE_ARCHIVE=$(ICUSRCDATA)\in\$(ICUPKG).dat
 !IF !EXISTS("$(ICUDATA_SOURCE_ARCHIVE)")
+# Does a big endian version exist either?
+ICUDATA_ARCHIVE=$(ICUSRCDATA)\in\$(U_ICUDATA_NAME)b.dat
+!IF EXISTS("$(ICUDATA_ARCHIVE)")
+ICUDATA_SOURCE_ARCHIVE=$(ICUTMP)\$(ICUPKG).dat
+!ELSE
+# Nothing was usable for input
 !UNDEF ICUDATA_SOURCE_ARCHIVE
 !ENDIF
+!ENDIF
 
-
-# Suffixes for data files
-.SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
-
+!IFDEF ICUDATA_SOURCE_ARCHIVE
+!MESSAGE ICU data source archive is $(ICUDATA_SOURCE_ARCHIVE)
+!ELSE
 # We're including a list of .ucm files.
 # There are several lists, they are all optional.
 
@@ -309,6 +318,7 @@ MISC_FILES = $(MISC_SOURCE:.txt=.res)
 
 # don't include COL_FILES
 ALL_RES = $(ALL_RES) $(RB_FILES) $(MISC_FILES)
+!ENDIF
 
 # Common defines for both ways of building ICU's data library.
 COMMON_ICUDATA_DEPENDENCIES="$(ICUP)\bin\pkgdata.exe" "$(ICUTMP)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
@@ -392,8 +402,8 @@ $(BRK_FILES:.brk =.brk
 	-@erase "$(ICUPKG).dat"
 !ENDIF
 
-# utility target to send us to the right dir
-GODATA :
+# utility target to create missing directories
+CREATE_DIRS :
 	@if not exist "$(ICUOUT)\$(NULL)" mkdir "$(ICUOUT)"
 	@if not exist "$(ICUTMP)\$(NULL)" mkdir "$(ICUTMP)"
 	@if not exist "$(ICUOUT)\build\$(NULL)" mkdir "$(ICUOUT)\build"
@@ -403,6 +413,9 @@ GODATA :
 	@if not exist "$(ICUBLD_PKG)\$(ICUTRNS)\$(NULL)" mkdir "$(ICUBLD_PKG)\$(ICUTRNS)"
 	@if not exist "$(TESTDATAOUT)\$(NULL)" mkdir "$(TESTDATAOUT)"
 	@if not exist "$(TESTDATABLD)\$(NULL)" mkdir "$(TESTDATABLD)"
+
+# utility target to send us to the right dir
+GODATA : CREATE_DIRS
 	@cd "$(ICUBLD_PKG)"
 
 # This is to remove all the data files
@@ -572,16 +585,26 @@ res_index {
 
 # Targets for uidna.spp
 "$(ICUBLD_PKG)\uidna.spp" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\NamePrepProfile.txt"
-	gensprep -s "$(ICUMISC)" -d "$(ICUBLD_PKG)\\" -b uidna -n "$(ICUUNIDATA)" -k -u 3.2.0 NamePrepProfile.txt
+	"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(ICUMISC)" -d "$(ICUBLD_PKG)\\" -b uidna -n "$(ICUUNIDATA)" -k -u 3.2.0 NamePrepProfile.txt
+
+!IFDEF ICUDATA_ARCHIVE
+"$(ICUDATA_SOURCE_ARCHIVE)": CREATE_DIRS $(ICUDATA_ARCHIVE) "$(ICUTOOLS)\icuswap\$(CFG)\icuswap.exe"
+	"$(ICUTOOLS)\icuswap\$(CFG)\icuswap" -t$(U_ICUDATA_ENDIAN_SUFFIX) "$(ICUDATA_ARCHIVE)" "$(ICUDATA_SOURCE_ARCHIVE)"
+!ENDIF
 
 # Dependencies on the tools for the batch inference rules
 
+!IFNDEF ICUDATA_SOURCE_ARCHIVE
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-# used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
-# see Jitterbug 4497
+# This used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
+# This data is now hard coded as a part of the library.
+# See Jitterbug 4497 for details.
 $(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD_PKG)\ucadata.icu"
 
-# used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
-# see Jitterbug 4497
+# This used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
+# This data is now hard coded as a part of the library.
+# See Jitterbug 4497 for details.
 $(BRK_SOURCE) : "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu"
+!ENDIF
+
