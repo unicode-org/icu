@@ -104,55 +104,67 @@ makeTypeProps(char type, uint8_t &charset, UBool &isBigEndian) {
     isBigEndian=(UBool)(typeEnum&1);
 }
 
-static int32_t
-getTypeEnumForInputData(const uint8_t *data, int32_t length,
-                        UErrorCode *pErrorCode) {
+U_CFUNC const UDataInfo *
+getDataInfo(const uint8_t *data, int32_t length,
+            int32_t &infoLength, int32_t &headerLength,
+            UErrorCode *pErrorCode) {
     const DataHeader *pHeader;
-    uint16_t headerLength, infoSize;
-    UBool inIsBigEndian;
-    int8_t inCharset;
+    const UDataInfo *pInfo;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return -1;
+        return NULL;
     }
     if( data==NULL ||
         (length>=0 && length<sizeof(DataHeader))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return -1;
+        return NULL;
     }
 
     pHeader=(const DataHeader *)data;
+    pInfo=&pHeader->info;
     if( (length>=0 && length<sizeof(DataHeader)) ||
         pHeader->dataHeader.magic1!=0xda ||
         pHeader->dataHeader.magic2!=0x27 ||
-        pHeader->info.sizeofUChar!=2
+        pInfo->sizeofUChar!=2
     ) {
         *pErrorCode=U_UNSUPPORTED_ERROR;
-        return -1;
+        return NULL;
     }
 
-    inIsBigEndian=(UBool)pHeader->info.isBigEndian;
-    inCharset=pHeader->info.charsetFamily;
-
-    if(inIsBigEndian==U_IS_BIG_ENDIAN) {
+    if(pInfo->isBigEndian==U_IS_BIG_ENDIAN) {
         headerLength=pHeader->dataHeader.headerSize;
-        infoSize=pHeader->info.size;
+        infoLength=pInfo->size;
     } else {
         headerLength=readSwapUInt16(pHeader->dataHeader.headerSize);
-        infoSize=readSwapUInt16(pHeader->info.size);
+        infoLength=readSwapUInt16(pInfo->size);
     }
 
     if( headerLength<sizeof(DataHeader) ||
-        infoSize<sizeof(UDataInfo) ||
-        headerLength<(sizeof(pHeader->dataHeader)+infoSize) ||
+        infoLength<sizeof(UDataInfo) ||
+        headerLength<(int32_t)(sizeof(pHeader->dataHeader)+infoLength) ||
         (length>=0 && length<headerLength)
     ) {
         *pErrorCode=U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+
+    return pInfo;
+}
+
+static int32_t
+getTypeEnumForInputData(const uint8_t *data, int32_t length,
+                        UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t infoLength, headerLength;
+
+    /* getDataInfo() checks for illegal arguments */
+    pInfo=getDataInfo(data, length, infoLength, headerLength, pErrorCode);
+    if(pInfo==NULL) {
         return -1;
     }
 
-    return makeTypeEnum(inCharset, inIsBigEndian);
+    return makeTypeEnum(pInfo->charsetFamily, (UBool)pInfo->isBigEndian);
 }
 
 // file handling ----------------------------------------------------------- ***
@@ -1117,7 +1129,17 @@ Package::listItems(FILE *file) {
 
     for(i=0; i<itemCount; ++i) {
         fprintf(file, "%s\n", items[i].name);
+        enumDependencies(items+i);
     }
+}
+
+void
+Package::checkDependency(void *context, const char *itemName, const char *targetName) {
+    // TODO
+    // check dependency: make sure target is in the package
+    // list dependencies?
+    Package *me=(Package *)context;
+    fprintf(stderr, "item %s depends on %s\n", itemName, targetName);
 }
 
 char *
