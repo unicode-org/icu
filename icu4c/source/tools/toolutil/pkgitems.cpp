@@ -51,7 +51,9 @@ printError(void *context, const char *fmt, va_list args) {
     vfprintf((FILE *)context, fmt, args);
 }
 
-typedef void U_CALLCONV CheckDependency(void *context, const char *itemName, const char *targetName);
+U_CDECL_END
+
+typedef void CheckDependency(void *context, const char *itemName, const char *targetName);
 
 static uint16_t
 readSwapUInt16(uint16_t x) {
@@ -64,7 +66,7 @@ readSwapUInt16(uint16_t x) {
  * assemble the target item name from the source item name, an ID
  * and a prefix
  */
-static void U_CALLCONV
+static void 
 checkDependency(const char *itemName, const char *id, const char *suffix,
                 CheckDependency check, void *context,
                 UErrorCode *pErrorCode) {
@@ -97,8 +99,6 @@ checkDependency(const char *itemName, const char *id, const char *suffix,
 
     check(context, itemName, target);
 }
-
-U_CDECL_END
 
 // get dependencies from resource bundles ---------------------------------- ***
 
