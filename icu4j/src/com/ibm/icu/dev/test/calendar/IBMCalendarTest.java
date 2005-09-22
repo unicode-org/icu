@@ -632,7 +632,7 @@ public class IBMCalendarTest extends CalendarTest {
         // Test index by country API
 
         // Format: {country, zone1, zone2, ..., zoneN}
-        String COUNTRY[][] = { {"", "GMT", "UTC"},
+        String COUNTRY[][] = { {""},
                                {"US", "America/Los_Angeles", "PST"} };
         StringBuffer buf = new StringBuffer();
         for (int i=0; i<COUNTRY.length; ++i) {
@@ -646,7 +646,7 @@ public class IBMCalendarTest extends CalendarTest {
                 buf.append(a[j]);
                 for (int k=1; k<COUNTRY[i].length; ++k) {
                     if ((mask & (1<<k)) == 0 &&
-                        a[j] == COUNTRY[i][k]) {
+                        a[j].equals(COUNTRY[i][k])) {
                         mask |= (1<<k);
                     }
                 }
@@ -669,7 +669,7 @@ public class IBMCalendarTest extends CalendarTest {
         buf.append("Equivalent to PST: ");
         for (int i=0; i<n; ++i) {
             String id = ZoneMeta.getEquivalentID("PST", i);
-            if (id == "America/Los_Angeles") {
+            if (id.equals("America/Los_Angeles")) {
                 ok = true;
             }
             if (i!=0) buf.append(", ");

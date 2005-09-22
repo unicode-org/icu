@@ -9,6 +9,7 @@ import com.ibm.icu.util.*;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.text.*;
@@ -108,7 +109,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                 }
                 if (bad) errln("TimeZone problems with GC");
             }
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             warnln("Could not load data. "+ e.getMessage());
         }
     }
@@ -954,7 +955,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         if (a.hashCode() != b.hashCode()) {
             errln("Calendar hash code unequal for cloned objects");
         }
-
+        TimeZone atz1 = a.getTimeZone();
+        TimeZone atz2 = (TimeZone)atz1.clone();
+        if(!atz1.equals(atz2)){
+        	errln("The clone timezones are not equal");
+        }
+        if(atz1.hashCode()!=atz2.hashCode()){
+        	errln("TimeZone hash code unequal for cloned objects");
+        }
         b.setMinimalDaysInFirstWeek(7 - a.getMinimalDaysInFirstWeek());
         if (a.hashCode() == b.hashCode()) {
             errln("Calendar hash code ignores minimal days in first week");
@@ -975,8 +983,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         
         // Assume getTimeZone() returns a reference, not a clone
         // of a reference -- this is true as of this writing
-        b.getTimeZone().setRawOffset(a.getTimeZone().getRawOffset() + 60*60*1000);
-        if (a.hashCode() == b.hashCode()) {
+        TimeZone atz = a.getTimeZone();
+        TimeZone btz = b.getTimeZone();
+
+        btz.setRawOffset(atz.getRawOffset() + 60*60*1000);
+        if(atz.hashCode()== btz.hashCode()){
+        	errln(atz.hashCode()+"=="+btz.hashCode());
+        }
+        if (a.getTimeZone()!= b.getTimeZone() && a.hashCode() == b.hashCode()) {
             errln("Calendar hash code ignores zone");
         }
         b.getTimeZone().setRawOffset(a.getTimeZone().getRawOffset());

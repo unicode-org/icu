@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -54,18 +54,26 @@ public class TimeZoneRegression extends TestFmwk {
         z.setEndRule(Calendar.MARCH, -1, Calendar.SUNDAY, 0);
         if (!z.useDaylightTime())
             errln("Fail: DST not active");
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        Calendar tempcal = Calendar.getInstance();
         tempcal.clear();
+        tempcal.setTimeZone(z);
         tempcal.set(1997, Calendar.JANUARY, 31);
         Date d1 = tempcal.getTime();
+        if (z.inDaylightTime(d1)) {
+            errln("Fail: DST not working as expected");
+        } 
+
         tempcal.set(1997, Calendar.MARCH, 1);
         Date d2 = tempcal.getTime();
-        tempcal.set(1997, Calendar.MARCH, 31);
-        Date d3 = tempcal.getTime();
-        if (z.inDaylightTime(d1) || !z.inDaylightTime(d2) ||
-            z.inDaylightTime(d3)) {
+        if (!z.inDaylightTime(d2)) {
             errln("Fail: DST not working as expected");
         }
+        tempcal.clear();
+        tempcal.set(1997, Calendar.MARCH, 31);
+        Date d3 = tempcal.getTime();
+        if (z.inDaylightTime(d3)) {
+            errln("Fail: DST not working as expected");
+        } 
     }
 
     /**
@@ -446,7 +454,7 @@ public class TimeZoneRegression extends TestFmwk {
             GOOD, Integer.MIN_VALUE,    0,  Integer.MAX_VALUE,   Integer.MIN_VALUE,
             GOOD, Calendar.JANUARY,    -5,  Calendar.SUNDAY,     0,
             GOOD, Calendar.DECEMBER,    5,  Calendar.SATURDAY,   24*60*60*1000-1,
-            BAD,  Calendar.DECEMBER,    5,  Calendar.SATURDAY,   24*60*60*1000,
+            BAD,  Calendar.DECEMBER,    5,  Calendar.SATURDAY,   24*60*60*1000+1,
             BAD,  Calendar.DECEMBER,    5,  Calendar.SATURDAY,  -1,
             BAD,  Calendar.JANUARY,    -6,  Calendar.SUNDAY,     0,
             BAD,  Calendar.DECEMBER,    6,  Calendar.SATURDAY,   24*60*60*1000,
@@ -891,6 +899,9 @@ public class TimeZoneRegression extends TestFmwk {
         }
         // Make a valid constructor call for subsequent tests.
         zone = new SimpleTimeZone(0, "A", 0, 1, 0, 0, 0, 1, 0, 0);
+        // Current orgnaization of data in zoneinfor.res allows negative
+        // values fro DOM so comment these tests out
+        /*
         try {
             zone.setStartRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule +savings");
@@ -915,6 +926,7 @@ public class TimeZoneRegression extends TestFmwk {
         } catch(IllegalArgumentException e) {
             logln("(h) " + e.getMessage());
         }
+        */
     }
 
     /**

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -650,7 +650,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
 
         if (tz.inDaylightTime(new Date(max)) == startsInDST)
         {
-            logln("Error: inDaylightTime(" + (new Date(max)) + ") != " + (!startsInDST));
+            errln("Error: inDaylightTime(" + (new Date(max)) + ") != " + (!startsInDST));
         }
 
         while ((max - min) >  INTERVAL)
@@ -835,7 +835,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
 
     public void TestStepwise()
     {
-        findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone("EST"), 2);
+        findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone("America/New_York"), 2);
         // disabled Oct 2003 aliu; ACT could mean anything, depending on the underlying JDK, as of 2.8
         // findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone("ACT"), 2);
         findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone("America/Phoenix"), 0); // Added 3Jan01
