@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -54,6 +54,13 @@ public final class Utility {
         return (source.length == targ.length
                 && arrayRegionMatches(source, 0, targ, 0, source.length));
     }
+    public final static boolean arrayEquals(byte[] source, Object target) {
+        if (source == null) return (target == null);
+        if (!(target instanceof byte[])) return false;
+        byte[] targ = (byte[]) target;
+        return (source.length == targ.length
+                && arrayRegionMatches(source, 0, targ, 0, source.length));
+    }
     ///CLOVER:ON
 
     /**
@@ -70,6 +77,8 @@ public final class Utility {
             return(arrayEquals((int[]) source,target));
         if (source instanceof double[])
             return(arrayEquals((int[]) source,target));
+        if (source instanceof byte[])
+            return(arrayEquals((byte[]) source,target));
         return source.equals(target);
     }
 
@@ -151,6 +160,16 @@ public final class Utility {
         }
         return true;
     }
+    public final static boolean arrayRegionMatches(byte[] source, int sourceStart,
+            byte[] target, int targetStart, int len){
+		int sourceEnd = sourceStart + len;
+		int delta = targetStart - sourceStart;
+		for (int i = sourceStart; i < sourceEnd; i++) {
+			if (source[i] != target[i + delta])
+				return false;
+		}
+		return true;
+	}
     ///CLOVER:ON
 
     /**

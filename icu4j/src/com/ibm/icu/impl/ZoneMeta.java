@@ -10,6 +10,7 @@
 */
 package com.ibm.icu.impl;
 
+import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -53,49 +56,27 @@ public final class ZoneMeta {
      * country.  If there are none, return a zero-length array.
      */
     public static synchronized String[] getAvailableIDs(String country) {
-        if (country == null) {
-            country = "";
+        if(!getOlsonMeta()){
+            return EMPTY;
         }
-        if (COUNTRY_MAP == null) {
-            Set valid = getValidIDs();
-            Set unused = new TreeSet(valid);
-
-            ArrayList list = new ArrayList(); // reuse this below
-
-            COUNTRY_MAP = new TreeMap();
-            for (int i=0; i<ZoneMetaData.COUNTRY.length; ++i) {
-                String[] z = ZoneMetaData.COUNTRY[i];
-
-                // Add all valid IDs to list
-                list.clear();
-                for (int j=1; j<z.length; ++j) {
-                    if (valid.contains(z[j])) {
-                        list.add(z[j]);
-                        unused.remove(z[j]);
-                    }
-                }
-                
-                COUNTRY_MAP.put(z[0], list.toArray(EMPTY));
-            }
-
-            // If there are zones in the underlying JDK that are NOT
-            // in our metadata, then assign them to the non-country.
-            // (Better than nothing.)
-            if (unused.size() > 0) {
-                list.clear();
-                list.addAll(Arrays.asList((String[]) COUNTRY_MAP.get("")));
-                list.addAll(unused);
-                Collections.sort(list);                
-                COUNTRY_MAP.put("", list.toArray(EMPTY));
-            }
+        try{
+	        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+	        ICUResourceBundle regions = top.get(kREGIONS);
+	        ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
+	        ICUResourceBundle temp = regions.get(country);
+	        int[] vector = temp.getIntVector();
+	        assert(vector.length>0);
+	        String[] ret = new String[vector.length];
+	        for (int i=0; i<vector.length; ++i) {
+	            assert(vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT);
+	            ret[i] = names.getString(vector[i]);
+	        }
+	        return ret;
+        }catch(MissingResourceException ex){
+        	//throw away the exception
         }
-        String[] result = (String[]) COUNTRY_MAP.get(country);
-        if (result == null) {
-            result = EMPTY; // per API spec
-        }
-        return result;
+        return EMPTY;
     }
-
     /**
      * Returns the number of IDs in the equivalency group that
      * includes the given ID.  An equivalency group contains zones
@@ -110,11 +91,16 @@ public final class ZoneMeta {
      * @see #getEquivalentID
      */
     public static synchronized int countEquivalentIDs(String id) {
-        if (EQUIV_MAP == null) {
-            createEquivMap();
+
+        ICUResourceBundle res = openOlsonResource(id);
+        int size = res.getSize();
+        if (size == 4 || size == 6) {
+            ICUResourceBundle r=res.get(size-1);
+            //result = ures_getSize(&r); // doesn't work
+            int[] v = r.getIntVector();
+            return v.length;
         }
-        String[] result = (String[]) EQUIV_MAP.get(id);
-        return (result == null) ? 0 : result.length;
+        return 0;
     }
 
     /**
@@ -136,17 +122,29 @@ public final class ZoneMeta {
      * @see #countEquivalentIDs
      */
     public static synchronized String getEquivalentID(String id, int index) {
-        if (EQUIV_MAP == null) {
-            createEquivMap();
+        String result="";
+        ICUResourceBundle res = openOlsonResource(id);
+        int zone = -1;
+        int size = res.getSize();
+        if (size == 4 || size == 6) {
+            ICUResourceBundle r = res.get(size-1);
+            int[] v = r.getIntVector();
+            if (index >= 0 && index < size && getOlsonMeta()) {
+                zone = v[index];
+            }
         }
-        String[] a = (String[]) EQUIV_MAP.get(id);
-        return (a != null && index >= 0 && index < a.length) ?
-            a[index] : "";
+        if (zone >= 0) {
+        	ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle ares = top.get(kNAMES); // dereference Zones section
+            result = ares.getString(zone);
+
+        }
+        return result;
     }
 
     /**
      * Create the equivalency map.
-     */
+     *
     private static void createEquivMap() {
         EQUIV_MAP = new TreeMap();
 
@@ -171,7 +169,7 @@ public final class ZoneMeta {
             }
         }
     }
-
+ */
     private static String[] getCanonicalInfo(String id) {
         if (canonicalMap == null) {
             Map m = new HashMap();
@@ -319,27 +317,6 @@ public final class ZoneMeta {
         return bundle.getStringWithFallback(ZONE_STRINGS+FORWARD_SLASH+format);
     }
 
-    // temporary for icu4j 3.4
-    // locale, hour, gmt, region, fallback
-    private static final String[][] TZ_LOCALIZATION_INFO = {
-        { "am", "+HHmm;-HHmm" },
-        { "bg", "+HHmm;-HHmm", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447{0}" },
-        { "cy", "+HHmm;-HHmm" },
-        { "el", "+HHmm;-HHmm" },
-        { "hr", "+HHmm;-HHmm" },
-        { "ja", "+HHmm;-HHmm", null, "{0}\u6642\u9593", "{0} ({1})\u6642\u9593" },
-        { "nn", "+HH.mm;-HH.mm" },
-        { "sk", "+HHmm;-HHmm" },
-        { "sl", "+HHmm;-HHmm" },
-        { "sr", "+HHmm;-HHmm" },
-        { "sv", "+HH.mm;-HH.mm", "GMT" },
-        { "th", "+HHmm;-HHmm" },
-        { "uk", "+HHmm;-HHmm" },
-        { "zh_Hant", "+HH:mm;-HH:mm" },
-        { "zh", "+HHmm;-HHmm" },
-        { null, "+HH:mm;-HH:mm", "GMT{0}", "{0}", "{0} ({1})" }
-    };
-
     private static Set getValidIDs() {
         // Construct list of time zones that are valid, according
         // to the current underlying core JDK.  We have to do this
@@ -354,13 +331,225 @@ public final class ZoneMeta {
      */
     private static final String[] EMPTY = new String[0];
 
-    /**
-     * Map of country codes to zone lists.
-     */
-    private static Map COUNTRY_MAP = null;
+
 
     /**
-     * Map of zones to equivalent zone lists.
+     * Given an ID, open the appropriate resource for the given time zone.
+     * Dereference aliases if necessary.
+     * @param id zone id
+     * @param res resource, which must be ready for use (initialized but not open)
+     * @return top-level resource bundle
      */
-    private static Map EQUIV_MAP = null;
+    public static ICUResourceBundle openOlsonResource(String id)
+    {
+        if(!getOlsonMeta()){
+            return null;
+        }
+        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle res = getZoneByName(top, id);
+        // Dereference if this is an alias.  Docs say result should be 1
+        // but it is 0 in 2.8 (?).
+         if (res.getSize() <= 1 && getOlsonMeta(top)) {
+            int deref = res.getInt() + 0;
+            ICUResourceBundle ares = top.get(kZONES); // dereference Zones section
+            res = ares.get(deref);
+        } 
+        return res;
+    }
+    /**
+     * Fetch a specific zone by name.  Replaces the getByKey call. 
+     * @param top Top timezone resource
+     * @param id Time zone ID
+     * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
+     */
+    private static ICUResourceBundle getZoneByName(ICUResourceBundle top, String id) {
+        // load the Rules object
+        ICUResourceBundle tmp = top.get(kNAMES);
+        
+        // search for the string
+        int idx = findInStringArray(tmp, id);
+        
+        if((idx == -1)) {
+            // not found 
+            throw new MissingResourceException(kNAMES, tmp.resPath, id);
+            //ures_close(oldbundle);
+            //oldbundle = NULL;
+        } else {
+            tmp = top.get(kZONES); // get Zones object from top
+            tmp = tmp.get(idx); // get nth Zone object
+        }
+        return tmp;
+    }
+    private static int findInStringArray(ICUResourceBundle array, String id){
+        int start = 0;
+        int limit = array.getSize();
+        int mid;
+        String u = null;
+        int lastMid = Integer.MAX_VALUE;
+        if((limit < 1)) { 
+            return -1;
+        }
+        for (;;) {
+            mid = (int)((start + limit) / 2);
+            if (lastMid == mid) {   /* Have we moved? */
+                break;  /* We haven't moved, and it wasn't found. */
+            }
+            lastMid = mid;
+            u = array.getString(mid);
+            if(u==null){
+                break;
+            }
+            int r = id.compareTo(u);
+            if(r==0) {
+                return mid;
+            } else if(r<0) {
+                limit = mid;
+            } else {
+                start = mid;
+            }
+        }
+        return -1;
+    }
+    private static final String kZONEINFO = "zoneinfo";
+    private static final String kREGIONS  = "Regions";
+    private static final String kZONES    = "Zones";
+    private static final String kRULES    = "Rules";
+    private static final String kNAMES    = "Names";
+    private static final String kDEFAULT  = "Default";
+    private static final String kGMT_ID   = "GMT";
+    private static final String kCUSTOM_ID= "Custom";    
+    //private static ICUResourceBundle zoneBundle = null;
+    private static java.util.Enumeration idEnum  = null;
+    /**
+     * The Olson data is stored the "zoneinfo" resource bundle.
+     * Sub-resources are organized into three ranges of data: Zones, final
+     * rules, and country tables.  There is also a meta-data resource
+     * which has 3 integers: The number of zones, rules, and countries,
+     * respectively.  The country count includes the non-country 'Default'.
+     */
+    static int OLSON_ZONE_START = -1; // starting index of zones
+    static int OLSON_ZONE_COUNT = 0;  // count of zones
+
+    /**
+     * Given a pointer to an open "zoneinfo" resource, load up the Olson
+     * meta-data. Return true if successful.
+     */
+    private static boolean getOlsonMeta(ICUResourceBundle top) {
+        if (OLSON_ZONE_START < 0) {
+            ICUResourceBundle res = top.get(kZONES);
+            OLSON_ZONE_COUNT = res.getSize();
+            OLSON_ZONE_START = 0;
+        }
+        return (OLSON_ZONE_START >= 0);
+    }
+
+    /**
+     * Load up the Olson meta-data. Return true if successful.
+     */
+    private static boolean getOlsonMeta() {
+        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        if(OLSON_ZONE_START < 0) {
+            getOlsonMeta(top);
+        }
+        return (OLSON_ZONE_START >= 0);
+    }
+    /**
+     * Lookup the given name in our system zone table.  If found,
+     * instantiate a new zone of that name and return it.  If not
+     * found, return 0.
+     */
+    public static TimeZone getSystemTimeZone(String id) {
+        try{
+            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle res = openOlsonResource(id);
+            TimeZone z = new OlsonTimeZone(top, res);
+            z.setID(id);
+            return z;
+        }catch(Exception ex){
+            return null;
+        }
+    }
+    
+    public static TimeZone getGMT(){
+        TimeZone z = new SimpleTimeZone(0, kGMT_ID);
+        z.setID(kGMT_ID);
+        return z;
+    }
+
+    /**
+     * Parse a custom time zone identifier and return a corresponding zone.
+     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
+     * GMT[+-]hh.
+     * @return a newly created SimpleTimeZone with the given offset and
+     * no Daylight Savings Time, or null if the id cannot be parsed.
+    */
+    public static TimeZone getCustomTimeZone(String id){
+
+        NumberFormat numberFormat = null;
+        
+        String idUppercase = id.toUpperCase();
+
+        if (id.length() > kGMT_ID.length() &&
+            idUppercase.startsWith(kGMT_ID))
+        {
+            ParsePosition pos = new ParsePosition(kGMT_ID.length());
+            boolean negative = false;
+            long offset;
+
+            if (id.charAt(pos.getIndex()) == 0x002D /*'-'*/)
+                negative = true;
+            else if (id.charAt(pos.getIndex()) != 0x002B /*'+'*/)
+                return null;
+            pos.setIndex(pos.getIndex() + 1);
+
+            numberFormat = NumberFormat.getInstance();
+
+            numberFormat.setParseIntegerOnly(true);
+
+        
+            // Look for either hh:mm, hhmm, or hh
+            int start = pos.getIndex();
+            
+            Number n = numberFormat.parse(id, pos);
+            if (pos.getIndex() == start) {
+                return null;
+            }
+            offset = n.longValue();
+
+            if (pos.getIndex() < id.length() &&
+                id.charAt(pos.getIndex()) == 0x003A /*':'*/)
+            {
+                // hh:mm
+                offset *= 60;
+                pos.setIndex(pos.getIndex() + 1);
+                int oldPos = pos.getIndex();
+                n = numberFormat.parse(id, pos);
+                if (pos.getIndex() == oldPos) {
+                    return null;
+                }
+                offset += n.longValue();
+            }
+            else 
+            {
+                // hhmm or hh
+
+                // Be strict about interpreting something as hh; it must be
+                // an offset < 30, and it must be one or two digits. Thus
+                // 0010 is interpreted as 00:10, but 10 is interpreted as
+                // 10:00.
+                if (offset < 30 && (pos.getIndex() - start) <= 2)
+                    offset *= 60; // hh, from 00 to 29; 30 is 00:30
+                else
+                    offset = offset % 100 + offset / 100 * 60; // hhmm
+            }
+
+            if(negative)
+                offset = -offset;
+
+            TimeZone z = new SimpleTimeZone((int)(offset * 60000), kCUSTOM_ID);
+            z.setID(kCUSTOM_ID);
+            return z;
+        }
+        return null;
+    }
 }
