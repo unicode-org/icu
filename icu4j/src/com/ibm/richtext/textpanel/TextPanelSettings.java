@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -44,7 +44,10 @@ public final class TextPanelSettings implements Cloneable, Serializable {
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     
+    static final long serialVersionUID = -4089186663018707478L;
+    
     private static final AttributeMap DEFAULTS;
+    
     static {
         final Float floatZero = new Float(0.0f);
 
