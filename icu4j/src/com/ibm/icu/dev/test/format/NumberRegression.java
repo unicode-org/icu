@@ -1377,21 +1377,21 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     // Scan for locations of min/max int/fract values in the byte array.
     // At the moment (ICU4J 2.1), there is only one instance of each target pair
-        // in the byte stream, so assume first match is it.  Note this is not entirely
+    // in the byte stream, so assume first match is it.  Note this is not entirely
     // failsafe, and needs to be checked if we change the package or structure of
     // this class.
     // Current positions are 890, 880, 886, 876
-    int[] offsets = new int[4];
-    for (int i = 0; i < bytes.length - 1; ++i) {
-        if (bytes[i] == 0x01) { // high byte
-        for (int j = 0; j < offsets.length; ++j) {
-            if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
-            offsets[j] = i;
-            break;
+        int[] offsets = new int[4];
+        for (int i = 0; i < bytes.length - 1; ++i) {
+            if (bytes[i] == 0x01) { // high byte
+                for (int j = 0; j < offsets.length; ++j) {
+                    if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
+                        offsets[j] = i;
+                        break;
+                    }
+                }
             }
         }
-        }
-    }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1407,9 +1407,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     // Change the values in the byte stream so that min > max.
     // Numberformat should catch this and throw an exception.
-    for (int i = 0; i < offsets.length; ++i) {
-        bytes[offsets[i]] = (byte)(4 - i);
-    }
+        for (int i = 0; i < offsets.length; ++i) {
+            bytes[offsets[i]] = (byte)(4 - i);
+        }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1423,11 +1423,11 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
 
     // Set values so they are too high, but min <= max
-    // Format should pass the min<= max test, and DecimalFormat should reset to current maximum
+    // Format should pass the min <= max test, and DecimalFormat should reset to current maximum
     // (for compatibility with versions streamed out before the maximums were imposed).
-    for (int i = 0; i < offsets.length; ++i) {
-        bytes[offsets[i]] = 4;
-    }
+        for (int i = 0; i < offsets.length; ++i) {
+            bytes[offsets[i]] = 4;
+        }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
