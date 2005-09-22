@@ -1020,20 +1020,23 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (strings != null) {
             return zid;
         }
-
-        // Do a search through the equivalency group for the given ID
-        int n = TimeZone.countEquivalentIDs(zid);
-        if (n > 1) {
-            int i;
-            for (i=0; i<n; ++i) {
-                String equivID = TimeZone.getEquivalentID(zid, i);
-                if (equivID != zid) {
-                    strings = (String[])zoneStringsHash.get(equivID);
-                    if (strings != null) {
-                        return equivID;
-                    }
-                }
-            }
+        try{
+	        // Do a search through the equivalency group for the given ID
+	        int n = TimeZone.countEquivalentIDs(zid);
+	        if (n > 1) {
+	            int i;
+	            for (i=0; i<n; ++i) {
+	                String equivID = TimeZone.getEquivalentID(zid, i);
+	                if (equivID != zid) {
+	                    strings = (String[])zoneStringsHash.get(equivID);
+	                    if (strings != null) {
+	                        return equivID;
+	                    }
+	                }
+	            }
+	        }
+        }catch(MissingResourceException ex){
+        	// throw away the exception
         }
         return null;
     }
