@@ -83,7 +83,7 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
-HEADERS = unicode/*.h $(srcdir)/unicode/*.h
+HEADERS = $(srcdir)/unicode/*.h unicode/*.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
