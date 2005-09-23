@@ -22,6 +22,14 @@
 #include "uassert.h"
 #include "ucln_cmn.h"
 
+#if defined(U_DARWIN)
+#include <AvailabilityMacros.h>
+#if (ICU_USE_THREADS == 1) && defined(MAC_OS_X_VERSION_10_4) && defined(MAC_OS_X_VERSION_MIN_REQUIRED) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4)
+#include <libkern/OSAtomic.h>
+#define USE_MAC_OS_ATOMIC_INCREMENT 1
+#endif
+#endif
+
 /* Assume POSIX, and modify as necessary below */
 #define POSIX
 
@@ -511,6 +519,8 @@ umtx_atomic_inc(int32_t *p)  {
     } else {
         #if defined (U_WINDOWS) && ICU_USE_THREADS == 1
             retVal = InterlockedIncrement((LONG*)p);
+        #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
+        	retVal = OSAtomicIncrement32Barrier(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = ++(*p);
@@ -531,6 +541,8 @@ umtx_atomic_dec(int32_t *p) {
     } else {
         #if defined (U_WINDOWS) && ICU_USE_THREADS == 1
             retVal = InterlockedDecrement((LONG*)p);
+        #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
+        	retVal = OSAtomicDecrement32Barrier(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = --(*p);
