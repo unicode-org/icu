@@ -610,7 +610,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 14: name = "TestLineBreaks";
              if(exec) TestLineBreaks();                        break;
         case 15: name = "TestSentBreaks";
-             if(exec) TestSentBreaks();                         break;   // TODO:  reenable this test
+             if(exec) TestSentBreaks();                        break;   
         case 16: name = "TestExtended";
              if(exec) TestExtended();                          break;
         case 17: name = "TestMonkey";
@@ -1312,7 +1312,7 @@ void RBBITest::TestExtended() {
             if (testString.compare(charIdx-1, 6, "<sent>") == 0) {
                 delete tp.bi;
                 tp.bi = NULL;
-                // tp.bi = BreakIterator::createSentenceInstance(locale,  status);  // TODO: re-enable this test.
+                tp.bi = BreakIterator::createSentenceInstance(locale,  status); 
                 charIdx += 5;
                 break;
             }
@@ -2346,7 +2346,7 @@ RBBISentMonkey::RBBISentMonkey():  fGCFMatcher(0)
     fSets->addElement(fCloseSet,   status);
     fSets->addElement(fOtherSet,   status);
 
-    fGCFMatcher = new RegexMatcher("\\X(?:[\\p{Sentence_Break = Format}])*", 0, status);
+    fGCFMatcher = new RegexMatcher("\\X", 0, status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2376,15 +2376,12 @@ int RBBISentMonkey::moveBack(int i) {
         return -1;
     }
     //
-    //  The regular expression for fGCFMatcher is "(Grapheme Cluster)Format*"
-    //  
-    //  We are looking for the index of the first char of the one-of-these that immediately
+    //  We are looking for the index of the first chunk that immediately
     //  precedes the incoming index.  
     testPos = i;
     for (;;) {
         testPos = fText->moveIndex32(testPos, -1); 
-        fGCFMatcher->find(testPos, status);
-        int endPos = fGCFMatcher->end(0, status);
+        int endPos = moveForward(testPos);
         if (endPos < i) {
             return endPos;
         }
@@ -2401,6 +2398,11 @@ int RBBISentMonkey::moveForward(int i) {
     if (i < fText->length()) {
         if (fGCFMatcher->find(i, status)) {
             result = fGCFMatcher->end(0, status);
+            if (!fSepSet->contains(cAt(i))) {
+                while (result<fText->length() && fFormatSet->contains(cAt(result))) {
+                    result = fText->moveIndex32(result, 1);
+                }
+            }
         }
     }
     return result;
@@ -2440,39 +2442,21 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
         p0 = p1;  c0 = c1;
         p1 = p2;  c1 = c2;
         p2 = p3;  c2 = c3;
-        // Advancd p3 by    (GC Format*)   Rules 3, 4
-        status = U_ZERO_ERROR;
-        if  (fGCFMatcher->find(p3, status) == FALSE) {
-            p3 = fText->length();
-            c3 = 0;
-        } else {
-            p3 = fGCFMatcher->end(0, status);
-            U_ASSERT(U_SUCCESS(status));
-            if (p3<fText->length()) {
-                c3 = fText->char32At(p3);
-            } else {
-                c3 = 0;
-            }
-        }
+        // Advancd p3 by  a grapheme cluster.   Rules 3, 4
+        p3 = moveForward(p3);
+        c3 = cAt(p3);
 
-        if (p1 == p2) {
-            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-            continue;
-        }
-        if (p2 == fText->length()) {
+        if (p2 >= fText->length()) {
             // Reached end of string.  Always a break position.
             break;
         }
 
+        if (p2 == prevPos) {
+            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
+            continue;
+        }
         // Rule (3).   Sep  <break>
         if (fSepSet->contains(c1)) {
-            // For this one rule only, trailing format chars don't stick.
-            //  p2 starts out being where the break would be if trailing formats were included.
-            int pbreak = fText->moveIndex32(p1, 1);
-            while (pbreak<p2 && !fFormatSet->contains(fText->char32At(pbreak))) {
-                pbreak = fText->moveIndex32(pbreak, 1);
-            }
-            p2 = pbreak;
             break;
         }
 
@@ -2499,7 +2483,9 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             for (;;) {
                 c = cAt(p8);
                 if (c==-1 || fOLetterSet->contains(c) || fUpperSet->contains(c) ||
-                    fLowerSet->contains(c) || fSepSet->contains(c)) 
+                    fLowerSet->contains(c) || fSepSet->contains(c) ||
+                    fATermSet->contains(c) || fSTermSet->contains(c))   // This last line deviates from
+                                                                        //  the TR.  The TR is wacky.
                 {
                     break;
                 }
@@ -2523,16 +2509,17 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             }
         }
 
-        // Rule (10)  (Sterm | ATerm) Close* Sp  x  (Sp | Sep)
-        if (fSpSet->contains(c1)) {
-            int p10 = p0;
-            while (fCloseSet->contains(cAt(p10))) {
-                p10 = moveBack(p10);
-            }
-            if (fSTermSet->contains(cAt(p10)) || fATermSet->contains(cAt(p10))) {
-                if (fSpSet->contains(c2) || fSepSet->contains(c2)) {
-                    continue;
-                }
+        // Rule (10)  (Sterm | ATerm) Close* Sp*  x  (Sp | Sep)
+        int p10 = p1;
+        while (fSpSet->contains(cAt(p10))) {
+            p10 = moveBack(p10);
+        }
+        while (fCloseSet->contains(cAt(p10))) {
+            p10 = moveBack(p10);
+        }
+        if (fSTermSet->contains(cAt(p10)) || fATermSet->contains(cAt(p10))) {
+            if (fSpSet->contains(c2) || fSepSet->contains(c2)) {
+                continue;
             }
         }
 
@@ -3656,7 +3643,7 @@ void RBBITest::TestMonkey(char *params) {
         logln("Line Break Monkey Test");
         RBBILineMonkey  m;
         BreakIterator  *bi = BreakIterator::createLineInstance(locale, status);
-        if (params == NULL) {
+        if (loopCount >= 10) {
             loopCount = loopCount / 5;   // Line break runs slower than the others.
         }
         if (U_SUCCESS(status)) {
@@ -3668,12 +3655,12 @@ void RBBITest::TestMonkey(char *params) {
         delete bi;
     }
 
-    if (breakType == "sent" /* || breakType == "all" */ ) {    // TODO:  turn on for "all" case.
+    if (breakType == "sent"  ) {   
         logln("Sentence Break Monkey Test");
         RBBISentMonkey  m;
         BreakIterator  *bi = BreakIterator::createSentenceInstance(locale, status);
-        if (params == NULL) {
-            loopCount = loopCount / 3;   // Sentence break also runs slower than the others.
+        if (loopCount >= 10) {
+            loopCount = loopCount / 10;   // Sentence runs slower than the other break types
         }
         if (U_SUCCESS(status)) {
             RunMonkey(bi, m, "sentence", seed, loopCount, useUText);
@@ -3972,18 +3959,25 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 void RBBITest::TestDebug(void) {
 #if 0
     UErrorCode   status = U_ZERO_ERROR;
-    int pos;
+    int pos = 0;
+    int ruleStatus = 0;
 
     RuleBasedBreakIterator* bi =
        // (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
-       (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::Locale("th"), status);
-    UnicodeString s("\\u0E2B\\u0E19\\u0E36\\u0E48\\u0E07\\u0E04\\u0E33");
+       // (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::Locale("th"), status);
+       (RuleBasedBreakIterator *)BreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    UnicodeString s("\\u2008\\u002e\\udc6a\\u37cd\\u71d0\\u2048\\U000e006a\\u002e\\u0046\\ufd3f\\u000a\\u002e");
+    // UnicodeString s("Aaa.  Bcd");
     s = s.unescape();
     bi->setText(s);
-    // bi->last();
+    UBool r = bi->isBoundary(8);
+    printf("%s", r?"true":"false");
+    return;
+    pos = bi->last();
     do {
-        pos = bi->next();
-        printf("%d\n", pos);
+        // ruleStatus = bi->getRuleStatus();
+        printf("%d\t%d\n", pos, ruleStatus);
+        pos = bi->previous();
     } while (pos != BreakIterator::DONE);
 #endif
 }
