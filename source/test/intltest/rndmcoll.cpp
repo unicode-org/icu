@@ -376,9 +376,9 @@ private:
     }
 
     // str  [in]    null-terminated c-string
-    void append(const char * str){
-        for(;*str != 0; str++){
-            append(*str);
+    void append(const char * strToAppend){
+        for(;*strToAppend != 0; strToAppend++){
+            append(*strToAppend);
         }
     }
 
@@ -692,8 +692,8 @@ private:
 
 class VariableNode : public Node {
 public:
-    VariableNode(const char * var_name, NodeSymbolTable * symbols):symbols(*symbols){
-        this->var_name.append_array(var_name, strlen(var_name) + 1);
+    VariableNode(const char * varName, NodeSymbolTable * symbols):symbols(*symbols){
+        this->var_name.append_array(varName, strlen(varName) + 1);
         this->var_ref = NULL;
     }
     UBool link(){
@@ -722,8 +722,8 @@ public:
         return &set + rand() % len;
     }
 
-    Magic_SelectOneChar( const char * set /*char set*/): len(strlen(set)){
-        this->set.append_array(set, len);
+    Magic_SelectOneChar( const char * setStr /*char set*/): len(strlen(set)){
+        this->set.append_array(setStr, len);
     }
 private:
     Buffer_char set;
@@ -812,10 +812,10 @@ public:
         return str;
     }
 
-    RepeatNode(Node * item, int min_count =0, int max_count = 1){
-        this->item = item;
-        this->min_count = min_count;
-        this->max_count = max_count;
+    RepeatNode(Node * otherItem, int minCount =0, int maxCount = 1){
+        this->item = otherItem;
+        this->min_count = minCount;
+        this->max_count = maxCount;
     }
     virtual ~RepeatNode(){
         delete item; // We assume its space is got from heap
