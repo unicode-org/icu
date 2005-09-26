@@ -4657,7 +4657,7 @@ TestThaiSortKey(void)
 static void
 TestUpperFirstQuaternary(void)
 {
-  char* tests[] = { "B", "b", "Bb", "bB" };
+  const char* tests[] = { "B", "b", "Bb", "bB" };
   UColAttribute att[] = { UCOL_STRENGTH, UCOL_CASE_FIRST };
   UColAttributeValue attVals[] = { UCOL_QUATERNARY, UCOL_UPPER_FIRST };
   genericLocaleStarterWithOptions("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]));
