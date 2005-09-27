@@ -4,7 +4,7 @@
 
 /*
 **********************************************************************
-*   Copyright (c) 2002-2004, International Business Machines
+*   Copyright (c) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -51,6 +51,7 @@ private:
     void     calcLastPos(RBBINode  *n);
     void     calcFollowPos(RBBINode *n);
     void     calcChainedFollowPos(RBBINode *n);
+    void     bofFixup(RBBINode *n);
     void     buildStateTable();
     void     flagAcceptingStates();
     void     flagLookAheadStates();
