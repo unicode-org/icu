@@ -413,6 +413,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
     // break position before the current position (we back our internal
     // iterator up one step to prevent handlePrevious() from returning
     // the current position), but not necessarily the last one before
+
     // where we started
 
     int32_t start = current();
@@ -653,7 +654,10 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // otherwise, we can use following() on the position before the specified
     // one and return true if the position we get back is the one the user
     // specified
-    return following(offset - 1) == offset;
+    fText->setIndex(offset);
+    int32_t  backOne = fText->move32(-1, CharacterIterator::kCurrent);
+    UBool    result  = following(backOne) == offset;
+    return result;
 }
 
 /**
@@ -684,84 +688,97 @@ int32_t RuleBasedBreakIterator::handleNext() {
 }
 
 int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
+    int32_t             state;
+    int16_t             category        = 0;
+    RBBIStateTableRow  *row;
+    UChar32 c;
+    int32_t             lookaheadStatus = 0;
+    int32_t             lookaheadTagIdx = 0;
+    int32_t             result          = 0;
+    int32_t             initialPosition = 0;
+    int32_t             lookaheadResult = 0;
+    int32_t             endCount        = 0;
+    UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+
     if (fTrace) {
         RBBIDebugPuts("Handle Next   pos   char  state category");
     }
 
     // No matter what, handleNext alway correctly sets the break tag value.
     fLastStatusIndexValid = TRUE;
+    fLastRuleStatusIndex = 0;
 
     // if we're already at the end of the text, return DONE.
     if (fText == NULL || fData == NULL || fText->hasNext() == FALSE) {
-        fLastRuleStatusIndex = 0;
         return BreakIterator::DONE;
     }
 
-    int32_t initialPosition = fText->getIndex();
-    int32_t result          = initialPosition;
-    int32_t lookaheadResult = 0;
+    //  Set up the starting char.
+    initialPosition = fText->getIndex();
+    result          = initialPosition;
+    c               = fText->current32();
 
-    // Initialize the state machine.  Begin in state 1
-    int32_t            state           = START_STATE;
-    int16_t            category;
-    UChar32            c               = fText->current32();
-    RBBIStateTableRow *row;
-    int32_t            lookaheadStatus = 0;
-    int32_t            lookaheadTagIdx = 0;
+    //  Set the initial state for the state machine
+    state = START_STATE;
+    row = (RBBIStateTableRow *)
+            (statetable->fTableData + (statetable->fRowLen * state));
+    category = (statetable->fFlags & RBBI_BOF_REQUIRED)?  2 : 3;
 
-    fLastRuleStatusIndex = 0;
-
-    row = (RBBIStateTableRow *)    // Point to starting row of state table.
-        (statetable->fTableData + (statetable->fRowLen * state));
-
-    // Character Category fetch for starting character.
-    //    See comments on character category code within loop, below.
-    UTRIE_GET16(&fData->fTrie, c, category);
-    if ((category & 0x4000) != 0)  {
-          fDictionaryCharCount++;
-          category &= ~0x4000;
-        }
 
     // loop until we reach the end of the text or transition to state 0
+    //
     for (;;) {
         if (c == CharacterIterator::DONE && fText->hasNext()==FALSE) {
             // Reached end of input string.
             //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
             //          character value.  Check for DONE first, because it's quicker,
             //          but also need to check fText->hasNext() to be certain.
-
-            if (lookaheadResult > result) {
-                // We ran off the end of the string with a pending look-ahead match.
-                // Treat this as if the look-ahead condition had been met, and return
-                //  the match at the / position from the look-ahead rule.
-                result               = lookaheadResult;
-                fLastRuleStatusIndex = lookaheadTagIdx;
-                lookaheadStatus = 0;
-            } else if (result == initialPosition) {
-                // Ran off end, no match found.
-                // move forward one
-                fText->setIndex(initialPosition);
-                fText->next32();
-                fText->getIndex();
+            if (endCount++ >= 1) {
+                // We have already run the loop one last time with the 
+                //   character set to the psueudo {eof} value.  Now it is time
+                //   to unconditionally bail out.
+                if (lookaheadResult > result) {
+                    // We ran off the end of the string with a pending look-ahead match.
+                    // Treat this as if the look-ahead condition had been met, and return
+                    //  the match at the / position from the look-ahead rule.
+                    result               = lookaheadResult;
+                    fLastRuleStatusIndex = lookaheadTagIdx;
+                    lookaheadStatus = 0;
+                } else if (result == initialPosition) {
+                    // Ran off end, no match found.
+                    // move forward one
+                    fText->setIndex(initialPosition);
+                    fText->next32();
+                }
+                break;
             }
-            break;
+            // Run the loop one last time with the fake end-of-input character category.
+            category = 1;
         }
-        // look up the current character's character category, which tells us
-        // which column in the state table to look at.
-        // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
-        //        not the size of the character going in, which is a UChar32.
-        //
-        UTRIE_GET16(&fData->fTrie, c, category);
 
-        // Check the dictionary bit in the character's category.
-        //    Counter is only used by dictionary based iterators (subclasses).
-        //    Chars that need to be handled by a dictionary have a flag bit set
-        //    in their category values.
         //
-        if ((category & 0x4000) != 0)  {
-            fDictionaryCharCount++;
-            //  And off the dictionary flag bit.
-            category &= ~0x4000;
+        // Get the char category.  An incoming category of 1 or 2 means that
+        //      we are preset for doing the beginning or end of input, and
+        //      that we shouldn't get a category from an actual text input character.
+        //
+        if (category >= 3) {
+            // look up the current character's character category, which tells us
+            // which column in the state table to look at.
+            // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
+            //        not the size of the character going in, which is a UChar32.
+            //
+            UTRIE_GET16(&fData->fTrie, c, category);
+
+            // Check the dictionary bit in the character's category.
+            //    Counter is only used by dictionary based iterators (subclasses).
+            //    Chars that need to be handled by a dictionary have a flag bit set
+            //    in their category values.
+            //
+            if ((category & 0x4000) != 0)  {
+                fDictionaryCharCount++;
+                //  And off the dictionary flag bit.
+                category &= ~0x4000;
+            }
         }
 
         #ifdef RBBI_DEBUG
@@ -776,38 +793,43 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
             }
         #endif
 
-        // look up a state transition in the state table
+        // State Transition - move machine to its next state
+        //
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
             (statetable->fTableData + (statetable->fRowLen * state));
 
-        // Get the next character.  Doing it here positions the iterator
-        //    to the correct position for recording matches in the code that
-        //    follows.
-        c = fText->next32();
+        // Advance to the next character.  
+        // If this is a beginning-of-input loop iteration, don't advance
+        //    the input position.  The next iteration will be processing the
+        //    first real input character.
+        if (category != 2) {
+            c = fText->next32();
+        }
+        category = 3;  // Flag that we aren't at the start of input.
+                       // Exact category doesn't matter, so long as it's >=3.
+
 
         if (row->fAccepting == -1) {
-            // Match found, common case, could have lookahead so we move on to check it
+            // Match found, common case.
             result = fText->getIndex();
-            /// added
             fLastRuleStatusIndex = row->fTagIdx;   // Remember the break status (tag) values.
         }
 
         if (row->fLookAhead != 0) {
             if (lookaheadStatus != 0
                 && row->fAccepting == lookaheadStatus) {
-                // Lookahead match is completed.  Set the result accordingly, but only
-                // if no other rule has matched further in the mean time.
+                // Lookahead match is completed.  
                 result               = lookaheadResult;
                 fLastRuleStatusIndex = lookaheadTagIdx;
                 lookaheadStatus      = 0;
-                /// i think we have to back up to read the lookahead character again
-                /// fText->setIndex(lookaheadResult);
-                /// TODO: this is a simple hack since reverse rules only have simple
-                /// lookahead rules that we can definitely break out from.
-                /// we need to make the lookahead rules not chain eventually.
-                /// return result;
-                /// this is going to be the longest match again
+                // TODO:  make a standalone hard break in a rule work.
+                if (lookAheadHardBreak) {
+                    fText->setIndex(result);
+                    return result;
+                }
+                // Look-ahead completed, but other rules may match further.  Continue on
+                //  TODO:  junk this feature?  I don't think it's used anywhwere.
                 goto continueOn;
             }
 
@@ -819,12 +841,11 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         }
 
 
-        if (row->fAccepting == 0) {
-            // No match, nothing of interest happening, common case.
-            goto continueOn;
+        if (row->fAccepting != 0) {
+            // Because this is an accepting state, any in-progress look-ahead match
+            //   is no longer relavant.  Clear out the pending lookahead status.
+            lookaheadStatus = 0;           // clear out any pending look-ahead match.
         }
-
-        lookaheadStatus = 0;           // clear out any pending look-ahead matches.
 
 continueOn:
         if (state == STOP_STATE) {
@@ -833,6 +854,7 @@ continueOn:
             //   longer match is possible, no matter what characters follow.
             break;
         }
+
     }
 
     // The state machine is done.  Check whether it found a match...
@@ -878,14 +900,33 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
     int32_t            lookaheadResult = 0;
     int32_t            lookaheadTagIdx = 0;
     UChar32            c               = fText->current32();
+    UBool              doingBOF        = (fData->fReverseTable->fFlags & RBBI_BOF_REQUIRED) != 0;
     RBBIStateTableRow *row;
 
+
+    //
+    // Initial (startup) state tble row
+    //
     row = (RBBIStateTableRow *)
         (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
-    UTRIE_GET16(&fData->fTrie, c, category);
-    if ((category & 0x4000) != 0)  {
-        fDictionaryCharCount++;
-        category &= ~0x4000;
+
+    //
+    // Initial char category (state table column).
+    //   If this table required a beginning-of-input test,
+    //     hardwire to column 2
+    //   otherwise do the normal char category thing.
+    //
+    if (doingBOF) {
+        // The rules included a test for being at the start {bof}, which
+        //   requires that we start the run with an extra iteration
+        //   of the state machine with the reserved character category of 2.
+        category = 2;
+    } else {
+        UTRIE_GET16(&fData->fTrie, c, category);
+        if ((category & 0x4000) != 0)  {
+            fDictionaryCharCount++;
+            category &= ~0x4000;
+        }
     }
 
     if (fTrace) {
@@ -898,15 +939,6 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             break;
         }
 
-        UTRIE_GET16(&fData->fTrie, c, category);
-
-        // Check the dictionary bit in the character's category.
-        //    Counter is only used by dictionary based iterators.
-        //
-        if ((category & 0x4000) != 0)  {
-            fDictionaryCharCount++;
-            category &= ~0x4000;
-        }
 
         #ifdef RBBI_DEBUG
             if (fTrace) {
@@ -970,7 +1002,20 @@ continueOn:
         }
 
         // then advance one character backwards
-        c = fText->previous32();
+        if (doingBOF == FALSE) {
+            c = fText->previous32();
+        }
+        doingBOF = FALSE;
+        UTRIE_GET16(&fData->fTrie, c, category);
+        U_ASSERT(category>=2);
+
+        // Check the dictionary bit in the character's category.
+        //    Counter is only used by dictionary based iterators.
+        //
+        if ((category & 0x4000) != 0)  {
+            fDictionaryCharCount++;
+            category &= ~0x4000;
+        }
     }
 
     // Note:  the result postion isn't what is returned to the user by previous(),
@@ -996,67 +1041,100 @@ continueOn:
 //
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable) {
-    if (fText == NULL || statetable == NULL) {
-        return 0;
-    }
-    // break tag is no longer valid after icu switched to exact backwards
-    // positioning.
-    fLastStatusIndexValid = FALSE;
-    if (statetable == NULL) {
-        return fText->setToStart();
-    }
-
-    int32_t            state              = START_STATE;
-    int32_t            category;
-    UBool              hasPassedStartText = !fText->hasPrevious();
-    UChar32            c                  = fText->previous32();
-    // previous character
-    int32_t            result             = fText->getIndex();
-    int32_t            lookaheadStatus    = 0;
-    int32_t            lookaheadResult    = 0;
-    UBool              lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
-
-    RBBIStateTableRow *row;
-
-    row = (RBBIStateTableRow *)
-        (statetable->fTableData + (state * statetable->fRowLen));
-    UTRIE_GET16(&fData->fTrie, c, category);
-    if ((category & 0x4000) != 0)  {
-        fDictionaryCharCount++;
-        category &= ~0x4000;
-    }
+    int32_t             state;
+    int16_t             category        = 0;
+    RBBIStateTableRow  *row;
+    UChar32 c;
+    int32_t             lookaheadStatus = 0;
+    int32_t             result          = 0;
+    int32_t             initialPosition = 0;
+    int32_t             lookaheadResult = 0;
+    int32_t             endCount        = 0;
+    UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
     if (fTrace) {
-        RBBIDebugPuts("Handle Prev   pos   char  state category");
+        RBBIDebugPuts("Handle Previous   pos   char  state category");
     }
 
-    // loop until we reach the beginning of the text or transition to state 0
+    // handlePrevious() never gets the rule status.
+    // Flag the status as invalid; if the user ever asks for status, we will need
+    // to back up, then re-find the break position using handleNext(), which does
+    // get the status value.
+    fLastStatusIndexValid = FALSE;
+    fLastRuleStatusIndex = 0;
+
+    // if we're already at the start of the text, return DONE.
+    if (fText == NULL || fData == NULL || fText->hasPrevious() == FALSE) {
+        return BreakIterator::DONE;
+    }
+
+    //  Set up the starting char.
+    initialPosition = fText->getIndex();
+    result          = initialPosition;
+    c               = fText->previous32();
+
+    //  Set the initial state for the state machine
+    state = START_STATE;
+    row = (RBBIStateTableRow *)
+            (statetable->fTableData + (statetable->fRowLen * state));
+    category = (statetable->fFlags & RBBI_BOF_REQUIRED)?  2 : 3;
+
+
+    // loop until we reach the start of the text or transition to state 0
+    //
     for (;;) {
-        if (hasPassedStartText) {
-            // Ran off the beginning of text.
-            if (*(int32_t *)fData->fHeader->fFormatVersion == 1) {
-                // This is the old (ICU 3.2 and earlier) format data.
-                //   No explicit support for matching {eof}.  Did have hack, though...
-                if (row->fLookAhead != 0 && lookaheadResult == 0) {
-                    result = 0;
+        if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
+            // Reached end of input string.
+            //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
+            //          character value.  Check for DONE first, because it's quicker,
+            //          but also need to check fText->hasNext() to be certain.
+            if (endCount++ >= 1 || 
+                *(int32_t *)fData->fHeader->fFormatVersion == 1 ) {
+                // We have already run the loop one last time with the 
+                //   character set to the psueudo {eof} value.  Now it is time
+                //   to unconditionally bail out.
+                //  (Or we have an old format binary rule file that does not support {eof}.)
+                if (lookaheadResult < result) {
+                    // We ran off the end of the string with a pending look-ahead match.
+                    // Treat this as if the look-ahead condition had been met, and return
+                    //  the match at the / position from the look-ahead rule.
+                    result               = lookaheadResult;
+                    lookaheadStatus = 0;
+                } else if (result == initialPosition) {
+                    // Ran off start, no match found.
+                    // move one index one (towards the start, since we are doing a previous())
+                    fText->setIndex(initialPosition);
+                    fText->previous32();   // TODO:  shouldn't be necessary.  We're already at beginning.  Check.
                 }
                 break;
             }
-            // Newer data format, with support for {eof}.
-            //    end of input is hardwired by rule builder as category/column  1.
+            // Run the loop one last time with the fake end-of-input character category.
             category = 1;
-        } else {
-            // Not at {eof}.
-            //  look up the current character's category (the table column)
-            UTRIE_GET16(&fData->fTrie, c, category);
         }
 
-        // Check the dictionary bit in the character's category.
-        //    Counter is only used by dictionary based iterators.
         //
-        if ((category & 0x4000) != 0)  {
-            fDictionaryCharCount++;
-            category &= ~0x4000;
+        // Get the char category.  An incoming category of 1 or 2 means that
+        //      we are preset for doing the beginning or end of input, and
+        //      that we shouldn't get a category from an actual text input character.
+        //
+        if (category >= 3) {
+            // look up the current character's character category, which tells us
+            // which column in the state table to look at.
+            // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
+            //        not the size of the character going in, which is a UChar32.
+            //
+            UTRIE_GET16(&fData->fTrie, c, category);
+
+            // Check the dictionary bit in the character's category.
+            //    Counter is only used by dictionary based iterators (subclasses).
+            //    Chars that need to be handled by a dictionary have a flag bit set
+            //    in their category values.
+            //
+            if ((category & 0x4000) != 0)  {
+                fDictionaryCharCount++;
+                //  And off the dictionary flag bit.
+                category &= ~0x4000;
+            }
         }
 
         #ifdef RBBI_DEBUG
@@ -1071,84 +1149,85 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
             }
         #endif
 
-        // look up a state transition in the backwards state table
+        // State Transition - move machine to its next state
+        //
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
-            (statetable->fTableData + (state * statetable->fRowLen));
+            (statetable->fTableData + (statetable->fRowLen * state));
 
         if (row->fAccepting == -1) {
-            // Match found, common case, could have lookahead so we move on to check it
+            // Match found, common case.
             result = fText->getIndex();
         }
 
         if (row->fLookAhead != 0) {
             if (lookaheadStatus != 0
                 && row->fAccepting == lookaheadStatus) {
-                // Lookahead match is completed.  Set the result accordingly, but only
-                // if no other rule has matched further in the mean time.
+                // Lookahead match is completed.  
                 result               = lookaheadResult;
                 lookaheadStatus      = 0;
-                /// i think we have to back up to read the lookahead character again
-                /// fText->setIndex(lookaheadResult);
-                /// TODO: this is a simple hack since reverse rules only have simple
-                /// lookahead rules that we can definitely break out from.
-                /// we need to make the lookahead rules not chain eventually.
-                /// return result;
-                /// this is going to be the longest match again
-
-                /// syn wee todo hard coded for line breaks stuff
-                /// needs to provide a tag in rules to ensure a stop.
-
+                // TODO:  make a standalone hard break in a rule work.
                 if (lookAheadHardBreak) {
                     fText->setIndex(result);
                     return result;
                 }
-                fText->setIndex(result);
-
+                // Look-ahead completed, but other rules may match further.  Continue on
+                //  TODO:  junk this feature?  I don't think it's used anywhwere.
                 goto continueOn;
             }
 
-            int32_t    r         = fText->getIndex();
-            lookaheadResult      = r;
-            lookaheadStatus      = row->fLookAhead;
-            goto continueOn;
-        }
-
-        // not lookahead
-        if (row->fAccepting == 0) {
-            // No match, nothing of interest happening, common case.
+            int32_t  r = fText->getIndex();
+            lookaheadResult = r;
+            lookaheadStatus = row->fLookAhead;
             goto continueOn;
         }
 
 
-        // This is a plain (non-look-ahead) accepting state
-        if (!lookAheadHardBreak) {
-            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
-                                     //  But only if not doing the lookAheadHardBreak option,
-                                     //  which needs to force a break no matter what is going
-                                     //  on with the rest of the match, i.e. we can't abandon
-                                     //  a partially completed look-ahead match because some
-                                     //  other rule matched further than the '/' position
-                                     //  in the look-ahead match.
+        if (row->fAccepting != 0) {
+            // Because this is an accepting state, any in-progress look-ahead match
+            //   is no longer relavant.  Clear out the pending lookahead status.
+            lookaheadStatus = 0;           // clear out any pending look-ahead match.
         }
 
 continueOn:
         if (state == STOP_STATE) {
+            // This is the normal exit from the lookup state machine.
+            // We have advanced through the string until it is certain that no
+            //   longer match is possible, no matter what characters follow.
             break;
         }
 
-        if (hasPassedStartText) {
-            break;
+        // Move (backwards) to the next character to process.  
+        // If this is a beginning-of-input loop iteration, don't advance
+        //    the input position.  The next iteration will be processing the
+        //    first real input character.
+        if (category != 2) {
+            c = fText->previous32();
         }
+        category = 3;  // Flag that this is no longer the first loop iteration.
+                        // Exact category doesn't matter, so long as it's >=3.
 
-        // Advance one character backwards
-        hasPassedStartText = !fText->hasPrevious();
-        c = fText->previous32();
+
     }
 
+    // The state machine is done.  Check whether it found a match...
 
+    // If the iterator failed to advance in the match engine, force it ahead by one.
+    //   (This really indicates a defect in the break rules.  They should always match
+    //    at least one character.)
+    if (result == initialPosition) {
+        result = fText->setIndex(initialPosition);
+        fText ->previous32();
+        result = fText->getIndex();
+    }
+
+    // Leave the iterator at our result position.
     fText->setIndex(result);
-
+    #ifdef RBBI_DEBUG
+        if (fTrace) {
+            RBBIDebugPrintf("result = %d\n\n", result);
+        }
+    #endif
     return result;
 }
 
