@@ -94,6 +94,7 @@ RBBISetBuilder::RBBISetBuilder(RBBIRuleBuilder *rb)
     fTrie           = 0;
     fTrieSize       = 0;
     fGroupCount     = 0;
+    fSawBOF         = FALSE;
 }
 
 
@@ -224,7 +225,8 @@ void RBBISetBuilder::build() {
     //
     //    Numbering: # 0  (state table column 0) is unused.
     //               # 1  is reserved - table column 1 is for end-of-input
-    //               # 2  is the first range list.
+    //               # 2  is reserved - table column 2 is for beginning-in-input
+    //               # 3  is the first range list.
     //
     RangeDescriptor *rlSearchRange;
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
@@ -236,20 +238,26 @@ void RBBISetBuilder::build() {
         }
         if (rlRange->fNum == 0) {
             fGroupCount ++;
-            rlRange->fNum = fGroupCount+1; 
+            rlRange->fNum = fGroupCount+2; 
             rlRange->setDictionaryFlag();
-            addValToSets(rlRange->fIncludesSets, fGroupCount+1);
+            addValToSets(rlRange->fIncludesSets, fGroupCount+2);
         }
     }
 
     // Handle input sets that contain the special string {eof}.
     //   Column 1 of the state table is reserved for EOF on input.
-    //   Add this column value (1) to the equivalent expression
+    //   Column 2 is reserved for before-the-start-input.
+    //            (This column can be optimized away later if there are no rule
+    //             references to {bof}.)
+    //   Add this column value (1 or 2) to the equivalent expression
     //     subtree for each UnicodeSet that contains the string {eof}
-    //   Because EOF is not a character in the normal sense, it doesn't
-    //   affect the computation of ranges or TRIE.
+    //   Because {bof} and {eof} are not a characters in the normal sense,
+    //   they doesn't affect the computation of ranges or TRIE.
     static const UChar eofUString[] = {0x65, 0x6f, 0x66, 0};
+    static const UChar bofUString[] = {0x62, 0x6f, 0x66, 0};
+
     UnicodeString eofString(eofUString);
+    UnicodeString bofString(bofUString);
     for (ni=0; ; ni++) {        // Loop over each of the UnicodeSets encountered in the input rules
         usetNode = (RBBINode *)this->fRB->fUSetNodes->elementAt(ni);
         if (usetNode==NULL) {
@@ -258,6 +266,10 @@ void RBBISetBuilder::build() {
         UnicodeSet      *inputSet = usetNode->fInputSet;
         if (inputSet->contains(eofString)) {
             addValToSet(usetNode, 1);
+        }
+        if (inputSet->contains(bofString)) {
+            addValToSet(usetNode, 2);
+            fSawBOF = TRUE;
         }
     }
 
@@ -367,9 +379,18 @@ void  RBBISetBuilder::addValToSet(RBBINode *usetNode, uint32_t val) {
 //
 //------------------------------------------------------------------------
 int32_t  RBBISetBuilder::getNumCharCategories() const {
-    return fGroupCount + 2;
+    return fGroupCount + 3;
 }
 
+
+//------------------------------------------------------------------------
+//
+//   sawBOF
+//
+//------------------------------------------------------------------------
+UBool  RBBISetBuilder::sawBOF() const {
+    return fSawBOF;
+}
 
 
 //------------------------------------------------------------------------

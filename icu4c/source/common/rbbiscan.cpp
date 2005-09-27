@@ -1148,7 +1148,7 @@ void RBBIRuleScanner::scanSet() {
 
     // Verify that the set contains at least one code point.
     //
-    if (uset->charAt(0) == -1) {
+    if (uset->isEmpty()) {
         // This set is empty.
         //  Make it an error, because it almost certainly is not what the user wanted.
         //  Also, avoids having to think about corner cases in the tree manipulation code

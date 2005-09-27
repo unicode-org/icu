@@ -81,6 +81,22 @@ void  RBBITableBuilder::build() {
     }
 
     //
+    // If the rules contained any references to {bof} 
+    //   add a {bof} <cat> <former root of tree> to the
+    //   tree.  Means that all matches must start out with the 
+    //   {bof} fake character.
+    // 
+    if (fRB->fSetBuilder->sawBOF()) {
+        RBBINode *bofTop    = new RBBINode(RBBINode::opCat);
+        RBBINode *bofLeaf   = new RBBINode(RBBINode::leafChar);
+        bofTop->fLeftChild  = bofLeaf;
+        bofTop->fRightChild = fTree;
+        bofLeaf->fParent    = bofTop;
+        bofLeaf->fVal       = 2;      // Reserved value for {bof}.
+        fTree               = bofTop;
+    }
+
+    //
     // Add a unique right-end marker to the expression.
     //   Appears as a cat-node, left child being the original tree,
     //   right child being the end marker.
@@ -124,6 +140,13 @@ void  RBBITableBuilder::build() {
     //
     if (fRB->fChainRules) {
         calcChainedFollowPos(fTree);
+    }
+
+    //
+    //  BOF (start of input) test fixup.
+    //
+    if (fRB->fSetBuilder->sawBOF()) {
+        bofFixup(fTree);
     }
 
     //
@@ -349,8 +372,15 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
         return;
     }
 
-    // Get all nodes that can be the start a match, which is FirstPosition(root)
-    UVector *matchStartNodes = tree->fFirstPosSet;
+    // Get all nodes that can be the start a match, which is FirstPosition()
+    // of the portion of the tree corresponding to user-written rules.
+    // See the tree description in bofFixup().
+    RBBINode *userRuleRoot = tree;
+    if (fRB->fSetBuilder->sawBOF()) {
+        userRuleRoot = tree->fLeftChild->fRightChild;
+    }
+    U_ASSERT(userRuleRoot != NULL);
+    UVector *matchStartNodes = userRuleRoot->fFirstPosSet;
 
 
     // Iteratate over all leaf nodes,
@@ -416,6 +446,62 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
     }
 }
 
+
+//-----------------------------------------------------------------------------
+//
+//   bofFixup.    Fixup for state tables that include {bof} beginning of input testing.
+//                Do an swizzle similar to chaining, modifying the followPos set of
+//                the bofNode to include the followPos nodes from other {bot} nodes
+//                scattered through the tree.
+//
+//                This function has much in common with calcChainedFollowPos().
+//
+//-----------------------------------------------------------------------------
+void RBBITableBuilder::bofFixup(RBBINode *tree) {
+
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
+
+    //   The parse tree looks like this ...
+    //         fTree root  --->       <cat>
+    //                               /     \
+    //                            <cat>   <#end node>
+    //                           /     \
+    //                     <bofNode>   rest
+    //                               of tree
+    //
+    //    We will be adding things to the followPos set of the <bofNode>
+    //
+    RBBINode  *bofNode = fTree->fLeftChild->fLeftChild;
+    U_ASSERT(bofNode->fType == RBBINode::leafChar);
+    U_ASSERT(bofNode->fVal == 2);
+
+    // Get all nodes that can be the start a match of the user-written rules
+    //  (excluding the fake bofNode)
+    //  We want the nodes that can start a match in the
+    //     part labeled "rest of tree"
+    // 
+    UVector *matchStartNodes = fTree->fLeftChild->fRightChild->fFirstPosSet;
+
+    RBBINode *startNode;
+    int       startNodeIx;
+    for (startNodeIx = 0; startNodeIx<matchStartNodes->size(); startNodeIx++) {
+        startNode = (RBBINode *)matchStartNodes->elementAt(startNodeIx);
+        if (startNode->fType != RBBINode::leafChar) {
+            continue;
+        }
+
+        if (startNode->fVal == bofNode->fVal) {
+            //  We found a leaf node corresponding to a {bof} that was
+            //    explicitly written into a rule.
+            //  Add everything from the followPos set of this node to the
+            //    followPos set of the fake bofNode at the start of the tree.
+            //  
+            setAdd(bofNode->fFollowPos, startNode->fFollowPos);
+        }
+    }
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -957,6 +1043,9 @@ void RBBITableBuilder::exportTable(void *where) {
     table->fFlags     = 0;
     if (fRB->fLookAheadHardBreak) {
         table->fFlags  |= RBBI_LOOKAHEAD_HARD_BREAK;
+    }
+    if (fRB->fSetBuilder->sawBOF()) {
+        table->fFlags  |= RBBI_BOF_REQUIRED;
     }
     table->fReserved  = 0;
 
