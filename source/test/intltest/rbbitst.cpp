@@ -2369,7 +2369,6 @@ UVector  *RBBISentMonkey::charClasses() {
 //               Skips over format chars, and 2nd-nth chars of grapheme clusters.
 //               The incoming parameter i must be on a boundary already.
 int RBBISentMonkey::moveBack(int i) {
-    UErrorCode status = U_ZERO_ERROR;
     int        testPos;
 
     if (i <= 0) {
@@ -2417,8 +2416,6 @@ UChar32 RBBISentMonkey::cAt(int pos) {
 }
 
 int32_t RBBISentMonkey::next(int32_t prevPos) {
-    UErrorCode status = U_ZERO_ERROR;
-
     int    p0, p1, p2, p3;    // Indices of the significant code points around the
                               //   break position being tested.  The candidate break
                               //   location is before p2.
