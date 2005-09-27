@@ -146,7 +146,7 @@ void  RBBITableBuilder::build() {
     //  BOF (start of input) test fixup.
     //
     if (fRB->fSetBuilder->sawBOF()) {
-        bofFixup(fTree);
+        bofFixup();
     }
 
     //
@@ -457,7 +457,7 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
 //                This function has much in common with calcChainedFollowPos().
 //
 //-----------------------------------------------------------------------------
-void RBBITableBuilder::bofFixup(RBBINode *tree) {
+void RBBITableBuilder::bofFixup() {
 
     if (U_FAILURE(*fStatus)) {
         return;
@@ -465,9 +465,9 @@ void RBBITableBuilder::bofFixup(RBBINode *tree) {
 
     //   The parse tree looks like this ...
     //         fTree root  --->       <cat>
-    //                               /     \
+    //                               /     \       .
     //                            <cat>   <#end node>
-    //                           /     \
+    //                           /     \  .
     //                     <bofNode>   rest
     //                               of tree
     //
