@@ -1467,6 +1467,7 @@ public:
     virtual UChar32     current32(void) const;
     virtual UBool       hasPrevious();
     virtual int32_t     move(int32_t delta, EOrigin origin);
+    virtual int32_t     move32(int32_t, EOrigin);
     static  UClassID    getStaticClassID(void);
     virtual UClassID    getDynamicClassID(void) const;
 
@@ -1490,7 +1491,6 @@ private:
     virtual UChar         current(void) const                    {U_ASSERT(FALSE); return 0;};
     virtual UChar         next(void)                             {U_ASSERT(FALSE); return 0;};
     virtual UChar         previous(void)                         {U_ASSERT(FALSE); return 0;};
-    virtual int32_t       move32(int32_t, EOrigin)               {U_ASSERT(FALSE); return 0;};
     virtual void          getText(UnicodeString        &)        {U_ASSERT(FALSE);};
 };
 
@@ -1635,6 +1635,18 @@ default:
     return result;
 }
 
+int32_t  CharacterIteratorUT::move32(int32_t amt, EOrigin origin) {
+    switch (origin) {
+case kCurrent: 
+    utext_moveIndex32(fUText, amt);
+    break;
+default:
+    // don't bother with kStart, kEnd.  Not Used by break iteration.
+    U_ASSERT(FALSE);
+    }
+    pos = utext_getNativeIndex(fUText);
+    return pos;
+}
 
 
 void  CharacterIteratorUT::resetTo(const UText *ut, UErrorCode *status) {
@@ -1676,7 +1688,6 @@ UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const
     }
     return result;
 }
-
 
 U_NAMESPACE_END
 
