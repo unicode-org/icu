@@ -3617,8 +3617,7 @@ void RBBITest::TestMonkey(char *params) {
             RunMonkey(bi, m, "char", seed, loopCount, useUText);
             if (breakType == "all" && useUText==FALSE) {
                 // Also run a quick test with UText when "all" is specified
-                // TODO:  re-enable this test
-                // RunMonkey(bi, m, "char", seed, loopCount, TRUE);
+                RunMonkey(bi, m, "char", seed, loopCount, TRUE);
             }
         }
         else {
