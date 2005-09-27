@@ -51,7 +51,7 @@ private:
     void     calcLastPos(RBBINode  *n);
     void     calcFollowPos(RBBINode *n);
     void     calcChainedFollowPos(RBBINode *n);
-    void     bofFixup(RBBINode *n);
+    void     bofFixup();
     void     buildStateTable();
     void     flagAcceptingStates();
     void     flagLookAheadStates();
