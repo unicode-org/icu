@@ -2662,6 +2662,7 @@ RBBILineMonkey::RBBILineMonkey()
     fAL    = new UnicodeSet("[\\p{Line_break=AL}]", status);
     fID    = new UnicodeSet("[\\p{Line_break=ID}]", status);
     fSA    = new UnicodeSet("[\\p{Line_break=SA}]", status);
+    fSG    = new UnicodeSet("[\\ud800-\\udfff]", status);
     fXX    = new UnicodeSet("[\\p{Line_break=XX}]", status);
 
     if (U_FAILURE(status)) {
@@ -2674,6 +2675,7 @@ RBBILineMonkey::RBBILineMonkey()
     fAL->addAll(*fXX);     // Default behavior for XX is identical to AL
     fAL->addAll(*fAI);     // Default behavior for AI is identical to AL
     fAL->addAll(*fSA);     // Default behavior for SA is XX, which defaults to AL
+    fAL->addAll(*fSG);     // Default behavior for SG is identical to AL.
 
     fSets->addElement(fBK, status);
     fSets->addElement(fCR, status);
@@ -2710,6 +2712,7 @@ RBBILineMonkey::RBBILineMonkey()
     fSets->addElement(fID, status);
     fSets->addElement(fWJ, status);
     fSets->addElement(fSA, status);
+    fSets->addElement(fSG, status);
 
     fNumberMatcher = new RegexMatcher(
         "(\\p{Line_Break=PR}\\p{Line_Break=CM}*)?"
@@ -3159,6 +3162,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fAL;
     delete fID;
     delete fSA;
+    delete fSG;
     delete fXX;
 
     delete fCharBI;
