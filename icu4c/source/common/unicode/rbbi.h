@@ -517,16 +517,6 @@ protected:
     virtual int32_t handleNext(void);
 
     /**
-     * This method backs the iterator back up to a "safe position" in the text.
-     * This is a position that we know, without any context, must be a break position.
-     * The various calling methods then iterate forward from this safe position to
-     * the appropriate position to return.  (For more information, see the description
-     * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
-     * @internal
-     */
-    virtual int32_t handlePrevious(void);
-
-    /**
      * Dumps caches and performs other actions associated with a complete change
      * in text or iteration position.  This function is a no-op in RuleBasedBreakIterator,
      * but subclasses can and do override it.

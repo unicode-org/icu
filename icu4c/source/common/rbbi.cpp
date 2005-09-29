@@ -419,7 +419,11 @@ int32_t RuleBasedBreakIterator::previous(void) {
     int32_t start = current();
 
     fText->previous32();
-    int32_t lastResult    = handlePrevious();
+    int32_t lastResult    = handlePrevious(fData->fReverseTable);
+    if (lastResult = UBRK_DONE) {
+        lastResult = fText->startIndex();
+        fText->setIndex(lastResult);
+    }
     int32_t result        = lastResult;
     int32_t lastTag       = 0;
     UBool   breakTagValid = FALSE;
@@ -672,32 +676,55 @@ int32_t RuleBasedBreakIterator::current(void) const {
 // implementation
 //=======================================================================
 
+//
+// RBBIRunMode  -  the state machine runs an extra iteration at the beginning and end
+//                 of user text.  A variable with this enum type keeps track of where we
+//                 are.  The state machine only fetches user input while in the RUN mode.
+//
+enum RBBIRunMode {
+    RBBI_START,     // state machine processing is before first char of input
+    RBBI_RUN,       // state machine processing is in the user text
+    RBBI_END        // state machine processing is after end of user text.
+};
+
 
 //-----------------------------------------------------------------------------------
 //
-//  handleNext()
-//     This method is the actual implementation of the next() method.  All iteration
-//     vectors through here.  This method initializes the state machine to state 1
-//     and advances through the text character by character until we reach the end
-//     of the text or the state machine transitions to state 0.  We update our return
-//     value every time the state machine passes through an accepting state.
-//
+//  handleNext(void)    All forward iteration vectors through this function.
+//                      NOTE:  This function is overridden by the dictionary base break iterator.
+//                             User level API functions go to the dbbi implementation
+//                                 when the break iterator type is dbbi.
+//                             The DBBI implementation sometimes explicitly calls back to here, 
+//                                 its inherited handleNext().
+//                  
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext() {
     return handleNext(fData->fForwardTable);
 }
 
+//-----------------------------------------------------------------------------------
+//
+//  handleNext(stateTable)
+//     This method is the actual implementation of the rbbi next() method. 
+//     It is not overridden by dictionary based break iterators.
+//     This method initializes the state machine to state 1
+//     and advances through the text character by character until we reach the end
+//     of the text or the state machine transitions to state 0.  We update our return
+//     value every time the state machine passes through an accepting state.
+//
+//-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     int32_t             state;
     int16_t             category        = 0;
+    RBBIRunMode         mode;
+    
     RBBIStateTableRow  *row;
-    UChar32 c;
+    UChar32             c;
     int32_t             lookaheadStatus = 0;
     int32_t             lookaheadTagIdx = 0;
     int32_t             result          = 0;
     int32_t             initialPosition = 0;
     int32_t             lookaheadResult = 0;
-    int32_t             endCount        = 0;
     UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
     if (fTrace) {
@@ -722,7 +749,12 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     state = START_STATE;
     row = (RBBIStateTableRow *)
             (statetable->fTableData + (statetable->fRowLen * state));
-    category = (statetable->fFlags & RBBI_BOF_REQUIRED)?  2 : 3;
+    category = 3;
+    mode     = RBBI_RUN;
+    if (statetable->fFlags & RBBI_BOF_REQUIRED) {
+        category = 2;
+        mode     = RBBI_START;
+    }
 
 
     // loop until we reach the end of the text or transition to state 0
@@ -733,7 +765,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
             //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
             //          character value.  Check for DONE first, because it's quicker,
             //          but also need to check fText->hasNext() to be certain.
-            if (endCount++ >= 1) {
+            if (mode == RBBI_END) {
                 // We have already run the loop one last time with the 
                 //   character set to the psueudo {eof} value.  Now it is time
                 //   to unconditionally bail out.
@@ -753,6 +785,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
                 break;
             }
             // Run the loop one last time with the fake end-of-input character category.
+            mode = RBBI_END;
             category = 1;
         }
 
@@ -761,7 +794,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         //      we are preset for doing the beginning or end of input, and
         //      that we shouldn't get a category from an actual text input character.
         //
-        if (category >= 3) {
+        if (mode == RBBI_RUN) {
             // look up the current character's character category, which tells us
             // which column in the state table to look at.
             // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
@@ -803,12 +836,13 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         // If this is a beginning-of-input loop iteration, don't advance
         //    the input position.  The next iteration will be processing the
         //    first real input character.
-        if (category != 2) {
+        if (mode == RBBI_RUN) {
             c = fText->next32();
+        } else {
+            if (mode == RBBI_START) {
+                mode = RBBI_RUN;
+            }
         }
-        category = 3;  // Flag that we aren't at the start of input.
-                       // Exact category doesn't matter, so long as it's >=3.
-
 
         if (row->fAccepting == -1) {
             // Match found, common case.
@@ -879,156 +913,6 @@ continueOn:
 }
 
 
-//----------------------------------------------------------------
-//
-//   handlePrevious(void)     This is the variant used with old style rules
-//                            (Overshoot to a safe point, then move forward)
-//
-//----------------------------------------------------------------
-int32_t RuleBasedBreakIterator::handlePrevious(void) {
-    if (fText == NULL || fData == NULL) {
-        return 0;
-    }
-    if (fData->fReverseTable == NULL) {
-        return fText->setToStart();
-    }
-
-    int32_t            state           = START_STATE;
-    int32_t            category;
-    int32_t            result          = fText->getIndex();
-    int32_t            lookaheadStatus = 0;
-    int32_t            lookaheadResult = 0;
-    int32_t            lookaheadTagIdx = 0;
-    UChar32            c               = fText->current32();
-    UBool              doingBOF        = (fData->fReverseTable->fFlags & RBBI_BOF_REQUIRED) != 0;
-    RBBIStateTableRow *row;
-
-
-    //
-    // Initial (startup) state tble row
-    //
-    row = (RBBIStateTableRow *)
-        (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
-
-    //
-    // Initial char category (state table column).
-    //   If this table required a beginning-of-input test,
-    //     hardwire to column 2
-    //   otherwise do the normal char category thing.
-    //
-    if (doingBOF) {
-        // The rules included a test for being at the start {bof}, which
-        //   requires that we start the run with an extra iteration
-        //   of the state machine with the reserved character category of 2.
-        category = 2;
-    } else {
-        UTRIE_GET16(&fData->fTrie, c, category);
-        if ((category & 0x4000) != 0)  {
-            fDictionaryCharCount++;
-            category &= ~0x4000;
-        }
-    }
-
-    if (fTrace) {
-        RBBIDebugPuts("Handle Prev   pos   char  state category");
-    }
-
-    // loop until we reach the beginning of the text or transition to state 0
-    for (;;) {
-        if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
-            break;
-        }
-
-
-        #ifdef RBBI_DEBUG
-            if (fTrace) {
-                RBBIDebugPrintf("             %4d   ", fText->getIndex());
-                if (0x20<=c && c<0x7f) {
-                    RBBIDebugPrintf("\"%c\"  ", c);
-                } else {
-                    RBBIDebugPrintf("%5x  ", c);
-                }
-                RBBIDebugPrintf("%3d  %3d\n", state, category);
-            }
-        #endif
-
-        // look up a state transition in the backwards state table
-        state = row->fNextState[category];
-        row = (RBBIStateTableRow *)
-            (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
-
-        if (row->fAccepting == 0 && row->fLookAhead == 0) {
-            // No match, nothing of interest happening, common case.
-            goto continueOn;
-        }
-
-        if (row->fAccepting == -1) {
-            // Match found, common case, no lookahead involved.
-            result = fText->getIndex();
-            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
-            goto continueOn;
-        }
-
-        if (row->fAccepting == 0 && row->fLookAhead != 0) {
-            // Lookahead match point.  Remember it, but only if no other rule
-            //                         has unconditionally matched to this point.
-            // TODO:  handle case where there's a pending match from a different rule
-            //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
-            int32_t  r = fText->getIndex();
-            if (r > result) {
-                lookaheadResult = r;
-                lookaheadStatus = row->fLookAhead;
-                lookaheadTagIdx = row->fTagIdx;
-            }
-            goto continueOn;
-        }
-
-        if (row->fAccepting != 0 && row->fLookAhead != 0) {
-            // Lookahead match is completed.  Set the result accordingly, but only
-            //   if no other rule has matched further in the mean time.
-            if (lookaheadResult > result) {
-                U_ASSERT(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
-                //    of overlapping lookahead matches.
-                result               = lookaheadResult;
-                fLastRuleStatusIndex = lookaheadTagIdx;
-                lookaheadStatus = 0;
-            }
-            goto continueOn;
-        }
-
-continueOn:
-        if (state == STOP_STATE) {
-            break;
-        }
-
-        // then advance one character backwards
-        if (doingBOF == FALSE) {
-            c = fText->previous32();
-        }
-        doingBOF = FALSE;
-        UTRIE_GET16(&fData->fTrie, c, category);
-        U_ASSERT(category>=2);
-
-        // Check the dictionary bit in the character's category.
-        //    Counter is only used by dictionary based iterators.
-        //
-        if ((category & 0x4000) != 0)  {
-            fDictionaryCharCount++;
-            category &= ~0x4000;
-        }
-    }
-
-    // Note:  the result postion isn't what is returned to the user by previous(),
-    //        but where the implementation of previous() turns around and
-    //        starts iterating forward again.
-    if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
-        result = fText->startIndex();
-    }
-    fText->setIndex(result);
-
-    return result;
-}
-
 
 //-----------------------------------------------------------------------------------
 //
@@ -1043,13 +927,13 @@ continueOn:
 int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable) {
     int32_t             state;
     int16_t             category        = 0;
+    RBBIRunMode         mode;
     RBBIStateTableRow  *row;
-    UChar32 c;
+    UChar32             c;
     int32_t             lookaheadStatus = 0;
     int32_t             result          = 0;
     int32_t             initialPosition = 0;
     int32_t             lookaheadResult = 0;
-    int32_t             endCount        = 0;
     UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
     if (fTrace) {
@@ -1077,7 +961,12 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     state = START_STATE;
     row = (RBBIStateTableRow *)
             (statetable->fTableData + (statetable->fRowLen * state));
-    category = (statetable->fFlags & RBBI_BOF_REQUIRED)?  2 : 3;
+    category = 3;
+    mode     = RBBI_RUN;
+    if (statetable->fFlags & RBBI_BOF_REQUIRED) {
+        category = 2;
+        mode     = RBBI_START;
+    }
 
 
     // loop until we reach the start of the text or transition to state 0
@@ -1088,7 +977,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
             //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
             //          character value.  Check for DONE first, because it's quicker,
             //          but also need to check fText->hasNext() to be certain.
-            if (endCount++ >= 1 || 
+            if (mode == RBBI_END || 
                 *(int32_t *)fData->fHeader->fFormatVersion == 1 ) {
                 // We have already run the loop one last time with the 
                 //   character set to the psueudo {eof} value.  Now it is time
@@ -1109,6 +998,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 break;
             }
             // Run the loop one last time with the fake end-of-input character category.
+            mode = RBBI_END;
             category = 1;
         }
 
@@ -1117,7 +1007,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         //      we are preset for doing the beginning or end of input, and
         //      that we shouldn't get a category from an actual text input character.
         //
-        if (category >= 3) {
+        if (mode == RBBI_RUN) {
             // look up the current character's character category, which tells us
             // which column in the state table to look at.
             // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
@@ -1186,7 +1076,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         if (row->fAccepting != 0) {
             // Because this is an accepting state, any in-progress look-ahead match
             //   is no longer relavant.  Clear out the pending lookahead status.
-            lookaheadStatus = 0;           // clear out any pending look-ahead match.
+            lookaheadStatus = 0;    
         }
 
 continueOn:
@@ -1201,13 +1091,13 @@ continueOn:
         // If this is a beginning-of-input loop iteration, don't advance
         //    the input position.  The next iteration will be processing the
         //    first real input character.
-        if (category != 2) {
+        if (mode == RBBI_RUN) {
             c = fText->previous32();
+        } else {            
+            if (mode == RBBI_START) {
+                mode = RBBI_RUN;
+            }
         }
-        category = 3;  // Flag that this is no longer the first loop iteration.
-                        // Exact category doesn't matter, so long as it's >=3.
-
-
     }
 
     // The state machine is done.  Check whether it found a match...
