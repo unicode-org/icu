@@ -19,7 +19,7 @@ az_Cyrl{
             "манат",
         }
     }
-    ExemplarCharacters{"[а-ик-хчшыјғҝүҹһәө]"}
+    ExemplarCharacters{"[а-хчшыјғҝүҹһәө]"}
     Languages{
         az{"Азәрбајҹан"}
     }
