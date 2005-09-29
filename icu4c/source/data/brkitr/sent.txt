@@ -100,6 +100,6 @@ $CloseEx_R    = $Format* $Extend* $Close;
 #            may require improving support for look-ahead breaks in the
 #            builder.  Needs more investigation.
 #
-[{bof}] [^$Sep]* ($Sep | $LF $CR) [^$Sep]* [$Sep {eof}] ($SpEx_R* $CloseEx_R* ($STermEx_R | $ATermEx_R))?;
+[{bof}] [^$Sep]* (.? | $LF $CR) [^$Sep]* [$Sep {eof}] ($SpEx_R* $CloseEx_R* ($STermEx_R | $ATermEx_R))?;
 
 
