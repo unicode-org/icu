@@ -1370,6 +1370,7 @@ structLocale{
         af{""}
         afa{""}
         afh{""}
+        ain{""}
         ak{""}
         akk{""}
         ale{""}
