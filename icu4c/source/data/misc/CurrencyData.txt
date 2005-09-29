@@ -242,7 +242,7 @@ CurrencyData{
         PY { "PYG" } // PARAGUAY: Guarani
         QA { "QAR" } // QATAR: Qatari Rial
         RE { "EUR" } // REUNION: Euro
-        RO { "ROL" } // ROMANIA: Leu
+        RO { "RON" } // ROMANIA: Leu
         RU { "RUB" } // RUSSIAN FEDERATION: Russian Ruble
         RW { "RWF" } // RWANDA: Rwanda Franc
         SA { "SAR" } // SAUDI ARABIA: Saudi Riyal
