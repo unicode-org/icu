@@ -1385,7 +1385,7 @@ u_getDataDirectory(void) {
     There may also be some platforms where environment variables
     are not allowed.
     */
-#   if !defined(ICU_NO_USER_DATA_OVERRIDE) && (!defined(UCONFIG_NO_FILE_IO) || !UCONFIG_NO_FILE_IO)
+#   if !defined(ICU_NO_USER_DATA_OVERRIDE) && !UCONFIG_NO_FILE_IO
     /* First try to get the environment variable */
     path=getenv("ICU_DATA");
 #   endif

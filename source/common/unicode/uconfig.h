@@ -59,6 +59,28 @@
 /* common library switches -------------------------------------------------- */
 
 /**
+ * \def UCONFIG_NO_FILE_IO
+ * This switch turns off all file access in the common library
+ * where file access is only used for data loading.
+ * ICU data must then be provided in the form of a data DLL (or with an
+ * equivalent way to link to the data residing in an executable,
+ * as in building a combined library with both the common library's code and
+ * the data), or via udata_setCommonData().
+ * Application data must be provided via udata_setAppData() or by using
+ * "open" functions that take pointers to data, for example ucol_openBinary().
+ *
+ * File access is not used at all in the i18n library.
+ *
+ * File access cannot be turned off for the icuio library or for the ICU
+ * test suites and ICU tools.
+ *
+ * @draft ICU 3.6
+ */
+#ifndef UCONFIG_NO_FILE_IO
+#   define UCONFIG_NO_FILE_IO 0
+#endif
+
+/**
  * \def UCONFIG_NO_CONVERSION
  * ICU will not completely build with this switch turned on.
  * This switch turns off all converters.
