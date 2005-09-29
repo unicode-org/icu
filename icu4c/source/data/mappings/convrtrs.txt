@@ -165,6 +165,8 @@ UTF-16BE { IANA* MIME* JAVA* }  x-utf-16be { JAVA }
                                 ibm-17585 { IBM } # Unicode 3.0, UTF-16 BE
                                 ibm-21680 { IBM } # Unicode 4.0, UTF-16 BE with IBM PUA
                                 ibm-21681 { IBM } # Unicode 4.0, UTF-16 BE
+                                ibm-25776 { IBM } # Unicode 4.1, UTF-16 BE with IBM PUA
+                                ibm-25777 { IBM } # Unicode 4.1, UTF-16 BE
                                 ibm-61955 { IBM } # UTF-16BE with Gaidai University (Japan) PUA
                                 ibm-61956 { IBM } # UTF-16BE with HKSCS-Big 5 PUA
                                 windows-1201 { WINDOWS* }
@@ -184,6 +186,8 @@ UTF-16LE { IANA* MIME* JAVA* }  x-utf-16le { JAVA }
                                 ibm-17587 { IBM } # Unicode 3.0, UTF-16 LE
                                 ibm-21682 { IBM } # Unicode 4.0, UTF-16 LE with IBM PUA
                                 ibm-21683 { IBM } # Unicode 4.0, UTF-16 LE
+                                ibm-25778 { IBM } # Unicode 4.1, UTF-16 LE with IBM PUA
+                                ibm-25779 { IBM } # Unicode 4.1, UTF-16 LE
                                 UTF16_LittleEndian
                                 windows-1200 { WINDOWS* }
 
