@@ -62,7 +62,7 @@ uz{
             "Ўзбекистон сўм",
         }
     }
-    ExemplarCharacters{"[а-яёіўѣѳѵҳ]"}
+    ExemplarCharacters{"[а-яёіўѣѳѵқҳ]"}
     Languages{
         ar{"Арабча"}
         de{"Олмонча"}
