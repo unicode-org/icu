@@ -1,14 +1,14 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 2001-2003, International Business Machines
+# *   Copyright (C) 2001-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created on Feb 21 13:55 PST 2003
+# File created on Sep 26 17:33 PDT 2005
 #
-# File created by genmucm tool.
-# from macos 10.2 using TECCreateConverter
+# File created by genucm tool.
+# from macos 10.4 using TECCreateConverter
 #
 # Table Version : 1.0
 # The 1st column is the Unicode scalar value.
@@ -23,19 +23,19 @@
 # Encoding description: 
 # Encoding name: X-MAC-GREEK
 #
-<code_set_name>               "macos-6-10.2"
+<code_set_name>               "macos-6_2-10.4"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
 <subchar>                     \x3F
 <icu:charsetFamily>           "ASCII"
 # Suggested ICU specific alias information
-#<icu:alias>                  "macos-6_VPUA"
+#<icu:alias>                  "macos-6_2_VPUA"
 
 #
 CHARMAP
 #
-#UNICODE 6
+#UNICODE 6_2
 #_______ _________
 <U0000> \x00 |0
 <U0001> \x01 |0
@@ -174,7 +174,7 @@ CHARMAP
 <U00A9> \xA9 |0
 <U00AB> \xC7 |0
 <U00AC> \xC2 |0
-<U00AD> \x9C |0
+<U00AD> \xFF |0
 <U00AE> \xA8 |0
 <U00B0> \xAE |0
 <U00B1> \xB1 |0
@@ -188,6 +188,7 @@ CHARMAP
 <U00C4> \x80 |0
 <U00C9> \x83 |0
 <U00D6> \x85 |0
+<U00D7> \x2A |1
 <U00DC> \x86 |0
 <U00DF> \xA7 |0
 <U00E0> \x88 |0
@@ -319,6 +320,7 @@ CHARMAP
 <U2028> \x0D |1
 <U2029> \x0D |1
 <U2030> \x98 |0
+<U20AC> \x9C |0
 <U2122> \x93 |0
 <U2212> \x2D |1
 <U2215> \x2F |1
@@ -330,7 +332,7 @@ CHARMAP
 <U2264> \xB2 |0
 <U2265> \xB3 |0
 <U22C5> \xAF |1
-<UF8A0> \xFF |0
+<UF8A0> \x9C |1
 #
 END CHARMAP
 #

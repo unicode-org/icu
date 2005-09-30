@@ -90,7 +90,7 @@ iso-8859_10-1998.ucm\
 iso-8859_11-2001.ucm\
 iso-8859_14-1998.ucm\
 macos-0_2-10.2.ucm\
-macos-6-10.2.ucm\
+macos-6_2-10.4.ucm\
 macos-7_3-10.2.ucm\
 macos-29-10.2.ucm\
 macos-35-10.2.ucm\
