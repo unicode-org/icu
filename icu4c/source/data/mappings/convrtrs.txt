@@ -520,7 +520,7 @@ ibm-33722_P12A-1999 { UTR22* }
                         X-EUC-JP { WINDOWS JAVA }   # Japan EUC. x-euc-jp is a MIME name
                         eucjis { JAVA }
                         windows-51932 { WINDOWS* }
-                        ujis # Linux sometimes uses this name. This is an unfortunate generic and rarely used name. It's use is discouraged.
+                        ujis # Linux sometimes uses this name. This is an unfortunate generic and rarely used name. Its use is discouraged.
                         ibm-33722_VPUA
                         IBM-eucJP
 ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
