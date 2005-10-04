@@ -1065,8 +1065,13 @@
             debug="on" deprecation="off"/>
         <jar jarfile="xliff.jar"
             compress="true"
-            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator*.class"
+            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class"
             basedir="${build.dir}"
+            manifest="${icu4j.module.manifest}"/>
+        <jar jarfile="xliff-src.jar"
+            compress="true"
+            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java"
+            basedir="${src.dir}"
             manifest="${icu4j.module.manifest}"/>
      </target>
      
