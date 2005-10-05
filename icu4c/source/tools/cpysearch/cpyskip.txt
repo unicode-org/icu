@@ -4,12 +4,15 @@
 *.brk
 *.bz2
 *.csproj
+*.doc
 *.gif
 *.gz
 *.ico
 *.jar
 *.jpg
+*.pdf
 *.png
+*.rtf
 *.sln
 *.sxd
 *.sxg
