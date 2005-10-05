@@ -88,6 +88,18 @@ else
   $1_TRUE='#'
 fi])
 
+dnl ICU_PROG_LINK - Make sure that the linker is usable
+AC_DEFUN(ICU_PROG_LINK,
+[
+case "${host}" in
+    *-*-cygwin*|*-*-mingw*)
+        if test "$GCC" != yes && test -n "`link --version 2>&1 | grep 'GNU coreutils'`"; then
+            AC_MSG_ERROR([link.exe is not a valid linker. Your PATH is incorrect.
+                  Please follow the directions in ICU's readme.])
+        fi;;
+    *);;
+esac])
+
 dnl AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
 dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
 dnl Search for a library defining FUNC, then see if it's not already available.
