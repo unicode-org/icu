@@ -66,6 +66,9 @@ AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
 
+dnl Check that the linker is usable
+ICU_PROG_LINK
+
 dnl Determine the executable suffix
 dnl We don't use AC_EXEEXT because some compilers output separate debugging
 dnl files, which confuses the AC_EXEEXT macro.
