@@ -90,8 +90,8 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Pointer to integer Value: %d\n", *n);
     u_fprintf(myFile, "This is a long test123456789012345678901234567890123456789012345678901234567890\n");
     *n = 1;
-    fprintf(u_fgetfile(myFile), "\tNormal fprintf count: n=%d %n n=%d\n", (int)*n, (int*)n, (int)*n);
-    fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", (int)*n);
+    u_fprintf(myFile, "\tNormal fprintf count: n=%d %n n=%d\n", (int)*n, (int*)n, (int)*n);
+    fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", (int)*n); /* Should be 27 as stated later on. */
 
     u_fclose(myFile);
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
