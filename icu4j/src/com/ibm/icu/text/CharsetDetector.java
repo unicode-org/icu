@@ -397,6 +397,7 @@ public class CharsetDetector {
             fByteStats[val]++;
         }
         
+        fC1Bytes = false;
         for (int i = 0x80; i <= 0x9F; i += 1) {
             if (fByteStats[i] != 0) {
                 fC1Bytes = true;

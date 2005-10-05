@@ -254,7 +254,37 @@ public class TestCharsetDetector extends TestFmwk
         if(matchType != 0){
             errln("Did not get the expected matchType level " + matchType);
         }
-}
+    }
+    
+    public void TestC1Bytes() throws Exception
+    {
+        String sISO =
+            "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+        
+        String sWindows =
+            "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \u201CC1\u201D bytes.";
+
+        byte[] bISO     = sISO.getBytes("ISO-8859-1");
+        byte[] bWindows = sWindows.getBytes("windows-1252");
+        
+        CharsetDetector det = new CharsetDetector();
+        CharsetMatch m;
+        
+        det.setText(bWindows);
+        m = det.detect();
+        
+        if (m.getName() != "windows-1252") {
+            errln("Text with C1 bytes not correctly detected as windows-1252.");
+            return;
+        }
+        
+        det.setText(bISO);
+        m = det.detect();
+        
+        if (m.getName() != "ISO-8859-1") {
+            errln("Text without C1 bytes not correctly detected as ISO-8859-1.");
+        }
+    }
     
     public void TestDetection()
     {
