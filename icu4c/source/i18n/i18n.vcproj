@@ -1388,6 +1388,30 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<Filter
+			Name="charset detect"
+			Filter="">
+			<File
+				RelativePath=".\ucsdet.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\ucsdet.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
