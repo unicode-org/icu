@@ -395,7 +395,7 @@ public class OlsonTimeZone extends TimeZone {
                 // using > rather than >=.  This allows us to use
                 // INT32_MAX as an exclusive upper limit for all
                 // years, including INT32_MAX.
-                assert(data[1] > Integer.MAX_VALUE);
+                assert(data[1] > Integer.MIN_VALUE);
                 finalYear = data[1] - 1;
                 // Also compute the millis for Jan 1, 0:00 GMT of the
                 // finalYear.  This reduces runtime computations.
