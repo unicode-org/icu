@@ -972,5 +972,57 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("UResourceBundle.getLoclae(Locale) should delegate to (ULocale)");
         }
     }
+    public void TestJavaULocaleBundleLoading(){
+        String baseName="com.ibm.icu.dev.data.resources.TestDataElements";
+        String locName = "en_Latn_US";
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(baseName, locName);
+        String fromRoot = bundle.getString("from_root");
+        if(!fromRoot.equals("This data comes from root")){
+            errln("Did not get the expected string for from_root");
+        }
+        String fromEn = bundle.getString("from_en");
+        if(!fromEn.equals("This data comes from en")){
+            errln("Did not get the expected string for from_en");
+        }
+        String fromEnLatn = bundle.getString("from_en_Latn");
+        if(!fromEnLatn.equals("This data comes from en_Latn")){
+            errln("Did not get the expected string for from_en_Latn");
+        }
+        String fromEnLatnUs = bundle.getString("from_en_Latn_US");
+        if(!fromEnLatnUs.equals("This data comes from en_Latn_US")){
+            errln("Did not get the expected string for from_en_Latn_US");
+        }
+        UResourceBundle bundle1 = UResourceBundle.getBundleInstance(baseName, new ULocale(locName));
+        if(!bundle1.equals(bundle)){
+            errln("Did not get the expected bundle for "+baseName +"."+locName);
+        }
+        if(bundle1!=bundle){
+            errln("Did not load the bundle from cache");
+        }
+        // non-existent bundle .. should return default
+        UResourceBundle defaultBundle = UResourceBundle.getBundleInstance(baseName, "hi_IN");
+        ULocale defaultLocale = ULocale.getDefault();
+        if(!defaultBundle.getULocale().equals(defaultLocale)){
+            errln("Did not get the default bundle for non-existent bundle");
+        }
+        // non-existent bundle, non-existent default locale
+        // so return the root bundle.
+        ULocale.setDefault(ULocale.CANADA_FRENCH);
+        UResourceBundle root = UResourceBundle.getBundleInstance(baseName, "hi_IN");
+        if(!root.getULocale().toString().equals("")){
+            errln("Did not get the root bundle for non-existent default bundle for non-existent bundle");
+        }        
+        //reset the default
+        ULocale.setDefault(defaultLocale);
+        Enumeration keys = bundle.getKeys();
+        int i=0;
+        while(keys.hasMoreElements()){
+            logln("key: "+ keys.nextElement());
+            i++;
+        }
+        if(i!=4){
+            errln("Did not get the expected number of keys");
+        }
+    }
 }
 
