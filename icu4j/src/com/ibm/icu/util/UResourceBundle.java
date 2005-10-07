@@ -256,7 +256,15 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
         m.put(key, b);
     }
-    
+
+    protected static synchronized void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
+        cacheKey.setKeyValues(cl, fullName, defaultLocale);
+        addToCache(cacheKey, b);
+    }
+    protected static synchronized UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
+        cacheKey.setKeyValues(cl, fullName, defaultLocale);
+        return loadFromCache(cacheKey);
+    }
     private static UResourceBundle loadFromCache(ResourceCacheKey key) {
         if (BUNDLE_CACHE != null) {
             Map m = (Map)BUNDLE_CACHE.get();
@@ -362,7 +370,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     private static final int ROOT_JAVA = 2;
     
     private static SoftReference ROOT_CACHE;
-    
+
     private static int getRootType(String baseName, ClassLoader root)
     {
         Map m = null;
@@ -381,14 +389,14 @@ public abstract class UResourceBundle extends ResourceBundle{
         
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-            UResourceBundle b = instantiateICUResource(baseName, rootLocale, root);
+            UResourceBundle b = ICUResourceBundle.instantiateBundle(baseName, rootLocale, root, true);
             int rt = ROOT_ICU;
             
             if (b == null) {
                 rt = ROOT_JAVA;
                 
                 try {
-                    b = new ResourceBundleWrapper(baseName, rootLocale, root);
+                    b = ResourceBundleWrapper.instantiateBundle(baseName, rootLocale, root, true);
                 } catch (MissingResourceException mre) {
                     rt = ROOT_MISSING;
                 }
@@ -433,13 +441,14 @@ public abstract class UResourceBundle extends ResourceBundle{
     {
         UResourceBundle b = null;
         int rootType = getRootType(baseName, root);
+
+        ULocale defaultLocale = ULocale.getDefault();
         
         switch (rootType)
         {
         case ROOT_ICU:
             if(disableFallback) {
-                ULocale defaultLocale = ULocale.getDefault();
-                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
+                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);        
                 
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
                 b = loadFromCache(cacheKey);
@@ -450,19 +459,19 @@ public abstract class UResourceBundle extends ResourceBundle{
                     addToCache(cacheKey, b);
                 }
             } else {
-                b = instantiateICUResource(baseName, localeName, root);
+                b = ICUResourceBundle.instantiateBundle(baseName, localeName, root, disableFallback);
             }
             
             return b;
             
         case ROOT_JAVA:
-            return new ResourceBundleWrapper(baseName, localeName, root);
+            return ResourceBundleWrapper.instantiateBundle(baseName, localeName, root, disableFallback);
             
         default:
-            b = instantiateICUResource(baseName, localeName, root);
+            b = ICUResourceBundle.instantiateBundle(baseName, localeName, root, disableFallback);
         
             if (b == null) {
-                b = new ResourceBundleWrapper(baseName, localeName, root);
+                b = ResourceBundleWrapper.instantiateBundle(baseName, localeName, root, disableFallback);
                 
                 if (b == null){
                     throw new MissingResourceException("Could not find the bundle ", baseName, localeName);   
@@ -482,92 +491,5 @@ public abstract class UResourceBundle extends ResourceBundle{
      */
     protected abstract void setLoadingStatus(int newStatus);
     
-    /**
-     * Creates a new ICUResourceBundle for the given locale, baseName and class loader
-     * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param localeID the locale for which a resource bundle is desired
-     * @param root the class object from which to load the resource bundle
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
-     * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     */
-    //  recursively build bundle
-    protected static UResourceBundle instantiateICUResource(String baseName, String localeID, ClassLoader root){
-        ULocale defaultLocale = ULocale.getDefault();
-        String localeName = ULocale.getBaseName(localeID);
-        String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-        cacheKey.setKeyValues(root, fullName, defaultLocale);
-        UResourceBundle b = loadFromCache(cacheKey);
-        
-        // here we assume that java type resource bundle organization
-        // is required then the base name contains '.' else 
-        // the resource organization is of ICU type
-        // so clients can instantiate resources of the type
-        // com.mycompany.data.MyLocaleElements_en.res and 
-        // com.mycompany.data.MyLocaleElements.res
-        //
-        final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-        final String defaultID = ULocale.getDefault().toString();
-        
-        if(localeName.equals("")){
-            localeName = rootLocale;   
-        }
-        if (b == null) {
-            b = ICUResourceBundle.createBundle(baseName, localeName, root);
-            
-            if(b == null){
-                int i = localeName.lastIndexOf('_');
-                if (i != -1) {
-                    String temp = localeName.substring(0, i);
-                    b = instantiateICUResource(baseName, temp, root);
-                    if(b!=null && b.getULocale().equals(temp)){
-                        b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
-                    }
-                }else{
-                    if(defaultID.indexOf(localeName)==-1){
-                        b = instantiateICUResource(baseName, defaultID, root);
-                        if(b!=null){
-                            b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
-                        }
-                    }else if(rootLocale.length()!=0){
-                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root); 
-                        if(b!=null){
-                            b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
-                        }
-                    }
-                }
-            }else{
-                UResourceBundle parent = null;
-                localeName = b.getLocaleID();
-                int i = localeName.lastIndexOf('_');
-                
-                cacheKey.setKeyValues(root, fullName, defaultLocale);
-                addToCache(cacheKey, b);
-                
-                if (i != -1) {
-                    parent = instantiateICUResource(baseName, localeName.substring(0, i), root);
-                }else{
-                    parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
-                }
-                
-                if(!b.equals(parent)){
-                    b.setParent(parent);
-                }
-            }      
-        }
-        return b;
-    }
-    /*
-    protected static UResourceBundle instantiateResource(String baseName,String localeID, ClassLoader root, boolean required){
-        // first try
-        try{
-        }catch(MissingResourceException e){  
-            if(required){
-                throw e;   
-            }
-        }
-    }
-   */
+    
 }

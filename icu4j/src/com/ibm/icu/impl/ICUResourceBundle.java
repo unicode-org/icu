@@ -8,12 +8,10 @@
 package com.ibm.icu.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -27,8 +25,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.Vector;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
@@ -773,8 +769,30 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         }
         return (Locale[]) list.toArray(new Locale[list.size()]);
     }
-
+ 
     public Enumeration getKeys() {
+        initKeysVector();
+        return keys.elements();
+    }
+    private Vector keys = null;
+    private synchronized void initKeysVector(){
+        if(keys!=null){
+            return;
+        }
+        ICUResourceBundle current = this;
+        keys = new Vector();
+        while(current!=null){
+            Enumeration e = current.handleGetKeys();
+            while(e.hasMoreElements()){
+                String elem = (String)e.nextElement();
+                if(!keys.contains(elem)){
+                    keys.add(elem);
+                }
+            }
+            current = (ICUResourceBundle)current.getParent();
+        }
+    }
+    protected Enumeration handleGetKeys(){
         Vector keys = new Vector();
         ICUResourceBundle item = null;
         for (int i = 0; i < size; i++) {
@@ -1126,5 +1144,81 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             }
         }
         return false;
+    }
+    /**
+     * Creates a new ICUResourceBundle for the given locale, baseName and class loader
+     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param localeID the locale for which a resource bundle is desired
+     * @param root the class object from which to load the resource bundle
+     * @exception MissingResourceException
+     *     if no resource bundle for the specified base name can be found
+     * @return a resource bundle for the given base name and locale
+     * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    //  recursively build bundle
+    synchronized public static UResourceBundle instantiateBundle(String baseName, String localeID, 
+                                                                    ClassLoader root, boolean disableFallback){
+        ULocale defaultLocale = ULocale.getDefault();
+        String localeName = ULocale.getBaseName(localeID);
+        String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
+        ICUResourceBundle b = (ICUResourceBundle)loadFromCache(root, fullName, defaultLocale);
+        
+        // here we assume that java type resource bundle organization
+        // is required then the base name contains '.' else 
+        // the resource organization is of ICU type
+        // so clients can instantiate resources of the type
+        // com.mycompany.data.MyLocaleElements_en.res and 
+        // com.mycompany.data.MyLocaleElements.res
+        //
+        final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
+        final String defaultID = ULocale.getDefault().toString();
+        
+        if(localeName.equals("")){
+            localeName = rootLocale;   
+        }
+        if (b == null) {
+            b = ICUResourceBundle.createBundle(baseName, localeName, root);
+            
+            if(b == null){
+                int i = localeName.lastIndexOf('_');
+                if (i != -1) {
+                    String temp = localeName.substring(0, i);
+                    b = (ICUResourceBundle)instantiateBundle(baseName, temp, root, disableFallback);
+                    if(b!=null && b.getULocale().equals(temp)){
+                        b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
+                    }
+                }else{
+                    if(defaultID.indexOf(localeName)==-1){
+                        b = (ICUResourceBundle)instantiateBundle(baseName, defaultID, root, disableFallback);
+                        if(b!=null){
+                            b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
+                        }
+                    }else if(rootLocale.length()!=0){
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root); 
+                        if(b!=null){
+                            b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
+                        }
+                    }
+                }
+            }else{
+                UResourceBundle parent = null;
+                localeName = b.getLocaleID();
+                int i = localeName.lastIndexOf('_');
+                
+                addToCache(root, fullName, defaultLocale, b);
+                
+                if (i != -1) {
+                    parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
+                }else{
+                    parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
+                }
+                
+                if(!b.equals(parent)){
+                    b.setParent(parent);
+                }
+            }      
+        }
+        return b;
     }
 }
