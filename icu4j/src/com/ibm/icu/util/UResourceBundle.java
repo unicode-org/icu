@@ -394,10 +394,8 @@ public abstract class UResourceBundle extends ResourceBundle{
             
             if (b == null) {
                 rt = ROOT_JAVA;
-                
-                try {
-                    b = ResourceBundleWrapper.instantiateBundle(baseName, rootLocale, root, true);
-                } catch (MissingResourceException mre) {
+                b = ResourceBundleWrapper.instantiateBundle(baseName, rootLocale, root, true);
+                if(b==null) {
                     rt = ROOT_MISSING;
                 }
             }

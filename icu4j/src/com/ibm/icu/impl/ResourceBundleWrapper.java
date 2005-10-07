@@ -192,13 +192,12 @@ public class ResourceBundleWrapper extends UResourceBundle {
                 if (DEBUG)
                     System.out.println(e);
             }
-    
-            if (b == null) {
-                throw new MissingResourceException("Could not load data " + name, "", "");
-            }
+
             addToCache(cl, name, defaultLocale, b);
         }
-        b.initKeysVector();
+        if(b!=null){
+            b.initKeysVector();
+        }
         return b;
     }
 }
