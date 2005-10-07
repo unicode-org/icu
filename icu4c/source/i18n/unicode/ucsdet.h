@@ -125,12 +125,14 @@ ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCod
  * @param encoding  an encoding for the current data obtained from
  *                  a header or declaration or other source outside
  *                  of the byte data itself.
+ * @param length    the length of the encoding name, or -1 if the name string
+ *                  is NUL terminated.
  * @param status    any error conditions are reported back in this variable.
  *
  * @draft ICU 3.6
  */
 U_DRAFT void U_EXPORT2
-ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, UErrorCode *status);
+ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t length, UErrorCode *status);
 
 
 /**
@@ -163,13 +165,12 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
 
 /**
   *  Find all charset matches that appear to be consistent with the input,
-  *  filling in an array with the results.  The results are ordered with the
+  *  returning an array of results.  The results are ordered with the
   *  best quality match first.
   *
-  *  Note though, that because the detection 
-  *  only looks at the start of the input data,
-  *  there is a possibility that the returned charset will fail to handle
-  *  the full set of input data.
+  *  Because the detection only looks at a limited amount of the
+  *  input byte data, some of the returned charsets may fail to handle
+  *  the all of input data.
   *  <p/>
   *  The returned UCharsetMatch objects are owned by the UCharsetDetector.
   *  They will remain valid until the detector input is reset, or until
@@ -181,22 +182,19 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
   *    <li>no input text has been provided</li>
   *  </ul>
   * 
-  * @param csd     the charset detector to be used.
-  * @param dest    an array to be filled in with UCharsetMatch *
-  *                pointers for the detected charsets.
-  * @param destCapacity  The capacity of the destination array -  the number
-  *                of UCharsetMatch pointers it can hold.  If the
-  *                capacity is zero, the array may be NULL.
-  * @param status  any error conditions are reported back in this variable.
-  * @return        The total number of matching charsets.  This will be the
-  *                full number, even if capacity of the array is too small
-  *                to contain all of the results.
-  *
+  * @param csd           the charset detector to be used.
+  * @param matchesFound  pointer to a variable that will be set to the
+  *                      number of charsets identified that are consistent with
+  *                      the input data.  
+  * @param status        any error conditions are reported back in this variable.
+  * @return              A pointer to an array of pointers to UCharSetMatch objects.
+  *                      This array, and the UCharSetMatch instances to which it refers,
+  *                      are owned by the UCharsetDetector, and will remain valid until
+  *                      the detector is closed or reset to new input.
   * @draft ICU 3.4
   */
-U_DRAFT int32_t U_EXPORT2
-ucsdet_detectAll(UCharsetDetector *csd, UCharsetMatch *dest,
-                      int32_t destCapacity, UErrorCode *status);
+U_DRAFT UCharsetMatch ** U_EXPORT2
+ucsdet_detectAll(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *status);
 
 
 
