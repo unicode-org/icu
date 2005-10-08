@@ -389,14 +389,17 @@ public abstract class UResourceBundle extends ResourceBundle{
         
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-            UResourceBundle b = ICUResourceBundle.instantiateBundle(baseName, rootLocale, root, true);
-            int rt = ROOT_ICU;
-            
-            if (b == null) {
-                rt = ROOT_JAVA;
-                b = ResourceBundleWrapper.instantiateBundle(baseName, rootLocale, root, true);
-                if(b==null) {
-                    rt = ROOT_MISSING;
+            int rt = ROOT_MISSING;
+            UResourceBundle b = null;  
+            try{
+                b = ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
+                rt = ROOT_ICU; 
+            }catch(MissingResourceException ex){
+                try{
+                    b = ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
+                    rt = ROOT_JAVA;
+                }catch(MissingResourceException e){
+                    //throw away the exception
                 }
             }
             
@@ -452,34 +455,27 @@ public abstract class UResourceBundle extends ResourceBundle{
                 b = loadFromCache(cacheKey);
                 
                 if (b == null) {
-                    b = ICUResourceBundle.createBundle(baseName, localeName, root);
+                    b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
                     cacheKey.setKeyValues(root, fullName, defaultLocale);
                     addToCache(cacheKey, b);
                 }
             } else {
-                b = ICUResourceBundle.instantiateBundle(baseName, localeName, root, disableFallback);
+                b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
             }
             
             return b;
             
         case ROOT_JAVA:
-            return ResourceBundleWrapper.instantiateBundle(baseName, localeName, root, disableFallback);
+            return ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, disableFallback);
             
         default:
-            b = ICUResourceBundle.instantiateBundle(baseName, localeName, root, disableFallback);
-        
-            if (b == null) {
-                b = ResourceBundleWrapper.instantiateBundle(baseName, localeName, root, disableFallback);
-                
-                if (b == null){
-                    throw new MissingResourceException("Could not find the bundle ", baseName, localeName);   
-                } else {
-                    setRootType(baseName, ROOT_JAVA);
-                }
-            } else {
+            try{
+                b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
                 setRootType(baseName, ROOT_ICU);
+            }catch(MissingResourceException ex){
+                b = ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, disableFallback);
+                setRootType(baseName, ROOT_JAVA);
             }
-
             return b;
         }
     }

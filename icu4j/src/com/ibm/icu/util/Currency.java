@@ -131,7 +131,7 @@ public class Currency extends MeasureUnit implements Serializable {
         if (variant.equals("PREEURO") || variant.equals("EURO")) {
             country = country + '_' + variant;
         }
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", true);
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(bundle==null){
             //throw new MissingResourceException()
         }

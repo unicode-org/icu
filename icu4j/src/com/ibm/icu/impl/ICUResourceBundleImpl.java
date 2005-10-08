@@ -37,7 +37,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             String localeID, ClassLoader root) {
 
         ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(
-                baseName, localeID, root);
+                                                                    baseName, localeID, root);
 
         // could not open the .res file so return null
         if (reader == null) {
