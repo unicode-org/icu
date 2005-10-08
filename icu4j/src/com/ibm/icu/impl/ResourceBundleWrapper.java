@@ -95,8 +95,17 @@ public class ResourceBundleWrapper extends UResourceBundle {
     // Flag for enabling/disabling debugging code
     private static final boolean DEBUG = ICUDebug.enabled("resourceBundleWrapper");
     
-    // recursively build bundle
-    static public synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
+    // This method is for super class's instantiateBundle method
+    public static UResourceBundle getBundleInstance(String baseName, String localeID, 
+                                                    ClassLoader root, boolean disableFallback){
+        UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
+        if(b==null){
+            throw new MissingResourceException("Could not find the bundle "+ baseName+"_"+ localeID,"","");
+        }
+        return b;
+    }
+    // recursively build bundle and override the super-class method
+     protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
                                                                     ClassLoader root, boolean disableFallback) {
         if (root == null) {
             // we're on the bootstrap

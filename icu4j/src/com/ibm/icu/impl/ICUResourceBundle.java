@@ -469,8 +469,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         // Check top level locale first
         ICUResourceBundle r = null;
 
-        r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName,
-                parent);
+        r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
         found = r.getULocale();
         if (fillinIsAvailable != null) {
             if (!found.equals(parent)) {
@@ -498,8 +497,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
         // Now, search for the named resource
         parent = new ULocale(baseLoc);
-        r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName,
-                parent);
+        r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
         // determine in which locale (if any) the named resource is located
         do {
             try {
@@ -649,33 +647,6 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     // will throw type mismatch exception if the resource is not a string
     public String getStringWithFallback(String path) throws MissingResourceException {
         return getWithFallback(path).getString();
-    }
-
-    /**
-     * Gets a resource bundle using the specified base name, locale, and class root.
-     *
-     * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param localeName the locale for which a resource bundle is desired
-     * @param disableFallback Option to disable locale inheritence.
-     *                          If true the fallback chain will not be built.
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
-     * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     *
-     */
-    public static UResourceBundle getBundleInstance(String baseName,
-            String localeName, boolean disableFallback) {
-        return instantiateBundle(baseName, localeName, ICU_DATA_CLASS_LOADER,
-            disableFallback);
-    }
-
-    /**
-     * @internal
-     */
-    public static UResourceBundle getBundleInstance(ClassLoader loader,
-            String baseName, String localeName, boolean disableFallback) {
-        return instantiateBundle(baseName, localeName, loader, disableFallback);
     }
 
     /**
@@ -916,8 +887,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         // all. gotta be a better way to do this, since to add a locale you have
         // to update this list,
         // and it's embedded in our binary resources.
-        ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(
-                baseName, ICU_RESOURCE_INDEX, root, true);
+        ICUResourceBundle bundle = (ICUResourceBundle) createBundle(baseName, ICU_RESOURCE_INDEX, root);
+        
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
         int i = 0;
@@ -938,8 +909,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
     private static final String[] createLocaleNameArray(String baseName,
             ClassLoader root) {
-        ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(
-                baseName, ICU_RESOURCE_INDEX, root, true);
+        ICUResourceBundle bundle = (ICUResourceBundle) createBundle( baseName, ICU_RESOURCE_INDEX, root);
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
         int i = 0;
@@ -1145,22 +1115,23 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         }
         return false;
     }
-    /**
-     * Creates a new ICUResourceBundle for the given locale, baseName and class loader
-     * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param localeID the locale for which a resource bundle is desired
-     * @param root the class object from which to load the resource bundle
-     * @exception MissingResourceException
-     *     if no resource bundle for the specified base name can be found
-     * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     */
-    //  recursively build bundle
-    synchronized public static UResourceBundle instantiateBundle(String baseName, String localeID, 
+    // This method is for super class's instantiateBundle method
+    public static UResourceBundle getBundleInstance(String baseName, String localeID, 
+                                                    ClassLoader root, boolean disableFallback){
+        UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
+        if(b==null){
+            throw new MissingResourceException("Could not find the bundle "+ baseName+"/"+ localeID+".res","","");
+        }
+        return b;
+    }
+    //  recursively build bundle .. over-ride super class method.
+    protected synchronized static UResourceBundle instantiateBundle(String baseName, String localeID, 
                                                                     ClassLoader root, boolean disableFallback){
         ULocale defaultLocale = ULocale.getDefault();
-        String localeName = ULocale.getBaseName(localeID);
+        String localeName = localeID;
+        if(localeName.indexOf('@')>0){
+            localeName = ULocale.getBaseName(localeID);
+        }
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         ICUResourceBundle b = (ICUResourceBundle)loadFromCache(root, fullName, defaultLocale);
         
@@ -1177,9 +1148,14 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         if(localeName.equals("")){
             localeName = rootLocale;   
         }
+        if(DEBUG) System.out.println("Creating "+fullName+ " currently b is "+b);
         if (b == null) {
             b = ICUResourceBundle.createBundle(baseName, localeName, root);
             
+            if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback);
+            if(disableFallback==true){
+                return b;
+            }
             if(b == null){
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
