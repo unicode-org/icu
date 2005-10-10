@@ -84,6 +84,7 @@ public class TestFmwk extends AbstractTestLog {
                 errln(msg);
                 ex.printStackTrace();
             } else {
+                errln(msg);
                 ex.printStackTrace();
                 throw new RuntimeException(msg);
             }
@@ -818,7 +819,7 @@ public class TestFmwk extends AbstractTestLog {
             errln("FAIL: TimeZone.getTimeZone(" + id + ") => null");
         }
         if (!tz.getID().equals(id)) {
-            errln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
+            warnln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
         }
         return tz;
     }
