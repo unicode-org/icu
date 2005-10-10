@@ -44,8 +44,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * The data path to be used with getBundleInstance API
      * @draft ICU 3.0
      */
-    public static final String ICU_BUNDLE = "data/icudt"
-            + VersionInfo.ICU_DATA_VERSION;
+    public static final String ICU_BUNDLE = "data/icudt" + VersionInfo.ICU_DATA_VERSION;
 
     /**
      * The base name of ICU data to be used with getBundleInstance API
@@ -57,8 +56,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * The base name of collation data to be used with getBundleInstance API
      * @draft ICU 3.0
      */
-    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME
-            + "/coll";
+    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
 
     /**
      * The base name of rbnf data to be used with getBundleInstance API
@@ -70,8 +68,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * The base name of transliterator data to be used with getBundleInstance API
      * @draft ICU 3.0
      */
-    public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME
-            + "/translit";
+    public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
 
     /**
      * The class loader constant to be used with getBundleInstance API
@@ -775,7 +772,11 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
     public static ICUResourceBundle createBundle(String baseName,
             String localeID, ClassLoader root) {
-        return ICUResourceBundleImpl.createBundle(baseName, localeID, root);
+        ICUResourceBundle b = ICUResourceBundleImpl.createBundle(baseName, localeID, root);
+        if(b==null){
+            throw new MissingResourceException("Could not find the bundle "+ baseName+"/"+ localeID+".res","","");
+        }
+        return b;
     }
 
     //====== protected members ==============
@@ -1150,7 +1151,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         }
         if(DEBUG) System.out.println("Creating "+fullName+ " currently b is "+b);
         if (b == null) {
-            b = ICUResourceBundle.createBundle(baseName, localeName, root);
+            b = ICUResourceBundleImpl.createBundle(baseName, localeName, root);
             
             if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback);
             if(disableFallback==true){
@@ -1171,7 +1172,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                             b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
                         }
                     }else if(rootLocale.length()!=0){
-                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root); 
+                        b = ICUResourceBundleImpl.createBundle(baseName, rootLocale, root); 
                         if(b!=null){
                             b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
                         }
@@ -1186,8 +1187,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                 
                 if (i != -1) {
                     parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
-                }else{
-                    parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
+                }else if(!localeName.equals(rootLocale)){
+                    parent = ICUResourceBundleImpl.createBundle(baseName, rootLocale, root);   
                 }
                 
                 if(!b.equals(parent)){

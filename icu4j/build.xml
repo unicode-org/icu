@@ -364,7 +364,7 @@
             todir="${build.dir}/com/ibm/icu/dev/data"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
-        <javac includes="com/ibm/icu/dev/data/*.java"
+        <javac includes="com/ibm/icu/dev/data/*.java, com/ibm/icu/dev/data/resources/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -383,7 +383,10 @@
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-        
+    	<copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
+	        <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/"
+	            includes="*.properties"/>
+	    </copy>
     </target>
 
     <!-- builds richedit and richedit tests -->
@@ -543,16 +546,25 @@
             includes="doc/**/*,richedit.jar,license.html"/>
     </target>
 
-    <target name="check" depends="tests" description="run standard icu4j test suite">
-    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-        <jvmarg value="-ea"/>  <!-- enable assertion checks -->
-        <arg value="-n"/>
-        <classpath>
-            <pathelement path="${java.class.path}/"/>
-            <pathelement location="clover.jar"/>
-            <pathelement path="${build.dir}"/>
-        </classpath>
-    </java>
+    <target name="check" depends="tests, jar" description="run standard icu4j test suite">
+    	<delete failonerror="no">
+        	<fileset dir="${build.dir}/com/ibm/icu/text"/>
+        	<fileset dir="${build.dir}/com/ibm/icu/impl"/>
+            <fileset dir="${build.dir}/com/ibm/icu/math"/>
+	        <fileset dir="${build.dir}/com/ibm/icu/lang"/>
+	        <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
+	    </delete>
+    	<java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+	        <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+	        <arg value="-n"/>
+	        <classpath>
+	            <pathelement path="${java.class.path}/"/>
+	        	<pathelement location="icu4j.jar"/>
+	            <pathelement location="clover.jar"/>
+	            <pathelement path="${build.dir}"/>
+	        	
+	        </classpath>
+	    </java>
     </target>
 
     <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
@@ -1097,7 +1109,7 @@
      <!-- Target for checking the loading of bundles from the default package.
           This is hack to get around Eclipse's build problems. 
      -->
-    <target name="testDefaultPackage" depends="tests" description="Tests for loading resources in the default package">
+    <target name="defaultPackageCheck" depends="tests" description="Tests for loading resources in the default package">
         <copy file="${src.dir}/com/ibm/icu/dev/test/util/TestDefaultPackageLoading.jpp"
             tofile="${src.dir}/TestDefaultPackageLoading.java"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/util/TestData_en.jpp"
