@@ -2400,7 +2400,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    /*
     public void TestJB4757(){
         DateFormat dfmt = DateFormat.getDateInstance(DateFormat.FULL, ULocale.ROOT);
     }
+    */
 }
