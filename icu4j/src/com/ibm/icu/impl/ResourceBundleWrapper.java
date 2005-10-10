@@ -100,7 +100,11 @@ public class ResourceBundleWrapper extends UResourceBundle {
                                                     ClassLoader root, boolean disableFallback){
         UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
         if(b==null){
-            throw new MissingResourceException("Could not find the bundle "+ baseName+"_"+ localeID,"","");
+            String separator ="_";
+            if(baseName.indexOf('/')>=0){
+                separator = "/";
+            }
+            throw new MissingResourceException("Could not find the bundle "+ baseName+separator+ localeID,"","");
         }
         return b;
     }
@@ -206,7 +210,10 @@ public class ResourceBundleWrapper extends UResourceBundle {
         }
         if(b!=null){
             b.initKeysVector();
+        }else{
+            if(DEBUG)System.out.println("Returning null for "+baseName+"_"+localeID);
         }
+        
         return b;
     }
 }
