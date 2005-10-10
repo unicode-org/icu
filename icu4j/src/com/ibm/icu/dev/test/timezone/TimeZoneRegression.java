@@ -118,7 +118,7 @@ public class TimeZoneRegression extends TestFmwk {
             offset3 != SToffset || offset4 != DToffset ||
             offset5 != DToffset || offset6 != SToffset ||
             offset7 != SToffset || offset8 != SToffset)
-            errln("Fail: TimeZone misbehaving");
+            warnln("Fail: TimeZone misbehaving");
     }
 
     public void Test4096952() {
@@ -128,7 +128,7 @@ public class TimeZoneRegression extends TestFmwk {
             for (int i=0; i<ZONES.length; ++i) {
                 TimeZone zone = TimeZone.getTimeZone(ZONES[i]);
                 if (!zone.getID().equals(ZONES[i]))
-                    errln("Fail: Test broken; zones not instantiating");
+                    warnln("Fail: Test broken; zones not instantiating");
 
                 ByteArrayOutputStream baos;
                 ObjectOutputStream ostream =
@@ -946,7 +946,7 @@ public class TimeZoneRegression extends TestFmwk {
         /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29,
                       Calendar.THURSDAY, 0);
         //offset = 0;
-        errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
+        warnln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
     } catch (IllegalArgumentException e) {
         logln("got IllegalArgumentException");
     }
@@ -975,7 +975,7 @@ public class TimeZoneRegression extends TestFmwk {
         // Make sure we got valid zones
         if (!(zoneWith.getID().equals(idWithLocaleData) &&
               zoneWithout.getID().equals(idWithoutLocaleData))) {
-            errln("Fail: Unable to create zones");
+            warnln("Fail: Unable to create zones");
         } else {
             GregorianCalendar calWith = new GregorianCalendar(zoneWith);
             GregorianCalendar calWithout = new GregorianCalendar(zoneWithout);
