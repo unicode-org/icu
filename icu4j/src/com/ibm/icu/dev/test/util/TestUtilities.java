@@ -185,7 +185,7 @@ public class TestUtilities extends TestFmwk {
                 case CollectionUtilities.A_PROPER_SUBSET_OF_B:
                     checkContainment(b.containsAll(a) && !a.equals(b), a, relation, b);
                     break;
-                case CollectionUtilities.A_PROPER_DISJOINT_B:
+                case CollectionUtilities.NOT_A_EQUALS_B:
                     checkContainment(!CollectionUtilities.containsSome(a, b) && a.size() != 0 && b.size() != 0, a, relation, b);
                     break;
                 case CollectionUtilities.A_PROPER_SUPERSET_B:

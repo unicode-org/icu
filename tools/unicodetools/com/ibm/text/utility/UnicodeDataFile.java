@@ -35,7 +35,7 @@ public class UnicodeDataFile {
         String[] batName2 = {""};
         mostRecent = UnicodeDataFile.generateBat(directory, filename, newSuffix, fileType, batName2);
         batName = batName2[0];
-    	filename = filename;
+    	this.filename = filename;
         
     	if (!isHTML) {
 	        out.println("# " + filename + UnicodeDataFile.getFileSuffix(false));

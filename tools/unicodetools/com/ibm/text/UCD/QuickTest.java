@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/06/24 23:51:52 $
-* $Revision: 1.6 $
+* $Date: 2005/10/11 19:39:15 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,11 @@ import java.util.*;
 import java.io.*;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeMap;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.dev.test.util.UnicodePropertySource;
+import com.ibm.icu.dev.test.util.UnicodeMap.MapIterator;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -24,7 +29,77 @@ import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
+	public static void main(String[] args) throws IOException {
+		getBidiMirrored();
+		if (true) return;
+		getLengths("NFC", Default.nfc());
+		getLengths("NFD", Default.nfd());
+		getLengths("NFKC", Default.nfkc());
+		getLengths("NFKD", Default.nfkd());
+		System.out.println("Done");
+	}
 	
+	
+	
+	private static void getBidiMirrored() {
+		ToolUnicodePropertySource foo = ToolUnicodePropertySource.make("");
+		UnicodeMap status = new UnicodeMap();
+		status.putAll(foo.getSet("generalcategory=ps"), "*open/close*");
+		status.putAll(foo.getSet("generalcategory=pe"), "*open/close*");
+		status.putAll(foo.getSet("generalcategory=pi"), "*open/close*");
+		status.putAll(foo.getSet("generalcategory=pf"), "*open/close*");
+		
+		UnicodeSet bidiMirroredSet = foo.getSet("bidimirrored=true");
+		status.putAll(bidiMirroredSet, "*core*");
+		UnicodeSet bidiMirroringSet = new UnicodeSet();
+		UnicodeProperty x = foo.getProperty("bidimirroringglyph");
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			String s = x.getValue(i);
+			if (!s.equals(UTF16.valueOf(i))) bidiMirroringSet.add(i);
+		}
+		status.putAll(new UnicodeSet(bidiMirroredSet).removeAll(bidiMirroringSet), "no bidi mirroring");
+		UnicodeSet mathSet = foo.getSet("generalcategory=sm");
+		status.putAll(mathSet, "math");
+		
+		UnicodeSet special = new UnicodeSet("[<>]");
+		for (UnicodeSetIterator it = new UnicodeSetIterator(mathSet); it.next();) {
+			String s = Default.nfkd().normalize(it.codepoint);
+			if (special.containsSome(s)) status.put(it.codepoint, "*special*");
+		}
+		//showStatus(status);
+		// close under nfd
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			if (!Default.ucd().isAssigned(i)) continue;
+			if (!Default.ucd().isPUA(i)) continue;
+			if (Default.nfkc().isNormalized(i)) continue;
+			String oldValue = (String) status.getValue(i);
+			if (oldValue != null) continue;
+			String s = Default.nfkc().normalize(i);
+			if (UTF16.countCodePoint(s) != 1) continue;
+			int cp = UTF16.charAt(s, 0);
+			String value = (String)status.getValue(cp);
+			if (value != null) status.put(i, "nfc-closure-" + value);
+		}
+		showStatus(status, bidiMirroredSet);
+	}
+
+	static BagFormatter bf = new BagFormatter();
+	private static void showStatus(UnicodeMap status, UnicodeSet x) {
+		Collection list = new TreeSet(status.getAvailableValues());
+		for (Iterator it = list.iterator(); it.hasNext(); ) {
+			String value = (String) it.next();
+			if (value == null) continue;
+			UnicodeSet set = status.getSet(value);
+			for (UnicodeSetIterator umi = new UnicodeSetIterator(set); umi.next();) {
+				System.out.println(Utility.hex(umi.codepoint) 
+						+ ";\t" + value
+						+ ";\t" + (x.contains(umi.codepoint) ? "O" : "")
+						+ ";\t" + Default.ucd().getName(umi.codepoint));
+			}
+		}
+	}
+
+
 	public static class Length {
 		String title;
 		int bytesPerCodeUnit;
@@ -48,14 +123,6 @@ public class QuickTest implements UCD_Types {
 				longestSet.add(codePoint);
 			}
 		}
-	}
-	
-	public static void main(String[] args) throws IOException {
-		getLengths("NFC", Default.nfc());
-		getLengths("NFD", Default.nfd());
-		getLengths("NFKC", Default.nfkc());
-		getLengths("NFKD", Default.nfkd());
-		System.out.println("Done");
 	}
 	
 	static final int skip = (1<<UCD.UNASSIGNED) | (1<<UCD.PRIVATE_USE) | (1<<UCD.SURROGATE);
