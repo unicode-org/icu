@@ -41,11 +41,14 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
     };
     
     private static final int _LOCALE_NUMBER = _LOCALES.length;
-    private static final ULocale[] available = ULocale.getAvailableLocales();
+    private static ULocale[] available = null;
     private HashMap availableMap = new HashMap();
     private static final ULocale _DEFAULT_LOCALE = ULocale.US;
     
     public LocaleAliasTest(){
+    }
+    protected void init(){
+        available = ULocale.getAvailableLocales();
         for(int i=0; i<available.length;i++){
             availableMap.put(available[i].toString(),"");
         }
@@ -53,7 +56,6 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
     public static void main(String[] args) {
         new LocaleAliasTest().run(args);
     }
-
     public void TestCalendar() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);
