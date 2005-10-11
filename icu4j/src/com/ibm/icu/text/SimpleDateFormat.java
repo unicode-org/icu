@@ -1884,5 +1884,6 @@ public class SimpleDateFormat extends DateFormat {
             parseAmbiguousDatesAsAfter(defaultCenturyStart);
         }
         serialVersionOnStream = currentSerialVersion;
+        locale = getLocale(ULocale.VALID_LOCALE);
     }
 }
