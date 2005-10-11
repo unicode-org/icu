@@ -8,6 +8,9 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Locale;
 
 /**
@@ -829,6 +832,20 @@ public class ChineseCalendar extends Calendar {
         return "chinese";
     }
 
+    /**
+     * Override readObject.
+     */
+    private void readObject(ObjectInputStream stream)
+        throws IOException, ClassNotFoundException
+    {
+        stream.defaultReadObject();
+        
+        /* set up the transient caches... */
+        astro = new CalendarAstronomer();
+        winterSolsticeCache = new CalendarCache();
+        newYearCache = new CalendarCache();
+    }
+    
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {

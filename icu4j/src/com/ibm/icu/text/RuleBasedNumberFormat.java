@@ -852,6 +852,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // we just write the textual description to the stream, so we
         // have an implementation-independent streaming format
         out.writeUTF(this.toString());
+        out.writeObject(this.locale);
     }
 
     /**
@@ -859,18 +860,28 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param in The stream to read from.
      */
     private void readObject(java.io.ObjectInputStream in)
-        throws java.io.IOException {
+        throws java.io.IOException, java.lang.ClassNotFoundException {
 
         // read the description in from the stream
         String description = in.readUTF();
+        ULocale loc;
+        
+        try {
+            loc = (ULocale) in.readObject();
+        } catch (Exception e) {
+            loc = ULocale.getDefault();
+        }
 
         // build a brand-new RuleBasedNumberFormat from the description,
         // then steal its substructure.  This object's substructure and
         // the temporary RuleBasedNumberFormat drop on the floor and
         // get swept up by the garbage collector
-        RuleBasedNumberFormat temp = new RuleBasedNumberFormat(description);
+        RuleBasedNumberFormat temp = new RuleBasedNumberFormat(description, loc);
         ruleSets = temp.ruleSets;
         defaultRuleSet = temp.defaultRuleSet;
+        publicRuleSetNames = temp.publicRuleSetNames;
+        decimalFormatSymbols = temp.decimalFormatSymbols;
+        locale = temp.locale;
     }
 
 

@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and
+ * Copyright (C) 2000-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -62,7 +62,8 @@ public class ChineseDateFormat extends SimpleDateFormat {
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        // TODO: convert CDFS to use ULocale
-        super(pattern, new ChineseDateFormatSymbols(locale.toLocale()), true);
+        //super(pattern, new ChineseDateFormatSymbols(locale.toLocale()), true);
+       super(pattern, new ChineseDateFormatSymbols(locale), locale);
     }
 
 // NOTE: This API still exists; we just inherit it from SimpleDateFormat
