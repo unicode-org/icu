@@ -28,12 +28,12 @@
 
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
-#include "unicode/ures.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ustring.h"
 #include "unicode/ucurr.h"
 #include "unicode/curramt.h"
+#include "uresimp.h"
 #include "uhash.h"
 #include "cmemory.h"
 #include "servloc.h"
