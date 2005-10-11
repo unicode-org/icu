@@ -206,29 +206,32 @@ public final class CollectionUtilities {
     }
     
     /**
-     * Returns an int with bits set.
-     * Bit 4: a - b != {}
-     * Bit 2: a * b != {}  // * is intersects
-     * Bit 1: b - a != {}
-     * Thus the bits can be used to get the following relations, plus
-     * for A_SUPERSET_B, use (x & NOT_A_SUPERSET_B) == 0
-     * for A_SUBSET_B, use (x & NOT_A_SUBSET_B) == 0
-     * for A_EQUALS_B, use (x & A_PROPER_DISJOINT_B) == 0
-     * for A_DISJOINT_B, use (x & NOT_A_DISJOINT_B) == 0
-     * for A_OVERLAPS_B, use (x & NOT_A_DISJOINT_B) == 1
+     * Used for results of getContainmentRelation
      */
-    static final int
-        // ContainmentRelation
+    public static final int
         ALL_EMPTY = 0,
         NOT_A_SUPERSET_B = 1,
         NOT_A_DISJOINT_B = 2,
         NOT_A_SUBSET_B = 4,
+        NOT_A_EQUALS_B = NOT_A_SUBSET_B | NOT_A_SUPERSET_B,
         A_PROPER_SUBSET_OF_B = NOT_A_DISJOINT_B | NOT_A_SUPERSET_B,
-        A_PROPER_DISJOINT_B = NOT_A_SUBSET_B | NOT_A_SUPERSET_B,
         A_PROPER_SUPERSET_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B,
         A_PROPER_OVERLAPS_B = NOT_A_SUBSET_B | NOT_A_DISJOINT_B | NOT_A_SUPERSET_B;
     
-    public static int getContainmentRelation(Collection a, Collection b) {
+    /**
+     * Assesses all the possible containment relations between collections A and B with one call.<br>
+     * Returns an int with bits set, according to a "Venn Diagram" view of A vs B.<br>
+     * NOT_A_SUPERSET_B: a - b != {}<br>
+     * NOT_A_DISJOINT_B: a * b != {}  // * is intersects<br>
+     * NOT_A_SUBSET_B: b - a != {}<br>
+     * Thus the bits can be used to get the following relations:<br>
+     * for A_SUPERSET_B, use (x & CollectionUtilities.NOT_A_SUPERSET_B) == 0<br>
+     * for A_SUBSET_B, use (x & CollectionUtilities.NOT_A_SUBSET_B) == 0<br>
+     * for A_EQUALS_B, use (x & CollectionUtilities.NOT_A_EQUALS_B) == 0<br>
+     * for A_DISJOINT_B, use (x & CollectionUtilities.NOT_A_DISJOINT_B) == 0<br>
+     * for A_OVERLAPS_B, use (x & CollectionUtilities.NOT_A_DISJOINT_B) != 0<br>
+     */
+     public static int getContainmentRelation(Collection a, Collection b) {
         if (a.size() == 0) {
         	return (b.size() == 0) ? ALL_EMPTY : NOT_A_SUPERSET_B;
         } else if (b.size() == 0) {

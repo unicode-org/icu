@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2004/10/14 17:54:56 $
-* $Revision: 1.35 $
+* $Date: 2005/10/11 19:39:15 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -143,7 +143,7 @@ public final class Main implements UCD_Types {
                 else if (arg.equalsIgnoreCase("breaktest")) GenerateBreakTest.main(null);
                 else if (arg.equalsIgnoreCase("checkcollator")) CheckCollator.main(null);
     
-                else if (arg.equalsIgnoreCase("genSplit")) GenerateData.genSplit();
+                //else if (arg.equalsIgnoreCase("genSplit")) GenerateData.genSplit();
                 else if (arg.equalsIgnoreCase("iana")) IANANames.testSensitivity();
                 
                 else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
@@ -157,7 +157,7 @@ public final class Main implements UCD_Types {
                 else if (arg.equalsIgnoreCase("VerifyIDN")) VerifyUCD.VerifyIDN();
                 else if (arg.equalsIgnoreCase("NFTest")) VerifyUCD.NFTest();
                 else if (arg.equalsIgnoreCase("test1")) VerifyUCD.test1();
-                else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();
+                //else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();
                 else if (arg.equalsIgnoreCase("GenerateThaiBreaks")) GenerateThaiBreaks.main(null);
                 
     			else if (arg.equalsIgnoreCase("TestData")) TestData.main(new String[]{args[++i]});
@@ -168,9 +168,9 @@ public final class Main implements UCD_Types {
                 else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
                 else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
                 else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
-                else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
+                //else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
                 else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.checkNameList();
-                else if (arg.equalsIgnoreCase("checkDifferences")) GenerateData.checkDifferences("3.2.0");
+                //else if (arg.equalsIgnoreCase("checkDifferences")) GenerateData.checkDifferences("3.2.0");
                 
                 else if (arg.equalsIgnoreCase("Compare14652")) Compare14652.main(null);
                 
@@ -182,7 +182,7 @@ public final class Main implements UCD_Types {
                     GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
                     */
                 // EXTRACTED PROPERTIES
-                
+                /*
                 else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
                     GenerateData.generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
                         "DerivedData/extracted/", "DerivedBidiClass");
@@ -230,8 +230,9 @@ public final class Main implements UCD_Types {
                 } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
                     GenerateData.generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, GenerateData.HEADER_DERIVED,
                         "DerivedData/extracted/", "DerivedNumericValues" );
-                
-                } else if (arg.equalsIgnoreCase("StandardizedVariants")) {
+                } 
+                */
+                else if (arg.equalsIgnoreCase("StandardizedVariants")) {
                     GenerateStandardizedVariants.generate();
                 
         // OTHER STANDARD PROPERTIES
@@ -244,7 +245,7 @@ public final class Main implements UCD_Types {
                     GenerateCaseFolding.generateSpecialCasing(true);
                     GenerateCaseFolding.generateSpecialCasing(false);
                         
-                } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
+ /*               } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
                     GenerateData.generateCompExclusions();
     
                 } else if (arg.equalsIgnoreCase("DerivedAge")) {
@@ -305,7 +306,7 @@ public final class Main implements UCD_Types {
                     
                 } else if (arg.equalsIgnoreCase("listKatakana")) {
                     GenerateData.listKatakana();
-                    
+*/                    
                 /* 
                 } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
                     mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);

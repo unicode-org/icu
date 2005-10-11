@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Counter.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2005/10/11 19:39:15 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -44,13 +44,31 @@ public final class Counter {
         }
     }
 
-    public void add(String obj) {
+    public void add(Object obj, int countValue) {
         RWInteger count = (RWInteger)map.get(obj);
-        if (count == null) {
-            count = new RWInteger();
-            map.put(obj, count);
+        if (count == null) map.put(obj, count = new RWInteger());
+        count.value += countValue;
+    }
+    
+    public int getCount(Object obj) {
+        RWInteger count = (RWInteger) map.get(obj);
+        return count == null ? 0 : count.value;
+    }
+    
+    public void clear() {
+        map.clear();
+    }
+    
+    public int getTotal() {
+        int count = 0;
+        for (Iterator it = map.keySet().iterator(); it.hasNext();) {
+            count += ((RWInteger) map.get(it.next())).value;
         }
-        count.value += obj.length();
+        return count;
+    }
+    
+    public int getItemCount() {
+        return map.size();
     }
 
     public Map getSortedByCount() {

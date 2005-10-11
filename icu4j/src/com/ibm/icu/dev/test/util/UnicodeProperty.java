@@ -318,8 +318,23 @@ Name: Unicode_1_Name
      * @return the unicode map
      */
     public UnicodeMap getUnicodeMap() {
-        return (UnicodeMap) getUnicodeMap_internal().clone();
+        return getUnicodeMap(false);
     }
+    
+    /**
+     * @return the unicode map
+     */
+    public UnicodeMap getUnicodeMap(boolean getShortest) {
+    	if (!getShortest) return (UnicodeMap) getUnicodeMap_internal().clone();
+        UnicodeMap result = new UnicodeMap();
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
+            String value = getValue(i,true);
+            result.put(i, value);
+        }
+        return result;
+    }
+
 
     /**
      * @return the unicode map
