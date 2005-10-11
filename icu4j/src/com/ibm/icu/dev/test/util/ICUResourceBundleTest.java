@@ -1023,6 +1023,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(i!=4){
             errln("Did not get the expected number of keys");
         }
+        UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR");
+        if(bundle==null){
+            errln("Could not load bundle fr_Latn_FR");
+        }
     }
 }
 
