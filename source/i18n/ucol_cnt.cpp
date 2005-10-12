@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,8 +25,6 @@
 #include "unicode/uchar.h"
 #include "ucol_cnt.h"
 #include "cmemory.h"
-
-U_NAMESPACE_BEGIN
 
 static void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     if(tbl->position == tbl->size) {
@@ -573,7 +571,5 @@ uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint
       return UCOL_NOT_FOUND;
     }
 }
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */

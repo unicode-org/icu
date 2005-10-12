@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,7 +31,7 @@
 #include "ucol_elm.h"
 #include "ucol_imp.h"
 
-U_NAMESPACE_BEGIN
+U_CDECL_BEGIN
 
 #define UPRV_CNTTAB_NEWELEMENT 0xFFFFFF
 
@@ -98,7 +98,7 @@ uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCod
 U_CAPI UBool U_EXPORT2 
 uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status);
 
-U_NAMESPACE_END
+U_CDECL_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
