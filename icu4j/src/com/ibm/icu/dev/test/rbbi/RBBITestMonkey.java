@@ -392,11 +392,13 @@ public class RBBITestMonkey extends TestFmwk {
             fJT    = new UnicodeSet("[\\p{Line_break=JT}]");
             fH2    = new UnicodeSet("[\\p{Line_break=H2}]");
             fH3    = new UnicodeSet("[\\p{Line_break=H3}]");
+            fSG    = new UnicodeSet("[\\ud800-\\udfff]");
             fXX    = new UnicodeSet("[\\p{Line_break=XX}]");
             
             fAL.addAll(fXX);     // Default behavior for XX is identical to AL
             fAL.addAll(fAI);     // Default behavior for AI is identical to AL
             fAL.addAll(fSA);     // Default behavior for SA is XX, which defaults to AL
+            fAL.addAll(fSG);     // Default behavior for SG (unpaired surrogates) is AL
             
             
             
@@ -912,6 +914,208 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
      
+    /**
+     * 
+     * Sentence Monkey Test Class
+     *
+     * 
+     * 
+     */
+    static class RBBISentenceMonkey extends RBBIMonkeyKind {
+        List                      fSets;
+        StringBuffer              fText;
+
+        UnicodeSet                fKatakanaSet;
+        UnicodeSet                fALetterSet;
+        UnicodeSet                fMidLetterSet;
+        UnicodeSet                fMidNumSet;
+        UnicodeSet                fNumericSet;
+        UnicodeSet                fFormatSet;
+        UnicodeSet                fExtendSet;
+        UnicodeSet                fExtendNumLetSet;
+        UnicodeSet                fOtherSet;
+
+        
+        RBBISentenceMonkey() {
+            fSets          = new ArrayList();
+
+            fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]");
+            fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]");
+            fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
+            fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
+            fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
+            fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
+            fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
+            fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]");
+            fOtherSet        = new UnicodeSet();
+
+            fOtherSet.complement();
+            fOtherSet.removeAll(fALetterSet);
+            fOtherSet.removeAll(fKatakanaSet);
+            fOtherSet.removeAll(fMidLetterSet);
+            fOtherSet.removeAll(fMidNumSet);
+            fOtherSet.removeAll(fNumericSet);
+            fOtherSet.removeAll(fFormatSet);
+            fOtherSet.removeAll(fExtendSet);
+            fOtherSet.removeAll(fExtendNumLetSet);
+
+            fSets.add(fALetterSet);
+            fSets.add(fKatakanaSet);
+            fSets.add(fMidLetterSet);
+            fSets.add(fMidNumSet);
+            fSets.add(fNumericSet);
+            fSets.add(fFormatSet);
+            fSets.add(fExtendSet);
+            fSets.add(fExtendNumLetSet);
+            fSets.add(fOtherSet);
+        }
+        
+        
+        List  charClasses() {
+         return fSets;  
+        }
+        
+        void   setText(StringBuffer s) { 
+            fText = s;        
+        }   
+
+        int   next(int prevPos) {  
+            int    p0, p1, p2, p3;      // Indices of the significant code points around the 
+                                        //   break position being tested.  The candidate break
+                                        //   location is before p2.
+            int     breakPos = -1;
+            
+            int c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+            
+            // Prev break at end of string.  return DONE.
+            if (prevPos >= fText.length()) {
+                return -1;
+            }
+            p0 = p1 = p2 = p3 = prevPos;
+            c3 = UTF16.charAt(fText, prevPos);
+            c0 = c1 = c2 = 0;
+            
+            
+
+            // Loop runs once per "significant" character position in the input text.
+            for (;;) {
+                // Move all of the positions forward in the input string.
+                p0 = p1;  c0 = c1;
+                p1 = p2;  c1 = c2;
+                p2 = p3;  c2 = c3;
+                
+                // Advancd p3 by    (GC Format*)   Rules 3, 4
+                p3 = nextGC(fText, p3);
+                if (p3 == -1 || p3 >= fText.length()) {
+                    p3 = fText.length();
+                    c3 = 0;
+                } else {
+                    c3 = UTF16.charAt(fText, p3);
+                    while (fFormatSet.contains(c3)) {
+                        p3 = moveIndex32(fText, p3, 1);
+                        c3 = 0;
+                        if (p3 < fText.length()) {
+                            c3 = UTF16.charAt(fText, p3);   
+                        }
+                    }
+                }
+
+                if (p1 == p2) {
+                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
+                    continue;
+                }
+                if (p2 == fText.length()) {
+                    // Reached end of string.  Always a break position.
+                    break;
+                }
+
+                // Rule (5).   ALetter x ALetter
+                if (fALetterSet.contains(c1) &&
+                        fALetterSet.contains(c2))  {
+                    continue;
+                }
+                
+                // Rule (6)  ALetter  x  MidLetter  ALetter
+                //
+                if ( fALetterSet.contains(c1) &&
+                        fMidLetterSet.contains(c2) &&
+                        fALetterSet.contains(c3)) {
+                    continue;
+                }
+                
+                
+                // Rule (7)  ALetter MidLetter   x  ALetter
+                if (fALetterSet.contains(c0) &&
+                        fMidLetterSet.contains(c1)  &&
+                        fALetterSet.contains(c2)) {
+                    continue;
+                }
+                
+                //  Rule (8)    Numeric x Numeric
+                if (fNumericSet.contains(c1) &&
+                        fNumericSet.contains(c2))  {
+                    continue;
+                }
+                
+                // Rule (9)    ALetter x Numeric
+                if (fALetterSet.contains(c1) &&
+                        fNumericSet.contains(c2))  {
+                    continue;
+                }
+
+                // Rule (10)    Numeric x ALetter
+                if (fNumericSet.contains(c1) &&
+                        fALetterSet.contains(c2))  {
+                    continue;
+                }
+                
+                // Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
+                if ( fNumericSet.contains(c0) &&
+                        fMidNumSet.contains(c1)  && 
+                        fNumericSet.contains(c2)) {
+                    continue;
+                }
+                
+                // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
+                if (fNumericSet.contains(c1) &&
+                        fMidNumSet.contains(c2) &&
+                        fNumericSet.contains(c3)) {
+                    continue;
+                }
+                
+                // Rule (13)  Katakana x Katakana
+                if (fKatakanaSet.contains(c1) &&
+                        fKatakanaSet.contains(c2))  {
+                    continue;
+                }
+                
+                // Rule 13a  (ALetter | Numeric | Katakana | ExtendNumLet) x ExtendNumLet
+                if ((fALetterSet.contains(c1) || fNumericSet.contains(c1) ||
+                        fKatakanaSet.contains(c1) || fExtendNumLetSet.contains(c1)) &&
+                        fExtendNumLetSet.contains(c2)) {
+                    continue;
+                }
+                // Rule 13b   ExtendNumLet x (ALetter | Numeric | Katakana | ExtendNumLet)
+                if (fExtendNumLetSet.contains(c1) &&
+                        (fALetterSet.contains(c2) || fNumericSet.contains(c2) ||
+                        fKatakanaSet.contains(c2) || fExtendNumLetSet.contains(c2))) {
+                    continue;
+                }
+               
+                // Rule 14.  Break found here.
+                break;
+            }
+            
+            breakPos = p2;
+            return breakPos;
+        }
+        
+    }
+
+ 
+
+    
+    
     /**
      * Move an index into a string by n code points.
      *   Similar to UTF16.moveCodePointOffset, but without the exceptions, which were
@@ -1502,6 +1706,24 @@ public void TestLineMonkey() {
         loopCount = 50;
     }
     RunMonkey(bi, m, "line", seed, loopCount);
+}
+
+public void TestSentMonkey() {
+    
+    int        loopCount = 500;
+    int        seed      = 1;
+    
+    if (params.inclusion >= 9) {
+        loopCount = 3000;
+    }
+    
+    logln("Sentence Break Monkey Test");
+    RBBISentenceMonkey  m = new RBBISentenceMonkey();
+    BreakIterator   bi = BreakIterator.getSentenceInstance(Locale.US);
+    if (params == null) {
+        loopCount = 30;
+    }
+    //RunMonkey(bi, m, "sent", seed, loopCount);
 }
 
 }
