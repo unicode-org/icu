@@ -26,6 +26,13 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     
     private static final int  START_STATE = 1;     // The state number of the starting state
     private static final int  STOP_STATE  = 0;     // The state-transition value indicating "stop"
+    
+    // RBBIRunMode - the state machine runs an extra iteration at the beginning and end
+    //               of user text.  A variable with this enum type keeps track of where we
+    //               are.  The state machine only fetches user text input while in RUN mode.
+    private static final int  RBBI_START  = 0;
+    private static final int  RBBI_RUN    = 1;
+    private static final int  RBBI_END   = 2;
 
     /** @internal */
     RuleBasedBreakIterator_New() {
@@ -270,7 +277,11 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         int       start = current();
 
         CIPrevious32(fText);
-        int       lastResult    = handlePrevious();
+        int       lastResult    = handlePrevious(fRData.fRTable);
+        if (lastResult == BreakIterator.DONE) {
+            lastResult = fText.getBeginIndex();
+            fText.setIndex(lastResult);
+        }
         int       result        = lastResult;
         int       lastTag       = 0;
         boolean   breakTagValid = false;
@@ -494,21 +505,18 @@ public boolean isBoundary(int offset) {
         return true;
     }
 
-    // out-of-range indexes are never boundary positions
-    if (offset < fText.getBeginIndex()) {
-        first();       // For side effects on current position, tag values.
-        return false;
-    }
-
-    if (offset > fText.getEndIndex()) {
-        last();        // For side effects on current position, tag values.
-        return false;
-    }
-
     // otherwise, we can use following() on the position before the specified
     // one and return true if the position we get back is the one the user
     // specified
-    return following(offset - 1) == offset;
+    
+    // return following(offset - 1) == offset;
+    // TODO:  check whether it is safe to revert to the simpler offset-1 code
+    //         The safe rules may take care of unpaired surrogates ok.
+    fText.setIndex(offset);
+    CIPrevious32(fText);
+    int  pos = fText.getIndex();
+    boolean result = following(pos) == offset;
+    return result;
 }
 
 /**
@@ -642,7 +650,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         this.first();
     }
     
-    // 23 bit Char value returned from when an iterator has run out of range.
+    // 32 bit Char value returned from when an iterator has run out of range.
     //     Positive value so fast case (not end, not surrogate) can be checked
     //     with a single test.
     private static int CI_DONE32 = 0x7fffffff;
@@ -757,6 +765,8 @@ public int getRuleStatusVec(int[] fillInArray) {
 
     /**
      * The State Machine Engine for moving forward is here.
+     * This function is the heart of the RBBI run time engine.
+     * 
      * @param stateTable
      * @return the new iterator position
      * 
@@ -769,12 +779,26 @@ public int getRuleStatusVec(int[] fillInArray) {
      * points at the lead surrogate of a supplementary.
      */
     private int handleNext(short stateTable[]) {
+        int               state;
+        short             category        = 0;
+        int               mode;
+        int               row;
+        int               c;
+        int               lookaheadStatus = 0;
+        int               lookaheadTagIdx = 0;
+        int               result          = 0;
+        int               initialPosition = 0;
+        int               lookaheadResult = 0;
+        boolean          lookAheadHardBreak = 
+            (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+        
         if (fTrace) {
             System.out.println("Handle Next   pos      char  state category");
         }
 
         // No matter what, handleNext alway correctly sets the break tag value.
         fLastStatusIndexValid = true;
+        fLastRuleStatusIndex  = 0;
 
         // if we're already at the end of the text, return DONE.
         if (fText == null) {
@@ -782,14 +806,10 @@ public int getRuleStatusVec(int[] fillInArray) {
             return BreakIterator.DONE;
         }
 
-        int initialPosition = fText.getIndex();
-        int result          = initialPosition;
-        int lookaheadResult = 0;
-
-        // Initialize the state machine.  Begin in state 1
-        int               state           = START_STATE;
-        short             category;
-        int               c               = fText.current();
+        // Set up the starting char
+        initialPosition = fText.getIndex();
+        result          = initialPosition;
+        c               = fText.current();
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
             c = CINextTrail32(fText, c);
             if (c == CI_DONE32) {
@@ -797,50 +817,59 @@ public int getRuleStatusVec(int[] fillInArray) {
                 return BreakIterator.DONE;
             }
         }
-        int               row             = fRData.getRowIndex(state); 
-        int               lookaheadStatus = 0;
-        int               lookaheadTagIdx = 0;
 
-        fLastRuleStatusIndex = 0;
+        // Set the initial state for the state machine
+        state           = START_STATE;
+        row             = fRData.getRowIndex(state); 
+        category        = 3;
+        mode            = RBBI_RUN;
+        if ((stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
+            category = 2;
+            mode     = RBBI_START;
+        }
 
-        // Character Category fetch for starting character.
-        //    See comments on character category code within loop, below.
-        category = (short)fRData.fTrie.getCodePointValue(c);
-        //if ((category & 0x4000) != 0)  {
-              // fDictionaryCharCount++;
-        //      category &= ~0x4000;
-        //    }
 
         // loop until we reach the end of the text or transition to state 0
         while (state != STOP_STATE) {
             if (c == CI_DONE32) {
                 // Reached end of input string.
- 
-                if (lookaheadResult > result) {
-                    // We ran off the end of the string with a pending look-ahead match.
-                    // Treat this as if the look-ahead condition had been met, and return
-                    //  the match at the / position from the look-ahead rule.
-                    result               = lookaheadResult;
-                    fLastRuleStatusIndex = lookaheadTagIdx;
-                    lookaheadStatus      = 0;
-                } else if (result == initialPosition) {
-                    // Ran off end, no match found.
-                    // move forward one
-                    fText.setIndex(initialPosition);
-                    CINext32(fText);
-                }
-                break;
-            }
-            // look up the current character's character category, which tells us
-            // which column in the state table to look at.
-            //
-            category = (short)fRData.fTrie.getCodePointValue(c);
+                if (mode == RBBI_END) {
+                    // We have already run the loop one last time with the
+                    // character set to the pseudo {eof} value. Now it is time
+                    // to unconditionally bail out.
 
-            //  Clear the dictionary flag bit in the character's category.
-            //  Note:  not using the old style dictionary stuff in this Java engine.
-            //         But the bit can be set by the C++ rule compiler, and
-            //         we need to clear it out here to be safe.
-            //category &= ~0x4000;  // TODO:  commented out for perf.  
+                    if (lookaheadResult > result) {
+                        // We ran off the end of the string with a pending
+                        // look-ahead match.
+                        // Treat this as if the look-ahead condition had been
+                        // met, and return
+                        // the match at the / position from the look-ahead rule.
+                        result = lookaheadResult;
+                        fLastRuleStatusIndex = lookaheadTagIdx;
+                        lookaheadStatus = 0;
+                    } else if (result == initialPosition) {
+                        // Ran off end, no match found.
+                        // move forward one
+                        fText.setIndex(initialPosition);
+                        CINext32(fText);
+                    }
+                    break;
+                }
+                // Run the loop one last time with the fake end-of-input character category
+                mode = RBBI_END;
+                category = 1;
+            }
+            
+            // Get the char category.  An incoming category of 1 or 2 mens that
+            //      we are preset for doing the beginning or end of input, and
+            //      that we shouldn't get a category from an actual text input character.
+            //
+            if (mode == RBBI_RUN) {
+                // look up the current character's character category, which tells us
+                // which column in the state table to look at.
+                //
+                category = (short) fRData.fTrie.getCodePointValue(c);
+            }
 
             if (fTrace) {
                 System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
@@ -853,16 +882,22 @@ public int getRuleStatusVec(int[] fillInArray) {
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
             row   = fRData.getRowIndex(state);  
 
-            // Get the next character.  Doing it here positions the iterator
-            //    to the correct position for recording matches in the code that
-            //    follows.
-            c = (int)fText.next(); 
-            if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
-                c = CINextTrail32(fText, c);
+            // Advance to the next character.  
+            // If this is a beginning-of-input loop iteration, don't advance.
+            //    The next iteration will be processing the first real input character.
+            if (mode == RBBI_RUN) {
+                c = (int)fText.next(); 
+                if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
+                    c = CINextTrail32(fText, c);
+                }
+            } else {
+                if (mode == RBBI_START) {
+                    mode = RBBI_RUN;
+                }
             }
-
+             
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
-                // Match found, common case, could have lookahead so we move on to check it
+                // Match found, common case
                 result = fText.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c != CI_DONE32) {
                     // The iterator has been left in the middle of a surrogate pair.
@@ -882,6 +917,12 @@ public int getRuleStatusVec(int[] fillInArray) {
                     result               = lookaheadResult;
                     fLastRuleStatusIndex = lookaheadTagIdx;
                     lookaheadStatus      = 0;
+                    // TODO: make a standalone hard break in a rule work.
+                    if (lookAheadHardBreak) {
+                        return result;
+                    }
+                    // Look-ahead completed, but other rules may match further.  Continue on.
+                    //   TODO:  junk this feature?  I don't think it's used anywhere.
                     continue;
                 }
 
@@ -898,9 +939,12 @@ public int getRuleStatusVec(int[] fillInArray) {
 
 
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
-                lookaheadStatus = 0;           // clear out any pending look-ahead matches.
+                // Because this is an accepting state, any in-progress look-ahead match
+                //   is no longer relavant.  Clear out the pending lookahead status.
+                lookaheadStatus = 0; 
             }
-        }        // End of state machine main loop
+            
+         }        // End of state machine main loop
 
         // The state machine is done.  Check whether it found a match...
 
@@ -914,6 +958,8 @@ public int getRuleStatusVec(int[] fillInArray) {
         }
 
         // Leave the iterator at our result position.
+        //   (we may have advanced beyond the last accepting position chasing after
+        //    longer matches that never completed.)
         fText.setIndex(result);
         if (fTrace) {
             System.out.println("result = " + result);
@@ -921,261 +967,187 @@ public int getRuleStatusVec(int[] fillInArray) {
         return result;
     }
 
-    /*
-     * handlePrevious
-     */
-    private int  handlePrevious() {
-        if (fText == null || fRData == null) {
-            return 0;
-        }
-        if (fRData.fRTable == null) {
-            fText.first();
-            return fText.getIndex();
-        }
-
-        short          stateTable[]    = fRData.fRTable;
-        int            state           = START_STATE;
-        int            category;
-        int            lastCategory    = 0;
-        int            result          = fText.getIndex();
-        int            lookaheadStatus = 0;
-        int            lookaheadResult = 0;
-        int            lookaheadTagIdx = 0;
-        int            c               = CICurrent32(fText);
-        int            row;
-
-        row = fRData.getRowIndex(state);
-        category = (short)fRData.fTrie.getCodePointValue(c);
-        //category &= ~0x4000;    // Clear the dictionary bit, just in case.
-
-        if (fTrace) {
-            System.out.println("Handle Prev   pos   char  state category ");
-        }
-
-        // loop until we reach the beginning of the text or transition to state 0
-        for (;;) {
-            if (c == CI_DONE32) {
-                break;
-            }
-
-            // save the last character's category and look up the current
-            // character's category
-            lastCategory = category;
-            category = (short)fRData.fTrie.getCodePointValue(c);
-
-            // Check the dictionary bit in the character's category.
-            //    Don't exist in this Java engine implementation.  Clear the bit.
-            //
-            // category &= ~0x4000;
-
-            if (fTrace) {
-                System.out.print("             " + fText.getIndex()+ "   ");
-                if (0x20<=c && c<0x7f) {
-                    System.out.print("  " +  c + "  ");
-                } else {
-                    System.out.print(" " + Integer.toHexString(c) + " ");
-                }
-                System.out.println(" " + state + "  " + category + " ");
-            }
-
-            // look up a state transition in the backwards state table
-            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row = fRData.getRowIndex(state);
-
-            continueOn: {
-                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0 &&
-                        stateTable[row + RBBIDataWrapper.LOOKAHEAD] == 0) {
-                    break continueOn;
-                }
-                
-                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
-                    // Match found, common case, no lookahead involved.
-                    result = fText.getIndex();
-                    lookaheadStatus = 0;     // clear out any pending look-ahead matches.
-                    break continueOn;
-                }
-                
-                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0 &&
-                    stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
-                    // Lookahead match point.  Remember it, but only if no other rule
-                    //                         has unconditionally matched to this point.
-                    // TODO:  handle case where there's a pending match from a different rule
-                    //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
-                    int  r = fText.getIndex();
-                    if (r > result) {
-                        lookaheadResult = r;
-                        lookaheadStatus = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
-                        lookaheadTagIdx = stateTable[row + RBBIDataWrapper.TAGIDX];
-                    }
-                    break continueOn;
-                }
-                
-                if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0 &&
-                        stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
-                    // Lookahead match is completed.  Set the result accordingly, but only
-                    //   if no other rule has matched further in the mean time.
-                    //  TODO:  CHECK THIS LOGIC.  It looks backwards.
-                    //         These are _reverse_ rules.  
-                    if (lookaheadResult > result) {
-                        if (stateTable[row + RBBIDataWrapper.ACCEPTING] != lookaheadStatus) {  
-                            // TODO:  handle this case of overlapping lookahead matches.
-                            //        With correctly written rules, we won't get here.
-                            // System.out.println("Trouble in handlePrevious()"); 
-                        }
-                        result               = lookaheadResult;
-                        fLastRuleStatusIndex = lookaheadTagIdx;
-                        lookaheadStatus      = 0;
-                    }
-                    break continueOn;
-                }   
-            }   // end of continueOn block.
-
-            if (state == STOP_STATE) {
-                break;
-            }
-
-            // then move one character backwards
-            c = CIPrevious32(fText);
-       }
-
-        // Note:  the result position isn't what is returned to the user by previous(),
-        //        but where the implementation of previous() turns around and
-        //        starts iterating forward again.
-        if (c == CI_DONE32) {
-            result = fText.getBeginIndex();
-        }
-        fText.setIndex(result);
-
-        return result;
-    }
     
     
     private int handlePrevious(short stateTable[]) {
-        if (fText == null || stateTable == null) {
-            return 0;
-        }
-        // break tag is no longer valid after icu switched to exact backwards
-        // positioning.
-        fLastStatusIndexValid = false;
-        if (stateTable == null) {
-            return fText.getBeginIndex();
-        }
-
-        int            state              = START_STATE;
-        int            category;
-        int            c                  = CIPrevious32(fText);
-        // previous character
-        int            result             = fText.getIndex();
+        int            state;
+        int            category           = 0;
+        int            mode;
+        int            row;        
+        int            c;
         int            lookaheadStatus    = 0;
+        int            result             = 0;
+        int            initialPosition    = 0;
         int            lookaheadResult    = 0;
         boolean        lookAheadHardBreak = 
             (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
-  
-        int            row = fRData.getRowIndex(state);
-
-        category = (short)fRData.fTrie.getCodePointValue(c);
-
+        
+        
+        if (fText == null || stateTable == null) {
+            return 0;
+        }
+        // handlePrevious() never gets the rule status.
+        // Flag the status as invalid; if the user ever asks for status, we will need
+        // to back up, then re-find the break position using handleNext(), which does
+        // get the status value.
+        fLastStatusIndexValid = false;
+        fLastRuleStatusIndex  = 0;
+        
+        // set up the starting char
+        initialPosition = fText.getIndex();
+        result          = initialPosition;
+        c               = CIPrevious32(fText);
+        
+        // Set up the initial state for the state machine
+        state = START_STATE;
+        row = fRData.getRowIndex(state);
+        category = 3;   // TODO:  obsolete?  from the old start/run mode scheme?
+        mode     = RBBI_RUN;
+        if ((stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
+            category = 2;
+            mode     = RBBI_START;
+        }
+        
         if (fTrace) {
             System.out.println("Handle Prev   pos   char  state category ");
         }
         
         // loop until we reach the beginning of the text or transition to state 0
-        for (;;) {
-            if (c==CI_DONE32) {
-                if (fRData.fHeader.fVersion == 1) {
-                    // This is the old (ICU 3.2 and earlier) format data.
-                    //  No explicit support for matching {eof}.  Did have hacke, though...
-                    if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0 &&
-                            lookaheadResult == 0) {
-                        result = 0;
+        //
+        mainLoop: for (;;) {
+            innerBlock: {
+                if (c == CI_DONE32) {
+                    // Reached end of input string.
+                    if (mode == RBBI_END || fRData.fHeader.fVersion == 1) {
+                        // Either this is the old (ICU 3.2 and earlier) format data which
+                        // does not support explicit support for matching {eof}, or
+                        // we have already done the {eof} iteration.  Now is the time
+                        // to unconditionally bail out.
+                        if (lookaheadResult < result) {
+                            // We ran off the end of the string with a pending look-ahead match.
+                            // Treat this as if the look-ahead condition had been met, and return
+                            //  the match at the / position from the look-ahead rule.
+                            result = lookaheadResult;
+                            lookaheadStatus = 0;
+                        } else if (result == initialPosition) {
+                            // Ran off start, no match found.
+                            // Move one position (towards the start, since we are doing previous.)
+                            fText.setIndex(initialPosition);
+                            CIPrevious32(fText);
+                        }
+                        break mainLoop;
                     }
-                    break;
+                    mode = RBBI_END;
+                    category = 1;
                 }
-                // Newer data format, with support for {eof}.
-                //    end of input is hardwired by rule builder as category 1
-                category = 1;
-            } else {
-                // not at {eof}  
-                //  look up the current character's category (the table column)
-                category = (short)fRData.fTrie.getCodePointValue(c);
-            }
-
-            // category &= ~0x4000;    // Clear the dictionary bit flag
-            //                         //   (Should be unused; holdover from old RBBI)
-
-            if (fTrace) {
-                System.out.print("             " + fText.getIndex()+ "   ");
-                if (0x20<=c && c<0x7f) {
-                    System.out.print("  " +  c + "  ");
-                } else {
-                    System.out.print(" " + Integer.toHexString(c) + " ");
+                
+                if (mode == RBBI_RUN) {
+                    // look up the current character's category, which tells us
+                    // which column in the state table to look at.
+                    //
+                    category = (short) fRData.fTrie.getCodePointValue(c);
                 }
-                System.out.println(" " + state + "  " + category + " ");
-            } 
-
-            // look up a state transition in the backwards state table
-            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row = fRData.getRowIndex(state);
-
-            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
-                // Match found, common case, could have lookahead so we move on to check it
-                result = fText.getIndex();
-            }
-
-            if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
-                if (lookaheadStatus != 0
-                    && stateTable[row + RBBIDataWrapper.ACCEPTING] == lookaheadStatus) {
-                    // Lookahead match is completed.  Set the result accordingly, but only
-                    // if no other rule has matched further in the mean time.
-                    result               = lookaheadResult;
-                    lookaheadStatus      = 0;
-                    /// i think we have to back up to read the lookahead character again
-                    /// fText->setIndex(lookaheadResult);
-                    /// TODO: this is a simple hack since reverse rules only have simple
-                    /// lookahead rules that we can definitely break out from.
-                    /// we need to make the lookahead rules not chain eventually.
-                    /// return result;
-                    /// this is going to be the longest match again
-
-                    /// syn wee todo hard coded for line breaks stuff
-                    /// needs to provide a tag in rules to ensure a stop.
-                    
-                    if (lookAheadHardBreak) {
-                        break;
+                
+                
+                if (fTrace) {
+                    System.out.print("             " + fText.getIndex() + "   ");
+                    if (0x20 <= c && c < 0x7f) {
+                        System.out.print("  " + c + "  ");
+                    } else {
+                        System.out.print(" " + Integer.toHexString(c) + " ");
                     }
-                    fText.setIndex(result);
-                } else {
-                    // Hit a possible look-ahead match.  We are at the
-                    // position of the '/'.  Remember this position.
-                    lookaheadResult      = fText.getIndex();
-                    lookaheadStatus      = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+                    System.out.println(" " + state + "  " + category + " ");
                 }
-            } else {               
-                // not lookahead...                
+                
+                // State Transition - move machine to its next state
+                //
+                state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
+                row = fRData.getRowIndex(state);
+                
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                    // Match found, common case, could have lookahead so we move
+                    // on to check it
+                    result = fText.getIndex();
+                }
+                
+                if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
+                    if (lookaheadStatus != 0
+                            && stateTable[row + RBBIDataWrapper.ACCEPTING] == lookaheadStatus) {
+                        // Lookahead match is completed. Set the result
+                        // accordingly, but only
+                        // if no other rule has matched further in the mean
+                        // time.
+                        result = lookaheadResult;
+                        lookaheadStatus = 0;
+                        // TODO: make a standalone hard break in a rule work.
+                        
+                        if (lookAheadHardBreak) {
+                            break mainLoop;
+                        }
+                        // Look-ahead completed, but other rules may match further.
+                        // Continue on.
+                        // TODO: junk this feature?  I don't think that it's used anywhere.
+                        break innerBlock;
+                    }
+                    // Hit a possible look-ahead match. We are at the
+                    // position of the '/'. Remember this position.
+                    lookaheadResult = fText.getIndex();
+                    lookaheadStatus = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+                    break innerBlock;
+                } 
+                
+                // not lookahead...
                 if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
-                    // This is a plain (non-look-ahead) acceptiong state.
+                    // This is a plain (non-look-ahead) accepting state.
                     if (!lookAheadHardBreak) {
-                        lookaheadStatus = 0;     //  Clear out any pending look-ahead matches,
-                                                 //   but only if not doing the lookAheadHardBreak option
-                                                 //   which needs to force a break no matter what is going
-                                                 //   on with the rest of the match, i.e. we can't abandon
-                                                 //   a partially completed look-ahead match because some
-                                                 //   other rule matched further than the '/' position
-                                                 //   in the look-ahead match.
+                        // Clear out any pending look-ahead matches,
+                        // but only if not doing the lookAheadHardBreak option
+                        // which needs to force a break no matter what is going
+                        // on with the rest of the match, i.e. we can't abandon
+                        // a partially completed look-ahead match because
+                        // some other rule matched further than the '/' position
+                        // in the look-ahead match.
+                        lookaheadStatus = 0; 
                     }
                 }
-            }
-            
+                
+            } // end of innerBlock.  "break innerBlock" in above code comes out here.
+        
+        
             if (state == STOP_STATE) {
-                break;
+                // Normal loop exit is here
+                break mainLoop;
             }
-
+        
             // then move iterator position backwards one character
-            c = CIPrevious32(fText);
+            //
+            if (mode == RBBI_RUN) {
+                c = CIPrevious32(fText);
+            } else {
+                if (mode == RBBI_START) {
+                    mode = RBBI_RUN;
+                }
+            }
+        
+        
+        }   // End of the main loop.
+        
+        // The state machine is done.  Check whether it found a match...
+        //
+        // If the iterator failed to advance in the match engine, force it ahead by one.
+        //   (This really indicates a defect in the break rules.  They should always match
+        //    at least one character.)
+        if (result == initialPosition) {
+            result = fText.setIndex(initialPosition);
+            CIPrevious32(fText);
+            result = fText.getIndex();
         }
-
+        
         fText.setIndex(result);
-
+        if (fTrace) {
+            System.out.println("Result = " + result);
+        }
+        
         return result;
     }
 

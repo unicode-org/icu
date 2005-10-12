@@ -60,6 +60,7 @@ final class RBBIDataWrapper {
     //     enum RBBIStateTableFlags in the C version.
     //
     final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
+    final static int      RBBI_BOF_REQUIRED         = 2;  
     
     //  Getters for fields from the state table header
     //
