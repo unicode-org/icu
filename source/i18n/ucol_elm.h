@@ -33,7 +33,7 @@
 #include <stdio.h>
 #endif
 
-U_NAMESPACE_BEGIN
+U_CDECL_BEGIN
 
 typedef struct {
     uint32_t *CEs;
@@ -103,7 +103,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status);
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
 
-U_NAMESPACE_END
+U_CDECL_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 

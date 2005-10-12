@@ -36,8 +36,6 @@
 #include "unicode/caniter.h"
 #include "cmemory.h"
 
-U_NAMESPACE_BEGIN
-
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
 U_CDECL_BEGIN
@@ -1588,8 +1586,6 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
   }
   return context.noOfClosures;
 }
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
