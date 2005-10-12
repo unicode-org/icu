@@ -67,6 +67,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
         sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMI" U_ICU_VERSION_SHORT "TE)'\"\n\n");
     else if (uprv_strcmp(o->libName, U_LIBICUDATA_NAME"_stub") == 0)
         sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMI" U_ICU_VERSION_SHORT "D1)'\"\n\n");
+    else
+        sprintf(tmp, "\n");
     T_FileStream_writeLine(makefile, tmp);
 #endif
     
