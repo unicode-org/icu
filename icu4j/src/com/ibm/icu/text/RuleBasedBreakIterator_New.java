@@ -723,7 +723,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         }
         char trail = ci.previous();
         int retVal = trail;
-        if (UTF16.isTrailSurrogate(trail)) {
+        if (UTF16.isTrailSurrogate(trail) && ci.getIndex()>ci.getBeginIndex()) {
             char lead = ci.previous();
             if (UTF16.isLeadSurrogate(lead)) {
                 retVal = (((int)lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
