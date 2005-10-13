@@ -322,6 +322,10 @@ udat_getSymbols(const   UDateFormat     *fmt,
         res = syms->getEras(count);
         break;
 
+    case UDAT_ERA_NAMES:
+        res = syms->getEraNames(count);
+        break;
+
     case UDAT_MONTHS:
         res = syms->getMonths(count);
         break;
@@ -353,10 +357,6 @@ udat_getSymbols(const   UDateFormat     *fmt,
             syms->getLocalPatternChars(res1);
             return res1.extract(result, resultLength, *status);
         }
-
-    case UDAT_ERA_NAMES:
-        res = syms->getEraNames(count);
-        break;
 
     case UDAT_NARROW_MONTHS:
         res = syms->getMonths(count, DateFormatSymbols::FORMAT, DateFormatSymbols::NARROW);
@@ -434,6 +434,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
     case UDAT_LOCALIZED_CHARS:
         count = 1;
         break;
+
     case UDAT_ERA_NAMES:
         syms->getEraNames(count);
         break;
@@ -526,6 +527,13 @@ public:
     }
 
     static void
+        setEraName(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fEraNames, syms->fEraNamesCount, index, value, valueLength, errorCode);
+    }
+
+    static void
         setMonth(DateFormatSymbols *syms, int32_t index,
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
@@ -540,6 +548,34 @@ public:
     }
 
     static void
+        setNarrowMonth(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fNarrowMonths, syms->fNarrowMonthsCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneMonth(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneMonths, syms->fStandaloneMonthsCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneShortMonth(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneShortMonths, syms->fStandaloneShortMonthsCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneNarrowMonth(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneNarrowMonths, syms->fStandaloneNarrowMonthsCount, index, value, valueLength, errorCode);
+    }
+
+    static void
         setWeekday(DateFormatSymbols *syms, int32_t index,
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
@@ -551,6 +587,34 @@ public:
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
         setSymbol(syms->fShortWeekdays, syms->fShortWeekdaysCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setNarrowWeekday(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fNarrowWeekdays, syms->fNarrowWeekdaysCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneWeekday(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneWeekdays, syms->fStandaloneWeekdaysCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneShortWeekday(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneShortWeekdays, syms->fStandaloneShortWeekdaysCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneNarrowWeekday(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneNarrowWeekdays, syms->fStandaloneNarrowWeekdaysCount, index, value, valueLength, errorCode);
     }
 
     static void
@@ -578,6 +642,7 @@ udat_setSymbols(    UDateFormat             *format,
             int32_t                 valueLength,
             UErrorCode              *status)
 {
+
     if(U_FAILURE(*status)) return;
 
     DateFormatSymbols *syms = (DateFormatSymbols *)((SimpleDateFormat *)format)->getDateFormatSymbols();
@@ -585,6 +650,10 @@ udat_setSymbols(    UDateFormat             *format,
     switch(type) {
     case UDAT_ERAS:
         DateFormatSymbolsSingleSetter::setEra(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_ERA_NAMES:
+        DateFormatSymbolsSingleSetter::setEraName(syms, index, value, valueLength, *status);
         break;
 
     case UDAT_MONTHS:
@@ -595,12 +664,44 @@ udat_setSymbols(    UDateFormat             *format,
         DateFormatSymbolsSingleSetter::setShortMonth(syms, index, value, valueLength, *status);
         break;
 
+    case UDAT_NARROW_MONTHS:
+        DateFormatSymbolsSingleSetter::setNarrowMonth(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_MONTHS:
+        DateFormatSymbolsSingleSetter::setStandaloneMonth(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_SHORT_MONTHS:
+        DateFormatSymbolsSingleSetter::setStandaloneShortMonth(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_NARROW_MONTHS:
+        DateFormatSymbolsSingleSetter::setStandaloneNarrowMonth(syms, index, value, valueLength, *status);
+        break;
+
     case UDAT_WEEKDAYS:
         DateFormatSymbolsSingleSetter::setWeekday(syms, index, value, valueLength, *status);
         break;
 
     case UDAT_SHORT_WEEKDAYS:
         DateFormatSymbolsSingleSetter::setShortWeekday(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_NARROW_WEEKDAYS:
+        DateFormatSymbolsSingleSetter::setNarrowWeekday(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_WEEKDAYS:
+        DateFormatSymbolsSingleSetter::setStandaloneWeekday(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_SHORT_WEEKDAYS:
+        DateFormatSymbolsSingleSetter::setStandaloneShortWeekday(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_NARROW_WEEKDAYS:
+        DateFormatSymbolsSingleSetter::setStandaloneNarrowWeekday(syms, index, value, valueLength, *status);
         break;
 
     case UDAT_AM_PMS:
@@ -610,6 +711,11 @@ udat_setSymbols(    UDateFormat             *format,
     case UDAT_LOCALIZED_CHARS:
         DateFormatSymbolsSingleSetter::setLocalPatternChars(syms, value, valueLength, *status);
         break;
+
+    default:
+        *status = U_UNSUPPORTED_ERROR;
+        break;
+        
     }
 }
 
