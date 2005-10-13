@@ -922,62 +922,141 @@ public class RBBITestMonkey extends TestFmwk {
      * 
      */
     static class RBBISentenceMonkey extends RBBIMonkeyKind {
-        List                      fSets;
-        StringBuffer              fText;
+        List                 fSets;
+        StringBuffer         fText;
 
-        UnicodeSet                fKatakanaSet;
-        UnicodeSet                fALetterSet;
-        UnicodeSet                fMidLetterSet;
-        UnicodeSet                fMidNumSet;
-        UnicodeSet                fNumericSet;
-        UnicodeSet                fFormatSet;
-        UnicodeSet                fExtendSet;
-        UnicodeSet                fExtendNumLetSet;
-        UnicodeSet                fOtherSet;
+        UnicodeSet           fSepSet;
+        UnicodeSet           fFormatSet;
+        UnicodeSet           fSpSet;
+        UnicodeSet           fLowerSet;
+        UnicodeSet           fUpperSet;
+        UnicodeSet           fOLetterSet;
+        UnicodeSet           fNumericSet;
+        UnicodeSet           fATermSet;
+        UnicodeSet           fSTermSet;
+        UnicodeSet           fCloseSet;
+        UnicodeSet           fOtherSet;
 
+ 
         
         RBBISentenceMonkey() {
-            fSets          = new ArrayList();
+            fSets            = new ArrayList();
 
-            fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]");
-            fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]");
-            fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
-            fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
-            fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
-            fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
-            fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
-            fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]");
+            fSepSet          = new UnicodeSet("[\\p{Sentence_Break = Sep}]");
+            fFormatSet       = new UnicodeSet("[\\p{Sentence_Break = Format}]");
+            fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]");
+            fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]");
+            fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]");
+            fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}]");
+            fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]");
+            fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]");
+            fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]");
+            fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]");
             fOtherSet        = new UnicodeSet();
 
-            fOtherSet.complement();
-            fOtherSet.removeAll(fALetterSet);
-            fOtherSet.removeAll(fKatakanaSet);
-            fOtherSet.removeAll(fMidLetterSet);
-            fOtherSet.removeAll(fMidNumSet);
-            fOtherSet.removeAll(fNumericSet);
-            fOtherSet.removeAll(fFormatSet);
-            fOtherSet.removeAll(fExtendSet);
-            fOtherSet.removeAll(fExtendNumLetSet);
 
-            fSets.add(fALetterSet);
-            fSets.add(fKatakanaSet);
-            fSets.add(fMidLetterSet);
-            fSets.add(fMidNumSet);
-            fSets.add(fNumericSet);
+            fOtherSet.complement();
+            fOtherSet.removeAll(fSepSet);
+            fOtherSet.removeAll(fFormatSet);
+            fOtherSet.removeAll(fSpSet);
+            fOtherSet.removeAll(fLowerSet);
+            fOtherSet.removeAll(fUpperSet);
+            fOtherSet.removeAll(fOLetterSet);
+            fOtherSet.removeAll(fNumericSet);
+            fOtherSet.removeAll(fATermSet);
+            fOtherSet.removeAll(fSTermSet);
+            fOtherSet.removeAll(fCloseSet);
+
+            fSets.add(fSepSet);
             fSets.add(fFormatSet);
-            fSets.add(fExtendSet);
-            fSets.add(fExtendNumLetSet);
+
+            fSets.add(fSpSet);
+            fSets.add(fLowerSet);
+            fSets.add(fUpperSet);
+            fSets.add(fOLetterSet);
+            fSets.add(fNumericSet);
+            fSets.add(fATermSet);
+            fSets.add(fSTermSet);
+            fSets.add(fCloseSet);
             fSets.add(fOtherSet);
         }
         
         
         List  charClasses() {
-         return fSets;  
+            return fSets;  
         }
         
         void   setText(StringBuffer s) { 
             fText = s;        
         }   
+
+ /*
+        //
+        //   moveIndex32.  Utility to move an index, needed to avoid
+        //                 onewanted exceptions, and to simplify porting from C.
+        //
+        static int moveIndex32(StringBuffer s, int from, int delta) {
+            int   result;
+            try {
+                result = UTF16.moveCodePointOffset(s, from, delta);
+            } 
+            catch(StringIndexOutOfBoundsException e) {
+                result = delta < 0? 0: s.length();
+            }
+            return result;
+        }
+        */
+        
+        //      moveBack()   Find the "significant" code point preceding the index i.
+        //      Skips over format chars, and 2nd-nth chars of grapheme clusters.
+        //      The incoming parameter i must be on a boundary already.
+        private int moveBack(int i) {
+            int        testPos;
+            
+            if (i <= 0) {
+                return -1;
+            }
+
+            // We are looking for the index of the first chunk that immediately
+            // precedes the incoming index.  
+            testPos = i;
+            for (;;) {
+                testPos = moveIndex32(fText, testPos, -1); 
+                int endPos = moveForward(testPos);
+                if (endPos < i) {
+                    return endPos;
+                }
+                if (testPos == 0) {
+                    return 0;
+                }
+            }
+        }
+        
+        
+        int moveForward(int i) {
+            int  result = fText.length();
+            if (i < fText.length()) {
+                result = nextGC(fText, i); 
+                if (i < 0) {
+                    i = fText.length();
+                } else {
+                    if (!fSepSet.contains(cAt(i))) {
+                        while (result<fText.length() && fFormatSet.contains(cAt(result))) {
+                            result = moveIndex32(fText, result, 1);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        
+        int cAt(int pos) {
+            if (pos<0 || pos>=fText.length()) {
+                return -1;
+            } else {
+                return UTF16.charAt(fText, pos);
+            }
+        }
 
         int   next(int prevPos) {  
             int    p0, p1, p2, p3;      // Indices of the significant code points around the 
@@ -985,7 +1064,8 @@ public class RBBITestMonkey extends TestFmwk {
                                         //   location is before p2.
             int     breakPos = -1;
             
-            int c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+            int c0, c1, c2, c3;         // The code points at p0, p1, p2 & p3.
+            int c;
             
             // Prev break at end of string.  return DONE.
             if (prevPos >= fText.length()) {
@@ -995,120 +1075,113 @@ public class RBBITestMonkey extends TestFmwk {
             c3 = UTF16.charAt(fText, prevPos);
             c0 = c1 = c2 = 0;
             
-            
-
             // Loop runs once per "significant" character position in the input text.
             for (;;) {
                 // Move all of the positions forward in the input string.
                 p0 = p1;  c0 = c1;
                 p1 = p2;  c1 = c2;
                 p2 = p3;  c2 = c3;
-                
-                // Advancd p3 by    (GC Format*)   Rules 3, 4
-                p3 = nextGC(fText, p3);
-                if (p3 == -1 || p3 >= fText.length()) {
-                    p3 = fText.length();
-                    c3 = 0;
-                } else {
-                    c3 = UTF16.charAt(fText, p3);
-                    while (fFormatSet.contains(c3)) {
-                        p3 = moveIndex32(fText, p3, 1);
-                        c3 = 0;
-                        if (p3 < fText.length()) {
-                            c3 = UTF16.charAt(fText, p3);   
-                        }
-                    }
-                }
+                // Advancd p3 by  a grapheme cluster.   Rules 3, 4
+                p3 = moveForward(p3);
+                c3 = cAt(p3);
 
-                if (p1 == p2) {
-                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-                    continue;
-                }
-                if (p2 == fText.length()) {
+                if (p2 >= fText.length()) {
                     // Reached end of string.  Always a break position.
                     break;
                 }
 
-                // Rule (5).   ALetter x ALetter
-                if (fALetterSet.contains(c1) &&
-                        fALetterSet.contains(c2))  {
+                if (p2 == prevPos) {
+                    // Still warming up the loop.  (won't work with zero length strings, but we don't care)
                     continue;
                 }
-                
-                // Rule (6)  ALetter  x  MidLetter  ALetter
-                //
-                if ( fALetterSet.contains(c1) &&
-                        fMidLetterSet.contains(c2) &&
-                        fALetterSet.contains(c3)) {
-                    continue;
+                // Rule (3).   Sep  <break>
+                if (fSepSet.contains(c1)) {
+                    break;
                 }
-                
-                
-                // Rule (7)  ALetter MidLetter   x  ALetter
-                if (fALetterSet.contains(c0) &&
-                        fMidLetterSet.contains(c1)  &&
-                        fALetterSet.contains(c2)) {
-                    continue;
-                }
-                
-                //  Rule (8)    Numeric x Numeric
-                if (fNumericSet.contains(c1) &&
-                        fNumericSet.contains(c2))  {
-                    continue;
-                }
-                
-                // Rule (9)    ALetter x Numeric
-                if (fALetterSet.contains(c1) &&
-                        fNumericSet.contains(c2))  {
+
+                // Rule (6).   ATerm x Numeric
+                if (fATermSet.contains(c1) &&  fNumericSet.contains(c2))  {
                     continue;
                 }
 
-                // Rule (10)    Numeric x ALetter
-                if (fNumericSet.contains(c1) &&
-                        fALetterSet.contains(c2))  {
+                // Rule (7).  Upper ATerm  x  Uppper
+                if (fUpperSet.contains(c0) && fATermSet.contains(c1) && fUpperSet.contains(c2)) {
                     continue;
                 }
-                
-                // Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
-                if ( fNumericSet.contains(c0) &&
-                        fMidNumSet.contains(c1)  && 
-                        fNumericSet.contains(c2)) {
-                    continue;
+
+                // Rule (8)  ATerm Close* Sp*  x  (not (OLettter | Upper | Lower | Sep))* Lower
+                int p8 = p1;
+                while (p8>0 && fSpSet.contains(cAt(p8))) {
+                    p8 = moveBack(p8);
                 }
-                
-                // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
-                if (fNumericSet.contains(c1) &&
-                        fMidNumSet.contains(c2) &&
-                        fNumericSet.contains(c3)) {
-                    continue;
+                while (p8>0 && fCloseSet.contains(cAt(p8))) {
+                    p8 = moveBack(p8);
                 }
-                
-                // Rule (13)  Katakana x Katakana
-                if (fKatakanaSet.contains(c1) &&
-                        fKatakanaSet.contains(c2))  {
-                    continue;
+                if (fATermSet.contains(cAt(p8))) {
+                    p8=p2;
+                    for (;;) {
+                        c = cAt(p8);
+                        if (c==-1 || fOLetterSet.contains(c) || fUpperSet.contains(c) ||
+                            fLowerSet.contains(c) || fSepSet.contains(c) ||
+                            fATermSet.contains(c) || fSTermSet.contains(c))   // This last line deviates from
+                                                                                //  the TR.  The TR is wacky.
+                        {
+                            break;
+                        }
+                        p8 = moveForward(p8);
+                    }
+                    if (p8<fText.length() && fLowerSet.contains(cAt(p8))) {
+                        continue;
+                    }
                 }
-                
-                // Rule 13a  (ALetter | Numeric | Katakana | ExtendNumLet) x ExtendNumLet
-                if ((fALetterSet.contains(c1) || fNumericSet.contains(c1) ||
-                        fKatakanaSet.contains(c1) || fExtendNumLetSet.contains(c1)) &&
-                        fExtendNumLetSet.contains(c2)) {
-                    continue;
+
+
+                // Rule (9)  (STerm | ATerm) Close*  x  (Close | Sp | Sep)
+                int p9 = p1;
+                while (p9>0 && fCloseSet.contains(cAt(p9))) {
+                    p9 = moveBack(p9);
                 }
-                // Rule 13b   ExtendNumLet x (ALetter | Numeric | Katakana | ExtendNumLet)
-                if (fExtendNumLetSet.contains(c1) &&
-                        (fALetterSet.contains(c2) || fNumericSet.contains(c2) ||
-                        fKatakanaSet.contains(c2) || fExtendNumLetSet.contains(c2))) {
-                    continue;
+                c = cAt(p9);
+                if ((fSTermSet.contains(c) || fATermSet.contains(c))) {
+                    if (fCloseSet.contains(c2) || fSpSet.contains(c2) || fSepSet.contains(c2)) {
+                        continue;
+                    }
                 }
-               
-                // Rule 14.  Break found here.
-                break;
+
+                // Rule (10)  (Sterm | ATerm) Close* Sp*  x  (Sp | Sep)
+                int p10 = p1;
+                while (p10>0 && fSpSet.contains(cAt(p10))) {
+                    p10 = moveBack(p10);
+                }
+                while (p10>0 && fCloseSet.contains(cAt(p10))) {
+                    p10 = moveBack(p10);
+                }
+                if (fSTermSet.contains(cAt(p10)) || fATermSet.contains(cAt(p10))) {
+                    if (fSpSet.contains(c2) || fSepSet.contains(c2)) {
+                        continue;
+                    }
+                }
+
+                // Rule (11)  (STerm | ATerm) Close* Sp*   <break>
+                int p11 = p1;
+                while (p11>0 && fSpSet.contains(cAt(p11))) {
+                    p11 = moveBack(p11);
+                }
+                while (p11>0 && fCloseSet.contains(cAt(p11))) {
+                    p11 = moveBack(p11);
+                }
+                if (fSTermSet.contains(cAt(p11)) || fATermSet.contains(cAt(p11))) {
+                    break;
+                }
+
+                //  Rule (12)  Any x Any
+                continue;
             }
-            
             breakPos = p2;
             return breakPos;
         }
+           
+
         
     }
 
@@ -1178,7 +1251,7 @@ public class RBBITestMonkey extends TestFmwk {
             return -1;
         }
         int  c = UTF16.charAt(s, i);
-        if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
+        if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && UTF16.isLeadSurrogate(s.charAt(i))) {
             retVal++;
         }
         return retVal;
@@ -1203,9 +1276,9 @@ public class RBBITestMonkey extends TestFmwk {
     private static UnicodeSet GC_LVT ;
 
     protected void init()throws Exception{
-        GC_Control = new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[:Grapheme_Extend:]]");
+        GC_Control = new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]-[\\p{Grapheme_Cluster_Break=Extend}]]");
        
-        GC_Extend = new UnicodeSet("[[:Grapheme_Extend:]]");
+        GC_Extend = new UnicodeSet("[\\p{Grapheme_Cluster_Break=Extend}]");
        
         GC_L = new UnicodeSet("[[:Hangul_Syllable_Type=L:]]");
        
@@ -1410,7 +1483,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     //--------------------------------------------------------------------------------------------
     // numIterations = -1;  
     // RuleBasedBreakIterator_New.fTrace = true;
-    // m_seed = 668686441;
+    // m_seed = 859056465;
     // TESTSTRINGLEN = 50;
     // printTestData = true;
     // printBreaksFromBI = true;
@@ -1723,7 +1796,7 @@ public void TestSentMonkey() {
     if (params == null) {
         loopCount = 30;
     }
-    //RunMonkey(bi, m, "sent", seed, loopCount);
+    RunMonkey(bi, m, "sent", seed, loopCount);
 }
 
 }
