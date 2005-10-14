@@ -54,7 +54,31 @@ final class STZInfo implements Serializable {
             }
         }
     }
-
+    
+    void applyTo(com.ibm.icu.util.SimpleTimeZone stz) {
+        if (sy != -1) {
+            stz.setStartYear(sy);
+        }
+        if (sm != -1) {
+            if (sdm == -1) {
+                stz.setStartRule(sm, sdwm, sdw, st);
+            } else if (sdw == -1) {
+                stz.setStartRule(sm, sdm, st);
+            } else {
+                stz.setStartRule(sm, sdm, sdw, st, sa);
+            }
+        }
+        if (em != -1) {
+            if (edm == -1) {
+                stz.setEndRule(em, edwm, edw, et);
+            } else if (edw == -1) {
+                stz.setEndRule(em, edm, et);
+            } else {
+                stz.setEndRule(em, edm, edw, et, ea);
+            }
+        }
+    }
+    
     int sy = -1;
     int sm = -1, sdwm, sdw, st, sdm;
     boolean sa;

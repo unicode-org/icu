@@ -566,7 +566,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
          * with the JDK.
          */
         TimeZone result = ZoneMeta.getSystemTimeZone(ID);
-
+        
         if (result == null) {
             result = ZoneMeta.getCustomTimeZone(ID);
         }

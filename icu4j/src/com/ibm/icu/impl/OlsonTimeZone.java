@@ -6,6 +6,8 @@
   */
 package com.ibm.icu.impl;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
@@ -670,5 +672,13 @@ public class OlsonTimeZone extends TimeZone {
     	} 
 	    return ret;
     }
+    /*
+    private void readObject(ObjectInputStream s) throws IOException  {
+        s.defaultReadObject();
+        // customized deserialization code
+       
+        // followed by code to update the object, if necessary
+    }
+    */
 }
 
