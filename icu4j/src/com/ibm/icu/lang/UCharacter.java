@@ -80,7 +80,7 @@ import com.ibm.icu.util.VersionInfo;
  * </ul>
  * <p>
  * Further detail differences can be determined from the program 
- *        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java>
+ *        <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * </p>
  * <p>

@@ -401,7 +401,7 @@ public final class CollationKey implements Comparable
      * </p>
      * <p>
      * For more on usage, see example in test procedure 
-     * <a href=http://oss.software.ibm.com/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/dev/test/collator/CollationAPITest.java?rev=&content-type=text/plain>
+     * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu4j/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * </p>

@@ -282,7 +282,7 @@ public class WriteCharts {
             out.println("The samples are mechanically generated, and only include single characters");
             out.println("from the source set. Thus it will <i>not</i> contain examples where the transliteration");
             out.println("depends on the context around the character. For a more detailed -- and interactive -- example, see the");
-            out.println("<a href='http://oss.software.ibm.com/cgi-bin/icu/tr'>Transliteration Demo</a></p><hr>");
+            out.println("<a href='http://www.ibm.com/software/globalization/icu/demo/transform'>Transliteration Demo</a></p><hr>");
             
             // set up the headers
             int columnCount = 3;

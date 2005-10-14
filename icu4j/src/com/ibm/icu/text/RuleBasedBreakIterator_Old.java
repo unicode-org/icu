@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -219,7 +219,7 @@ import java.io.*;
  *     </tr>
  *
  * <p>For a more complete explanation, see <a
- * href="http://oss.software.ibm.com/icu/docs/papers/text_boundary_analysis_in_java/index.html">http://oss.software.ibm.com/icu/docs/papers/text_boundary_analysis_in_java/index.html</a>.
+ * href="http://icu.sourceforge.net/docs/papers/text_boundary_analysis_in_java/">http://icu.sourceforge.net/docs/papers/text_boundary_analysis_in_java/</a>.
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
