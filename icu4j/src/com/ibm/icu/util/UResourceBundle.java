@@ -31,7 +31,7 @@ import com.ibm.icu.util.ULocale;
  * 
  * <P>
  * Resource bundles in ICU are currently defined using text files which conform to the following
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icuhtml/design/bnf_rb.txt">BNF definition</a>.
+ * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the 
  * <a href="http://icu.sourceforge.net/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
