@@ -34,7 +34,7 @@ import com.ibm.icu.util.VersionInfo;
 /**
  * <p>
  * The UCharacter class provides extensions to the 
- * <a href=http://java.sun.com/j2se/1.3/docs/api/java/lang/Character.html>
+ * <a href="http://java.sun.com/j2se/1.5/docs/api/java/lang/Character.html">
  * java.lang.Character</a> class. These extensions provide support for 
  * more Unicode properties and together with the <a href=../text/UTF16.html>UTF16</a> 
  * class, provide support for supplementary characters (those with code 
@@ -80,7 +80,7 @@ import com.ibm.icu.util.VersionInfo;
  * </ul>
  * <p>
  * Further detail differences can be determined from the program 
- *        <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ *        <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * </p>
  * <p>
