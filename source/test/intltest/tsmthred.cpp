@@ -1287,7 +1287,7 @@ void MultithreadTest::TestCollators()
                     "INFO: Working with the stub file.\n"
                     "If you need the full conformance test, please\n"
                     "download the appropriate data files from:\n"
-                    "http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/");
+                    "http://dev.icu-project.org/cgi-bin/viewcvs.cgi/unicodetools/com/ibm/text/data/");
             }
         }
     }

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2003 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2005 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -1362,7 +1362,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     }
     fprintf(OUTPUT_, "</td></tr>\n");
     
-    fprintf(OUTPUT_, "<tr><th>Rules</th><td class='noborder'><a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/source/data/locales/%s.txt>%s.txt</a></td></tr>\n", locale, locale);
+    fprintf(OUTPUT_, "<tr><th>Rules</th><td class='noborder'><a href=\"http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu/source/data/coll/%s.txt\">%s.txt</a></td></tr>\n", locale, locale);
     
     UVersionInfo version;
     ucol_getVersion(COLLATOR_, version);
@@ -1441,7 +1441,7 @@ void outputListHTMLHeader(FILE *file)
 void outputListHTMLFooter(FILE *file)
 {
     fprintf(file, "</p>\n");
-	fprintf(file, "<center><image src=http://oss.software.ibm.com/icu/images/w24.gif></center>\n");
+	//fprintf(file, "<center><image src=http://oss.software.ibm.com/icu/images/w24.gif></center>\n");
     fprintf(file, "</body>\n");
     fprintf(file, "</html>\n");
 }
