@@ -1558,7 +1558,9 @@ void RandomCollatorTest::Test2(){
 void RandomCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* ){
     if (exec) logln("TestSuite RandomCollatorTest: ");
     switch (index) {
+#if U_ICU_VERSION_MAJOR_NUM >= 3 && U_ICU_VERSION_MINOR_NUM >= 6
         TESTCASE(0, Test);
+#endif
         default: name = ""; break;
     }
 }
