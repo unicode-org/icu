@@ -31,7 +31,7 @@
 				AssemblerListingLocation=".\decmn_Win32_Release/"
 				ObjectFile=".\decmn_Win32_Release/"
 				ProgramDataBaseFileName=".\decmn_Win32_Release/"
-				WarningLevel="4"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
@@ -93,7 +93,7 @@
 				ObjectFile=".\decmn_Win32_Debug/"
 				ProgramDataBaseFileName=".\decmn_Win32_Debug/"
 				BrowseInformation="1"
-				WarningLevel="4"
+				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
