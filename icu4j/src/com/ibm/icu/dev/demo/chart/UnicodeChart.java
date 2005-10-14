@@ -104,14 +104,14 @@ public class UnicodeChart {
         int startValue = -1;
         int lastEnum = -1;
         for (int i = 0; i <= 0x10FFFF; ++i) {
-        	int enum = UCharacter.getIntPropertyValue(i,UProperty.BLOCK);
-        	if (enum == lastEnum) continue;
+        	int prop = UCharacter.getIntPropertyValue(i,UProperty.BLOCK);
+        	if (prop == lastEnum) continue;
         	if (lastEnum != -1) {
         		String s = UCharacter.getPropertyValueName(UProperty.BLOCK, lastEnum, UProperty.NameChoice.LONG);
         		blockMap.put(s, hex(startValue,0) + "/" + hex(i - startValue,0));
         		System.out.println(s + ": " + blockMap.get(s));
         	}
-        	lastEnum = enum;
+        	lastEnum = prop;
         	startValue = i;
         }
 		String s = UCharacter.getPropertyValueName(UProperty.BLOCK, lastEnum, UProperty.NameChoice.LONG);

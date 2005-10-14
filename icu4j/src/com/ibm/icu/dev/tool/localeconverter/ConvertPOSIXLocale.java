@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -250,9 +250,9 @@ public class ConvertPOSIXLocale {
                 printUsage();
             } else {
                 PosixCharMap map = new PosixCharMap();
-                Enumeration enum = mapFiles.elements();
-                while (enum.hasMoreElements()) {
-                    String mapFile = (String)enum.nextElement();
+                Enumeration enumer = mapFiles.elements();
+                while (enumer.hasMoreElements()) {
+                    String mapFile = (String)enumer.nextElement();
                     System.err.println("Locale: "+locale);
                     System.err.println("Loading character map file: "+mapFile);
                     try {

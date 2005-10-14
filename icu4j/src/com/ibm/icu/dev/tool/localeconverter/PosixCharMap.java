@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -370,9 +370,9 @@ public class PosixCharMap {
 
     public void swap() {
         Hashtable newTable = new Hashtable();
-        Enumeration enum = table.keys();
-        while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
+        Enumeration enumer = table.keys();
+        while (enumer.hasMoreElements()) {
+            String key = (String)enumer.nextElement();
             String code = (String)table.get(key);
             
             String newKey = toSymbol(code);
@@ -409,9 +409,9 @@ public class PosixCharMap {
     
     public void dump(PrintStream out) {
         StringBuffer escapeBuffer = new StringBuffer();
-        Enumeration enum = table.keys();
-        while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
+        Enumeration enumer = table.keys();
+        while (enumer.hasMoreElements()) {
+            String key = (String)enumer.nextElement();
             String code = (String)table.get(key);
             out.print(key);
             out.print("       <U");
@@ -445,9 +445,9 @@ public class PosixCharMap {
     public String backmapValue(final String value) {
         if (backTable == null) {
             backTable = new Hashtable();
-            Enumeration enum = table.keys();
-            while (enum.hasMoreElements()) {
-                String key = (String)enum.nextElement();
+            Enumeration enumer = table.keys();
+            while (enumer.hasMoreElements()) {
+                String key = (String)enumer.nextElement();
                 String val = (String)table.get(key);
                 backTable.put(val, key);
             }
