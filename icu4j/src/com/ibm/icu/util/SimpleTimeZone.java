@@ -4,6 +4,8 @@
 */
 
 package com.ibm.icu.util;
+import com.ibm.icu.impl.JDKTimeZone;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -28,7 +30,7 @@ import com.ibm.icu.impl.Utility;
  * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
-public class SimpleTimeZone extends TimeZone {
+public class SimpleTimeZone extends JDKTimeZone {
     private static final long serialVersionUID = -7034676239311322769L;
 
     /**
@@ -142,8 +144,8 @@ public class SimpleTimeZone extends TimeZone {
                                           startDayOfWeek, startTime, endMonth,
                                           endDay, endDayOfWeek, endTime, dstSavings), ID);
 
-        this.rawOffset = rawOffset;
-        this.dstSavings = dstSavings;
+        this.raw = rawOffset;
+        this.dst = dstSavings;
 
         STZInfo xinfo = getSTZInfo();
         xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
@@ -165,7 +167,7 @@ public class SimpleTimeZone extends TimeZone {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setRawOffset(int offsetMillis) {
-        rawOffset = offsetMillis;
+        raw = offsetMillis;
     }
   
     /**
@@ -176,7 +178,7 @@ public class SimpleTimeZone extends TimeZone {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getRawOffset() {
-        return rawOffset;
+        return raw;
     }
 
 
@@ -424,7 +426,7 @@ public class SimpleTimeZone extends TimeZone {
         if (millisSavedDuringDST <= 0) {
             throw new IllegalArgumentException();
         }
-        dstSavings = millisSavedDuringDST;
+        dst = millisSavedDuringDST;
     }
 
     /**
@@ -435,7 +437,7 @@ public class SimpleTimeZone extends TimeZone {
      * @stable ICU 2.0
      */
     public int getDSTSavings() {
-        return dstSavings;
+        return dst;
     }
 
     /**
@@ -444,9 +446,10 @@ public class SimpleTimeZone extends TimeZone {
      * API.
      * @internal
      */
-    private SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
-    	super.setID(ID);
-    	rawOffset = tz.getRawOffset();
+    public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
+        super(tz);
+        super.setID(ID);
+    	raw = tz.getRawOffset();
     }
     
     /**
@@ -459,7 +462,7 @@ public class SimpleTimeZone extends TimeZone {
     // on JDK 1.4 and later, can't deserialize a SimpleTimeZone as a SimpleTimeZone...
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        /*
+        
         if (!(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(getID()))) {
             // System.out.println("*** readjust " + zone.getClass().getName() + " " + zone.getID() + " ***");
             java.util.SimpleTimeZone stz = 
@@ -475,7 +478,13 @@ public class SimpleTimeZone extends TimeZone {
             }
             zone = stz;
         }
-        */
+        /* set all instance variables in this object
+         * to the values in zone 
+         */            
+         if (xinfo != null) {
+             xinfo.applyTo(this);
+         }
+        
     }
 
     private STZInfo getSTZInfo() {
@@ -585,7 +594,7 @@ public class SimpleTimeZone extends TimeZone {
             }
         }
 
-        int result = rawOffset;
+        int result = raw;
 
         // Bail out if we are before the onset of daylight savings time
         if (!useDaylight || year < startYear || era != GregorianCalendar.AD) return result;
@@ -598,7 +607,7 @@ public class SimpleTimeZone extends TimeZone {
         // = date<rule, 0 = date==rule.
         int startCompare = compareToRule(month, monthLength, prevMonthLength,
                                          day, dayOfWeek, millis,
-                                         startTimeMode == UTC_TIME ? -rawOffset : 0,
+                                         startTimeMode == UTC_TIME ? -raw : 0,
                                          startMode, startMonth, startDayOfWeek,
                                          startDay, startTime);
         int endCompare = 0;
@@ -615,8 +624,8 @@ public class SimpleTimeZone extends TimeZone {
              * normalize the millis to the range 0..millisPerDay-1. */
             endCompare = compareToRule(month, monthLength, prevMonthLength,
                                        day, dayOfWeek, millis,
-                                       endTimeMode == WALL_TIME ? dstSavings :
-                                        (endTimeMode == UTC_TIME ? -rawOffset : 0),
+                                       endTimeMode == WALL_TIME ? dst :
+                                        (endTimeMode == UTC_TIME ? -raw : 0),
                                        endMode, endMonth, endDayOfWeek,
                                        endDay, endTime);
         }
@@ -627,7 +636,7 @@ public class SimpleTimeZone extends TimeZone {
         // hemisphere.
         if ((!southern && (startCompare >= 0 && endCompare < 0)) ||
             (southern && (startCompare >= 0 || endCompare < 0)))
-            result += dstSavings;
+            result += dst;
 
         return result;
     }
@@ -739,8 +748,8 @@ public class SimpleTimeZone extends TimeZone {
         }
     }
     // data needed for streaming mutated SimpleTimeZones in JDK14
-    private int rawOffset;// the TimeZone's raw GMT offset 
-    private int dstSavings = 3600000;
+    private int raw;// the TimeZone's raw GMT offset 
+    private int dst = 3600000;
     private STZInfo xinfo = null;
     private int startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
     private int startTime;
@@ -827,7 +836,7 @@ public class SimpleTimeZone extends TimeZone {
                                    int savingsEndTime,
                                    int savingsEndTimeMode,
                                    int savingsDST) {
-        this.rawOffset      = rawOffsetGMT;
+        this.raw      = rawOffsetGMT;
         this.startMonth     = savingsStartMonth;
         this.startDay       = savingsStartDay;
         this.startDayOfWeek = savingsStartDayOfWeek;
@@ -838,7 +847,7 @@ public class SimpleTimeZone extends TimeZone {
         this.endDayOfWeek   = savingsEndDayOfWeek;
         this.endTime        = savingsEndTime;
         this.endTimeMode    = savingsEndTimeMode;
-        this.dstSavings     = savingsDST;
+        this.dst     = savingsDST;
         this.startYear      = 0;
         this.startMode      = DOM_MODE;
         this.endMode        = DOM_MODE;
@@ -881,8 +890,8 @@ public class SimpleTimeZone extends TimeZone {
     private void decodeStartRule() {
 
         useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? false : true);
-        if (useDaylight && dstSavings == 0) {
-            dstSavings = TimeZone.MILLIS_PER_DAY;
+        if (useDaylight && dst == 0) {
+            dst = TimeZone.MILLIS_PER_DAY;
         }
         if (startDay != 0) {
             if (startMonth < Calendar.JANUARY || startMonth > Calendar.DECEMBER) {
@@ -928,8 +937,8 @@ public class SimpleTimeZone extends TimeZone {
     private void decodeEndRule() {
 
         useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false);
-        if (useDaylight && dstSavings == 0) {
-            dstSavings = TimeZone.MILLIS_PER_DAY;
+        if (useDaylight && dst == 0) {
+            dst = TimeZone.MILLIS_PER_DAY;
         }
         if (endDay != 0) {
             if (endMonth < Calendar.JANUARY || endMonth > Calendar.DECEMBER) {
@@ -969,11 +978,11 @@ public class SimpleTimeZone extends TimeZone {
     public boolean equals(Object obj){
         if (!super.equals(obj)) return false; // super does class check
         SimpleTimeZone that = (SimpleTimeZone) obj;
-        return rawOffset     == that.rawOffset &&
+        return raw     == that.raw &&
             useDaylight     == that.useDaylight &&
             (!useDaylight
              // Only check rules if using DST
-             || (dstSavings     == that.dstSavings &&
+             || (dst     == that.dst &&
                  startMode      == that.startMode &&
                  startMonth     == that.startMonth &&
                  startDay       == that.startDay &&
@@ -991,10 +1000,10 @@ public class SimpleTimeZone extends TimeZone {
     }
     public int hashCode(){
     	int ret = (int)( super.hashCode() +
-    					 rawOffset ^ (rawOffset>>>8) +
+    					 raw ^ (raw>>>8) +
     					 (useDaylight?0:1));
     	if(!useDaylight){
-    		ret += (int)(dstSavings ^ (dstSavings>>>10) +
+    		ret += (int)(dst ^ (dst>>>10) +
     				startMode ^ (startMode>>>11) +
     				startMonth ^ (startMonth>>>12) +
     				startDay ^ (startDay>>>13) +
@@ -1017,11 +1026,11 @@ public class SimpleTimeZone extends TimeZone {
     	}
     	SimpleTimeZone other = (SimpleTimeZone)othr;
         return other != null &&
-        rawOffset     == other.rawOffset &&
+        raw     == other.raw &&
         useDaylight     == other.useDaylight &&
         (!useDaylight
          // Only check rules if using DST
-         || (dstSavings     == other.dstSavings &&
+         || (dst     == other.dst &&
              startMode      == other.startMode &&
              startMonth     == other.startMonth &&
              startDay       == other.startDay &&
