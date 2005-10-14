@@ -1294,16 +1294,18 @@ overwrite any corresponding resource files already in that directory.
 <h4><a name="resourcesICU4C">Building ICU4J Resources from ICU4C</a></h4>
 <h5>Requirements</h5>
 <ul>
+  <li><a
+ href="http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU4C</a></li>
   <li>Compilers and tools required for building <a
- href="http://oss.software.ibm.com/cvs/icu/%7Echeckout%7E/icu/readme.html#HowToBuild">ICU</a>.</li>
+ href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu/readme.html#HowToBuild">ICU4C</a>.</li>
   <li>Java SDK version 1.4.0 or above.</li>
   <li>Perl version 5 or above.</li>
 </ul>
 <h5> Procedure</h5>
 <ol>
-  <li> Download and build ICU on a Windows machine. For instructions on
-downloading and building ICU, please click <a
- href="http://oss.software.ibm.com/cvs/icu/%7Echeckout%7E/icu/readme.html#HowToBuild">here</a>.</li>
+  <li> Download and build ICU4C on a Windows machine. For instructions on
+downloading and building ICU4C, please click <a
+ href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu/readme.html#HowToBuild">here</a>.</li>
   <li> Change directory to <i>$icu_root</i>/source/tools/genrb </li>
   <li> Launch gendtjar.pl from that directory itself with the command <br>
 gendtjar.pl --icu-root=<i>$icu_root</i> --jar=<i>$jdk_home/bin</i>

@@ -100,7 +100,7 @@ import com.ibm.icu.impl.Utility;
  * normalize(FCD) may be implemented with NFD.
  *
  * For more details on FCD see the collation design document:
- * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
+ * http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icuhtml/design/collation/ICU_collation_design.htm
  *
  * ICU collation performs either NFD or FCD normalization automatically if 
  * normalization is turned on for the collator object. Beyond collation and 
