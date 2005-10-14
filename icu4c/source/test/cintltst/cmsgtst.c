@@ -257,7 +257,7 @@ static void MessageFormatTest( void )
 
 
 /*test u_formatMessage() with sample patterns */
-static void TestSampleMessageFormat()
+static void TestSampleMessageFormat(void)
 {
     UChar *str;
     UChar *result;
@@ -557,7 +557,7 @@ static void TestSampleFormatAndParseWithError(void)
 }
 
 /* Test u_formatMessage() and u_parseMessage() , format and parse sequence and round trip */
-static void TestSampleFormatAndParse()
+static void TestSampleFormatAndParse(void)
 {
 
     UChar *result, *tzID, *str;
@@ -650,7 +650,7 @@ static void TestSampleFormatAndParse()
 }
 
 /* test message format with a choice option */
-static void TestMsgFormatChoice()
+static void TestMsgFormatChoice(void)
 {
     UChar* str;
     UErrorCode status = U_ZERO_ERROR;
@@ -737,7 +737,7 @@ static void TestMsgFormatChoice()
 }
 
 /*test u_parseMessage() with various test patterns */
-static void TestParseMessage()
+static void TestParseMessage(void)
 {
     UChar pattern[100];
     UChar source[100];
