@@ -1,4 +1,4 @@
-## Copyright (c) 2002-2003, International Business Machines Corporation 
+## Copyright (c) 2002-2005, International Business Machines Corporation 
 ## and others. All Rights Reserved.
 
 This directory contains sample code
@@ -52,7 +52,7 @@ ustring  - demonstrates ICU string manipulation functions
  - The "icuapps" CVS module contains other applications and libraries not
     included with ICU.  You can check it out from the CVS command line
     by using for example,  "cvs co icuapps" instead of "cvs co icu",
-   or through WebCVS at http://oss.software.ibm.com/cvs/icu/icuapps/
+   or through WebCVS at http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icuapps/
 
 ==
 * How do I build the samples?
