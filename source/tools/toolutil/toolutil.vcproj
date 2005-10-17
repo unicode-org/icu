@@ -37,11 +37,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\..\bin\icutu34.dll"
+				OutputFile="..\..\..\bin\icutu35.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu34.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu35.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutu.lib"/>
@@ -102,12 +102,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\..\bin\icutu34d.dll"
+				OutputFile="..\..\..\bin\icutu35d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu34d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu35d.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutud.lib"/>
 			<Tool
