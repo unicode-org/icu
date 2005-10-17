@@ -194,13 +194,6 @@ static inline UBool isLDHChar(UChar ch){
     return FALSE;
 }
 
-// We should add this to utypes.c
-#if U_ICU_VERSION_MAJOR_NUM>3 || (U_ICU_VERSION_MAJOR_NUM==3 && U_ICU_VERSION_MINOR_NUM>4)
-#   error Time bomb: After ICU 3.4 move the definition of utypes.h and fix the TODO in _uIDNAErrorName definition.
-#else
-#   define U_IDNA_ZERO_LENGTH_LABEL_ERROR U_IDNA_ERROR_LIMIT
-#endif
-
 static int32_t 
 _internal_toASCII(const UChar* src, int32_t srcLength, 
                   UChar* dest, int32_t destCapacity,

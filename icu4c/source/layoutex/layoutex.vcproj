@@ -37,10 +37,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx34.dll"
+				OutputFile="..\..\bin\iculx35.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\iculx34.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx35.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculx.lib"/>
@@ -102,11 +102,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx34d.dll"
+				OutputFile="..\..\bin\iculx35d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\iculx34d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx35d.pdb"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculxd.lib"/>
 			<Tool
