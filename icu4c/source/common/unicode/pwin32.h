@@ -271,7 +271,7 @@ typedef unsigned int uint32_t;
 #   endif
 #endif
 
-#if defined(_MSC_VER) && defined(_M_IX86)
+#if defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
 #define U_ALIGN_CODE(val)    __asm      align val
 #else
 #define U_ALIGN_CODE(val)
