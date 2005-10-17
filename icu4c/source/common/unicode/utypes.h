@@ -719,6 +719,7 @@ typedef enum UErrorCode {
     U_IDNA_ACE_PREFIX_ERROR,
     U_IDNA_VERIFICATION_ERROR,
     U_IDNA_LABEL_TOO_LONG_ERROR,
+    U_IDNA_ZERO_LENGTH_LABEL_ERROR,
     U_IDNA_ERROR_LIMIT,
     /*
      * Aliases for StringPrep

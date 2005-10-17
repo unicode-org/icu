@@ -240,12 +240,6 @@ CLEANUP:
 }
 			
 
-#if U_ICU_VERSION_MAJOR_NUM>3 || (U_ICU_VERSION_MAJOR_NUM==3 && U_ICU_VERSION_MINOR_NUM>4)
-#   error Time bomb: Remove the definition of U_IDNA_ZERO_LENGTH_LABEL_ERROR from __FILE__
-#else
-#   define U_IDNA_ZERO_LENGTH_LABEL_ERROR U_IDNA_ERROR_LIMIT
-#endif
-
 U_CFUNC int32_t U_EXPORT2
 idnaref_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,

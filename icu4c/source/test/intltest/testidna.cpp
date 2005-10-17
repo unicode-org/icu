@@ -395,7 +395,7 @@ static struct ErrorCases{
         0x0000
       },
       "www..com",
-      U_IDNA_ERROR_LIMIT, //TODO: Fix this to U_IDNA_ZERO_LENGTH_LABEL_ERROR, in 3.6
+      U_IDNA_ZERO_LENGTH_LABEL_ERROR,
       TRUE, TRUE, FALSE
     },
     { 
