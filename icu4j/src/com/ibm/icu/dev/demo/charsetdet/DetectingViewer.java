@@ -249,6 +249,11 @@ public class DetectingViewer extends JFrame implements ActionListener
         char[] buffer = new char[1024];
         int bytesRead = 0;
         
+        if (matches == null || matches.length == 0) {
+            errorDialog("Match Error", "No matches!");
+            return;
+        }
+        
         try {
             StringBuffer sb = new StringBuffer();
             String encoding = matches[0].getName();
