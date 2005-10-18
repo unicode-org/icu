@@ -442,6 +442,7 @@ public class GlobalizationPreferences {
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, DateFormat format) {
+		if (dateFormats == null) dateFormats = new DateFormat[NONE+1][NONE+1];
 		dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
 		return this;
 	}
@@ -457,7 +458,8 @@ public class GlobalizationPreferences {
 	 */
 	public DateFormat getDateFormat(int dateStyle, int timeStyle) {
 		try {
-			DateFormat result = dateFormats[dateStyle][timeStyle];
+			DateFormat result = null;
+			if (dateFormats != null) result = dateFormats[dateStyle][timeStyle];
 			if (result != null) {
 				result = (DateFormat) result.clone(); // clone for safety
 				result.setCalendar(calendar);
@@ -485,7 +487,8 @@ public class GlobalizationPreferences {
 	 */
 	public NumberFormat getNumberFormat(int style) {
 		try {
-			NumberFormat result = numberFormats[style];
+			NumberFormat result = null;
+			if (numberFormats != null) result = numberFormats[style];
 			if (result != null) {
 				result = (NumberFormat) result.clone(); // clone for safety
 				if (style == CURRENCY) {
@@ -513,6 +516,7 @@ public class GlobalizationPreferences {
 	 * TBD
 	 */
 	public GlobalizationPreferences setNumberFormat(int style, DateFormat format) {
+		if (numberFormats == null) numberFormats = new NumberFormat[NUMBER_LIMIT];
 		numberFormats[style] = (NumberFormat) format.clone(); // for safety
 		return this;
 	}
@@ -601,9 +605,9 @@ public class GlobalizationPreferences {
 	private boolean explicitCalendar;
 	
 	private ULocale dateLocale;
-	private DateFormat[][] dateFormats = new DateFormat[NONE+1][NONE+1];
+	private DateFormat[][] dateFormats;
 	private ULocale numberLocale;
-	private NumberFormat[] numberFormats = new NumberFormat[NUMBER_LIMIT];
+	private NumberFormat[] numberFormats;
 	
 	{
 		clear();
