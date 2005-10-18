@@ -155,7 +155,8 @@ public class CharsetDetector {
      *    <li>no input text has been provided</li>
      *  </ul>
      *
-     * @return a CharsetMatch object representing the best matching charset.
+     * @return a CharsetMatch object representing the best matching charset, or
+     *         <code>null</code> if there are no matches.
      *
      * @draft ICU 3.4
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -165,8 +166,13 @@ public class CharsetDetector {
 //          detectAll(), and cut it short as soon as a match with a high confidence
 //          is found.  This is something to be done later, after things are otherwise
 //          working.
-
-        return detectAll()[0];
+        CharsetMatch matches[] = detectAll();
+        
+        if (matches == null || matches.length == 0) {
+            return null;
+        }
+        
+        return matches[0];
      }
     
     /**
