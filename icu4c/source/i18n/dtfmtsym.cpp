@@ -143,25 +143,25 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale and calendar
  */
-const char gErasTag[]="eras";
-const char gAbbreviatedTag[] = "abbreviated";
-const char gMonthNamesTag[]="monthNames";
-const char gDayNamesTag[]="dayNames";
-const char gNamesWideTag[]="wide";
-const char gNamesAbbrTag[]="abbreviated";
-const char gNamesNarrowTag[]="narrow";
-const char gNamesStandaloneTag[]="stand-alone";
-const char gAmPmMarkersTag[]="AmPmMarkers";
+static const char gErasTag[]="eras";
+static const char gAbbreviatedTag[] = "abbreviated";
+static const char gMonthNamesTag[]="monthNames";
+static const char gDayNamesTag[]="dayNames";
+static const char gNamesWideTag[]="wide";
+static const char gNamesAbbrTag[]="abbreviated";
+static const char gNamesNarrowTag[]="narrow";
+static const char gNamesStandaloneTag[]="stand-alone";
+static const char gAmPmMarkersTag[]="AmPmMarkers";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
  * associated with a locale.
  */
-const char gZoneStringsTag[]="zoneStrings";
-const char gLocalPatternCharsTag[]="localPatternChars";
+static const char gZoneStringsTag[]="zoneStrings";
+static const char gLocalPatternCharsTag[]="localPatternChars";
 
 static UMTX LOCK;
-static UnicodeString bogus; 
+
 /*
  * Keep this variable in synch with max length of display strings
  */
@@ -181,6 +181,12 @@ static UnicodeString bogus;
 static inline UnicodeString* newUnicodeStringArray(size_t count) {
     return new UnicodeString[count ? count : 1];
 }
+
+U_CDECL_BEGIN
+static void deleteUnicodeStringArray(void* obj) {
+    delete[] (UnicodeString*)obj;
+}
+U_CDECL_END
 
 //------------------------------------------------------
 
@@ -356,11 +362,6 @@ void DateFormatSymbols::disposeZoneStrings()
         uprv_free(fZoneStrings);
     } 
     if(fZoneStringsHash){
-        for(int32_t i=0; i<fZoneStringsHash->count(); i++){
-            const UHashElement* elem = fZoneStringsHash->nextElement(i);
-            UnicodeString* array = (UnicodeString*)(elem->value.pointer);
-            delete[] array;
-        }
         delete fZoneStringsHash;
         fZoneStringsHash =  NULL;
     }
@@ -1249,17 +1250,19 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     }
     int32_t i;
     
+    fZoneStringsHash = new Hashtable(status);
+    if(fZoneStringsHash==NULL){
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    fZoneStringsHash->setValueDeleter(deleteUnicodeStringArray);
+
     if(fResourceBundle != NULL){
-        static const UnicodeString solidus("/");
-        static const UnicodeString colon(":");
+        UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
+        UnicodeString colon = UNICODE_STRING_SIMPLE(":");
         UResourceBundle zoneArray,zoneItem;
         ures_initStackObject(&zoneItem);
         ures_initStackObject(&zoneArray);
-        fZoneStringsHash = new Hashtable(status);
-        if(fZoneStringsHash==NULL){
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
         for(const UResourceBundle* rb = fResourceBundle; rb!=NULL; rb=ures_getParentBundle(rb)){
             ures_getByKey(rb, gZoneStringsTag, &zoneArray, &status);
             if(U_FAILURE(status)){
@@ -1269,7 +1272,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
                 UErrorCode tempStatus = U_ZERO_ERROR;
                 UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
                 ures_getNextResource(&zoneArray, &zoneItem, &status);
-                UnicodeString key(ures_getKey(&zoneItem));
+                UnicodeString key(ures_getKey(&zoneItem), -1, US_INV);
                 key.findAndReplace(colon, solidus);
                 int32_t len = 0;
                 //fetch the strings with fine grained fallback
@@ -1340,11 +1343,6 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         }
     }else{
         //last resort strings
-        fZoneStringsHash = new Hashtable(status);
-        if(fZoneStringsHash==NULL){
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }        
         UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
         if(fZoneStringsHash==NULL){
             delete fZoneStringsHash;
