@@ -64,6 +64,11 @@ public class GlobalizationPreferences {
 			Date now = new Date();
 			
 			GlobalizationPreferences lPreferences = new GlobalizationPreferences();
+
+			out.println("Samples from Globalization Preferences prototype");
+			out.println("\tWarning: some of this is just mockup -- real data will be accessed later.");
+			out.println();
+
 			
 			out.println("Check defaulting");
 			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
@@ -170,10 +175,10 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences setULocales(List locales) {
 		this.locales = new ArrayList(locales);
 		explicitLocales = true;
-		setTerritoryFromLocales();
-		setCurrencyFromTerritory();
-		setTimeZoneFromTerritory();
-		setCalendarFromTerritory();
+		if (!explicitTerritory) setTerritoryFromLocales();
+		if (!explicitCurrency) setCurrencyFromTerritory();
+		if (!explicitTimezone) setTimeZoneFromTerritory();
+		if (!explicitCalendar) setCalendarFromTerritory();
 		return this;
 	}
 	/**
@@ -181,6 +186,14 @@ public class GlobalizationPreferences {
 	 */
 	public List getULocales() {
 		return new ArrayList(locales); // clone for safety
+	}
+
+	/**
+	 * Convenience function for getting the locales in priority order
+	 * @return first item.
+	 */
+	public ULocale getULocale(int i) {
+		return (ULocale)locales.get(i);
 	}
 
 	/**
@@ -255,9 +268,9 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences setTerritory(String territory) {
 		this.territory = territory;
 		explicitTerritory = true;
-		setCurrencyFromTerritory();
-		setTimeZoneFromTerritory();
-		setCalendarFromTerritory();
+		if (!explicitCurrency) setCurrencyFromTerritory();
+		if (!explicitTimezone) setTimeZoneFromTerritory();
+		if (!explicitCalendar) setCalendarFromTerritory();
 		return this;
 	}
 	/**
@@ -511,38 +524,15 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences clear() {
 		explicitLocales = explicitTerritory = explicitCurrency = explicitTimezone = explicitCalendar = false;
 		locales.add(ULocale.getDefault());
-		setTerritoryFromLocales();
-		setCurrencyFromTerritory();
-		setTimeZoneFromTerritory();
-		setCalendarFromTerritory();
+		if (!explicitTerritory) setTerritoryFromLocales();
+		if (!explicitCurrency) setCurrencyFromTerritory();
+		if (!explicitTimezone) setTimeZoneFromTerritory();
+		if (!explicitCalendar) setCalendarFromTerritory();
 		return this;
 	}
 	
-	// PRIVATES
-	
-	private ArrayList locales = new ArrayList();
-	private String territory;
-	private Currency currency;
-	private TimeZone timezone;
-	private Calendar calendar;
-	private boolean explicitLocales;
-	private boolean explicitTerritory;
-	private boolean explicitCurrency;
-	private boolean explicitTimezone;
-	private boolean explicitCalendar;
-	
-	private ULocale dateLocale;
-	private DateFormat[][] dateFormats = new DateFormat[NONE+1][NONE+1];
-	private ULocale numberLocale;
-	private NumberFormat[] numberFormats = new NumberFormat[NUMBER_LIMIT];
-	
-	{
-		clear();
-	}
-	
-	// private helper functions
-	private void setTerritoryFromLocales() {
-		if (explicitTerritory) return;
+	// protected helper functions
+	protected void setTerritoryFromLocales() {
 		// pass through locales to see if there is a territory.
 		for (Iterator it = locales.iterator(); it.hasNext();) {
 			ULocale locale = (ULocale)it.next();
@@ -571,28 +561,57 @@ public class GlobalizationPreferences {
 		if (territory == null) territory = (String) language_territory_hack_map.get(language);
 		if (territory == null) territory = "US"; // need *some* default
 	}
-	private void setCurrencyFromTerritory() {
-		if (explicitCurrency) return;
+	protected void setCurrencyFromTerritory() {
 		currency = Currency.getInstance(new ULocale("und-" + territory));
 	}
-	private void setTimeZoneFromTerritory() {
-		if (explicitTimezone) return;
+	protected void setTimeZoneFromTerritory() {
 		// TODO fix using real data
 		// for single-zone countries, pick that zone
 		// for others, pick the most populous zone
 		// for now, just use fixed value
 		String[] attempt = ZoneMeta.getAvailableIDs(territory);
-		if (attempt.length == 0) timezone = TimeZone.getTimeZone("Europe/London");
-		else timezone = TimeZone.getTimeZone(attempt[0]);
+		if (attempt.length == 0) {
+			timezone = TimeZone.getTimeZone("Europe/London");
+		} else {
+			int i;
+			// this all needs to be fixed to use real data. But for now, do slightly better by skipping cruft
+			for (i = 0; i < attempt.length; ++i) {
+				if (attempt[i].indexOf("/") >= 0) break;
+			}
+			if (i > attempt.length) i = 0;
+			timezone = TimeZone.getTimeZone(attempt[i]);
+		}
 	}
-	private void setCalendarFromTerritory() {
-		if (explicitCalendar) return;
+	protected void setCalendarFromTerritory() {
 		// TODO add better API
 		calendar = Calendar.getInstance(new ULocale("und-" + territory));
 	}
-	Map language_territory_hack_map;
 	
-	String[][] language_territory_hack = {
+	// PRIVATES
+	
+	private ArrayList locales = new ArrayList();
+	private String territory;
+	private Currency currency;
+	private TimeZone timezone;
+	private Calendar calendar;
+	private boolean explicitLocales;
+	private boolean explicitTerritory;
+	private boolean explicitCurrency;
+	private boolean explicitTimezone;
+	private boolean explicitCalendar;
+	
+	private ULocale dateLocale;
+	private DateFormat[][] dateFormats = new DateFormat[NONE+1][NONE+1];
+	private ULocale numberLocale;
+	private NumberFormat[] numberFormats = new NumberFormat[NUMBER_LIMIT];
+	
+	{
+		clear();
+	}
+	// 
+	private Map language_territory_hack_map;
+	
+	private String[][] language_territory_hack = {
 				{"af", "ZA"},
 				{"am", "ET"},
 				{"ar", "SA"},
