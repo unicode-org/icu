@@ -246,7 +246,13 @@ public class CharsetDetector {
         try {
             setText(in);
             
-            return detect().getReader();
+            CharsetMatch match = detect();
+            
+            if (match == null) {
+                return null;
+            }
+            
+            return match.getReader();
         } catch (IOException e) {
             return null;
         }
@@ -275,7 +281,14 @@ public class CharsetDetector {
        
         try {
             setText(in);
-            return detect().getString(-1);
+            
+            CharsetMatch match = detect();
+            
+            if (match == null) {
+                return null;
+            }
+            
+            return match.getString(-1);
         } catch (IOException e) {
             return null;
         }
