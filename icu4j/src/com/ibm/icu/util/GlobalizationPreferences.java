@@ -71,7 +71,7 @@ public class GlobalizationPreferences {
 
 			
 			out.println("Check defaulting");
-			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
+			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "en-TH", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
 			for (int i = 0; i < localeList.length; ++i) {
 				lPreferences.setULocales(localeList[i]);
 				out.println("\tdefaults for: \t" + localeList[i] + "\t"
@@ -175,10 +175,10 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences setULocales(List locales) {
 		this.locales = new ArrayList(locales);
 		explicitLocales = true;
-		if (!explicitTerritory) setTerritoryFromLocales();
-		if (!explicitCurrency) setCurrencyFromTerritory();
-		if (!explicitTimezone) setTimeZoneFromTerritory();
-		if (!explicitCalendar) setCalendarFromTerritory();
+		if (!explicitTerritory) guessTerritory();
+		if (!explicitCurrency) guessCurrency();
+		if (!explicitTimezone) guessTimeZone();
+		if (!explicitCalendar) guessCalendar();
 		return this;
 	}
 	/**
@@ -268,9 +268,9 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences setTerritory(String territory) {
 		this.territory = territory;
 		explicitTerritory = true;
-		if (!explicitCurrency) setCurrencyFromTerritory();
-		if (!explicitTimezone) setTimeZoneFromTerritory();
-		if (!explicitCalendar) setCalendarFromTerritory();
+		if (!explicitCurrency) guessCurrency();
+		if (!explicitTimezone) guessTimeZone();
+		if (!explicitCalendar) guessCalendar();
 		return this;
 	}
 	/**
@@ -528,15 +528,15 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences clear() {
 		explicitLocales = explicitTerritory = explicitCurrency = explicitTimezone = explicitCalendar = false;
 		locales.add(ULocale.getDefault());
-		if (!explicitTerritory) setTerritoryFromLocales();
-		if (!explicitCurrency) setCurrencyFromTerritory();
-		if (!explicitTimezone) setTimeZoneFromTerritory();
-		if (!explicitCalendar) setCalendarFromTerritory();
+		if (!explicitTerritory) guessTerritory();
+		if (!explicitCurrency) guessCurrency();
+		if (!explicitTimezone) guessTimeZone();
+		if (!explicitCalendar) guessCalendar();
 		return this;
 	}
 	
 	// protected helper functions
-	protected void setTerritoryFromLocales() {
+	protected void guessTerritory() {
 		// pass through locales to see if there is a territory.
 		for (Iterator it = locales.iterator(); it.hasNext();) {
 			ULocale locale = (ULocale)it.next();
@@ -548,13 +548,7 @@ public class GlobalizationPreferences {
 		}
 		// if not, guess from the first language tag, or maybe from intersection of languages, eg nl + fr => BE
 		// TODO fix using real data
-		// for now, just use fixed value
-		if (language_territory_hack_map == null) {
-			language_territory_hack_map = new HashMap();
-			for (int i = 0; i < language_territory_hack.length; ++i) {
-				language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
-			}
-		}
+		// for now, just use fixed values
 		ULocale firstLocale = (ULocale)locales.iterator().next();
 		String language = firstLocale.getLanguage();
 		String script = firstLocale.getScript();
@@ -565,28 +559,35 @@ public class GlobalizationPreferences {
 		if (territory == null) territory = (String) language_territory_hack_map.get(language);
 		if (territory == null) territory = "US"; // need *some* default
 	}
-	protected void setCurrencyFromTerritory() {
+	protected void guessCurrency() {
 		currency = Currency.getInstance(new ULocale("und-" + territory));
 	}
-	protected void setTimeZoneFromTerritory() {
+	protected void guessTimeZone() {
 		// TODO fix using real data
 		// for single-zone countries, pick that zone
 		// for others, pick the most populous zone
 		// for now, just use fixed value
-		String[] attempt = ZoneMeta.getAvailableIDs(territory);
-		if (attempt.length == 0) {
-			timezone = TimeZone.getTimeZone("Europe/London");
-		} else {
-			int i;
-			// this all needs to be fixed to use real data. But for now, do slightly better by skipping cruft
-			for (i = 0; i < attempt.length; ++i) {
-				if (attempt[i].indexOf("/") >= 0) break;
+		// NOTE: in a few cases can do better by looking at language. 
+		// Eg haw+US should go to Pacific/Honolulu
+		// fr+CA should go to America/Montreal
+		String timezoneString = (String) territory_tzid_hack_map.get(territory);
+		if (timezoneString == null) {
+			String[] attempt = ZoneMeta.getAvailableIDs(territory);
+			if (attempt.length == 0) {
+				timezoneString = "Etc/GMT"; // gotta do something
+			} else {
+				int i;
+				// this all needs to be fixed to use real data. But for now, do slightly better by skipping cruft
+				for (i = 0; i < attempt.length; ++i) {
+					if (attempt[i].indexOf("/") >= 0) break;
+				}
+				if (i > attempt.length) i = 0;
+				timezoneString = attempt[i];
 			}
-			if (i > attempt.length) i = 0;
-			timezone = TimeZone.getTimeZone(attempt[i]);
 		}
+		timezone = TimeZone.getTimeZone(timezoneString);
 	}
-	protected void setCalendarFromTerritory() {
+	protected void guessCalendar() {
 		// TODO add better API
 		calendar = Calendar.getInstance(new ULocale("und-" + territory));
 	}
@@ -613,148 +614,191 @@ public class GlobalizationPreferences {
 		clear();
 	}
 	// 
-	private Map language_territory_hack_map;
+	private static final Map language_territory_hack_map = new HashMap();
+	private static final String[][] language_territory_hack = {
+		{"af", "ZA"},
+		{"am", "ET"},
+		{"ar", "SA"},
+		{"as", "IN"},
+		{"ay", "PE"},
+		{"az", "AZ"},
+		{"bal", "PK"},
+		{"be", "BY"},
+		{"bg", "BG"},
+		{"bn", "IN"},
+		{"bs", "BA"},
+		{"ca", "ES"},
+		{"ch", "MP"},
+		{"cpe", "SL"},
+		{"cs", "CZ"},
+		{"cy", "GB"},
+		{"da", "DK"},
+		{"de", "DE"},
+		{"dv", "MV"},
+		{"dz", "BT"},
+		{"el", "GR"},
+		{"en", "US"},
+		{"es", "ES"},
+		{"et", "EE"},
+		{"eu", "ES"},
+		{"fa", "IR"},
+		{"fi", "FI"},
+		{"fil", "PH"},
+		{"fj", "FJ"},
+		{"fo", "FO"},
+		{"fr", "FR"},
+		{"ga", "IE"},
+		{"gd", "GB"},
+		{"gl", "ES"},
+		{"gn", "PY"},
+		{"gu", "IN"},
+		{"gv", "GB"},
+		{"ha", "NG"},
+		{"he", "IL"},
+		{"hi", "IN"},
+		{"ho", "PG"},
+		{"hr", "HR"},
+		{"ht", "HT"},
+		{"hu", "HU"},
+		{"hy", "AM"},
+		{"id", "ID"},
+		{"is", "IS"},
+		{"it", "IT"},
+		{"ja", "JP"},
+		{"ka", "GE"},
+		{"kk", "KZ"},
+		{"kl", "GL"},
+		{"km", "KH"},
+		{"kn", "IN"},
+		{"ko", "KR"},
+		{"kok", "IN"},
+		{"ks", "IN"},
+		{"ku", "TR"},
+		{"ky", "KG"},
+		{"la", "VA"},
+		{"lb", "LU"},
+		{"ln", "CG"},
+		{"lo", "LA"},
+		{"lt", "LT"},
+		{"lv", "LV"},
+		{"mai", "IN"},
+		{"men", "GN"},
+		{"mg", "MG"},
+		{"mh", "MH"},
+		{"mk", "MK"},
+		{"ml", "IN"},
+		{"mn", "MN"},
+		{"mni", "IN"},
+		{"mo", "MD"},
+		{"mr", "IN"},
+		{"ms", "MY"},
+		{"mt", "MT"},
+		{"my", "MM"},
+		{"na", "NR"},
+		{"nb", "NO"},
+		{"nd", "ZA"},
+		{"ne", "NP"},
+		{"niu", "NU"},
+		{"nl", "NL"},
+		{"nn", "NO"},
+		{"no", "NO"},
+		{"nr", "ZA"},
+		{"nso", "ZA"},
+		{"ny", "MW"},
+		{"om", "KE"},
+		{"or", "IN"},
+		{"pa", "IN"},
+		{"pau", "PW"},
+		{"pl", "PL"},
+		{"ps", "PK"},
+		{"pt", "BR"},
+		{"qu", "PE"},
+		{"rn", "BI"},
+		{"ro", "RO"},
+		{"ru", "RU"},
+		{"rw", "RW"},
+		{"sd", "IN"},
+		{"sg", "CF"},
+		{"si", "LK"},
+		{"sk", "SK"},
+		{"sl", "SI"},
+		{"sm", "WS"},
+		{"so", "DJ"},
+		{"sq", "CS"},
+		{"sr", "CS"},
+		{"ss", "ZA"},
+		{"st", "ZA"},
+		{"sv", "SE"},
+		{"sw", "KE"},
+		{"ta", "IN"},
+		{"te", "IN"},
+		{"tem", "SL"},
+		{"tet", "TL"},
+		{"th", "TH"},
+		{"ti", "ET"},
+		{"tg", "TJ"},
+		{"tk", "TM"},
+		{"tkl", "TK"},
+		{"tvl", "TV"},
+		{"tl", "PH"},
+		{"tn", "ZA"},
+		{"to", "TO"},
+		{"tpi", "PG"},
+		{"tr", "TR"},
+		{"ts", "ZA"},
+		{"uk", "UA"},
+		{"ur", "IN"},
+		{"uz", "UZ"},
+		{"ve", "ZA"},
+		{"vi", "VN"},
+		{"wo", "SN"},
+		{"xh", "ZA"},
+		{"zh", "CN"},
+		{"zh_Hant", "TW"},
+		{"zu", "ZA"},
+	};
+	static {
+		for (int i = 0; i < language_territory_hack.length; ++i) {
+			language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
+		}
+	}
 	
-	private String[][] language_territory_hack = {
-				{"af", "ZA"},
-				{"am", "ET"},
-				{"ar", "SA"},
-				{"as", "IN"},
-				{"ay", "PE"},
-				{"az", "AZ"},
-				{"bal", "PK"},
-				{"be", "BY"},
-				{"bg", "BG"},
-				{"bn", "IN"},
-				{"bs", "BA"},
-				{"ca", "ES"},
-				{"ch", "MP"},
-				{"cpe", "SL"},
-				{"cs", "CZ"},
-				{"cy", "GB"},
-				{"da", "DK"},
-				{"de", "DE"},
-				{"dv", "MV"},
-				{"dz", "BT"},
-				{"el", "GR"},
-				{"en", "US"},
-				{"es", "ES"},
-				{"et", "EE"},
-				{"eu", "ES"},
-				{"fa", "IR"},
-				{"fi", "FI"},
-				{"fil", "PH"},
-				{"fj", "FJ"},
-				{"fo", "FO"},
-				{"fr", "FR"},
-				{"ga", "IE"},
-				{"gd", "GB"},
-				{"gl", "ES"},
-				{"gn", "PY"},
-				{"gu", "IN"},
-				{"gv", "GB"},
-				{"ha", "NG"},
-				{"he", "IL"},
-				{"hi", "IN"},
-				{"ho", "PG"},
-				{"hr", "HR"},
-				{"ht", "HT"},
-				{"hu", "HU"},
-				{"hy", "AM"},
-				{"id", "ID"},
-				{"is", "IS"},
-				{"it", "IT"},
-				{"ja", "JP"},
-				{"ka", "GE"},
-				{"kk", "KZ"},
-				{"kl", "GL"},
-				{"km", "KH"},
-				{"kn", "IN"},
-				{"ko", "KR"},
-				{"kok", "IN"},
-				{"ks", "IN"},
-				{"ku", "TR"},
-				{"ky", "KG"},
-				{"la", "VA"},
-				{"lb", "LU"},
-				{"ln", "CG"},
-				{"lo", "LA"},
-				{"lt", "LT"},
-				{"lv", "LV"},
-				{"mai", "IN"},
-				{"men", "GN"},
-				{"mg", "MG"},
-				{"mh", "MH"},
-				{"mk", "MK"},
-				{"ml", "IN"},
-				{"mn", "MN"},
-				{"mni", "IN"},
-				{"mo", "MD"},
-				{"mr", "IN"},
-				{"ms", "MY"},
-				{"mt", "MT"},
-				{"my", "MM"},
-				{"na", "NR"},
-				{"nb", "NO"},
-				{"nd", "ZA"},
-				{"ne", "NP"},
-				{"niu", "NU"},
-				{"nl", "NL"},
-				{"nn", "NO"},
-				{"no", "NO"},
-				{"nr", "ZA"},
-				{"nso", "ZA"},
-				{"ny", "MW"},
-				{"om", "KE"},
-				{"or", "IN"},
-				{"pa", "IN"},
-				{"pau", "PW"},
-				{"pl", "PL"},
-				{"ps", "PK"},
-				{"pt", "BR"},
-				{"qu", "PE"},
-				{"rn", "BI"},
-				{"ro", "RO"},
-				{"ru", "RU"},
-				{"rw", "RW"},
-				{"sd", "IN"},
-				{"sg", "CF"},
-				{"si", "LK"},
-				{"sk", "SK"},
-				{"sl", "SI"},
-				{"sm", "WS"},
-				{"so", "DJ"},
-				{"sq", "CS"},
-				{"sr", "CS"},
-				{"ss", "ZA"},
-				{"st", "ZA"},
-				{"sv", "SE"},
-				{"sw", "KE"},
-				{"ta", "IN"},
-				{"te", "IN"},
-				{"tem", "SL"},
-				{"tet", "TL"},
-				{"th", "TH"},
-				{"ti", "ET"},
-				{"tg", "TJ"},
-				{"tk", "TM"},
-				{"tkl", "TK"},
-				{"tvl", "TV"},
-				{"tl", "PH"},
-				{"tn", "ZA"},
-				{"to", "TO"},
-				{"tpi", "PG"},
-				{"tr", "TR"},
-				{"ts", "ZA"},
-				{"uk", "UA"},
-				{"ur", "IN"},
-				{"uz", "UZ"},
-				{"ve", "ZA"},
-				{"vi", "VN"},
-				{"wo", "SN"},
-				{"xh", "ZA"},
-				{"zh", "CN"},
-				{"zh_Hant", "TW"},
-				{"zu", "ZA"},
-		};
+	static final Map territory_tzid_hack_map = new HashMap();
+	static final String[][] territory_tzid_hack = {
+		{"AQ", "Antarctica/McMurdo"},
+		{"AR", "America/Buenos_Aires"},
+		{"AU", "Australia/Sydney"},
+		{"BR", "America/Sao_Paulo"},
+		{"CA", "America/Toronto"},
+		{"CD", "Africa/Kinshasa"},
+		{"CL", "America/Santiago"},
+		{"CN", "Asia/Shanghai"},
+		{"EC", "America/Guayaquil"},
+		{"ES", "Europe/Madrid"},
+		{"GB", "Europe/London"},
+		{"GL", "America/Godthab"},
+		{"ID", "Asia/Jakarta"},
+		{"ML", "Africa/Bamako"},
+		{"MX", "America/Mexico_City"},
+		{"MY", "Asia/Kuala_Lumpur"},
+		{"NZ", "Pacific/Auckland"},
+		{"PT", "Europe/Lisbon"},
+		{"RU", "Europe/Moscow"},
+		{"UA", "Europe/Kiev"},
+		{"US", "America/New_York"},
+		{"UZ", "Asia/Tashkent"},
+		{"PF", "Pacific/Tahiti"},
+		{"FM", "Pacific/Kosrae"},
+		{"KI", "Pacific/Tarawa"},
+		{"KZ", "Asia/Almaty"},
+		{"MH", "Pacific/Majuro"},
+		{"MN", "Asia/Ulaanbaatar"},
+		{"SJ", "Arctic/Longyearbyen"},
+		{"UM", "Pacific/Midway"},	
+	};
+	static {
+		for (int i = 0; i < territory_tzid_hack.length; ++i) {
+			territory_tzid_hack_map.put(territory_tzid_hack[i][0],territory_tzid_hack[i][1]);
+		}
+	}
 }
