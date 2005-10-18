@@ -1344,7 +1344,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     }else{
         //last resort strings
         UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(fZoneStringsHash==NULL){
+        if(array==NULL){
             delete fZoneStringsHash;
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
