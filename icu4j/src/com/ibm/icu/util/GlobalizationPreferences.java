@@ -9,16 +9,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.xml.utils.UnImplNode;
-
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
@@ -58,6 +64,21 @@ public class GlobalizationPreferences {
 			Date now = new Date();
 			
 			GlobalizationPreferences lPreferences = new GlobalizationPreferences();
+			
+			out.println("Check defaulting");
+			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
+			for (int i = 0; i < localeList.length; ++i) {
+				lPreferences.setULocales(localeList[i]);
+				out.println("\tdefaults for: \t" + localeList[i] + "\t"
+						+ lPreferences.getULocales()
+						+ ", \t" + lPreferences.getTerritory()
+						+ ", \t" + lPreferences.getCurrency()
+						+ ", \t" + lPreferences.getCalendar().getClass()
+						+ ", \t" + lPreferences.getTimezone().getID()
+				);
+			}
+			
+			out.println();
 			out.println("Date Formatting");
 			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, NONE).format(now));
 			
@@ -85,16 +106,8 @@ public class GlobalizationPreferences {
 					out.println("\twidth: " + WidthNames[width-dfs.ABBREVIATED]);
 					out.println("\t\tgetAmPmStrings:\t" + Arrays.asList(dfs.getAmPmStrings()));
 					out.println("\t\tgetEras\t" + Arrays.asList((width > 0 ? dfs.getEraNames() : dfs.getEras())));
-					try {
-						out.println("\t\tgetMonths:\t" + Arrays.asList(dfs.getMonths(context, width)));
-					} catch (RuntimeException e) {
-						out.println("\t\tgetMonths:\t" + "none");
-					}	
-					try {
-						out.println("\t\tgetWeekdays:\t" + Arrays.asList(dfs.getWeekdays(context, width)));
-					} catch (RuntimeException e) {
-						out.println("\t\tgetWeekdays:\t" + "none");
-					}	
+					out.println("\t\tgetMonths:\t" + Arrays.asList(dfs.getMonths(context, width)));
+					out.println("\t\tgetWeekdays:\t" + Arrays.asList(dfs.getWeekdays(context, width)));
 				}
 			}
 			
@@ -195,11 +208,43 @@ public class GlobalizationPreferences {
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setULocales(String acceptLanguageString) {
-		// change Accept-Language list into ordered list of ULocales
-		// then call setULocales with that list
-		if (true) throw new UnsupportedOperationException("not yet implemented");
-		return this;
+		/*
+		Accept-Language = "Accept-Language" ":" 1#( language-range [ ";" "q" "=" qvalue ] )
+		x matches x-...
+		*/
+		// reorders in quality order
+		// don't care that it is not very efficient right now
+		Matcher acceptMatcher = Pattern.compile("\\s*([-_a-zA-Z]+)(;q=([.0-9]+))?\\s*").matcher("");
+		Map reorder = new TreeMap();
+		String[] pieces = acceptLanguageString.split(",");
+		
+		for (int i = 0; i < pieces.length; ++i) {
+			Double qValue = new Double(1);
+			try {
+				if (!acceptMatcher.reset(pieces[i]).matches()) {
+					throw new IllegalArgumentException();
+				}
+				String qValueString = acceptMatcher.group(3);
+				if (qValueString != null) qValue = new Double(Double.parseDouble(qValueString));
+			} catch (Exception e) {
+				throw new IllegalArgumentException("element '" + pieces[i] + "' is not of the form '<locale>{;q=<number>}");
+			}
+			List items = (List)reorder.get(qValue);
+			if (items == null) reorder.put(qValue, items = new LinkedList());
+			items.add(0, acceptMatcher.group(1)); // reverse order, will reverse again
+		}
+		// now read out in reverse order
+		List result = new ArrayList();
+		for (Iterator it = reorder.keySet().iterator(); it.hasNext();) {
+			Object key = it.next();
+			List items = (List)reorder.get(key);
+			for (Iterator it2 = items.iterator(); it2.hasNext();) {
+				result.add(0, new ULocale((String)it2.next()));
+			}
+		}
+		return setULocales(result);
 	}
+	
 	/**
 	 * Sets the territory, which is a valid territory according to for RFC 3066 (or successor).
 	 * If not otherwise set, default currency and timezone values will be set from this.
@@ -259,7 +304,7 @@ public class GlobalizationPreferences {
 	/**
 	 * Sets the timezone ID.  If this has not been set, uses default for territory.
 	 * @param timezone a valid TZID (see UTS#35).
-	 * @return
+	 * @return the object, for chaining.
 	 */
 	public GlobalizationPreferences setTimezone(TimeZone timezone) {
 		this.timezone = timezone;
@@ -274,67 +319,37 @@ public class GlobalizationPreferences {
 	}
 
 	/**
-	 * Set the date locale. If not null, overrides the locale priority list for all the date formats.
-	 * @param dateLocale
-	 * @return
+	 * Set the date locale. 
+	 * @param dateLocale If not null, overrides the locale priority list for all the date formats.
+	 * @return the object, for chaining
 	 */
 	public GlobalizationPreferences setDateLocale(ULocale dateLocale) {
 		this.dateLocale = dateLocale;
 		return this;
 	}
 	/**
-	 * @return date locale. Null if none was set.
+	 * @return date locale. Null if none was set explicitly.
 	 */
 	public ULocale getDateLocale() {
 		return dateLocale;
 	}
 	
 	/**
-	 * Set an explicit date format. Overrides both the date locale, and the locale priority list
-	 * for a particular combination of dateStyle and timeStyle. NONE should be used if for the style,
-	 * where only the date or time format individually is being set.
-	 * @param dateStyle
-	 * @param timeStyle
-	 * @param format
-	 * @return this, for chaining
+	 * Set the number locale. 
+	 * @param numberLocale If not null, overrides the locale priority list for all the date formats.
+	 * @return the object, for chaining
 	 */
-	public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, DateFormat format) {
-		dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
+	public GlobalizationPreferences setNumberLocale(ULocale numberLocale) {
+		this.numberLocale = numberLocale;
 		return this;
 	}
-	
+
 	/**
-	 * Gets a date format according to the current settings. If there is an explicit (non-null) date/time
-	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
-	 * Otherwise, the language priority list is used. NONE should be used if for the style,
-	 * where only the date or time format individually is being gotten.
-	 * @param dateStyle
-	 * @param timeStyle
-	 * @return a DateFormat, according to the above description
+	 * Get the current number locale setting.
+	 * @return number locale. Null if none was set explicitly.
 	 */
-	public DateFormat getDateFormat(int dateStyle, int timeStyle) {
-		try {
-			DateFormat result = dateFormats[dateStyle][timeStyle];
-			if (result != null) {
-				result = (DateFormat) result.clone(); // clone for safety
-				result.setCalendar(calendar);
-			} else {
-				// In the case of date formats, we don't have to look at more than one
-				// locale. May be different for other cases
-				ULocale currentLocale = dateLocale != null ? dateLocale : (ULocale)locales.get(0);
-				// TODO Make this one function.
-				if (timeStyle == NONE) {
-					result = DateFormat.getDateInstance(calendar, dateStyle, currentLocale);
-				} else if (dateStyle == NONE) {
-					result = DateFormat.getTimeInstance(calendar, timeStyle, currentLocale);
-				} else {
-					result = DateFormat.getDateTimeInstance(calendar, dateStyle, timeStyle, currentLocale);
-				}
-			}
-			return result;
-		} catch (RuntimeException e) {
-			throw (IllegalArgumentException) new IllegalArgumentException("Cannot create DateFormat").initCause(e);	
-		}
+	public ULocale getNumberLocale() {
+		return numberLocale;
 	}
 	
 	/**
@@ -405,18 +420,51 @@ public class GlobalizationPreferences {
 	private static final Matcher badTimezone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
 
 	/**
-	 * TBD
+	 * Set an explicit date format. Overrides both the date locale, and the locale priority list
+	 * for a particular combination of dateStyle and timeStyle. NONE should be used if for the style,
+	 * where only the date or time format individually is being set.
+	 * @param dateStyle
+	 * @param timeStyle
+	 * @param format
+	 * @return this, for chaining
 	 */
-	public ULocale getNumberLocale() {
-		return numberLocale;
+	public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, DateFormat format) {
+		dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
+		return this;
 	}
 	
 	/**
-	 * TBD
+	 * Gets a date format according to the current settings. If there is an explicit (non-null) date/time
+	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
+	 * Otherwise, the language priority list is used. NONE should be used if for the style,
+	 * where only the date or time format individually is being gotten.
+	 * @param dateStyle
+	 * @param timeStyle
+	 * @return a DateFormat, according to the above description
 	 */
-	public GlobalizationPreferences setNumberLocale(ULocale numberLocale) {
-		this.numberLocale = numberLocale;
-		return this;
+	public DateFormat getDateFormat(int dateStyle, int timeStyle) {
+		try {
+			DateFormat result = dateFormats[dateStyle][timeStyle];
+			if (result != null) {
+				result = (DateFormat) result.clone(); // clone for safety
+				result.setCalendar(calendar);
+			} else {
+				// In the case of date formats, we don't have to look at more than one
+				// locale. May be different for other cases
+				ULocale currentLocale = dateLocale != null ? dateLocale : (ULocale)locales.get(0);
+				// TODO Make this one function.
+				if (timeStyle == NONE) {
+					result = DateFormat.getDateInstance(calendar, dateStyle, currentLocale);
+				} else if (dateStyle == NONE) {
+					result = DateFormat.getTimeInstance(calendar, timeStyle, currentLocale);
+				} else {
+					result = DateFormat.getDateTimeInstance(calendar, dateStyle, timeStyle, currentLocale);
+				}
+			}
+			return result;
+		} catch (RuntimeException e) {
+			throw (IllegalArgumentException) new IllegalArgumentException("Cannot create DateFormat").initCause(e);	
+		}
 	}
 	
 	/**
@@ -456,6 +504,19 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	
+	/**
+	 * Restore the object to the initial state.
+	 * @return the object, for chaining
+	 */
+	public GlobalizationPreferences clear() {
+		explicitLocales = explicitTerritory = explicitCurrency = explicitTimezone = explicitCalendar = false;
+		locales.add(ULocale.getDefault());
+		setTerritoryFromLocales();
+		setCurrencyFromTerritory();
+		setTimeZoneFromTerritory();
+		setCalendarFromTerritory();
+		return this;
+	}
 	
 	// PRIVATES
 	
@@ -476,21 +537,17 @@ public class GlobalizationPreferences {
 	private NumberFormat[] numberFormats = new NumberFormat[NUMBER_LIMIT];
 	
 	{
-		locales.add(ULocale.getDefault());
-		setTerritoryFromLocales();
-		setCurrencyFromTerritory();
-		setTimeZoneFromTerritory();
-		setCalendarFromTerritory();
+		clear();
 	}
 	
-	// helper functions
+	// private helper functions
 	private void setTerritoryFromLocales() {
 		if (explicitTerritory) return;
 		// pass through locales to see if there is a territory.
 		for (Iterator it = locales.iterator(); it.hasNext();) {
 			ULocale locale = (ULocale)it.next();
 			String temp = locale.getCountry();
-			if (temp.length() == 0) {
+			if (temp.length() != 0) {
 				territory = temp;
 				return;
 			}
@@ -498,13 +555,25 @@ public class GlobalizationPreferences {
 		// if not, guess from the first language tag, or maybe from intersection of languages, eg nl + fr => BE
 		// TODO fix using real data
 		// for now, just use fixed value
-		territory = "CN";
+		if (language_territory_hack_map == null) {
+			language_territory_hack_map = new HashMap();
+			for (int i = 0; i < language_territory_hack.length; ++i) {
+				language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
+			}
+		}
+		ULocale firstLocale = (ULocale)locales.iterator().next();
+		String language = firstLocale.getLanguage();
+		String script = firstLocale.getScript();
+		territory = null;
+		if (script.length() != 0) {
+			territory = (String) language_territory_hack_map.get(language + "_" + script);
+		}
+		if (territory == null) territory = (String) language_territory_hack_map.get(language);
+		if (territory == null) territory = "US"; // need *some* default
 	}
 	private void setCurrencyFromTerritory() {
 		if (explicitCurrency) return;
-		// TODO fix using real data
-		// for now, just use what we've got
-		currency = Currency.getInstance((ULocale)locales.get(0));
+		currency = Currency.getInstance(new ULocale("und-" + territory));
 	}
 	private void setTimeZoneFromTerritory() {
 		if (explicitTimezone) return;
@@ -512,12 +581,157 @@ public class GlobalizationPreferences {
 		// for single-zone countries, pick that zone
 		// for others, pick the most populous zone
 		// for now, just use fixed value
-		timezone = TimeZone.getTimeZone("Europe/London");
+		String[] attempt = ZoneMeta.getAvailableIDs(territory);
+		if (attempt.length == 0) timezone = TimeZone.getTimeZone("Europe/London");
+		else timezone = TimeZone.getTimeZone(attempt[0]);
 	}
 	private void setCalendarFromTerritory() {
 		if (explicitCalendar) return;
-		// TODO fix using real data
-		calendar = Calendar.getInstance((ULocale)locales.get(0));
+		// TODO add better API
+		calendar = Calendar.getInstance(new ULocale("und-" + territory));
 	}
+	Map language_territory_hack_map;
 	
+	String[][] language_territory_hack = {
+				{"af", "ZA"},
+				{"am", "ET"},
+				{"ar", "SA"},
+				{"as", "IN"},
+				{"ay", "PE"},
+				{"az", "AZ"},
+				{"bal", "PK"},
+				{"be", "BY"},
+				{"bg", "BG"},
+				{"bn", "IN"},
+				{"bs", "BA"},
+				{"ca", "ES"},
+				{"ch", "MP"},
+				{"cpe", "SL"},
+				{"cs", "CZ"},
+				{"cy", "GB"},
+				{"da", "DK"},
+				{"de", "DE"},
+				{"dv", "MV"},
+				{"dz", "BT"},
+				{"el", "GR"},
+				{"en", "US"},
+				{"es", "ES"},
+				{"et", "EE"},
+				{"eu", "ES"},
+				{"fa", "IR"},
+				{"fi", "FI"},
+				{"fil", "PH"},
+				{"fj", "FJ"},
+				{"fo", "FO"},
+				{"fr", "FR"},
+				{"ga", "IE"},
+				{"gd", "GB"},
+				{"gl", "ES"},
+				{"gn", "PY"},
+				{"gu", "IN"},
+				{"gv", "GB"},
+				{"ha", "NG"},
+				{"he", "IL"},
+				{"hi", "IN"},
+				{"ho", "PG"},
+				{"hr", "HR"},
+				{"ht", "HT"},
+				{"hu", "HU"},
+				{"hy", "AM"},
+				{"id", "ID"},
+				{"is", "IS"},
+				{"it", "IT"},
+				{"ja", "JP"},
+				{"ka", "GE"},
+				{"kk", "KZ"},
+				{"kl", "GL"},
+				{"km", "KH"},
+				{"kn", "IN"},
+				{"ko", "KR"},
+				{"kok", "IN"},
+				{"ks", "IN"},
+				{"ku", "TR"},
+				{"ky", "KG"},
+				{"la", "VA"},
+				{"lb", "LU"},
+				{"ln", "CG"},
+				{"lo", "LA"},
+				{"lt", "LT"},
+				{"lv", "LV"},
+				{"mai", "IN"},
+				{"men", "GN"},
+				{"mg", "MG"},
+				{"mh", "MH"},
+				{"mk", "MK"},
+				{"ml", "IN"},
+				{"mn", "MN"},
+				{"mni", "IN"},
+				{"mo", "MD"},
+				{"mr", "IN"},
+				{"ms", "MY"},
+				{"mt", "MT"},
+				{"my", "MM"},
+				{"na", "NR"},
+				{"nb", "NO"},
+				{"nd", "ZA"},
+				{"ne", "NP"},
+				{"niu", "NU"},
+				{"nl", "NL"},
+				{"nn", "NO"},
+				{"no", "NO"},
+				{"nr", "ZA"},
+				{"nso", "ZA"},
+				{"ny", "MW"},
+				{"om", "KE"},
+				{"or", "IN"},
+				{"pa", "IN"},
+				{"pau", "PW"},
+				{"pl", "PL"},
+				{"ps", "PK"},
+				{"pt", "BR"},
+				{"qu", "PE"},
+				{"rn", "BI"},
+				{"ro", "RO"},
+				{"ru", "RU"},
+				{"rw", "RW"},
+				{"sd", "IN"},
+				{"sg", "CF"},
+				{"si", "LK"},
+				{"sk", "SK"},
+				{"sl", "SI"},
+				{"sm", "WS"},
+				{"so", "DJ"},
+				{"sq", "CS"},
+				{"sr", "CS"},
+				{"ss", "ZA"},
+				{"st", "ZA"},
+				{"sv", "SE"},
+				{"sw", "KE"},
+				{"ta", "IN"},
+				{"te", "IN"},
+				{"tem", "SL"},
+				{"tet", "TL"},
+				{"th", "TH"},
+				{"ti", "ET"},
+				{"tg", "TJ"},
+				{"tk", "TM"},
+				{"tkl", "TK"},
+				{"tvl", "TV"},
+				{"tl", "PH"},
+				{"tn", "ZA"},
+				{"to", "TO"},
+				{"tpi", "PG"},
+				{"tr", "TR"},
+				{"ts", "ZA"},
+				{"uk", "UA"},
+				{"ur", "IN"},
+				{"uz", "UZ"},
+				{"ve", "ZA"},
+				{"vi", "VN"},
+				{"wo", "SN"},
+				{"xh", "ZA"},
+				{"zh", "CN"},
+				{"zh_Hant", "TW"},
+				{"zu", "ZA"},
+		};
 }
