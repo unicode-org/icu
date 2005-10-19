@@ -203,6 +203,14 @@ public:
     const UnicodeString* getEraNames(int32_t& count) const;
 
     /**
+     * Sets era name strings. For example: "Anno Domini" and "Before Christ".
+     * @param eraNames  Array of era name strings (DateFormatSymbols retains ownership.)
+     * @param count Filled in with length of the array.
+     * @draft ICU 3.6
+     */
+    void setEraNames(const UnicodeString* eraNames, int32_t count);
+
+    /**
      * Gets month strings. For example: "January", "February", etc.
      * @param count Filled in with length of the array.
      * @return the month strings. (DateFormatSymbols retains ownership.)
@@ -270,12 +278,23 @@ public:
     /**
      * Gets month strings by width and context. For example: "January", "February", etc.
      * @param count Filled in with length of the array.
-     * @param context The day formatting context, either FORMAT or STANDALONE
+     * @param context The formatting context, either FORMAT or STANDALONE
      * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings. (DateFormatSymbols retains ownership.)
      * @draft ICU 3.4
      */
     const UnicodeString* getMonths(int32_t& count, DtContextType context, DtWidthType width) const;
+
+    /**
+     * Sets month strings by width and context. For example: "January", "February", etc.
+     *
+     * @param months  The new month strings. (not adopted; caller retains ownership)
+     * @param count   Filled in with length of the array.
+     * @param context The formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @draft ICU 3.6
+     */
+    void setMonths(const UnicodeString* months, int32_t count, DtContextType context, DtWidthType width);
 
     /**
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
@@ -313,12 +332,22 @@ public:
     /**
      * Gets weekday strings by width and context. For example: "Sunday", "Monday", etc.
      * @param count   Filled in with length of the array.
-     * @param context The day formatting context, either FORMAT or STANDALONE
-     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
+     * @param context The formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW
      * @return the month strings. (DateFormatSymbols retains ownership.)
      * @draft ICU 3.4
      */
     const UnicodeString* getWeekdays(int32_t& count, DtContextType context, DtWidthType width) const;
+
+    /**
+     * Sets weekday strings by width and context. For example: "Sunday", "Monday", etc.
+     * @param weekdays  The new weekday strings. (not adopted; caller retains ownership)
+     * @param count     Filled in with length of the array.
+     * @param context   The formatting context, either FORMAT or STANDALONE
+     * @param width     The width of returned strings, either WIDE, ABBREVIATED, or NARROW
+     * @draft ICU 3.6
+     */
+    void setWeekdays(const UnicodeString* weekdays, int32_t count, DtContextType context, DtWidthType width);
 
     /**
      * Gets AM/PM strings. For example: "AM" and "PM".
