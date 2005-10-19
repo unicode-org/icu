@@ -16,6 +16,7 @@
 *   11/16/99    weiv        Added 'Y' and 'e' to fgPatternChars
 *   03/27/00    weiv        Keeping resource bundle around!
 *   06/30/05    emmons      Added eraNames, narrow month/day, standalone context
+*   10/12/05    emmons      Added setters for eraNames, month/day by width/context
 *******************************************************************************
 */
  
@@ -611,6 +612,19 @@ DateFormatSymbols::setEras(const UnicodeString* erasArray, int32_t count)
 }
 
 void
+DateFormatSymbols::setEraNames(const UnicodeString* eraNamesArray, int32_t count)
+{
+    // delete the old list if we own it
+    if (fEraNames) delete[] fEraNames;
+
+    // we always own the new list, which we create here (we duplicate rather
+    // than adopting the list passed in)
+    fEraNames = newUnicodeStringArray(count);
+    uprv_arrayCopy(eraNamesArray,fEraNames,  count);
+    fEraNamesCount = count;
+}
+
+void
 DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count)
 {
     // delete the old list if we own it
@@ -636,6 +650,62 @@ DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t
     fShortMonthsCount = count;
 }
 
+void
+DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count, DtContextType context, DtWidthType width)
+{
+    // delete the old list if we own it
+    // we always own the new list, which we create here (we duplicate rather
+    // than adopting the list passed in)
+
+    switch (context) {
+      case FORMAT :
+         switch (width) {
+            case WIDE :
+               if (fMonths) delete[] fMonths;
+               fMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fMonths,count);
+               fMonthsCount = count;
+               break;
+            case ABBREVIATED :
+               if (fShortMonths) delete[] fShortMonths;
+               fShortMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fShortMonths,count);
+               fShortMonthsCount = count;
+               break;
+            case NARROW :
+               if (fNarrowMonths) delete[] fNarrowMonths;
+               fNarrowMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fNarrowMonths,count);
+               fNarrowMonthsCount = count;
+               break; 
+         }
+         break;
+      case STANDALONE :
+         switch (width) {
+            case WIDE :
+               if (fStandaloneMonths) delete[] fStandaloneMonths;
+               fStandaloneMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fStandaloneMonths,count);
+               fStandaloneMonthsCount = count;
+               break;
+            case ABBREVIATED :
+               if (fStandaloneShortMonths) delete[] fStandaloneShortMonths;
+               fStandaloneShortMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fStandaloneShortMonths,count);
+               fStandaloneShortMonthsCount = count;
+               break;
+            case NARROW :
+               if (fStandaloneNarrowMonths) delete[] fStandaloneNarrowMonths;
+               fStandaloneNarrowMonths = newUnicodeStringArray(count);
+               uprv_arrayCopy( monthsArray,fStandaloneNarrowMonths,count);
+               fStandaloneNarrowMonthsCount = count;
+               break; 
+         }
+         break;
+
+    }
+}
+
 void DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count)
 {
     // delete the old list if we own it
@@ -659,6 +729,62 @@ DateFormatSymbols::setShortWeekdays(const UnicodeString* shortWeekdaysArray, int
     fShortWeekdays = newUnicodeStringArray(count);
     uprv_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
     fShortWeekdaysCount = count;
+}
+
+void
+DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count, DtContextType context, DtWidthType width)
+{
+    // delete the old list if we own it
+    // we always own the new list, which we create here (we duplicate rather
+    // than adopting the list passed in)
+
+    switch (context) {
+      case FORMAT :
+         switch (width) {
+            case WIDE :
+               if (fWeekdays) delete[] fWeekdays;
+               fWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fWeekdays,count);
+               fWeekdaysCount = count;
+               break;
+            case ABBREVIATED :
+               if (fShortWeekdays) delete[] fShortWeekdays;
+               fShortWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fShortWeekdays,count);
+               fShortWeekdaysCount = count;
+               break;
+            case NARROW :
+               if (fNarrowWeekdays) delete[] fNarrowWeekdays;
+               fNarrowWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fNarrowWeekdays,count);
+               fNarrowWeekdaysCount = count;
+               break; 
+         }
+         break;
+      case STANDALONE :
+         switch (width) {
+            case WIDE :
+               if (fStandaloneWeekdays) delete[] fStandaloneWeekdays;
+               fStandaloneWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fStandaloneWeekdays,count);
+               fStandaloneWeekdaysCount = count;
+               break;
+            case ABBREVIATED :
+               if (fStandaloneShortWeekdays) delete[] fStandaloneShortWeekdays;
+               fStandaloneShortWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fStandaloneShortWeekdays,count);
+               fStandaloneShortWeekdaysCount = count;
+               break;
+            case NARROW :
+               if (fStandaloneNarrowWeekdays) delete[] fStandaloneNarrowWeekdays;
+               fStandaloneNarrowWeekdays = newUnicodeStringArray(count);
+               uprv_arrayCopy( weekdaysArray,fStandaloneNarrowWeekdays,count);
+               fStandaloneNarrowWeekdaysCount = count;
+               break; 
+         }
+         break;
+
+    }
 }
 
 void
