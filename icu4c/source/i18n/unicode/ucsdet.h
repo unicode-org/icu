@@ -12,46 +12,14 @@
 *
 *   ICU Character Set Detection, API for C
 *
-*  Draft version 28 Aug 2005
-*
-*  Questions and Issues
-*
-*  0   is (char *) or (UChar *) for the encoding name parameters?
-*       o  char * is consistent with the converter API encoding name params.
-*       o  char * causes awkwardness in 100% Unicode apps.
-*          You would think that a Unicode library would use Unicode for
-*          strings.
-*
-*
-*  0  UText: With UFILE related functionality all being move into the realm of
-*          ICU IO, does it still make sense to support UText directly from
-*          the CharsetDetection API?  
-*
-*  0  The match type (BOM, encoding scheme, language type, etc.) from the
-*          Java API is omitted for now.  It didn't get implemented in the
-*          Java for ICU 3.4, and I don't see it as being very useful.
-*
-*
-*   Changes
-*
-*   - removed all FILE and UFILE related functions.  Equivalent functionality
-*     will be added to the icu io package.
-*
-*   - Changed UCharSetDetector to UCharsetDetector, to match the Java spelling.
-*
-*   - Add UCharsetMatch, an abstract type to represent a match.  More closely
-*     follows the structure of the Java API.
-*
-*   - add ucsdet_detect(), ucsdet_detectAll(), remove ucsdet_getDetectedCount().
-*
-*   - removed the UText interface.  This only makes sense when the byte input is
-*     coming in from a stream, a capability that is moving into icu io.
+*   Draft version 18 Oct 2005
 *
 */
 #ifndef CSDET_H
 #define CSDET_H
 
 #include "unicode/utypes.h"
+#include "unicode/uenum.h"
 
 #ifndef U_HIDE_DRAFT_API
 
@@ -155,7 +123,8 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t 
   *
   * @param csd       the charset detector to be used.
   * @param status    any error conditions are reported back in this variable.
-  * @return          a UCharsetMatch  representing the best matching charset.
+  * @return          a UCharsetMatch  representing the best matching charset,
+  *                  or NULL if no charset matches the byte data.
   *
   * @draft ICU 3.6
   */
@@ -173,8 +142,8 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
   *  the all of input data.
   *  <p/>
   *  The returned UCharsetMatch objects are owned by the UCharsetDetector.
-  *  They will remain valid until the detector input is reset, or until
-  *  the detector is closed.
+  *  They will remain valid until the detector is closed or modified
+  *  
   * <p/>
   * Return an error if 
   *  <ul>
@@ -185,12 +154,12 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
   * @param csd           the charset detector to be used.
   * @param matchesFound  pointer to a variable that will be set to the
   *                      number of charsets identified that are consistent with
-  *                      the input data.  
+  *                      the input data.  Output only.
   * @param status        any error conditions are reported back in this variable.
   * @return              A pointer to an array of pointers to UCharSetMatch objects.
   *                      This array, and the UCharSetMatch instances to which it refers,
   *                      are owned by the UCharsetDetector, and will remain valid until
-  *                      the detector is closed or reset to new input.
+  *                      the detector is closed or modified.
   * @draft ICU 3.4
   */
 U_DRAFT UCharsetMatch ** U_EXPORT2
@@ -220,7 +189,7 @@ ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status);
  *  Get a confidence number for the quality of the match of the byte
  *  data with the charset.  Confidence numbers range from zero to 100,
  *  with 100 representing complete confidence and zero representing
- *  no no confidence.
+ *  no confidence.
  *
  *  The confidence values are somewhat arbitrary.  They define an
  *  an ordering within the results for any single detection operation
@@ -230,7 +199,7 @@ ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status);
  *  for charsets that can represent the input data, but for which there
  *  is no other indication that suggests that the charset is the correct one.
  *  Pure 7 bit ASCII data, for example, is compatible with a
- *  great many charsets, most of which will be appear as possible matches
+ *  great many charsets, most of which will appear as possible matches
  *  with a confidence of 10.
  *
  *  @param csm     The charset match object.
@@ -251,7 +220,7 @@ ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status);
  *  is returned by this function.
  *
  *  CAUTION:
- *    1.  Language information is not available for input data encoded in.
+ *    1.  Language information is not available for input data encoded in
  *        all charsets. In particular, no language is identified
  *        for UTF-8 input data.
  *
@@ -276,27 +245,23 @@ ucsdet_getLanguage(const UCharsetMatch *csm, UErrorCode *status);
 
 /**
   *  Get the entire input text as a UChar string, placing it into
-  *  a caller-supplied buffer.
-  *
-  *  If the supplied buffer is smaller than the actual text, as much
-  *  of it as will fit will be placed in the buffer.  A terminating
+  *  a caller-supplied buffer.  A terminating
   *  NUL character will be appended to the buffer if space is available.
-  *  Only complete code points will be placed in the buffer - the buffer
-  *  will never end with the leading half of a surrogate pair.
   *
-  *  The number of UChars actually placed in the buffer is returned.
-  *  This is different from other ICU functions that fill a buffer in that
-  *  the returned value is NOT the size that would be required to hold
-  *  all available data when the buffer is to small.  The reason is that
-  *  the size of the data from a file may be very large indeed.
+  *  The number of UChars in the output string, not including the terminating
+  *  NUL, is returned. 
+  *
+  *  If the supplied buffer is smaller than required to hold the output,
+  *  the contents of the buffer are undefined.  The full output string length
+  *  (in UChars) is returned as always, and can be used to allocate a buffer
+  *  of the correct size.
   *
   *
   * @param csm     The charset match object.
   * @param buf     A UChar buffer to be filled with the converted text data.
   * @param cap     The capacity of the buffer in UChars.
   * @param status  Any error conditions are reported back in this variable.
-  * @return        The number of UChars placed in the buffer, not including
-  *                the trailing NUL.
+  * @return        The number of UChars in the output string.
   *
   * @draft ICU 3.6
   */
@@ -307,8 +272,12 @@ ucsdet_getUChars(const UCharsetMatch *csm,
 
 
 /**
-  *  Get the total number of charsets that can be recognized by the
-  *  charset detector implementation.
+  *  Get an iterator over the set of all detectable charsets - 
+  *  over the charsets that are known to the charset detection
+  *  service.
+  *
+  *  The returned UEnumeration provides access to the names of
+  *  the charsets.
   *
   *  The state of the Charset detector that is passed in does not
   *  affect the result of this function, but requiring a valid, open
@@ -318,37 +287,13 @@ ucsdet_getUChars(const UCharsetMatch *csm,
   *
   *  @param csd a Charset detector.
   *  @param status  Any error conditions are reported back in this variable.
-  *  @return the number of charsets that are known to the charset detector service.
+  *  @return an iterator providing access to the detectable charset names.
   *  @draft ICU 3.6
   */
-U_DRAFT  int32_t U_EXPORT2
-ucsdet_getDetectableCharsetsCount(const UCharsetDetector *csd, UErrorCode *status);
 
-/**
-  *  Get the name of the Nth charset that is detectable.  This function
-  *  can return the names of all charsets that are known to the
-  *  charset detector service.
-  *
-  *  The storage for the name string is owned by the charset detector
-  *  and will remain valid until the detector is closed.  The caller
-  *  must not modify or free the returned string.
-  *
-  *  The charset names are IANA standard names, and are suitable
-  *  for use with the ICU conversion functions.
-  *
-  *  @param csd    A charset detector.  The set of detectable charsets
-  *                is the same for all detectors.
-  *  @param index  The index of the charset to be returned.  The value
-  *                must be between zero and the number of detectable
-  *                charsets - 1.
-  *  @param status Any error conditions are reported back in this variable.
-  *                The possible error conditions include U_INDEX_OUTOFBOUNDS_ERROR.
-  *  @return       The name of the charset.
-  *
-  *  @draft ICU 3.6
-  **/
-U_DRAFT  const char * U_EXPORT2
-ucsdet_getDetectableCharsetName(const UCharsetDetector *csd, int32_t index, UErrorCode *status);
+U_DRAFT  UEnumeration * U_EXPORT2
+ucsdet_getAllDetectableCharsets(const UCharsetDetector *csd,  UErrorCode *status);
+
 
 /**
   *  Test whether input filtering is enabled for this charset detector.
