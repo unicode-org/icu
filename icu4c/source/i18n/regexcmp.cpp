@@ -60,7 +60,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
     fCharNum          = 0;
     fQuoteMode        = FALSE;
     fInBackslashQuote = FALSE;
-    fModeFlags        = fRXPat->fFlags;
+    fModeFlags        = fRXPat->fFlags | 0x80000000;
     fEOLComments      = TRUE;
 
     fMatchOpenParen   = -1;
@@ -339,11 +339,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_STATE_SAVE, 2), *fStatus);
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_JMP,  3), *fStatus);
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_FAIL, 0), *fStatus);
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP,  0), *fStatus);
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP,  0), *fStatus);
 
-        fParenStack.push(-1, *fStatus);     // Begin a Paren Stack Frame
-        fParenStack.push( 3, *fStatus);     // Push location of first NOP
+        // Standard open nonCapture paren action emits the two NOPs and
+        //   sets up the paren stack frame.
+        doParseActions((EParseAction)doOpenNonCaptureParen);
         break;
 
     case doPatFinish:
@@ -1333,6 +1332,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doSetMatchMode:
         // We've got a (?i) or similar.  The match mode is being changed, but
         //   the change is not scoped to a parenthesized block.
+        U_ASSERT(fNewModeFlags < 0);
         fModeFlags = fNewModeFlags;
 
         // Prevent any string from spanning across the change of match mode.
@@ -1363,6 +1363,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
 
             // Set the current mode flags to the new values.
+            U_ASSERT(fNewModeFlags < 0);
             fModeFlags = fNewModeFlags;
         }
         break;
@@ -1620,6 +1621,7 @@ void   RegexCompile::insertOp(int32_t where) {
     //  the compiled pattern.   (Negative values are frame boundaries, and don't need fixing.)
     for (loc=0; loc<fParenStack.size(); loc++) {
         int32_t x = fParenStack.elementAti(loc);
+        U_ASSERT(x < code->size());
         if (x>where) {
             x++;
             fParenStack.setElementAt(x, loc);
@@ -1726,6 +1728,7 @@ void  RegexCompile::handleCloseParen() {
     //  the value they had at the open paren.  Saved value is
     //  at the top of the paren stack.  
     fModeFlags = fParenStack.popi();
+    U_ASSERT(fModeFlags < 0);
     
     // DO any additional fixups, depending on the specific kind of
     // parentesized grouping this is
