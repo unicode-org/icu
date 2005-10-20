@@ -154,6 +154,9 @@ private:
     //  Data associated with the generation of the pcode for the match engine
     //
     int32_t                       fModeFlags;        // Match Flags.  (Case Insensitive, etc.)
+                                                     //   Always has high bit (31) set so that flag values
+                                                     //   on the paren stack are distinguished from relocatable
+                                                     //   pcode addresses.
     int32_t                       fNewModeFlags;     // New flags, while compiling (?i, holds state
                                                      //   until last flag is scanned.
     UBool                         fSetModeFlag;      // true for (?ismx, false for (?-ismx
