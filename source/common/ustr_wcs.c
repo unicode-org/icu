@@ -315,7 +315,7 @@ _strFromWCS( UChar   *dest,
             if(retVal == -1){
                 *pErrorCode = U_ILLEGAL_CHAR_FOUND;
                 goto cleanup;
-            }else if(retVal == cStackCap){
+            }else if(retVal >= (cStackCap-1)){
                 /* Should rarely occur */
                 u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
                     cStackCap * _BUFFER_CAPACITY_MULTIPLIER, 0, sizeof(char));
