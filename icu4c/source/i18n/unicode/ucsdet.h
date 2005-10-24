@@ -128,7 +128,7 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t 
   *
   * @draft ICU 3.6
   */
-U_DRAFT UCharsetMatch * U_EXPORT2
+U_DRAFT const UCharsetMatch * U_EXPORT2
 ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
     
 
@@ -162,7 +162,7 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
   *                      the detector is closed or modified.
   * @draft ICU 3.4
   */
-U_DRAFT UCharsetMatch ** U_EXPORT2
+U_DRAFT const UCharsetMatch ** U_EXPORT2
 ucsdet_detectAll(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *status);
 
 
