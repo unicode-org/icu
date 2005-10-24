@@ -38,10 +38,20 @@
 
 #include "unicode/uwmsg.h"
 
-#if (defined(U_WINDOWS) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
+#if defined(U_WINDOWS) || defined(U_CYGWIN)
 #include <io.h>
 #include <fcntl.h>
 #define USE_FILENO_BINARY_MODE 1
+/* Windows likes to rename Unix-like functions */
+#ifndef fileno
+#define fileno _fileno
+#endif
+#ifndef setmode
+#define setmode _setmode
+#endif
+#ifndef O_BINARY
+#define O_BINARY _O_BINARY
+#endif
 #endif
 
 #ifdef UCONVMSG_LINK

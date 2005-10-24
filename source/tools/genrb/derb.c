@@ -33,6 +33,17 @@
 #if defined(U_WINDOWS) || defined(U_CYGWIN)
 #include <io.h>
 #include <fcntl.h>
+#define USE_FILENO_BINARY_MODE 1
+/* Windows likes to rename Unix-like functions */
+#ifndef fileno
+#define fileno _fileno
+#endif
+#ifndef setmode
+#define setmode _setmode
+#endif
+#ifndef O_BINARY
+#define O_BINARY _O_BINARY
+#endif
 #endif
 
 #define DERB_VERSION "1.0"
@@ -285,7 +296,7 @@ main(int argc, char* argv[]) {
             if (tostdout) {
                 out = stdout;
 #if defined(U_WINDOWS) || defined(U_CYGWIN)
-                if (_setmode(_fileno(out), _O_BINARY) == -1) {
+                if (setmode(fileno(out), O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n", pname);
                     return 4;
                 }
