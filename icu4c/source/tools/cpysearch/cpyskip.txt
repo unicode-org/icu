@@ -4,6 +4,7 @@
 *.brk
 *.bz2
 *.csproj
+*.dat
 *.doc
 *.gif
 *.gz
