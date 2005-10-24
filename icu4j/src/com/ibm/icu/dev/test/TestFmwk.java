@@ -1079,13 +1079,13 @@ public class TestFmwk extends AbstractTestLog {
         private StringBuffer errorSummary;
 
         private PrintWriter log = new ASCIIWriter(System.out, true);
-        private int indentLevel;
+        public int indentLevel;
         private boolean needLineFeed;
         private boolean suppressIndent;
         private int errorCount;
         private int warnCount;
         private int invalidCount;
-        private int testCount;
+        public int testCount;
         private NumberFormat tformat;
         public Random random;
 
