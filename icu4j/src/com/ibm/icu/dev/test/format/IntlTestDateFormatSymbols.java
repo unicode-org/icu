@@ -158,6 +158,66 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             }
         }
 
+        final String[] narrowMonths = en.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        fr.setMonths(narrowMonths,DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        final String[] narrowMonths1 = fr.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        count = narrowMonths.length;
+        if( count != narrowMonths1.length) {
+            errln("ERROR: setMonths(FORMAT,NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! narrowMonths[i].equals(narrowMonths1[i])) {
+                    errln("ERROR: setMonths(FORMAT,NARROW) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneMonths = en.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        fr.setMonths(standaloneMonths,DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        final String[] standaloneMonths1 = fr.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        count = standaloneMonths.length;
+        if( count != standaloneMonths1.length) {
+            errln("ERROR: setMonths(STANDALONE,WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneMonths[i].equals(standaloneMonths1[i])) {
+                    errln("ERROR: setMonths(STANDALONE,WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneShortMonths = en.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        fr.setMonths(standaloneShortMonths,DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        final String[] standaloneShortMonths1 = fr.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        count = standaloneShortMonths.length;
+        if( count != standaloneShortMonths1.length) {
+            errln("ERROR: setMonths(STANDALONE,ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneShortMonths[i].equals(standaloneShortMonths1[i])) {
+                    errln("ERROR: setMonths(STANDALONE,ABBREVIATED) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneNarrowMonths = en.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        fr.setMonths(standaloneNarrowMonths,DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        final String[] standaloneNarrowMonths1 = fr.getMonths(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        count = standaloneNarrowMonths.length;
+        if( count != standaloneNarrowMonths1.length) {
+            errln("ERROR: setMonths(STANDALONE,NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneNarrowMonths[i].equals(standaloneNarrowMonths1[i])) {
+                    errln("ERROR: setMonths(STANDALONE,NARROW) failed (different string values)");
+                }
+            }
+        }
+
         final String[] weekdays = en.getWeekdays();
         fr.setWeekdays(weekdays);
         final String[] weekdays1 = fr.getWeekdays();
@@ -188,6 +248,65 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             }
         }
 
+        final String[] narrowWeekdays = en.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        fr.setWeekdays(narrowWeekdays,DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        final String[] narrowWeekdays1 = fr.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        count = narrowWeekdays.length;
+        if( count != narrowWeekdays1.length) {
+            errln("ERROR: setWeekdays(FORMAT,NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! narrowWeekdays[i].equals(narrowWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(FORMAT,NARROW) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneWeekdays = en.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        fr.setWeekdays(standaloneWeekdays,DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        final String[] standaloneWeekdays1 = fr.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        count = standaloneWeekdays.length;
+        if( count != standaloneWeekdays1.length) {
+            errln("ERROR: setWeekdays(STANDALONE,WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneWeekdays[i].equals(standaloneWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(STANDALONE,WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneShortWeekdays = en.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        fr.setWeekdays(standaloneShortWeekdays,DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        final String[] standaloneShortWeekdays1 = fr.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        count = standaloneShortWeekdays.length;
+        if( count != standaloneShortWeekdays1.length) {
+            errln("ERROR: setWeekdays(STANDALONE,ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneShortWeekdays[i].equals(standaloneShortWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(STANDALONE,ABBREVIATED) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneNarrowWeekdays = en.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        fr.setWeekdays(standaloneNarrowWeekdays,DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        final String[] standaloneNarrowWeekdays1 = fr.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        count = standaloneNarrowWeekdays.length;
+        if( count != standaloneNarrowWeekdays1.length) {
+            errln("ERROR: setWeekdays(STANDALONE,NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneNarrowWeekdays[i].equals(standaloneNarrowWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(STANDALONE,NARROW) failed (different string values)");
+                }
+            }
+        }
         final String[] ampms = en.getAmPmStrings();
         fr.setAmPmStrings(ampms);
         final String[] ampms1 = fr.getAmPmStrings();
