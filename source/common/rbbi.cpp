@@ -1403,14 +1403,22 @@ private:
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CharacterIteratorUT)
 
 CharacterIteratorUT::CharacterIteratorUT(UText *ut) {
+    fUText     = 0;
+    textLength = 0;
+    pos        = 0;
+    begin      = 0;
+    end        = 0;
+    if (ut == NULL) {
+        return;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     fUText = utext_clone(NULL, ut, FALSE, &status);
-    
-    // Set the inherited CharacterItertor fields
-    textLength = utext_nativeLength(ut);
-    pos = 0;
-    begin = 0;
-    end = textLength;
+    if (fUText != NULL) {
+        // Set the inherited CharacterItertor fields
+        textLength = utext_nativeLength(ut);
+        end = textLength;
+    }
 }
 
 CharacterIteratorUT::CharacterIteratorUT() {
@@ -1427,15 +1435,7 @@ CharacterIteratorUT::~CharacterIteratorUT() {
 
 
 CharacterIterator *CharacterIteratorUT::clone() const {
-    UErrorCode status = U_ZERO_ERROR;
-    CharacterIteratorUT *result = new  CharacterIteratorUT();
-    result->fUText = utext_clone(NULL, fUText, TRUE, &status);
-    if (U_SUCCESS(status)) {
-        result->textLength = utext_nativeLength(fUText);
-        result->pos = 0;
-        result->begin = 0;
-        result->end = textLength;
-    }
+    CharacterIteratorUT *result = new CharacterIteratorUT(this->fUText);
     return result;
 }
 
