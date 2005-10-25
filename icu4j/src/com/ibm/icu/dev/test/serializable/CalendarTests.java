@@ -32,7 +32,7 @@ import com.ibm.icu.util.TimeZone;
  */
 public class CalendarTests
 {
-    static class CalendarTest implements SerializableTest.Handler
+    static class CalendarHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
         {
@@ -63,7 +63,7 @@ public class CalendarTests
         }
     }
 
-    static class BuddhistCalendarTest extends CalendarTest
+    static class BuddhistCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -79,7 +79,7 @@ public class CalendarTests
         }
     }
     
-    static class ChineseCalendarTest extends CalendarTest
+    static class ChineseCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -95,7 +95,7 @@ public class CalendarTests
         }
     }
     
-    static class CopticCalendarTest extends CalendarTest
+    static class CopticCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -111,7 +111,7 @@ public class CalendarTests
         }
     }
 
-    static class EthiopicCalendarTest extends CalendarTest
+    static class EthiopicCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -127,7 +127,7 @@ public class CalendarTests
         }
     }
 
-    static class GregorianCalendarTest extends CalendarTest
+    static class GregorianCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -143,7 +143,7 @@ public class CalendarTests
         }
     }
 
-    static class HebrewCalendarTest extends CalendarTest
+    static class HebrewCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {
@@ -159,7 +159,7 @@ public class CalendarTests
         }
     }
     
-    static class IslamicCalendarTest extends CalendarTest
+    static class IslamicCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects() {
             Locale locales[] = SerializableTest.getLocales();
@@ -174,7 +174,7 @@ public class CalendarTests
         }
     }
 
-    static class JapaneseCalendarTest extends CalendarTest
+    static class JapaneseCalendarHandler extends CalendarHandler
     {
         public Object[] getTestObjects()
         {

@@ -22,7 +22,7 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
  */
 public class ExceptionTests
 {
-    static abstract class ExceptionTest implements SerializableTest.Handler
+    static abstract class ExceptionHandler implements SerializableTest.Handler
     {
         abstract public Object[] getTestObjects();
         
@@ -35,7 +35,7 @@ public class ExceptionTests
         }
     }
     
-    static class ArabicShapingExceptionTest extends ExceptionTest
+    static class ArabicShapingExceptionHandler extends ExceptionHandler
     {
         public Object[] getTestObjects()
         {
@@ -50,7 +50,7 @@ public class ExceptionTests
         }
     }
     
-    static class StringPrepParseExceptionTest extends ExceptionTest
+    static class StringPrepParseExceptionHandler extends ExceptionHandler
     {
         public Object[] getTestObjects()
         {
@@ -66,7 +66,7 @@ public class ExceptionTests
         }
     }
     
-    static class UResourceTypeMismatchExceptionTest extends ExceptionTest
+    static class UResourceTypeMismatchExceptionHandler extends ExceptionHandler
     {
         public Object[] getTestObjects()
         {

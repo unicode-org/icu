@@ -8,16 +8,13 @@
 
 package com.ibm.icu.dev.test.serializable;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.HashMap;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.JDKTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
+import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.Currency;
@@ -31,7 +28,7 @@ import com.ibm.icu.util.ULocale;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SerializableTest
+public class SerializableTest extends TestFmwk.TestGroup
 {
     public interface Handler
     {
@@ -45,7 +42,7 @@ public class SerializableTest
         return (Handler) map.get(className);
     }
     
-    private static class TimeZoneTest implements Handler
+    private static class TimeZoneHandler implements Handler
     {
         String[] ZONES = { "GMT", "MET", "IST" };
 
@@ -120,7 +117,7 @@ public class SerializableTest
         return true;
     }
 
-    private static class SimpleTimeZoneTest extends TimeZoneTest
+    private static class SimpleTimeZoneHandler extends TimeZoneHandler
     {
         public Object[] getTestObjects()
         {
@@ -150,7 +147,7 @@ public class SerializableTest
         }
     }
     
-    private static class ULocaleTest implements Handler
+    private static class ULocaleHandler implements Handler
     {
         public Object[] getTestObjects()
         {
@@ -172,7 +169,7 @@ public class SerializableTest
         }
     }
     
-    private static class CurrencyTest implements Handler
+    private static class CurrencyHandler implements Handler
     {
         public Object[] getTestObjects()
         {
@@ -195,7 +192,7 @@ public class SerializableTest
         }
     }
     
-    private static class OlsonTimeZoneTest implements Handler
+    private static class OlsonTimeZoneHandler implements Handler
     {
         String zoneIDs[] = {
             "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
@@ -233,7 +230,77 @@ public class SerializableTest
         }
     }
     
-    private static class BigDecimalTest implements Handler
+    private static class JDKTimeZoneHandler implements Handler
+    {
+        String zoneIDs[] = {
+            "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
+            "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
+            "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
+            "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
+            "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
+            "Europe/Paris", "Europe/Rome"
+        };
+        
+        public Object[] getTestObjects()
+        {
+            JDKTimeZone timeZones[] = new JDKTimeZone[zoneIDs.length];
+            
+            for (int i = 0; i < zoneIDs.length; i += 1) {
+                timeZones[i] = new JDKTimeZone(java.util.TimeZone.getTimeZone(zoneIDs[i]));
+            }
+            
+            return timeZones;
+                
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            JDKTimeZone jtz_a = (JDKTimeZone) a;
+            JDKTimeZone jtz_b = (JDKTimeZone) b;
+            long now = System.currentTimeMillis();
+            int a_offsets[] = {0, 0};
+            int b_offsets[] = {0, 0};
+            
+            jtz_a.getOffset(now, false, a_offsets);
+            jtz_b.getOffset(now, false, b_offsets);
+            
+            return a_offsets[0] == b_offsets[0] && a_offsets[1] == b_offsets[1];
+        }
+    }
+    
+    private static class TimeZoneAdapterHandler implements Handler
+    {
+        String zoneIDs[] = {
+            "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
+            "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
+            "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
+            "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
+            "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
+            "Europe/Paris", "Europe/Rome"
+        };
+        
+        public Object[] getTestObjects()
+        {
+            TimeZoneAdapter timeZones[] = new TimeZoneAdapter[zoneIDs.length];
+            
+            for (int i = 0; i < zoneIDs.length; i += 1) {
+                timeZones[i] = new TimeZoneAdapter(TimeZone.getTimeZone(zoneIDs[i]));
+            }
+            
+            return timeZones;
+                
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
+            TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
+            
+            return tza_a.hasSameRules(tza_b);
+        }
+    }
+    
+    private static class BigDecimalHandler implements Handler
     {
         String values[] = {
             "1234567890.",
@@ -267,7 +334,7 @@ public class SerializableTest
         }
     }
     
-    private static class MathContextTest implements Handler
+    private static class MathContextHandler implements Handler
     {
         int forms[] = {MathContext.PLAIN, MathContext.ENGINEERING, MathContext.SCIENTIFIC};
         int rounds[] = {
@@ -305,117 +372,58 @@ public class SerializableTest
     private static HashMap map = new HashMap();
     
     static {
-        map.put("com.ibm.icu.util.TimeZone", new TimeZoneTest());
-        map.put("com.ibm.icu.util.SimpleTimeZone", new SimpleTimeZoneTest());
-        map.put("com.ibm.icu.util.ULocale", new ULocaleTest());
-        map.put("com.ibm.icu.util.Currency", new CurrencyTest());
-        map.put("com.ibm.icu.impl.OlsonTimeZone", new OlsonTimeZoneTest());
-        map.put("com.ibm.icu.math.BigDecimal", new BigDecimalTest());
-        map.put("com.ibm.icu.math.MathContext", new MathContextTest());
+        map.put("com.ibm.icu.util.TimeZone", new TimeZoneHandler());
+        map.put("com.ibm.icu.util.SimpleTimeZone", new SimpleTimeZoneHandler());
+        map.put("com.ibm.icu.util.ULocale", new ULocaleHandler());
+        map.put("com.ibm.icu.util.Currency", new CurrencyHandler());
+        map.put("com.ibm.icu.impl.JDKTimeZone", new JDKTimeZoneHandler());
+        map.put("com.ibm.icu.impl.OlsonTimeZone", new OlsonTimeZoneHandler());
+        map.put("com.ibm.icu.impl.TimeZoneAdapter", new TimeZoneAdapterHandler());
+        map.put("com.ibm.icu.math.BigDecimal", new BigDecimalHandler());
+        map.put("com.ibm.icu.math.MathContext", new MathContextHandler());
         
-        map.put("com.ibm.icu.text.NumberFormat", new FormatTests.NumberFormatTest());
-        map.put("com.ibm.icu.text.DecimalFormat", new FormatTests.DecimalFormatTest());
-        map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatTests.RuleBasedNumberFormatTest());
-        map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatTests.DecimalFormatSymbolsTest());
-        map.put("com.ibm.icu.text.MessageFormat", new FormatTests.MessageFormatTest());
-        map.put("com.ibm.icu.text.DateFormat", new FormatTests.DateFormatTest());
-        map.put("com.ibm.icu.text.DateFormatSymbols", new FormatTests.DateFormatSymbolsTest());
-        map.put("com.ibm.icu.text.SimpleDateFormat", new FormatTests.SimpleDateFormatTest());
-        map.put("com.ibm.icu.text.ChineseDateFormat", new FormatTests.ChineseDateFormatTest());
-        map.put("com.ibm.icu.text.ChineseDateFormatSymbols", new FormatTests.ChineseDateFormatSymbolsTest());
+        map.put("com.ibm.icu.text.NumberFormat", new FormatTests.NumberFormatHandler());
+        map.put("com.ibm.icu.text.DecimalFormat", new FormatTests.DecimalFormatHandler());
+        map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatTests.RuleBasedNumberFormatHandler());
+        map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatTests.DecimalFormatSymbolsHandler());
+        map.put("com.ibm.icu.text.MessageFormat", new FormatTests.MessageFormatHandler());
+        map.put("com.ibm.icu.text.DateFormat", new FormatTests.DateFormatHandler());
+        map.put("com.ibm.icu.text.DateFormatSymbols", new FormatTests.DateFormatSymbolsHandler());
+        map.put("com.ibm.icu.text.SimpleDateFormat", new FormatTests.SimpleDateFormatHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormat", new FormatTests.ChineseDateFormatHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormatSymbols", new FormatTests.ChineseDateFormatSymbolsHandler());
 
-        map.put("com.ibm.icu.util.Calendar", new CalendarTests.CalendarTest());
-        map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarTests.BuddhistCalendarTest());
-        map.put("com.ibm.icu.util.ChineseCalendar", new CalendarTests.ChineseCalendarTest());
-        map.put("com.ibm.icu.util.CopticCalendar", new CalendarTests.CopticCalendarTest());
-        map.put("com.ibm.icu.util.EthiopicCalendar", new CalendarTests.EthiopicCalendarTest());
-        map.put("com.ibm.icu.util.GregorianCalendar", new CalendarTests.GregorianCalendarTest());
-        map.put("com.ibm.icu.util.HebrewCalendar", new CalendarTests.HebrewCalendarTest());
-        map.put("com.ibm.icu.util.IslamicCalendar", new CalendarTests.IslamicCalendarTest());
-        map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarTests.JapaneseCalendarTest());
+        map.put("com.ibm.icu.util.Calendar", new CalendarTests.CalendarHandler());
+        map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarTests.BuddhistCalendarHandler());
+        map.put("com.ibm.icu.util.ChineseCalendar", new CalendarTests.ChineseCalendarHandler());
+        map.put("com.ibm.icu.util.CopticCalendar", new CalendarTests.CopticCalendarHandler());
+        map.put("com.ibm.icu.util.EthiopicCalendar", new CalendarTests.EthiopicCalendarHandler());
+        map.put("com.ibm.icu.util.GregorianCalendar", new CalendarTests.GregorianCalendarHandler());
+        map.put("com.ibm.icu.util.HebrewCalendar", new CalendarTests.HebrewCalendarHandler());
+        map.put("com.ibm.icu.util.IslamicCalendar", new CalendarTests.IslamicCalendarHandler());
+        map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarTests.JapaneseCalendarHandler());
         
-        map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionTests.ArabicShapingExceptionTest());
-        map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionTests.StringPrepParseExceptionTest());
-        map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionTests.UResourceTypeMismatchExceptionTest());
+        map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionTests.ArabicShapingExceptionHandler());
+        map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionTests.StringPrepParseExceptionHandler());
+        map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionTests.UResourceTypeMismatchExceptionHandler());
     }
     
-    public void testDirectory(File dir)
+    public SerializableTest()
     {
-        File files[] = dir.listFiles();
-        
-        for (int i = 0; i < files.length; i += 1) {
-            check(files[i]);
-        }
+        super(
+            new String[] {
+                "com.ibm.icu.dev.test.serializable.CoverageTest",
+                "com.ibm.icu.dev.test.serializable.CompatibilityTest"},
+                "All Serializable Tests"
+        );
     }
-    
-    public void check(File file)
-    {
-        String filename = file.getName();
-        int ix = filename.lastIndexOf(".dat");
-        
-        if (ix < 0) {
-            return;
-        }
-        
-        String className = filename.substring(0, ix);
-        Handler handler = getHandler(className);
 
-        System.out.print(className + " - ");
-        
-        if (handler == null) {
-            System.out.println("no test.");
-            return;
-        }
-        
-        try {
-            FileInputStream fs = new FileInputStream(file);
-            
-            ObjectInputStream in = new ObjectInputStream(fs);
-            Object inputObjects[] = (Object[]) in.readObject();
-            Object testObjects[] = handler.getTestObjects();
-            boolean passed = true;
-            
-            in.close();
-            fs.close();
-            
-            // TODO: add equality test...
-            for (int i = 0; i < testObjects.length; i += 1) {
-                if (! handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
-                    passed = false;
-                    System.out.println("Input object " + i + " failed behavior test.");
-                }
-            }
-            
-            if (passed) {
-                System.out.println("test passed.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error processing test object: " + e.toString());
-        }
-    }
-    
+    public static final String CLASS_TARGET_NAME  = "Serializable";
+
     public static void main(String[] args)
     {
         SerializableTest test = new SerializableTest();
-        List argList = Arrays.asList(args);
-        boolean write = false;
         
-        for (Iterator it = argList.iterator(); it.hasNext(); /*anything?*/) {
-            String arg = (String) it.next();
-            
-            try {
-                File dir = new File(arg);
-                
-                if (! dir.isDirectory()) {
-                    System.out.println(dir + " is not a directory.");
-                    continue;
-                }
-                
-                System.out.println("Checking test data from " + arg + ":");
-                test.testDirectory(dir);
-            } catch (Exception e) {
-                System.out.println("Error processing " + arg + ": " + e.getMessage());
-            }
-        }
+        test.run(args);
     }
 }

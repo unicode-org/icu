@@ -220,6 +220,37 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text svne
 icu4j/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.JDKTimeZone.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.MathContext.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ArabicShapingException.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormatSymbols.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.MessageFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.NumberFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.SimpleDateFormat.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.StringPrepParseException.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.BuddhistCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Calendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ChineseCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.CopticCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Currency.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.EthiopicCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.GregorianCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.HebrewCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.IslamicCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.JapaneseCalendar.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.SimpleTimeZone.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZone.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
+icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
