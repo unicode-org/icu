@@ -360,6 +360,11 @@
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml"
             todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
+    	<copy todir="${build.dir}/com/ibm/icu/dev/test/serializable/data">
+    		<fileset dir="${src.dir}/com/ibm/icu/dev/test/serializable/data">
+    			<include name="**/*.dat"/>
+			</fileset>
+		</copy>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
