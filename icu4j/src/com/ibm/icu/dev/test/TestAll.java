@@ -37,7 +37,8 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.impl.TestAll",
                   "com.ibm.icu.dev.test.stringprep.TestAll",
                   "com.ibm.icu.dev.test.timescale.TestAll",
-				  "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector"
+				  "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector",
+                  "com.ibm.icu.dev.test.serializable.SerializableTest" // *is* a group
               },
               "All tests in ICU");
     }
