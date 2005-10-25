@@ -64,8 +64,11 @@ public class JDKTimeZone extends TimeZone {
      * Constructs a JDKTimeZone given a java.util.TimeZone reference
      * which must not be null.
      * @param tz the time zone to wrap
+     * 
+     * @internal
+     * @deprecated This is an internal API and should not be used by client code.
      */
-    protected JDKTimeZone(java.util.TimeZone tz) {
+    public JDKTimeZone(java.util.TimeZone tz) {
         zone = tz;
         super.setID(zone.getID());
     }
