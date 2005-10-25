@@ -33,7 +33,7 @@ import com.ibm.icu.util.ULocale;
 public class FormatTests
 {
 
-    public static class NumberFormatTest implements SerializableTest.Handler
+    public static class NumberFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
         {
@@ -58,7 +58,7 @@ public class FormatTests
         }
     }
     
-    public static class DecimalFormatTest extends NumberFormatTest
+    public static class DecimalFormatHandler extends NumberFormatHandler
     {
         public Object[] getTestObjects()
         {
@@ -73,7 +73,7 @@ public class FormatTests
         }
     }
     
-    public static class RuleBasedNumberFormatTest extends NumberFormatTest
+    public static class RuleBasedNumberFormatHandler extends NumberFormatHandler
     {
         int types[] = {RuleBasedNumberFormat.SPELLOUT, RuleBasedNumberFormat.ORDINAL, RuleBasedNumberFormat.DURATION};
         
@@ -93,7 +93,7 @@ public class FormatTests
         }
     }
     
-    public static class DecimalFormatSymbolsTest implements SerializableTest.Handler
+    public static class DecimalFormatSymbolsHandler implements SerializableTest.Handler
     {
         private char[] getCharSymbols(DecimalFormatSymbols dfs)
         {
@@ -153,7 +153,7 @@ public class FormatTests
         }
     }
     
-    public static class MessageFormatTest implements SerializableTest.Handler
+    public static class MessageFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
         {
@@ -172,7 +172,7 @@ public class FormatTests
         }
     }
     
-    public static class DateFormatTest implements SerializableTest.Handler
+    public static class DateFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
         {
@@ -197,7 +197,7 @@ public class FormatTests
         
     }
     
-    public static class DateFormatSymbolsTest implements SerializableTest.Handler
+    public static class DateFormatSymbolsHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
         {
@@ -222,7 +222,7 @@ public class FormatTests
         }
     }
     
-    public static class SimpleDateFormatTest extends DateFormatTest
+    public static class SimpleDateFormatHandler extends DateFormatHandler
     {
         String patterns[] = {
             "EEEE, yyyy MMMM dd",
@@ -247,7 +247,7 @@ public class FormatTests
         }
     }
     
-    public static class ChineseDateFormatTest extends DateFormatTest
+    public static class ChineseDateFormatHandler extends DateFormatHandler
     {
         String patterns[] = {
             "EEEE y'x'G-Ml-d",
@@ -274,7 +274,7 @@ public class FormatTests
         }
     }
     
-    public static class ChineseDateFormatSymbolsTest extends DateFormatSymbolsTest
+    public static class ChineseDateFormatSymbolsHandler extends DateFormatSymbolsHandler
     {
         public Object[] getTestObjects()
         {
