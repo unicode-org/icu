@@ -365,10 +365,17 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getEraNames() {
-    // TODO: Fill the era names in appropriately.  Just a placeholder right now.
         return duplicate(eraNames);
     }
 
+    /**
+     * Sets era name strings. For example: "Anno Domini" and "Before Christ".
+     * @param newEras the new era strings.
+     * @draft ICU 3.6
+     */
+    public void setEraNames(String[] newEraNames) {
+        eraNames = duplicate(newEraNames);
+    }
     /**
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
@@ -431,6 +438,47 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Sets month strings. For example: "January", "February", etc.
+     * @param newMonths the new month strings.
+     * @param context    The formatting context, FORMAT or STANDALONE.
+     * @param width      The width of the month string,
+     *                   either WIDE, ABBREVIATED, or NARROW.
+     * @draft ICU 3.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+
+    public void setMonths(String[] newMonths, int context, int width) {
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    months = duplicate(newMonths);
+                    break;
+                 case ABBREVIATED :
+                    shortMonths = duplicate(newMonths);
+                    break;
+                 case NARROW :
+                    narrowMonths = duplicate(newMonths);
+                    break;
+              }
+              break;
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    standaloneMonths = duplicate(newMonths);
+                    break;
+                 case ABBREVIATED :
+                    standaloneShortMonths = duplicate(newMonths);
+                    break;
+                 case NARROW :
+                    standaloneNarrowMonths = duplicate(newMonths);
+                    break;
+              }
+              break;
+        }
+    }
+    
+    /**
      * Gets short month strings. For example: "Jan", "Feb", etc.
      * @return the short month strings.
      * @stable ICU 2.0
@@ -462,7 +510,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
      * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
-     * @param context    Weekday context, either FORMAT or STANDALONE.
+     * @param context    Formatting context, either FORMAT or STANDALONE.
      * @param width      Width of strings to be returned, either
      *                   WIDE, ABBREVIATED, or NARROW
      * @draft ICU 3.4
@@ -499,6 +547,47 @@ public class DateFormatSymbols implements Serializable, Cloneable {
               break;
         }
         return duplicate(returnValue);
+    }
+
+    /**
+     * Sets weekday strings. For example: "Sunday", "Monday", etc.
+     * @param newWeekdays The new weekday strings.
+     * @param context     The formatting context, FORMAT or STANDALONE.
+     * @param width       The width of the strings,
+     *                    either WIDE, ABBREVIATED, or NARROW.
+     * @draft ICU 3.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+
+    public void setWeekdays(String[] newWeekdays, int context, int width) {
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    months = duplicate(newWeekdays);
+                    break;
+                 case ABBREVIATED :
+                    shortWeekdays = duplicate(newWeekdays);
+                    break;
+                 case NARROW :
+                    narrowWeekdays = duplicate(newWeekdays);
+                    break;
+              }
+              break;
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    standaloneWeekdays = duplicate(newWeekdays);
+                    break;
+                 case ABBREVIATED :
+                    standaloneShortWeekdays = duplicate(newWeekdays);
+                    break;
+                 case NARROW :
+                    standaloneNarrowWeekdays = duplicate(newWeekdays);
+                    break;
+              }
+              break;
+        }
     }
 
     /**
