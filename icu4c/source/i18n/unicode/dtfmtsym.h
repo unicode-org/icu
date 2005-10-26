@@ -244,35 +244,25 @@ public:
      */
     void setShortMonths(const UnicodeString* shortMonths, int32_t count);
 
+    /**
+     * Selector for date formatting context
+     * @draft ICU 3.6
+     */
     enum DtContextType {
-        /**
-         * Selector for format date context
-         * @draft ICU 3.4
-         */
-         FORMAT = 0,
-       /**
-         * Selector for standalone date context
-         * @draft ICU 3.4
-         */
-         STANDALONE = 1
+         FORMAT,
+         STANDALONE,
+         DT_CONTEXT_COUNT
     };
 
+    /**
+     * Selector for date formatting width
+     * @draft ICU 3.6
+     */
     enum DtWidthType {
-        /**
-         * Selector for wide strings
-         * @draft ICU 3.4
-         */
-         WIDE = 4,
-       /**
-         * Selector for abbreviated strings
-         * @draft ICU 3.4
-         */
-         ABBREVIATED = 3,
-       /**
-         * Selector for narrow strings
-         * @draft ICU 3.4
-         */
-         NARROW = 5
+         ABBREVIATED,
+         WIDE,
+         NARROW,
+         DT_WIDTH_COUNT
     };
 
     /**
