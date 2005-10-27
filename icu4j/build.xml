@@ -146,23 +146,15 @@
     <!-- build everything but dist-related stuff -->
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs" description="build all primary targets"/>
 
-    <target name="resources" depends="init" description="builds all the resources">
+    <target name="resources" depends="init, testdata" description="builds all the resources">
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
-        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-        <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
 
     <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
-    </target>
-
-    <target name="testdata" depends="init" if="icu4j.testdata.resources">
-        <!-- use this target to force resources to be rebuilt -->
-        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-        <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
 
 <!--
@@ -186,7 +178,7 @@
             encoding="ascii"/>
     </target>
 
-    <target name="tests" depends="core,testData" description="build tests">
+    <target name="tests" depends="core,testdata" description="build tests">
         <javac includes="com/ibm/icu/dev/test/calendar/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -227,6 +219,14 @@
             source="${icu4j.javac.source}"
             target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
+        <javac includes="com/ibm/icu/dev/test/serializable/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on" deprecation="off"/>            
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -237,7 +237,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="demos" depends="core,testData" description="build demos">
+    <target name="demos" depends="core,testdata" description="build demos">
         <javac includes="com/ibm/icu/dev/demo/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -353,7 +353,7 @@
         </copy>
     </target>
 
-    <target name ="testData" depends="init">
+    <target name ="testdata" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
             todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
@@ -387,11 +387,13 @@
         </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
-        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-    	<copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
+     	<copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
 	        <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/"
 	            includes="*.properties"/>
 	    </copy>
+        <!-- use this target to force resources to be rebuilt -->
+        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
+        <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
 
     <!-- builds richedit and richedit tests -->
@@ -420,7 +422,7 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="testJar" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
+    <target name="jarTests" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
@@ -572,7 +574,9 @@
 	    </java>
     </target>
 
-    <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
+	<target name="secure" depends="jarTests" description="builds icu4j.jar and icu4jtests.jar"/>
+
+	<target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
         <!-- jvmarg value="-verbose"/ -->
         <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
@@ -589,7 +593,8 @@
             </classpath>
         </java>
     </target>
-	<target name="deleteData" depends="init" >
+
+	<target name="noData" depends="core, tests" description="builds ICU4J without any data">
        <delete failonerror="no">
         	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
         	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
@@ -597,8 +602,8 @@
 	        <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
 	        <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
 	    </delete>
-	</target>		
-    <target name="noDataCheck" depends="core, tests, deleteData" description="runs the tests when no data is present">
+	</target>
+    <target name="noDataCheck" depends="noData" description="runs the tests when no data is present">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-nothrow"/>
             <arg value="-nodata"/>
