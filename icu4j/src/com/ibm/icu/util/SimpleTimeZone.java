@@ -45,12 +45,13 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID) {
-        this(new java.util.SimpleTimeZone(rawOffset, ID), ID); 
+        //this(new java.util.SimpleTimeZone(rawOffset, ID), ID);
         construct(rawOffset, 0, 0, 0,
                 0, WALL_TIME,
                 0, 0, 0,
                 0, WALL_TIME,
                 MILLIS_PER_HOUR);
+        super.setID(ID);
     }
 
     /**
@@ -114,18 +115,19 @@ public class SimpleTimeZone extends JDKTimeZone {
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime) {
-        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
+/*        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
                                           startDayOfWeek, startTime, endMonth,
-                                          endDay, endDayOfWeek, endTime), ID);
-        STZInfo xinfo = getSTZInfo();
-        xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
-        xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
+                                          endDay, endDayOfWeek, endTime), ID);*/
+       // STZInfo xinfo = getSTZInfo();
+       // xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
+       // xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
                 MILLIS_PER_HOUR);
+        super.setID(ID);
     }
 
     /**
@@ -140,22 +142,24 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime,
                           int dstSavings) {
-        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
+        /*this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
                                           startDayOfWeek, startTime, endMonth,
-                                          endDay, endDayOfWeek, endTime, dstSavings), ID);
-
+                                          endDay, endDayOfWeek, endTime, dstSavings), ID);*/
         this.raw = rawOffset;
         this.dst = dstSavings;
-
+        /*
         STZInfo xinfo = getSTZInfo();
         xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
         xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
+        */
+
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
-                dstSavings);
+                dstSavings); 
+        super.setID(ID);
     }
     
 
@@ -445,11 +449,14 @@ public class SimpleTimeZone extends JDKTimeZone {
      * java.util.SimpleTimeZone.  Do not call; use the TimeZone
      * API.
      * @internal
+     * @deprecated
+     * @obsolete
      */
     public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
         super(tz);
         super.setID(ID);
-    	raw = tz.getRawOffset();
+        dst = tz.getDSTSavings();
+        raw = tz.getRawOffset();
     }
     
     /**
@@ -462,11 +469,12 @@ public class SimpleTimeZone extends JDKTimeZone {
     // on JDK 1.4 and later, can't deserialize a SimpleTimeZone as a SimpleTimeZone...
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        
-        if (!(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(getID()))) {
+        String id = getID();
+        /*
+        if (id!=null && !(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(id))) {
             // System.out.println("*** readjust " + zone.getClass().getName() + " " + zone.getID() + " ***");
             java.util.SimpleTimeZone stz = 
-                new java.util.SimpleTimeZone(raw, getID());
+                new java.util.SimpleTimeZone(raw, id);
             if (dst != 0) {
                 stz.setDSTSavings(dst);
                 // if it is 0, then there shouldn't be start/end rules and the default
@@ -476,8 +484,9 @@ public class SimpleTimeZone extends JDKTimeZone {
             if (xinfo != null) {
                 xinfo.applyTo(stz);
             }
-            zone = stz;
+            zoneJDK = stz;
         }
+        */
         /* set all instance variables in this object
          * to the values in zone 
          */            
@@ -486,7 +495,13 @@ public class SimpleTimeZone extends JDKTimeZone {
          }
         
     }
-
+    /**
+     * Returns a string representation of this object.
+     * @return  a string representation of this object.
+     */
+    public String toString() {
+        return "SimpleTimeZone: " + getID();
+    }
     private STZInfo getSTZInfo() {
         if (xinfo == null) {
             xinfo = new STZInfo();
@@ -497,7 +512,11 @@ public class SimpleTimeZone extends JDKTimeZone {
 //  since we don't handle leap years. Could handle assuming always
 //  Gregorian, since we know they didn't have daylight time when
 //  Gregorian calendar started.
-    private static final int[] STATICMONTHLENGTH = new int[]{31,29,31,30,31,30,31,31,30,31,30,31};
+  //  private static final int[] STATICMONTHLENGTH = new int[]{31,29,31,30,31,30,31,31,30,31,30,31};
+    private final byte monthLength[] = staticMonthLength;
+    private final static byte staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+    private final static byte staticLeapMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+
 //  -------------------------------------
 
     public int getOffset(int era, int year, int month, int day,
@@ -514,7 +533,7 @@ public class SimpleTimeZone extends JDKTimeZone {
             throw new IllegalArgumentException();
         }
 
-        return getOffset(era, year, month, day, dayOfWeek, millis, STATICMONTHLENGTH[month]);
+        return getOffset(era, year, month, day, dayOfWeek, millis, staticMonthLength[month]);
     }
 
     public int getOffset(int era, int year, int month, int day,
@@ -532,7 +551,7 @@ public class SimpleTimeZone extends JDKTimeZone {
         }
         
         // TODO FIX We don't handle leap years yet!
-        int prevMonthLength = (month >= 1) ? STATICMONTHLENGTH[month - 1] : 31;
+        int prevMonthLength = (month >= 1) ? staticMonthLength[month - 1] : 31;
 
         return getOffset(era, year, month, day, dayOfWeek, millis,
                          monthLength, prevMonthLength);
@@ -542,7 +561,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                   int dayOfWeek, int millis, 
                   int monthLength, int prevMonthLength ){
 
-        if (false) {
+        if (true) {
             /* Use this parameter checking code for normal operation.  Only one
              * of these two blocks should actually get compiled into the class
              * file.  */
@@ -574,7 +593,7 @@ public class SimpleTimeZone extends JDKTimeZone {
             }
             if (day < 1
                 || day > monthLength) {
-                throw new IllegalArgumentException("Illegal day " + day);
+                throw new IllegalArgumentException("Illegal day " + day+" max month len: "+monthLength);
             }
             if (dayOfWeek < Calendar.SUNDAY
                 || dayOfWeek > Calendar.SATURDAY) {
@@ -770,23 +789,22 @@ public class SimpleTimeZone extends JDKTimeZone {
         return gc.inDaylightTime();
     }
     
-    public SimpleTimeZone( int rawOffsetGMT,  String ID,
-                    int savingsStartMonth, int savingsStartDay,
-                    int savingsStartDayOfWeek, int savingsStartTime,
-                    int savingsStartTimeMode,
-                    int savingsEndMonth, int savingsEndDay,
-                    int savingsEndDayOfWeek, int savingsEndTime,
-                    int savingsEndTimeMode,int savingsDST){
-        this(new java.util.SimpleTimeZone(rawOffsetGMT, ID, savingsStartMonth, savingsStartDay,
+    public SimpleTimeZone(  int raw,  String ID,
+                            int startMonth, int startDay,
+                            int startDayOfWeek, int startTime,
+                            int startTimeMode,
+                            int endMonth, int endDay,
+                            int endDayOfWeek, int endTime,
+                            int endTimeMode,int dst){
+        /*this(new java.util.SimpleTimeZone(rawOffsetGMT, ID, savingsStartMonth, savingsStartDay,
                 savingsStartDayOfWeek, savingsStartTime, savingsEndMonth,
-                savingsEndDay, savingsEndDayOfWeek, savingsEndTime, savingsDST), ID);
-    	
-        construct(rawOffsetGMT,
-                  savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
-                  savingsStartTime, savingsStartTimeMode,
-                  savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
-                  savingsEndTime, savingsEndTimeMode,
-                  savingsDST);
+                savingsEndDay, savingsEndDayOfWeek, savingsEndTime, savingsDST), ID);*/
+        construct(raw,
+                  startMonth, startDay, startDayOfWeek,
+                  startTime, startTimeMode,
+                  endMonth, endDay, endDayOfWeek,
+                  endTime, endTimeMode,
+                  dst);
     }
 //  -------------------------------------
 /*
@@ -824,37 +842,37 @@ public class SimpleTimeZone extends JDKTimeZone {
     /**
      * Internal construction method.
      */
-    private void construct(int rawOffsetGMT,
-                                   int savingsStartMonth,
-                                   int savingsStartDay,
-                                   int savingsStartDayOfWeek,
-                                   int savingsStartTime,
-                                   int savingsStartTimeMode,
-                                   int savingsEndMonth,
-                                   int savingsEndDay,
-                                   int savingsEndDayOfWeek,
-                                   int savingsEndTime,
-                                   int savingsEndTimeMode,
-                                   int savingsDST) {
-        this.raw      = rawOffsetGMT;
-        this.startMonth     = savingsStartMonth;
-        this.startDay       = savingsStartDay;
-        this.startDayOfWeek = savingsStartDayOfWeek;
-        this.startTime      = savingsStartTime;
-        this.startTimeMode  = savingsStartTimeMode;
-        this.endMonth       = savingsEndMonth;
-        this.endDay         = savingsEndDay;
-        this.endDayOfWeek   = savingsEndDayOfWeek;
-        this.endTime        = savingsEndTime;
-        this.endTimeMode    = savingsEndTimeMode;
-        this.dst     = savingsDST;
+    private void construct(int raw,
+                           int startMonth,
+                           int startDay,
+                           int startDayOfWeek,
+                           int startTime,
+                           int startTimeMode,
+                           int endMonth,
+                           int endDay,
+                           int endDayOfWeek,
+                           int endTime,
+                           int endTimeMode,
+                           int dst) {
+        this.raw            = raw;
+        this.startMonth     = startMonth;
+        this.startDay       = startDay;
+        this.startDayOfWeek = startDayOfWeek;
+        this.startTime      = startTime;
+        this.startTimeMode  = startTimeMode;
+        this.endMonth       = endMonth;
+        this.endDay         = endDay;
+        this.endDayOfWeek   = endDayOfWeek;
+        this.endTime        = endTime;
+        this.endTimeMode    = endTimeMode;
+        this.dst            = dst;
         this.startYear      = 0;
         this.startMode      = DOM_MODE;
         this.endMode        = DOM_MODE;
 
         decodeRules();
 
-        if (savingsDST <= 0) {
+        if (dst <= 0) {
             throw new IllegalArgumentException();
         }
     }
@@ -889,7 +907,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     private void decodeStartRule() {
 
-        useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? false : true);
+        useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false  );
         if (useDaylight && dst == 0) {
             dst = TimeZone.MILLIS_PER_DAY;
         }
@@ -923,7 +941,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 if (startDay < -5 || startDay > 5) {
                     throw new IllegalArgumentException();
                 }
-            } else if (startDay > STATICMONTHLENGTH[startMonth]) {
+            } else if (startDay < 1 || startDay > staticMonthLength[startMonth]) {
                 throw new IllegalArgumentException();
             }
         }
@@ -970,19 +988,22 @@ public class SimpleTimeZone extends JDKTimeZone {
                 if (endDay < -5 || endDay > 5) {
                     throw new IllegalArgumentException();
                 }
-            } else if (endDay > STATICMONTHLENGTH[endMonth]) {
+            } else if (endDay<1 || endDay > staticMonthLength[endMonth]) {
                 throw new IllegalArgumentException();
             }
         }
     }
+
     public boolean equals(Object obj){
-        if (!super.equals(obj)) return false; // super does class check
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         SimpleTimeZone that = (SimpleTimeZone) obj;
         return raw     == that.raw &&
             useDaylight     == that.useDaylight &&
+            idEquals(getID(),that.getID()) &&
             (!useDaylight
              // Only check rules if using DST
-             || (dst     == that.dst &&
+             || (dst            == that.dst &&
                  startMode      == that.startMode &&
                  startMonth     == that.startMonth &&
                  startDay       == that.startDay &&
@@ -995,8 +1016,17 @@ public class SimpleTimeZone extends JDKTimeZone {
                  endDayOfWeek   == that.endDayOfWeek &&
                  endTime        == that.endTime &&
                  endTimeMode    == that.endTimeMode &&
-                 startYear      == that.startYear));
+                 startYear      == that.startYear ));
 
+    }
+    private boolean idEquals(String id1, String id2){
+        if(id1==null && id2==null){
+            return true;
+        }
+        if(id1!=null && id2!=null){
+            return id1.equals(id2);
+        }
+        return false;
     }
     public int hashCode(){
     	int ret = (int)( super.hashCode() +
@@ -1019,6 +1049,26 @@ public class SimpleTimeZone extends JDKTimeZone {
     				startYear ^ (startYear>>>23));
     	}
 		return ret;
+    }
+
+    public Object clone() {
+        SimpleTimeZone clone = new SimpleTimeZone( raw, getID());
+        clone.startMonth     = startMonth;
+        clone.startDay       = startDay;
+        clone.startDayOfWeek = startDayOfWeek;
+        clone.startTime      = startTime;
+        clone.startTimeMode  = startTimeMode;
+        clone.endMonth       = endMonth;
+        clone.endDay         = endDay;
+        clone.endDayOfWeek   = endDayOfWeek;
+        clone.endTime        = endTime;
+        clone.endTimeMode    = endTimeMode;
+        clone.dst            = dst;
+        clone.startYear      = startYear;
+        clone.startMode      = startMode;
+        clone.endMode        = endMode;
+        clone.useDaylight    = useDaylight;
+        return clone;
     }
     public boolean hasSameRules(TimeZone othr) {
     	if(!(othr instanceof SimpleTimeZone)){

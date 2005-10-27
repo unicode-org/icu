@@ -17,11 +17,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
 
 /**
- * A wrapper around a java.util.TimeZone object.  This is a concrete
- * instance of TimeZone.  All TimeZones that wrap a java.util.TimeZone
- * should inherit from this class.  TimeZones that do not wrap a
- * java.util.TimeZone inherit directly from TimeZone.
- *
+ * Wrapper around OlsonTimeZone object. Due to serialziation constraints
+ * SimpleTimeZone cannot be a subclass of OlsonTimeZone.
+ * 
  * The complement of this is TimeZoneAdapter, which makes a
  * com.ibm.icu.util.TimeZone look like a java.util.TimeZone.
  *
@@ -32,13 +30,12 @@ import java.io.IOException;
 public class JDKTimeZone extends TimeZone {
 
     private static final long serialVersionUID = -3724907649889455280L;
-
+    
     /**
      * The java.util.TimeZone wrapped by this object.  Must not be null.
      */
     // give access to SimpleTimeZone
-    protected transient java.util.TimeZone zone;
-
+    protected transient OlsonTimeZone zone;
     /**
      * Given a java.util.TimeZone, wrap it in the appropriate adapter
      * subclass of com.ibm.icu.util.TimeZone and return the adapter.
@@ -53,12 +50,6 @@ public class JDKTimeZone extends TimeZone {
         return new JDKTimeZone(tz);
     }
 
-    /**
-     * Return the java.util.TimeZone wrapped by this object.
-     */
-    public java.util.TimeZone unwrap() {
-        return zone;
-    }
 
     /**
      * Constructs a JDKTimeZone given a java.util.TimeZone reference
@@ -69,10 +60,23 @@ public class JDKTimeZone extends TimeZone {
      * @deprecated This is an internal API and should not be used by client code.
      */
     public JDKTimeZone(java.util.TimeZone tz) {
+        String id = tz.getID();
+        try{
+            zone = new OlsonTimeZone(id);
+        }catch(Exception ex){
+            // throw away exception
+        }
+        super.setID(id);
+    }
+    protected JDKTimeZone(OlsonTimeZone tz) {
         zone = tz;
         super.setID(zone.getID());
     }
-
+    /**
+     * Default constructor
+     */
+    protected JDKTimeZone() {
+    }
     /**
      * Sets the time zone ID. This does not change any other data in
      * the time zone object.
@@ -80,7 +84,9 @@ public class JDKTimeZone extends TimeZone {
      */
     public void setID(String ID) {
         super.setID(ID);
-        zone.setID(ID);
+        if(zone!=null){
+            zone.setID(ID);
+        }
     }
 
     /**
@@ -89,68 +95,61 @@ public class JDKTimeZone extends TimeZone {
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int milliseconds) {
 
-        return unwrap().getOffset(era, year, month, day,
-                                  dayOfWeek, milliseconds);
+        if(zone!=null){
+            return zone.getOffset(era, year, month, day,
+                                      dayOfWeek, milliseconds);
+        }
+        throw new IllegalStateException();
     }
 
-    /**
-     * Override TimeZone to handle wrapped ZoneInfo.
-     */
 
     public void getOffset(long date, boolean local, int[] offsets) {
-        // The following code works only on 1.4 or later.  We no longer support JDK 1.3.
-	// assume if we're running under a security manager, then we don't have access to
-	// sun classes
-	if (System.getSecurityManager() == null) {
-	    try {
-		if (zone instanceof sun.util.calendar.ZoneInfo) {
-		    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-		    if (local) {
-			date -= offsets[0] + offsets[1];
-			((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-		    }
-// 		    System.err.println("offsets: " + offsets[0] + ", " + offsets[1]);
-		    return;
-		} 
-	    }
-	    catch (SecurityException ex) {
-		// ok; fall through, we're running in a protected context
-	    } 
-	    catch (Throwable th) {
-		// System.out.println("caught: " + th);
-	    }
-	}
-	
-        super.getOffset(date, local, offsets);
-// 	System.err.println("default offsets: " + offsets[0] + ", " + offsets[1]);
+
+        if(zone!=null){
+            zone.getOffset(date, local, offsets);
+        }else{
+            super.getOffset(date, local, offsets);
+        }
     }
  
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public void setRawOffset(int offsetMillis) {
-        unwrap().setRawOffset(offsetMillis);
+        if(zone!=null){
+            zone.setRawOffset(offsetMillis);
+        }
+        throw new IllegalStateException();
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public int getRawOffset() {
-        return unwrap().getRawOffset();
+        if(zone!=null){
+            return zone.getRawOffset();
+        }
+        throw new IllegalStateException();
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public boolean useDaylightTime() {
-        return unwrap().useDaylightTime();
+        if(zone!=null){
+            return zone.useDaylightTime();
+        }
+        throw new IllegalStateException();
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public boolean inDaylightTime(Date date) {
-        return unwrap().inDaylightTime(date);
+        if(zone!=null){
+            return zone.inDaylightTime(date);
+        }
+        throw new IllegalStateException();
     }
 
     /**
@@ -161,7 +160,9 @@ public class JDKTimeZone extends TimeZone {
             return false;
         }
         if (other instanceof JDKTimeZone) {
-            return zone.hasSameRules(((JDKTimeZone) other).zone);
+            if(zone!=null){
+                return zone.hasSameRules(((JDKTimeZone) other).zone);
+            }
         }
         return super.hasSameRules(other);
     }
@@ -170,14 +171,21 @@ public class JDKTimeZone extends TimeZone {
      * Boilerplate API; calls through to wrapped object.
      */
     public Object clone() {
-        return wrap((java.util.TimeZone)zone.clone());
+        JDKTimeZone clone = new JDKTimeZone();
+        if(zone!=null){
+            clone.zone = (OlsonTimeZone)zone.clone();
+        }
+        return clone;
     }
 
     /**
      * Boilerplate API; calls through to wrapped object.
      */
     public synchronized int hashCode() {
-        return unwrap().hashCode();
+        if(zone!=null){
+            return zone.hashCode();
+        }
+        return super.hashCode();
     }
 
     /**
@@ -189,38 +197,11 @@ public class JDKTimeZone extends TimeZone {
      */
     public int getDSTSavings() {
         if (useDaylightTime()) {
-	    if (System.getSecurityManager() == null) {
-		// assume if we have a security manager, we'll fail
-		try {   
-		    // This is only to make a 1.3 compiler happy.  JDKTimeZone
-		    // is only used in JDK 1.4, where TimeZone has the getDSTSavings
-		    // API on it, so a straight call to getDSTSavings would actually
-		    // work if we could compile it.  Since on 1.4 the time zone is
-		    // not a SimpleTimeZone, we can't downcast in order to make
-		    // the direct call that a 1.3 compiler would like, because at
-		    // runtime the downcast would fail.
-		    // todo: remove when we no longer support compiling under 1.3
-
-		    // The following works if getDSTSavings is declared in   
-		    // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
-		    final Object[] args = new Object[0];
-		    final Class[] argtypes = new Class[0];
-		    Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
-		    int result = ((Integer) m.invoke(zone, args)).intValue();
-// 		    System.err.println("JDKTZ got " + (result/3600000f) + " hour daylight saving time");
-		    return result;
-		} catch (Exception e) {
-		    // if zone is in the sun.foo class hierarchy and we
-		    // are in a protection domain, we'll get a security
-		    // exception.  And if we claim to support DST, but 
-		    // return a value of 0, later java.util.SimpleTimeZone will
-		    // throw an illegalargument exception.  so... fake
-		    // the dstoffset;
-		}   
-	    }
-// 	    System.err.println("JDKTZ assume 1 hour daylight saving time");
-	    return 3600000;
-	}
+            if(zone!=null){
+                return zone.getDSTSavings();
+            }
+			return 3600000;
+		}
         return 0;
     }
 
@@ -229,8 +210,16 @@ public class JDKTimeZone extends TimeZone {
      */
     public boolean equals(Object obj) {
         try {
-            return obj != null &&
-                unwrap().equals(((JDKTimeZone) obj).unwrap());
+            if(obj !=null){
+                TimeZone tz1 = zone;
+                TimeZone tz2 = ((JDKTimeZone) obj).zone;
+                boolean equal = true;
+                if(tz1!=null && tz2!=null){
+                    equal = tz1.equals(tz2);
+                }
+                return equal;
+            }
+            return false;
         } catch (ClassCastException e) {
             return false;
         }
@@ -241,16 +230,26 @@ public class JDKTimeZone extends TimeZone {
      * @return  a string representation of this object.
      */
     public String toString() {
-        return "JDKTimeZone: " + unwrap().toString();
+        return "JDKTimeZone: " + zone.toString();
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.writeObject(zone.getID());
+        if(zone!=null){
+            out.writeObject(zone.getID());
+        }
+        out.writeObject(getID());
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         String id = (String)in.readObject();
-        zone = java.util.TimeZone.getTimeZone(id);
+
+        // create the TimeZone object if reading the old version of object
+        try{
+            zone = new OlsonTimeZone(id);
+        }catch(Exception ex){
+            //throw away exception
+        }							 
+        setID(id);
     }
 }
 

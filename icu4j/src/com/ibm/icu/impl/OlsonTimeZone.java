@@ -166,6 +166,7 @@ public class OlsonTimeZone extends TimeZone {
     public Object clone() {
         OlsonTimeZone other = (OlsonTimeZone) super.clone();
         if(finalZone!=null){
+            finalZone.setID(getID());
         	other.finalZone = (SimpleTimeZone)finalZone.clone();
         }
         other.transitionTimes = (int[])transitionTimes.clone();
@@ -431,9 +432,18 @@ public class OlsonTimeZone extends TimeZone {
         }       
     }
     public OlsonTimeZone(String id){
-        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         ICUResourceBundle res = ZoneMeta.openOlsonResource(id);
         construct(top, res);
+        if(finalZone!=null){
+            finalZone.setID(id);
+        }
+        super.setID(id);
+    }
+    public void setID(String id){
+        if(finalZone!= null){
+            finalZone.setID(id);
+        }
         super.setID(id);
     }
     private static final int UNSIGNED_BYTE_MASK =0xFF;

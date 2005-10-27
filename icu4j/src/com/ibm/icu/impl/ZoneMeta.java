@@ -20,6 +20,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -60,7 +61,7 @@ public final class ZoneMeta {
             return EMPTY;
         }
         try{
-	        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+	        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
 	        ICUResourceBundle regions = top.get(kREGIONS);
 	        ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
 	        ICUResourceBundle temp = regions.get(country);
@@ -76,6 +77,50 @@ public final class ZoneMeta {
         	//throw away the exception
         }
         return EMPTY;
+    }
+    public static synchronized String[] getAvailableIDs() {
+        if(!getOlsonMeta()){
+            return EMPTY;
+        }
+        try{
+            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
+            return names.getStringArray();
+        }catch(MissingResourceException ex){
+            //throw away the exception
+        }
+        return EMPTY;
+    }
+    public static synchronized String[] getAvailableIDs(int offset){
+        Vector vector = new Vector();
+        for (int i=0; i<OLSON_ZONE_COUNT; ++i) {
+            String unistr;
+            if ((unistr=getID(i))!=null) {
+                // This is VERY inefficient.
+                TimeZone z = TimeZone.getTimeZone(unistr);
+                // Make sure we get back the ID we wanted (if the ID is
+                // invalid we get back GMT).
+                if (z != null && z.getID().equals(unistr) &&
+                    z.getRawOffset() == offset) {
+                    vector.add(unistr);
+                }
+            }
+        }
+        if(!vector.isEmpty()){
+            String[] strings = new String[vector.size()];
+            return (String[])vector.toArray(strings);
+        }
+        return EMPTY;
+    }
+    private static String getID(int i) {
+        try{
+            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
+            return names.getString(i);
+        }catch(MissingResourceException ex){
+            //throw away the exception
+        }
+        return null;
     }
     /**
      * Returns the number of IDs in the equivalency group that
@@ -134,7 +179,7 @@ public final class ZoneMeta {
             }
         }
         if (zone >= 0) {
-        	ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        	ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             ICUResourceBundle ares = top.get(kNAMES); // dereference Zones section
             result = ares.getString(zone);
 
@@ -345,7 +390,7 @@ public final class ZoneMeta {
         if(!getOlsonMeta()){
             return null;
         }
-        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         ICUResourceBundle res = getZoneByName(top, id);
         // Dereference if this is an alias.  Docs say result should be 1
         // but it is 0 in 2.8 (?).
@@ -447,7 +492,7 @@ public final class ZoneMeta {
      * Load up the Olson meta-data. Return true if successful.
      */
     private static boolean getOlsonMeta() {
-        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(OLSON_ZONE_START < 0) {
             getOlsonMeta(top);
         }
@@ -460,7 +505,7 @@ public final class ZoneMeta {
      */
     public static TimeZone getSystemTimeZone(String id) {
         try{
-            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             ICUResourceBundle res = openOlsonResource(id);
             TimeZone z = new OlsonTimeZone(top, res);
             z.setID(id);

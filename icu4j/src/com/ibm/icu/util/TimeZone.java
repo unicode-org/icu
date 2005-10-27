@@ -565,6 +565,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
          * We cannot return NULL, because that would break compatibility
          * with the JDK.
          */
+        if(ID==null){
+            throw new NullPointerException();
+        }
         TimeZone result = ZoneMeta.getSystemTimeZone(ID);
         
         if (result == null) {
@@ -587,7 +590,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(int rawOffset) {
-        return java.util.TimeZone.getAvailableIDs(rawOffset);
+        return ZoneMeta.getAvailableIDs(rawOffset);
 
     }
 
@@ -616,7 +619,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs() {
-        return java.util.TimeZone.getAvailableIDs();
+        return ZoneMeta.getAvailableIDs();
     }
     
     /**
@@ -684,6 +687,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static synchronized void setDefault(TimeZone tz) {
+        
         defaultZone = tz;
         // Keep java.util.TimeZone default in sync so java.util.Date
         // can interoperate with com.ibm.icu.util classes.

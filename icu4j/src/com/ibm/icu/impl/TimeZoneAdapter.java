@@ -46,9 +46,6 @@ public class TimeZoneAdapter extends java.util.TimeZone {
      * subclass of com.ibm.icu.util.TimeZone and return the adapter.
      */
     public static java.util.TimeZone wrap(com.ibm.icu.util.TimeZone tz) {
-        if (tz instanceof JDKTimeZone) {
-            return ((JDKTimeZone) tz).unwrap();
-        }
         return new TimeZoneAdapter(tz);
     }
 
