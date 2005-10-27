@@ -131,7 +131,7 @@ public class Currency extends MeasureUnit implements Serializable {
         if (variant.equals("PREEURO") || variant.equals("EURO")) {
             country = country + '_' + variant;
         }
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(bundle==null){
             //throw new MissingResourceException()
         }
@@ -621,7 +621,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            ICUResourceBundle root = ICUResourceBundle.createBundle(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            ICUResourceBundle root = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             ICUResourceBundle currencyMeta = root.get("CurrencyMeta");
 
             //Integer[] i = null;
