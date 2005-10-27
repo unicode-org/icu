@@ -88,7 +88,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final UResourceBundle getBundleInstance(String baseName, String localeName){
+    public static UResourceBundle getBundleInstance(String baseName, String localeName){
         return getBundleInstance(baseName, localeName, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
     
@@ -104,7 +104,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root){
+    public static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root){
         return getBundleInstance(baseName, localeName, root, false);
     }
     
@@ -147,7 +147,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final UResourceBundle getBundleInstance(ULocale locale){
+    public static UResourceBundle getBundleInstance(ULocale locale){
         if(locale==null){
             locale = ULocale.getDefault();   
         }
@@ -162,7 +162,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0 
      * @deprecated This is a draft API and might change in a future release of ICU.
      */    
-    public static final UResourceBundle getBundleInstance(String baseName){
+    public static UResourceBundle getBundleInstance(String baseName){
         return getBundleInstance( baseName, ULocale.getDefault().toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );
     }
     /**
@@ -177,7 +177,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
 
-    public static final UResourceBundle getBundleInstance(String baseName, Locale locale){
+    public static UResourceBundle getBundleInstance(String baseName, Locale locale){
         return getBundleInstance(baseName, ULocale.forLocale(locale));
     }
    
@@ -192,7 +192,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final UResourceBundle getBundleInstance(String baseName, ULocale locale){
+    public static UResourceBundle getBundleInstance(String baseName, ULocale locale){
          return getBundleInstance(baseName, locale.toString(),ICUResourceBundle.ICU_DATA_CLASS_LOADER);  
     }
     
