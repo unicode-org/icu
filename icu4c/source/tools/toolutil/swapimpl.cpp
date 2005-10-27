@@ -527,6 +527,8 @@ static const struct {
     { { 0x52, 0x65, 0x73, 0x42 }, ures_swap },          /* dataFormat="ResB" */
 #if !UCONFIG_NO_LEGACY_CONVERSION
     { { 0x63, 0x6e, 0x76, 0x74 }, ucnv_swap },          /* dataFormat="cnvt" */
+#endif
+#if !UCONFIG_NO_CONVERSION
     { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases },   /* dataFormat="CvAl" */
 #endif
 #if !UCONFIG_NO_IDNA

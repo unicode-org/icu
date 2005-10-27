@@ -1143,7 +1143,9 @@ static const struct {
     {"gb18030",                  "cnv", ucnv_swap},
     /* MBCS conversion table file with extension */
     {"*test4x",                  "cnv", ucnv_swap},
+#endif
 
+#if !UCONFIG_NO_CONVERSION
     /* alias table */
     {"cnvalias",                 "icu", ucnv_swapAliases},
 #endif
