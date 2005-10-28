@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 
 public class TimeZoneTest extends TestFmwk
@@ -1133,7 +1135,19 @@ public class TimeZoneTest extends TestFmwk
         }
         if (!stub.hasSameRules(stub2)){
             errln("TimeZone.clone() object should hasSameRules");
+     
         }
+    }
+    public void TestMark(){
+        String tzid = "America/Argentina/ComodRivadavia";
+        TimeZone tz = TimeZone.getTimeZone(tzid);
+        int offset = tz.getOffset(new Date().getTime());
+        logln(tzid + ":\t" + offset);
+        List list = Arrays.asList(TimeZone.getAvailableIDs());
+        if(!list.contains(tzid)){
+            errln("Could create the time zone but it is not in getAvailableIDs");
+        }
+
     }
 }
 
