@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.security.Policy;
 
 import com.ibm.icu.dev.test.TestFmwk.Target;
 import com.ibm.icu.dev.test.serializable.CompatibilityTest.HandlerTarget;
@@ -180,6 +181,11 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
     
     protected Target getTargets(String targetName)
     {
+        if (System.getSecurityManager() != null) {
+            // This test won't run under a security manager
+            return new CoverageTarget("Skipped Due To Security Manager", Modifier.ABSTRACT, null);
+        }
+        
         URL url = getClass().getResource("/com/ibm/icu");
         URLHandler handler  = URLHandler.get(url);
         
