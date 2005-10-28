@@ -50,9 +50,9 @@ CPPFLAGS+=-DU_RELEASE=1
 endif
 
 # /GF pools strings and places them into read-only memory
-# /GX enables exception handling
+# /EHsc enables exception handling
 CFLAGS += /GF
-CXXFLAGS += /GF /GX
+CXXFLAGS += /GF /EHsc
 CPPFLAGS+=/nologo
 DEFS+=-DWIN32
 LDFLAGS+=/nologo
