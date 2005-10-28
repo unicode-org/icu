@@ -263,7 +263,7 @@ public class CopticTest extends CalendarTest
             };
 
             String[] formatLocales = {
-                "en", "am", "gez", "ti"
+                "en", "am", "am_ET", "gez", "ti"
             };
             for (int i = 0; i < calendarLocales.length; ++i) {
                 String calLocName = calendarLocales[i];
