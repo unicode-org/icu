@@ -1015,7 +1015,11 @@ public class TestFmwk extends AbstractTestLog {
          */
         public static TestParams create(String[] args, PrintWriter log) {
             TestParams params = new TestParams();
-            params.log = log == null ? new NullWriter() : new ASCIIWriter(log, true);
+            if(log == null){
+                params.log = new NullWriter();
+            }else{
+                params.log =  new ASCIIWriter(log, true);
+            }
             boolean usageError = false;
             String filter = null;
             int wx = 0; // write argets.
