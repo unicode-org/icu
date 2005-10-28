@@ -847,7 +847,7 @@ public class SimpleDateFormat extends DateFormat {
                     // note, tr35 does not describe the special case for 'no country' 
                     // implemented below, this is from discussion with Mark
                     if (zid == null || !isGeneric || ZoneMeta.getCanonicalCountry(zid) == null) {
-                        long offset = cal.get(Calendar.ZONE_OFFSET) +
+                         long offset = cal.get(Calendar.ZONE_OFFSET) +
                             cal.get(Calendar.DST_OFFSET);
                         res = ZoneMeta.displayGMT(offset, locale);
                     } else { 

@@ -685,7 +685,7 @@ public class TimeZoneRegression extends TestFmwk {
         SimpleDateFormat fmt = new SimpleDateFormat("z", Locale.US);
         final int ONE_HOUR = 60*60*1000;
         final float H = (float) ONE_HOUR;
-    TimeZone initialZone = TimeZone.getDefault();
+        TimeZone initialZone = TimeZone.getDefault();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z");
 
         SimpleTimeZone asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,
@@ -871,6 +871,9 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * SimpleTimeZone allows invalid DOM values.
      */
+    // Current orgnaization of data in zoneinfor.res allows negative
+    // values from DOM so comment these tests out
+    
     public void Test4184229() {
         SimpleTimeZone zone = null;
         try {
@@ -898,10 +901,9 @@ public class TimeZoneRegression extends TestFmwk {
             logln("(d) " + e.getMessage());
         }
         // Make a valid constructor call for subsequent tests.
+
         zone = new SimpleTimeZone(0, "A", 0, 1, 0, 0, 0, 1, 0, 0);
-        // Current orgnaization of data in zoneinfor.res allows negative
-        // values fro DOM so comment these tests out
-        /*
+        
         try {
             zone.setStartRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule +savings");
@@ -926,7 +928,7 @@ public class TimeZoneRegression extends TestFmwk {
         } catch(IllegalArgumentException e) {
             logln("(h) " + e.getMessage());
         }
-        */
+        
     }
 
     /**
