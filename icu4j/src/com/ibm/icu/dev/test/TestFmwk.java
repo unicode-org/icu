@@ -464,9 +464,10 @@ public class TestFmwk extends AbstractTestLog {
 
     protected TestFmwk() {
     }
-    protected void init() throws Exception{
     
+    protected void init() throws Exception{
     }
+    
     /**
      * Parse arguments into a TestParams object and a collection of target
      * paths. If there was an error parsing the TestParams, print usage and exit
@@ -478,173 +479,97 @@ public class TestFmwk extends AbstractTestLog {
      * This method never returns, since it always exits with System.exit();
      */
     public void run(String[] args) {
-        TestParams params = new TestParams();
-
-        ArrayList targets = null;
+        System.exit(run(args, new PrintWriter(System.out)));
+     }
+    
+    /**
+     * Like run(String[]) except this allows you to specify the error log.
+     * Unlike run(String[]) this returns the error code as a result instead of
+     * calling System.exit().
+     */
+    public int run(String[] args, PrintWriter log) {
         boolean prompt = false;
-        int exitCode = 0;
-        boolean usageError = false;
-        String filter = null;
-
-        for (int i = 0; i < args.length; i++) {
+        int wx = 0;
+        for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
-            if (arg.charAt(0) == '-') {
-                arg = arg.toLowerCase();
-                if (arg.equals("-verbose") || arg.equals("-v")) {
-                    params.verbose = true;
-                    params.quiet = false;
-                } else if (arg.equals("-quiet") || arg.equals("-q")) {
-                    params.quiet = true;
-                    params.verbose = false;
-                } else if (arg.equals("-help") || arg.equals("-h")) {
-                    usageError = true;
-                } else if (arg.equals("-warning") || arg.equals("-w")) {
-                    params.warnings = true;
-                } else if (arg.equals("-nodata") || arg.equals("-nd")) {
-                    params.nodata = true;
-                } else if (arg.equals("-prompt")) {
-                    prompt = true;
-                } else if (arg.equals("-list") || arg.equals("-l")) {
-                    params.listlevel = 1;
-                } else if (arg.equals("-listall") || arg.equals("-la")) {
-                    params.listlevel = 2;
-                } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
-                    params.listlevel = 3;
-                } else if (arg.equals("-memory") || arg.equals("-m")) {
-                    params.memusage = true;
-                } else if (arg.equals("-nothrow") || arg.equals("-n")) {
-                    params.nothrow = true;
-                    params.errorSummary = new StringBuffer();
-                } else if (arg.equals("-describe") || arg.equals("-d")) {
-                    params.describe = true;
-                } else if (arg.startsWith("-r")) {
-                    String s = null;
-                    int n = arg.indexOf(':');
-                    if (n != -1) {
-                        s = arg.substring(n + 1);
-                        arg = arg.substring(0, n);
-                    }
-
-                    if (arg.equals("-r") || arg.equals("-random")) {
-                        if (s == null) {
-                            params.seed = System.currentTimeMillis();
-                        } else {
-                            params.seed = Long.parseLong(s);
-                        }
-                    } else {
-                        System.out.println("*** Error: unrecognized argument: "
-                                + arg);
-                        exitCode = 1;
-                        usageError = true;
-                    }
-                } else if (arg.startsWith("-e")) {
-                    // see above
-                    params.inclusion = (arg.length() == 2) ? 5 : Integer
-                            .parseInt(arg.substring(2));
-                    if (params.inclusion < 0 || params.inclusion > 10) {
-                        usageError = true;
-                    }
-                } else if (arg.startsWith("-tfilter:")) {
-                    params.tfilter = arg.substring(8);
-                } else if (arg.startsWith("-time") || arg.startsWith("-t")) {
-                    long val = 0;
-                    int inx = arg.indexOf(':');
-                    if (inx > 0) {
-                        String num = arg.substring(inx + 1);
-                        try {
-                            val = Long.parseLong(num);
-                        } catch (Exception e) {
-                            System.out
-                                    .println("*** Error: could not parse time threshold '"
-                                            + num + "'");
-                            System.exit(1);
-                        }
-                    }
-                    params.timing = val;
-                    String fmt = "#,00s";
-                    if (val <= 10) {
-                        fmt = "#,##0.000s";
-                    } else if (val <= 100) {
-                        fmt = "#,##0.00s";
-                    } else if (val <= 1000) {
-                        fmt = "#,##0.0s";
-                    }
-                    params.tformat = new DecimalFormat(fmt);
-                } else if (arg.startsWith("-filter:")) {
-                    String temp = arg.substring(8).toLowerCase();
-                    filter = filter == null ? temp : filter + "," + temp;
-                } else if (arg.startsWith("-f:")) {
-                    String temp = arg.substring(3).toLowerCase();
-                    filter = filter == null ? temp : filter + "," + temp;
-                } else if (arg.startsWith("-s")) {
-                    params.log = new NullWriter();
-                } else {
-                    System.out.println("*** Error: unrecognized argument: "
-                            + args[i]);
-                    exitCode = 1;
-                    usageError = true;
-                }
+            if (arg.equals("-p") || arg.equals("-prompt")) {
+                prompt = true;
             } else {
-                if (targets == null) {
-                    targets = new ArrayList();
+                if (wx < i) {
+                    args[wx] = arg;
                 }
-                targets.add(arg);
+                wx++;
             }
         }
-
-        if (usageError) {
-            usage();
-            System.exit(exitCode);
+        while (wx < args.length) {
+            args[wx++] = null;
         }
-
-        if (filter != null) {
-            params.filter = filter.toLowerCase();
+        
+        TestParams params = TestParams.create(args, log);
+        if (params == null) {
+            return -1;
         }
-
-        try {
-            if (targets == null) {
-                params.init();
-                resolveTarget(params).run();
-            } else {
-                for (int i = 0; i < targets.size(); ++i) {
-                    if (i > 0) {
-                        System.out.println();
-                    }
-
-                    //String target = (String)targets.get(i);
-                    params.init();
-                    resolveTarget(params, (String) targets.get(i)).run();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            System.out.println("encountered exception, exiting");
-        }
-
+        
+        int errorCount = runTests(params, args);
+        
         if (params.seed != 0) {
-            System.out.println("-random:" + params.seed);
-            System.out.flush();
+            params.log.println("-random:" + params.seed);
+            params.log.flush();
         }
 
         if (params.errorSummary != null && params.errorSummary.length() > 0) {
-            System.out.println("\nError summary:");
-            System.out.println(params.errorSummary.toString());
+            params.log.println("\nError summary:");
+            params.log.println(params.errorSummary.toString());
         }
 
         if (prompt) {
             System.out.println("Hit RETURN to exit...");
+            System.out.flush();
             try {
                 System.in.read();
             } catch (IOException e) {
-                System.out.println("Exception: " + e.toString()
-                        + e.getMessage());
+                params.log.println("Exception: " + e.toString() + e.getMessage());
             }
         }
 
-        System.exit(params.errorCount);
+        return errorCount;
     }
 
+    public int runTests(TestParams params, String[] tests) {
+        int ec = 0;
+        
+        try {
+            if (tests[0] == null) { // no args
+                params.init();
+                resolveTarget(params).run();
+                ec = params.errorCount;
+            } else {
+                for (int i = 0; i < tests.length ; ++i) {
+                    if (tests[i] == null) continue;
+                    
+                    if (i > 0) {
+                        params.log.println();
+                    }
+
+                    params.init();
+                    resolveTarget(params, tests[i]).run();
+                    ec += params.errorCount;
+                    
+                    if (params.errorSummary != null && params.errorSummary.length() > 0) {
+                        params.log.println("\nError summary:");
+                        params.log.println(params.errorSummary.toString());
+                    }
+               }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(params.log);
+            params.log.println(e.getMessage());
+            params.log.println("encountered exception, exiting");
+        }
+        
+        return ec;
+    }
+    
     /**
      * Return a ClassTarget for this test. Params is set on this test.
      */
@@ -827,80 +752,64 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * Print a usage message for this test class.
      */
-    void usage() {
-        System.out.println("Usage: " + getClass().getName()
-                + " option* target*");
-        System.out.println();
-        System.out.println("Options:");
-        System.out
-                .println(" -describe Print a short descriptive string for this test and all");
-        System.out.println("       listed targets.");
-        System.out
-                .println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n"
-                        + "       To run all tests, specify -e10.  Giving -e with no <n> is\n"
-                        + "       the same as -e5.");
-        System.out
-                .println(" -filter:<str> Only tests matching filter will be run or listed.\n"
-                        + "       <str> is of the form ['^']text[','['^']text].\n"
-                        + "       Each string delimited by ',' is a separate filter argument.\n"
-                        + "       If '^' is prepended to an argument, its matches are excluded.\n"
-                        + "       Filtering operates on test groups as well as tests, if a test\n"
-                        + "       group is included, all its subtests that are not excluded will\n"
-                        + "       be run.  Examples:\n"
-                        + "    -filter:A -- only tests matching A are run.  If A matches a group,\n"
-                        + "       all subtests of this group are run.\n"
-                        + "    -filter:^A -- all tests except those matching A are run.  If A matches\n"
-                        + "        a group, no subtest of that group will be run.\n"
-                        + "    -filter:A,B,^C,^D -- tests matching A or B and not C and not D are run\n"
-                        + "       Note: Filters are case insensitive.");
-        System.out.println(" -h[elp] Print this help text and exit.");
-        System.out.println(" -l[ist] List immediate targets of this test");
-        System.out
-                .println("   -la, -listAll List immediate targets of this test, and all subtests");
-        System.out
-                .println("   -le, -listExaustive List all subtests and targets");
+    public void usage() {
+        usage(new PrintWriter(System.out), getClass().getName());
+    }
+    
+    public static void usage(PrintWriter pw, String className) {
+        pw.println("Usage: " + className + " option* target*");
+        pw.println();
+        pw.println("Options:");
+        pw.println(" -describe Print a short descriptive string for this test and all");
+        pw.println("       listed targets.");
+        pw.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n"
+                 + "       To run all tests, specify -e10.  Giving -e with no <n> is\n"
+                 + "       the same as -e5.");
+        pw.println(" -filter:<str> Only tests matching filter will be run or listed.\n"
+                 + "       <str> is of the form ['^']text[','['^']text].\n"
+                 + "       Each string delimited by ',' is a separate filter argument.\n"
+                 + "       If '^' is prepended to an argument, its matches are excluded.\n"
+                 + "       Filtering operates on test groups as well as tests, if a test\n"
+                 + "       group is included, all its subtests that are not excluded will\n"
+                 + "       be run.  Examples:\n"
+                 + "    -filter:A -- only tests matching A are run.  If A matches a group,\n"
+                 + "       all subtests of this group are run.\n"
+                 + "    -filter:^A -- all tests except those matching A are run.  If A matches\n"
+                 + "        a group, no subtest of that group will be run.\n"
+                 + "    -filter:A,B,^C,^D -- tests matching A or B and not C and not D are run\n"
+                 + "       Note: Filters are case insensitive.");
+        pw.println(" -h[elp] Print this help text and exit.");
+        pw.println(" -l[ist] List immediate targets of this test");
+        pw.println("   -la, -listAll List immediate targets of this test, and all subtests");
+        pw.println("   -le, -listExaustive List all subtests and targets");
         // don't know how to get useful numbers for memory usage using java API
         // calls
-        //      System.out.println(" -m[emory] print memory usage and force gc for
+        //      pw.println(" -m[emory] print memory usage and force gc for
         // each test");
-        System.out
-                .println(" -n[othrow] Message on test failure rather than exception");
-        System.out.println(" -prompt Prompt before exiting");
-        System.out.println(" -q[uiet] Do not show warnings");
-        System.out
-                .println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n"
+        pw.println(" -n[othrow] Message on test failure rather than exception");
+        pw.println(" -prompt Prompt before exiting");
+        pw.println(" -q[uiet] Do not show warnings");
+        pw.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n"
                         + "       use it as the seed.  If random is not set, targets will\n"
                         + "       be in alphabetical order to ensure cross-platform consistency.");
-        System.out
-                .println(" -s[ilent] No output except error summary or exceptions.");
-        System.out
-                .println(" -tfilter:<str> Transliterator Test filter of ids.");
-        System.out
-                .println(" -t[ime][:<n>] Print elapsed time for each test.  if n is present\n"
+        pw.println(" -s[ilent] No output except error summary or exceptions.");
+        pw.println(" -tfilter:<str> Transliterator Test filter of ids.");
+        pw.println(" -t[ime][:<n>] Print elapsed time for each test.  if n is present\n"
                         + "       only print times >= n milliseconds.");
-        System.out.println(" -v[erbose] Show log messages");
-        System.out
-                .println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
-        System.out
-                .println(" -nodata | -nd Do not warn if resource data is not present.");
-        System.out.println();
-        System.out
-                .println(" If a list or describe option is provided, no tests are run.");
-        System.out.println();
-        System.out.println("Targets:");
-        System.out
-                .println(" If no target is specified, all targets for this test are run.");
-        System.out
-                .println(" If a target contains no '/' characters, and matches a target");
-        System.out
-                .println(" of this test, the target is run.  Otherwise, the part before the");
-        System.out
-                .println(" '/' is used to match a subtest, which then evaluates the");
-        System.out
-                .println(" remainder of the target as above.  Target matching is case-insensitive.");
-        System.out.println();
-        System.out
-                .println(" If multiple targets are provided, each is executed in order.");
+        pw.println(" -v[erbose] Show log messages");
+        pw.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
+        pw.println(" -nodata | -nd Do not warn if resource data is not present.");
+        pw.println();
+        pw.println(" If a list or describe option is provided, no tests are run.");
+        pw.println();
+        pw.println("Targets:");
+        pw.println(" If no target is specified, all targets for this test are run.");
+        pw.println(" If a target contains no '/' characters, and matches a target");
+        pw.println(" of this test, the target is run.  Otherwise, the part before the");
+        pw.println(" '/' is used to match a subtest, which then evaluates the");
+        pw.println(" remainder of the target as above.  Target matching is case-insensitive.");
+        pw.println();
+        pw.println(" If multiple targets are provided, each is executed in order.");
     }
 
     public static String hex(char ch) {
@@ -984,7 +893,7 @@ public class TestFmwk extends AbstractTestLog {
         return cal.getTime();
     }
 
-    private static class NullWriter extends PrintWriter {
+    public static class NullWriter extends PrintWriter {
         public NullWriter() {
             super(System.out, false);
         }
@@ -998,8 +907,7 @@ public class TestFmwk extends AbstractTestLog {
         }
     }
 
-    private static class ASCIIWriter extends PrintWriter {
-        private Writer w;
+    public static class ASCIIWriter extends PrintWriter {
         private StringBuffer buffer = new StringBuffer();
 
         // Characters that we think are printable but that escapeUnprintable
@@ -1078,17 +986,166 @@ public class TestFmwk extends AbstractTestLog {
 
         private StringBuffer errorSummary;
 
-        private PrintWriter log = new ASCIIWriter(System.out, true);
+        private PrintWriter log;
         public int indentLevel;
         private boolean needLineFeed;
         private boolean suppressIndent;
-        private int errorCount;
-        private int warnCount;
-        private int invalidCount;
+        public int errorCount;
+        public int warnCount;
+        public int invalidCount;
         public int testCount;
         private NumberFormat tformat;
         public Random random;
 
+        private TestParams() {
+        }
+        
+        public static TestParams create(String arglist, PrintWriter log) {
+            return create(arglist.split("\\s"), log);
+        }
+        
+        /**
+         * Create a TestParams from a list of arguments.  If successful, return the params object,
+         * else return null.  Error messages will be reported on errlog if it is not null.
+         * Arguments and values understood by this method will be removed from the args array
+         * and existing args will be shifted down, to be filled by nulls at the end.
+         * @param args the list of arguments
+         * @param errlog the error log, or null if no error log is desired
+         * @return the new TestParams object, or null if error
+         */
+        public static TestParams create(String[] args, PrintWriter log) {
+            TestParams params = new TestParams();
+            params.log = log == null ? new NullWriter() : new ASCIIWriter(log, true);
+            boolean usageError = false;
+            String filter = null;
+            int wx = 0; // write argets.
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (arg == null) {
+                    continue;
+                }
+                if (arg.charAt(0) == '-') {
+                    arg = arg.toLowerCase();
+                    if (arg.equals("-verbose") || arg.equals("-v")) {
+                        params.verbose = true;
+                        params.quiet = false;
+                    } else if (arg.equals("-quiet") || arg.equals("-q")) {
+                        params.quiet = true;
+                        params.verbose = false;
+                    } else if (arg.equals("-help") || arg.equals("-h")) {
+                        usageError = true;
+                    } else if (arg.equals("-warning") || arg.equals("-w")) {
+                        params.warnings = true;
+                    } else if (arg.equals("-nodata") || arg.equals("-nd")) {
+                        params.nodata = true;
+                    } else if (arg.equals("-list") || arg.equals("-l")) {
+                        params.listlevel = 1;
+                    } else if (arg.equals("-listall") || arg.equals("-la")) {
+                        params.listlevel = 2;
+                    } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
+                        params.listlevel = 3;
+                    } else if (arg.equals("-memory") || arg.equals("-m")) {
+                        params.memusage = true;
+                    } else if (arg.equals("-nothrow") || arg.equals("-n")) {
+                        params.nothrow = true;
+                        params.errorSummary = new StringBuffer();
+                    } else if (arg.equals("-describe") || arg.equals("-d")) {
+                        params.describe = true;
+                    } else if (arg.startsWith("-r")) {
+                        String s = null;
+                        int n = arg.indexOf(':');
+                        if (n != -1) {
+                            s = arg.substring(n + 1);
+                            arg = arg.substring(0, n);
+                        }
+
+                        if (arg.equals("-r") || arg.equals("-random")) {
+                            if (s == null) {
+                                params.seed = System.currentTimeMillis();
+                            } else {
+                                params.seed = Long.parseLong(s);
+                            }
+                        } else {
+                            log.println("*** Error: unrecognized argument: " + arg);
+                            usageError = true;
+                            break;
+                        }
+                    } else if (arg.startsWith("-e")) {
+                        // see above
+                        params.inclusion = (arg.length() == 2) 
+                            ? 5 
+                            : Integer.parseInt(arg.substring(2));
+                        if (params.inclusion < 0 || params.inclusion > 10) {
+                            usageError = true;
+                            break;
+                        }
+                    } else if (arg.startsWith("-tfilter:")) {
+                        params.tfilter = arg.substring(8);
+                    } else if (arg.startsWith("-time") || arg.startsWith("-t")) {
+                        long val = 0;
+                        int inx = arg.indexOf(':');
+                        if (inx > 0) {
+                            String num = arg.substring(inx + 1);
+                            try {
+                                val = Long.parseLong(num);
+                            } catch (Exception e) {
+                                log.println("*** Error: could not parse time threshold '"
+                                                + num + "'");
+                                usageError = true;
+                                break;
+                            }
+                        }
+                        params.timing = val;
+                        String fmt = "#,00s";
+                        if (val <= 10) {
+                            fmt = "#,##0.000s";
+                        } else if (val <= 100) {
+                            fmt = "#,##0.00s";
+                        } else if (val <= 1000) {
+                            fmt = "#,##0.0s";
+                        }
+                        params.tformat = new DecimalFormat(fmt);
+                    } else if (arg.startsWith("-filter:")) {
+                        String temp = arg.substring(8).toLowerCase();
+                        filter = filter == null ? temp : filter + "," + temp;
+                    } else if (arg.startsWith("-f:")) {
+                        String temp = arg.substring(3).toLowerCase();
+                        filter = filter == null ? temp : filter + "," + temp;
+                    } else if (arg.startsWith("-s")) {
+                        params.log = new NullWriter();
+                    } else {
+                        log.println("*** Error: unrecognized argument: "
+                                + args[i]);
+                        usageError = true;
+                        break;
+                    }
+                } else {
+                    args[wx++] = arg; // shift down
+                }
+            }
+
+            while (wx < args.length) {
+                args[wx++] = null;
+            }
+            
+            if (usageError) {
+                usage(log, "TestAll");
+                return null;
+            }
+
+            if (filter != null) {
+                params.filter = filter.toLowerCase();
+            }
+
+            params.init();
+            
+            return params;
+        }
+        
+        public String errorSummary() {
+            return errorSummary == null ? "" : errorSummary.toString();
+        }
+        
         public void init() {
             indentLevel = 0;
             needLineFeed = false;
@@ -1239,6 +1296,37 @@ public class TestFmwk extends AbstractTestLog {
             return result;
         }
 
+        /**
+         * Log access.
+         * @param message
+         * @param level
+         * @param incCount
+         * @param newln
+         */
+        public void write(String msg) {
+            write(msg, false);
+        }
+        
+        public void writeln(String msg) {
+            write(msg, true);
+        }
+        
+        private void write(String msg, boolean newln) {
+            if (!suppressIndent) {
+                if (needLineFeed) {
+                    log.println();
+                    needLineFeed = false;
+                }
+                log.print(spaces.substring(0, indentLevel * 2));
+            }
+            log.print(msg);
+            if (newln) {
+                log.println(); 
+            }
+            log.flush();
+            suppressIndent = !newln;
+        }
+        
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
             if (level == WARN && (!warnings && !nodata)){
