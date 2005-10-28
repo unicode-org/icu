@@ -38,8 +38,9 @@ UNICODE_VERSION="4.1"
 AC_SUBST(UNICODE_VERSION)
 
 AC_SUBST(CPPFLAGS)
-#AC_SUBST(CINTLTST_CPPFLAGS)
 
+dnl This variable is needed on z/OS because the C++ compiler only recognizes .C
+_CXX_CXXSUFFIX=cc
 dnl Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
