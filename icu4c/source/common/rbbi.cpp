@@ -1416,7 +1416,7 @@ CharacterIteratorUT::CharacterIteratorUT(UText *ut) {
     fUText = utext_clone(NULL, ut, FALSE, &status);
     if (fUText != NULL) {
         // Set the inherited CharacterItertor fields
-        textLength = utext_nativeLength(ut);
+        textLength = (int32_t)utext_nativeLength(ut);
         end = textLength;
     }
 }
@@ -1456,13 +1456,13 @@ UChar CharacterIteratorUT::setIndex(int32_t position) {
         pos = end;
     }
     utext_setNativeIndex(fUText, pos);
-    pos = utext_getNativeIndex(fUText);  // because utext snaps to code point boundary.
+    pos = (int32_t)utext_getNativeIndex(fUText);  // because utext snaps to code point boundary.
     return 0x0000ffff;  // RBBI doesn't use return value, and UText can't return a UChar easily.
 }
 
 UChar32 CharacterIteratorUT::previous32(void) {
     UChar32 result = UTEXT_PREVIOUS32(fUText);
-    pos = utext_getNativeIndex(fUText);  // TODO:  maybe optimize common case?
+    pos = (int32_t)utext_getNativeIndex(fUText);  // TODO:  maybe optimize common case?
     if (result < 0) {
         result = 0x0000ffff;
     }
@@ -1472,7 +1472,7 @@ UChar32 CharacterIteratorUT::previous32(void) {
 UChar32 CharacterIteratorUT::next32(void) {
     // TODO: optimize.
     UTEXT_NEXT32(fUText);
-    pos = utext_getNativeIndex(fUText);
+    pos = (int32_t)utext_getNativeIndex(fUText);
     UChar32 result = UTEXT_NEXT32(fUText);
     if (result < 0) {
         result = 0x0000ffff;
@@ -1521,7 +1521,7 @@ default:
     U_ASSERT(FALSE);
     }
     utext_setNativeIndex(fUText, result);
-    pos = utext_getNativeIndex(fUText);  // align to cp boundary
+    pos = (int32_t)utext_getNativeIndex(fUText);  // align to cp boundary
     return result;
 }
 
@@ -1534,7 +1534,7 @@ default:
     // don't bother with kStart, kEnd.  Not Used by break iteration.
     U_ASSERT(FALSE);
     }
-    pos = utext_getNativeIndex(fUText);
+    pos = (int32_t)utext_getNativeIndex(fUText);
     return pos;
 }
 
@@ -1543,7 +1543,7 @@ void  CharacterIteratorUT::resetTo(const UText *ut, UErrorCode *status) {
     // Reset this CharacterIteratorUT to use a new UText.
     fUText = utext_clone(fUText, ut, FALSE, status);
     utext_setNativeIndex(fUText, 0);
-    textLength = utext_nativeLength(fUText);
+    textLength = (int32_t)utext_nativeLength(fUText);
     pos = 0;
     end = textLength;
 }

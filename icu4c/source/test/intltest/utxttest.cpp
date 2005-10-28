@@ -410,7 +410,7 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
 
         // Compare the results of the two parallel tests
         int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
-        int32_t  uti = 0;    // UText position, native index.
+        int64_t  uti = 0;    // UText position, native index.
         int32_t  cpi;        // char32 position (code point index) 
         UChar32  usc;        // code point from Unicode String
         UChar32  utc;        // code point from UText
@@ -429,7 +429,7 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
                 goto cleanupAndReturn;
             }
         }
-        int32_t expectedNativeLength = utext_nativeLength(ut);
+        int64_t expectedNativeLength = utext_nativeLength(ut);
         if (move == FALSE) {
             expectedNativeLength += nativeLimit - nativeStart;
         }
@@ -486,11 +486,11 @@ void UTextTest::TestReplace(
     // Compare the results
     //
     int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
-    int32_t  uti = 0;    // UText position, native index.
+    int64_t  uti = 0;    // UText position, native index.
     int32_t  cpi;        // char32 position (code point index) 
     UChar32  usc;        // code point from Unicode String
     UChar32  utc;        // code point from UText
-    int32_t  expectedNativeLength = 0;
+    int64_t  expectedNativeLength = 0;
     utext_setNativeIndex(targetUT, 0);
     for (cpi=0; ; cpi++) {
         usc = targetUS.char32At(usi);
@@ -526,8 +526,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //
     //  Check the length from the UText
     //
-    int expectedLen = cpMap[cpCount].nativeIdx;
-    int utlen = ut->nativeLength(ut);
+    int64_t expectedLen = cpMap[cpCount].nativeIdx;
+    int64_t utlen = ut->nativeLength(ut);
     TEST_ASSERT(expectedLen == utlen);
 
     //
@@ -535,12 +535,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //   at the correct native offsets.
     //
     int         i = 0;
-    int         index;
-    int         expectedIndex = 0;
-    int         foundIndex = 0;
+    int64_t     index;
+    int64_t     expectedIndex = 0;
+    int64_t     foundIndex = 0;
     UChar32     expectedC;
     UChar32     foundC;
-    int32_t     len;
+    int64_t     len;
 
     for (i=0; i<cpCount; i++) {
         expectedIndex = cpMap[i].nativeIdx;
@@ -878,7 +878,7 @@ void UTextTest::ErrorTest()
         TEST_SUCCESS(status);
         isExpensive = utext_isLengthExpensive(utb);
         TEST_ASSERT(isExpensive == TRUE);
-        int32_t  len = utext_nativeLength(utb);
+        int64_t  len = utext_nativeLength(utb);
         TEST_ASSERT(len == 99);
         isExpensive = utext_isLengthExpensive(utb);
         TEST_ASSERT(isExpensive == FALSE);
@@ -910,7 +910,7 @@ void UTextTest::ErrorTest()
         int32_t startMapLimit = sizeof(startMap) / sizeof(int32_t);
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -918,7 +918,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_char32At(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -926,7 +926,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_next32From(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == nextMap[i]);
         }
         
@@ -934,7 +934,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_previous32From(ut, i);
             TEST_ASSERT(c32 == pr32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == prevMap[i]);
         }
 
@@ -978,7 +978,7 @@ void UTextTest::ErrorTest()
         int i;
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -986,7 +986,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_char32At(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -994,7 +994,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_next32From(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == nextMap[i]);
         }
         
@@ -1002,7 +1002,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_previous32From(ut, i);
             TEST_ASSERT(c32 == pr32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == prevMap[i]);
         }
 
@@ -1045,7 +1045,7 @@ void UTextTest::ErrorTest()
         int i;
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -1053,7 +1053,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_char32At(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
@@ -1061,7 +1061,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_next32From(ut, i);
             TEST_ASSERT(c32 == c32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == nextMap[i]);
         }
         
@@ -1069,7 +1069,7 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             UChar32 c32 = utext_previous32From(ut, i);
             TEST_ASSERT(c32 == pr32Map[i]);
-            int32_t cpIndex = utext_getNativeIndex(ut);
+            int64_t cpIndex = utext_getNativeIndex(ut);
             TEST_ASSERT(cpIndex == prevMap[i]);
         }
 
