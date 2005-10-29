@@ -360,11 +360,11 @@
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml"
             todir="${build.dir}/com/ibm/icu/dev/test/charsetdet"/>
-    	<copy todir="${build.dir}/com/ibm/icu/dev/test/serializable/data">
-    		<fileset dir="${src.dir}/com/ibm/icu/dev/test/serializable/data">
-    			<include name="**/*.dat"/>
-			</fileset>
-		</copy>
+        <copy todir="${build.dir}/com/ibm/icu/dev/test/serializable/data">
+            <fileset dir="${src.dir}/com/ibm/icu/dev/test/serializable/data">
+                <include name="**/*.dat"/>
+            </fileset>
+        </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
             todir="${build.dir}/com/ibm/icu/dev/data"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt"
@@ -387,10 +387,10 @@
         </copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
-     	<copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
-	        <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/"
-	            includes="*.properties"/>
-	    </copy>
+        <copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
+            <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/"
+                includes="*.properties"/>
+        </copy>
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
@@ -552,31 +552,31 @@
             basedir="${richedit.dir}"
             includes="doc/**/*,richedit.jar,license.html"/>
     </target>
-
-    <target name="check" depends="tests, jar" description="run standard icu4j test suite">
-    	<delete failonerror="no">
-        	<fileset dir="${build.dir}/com/ibm/icu/text"/>
-        	<fileset dir="${build.dir}/com/ibm/icu/impl"/>
+    <target name="deleteCore" depends="init" >
+        <delete failonerror="no">
+            <fileset dir="${build.dir}/com/ibm/icu/text"/>
+            <fileset dir="${build.dir}/com/ibm/icu/impl"/>
             <fileset dir="${build.dir}/com/ibm/icu/math"/>
-	        <fileset dir="${build.dir}/com/ibm/icu/lang"/>
-	        <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
-	    </delete>
-    	<java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-	        <jvmarg value="-ea"/>  <!-- enable assertion checks -->
-	        <arg value="-n"/>
-	        <classpath>
-	            <pathelement path="${java.class.path}/"/>
-	        	<pathelement location="icu4j.jar"/>
-	            <pathelement location="clover.jar"/>
-	            <pathelement path="${build.dir}"/>
-	        	
-	        </classpath>
-	    </java>
+            <fileset dir="${build.dir}/com/ibm/icu/lang"/>
+            <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
+        </delete>
+    </target>
+    <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="icu4j.jar"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
     </target>
 
-	<target name="secure" depends="jarTests" description="builds icu4j.jar and icu4jtests.jar"/>
+    <target name="secure" depends="jarTests" description="builds icu4j.jar and icu4jtests.jar"/>
 
-	<target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
+    <target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
         <!-- jvmarg value="-verbose"/ -->
         <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
@@ -594,15 +594,15 @@
         </java>
     </target>
 
-	<target name="noData" depends="core, tests" description="builds ICU4J without any data">
+    <target name="noData" depends="core, tests" description="builds ICU4J without any data">
        <delete failonerror="no">
-        	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
-        	<fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
+            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="Holiday*.class"/>
+            <fileset dir="${build.dir}/${icu4j.data.path}/../" includes="BreakIterator*.class"/>
             <fileset dir="${build.dir}/${icu4j.data.path}"/>
-	        <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
-	        <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
-	    </delete>
-	</target>
+            <fileset dir="${build.dir}/${icu4j.testdata.path}"/>
+            <fileset dir="${build.dir}/${icu4j.testdata.path}../"/>                 
+        </delete>
+    </target>
     <target name="noDataCheck" depends="noData" description="runs the tests when no data is present">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-nothrow"/>
@@ -1068,6 +1068,16 @@
         </unjar>
     </target>
 
+    <target name="moduleCheck" depends="init" description="run tests for module jar">
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-nothrow"/>
+            <arg value="-nodata"/>
+            <classpath>
+                <pathelement location="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
+    
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
     <target name="extraTransliteratorData" depends="init" description="build han-to-latin transliterator data (normally omitted)">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
@@ -1119,7 +1129,7 @@
      <!-- Target for checking the loading of bundles from the default package.
           This is hack to get around Eclipse's build problems. 
      -->
-    <target name="defaultPackageCheck" depends="tests" description="Tests for loading resources in the default package">
+    <target name="defaultPackage" depends="tests" description="Tests for loading resources in the default package">
         <copy file="${src.dir}/com/ibm/icu/dev/test/util/TestDefaultPackageLoading.jpp"
             tofile="${src.dir}/TestDefaultPackageLoading.java"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/util/TestData_en.jpp"
@@ -1138,7 +1148,10 @@
         <!-- copy the file up one level and test if java style base name loading works -->
         <copy file="${build.dir}/com/ibm/icu/dev/data/testdata/te.res"
             tofile="${build.dir}/com/ibm/icu/dev/data/TestData_bge.res"/>
-        <!--run the tests -->
+    </target>
+    
+    <target name="defaultPackageCheck" depends="tests" description="Run Tests for loading resources in the default package">
+            <!--run the tests -->
         <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
             <arg value="-n"/>
