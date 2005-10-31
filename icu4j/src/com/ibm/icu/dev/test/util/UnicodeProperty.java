@@ -325,7 +325,7 @@ Name: Unicode_1_Name
      * @return the unicode map
      */
     public UnicodeMap getUnicodeMap(boolean getShortest) {
-    	if (!getShortest) return (UnicodeMap) getUnicodeMap_internal().clone();
+    	if (!getShortest) return (UnicodeMap) getUnicodeMap_internal().cloneAsThawed();
         UnicodeMap result = new UnicodeMap();
         for (int i = 0; i <= 0x10FFFF; ++i) {
             //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));

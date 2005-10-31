@@ -35,6 +35,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.Freezable;
 /**
  * Class for mapping Unicode characters to values
  * Much smaller storage than using HashMap, and much faster and more compact than
@@ -42,7 +43,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
  * @author Davis
  */
 
-public final class UnicodeMap implements Cloneable, Lockable, Externalizable {
+public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
@@ -98,7 +99,7 @@ public final class UnicodeMap implements Cloneable, Lockable, Externalizable {
     /**
      * Standard clone. Warning, as with Collections, does not do deep clone.
      */
-    public Object clone() {
+    public Object cloneAsThawed() {
         UnicodeMap that = new UnicodeMap();
         that.length = length;
         that.transitions = (int[]) transitions.clone();
@@ -606,7 +607,7 @@ public final class UnicodeMap implements Cloneable, Lockable, Externalizable {
 	/* (non-Javadoc)
 	 * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
 	 */
-	public boolean isLocked() {
+	public boolean isFrozen() {
 		// TODO Auto-generated method stub
 		return locked;
 	}
@@ -614,7 +615,7 @@ public final class UnicodeMap implements Cloneable, Lockable, Externalizable {
 	/* (non-Javadoc)
 	 * @see com.ibm.icu.dev.test.util.Lockable#lock()
 	 */
-	public Object lock() {
+	public Object freeze() {
 		locked = true;
 		return this;
 	}
