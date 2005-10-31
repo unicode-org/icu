@@ -107,7 +107,7 @@ public class TestUtilities extends TestFmwk {
         };
         
         logln("Trying Compose");
-        UnicodeMap composed = ((UnicodeMap)scripts.clone()).composeWith(map1, composer);
+        UnicodeMap composed = ((UnicodeMap)scripts.cloneAsThawed()).composeWith(map1, composer);
         Object last = "";
         for (int i = 0; i < 0x10FFFF; ++i) {
         	Object comp = composed.getValue(i);
