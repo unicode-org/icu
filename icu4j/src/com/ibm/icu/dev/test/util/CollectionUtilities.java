@@ -21,6 +21,9 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 
+/**
+ * Utilities that ought to be on collections, but aren't
+ */
 public final class CollectionUtilities {
 	/**
 	 * Utility like Arrays.asList()
@@ -34,6 +37,13 @@ public final class CollectionUtilities {
     		target.put(source[i][from], source[i][to]);
     	}
     	return target;
+	}
+	
+	public static Collection addAll(Collection target, Iterator source) {
+		while (source.hasNext()) {
+			target.add(source.next());
+		}
+		return target; // for chaining
 	}
 	
 	public static Map asMap(Object[][] source) {
