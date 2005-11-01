@@ -12,8 +12,6 @@ package com.ibm.icu.impl;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Date;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
 
 /**
@@ -99,7 +97,8 @@ public class JDKTimeZone extends TimeZone {
             return zone.getOffset(era, year, month, day,
                                       dayOfWeek, milliseconds);
         }
-        throw new IllegalStateException();
+        //should never occur except while serializing JDKTimeZone object
+        return 0;
     }
 
 
@@ -119,7 +118,6 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             zone.setRawOffset(offsetMillis);
         }
-        throw new IllegalStateException();
     }
 
     /**
@@ -129,7 +127,8 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.getRawOffset();
         }
-        throw new IllegalStateException();
+        // should never happen except when serializing the JDKTimeZone object
+        return 0;
     }
 
     /**
@@ -139,7 +138,8 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.useDaylightTime();
         }
-        throw new IllegalStateException();
+        // should never happen except when serializing the JDKTimeZone object
+        return false;
     }
 
     /**
@@ -149,7 +149,8 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.inDaylightTime(date);
         }
-        throw new IllegalStateException();
+        //should never happen except when serializing the JDKTimeZone object
+        return false;
     }
 
     /**
