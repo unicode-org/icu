@@ -323,6 +323,11 @@ public class OlsonTimeZone extends TimeZone {
         getOffset(date.getTime(), false, temp);
         return temp[1] != 0;
     }
+    
+    /**
+     * Construct a GMT+0 zone with no transitions.  This is done when a
+     * constructor fails so the resultant object is well-behaved.
+     */
     private void constructEmpty(){
         transitionCount = 0;
         typeCount = 1;
@@ -431,6 +436,17 @@ public class OlsonTimeZone extends TimeZone {
             }
         }       
     }
+    public OlsonTimeZone(){
+       /*
+        * 
+        finalYear = Integer.MAX_VALUE;
+        finalMillis = Double.MAX_VALUE;
+        finalZone = null;
+        */
+        constructEmpty();
+    }
+
+
     public OlsonTimeZone(String id){
         ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         ICUResourceBundle res = ZoneMeta.openOlsonResource(id);

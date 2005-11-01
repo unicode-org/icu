@@ -46,6 +46,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public SimpleTimeZone(int rawOffset, String ID) {
         //this(new java.util.SimpleTimeZone(rawOffset, ID), ID);
+        //super(ID);
         construct(rawOffset, 0, 0, 0,
                 0, WALL_TIME,
                 0, 0, 0,
