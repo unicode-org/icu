@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2004/04/17 18:21:39 $
-* $Revision: 1.16 $
+* $Date: 2005/11/01 00:10:54 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -136,7 +136,7 @@ public final class Normalizer implements UCD_Types {
 
     /**
     * Normalizes text according to the chosen form
-    * @param   source      the original text, unnormalized
+    * @param   newLocaleID      the original text, unnormalized
     * @return  target      the resulting normalized text
     */
     public String normalize(int cp) {
@@ -157,7 +157,7 @@ public final class Normalizer implements UCD_Types {
     /**
      * Does a quick check to see if the string is in the current form. Checks canonical order and
      * isAllowed().
-     * @param   source  source text
+     * @param   newLocaleID  source text
      * @return YES, NO, MAYBE
      */
      /*

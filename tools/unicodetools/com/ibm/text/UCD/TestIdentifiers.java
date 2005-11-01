@@ -4,10 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.UnicodeMap;
+import com.ibm.icu.dev.test.util.XEquivalenceClass;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
@@ -33,6 +38,14 @@ public class TestIdentifiers {
 				tiany.testItem(tests[i]);
 				System.out.print(folded);
 				ti.testItem(folded);
+			}
+			for (int j = 0; j < tests[i].length(); ++j) {
+				int cp = tests[i].charAt(j);
+				Set s = ti.getConfusables(cp, "MA");
+				System.out.println(Default.ucd().getCodeAndName(cp));
+				for (Iterator it = s.iterator(); it.hasNext();) {
+					System.out.println("\t= " + Default.ucd().getCodeAndName((String)it.next()));
+				}
 			}
 		}
 	}
@@ -140,6 +153,49 @@ public class TestIdentifiers {
 					+ line).initCause(e);
 		}
 		br.close();
+	}
+	
+	Map type_equivalences;
+	
+	void loadConfusables() throws IOException {
+		BufferedReader br = BagFormatter.openUTF8Reader(indir,
+				"confusables.txt");
+		String line = null;
+		type_equivalences = new HashMap();
+		try {
+			while (true) {
+				line = Utility.readDataLine(br);
+				if (line == null)
+					break;
+				if (line.length() == 0)
+					continue;
+				String[] pieces = Utility.split(line, ';');
+				// part 0 is source code point
+				String s = Utility.fromHex(pieces[0].trim());
+				// part 1 is script1
+				String t = Utility.fromHex(pieces[1].trim());
+
+				String type = pieces[2].trim();
+				XEquivalenceClass ec = (XEquivalenceClass) type_equivalences.get(type);
+				if (ec == null) type_equivalences.put(type, ec = new XEquivalenceClass(""));
+				ec.add(s, t);
+				//System.out.println(type + ": " + Default.ucd().getCodeAndName(s) + " => " + Default.ucd().getCodeAndName(t));
+			}
+		} catch (Exception e) {
+			throw (RuntimeException) new RuntimeException("Failure on line "
+					+ line).initCause(e);
+		}
+		br.close();
+	}
+
+	public Set getConfusables(int cp, String type) {
+		try {
+			if (type_equivalences == null) loadConfusables();
+		} catch (IOException e) {
+			return null;
+		}
+		XEquivalenceClass ec = (XEquivalenceClass) type_equivalences.get(type);
+		return ec.getEquivalences(UTF16.valueOf(cp));
 	}
 
 	void loadWholeScriptConfusables(String filterType) throws IOException {

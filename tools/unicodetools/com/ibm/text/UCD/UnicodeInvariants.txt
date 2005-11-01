@@ -111,6 +111,21 @@ $XID_Continue ! [$Pattern_Whitespace $Pattern_Syntax]
 $Pattern_Whitespace ! [$XID_Continue $Pattern_Syntax]
 $Pattern_Syntax ! [$XID_Continue $Pattern_Whitespace]
 
+# Test SA characters
+
+# They are limited to certain scripts:
+Let $SAScripts = [$script:thai $script:lao $script:myanmar $script:khmer]
+$SAScripts ⊇ $LineBreak:SA
+
+# And in those scripts, they are all the alphabetic spacing characters, plus some odd Cf
+[$SAScripts & [$Alphabetic $gc:cf]] = [$SAScripts & [$LineBreak:SA $LineBreak:CM]]
+
+# Try removing M* from alphabetic, and matching to SA
+[$SAScripts & [$Alphabetic $gc:cf - $gcAllMarks]] = $LineBreak:SA
+
+# Try adding M* to alphabetic, and matching to SA
+[$SAScripts & [$Alphabetic $gc:cf $gcAllMarks]] = $LineBreak:SA
+
 # testing
 # [$Pattern_Whitespace $Pattern_Syntax] ! [[^$WB:Format $WB:Other] \u2019 \u0027 \u02BC \u002d \u00ad \u2027 \u058A]
 Let $otherword = [\u2019 \u0027 \u02BC \u002d \u00ad \u2027 \u058A]

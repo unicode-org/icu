@@ -73,7 +73,7 @@ public class TestUnicodeInvariants {
        int variableCount = 0;
        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
        out.write('\uFEFF'); // BOM
-       BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
+       BufferedReader in = BagFormatter.openUTF8Reader("com/ibm/text/UCD/", "UnicodeInvariants.txt");
        BagFormatter bf = new BagFormatter();
        bf.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
        BagFormatter bf2 = new BagFormatter();

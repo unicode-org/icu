@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2005/05/02 15:39:53 $
-* $Revision: 1.39 $
+* $Date: 2005/11/01 00:10:54 $
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,7 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "4.1.0";
+    public static final String latestVersion = "5.1.0";
 
     /**
      * Create singleton instance for default (latest) version
@@ -158,12 +158,16 @@ public final class UCD implements UCD_Types {
      * Get the character names for the code points in a string, separated by ", "
      */
     public String getName(String s, byte style) {
+    	return getName(s, style, ", ");
+    }
+    
+    public String getName(String s, byte style, String separator) {
         if (s.length() == 1) return getName(s.charAt(0), style); // optimize BMP
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
-            if (i > 0) result.append(", ");
+            if (i > 0) result.append(separator);
             result.append(getName(cp, style));
         }
         return result.toString();

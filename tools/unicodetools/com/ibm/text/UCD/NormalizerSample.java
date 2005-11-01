@@ -86,7 +86,7 @@ public class NormalizerSample implements UCD_Types {
 
     /**
     * Normalizes text according to the chosen form
-    * @param   source      the original text, unnormalized
+    * @param   newLocaleID      the original text, unnormalized
     * @return  target      the resulting normalized text
     */
     public String normalize(int cp) {
