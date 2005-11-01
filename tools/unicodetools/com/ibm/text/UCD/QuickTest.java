@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/10/11 19:39:15 $
-* $Revision: 1.7 $
+* $Date: 2005/11/01 00:10:54 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.dev.test.util.UnicodePropertySource;
 import com.ibm.icu.dev.test.util.UnicodeMap.MapIterator;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -30,17 +31,92 @@ import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
-		getBidiMirrored();
-		if (true) return;
-		getLengths("NFC", Default.nfc());
-		getLengths("NFD", Default.nfd());
-		getLengths("NFKC", Default.nfkc());
-		getLengths("NFKD", Default.nfkd());
-		System.out.println("Done");
+		try {
+			//getBidiMirrored();
+			getCaseFoldingUnstable();
+			if (true) return;
+			getHasAllNormalizations();
+			getLengths("NFC", Default.nfc());
+			getLengths("NFD", Default.nfd());
+			getLengths("NFKC", Default.nfkc());
+			getLengths("NFKD", Default.nfkd());
+		} finally {
+			System.out.println("Done");
+		}
 	}
 	
-	
-	
+	private static void getCaseFoldingUnstable() {
+		for (int i = 3; i < com.ibm.text.utility.Utility.searchPath.length - 1; ++i) {
+			String newName = com.ibm.text.utility.Utility.searchPath[i];
+			String oldName = com.ibm.text.utility.Utility.searchPath[i+1];
+			showMemoryUsage();		
+			UCD ucdNew = UCD.make(newName);
+			showMemoryUsage();
+			UCD ucdOld = UCD.make(oldName);
+			showMemoryUsage();
+			UnicodeMap differences = new UnicodeMap();
+			UnicodeSet differenceSet = new UnicodeSet();
+			for (int j = 0; j < 0x10FFFF; ++j) {
+				if (!ucdOld.isAssigned(j)) continue;
+				String oldString = ucdOld.getCase(j, UCD.FULL, UCD.FOLD);
+				String newString = ucdNew.getCase(j, UCD.FULL, UCD.FOLD);
+				if (!oldString.equals(newString)) {
+					differenceSet.add(j);
+					differences.put(j, new String[]{oldString, newString});
+					System.out.println(".");
+				}
+			}
+			if (differenceSet.size() != 0) {
+				System.out.println("Differences in " + com.ibm.text.utility.Utility.searchPath[i]);
+				for (UnicodeSetIterator it = new UnicodeSetIterator(differenceSet); it.next();) {
+					System.out.println(ucdNew.getCodeAndName(it.codepoint));
+					String[] strings = (String[]) differences.getValue(it.codepoint);
+					System.out.println("\t" + oldName + ": " + ucdNew.getCodeAndName(strings[0]));
+					System.out.println("\t" + newName + ": " + ucdNew.getCodeAndName(strings[1]));
+				}
+			}
+		}
+	}
+
+	  static public void showMemoryUsage() {
+		    System.gc(); System.gc(); System.gc(); System.gc();
+		    System.gc(); System.gc(); System.gc(); System.gc();
+		    System.gc(); System.gc(); System.gc(); System.gc();
+		    System.gc(); System.gc(); System.gc(); System.gc();
+		    System.out.println("total:\t" + Runtime.getRuntime().totalMemory() + ";\tfree:\t" + 
+		      Runtime.getRuntime().freeMemory());
+		  }
+
+	private static void getHasAllNormalizations() {
+		UnicodeSet items = new UnicodeSet();
+		Set s = new LinkedHashSet();
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			if (!Default.ucd().isAssigned(i)) continue;
+			if (Default.ucd().getDecompositionType(i) == UCD.NONE) continue;
+			String source = UTF16.valueOf(i);
+			String nfc = Default.nfc().normalize(source);
+			String nfd = Default.nfd().normalize(source);
+			String nfkd = Default.nfkd().normalize(source);
+			String nfkc = Default.nfkc().normalize(source);
+			s.clear();
+			s.add(source);
+			s.add(nfc);
+			s.add(nfd);
+			s.add(nfkd);
+			s.add(nfkc);
+			if (s.size() > 3) {
+				System.out.println(Utility.hex(source) + "\t" + Utility.escape(source)
+					+ "\t" + Default.ucd().getName(source)
+					+ "\tnfd\t" + Utility.hex(nfd) + "\t" + Utility.escape(nfd)
+					+ "\tnfc\t" + Utility.hex(nfc) + "\t" + Utility.escape(nfc)
+					+ "\tnfkd\t" + Utility.hex(nfkd) + "\t" + Utility.escape(nfkd)
+					+ "\tnfkc\t" + Utility.hex(nfkc) + "\t" + Utility.escape(nfkc));
+			}
+		}
+	}
+
+
+
 	private static void getBidiMirrored() {
 		ToolUnicodePropertySource foo = ToolUnicodePropertySource.make("");
 		UnicodeMap status = new UnicodeMap();
@@ -92,9 +168,10 @@ public class QuickTest implements UCD_Types {
 			UnicodeSet set = status.getSet(value);
 			for (UnicodeSetIterator umi = new UnicodeSetIterator(set); umi.next();) {
 				System.out.println(Utility.hex(umi.codepoint) 
-						+ ";\t" + value
-						+ ";\t" + (x.contains(umi.codepoint) ? "O" : "")
-						+ ";\t" + Default.ucd().getName(umi.codepoint));
+						+ (value.startsWith("*") ? ";\tBidi_Mirrored" : "")
+						+ "\t#\t" + value
+						//+ ";\t" + (x.contains(umi.codepoint) ? "O" : "")
+						+ "\t" + Default.ucd().getName(umi.codepoint));
 			}
 		}
 	}
@@ -288,6 +365,6 @@ public class QuickTest implements UCD_Types {
         System.out.println("\tCount:" + set1.size());
         System.out.println("\tSet:" + set1.toPattern(true));
         System.out.println("\tDetails:");
-        Utility.showSetNames("", set1, false, Default.ucd());
+        //Utility.showSetNames("", set1, false, Default.ucd());
     }
 }

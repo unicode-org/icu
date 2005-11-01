@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2005/03/10 02:37:20 $
-* $Revision: 1.31 $
+* $Date: 2005/11/01 00:10:54 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    static final byte BINARY_FORMAT = 16; // bumped if binary format of UCD changes. Forces rebuild   
+    static final byte BINARY_FORMAT = 17; // bumped if binary format of UCD changes. Forces rebuild   
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";

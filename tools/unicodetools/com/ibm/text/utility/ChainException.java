@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/ChainException.java,v $
-* $Date: 2001/12/06 00:05:52 $
-* $Revision: 1.3 $
+* $Date: 2005/11/01 00:10:53 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -20,7 +20,7 @@ import java.io.*;
 public class ChainException extends RuntimeException {
     Object[] keyData;
     String messageFormat;
-    Exception chain;
+    //Exception chain;
 
     public ChainException (String messageFormat, Object[] objects) {
         this.messageFormat = messageFormat;
@@ -30,20 +30,20 @@ public class ChainException extends RuntimeException {
     public ChainException (String messageFormat, Object[] objects, Exception chainedException) {
         this.messageFormat = messageFormat;
         keyData = objects == null ? null : (Object[]) objects.clone();
-        chain = chainedException;
+        initCause(chainedException);
     }
 
     public String getMessage() {
         String chainMsg = "";
-        if (chain != null) {
-            chainMsg = "; " + chain.getClass().getName()
-                + ", " + chain.getMessage();
-            StringWriter w = new StringWriter();
-            PrintWriter p = new PrintWriter(w);
-            chain.printStackTrace(p);
-            chainMsg += ", " + w.getBuffer();
-            p.close();
-        }
+//        if (chain != null) {
+//            chainMsg = "; " + chain.getClass().getName()
+//                + ", " + chain.getMessage();
+//            StringWriter w = new StringWriter();
+//            PrintWriter p = new PrintWriter(w);
+//            chain.printStackTrace(p);
+//            chainMsg += ", " + w.getBuffer();
+//            p.close();
+//        }
         String main = "";
         if (keyData != null) main = MessageFormat.format(messageFormat, keyData);
         return main + chainMsg;

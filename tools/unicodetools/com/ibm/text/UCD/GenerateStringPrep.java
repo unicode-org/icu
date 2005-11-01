@@ -206,7 +206,7 @@ class GenerateStringPrep implements UCD_Types {
 				return a + "\t" + b;
 			}
 		};
-		UnicodeMap sb = ((UnicodeMap)scripts.clone()).composeWith(blocks, myCompose);
+		UnicodeMap sb = ((UnicodeMap)scripts.cloneAsThawed()).composeWith(blocks, myCompose);
 		for (Iterator it = sb.getAvailableValues(new TreeSet()).iterator(); it.hasNext();) {
 			System.out.println(it.next());
 		}

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2004/11/12 23:17:15 $
-* $Revision: 1.16 $
+* $Date: 2005/11/01 00:10:53 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -396,142 +396,145 @@ public final class ConvertUCD implements UCD_Types {
         try {
     	    String[] parts = new String[20];
             for (int lineNumber = 1; ; ++lineNumber) {
-                line = input.readLine();
-			    if (line == null) break;
-			    if (SHOW && (lineNumber % 500) == 0) System.out.println("//" + lineNumber + ": '" + line + "'");
+                try {
+					line = input.readLine();
+					if (line == null) break;
+					if (SHOW && (lineNumber % 500) == 0) System.out.println("//" + lineNumber + ": '" + line + "'");
 
-                String original = line;
-			    String comment = "";
-			    int commentPos = line.indexOf('#');
-			    if (commentPos >= 0) {
-			        comment = line.substring(commentPos+1).trim();
-			        line = line.substring(0, commentPos);
-			    }
-			    line = line.trim();
-			    if (line.length() == 0) continue;
+					String original = line;
+					String comment = "";
+					int commentPos = line.indexOf('#');
+					if (commentPos >= 0) {
+					    comment = line.substring(commentPos+1).trim();
+					    line = line.substring(0, commentPos);
+					}
+					line = line.trim();
+					if (line.length() == 0) continue;
 
-                int count = Utility.split(line,';',parts);
+					int count = Utility.split(line,';',parts);
 
-                if (false && parts[0].equals("2801")) {
-                    System.out.println("debug?");
-                }
+					if (false && parts[0].equals("2801")) {
+					    System.out.println("debug?");
+					}
 
-                // fix malformed or simple lists.
+					// fix malformed or simple lists.
 
-                if (count != labels.length) {
-                    if (count == labels.length + 1 && parts[count-1].equals("")) {
-                        if (!showedSemi) System.out.println("Extra semicolon in: " + original);
-                        showedSemi = true;
-                    } else if (count == 1) { // fix simple list
-                        ++count;
-                        parts[1] = "Y";
-                    } else if (count < labels.length) {
-                        if (!showedShort) System.out.println("Line shorter than labels: " + original);
-                        showedShort = true;
-                        for (int i = count; i < labels.length; ++i) {
-                            parts[i] = "";
-                        }
-                    } else {
-                        throw new ChainException("wrong count: {0}",
-                            new Object[] {new Integer(line), new Integer(count)});
-                    }
-                }
+					if (count != labels.length) {
+					    if (count == labels.length + 1 && parts[count-1].equals("")) {
+					        if (!showedSemi) System.out.println("Extra semicolon in: " + original);
+					        showedSemi = true;
+					    } else if (count == 1) { // fix simple list
+					        ++count;
+					        parts[1] = "Y";
+					    } else if (count < labels.length) {
+					        if (!showedShort) System.out.println("Line shorter than labels: " + original);
+					        showedShort = true;
+					        for (int i = count; i < labels.length; ++i) {
+					            parts[i] = "";
+					        }
+					    } else {
+					        throw new ChainException("wrong count: {0}",
+					            new Object[] {new Integer(line), new Integer(count)});
+					    }
+					}
 
-                // store char
-                 // first field is always character OR range. May be UTF-32
-                int cpTop;
-                int cpStart;
-                int ddot = parts[0].indexOf(".");
-                if (ddot >= 0) {
-                    cpStart = UTF32.char32At(Utility.fromHex(parts[0].substring(0,ddot)),0);
-                    cpTop = UTF32.char32At(Utility.fromHex(parts[0].substring(ddot+2)),0);
-                    // System.out.println(Utility.hex(cpStart) + " ... " + Utility.hex(cpTop));
-                } else {
-                    cpStart = UTF32.char32At(Utility.fromHex(parts[0]),0);
-                    cpTop = cpStart;
-                    if (labels[1].equals("RANGE")) UTF32.char32At(Utility.fromHex(parts[1]),0);
-                }
+					// store char
+					 // first field is always character OR range. May be UTF-32
+					int cpTop;
+					int cpStart;
+					int ddot = parts[0].indexOf(".");
+					if (ddot >= 0) {
+					    cpStart = UTF32.char32At(Utility.fromHex(parts[0].substring(0,ddot)),0);
+					    cpTop = UTF32.char32At(Utility.fromHex(parts[0].substring(ddot+2)),0);
+					    // System.out.println(Utility.hex(cpStart) + " ... " + Utility.hex(cpTop));
+					} else {
+					    cpStart = UTF32.char32At(Utility.fromHex(parts[0]),0);
+					    cpTop = cpStart;
+					    if (labels[1].equals("RANGE")) UTF32.char32At(Utility.fromHex(parts[1]),0);
+					}
 
+					// properties first
+					if (labels[1].equals("PROP")) {
+					    String prop = parts[2].trim();
+					    // FIX!!
+					    boolean skipLetters = false;
+					    if (prop.equals("Alphabetic")) {
+					        prop = "Other_Alphabetic";
+					        skipLetters = true;
+					    }
+					    // END FIX!!
+					    properties.add(prop);
+					    if (Utility.find(prop, UCD_Names.DeletedProperties, true) == -1) { // only undeleted
+					        int end = UTF32.char32At(Utility.fromHex(parts[1]),0);
+					        if (end == 0) end = cpStart;
 
+					        for (int j = cpStart; j <= end; ++j) {
+					            if (j != UCD.mapToRepresentative(j, Integer.MAX_VALUE)) continue;
+					            if (skipLetters && getEntry(cpStart).isLetter()) continue;
+					            appendCharProperties(j, prop);
+					        }
+					    }
+					} else { // not range!
+					    String val = "";
+					    String lastVal;
 
-                // properties first
-                if (labels[1].equals("PROP")) {
-                    String prop = parts[2].trim();
-                    // FIX!!
-                    boolean skipLetters = false;
-                    if (prop.equals("Alphabetic")) {
-                        prop = "Other_Alphabetic";
-                        skipLetters = true;
-                    }
-                    // END FIX!!
-                    properties.add(prop);
-                    if (Utility.find(prop, UCD_Names.DeletedProperties, true) == -1) { // only undeleted
-                        int end = UTF32.char32At(Utility.fromHex(parts[1]),0);
-                        if (end == 0) end = cpStart;
+					    for (int i = 1; i < labels.length; ++i) {
+					        String key = labels[i];
+					        lastVal = val;
+					        if (isHex.get(key) != null) {
+					            val = Utility.fromHex(parts[i]);
+					        } else {
+					            val = parts[i].trim();
+					        }
+					        if (key.equals("OMIT")) continue; // do after val, so lastVal is correct
+					        if (key.equals("RANGE")) continue; // do after val, so lastVal is correct
+					        if (val.equals("")) continue; // skip empty values, they mean default
 
-                        for (int j = cpStart; j <= end; ++j) {
-                            if (j != UCD.mapToRepresentative(j, Integer.MAX_VALUE)) continue;
-                            if (skipLetters && getEntry(cpStart).isLetter()) continue;
-                            appendCharProperties(j, prop);
-                        }
-                    }
-                } else { // not range!
-                    String val = "";
-                    String lastVal;
+					        for (int cps = cpStart; cps <= cpTop; ++cps) {
+					            if (UCD.mapToRepresentative(cps, Integer.MAX_VALUE) != cps) continue;    // skip condensed ranges
 
-                    for (int i = 1; i < labels.length; ++i) {
-                        String key = labels[i];
-                        lastVal = val;
-                        if (isHex.get(key) != null) {
-                            val = Utility.fromHex(parts[i]);
-                        } else {
-                            val = parts[i].trim();
-                        }
-                        if (key.equals("OMIT")) continue; // do after val, so lastVal is correct
-                        if (key.equals("RANGE")) continue; // do after val, so lastVal is correct
-                        if (val.equals("")) continue; // skip empty values, they mean default
-
-                        for (int cps = cpStart; cps <= cpTop; ++cps) {
-                            if (UCD.mapToRepresentative(cps, Integer.MAX_VALUE) != cps) continue;    // skip condensed ranges
-
-                            if (key.equals("binary")) {
-                                appendCharProperties(cps, val);
-                            } else if (key.equals("fc")) {
-                                UData data = getEntry(cps);
-                                String type = parts[i-1].trim();
-                                if (type.equals("F") || type.equals("C") || type.equals("E") || type.equals("L")) {
-                                    data.fullCaseFolding = val;
-                                    //System.out.println("*<" + parts[i-1] + "> Setting " + Utility.hex(cps) + ": " + Utility.hex(val));
-                                }
-                                if (type.equals("S") || type.equals("C") || type.equals("L")) {
-                                    data.simpleCaseFolding = val;
-                                    //System.out.println("<" + parts[i-1] + "> Setting " + Utility.hex(cps) + ": " + Utility.hex(val));
-                                }
-                                if (type.equals("I")) {
-                                    data.simpleCaseFolding = val;
-                                    setBinaryProperty(cps, CaseFoldTurkishI);
-                                    if (DEBUG) System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " 
-                                    	+ Utility.hex(cps) + ": " + Utility.hex(val));
-                                }
-                            } else if (labels[0].equals("SpecialCasing")   // special handling for special casing
-                            			&& labels[4].equals("sc")
-                                		&& parts[4].trim().length() > 0) {
-                                if (i < 4) {
-                                	if (DEBUG) System.out.println("Got special: " + Utility.hex(cps) + ", " 
-                                		+ Utility.hex(key) + ":" + Utility.hex(val));
-                                	addCharData(cps, "sc", parts[4].trim() + ":" + key + ":" + val);
-                                }
-                            } else {
-                                /*if (key.equals("sn")) { // SKIP UNDEFINED!!
-                                    UData data = getEntryIfExists(cps);
-                                    if (data == null || data.generalCategory == Cn) continue;
-                                }
-                                */
-                                addCharData(cps, key, val);
-                            }
-                        }
-                    }
-                }
+					            if (key.equals("binary")) {
+					                appendCharProperties(cps, val);
+					            } else if (key.equals("fc")) {
+					                UData data = getEntry(cps);
+					                String type = parts[i-1].trim();
+					                if (type.equals("F") || type.equals("C") || type.equals("E") || type.equals("L")) {
+					                    data.fullCaseFolding = val;
+					                    //System.out.println("*<" + parts[i-1] + "> Setting " + Utility.hex(cps) + ": " + Utility.hex(val));
+					                }
+					                if (type.equals("S") || type.equals("C") || type.equals("L")) {
+					                    data.simpleCaseFolding = val;
+					                    //System.out.println("<" + parts[i-1] + "> Setting " + Utility.hex(cps) + ": " + Utility.hex(val));
+					                }
+					                if (type.equals("I")) {
+					                    data.simpleCaseFolding = val;
+					                    setBinaryProperty(cps, CaseFoldTurkishI);
+					                    if (DEBUG) System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " 
+					                    	+ Utility.hex(cps) + ": " + Utility.hex(val));
+					                }
+					            } else if (labels[0].equals("SpecialCasing")   // special handling for special casing
+					            			&& labels[4].equals("sc")
+					                		&& parts[4].trim().length() > 0) {
+					                if (i < 4) {
+					                	if (DEBUG) System.out.println("Got special: " + Utility.hex(cps) + ", " 
+					                		+ Utility.hex(key) + ":" + Utility.hex(val));
+					                	addCharData(cps, "sc", parts[4].trim() + ":" + key + ":" + val);
+					                }
+					            } else {
+					                /*if (key.equals("sn")) { // SKIP UNDEFINED!!
+					                    UData data = getEntryIfExists(cps);
+					                    if (data == null || data.generalCategory == Cn) continue;
+					                }
+					                */
+					                addCharData(cps, key, val);
+					            }
+					        }
+					    }
+					}
+				} catch (Exception e) {
+		            System.err.println("*Exception at: " + line + ", " + e.getMessage());
+					//System.err.println(e.getMessage());
+				}
             }
         } catch (Exception e) {
             System.out.println("Exception at: " + line + ", " + e.getMessage());
