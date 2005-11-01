@@ -36,12 +36,12 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
 
     private static Class serializable;
 
-    static {
+    public void init() {
         try {    
             serializable = Class.forName("java.io.Serializable");
         } catch (Exception e) {
             // we're in deep trouble...
-            System.out.println("Woops! Can't get class info for Serializable.");
+            warnln("Woops! Can't get class info for Serializable.");
         }
     }
 
@@ -132,6 +132,9 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
     
     public void visit(String str)
     {
+        if(serializable==null){
+            return;
+        }
         int ix = str.lastIndexOf(".class");
         
         if (ix >= 0) {
@@ -163,7 +166,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                                 out.close();
                                 byteOut.close();
                             } catch (IOException e) {
-                                System.out.println("Eror writing test objects: " + e.toString());
+                                warnln("Eror writing test objects: " + e.toString());
                                 return;
                             }
                             
@@ -174,7 +177,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                     }
                 }
            } catch (Exception e) {
-                System.out.println("Error processing " + className + ": " + e.toString());
+                warnln("Error processing " + className + ": " + e.toString());
             }
         }
     }
