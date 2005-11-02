@@ -538,6 +538,7 @@ public class TestFmwk extends AbstractTestLog {
     public int runTests(TestParams params, String[] tests) {
         int ec = 0;
         
+        StringBuffer summary = null;
         try {
             if (tests[0] == null) { // no args
                 params.init();
@@ -556,8 +557,11 @@ public class TestFmwk extends AbstractTestLog {
                     ec += params.errorCount;
                     
                     if (params.errorSummary != null && params.errorSummary.length() > 0) {
-                        params.log.println("\nError summary:");
-                        params.log.println(params.errorSummary.toString());
+                        if (summary == null) {
+                            summary = new StringBuffer();
+                        }
+                        summary.append("\nTest: " + tests[i]);
+                        summary.append(params.errorSummary());
                     }
                }
             }
@@ -567,6 +571,7 @@ public class TestFmwk extends AbstractTestLog {
             params.log.println("encountered exception, exiting");
         }
         
+        params.errorSummary = summary;
         return ec;
     }
     
