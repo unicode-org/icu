@@ -184,11 +184,15 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
     
     protected Target getTargets(String targetName)
     {
+        
         if (System.getSecurityManager() != null) {
             // This test won't run under a security manager
             return new CoverageTarget("Skipped Due To Security Manager", Modifier.ABSTRACT, null);
         }
         
+        if(serializable==null){
+            init();
+        }
         URL url = getClass().getResource("/com/ibm/icu");
         URLHandler handler  = URLHandler.get(url);
         
