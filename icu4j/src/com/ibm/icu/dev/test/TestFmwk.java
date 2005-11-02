@@ -982,7 +982,7 @@ public class TestFmwk extends AbstractTestLog {
         public long seed;
         public String tfilter; // for transliterator tests
 
-        private State stack;
+        public State stack;
 
         private StringBuffer errorSummary;
 
@@ -1015,11 +1015,13 @@ public class TestFmwk extends AbstractTestLog {
          */
         public static TestParams create(String[] args, PrintWriter log) {
             TestParams params = new TestParams();
+            
             if(log == null){
                 params.log = new NullWriter();
             }else{
                 params.log =  new ASCIIWriter(log, true);
             }
+            
             boolean usageError = false;
             String filter = null;
             int wx = 0; // write argets.
@@ -1161,7 +1163,7 @@ public class TestFmwk extends AbstractTestLog {
             random = seed == 0 ? null : new Random(seed);
         }
 
-        private class State {
+        public class State {
             State link;
             String name;
             StringBuffer buffer;
@@ -1171,7 +1173,7 @@ public class TestFmwk extends AbstractTestLog {
             int ic;
             int tc;
             boolean flushed;
-            boolean included;
+            public boolean included;
             long mem;
             long millis;
 
