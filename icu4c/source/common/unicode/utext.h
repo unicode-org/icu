@@ -1149,7 +1149,7 @@ struct UText {
 
     UBool           bPadding1, bPadding2, bPadding3;   /* pad UBools to 32 bit boudary */
 
-    int32_t         iPadding;                          /* pad int32 fields out to a 64 bit boudary.
+    int32_t         iPadding;                          /* pad int32 fields out to a 64 bit boudary. */
 
     /**
      * (public) Function pointer for UTextClone
