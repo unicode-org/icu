@@ -144,10 +144,12 @@ $(ICUDATA_SOURCE_ARCHIVE): $(ICUDATA_ARCHIVE) $(OUTDIR)
 	$(INVOKE) $(BINDIR)/icuswap -t$(ICUDATA_CHAR) $(ICUDATA_ARCHIVE) $(ICUDATA_SOURCE_ARCHIVE)
 endif
 else
+ifneq ($(ENABLE_STATIC),YES)
 ifeq ($(PKGDATA_MODE),common)
 # We have a source data common archive in the native endianess,
 # and it's what we want to build. Try to not run any of ICU's tools.
 ICUDATA_SOURCE_IS_NATIVE_TARGET=YES
+endif
 endif
 endif
 
