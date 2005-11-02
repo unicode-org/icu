@@ -585,7 +585,7 @@
             <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
             <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
             <arg value="-w"/>
-            <!-- arg value="Format/DateFormat/DateFormatTest/TestGenericTime"/ -->
+            <!-- arg value="Serializable/CoverageTest"/ -->
             <classpath>
                 <pathelement location="clover.jar"/>
                 <pathelement location="${jar.file}"/>
@@ -640,8 +640,8 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.4"/>
-                <param name="-output" value="${api.dir}/icu4j34.api"/>
+                <param name="-name" value="ICU4J 3.4.1"/>
+                <param name="-output" value="${api.dir}/icu4j341.api"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
@@ -650,12 +650,12 @@
     <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
             <arg value="-old:"/>
-            <arg value="${api.dir}/icu4j32.api.gz"/>
-            <arg value="-new:"/>
             <arg value="${api.dir}/icu4j34.api.gz"/>
+            <arg value="-new:"/>
+            <arg value="${api.dir}/icu4j34.1.api.gz"/>
             <arg value="-html"/>
             <arg value="-out:"/>
-            <arg value="${api.dir}/icu4j_compare_32_34.html"/>
+            <arg value="${api.dir}/icu4j_compare_34_341.html"/>
             <!-- arg value="icu4j_compare_32_34.txt"/> -->
         </java>
     </target>
