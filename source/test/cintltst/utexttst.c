@@ -86,7 +86,7 @@ static void TestAPI(void) {
     /* utext_clone()  */
     {
         UChar   uString[]  = {0x41, 0x42, 0x43, 0};
-        int32_t len;
+        int64_t len;
         UText   *uta;
         UText   *utb;
 
@@ -108,9 +108,9 @@ static void TestAPI(void) {
         UChar     uString[]  = {0x41, 0x42, 0x43, 0};
         UText     *uta;
         UChar32   c;
-        int32_t   len;
+        int64_t   len;
         UBool     b;
-        int32_t   i;
+        int64_t   i;
 
         status = U_ZERO_ERROR;
         uta = utext_openUChars(NULL, uString, -1, &status);
