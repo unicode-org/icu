@@ -88,34 +88,40 @@ public class CompatibilityTest extends TestFmwk
         
         protected void execute() throws Exception
         {
-            params.testCount += 1;
-
-            try {
-                ObjectInputStream in = new ObjectInputStream(inputStream);
-                Object inputObjects[] = (Object[]) in.readObject();
-                Object testObjects[] = handler.getTestObjects();
-                boolean passed = true;
-                
-                in.close();
-                inputStream.close();
-                
-                // TODO: add equality test...
-                // The commented out code below does that,
-                // but some test objects don't define an equals() method,
-                // and the default method is the same as the "==" operator...
-                for (int i = 0; i < testObjects.length; i += 1) {
-//                    if (! inputObjects[i].equals(testObjects[i])) {
-//                        errln("Input object " + i + " failed equality test.");
-//                    }
+            if (params.inDocMode()) {
+                // nothing to execute
+            } else if (!params.stack.included) {
+                ++params.invalidCount;
+            } else {
+                params.testCount += 1;
+    
+                try {
+                    ObjectInputStream in = new ObjectInputStream(inputStream);
+                    Object inputObjects[] = (Object[]) in.readObject();
+                    Object testObjects[] = handler.getTestObjects();
+                    boolean passed = true;
                     
-                    if (! handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
-                        warnln("Input object " + i + " failed behavior test.");
+                    in.close();
+                    inputStream.close();
+                    
+                    // TODO: add equality test...
+                    // The commented out code below does that,
+                    // but some test objects don't define an equals() method,
+                    // and the default method is the same as the "==" operator...
+                    for (int i = 0; i < testObjects.length; i += 1) {
+    //                    if (! inputObjects[i].equals(testObjects[i])) {
+    //                        errln("Input object " + i + " failed equality test.");
+    //                    }
+                        
+                        if (! handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
+                            warnln("Input object " + i + " failed behavior test.");
+                        }
                     }
+                }catch (MissingResourceException e){
+                    warnln("Could not load the data. "+e.getMessage());
+                } catch (Exception e) {
+                    errln("Exception: " + e.toString());
                 }
-            }catch (MissingResourceException e){
-                warnln("Could not load the data. "+e.getMessage());
-            } catch (Exception e) {
-                errln("Exception: " + e.toString());
             }
         }
     }
