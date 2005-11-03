@@ -37,6 +37,15 @@ public class XEquivalenceClass {
 	private Map obj_obj_reasons = new HashMap();
 	private Object defaultReason;
 	
+	/**
+	 * empty, as if just created
+	 */
+	public XEquivalenceClass clear(Object defaultReason) {
+		toPartitionSet.clear();
+		obj_obj_reasons.clear();
+		this.defaultReason = defaultReason;
+		return this;
+	}
 	
 	/**
 	 * Create class with comparator, and default reason.
