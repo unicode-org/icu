@@ -48,6 +48,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(11,TestHistorical);
         CASE(12,TestEquivalentIDs);
         CASE(13, TestAliasedNames);
+        CASE(14, TestFractionalDST);
        default: name = ""; break;
     }
 }
@@ -776,7 +777,7 @@ void TimeZoneTest::TestCustomParse()
     kData[] =
     {
         // ID        Expected offset in minutes
-        //"GMT",       kUnparseable,   Isn't custom. Can't test it here. [returns normal GMT]
+        //{"GMT",       kUnparseable},   //Isn't custom. Can't test it here. [returns normal GMT]
         {"GMT-YOUR.AD.HERE", kUnparseable},
         // {"GMT0",      kUnparseable}, // ICU 2.8: An Olson zone ID
         // {"GMT+0",     (0)}, // ICU 2.8: An Olson zone ID
@@ -1332,6 +1333,22 @@ TimeZoneTest::TestAlternateRules()
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/17/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
+}
+
+void TimeZoneTest::TestFractionalDST() {
+    const char* tzName = "Australia/Lord_Howe"; // 30 min offset
+    TimeZone* tz_icu = TimeZone::createTimeZone(tzName);
+	int dst_icu = tz_icu->getDSTSavings();
+    UnicodeString id;
+    int32_t expected = 1800000;
+	if (expected != dst_icu) {
+	    errln(UnicodeString("java reports dst savings of ") + expected +
+	        " but icu reports " + dst_icu + 
+	        " for tz " + tz_icu->getID(id));
+	} else {
+	    logln(UnicodeString("both java and icu report dst savings of ") + expected + " for tz " + tz_icu->getID(id));
+	}
+    delete tz_icu;
 }
 
 /**

@@ -363,6 +363,9 @@
 			Name="data &amp; memory"
 			Filter="">
 			<File
+				RelativePath=".\callimts.cpp">
+			</File>
+			<File
 				RelativePath=".\uobjtest.cpp">
 			</File>
 			<File
@@ -383,9 +386,6 @@
 			</File>
 			<File
 				RelativePath=".\calcasts.h">
-			</File>
-			<File
-				RelativePath=".\callimts.cpp">
 			</File>
 			<File
 				RelativePath=".\callimts.h">

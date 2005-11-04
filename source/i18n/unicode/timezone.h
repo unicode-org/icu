@@ -602,7 +602,23 @@ public:
      * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const = 0;
-
+    
+    /**
+     * Returns the amount of time to be added to local standard time
+     * to get local wall clock time.
+     * <p>
+     * The default implementation always returns 3600000 milliseconds
+     * (i.e., one hour) if this time zone observes Daylight Saving
+     * Time. Otherwise, 0 (zero) is returned.
+     * <p>
+     * If an underlying TimeZone implementation subclass supports
+     * historical Daylight Saving Time changes, this method returns
+     * the known latest daylight saving value.
+     *
+     * @return the amount of saving time in milliseconds
+     * @draft ICU 3.6
+     */
+    virtual inline int32_t getDSTSavings() const;
 protected:
 
     /**

@@ -1765,6 +1765,8 @@ DateFormatSymbols::getZoneID(const UnicodeString& zid, UnicodeString& result, UE
                 }
             }
         }
+    }else{
+        result.setTo(zid);
     }
     return result;
 }

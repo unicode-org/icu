@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2001, International Business Machines Corporation and
+ * Copyright (c) 1998-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -41,10 +41,11 @@ public:
     void Test4154650(void);
     void Test4154525(void);
     void Test4162593(void);
+    void Test4176686(void);
     void TestJ186(void);
     void TestJ449(void);
     void TestJDK12API(void);
-
+    void Test4184229(void);
     UBool checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);
 
 

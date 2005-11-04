@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -27,6 +27,7 @@
 
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
+#include "unicode/smpdtfmt.h"
 
 U_NAMESPACE_BEGIN
 
@@ -822,7 +823,7 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
-        } else if (startDay > STATICMONTHLENGTH[startMonth]) {
+        } else if (startDay<1 || startDay > STATICMONTHLENGTH[startMonth]) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
@@ -877,7 +878,7 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
-        } else if (endDay > STATICMONTHLENGTH[endMonth]) {
+        } else if (endDay<1 || endDay > STATICMONTHLENGTH[endMonth]) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
