@@ -473,7 +473,18 @@ UBool OlsonTimeZone::useDaylightTime() const {
     }
     return FALSE;
 }
-
+inline int32_t OlsonTimeZone::getDSTSavings() const{
+    if(finalZone!=NULL){
+        return finalZone->getDSTSavings();
+    }
+    // return super->getDSTSavings();
+    // this is basically identical to implementation in
+    // superclass timezone
+    if (useDaylightTime()) {
+    	return 3600000;
+    }
+    return 0;
+}
 /**
  * TimeZone API.
  */

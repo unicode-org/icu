@@ -84,7 +84,9 @@ public:
     void TestEquivalentIDs(void);
 
     void TestAliasedNames(void);
-
+    
+    void TestFractionalDST(void);
+    
     static const UDate INTERVAL;
 
 private:

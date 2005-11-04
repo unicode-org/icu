@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -208,6 +208,8 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
      * TimeZone API.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& ec) const;
+
+    virtual inline int32_t getDSTSavings() const;
 
  protected:
     /**
