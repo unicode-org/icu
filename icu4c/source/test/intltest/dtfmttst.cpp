@@ -176,6 +176,9 @@ DateFormatTest::TestEquals()
     if (!(*fmtA == *fmtB)) errln((UnicodeString)"FAIL");
     delete fmtA;
     delete fmtB;
+
+    TimeZone* test = TimeZone::createTimeZone("PDT");
+    delete test;
 }
  
 // -------------------------------------
@@ -191,13 +194,21 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     SimpleDateFormat *fmt = new SimpleDateFormat((UnicodeString)"dd-MMM-yy h:mm:ss 'o''clock' a z", Locale::getEnglish(), status);
     //DateFormat* fmt = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, Locale::ENGLISH);
     UnicodeString* s = new UnicodeString("03-Apr-04 2:20:47 o'clock AM PST", "");
-    int32_t hour = 2;
-
+    TimeZone* defaultTZ = TimeZone::createDefault();
+    TimeZone* PST = TimeZone::createTimeZone("PST");
+    int32_t defaultOffset = defaultTZ->getRawOffset();
+    int32_t PSTOffset = PST->getRawOffset();
+    int32_t hour = 2 + (defaultOffset - PSTOffset) / (60*60*1000);
+    // hour is the expected hour of day, in units of seconds
+    hour = ((hour < 0) ? hour + 24 : hour) * 60*60;
+    
     UnicodeString str;
     UDate d = fmt->parse(*s, status);
     logln(*s + " P> " + ((DateFormat*)fullFmt)->format(d, str));
     int32_t y, m, day, hr, min, sec;
     dateToFields(d, y, m, day, hr, min, sec);
+    hour += defaultTZ->inDaylightTime(d, status) ? 1 : 0;
+    hr = hr*60*60;
     if (hr != hour)
         errln((UnicodeString)"FAIL: Should parse to hour " + hour + " but got " + hr);
 
@@ -207,6 +218,8 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     delete s;
     delete fmt;
     delete fullFmt;
+    delete PST;
+    delete defaultTZ;
 }
  
 // -------------------------------------

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -79,7 +79,8 @@ public: // package
      * Use a stepwise march to find boundaries.
      */ 
     virtual void TestStepwise(void);
-
+    void verifyMapping(Calendar& cal, int year, int month, int dom, int hour,
+                    double epochHours) ;
 private:
     const UDate ONE_SECOND;
     const UDate ONE_MINUTE;

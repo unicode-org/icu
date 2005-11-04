@@ -215,6 +215,16 @@ CalendarRegressionTest::test4031502()
     UErrorCode status = U_ZERO_ERROR;
     StringEnumeration* ids = TimeZone::createEnumeration();
     UBool bad = FALSE;
+    TimeZone* tz =TimeZone::createTimeZone("Asia/Riyadh87");
+    failure(status, "new TimeZone");
+    GregorianCalendar *cl = new GregorianCalendar(tz, status);
+    failure(status, "new GregorianCalendar");
+    cl->clear();
+    cl->set(1900, 15, 5, 5, 8, 13);
+    cl->get(UCAL_HOUR, status);
+    failure(status, "cl->get(UCAL_HOUR, status)");
+    status = U_ZERO_ERROR;
+    delete tz;
     for (int32_t i=0; i<ids->count(status); ++i) {
         TimeZone *zone = TimeZone::createTimeZone(*ids->snext(status));
         GregorianCalendar *cal = new GregorianCalendar(zone, status);
