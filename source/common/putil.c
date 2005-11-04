@@ -1213,7 +1213,8 @@ extern U_IMPORT char *U_TZNAME[];
 #if defined(U_DARWIN)   /* For Mac OS X */
 #define TZZONELINK      "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
-static char *gTimeZoneBuffer = NULL; /* Heap allocated */
+static char gTimeZoneBuffer[MAXPATHLEN + 2]; /* Heap allocated */
+static char *gTimeZoneBufferPtr = NULL;
 #endif
 
 U_CAPI const char* U_EXPORT2
@@ -1224,17 +1225,26 @@ uprv_tzname(int n)
     if (id != NULL) {
         return id;
     }
-#endif
-
-#if defined(U_DARWIN)
+#elif defined(U_DARWIN)
     int ret;
-
     char *tzenv;
 
     tzenv = getenv("TZFILE");
     if (tzenv != NULL) {
         return tzenv;
     }
+
+    /* Caller must handle threading issues */
+    if (gTimeZoneBufferPtr == NULL) {
+        ret = readlink(TZZONELINK, gTimeZoneBuffer, sizeof(gTimeZoneBuffer));
+        if (0 < ret) {
+            gTimeZoneBuffer[ret] = 0;
+            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
+                return (gTimeZoneBufferPtr = gTimeZoneBuffer + sizeof(TZZONEINFO) - 1);
+            }
+        }
+    }
+#endif
 
 #if 0
     /* TZ is often set to "PST8PDT" or similar, so we cannot use it. Alan */
@@ -1244,23 +1254,6 @@ uprv_tzname(int n)
     }
 #endif
     
-    /* Caller must handle threading issues */
-    if (gTimeZoneBuffer == NULL) {
-        gTimeZoneBuffer = (char *) uprv_malloc(MAXPATHLEN + 2);
-
-        ret = readlink(TZZONELINK, gTimeZoneBuffer, MAXPATHLEN + 2);
-        if (0 < ret) {
-            gTimeZoneBuffer[ret] = '\0';
-            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
-                return (gTimeZoneBuffer += sizeof(TZZONEINFO) - 1);
-            }
-        }
-
-        uprv_free(gTimeZoneBuffer);
-        gTimeZoneBuffer = NULL;
-    }
-#endif
-
 #ifdef U_TZNAME
     return U_TZNAME[n];
 #else
