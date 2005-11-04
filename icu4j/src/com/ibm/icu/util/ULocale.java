@@ -1728,7 +1728,7 @@ public final class ULocale implements Serializable {
         private Comparator getKeyComparator() {
             final Comparator comp = new Comparator() {
                     public int compare(Object lhs, Object rhs) {
-                        return ((String)lhs).compareTo(rhs);
+                        return ((String)lhs).compareTo((String)rhs);
                     }
                 };
             return comp;

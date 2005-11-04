@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -427,7 +427,7 @@ public class ICUServiceTest extends TestFmwk
             logln("display names in reverse order: " +
                   service.getDisplayNames(ULocale.US, new Comparator() {
                           public int compare(Object lhs, Object rhs) {
-                              return -String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
+                              return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
                           }
                       }));
         }
@@ -776,7 +776,7 @@ public class ICUServiceTest extends TestFmwk
             SortedMap map = service.getDisplayNames(ULocale.US,
                             new Comparator() {
                                 public int compare(Object lhs, Object rhs) {
-                                return -String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
+                                return -String.CASE_INSENSITIVE_ORDER.compare((String)lhs, (String)rhs);
                                 }
                             },
                             "es");
