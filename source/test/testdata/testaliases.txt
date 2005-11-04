@@ -56,7 +56,7 @@ testaliases
         :alias { "te/zoneStrings/2/4" } //"PDT",
         :alias { "te/zoneStrings/2/5" } //"Los Angeles",
     }
-
+    testAliasToTree:alias{"/ICUDATA-coll/en/collations"}
 
 }
 

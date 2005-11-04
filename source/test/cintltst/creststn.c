@@ -2268,6 +2268,10 @@ static void TestResourceLevelAliasing(void) {
             }
         }
     }
+    tb = ures_getByKey(aliasB, "testAliasToTree", tb, &status);
+    if(U_FAILURE(status)){
+        log_err("Fetching the resource with key %s failed. Error: %s\n", "testAliasToTree", u_errorName(status));
+    }
 cleanup:
     ures_close(aliasB);
     ures_close(tb);
