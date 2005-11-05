@@ -618,7 +618,7 @@ public:
      * @return the amount of saving time in milliseconds
      * @draft ICU 3.6
      */
-    virtual inline int32_t getDSTSavings() const;
+    virtual int32_t getDSTSavings() const;
 protected:
 
     /**

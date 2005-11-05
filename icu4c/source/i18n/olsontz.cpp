@@ -473,7 +473,8 @@ UBool OlsonTimeZone::useDaylightTime() const {
     }
     return FALSE;
 }
-inline int32_t OlsonTimeZone::getDSTSavings() const{
+int32_t 
+OlsonTimeZone::getDSTSavings() const{
     if(finalZone!=NULL){
         return finalZone->getDSTSavings();
     }
