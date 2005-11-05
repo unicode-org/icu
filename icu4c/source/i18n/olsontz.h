@@ -209,7 +209,7 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& ec) const;
 
-    virtual inline int32_t getDSTSavings() const;
+    virtual int32_t getDSTSavings() const;
 
  protected:
     /**

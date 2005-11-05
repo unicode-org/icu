@@ -645,7 +645,7 @@ public:
      * are in effect. A positive number, typically one hour (3600000).
      * @stable ICU 2.0
      */
-    int32_t getDSTSavings(void) const;
+    virtual int32_t getDSTSavings(void) const;
 
     /**
      * Queries if this TimeZone uses Daylight Savings Time.
