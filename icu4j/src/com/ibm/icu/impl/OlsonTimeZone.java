@@ -685,7 +685,7 @@ public class OlsonTimeZone extends TimeZone {
     			   transitionCount ^ (transitionCount>>>6) +
     			   typeCount ^ (typeCount>>>8) + 
     			   Double.doubleToLongBits(finalMillis)+
-    			   finalZone.hashCode() + 
+    			   (finalZone == null ? 0 : finalZone.hashCode()) + 
     			   super.hashCode());
     	for(int i=0; i<transitionTimes.length; i++){
     		ret+=transitionTimes[i]^(transitionTimes[i]>>>8);

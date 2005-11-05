@@ -248,7 +248,6 @@ public class SimpleDateFormat extends DateFormat {
     private DateFormatSymbols formatData;
 
     private transient ULocale locale;
-    private transient boolean formatDataIsValid;
 
     /**
      * We map dates with two-digit years into the century starting at
@@ -459,9 +458,6 @@ public class SimpleDateFormat extends DateFormat {
     private void initialize(ULocale loc) {
         // time zone formatting
         locale = loc;
-        this.formatDataIsValid = 
-            LocaleUtility.isFallbackOf(formatData.getLocale(ULocale.ACTUAL_LOCALE).getBaseName(),
-                                       loc.getBaseName());
 
         // The format object must be constructed using the symbols for this zone.
         // However, the calendar should use the current default TimeZone.
@@ -816,6 +812,7 @@ public class SimpleDateFormat extends DateFormat {
         case 17: // 'z' - ZONE_OFFSET
         case 24: // 'v' - TIMEZONE_GENERIC 
             {
+
                 String zid;
                 String res=null;
                 zid = ZoneMeta.getCanonicalID(cal.getTimeZone().getID());
