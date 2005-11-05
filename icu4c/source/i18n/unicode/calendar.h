@@ -52,7 +52,7 @@ typedef const void* URegistryKey;
  */
 typedef int32_t UFieldResolutionTable[12][8];
 
-/**.
+/**
  * <code>Calendar</code> is an abstract base class for converting between
  * a <code>UDate</code> object and a set of integer fields such as
  * <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>, <code>HOUR</code>,
