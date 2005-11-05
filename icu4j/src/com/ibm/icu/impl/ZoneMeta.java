@@ -284,15 +284,14 @@ public final class ZoneMeta {
 
         String country_code = info[1];
         if (country_code == null) {
-        	return null; // error!   
+            return null; // error!   
         }
 
         String country = null;
         if (country_code != null) {
             ICUResourceBundle rb = 
                 (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-            String rblocname = rb.getULocale().getBaseName();
-            if (LocaleUtility.isFallbackOf(rblocname, locale.getBaseName())) {  
+            if (rb.getLoadingStatus() != rb.FROM_ROOT && rb.getLoadingStatus() != rb.FROM_DEFAULT) {
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
             }
             if (country == null || country.length() == 0) country = country_code;

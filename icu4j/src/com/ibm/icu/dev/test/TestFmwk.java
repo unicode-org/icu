@@ -69,6 +69,7 @@ public class TestFmwk extends AbstractTestLog {
         }
         
         String msg = ex.getMessage();
+        System.err.println("TF handleException msg: " + msg);
         if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError) {
             if (params.warnings || params.nodata) {
                 warnln(msg);
@@ -989,9 +990,9 @@ public class TestFmwk extends AbstractTestLog {
 
         public State stack;
 
-        private StringBuffer errorSummary;
+        public StringBuffer errorSummary;
 
-        private PrintWriter log;
+        public PrintWriter log;
         public int indentLevel;
         private boolean needLineFeed;
         private boolean suppressIndent;

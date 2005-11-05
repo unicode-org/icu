@@ -25,6 +25,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     private String localeID;
     private String baseName;
     private ULocale ulocale;
+    private ClassLoader loader;
 
     /**
      * 
@@ -47,7 +48,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         byte[] rawData = reader.getData();
         long rootResource = (UNSIGNED_INT_MASK) & getInt(rawData, 0);
         ICUResourceBundleImpl bundle = new ICUResourceBundleImpl(rawData,
-                baseName, localeID, rootResource);
+                baseName, localeID, rootResource, root);
         return bundle.getBundle();
     }
 
@@ -99,12 +100,13 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         }
     }
     private ICUResourceBundleImpl(byte[] rawData, String baseName,
-            String localeID, long rootResource) {
+            String localeID, long rootResource, ClassLoader loader) {
         this.rawData = rawData;
         this.rootResource = rootResource;
         this.baseName = baseName;
         this.localeID = localeID;
         this.ulocale = new ULocale(localeID);
+        this.loader = loader;
     }
     static final int RES_GET_TYPE(long res) {
         return (int) ((res) >> 28L);
@@ -600,6 +602,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     }
     private ICUResourceBundle findResource(String key, long resource,
             HashMap table, ICUResourceBundle requested) {
+
+        ClassLoader loaderToUse = loader;
+
         String locale = null, keyPath = null;
         String bundleName;
         String resPath = getStringValue(resource);
@@ -623,6 +628,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             //there is a path included
             if (bundleName.equals(ICUDATA)) {
                 bundleName = ICU_BASE_NAME;
+                loaderToUse = ICU_DATA_CLASS_LOADER;
             }
         } else {
             //no path start with locale
@@ -643,11 +649,12 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             keyPath = resPath.substring(LOCALE.length() + 2/* prepending and appending / */, resPath.length());
             locale = requested.getLocaleID();
         }else if (locale == null) {
+            // {dlf} must use requestor's class loader to get resources from same jar
             bundle = (ICUResourceBundle) getBundleInstance(bundleName, "",
-                    ICU_DATA_CLASS_LOADER, false);
+                     loaderToUse, false); 
         } else {
             bundle = (ICUResourceBundle) getBundleInstance(bundleName, locale,
-                    ICU_DATA_CLASS_LOADER, false);
+                     loaderToUse, false);
         }
         ICUResourceBundle sub = null;
         if (keyPath != null) {

@@ -724,7 +724,7 @@ public final class ULocale implements Serializable {
     /**
      * Construct a ULocale object from a {@link java.util.Locale}.
      * @param loc a JDK locale
-     * @draft ICU 2.8
+     * @stable ICU 2.8
      * @internal
      */
     private ULocale(Locale loc) {
@@ -2626,7 +2626,6 @@ public final class ULocale implements Serializable {
     availableLocales, boolean[] fallback) {
         /**
          * @internal ICU 3.4
-         * @deprecated this is an internal class
          */
         class ULocaleAcceptLanguageQ implements Comparable {
             private double q;

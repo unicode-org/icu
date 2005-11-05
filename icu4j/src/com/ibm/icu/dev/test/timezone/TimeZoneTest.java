@@ -17,6 +17,7 @@ package com.ibm.icu.dev.test.timezone;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.*;
+import com.ibm.icu.text.SimpleDateFormat;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -316,8 +317,10 @@ public class TimeZoneTest extends TestFmwk
         TimeZone zone = TimeZone.getTimeZone("PST");
         String name = zone.getDisplayName(Locale.ENGLISH);
         logln("PST->" + name);
-        if (!name.equals("Pacific Standard Time"))
-            errln("Fail: Expected \"Pacific Standard Time\", got " + name +
+
+        // dlf - we now (3.4.1) return generic time
+        if (!name.equals("Pacific Time"))
+            errln("Fail: Expected \"Pacific Time\", got " + name +
                   " for " + zone);
 
         //*****************************************************************
@@ -344,14 +347,16 @@ public class TimeZoneTest extends TestFmwk
 
         // Make sure that we don't display the DST name by constructing a fake
         // PST zone that has DST all year long.
+        // dlf - this test is no longer relevant, we display generic time now
+        //    so the behavior of the timezone doesn't matter
         SimpleTimeZone zone2 = new SimpleTimeZone(0, "PST");
         zone2.setStartRule(Calendar.JANUARY, 1, 0);
         zone2.setEndRule(Calendar.DECEMBER, 31, 0);
         logln("Modified PST inDaylightTime->" + zone2.inDaylightTime(new Date()));
         name = zone2.getDisplayName(Locale.ENGLISH);
         logln("Modified PST->" + name);
-        if (!name.equals("Pacific Standard Time"))
-            errln("Fail: Expected \"Pacific Standard Time\"");
+        if (!name.equals("Pacific Time"))
+            errln("Fail: Expected \"Pacific Time\"");
 
         // Make sure we get the default display format for Locales
         // with no display name data.
@@ -378,16 +383,18 @@ public class TimeZoneTest extends TestFmwk
             if (!name.equals("Pacific Standard Time"))
                 errln("Fail: Expected Pacific Standard Time for PST in mt_MT but got ");
         }
-        else if(!name.equals("Pacific Standard Time") &&
+        // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone 
+        //     - we now (3.4.1) have localizations for this zone, so change test string
+        else if(!name.equals("Los Angeles (Stati Uniti)") &&
             !name.equals("GMT-08:00") &&
             !name.equals("GMT-8:00") &&
             !name.equals("GMT-0800") &&
             !name.equals("GMT-800")) {
 
-            errln("Fail: Expected GMT-08:00 or something similar");
-            errln("************************************************************");
-            errln("THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED");
-            errln("************************************************************");
+            errln("Fail: got '" + name + "', expected GMT-08:00 or something similar\n" +
+                  "************************************************************\n" +
+                  "THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED\n" +
+                  "************************************************************");
         }
         
         // Now try a non-existent zone
@@ -411,6 +418,30 @@ public class TimeZoneTest extends TestFmwk
             !name.equals("GMT+130"))
             errln("Fail: Expected GMT+01:30 or something similar");        
         ULocale.setDefault(save);
+    }
+
+
+    public void TestDisplayName2() {
+        // Date now = new Date();
+        Date then = new Date(2005, 0, 1);
+
+        String[] timezones = {"America/Chicago", "Europe/Moscow", "Europe/Rome", "Asia/Shanghai", "WET" };
+        String[] locales = {"en", "fr", "de", "ja", "zh_TW", "zh_Hans" };
+        for (int j = 0; j < locales.length; ++j) {
+            ULocale locale = new ULocale(locales[j]);
+            for (int i = 0; i < timezones.length; ++i) {
+                TimeZone tz = TimeZone.getTimeZone(timezones[i]);
+                String displayName0 = tz.getDisplayName(locale); // doesn't work???
+                SimpleDateFormat dt = new SimpleDateFormat("vvvv", locale);
+                dt.setTimeZone(tz);
+                String displayName1 = dt.format(then);  // date value _does_ matter if we fallback to GMT
+                logln(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
+                if (!displayName1.equals(displayName0)) {
+                    errln(locale.getDisplayName() + ", " + tz.getID() + 
+                          ": expected " + displayName1 + " but got: " + displayName0);
+                }
+            }
+        }
     }
 
     public void TestGenericAPI() {
