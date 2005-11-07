@@ -1748,11 +1748,11 @@ public class SimpleDateFormat extends DateFormat {
                     inQuote = true;
                 else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                     int ci = from.indexOf(c);
-                    if (ci == -1)
-                        throw new IllegalArgumentException("Illegal pattern " +
-                                                           " character '" +
-                                                           c + "'");
-                    c = to.charAt(ci);
+                    if (ci != -1) {
+                        c = to.charAt(ci);
+                    }
+                    // do not worry on translatepattern if the character is not listed
+                    // we do the validity check elsewhere
                 }
             }
             result.append(c);
