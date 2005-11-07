@@ -82,39 +82,54 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // Constants for context
     /**
      * Constant for context.
-     * @draft ICU 3.4
+     * @draft ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int FORMAT = 0;
 
     /**
      * Constant for context.
-     * @draft ICU 3.4
+     * @draft ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int STANDALONE = 1;
 
+    /**
+     * Constant for context.
+     * @draft ICU 3.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int DT_CONTEXT_COUNT = 2;
+
     // Constants for width
-    /**
-     * Constant for width.
-     * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     */
-    public static final int WIDE = 4;
 
     /**
      * Constant for width.
-     * @draft ICU 3.4
+     * @draft ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final int ABBREVIATED = 3;
+    public static final int ABBREVIATED = 0;
 
     /**
      * Constant for width.
-     * @draft ICU 3.4
+     * @draft ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final int NARROW = 5;
+    public static final int WIDE = 1;
+
+    /**
+     * Constant for width.
+     * @draft ICU 3.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int NARROW = 2;
+
+    /**
+     * Constant for width.
+     * @draft ICU 3.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int DT_WIDTH_COUNT = 3;
 
     /**
      * Construct a DateFormatSymbols object by loading format data from
@@ -564,7 +579,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
            case FORMAT :
               switch(width) {
                  case WIDE :
-                    months = duplicate(newWeekdays);
+                    weekdays = duplicate(newWeekdays);
                     break;
                  case ABBREVIATED :
                     shortWeekdays = duplicate(newWeekdays);
