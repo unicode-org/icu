@@ -1833,6 +1833,25 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestChineseDateFormatLocalizedPatternChars() {
+        // jb 4904
+        // make sure we can display localized versions of the chars used in the default
+        // chinese date format patterns
+        Calendar chineseCalendar = new ChineseCalendar();
+        chineseCalendar.setTimeInMillis((new Date()).getTime());
+        SimpleDateFormat longChineseDateFormat = 
+            (SimpleDateFormat)chineseCalendar.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, Locale.CHINA );
+        DateFormatSymbols dfs = new ChineseDateFormatSymbols( chineseCalendar, Locale.CHINA );
+        longChineseDateFormat.setDateFormatSymbols( dfs );
+        // This next line throws the exception
+        try {
+            String longFormatPattern = longChineseDateFormat.toLocalizedPattern();
+        }
+        catch (Exception e) {
+            errln("could not localized pattern: " + e.getMessage());
+        }
+    }
+
     public void TestCoverage() {
         Date now = new Date();
         Calendar cal = new GregorianCalendar();
