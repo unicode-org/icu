@@ -756,7 +756,20 @@ public class GlobalizationPreferences {
 		{"zh", "CN"},
 		{"zh_Hant", "TW"},
 		{"zu", "ZA"},
-	};
+		{"aa", "ET"},
+		{"byn", "ER"},
+		{"eo", "DE"},
+		{"gez", "ET"},
+		{"haw", "US"},
+		{"iu", "CA"},
+		{"kw", "GB"},
+		{"sa", "IN"},
+		{"sh", "HR"},
+		{"sid", "ET"},
+		{"syr", "SY"},
+		{"tig", "ER"},
+		{"tt", "RU"},
+		{"wal", "ET"},	};
 	static {
 		for (int i = 0; i < language_territory_hack.length; ++i) {
 			language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
