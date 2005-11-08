@@ -137,8 +137,8 @@ Show [$name:«.*LETTER.*» - $alphabetic]
 
 # Pattern characters are invariant!
 # Add after 4.1.0
-#$Pattern_Whitespace = $×Pattern_Whitespace
-#$Pattern_Syntax = $×Pattern_Syntax
+$Pattern_Whitespace = $×Pattern_Whitespace
+$Pattern_Syntax = $×Pattern_Syntax
 
 #BIDI invariant constants
 Let $R_blocks = [$block:Kharoshthi $block:Hebrew $block:Cypriot_Syllabary  \u07C0-\u08FF \uFB1D-\uFB4F \U00010840-\U00010FFF]

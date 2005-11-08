@@ -1,7 +1,7 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -151,6 +151,7 @@ public abstract class Tabber {
             setPostfix("</tr>");
         }
         public void setParameters(int count, String params) {
+        	while (count >= parameters.size()) parameters.add(null);
             parameters.set(count,params);
         }
         

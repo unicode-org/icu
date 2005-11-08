@@ -406,7 +406,11 @@ public class MakeNamesChart {
 			//String hex = Utility.hex(cp);
 			//return "<img alt='" + hex + "' src='http://www.unicode.org/cgi-bin/refglyph?24-" + hex + "'>";
 		}
+		
 		int type = Default.ucd().getCategory(cp);
+		if (type == UCD.Cn || type == UCD.Co || type == UCD.Cs) {
+			return "\u2588";
+		}
 		String result = BagFormatter.toHTML.transliterate(UTF16.valueOf(cp));
 		if (type == UCD.Me || type == UCD.Mn) {
 			result = "\u25CC" + result;

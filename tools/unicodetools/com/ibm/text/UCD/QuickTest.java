@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/11/01 00:10:54 $
-* $Revision: 1.8 $
+* $Date: 2005/11/08 05:19:59 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -32,8 +32,8 @@ import com.ibm.text.utility.*;
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
 		try {
-			//getBidiMirrored();
-			getCaseFoldingUnstable();
+			getBidiMirrored();
+			//getCaseFoldingUnstable();
 			if (true) return;
 			getHasAllNormalizations();
 			getLengths("NFC", Default.nfc());
@@ -115,61 +115,116 @@ public class QuickTest implements UCD_Types {
 		}
 	}
 
+	static UnicodeMap.Composer MyComposer = new UnicodeMap.Composer(){
+		public Object compose(int codePoint, Object a, Object b) {
+			if (a == null) return b;
+			if (b == null) return a;
+			return a + "; " + b;
+		}		
+	};
 
-
-	private static void getBidiMirrored() {
-		ToolUnicodePropertySource foo = ToolUnicodePropertySource.make("");
+	static void add(UnicodeMap map, int cp, String s) {
+		String x = (String) map.getValue(cp);
+		if (x == null) map.put(cp, s);
+		else map.put(cp, x + "; " + s);
+	}
+	
+	private static void getBidiMirrored() throws IOException {
+		//UnicodeMap.Composer composer;
+		//ToolUnicodePropertySource foo = ToolUnicodePropertySource.make("");
+		UnicodeSet proposed = new UnicodeSet("[\u0F3A-\u0F3D\u169B\u169C\u2018-\u201F\u301D-\u301F\uFD3E\uFD3F\uFE59-\uFE5E\uFE64\uFE65\\U0001D6DB\\U0001D715\\U0001D74F\\U0001D789\\U0001D7C3]");
+		//UnicodeSet proposed = new UnicodeSet("[\u0F3A-\u0F3D\u169B\u169C\u2018-\u201F\u301D-\u301F\uFD3E\uFD3F\uFE59-\uFE5E\uFE64\uFE65]");
 		UnicodeMap status = new UnicodeMap();
-		status.putAll(foo.getSet("generalcategory=ps"), "*open/close*");
-		status.putAll(foo.getSet("generalcategory=pe"), "*open/close*");
-		status.putAll(foo.getSet("generalcategory=pi"), "*open/close*");
-		status.putAll(foo.getSet("generalcategory=pf"), "*open/close*");
+		UCD ucd31 = UCD.make("3.1.0");
+		for (int cp = 0; cp < 0x10FFFF; ++cp) {
+			if (!Default.ucd().isAssigned(cp)) continue;
+			if (Default.ucd().isPUA(cp)) continue;
+			
+			if (proposed.contains(cp)) {
+				add(status, cp, "***");
+			}
+
+			int type = Default.ucd().getCategory(cp);
+			if (type == UCD.Ps || type == Pe || type == Pi || type == Pf) {
+				add(status, cp, "Px");
+			}
+			
+			String s = Default.ucd().getBidiMirror(cp);
+			if (!s.equals(UTF16.valueOf(cp))) add(status, cp, "bmg");
+			
+			if (ucd31.getBinaryProperty(cp,BidiMirrored)) {
+				add(status, cp, "bmp3.1");
+			} else if (Default.ucd().getBinaryProperty(cp,BidiMirrored)) {
+				add(status, cp, "bmp5.0");
+			} else if (!Default.nfkc().isNormalized(cp)) {
+				String ss = Default.nfkc().normalize(cp);
+				if (isBidiMirrored(ss)) {
+					add(status, cp, "bmp(" + Utility.hex(ss) + ")");
+					String name = Default.ucd().getName(cp);
+					if (name.indexOf("VERTICAL") < 0) proposed.add(cp);
+				}
+
+			}
+			
+			if (type == Sm) {
+				add(status, cp, "Sm");
+			}
+			else if (Default.ucd().getBinaryProperty(cp,Math_Property)) {
+				String ss = Default.nfkc().normalize(cp);
+				if (UTF16.countCodePoint(ss) == 1) {
+					int cp2 = UTF16.charAt(ss, 0);
+					int type2 = Default.ucd().getCategory(cp2);
+					if (type2 == UCD.Lu || type2 == Ll || type2 == Lo || type2 == Nd) {
+						//System.out.println("Skipping: " + Default.ucd().getCodeAndName(cp));
+					} else {
+						add(status, cp, "S-Math");
+					}
+				} else {
+					add(status, cp, "S-Math");
+				}
+			}
 		
-		UnicodeSet bidiMirroredSet = foo.getSet("bidimirrored=true");
-		status.putAll(bidiMirroredSet, "*core*");
-		UnicodeSet bidiMirroringSet = new UnicodeSet();
-		UnicodeProperty x = foo.getProperty("bidimirroringglyph");
-		for (int i = 0; i < 0x10FFFF; ++i) {
-			String s = x.getValue(i);
-			if (!s.equals(UTF16.valueOf(i))) bidiMirroringSet.add(i);
-		}
-		status.putAll(new UnicodeSet(bidiMirroredSet).removeAll(bidiMirroringSet), "no bidi mirroring");
-		UnicodeSet mathSet = foo.getSet("generalcategory=sm");
-		status.putAll(mathSet, "math");
+//		temp = new UnicodeMap();
+//		UnicodeSet special = new UnicodeSet("[<>]");
+//		for (UnicodeSetIterator it = new UnicodeSetIterator(mathSet); it.next();) {
+//			String s = Default.nfkd().normalize(it.codepoint);
+//			if (special.containsSome(s)) temp.put(it.codepoint, "*special*");
+//		}
+//		status.composeWith(temp, MyComposer);
 		
-		UnicodeSet special = new UnicodeSet("[<>]");
-		for (UnicodeSetIterator it = new UnicodeSetIterator(mathSet); it.next();) {
-			String s = Default.nfkd().normalize(it.codepoint);
-			if (special.containsSome(s)) status.put(it.codepoint, "*special*");
-		}
 		//showStatus(status);
 		// close under nfd
-		for (int i = 0; i < 0x10FFFF; ++i) {
-			if (!Default.ucd().isAssigned(i)) continue;
-			if (!Default.ucd().isPUA(i)) continue;
-			if (Default.nfkc().isNormalized(i)) continue;
-			String oldValue = (String) status.getValue(i);
-			if (oldValue != null) continue;
-			String s = Default.nfkc().normalize(i);
-			if (UTF16.countCodePoint(s) != 1) continue;
-			int cp = UTF16.charAt(s, 0);
-			String value = (String)status.getValue(cp);
-			if (value != null) status.put(i, "nfc-closure-" + value);
+
 		}
-		showStatus(status, bidiMirroredSet);
+		//proposed = status.getSet("Px");
+		System.out.println(proposed);
+		//showStatus(status);
+		PrintWriter pw = BagFormatter.openUTF8Writer(UCD.GEN_DIR, "bidimirroring_chars.txt");
+		showStatus(pw, status);
+		pw.close();
+	}
+
+	private static boolean isBidiMirrored(String ss) {
+		int cp;
+		for (int i = 0; i < ss.length(); i += UTF16.getCharCount(cp)) {
+			cp = UTF16.charAt(ss, i);
+			if (!Default.ucd().getBinaryProperty(cp,BidiMirrored)) return false;
+		}
+		return true;
 	}
 
 	static BagFormatter bf = new BagFormatter();
-	private static void showStatus(UnicodeMap status, UnicodeSet x) {
+	private static void showStatus(PrintWriter pw, UnicodeMap status) {
 		Collection list = new TreeSet(status.getAvailableValues());
 		for (Iterator it = list.iterator(); it.hasNext(); ) {
 			String value = (String) it.next();
 			if (value == null) continue;
 			UnicodeSet set = status.getSet(value);
 			for (UnicodeSetIterator umi = new UnicodeSetIterator(set); umi.next();) {
-				System.out.println(Utility.hex(umi.codepoint) 
-						+ (value.startsWith("*") ? ";\tBidi_Mirrored" : "")
-						+ "\t#\t" + value
+				pw.println(Utility.hex(umi.codepoint) 
+						//+ (value.startsWith("*") ? ";\tBidi_Mirrored" : "")
+						+ "\t# " + value
+						+ "\t\t( " + UTF16.valueOf(umi.codepoint) + " ) "
 						//+ ";\t" + (x.contains(umi.codepoint) ? "O" : "")
 						+ "\t" + Default.ucd().getName(umi.codepoint));
 			}
