@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -2947,8 +2947,8 @@ TestHZ() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -2967,7 +2967,7 @@ TestHZ() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
 
@@ -2977,9 +2977,9 @@ TestHZ() {
         test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "HZ encoding");
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     TestJitterbug930("csISO2022JP");
     ucnv_close(cnv);
     free(offsets);
@@ -3166,8 +3166,8 @@ TestISO_2022_JP() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -3187,7 +3187,7 @@ TestISO_2022_JP() {
         return;
     }
 
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
 
@@ -3197,10 +3197,10 @@ TestISO_2022_JP() {
         test++;
     }
 
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-JP encoding");
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     TestJitterbug930("csISO2022JP");
     ucnv_close(cnv);
     free(uBuf);
@@ -3232,7 +3232,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar));
     cBuf =(char*)malloc(uBufSize * sizeof(char));
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     uSourceLimit=uSource+len;
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize;
@@ -3254,7 +3254,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
         return;
     }
 
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
             log_err("for codepage %s : Expected : \\u%04X \t Got: \\u%04X\n",conv,*uSource,(int)*test) ;
@@ -3262,12 +3262,12 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
         uSource++;
         test++;
     }
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[len],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[len],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)&in[len],cnv);
+    TestSmallSourceBuffer(in,(const UChar*)&in[len],cnv);
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, conv);
     if(byteArr && byteArrLen!=0){
         TestGetNextUChar2022(cnv, byteArr, (byteArr+byteArrLen), in, lang);
-        TestToAndFromUChars(&in[0],(const UChar*)&in[len],cnv);
+        TestToAndFromUChars(in,(const UChar*)&in[len],cnv);
         {
             cSource = byteArr;
             cSourceLimit = cSource+byteArrLen;
@@ -3279,7 +3279,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
                 return;
             }
 
-            uSource = (const UChar*)&in[0];
+            uSource = (const UChar*)in;
             while(uSource<uSourceLimit){
                 if(*test!=*uSource){
                     log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
@@ -3694,8 +3694,8 @@ TestISO_2022_JP_1() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -3713,7 +3713,7 @@ TestISO_2022_JP_1() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
 
@@ -3730,8 +3730,8 @@ TestISO_2022_JP_1() {
         static const uint8_t source2[]={0x0e,0x24,0x053};
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-JP-1]");
     }
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -3784,8 +3784,8 @@ TestISO_2022_JP_2() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -3804,7 +3804,7 @@ TestISO_2022_JP_2() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
 
@@ -3813,9 +3813,9 @@ TestISO_2022_JP_2() {
         uSource++;
         test++;
     }
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     /*Test for the condition where there is an invalid character*/
     ucnv_reset(cnv);
     {
@@ -3861,8 +3861,8 @@ TestISO_2022_KR() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -3881,7 +3881,7 @@ TestISO_2022_KR() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,*test) ;
@@ -3890,9 +3890,9 @@ TestISO_2022_KR() {
         test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-KR encoding");
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     TestJitterbug930("csISO2022KR");
     /*Test for the condition where there is an invalid character*/
     ucnv_reset(cnv);
@@ -3940,8 +3940,8 @@ TestISO_2022_KR_1() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -3960,7 +3960,7 @@ TestISO_2022_KR_1() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,*test) ;
@@ -3970,10 +3970,10 @@ TestISO_2022_KR_1() {
     }
     ucnv_reset(cnv);
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-KR encoding");
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     ucnv_reset(cnv);
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
         /*Test for the condition where there is an invalid character*/
     ucnv_reset(cnv);
     {
@@ -4242,8 +4242,8 @@ TestISO_2022_CN_EXT() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -4262,7 +4262,7 @@ TestISO_2022_CN_EXT() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
@@ -4273,8 +4273,8 @@ TestISO_2022_CN_EXT() {
         uSource++;
         test++;
     }
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     /*Test for the condition where there is an invalid character*/
     ucnv_reset(cnv);
     {
@@ -4340,8 +4340,8 @@ TestISO_2022_CN() {
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
-    uSource = (const UChar*)&in[0];
-    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    uSource = (const UChar*)in;
+    uSourceLimit=(const UChar*)in + (sizeof(in)/sizeof(in[0]));
     cTarget = cBuf;
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
@@ -4360,7 +4360,7 @@ TestISO_2022_CN() {
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = (const UChar*)&in[0];
+    uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
             log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
@@ -4372,9 +4372,9 @@ TestISO_2022_CN() {
         test++;
     }
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-CN encoding");
-    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestSmallTargetBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestSmallSourceBuffer(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
+    TestToAndFromUChars(in,(const UChar*)in + (sizeof(in)/sizeof(in[0])),cnv);
     TestJitterbug930("csISO2022CN");
     /*Test for the condition where there is an invalid character*/
     ucnv_reset(cnv);
