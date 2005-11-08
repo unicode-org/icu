@@ -13,6 +13,7 @@
 *.jpg
 *.pdf
 *.png
+*.ppt
 *.rtf
 *.sln
 *.sxd
