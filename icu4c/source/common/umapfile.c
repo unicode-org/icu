@@ -40,6 +40,7 @@
 #   define NOIME
 #   define NOMCX
 #   include <windows.h>
+#   include "cmemory.h"
 
     typedef HANDLE MemoryMap;
 
@@ -125,6 +126,9 @@
     {
         HANDLE map;
         HANDLE file;
+        SECURITY_ATTRIBUTES mappingAttributes;
+        SECURITY_ATTRIBUTES *mappingAttributesPtr = NULL;
+        SECURITY_DESCRIPTOR securityDesc;
 
         UDataMemory_init(pData); /* Clear the output struct.        */
 
@@ -136,8 +140,24 @@
             return FALSE;
         }
 
+        /* Declare and initialize a security descriptor.
+           This is required for multiuser systems on Windows 2000 SP4 and beyond */
+        if (InitializeSecurityDescriptor(&securityDesc, SECURITY_DESCRIPTOR_REVISION)) {
+            /* give the security descriptor a Null Dacl done using the  "TRUE, (PACL)NULL" here	*/
+            if (SetSecurityDescriptorDacl(&securityDesc, TRUE, (PACL)NULL, FALSE)) {
+                /* Make the security attributes point to the security descriptor */
+                uprv_memset(&mappingAttributes, 0, sizeof(mappingAttributes));
+                mappingAttributes.nLength = sizeof(mappingAttributes);
+                mappingAttributes.lpSecurityDescriptor = &securityDesc;
+                mappingAttributes.bInheritHandle = FALSE; /* object uninheritable */
+                mappingAttributesPtr = &mappingAttributes;
+            }
+        }
+        /* else creating security descriptors can fail when we are on Windows 98,
+           and mappingAttributesPtr == NULL for that case. */
+
         /* create an unnamed Windows file-mapping object for the specified file */
-        map=CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL);
+        map=CreateFileMapping(file, mappingAttributesPtr, PAGE_READONLY, 0, 0, NULL);
         CloseHandle(file);
         if(map==NULL) {
             return FALSE;
