@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
@@ -39,13 +40,23 @@ public final class CollectionUtilities {
     	return target;
 	}
 	
-	public static Collection addAll(Collection target, Iterator source) {
+	public static Collection addAll(Iterator source, Collection target) {
 		while (source.hasNext()) {
 			target.add(source.next());
 		}
 		return target; // for chaining
 	}
 	
+	public static int size(Iterator source) {
+		int result = 0;
+		while (source.hasNext()) {
+			source.next();
+			++result;
+		}
+		return result;
+	}
+	
+
 	public static Map asMap(Object[][] source) {
     	return asMap(source, new HashMap(), false);
 	}
@@ -408,5 +419,85 @@ public final class CollectionUtilities {
             return 0;
         }
     }
+
+    /**
+     * Modifies Unicode set to flatten the strings. Eg [abc{da}] => [abcd]
+     * Returns the set for chaining.
+     * @param exemplar1
+     * @return
+     */
+	public static UnicodeSet flatten(UnicodeSet exemplar1) {
+		UnicodeSet result = new UnicodeSet();
+		boolean gotString = false;
+		for (UnicodeSetIterator it = new UnicodeSetIterator(exemplar1); it.nextRange();) {
+			if (it.codepoint == it.IS_STRING) {
+				result.addAll(it.string);
+				gotString = true;
+			} else {
+				result.add(it.codepoint, it.codepointEnd);
+			}
+		}
+		if (gotString) exemplar1.set(result);
+		return exemplar1;
+	}
+
+	/**
+	 * For producing filtered iterators
+	 */
+	public static abstract class FilteredIterator implements Iterator {
+		private Iterator baseIterator;
+		private static final Object EMPTY = new Object();
+		private static final Object DONE = new Object();
+		private Object nextObject = EMPTY;
+		public FilteredIterator set(Iterator baseIterator) {
+			this.baseIterator = baseIterator;
+			return this;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException("Doesn't support removal");
+		}
+		public Object next() {
+			Object result = nextObject;
+			nextObject = EMPTY;
+			return result;
+		}		
+		public boolean hasNext() {
+			if (nextObject == DONE) return false;
+			if (nextObject != EMPTY) return true;
+			while (baseIterator.hasNext()) {
+				nextObject = baseIterator.next();
+				if (isIncluded(nextObject)) {
+					return true;
+				}
+			}
+			nextObject = DONE;
+			return false;
+		}
+		abstract public boolean isIncluded(Object item);
+	}
+	
+	public static class PrefixIterator extends FilteredIterator {
+		private String prefix;
+		public PrefixIterator set(Iterator baseIterator, String prefix) {
+			super.set(baseIterator);
+			this.prefix = prefix;
+			return this;
+		}
+		public boolean isIncluded(Object item) {
+			return ((String)item).startsWith(prefix);
+		}
+	}
+	
+	public static class RegexIterator extends FilteredIterator {
+		private Matcher matcher;
+		public RegexIterator set(Iterator baseIterator, Matcher matcher) {
+			super.set(baseIterator);
+			this.matcher = matcher;
+			return this;
+		}
+		public boolean isIncluded(Object item) {
+			return matcher.reset((String)item).matches();
+		}
+	}
 
 }
