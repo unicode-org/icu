@@ -952,9 +952,9 @@ void TimeZoneRegressionTest::Test4176686() {
         "DateFormat.format(dst)/dst zone", fmt2->format(dst, l), "GMT+02:15",
     };
 
-    for (int i=0; i<ARRAY_LENGTH(DATA); i+=3) {
-        if (DATA[i+1]!=(DATA[i+2])) {
-            errln("FAIL: " + DATA[i] + " -> " + DATA[i+1] + ", exp " + DATA[i+2]);
+    for (int idx=0; idx<ARRAY_LENGTH(DATA); idx+=3) {
+        if (DATA[idx+1]!=(DATA[idx+2])) {
+            errln("FAIL: " + DATA[idx] + " -> " + DATA[idx+1] + ", exp " + DATA[idx+2]);
         }
     }
     delete z1;
