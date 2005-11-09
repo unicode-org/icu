@@ -135,6 +135,12 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     }
 
     status = U_ZERO_ERROR;
+    DateFormatSymbols fr2(Locale::getFrench(), status);
+    if(U_FAILURE(status)) {
+        errln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
@@ -168,6 +174,20 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     fr.setShortMonths(shortMonths, count);
     if( *en.getShortMonths(count) != *fr.getShortMonths(count)) {
         errln("ERROR: setShortMonths() failed");
+    }
+
+    const UnicodeString *wideMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
+    fr2.setMonths(wideMonths, count, DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
+    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) != 
+        *fr2.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE )) {
+        errln("ERROR: setMonths(FORMAT,WIDE) failed");
+    }
+
+    const UnicodeString *abbrMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
+    fr2.setMonths(abbrMonths, count, DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
+    if( *en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) != 
+        *fr2.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED )) {
+        errln("ERROR: setMonths(FORMAT,ABBREVIATED) failed");
     }
 
     const UnicodeString *narrowMonths = en.getMonths(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
@@ -208,6 +228,20 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     fr.setShortWeekdays(shortWeekdays, count);
     if( *en.getShortWeekdays(count) != *fr.getShortWeekdays(count)) {
         errln("ERROR: setShortWeekdays() failed");
+    }
+
+    const UnicodeString *wideWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
+    fr2.setWeekdays(wideWeekdays, count, DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE);
+    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE) != 
+        *fr2.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::WIDE )) {
+        errln("ERROR: setWeekdays(FORMAT,WIDE) failed");
+    }
+
+    const UnicodeString *abbrWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
+    fr2.setWeekdays(abbrWeekdays, count, DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED);
+    if( *en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED) != 
+        *fr2.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::ABBREVIATED )) {
+        errln("ERROR: setWeekdays(FORMAT,ABBREVIATED) failed");
     }
 
     const UnicodeString *narrowWeekdays = en.getWeekdays(count,DateFormatSymbols::FORMAT,DateFormatSymbols::NARROW);
