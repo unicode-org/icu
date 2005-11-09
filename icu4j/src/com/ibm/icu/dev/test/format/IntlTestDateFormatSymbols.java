@@ -102,6 +102,7 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
     public void TestSymbols()
     {
         DateFormatSymbols fr = new DateFormatSymbols(Locale.FRENCH);
+        DateFormatSymbols fr2 = new DateFormatSymbols(Locale.FRENCH);
 
         DateFormatSymbols en = new DateFormatSymbols(Locale.ENGLISH);
 
@@ -154,6 +155,36 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             for(int i = 0; i < count; i++) {
                 if(! shortMonths[i].equals(shortMonths1[i])) {
                     errln("ERROR: setShortMonths() failed (different string values)");
+                }
+            }
+        }
+
+        final String[] wideMonths = en.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        fr2.setMonths(wideMonths,DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        final String[] wideMonths1 = fr2.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        count = wideMonths.length;
+        if( count != wideMonths1.length) {
+            errln("ERROR: setMonths(FORMAT,WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! wideMonths[i].equals(wideMonths1[i])) {
+                    errln("ERROR: setMonths(FORMAT,WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] abbrMonths = en.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        fr2.setMonths(abbrMonths,DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        final String[] abbrMonths1 = fr2.getMonths(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        count = abbrMonths.length;
+        if( count != abbrMonths1.length) {
+            errln("ERROR: setMonths(FORMAT,ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! abbrMonths[i].equals(abbrMonths1[i])) {
+                    errln("ERROR: setMonths(FORMAT,ABBREVIATED) failed (different string values)");
                 }
             }
         }
@@ -244,6 +275,36 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             for(int i = 0; i < count; i++) {
                 if(! shortWeekdays[i].equals(shortWeekdays1[i])) {
                     errln("ERROR: setShortWeekdays() failed (different string values)");
+                }
+            }
+        }
+
+        final String[] wideWeekdays = en.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        fr2.setWeekdays(wideWeekdays,DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        final String[] wideWeekdays1 = fr2.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        count = wideWeekdays.length;
+        if( count != wideWeekdays1.length) {
+            errln("ERROR: setWeekdays(FORMAT,WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! wideWeekdays[i].equals(wideWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(FORMAT,WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] abbrWeekdays = en.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        fr2.setWeekdays(abbrWeekdays,DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        final String[] abbrWeekdays1 = fr2.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        count = abbrWeekdays.length;
+        if( count != abbrWeekdays1.length) {
+            errln("ERROR: setWeekdays(FORMAT,ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! abbrWeekdays[i].equals(abbrWeekdays1[i])) {
+                    errln("ERROR: setWeekdays(FORMAT,ABBREVIATED) failed (different string values)");
                 }
             }
         }
