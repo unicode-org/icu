@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.text.CharacterIterator;
+
+import com.ibm.icu.dev.test.util.Differ;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
