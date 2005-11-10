@@ -295,7 +295,10 @@ public final class CollectionUtilities {
         }
         result.flushLast();
         result.append("]");
-        return result.toString();
+        String sresult = result.toString();
+        UnicodeSet doubleCheck = new UnicodeSet(sresult);
+        if (!uset.equals(doubleCheck)) throw new InternalError("Failure to round-trip in pretty-print");
+        return sresult;
     }
     
     private static class Appender {
@@ -343,6 +346,11 @@ public final class CollectionUtilities {
                 first = false;
             } else if (spaceComp.compare(s, lastString) != 0) {
                 target.append(' ');
+            } else {
+	            int type = UCharacter.getType(UTF16.charAt(s,0));
+	            if (type == UCharacter.NON_SPACING_MARK || type == UCharacter.ENCLOSING_MARK) {
+	                target.append(' ');
+	            }
             }
         }
         
@@ -376,12 +384,6 @@ public final class CollectionUtilities {
                 // Escape whitespace
                 if (UCharacterProperty.isRuleWhiteSpace(codePoint)) {
                     target.append('\\');
-                } else { // if it is a non-spacing mark, add extra space
-                    int type = UCharacter.getType(codePoint);
-                    if (type == UCharacter.NON_SPACING_MARK || type == UCharacter.ENCLOSING_MARK) {
-                        target.append(' ');
-                    }
-
                 }
                 break;
             }
