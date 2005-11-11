@@ -265,10 +265,7 @@
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-d"/>
             <arg value="VERSION_${ant.java.version}"/>
-            <arg value="-in"/>
             <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.jpp"/>
-            <arg value="-out"/>
-            <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java"/>
          </java>
     </target>
 
