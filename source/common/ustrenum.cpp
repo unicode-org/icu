@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -110,6 +110,10 @@ StringEnumeration::setChars(const char *s, int32_t length, UErrorCode &status) {
     }
 
     return NULL;
+}
+UBool 
+StringEnumeration::operator==(const StringEnumeration& that)const{
+    return getDynamicClassID() == that.getDynamicClassID();
 }
 
 // UStringEnumeration implementation --------------------------------------- ***
@@ -310,4 +314,5 @@ uenum_openCharStringsEnumeration(const char** strings, int32_t count,
     }
     return (UEnumeration*) result;
 }
+
 

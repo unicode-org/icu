@@ -478,13 +478,7 @@ OlsonTimeZone::getDSTSavings() const{
     if(finalZone!=NULL){
         return finalZone->getDSTSavings();
     }
-    // return super->getDSTSavings();
-    // this is basically identical to implementation in
-    // superclass timezone
-    if (useDaylightTime()) {
-    	return 3600000;
-    }
-    return 0;
+    return TimeZone::getDSTSavings();
 }
 /**
  * TimeZone API.

@@ -773,12 +773,6 @@ private:
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
 
     /**
-     * Given a canonical time zone id, return the row index in our symbols for that id,
-     * or -1 if none found.
-     *
-    int32_t      getTimeZoneIndex(const UnicodeString& id) const;
-     */
-    /**
      * Given text, a start in the text, and a row index, return the column index that
      * of the zone name that matches (case insensitive) at start, or 0 if none matches.
      *

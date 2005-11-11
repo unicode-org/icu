@@ -384,15 +384,6 @@ SimpleDateFormat::initialize(const Locale& locale,
 {
     if (U_FAILURE(status)) return;
 
-    // {sfb} should this be here?
-    /*
-    commenting this code out check for bogus locale data does not belong here
-    if (fSymbols->fZoneStringsColCount < 1)
-    {
-        status = U_INVALID_FORMAT_ERROR; // Check for bogus locale data
-        return;
-    }
-    */
     // We don't need to check that the row count is >= 1, since all 2d arrays have at
     // least one row
     fNumberFormat = NumberFormat::createInstance(locale, status);
@@ -1557,47 +1548,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return -start;
     }
 }
-/*
-int32_t 
-SimpleDateFormat::getTimeZoneIndex(const UnicodeString& id) const
-{
-  int32_t i = fSymbols->fZoneStringsRowCount;
-  while (--i >= 0 && fSymbols->fZoneStrings[i][0] != id);
-  return i;
-}
 
-int32_t
-SimpleDateFormat::matchZoneString(const UnicodeString& text, int32_t start, int32_t zi) const
-{
-  // ### TODO markus 20021014: This use of caseCompare() will fail
-  // if the text contains a character that case-folds into multiple
-  // characters. In that case, zs->length() may be too long, and it does not match.
-  // We need a case-insensitive version of startsWith().
-  // There are similar cases of such caseCompare() uses elsewhere in ICU.
-
-  int32_t i = fSymbols->fZoneStringsColCount;
-  const int32_t zscc = i;
-
-  while (--i >= 1) {
-    if (i == 5 && (zscc == 6 || zscc >= 8)) { // skip city name if we have it
-      continue;
-    }
-
-        // Checking long and short zones [1 & 2],
-    // and long and short daylight [3 & 4],
-    // and long and short generic [6 & 7]
-    const UnicodeString& zs = fSymbols->fZoneStrings[zi][i];
-    if (zs.length() > 0 && 0 == text.caseCompare(start, zs.length(), zs, 0)) {
-      break;
-    }
-  }
-  return i;
-}
-*/
-/**
- * find time zone 'text' matched zoneStrings and set cal.
- * includes optimizations for calendar and default time zones
- */
 int32_t
 SimpleDateFormat::subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal, UErrorCode& status) const
 {

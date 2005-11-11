@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -103,7 +103,7 @@ static void TestBasic(void) {
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
 
-    hash = uhash_open(hashChars, isEqualChars,  &status);
+    hash = uhash_open(hashChars, isEqualChars, NULL,  &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: uhash_open failed with %s and returned 0x%08x\n",
                 u_errorName(status), hash);
@@ -163,7 +163,7 @@ static void TestOtherAPI(void){
     static const UChar five[6]  = {0x0066, 0x0069, 0x0076, 0x0065, 0}; /* L"five" */
     static const UChar five2[6] = {0x0066, 0x0069, 0x0076, 0x0065, 0}; /* L"five" */
 
-    hash = uhash_open(uhash_hashUChars, uhash_compareUChars,  &status);
+    hash = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL,  &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: uhash_open failed with %s and returned 0x%08x\n",
                 u_errorName(status), hash);
@@ -287,7 +287,7 @@ static void hashIChars(void) {
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
 
-    hash = uhash_open(uhash_hashIChars, uhash_compareIChars, &status);
+    hash = uhash_open(uhash_hashIChars, uhash_compareIChars, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: uhash_open failed with %s and returned 0x%08x\n",
                 u_errorName(status), hash);

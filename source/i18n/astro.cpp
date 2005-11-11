@@ -1543,7 +1543,7 @@ void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErro
 }
 
 CalendarCache::CalendarCache(int32_t size, UErrorCode &status) {
-  fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, size, &status);
+  fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, NULL, size, &status);
   U_DEBUG_ASTRO_MSG(("%p: Opening.\n", fTable));
 }
 

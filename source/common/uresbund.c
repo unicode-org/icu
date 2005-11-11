@@ -214,7 +214,7 @@ static void initCache(UErrorCode *status) {
     makeCache = (cache ==  NULL);
     umtx_unlock(&resbMutex);
     if(makeCache) {
-        UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
+        UHashtable *newCache = uhash_open(hashEntry, compareEntries, NULL, status);
         if (U_FAILURE(*status)) {
             return;
         }

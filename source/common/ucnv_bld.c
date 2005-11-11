@@ -374,7 +374,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
 
     if (SHARED_DATA_HASHTABLE == NULL)
     {
-        SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars,
+        SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars, NULL,
                             ucnv_io_countTotalAliases(&err),
                             &err);
         ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -140,7 +140,9 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
  * PRIVATE Prototypes
  ********************************************************************/
 
-static UHashtable* _uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
+static UHashtable* _uhash_create(UHashFunction *keyHash, 
+                                 UKeyComparator *keyComp,
+                                 UValueComparator *valueComp,
                                  int32_t primeIndex, UErrorCode *status);
 
 static void _uhash_allocate(UHashtable *hash, int32_t primeIndex,
@@ -174,14 +176,18 @@ static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePol
  ********************************************************************/
 
 U_CAPI UHashtable* U_EXPORT2
-uhash_open(UHashFunction *keyHash, UKeyComparator *keyComp,
+uhash_open(UHashFunction *keyHash, 
+           UKeyComparator *keyComp,
+           UValueComparator *valueComp,
            UErrorCode *status) {
 
-    return _uhash_create(keyHash, keyComp, 3, status);
+    return _uhash_create(keyHash, keyComp, valueComp, 3, status);
 }
 
 U_CAPI UHashtable* U_EXPORT2
-uhash_openSize(UHashFunction *keyHash, UKeyComparator *keyComp,
+uhash_openSize(UHashFunction *keyHash, 
+               UKeyComparator *keyComp,
+               UValueComparator *valueComp,
                int32_t size,
                UErrorCode *status) {
 
@@ -191,7 +197,7 @@ uhash_openSize(UHashFunction *keyHash, UKeyComparator *keyComp,
         ++i;
     }
 
-    return _uhash_create(keyHash, keyComp, i, status);
+    return _uhash_create(keyHash, keyComp, valueComp, i, status);
 }
 
 U_CAPI void U_EXPORT2
@@ -222,6 +228,12 @@ U_CAPI UKeyComparator *U_EXPORT2
 uhash_setKeyComparator(UHashtable *hash, UKeyComparator *fn) {
     UKeyComparator *result = hash->keyComparator;
     hash->keyComparator = fn;
+    return result;
+}
+U_CAPI UValueComparator *U_EXPORT2 
+uhash_setValueComparator(UHashtable *hash, UValueComparator *fn){
+    UValueComparator *result = hash->valueComparator;
+    hash->valueComparator = fn;
     return result;
 }
 
@@ -491,6 +503,48 @@ uhash_hashIChars(const UHashTok key) {
     STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), uprv_tolower(*p));
 }
 
+U_CAPI UBool U_EXPORT2 
+uhash_equals(const UHashtable* hash1, const UHashtable* hash2){
+    
+    int32_t count1, count2, pos, i;
+
+    if(hash1==hash2){
+        return TRUE;
+    }
+
+    if(hash1==NULL || hash2==NULL){
+        return FALSE;
+    }
+    /* make sure that we are comparing 2 hashes of the same type */
+    if( hash1->keyComparator != hash2->keyComparator ||
+        hash2->valueComparator != hash2->valueComparator){
+        return FALSE;
+    }
+
+    count1 = uhash_count(hash1);
+    count2 = uhash_count(hash2);
+    if(count1!=count2){
+        return FALSE;
+    }
+    
+    pos=-1;
+    for(i=0; i<count1; i++){
+        const UHashElement* elem1 = uhash_nextElement(hash1, &pos);
+        const UHashTok key1 = elem1->key;
+        const UHashTok val1 = elem1->value;
+        /* here the keys are not compared, instead the key form hash1 is used to fetch
+         * value from hash2. If the hashes are equal then then both hashes should 
+         * contain equal values for the same key!
+         */
+        const UHashElement* elem2 = _uhash_find(hash2, key1, hash2->keyHasher(key1));
+        const UHashTok val2 = elem2->value;
+        if(hash1->valueComparator(val1, val2)==FALSE){
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 /********************************************************************
  * PUBLIC Comparator Functions
  ********************************************************************/
@@ -574,7 +628,9 @@ uhash_freeBlock(void *obj) {
  ********************************************************************/
 
 static UHashtable*
-_uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
+_uhash_create(UHashFunction *keyHash, 
+              UKeyComparator *keyComp,
+              UValueComparator *valueComp,
               int32_t primeIndex,
               UErrorCode *status) {
     UHashtable *result;
@@ -589,10 +645,11 @@ _uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
         return NULL;
     }
 
-    result->keyHasher      = keyHash;
-    result->keyComparator  = keyComp;
-    result->keyDeleter     = NULL;
-    result->valueDeleter   = NULL;
+    result->keyHasher       = keyHash;
+    result->keyComparator   = keyComp;
+    result->valueComparator = valueComp;
+    result->keyDeleter      = NULL;
+    result->valueDeleter    = NULL;
     _uhash_internalSetResizePolicy(result, U_GROW);
 
     _uhash_allocate(result, primeIndex, status);
