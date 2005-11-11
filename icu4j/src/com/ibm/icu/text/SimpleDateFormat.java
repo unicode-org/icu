@@ -1287,25 +1287,6 @@ public class SimpleDateFormat extends DateFormat {
             }
         return -start;
     }
-/*
-    private int matchZoneString(String text, int start, int zoneIndex) {
-        String[] zs = formatData.zoneStrings[zoneIndex];
-        for (int j = 1; j < zs.length; ++j) {
-            if (j == 5 && (zs.length ==6 || zs.length >= 8)) { // skip city name if we have it
-                continue;
-            }
-            if (zs[j].length() == 0) continue; // SKIP over empty zone strings
-            // Checking long and short zones [1 & 2],
-            // and long and short daylight [3 & 4],
-            // and long and short generic [6 & 7]
-            if (text.regionMatches(true, start, zs[j], 0, zs[j].length())) {
-                return j;
-            }
-        }
- 
-        return -1;
-    }
-*/
     /**
      * find time zone 'text' matched zoneStrings and set cal
      */
@@ -1369,7 +1350,6 @@ public class SimpleDateFormat extends DateFormat {
             } else if (type == DateFormatSymbols.TIMEZONE_SHORT_DAYLIGHT
                     || type == DateFormatSymbols.TIMEZONE_LONG_DAYLIGHT) {
                 // daylight time
-                // !!! todo - no getDSTSavings() in ICU's timezone
                 // use the correct DST SAVINGS for the zone.
                 // cal.set(UCAL_DST_OFFSET, tz->getDSTSavings());
                 cal.set(Calendar.DST_OFFSET, millisPerHour);

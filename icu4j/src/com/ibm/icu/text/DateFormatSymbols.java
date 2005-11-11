@@ -738,11 +738,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 }
             }
         }
-        /*
-        for (int index = 0; index < this.zoneStrings[0].length; ++index)
-            if(this.zoneStrings[0][index]!=null)
-                hashcode ^= this.zoneStrings[0][index].hashCode();
-        */
         return hashcode;
     }
 
