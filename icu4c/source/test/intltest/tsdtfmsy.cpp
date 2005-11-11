@@ -305,8 +305,11 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     en = fr;
 
-    if(en != fr || foo != bar) {
-        errln("ERROR: Copy Constructor or Assignment failed");
+    if(en != fr) {
+        errln("ERROR: Assignment operator failed");
+    }
+    if(foo != bar) {
+        errln("ERROR: Copy Constructor failed");
     }
 }
 

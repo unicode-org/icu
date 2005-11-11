@@ -197,7 +197,7 @@ initCache(UErrorCode *status) {
     makeCache = (SHARED_DATA_HASHTABLE ==  NULL);
     umtx_unlock(&usprepMutex);
     if(makeCache) {
-        UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
+        UHashtable *newCache = uhash_open(hashEntry, compareEntries, NULL, status);
         if (U_FAILURE(*status)) {
             return;
         }

@@ -435,27 +435,15 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
                     return FALSE;
                 }
             }else{
-                if(hashCompare(fZoneStringsHash, other.fZoneStringsHash) == FALSE){
+                if(fZoneStringsHash->equals(*other.fZoneStringsHash) == FALSE){
                     return FALSE;
                 }
                 // we always make sure that we update the enumeration when the hash is
                 // updated. So we can be sure that once we compare the hashes  the 
                 // enumerations are also equal
-                //if(stringEnumCompare(fZoneIDEnumeration, other.fZoneIDEnumeration)==FALSE){
-                //    return FALSE;
-                //}
             }
             // since fZoneStrings data member is deprecated .. and may not be initialized
             // so don't compare them
-            // fZoneStringsRowCount == other.fZoneStringsRowCount &&
-            //fZoneStringsColCount == other.fZoneStringsColCount
-            //if (fZoneStrings == other.fZoneStrings) return TRUE;
-            //
-            //for (int32_t row=0; row<fZoneStringsRowCount; ++row)
-            //{
-            //    if (!arrayCompare(fZoneStrings[row], other.fZoneStrings[row], fZoneStringsColCount))
-            //        return FALSE;
-            //}
             return TRUE;
         }
     }
@@ -826,13 +814,13 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
     // since deleting a 2-d array is a pain in the butt, we offload that task to
     // a separate function
     disposeZoneStrings();
-
+    UErrorCode status = U_ZERO_ERROR;
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
     fZoneStringsRowCount = rowCount;
     fZoneStringsColCount = columnCount;
     createZoneStrings((const UnicodeString**)strings);
-    initZoneStrings((const UnicodeString**)strings, rowCount,columnCount);
+    initZoneStrings((const UnicodeString**)strings, rowCount,columnCount, status);
 }
 
 //------------------------------------------------------
@@ -1053,8 +1041,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     weekdaysData = calData.getByKey2(gDayNamesTag, gNamesWideTag, status);
     fWeekdaysCount = ures_getSize(weekdaysData);
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
-    /* test for NULL */
-    if (fWeekdays == 0) {
+    /* pin the blame on system. If we cannot get a chunk of memory .. the system is dying!*/
+    if (fWeekdays == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         goto cleanup;
     }
@@ -1226,7 +1214,6 @@ DateFormatSymbols::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
     return locBased.getLocale(type, status);
 }
 
-
 class TimeZoneKeysEnumeration : public StringEnumeration {
 private:
     UnicodeString* strings;
@@ -1298,7 +1285,7 @@ public:
         return NULL;
     }
     /* this method is for thread safe iteration */
-    const UnicodeString* snext(int32_t& pos, UErrorCode& status) {
+    const UnicodeString* snext(int32_t& pos, UErrorCode& status)const {
         if(U_FAILURE(status)){
             return NULL;
         }
@@ -1312,7 +1299,44 @@ public:
         current = 0;
 
     }
+    virtual UBool operator==(const StringEnumeration& that)const{
+        return ((this == &that) ||
+            (getDynamicClassID() == that.getDynamicClassID() &&
+            StringEnumeration::operator==(that) &&
+            equals(that)));
+    }
+private:
+    UBool equals(const StringEnumeration& other) const{
+        if (other.getDynamicClassID() != TimeZoneKeysEnumeration::getStaticClassID()) {
+            return FALSE;
+        }
+        TimeZoneKeysEnumeration& enum2 =  (TimeZoneKeysEnumeration&)(other);
+        UErrorCode status = U_ZERO_ERROR;
 
+        int32_t count1 = count(status);
+        int32_t count2 = other.count(status);
+        if(count1 != count2){
+            return FALSE;
+        }
+        int32_t pos1 = 0; 
+        int32_t pos2 = 0;
+        const UnicodeString* str1 = NULL;
+        const UnicodeString* str2 = NULL;
+
+        while((str1 = snext(pos1, status))!=NULL){ 
+            str2 = enum2.snext(pos2, status);
+            if(U_FAILURE(status)){
+                return FALSE;
+            }
+            if(*str1 != *str2){
+                // bail out at the first failure
+                return FALSE;
+            }
+            
+        }
+        // if we reached here that means that the enumerations are equal
+        return TRUE;
+    }
 };
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneKeysEnumeration);
@@ -1328,8 +1352,8 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
     fZoneStringsRowCount = fZoneIDEnumeration->count(status);
     fZoneStringsColCount = 8;
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
-    /* test for NULL */
-    if (fZoneStrings == 0) {
+    /* if we can't get a chunk of heap then the system is going down. Pin the blame on system*/
+    if (fZoneStrings == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1365,6 +1389,25 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
     }
 }
 
+UBool U_CALLCONV 
+uhash_compareTZHashValues(const UHashTok val1, const UHashTok val2){
+
+    const UnicodeString* array1 = (UnicodeString*) val1.pointer;
+    const UnicodeString* array2 = (UnicodeString*) val2.pointer;
+    if(array1==array2){
+        return TRUE;
+    }
+    if(array1==NULL || array2==NULL){
+        return FALSE;
+    }
+    for(int32_t j=0; j< UTZ_MAX_DISPLAY_STRINGS_LENGTH; j++){
+        if(array1[j] != array2[j]){
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 void
 DateFormatSymbols::initZoneStrings(UErrorCode &status){
     if(U_FAILURE(status)){
@@ -1376,7 +1419,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     }
     int32_t i;
     
-    fZoneStringsHash = new Hashtable(status);
+    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
     if(fZoneStringsHash==NULL){
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1495,12 +1538,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     }
 }
 void 
-DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCount, int32_t columnCount){
-    // This method should have a status parameter
-    // but setZoneStrings API that calls this method does not have one
-    // setZoneStrings API is unsafe and should be deprecated!!
-    UErrorCode status = U_ZERO_ERROR;
-
+DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCount, int32_t columnCount, UErrorCode& status){
     if(strings==NULL || rowCount<0 || columnCount<0){
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -1514,7 +1552,7 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fZoneStringsHash = new Hashtable(status);
+    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
     if(U_FAILURE(status)){
         return;
     }
@@ -1637,7 +1675,7 @@ DateFormatSymbols::setZoneString(const UnicodeString &zid, const TimeZoneTransla
 Hashtable* 
 DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
     UErrorCode status = U_ZERO_ERROR;
-    Hashtable* hash = new Hashtable(status);
+    Hashtable* hash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
     if(hash==NULL){
         return NULL;
     }
@@ -1669,76 +1707,7 @@ DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
     return hash;
 }
 
-/**
- * compares 2 StringEnumerations
- */
-UBool 
-DateFormatSymbols::stringEnumCompare(StringEnumeration* e1, 
-                                     StringEnumeration* e2){
-    TimeZoneKeysEnumeration *enum1 = (TimeZoneKeysEnumeration*)e1;
-    TimeZoneKeysEnumeration *enum2 = (TimeZoneKeysEnumeration*)e2;
-    if(enum1==NULL || enum2==NULL){
-        return FALSE;
-    }
-    
-    UErrorCode status = U_ZERO_ERROR;
 
-    int32_t count1 = enum1->count(status);
-    int32_t count2 = enum2->count(status);
-    if(count1 != count2){
-        return FALSE;
-    }
-    int32_t pos1 = 0; 
-    int32_t pos2 = 0;
-    const UnicodeString* str1 = NULL;
-    const UnicodeString* str2 = NULL;
-
-    while((str1 = enum1->snext(pos1, status))!=NULL){ 
-        str2 = enum2->snext(pos2, status);
-        if(U_FAILURE(status)){
-            return FALSE;
-        }
-        if(*str1 != *str2){
-            // bail out at the first failure
-            return FALSE;
-        }
-        
-    }
-    // if we reached here that means that the enumerations are equal
-    return TRUE;
-}
-/**
- * compares 2 Hashtables
- */
-UBool 
-DateFormatSymbols::hashCompare(Hashtable* hash1, 
-                               Hashtable* hash2){
-
-    if(hash1==NULL || hash2==NULL){
-        return FALSE;
-    }
-    int32_t count1 = hash1->count();
-    int32_t count2 = hash2->count();
-    if(count1!=count2){
-        return FALSE;
-    }
-    int32_t pos1=-1;
-    for(int32_t i=0; i<count1; i++){
-        const UHashElement* elem1 = hash1->nextElement(pos1);
-        UnicodeString* key1 = (UnicodeString*) elem1->key.pointer;
-        UnicodeString* array1 = (UnicodeString*) elem1->value.pointer;
-        UnicodeString* array2 = (UnicodeString*)hash2->get(*key1);
-        if(array1==NULL || array2==NULL){
-            return FALSE;
-        }
-        for(int32_t j=0; j< UTZ_MAX_DISPLAY_STRINGS_LENGTH; j++){
-            if(array1[j] != array2[j]){
-                return FALSE;
-            }
-        }
-    }
-    return TRUE;                               
-}
 UnicodeString&
 DateFormatSymbols::getZoneID(const UnicodeString& zid, UnicodeString& result, UErrorCode& status){
     if(fZoneStringsHash == NULL){

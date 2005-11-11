@@ -218,7 +218,7 @@ static UHashtable *udata_getHashTable() {
         return gCommonDataCache;
     }
 
-    tHT = uhash_open(uhash_hashChars, uhash_compareChars, &err);
+    tHT = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &err);
     uhash_setValueDeleter(tHT, DataCacheElement_deleter);
 
     umtx_lock(NULL);

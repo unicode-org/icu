@@ -668,7 +668,7 @@ private:
      * initialzes the zoneStrings has and keys enumeration after reading the strings[][]. Required for backwards
      * compatibility of setZoneStrings method
      */
-    void initZoneStrings(const UnicodeString** strings, int32_t rowCount, int32_t collumnCount);
+    void initZoneStrings(const UnicodeString** strings, int32_t rowCount, int32_t collumnCount, UErrorCode& status);
     /**
      * initialization of the fZoneStrings data member
      */
@@ -677,15 +677,7 @@ private:
      * Creates a deep clone of the Hashtable
      */
     Hashtable* createZoneStringsHash(const Hashtable* otherHash);
-    /**
-     * compares 2 StringEnumerations
-     */
-    static UBool stringEnumCompare(StringEnumeration* enum1, StringEnumeration* enum2);
-    /**
-     * compares 2 Hashtables
-     */
-    static UBool hashCompare(Hashtable* hash1, Hashtable* hash2); 
-
+    
     /**
      * Fetches the key from the hashtable for a given ID.
      * e.g: for a given ID such as PST returns "Americal/Los_Angeles"

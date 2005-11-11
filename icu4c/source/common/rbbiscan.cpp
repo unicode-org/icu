@@ -142,7 +142,7 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     }
 
     fSymbolTable = new RBBISymbolTable(this, rb->fRules, *rb->fStatus);
-    fSetTable    = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, rb->fStatus);
+    fSetTable    = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, rb->fStatus);
     uhash_setValueDeleter(fSetTable, RBBISetTable_deleter);
 }
 

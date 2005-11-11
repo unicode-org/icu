@@ -377,7 +377,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 
     /* initialize the hashtable */
     if(hashTable==NULL){
-        hashTable = uhash_open(hashEntry, compareEntries, status);
+        hashTable = uhash_open(hashEntry, compareEntries, NULL, status);
         uhash_setValueDeleter(hashTable, valueDeleter);
     }
     
