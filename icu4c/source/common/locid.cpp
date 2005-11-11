@@ -160,7 +160,7 @@ void locale_set_default_internal(const char *id)
     umtx_unlock(NULL);
     if (hashTableNeedsInit) {
         status = U_ZERO_ERROR;
-        UHashtable *tHashTable = uhash_open(uhash_hashChars, uhash_compareChars, &status);
+        UHashtable *tHashTable = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
         if (U_FAILURE(status)) {
             return;
         }

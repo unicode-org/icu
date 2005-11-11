@@ -1820,7 +1820,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   if(U_FAILURE(*status)) {
     return;
   }
-  src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
+  src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, NULL, status);
   if(U_FAILURE(*status)) {
     return;
   }

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -117,7 +117,14 @@ typedef int32_t U_CALLCONV UHashFunction(const UHashTok key);
  */
 typedef UBool U_CALLCONV UKeyComparator(const UHashTok key1,
                                         const UHashTok key2);
-
+/**
+ * A key comparison function.
+ * @param val1 A key stored in a hashtable
+ * @param val2 A key stored in a hashtable
+ * @return TRUE if the two keys are equal.
+ */
+typedef UBool U_CALLCONV UValueComparator(const UHashTok val1,
+                                          const UHashTok val2);
 /**
  * A function called by <TT>uhash_remove</TT>,
  * <TT>uhash_close</TT>, or <TT>uhash_put</TT> to delete
@@ -169,6 +176,8 @@ struct UHashtable {
                                    * Never null. */
     UKeyComparator *keyComparator; /* Compares keys for equality.
                                    * Never null. */
+    UValueComparator *valueComparator; /* Compares the values for equality */
+
     UObjectDeleter *keyDeleter;    /* Deletes keys when required.
                                    * If NULL won't do anything */
     UObjectDeleter *valueDeleter;  /* Deletes values when required.
@@ -195,6 +204,7 @@ U_CDECL_END
 U_CAPI UHashtable* U_EXPORT2 
 uhash_open(UHashFunction *keyHash,
            UKeyComparator *keyComp,
+           UValueComparator *valueComp,
            UErrorCode *status);
 
 /**
@@ -211,6 +221,7 @@ uhash_open(UHashFunction *keyHash,
 U_CAPI UHashtable* U_EXPORT2 
 uhash_openSize(UHashFunction *keyHash,
                UKeyComparator *keyComp,
+               UValueComparator *valueComp,
                int32_t size,
                UErrorCode *status);
 
@@ -241,6 +252,16 @@ uhash_setKeyHasher(UHashtable *hash, UHashFunction *fn);
  */
 U_CAPI UKeyComparator *U_EXPORT2 
 uhash_setKeyComparator(UHashtable *hash, UKeyComparator *fn);
+
+/**
+ * Set the function used to compare values.  The default comparison is a
+ * void* pointer comparison.
+ * @param hash The UHashtable to set
+ * @param fn the function to be used compare keys; must not be NULL
+ * @return the previous key comparator; non-NULL
+ */
+U_CAPI UValueComparator *U_EXPORT2 
+uhash_setValueComparator(UHashtable *hash, UValueComparator *fn);
 
 /**
  * Set the function used to delete keys.  If this function pointer is
@@ -675,5 +696,14 @@ uhash_deleteUVector(void *obj);
  */
 U_CAPI void U_EXPORT2 
 uhash_freeBlock(void *obj);
+
+/**
+ * Checks if the given hash tables are equal or not.
+ * @param hash1
+ * @param hash2
+ * @return true if the hashtables are equal and false if not.
+ */
+U_CAPI UBool U_EXPORT2 
+uhash_equals(const UHashtable* hash1, const UHashtable* hash2);
 
 #endif

@@ -1515,6 +1515,11 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
         errln("Could not create the StringEnumeration for Locale::getUS(). Error: %s", u_errorName(status)); 
         return;
     }
+    
+    StringEnumeration* keys2 = symbols.createZoneStringIDs(status);
+     if(*keys2!=*keys){
+        errln("operator!= failed for TimeZoneStringsEnum");
+    }
     const UnicodeString* key = NULL;
 
     while( (key = keys->snext(status))!=NULL){ 

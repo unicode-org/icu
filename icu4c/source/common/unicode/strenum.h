@@ -184,6 +184,23 @@ public:
      */
     virtual void reset(UErrorCode& status) = 0;
 
+    /**
+     * Compares this enumeration to other to check if both are equal
+     *
+     * @param Other string enumeration to compare this object to
+     * @return TRUE if the enumerations are equal. FALSE if not.
+     * @draft ICU 3.6 
+     */
+    virtual UBool operator==(const StringEnumeration& that)const;
+    /**
+     * Compares this enumeration to other to check if both are not equal
+     *
+     * @param Other string enumeration to compare this object to
+     * @return TRUE if the enumerations are equal. FALSE if not.
+     * @draft ICU 3.6 
+     */
+    virtual UBool operator!=(const StringEnumeration& that)const {return !operator==(that);};
+
 protected:
     /**
      * UnicodeString field for use with default implementations and subclasses.
