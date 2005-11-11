@@ -100,7 +100,7 @@
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
         <!-- fix the data folder every time there is a version update-->
-        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt34b/" />
+        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt35b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
         <property name="icu4j.javac.source" value="1.4"/>
         <property name="icu4j.javac.target" value="1.4"/>
@@ -271,16 +271,16 @@
 
     <target name="indices" depends="icudata,tools">
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/" />
+            <arg value="${build.dir}/${icu4j.data.path}" />
         </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/rbnf" />
+            <arg value="${build.dir}/${icu4j.data.path}/rbnf" />
         </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/coll" />
+            <arg value="${build.dir}/${icu4j.data.path}/coll" />
         </java>
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
-            <arg value="${build.dir}/com/ibm/icu/impl/data/icudt34b/translit" />
+            <arg value="${build.dir}/${icu4j.data.path}/translit" />
         </java>
     </target>
 
