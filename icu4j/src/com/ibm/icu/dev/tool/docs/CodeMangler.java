@@ -41,10 +41,7 @@ public class CodeMangler {
     private boolean verbose; // true if we emit debug output
 
     public static void main(String[] args) {
-        int result = new CodeMangler(args).run();
-        if (result != 0) {
-            System.exit(result);
-        }
+        new CodeMangler(args).run();
     }
 
     private static final String usage = "Usage:\n" +
