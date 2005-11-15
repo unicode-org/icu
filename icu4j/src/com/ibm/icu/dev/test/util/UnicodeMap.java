@@ -48,16 +48,33 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
 
-    private int length = 2;
-    private int[] transitions = {0,0x110000,0,0,0,0,0,0,0,0};
-    private Object[] values = new Object[10];
+    private int length;
+    // two parallel arrays to save memory. Wish Java had structs.
+    private int[] transitions;
+    private Object[] values;
     
     private LinkedHashSet availableValues = new LinkedHashSet();
-    private transient boolean staleAvailableValues = false;
+    private transient boolean staleAvailableValues;
 
-    private transient boolean errorOnReset = false;
+    private transient boolean errorOnReset;
     private transient boolean locked;
-    private int lastIndex = 0;
+    private int lastIndex;
+    
+    { clear(); }
+    
+    public UnicodeMap clear() {
+        if (locked) throw new UnsupportedOperationException("Attempt to modify locked object");
+        length = 2;
+        transitions = new int[] {0,0x110000,0,0,0,0,0,0,0,0};
+        values = new Object[10];
+        
+        availableValues.clear();
+        staleAvailableValues = false;
+
+        errorOnReset = false;
+        lastIndex = 0;
+    	return this;
+    }
     
     /* Boilerplate */
     public boolean equals(Object other) {
@@ -453,6 +470,10 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     }
     public UnicodeSet getSet(Object value) {
         return getSet(value,null);
+    }
+
+    public UnicodeSet keySet() {
+        return getSet(null,null).complement();
     }
     /**
      * Returns the list of possible values. Deposits each non-null value into
