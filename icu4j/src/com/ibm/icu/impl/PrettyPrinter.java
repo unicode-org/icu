@@ -99,10 +99,11 @@ public class PrettyPrinter {
 	 * a UnicodeSet of extra characters to quote with \\uXXXX-style escaping (will automatically quote pattern whitespace)
 	 * @param toQuote
 	 */
-	public void setToQuote(UnicodeSet toQuote) {
+	public PrettyPrinter setToQuote(UnicodeSet toQuote) {
 		toQuote = (UnicodeSet)toQuote.clone();
 		toQuote.addAll(patternWhitespace);
 		this.toQuote = toQuote;
+		return this;
 	}
 		
 	/**
