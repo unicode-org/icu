@@ -2284,7 +2284,6 @@ structLocale{
                 }
                 wide{
                     "",
-                    ""
                 }
             }
             monthNames{
