@@ -1656,27 +1656,46 @@ public class UnicodeSet extends UnicodeFilter {
      * @return true if the test condition is met
      * @stable ICU 2.0
      */
-    public boolean containsAll(String s) {
+     public boolean containsAll(String s) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
-            if (!contains(cp)) {
-            	if (strings.size() == 0) return false; // quick exit
-            	// TODO: later, optimize for two common cases
-            	// 1. If all the characters in the strings are individually in the set, then just return false
-            	//    in that case, looking at the strings wouldn't help.
-            	//    This setting can be cached.
-            	// 2. If none of the strings overlap, then we don't need to go to regex, 
-            	//    we can use a simpler test.
-            	//    We would cache this setting also, plus the maximum string length
-            	
-            	// TODO: later, cache the Matcher
-            	// 		 with all caches, we need to flush them if the set changes, of course!
-            	return Pattern.matches(getRegexEquivalent() + "*", s);
+            if (!contains(cp))  {
+                if (strings.size() == 0) {
+                    return false;
+                }
+                return containsAll(s, 0);
             }
         }
         return true;
     }
+
+    /**
+     * Recursive routine called if we fail to find a match in containsAll, and there are strings
+     * @param s source string
+     * @param i point to match to the end on
+     * @return true if ok
+     */
+    private boolean containsAll(String s, int i) {
+        if (i >= s.length()) {
+            return true;
+        }
+        int  cp= UTF16.charAt(s, i);
+        if (contains(cp) && containsAll(s, i+UTF16.getCharCount(cp))) {
+            return true;
+        }
+        
+        Iterator it = strings.iterator();
+        while (it.hasNext()) {
+            String setStr = (String)it.next();
+            if (s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+
 
     /**
      * @internal
