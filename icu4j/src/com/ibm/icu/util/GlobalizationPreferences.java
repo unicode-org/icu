@@ -5,31 +5,45 @@
  *******************************************************************************
 */
 package com.ibm.icu.util;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 
+/**
+ * This convenience class provides a mechanism for bundling together different
+ * globalization preferences. It includes:
+ * <ul>
+ * <li>A list of locales/languages in preference order</li>
+ * <li>A territory</li>
+ * <li>A currency</li>
+ * <li>A timezone</li>
+ * <li>A calendar</li>
+ * <li>A collator (for language-sensitive sorting, searching, and matching).</li>
+ * <li>And explicit overrides for date/time formats, etc.</li></ul>
+ * The class will heuristically compute implicit, heuristic values for the above based on available
+ * data if explicit values are not supplied. These implicit values can be presented to users
+ * for confirmation, or replacement if the values are incorrect.
+ * <p>The class also supplies display names for languages, scripts, territories, currencies,
+ *  timezones, etc. These are computed according to the locale/language preference list. Thus,
+ *  if the preference is Breton; French; English, then the display name for a language will be returned
+ *  in Breton if available, otherwise in French if available, otherwise in English.
+ *  <p><b>This is at a prototype stage, and has not incorporated all the design changes
+ *  that we would like yet; further feedback is welcome.
+ */
 public class GlobalizationPreferences {
 	/**
 	 * Number Format types
@@ -40,7 +54,7 @@ public class GlobalizationPreferences {
 	 */
 	public static final int NONE = 4;
 	/**
-	 * Display Name Item (TODO: flesh out)
+	 * For selecting a choice of display names
 	 */
 	public static final int
 		LOCALEID = 0, LANGUAGEID = 1, SCRIPTID = 2, TERRITORYID = 3, VARIANTID = 4, 
@@ -48,125 +62,7 @@ public class GlobalizationPreferences {
 		CURRENCYID = 7, CURRENCY_SYMBOLID = 8, TIMEZONEID = 9, DISPLAYID_LIMIT = 10;
 	
 	/**
-	 * Just for testing right now. Will remove later.
-	 */
-	private static final String[] TYPENAMES = {
-		"locale", "language", "script", "territory", "variant",
-		"keyword", "keyword=value",
-		"currency", "currency-symbol", "timezone"
-	};
-	private static final String[] ContextNames = {"format", "standalone"};
-	private static final String[] WidthNames = {"abbreviated", "wide", "narrow"};
-	
-	public static void main(String[] args) throws IOException {
-		PrintWriter out = BagFormatter.openUTF8Writer("c:/", "tempFile.txt");
-		try {
-			Date now = new Date();
-			
-			GlobalizationPreferences lPreferences = new GlobalizationPreferences();
-
-			out.println("Samples from Globalization Preferences prototype");
-			out.println("\tWarning: some of this is just mockup -- real data will be accessed later.");
-			out.println();
-
-			
-			out.println("Check defaulting");
-			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "en-TH", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
-			for (int i = 0; i < localeList.length; ++i) {
-				lPreferences.setULocales(localeList[i]);
-				out.println("\tdefaults for: \t" + localeList[i] + "\t"
-						+ lPreferences.getULocales()
-						+ ", \t" + lPreferences.getTerritory()
-						+ ", \t" + lPreferences.getCurrency()
-						+ ", \t" + lPreferences.getCalendar().getClass()
-						+ ", \t" + lPreferences.getTimezone().getID()
-				);
-			}
-			
-			out.println();
-			out.println("Date Formatting");
-			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, NONE).format(now));
-			
-			out.println("setting locale to Germany");
-			lPreferences.setULocales(ULocale.GERMANY);
-			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, NONE).format(now));
-			
-			out.println("setting date locale to France");
-			lPreferences.setDateLocale(ULocale.FRANCE);
-			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, NONE).format(now));
-			
-			out.println("setting date format to yyyy-MMM-dd (Italy)");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd",ULocale.ITALY);
-			lPreferences.setDateFormat(DateFormat.FULL, NONE, sdf);
-			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, NONE).format(now));
-			
-			out.println();
-			out.println("Various named date fields");
-			SimpleDateFormat df = (SimpleDateFormat)lPreferences.getDateFormat(DateFormat.FULL, NONE);
-			DateFormatSymbols dfs = df.getDateFormatSymbols();
-			
-			for (int context = dfs.FORMAT; context <= dfs.STANDALONE; ++context) {
-				out.println("context: " + ContextNames[context-dfs.FORMAT]);
-				for (int width = dfs.ABBREVIATED; width <= dfs.NARROW; ++width) {
-					out.println("\twidth: " + WidthNames[width-dfs.ABBREVIATED]);
-					out.println("\t\tgetAmPmStrings:\t" + Arrays.asList(dfs.getAmPmStrings()));
-					out.println("\t\tgetEras\t" + Arrays.asList((width > 0 ? dfs.getEraNames() : dfs.getEras())));
-					out.println("\t\tgetMonths:\t" + Arrays.asList(dfs.getMonths(context, width)));
-					out.println("\t\tgetWeekdays:\t" + Arrays.asList(dfs.getWeekdays(context, width)));
-				}
-			}
-			
-			// now show currencies
-			out.println();
-			out.println("Currency Formatting");
-			out.println("\tcurrency: \t" + lPreferences.getNumberFormat(CURRENCY).format(1234.567));
-			
-			out.println("setting number locale to Canada");
-			lPreferences.setNumberLocale(ULocale.CANADA);
-			out.println("\tcurrency: \t" + lPreferences.getNumberFormat(CURRENCY).format(1234.567));
-			
-			out.println("setting currency to INR"); 
-			lPreferences.setCurrency(Currency.getInstance("INR"));
-			out.println("\tcurrency: \t" + lPreferences.getNumberFormat(CURRENCY).format(1234.567));
-			
-			out.println("setting number locale to Hindi-India"); 
-			lPreferences.setNumberLocale(new ULocale("hi-IN"));
-			out.println("\tcurrency: \t" + lPreferences.getNumberFormat(CURRENCY).format(1234.567));
-			
-			// now try a fallback within locales
-			out.println();
-			out.println("Display Names");
-			lPreferences.setULocales(new ULocale[]{new ULocale("as"),new ULocale("pl"),new ULocale("fr")});
-			out.println("Trying fallback for multiple locales: " + lPreferences.getULocales());
-			String[][] testItems = {
-					{LOCALEID+"", "as_FR", "en_RU","haw_CA","se_Cyrl_AT"},
-					{LANGUAGEID+"", "as", "en","haw","se","kok"},
-					{SCRIPTID+"", "Arab", "Cyrl", "Hant"},
-					{TERRITORYID+"", "US", "FR", "AU", "RU","IN"},
-					{VARIANTID+"","REVISED"},
-					{KEYWORDID+"","calendar", "collation", "currency"},
-					{KEYWORD_VALUEID+"", "calendar=buddhist", "calendar=gregorian", 
-						"collation=phonebook", "collation=traditional"},
-					{CURRENCYID+"", "USD", "GBP", "EUR", "JPY","INR"},
-					{CURRENCY_SYMBOLID+"", "USD", "GBP", "EUR", "JPY","INR"},
-					{TIMEZONEID+"", "America/Mexico_City", "Asia/Shanghai", "Europe/London", "Europe/Berlin"},
-					};
-			for (int i = 0; i < testItems.length; ++i) {
-				int type = Integer.parseInt(testItems[i][0]);
-				String typeName = TYPENAMES[type];
-				for (int j = 1; j < testItems[i].length; ++j) {
-					String item = testItems[i][j];
-					out.println(typeName + " for " + item + ": \t"
-							+ lPreferences.getDisplayName(item, type));
-				}
-			}
-		} finally {
-			out.close();
-			System.out.println("done");
-		}
-	}
-	/**
-	 * Sets the language priority list. If other information is not (yet) available, this is used to
+	 * Sets the language/locale priority list. If other information is not (yet) available, this is used to
 	 * to produce a default value for the appropriate territory, currency, timezone, etc.
 	 * The user should be given the opportunity to correct those defaults in case they are incorrect.
 	 * @param locales list of locales in priority order, eg {"be", "fr"} for Breton first, then French if that fails.
@@ -182,7 +78,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
-	 * @return a copy of the language priority list.
+	 * @return a copy of the language/locale priority list.
 	 */
 	public List getULocales() {
 		return new ArrayList(locales); // clone for safety
@@ -197,27 +93,27 @@ public class GlobalizationPreferences {
 	}
 
 	/**
-	 * Convenience routine for setting the locale priority list
-	 * @see setULocales(List locales)
-	 * @param locales list of locales in an array
+	 * Convenience routine for setting the language/locale priority list from an array.
+	 * @see #setULocales(List locales)
+	 * @param uLocales list of locales in an array
 	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setULocales(ULocale[] locales) {
-		return setULocales(Arrays.asList(locales));
+	public GlobalizationPreferences setULocales(ULocale[] uLocales) {
+		return setULocales(Arrays.asList(uLocales));
 	}
 	/**
-	 * Convenience routine for setting the locale priority list
-	 * @see setULocales(List locales)
-	 * @param ulocale single locale
+	 * Convenience routine for setting the language/locale priority list from a single locale/language.
+	 * @see #setULocales(List locales)
+	 * @param uLocale single locale
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setULocales(ULocale uLocale) {
 		return setULocales(new ULocale[]{uLocale});
 	}
 	/**
-	 * Convenience routine for setting the locale priority list
-	 * @see setULocales(List locales)
-	 * @param ulocale Accept-Language list, as defined by Section 14.4 of the RFC 2616 (HTTP 1.1)
+	 * Convenience routine for setting the locale priority list from an Accept-Language string.
+	 * @see #setULocales(List locales)
+	 * @param acceptLanguageString Accept-Language list, as defined by Section 14.4 of the RFC 2616 (HTTP 1.1)
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setULocales(String acceptLanguageString) {
@@ -274,6 +170,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
+	 * Gets the territory setting. If it wasn't explicitly set, it is computed from the general locale setting.
 	 * @return territory code, explicit or implicit.
 	 */
 	public String getTerritory() {
@@ -291,6 +188,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
+	 * Get a copy of the currency computed according to the settings. 
 	 * @return currency code, explicit or implicit.
 	 */
 	public Currency getCurrency() {
@@ -308,6 +206,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
+	 * Get a copy of the calendar according to the settings. 
 	 * @return currency code, explicit or implicit.
 	 */
 	public Calendar getCalendar() {
@@ -325,6 +224,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
+	 * Get the timezone. It was either explicitly set, or is heuristically computed from other settings.
 	 * @return timezone, either implicitly or explicitly set
 	 */
 	public TimeZone getTimezone() {
@@ -341,6 +241,7 @@ public class GlobalizationPreferences {
 		return this;
 	}
 	/**
+	 * Gets the date locale, to be used in computing date formats. Overrides the general locale setting.
 	 * @return date locale. Null if none was set explicitly.
 	 */
 	public ULocale getDateLocale() {
@@ -358,7 +259,7 @@ public class GlobalizationPreferences {
 	}
 
 	/**
-	 * Get the current number locale setting.
+	 * Get the current number locale setting used for getNumberFormat.
 	 * @return number locale. Null if none was set explicitly.
 	 */
 	public ULocale getNumberLocale() {
@@ -370,7 +271,6 @@ public class GlobalizationPreferences {
 	 * Uses the language priority list to do so.
 	 * @param id language code, script code, ...
 	 * @param type specifies the type of the ID: LANGUAGE, etc.
-	 * @param length specifies the style (only currently for currency).
 	 * @return the display name
 	 */
 	public String getDisplayName(String id, int type) {
@@ -450,7 +350,7 @@ public class GlobalizationPreferences {
 	/**
 	 * Gets a date format according to the current settings. If there is an explicit (non-null) date/time
 	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
-	 * Otherwise, the language priority list is used. NONE should be used if for the style,
+	 * Otherwise, the language priority list is used. NONE should be used for the style,
 	 * where only the date or time format individually is being gotten.
 	 * @param dateStyle
 	 * @param timeStyle
@@ -483,7 +383,11 @@ public class GlobalizationPreferences {
 	}
 	
 	/**
-	 * TBD
+	 * Gets a number format according to the current settings.
+	 * If there is an explicit (non-null) number
+	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
+	 * Otherwise, the language priority list is used. NONE should be used for the style,
+	 * where only the date or time format individually is being gotten.
 	 */
 	public NumberFormat getNumberFormat(int style) {
 		try {
@@ -513,7 +417,7 @@ public class GlobalizationPreferences {
 	}
 	
 	/**
-	 * TBD
+	 * Sets a number format explicitly. Overrides the number locale and the general locale settings.
 	 */
 	public GlobalizationPreferences setNumberFormat(int style, DateFormat format) {
 		if (numberFormats == null) numberFormats = new NumberFormat[NUMBER_LIMIT];
