@@ -31,6 +31,7 @@ import java.util.MissingResourceException;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -615,7 +616,7 @@ public class UnicodeSet extends UnicodeFilter {
             return result;
         }
 
-        return _generatePattern(result, escapeUnprintable);
+        return _generatePattern(result, escapeUnprintable, true);
     }
 
     /**
@@ -623,9 +624,10 @@ public class UnicodeSet extends UnicodeFilter {
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
      * @stable ICU 2.0
+     * @param includeStrings if false, doesn't include the strings.
      */
     public StringBuffer _generatePattern(StringBuffer result,
-                                         boolean escapeUnprintable) {
+                                         boolean escapeUnprintable, boolean includeStrings) {
         result.append('[');
 
 //      // Check against the predefined categories.  We implicitly build
@@ -678,7 +680,7 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
 
-        if (strings.size() > 0) {
+        if (includeStrings && strings.size() > 0) {
             Iterator it = strings.iterator();
             while (it.hasNext()) {
                 result.append('{');
@@ -1646,8 +1648,10 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
-     * Returns true if this set contains all the characters
-     * of the given string.
+     * Returns true if there is a partition of the string such that this set contains each of the partitioned strings.
+     * For example, for the Unicode set [a{bc}{cd}]<br>
+     * containsAll is true for each of: "a", "bc", ""cdbca"<br>
+     * containsAll is false for each of: "acb", "bcda", "bcx"<br>
      * @param s string containing characters to be checked for containment
      * @return true if the test condition is met
      * @stable ICU 2.0
@@ -1656,12 +1660,42 @@ public class UnicodeSet extends UnicodeFilter {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
-            if (!contains(cp)) return false;
+            if (!contains(cp)) {
+            	if (strings.size() == 0) return false; // quick exit
+            	// TODO: later, optimize for two common cases
+            	// 1. If all the characters in the strings are individually in the set, then just return false
+            	//    in that case, looking at the strings wouldn't help.
+            	//    This setting can be cached.
+            	// 2. If none of the strings overlap, then we don't need to go to regex, 
+            	//    we can use a simpler test.
+            	//    We would cache this setting also, plus the maximum string length
+            	
+            	// TODO: later, cache the Matcher
+            	// 		 with all caches, we need to flush them if the set changes, of course!
+            	return Pattern.matches(getRegexEquivalent() + "*", s);
+            }
         }
         return true;
     }
 
     /**
+     * @internal
+     * @deprecated
+     * @return regex pattern equivalent to this UnicodeSet
+     */
+    public String getRegexEquivalent() {
+		if (strings.size() == 0) return toString();
+		StringBuffer result = new StringBuffer("(?:");
+		_generatePattern(result, true, false);
+        Iterator it = strings.iterator();
+        while (it.hasNext()) {
+            result.append('|');
+            _appendToPat(result, (String) it.next(), true);
+        }
+		return result.append(")").toString();
+	}
+
+	/**
      * Returns true if this set contains none of the characters
      * of the given range.
      * @param start first character, inclusive, of the range
@@ -1684,8 +1718,10 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
-     * Returns true if this set contains none of the characters and strings
-     * of the given set.
+     * Returns true if none of the characters or strings in this UnicodeSet appears in the string.
+     * For example, for the Unicode set [a{bc}{cd}]<br>
+     * containsNone is true for: "xy", "cb"<br>
+     * containsNone is false for: "a", "bc", "bcd"<br>
      * @param c set to be checked for containment
      * @return true if the test condition is met
      * @stable ICU 2.0
@@ -1716,6 +1752,12 @@ public class UnicodeSet extends UnicodeFilter {
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
             if (contains(cp)) return false;
+        }
+        if (strings.size() == 0) return true;
+        // do a last check to make sure no strings are in.
+        for (Iterator it = strings.iterator(); it.hasNext();) {
+        	String item = (String)it.next();
+        	if (s.indexOf(item) >= 0) return false;
         }
         return true;
     }
@@ -2356,7 +2398,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (usePat) {
             rebuiltPat.append(pat.toString());
         } else {
-            _generatePattern(rebuiltPat, false);
+            _generatePattern(rebuiltPat, false, true);
         }
     }
 

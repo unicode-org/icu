@@ -994,13 +994,48 @@ public class UnicodeSetTest extends TestFmwk {
 
             "[:Assigned:]",
             "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
-            "\\u0888\\uFDD3\\uFFFE\\U00050005"
+            "\\u0888\\uFDD3\\uFFFE\\U00050005",
+            
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
             expectContainment(DATA[i], DATA[i+1], DATA[i+2]);
         }
     }
+    
+    public void TestUnicodeSetStrings() {
+		UnicodeSet uset = new UnicodeSet("[a{bc}{cd}pqr\u0000]");
+		logln(uset + " ~ " + uset.getRegexEquivalent());
+		String[][] testStrings = {{"x", "none"},
+				{"bc", "all"},
+				{"cdbca", "all"},
+				{"a", "all"},
+				{"bcx", "some"},
+				{"ab", "some"},
+				{"acb", "some"},
+				{"bcda", "some"},
+				{"dccbx", "none"},
+			};
+		for (int i = 0; i < testStrings.length; ++i) {
+			check(uset, testStrings[i][0], testStrings[i][1]);
+		}
+	}
+
+    
+	private void check(UnicodeSet uset, String string, String desiredStatus) {
+		boolean shouldContainAll = desiredStatus.equals("all");
+		boolean shouldContainNone = desiredStatus.equals("none");
+	    if (uset.containsAll(string) != shouldContainAll) {
+	    	errln("containsAll " +  string + " should be " + shouldContainAll);
+	    } else {
+	    	logln("containsAll " +  string + " = " + shouldContainAll);
+	    }
+	    if (uset.containsNone(string) != shouldContainNone) {
+	    	errln("containsNone " +  string + " should be " + shouldContainNone);
+	    } else {
+	    	logln("containsNone " +  string + " = " + shouldContainNone);	    	
+	    }
+	}
 
     /**
      * Test cloning of UnicodeSet
@@ -1747,4 +1782,6 @@ public class UnicodeSetTest extends TestFmwk {
     static final String CharsToUnicodeString(String s) {
         return Utility.unescape(s);
     }
+    
+    
 }
