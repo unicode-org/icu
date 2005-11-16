@@ -1339,7 +1339,7 @@ private:
     }
 };
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneKeysEnumeration);
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneKeysEnumeration)
 
 void
 DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
