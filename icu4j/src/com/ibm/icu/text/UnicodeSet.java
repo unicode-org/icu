@@ -260,9 +260,11 @@ import java.util.regex.Pattern;
  *     </tr>
  *   </table>
  * </blockquote>
+ * <p>To iterate over contents of UnicodeSet, use UnicodeSetIterator class.
  *
  * @author Alan Liu
  * @stable ICU 2.0
+ * @see UnicodeSetIterator
  */
 public class UnicodeSet extends UnicodeFilter {
 

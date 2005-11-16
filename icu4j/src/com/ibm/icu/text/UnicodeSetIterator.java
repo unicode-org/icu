@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,9 +16,9 @@ import java.util.*;
  *
  * <p>To iterate over code points, use a loop like this:
  * <pre>
- * UnicodeSetIterator it(set);
+ * UnicodeSetIterator it = new UnicodeSetIterator(set);
  * while (set.next()) {
- *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
+ *   if (set.codepoint != UnicodeSetIterator.IS_STRING) {
  *     processCodepoint(set.codepoint);
  *   } else {
  *     processString(set.string);
@@ -28,9 +28,9 @@ import java.util.*;
  *
  * <p>To iterate over code point ranges, use a loop like this:
  * <pre>
- * UnicodeSetIterator it(set);
+ * UnicodeSetIterator it = new UnicodeSetIterator(set);
  * while (set.nextRange()) {
- *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
+ *   if (set.codepoint != UnicodeSetIterator.IS_STRING) {
  *     processCodepointRange(set.codepoint, set.codepointEnd);
  *   } else {
  *     processString(set.string);
