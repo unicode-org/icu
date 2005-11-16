@@ -1389,8 +1389,9 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
     }
 }
 
-UBool U_CALLCONV 
-uhash_compareTZHashValues(const UHashTok val1, const UHashTok val2){
+U_CDECL_BEGIN
+static UBool U_CALLCONV 
+compareTZHashValues(const UHashTok val1, const UHashTok val2){
 
     const UnicodeString* array1 = (UnicodeString*) val1.pointer;
     const UnicodeString* array2 = (UnicodeString*) val2.pointer;
@@ -1407,6 +1408,7 @@ uhash_compareTZHashValues(const UHashTok val1, const UHashTok val2){
     }
     return TRUE;
 }
+U_CDECL_END
 
 void
 DateFormatSymbols::initZoneStrings(UErrorCode &status){
@@ -1419,7 +1421,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     }
     int32_t i;
     
-    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
+    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, compareTZHashValues, status);
     if(fZoneStringsHash==NULL){
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1552,7 +1554,7 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
+    fZoneStringsHash = new Hashtable(uhash_compareUnicodeString, compareTZHashValues, status);
     if(U_FAILURE(status)){
         return;
     }
@@ -1675,7 +1677,7 @@ DateFormatSymbols::setZoneString(const UnicodeString &zid, const TimeZoneTransla
 Hashtable* 
 DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
     UErrorCode status = U_ZERO_ERROR;
-    Hashtable* hash = new Hashtable(uhash_compareUnicodeString, uhash_compareTZHashValues, status);
+    Hashtable* hash = new Hashtable(uhash_compareUnicodeString, compareTZHashValues, status);
     if(hash==NULL){
         return NULL;
     }
