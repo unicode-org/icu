@@ -740,7 +740,7 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
     USet *exemplarSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
     int32_t strIdx;
     if (U_FAILURE(errorCode)) {
-      log_err("%s: error uset_openPattern returned %s\n", currLoc, u_errorName(errorCode));
+        log_err("%s: error uset_openPattern returned %s\n", currLoc, u_errorName(errorCode));
         return -1;
     }
 
@@ -748,6 +748,7 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
         if (!uset_contains(exemplarSet, string[strIdx])
             && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027) {
             if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
+                uset_close(exemplarSet);
                 return strIdx;
             }
         }
@@ -1037,6 +1038,7 @@ static void TestExemplarSet(void){
     UErrorCode ec = U_ZERO_ERROR;
     UEnumeration* avail;
     USet* exemplarSets[2];
+    USet* unassignedSet;
     UScriptCode code[MAX_SCRIPTS_PER_LOCALE];
     USet* codeSets[MAX_SCRIPTS_PER_LOCALE];
     int32_t codeLen;
@@ -1047,7 +1049,9 @@ static void TestExemplarSet(void){
     int32_t strLen;
     UChar32 start, end;
     
-    exemplarSets[0] = exemplarSets[1] = NULL;
+    unassignedSet = NULL;
+    exemplarSets[0] = NULL;
+    exemplarSets[1] = NULL;
     for (i=0; i<MAX_SCRIPTS_PER_LOCALE; ++i) {
         codeSets[i] = NULL;
     }
@@ -1056,6 +1060,10 @@ static void TestExemplarSet(void){
     if (!assertSuccess("ures_openAvailableLocales", &ec)) goto END;
     n = uenum_count(avail, &ec);
     if (!assertSuccess("uenum_count", &ec)) goto END;
+
+    u_uastrcpy(ubuf, "[:unassigned:]");
+    unassignedSet = uset_openPattern(ubuf, -1, &ec);
+    if (!assertSuccess("uset_openPattern", &ec)) goto END;
 
     for(i=0; i<n; i++){
         const char* locale = uenum_next(avail, NULL, &ec);
@@ -1070,6 +1078,9 @@ static void TestExemplarSet(void){
             exemplarSets[k] = exemplarSet;
             if (!assertSuccess("ulocaledata_getExemplarSet", &ec)) goto END;
 
+            if (uset_containsSome(exemplarSet, unassignedSet)) {
+                log_err("ExemplarSet contains unassigned characters for locale : %s\n", locale);
+            }
             codeLen = uscript_getCode(locale, code, 8, &ec);
             if (!assertSuccess("uscript_getCode", &ec)) goto END;
 
@@ -1129,6 +1140,7 @@ static void TestExemplarSet(void){
     uenum_close(avail);
     uset_close(exemplarSets[0]);
     uset_close(exemplarSets[1]);
+    uset_close(unassignedSet);
     for (i=0; i<MAX_SCRIPTS_PER_LOCALE; ++i) {
         uset_close(codeSets[i]);
     }
