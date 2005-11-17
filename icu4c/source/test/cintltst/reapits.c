@@ -1021,6 +1021,7 @@ void TestBug4315(void) {
         TEST_ASSERT(destFields[3] == NULL);
         free(textBuff);
     }
+    uregex_close(theRegEx);
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
