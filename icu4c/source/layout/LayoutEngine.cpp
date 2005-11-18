@@ -143,7 +143,7 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
 }
 
 le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-                LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+                LEUnicode *&outChars, LEGlyphStorage &/*glyphStorage*/, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -163,6 +163,13 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         CharSubstitutionFilter *substitutionFilter = new CharSubstitutionFilter(fFontInstance);
 		const LEUnicode *inChars = &chars[offset];
 		LEUnicode *reordered = NULL;
+        LEGlyphStorage fakeGlyphStorage;
+
+        fakeGlyphStorage.allocateGlyphArray(count, rightToLeft, success);
+
+        if (LE_FAILURE(success)) {
+            return 0;
+        }
 
 		// This is the cheapest way to get mark reordering only for Hebrew.
 		// We could just do the mark reordering for all scripts, but most
@@ -175,12 +182,11 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 				return 0;
 			}
 
-			CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, reordered, glyphStorage);
+			CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, reordered, fakeGlyphStorage);
 			inChars = reordered;
-		}
+        }
 
-        glyphStorage.allocateGlyphArray(count, rightToLeft, success);
-        glyphStorage.allocateAuxData(success);
+        fakeGlyphStorage.allocateAuxData(success);
 
         if (LE_FAILURE(success)) {
             return 0;
@@ -192,21 +198,21 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         }
 
         for (i = 0; i < count; i += 1, out += dir) {
-            glyphStorage[out] = (LEGlyphID) inChars[i];
-            glyphStorage.setAuxData(out, canonFeatures, success);
+            fakeGlyphStorage[out] = (LEGlyphID) inChars[i];
+            fakeGlyphStorage.setAuxData(out, canonFeatures, success);
         }
 
 		if (reordered != NULL) {
 			LE_DELETE_ARRAY(reordered);
 		}
 
-        outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE);
+        outCharCount = canonGSUBTable->process(fakeGlyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE);
 
-        out = (rightToLeft? count - 1 : 0);
+        out = (rightToLeft? outCharCount - 1 : 0);
 
         outChars = LE_NEW_ARRAY(LEUnicode, outCharCount);
         for (i = 0; i < outCharCount; i += 1, out += dir) {
-            outChars[out] = (LEUnicode) LE_GET_GLYPH(glyphStorage[i]);
+            outChars[out] = (LEUnicode) LE_GET_GLYPH(fakeGlyphStorage[i]);
         }
 
         delete substitutionFilter;
