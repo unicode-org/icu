@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/11/08 05:19:59 $
-* $Revision: 1.9 $
+* $Date: 2005/11/19 05:39:39 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -16,35 +16,90 @@ package com.ibm.text.UCD;
 import java.util.*;
 import java.io.*;
 
+import com.ibm.icu.dev.demo.translit.CaseIterator;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.dev.test.util.UnicodePropertySource;
 import com.ibm.icu.dev.test.util.UnicodeMap.MapIterator;
+import com.ibm.icu.impl.PrettyPrinter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.ULocale;
 
 import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
 		try {
-			getBidiMirrored();
-			//getCaseFoldingUnstable();
+			
+			getCaseLengths("Lower", UCD.LOWER);
+			getCaseLengths("Upper", UCD.UPPER);
+			getCaseLengths("Title", UCD.TITLE);
+			getCaseLengths("Fold", UCD.FOLD);
+
 			if (true) return;
-			getHasAllNormalizations();
+			checkUnicodeSet();
 			getLengths("NFC", Default.nfc());
 			getLengths("NFD", Default.nfd());
 			getLengths("NFKC", Default.nfkc());
 			getLengths("NFKD", Default.nfkd());
+
+			//getCaseFoldingUnstable();
+			
+			checkCase();
+			if (true) return;
+			tem();
+			//checkPrettyPrint();
+			Collection l = new CaseVariantMaker().getVariants("abc");
+			for (Iterator it = l.iterator(); it.hasNext();) {
+				System.out.println(it.next());
+			}
+			String propName = UCharacter.getPropertyName(3, UProperty.NameChoice.LONG);
+			//testProps();
+			
+			getBidiMirrored();
+			getHasAllNormalizations();
 		} finally {
 			System.out.println("Done");
 		}
 	}
 	
+	private static void checkUnicodeSet() {
+		UnicodeSet uset = new UnicodeSet("[a{bc}{cd}pqr\u0000]");
+		System.out.println(uset + " ~ " + uset.getRegexEquivalent());
+		String[][] testStrings = {
+				{"x", "none"},
+				{"bc", "all"},
+				{"cdbca", "all"},
+				{"a", "all"},
+				{"bcx", "some"},
+				{"ab", "some"},
+				{"acb", "some"},
+				{"bcda", "some"},
+				{"dccbx", "none"},
+			};
+		for (int i = 0; i < testStrings.length; ++i) {
+			check(uset, testStrings[i][0], testStrings[i][1]);
+		}
+	}
+
+	private static void check(UnicodeSet uset, String string, String desiredStatus) {
+		boolean shouldContainAll = desiredStatus.equals("all");
+		boolean shouldContainNone = desiredStatus.equals("none");
+	    System.out.println((uset.containsAll(string) == shouldContainAll ? "" : "FAILURE:") + "\tcontainsAll " +  string + " = " + shouldContainAll);
+	    System.out.println((uset.containsNone(string) == shouldContainNone ? "" : "FAILURE:") + "\tcontainsNone " +  string + " = " + shouldContainNone);
+	}
+
 	private static void getCaseFoldingUnstable() {
 		for (int i = 3; i < com.ibm.text.utility.Utility.searchPath.length - 1; ++i) {
 			String newName = com.ibm.text.utility.Utility.searchPath[i];
@@ -236,23 +291,27 @@ public class QuickTest implements UCD_Types {
 		String title;
 		int bytesPerCodeUnit;
 		int longestCodePoint = -1;
-		int longestLength = 0;
-		UnicodeSet longestSet = new UnicodeSet();
+		double longestLength = 0;
+		UnicodeMap longestSet = new UnicodeMap();
 		Length(String title, int bytesPerCodeUnit) {
 			this.title = title;
 			this.bytesPerCodeUnit = bytesPerCodeUnit;
 		}
-		void add(int codePoint, int codeUnitLength) {
+		void add(int codePoint, int cuLen, int processedUnitLength, String processedString) {
+			double codeUnitLength = processedUnitLength / (double) cuLen;
 			if (codeUnitLength > longestLength) {
 				longestCodePoint = codePoint;
 				longestLength = codeUnitLength;
 				longestSet.clear();
-				longestSet.add(codePoint);
+				longestSet.put(codePoint, processedString);
 				System.out.println(title + " \t(" + codeUnitLength*bytesPerCodeUnit + " bytes, "
 						+ codeUnitLength + " code units) \t"
-						+ Default.ucd().getCodeAndName(codePoint));				
+						+ longestLength + " expansion) \t"
+						+ Default.ucd().getCodeAndName(codePoint)
+						+ "\r\n\t=> " + Default.ucd().getCodeAndName(processedString)
+						);				
 			} else if (codeUnitLength == longestLength) {
-				longestSet.add(codePoint);
+				longestSet.put(codePoint, processedString);
 			}
 		}
 	}
@@ -269,20 +328,46 @@ public class QuickTest implements UCD_Types {
 		for (int i = 0; i <= 0x10FFFF; ++i) {
 			int type = Default.ucd().getCategoryMask(i);
 			if ((type & skip) != 0) continue;
+			String is = UTF16.valueOf(i);
 			String norm = normalizer.normalize(i);
-			utf8Len.add(i, getUTF8Length(norm));
-			utf16Len.add(i, norm.length());
-			utf32Len.add(i, UTF16.countCodePoint(norm));
+			utf8Len.add(i, getUTF8Length(is), getUTF8Length(norm), norm);
+			utf16Len.add(i, is.length(), norm.length(), norm);
+			utf32Len.add(i, 1, UTF16.countCodePoint(norm), norm);
 		}
-		UnicodeSet common = new UnicodeSet(utf8Len.longestSet)
-			.retainAll(utf16Len.longestSet)
-			.retainAll(utf32Len.longestSet);
+		UnicodeSet common = new UnicodeSet(utf8Len.longestSet.keySet())
+			.retainAll(utf16Len.longestSet.keySet())
+			.retainAll(utf32Len.longestSet.keySet());
 		if (common.size() > 0) {
 			UnicodeSetIterator it = new UnicodeSetIterator(common);
 			it.next();
 			System.out.println("Common Exemplar: " + Default.ucd().getCodeAndName(it.codepoint));
 		}
 	}
+	
+	private static void getCaseLengths(String title, byte caseType) throws IOException {
+		System.out.println();
+		Length utf8Len = new Length(title + "\tUTF8", 1);
+		Length utf16Len = new Length(title + "\tUTF16", 1);
+		Length utf32Len = new Length(title + "\tUTF32", 1);
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			int type = Default.ucd().getCategoryMask(i);
+			if ((type & skip) != 0) continue;
+			String is = UTF16.valueOf(i);
+			String norm = Default.ucd().getCase(i, UCD.FULL, caseType);
+			utf8Len.add(i, getUTF8Length(is), getUTF8Length(norm), norm);
+			utf16Len.add(i, is.length(), norm.length(), norm);
+			utf32Len.add(i, 1, UTF16.countCodePoint(norm), norm);
+		}
+		UnicodeSet common = new UnicodeSet(utf8Len.longestSet.keySet())
+			.retainAll(utf16Len.longestSet.keySet())
+			.retainAll(utf32Len.longestSet.keySet());
+		if (common.size() > 0) {
+			UnicodeSetIterator it = new UnicodeSetIterator(common);
+			it.next();
+			System.out.println("Common Exemplar: " + Default.ucd().getCodeAndName(it.codepoint));
+		}
+	}
+
 
 	static ByteArrayOutputStream utf8baos;
 	static Writer utf8bw;
@@ -422,4 +507,319 @@ public class QuickTest implements UCD_Types {
         System.out.println("\tDetails:");
         //Utility.showSetNames("", set1, false, Default.ucd());
     }
+    
+	
+	private static void checkPrettyPrint() {
+		//System.out.println("Test: " + fixTransRule("\\u0061"));
+		UnicodeSet s = new UnicodeSet("[^[:script=common:][:script=inherited:]]");
+		UnicodeSet quoting = new UnicodeSet("[[:Mn:][:Me:]]");
+		String ss = new PrettyPrinter().setToQuote(quoting).toPattern(s);
+		System.out.println("test: " + ss);
+	}
+	
+	static class CaseVariantMaker {
+		private ULocale locale = ULocale.ROOT;
+		private String string = null;
+		private Collection output;
+		
+		private Collection getVariants(String string) {
+			return getVariants(string, null);
+		}
+		
+		private Collection getVariants(String string, Collection output) {
+			this.string = string;
+			if (output == null)  output = new ArrayList();
+			this.output = output;
+			getSimpleCaseVariants(0, "");
+			return output;
+		}
+		
+		private void getSimpleCaseVariants(int i, String soFar) {
+			if (i == string.length()) {
+				output.add(soFar);
+				return;
+			}
+			// can optimize later
+			String s = UTF16.valueOf(string, i);
+			i += s.length();
+			getSimpleCaseVariants(i, soFar + s);
+			String upper = UCharacter.toUpperCase(locale, s);
+			if (!upper.equals(s)) {
+				getSimpleCaseVariants(i, soFar + upper);
+			}
+			String title = UCharacter.toTitleCase(locale, s, null);
+			if (!title.equals(s) && !title.equals(upper)) {
+				getSimpleCaseVariants(i, soFar + title);
+			}
+			String lower = UCharacter.toLowerCase(locale, s);
+			if (!lower.equals(s) && !lower.equals(upper) && !lower.equals(title)) {
+				getSimpleCaseVariants(i, soFar + lower);
+			}
+		}
+		
+		public ULocale getLocale() {
+			return locale;
+		}
+		
+		public void setLocale(ULocale locale) {
+			this.locale = locale;
+		}
+	}
+	
+	private static void tem() {
+		PrintStream out = System.out;
+		String text = "\ufb03";
+		
+		String BASE_RULES =
+			"'<' > '&lt;' ;" +
+			"'<' < '&'[lL][Tt]';' ;" +
+			"'&' > '&amp;' ;" +
+			"'&' < '&'[aA][mM][pP]';' ;" +
+			"'>' < '&'[gG][tT]';' ;" +
+			"'\"' < '&'[qQ][uU][oO][tT]';' ; " +
+			"'' < '&'[aA][pP][oO][sS]';' ; ";
+		
+		String CONTENT_RULES =
+			"'>' > '&gt;' ;";
+		
+		String HTML_RULES = BASE_RULES + CONTENT_RULES + 
+		"'\"' > '&quot;' ; ";
+		
+		String HTML_RULES_CONTROLS = HTML_RULES + 
+		"([[:C:][:Z:][:whitespace:][:Default_Ignorable_Code_Point:][\\u0080-\\U0010FFFF]-[\\u0020]]) > &hex/xml($1) ; ";
+		
+		
+		Transliterator toHTML = Transliterator.createFromRules(
+				"any-xml", HTML_RULES_CONTROLS, Transliterator.FORWARD);
+		
+		int[][] ranges = {{UProperty.BINARY_START, UProperty.BINARY_LIMIT},
+				{UProperty.INT_START, UProperty.INT_LIMIT},
+				{UProperty.DOUBLE_START, UProperty.DOUBLE_START},
+				{UProperty.STRING_START, UProperty.STRING_LIMIT},
+		};
+		Collator col = Collator.getInstance(ULocale.ROOT);
+		((RuleBasedCollator)col).setNumericCollation(true);
+		Map alpha = new TreeMap(col);
+		
+		String HTML_INPUT = "::hex-any/xml10; ::hex-any/unicode; ::hex-any/java;";
+		Transliterator fromHTML = Transliterator.createFromRules(
+				"any-xml", HTML_INPUT, Transliterator.FORWARD);
+		
+		text = fromHTML.transliterate(text);
+		
+		int cp = UTF16.charAt(text, 0);
+		text = UTF16.valueOf(text,0);
+		for (int range = 0; range < ranges.length; ++range) {
+			for (int propIndex = ranges[range][0]; propIndex < ranges[range][1]; ++propIndex) {
+				String propName = UCharacter.getPropertyName(propIndex, UProperty.NameChoice.LONG);
+				String propValue = null;
+				int ival;
+				switch (range) {
+				default: propValue = "???"; break;
+				case 0: ival = UCharacter.getIntPropertyValue(cp, propIndex);
+				if (ival != 0) propValue = "True";
+				break;
+				case 2: propValue = String.valueOf(UCharacter.getNumericValue(cp)); break;
+				case 3: 
+					propValue = UCharacter.getStringPropertyValue(propIndex, cp, UProperty.NameChoice.LONG); 
+					if (text.equals(propValue)) propValue = null;
+					break;
+				case 1: ival = UCharacter.getIntPropertyValue(cp, propIndex);
+				if (ival != 0) {
+					propValue = UCharacter.getPropertyValueName(propIndex, ival, UProperty.NameChoice.LONG);
+					if (propValue == null) propValue = String.valueOf(ival);
+				}
+				break;					
+				}
+				if (propValue != null) {
+					alpha.put(propName, propValue);
+				}
+			}
+		}
+		String x;
+		String upper = x = UCharacter.toUpperCase(ULocale.ENGLISH,text);
+		if (!text.equals(x)) alpha.put("Uppercase", x);
+		String lower = x = UCharacter.toLowerCase(ULocale.ENGLISH,text);
+		if (!text.equals(x)) alpha.put("Lowercase", x);
+		String title = x = UCharacter.toTitleCase(ULocale.ENGLISH,text,null);
+		if (!text.equals(x)) alpha.put("Titlecase", x);
+		String nfc = x = Normalizer.normalize(text,Normalizer.NFC);
+		if (!text.equals(x)) alpha.put("NFC", x);
+		String nfd = x = Normalizer.normalize(text,Normalizer.NFD);
+		if (!text.equals(x)) alpha.put("NFD", x);
+		x = Normalizer.normalize(text,Normalizer.NFKD);
+		if (!text.equals(x)) alpha.put("NFKD", x);
+		x = Normalizer.normalize(text,Normalizer.NFKC);
+		if (!text.equals(x)) alpha.put("NFKC", x);
+		
+		CanonicalIterator ci = new CanonicalIterator(text);
+		int count = 0;
+		for (String item = ci.next(); item != null; item = ci.next()) {
+			if (item.equals(text)) continue;
+			if (item.equals(nfc)) continue;
+			if (item.equals(nfd)) continue;
+			alpha.put("Other_Canonical_Equivalent#" + (++count), item);
+		}
+		
+		CaseIterator cai = new CaseIterator();
+		cai.reset(text);
+		count = 0;
+		for (String item = cai.next(); item != null; item = cai.next()) {
+			if (item.equals(text)) continue;
+			if (item.equals(upper)) continue;
+			if (item.equals(lower)) continue;
+			if (item.equals(title)) continue;
+			alpha.put("Other_Case_Equivalent#" + (++count), item);
+		}
+		
+		out.println("<table>");
+		out.println("<tr><td><b>" + "Character" + "</b></td><td><b>" + toHTML.transliterate(text) + "</b></td></tr>");
+		out.println("<tr><td><b>" + "Code_Point" + "</b></td><td><b>" + com.ibm.icu.impl.Utility.hex(cp,4) + "</b></td></tr>");
+		out.println("<tr><td><b>" + "Name" + "</b></td><td><b>" + toHTML.transliterate((String)alpha.get("Name")) + "</b></td></tr>");
+		alpha.remove("Name");
+		for (Iterator it = alpha.keySet().iterator(); it.hasNext();) {
+			String propName = (String) it.next();
+			String propValue = (String) alpha.get(propName);
+			out.println("<tr><td>" + propName + "</td><td>" + toHTML.transliterate(propValue) + "</td></tr>");
+		}
+		out.println("</table>");
+		
+		
+	}
+
+	private static void checkCase() {
+		System.out.println("Getting Values1");
+
+		UnicodeSet hasFrom = new UnicodeSet();
+		UnicodeSet hasTo = new UnicodeSet();
+		UnicodeSet isLower = new UnicodeSet();
+		UnicodeSet isUpper = new UnicodeSet();
+		UnicodeSet isTitle = new UnicodeSet();
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			String si = UTF16.valueOf(i);
+			String xx;
+			xx = UCharacter.toLowerCase(si);
+			if (si.equals(xx)) {
+				isLower.add(i);
+			} else {
+				hasFrom.add(i);
+				hasTo.add(xx);
+			}
+
+			xx = UCharacter.toUpperCase(si);
+			if (si.equals(xx)) {
+				isUpper.add(i);
+			} else {
+				hasFrom.add(i);
+				hasTo.add(xx);
+			}
+
+			xx = UCharacter.toTitleCase(si,null);
+			if (si.equals(xx)) {
+				isTitle.add(i);
+			} else {
+				hasFrom.add(i);
+				hasTo.add(xx);
+			}
+		}
+		
+		PrettyPrinter pp = new PrettyPrinter();
+		
+		showDifferences(pp, "hasFrom", hasFrom, "hasTo", hasTo, "xxx", new UnicodeSet());
+		
+		System.out.println("Getting Values2");
+		isLower.retainAll(hasFrom);
+		isUpper.retainAll(hasFrom);
+		isTitle.retainAll(hasFrom);
+		hasFrom.removeAll(isLower).removeAll(isUpper).removeAll(isTitle);
+		UnicodeSet upperAndTitle = new UnicodeSet(isUpper).retainAll(isTitle);
+		isUpper.removeAll(upperAndTitle);
+		isTitle.removeAll(upperAndTitle);
+		
+		System.out.println("isLower: " + isLower.size());
+		System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(isLower)));
+		System.out.println("isUpper (alone): " + isUpper.size());
+		System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(isUpper)));
+		System.out.println("isTitle (alone): " + isTitle.size());
+		System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(isTitle)));
+		System.out.println("isUpperAndTitle: " + upperAndTitle.size());
+		System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(upperAndTitle)));
+		System.out.println("other: " + hasFrom.size());
+		System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(hasFrom)));
+		
+		UnicodeSet LowercaseProperty = new UnicodeSet("[:Lowercase:]");
+		UnicodeSet LowercaseCategory = new UnicodeSet("[:Lowercase_Letter:]");
+		//System.out.println(pp.toPattern(isLower));
+		
+		showDifferences(pp, "Lowercase", LowercaseProperty, 
+				"Functionally Lowercase", isLower, 
+				"Lowercase_Letter", LowercaseCategory);
+
+		UnicodeSet TitlecaseProperty = new UnicodeSet();
+		UnicodeSet TitlecaseCategory = new UnicodeSet("[:Titlecase_Letter:]");
+
+		showDifferences(pp, "Titlecase", TitlecaseProperty, 
+				"Functionally Titlecase", isTitle, 
+				"Titlecase_Letter", TitlecaseCategory);
+
+		UnicodeSet UppercaseProperty = new UnicodeSet("[:Uppercase:]");
+		UnicodeSet UppercaseCategory = new UnicodeSet("[:Uppercase_Letter:]");
+
+		showDifferences(pp, "Uppercase", UppercaseProperty, 
+				"Functionally Uppercase", new UnicodeSet(isUpper).addAll(upperAndTitle), 
+				"Uppercase_Letter", UppercaseCategory);
+
+
+//		UnicodeMap compare = new UnicodeMap();
+//		compare.putAll(isLower,"isLowercase&isCased");
+//		
+//		compare.composeWith(new UnicodeMap().putAll(LowercaseProperty,"Lowercase"), new MyComposer());
+//		compare.composeWith(new UnicodeMap().putAll(LowercaseProperty,"Lowercase_Letter"), new MyComposer());
+//		for (Iterator it = compare.getAvailableValues().iterator(); it.hasNext();) {
+//			String value = (String) it.next();
+//			UnicodeSet chars = compare.getSet(value);
+//			System.out.println(value + ", size: " + chars.size());
+//			System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(chars)));
+//		}
+	}
+
+	private static void showDifferences(PrettyPrinter pp, 
+			String lowercaseTitle, UnicodeSet LowercaseProperty, 
+			String funcLowerTitle, UnicodeSet isLower,
+			String lowercaseCatTitle, UnicodeSet LowercaseCategory) {
+		System.out.println("Getting Values3");
+		UnicodeSet[] categories = new UnicodeSet[8];
+		for (int i = 0; i < categories.length; ++i) categories[i] = new UnicodeSet();
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			int sum = 0;
+			if (isLower.contains(i)) sum |= 1;
+			if (LowercaseCategory.contains(i)) sum |= 2;
+			if (LowercaseProperty.contains(i)) sum |= 4;
+			categories[sum].add(i);
+		}
+		System.out.println("Printing Values");
+		for (int i = 1; i < categories.length; ++i) {
+			if (categories[i].size() == 0) continue;
+			String name = "";
+			if ((i & 4) != 0) name += " & " + lowercaseTitle;
+			if ((i & 1) != 0) name += " & " + funcLowerTitle;
+			if ((i & 2) != 0) name += " & " + lowercaseCatTitle;
+			name = name.substring(3); // skip " & "
+			System.out.println(name + ", size: " + categories[i].size());
+			System.out.println(com.ibm.icu.impl.Utility.escape(pp.toPattern(categories[i])));
+		}
+	}
+	
+	static class MyComposer implements UnicodeMap.Composer {
+
+		public Object compose(int codePoint, Object a, Object b) {
+			if (a == null) return b;
+			if (b == null) return a;
+			return a + " & " + b;
+		}
+		
+	}
+	
+
+
 }

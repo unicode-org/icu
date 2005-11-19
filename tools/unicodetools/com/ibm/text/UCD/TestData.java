@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/05/27 21:38:51 $
-* $Revision: 1.23 $
+* $Date: 2005/11/19 05:39:39 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -19,11 +19,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
 import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.impl.CollectionUtilities;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharArrayIterator;
