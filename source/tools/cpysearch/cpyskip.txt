@@ -95,6 +95,8 @@ icu4j/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt
 icu4j/src/com/ibm/icu/dev/data/unicode/ucdterms.txt
 icu4j/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt
 icu4j/src/com/ibm/icu/dev/data/IDNATestInput.txt
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/.classpath
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/.classpath
 icu4j/src/com/ibm/icu/dev/test/serializable/*/*.dat
 icu4j/src/com/ibm/icu/dev/tool/ime/indic/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/icu/dev/tool/ime/translit/services/java.awt.im.spi.InputMethodDescriptor
