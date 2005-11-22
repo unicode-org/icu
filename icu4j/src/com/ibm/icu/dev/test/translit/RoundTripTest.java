@@ -206,9 +206,9 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
-        if (skipIfBeforeICU(3,4)) {
+        if (skipIfBeforeICU(3,5)) {
             // We temporarily filter against Unicode 4.1, but we only do this
-            // before version 3.4.
+            // before version 3.5.
             logln("TestGreek needs to be updated to remove delete the section marked [:Age=4.0:] filter");
         } else {
             errln("TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -268,9 +268,9 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestHebrew() throws IOException {
         //      Time bomb
-        if (skipIfBeforeICU(3,4)) {
+        if (skipIfBeforeICU(3,5)) {
             // We temporarily filter against Unicode 4.1, but we only do this
-            // before version 3.4.
+            // before version 3.5.
             logln("TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
         } else {
             errln("TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
