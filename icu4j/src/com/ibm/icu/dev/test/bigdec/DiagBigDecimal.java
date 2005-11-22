@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
 package com.ibm.icu.dev.test.bigdec;
@@ -365,6 +366,7 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("con006")).ok=(com.ibm.icu.math.BigDecimal.TEN.intValueExact())==10;
   
   // [java.math.] BigDecimal
+//#ifndef FOUNDATION
   (new Test("cbd001")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("0"))).toString()).equals("0");
   (new Test("cbd002")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("1"))).toString()).equals("1");
   (new Test("cbd003")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("10"))).toString()).equals("10");
@@ -384,6 +386,7 @@ public class DiagBigDecimal extends TestFmwk{
   num="0.00000123456789";
   (new Test("cbd013")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   num="0.000000123456789";
+
   // ignore format change issues with 1.5
   if (!isJDK15OrLater)
       (new Test("cbd014")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
@@ -396,6 +399,7 @@ public class DiagBigDecimal extends TestFmwk{
    flag=true;
   }/*checknull*/
   (new Test("cbi015")).ok=flag;
+//#endif
   
   // BigInteger
   bip=new BigInteger("987654321987654321987654321"); // biggie +ve
@@ -550,6 +554,7 @@ public class DiagBigDecimal extends TestFmwk{
   }/*checkbound3*/
   (new Test("cca204")).ok=flag;
   
+//#ifndef FOUNDATION
   // double [deprecated]
   // Note that many of these differ from the valueOf(double) results.
   dzer=(double)0;
@@ -604,7 +609,7 @@ public class DiagBigDecimal extends TestFmwk{
   d=d/((double)10);
   if (!isJDK15OrLater)
       (new Test("cdo018")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.000000008999999999999997872197332322678764437995369007694534957408905029296875");
-  
+//#endif
   
   try{checkpin:do{
    new com.ibm.icu.math.BigDecimal(java.lang.Double.POSITIVE_INFINITY);
@@ -4018,8 +4023,9 @@ public class DiagBigDecimal extends TestFmwk{
  /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#toBigDecimal} method. */
- 
+
  public void diagtobigdecimal(){
+//#ifndef FOUNDATION
   (new Test("tbd001")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigDecimal().toString()).equals("0");
   (new Test("tbd002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).toBigDecimal().toString()).equals("-1");
   (new Test("tbd003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).toBigDecimal().toString()).equals("1");
@@ -4033,7 +4039,9 @@ public class DiagBigDecimal extends TestFmwk{
   (new Test("tbd009")).ok=((new com.ibm.icu.math.BigDecimal("1E10")).toBigDecimal().toString()).equals("10000000000");
   (new Test("tbd010")).ok=((new com.ibm.icu.math.BigDecimal("1E12")).toBigDecimal().toString()).equals("1000000000000");
   summary("toBigDecimal");
+//#endif
  }
+
 /* ----------------------------------------------------------------- */
  
  /** Test the {@link com.ibm.icu.math.BigDecimal#toBigInteger} method. */

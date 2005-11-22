@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -38,7 +39,9 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.stringprep.TestAll",
                   "com.ibm.icu.dev.test.timescale.TestAll",
 				  "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector",
+//#ifndef FOUNDATION
                   "com.ibm.icu.dev.test.serializable.SerializableTest" // *is* a group
+//#endif
               },
               "All tests in ICU");
     }

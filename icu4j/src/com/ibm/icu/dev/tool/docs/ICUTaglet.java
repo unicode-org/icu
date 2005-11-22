@@ -1,3 +1,4 @@
+//##header VERSION_1.4
 /**
 *******************************************************************************
 * Copyright (C) 2002-2005, International Business Machines Corporation and    *
@@ -16,15 +17,15 @@ package com.ibm.icu.dev.tool.docs;
 import com.sun.javadoc.*;
 import com.sun.tools.doclets.*;
 //#ifdef VERSION_1.5
-
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-
-// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
-// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
-// Their registration code casts to the second, not the first, and the
-// second doesn't implement the first, so if you just implement the
-// first, you die.
+//##
+//##import com.sun.tools.doclets.internal.toolkit.taglets.*;
+//##import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+//##
+//##// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
+//##// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
+//##// Their registration code casts to the second, not the first, and the
+//##// second doesn't implement the first, so if you just implement the
+//##// first, you die.
 //#endif
 
 import java.text.BreakIterator;
@@ -113,22 +114,22 @@ public abstract class ICUTaglet implements Taglet {
         return null;
     }
 //#ifdef VERSION_1.5
-
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-	TagletOutput out = writer.getTagletOutputInstance();
-	out.setOutput(toString(tag));
-	return out;
-    }
-
-    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
- 	TagletOutput out = writer.getTagletOutputInstance();
-	Tag[] tags = holder.tags(getName());
-	if (tags.length == 0) {
-	    return null;
-	}
- 	out.setOutput(toString(tags[0]));
- 	return out;
-    }
+//##
+//##    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+//##	TagletOutput out = writer.getTagletOutputInstance();
+//##	out.setOutput(toString(tag));
+//##	return out;
+//##    }
+//##
+//##    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
+//## 	TagletOutput out = writer.getTagletOutputInstance();
+//##	Tag[] tags = holder.tags(getName());
+//##	if (tags.length == 0) {
+//##	    return null;
+//##	}
+//## 	out.setOutput(toString(tags[0]));
+//## 	return out;
+//##    }
 //#endif
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";

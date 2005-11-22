@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -192,8 +193,10 @@ public abstract class NumberFormat extends UFormat {
             return format(((Long)number).longValue(), toAppendTo, pos);
         } else if (number instanceof BigInteger) {
             return format((BigInteger) number, toAppendTo, pos);
+//#ifndef FOUNDATION
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
+//#endif
         } else if (number instanceof com.ibm.icu.math.BigDecimal) {
             return format((com.ibm.icu.math.BigDecimal) number, toAppendTo, pos);
         } else if (number instanceof CurrencyAmount) {
@@ -246,6 +249,7 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
+//#ifndef FOUNDATION
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
@@ -255,6 +259,7 @@ public abstract class NumberFormat extends UFormat {
         return format(number, new StringBuffer(),
                       new FieldPosition(0)).toString();
     }
+//#endif
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -304,7 +309,7 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos); 
-
+//#ifndef FOUNDATION
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
@@ -314,6 +319,7 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(java.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
+//#endif
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>

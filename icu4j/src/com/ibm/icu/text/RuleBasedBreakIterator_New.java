@@ -6,9 +6,11 @@
  */
 package com.ibm.icu.text;
 
-import java.text.CharacterIterator;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.CharacterIterator;
+
+import com.ibm.icu.impl.Assert;
 
 
 /**
@@ -23,6 +25,7 @@ import java.io.InputStream;
  * @internal
  */
 public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
+    private static final boolean ASSERT = false;
     
     private static final int  START_STATE = 1;     // The state number of the starting state
     private static final int  STOP_STATE  = 0;     // The state-transition value indicating "stop"
@@ -526,7 +529,7 @@ public boolean isBoundary(int offset) {
  */
 public int current() {
     return (fText != null) ? fText.getIndex() : BreakIterator.DONE;
-    }
+}
 
 
 
@@ -542,11 +545,14 @@ private void makeRuleStatusValid() {
             int pa = current();
             previous();
             int pb = next();
-            assert pa == pb;
+            if (ASSERT) Assert.assrt("pa == pb", pa == pb);
         }
     }
-    assert fLastStatusIndexValid == true;
-    assert fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fRData.fStatusTable.length;
+    if (ASSERT) {
+        Assert.assrt("fLastStatusIndexValid == true", fLastStatusIndexValid == true);
+        Assert.assrt("fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fRData.fStatusTable.length",
+                        fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fRData.fStatusTable.length);
+    }
 }
 
 

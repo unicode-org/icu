@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU4J Tests
+Bundle-SymbolicName: com.ibm.icu.tests
+Bundle-Version: 3.4.1
+Bundle-Vendor: IBM
+Bundle-Copyright: Licensed Materials - Property of IBM 
+ (C) Copyright IBM Corp. 2000, 2005. All Rights Reserved. 
+ IBM is a registered trademark of IBM Corp.
+Bundle-Localization: plugin
+Require-Bundle: org.junit,
+ com.ibm.icu
+Bundle-ClassPath: icu4jtests.jar

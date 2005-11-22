@@ -1,3 +1,4 @@
+//##header 1132615671000 
 /**
 *******************************************************************************
 * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -7,11 +8,16 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.MissingResourceException;
+
+//#ifndef FOUNDATION
+import java.nio.ByteBuffer;
+//#else
+//##import com.ibm.icu.impl.ByteBuffer;
+//#endif
 
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.ICUDebug;

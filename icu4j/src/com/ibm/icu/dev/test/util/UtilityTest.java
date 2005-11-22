@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
 **********************************************************************
 * Copyright (c) 2003-2005, International Business Machines
@@ -112,7 +113,11 @@ public class UtilityTest extends TestFmwk {
     {
         byte[] ba = {0x00, 0x01, 0x02};
         byte[] bb = {0x00, 0x01, 0x02, -1};
+//#ifndef FOUNDATION
         java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
+//#else
+//##        com.ibm.icu.impl.ByteBuffer buffer = com.ibm.icu.impl.ByteBuffer.wrap(ba);
+//#endif
         ByteArrayWrapper x = new ByteArrayWrapper(buffer);
         
         ByteArrayWrapper y = new ByteArrayWrapper(ba, 3);

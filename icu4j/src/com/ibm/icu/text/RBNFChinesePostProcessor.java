@@ -7,6 +7,8 @@
 
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.Utility;
+
 /**
  * A post-processor for Chinese text.
  */
@@ -45,7 +47,7 @@ final class RBNFChinesePostProcessor extends RBNFPostProcessor {
         }
 
         if (longForm) {
-            for (int i = buf.indexOf("*"); i != -1; i = buf.indexOf("*", i)) {
+            for (int i = Utility.indexOf(buf,"*"); i != -1; i = Utility.indexOf(buf, "*", i)) {
                 buf.delete(i, i+1);
             }
             return;
@@ -79,14 +81,14 @@ final class RBNFChinesePostProcessor extends RBNFPostProcessor {
         {
             String[] m = markers[format];
             for (int i = 0; i < m.length-1; ++i) {
-                int n = buf.indexOf(m[i]);
+                int n = Utility.indexOf(buf, m[i]);
                 if (n != -1) {
                     buf.insert(n+m[i].length(), '|');
                 }
             }
         }
 
-        int x = buf.indexOf(DIAN);
+        int x = Utility.indexOf(buf, DIAN);
         if (x == -1) {
             x = buf.length();
         }
@@ -94,8 +96,8 @@ final class RBNFChinesePostProcessor extends RBNFPostProcessor {
         int n = -1; // previous optional ling
         String ling = markers[format][3];
         while (x >= 0) {
-            int m = buf.lastIndexOf("|", x);
-            int nn = buf.lastIndexOf(ling, x);
+            int m = Utility.lastIndexOf(buf, "|", x);
+            int nn = Utility.lastIndexOf(buf, ling, x);
             int ns = 0;
             if (nn > m) {
                 ns = (nn > 0 && buf.charAt(nn-1) != '*') ? 2 : 1;

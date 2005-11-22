@@ -56,6 +56,7 @@ icu4c/source/test/testdata/iscii.bin -text
 icu4c/source/test/testdata/testdata_icu26_testtypes.res -text
 icu4c/source/test/testdata/testdata_icu26e_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text
+icu4j/ee.foundation.jar -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text

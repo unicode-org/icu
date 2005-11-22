@@ -1,3 +1,4 @@
+//##header 1132616027000 
 /*
  ******************************************************************************
  * Copyright (C) 2004-2005, International Business Machines Corporation and   *
@@ -6,7 +7,6 @@
  */
 package com.ibm.icu.impl;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -15,6 +15,11 @@ import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
+
+//#ifndef FOUNDATION
+import java.nio.ByteBuffer;
+//#endif
+
 /**
  * @author ram
  */
@@ -27,6 +32,8 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     private ULocale ulocale;
     private ClassLoader loader;
 
+    private static final boolean ASSERT = false;
+    
     /**
      * 
      * @param baseName
@@ -500,7 +507,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     }
     
     private static int getInt(byte[] data, int offset){
-        assert offset < data.length;
+        if (ASSERT) Assert.assrt("offset < data.length", offset < data.length);
         return makeInt(data[offset], data[offset+1], 
                        data[offset+2], data[offset+3]);
     }
@@ -515,7 +522,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             int length = ICUResourceBundleImpl.getInt(rawData,offset);
             int byteOffset = offset + getIntOffset(1);
             byte[] dst = new byte[length];
-            assert byteOffset+length < rawData.length;
+            if (ASSERT) Assert.assrt("byteOffset+length < rawData.length", byteOffset+length < rawData.length);
             System.arraycopy(rawData, byteOffset, dst, 0, length);
             return dst;
         }
@@ -551,7 +558,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             int[] val = new int[length];
             int byteLength = getIntOffset(length);
             
-            assert (intOffset+byteLength)<rawData.length;
+            if (ASSERT) Assert.assrt("(intOffset+byteLength)<rawData.length", (intOffset+byteLength)<rawData.length);
             
             for(int i=0; i<length;i++){
                 val[i]=ICUResourceBundleImpl.getInt(rawData, intOffset+getIntOffset(i));
@@ -584,7 +591,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         int length = getInt(rawData,offset);
         int stringOffset = offset + getIntOffset(1);
         char[] dst = new char[length];
-        assert (stringOffset+getCharOffset(length)) < rawData.length;
+        if (ASSERT) Assert.assrt("(stringOffset+getCharOffset(length)) < rawData.length", (stringOffset+getCharOffset(length)) < rawData.length);
         for(int i=0; i<length; i++){
             dst[i]=getChar(rawData, stringOffset+getCharOffset(i));
         }

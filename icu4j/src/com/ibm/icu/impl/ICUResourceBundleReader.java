@@ -1,3 +1,4 @@
+//##header 1132615046000 
 /*
  *******************************************************************************
  * Copyright (C) 2004-2005, International Business Machines Corporation and         *
@@ -154,7 +155,11 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
 
             stream.close();
         }catch(IOException ex){
+//#ifndef FOUNDATION
             throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.", ex);   
+//#else
+//##            throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.");   
+//#endif
         }
     }
     public static ICUResourceBundleReader getReader(String baseName, String localeName, ClassLoader root){

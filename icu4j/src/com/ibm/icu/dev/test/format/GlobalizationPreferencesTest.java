@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 2004-2005, International Business Machines Corporation and    *
@@ -44,7 +45,7 @@ public class GlobalizationPreferencesTest {
 			out.println("\tWarning: some of this is just mockup -- real data will be accessed later.");
 			out.println();
 
-			
+//#ifndef FOUNDATION
 			out.println("Check defaulting");
 			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "en-TH", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
 			for (int i = 0; i < localeList.length; ++i) {
@@ -59,6 +60,8 @@ public class GlobalizationPreferencesTest {
 			}
 			
 			out.println();
+//#endif
+
 			out.println("Date Formatting");
 			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE).format(now));
 			

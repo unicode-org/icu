@@ -19,9 +19,9 @@ import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.util.ULocale;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -675,7 +675,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     public void setZoneStrings(String[][] newZoneStrings) {
         zoneStrings = duplicate(newZoneStrings);
         if(zoneStringsHash==null){
-            zoneStringsHash = new LinkedHashMap();
+            zoneStringsHash = new HashMap();
         }
         initZoneStrings(newZoneStrings);
         // reset the zone strings.
@@ -966,7 +966,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
         zoneStrings = new String[zoneStringsHash.size()][8];
         int i = 0;
-        for (Iterator it = zoneStringsHash.keySet().iterator(); it.hasNext();) {
+        for (Iterator it = zoneStringsKeyList.iterator(); it.hasNext();) {
             String key =  (String)it.next();
             String[] strings =  (String[])zoneStringsHash.get(key);
             zoneStrings[i][0] = key;
@@ -990,13 +990,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
     private void initZoneStringsHash(){
     
-        zoneStringsHash = new LinkedHashMap();
+        zoneStringsHash = new HashMap();
+        zoneStringsKeyList = new ArrayList();
         for (ULocale tempLocale = requestedLocale; tempLocale != null; tempLocale = tempLocale.getFallback()) {
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, tempLocale);
             ICUResourceBundle zoneStringsBundle = bundle.getWithFallback("zoneStrings");
             for(int i=0; i<zoneStringsBundle.getSize(); i++){
                 ICUResourceBundle zoneTable = zoneStringsBundle.get(i);
-                String key = zoneTable.getKey().replaceAll(":","/");
+                String key = Utility.replaceAll(zoneTable.getKey(),":","/");
                 // hack for the root zone strings
                 if(key.length()==0|| zoneTable.getType()!=ICUResourceBundle.TABLE){
                     continue;
@@ -1039,14 +1040,18 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 }
                 if(!zoneStringsHash.containsKey(key)){
                     zoneStringsHash.put(key, strings); // only add if we don't have already
+                    zoneStringsKeyList.add(key);
                 }
             }
         }  
     }
+    
+    private ArrayList zoneStringsKeyList;
     private void initZoneStrings(String[][] newZoneStrings){
         if(newZoneStrings==null){
             return;
         }
+        zoneStringsKeyList = new ArrayList();
         for(int row=0; row<newZoneStrings.length; row++){
             String key = newZoneStrings[row][0];
             String[] strings = (String[])zoneStringsHash.get(key);
@@ -1091,6 +1096,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 }
             } 
             zoneStringsHash.put(key, strings);
+            zoneStringsKeyList.add(key);
         }
     }
     Iterator getZoneStringIDs(){
@@ -1300,7 +1306,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         dst.standaloneNarrowWeekdays = duplicate(src.standaloneNarrowWeekdays);
         dst.ampms = duplicate(src.ampms);
         if(src.zoneStringsHash != null){
-            dst.zoneStringsHash = (LinkedHashMap)src.zoneStringsHash.clone();
+            dst.zoneStringsHash = (HashMap)src.zoneStringsHash.clone();
         }
         dst.requestedLocale = new ULocale(src.requestedLocale.toString());
         //dst.zoneStrings = duplicate(src.zoneStrings);
@@ -1474,7 +1480,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
-        String calType = className.replaceAll("Calendar","").toLowerCase();
+        String calType = Utility.replaceAll(className, "Calendar", "").toLowerCase();
         
         initializeData(locale, calType);
     }

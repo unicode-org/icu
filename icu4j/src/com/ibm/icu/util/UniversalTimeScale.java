@@ -531,7 +531,7 @@ public final class UniversalTimeScale
     public static BigDecimal bigDecimalFrom(double otherTime, int timeScale)
     {
         TimeScaleData data     = getTimeScaleData(timeScale);
-        BigDecimal other       = new BigDecimal(otherTime);
+        BigDecimal other       = new BigDecimal(String.valueOf(otherTime));
         BigDecimal units       = new BigDecimal(data.units);
         BigDecimal epochOffset = new BigDecimal(data.epochOffset);
         

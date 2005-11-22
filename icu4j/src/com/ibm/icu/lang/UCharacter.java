@@ -1,3 +1,4 @@
+//##header 1132615046000 
 /**
 *******************************************************************************
 * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -2949,7 +2950,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated (Java)
      */
     public static boolean isSpace(int ch) {
-	return java.lang.Character.isSpace((char)(ch & 0xffff));
+    	return ch <= 0x20 &&
+    		(ch == 0x20 || ch == 0x09 || ch == 0x0a || ch == 0x0c || ch == 0x0d);
     }
 
     /**
@@ -5266,7 +5268,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
+//#ifndef FOUNDATION
     public static final int codePointAt(CharSequence seq, int index) {
+//#else
+//##    public static final int codePointAt(String seq, int index) {
+//#endif
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
             if (index < seq.length()) {
@@ -5278,6 +5284,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c1;
     }
+//#ifdef FOUNDATION
+//##    public static final int codePointAt(StringBuffer seq, int index) {
+//##        return codePointAt(seq.toString(), index);
+//##    }
+//#endif
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
@@ -5339,7 +5350,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
+//#ifndef FOUNDATION
     public static final int codePointBefore(CharSequence seq, int index) {
+//#else
+//##    public static final int codePointBefore(String seq, int index) {
+//#endif
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
             if (index > 0) {
@@ -5351,6 +5366,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
+//#ifdef FOUNDATION
+//##    public static final int codePointBefore(StringBuffer seq, int index) {
+//##        return codePointBefore(seq.toString(), index);
+//##    }
+//#endif
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
@@ -5479,25 +5499,29 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
+//#ifndef FOUNDATION
     public static int codePointCount(CharSequence text, int start, int limit) {
-    if (start < 0 || limit < start || limit > text.length()) {
-        throw new IndexOutOfBoundsException("start (" + start +
-                        ") or limit (" + limit +
-                        ") invalid or out of range 0, " + text.length());
-    }
+//#else
+//##    public static int codePointCount(String text, int start, int limit) {
+//#endif
+        if (start < 0 || limit < start || limit > text.length()) {
+            throw new IndexOutOfBoundsException("start (" + start +
+                ") or limit (" + limit +
+                ") invalid or out of range 0, " + text.length());
+        }
 
-    int len = limit - start;
-    while (limit > start) {
-        char ch = text.charAt(--limit);
-        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
-        ch = text.charAt(--limit);
-        if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
-            --len;
-            break;
+        int len = limit - start;
+        while (limit > start) {
+            char ch = text.charAt(--limit);
+            while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+                ch = text.charAt(--limit);
+                if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+                    --len;
+                    break;
+                }
+            }
         }
-        }
-    }
-    return len;
+        return len;
     }
 
     /**
@@ -5510,24 +5534,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int codePointCount(char[] text, int start, int limit) {
-    if (start < 0 || limit < start || limit > text.length) {
-        throw new IndexOutOfBoundsException("start (" + start +
-                        ") or limit (" + limit +
-                        ") invalid or out of range 0, " + text.length);
-    }
+        if (start < 0 || limit < start || limit > text.length) {
+            throw new IndexOutOfBoundsException("start (" + start +
+                                                ") or limit (" + limit +
+                                                ") invalid or out of range 0, " + text.length);
+        }
 
-    int len = limit - start;
-    while (limit > start) {
-        char ch = text[--limit];
-        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
-        ch = text[--limit];
-        if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
-            --len;
-            break;
+        int len = limit - start;
+        while (limit > start) {
+            char ch = text[--limit];
+            while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+                ch = text[--limit];
+                if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+                    --len;
+                    break;
+                }
+            }
         }
-        }
-    }
-    return len;
+        return len;
     }
 
     /**
@@ -5539,40 +5563,44 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
+//#ifndef FOUNDATION
     public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
-    if (index < 0 || index > text.length()) {
-        throw new IndexOutOfBoundsException("index ( " + index +
-                        ") out of range 0, " + text.length());
-    }
+//#else
+//##    public static int offsetByCodePoints(String text, int index, int codePointOffset) {
+//#endif
+        if (index < 0 || index > text.length()) {
+            throw new IndexOutOfBoundsException("index ( " + index +
+                                                ") out of range 0, " + text.length());
+        }
 
-    if (codePointOffset < 0) {
-        while (++codePointOffset <= 0) {
-        char ch = text.charAt(--index);
-        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
-            ch = text.charAt(--index);
-            if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
-            if (++codePointOffset > 0) {
-                return index+1;
+        if (codePointOffset < 0) {
+            while (++codePointOffset <= 0) {
+                char ch = text.charAt(--index);
+                while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
+                    ch = text.charAt(--index);
+                    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+                        if (++codePointOffset > 0) {
+                            return index+1;
+                        }
+                    }
+                }
             }
+        } else {
+            int limit = text.length();
+            while (--codePointOffset >= 0) {
+                char ch = text.charAt(index++);
+                while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+                    ch = text.charAt(index++);
+                    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+                        if (--codePointOffset < 0) {
+                            return index-1;
+                        }
+                    }
+                }
             }
         }
-        }
-    } else {
-        int limit = text.length();
-        while (--codePointOffset >= 0) {
-        char ch = text.charAt(index++);
-        while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
-            ch = text.charAt(index++);
-            if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
-            if (--codePointOffset < 0) {
-                return index-1;
-            }
-            }
-        }
-        }
-    }
 
-    return index;
+        return index;
     }
 
     /**
@@ -5587,51 +5615,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int offsetByCodePoints(char[] text, int start, int count, int index, int codePointOffset) {
-    int limit = start + count;
-    if (start < 0 || limit < start || limit > text.length || index < start || index > limit) {
-        throw new IndexOutOfBoundsException("index ( " + index +
-                        ") out of range " + start +
-                        ", " + limit +
-                        " in array 0, " + text.length);
-    }
-
-    if (codePointOffset < 0) {
-        while (++codePointOffset <= 0) {
-        char ch = text[--index];
-        if (index < start) {
+        int limit = start + count;
+        if (start < 0 || limit < start || limit > text.length || index < start || index > limit) {
             throw new IndexOutOfBoundsException("index ( " + index +
-                            ") < start (" + start +
-                            ")");
+                                                ") out of range " + start +
+                                                ", " + limit +
+                                                " in array 0, " + text.length);
         }
-        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > start) {
-            ch = text[--index];
-            if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
-            if (++codePointOffset > 0) {
-                return index+1;
-            }
-            }
-        }
-        }
-    } else {
-        while (--codePointOffset >= 0) {
-        char ch = text[index++];
-        if (index > limit) {
-            throw new IndexOutOfBoundsException("index ( " + index +
-                            ") > limit (" + limit +
-                            ")");
-        }
-        while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
-            ch = text[index++];
-            if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
-            if (--codePointOffset < 0) {
-                return index-1;
-            }
-            }
-        }
-        }
-    }
 
-    return index;
+        if (codePointOffset < 0) {
+            while (++codePointOffset <= 0) {
+                char ch = text[--index];
+                if (index < start) {
+                    throw new IndexOutOfBoundsException("index ( " + index +
+                                                        ") < start (" + start +
+                                                        ")");
+                }
+                while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > start) {
+                    ch = text[--index];
+                    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+                        if (++codePointOffset > 0) {
+                            return index+1;
+                        }
+                    }
+                }
+            }
+        } else {
+            while (--codePointOffset >= 0) {
+                char ch = text[index++];
+                if (index > limit) {
+                    throw new IndexOutOfBoundsException("index ( " + index +
+                                                        ") > limit (" + limit +
+                                                        ")");
+                }
+                while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+                    ch = text[index++];
+                    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+                        if (--codePointOffset < 0) {
+                            return index-1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return index;
     }
 
     // protected data members --------------------------------------------

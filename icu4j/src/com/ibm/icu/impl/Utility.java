@@ -1,3 +1,4 @@
+//##header 1132615046000 
 /*
  *******************************************************************************
  * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -1799,5 +1800,65 @@ public final class Utility {
         }
         return result.toString();
     }
+    
+    // !!! 1.3 compatibiliy
+    public static int indexOf(StringBuffer buf, String s) {
+//#ifndef FOUNDATION
+        return buf.indexOf(s);
+//#else
+//##    	return buf.toString().indexOf(s);
+//#endif
+    }
+    
+    // !!! 1.3 compatibiliy
+    public static int lastIndexOf(StringBuffer buf, String s) {
+//#ifndef FOUNDATION
+        return buf.lastIndexOf(s);
+//#else
+//##    	return buf.toString().lastIndexOf(s);
+//#endif
+    }
+    
+    // !!! 1.3 compatibiliy
+    public static int indexOf(StringBuffer buf, String s, int i) {
+//#ifndef FOUNDATION
+        return buf.indexOf(s, i);
+//#else
+//##    	return buf.toString().indexOf(s, i);
+//#endif
+    }
+    
+    // !!! 1.3 compatibiliy
+   public static int lastIndexOf(StringBuffer buf, String s, int i) {
+//#ifndef FOUNDATION
+        return buf.lastIndexOf(s, i);
+//#else
+//##    	return buf.toString().lastIndexOf(s, i);
+//#endif
+    }
+   
+   // !!! 1.3 compatibiliy
+   public static String replaceAll(String src, String target, String replacement) {
+//#ifndef FOUNDATION
+       return src.replaceAll(target, replacement);
+//#else
+//##       int i = src.indexOf(target);
+//##       if (i == -1) {
+//##           return src;
+//##       }
+//##       StringBuffer buf = new StringBuffer();
+//##       int n = 0;
+//##       do {
+//##           buf.append(src.substring(n, i));
+//##           buf.append(replacement);
+//##           n = i + target.length();
+//##           i = src.indexOf(target, n);
+//##       } while (i != -1);
+//##       if (n < src.length()) {
+//##           buf.append(src.substring(n));
+//##       }
+//##       return buf.toString();
+//#endif
+   }
 }
 ///CLOVER:ON

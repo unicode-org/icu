@@ -1,3 +1,4 @@
+//##header 1132616027000 
 /*
  * *****************************************************************************
  * Copyright (C) 2005, International Business Machines Corporation and * others.
@@ -13,7 +14,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,8 +25,12 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.Vector;
-import java.util.regex.Pattern;
 
+//#ifndef FOUNDATION
+import java.nio.ByteBuffer;
+//#else
+//##import com.ibm.icu.impl.ByteBuffer;
+//#endif
 import com.ibm.icu.impl.URLHandler.URLVisitor;
 import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
@@ -959,9 +963,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                     if (handler != null) {
                         final ArrayList list = new ArrayList();
                         URLVisitor v = new URLVisitor() {
-                            private Pattern p = Pattern.compile(".*\\.res");
                             public void visit(String s) {
-                                if (p.matcher(s).matches() && !"res_index.res".equals(s)) {
+                                if (s.endsWith(".res") && !"res_index.res".equals(s)) {
                                     list.add(s.substring(0, s.length() - 4)); // strip '.res'
                                 }
                             }

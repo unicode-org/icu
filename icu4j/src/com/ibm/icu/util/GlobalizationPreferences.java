@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 2004-2005, International Business Machines Corporation and    *
@@ -14,8 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+//#ifndef FOUNDATION
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+//#endif
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
@@ -43,6 +47,9 @@ import com.ibm.icu.text.SimpleDateFormat;
  *  in Breton if available, otherwise in French if available, otherwise in English.
  *  <p><b>This is at a prototype stage, and has not incorporated all the design changes
  *  that we would like yet; further feedback is welcome.
+ *
+ * @internal
+ * @deprecated ICU 3.4.2
  */
 public class GlobalizationPreferences {
 	/**
@@ -110,6 +117,8 @@ public class GlobalizationPreferences {
 	public GlobalizationPreferences setULocales(ULocale uLocale) {
 		return setULocales(new ULocale[]{uLocale});
 	}
+
+//#ifndef FOUNDATION
 	/**
 	 * Convenience routine for setting the locale priority list from an Accept-Language string.
 	 * @see #setULocales(List locales)
@@ -153,7 +162,8 @@ public class GlobalizationPreferences {
 		}
 		return setULocales(result);
 	}
-	
+//#endif
+
 	/**
 	 * Sets the territory, which is a valid territory according to for RFC 3066 (or successor).
 	 * If not otherwise set, default currency and timezone values will be set from this.
@@ -318,7 +328,10 @@ public class GlobalizationPreferences {
 				// TODO, have method that doesn't require us to create a timezone
 				// fix other hacks
 				// hack for couldn't match
+                                // note, compiling with FOUNDATION omits this check for now
+//#ifndef FOUNDATION
 				if (badTimezone.reset(result).matches()) continue;
+//#endif
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
@@ -329,8 +342,10 @@ public class GlobalizationPreferences {
 		}
 		return result;
 	}
+//#ifndef FOUNDATION
 	// TODO remove need for this
 	private static final Matcher badTimezone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
+//#endif
 
 	/**
 	 * Set an explicit date format. Overrides both the date locale, and the locale priority list
@@ -378,7 +393,11 @@ public class GlobalizationPreferences {
 			}
 			return result;
 		} catch (RuntimeException e) {
-			throw (IllegalArgumentException) new IllegalArgumentException("Cannot create DateFormat").initCause(e);	
+                    IllegalArgumentException ex = new IllegalArgumentException("Cannot create DateFormat");
+//#ifndef FOUNDATION
+                    ex.initCause(e);
+//#endif
+                    throw ex;
 		}
 	}
 	

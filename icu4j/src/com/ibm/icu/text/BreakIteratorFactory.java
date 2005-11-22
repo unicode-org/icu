@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
@@ -29,6 +30,7 @@ import com.ibm.icu.util.ULocale;
  * Window>Preferences>Java>Code Generation.
  */
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
+    private static final boolean ASSERT = false;
 
     public Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         iter.setText(new java.text.StringCharacterIterator(""));
@@ -156,10 +158,10 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                 iter = new DictionaryBasedBreakIterator(rules, dictionary);
             }
             catch(IOException e) {
-                assert false : e;
+                if (ASSERT) Assert.fail(e);
             }
             catch(MissingResourceException e) {
-                assert false : e;
+                if (ASSERT) Assert.fail(e);
             }
         // TODO: we don't have 'bad' resource data, so this should never happen
         // in our current tests.

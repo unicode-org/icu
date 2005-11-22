@@ -45,6 +45,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @since ICU 2.8
  */
 public final class ZoneMeta {
+    private static final boolean ASSERT = false;
 
     /**
      * Returns a String array containing all system TimeZone IDs
@@ -66,10 +67,11 @@ public final class ZoneMeta {
 	        ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
 	        ICUResourceBundle temp = regions.get(country);
 	        int[] vector = temp.getIntVector();
-	        assert(vector.length>0);
+	        if (ASSERT) Assert.assrt("vector.length>0", vector.length>0);
 	        String[] ret = new String[vector.length];
 	        for (int i=0; i<vector.length; ++i) {
-	            assert(vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT);
+	        	if (ASSERT) Assert.assrt("vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT", 
+	        			vector[i] >= 0 && vector[i] < OLSON_ZONE_COUNT);
 	            ret[i] = names.getString(vector[i]);
 	        }
 	        return ret;

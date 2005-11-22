@@ -1,3 +1,4 @@
+//##header 1132615046000 
 /*
  *******************************************************************************
  * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -12,8 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
+//#ifndef FOUNDATION
 import java.util.regex.Matcher;
-
+//#endif
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -378,6 +380,7 @@ public final class CollectionUtilities {
 		}
 	}
 	
+//#ifndef FOUNDATION
 	public static class RegexIterator extends FilteredIterator {
 		private Matcher matcher;
 		public RegexIterator set(Iterator baseIterator, Matcher matcher) {
@@ -389,5 +392,5 @@ public final class CollectionUtilities {
 			return matcher.reset((String)item).matches();
 		}
 	}
-
+//#endif
 }

@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /**
  *******************************************************************************
  * Copyright (C) 2001-2005, International Business Machines Corporation and    *
@@ -14,7 +15,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.JarURLConnection;
+//#ifndef FOUNDATION
 import java.nio.ByteBuffer;
+//#else
+//##import com.ibm.icu.impl.ByteBuffer;
+//#endif
 import java.util.MissingResourceException;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
