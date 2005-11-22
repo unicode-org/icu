@@ -87,6 +87,7 @@
         <property name="jarSrc.file" value="icu4jsrc.jar"/>
         <property name="zipCoreSrc.file" value="icu4jcsrc.zip"/>
         <property name="zipTestSrc.file" value="icu4jtsrc.zip"/>
+        <property name="eclipse.dir" value="${src.dir}/com/ibm/icu/dev/eclipse"/>
         <property name="jarDocs.file" value="icu4jdocs.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
@@ -263,13 +264,12 @@
     <!-- this is a hack for now, need a way to express dependency on the .jpp files
     and to provide directories or trees of files to the code mangler tool. -->
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-            <arg value="-d"/>
-            <arg value="VERSION_${ant.java.version}"/>
-            <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.jpp"/>
+            <arg value="-dVERSION_${ant.java.version}"/>
+            <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java"/>
          </java>
     </target>
 
-    <target name="indices" depends="icudata,tools">
+    <target name="indices" depends="icudata,build_indexgenerator">
         <java classname="com.ibm.icu.dev.tool.index.IndexGenerator" classpath="${build.dir}" logError="true">
             <arg value="${build.dir}/${icu4j.data.path}" />
         </java>
@@ -306,6 +306,16 @@
             debug="on" deprecation="off"/>
     </target>
 
+    <target name="build_indexgenerator" depends="core">
+        <javac includes="com/ibm/icu/dev/tool/index/IndexGenerator.java"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on" deprecation="off"/>
+    </target>
+            
 <!-- use excludefiles below when we move to ant 1.5 -->
 
     <target name="docs" depends="anthack1,anthack2,tools" description="build user javadoc">
@@ -440,22 +450,6 @@
             basedir="."
             excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,*.jar,*.zip, *.gz"
             manifest="${icu4j.manifest}"/>
-    </target>
-
-    <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
-        <!-- for eclipse -->
-        <zip destfile="${zipCoreSrc.file}"
-            compress="true"
-            basedir="${src.dir}"
-            includes="com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*"/>
-    </target>
-
-    <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
-        <!-- for eclipse -->
-        <zip destfile="${zipTestSrc.file}"
-            compress="true"
-            basedir="${src.dir}"
-            includes="com/ibm/icu/dev/test/**/*"/>
     </target>
 
     <target name="jarDocs" depends="docs" description="build documentation 'icu4jdocs.jar' jar file">
@@ -1175,4 +1169,90 @@
             </classpath>
         </java>
     </target>
+
+    <!-- for building eclipse distribution -->
+    
+    <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
+        <!-- for eclipse -->
+        <zip destfile="${zipCoreSrc.file}"
+            compress="true"
+            basedir="${src.dir}"
+            includes="../license.html,../Copyright_Assignment.rtf,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*"/>
+    </target>
+
+    <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
+        <!-- for eclipse -->
+        <zip destfile="${zipTestSrc.file}"
+            compress="true"
+            basedir="${src.dir}"
+            includes="com/ibm/icu/dev/test/**/*"/>
+    </target>
+
+    <target name="undoEclipseMangle" depends="buildmangle">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-v"/>
+            <arg value="@eclipseCoreArgs.txt"/>
+            <arg value="@eclipseTestArgs.txt"/>
+        </java>
+    </target>
+
+    <target name="eclipseCoreMangle" depends="buildmangle">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-dFOUNDATION"/>
+            <arg value="@eclipseCoreArgs.txt"/>
+         </java>
+    </target>
+
+    <target name="eclipseTestMangle" depends="buildmangle">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-dFOUNDATION"/>
+            <arg value="@eclipseTestArgs.txt"/>
+        </java>
+    </target>
+
+    <target name="eclipseCore" depends="init,coreData,icudata,eclipseCoreMangle">
+        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+            excludes="**/CVS/**/*"
+            compiler="javac1.3"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            bootclasspath="ee.foundation.jar"
+            source="1.3"
+            target="1.1"
+            debug="on" 
+            deprecation="off"
+            encoding="ascii"/>
+        <antcall target="indices"/>
+        <jar jarfile="${jar.file}"
+            compress="true"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+            basedir="${build.dir}"
+            manifest="${icu4j.manifest}"/>
+    </target>
+
+    <target name="eclipseCorePkg" depends="eclipseCore" description="build eclipse core package">
+        <!-- should do a clean build before start -->
+
+        <copy file="${jar.file}" toDir="${eclipse.dir}/com.ibm.icu"/>
+        <antcall target="zipCoreSrc"/>
+        <move file="${zipCoreSrc.file}" toDir="${eclipse.dir}/com.ibm.icu"/>
+        <zip destfile="eclipseICU4J_core.zip"
+            basedir="${eclipse.dir}"
+            includes="com.ibm.icu,com.ibm.icu/**/*"/>
+    </target>
+
+    <target name="eclipseTestPkg" depends="eclipseCore,eclipseTestMangle" description="build tests trimmed for eclipse API">
+        <antcall target="tests"/>
+        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
+        </jar>
+        <copy file="${testjar.file}" toDir="${eclipse.dir}/com.ibm.icu.tests"/>
+        <antcall target="zipTestSrc"/>
+        <move file="${zipTestSrc.file}" toDir="${eclipse.dir}/com.ibm.icu.tests"/>
+        <zip destfile="eclipseICU4J_tests.zip"
+            basedir="${eclipse.dir}"
+            includes="com.ibm.icu.tests,com.ibm.icu.tests/**/*"/>
+    </target>    
 </project>

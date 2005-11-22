@@ -1,6 +1,7 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -200,15 +201,8 @@ final class DigitList {
         }
     }
 
-    /**
-     * Return a <code>BigDecimal</code> representing the value stored in this
-     * <code>DigitList</code>.
-     * [bnf]
-     * @param isPositive determines the sign of the returned result
-     * @return the value of this object as a <code>BigDecimal</code>
-     */
-    public java.math.BigDecimal getBigDecimal(boolean isPositive) {
-        if (isZero()) return java.math.BigDecimal.valueOf(0);
+    private String getStringRep(boolean isPositive) {
+        if (isZero()) return "0";
         StringBuffer stringRep = new StringBuffer(count+1);
         if (!isPositive) {
             stringRep.append('-');
@@ -231,7 +225,33 @@ final class DigitList {
         while (d-- > count) {
             stringRep.append('0');
         }
-        return new java.math.BigDecimal(stringRep.toString());
+        return stringRep.toString();
+    }
+    
+//#ifndef FOUNDATION    
+    /**
+     * Return a <code>BigDecimal</code> representing the value stored in this
+     * <code>DigitList</code>.
+     * [bnf]
+     * @param isPositive determines the sign of the returned result
+     * @return the value of this object as a <code>BigDecimal</code>
+     */
+    public java.math.BigDecimal getBigDecimal(boolean isPositive) {
+        if (isZero()) return java.math.BigDecimal.valueOf(0);
+       return new java.math.BigDecimal(getStringRep(isPositive));
+    }
+//#endif
+
+    /**
+     * Return an <code>ICU BigDecimal</code> representing the value stored in this
+     * <code>DigitList</code>.
+     * [bnf]
+     * @param isPositive determines the sign of the returned result
+     * @return the value of this object as a <code>BigDecimal</code>
+     */
+    public com.ibm.icu.math.BigDecimal getBigDecimalICU(boolean isPositive) {
+        if (isZero()) return com.ibm.icu.math.BigDecimal.valueOf(0);
+       return new com.ibm.icu.math.BigDecimal(getStringRep(isPositive));
     }
 
     /**
@@ -640,6 +660,7 @@ final class DigitList {
         round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
+//#ifndef FOUNDATION
     /**
      * Set the digit list to a representation of the given BigDecimal value.
      * [bnf]
@@ -654,6 +675,7 @@ final class DigitList {
                           int maximumDigits, boolean fixedPoint) {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
+//#endif
 
     /*
      * Set the digit list to a representation of the given BigDecimal value.

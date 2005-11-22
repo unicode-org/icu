@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 1996-2005, International Business Machines Corporation and    *
@@ -11,6 +12,7 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -1096,6 +1098,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
+//#ifndef FOUNDATION
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:
@@ -1107,6 +1110,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                                FieldPosition pos) {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
+//#endif
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -1373,7 +1377,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private String extractSpecial(StringBuffer description, String specialName) {
         String result = null;
-        int lp = description.indexOf(specialName);
+        int lp = Utility.indexOf(description, specialName);
         if (lp != -1) {
             // we've got to make sure we're not in the middle of a rule
             // (where specialName would actually get treated as
@@ -1382,7 +1386,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 // locate the beginning and end of the actual special
                 // rules (there may be whitespace between the name and
                 // the first token in the description)
-                int lpEnd = description.indexOf(";%", lp);
+                int lpEnd = Utility.indexOf(description, ";%", lp);
 
                 if (lpEnd == -1) {
                     lpEnd = description.length() - 1; // later we add 1 back to get the '%'
@@ -1433,7 +1437,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // rule sets (";%" marks the end of one rule set and the beginning
         // of the next)
         int numRuleSets = 0;
-        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", p)) {
+        for (int p = Utility.indexOf(descBuf, ";%"); p != -1; p = Utility.indexOf(descBuf, ";%", p)) {
             ++numRuleSets;
             ++p;
         }
@@ -1453,7 +1457,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         int curRuleSet = 0;
         int start = 0;
-        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", start)) {
+        for (int p = Utility.indexOf(descBuf, ";%"); p != -1; p = Utility.indexOf(descBuf, ";%", start)) {
             ruleSetDescriptions[curRuleSet] = descBuf.substring(start, p + 1);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet);
             ++curRuleSet;

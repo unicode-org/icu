@@ -17,8 +17,10 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,38 +28,48 @@ import java.util.regex.Pattern;
  * A simple facility for adding C-like preprocessing to .java files.
  * This only understands a subset of the C preprocessing syntax.
  * Its used to manage files that with only small differences can be
- * compiled for different JVMs.  Input is generally a '.jpp' file,
- * output is a '.java' file with the same name, that can then be
- * compiled.
+ * compiled for different JVMs.  This changes files in place, 
+ * commenting out lines based on the current flag settings.
  */
 public class CodeMangler {
     private File indir;      // root of input
     private File outdir;     // root of output
     private String suffix;   // suffix to process, default '.jpp'
     private boolean recurse; // true if recurse on directories
-    private Map map;         // defines
+    private boolean force;   // true if force reprocess of files
+    private boolean clean;   // true if output is to be cleaned
+    private HashMap map;     // defines
     private ArrayList names; // files/directories to process
+    private String header;   // sorted list of defines passed in
 
     private boolean verbose; // true if we emit debug output
+
+    private static final String IGNORE_PREFIX = "//##";
+    private static final String HEADER_PREFIX = "//##header";
 
     public static void main(String[] args) {
         new CodeMangler(args).run();
     }
 
     private static final String usage = "Usage:\n" +
-        "    CodeMangler [flags] file... dir...\n" +
+        "    CodeMangler [flags] file... dir... @argfile... \n" +
         "-in[dir] path          - root directory of input files, otherwise use current directory\n" +
-        "-out[dir] path         - root directory of output files, otherwise use current directory\n" +
-        "-suffix string         - suffix of files to process, otherwise use '.jpp' (directories only)\n" +
-        "-r                     - if present, recursively process subdirectories\n" +
-        "-d[efine] NAME[=VALUE] - define NAME with optional value VALUE\n" +
+        "-out[dir] path         - root directory of output files, otherwise use input directory\n" +
+        "-s[uffix] string       - suffix of inputfiles to process, otherwise use '.java' (directories only)\n" +
+        "-c[lean]               - remove all control flags from code on output (does not proceed if overwriting)\n" +
+        "-r[ecurse]             - if present, recursively process subdirectories\n" +
+        "-f[orce]               - force reprocessing of files even if timestamp and headers match\n" +
+        "-dNAME[=VALUE]         - define NAME with optional value VALUE\n" +
+        "  (or -d NAME[=VALUE])\n" +
         "-help                  - print this usage message and exit.\n" +
         "\n" +
         "For file arguments, output '.java' files using the same path/name under the output directory.\n" +
         "For directory arguments, process all files with the defined suffix in the directory.\n" +
         "  (if recursing, do the same for all files recursively under each directory)\n" +
+        "For @argfile arguments, read the specified text file (strip the '@'), and process each line of that file as \n" +
+        "an argument.\n" +
         "\n" +
-        "Directives in the file are one of the following:\n" +
+        "Directives are one of the following:\n" +
         "  #ifdef, #ifndef, #else, #endif, #if, #elif, #define, #undef\n" +
         "These may optionally be preceeded by whitespace or //.\n" +
         "#if, #elif args are of the form 'key == value' or 'key != value'.\n" +
@@ -67,7 +79,8 @@ public class CodeMangler {
     CodeMangler(String[] args) {
         map = new HashMap();
         names = new ArrayList();
-        suffix = ".jpp";
+        suffix = ".java";
+        clean = false;
 
         String inname = null;
         String outname = null;
@@ -84,7 +97,10 @@ public class CodeMangler {
                     } else if (arg.startsWith("-out")) {
                         outname = args[++i];
                     } else if (arg.startsWith("-d")) {
-                        String id = args[++i];
+                        String id = arg.substring(2);
+                        if (id.length() == 0) {
+                            id = args[++i];
+                        }
                         String val = "";
                         int ix = id.indexOf('=');
                         if (ix >= 0) {
@@ -92,11 +108,15 @@ public class CodeMangler {
                             id = id.substring(0,ix);
                         }
                         map.put(id, val);
-                    } else if ("-suffix".equals(arg)) {
+                    } else if (arg.startsWith("-s")) {
                         suffix = args[++i];
-                    } else if ("-r".equals(arg)) {
+                    } else if (arg.startsWith("-r")) {
                         recurse = true;
-                    } else if (arg.startsWith("-help")) {
+                    } else if (arg.startsWith("-f")) {
+                        force = true;
+                    } else if (arg.startsWith("-c")) {
+                        clean = true;
+                    } else if (arg.startsWith("-h")) {
                         System.out.print(usage);
                         break; // stop before processing arguments, so we will do nothing
                     } else if (arg.startsWith("-v")) {
@@ -107,7 +127,32 @@ public class CodeMangler {
                         throw new IllegalArgumentException(arg);
                     }
                 } else {
-                    names.add(arg);
+                    if (arg.charAt(0) == '@') {
+                        File argfile = new File(arg.substring(1));
+                        if (argfile.exists() && !argfile.isDirectory()) {
+                            try {
+                                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(argfile)));
+                                ArrayList list = new ArrayList();
+                                for (int x = 0; x < args.length; ++x) {
+                                    list.add(args[x]);
+                                }
+                                String line;
+                                while (null != (line = br.readLine())) {
+                                    line = line.trim();
+                                    if (line.length() > 0 && line.charAt(0) != '#') {
+                                        if (verbose) System.out.println("adding argument: " + line);
+                                        list.add(line);
+                                    }
+                                }
+                                args = (String[])list.toArray(new String[list.size()]);
+                            }
+                            catch (IOException e) {
+                                System.err.println("error reading arg file: " + e);
+                            }
+                        }
+                    } else {
+                        names.add(arg);
+                    }
                 }
             }
         } catch (IndexOutOfBoundsException e) {
@@ -135,10 +180,10 @@ public class CodeMangler {
         } else if (!indir.isDirectory()) {
             throw new IllegalArgumentException("Input path '" + indir.getAbsolutePath() + "' is not a directory.");
         }
-        if (verbose) System.err.println("indir: " + indir.getAbsolutePath());
+        if (verbose) System.out.println("indir: " + indir.getAbsolutePath());
 
         if (outname == null) {
-            outname = username;
+            outname = inname;
         } else if (!(outname.startsWith("\\") || outname.startsWith("/"))) {
             outname = username + File.separator + outname;
         }
@@ -154,11 +199,42 @@ public class CodeMangler {
         } else if (!outdir.isDirectory()) {
             throw new IllegalArgumentException("Output path '" + outdir.getAbsolutePath() + "' is not a directory.");
         }
-        if (verbose) System.err.println("outdir: " + outdir.getAbsolutePath());
+        if (verbose) System.out.println("outdir: " + outdir.getAbsolutePath());
+
+        
+        if (clean && suffix.equals(".java")) {
+            try {
+                if (outdir.getCanonicalPath().equals(indir.getCanonicalPath())) {
+                    throw new IllegalArgumentException("Cannot use 'clean' to overwrite .java files in same directory tree");
+                }
+            }
+            catch (IOException e) {
+                System.err.println("possible overwrite, error: " + e.getMessage());
+                throw new IllegalArgumentException("Cannot use 'clean' to overrwrite .java files");
+            }
+        }
 
         if (names.isEmpty()) {
             names.add(".");
         }
+
+        TreeMap sort = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+        sort.putAll(map);
+        Iterator iter = sort.entrySet().iterator();
+        StringBuffer buf = new StringBuffer();
+        while (iter.hasNext()) {
+            Map.Entry e = (Map.Entry)iter.next();
+            if (buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append(e.getKey());
+            String v = (String)e.getValue();
+            if (v != null && v.length() > 0) {
+                buf.append('=');
+                buf.append(v);
+            }
+        }
+        header = buf.toString();
     }
 
     public int run() {
@@ -166,10 +242,10 @@ public class CodeMangler {
     }
 
     public int process(String path, String[] filenames) {
-        if (verbose) System.err.println("path: '" + path + "'");
+        if (verbose) System.out.println("path: '" + path + "'");
         int count = 0;
         for (int i = 0; i < filenames.length; ++i) {
-            if (verbose) System.err.println("name " + i + " of " + filenames.length + ": '" + filenames[i] + "'");
+            if (verbose) System.out.println("name " + i + " of " + filenames.length + ": '" + filenames[i] + "'");
             String name = path + filenames[i];
             File fin = new File(indir, name);
             try {
@@ -182,7 +258,7 @@ public class CodeMangler {
                 continue;
             }
             if (fin.isFile()) {
-                if (verbose) System.err.println("processing file: '" + fin.getAbsolutePath() + "'");
+                if (verbose) System.out.println("processing file: '" + fin.getAbsolutePath() + "'");
                 String oname;
                 int ix = name.lastIndexOf(".");
                 if (ix != -1) {
@@ -192,19 +268,11 @@ public class CodeMangler {
                 }
                 oname += ".java";
                 File fout = new File(outdir, oname);
-                String foutpname = fout.getParent();
-                if (foutpname != null) {
-                    File foutp = new File(foutpname);
-                    if (!(foutp.exists() || foutp.mkdirs())) {
-                        System.err.println("could not create directory: '" + foutpname + "'");
-                        continue;
-                    }
-                }
                 if (processFile(fin, fout)) {
                     ++count;
                 }
             } else if (fin.isDirectory()) {
-                if (verbose) System.err.println("recursing on directory '" + fin.getAbsolutePath() + "'");
+                if (verbose) System.out.println("recursing on directory '" + fin.getAbsolutePath() + "'");
                 String npath = ".".equals(name) ? path : path + fin.getName() + File.separator;
                 count += process(npath, fin.list(filter)); // recursive call
             }
@@ -221,62 +289,121 @@ public class CodeMangler {
         };
 
     public boolean processFile(File infile, File outfile) {
-        Pattern pat = Pattern.compile(
-            "(?i)^\\s*(?://+)??\\s*#(ifdef\\s|ifndef\\s|else|endif|undef\\s|define\\s|if\\s|elif\\s)\\s*(.*)$");
-        Pattern pat2 = Pattern.compile("([^=!]+)\\s*([!=]=)??\\s*(\\w+)");
+        File backup = null;
+
+        class State {
+            int lc;
+            String line;
+            boolean emit = true;
+            boolean tripped;
+            private State next;
+
+            public String toString() {
+                return "line " + lc 
+                    + ": '" + line 
+                    + "' (emit: " + emit 
+                    + " tripped: " + tripped 
+                    + ")";
+            }
+
+            void trip(boolean trip) {
+                if (!tripped & trip) {
+                    tripped = true;
+                    emit = next != null ? next.emit : true;
+                } else {
+                    emit = false;
+                }
+            }
+                        
+            State push(int lc, String line, boolean trip) {
+                this.lc = lc;
+                this.line = line;
+                State ret = new State();
+                ret.next = this;
+                ret.emit = this.emit & trip;
+                ret.tripped = trip;
+                return ret;
+            }
+
+            State pop() {
+                return next;
+            }
+        };
+
+        final Pattern pat = Pattern.compile(
+            "(?i)^(\\s*(?://+)??\\s*)#(ifdef\\s|ifndef\\s|else|endif|undef\\s|define\\s|if\\s|elif\\s)\\s*(.*)$");
+        final Pattern pat2 = Pattern.compile("([^=!]+)\\s*([!=]?=)??\\s*(\\w+)");
+        final Pattern pat3 = Pattern.compile("^(\\s*//##).*");
+        HashMap oldMap = null;
+        
+        long outModTime = 0;
+
         try {
-            PrintStream outstream = new PrintStream(new FileOutputStream(outfile));
+            PrintStream outstream = null;
             InputStream instream = new FileInputStream(infile);
 
-            class State {
-                int lc;
-                String line;
-                boolean emit = true;
-                boolean tripped;
-                private State next;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+            int lc = 0;
+            State state = new State();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (lc == 0) { // check and write header for output file if needed
+                    boolean hasHeader = line.startsWith(HEADER_PREFIX);
+                    if (hasHeader && !force) {
+                        long expectLastModified = ((infile.lastModified() + 999)/1000)*1000;
+                        String headerline = HEADER_PREFIX + ' ' + String.valueOf(expectLastModified) + ' ' + header;
+                        if (line.equals(headerline)) {
+                            if (verbose) System.out.println("no changes necessary to " + infile.getCanonicalPath());
+                            instream.close();
+                            return false; // nothing to do
+                        }
+                        if (verbose) {
+                            System.out.println("  old header:  " + line);
+                            System.out.println("  != expected: " + headerline);
+                        }
+                    }
 
-                public String toString() {
-                    return "line " + lc 
-                        + ": '" + line 
-                        + "' (emit: " + emit 
-                        + " tripped: " + tripped 
-                        + ")";
-                }
+                    // create output file directory structure
+                    String outpname = outfile.getParent();
+                    if (outpname != null) {
+                        File outp = new File(outpname);
+                        if (!(outp.exists() || outp.mkdirs())) {
+                            System.err.println("could not create directory: '" + outpname + "'");
+                            return false;
+                        }
+                    }
 
-                void trip(boolean trip) {
-                    if (!tripped & trip) {
-                        tripped = true;
-                        emit = next != null ? next.emit : true;
-                    } else {
-                        emit = false;
+                    // if we're overwriting, use a temporary file
+                    if (suffix.equals(".java")) {
+                        backup = outfile;
+                        try {
+                            outfile = File.createTempFile(outfile.getName(), null, outfile.getParentFile());
+                        }
+                        catch (IOException ex) {
+                            System.err.println(ex.getMessage());
+                            return false;
+                        }
+                    }
+            
+                    outModTime = ((outfile.lastModified()+999)/1000)*1000; // round up
+                    outstream = new PrintStream(new FileOutputStream(outfile));
+                    String headerline = HEADER_PREFIX + ' ' + String.valueOf(outModTime) + ' ' + header;
+                    outstream.println(headerline);
+                    if (verbose) System.out.println("header: " + headerline);
+
+                    // discard the old header if we had one, otherwise match this line like any other
+                    if (hasHeader) {
+                        ++lc; // mark as having read a line so we never reexecute this block
+                        continue;
                     }
                 }
                         
-                State push(int lc, String line, boolean trip) {
-                    this.lc = lc;
-                    this.line = line;
-                    State ret = new State();
-                    ret.next = this;
-                    ret.emit = this.emit & trip;
-                    ret.tripped = trip;
-                    return ret;
-                }
-
-                State pop() {
-                    return next;
-                }
-            }
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
-            String line = null;
-            int lc = 0;
-            State state = new State();
-            while ((line = reader.readLine()) != null) {
                 Matcher m = pat.matcher(line);
                 if (m.find()) {
-                    String key = m.group(1).toLowerCase().trim();
-                    String val = m.group(2).trim();
-                    if (verbose) outstream.println("directive: " + line
+                    String lead = m.group(1);
+                    String key = m.group(2).toLowerCase().trim();
+                    String val = m.group(3).trim();
+                    if (verbose) System.out.println("directive: " + line
                                                    + " key: '" + key
                                                    + "' val: '" + val 
                                                    + "' " + state);
@@ -290,15 +417,18 @@ public class CodeMangler {
                         state = state.pop();
                     } else if (key.equals("undef")) {
                         if (state.emit) {
+                            if (oldMap == null) {
+                                oldMap = (HashMap)map.clone();
+                            }
                             map.remove(val);
                         }
-                    } else {
+                    } else { // #define, #if, #elif
                         Matcher m2 = pat2.matcher(val);
                         if (m2.find()) {
                             String key2 = m2.group(1).trim();
                             boolean neq = "!=".equals(m2.group(2)); // optional
                             String val2 = m2.group(3).trim();
-                            if (verbose) outstream.println("val2: '" + val2 
+                            if (verbose) System.out.println("val2: '" + val2 
                                                            + "' neq: '" + neq 
                                                            + "' key2: '" + key2 
                                                            + "'");
@@ -308,32 +438,71 @@ public class CodeMangler {
                                 state.trip(val2.equals(map.get(key2)) != neq);
                             } else if (key.equals("define")) {
                                 if (state.emit) {
+                                    if (oldMap == null) {
+                                        oldMap = (HashMap)map.clone();
+                                    }
                                     map.put(key2, val2);
                                 }
                             }
                         }
                     }
+                    if (!clean) {
+                        lc++;
+                        if (!lead.equals("//")) {
+                            outstream.print("//");
+                            line = line.substring(lead.length());
+                        }
+                        outstream.println(line);
+                    }
                     continue;
                 }
 
                 lc++;
-                if (state.emit) {
+                m = pat3.matcher(line);
+                boolean hasIgnore = m.find();
+                if (state.emit == hasIgnore) {
+                    if (state.emit) {
+                        line = line.substring(m.group(1).length());
+                    } else {
+                        line = IGNORE_PREFIX + line;
+                    }
+                } else if (hasIgnore && !m.group(1).equals(IGNORE_PREFIX)) {
+                    line = IGNORE_PREFIX + line.substring(m.group(1).length());
+                }
+                if (!clean || state.emit) {
                     outstream.println(line);
-                } else {
-                    if (verbose) outstream.println("skipping: " + line);
                 }
             }
 
             state = state.pop();
             if (state != null) {
-                System.out.println("Error: unclosed directive(s):");
+                System.err.println("Error: unclosed directive(s):");
                 do {
                     System.err.println(state);
                 } while ((state = state.pop()) != null);
+                System.err.println(" in file: " + outfile.getCanonicalPath());
+                if (oldMap != null) {
+                    map = oldMap;
+                }
+                outstream.close();
+                return false;
             }
                 
             outstream.close();
             instream.close();
+
+            if (backup != null) {
+                if (backup.exists()) {
+                    backup.delete();
+                }
+                outfile.renameTo(backup);
+            }
+
+            outfile.setLastModified(outModTime); // synch with timestamp
+
+            if (oldMap != null) {
+                map = oldMap;
+            }
         }
         catch (IOException e) {
             System.err.println(e);

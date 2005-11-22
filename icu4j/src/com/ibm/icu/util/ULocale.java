@@ -16,9 +16,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
-import com.ibm.icu.impl.LocaleUtility;
 
+import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
@@ -2669,19 +2670,19 @@ public final class ULocale implements Serializable {
             if((paramEnd != -1) && (paramEnd < itemEnd)) {
                 /* semicolon (;) is closer than end (,) */
                 int t = paramEnd + 1;
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 if(acceptLanguageList.charAt(t)=='q') {
                     t++;
                 }
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 if(acceptLanguageList.charAt(t)=='=') {
                     t++;
                 }
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 try {

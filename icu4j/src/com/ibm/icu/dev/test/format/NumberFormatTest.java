@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 2001-2005, International Business Machines Corporation and    *
@@ -847,7 +848,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, 2.0, "2.00 *&' Rs. '&*");
         expect2(df, -1.0, "-1.00 *&' Re. '&*");
 
+//#ifndef FOUNDATION
         java.math.BigDecimal r = df.getRoundingIncrement();
+//#else
+//##        com.ibm.icu.math.BigDecimal r = df.getRoundingIncrement();
+//#endif
         if (r != null) {
             errln("FAIL: rounding = " + r + ", expect null");
         }

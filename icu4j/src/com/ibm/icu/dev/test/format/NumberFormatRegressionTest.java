@@ -1,3 +1,4 @@
+//##header 1132615047000 
 /*
  *******************************************************************************
  * Copyright (C) 2001-2005, International Business Machines Corporation and    *
@@ -160,6 +161,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     
     //Test New serialized DecimalFormat(2.0) read old serialized forms of DecimalFormat(1.3.1.1)
     public void TestSerialization() throws IOException, ClassNotFoundException{
+//#ifndef FOUNDATION
         byte[][] contents = NumberFormatSerialTestData.getContent();
         double data = 1234.56;
         String[] expected = {
@@ -178,5 +180,8 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 warnln("FAIL: " + e.getMessage());
             }
         }
+//#else
+//##    warnln("FOUNDATION");
+//#endif
     }
 }

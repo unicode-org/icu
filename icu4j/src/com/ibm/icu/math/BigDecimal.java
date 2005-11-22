@@ -1,3 +1,4 @@
+//##header 1132615046000 
 /* Generated from 'BigDecimal.nrx' 8 Sep 2000 11:10:50 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.icu.math;
@@ -449,6 +450,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  /* Constructors                                                     */
  /* ---------------------------------------------------------------- */
  
+//#ifndef FOUNDATION
  /**
   * Constructs a <code>BigDecimal</code> object from a
   * <code>java.math.BigDecimal</code>.
@@ -471,6 +473,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  public BigDecimal(java.math.BigDecimal bd){
   this(bd.toString());
   return;}
+//#ENDIF
 
  /**
   * Constructs a <code>BigDecimal</code> object from a
@@ -828,9 +831,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // 2000.01.01: note that this constructor does give an exact result,
   //             so perhaps it should not be deprecated
   // 2000.06.18: no longer deprecated
+//#ifndef FOUNDATION
   this((new java.math.BigDecimal(num)).toString());
+//#else
+//##    this(String.valueOf(num));
+//#endif
   return;}
-
  /**
   * Constructs a <code>BigDecimal</code> object directly from a
   * <code>int</code>.
@@ -3140,6 +3146,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   return (int)this.ind; // [note this assumes values for ind.]
   }
 
+//#ifndef FOUNDATION
  /**
   * Converts this <code>BigDecimal</code> to a
   * <code>java.math.BigDecimal</code>.
@@ -3162,6 +3169,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  public java.math.BigDecimal toBigDecimal(){
   return new java.math.BigDecimal(this.unscaledValue(),this.scale());
   }
+//#ENDIF
 
  /**
   * Converts this <code>BigDecimal</code> to a

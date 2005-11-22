@@ -31,7 +31,6 @@ import java.util.MissingResourceException;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
