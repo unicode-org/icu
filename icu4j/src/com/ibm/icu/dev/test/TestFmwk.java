@@ -541,7 +541,7 @@ public class TestFmwk extends AbstractTestLog {
         
         StringBuffer summary = null;
         try {
-            if (tests[0] == null) { // no args
+            if (tests.length == 0 || tests[0] == null) { // no args
                 params.init();
                 resolveTarget(params).run();
                 ec = params.errorCount;
@@ -561,10 +561,11 @@ public class TestFmwk extends AbstractTestLog {
                         if (summary == null) {
                             summary = new StringBuffer();
                         }
-                        summary.append("\nTest: " + tests[i]);
+                        summary.append("\nTest Root: " + tests[i] + "\n");
                         summary.append(params.errorSummary());
                     }
-               }
+                }
+                params.errorSummary = summary;
             }
         } catch (Exception e) {
             e.printStackTrace(params.log);
@@ -572,7 +573,6 @@ public class TestFmwk extends AbstractTestLog {
             params.log.println("encountered exception, exiting");
         }
         
-        params.errorSummary = summary;
         return ec;
     }
     

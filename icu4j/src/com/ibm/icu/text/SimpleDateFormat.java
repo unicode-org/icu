@@ -1226,8 +1226,10 @@ public class SimpleDateFormat extends DateFormat {
                     // then we ask the timezone to handle this local time
                     int[] offsets = new int[2];
                     tz.getOffset(copy.getTimeInMillis()+tz.getRawOffset(), true, offsets);
+
                     cal.set(Calendar.ZONE_OFFSET, offsets[0]);
                     cal.set(Calendar.DST_OFFSET, offsets[1]);
+                    cal.setTimeZone(tz);
                 }
             }
         }
