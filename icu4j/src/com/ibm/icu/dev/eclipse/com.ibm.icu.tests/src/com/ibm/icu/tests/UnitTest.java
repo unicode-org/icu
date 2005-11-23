@@ -21,99 +21,82 @@ import com.ibm.icu.dev.test.TestFmwk.ASCIIWriter;
 
 public class UnitTest extends TestCase {
     
-//	public static void main(String[] args) throws Exception {
-//	    String[] names = { 
-//			"Calendar", "Collator", "Compression", "DiagBigDecimal", "Format", "Impl", 
-//	   		"Normalizer", "Property", "RBBI", "SearchTest", "StringPrep", "TestCharsetDetector", 
-//	   		"TestUCharacterIterator", "TimeScale", "TimeZone", "Translit", "Util",
-//	    };
-//	    for (int i = 0; i < names.length; ++i) {
-//	    	String name = names[i];
-//	    	System.out.println();
-//	    	System.out.println("public void test" + name + "() throws Exception {");
-//	    	System.out.println("    runUtility(\"" + name + "\");");
-//	    	System.out.println("}");
-//	    }
-//	}
+    public void testCalendar() throws Exception {
+        runUtility("Calendar");
+    }
 
-	public void testCalendar() throws Exception {
-	    runUtility("Calendar");
-	}
+    public void testCollator() throws Exception {
+        runUtility("Collator");
+    }
 
-	public void testCollator() throws Exception {
-	    runUtility("Collator");
-	}
+    public void testCompression() throws Exception {
+        runUtility("Compression");
+    }
 
-	public void testCompression() throws Exception {
-	    runUtility("Compression");
-	}
+    public void testDiagBigDecimal() throws Exception {
+        runUtility("DiagBigDecimal");
+    }
 
-	public void testDiagBigDecimal() throws Exception {
-	    runUtility("DiagBigDecimal");
-	}
+    public void testFormat() throws Exception {
+        runUtility("Format");
+    }
 
-	public void testFormat() throws Exception {
-	    runUtility("Format");
-	}
+    public void testImpl() throws Exception {
+        runUtility("Impl");
+    }
 
-	public void testImpl() throws Exception {
-	    runUtility("Impl");
-	}
+    public void testNormalizer() throws Exception {
+        runUtility("Normalizer");
+    }
 
-	public void testNormalizer() throws Exception {
-	    runUtility("Normalizer");
-	}
+    public void testProperty() throws Exception {
+        runUtility("Property");
+    }
 
-	public void testProperty() throws Exception {
-	    runUtility("Property");
-	}
+    public void testRBBI() throws Exception {
+        runUtility("RBBI");
+    }
 
-	public void testRBBI() throws Exception {
-	    runUtility("RBBI");
-	}
+    public void testSearchTest() throws Exception {
+        runUtility("SearchTest");
+    }
 
-	public void testSearchTest() throws Exception {
-	    runUtility("SearchTest");
-	}
+    public void testStringPrep() throws Exception {
+        runUtility("StringPrep");
+    }
 
-	public void testStringPrep() throws Exception {
-	    runUtility("StringPrep");
-	}
+    public void testTestCharsetDetector() throws Exception {
+        runUtility("TestCharsetDetector");
+    }
 
-	public void testTestCharsetDetector() throws Exception {
-	    runUtility("TestCharsetDetector");
-	}
+    public void testTestUCharacterIterator() throws Exception {
+        runUtility("TestUCharacterIterator");
+    }
 
-	public void testTestUCharacterIterator() throws Exception {
-	    runUtility("TestUCharacterIterator");
-	}
+    public void testTimeScale() throws Exception {
+        runUtility("TimeScale");
+    }
 
-	public void testTimeScale() throws Exception {
-	    runUtility("TimeScale");
-	}
+    public void testTimeZone() throws Exception {
+        runUtility("TimeZone");
+    }
 
-	public void testTimeZone() throws Exception {
-	    runUtility("TimeZone");
-	}
+    public void testTranslit() throws Exception {
+        runUtility("Translit");
+    }
 
-	public void testTranslit() throws Exception {
-	    runUtility("Translit");
-	}
+    public void testUtil() throws Exception {
+        runUtility("Util");
+    }
 
-	public void testUtil() throws Exception {
-	    runUtility("Util");
-	}
-
-	public void runUtility(String testname) throws Exception {
-        TestParams params = new TestParams();
-        params.nothrow = true;
-        params.log = new NullWriter();
+    public void runUtility(String testname) throws Exception {
+        TestParams params = TestParams.create("-n", null);
         TestFmwk test = new TestAll();
         test.resolveTarget(params, testname).run();
         if (params.errorCount > 0) {
-        	fail(params.errorSummary.toString());
+            fail(params.errorSummary.toString());
         }
-	}
+    }
 	
     // sample tests from ICU4J test suite
 
