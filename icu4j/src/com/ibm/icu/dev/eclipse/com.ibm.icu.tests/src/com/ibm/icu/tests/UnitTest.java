@@ -10,8 +10,6 @@ import junit.framework.TestCase;
 import com.ibm.icu.dev.test.TestAll;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestFmwk.TestParams;
-import com.ibm.icu.dev.test.TestFmwk.NullWriter;
-import com.ibm.icu.dev.test.TestFmwk.ASCIIWriter;
 
 //import com.ibm.icu.text.DateFormat;
 //import com.ibm.icu.util.Calendar;
