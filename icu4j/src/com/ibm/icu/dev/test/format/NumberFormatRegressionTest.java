@@ -1,4 +1,4 @@
-//##header 1132615047000 
+//##header 1132707402000 
 /*
  *******************************************************************************
  * Copyright (C) 2001-2005, International Business Machines Corporation and    *
@@ -180,8 +180,6 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 warnln("FAIL: " + e.getMessage());
             }
         }
-//#else
-//##    warnln("FOUNDATION");
 //#endif
     }
 }
