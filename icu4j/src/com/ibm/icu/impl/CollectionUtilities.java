@@ -13,9 +13,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
+
 //#ifndef FOUNDATION
 import java.util.regex.Matcher;
 //#endif
+
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -25,6 +27,27 @@ import com.ibm.icu.text.UnicodeSetIterator;
  * Utilities that ought to be on collections, but aren't
  */
 public final class CollectionUtilities {
+	
+    public static String join(Object[] array, String separator) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < array.length; ++i) {
+            if (i != 0) result.append(separator);
+            result.append(array[i]);
+        }
+        return result.toString();
+    }
+
+    public static String join(Collection collection, String separator) {
+        StringBuffer result = new StringBuffer();
+        boolean first = true;
+        for (Iterator it = collection.iterator(); it.hasNext();) {
+            if (first) first = false;
+            else result.append(separator);
+            result.append(it.next());
+        }
+        return result.toString();
+    }
+
 	/**
 	 * Utility like Arrays.asList()
 	 */
@@ -90,11 +113,25 @@ public final class CollectionUtilities {
 		return bestSoFar;
 	}
 	
-	public interface Filter {
+	public interface ObjectMatcher {
+		/**
+		 * Must handle null, never throw exception
+		 */
 		boolean matches(Object o);
 	}
+	
+    public static class InverseMatcher implements ObjectMatcher {
+    	ObjectMatcher other;
+        public ObjectMatcher set(ObjectMatcher toInverse) {
+            other = toInverse;
+            return this;
+        }
+        public boolean matches(Object value) {
+            return !other.matches(value);
+        }
+    }
 
-	public static Collection removeAll(Collection c, Filter f) {
+	public static Collection removeAll(Collection c, ObjectMatcher f) {
 		for (Iterator it = c.iterator(); it.hasNext();) {
 			Object item = it.next();
 			if (f.matches(item)) it.remove();
@@ -102,7 +139,7 @@ public final class CollectionUtilities {
 		return c;
 	}
 	
-	public static Collection retainAll(Collection c, Filter f) {
+	public static Collection retainAll(Collection c, ObjectMatcher f) {
 		for (Iterator it = c.iterator(); it.hasNext();) {
 			Object item = it.next();
 			if (!f.matches(item)) it.remove();

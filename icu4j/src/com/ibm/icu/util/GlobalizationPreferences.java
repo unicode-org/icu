@@ -23,11 +23,23 @@ import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
+import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-
 /**
+ * Copyright (C) 2004-2005, International Business Machines Corporation and    *
+ * others. All Rights Reserved. 
+ */
+/**
+ * <pre>
+ *  DRAFT
+ *  Copyright (C) 2005, International Business Machines Corporation and
+ *  others. All Rights Reserved.
+ * </pre>
+ * 
  * This convenience class provides a mechanism for bundling together different
  * globalization preferences. It includes:
  * <ul>
@@ -37,6 +49,57 @@ import com.ibm.icu.text.SimpleDateFormat;
  * <li>A timezone</li>
  * <li>A calendar</li>
  * <li>A collator (for language-sensitive sorting, searching, and matching).</li>
+<<<<<<< GlobalizationPreferences.java
+ * <li>And explicit overrides for date/time formats, etc.</li>
+ * </ul>
+ * The class will heuristically compute implicit, heuristic values for the above
+ * based on available data if explicit values are not supplied. These implicit
+ * values can be presented to users for confirmation, or replacement if the
+ * values are incorrect.
+ * <p>
+ * To reset any explicit field so that it will get heuristic values, pass in
+ * null. For example, myPreferences.setLocale(null);
+ * <p>
+ * All of the heuristics can be customized by subclasses, by overriding
+ * getTerritory(), guessCollator(), etc.
+ * <p>
+ * The class also supplies display names for languages, scripts, territories,
+ * currencies, timezones, etc. These are computed according to the
+ * locale/language preference list. Thus, if the preference is Breton; French;
+ * English, then the display name for a language will be returned in Breton if
+ * available, otherwise in French if available, otherwise in English.
+ * <p>
+ * The codes used to reference territory, currency, etc. are as defined elsewhere in ICU,
+ * and are taken from CLDR (which reflects RFC 3066bis usage, ISO 4217, and the 
+ * TZ Timezone database identifiers).
+ * <p>
+ * <b>This is at a prototype stage, and has not incorporated all the design
+ * changes that we would like yet; further feedback is welcome.</b></p>
+ * <p>
+ * TODO:<ul>
+ * <li>Separate out base class</li>
+ * <li>Add BreakIterator</li>
+ * <li>Add Holidays</li>
+ * <li>Add convenience to get/take Locale as well as ULocale.</li>
+ * <li>Add getResourceBundle(String baseName, ClassLoader loader);</li>
+ * <li>Add getFallbackLocales();</li>
+ * <li>Add Lenient datetime formatting when that is available.</li>
+ * <li>Should this be serializable?</li>
+ * <li>Other utilities?</li>
+ * </ul>
+ * Note:
+ * <ul>
+ * <li>to get the display name for the first day of the week, use the calendar +
+ * display names.</li>
+ * <li>to get the work days, ask the calendar (when that is available).</li>
+ * <li>to get papersize / measurement system/bidi-orientation, ask the locale
+ * (when that is available there)</li>
+ * <li>to get the field order in a date, and whether a time is 24hour or not,
+ * ask the DateFormat (when that is available there)</li>
+ * <li>it will support HOST locale when it becomes available (it is a special
+ * locale that will ask the services to use the host platform's values).</li>
+ * </ul>
+=======
  * <li>And explicit overrides for date/time formats, etc.</li></ul>
  * The class will heuristically compute implicit, heuristic values for the above based on available
  * data if explicit values are not supplied. These implicit values can be presented to users
@@ -50,8 +113,9 @@ import com.ibm.icu.text.SimpleDateFormat;
  *
  * @internal
  * @deprecated ICU 3.4.2
+>>>>>>> 1.8
  */
-public class GlobalizationPreferences {
+public class GlobalizationPreferences implements Freezable {
 	/**
 	 * Number Format types
 	 */
@@ -75,57 +139,85 @@ public class GlobalizationPreferences {
 	 * @param locales list of locales in priority order, eg {"be", "fr"} for Breton first, then French if that fails.
 	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setULocales(List locales) {
-		this.locales = new ArrayList(locales);
-		explicitLocales = true;
-		if (!explicitTerritory) guessTerritory();
-		if (!explicitCurrency) guessCurrency();
-		if (!explicitTimezone) guessTimeZone();
-		if (!explicitCalendar) guessCalendar();
+	public GlobalizationPreferences setLocales(List locales) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		if (locales.size() == 0) {
+			this.locales = locales.get(0);
+		} else {
+			this.locales = new ArrayList(locales); // clone for safety
+		}
 		return this;
 	}
 	/**
+	 * Get a copy of the language/locale priority list
 	 * @return a copy of the language/locale priority list.
 	 */
-	public List getULocales() {
-		return new ArrayList(locales); // clone for safety
+	public List getLocales() {
+		List result = new ArrayList(); // clone for safety
+		if (locales == null) {
+			result = guessLocales();
+		} else if (locales instanceof ULocale) {
+			result.add(locales);
+		} else {
+			result.addAll((List)locales);
+		}
+		return result;
 	}
 
 	/**
 	 * Convenience function for getting the locales in priority order
-	 * @return first item.
+	 * @param index The index (0..n) of the desired item.
+	 * @return desired item.
 	 */
-	public ULocale getULocale(int i) {
-		return (ULocale)locales.get(i);
+	public ULocale getLocale(int index) {
+		if (locales == null) {
+			return (ULocale)guessLocales().get(index);
+		} else if (locales instanceof ULocale) {
+			if (index != 0) throw new IllegalArgumentException("Out of bounds: " + index);
+			return (ULocale)locales;
+		} else {
+			return (ULocale)((List)locales).get(index);
+		}
 	}
 
 	/**
 	 * Convenience routine for setting the language/locale priority list from an array.
-	 * @see #setULocales(List locales)
+	 * @see #setLocales(List locales)
 	 * @param uLocales list of locales in an array
 	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setULocales(ULocale[] uLocales) {
-		return setULocales(Arrays.asList(uLocales));
+	public GlobalizationPreferences setLocales(ULocale[] uLocales) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		return setLocales(Arrays.asList(uLocales));
 	}
 	/**
 	 * Convenience routine for setting the language/locale priority list from a single locale/language.
-	 * @see #setULocales(List locales)
+	 * @see #setLocales(List locales)
 	 * @param uLocale single locale
 	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setULocales(ULocale uLocale) {
-		return setULocales(new ULocale[]{uLocale});
+	public GlobalizationPreferences setLocale(ULocale uLocale) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		return setLocales(new ULocale[]{uLocale});
 	}
 
 //#ifndef FOUNDATION
 	/**
 	 * Convenience routine for setting the locale priority list from an Accept-Language string.
-	 * @see #setULocales(List locales)
+	 * @see #setLocales(List locales)
 	 * @param acceptLanguageString Accept-Language list, as defined by Section 14.4 of the RFC 2616 (HTTP 1.1)
 	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setULocales(String acceptLanguageString) {
+	public GlobalizationPreferences setLocales(String acceptLanguageString) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		/*
 		Accept-Language = "Accept-Language" ":" 1#( language-range [ ";" "q" "=" qvalue ] )
 		x matches x-...
@@ -160,7 +252,7 @@ public class GlobalizationPreferences {
 				result.add(0, new ULocale((String)it2.next()));
 			}
 		}
-		return setULocales(result);
+		return setLocales(result);
 	}
 //#endif
 
@@ -172,11 +264,10 @@ public class GlobalizationPreferences {
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setTerritory(String territory) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		this.territory = territory;
-		explicitTerritory = true;
-		if (!explicitCurrency) guessCurrency();
-		if (!explicitTimezone) guessTimeZone();
-		if (!explicitCalendar) guessCalendar();
 		return this;
 	}
 	/**
@@ -184,6 +275,7 @@ public class GlobalizationPreferences {
 	 * @return territory code, explicit or implicit.
 	 */
 	public String getTerritory() {
+		if (territory == null) return guessTerritory();
 		return territory; // immutable, so don't need to clone
 	}
 
@@ -193,8 +285,10 @@ public class GlobalizationPreferences {
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setCurrency(Currency currency) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		this.currency = currency;
-		explicitCurrency = true;
 		return this;
 	}
 	/**
@@ -202,6 +296,7 @@ public class GlobalizationPreferences {
 	 * @return currency code, explicit or implicit.
 	 */
 	public Currency getCurrency() {
+		if (currency == null) return guessCurrency();
 		return currency; // immutable, so don't have to clone
 	}
 
@@ -211,42 +306,79 @@ public class GlobalizationPreferences {
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setCalendar(Calendar calendar) {
-		this.calendar = calendar;
-		explicitCalendar = true;
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+	    this.calendar = calendar;
 		return this;
 	}
 	/**
 	 * Get a copy of the calendar according to the settings. 
-	 * @return currency code, explicit or implicit.
+	 * @return calendar explicit or implicit.
 	 */
 	public Calendar getCalendar() {
-		return (Calendar) calendar.clone(); // clone for safety
+		if (calendar == null) return guessCalendar();
+		Calendar temp = (Calendar) calendar.clone(); // clone for safety
+		temp.setTimeZone(getTimeZone());
+		return temp;
 	}
 
 	/**
 	 * Sets the timezone ID.  If this has not been set, uses default for territory.
 	 * @param timezone a valid TZID (see UTS#35).
-	 * @return the object, for chaining.
+	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences setTimezone(TimeZone timezone) {
+	public GlobalizationPreferences setTimeZone(TimeZone timezone) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		this.timezone = timezone;
-		explicitTimezone = true;
 		return this;
 	}
 	/**
 	 * Get the timezone. It was either explicitly set, or is heuristically computed from other settings.
 	 * @return timezone, either implicitly or explicitly set
 	 */
-	public TimeZone getTimezone() {
+	public TimeZone getTimeZone() {
+		if (timezone == null) return guessTimeZone();
 		return (TimeZone) timezone.clone(); // clone for safety
+	}
+	
+	/**
+	 * Get a copy of the collator according to the settings. 
+	 * @return collator explicit or implicit.
+	 */
+	public Collator getCollator() {
+		if (collator == null) return guessCollator();
+		try {
+			return (Collator) collator.clone();  // clone for safety
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError("Error in cloning collator");
+		}
+	}
+
+	/**
+	 * Explicitly set the collator for this object.
+	 * @param collator
+	 * @return this, for chaining
+	 */
+	public GlobalizationPreferences setCollator(Collator collator) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		this.collator = collator;
+		return this;
 	}
 
 	/**
 	 * Set the date locale. 
 	 * @param dateLocale If not null, overrides the locale priority list for all the date formats.
-	 * @return the object, for chaining
+	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setDateLocale(ULocale dateLocale) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		this.dateLocale = dateLocale;
 		return this;
 	}
@@ -255,15 +387,18 @@ public class GlobalizationPreferences {
 	 * @return date locale. Null if none was set explicitly.
 	 */
 	public ULocale getDateLocale() {
-		return dateLocale;
+		return dateLocale != null ? dateLocale : getLocale(0);
 	}
 	
 	/**
 	 * Set the number locale. 
 	 * @param numberLocale If not null, overrides the locale priority list for all the date formats.
-	 * @return the object, for chaining
+	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setNumberLocale(ULocale numberLocale) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
 		this.numberLocale = numberLocale;
 		return this;
 	}
@@ -273,7 +408,7 @@ public class GlobalizationPreferences {
 	 * @return number locale. Null if none was set explicitly.
 	 */
 	public ULocale getNumberLocale() {
-		return numberLocale;
+		return numberLocale != null ? numberLocale : getLocale(0);
 	}
 	
 	/**
@@ -285,7 +420,7 @@ public class GlobalizationPreferences {
 	 */
 	public String getDisplayName(String id, int type) {
 		String result = id;
-		for (Iterator it = locales.iterator(); it.hasNext();) {
+		for (Iterator it = getLocales().iterator(); it.hasNext();) {
 			ULocale locale = (ULocale) it.next();
 			switch (type) {
 			case LOCALEID: 
@@ -328,9 +463,9 @@ public class GlobalizationPreferences {
 				// TODO, have method that doesn't require us to create a timezone
 				// fix other hacks
 				// hack for couldn't match
-                                // note, compiling with FOUNDATION omits this check for now
+// note, compiling with FOUNDATION omits this check for now
 //#ifndef FOUNDATION
-				if (badTimezone.reset(result).matches()) continue;
+				if (badTimeZone.reset(result).matches()) continue;
 //#endif
 				break;
 			default:
@@ -344,51 +479,80 @@ public class GlobalizationPreferences {
 	}
 //#ifndef FOUNDATION
 	// TODO remove need for this
-	private static final Matcher badTimezone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
+	private static final Matcher badTimeZone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
 //#endif
+
 
 	/**
 	 * Set an explicit date format. Overrides both the date locale, and the locale priority list
 	 * for a particular combination of dateStyle and timeStyle. NONE should be used if for the style,
 	 * where only the date or time format individually is being set.
-	 * @param dateStyle
-	 * @param timeStyle
+	 * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
+	 * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
 	 * @param format
 	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, DateFormat format) {
-		if (dateFormats == null) dateFormats = new DateFormat[NONE+1][NONE+1];
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		if (dateFormats == null) dateFormats = new Object[NONE+1][NONE+1];
 		dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
 		return this;
 	}
 	
 	/**
+	 * Set an explicit date format. Overrides both the date locale, and the locale priority list
+	 * for a particular combination of dateStyle and timeStyle. NONE should be used if for the style,
+	 * where only the date or time format individually is being set.
+	 * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
+	 * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
+	 * @param formatPattern date pattern, eg "yyyy-MMM-dd"
+	 * @return this, for chaining
+	 */
+	public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, String formatPattern) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		if (dateFormats == null) dateFormats = new Object[NONE+1][NONE+1];
+		// test the format to make sure it won't throw an error later
+		new SimpleDateFormat(formatPattern, getDateLocale());
+		dateFormats[dateStyle][timeStyle] = formatPattern; // for safety
+		return this;
+	}
+	/**
 	 * Gets a date format according to the current settings. If there is an explicit (non-null) date/time
 	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
 	 * Otherwise, the language priority list is used. NONE should be used for the style,
 	 * where only the date or time format individually is being gotten.
-	 * @param dateStyle
-	 * @param timeStyle
+	 * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
+	 * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
 	 * @return a DateFormat, according to the above description
 	 */
 	public DateFormat getDateFormat(int dateStyle, int timeStyle) {
 		try {
 			DateFormat result = null;
-			if (dateFormats != null) result = dateFormats[dateStyle][timeStyle];
+			if (dateFormats != null) { // and override can either be a string or a pattern
+				Object temp = dateFormats[dateStyle][timeStyle];
+				if (temp instanceof DateFormat) {
+					result = (DateFormat) temp;
+				} else {
+					result = new SimpleDateFormat((String)temp, getDateLocale());
+				}	
+			}
 			if (result != null) {
 				result = (DateFormat) result.clone(); // clone for safety
-				result.setCalendar(calendar);
+				result.setCalendar(getCalendar());
 			} else {
 				// In the case of date formats, we don't have to look at more than one
 				// locale. May be different for other cases
-				ULocale currentLocale = dateLocale != null ? dateLocale : (ULocale)locales.get(0);
 				// TODO Make this one function.
 				if (timeStyle == NONE) {
-					result = DateFormat.getDateInstance(calendar, dateStyle, currentLocale);
+					result = DateFormat.getDateInstance(getCalendar(), dateStyle, getDateLocale());
 				} else if (dateStyle == NONE) {
-					result = DateFormat.getTimeInstance(calendar, timeStyle, currentLocale);
+					result = DateFormat.getTimeInstance(getCalendar(), timeStyle, getDateLocale());
 				} else {
-					result = DateFormat.getDateTimeInstance(calendar, dateStyle, timeStyle, currentLocale);
+					result = DateFormat.getDateTimeInstance(getCalendar(), dateStyle, timeStyle, getDateLocale());
 				}
 			}
 			return result;
@@ -404,32 +568,39 @@ public class GlobalizationPreferences {
 	/**
 	 * Gets a number format according to the current settings.
 	 * If there is an explicit (non-null) number
-	 * format set, a copy of that is returned. Otherwise, if there is a non-null date locale, that is used.
+	 * format set, a copy of that is returned. Otherwise, if there is a non-null number locale, that is used.
 	 * Otherwise, the language priority list is used. NONE should be used for the style,
 	 * where only the date or time format individually is being gotten.
+	 * @param style CURRENCY, NUMBER, INTEGER, SCIENTIFIC, PERCENT
 	 */
 	public NumberFormat getNumberFormat(int style) {
 		try {
 			NumberFormat result = null;
-			if (numberFormats != null) result = numberFormats[style];
+			if (numberFormats != null) {
+				Object temp = numberFormats[style];
+				if (temp instanceof NumberFormat) {
+					result = (NumberFormat) temp;
+				} else {
+					result = new DecimalFormat((String)temp, new DecimalFormatSymbols(getDateLocale()));
+				}	
+			}
 			if (result != null) {
-				result = (NumberFormat) result.clone(); // clone for safety
+				result = (NumberFormat) result.clone(); // clone for safety (later optimize)
 				if (style == CURRENCY) {
-					result.setCurrency(currency);
+					result.setCurrency(getCurrency());
 				}
 				return result; 
 			}
 			// In the case of date formats, we don't have to look at more than one
 			// locale. May be different for other cases
-			ULocale currentLocale = numberLocale != null ? numberLocale : (ULocale)locales.get(0);
 			switch (style) {
-			case NUMBER: return NumberFormat.getInstance(currentLocale);
-			case SCIENTIFIC: return NumberFormat.getScientificInstance(currentLocale);
-			case INTEGER: return NumberFormat.getIntegerInstance(currentLocale);
-			case PERCENT: return NumberFormat.getPercentInstance(currentLocale);
-			case CURRENCY: result = NumberFormat.getCurrencyInstance(currentLocale);
-			result.setCurrency(currency);
-			return result;
+			case NUMBER: return NumberFormat.getInstance(getNumberLocale());
+			case SCIENTIFIC: return NumberFormat.getScientificInstance(getNumberLocale());
+			case INTEGER: return NumberFormat.getIntegerInstance(getNumberLocale());
+			case PERCENT: return NumberFormat.getPercentInstance(getNumberLocale());
+			case CURRENCY: result = NumberFormat.getCurrencyInstance(getNumberLocale());
+				result.setCurrency(getCurrency());
+				return result;
 			}
 		} catch (RuntimeException e) {}
 		throw new IllegalArgumentException(); // fix later
@@ -437,55 +608,111 @@ public class GlobalizationPreferences {
 	
 	/**
 	 * Sets a number format explicitly. Overrides the number locale and the general locale settings.
+	 * @param style CURRENCY, NUMBER, INTEGER, SCIENTIFIC, PERCENT
+	 * @return this, for chaining
 	 */
 	public GlobalizationPreferences setNumberFormat(int style, DateFormat format) {
-		if (numberFormats == null) numberFormats = new NumberFormat[NUMBER_LIMIT];
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		if (numberFormats == null) numberFormats = new Object[NUMBER_LIMIT];
 		numberFormats[style] = (NumberFormat) format.clone(); // for safety
 		return this;
 	}
 	
 	/**
-	 * Restore the object to the initial state.
-	 * @return the object, for chaining
+	 * Sets a number format explicitly. Overrides the number locale and the general locale settings.
+	 * @return this, for chaining
 	 */
-	public GlobalizationPreferences clear() {
-		explicitLocales = explicitTerritory = explicitCurrency = explicitTimezone = explicitCalendar = false;
-		locales.add(ULocale.getDefault());
-		if (!explicitTerritory) guessTerritory();
-		if (!explicitCurrency) guessCurrency();
-		if (!explicitTimezone) guessTimeZone();
-		if (!explicitCalendar) guessCalendar();
+	public GlobalizationPreferences setNumberFormat(int style, String formatPattern) {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		if (numberFormats == null) numberFormats = new Object[NUMBER_LIMIT];
+		// check to make sure it compiles
+		new DecimalFormat((String)formatPattern, new DecimalFormatSymbols(getDateLocale()));
+		numberFormats[style] = formatPattern; // for safety
+		return this;
+	}
+
+	/**
+	 * Restore the object to the initial state.
+	 * @return this, for chaining
+	 */
+	public GlobalizationPreferences reset() {
+	    if (isFrozen()) {
+	        throw new UnsupportedOperationException("Attempt to modify immutable object");
+	    }
+		territory = null;
+		calendar = null;
+		collator = null;
+		timezone = null;
+		currency = null;
+		dateFormats = null;
+		numberFormats = null;
+		dateLocale = null;
+		numberLocale = null;
+		locales = null;
 		return this;
 	}
 	
-	// protected helper functions
-	protected void guessTerritory() {
+	/**
+	 * This function can be overridden by subclasses to use different heuristics.
+	 */
+	protected String guessTerritory() {
+		String result;
 		// pass through locales to see if there is a territory.
-		for (Iterator it = locales.iterator(); it.hasNext();) {
+		for (Iterator it = getLocales().iterator(); it.hasNext();) {
 			ULocale locale = (ULocale)it.next();
-			String temp = locale.getCountry();
-			if (temp.length() != 0) {
-				territory = temp;
-				return;
+			result = locale.getCountry();
+			if (result.length() != 0) {
+				return result;
 			}
 		}
 		// if not, guess from the first language tag, or maybe from intersection of languages, eg nl + fr => BE
 		// TODO fix using real data
 		// for now, just use fixed values
-		ULocale firstLocale = (ULocale)locales.iterator().next();
+		ULocale firstLocale = getLocale(0);
 		String language = firstLocale.getLanguage();
 		String script = firstLocale.getScript();
-		territory = null;
+		result = null;
 		if (script.length() != 0) {
-			territory = (String) language_territory_hack_map.get(language + "_" + script);
+			result = (String) language_territory_hack_map.get(language + "_" + script);
 		}
-		if (territory == null) territory = (String) language_territory_hack_map.get(language);
-		if (territory == null) territory = "US"; // need *some* default
+		if (result == null) result = (String) language_territory_hack_map.get(language);
+		if (result == null) result = "US"; // need *some* default
+		return result;
 	}
-	protected void guessCurrency() {
-		currency = Currency.getInstance(new ULocale("und-" + territory));
+	/**
+	 * This function can be overridden by subclasses to use different heuristics
+	 */
+	protected Currency guessCurrency() {
+		return Currency.getInstance(new ULocale("und-" + getTerritory()));
 	}
-	protected void guessTimeZone() {
+	/**
+	 * This function can be overridden by subclasses to use different heuristics
+	 * <b>It MUST return a 'safe' value,
+	 * one whose modification will not affect this object.</b>
+	 */
+	protected List guessLocales() {
+		List result = new ArrayList(0);
+		result.add(ULocale.getDefault());
+		return result;
+	}
+	/**
+	 * This function can be overridden by subclasses to use different heuristics.
+	 * <b>It MUST return a 'safe' value,
+	 * one whose modification will not affect this object.</b>
+	 */
+	protected Collator guessCollator() {
+		return Collator.getInstance(getLocale(0));
+	}
+	/**
+	 * This function can be overridden by subclasses to use different heuristics.
+	 * <b>It MUST return a 'safe' value,
+	 * one whose modification will not affect this object.</b>
+	 */
+	protected TimeZone guessTimeZone() {
 		// TODO fix using real data
 		// for single-zone countries, pick that zone
 		// for others, pick the most populous zone
@@ -493,9 +720,9 @@ public class GlobalizationPreferences {
 		// NOTE: in a few cases can do better by looking at language. 
 		// Eg haw+US should go to Pacific/Honolulu
 		// fr+CA should go to America/Montreal
-		String timezoneString = (String) territory_tzid_hack_map.get(territory);
+		String timezoneString = (String) territory_tzid_hack_map.get(getTerritory());
 		if (timezoneString == null) {
-			String[] attempt = ZoneMeta.getAvailableIDs(territory);
+			String[] attempt = ZoneMeta.getAvailableIDs(getTerritory());
 			if (attempt.length == 0) {
 				timezoneString = "Etc/GMT"; // gotta do something
 			} else {
@@ -508,35 +735,39 @@ public class GlobalizationPreferences {
 				timezoneString = attempt[i];
 			}
 		}
-		timezone = TimeZone.getTimeZone(timezoneString);
+		return TimeZone.getTimeZone(timezoneString);
 	}
-	protected void guessCalendar() {
+	/**
+	 * This function can be overridden by subclasses to use different heuristics.
+	 * <b>It MUST return a 'safe' value,
+	 * one whose modification will not affect this object.</b>
+	 */
+	protected Calendar guessCalendar() {
 		// TODO add better API
-		calendar = Calendar.getInstance(new ULocale("und-" + territory));
+		return Calendar.getInstance(new ULocale("und-" + getTerritory()));
 	}
 	
 	// PRIVATES
 	
-	private ArrayList locales = new ArrayList();
+	private Object locales;
 	private String territory;
 	private Currency currency;
 	private TimeZone timezone;
 	private Calendar calendar;
-	private boolean explicitLocales;
-	private boolean explicitTerritory;
-	private boolean explicitCurrency;
-	private boolean explicitTimezone;
-	private boolean explicitCalendar;
+	private Collator collator;
 	
 	private ULocale dateLocale;
-	private DateFormat[][] dateFormats;
+	private Object[][] dateFormats;
 	private ULocale numberLocale;
-	private NumberFormat[] numberFormats;
+	private Object[] numberFormats;
 	
 	{
-		clear();
+		reset();
 	}
-	// 
+	
+	/** WARNING: All of this data is temporary, until we start importing from CLDR!!!
+	 * 
+	 */
 	private static final Map language_territory_hack_map = new HashMap();
 	private static final String[][] language_territory_hack = {
 		{"af", "ZA"},
@@ -737,4 +968,24 @@ public class GlobalizationPreferences {
 			territory_tzid_hack_map.put(territory_tzid_hack[i][0],territory_tzid_hack[i][1]);
 		}
 	}
+
+	protected boolean frozen;
+	public boolean isFrozen() {
+		return frozen;
+	}
+	public Object freeze() {
+		frozen = true;
+		return this;
+	}
+	public Object cloneAsThawed() {
+		try {
+			GlobalizationPreferences result = (GlobalizationPreferences) clone();
+			result.frozen = false;
+			return result;
+		} catch (CloneNotSupportedException e) {
+			// will always work
+			return null;
+		}
+	}
 }
+

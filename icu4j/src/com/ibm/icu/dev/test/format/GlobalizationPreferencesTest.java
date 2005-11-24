@@ -9,6 +9,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +36,8 @@ public class GlobalizationPreferencesTest {
 	private static final String[] WidthNames = {"abbreviated", "wide", "narrow"};
 	
 	public static void main(String[] args) throws IOException {
-		PrintWriter out = BagFormatter.openUTF8Writer("c:/", "tempFile.txt");
+		PrintStream out = System.out;
+		//PrintWriter out = BagFormatter.openUTF8Writer("c:/", "tempFile.txt");
 		try {
 			Date now = new Date();
 			
@@ -49,13 +51,13 @@ public class GlobalizationPreferencesTest {
 			out.println("Check defaulting");
 			String[] localeList = {"fr_BE;q=0.5,de", "fr_BE,de", "fr", "en_NZ", "en", "en-TH", "zh-Hant", "zh-MO", "zh", "it", "as", "haw", "ar-EG", "ar", "qqq"};
 			for (int i = 0; i < localeList.length; ++i) {
-				lPreferences.setULocales(localeList[i]);
+				lPreferences.setLocales(localeList[i]);
 				out.println("\tdefaults for: \t" + localeList[i] + "\t"
-						+ lPreferences.getULocales()
+						+ lPreferences.getLocales()
 						+ ", \t" + lPreferences.getTerritory()
 						+ ", \t" + lPreferences.getCurrency()
 						+ ", \t" + lPreferences.getCalendar().getClass()
-						+ ", \t" + lPreferences.getTimezone().getID()
+						+ ", \t" + lPreferences.getTimeZone().getID()
 				);
 			}
 			
@@ -66,11 +68,15 @@ public class GlobalizationPreferencesTest {
 			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE).format(now));
 			
 			out.println("setting locale to Germany");
-			lPreferences.setULocales(ULocale.GERMANY);
+			lPreferences.setLocale(ULocale.GERMANY);
 			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE).format(now));
 			
 			out.println("setting date locale to France");
 			lPreferences.setDateLocale(ULocale.FRANCE);
+			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE).format(now));
+			
+			out.println("setting explicit pattern");
+			lPreferences.setDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE, "GGG yyyy+MMM+DD vvvv");
 			out.println("\tdate: \t" + lPreferences.getDateFormat(DateFormat.FULL, GlobalizationPreferences.NONE).format(now));
 			
 			out.println("setting date format to yyyy-MMM-dd (Italy)");
@@ -111,11 +117,21 @@ public class GlobalizationPreferencesTest {
 			lPreferences.setNumberLocale(new ULocale("hi-IN"));
 			out.println("\tcurrency: \t" + lPreferences.getNumberFormat(GlobalizationPreferences.CURRENCY).format(1234.567));
 			
+			out.println();
+			out.println("Comparison");
+			out.println("setting number locale to Germany");
+			lPreferences.setLocale(ULocale.GERMANY);
+			out.println("\tcompare: \u00e4 & z \t" + lPreferences.getCollator().compare("\u00e4", "z"));
+
+			out.println("setting number locale to Swedish");
+			lPreferences.setLocale(new ULocale("sv"));
+			out.println("\tcompare: \u00e4 & z \t" + lPreferences.getCollator().compare("\u00e4", "z"));
+
 			// now try a fallback within locales
 			out.println();
 			out.println("Display Names");
-			lPreferences.setULocales(new ULocale[]{new ULocale("as"),new ULocale("pl"),new ULocale("fr")});
-			out.println("Trying fallback for multiple locales: " + lPreferences.getULocales());
+			lPreferences.setLocales(new ULocale[]{new ULocale("as"),new ULocale("pl"),new ULocale("fr")});
+			out.println("Trying fallback for multiple locales: " + lPreferences.getLocales());
 			String[][] testItems = {
 					{GlobalizationPreferences.LOCALEID+"", "as_FR", "en_RU","haw_CA","se_Cyrl_AT"},
 					{GlobalizationPreferences.LANGUAGEID+"", "as", "en","haw","se","kok"},
