@@ -20,6 +20,8 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.CollectionUtilities.InverseMatcher;
+import com.ibm.icu.impl.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
@@ -215,7 +217,7 @@ Name: Unicode_1_Name
     public final UnicodeSet getSet(String propertyValue) {
         return getSet(propertyValue,null);
     }
-    public final UnicodeSet getSet(Matcher matcher) {
+    public final UnicodeSet getSet(PatternMatcher matcher) {
         return getSet(matcher,null);
     }
 
@@ -229,7 +231,7 @@ Name: Unicode_1_Name
 
     public static final String UNUSED = "??";
 
-    public final UnicodeSet getSet(Matcher matcher, UnicodeSet result) {
+    public final UnicodeSet getSet(PatternMatcher matcher, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();
         if (isType(STRING_OR_MISC_MASK)) {
             for (int i = 0; i <= 0x10FFFF; ++i) {
@@ -605,12 +607,12 @@ Name: Unicode_1_Name
             }
             return result;
         }
-        InverseMatcher inverseMatcher = new InverseMatcher();
+        InversePatternMatcher inverseMatcher = new InversePatternMatcher();
         /**
          * Format is:
          *    propname ('=' | '!=') propvalue ( '|' propValue )*
          */
-        public final UnicodeSet getSet(String propAndValue, Matcher matcher, UnicodeSet result) {
+        public final UnicodeSet getSet(String propAndValue, PatternMatcher matcher, UnicodeSet result) {
             int equalPos = propAndValue.indexOf('=');
             String prop = propAndValue.substring(0,equalPos);
             String value = propAndValue.substring(equalPos+1);
@@ -632,7 +634,7 @@ Name: Unicode_1_Name
             return up.getSet(matcher.set(value), result);
         }
 
-        public final UnicodeSet getSet(String propAndValue, Matcher matcher) {
+        public final UnicodeSet getSet(String propAndValue, PatternMatcher matcher) {
             return getSet(propAndValue, matcher, null);
         }
         public final UnicodeSet getSet(String propAndValue) {
@@ -855,57 +857,51 @@ Name: Unicode_1_Name
         }
     }
 
-    public interface Matcher {
-        /**
-         * Must be able to handle null
-         * @param value
-         * @return true if the value matches
-         */
-        public boolean matches(String value);
-        public Matcher set(String pattern);
+    public interface PatternMatcher extends ObjectMatcher {
+        public PatternMatcher set(String pattern);
     }
 
-    public static class InverseMatcher implements Matcher {
-        Matcher other;
-        public Matcher set(Matcher toInverse) {
+    public static class InversePatternMatcher extends InverseMatcher implements PatternMatcher {
+        PatternMatcher other;
+        public PatternMatcher set(PatternMatcher toInverse) {
             other = toInverse;
             return this;
         }
-        public boolean matches(String value) {
+        public boolean matches(Object value) {
             return !other.matches(value);
         }
-        public Matcher set(String pattern) {
+        public PatternMatcher set(String pattern) {
             other.set(pattern);
             return this;
         }
     }
 
-    public static class SimpleMatcher implements Matcher {
+    public static class SimpleMatcher implements PatternMatcher {
         Comparator comparator;
         String pattern;
         public SimpleMatcher(String pattern, Comparator comparator) {
             this.comparator = comparator;
             this.pattern = pattern;
         }
-        public boolean matches(String value) {
+        public boolean matches(Object value) {
             if (comparator == null) return pattern.equals(value);
             return comparator.compare(pattern, value) == 0;
         }
-        public Matcher set(String pattern) {
+        public PatternMatcher set(String pattern) {
             this.pattern = pattern;
             return this;
         }
     }
 
-    public static class RegexMatcher implements UnicodeProperty.Matcher {
+    public static class RegexMatcher implements UnicodeProperty.PatternMatcher {
         private java.util.regex.Matcher matcher;
 
-        public UnicodeProperty.Matcher set(String pattern) {
+        public UnicodeProperty.PatternMatcher set(String pattern) {
             matcher = Pattern.compile(pattern).matcher("");
             return this;
         }
-        public boolean matches(String value) {
-            matcher.reset(value);
+        public boolean matches(Object value) {
+            matcher.reset(value.toString());
             return matcher.matches();
         }
     }

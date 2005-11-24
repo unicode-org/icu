@@ -112,6 +112,7 @@ public class PrettyPrinter {
 	 * @return formatted UnicodeSet
 	 */
 	public String toPattern(UnicodeSet uset) {
+		first = true;
 		// make sure that comparison separates all strings, even canonically equivalent ones
 		Set orderedStrings = new TreeSet(ordering);
 		for (UnicodeSetIterator it = new UnicodeSetIterator(uset); it.next();) {

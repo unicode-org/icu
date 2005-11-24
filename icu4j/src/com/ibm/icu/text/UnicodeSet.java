@@ -3447,7 +3447,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @deprecated
      * @author medavis
      */
-    abstract static class XSymbolTable implements SymbolTable {
+    abstract public static class XSymbolTable implements SymbolTable {
         public UnicodeMatcher lookupMatcher(int i) {
         return null;
     }
