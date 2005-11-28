@@ -280,8 +280,8 @@ case $platform in
         THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
-        export RELEASE_CFLAGS='-2'
-        export RELEASE_CXXFLAGS='-2'
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
         ;;
     zOSV1R2)
         THE_OS="z/OS 1.2"
@@ -293,8 +293,8 @@ case $platform in
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(zOSV1R2)'"
         export CXXFLAGS="-Wc,'target(zOSV1R2)'"
-        export RELEASE_CFLAGS='-2'
-        export RELEASE_CXXFLAGS='-2'
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
         ;;
     OS390V2R10)
         THE_OS="OS/390 2.10"
@@ -306,8 +306,8 @@ case $platform in
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(OSV2R10)'"
         export CXXFLAGS="-Wc,'target(OSV2R10)'"
-        export RELEASE_CFLAGS='-2'
-        export RELEASE_CXXFLAGS='-2'
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"

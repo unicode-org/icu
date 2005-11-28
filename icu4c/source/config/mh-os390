@@ -1,5 +1,5 @@
 ## -*-makefile-*-
-## 390-specific setup 
+## os/390, z/OS specific setup 
 ## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -30,20 +30,22 @@
 #                                                                 #
 ###################################################################
 
+# TODO: Fix this configuration so that icu-config will work!
+#       If statements don't work well when icu-config is generated.
 ifeq (${IEEE390},)
-IEEE390=1
+IEEE390=1#M#
 endif
 
 ifeq (${IEEE390}, 1)
-ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
+ICU_IEEE          = -Wc,'float(ieee)'
 else
-ICU_IEEE          = -DIEEE_754=0
+ICU_IEEE          = -DIEEE_754=0#M#
 endif
 
 # TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
 #       -Wc,"ros" seems to work, but not the "roc"
-CFLAGS          += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
-CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros' $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros' $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 ARFLAGS         = -cr
 
@@ -53,19 +55,15 @@ ifeq (${OS390_XPLINK}, 1)
 # Note:  The following options require the PTF for PQ69418 on z/OS 1.2
 #        and later.
 # These lines must be the last options specified.
-ICU_XPLINK_C      = -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,RENT,SSCOMM" -Wc,"inline(auto,noreport,500,2500)"
-ICU_XPLINK_CPP    = -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC" -Wc,"inline(auto,noreport,300,2500)"
+ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,RENT,SSCOMM'
+ICU_XPLINK_CPP    = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,NOTEMPINC'
 ICU_XPLINK_L      = -Wl,dll,xplink -Wl,EDIT=NO
 endif
 
 ## OS390BATCH
 ifeq (${OS390BATCH},1)
-DEFS            += -DOS390BATCH
+DEFS            += -DOS390BATCH#M#
 endif
-
-# Uncomment this line or do "gmake OS390_STUBDATA=1" to enable dual common library support
-#OS390_STUBDATA=1
-
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	makedep                        
@@ -108,8 +106,8 @@ STATIC_O = o
 
 ifeq ($(OS390_STUBDATA),1)
 ## Suffix of the subset data library for dual common library support
-STUB_SUFFIX=_stub
-DEFS      += -DOS390_STUBDATA
+STUB_SUFFIX=_stub#M#
+DEFS      += -DOS390_STUBDATA#M#
 endif
 
 ifeq ($(OS390BATCH),1)
@@ -144,11 +142,13 @@ LIBICUIO=	$(top_builddir)/io/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)test$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 
+# TODO: Fix this configuration so that icu-config will work!
+#       If statements don't work well when icu-config is generated.
 ifneq (${ICUDATA_CHAR},e)
 ## We're in ASCII mode.
-CFLAGS		+= -Wc,"ascii"
-CXXFLAGS	+= -Wc,"ascii"
-SO = so
+CFLAGS		+= -Wc,'ascii'#M#
+CXXFLAGS	+= -Wc,'ascii'#M#
+SO = so#M#
 else
 ## We're in EBCDIC mode.
 ## Shared object suffix
