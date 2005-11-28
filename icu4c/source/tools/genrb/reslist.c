@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -40,7 +40,7 @@ static const UDataInfo dataInfo= {
     0,
 
     {0x52, 0x65, 0x73, 0x42},     /* dataFormat="resb" */
-    {1, 1, 0, 0},                 /* formatVersion */
+    {1, 2, 0, 0},                 /* formatVersion */
     {1, 4, 0, 0}                  /* dataVersion take a look at version inside parsed resb*/
 };
 
@@ -393,11 +393,21 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
      * write int32_t indexes[] after root and before the strings
      * to make it easier to parse resource bundles in icuswap or from Java etc.
      */
+    uprv_memset(indexes, 0, sizeof(indexes));
     indexes[URES_INDEX_LENGTH]=             URES_INDEX_TOP;
     indexes[URES_INDEX_STRINGS_TOP]=        (int32_t)(usedOffset>>2);
     indexes[URES_INDEX_RESOURCES_TOP]=      (int32_t)(top>>2);
     indexes[URES_INDEX_BUNDLE_TOP]=         indexes[URES_INDEX_RESOURCES_TOP];
     indexes[URES_INDEX_MAX_TABLE_LENGTH]=   bundle->fMaxTableLength;
+
+    /*
+     * formatVersion 1.2 (ICU 3.6):
+     * write indexes[URES_INDEX_ATTRIBUTES] with URES_ATT_NO_FALLBACK set or not set
+     * the memset() above initialized all indexes[] to 0
+     */
+    if(bundle->noFallback) {
+        indexes[URES_INDEX_ATTRIBUTES]=URES_ATT_NO_FALLBACK;
+    }
 
     /* write the indexes[] */
     udata_writeBlock(mem, indexes, sizeof(indexes));

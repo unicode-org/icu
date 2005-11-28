@@ -1474,6 +1474,7 @@ U_STRING_DECL(k_type_string,    "string",    6);
 U_STRING_DECL(k_type_binary,    "binary",    6);
 U_STRING_DECL(k_type_bin,       "bin",       3);
 U_STRING_DECL(k_type_table,     "table",     5);
+U_STRING_DECL(k_type_table_no_fallback,     "table(nofallback)",         17);
 U_STRING_DECL(k_type_int,       "int",       3);
 U_STRING_DECL(k_type_integer,   "integer",   7);
 U_STRING_DECL(k_type_array,     "array",     5);
@@ -1494,6 +1495,7 @@ typedef enum EResourceType
     RT_STRING,
     RT_BINARY,
     RT_TABLE,
+    RT_TABLE_NO_FALLBACK,
     RT_INTEGER,
     RT_ARRAY,
     RT_ALIAS,
@@ -1515,6 +1517,7 @@ static struct {
     {"string", k_type_string, parseString},
     {"binary", k_type_binary, parseBinary},
     {"table", k_type_table, parseTable},
+    {"table(nofallback)", k_type_table_no_fallback, NULL}, /* parseFunction will never be called */
     {"integer", k_type_integer, parseInteger},
     {"array", k_type_array, parseArray},
     {"alias", k_type_alias, parseAlias},
@@ -1535,6 +1538,7 @@ void initParser(UBool makeBinaryCollation)
     U_STRING_INIT(k_type_binary,    "binary",    6);
     U_STRING_INIT(k_type_bin,       "bin",       3);
     U_STRING_INIT(k_type_table,     "table",     5);
+    U_STRING_INIT(k_type_table_no_fallback,     "table(nofallback)",         17);
     U_STRING_INIT(k_type_int,       "int",       3);
     U_STRING_INIT(k_type_integer,   "integer",   7);
     U_STRING_INIT(k_type_array,     "array",     5);
@@ -1552,6 +1556,10 @@ void initParser(UBool makeBinaryCollation)
         ustr_init(&lookahead[i].value);
     }
     gMakeBinaryCollation = makeBinaryCollation;
+}
+
+static U_INLINE isTable(enum EResourceType type) {
+    return (UBool)(type==RT_TABLE || type==RT_TABLE_NO_FALLBACK);
 }
 
 static enum EResourceType
@@ -1595,6 +1603,7 @@ parseResourceType(UErrorCode *status)
     return result;
 }
 
+/* parse a non-top-level resource */
 static struct SResource *
 parseResource(char *tag, const struct UString *comment, UErrorCode *status)
 {
@@ -1706,6 +1715,10 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
         }
 
         /* printf("Type guessed as %s\n", resourceNames[resType]); */
+    } else if(resType == RT_TABLE_NO_FALLBACK) {
+        *status = U_INVALID_FORMAT_ERROR;
+        error(startline, "error: %s resource type not valid except on top bundle level", gResourceTypes[resType].nameChars);
+        return NULL;
     }
 
     /* We should now know what we need to parse next, so call the appropriate parser
@@ -1722,6 +1735,7 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
     return NULL;
 }
 
+/* parse the top-level resource */
 struct SRBRoot *
 parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
 {
@@ -1753,21 +1767,11 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     /* expect(TOK_OPEN_BRACE, NULL, &line, status); */
     /* The following code is to make Empty bundle work no matter with :table specifer or not */
     token = getToken(NULL, NULL, &line, status);
-
-    if(token==TOK_COLON)
-    {
+    if(token==TOK_COLON) {
         *status=U_ZERO_ERROR;
-    }
-    else
-    {
-        *status=U_PARSE_ERROR;
-    }
-
-    if(U_SUCCESS(*status)){
-
         bundleType=parseResourceType(status);
 
-        if(bundleType==RT_TABLE)
+        if(isTable(bundleType))
         {
             expect(TOK_OPEN_BRACE, NULL, NULL, &line, status);
         }
@@ -1779,12 +1783,16 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     }
     else
     {
+        /* not a colon */
         if(token==TOK_OPEN_BRACE)
         {
             *status=U_ZERO_ERROR;
+            bundleType=RT_TABLE;
         }
         else
         {
+            /* neither colon nor open brace */
+            *status=U_PARSE_ERROR;
             error(line, "parse error, did not find open-brace '{' or colon ':', stopped with %s", u_errorName(*status));
         }
     }
@@ -1796,6 +1804,15 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
         return NULL;
     }
 
+    if(bundleType==RT_TABLE_NO_FALLBACK) {
+        /*
+         * Parse a top-level table with the table(nofallback) declaration.
+         * This is the same as a regular table, but also sets the
+         * URES_ATT_NO_FALLBACK flag in indexes[URES_INDEX_ATTRIBUTES] .
+         */
+        bundle->noFallback=TRUE;
+    }
+    /* top-level tables need not handle special table names like "collations" */
     realParseTable(bundle->fRoot, NULL, line, status);
 
     if (U_FAILURE(*status))
