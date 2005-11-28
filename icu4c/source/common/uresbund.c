@@ -320,12 +320,10 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 
         r->fHashKey = hashValue;
         r->fParent = NULL;
-        r->fData.data = NULL;
-        r->fData.pRoot = NULL;
-        r->fData.rootRes = 0;
+        uprv_memset(&r->fData, 0, sizeof(ResourceData));
         r->fBogus = U_ZERO_ERROR;
         
-        /* this is the acutal loading - returns bool true/false */
+        /* this is the actual loading - returns bool true/false */
         result = res_load(&(r->fData), r->fPath, r->fName, status);
 
         if (result == FALSE || U_FAILURE(*status)) { 
@@ -461,7 +459,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
       if(r != NULL) { /* if there is one real locale, we can look for parents. */
         t1 = r;
         hasRealData = TRUE;
-        while (hasChopped && !isRoot && t1->fParent == NULL) {
+        while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
             /* insert regular parents */
             t2 = init_entry(name, r->fPath, &parentStatus);
             t1->fParent = t2;
@@ -503,7 +501,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         } else { /* we don't even have the root locale */
           *status = U_MISSING_RESOURCE_ERROR;
         }
-      } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
+      } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL && !r->fData.noFallback) {
           /* insert root locale */
           t2 = init_entry(kRootLocaleName, r->fPath, &parentStatus);
           if(!hasRealData) {
@@ -869,9 +867,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fVersion = NULL;
     resB->fRes = r;
     /*resB->fParent = parent->fRes;*/
-    resB->fResData.data = rdata->data;
-    resB->fResData.pRoot = rdata->pRoot;
-    resB->fResData.rootRes = rdata->rootRes;
+    uprv_memcpy(&resB->fResData, rdata, sizeof(ResourceData));
     resB->fSize = res_countArrayItems(&(resB->fResData), resB->fRes);
     return resB;
 }
@@ -1727,9 +1723,8 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         while(firstData->fBogus != U_ZERO_ERROR && firstData->fParent != NULL) {
             firstData = firstData->fParent;
         }
-        r->fResData.data = firstData->fData.data;
-        r->fResData.pRoot = firstData->fData.pRoot;
-        r->fResData.rootRes = firstData->fData.rootRes;
+        uprv_memcpy(&r->fResData, &firstData->fData, sizeof(ResourceData));
+        r->fHasFallback=(UBool)!r->fResData.noFallback;
         r->fRes = r->fResData.rootRes;
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
         /*r->fParent = RES_BOGUS;*/
@@ -1795,9 +1790,8 @@ ures_open(const char* path,
         }
     }
 
-    r->fResData.data = hasData->fData.data;
-    r->fResData.pRoot = hasData->fData.pRoot;
-    r->fResData.rootRes = hasData->fData.rootRes;
+    uprv_memcpy(&r->fResData, &hasData->fData, sizeof(ResourceData));
+    r->fHasFallback=(UBool)!r->fResData.noFallback;
     r->fRes = r->fResData.rootRes;
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
@@ -1857,9 +1851,8 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
 
     r->fKey = NULL;
     r->fVersion = NULL;
-    r->fResData.data = r->fData->fData.data;
-    r->fResData.pRoot = r->fData->fData.pRoot;
-    r->fResData.rootRes = r->fData->fData.rootRes;
+    uprv_memcpy(&r->fResData, &r->fData->fData, sizeof(ResourceData));
+    /* r->fHasFallback remains FALSE here in ures_openDirect() */
     r->fRes = r->fResData.rootRes;
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
