@@ -816,6 +816,7 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" remainder of the target as above.  Target matching is case-insensitive.");
         pw.println();
         pw.println(" If multiple targets are provided, each is executed in order.");
+        pw.flush();
     }
 
     public static String hex(char ch) {
