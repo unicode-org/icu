@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -709,11 +710,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
         defaultZone = tz;
         // Keep java.util.TimeZone default in sync so java.util.Date
         // can interoperate with com.ibm.icu.util classes.
-        //java.util.TimeZone jdkZone = null;
+        java.util.TimeZone jdkZone = null;
         if (tz != null) {
-            //jdkZone = TimeZoneAdapter.wrap(tz);
+            jdkZone = TimeZoneAdapter.wrap(tz);
         }
-        //java.util.TimeZone.setDefault(jdkZone);
+        java.util.TimeZone.setDefault(jdkZone);
     }
 
     /**
