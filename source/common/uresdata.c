@@ -200,6 +200,7 @@ static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
+    uprv_memcpy(context, pInfo->formatVersion, 4);
     return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
@@ -217,10 +218,11 @@ isAcceptable(void *context,
 U_CFUNC UBool
 res_load(ResourceData *pResData,
          const char *path, const char *name, UErrorCode *errorCode) {
+    UVersionInfo formatVersion;
     UResType rootType;
 
     /* load the ResourceBundle file */
-    pResData->data=udata_openChoice(path, "res", name, isAcceptable, NULL, errorCode);
+    pResData->data=udata_openChoice(path, "res", name, isAcceptable, formatVersion, errorCode);
     if(U_FAILURE(*errorCode)) {
         return FALSE;
     }
@@ -228,6 +230,7 @@ res_load(ResourceData *pResData,
     /* get its memory and root resource */
     pResData->pRoot=(Resource *)udata_getMemory(pResData->data);
     pResData->rootRes=*pResData->pRoot;
+    pResData->noFallback=FALSE;
 
     /* currently, we accept only resources that have a Table as their roots */
     rootType=RES_GET_TYPE(pResData->rootRes);
@@ -236,6 +239,14 @@ res_load(ResourceData *pResData,
         udata_close(pResData->data);
         pResData->data=NULL; 
         return FALSE;
+    }
+
+    if(formatVersion[0]>1 || (formatVersion[0]==1 && formatVersion[1]>=1)) {
+        /* bundles with formatVersion 1.1 and later contain an indexes[] array */
+        const int32_t *indexes=(const int32_t *)pResData->pRoot+1;
+        if(indexes[URES_INDEX_LENGTH]>URES_INDEX_ATTRIBUTES) {
+            pResData->noFallback=(UBool)(indexes[URES_INDEX_ATTRIBUTES]&URES_ATT_NO_FALLBACK);
+        }
     }
 
     return TRUE;

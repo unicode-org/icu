@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,6 +41,7 @@ struct SRBRoot {
   int32_t fCount;
   struct SResource *fRoot;
   int32_t fMaxTableLength;
+  UBool noFallback; /* see URES_ATT_NO_FALLBACK */
 };
 
 struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status);

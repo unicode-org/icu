@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 1999-2003, International Business Machines                   *
+* Copyright (C) 1999-2005, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -48,6 +48,7 @@ enum {
     URES_INDEX_BUNDLE_TOP,      /* [3] contains the top of the bundle, */
                                 /*     in case it were ever different from [2] */
     URES_INDEX_MAX_TABLE_LENGTH,/* [4] max. length of any table */
+    URES_INDEX_ATTRIBUTES,      /* [5] attributes bit set, see URES_ATT_* (new in formatVersion 1.2) */
     URES_INDEX_TOP
 };
 
@@ -57,7 +58,20 @@ enum {
 };
 
 /*
- * File format for .res resource bundle files (formatVersion=1.1)
+ * Nofallback attribute, attribute bit 0 in indexes[URES_INDEX_ATTRIBUTES].
+ * New in formatVersion 1.2 (ICU 3.6).
+ *
+ * If set, then this resource bundle is a standalone bundle.
+ * If not set, then the bundle participates in locale fallback, eventually
+ * all the way to the root bundle.
+ * If indexes[] is missing or too short, then the attribute cannot be determined
+ * reliably. Dependency checking should ignore such bundles, and loading should
+ * use fallbacks.
+ */
+#define URES_ATT_NO_FALLBACK 1
+
+/*
+ * File format for .res resource bundle files (formatVersion=1.2)
  *
  * An ICU4C resource bundle file (.res) is a binary, memory-mappable file
  * with nested, hierarchical data structures.
@@ -67,7 +81,7 @@ enum {
  *                     currently, the root item must be a table or table32 resource item
  *   int32_t indexes[indexes[0]]; -- array of indexes for friendly
  *                                   reading and swapping; see URES_INDEX_* above
- *                                   new in formatVersion 1.1
+ *                                   new in formatVersion 1.1 (ICU 2.8)
  *   char keys[]; -- characters for key strings
  *                   (formatVersion 1.0: up to 65k of characters; 1.1: <2G)
  *                   (minus the space for root and indexes[]),
@@ -156,6 +170,7 @@ typedef struct {
     UDataMemory *data;
     Resource *pRoot;
     Resource rootRes;
+    UBool noFallback; /* see URES_ATT_NO_FALLBACK */
 } ResourceData;
 
 /*
