@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2001-2005 International Business Machines
 // Corporation and others. All Rights Reserved.
-DataDrivenCollationTest {
+DataDrivenCollationTest:table(nofallback) {
     Info {
         Headers { "sequence" }
         Description { "These are the data driven tests" }

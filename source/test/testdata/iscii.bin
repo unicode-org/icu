@@ -1,10 +1,10 @@
 //*******************************************************************************
 //*
-//*Copyright(C)1998-2000InternationalBusinessMachines
+//*Copyright(C)1998-2005InternationalBusinessMachines
 //*Corporationandothers.AllRightsReserved.
 //*
 //*******************************************************************************
-iscii{
+iscii:table(nofallback){
     str{
         "	ï4ï3ÍÝï4ï3Æá×è³å .³á .¬³ .¤ÅèÍÍÆ .³á ¤ÆÝ×ÚÏ 1990 Â³ ³¢ÈèÍÞ½Ï-ÈèÏÊ¢ÅÛÂ ×Þ¸ÆÚ"
         "ÈèÏÁÚÑÜ .³á .ÍåµÄÚÆ .³á .ÉÑ×èÔÏÞÈ .ÔÛÕèÔ .Ìá¢ .×ÚÑÚÆÚ .2200 ¤ÏÊ ÏÝÈÍá ÌÞÑèÍ"

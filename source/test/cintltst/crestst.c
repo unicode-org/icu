@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -459,7 +459,7 @@ static void TestFallback()
 
 static void
 TestOpenDirect(void) {
-    UResourceBundle *idna_rules, *item;
+    UResourceBundle *idna_rules, *casing, *te_IN, *ne, *item;
     UErrorCode errorCode;
 
     /*
@@ -468,7 +468,7 @@ TestOpenDirect(void) {
      * from root or similar
      */
     errorCode=U_ZERO_ERROR;
-    idna_rules=ures_openDirect("testdata", "idna_rules", &errorCode);
+    idna_rules=ures_openDirect(loadTestData(&errorCode), "idna_rules", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("ures_openDirect(\"idna_rules\") failed: %s\n", u_errorName(errorCode));
         return;
@@ -489,7 +489,7 @@ TestOpenDirect(void) {
     }
 
     /* try an item in root, must fail */
-    item=ures_getByKey(idna_rules, "Languages", NULL, &errorCode);
+    item=ures_getByKey(idna_rules, "ShortLanguage", NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         errorCode=U_ZERO_ERROR;
     } else {
@@ -527,6 +527,80 @@ TestOpenDirect(void) {
         return;
     }
     ures_close(idna_rules);
+
+    /*
+     * ICU 3.6 has new resource bundle syntax and data for bundles that do not
+     * participate in locale fallback. Now,
+     * - ures_open() works like ures_openDirect() on a bundle with a top-level
+     *   type of ":table(nofallback)" _if_ the bundle exists
+     * - ures_open() will continue to find a root bundle if the requested one
+     *   does not exist, unlike ures_openDirect()
+     *
+     * Test with a different bundle than above to avoid confusion in the cache.
+     */
+
+    /*
+     * verify that ures_open("casing"), which now has a nofallback declaration,
+     * does not enable fallbacks
+     */
+    errorCode=U_ZERO_ERROR;
+    casing=ures_open("testdata", "casing", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ures_open(\"casing\") failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    item=ures_getByKey(casing, "Info", NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("casing.getByKey(Info) failed - %s\n", u_errorName(errorCode));
+    } else {
+        ures_close(item);
+    }
+
+    errorCode=U_ZERO_ERROR;
+    item=ures_getByKey(casing, "ShortLanguage", NULL, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("casing.getByKey(root key) succeeded despite nofallback declaration - %s\n", u_errorName(errorCode));
+        ures_close(item);
+    }
+    ures_close(casing);
+
+    /*
+     * verify that ures_open("ne") finds the root bundle but
+     * ures_openDirect("ne") does not
+     */
+    errorCode=U_ZERO_ERROR;
+    ne=ures_open("testdata", "ne", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ures_open(\"ne\") failed (expected to get root): %s\n", u_errorName(errorCode));
+    }
+    if(errorCode!=U_USING_DEFAULT_WARNING || 0!=uprv_strcmp("root", ures_getLocale(ne, &errorCode))) {
+        log_err("ures_open(\"ne\") found something other than \"root\" - %s\n", u_errorName(errorCode));
+    }
+    ures_close(ne);
+
+    errorCode=U_ZERO_ERROR;
+    ne=ures_openDirect("testdata", "ne", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("ures_openDirect(\"ne\") succeeded unexpectedly\n");
+        ures_close(ne);
+    }
+
+    /* verify that ures_openDirect("te_IN") does not enable fallbacks */
+    errorCode=U_ZERO_ERROR;
+    te_IN=ures_openDirect("testdata", "te_IN", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ures_open(\"te_IN\") failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    errorCode=U_ZERO_ERROR;
+    item=ures_getByKey(te_IN, "ShortLanguage", NULL, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        log_err("te_IN.getByKey(root key) succeeded despite use of ures_openDirect() - %s\n", u_errorName(errorCode));
+        ures_close(item);
+    }
+    ures_close(te_IN);
 }
 
 static int32_t
