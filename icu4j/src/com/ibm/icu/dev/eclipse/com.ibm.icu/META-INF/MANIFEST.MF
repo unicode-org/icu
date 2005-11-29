@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: International Components for Unicode for Java (ICU4J)
-Bundle-SymbolicName: com.ibm.icu
-Bundle-Version: 3.4.1
+Bundle-SymbolicName: com.ibm.icu; singleton:=true
+Bundle-Version: 3.4.2
 Bundle-Vendor: IBM
 Bundle-Localization: plugin
 Bundle-Copyright: Licensed Materials - Property of IBM 
@@ -15,5 +15,9 @@ Export-Package: com.ibm.icu.impl;x-friends:="com.ibm.icu.tests",
  com.ibm.icu.math,
  com.ibm.icu.text,
  com.ibm.icu.util
-Bundle-ClassPath: icu4j.jar
+Bundle-ClassPath: icu4j.jar,
+ bin/
 Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,
+ J2SE-1.3
+Require-Bundle: org.eclipse.icu

@@ -196,7 +196,38 @@ public abstract class UResourceBundle extends ResourceBundle{
          return getBundleInstance(baseName, locale.toString(),ICUResourceBundle.ICU_DATA_CLASS_LOADER);  
     }
     
-
+    /**
+     * Creates a UResourceBundle for the specified locale and specified base name,
+     * from which users can extract resources by using their corresponding keys.
+     * @param baseName  specifies the locale for which we want to open the resource.
+     *                If null the bundle for default locale is opened.              
+     * @param locale  specifies the locale for which we want to open the resource.
+     *                If null the bundle for default locale is opened.  
+     * @param loader  the loader to use
+     * @return a resource bundle for the given base name and locale
+     * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader){
+        return getBundleInstance(baseName, ULocale.forLocale(locale), loader);
+    }
+   
+    /**
+     * Creates a UResourceBundle, from which users can extract resources by using
+     * their corresponding keys.
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
+     * @param locale  specifies the locale for which we want to open the resource.
+     *                If null the bundle for default locale is opened.
+     * @param loader  the loader to use
+     * @return a resource bundle for the given base name and locale               
+     * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader){
+         return getBundleInstance(baseName, locale.toString(),loader);  
+    }
+    
     /**
      * Returns the RFC 3066 conformant locale id of this resource bundle. 
      * This method can be used after a call to getBundleInstance() to

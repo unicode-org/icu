@@ -1,4 +1,4 @@
-//##header 1132615047000 
+//##header 1133291226000 
 /**
  *******************************************************************************
  * Copyright (C) 2001-2005, International Business Machines Corporation and    *
@@ -993,7 +993,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestJavaULocaleBundleLoading(){
         String baseName="com.ibm.icu.dev.data.resources.TestDataElements";
         String locName = "en_Latn_US";
-        UResourceBundle bundle = UResourceBundle.getBundleInstance(baseName, locName);
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(baseName, locName, testLoader);
         String fromRoot = bundle.getString("from_root");
         if(!fromRoot.equals("This data comes from root")){
             errln("Did not get the expected string for from_root");
@@ -1010,7 +1010,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(!fromEnLatnUs.equals("This data comes from en_Latn_US")){
             errln("Did not get the expected string for from_en_Latn_US");
         }
-        UResourceBundle bundle1 = UResourceBundle.getBundleInstance(baseName, new ULocale(locName));
+        UResourceBundle bundle1 = UResourceBundle.getBundleInstance(baseName, new ULocale(locName), testLoader);
         if(!bundle1.equals(bundle)){
             errln("Did not get the expected bundle for "+baseName +"."+locName);
         }
@@ -1018,7 +1018,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not load the bundle from cache");
         }
         // non-existent bundle .. should return default
-        UResourceBundle defaultBundle = UResourceBundle.getBundleInstance(baseName, "hi_IN");
+        UResourceBundle defaultBundle = UResourceBundle.getBundleInstance(baseName, "hi_IN", testLoader);
         ULocale defaultLocale = ULocale.getDefault();
         if(!defaultBundle.getULocale().equals(defaultLocale)){
             errln("Did not get the default bundle for non-existent bundle");
@@ -1026,7 +1026,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // non-existent bundle, non-existent default locale
         // so return the root bundle.
         ULocale.setDefault(ULocale.CANADA_FRENCH);
-        UResourceBundle root = UResourceBundle.getBundleInstance(baseName, "hi_IN");
+        UResourceBundle root = UResourceBundle.getBundleInstance(baseName, "hi_IN", testLoader);
         if(!root.getULocale().toString().equals("")){
             errln("Did not get the root bundle for non-existent default bundle for non-existent bundle");
         }        
@@ -1041,7 +1041,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(i!=4){
             errln("Did not get the expected number of keys: got " + i + ", expected 4");
         }
-        UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR");
+        UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR", testLoader);
         if(bundle==null){
             errln("Could not load bundle fr_Latn_FR");
         }
