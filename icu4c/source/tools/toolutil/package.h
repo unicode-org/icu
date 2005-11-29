@@ -105,6 +105,11 @@ public:
 
     void listItems(FILE *file);
 
+    /*
+     * Check dependencies and return TRUE if all dependencies are fulfilled.
+     */
+    UBool checkDependencies();
+
 private:
     void enumDependencies(Item *pItem);
 
@@ -140,6 +145,9 @@ private:
     const char *findPrefix, *findSuffix;
     int32_t findPrefixLength, findSuffixLength;
     int32_t findNextIndex;
+
+    // state for checkDependencies()
+    UBool isMissingItems;
 };
 
 U_NAMESPACE_END
