@@ -9,7 +9,7 @@
 // Since ICU doesn't follow the traditional fallback model where all keys fallback to root,
 // root can't be used to validate the structure.
 // This file was generated from en.txt, and all ".*" were replaced with "".
-structLocale{
+structLocale:table(nofallback){
     BreakDictionaryData:bin {00}
     Countries{
         001{""}

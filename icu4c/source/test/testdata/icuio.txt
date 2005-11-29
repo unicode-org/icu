@@ -15,7 +15,7 @@
 //
 //*****************************************************************************
 
-icuio {
+icuio:table(nofallback) {
     Info {
         Description { "Test data for ICU I/O" }
         LongDescription {

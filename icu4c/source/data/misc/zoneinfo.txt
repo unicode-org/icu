@@ -11,7 +11,7 @@
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
 //---------------------------------------------------------
 
-zoneinfo {
+zoneinfo:table(nofallback) {
  Zones:array { 
   /* ACT */ :int { 310 } //Z#0
 ,  /* AET */ :int { 321 } //Z#1

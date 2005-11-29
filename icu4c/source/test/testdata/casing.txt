@@ -5,7 +5,7 @@
 //*
 //*******************************************************************************
 
-casing {
+casing:table(nofallback) {
     Info {
         Description { "This is test data file for string casing." }
 
