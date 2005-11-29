@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-CurrencyData{
+CurrencyData:table(nofallback){
     // Currency metadata.  Unlike the "Currencies" element, this is
     // NOT true locale data.  It exists only in root.  The two
     // integers are the fraction digits for each currency, and the
