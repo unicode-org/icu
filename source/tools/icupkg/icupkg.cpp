@@ -428,6 +428,12 @@ main(int argc, char *argv[]) {
         pkg->listItems(stdout);
     }
 
+    /* check dependencies between items */
+    if(!pkg->checkDependencies()) {
+        /* some dependencies are not fulfilled */
+        return U_MISSING_RESOURCE_ERROR;
+    }
+
     /* write the output .dat package if there are any modifications */
     if(isModified) {
         char outFilenameBuffer[1024]; // for auto-generated output filename, if necessary
