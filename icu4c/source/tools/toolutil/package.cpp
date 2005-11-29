@@ -1129,17 +1129,28 @@ Package::listItems(FILE *file) {
 
     for(i=0; i<itemCount; ++i) {
         fprintf(file, "%s\n", items[i].name);
-        enumDependencies(items+i);
     }
 }
 
 void
 Package::checkDependency(void *context, const char *itemName, const char *targetName) {
-    // TODO
-    // check dependency: make sure target is in the package
-    // list dependencies?
+    // check dependency: make sure the target item is in the package
     Package *me=(Package *)context;
-    fprintf(stderr, "item %s depends on %s\n", itemName, targetName);
+    if(me->findItem(targetName)<0) {
+        me->isMissingItems=TRUE;
+        fprintf(stderr, "Item %s depends on missing item %s\n", itemName, targetName);
+    }
+}
+
+UBool
+Package::checkDependencies() {
+    int32_t i;
+
+    isMissingItems=FALSE;
+    for(i=0; i<itemCount; ++i) {
+        enumDependencies(items+i);
+    }
+    return (UBool)!isMissingItems;
 }
 
 char *

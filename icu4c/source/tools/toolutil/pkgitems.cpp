@@ -64,17 +64,17 @@ readSwapUInt16(uint16_t x) {
 
 /*
  * assemble the target item name from the source item name, an ID
- * and a prefix
+ * and a suffix
  */
 static void 
-checkDependency(const char *itemName, const char *id, const char *suffix,
-                CheckDependency check, void *context,
-                UErrorCode *pErrorCode) {
+checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char *suffix,
+              CheckDependency check, void *context,
+              UErrorCode *pErrorCode) {
     char target[200];
     const char *itemID;
-    int32_t treeLength, idLength, suffixLength, targetLength;
+    int32_t treeLength, suffixLength, targetLength;
 
-    // build the target string
+    // get the item basename
     itemID=strrchr(itemName, '/');
     if(itemID!=NULL) {
         ++itemID;
@@ -82,12 +82,15 @@ checkDependency(const char *itemName, const char *id, const char *suffix,
         itemID=itemName;
     }
 
+    // build the target string
     treeLength=(int32_t)(itemID-itemName);
-    idLength=(int32_t)strlen(id);
+    if(idLength<0) {
+        idLength=(int32_t)strlen(id);
+    }
     suffixLength=(int32_t)strlen(suffix);
     targetLength=treeLength+idLength+suffixLength;
     if(targetLength>=(int32_t)sizeof(target)) {
-        fprintf(stderr, "icupkg/checkDependency(%s) alias target item name length %ld too long\n",
+        fprintf(stderr, "icupkg/checkIDSuffix(%s) alias target item name length %ld too long\n",
                         itemName, targetLength);
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -98,6 +101,47 @@ checkDependency(const char *itemName, const char *id, const char *suffix,
     memcpy(target+treeLength+idLength, suffix, suffixLength+1); // +1 includes the terminating NUL
 
     check(context, itemName, target);
+}
+
+/* assemble the target item name from the item's parent item name */
+static void 
+checkParent(const char *itemName, CheckDependency check, void *context,
+            UErrorCode *pErrorCode) {
+    const char *itemID, *parent, *parentLimit, *suffix;
+    int32_t parentLength;
+
+    // get the item basename
+    itemID=strrchr(itemName, '/');
+    if(itemID!=NULL) {
+        ++itemID;
+    } else {
+        itemID=itemName;
+    }
+
+    // get the item suffix
+    suffix=strrchr(itemID, '.');
+    if(suffix==NULL) {
+        // empty suffix, point to the end of the string
+        suffix=strrchr(itemID, 0);
+    }
+
+    // get the position of the last '_'
+    for(parentLimit=suffix; parentLimit>itemID && *--parentLimit!='_';) {}
+
+    if(parentLimit!=itemID) {
+        // get the parent item name by truncating the last part of this item's name */
+        parent=itemID;
+        parentLength=(int32_t)(parentLimit-itemID);
+    } else {
+        // no '_' in the item name: the parent is the root bundle
+        parent="root";
+        parentLength=4;
+        if((suffix-itemID)==parentLength && 0==memcmp(itemID, parent, parentLength)) {
+            // the item itself is "root", which does not depend on a parent
+            return;
+        }
+    }
+    checkIDSuffix(itemName, parent, parentLength, suffix, check, context, pErrorCode);
 }
 
 // get dependencies from resource bundles ---------------------------------- ***
@@ -254,7 +298,7 @@ ures_enumDependencies(const UDataSwapper *ds,
 #           error Unknown U_CHARSET_FAMILY value!
 #endif
 
-            checkDependency(itemName, localeID, ".res", check, context, pErrorCode);
+            checkIDSuffix(itemName, localeID, -1, ".res", check, context, pErrorCode);
         }
         break;
     case URES_TABLE:
@@ -395,6 +439,25 @@ ures_enumDependencies(const UDataSwapper *ds,
         rootRes, NULL, 0,
         check, context,
         pErrorCode);
+
+    /*
+     * if the bundle attributes are present and the nofallback flag is not set,
+     * then add the parent bundle as a dependency
+     */
+    if(pInfo->formatVersion[1]>=1) {
+        int32_t indexes[URES_INDEX_TOP];
+        const int32_t *inIndexes;
+
+        inIndexes=(const int32_t *)inBundle+1;
+        indexes[URES_INDEX_LENGTH]=udata_readInt32(ds, inIndexes[URES_INDEX_LENGTH]);
+        if(indexes[URES_INDEX_LENGTH]>URES_INDEX_ATTRIBUTES) {
+            indexes[URES_INDEX_ATTRIBUTES]=udata_readInt32(ds, inIndexes[URES_INDEX_ATTRIBUTES]);
+            if(0==(indexes[URES_INDEX_ATTRIBUTES]&URES_ATT_NO_FALLBACK)) {
+                /* this bundle participates in locale fallback */
+                checkParent(itemName, check, context, pErrorCode);
+            }
+        }
+    }
 }
 
 // get dependencies from conversion tables --------------------------------- ***
@@ -489,7 +552,7 @@ ucnv_enumDependencies(const UDataSwapper *ds,
             }
             ds->swapInvChars(ds, inMBCSHeader+1, baseNameLength+1, baseName, pErrorCode);
 
-            checkDependency(itemName, baseName, ".cnv", check, context, pErrorCode);
+            checkIDSuffix(itemName, baseName, -1, ".cnv", check, context, pErrorCode);
         }
     }
 }
