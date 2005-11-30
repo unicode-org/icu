@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sl.xml
+// * Source File:<path>/common/main/sl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/sl.xml
+ *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
+    AuxExemplarCharacters{"[qwxy]"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -320,7 +321,7 @@ sl{
             "Ameriški Dolar",
         }
     }
-    ExemplarCharacters{"[a-pr-vzčšž]"}
+    ExemplarCharacters{"[a-c č d-p r s š t-v z ž]"}
     Keys{
         calendar{"Kolendar"}
         collation{"Zlaganje"}
@@ -372,7 +373,7 @@ sl{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -396,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.48"}
+    Version{"1.55"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

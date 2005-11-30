@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/hu.xml
+// * Source File:<path>/common/main/hu.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/hu.xml
+ *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
+    AuxExemplarCharacters{"[qwxy]"}
     Countries{
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
@@ -1225,8 +1226,9 @@ hu{
         }
     }
     ExemplarCharacters{
-        "[a-z á é í ó ú ö ü ő ű {cs} {dz} {dzs} {gy} {ly} {ny} {sz} {ty} {zs} {ccs} {"
-        "ddz} {ddzs} {ggy} {lly} {nny} {ssz} {tty} {zzs}]"
+        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j-l {"
+        "ly} {lly} m n {ny} {nny} o ó ö ő p-s {sz} {ssz} t {ty} {tty} u ú ü ű v-z {zs"
+        "} {zzs}]"
     }
     Keys{
         calendar{"Naptár"}
@@ -1388,7 +1390,7 @@ hu{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1443,7 +1445,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.49"}
+    Version{"1.56"}
     calendar{
         buddhist{
             eras{
@@ -1568,7 +1570,6 @@ hu{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tisri",
                         "Hesván",
@@ -1595,7 +1596,6 @@ hu{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "Moharrem",
                         "Safar",
@@ -1613,7 +1613,6 @@ hu{
                 }
             }
         }
-        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{

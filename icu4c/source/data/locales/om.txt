@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/om.xml
+// * Source File:<path>/common/main/om.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/om.xml
+ *  ICU <specials> source: <path>/xml/main/om.xml
  */
 om{
     Countries{
@@ -47,7 +47,7 @@ om{
     LocaleScript{
         "Latn",
     }
-    Version{"1.29"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

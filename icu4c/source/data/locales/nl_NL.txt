@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/nl_NL.xml
+// * Source File:<path>/common/main/nl_NL.xml
 // *
 // ***************************************************************************
 nl_NL{
@@ -13,5 +13,5 @@ nl_NL{
         "#,##0%",
         "#E0",
     }
-    Version{"1.27"}
+    Version{"1.31"}
 }

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/zh_Hant_MO.xml
+// * Source File:<path>/common/main/zh_Hant_MO.xml
 // *
 // ***************************************************************************
 zh_Hant_MO{
@@ -16,7 +16,7 @@ zh_Hant_MO{
         "#,##0%",
         "#E0",
     }
-    Version{"1.15"}
+    Version{"1.19"}
     calendar{
         gregorian{
             DateTimePatterns{

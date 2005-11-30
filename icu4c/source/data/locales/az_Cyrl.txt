@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/az_Cyrl.xml
+// * Source File:<path>/common/main/az_Cyrl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/az_Cyrl.xml
+ *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
  */
 az_Cyrl{
     Countries{
@@ -19,14 +19,14 @@ az_Cyrl{
             "манат",
         }
     }
-    ExemplarCharacters{"[а-хчшыјғҝүҹһәө]"}
+    ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}
     Languages{
         az{"Азәрбајҹан"}
     }
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.6"}
+    Version{"1.11"}
     calendar{
         gregorian{
             dayNames{

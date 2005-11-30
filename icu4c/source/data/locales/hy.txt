@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/hy.xml
+// * Source File:<path>/common/main/hy.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/hy.xml
+ *  ICU <specials> source: <path>/xml/main/hy.xml
  */
 hy{
     Countries{
@@ -203,7 +203,7 @@ hy{
         ZM{"Զամբիա"}
         ZW{"Զիմբաբվե"}
     }
-    ExemplarCharacters{"[Ա-Ֆՙ-՟ա-և֊ﬓ-ﬗ]"}
+    ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-մ ﬔ ﬕ ﬗ ﬓ յ-վ ﬖ տ-ֆ ՙ]"}
     Languages{
         hy{"Հայերէն"}
     }
@@ -221,7 +221,7 @@ hy{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -230,7 +230,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.40"}
     calendar{
         gregorian{
             AmPmMarkers{

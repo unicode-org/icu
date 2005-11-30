@@ -3,17 +3,17 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ml.xml
+// * Source File:<path>/common/main/ml.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/ml.xml
+ *  ICU <specials> source: <path>/xml/main/ml.xml
  */
 ml{
     Countries{
         IN{"ഇന്ത്യ"}
     }
-    ExemplarCharacters{"[ംഃഅആഇഈഉഊഋഌഎഏഐഒഓഔകഖഗഘങചഛജഝഞടഠഡഢണതഥദധനപഫബഭമയരറലളഴവശഷസഹാിീുൂൃെേൈൊോൌ്ൗൠൡ]"}
+    ExemplarCharacters{"[അ-ഋ ൠ ഌ ൡ എ-ഐ ഒ-ന പ-ര ല വ ള ഴ റ ശ-ഹ ഃ ം ാ-ൃ െ-ൈ ൊ-് ൗ]"}
     Languages{
         ml{"മലയാളം"}
     }
@@ -31,10 +31,10 @@ ml{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
-    Version{"1.14"}
+    Version{"1.19"}
     calendar{
         gregorian{
             AmPmMarkers{
