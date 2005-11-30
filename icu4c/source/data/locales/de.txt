@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/de.xml
+// * Source File:<path>/common/main/de.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/de.xml
+ *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
     Countries{
@@ -1224,7 +1224,7 @@ de{
             "Simbabwe Dollar",
         }
     }
-    ExemplarCharacters{"[a-z ä ö ü ß]"}
+    ExemplarCharacters{"[a ä b-o ö p-s ß t u ü v-z]"}
     Keys{
         calendar{"Kalender"}
         collation{"Sortierung"}
@@ -1713,7 +1713,7 @@ de{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1787,7 +1787,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.52"}
+    Version{"1.58"}
     calendar{
         gregorian{
             AmPmMarkers{

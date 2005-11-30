@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/bn.xml
+// * Source File:<path>/common/main/bn.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/bn.xml
+ *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
     Countries{
@@ -129,14 +129,17 @@ bn{
             "INR",
         }
     }
-    ExemplarCharacters{"[ঁ-ঃঅ-ঌএঐও-নপ-রলশ-হ়-ৄেৈো-ৎৗড়ঢ়য়-ৣ০-৺‌‍]"}
+    ExemplarCharacters{
+        "[‌ ‍ ় ঁ-ঃ ৺ ৸ ৹ ৲ ৳ ০ ১ ৴ ২ ৵ ৩ ৶ ৪ ৷ ৫-৯ অ-ঋ ৠ ঌ ৡ এ ঐ ও-ড ড় ঢ ঢ় ণ ত ৎ থ-ন"
+        " প-য য় র ৰ ল ৱ শ-হ ঽ-ৄ ৢ ৣ ে ৈ ো-্ ৗ]"
+    }
     Languages{
         bn{"বাংলা"}
     }
     LocaleScript{
         "Beng",
     }
-    Version{"1.32"}
+    Version{"1.37"}
     calendar{
         gregorian{
             AmPmMarkers{

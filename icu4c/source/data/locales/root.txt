@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/root.xml
+// * Source File:<path>/common/main/root.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/root.xml
+ *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
     AuxExemplarCharacters{"[]"}
@@ -53,7 +53,7 @@ root{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -66,7 +66,7 @@ root{
         297,
         210,
     }
-    Version{"1.52"}
+    Version{"1.62"}
     boundaries{
         grapheme{"char"}
         line{"line"}
@@ -213,6 +213,7 @@ root{
                     "BCE",
                     "CE",
                 }
+                wide:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
             }
             monthNames{
                 default{"format"}
@@ -620,17 +621,9 @@ root{
             "America/Godthab",
             "America/Santiago",
             "America/Guayaquil",
-            "",
-            "",
-            "",
-            "",
             "Asia/Shanghai",
             "Asia/Tashkent",
             "Asia/Kuala_Lumpur",
-            "",
-            "",
-            "",
-            "",
             "Europe/Madrid",
             "Europe/Lisbon",
             "Europe/London",

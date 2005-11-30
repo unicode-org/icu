@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/el.xml
+// * Source File:<path>/common/main/el.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/el.xml
+ *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
     Countries{
@@ -1187,7 +1187,7 @@ el{
             "Δολάριο Ζιμπάμπουε",
         }
     }
-    ExemplarCharacters{"[ΐά-ώ]"}
+    ExemplarCharacters{"[α ά β-ε έ ζ η ή θ ι ί ϊ ΐ κ-ο ό π ρ σ ς τ υ ύ ϋ ΰ φ-ω ώ]"}
     Keys{
         calendar{"Ημερολόγιο"}
         collation{"Τακτοποίηση"}
@@ -1280,7 +1280,7 @@ el{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1320,7 +1320,7 @@ el{
             traditional{"Παραδοσιακή"}
         }
     }
-    Version{"1.50"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{

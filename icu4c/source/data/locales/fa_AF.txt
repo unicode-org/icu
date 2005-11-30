@@ -3,14 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fa_AF.xml
+// * Source File:<path>/common/main/fa_AF.xml
 // *
 // ***************************************************************************
 fa_AF{
-    AuxExemplarCharacters{
-        "[\u064a\u067c\u0681\u0685\u0689\u0693\u0696\u069a\u06ab\u06bc\u06cd\u06d0"
-        "\u0656\u0670]"
-    }
+    AuxExemplarCharacters{"[ٖ ٰ ټ ځ څ ډ ړ ږ ښ ګ ڼ ي ې ۍ]"}
     Countries{
         AD{"اندورا"}
         AE{"امارات متحدهٔ عربی"}
@@ -140,7 +137,7 @@ fa_AF{
         sv{"سویدنی"}
         tg{"تاجکی"}
     }
-    Version{"1.33"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/pa.xml
+// * Source File:<path>/common/main/pa.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/pa.xml
+ *  ICU <specials> source: <path>/xml/main/pa.xml
  */
 pa{
     Countries{
@@ -19,7 +19,10 @@ pa{
             "ਰੁਪਿਯ",
         }
     }
-    ExemplarCharacters{"[ਁ-ਃਅ-ਊਏਐਓ-ਨਪ-ਰਲਲ਼ਵਸ਼ਸਹ਼ਾ-ੂੇੈੋ-੍ਖ਼-ੜਫ਼੦-ੴ‌‍]"}
+    ExemplarCharacters{
+        "[‌ ‍ ਼ ਁ-ਃ ੰ ੱ ੦-੯ ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ ਸ਼ ਹ ਕ ਖ ਖ਼ ਗ ਗ਼ ਘ-ਜ ਜ਼ ਝ-ਨ ਪ ਫ ਫ਼"
+        " ਬ-ਰ ਲ ਲ਼ ਵ ੜ ਾ-ੂ ੇ ੈ ੋ-੍]"
+    }
     Languages{
         pa{"ਪੰਜਾਬੀ"}
     }
@@ -37,7 +40,7 @@ pa{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -46,7 +49,7 @@ pa{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.26"}
+    Version{"1.32"}
     calendar{
         gregorian{
             AmPmMarkers{

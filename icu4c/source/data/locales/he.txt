@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/he.xml
+// * Source File:<path>/common/main/he.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/he.xml
+ *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
     Countries{
@@ -277,7 +277,7 @@ he{
             "USD",
         }
     }
-    ExemplarCharacters{"[ְ-ֹֻ-ֽֿׁ-ׂׄא-ת]"}
+    ExemplarCharacters{"[ֽ ׄ ְ-ֹ ֻ ׂ ׁ ּ ֿ א-י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק-ת]"}
     Keys{
         calendar{"לוח שנה"}
         collation{"מיון"}
@@ -370,7 +370,7 @@ he{
             hebrew{"לוח שנה עברי"}
         }
     }
-    Version{"1.51"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -470,7 +470,6 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "תשרי",
                         "חשון",
@@ -497,7 +496,6 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "מוחרם",
                         "ספר",
@@ -515,7 +513,6 @@ he{
                 }
             }
         }
-        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{

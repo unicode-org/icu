@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/hr.xml
+// * Source File:<path>/common/main/hr.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/hr.xml
+ *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
     Countries{
@@ -988,7 +988,7 @@ hr{
             "Zimbabveanski dolar",
         }
     }
-    ExemplarCharacters{"[a-p r-v z đ ć č ž š {lj} {nj} {dž}]"}
+    ExemplarCharacters{"[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
     Keys{
         calendar{"Kalendar"}
         collation{"Poredavanje"}
@@ -1081,7 +1081,7 @@ hr{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1105,7 +1105,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.48"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ml_IN.xml
+// * Source File:<path>/common/main/ml_IN.xml
 // *
 // ***************************************************************************
 ml_IN{
@@ -13,7 +13,7 @@ ml_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.14"}
+    Version{"1.18"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

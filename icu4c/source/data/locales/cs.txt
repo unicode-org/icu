@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/cs.xml
+// * Source File:<path>/common/main/cs.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/cs.xml
+ *  ICU <specials> source: <path>/xml/main/cs.xml
  */
 cs{
     Countries{
@@ -1253,7 +1253,7 @@ cs{
             "Dolar zimbabwský",
         }
     }
-    ExemplarCharacters{"[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]"}
+    ExemplarCharacters{"[a á b c č d ď e é ě f-i í j-n ň o ó p-r ř s š t ť u ú ů v-y ý z ž]"}
     Keys{
         calendar{"Kalendář"}
         collation{"Třídění"}
@@ -1414,7 +1414,7 @@ cs{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1431,7 +1431,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.61"}
+    Version{"1.68"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1661,9 +1661,6 @@ cs{
         }
         "Antarctica:South_Pole"{
             ec{"Jižní pól"}
-        }
-        "Asia:Jakarta"{
-            ec{"Jakarta"}
         }
         "Asia:Jerusalem"{
             ec{"Jeruzalém"}

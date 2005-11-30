@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/pl.xml
+// * Source File:<path>/common/main/pl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/pl.xml
+ *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
+    AuxExemplarCharacters{"[qvx]"}
     Countries{
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
@@ -1180,7 +1181,7 @@ pl{
             "dolar Zimbabwe",
         }
     }
-    ExemplarCharacters{"[a-z ó ą ę ć ń ś ź ł ż]"}
+    ExemplarCharacters{"[a ą b c ć d e ę f-l ł m n ń o ó p-s ś t-z ź ż]"}
     Keys{
         calendar{"Kalendarz"}
         collation{"Sortowanie"}
@@ -1232,7 +1233,7 @@ pl{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1294,7 +1295,7 @@ pl{
             traditional{"tradycyjny"}
         }
     }
-    Version{"1.51"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

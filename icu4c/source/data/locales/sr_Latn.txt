@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sr_Latn.xml
+// * Source File:<path>/common/main/sr_Latn.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/sr_Latn.xml
+ *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
+    AuxExemplarCharacters{"[qwxy]"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -420,7 +421,7 @@ sr_Latn{
             "YUN",
         }
     }
-    ExemplarCharacters{"[a-p r-v z đ ć č ž š {lj} {nj} {dž}]"}
+    ExemplarCharacters{"[a-c ć č d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
     Keys{
         calendar{"Kalendar"}
         collation{"Sortiranje"}
@@ -529,7 +530,7 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.30"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimePatterns{

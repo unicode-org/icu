@@ -3,9 +3,9 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fr_FR.xml
+// * Source File:<path>/common/main/fr_FR.xml
 // *
 // ***************************************************************************
 fr_FR{
-    Version{"1.25"}
+    Version{"1.29"}
 }

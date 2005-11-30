@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sr_Latn_CS.xml
+// * Source File:<path>/common/main/sr_Latn_CS.xml
 // *
 // ***************************************************************************
 sr_Latn_CS{
-    Version{"1.12"}
+    Version{"1.16"}
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}

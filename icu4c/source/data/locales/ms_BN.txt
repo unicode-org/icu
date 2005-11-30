@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ms_BN.xml
+// * Source File:<path>/common/main/ms_BN.xml
 // *
 // ***************************************************************************
 ms_BN{
@@ -28,10 +28,10 @@ ms_BN{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
-    Version{"1.20"}
+    Version{"1.24"}
     calendar{
         gregorian{
             DateTimePatterns{

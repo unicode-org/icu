@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ro.xml
+// * Source File:<path>/common/main/ro.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/ro.xml
+ *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
+    AuxExemplarCharacters{"[qwy]"}
     Countries{
         001{"Lume"}
         005{"America de Sud"}
@@ -300,7 +301,7 @@ ro{
             "USD",
         }
     }
-    ExemplarCharacters{"[a-z â î ă ş ţ]"}
+    ExemplarCharacters{"[a ă â b-i î j-s ş t ţ u-z]"}
     Languages{
         ar{"Arabă"}
         bg{"Bulgară"}
@@ -347,10 +348,10 @@ ro{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
-    Version{"1.46"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

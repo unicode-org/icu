@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/nl.xml
+// * Source File:<path>/common/main/nl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/nl.xml
+ *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
     Countries{
@@ -1268,7 +1268,7 @@ nl{
             "Zimbabwaanse dollar",
         }
     }
-    ExemplarCharacters{"[a-záéíóúäëïöüĳ]"}
+    ExemplarCharacters{"[a á ä b-e é ë f-i í ï ĳ j-o ó ö p-u ú ü v-z]"}
     Keys{
         calendar{"Kalender"}
         collation{"Volgorde"}
@@ -1756,7 +1756,7 @@ nl{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1836,7 +1836,7 @@ nl{
     Variants{
         REVISED{"Gewijzigd"}
     }
-    Version{"1.52"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1941,7 +1941,6 @@ nl{
         hebrew{
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tisjrie",
                         "Chesjwan",
@@ -1968,7 +1967,6 @@ nl{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "Moeharram",
                         "Safar",
@@ -1986,7 +1984,6 @@ nl{
                 }
             }
         }
-        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     zoneStrings{
         "Africa:Casablanca"{

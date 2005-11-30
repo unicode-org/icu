@@ -3,16 +3,16 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fi_FI.xml
+// * Source File:<path>/common/main/fi_FI.xml
 // *
 // ***************************************************************************
 fi_FI{
-    AuxExemplarCharacters{"[à á ã æ è é ë ï ô õ ø ü œ ç č ñ ř â đ ń ŋ ŧ ŧ ǥ ǧ ǩ ǯ ʒ ȟ]"}
+    AuxExemplarCharacters{"[á à â ã č ç đ é è ë ǧ ǥ ȟ ï ǩ ń ñ ŋ ô ř ŧ ü æ ø õ œ ʒ ǯ]"}
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.28"}
+    Version{"1.32"}
 }

@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/es.xml
+// * Source File:<path>/common/main/es.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/es.xml
+ *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
+    AuxExemplarCharacters{"[ü]"}
     Countries{
         AD{"Andorra"}
         AE{"Emiratos Árabes Unidos"}
@@ -1229,7 +1230,7 @@ es{
             "dólar de Zimbabue",
         }
     }
-    ExemplarCharacters{"[a-z ñ á é í ó ú ü]"}
+    ExemplarCharacters{"[a á b-e é f-i í j-n ñ o ó p-u ú ü v-z]"}
     Keys{
         calendar{"calendario"}
         collation{"intercalación"}
@@ -1712,7 +1713,7 @@ es{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -1799,7 +1800,7 @@ es{
     Variants{
         REVISED{"Revisado"}
     }
-    Version{"1.52"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

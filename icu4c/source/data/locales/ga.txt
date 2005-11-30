@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ga.xml
+// * Source File:<path>/common/main/ga.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/ga.xml
+ *  ICU <specials> source: <path>/xml/main/ga.xml
  */
 ga{
+    AuxExemplarCharacters{"[k]"}
     Countries{
         AD{"Andóra"}
         AE{"Aontas na nÉimíríochtaí Arabacha"}
@@ -1222,7 +1223,7 @@ ga{
             "Dollar Siombábach",
         }
     }
-    ExemplarCharacters{"[a-z á é í ó ú]"}
+    ExemplarCharacters{"[a á b-e é f-i í j-o ó p-u ú v-z]"}
     Languages{
         aa{"Afar"}
         ab{"Abcáisis"}
@@ -1348,7 +1349,7 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.36"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{
