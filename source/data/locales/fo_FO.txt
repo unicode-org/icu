@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fo_FO.xml
+// * Source File:<path>/common/main/fo_FO.xml
 // *
 // ***************************************************************************
 fo_FO{
@@ -13,5 +13,5 @@ fo_FO{
         "#,##0%",
         "#E0",
     }
-    Version{"1.26"}
+    Version{"1.30"}
 }

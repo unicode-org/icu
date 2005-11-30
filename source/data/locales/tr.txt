@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/tr.xml
+// * Source File:<path>/common/main/tr.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/tr.xml
+ *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
+    AuxExemplarCharacters{"[qwx]"}
     Countries{
         001{"Dünya"}
         002{"Afrika"}
@@ -1264,7 +1265,7 @@ tr{
             "Zimbabwe Doları",
         }
     }
-    ExemplarCharacters{"[a-zâûöüıçşğİ]"}
+    ExemplarCharacters{"[a â b c ç d-g ğ h ı i İ j-o ö p-s ş t u û ü v-z]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1543,7 +1544,7 @@ tr{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1587,7 +1588,7 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.50"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

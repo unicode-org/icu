@@ -3,14 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/collation/pl.xml
+// * Source File:<path>/common/collation/pl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/collation/pl.xml
+ *  ICU <specials> source: <path>/xml/collation/pl.xml
  */
 pl{
-    Version{"1.19"}
+    Version{"1.20"}
     collations{
         standard{
             Sequence{
@@ -23,7 +23,7 @@ pl{
                 "&S<ś<<<Ś"
                 "&Z<ź<<<Ź<ż<<<Ż"
             }
-            Version{"1.3"}
+            Version{"1.4"}
         }
     }
 }

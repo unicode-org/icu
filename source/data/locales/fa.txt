@@ -3,14 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fa.xml
+// * Source File:<path>/common/main/fa.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/fa.xml
+ *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    AuxExemplarCharacters{"[\u0656\u0670]"}
+    AuxExemplarCharacters{"[ٖ ٰ]"}
     Countries{
         AD{"آندورا"}
         AE{"امارات متحده‌ی عربی"}
@@ -278,7 +278,10 @@ fa{
             "USD",
         }
     }
-    ExemplarCharacters{"[ء-ؤئ-غفقل-وً-ْٰٔپچژکگی‌‍‏‎]"}
+    ExemplarCharacters{
+        "[‌ ‍ َ ِ ُ ً ٍ ٌ ّ ْ ٔ ٰ آ ا ء أ ؤ ئ ب پ ت-ج چ ح-ز ژ س-غ ف ق ک گ ل-ن و ه ة ی"
+        "]"
+    }
     Languages{
         aa{"آفاری"}
         ab{"آبخازی"}
@@ -525,7 +528,7 @@ fa{
         Yiii{"یی"}
         Zyyy{"مشترک"}
     }
-    Version{"1.43"}
+    Version{"1.47"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/kok.xml
+// * Source File:<path>/common/main/kok.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/kok.xml
+ *  ICU <specials> source: <path>/xml/main/kok.xml
  */
 kok{
     Countries{
@@ -19,7 +19,10 @@ kok{
             "INR",
         }
     }
-    ExemplarCharacters{"[ँ-ह़-्ॐ-॔क़-ॣ०-९ॽ‌‍]"}
+    ExemplarCharacters{
+        "[‌ ‍ ़ ँ-ः ॑-॔ ०-९ ॐ ऄ-ऋ ॠ ऌ ॡ ऍ-क क़ ख ख़ ग ग़ घ-ज ज़ झ-ड ड़ ढ ढ़ ण-फ फ़ ब-य य़ र-ह"
+        " ऽ ॽ ा-ॄ ॢ ॣ ॅ-्]"
+    }
     Languages{
         aa{"अफार"}
         ab{"अबखेज़ियन"}
@@ -165,7 +168,7 @@ kok{
     LocaleScript{
         "Deva",
     }
-    Version{"1.31"}
+    Version{"1.35"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/ar.xml
+// * Source File:<path>/common/main/ar.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/ar.xml
+ *  ICU <specials> source: <path>/xml/main/ar.xml
  */
 ar{
     Countries{
@@ -293,7 +293,7 @@ ar{
             "YER",
         }
     }
-    ExemplarCharacters{"[ء-غـ-ْ‌‍‏‎]"}
+    ExemplarCharacters{"[‌ ‍ ً-ْ ـ ء-غ ف-ي]"}
     Keys{
         calendar{"تقويم"}
         collation{"الترتيب"}
@@ -394,7 +394,7 @@ ar{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -440,7 +440,7 @@ ar{
             traditional{"تقليدي"}
         }
     }
-    Version{"1.46"}
+    Version{"1.52"}
     calendar{
         buddhist{
             eras{
@@ -571,7 +571,6 @@ ar{
             }
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "محرم",
                         "صفر",

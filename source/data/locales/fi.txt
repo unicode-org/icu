@@ -3,14 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fi.xml
+// * Source File:<path>/common/main/fi.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/fi.xml
+ *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    AuxExemplarCharacters{"[à á ã æ è é ë ï ô õ ø ü œ ç č ñ ř]"}
+    AuxExemplarCharacters{"[á à ã č ç é è ë ï ñ ô ř ü æ ø õ œ]"}
     Countries{
         001{"maailma"}
         002{"Afrikka"}
@@ -1265,7 +1265,7 @@ fi{
             "Zimbabwen dollari",
         }
     }
-    ExemplarCharacters{"[a-z å ä ö š ž]"}
+    ExemplarCharacters{"[a-s š t-z ž å ä ö]"}
     Keys{
         calendar{"kalenteri"}
         collation{"lajittelu"}
@@ -1749,7 +1749,7 @@ fi{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -1868,7 +1868,7 @@ fi{
             traditional{"perinteinen järjestys"}
         }
     }
-    Version{"1.56"}
+    Version{"1.60"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2021,7 +2021,6 @@ fi{
         islamic{
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "muhárram",
                         "sáfar",

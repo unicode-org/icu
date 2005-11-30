@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sr_Cyrl.xml
+// * Source File:<path>/common/main/sr_Cyrl.xml
 // *
 // ***************************************************************************
 sr_Cyrl{
@@ -21,7 +21,7 @@ sr_Cyrl{
             "Српски Динар",
         }
     }
-    Version{"1.11"}
+    Version{"1.15"}
     calendar{
         gregorian{
             eras{

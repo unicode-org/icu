@@ -3,14 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/collation/zh_MO.xml
+// * Source File:<path>/common/collation/zh_MO.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/collation/zh_MO.xml
+ *  ICU <specials> source: <path>/xml/collation/zh_MO.xml
  */
 zh_MO{
-    Version{"1.6"}
+    Version{"1.7"}
     collations{
         default{"stroke"}
     }

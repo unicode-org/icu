@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sr.xml
+// * Source File:<path>/common/main/sr.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/sr.xml
+ *  ICU <specials> source: <path>/xml/main/sr.xml
  */
 sr{
     Countries{
@@ -413,7 +413,7 @@ sr{
             "YUN",
         }
     }
-    ExemplarCharacters{"[а-и к-ш ђ ј љ њ ћ џ]"}
+    ExemplarCharacters{"[а-д ђ е-и ј к л љ м н њ о-т ћ у-ч џ ш]"}
     Keys{
         calendar{"Календар"}
         collation{"Сортирање"}
@@ -496,7 +496,7 @@ sr{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     Scripts{
@@ -537,7 +537,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.49"}
+    Version{"1.55"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

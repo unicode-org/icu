@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/so.xml
+// * Source File:<path>/common/main/so.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/so.xml
+ *  ICU <specials> source: <path>/xml/main/so.xml
  */
 so{
     Countries{
@@ -144,7 +144,7 @@ so{
     LocaleScript{
         "Latn",
     }
-    Version{"1.30"}
+    Version{"1.34"}
     calendar{
         gregorian{
             AmPmMarkers{

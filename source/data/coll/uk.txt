@@ -3,18 +3,18 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/collation/uk.xml
+// * Source File:<path>/common/collation/uk.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/collation/uk.xml
+ *  ICU <specials> source: <path>/xml/collation/uk.xml
  */
 uk{
-    Version{"1.18"}
+    Version{"1.19"}
     collations{
         standard{
             Sequence{"&Г<ґ<<<Ґ"}
-            Version{"1.3"}
+            Version{"1.4"}
         }
     }
 }

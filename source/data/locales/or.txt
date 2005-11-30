@@ -3,17 +3,17 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/or.xml
+// * Source File:<path>/common/main/or.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/or.xml
+ *  ICU <specials> source: <path>/xml/main/or.xml
  */
 or{
     Countries{
         IN{"ଭାରତ"}
     }
-    ExemplarCharacters{"[ଁଂଃଅଆଇଈଉଊଋଌଏଐଓଔକଖଗଘଙଚଛଜଝଞଟଠଡଢଣତଥଦଧନପଫବଭମଯରଲଳଵଶଷସହ଼ଽାିୀୁୂୃେୈୋୌ୍ୖୗଡ଼ଢ଼ୟୠୡ୰ୱ]"}
+    ExemplarCharacters{"[୰ ଅ-ଋ ୠ ଌ ୡ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ଡ଼ ଢ଼ ୟ ୱ ଵ ଂ ଃ ଁ ୍ ଼-ୃ େ ୈ ୋ ୌ ୖ ୗ]"}
     Languages{
         or{"ଓଡ଼ିଆ"}
     }
@@ -31,10 +31,10 @@ or{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
-    Version{"1.13"}
+    Version{"1.17"}
     calendar{
         gregorian{
             dayNames{

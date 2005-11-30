@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/sr_Cyrl_CS.xml
+// * Source File:<path>/common/main/sr_Cyrl_CS.xml
 // *
 // ***************************************************************************
 sr_Cyrl_CS{
-    Version{"1.13"}
+    Version{"1.17"}
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}

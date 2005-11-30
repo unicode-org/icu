@@ -3,14 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/collation/th.xml
+// * Source File:<path>/common/collation/th.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/collation/th.xml
+ *  ICU <specials> source: <path>/xml/collation/th.xml
  */
 th{
-    Version{"1.18"}
+    Version{"1.19"}
     collations{
         standard{
             Sequence{
@@ -23,7 +23,7 @@ th{
                 "&[last secondary ignorable ]<<<'\u0020'<<<'-'<<<'.'<<<'...'<<<ฯ<<<ๆ<"
                 "<<๏<<<๚<<<๛"
             }
-            Version{"1.3"}
+            Version{"1.4"}
         }
     }
 }

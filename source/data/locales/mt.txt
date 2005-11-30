@@ -3,13 +3,14 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/mt.xml
+// * Source File:<path>/common/main/mt.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/mt.xml
+ *  ICU <specials> source: <path>/xml/main/mt.xml
  */
 mt{
+    AuxExemplarCharacters{"[cy]"}
     Countries{
         AD{"Andorra"}
         AE{"Emirati Għarab Maqgħuda"}
@@ -256,7 +257,7 @@ mt{
             "Lira Maltija",
         }
     }
-    ExemplarCharacters{"[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]"}
+    ExemplarCharacters{"[a à b ċ d e è f ġ g {għ} h ħ i ì j-o ò p-u ù v-x ż z]"}
     Languages{
         aa{"Afar"}
         ab{"Abkażjan"}
@@ -732,7 +733,7 @@ mt{
     LocaleScript{
         "Latn",
     }
-    Version{"1.37"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

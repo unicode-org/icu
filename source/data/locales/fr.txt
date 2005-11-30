@@ -3,11 +3,11 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/fr.xml
+// * Source File:<path>/common/main/fr.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ./xml/main/fr.xml
+ *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
     Countries{
@@ -1249,7 +1249,7 @@ fr{
             "dollar du Zimbabwe",
         }
     }
-    ExemplarCharacters{"[a-zéèùçàâêîôûæœëïÿü]"}
+    ExemplarCharacters{"[a à â æ b c ç d e é è ê ë f-i î ï j-o ô œ p-u ù û ü v-y ÿ z]"}
     Keys{
         calendar{"Calendrier"}
         collation{"Ordonnancement"}
@@ -1625,7 +1625,7 @@ fr{
         "E",
         "‰",
         "∞",
-        "�",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -1712,7 +1712,7 @@ fr{
     Variants{
         REVISED{"Révisé"}
     }
-    Version{"1.61"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1825,7 +1825,6 @@ fr{
         hebrew{
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                     wide{
                         "Tisseri",
                         "Hesvan",
@@ -1847,7 +1846,6 @@ fr{
         islamic{
             monthNames{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     wide{
                         "Mouharram",
                         "Safar",
@@ -1865,7 +1863,6 @@ fr{
                 }
             }
         }
-        islamic-civil:alias{"/LOCALE/calendar/islamic"}
     }
     delimiters{
         alternateQuotationEnd{"”"}

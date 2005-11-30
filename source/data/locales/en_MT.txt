@@ -3,7 +3,7 @@
 // * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../cldr/common/main/en_MT.xml
+// * Source File:<path>/common/main/en_MT.xml
 // *
 // ***************************************************************************
 en_MT{
@@ -13,7 +13,7 @@ en_MT{
             "British Pound Sterling",
         }
     }
-    Version{"1.30"}
+    Version{"1.34"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
