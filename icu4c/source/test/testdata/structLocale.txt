@@ -1717,6 +1717,7 @@ structLocale:table(nofallback){
         rom{""}
         root{""}
         ru{""}
+        rup{""}
         rw{""}
         sa{""}
         sad{""}
