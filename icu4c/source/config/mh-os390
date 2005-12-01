@@ -49,15 +49,15 @@ CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros' $(ICU_BUILD_OPTIONS) 
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 ARFLAGS         = -cr
 
-# TODO: Fix this configuration so that icu-config will work!
-#       This means we shouldn't be using so many of these special case defines.
 ifeq (${OS390_XPLINK}, 1)
+#SH# if [ "x$OS390_XPLINK" = "x1" ]; then
 # Note:  The following options require the PTF for PQ69418 on z/OS 1.2
 #        and later.
 # These lines must be the last options specified.
 ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,RENT,SSCOMM'
 ICU_XPLINK_CPP    = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,NOTEMPINC'
 ICU_XPLINK_L      = -Wl,dll,xplink -Wl,EDIT=NO
+#SH# fi
 endif
 
 ## OS390BATCH
@@ -142,18 +142,19 @@ LIBICUIO=	$(top_builddir)/io/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)test$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 
-# TODO: Fix this configuration so that icu-config will work!
-#       If statements don't work well when icu-config is generated.
 ifneq (${ICUDATA_CHAR},e)
+#SH# if [ "$ICUDATA_CHAR" != "e" ]; then
 ## We're in ASCII mode.
-CFLAGS		+= -Wc,'ascii'#M#
-CXXFLAGS	+= -Wc,'ascii'#M#
-SO = so#M#
+CFLAGS		+= -Wc,'ascii'
+CXXFLAGS	+= -Wc,'ascii'
+SO = so
 else
+#SH# else
 ## We're in EBCDIC mode.
 ## Shared object suffix
 SO = dll
 endif
+#SH# fi
 
 ## Special 390 rules
 

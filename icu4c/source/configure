@@ -4300,6 +4300,13 @@ echo "${ECHO_T}$ac_cv_func_pthread_mutex_lock" >&6
   *-pc-cygwin*|*-pc-mingw*)
     if test "$ac_cv_c_compiler_gnu" = no; then
             ICU_USE_THREADS=1
+      if test $ENABLE_DEBUG = 1; then
+                CFLAGS="${CFLAGS} /MDd"
+        CXXFLAGS="${CXXFLAGS} /MDd"
+      else
+                CFLAGS="${CFLAGS} /MD"
+        CXXFLAGS="${CXXFLAGS} /MD"
+      fi
     fi ;;
   *-*-hpux*)
         case "${icu_cv_host_frag}" in
@@ -8177,9 +8184,10 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
