@@ -1,4 +1,4 @@
-## Cygwin-specific setup
+## Cygwin with Microsoft Visual C++ compiler specific setup
 ## Copyright (c) 2001-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -16,7 +16,7 @@ GEN_DEPS.cc=	:
 ## Flags to create/use a static library
 ifneq ($(ENABLE_SHARED),YES)
 ## Make sure that the static libraries can be built and used
-CPPFLAGS += -DU_STATIC_IMPLEMENTATION
+CPPFLAGS += -DU_STATIC_IMPLEMENTATION#M#
 else
 ## Make sure that the static libraries can be built
 STATICCPPFLAGS = -DU_STATIC_IMPLEMENTATION
@@ -30,20 +30,6 @@ SHAREDLIBCPPFLAGS =
 ## Additional flags when building libraries and with threads
 LIBCPPFLAGS = 
 
-ifeq ($(ENABLE_DEBUG),1)
-# /MDd means 'compiles and links a debugable multithreaded program with DLL'
-THREADSCFLAGS += /MDd
-THREADSCXXFLAGS += /MDd
-# The debug flags are defined here because configure can't handle them.
-CFLAGS+=/Zi
-CXXFLAGS+=/Zi
-LDFLAGS+=/DEBUG
-else
-# /MD means 'compiles and links a multithreaded program with DLL'
-THREADSCFLAGS += /MD
-THREADSCXXFLAGS += /MD
-endif
-
 ifeq ($(ENABLE_RELEASE),1)
 # Make sure that assertions are disabled
 CPPFLAGS+=-DU_RELEASE=1
@@ -51,8 +37,8 @@ endif
 
 # /GF pools strings and places them into read-only memory
 # /EHsc enables exception handling
-CFLAGS += /GF
-CXXFLAGS += /GF /EHsc
+CFLAGS+=/GF
+CXXFLAGS+=/GF /EHsc
 CPPFLAGS+=/nologo
 DEFS+=-DWIN32
 LDFLAGS+=/nologo

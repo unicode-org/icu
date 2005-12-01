@@ -220,9 +220,10 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2 /Op'
         RELEASE_CXXFLAGS='/O2 /Ob2 /Op'
-        # The real debug flags are defined by the mh file because configure can't handle them.
-        DEBUG_CFLAGS=
-        DEBUG_CXXFLAGS=
+        # The some debug flags are defined by the mh file because configure can't handle them.
+        DEBUG_CFLAGS='/Zi'
+        DEBUG_CXXFLAGS='/Zi'
+        DEBUG_LDFLAGS='/DEBUG'
         ;;
     Cygwin/ICL)
         THE_OS="Windows with Cygwin"
@@ -232,9 +233,10 @@ case $platform in
         # The Intel compiler has optimization bugs. So we disable optimization.
         RELEASE_CFLAGS='/Od'
         RELEASE_CXXFLAGS='/Od'
-        # The real debug flags are defined by the mh file because configure can't handle them.
-        DEBUG_CFLAGS=
-        DEBUG_CXXFLAGS=
+        # The some debug flags are defined by the mh file because configure can't handle them.
+        DEBUG_CFLAGS='/Zi'
+        DEBUG_CXXFLAGS='/Zi'
+        DEBUG_LDFLAGS='/DEBUG'
         ;;
     MacOSX)
         THE_OS="MacOS X (Darwin)"

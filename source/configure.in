@@ -294,6 +294,15 @@ if test $threads = true; then
     if test "$ac_cv_prog_gcc" = no; then
       dnl We're using normal windows compilers. Threading is available.
       ICU_USE_THREADS=1
+      if test $ENABLE_DEBUG = 1; then
+        dnl /MDd means 'compiles and links a debugable multithreaded program with DLL'
+        CFLAGS="${CFLAGS} /MDd"
+        CXXFLAGS="${CXXFLAGS} /MDd"
+      else
+        dnl /MD means 'compiles and links a multithreaded program with DLL'
+        CFLAGS="${CFLAGS} /MD"
+        CXXFLAGS="${CXXFLAGS} /MD"
+      fi
     fi ;;
   *-*-hpux*)
     dnl Add -mt because it does several nice things on newer compilers.
