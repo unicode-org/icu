@@ -776,7 +776,7 @@ AC_ARG_ENABLE(extras,
 		esac], 
 	extras=true)
 ICU_CONDITIONAL(EXTRAS, test "$extras" = true)
-AC_ARG_ENABLE(extras,
+AC_ARG_ENABLE(icuio,
 	[  --enable-icuio          build ICU's icuio library [default=yes]],
 	[case "${enableval}" in
 		yes) icuio=true ;;
