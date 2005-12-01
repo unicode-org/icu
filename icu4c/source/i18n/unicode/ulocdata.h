@@ -26,21 +26,11 @@
  * \brief C API: Provides access to locale data. 
  */
 
-/** A locale data object.
- *  For usage in C programs.
- *  @draft ICU 3.4
- */
-typedef struct ULocaleData {
-    /**
-     * Controls the "No Substitute" behavior of this locale data object
-     */
-    UBool noSubstitute;
+/** Forward declaration of the ULocaleData structure. @draft ICU 3.6 */
+struct ULocaleData;
 
-    /**
-     * Pointer to the resource bundle associated with this locale data object
-     */
-    UResourceBundle *bundle;
-} ULocaleData;
+/** A locale data object. @draft ICU 3.6 */
+typedef struct ULocaleData ULocaleData;
 
 /** The possible types of exemplar character sets.
   * @draft ICU 3.4
