@@ -330,7 +330,7 @@ public final class ULocale implements Serializable {
                 "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
                 "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
                 "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",
-                "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
+                "ru",  "rup", "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
                 "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",
                 "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",
                 "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
@@ -443,8 +443,8 @@ public final class ULocale implements Serializable {
                 "pli", "pol", "pon", "pra", "pro", "pus", "por", "que",
                 /*"raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
                 "raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
-                /*"ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
-                "rus", "kin", "san", "sad", "sah", "sai", "sal", "sam",
+                /*"ru",  "rup", "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
+                "rus", "rup", "kin", "san", "sad", "sah", "sai", "sal", "sam",
                 /*"sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
                 "sas", "sat", "srd", "sco", "snd", "sme", "sel", "sem",
                 /*"sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
