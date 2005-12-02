@@ -1,5 +1,4 @@
 ## Makefile.in for ICU - tools/gentest
-
 ## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Madhu Katragadda
@@ -15,15 +14,16 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools/gentest
 
-##
-
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = gentest$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gentest.o genres32.o
@@ -32,8 +32,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local dist dist-local check	\
-check-local
+distclean distclean-local dist dist-local check check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -52,7 +51,7 @@ install-local: all-local
 
 dist-local:
 
-clean-local: 
+clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	$(RMV) $(TARGET) $(OBJECTS)
 
@@ -75,5 +74,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
-
 

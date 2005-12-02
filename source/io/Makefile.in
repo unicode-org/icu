@@ -4,7 +4,7 @@
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
-## Makefile.in for ICU - io/libustdio.so
+## Makefile.in for ICU - icuio.so
 ## Stephen F. Booth
 
 ## Source directory information
@@ -43,7 +43,7 @@ BATCH_TARGET = $(BATCH_IO_TARGET)
 BATCH_LIBS = $(BATCH_LIBICUUC) $(BATCH_LIBICUI18N) -lm
 endif   # OS390BATCH
 
-endif
+endif   # ENABLE_SHARED
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET)
 
@@ -51,24 +51,31 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LDFLAGS += $(LDFLAGSICUIO)
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
 DEFS += -DU_IO_IMPLEMENTATION
+LDFLAGS += $(LDFLAGSICUIO)
 LIBS = $(LIBICUUC) $(LIBICUI18N) $(DEFAULT_LIBS)
 
 OBJECTS = locbund.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o \
 uscanf.o uscanf_p.o ustdio.o sprintf.o sscanf.o \
 ustream.o
 
-STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
-
+## Header files to install
 HEADERS = $(srcdir)/unicode/*.h
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
+-include Makefile.local
+
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local \
-distclean distclean-local dist dist-local check check-local
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library install-headers dist	\
+dist-local check check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -83,7 +90,7 @@ check: all check-local
 
 all-local: $(ALL_TARGETS)
 
-install-local: all-local install-headers install-library
+install-local: install-headers install-library
 
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
@@ -116,7 +123,6 @@ install-headers:
 	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
 	done
 
-
 dist-local:
 
 clean-local:
@@ -142,11 +148,10 @@ $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
-$(BATCH_TARGET): $(OBJECTS)
+$(BATCH_TARGET):$(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(BATCH_LIBS)
-endif # OS390BATCH
-
-endif
+endif   # OS390BATCH
+endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
@@ -155,3 +160,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+

@@ -14,18 +14,14 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools/pkgdata
 
-##
-
 TARGET_STUB_NAME = pkgdata
 
 SECTION = 1
 
-MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
-
-ALL_MAN_FILES = $(MANX_FILES)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(MAN_FILES)
 
 ifneq ($(PKGDATA_DEFS),)
 DEFS += $(PKGDATA_DEFS)
@@ -34,7 +30,10 @@ endif
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 DEFS += -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
@@ -44,8 +43,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check	\
-check-local install-man install-manx
+distclean distclean-local dist dist-local check check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -58,21 +56,16 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(ALL_MAN_FILES)
+all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
-# man page
-install-man: install-manx
-install-manx: $(MANX_FILES)
+install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
-%.$(SECTION): $(srcdir)/%.$(SECTION).in
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 dist-local:
 
@@ -89,12 +82,14 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-
-	cd $(top_builddir) \
-	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
 $(TARGET) : $(OBJECTS)
 	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
+
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
@@ -103,3 +98,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+
