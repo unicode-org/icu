@@ -51,9 +51,12 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LDFLAGS += $(LDFLAGSICUUC)
-CPPFLAGS += -I. -I$(srcdir) -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
 DEFS += -DU_COMMON_IMPLEMENTATION
+LDFLAGS += $(LDFLAGSICUUC)
 
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
@@ -78,12 +81,14 @@ serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o locutil.o \
 uenum.o ustrenum.o uidna.o usprep.o punycode.o \
 cwchar.o util.o parsepos.o utrace.o locbased.o
 
+## Header files to install
+HEADERS = $(srcdir)/unicode/*.h unicode/*.h
+
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
-## Header files to install
-HEADERS = $(srcdir)/unicode/*.h unicode/*.h
+-include Makefile.local
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -100,8 +105,6 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
-
--include Makefile.local
 
 all-local: $(ALL_TARGETS) unicode/platform.h
 
@@ -167,10 +170,9 @@ $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
-$(BATCH_TARGET): $(OBJECTS)
+$(BATCH_TARGET):$(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(BATCH_LIBS)
 endif   # OS390BATCH
-
 endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))

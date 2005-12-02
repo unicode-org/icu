@@ -15,7 +15,6 @@ top_builddir = ..
 
 ## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
--include Makefile.local
 
 ## Build directory information
 subdir = i18n
@@ -42,9 +41,9 @@ endif
 ifeq ($(OS390BATCH),1)
 BATCH_TARGET = $(BATCH_I18N_TARGET)
 BATCH_LIBS = $(BATCH_LIBICUUC) -lm
-endif # OS390BATCH
+endif   # OS390BATCH
 
-endif # ENABLE_SHARED
+endif   # ENABLE_SHARED
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET)
 
@@ -52,9 +51,12 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LDFLAGS += $(LDFLAGSICUI18N)
-CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common $(LIBCPPFLAGS)
 DEFS += -DU_I18N_IMPLEMENTATION
+LDFLAGS += $(LDFLAGSICUI18N)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = ucln_in.o \
@@ -74,13 +76,14 @@ name2uni.o uni2name.o nortrans.o quant.o transreg.o \
 regexcmp.o rematch.o repattrn.o regexst.o uregex.o uregexc.o \
 ulocdata.o measfmt.o currfmt.o curramt.o currunit.o measure.o utmscale.o
 
+## Header files to install
+HEADERS = $(srcdir)/unicode/*.h
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
-## Header files to install
-HEADERS= $(srcdir)/unicode/*.h
+-include Makefile.local
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -100,7 +103,7 @@ check: all check-local
 
 all-local: $(ALL_TARGETS)
 
-install-local: install-headers install-library 
+install-local: install-headers install-library
 
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
@@ -160,8 +163,8 @@ $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET):$(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(BATCH_LIBS)
-endif # OS390BATCH
-endif
+endif   # OS390BATCH
+endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
@@ -170,3 +173,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+

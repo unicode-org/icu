@@ -10,7 +10,8 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-##
+## Build directory information
+subdir = tools/genrb
 
 TARGET_STUB_NAME = genrb
 DERB_STUB_NAME = derb
@@ -19,8 +20,6 @@ SECTION = 1
 
 MAN_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DERB_STUB_NAME).$(SECTION)
 
-## Build directory information
-subdir = tools/genrb
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(MAN_FILES) $(DEPS) $(DERB_DEPS)
@@ -29,7 +28,10 @@ CLEANFILES = *~ $(MAN_FILES) $(DEPS) $(DERB_DEPS)
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 DERB = $(BINDIR)/$(DERB_STUB_NAME)$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = errmsg.o genrb.o parse.o read.o reslist.o ustr.o rbutil.o \
@@ -41,8 +43,7 @@ DERB_DEPS = $(DERB_OBJ:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check \
-check-local install-man
+distclean distclean-local dist dist-local check check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -62,9 +63,13 @@ install-local: all-local install-man
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 	$(INSTALL) $(DERB) $(DESTDIR)$(bindir)
 
+install-man: $(MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
 dist-local:
 
-clean-local: 
+clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	$(RMV) $(TARGET) $(DERB) $(OBJECTS) $(DERB_OBJ)
 
@@ -84,13 +89,6 @@ $(DERB) : $(DERB_OBJ)
 	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
 
 
-# the 'mv' will always fail if you are building in the source dir
-
-# man page
-install-man: $(MAN_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
-
 # This line is needed to serialize builds when the gmake -j option is used.
 $(TARGET_STUB_NAME).$(SECTION): $(DERB_STUB_NAME).$(SECTION)
 
@@ -98,12 +96,6 @@ $(TARGET_STUB_NAME).$(SECTION): $(DERB_STUB_NAME).$(SECTION)
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-# build postscript and pdf formats
-$(TARGET).ps: $(TARGET).$(SECTION)
-	groff -man < $< > $@
-
-$(TARGET).pdf: $(TARGET).ps
-	ps2pdf $< $@
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
