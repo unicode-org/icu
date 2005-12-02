@@ -11,7 +11,8 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-##
+## Build directory information
+subdir = tools/gensprep
 
 TARGET_STUB_NAME = gensprep
 
@@ -19,8 +20,6 @@ SECTION = 8
 
 MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
-## Build directory information
-subdir = tools/gensprep
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(MAN_FILES)
@@ -28,7 +27,10 @@ CLEANFILES = *~ $(DEPS) $(MAN_FILES)
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gensprep.o store.o
@@ -36,9 +38,8 @@ OBJECTS = gensprep.o store.o
 DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local dist dist-local check	\
-check-local install-man
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local dist dist-local check check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -57,21 +58,9 @@ install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
-# man page
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
-
-%.$(SECTION): $(srcdir)/%.$(SECTION).in
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-# build postscript and pdf formats
-#$(TARGET).ps: $(TARGET).$(SECTION)
-#	groff -man < $< > $@
-
-#$(TARGET).pdf: $(TARGET).ps
-#	ps2pdf $< $@
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 dist-local:
 
@@ -90,6 +79,12 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

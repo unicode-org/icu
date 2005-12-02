@@ -19,7 +19,7 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = stubdata
 
-## Files to remove for 'make clean'
+## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
 
 ## Target information
@@ -43,21 +43,27 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common $(LIBCPPFLAGS)
 LDFLAGS += $(LDFLAGSICUDT)
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 
 OBJECTS = stubdata.o
 
-STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
-
+## Header files to install
 HEADERS = 
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
+-include Makefile.local
 
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local \
-distclean distclean-local dist dist-local check check-local
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library dist	\
+dist-local check check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -69,7 +75,6 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
-
 
 all-local: $(ALL_TARGETS)
 
@@ -105,10 +110,10 @@ clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
-check-local:
-
 distclean-local: clean-local
 	$(RMV) Makefile
+
+check-local:
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -117,7 +122,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 ../common/unicode/platform.h: $(srcdir)/../common/unicode/platform.h.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=common/unicode/platform.h CONFIG_HEADERS= $(SHELL) ./config.status
-
 
 ifneq ($(ENABLE_STATIC),)
 $(TARGET): $(TARGET)($(STATIC_OBJECTS))
@@ -132,7 +136,7 @@ ifeq ($(OS390BATCH),1)
 $(BATCH_STUB_TARGET): $(OBJECTS)
 	$(SHLIB.c) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 endif   # OS390BATCH
-endif
+endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

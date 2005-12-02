@@ -1,6 +1,9 @@
-## Copyright (C) 1999-2005, International Business Machines Corporation 
-## and others.  All Rights Reserved.
-
+#******************************************************************************
+#
+#   Copyright (C) 1999-2005, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
 ## Makefile.in for ICU - tools/toolutil
 ## Steven R. Loomis
 
@@ -10,6 +13,7 @@ top_srcdir = @top_srcdir@
 
 top_builddir = ../..
 
+## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
@@ -37,9 +41,12 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LDFLAGS += $(LDFLAGSICUTOOLUTIL)
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
 DEFS += -DU_TOOLUTIL_IMPLEMENTATION
+LDFLAGS += $(LDFLAGSICUTOOLUTIL)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = filestrm.o package.o pkgitems.o propsvec.o swapimpl.o toolutil.o unewdata.o \
@@ -50,9 +57,12 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
+-include Makefile.local
+
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
-distclean distclean-local dist dist-local check check-local install-library
+distclean distclean-local install-library dist	\
+dist-local check check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -116,3 +126,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+

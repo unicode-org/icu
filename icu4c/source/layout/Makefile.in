@@ -1,13 +1,18 @@
-## Copyright (c) 1999-2005, International Business Machines Corporation and
-## others. All Rights Reserved.
+#******************************************************************************
+#
+#   Copyright (C) 1999-2005, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
 ## Makefile.in for ICU - layout
 
-## Install directory information
+## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
 top_builddir = ..
 
+## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
@@ -45,9 +50,12 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LDFLAGS += $(LDFLAGSICULE)
-CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/unicode -I$(srcdir)/.. $(LIBCPPFLAGS)
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)/common -I$(srcdir)/unicode $(LIBCPPFLAGS)
 DEFS += -DU_LAYOUT_IMPLEMENTATION
+LDFLAGS += $(LDFLAGSICULE)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS =  LEFontInstance.o \
@@ -123,12 +131,14 @@ TibetanLayoutEngine.o \
 TibetanReordering.o \
 KernTable.o
 
+## Header files to install
+HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
+
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
-## Header files to install
-HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
+-include Makefile.local
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -148,7 +158,7 @@ check: all check-local
 
 all-local: $(ALL_TARGETS)
 
-install-local: install-headers install-library 
+install-local: install-headers install-library
 
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
@@ -174,7 +184,6 @@ ifneq ($(MIDDLE_IMPORT_LIB),$(FINAL_IMPORT_LIB))
 endif
 endif
 
-
 install-headers:
 	$(MKINSTALLDIRS) $(DESTDIR)$(includedir)/layout
 	@for file in $(HEADERS); do \
@@ -186,7 +195,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_TARGETS) $(SO_VERSION_DATA)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS) $(SO_VERSION_DATA)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -207,11 +216,10 @@ $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
-$(BATCH_TARGET): $(OBJECTS)
+$(BATCH_TARGET):$(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(BATCH_LIBS)
 endif   # OS390BATCH
-
-endif
+endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
@@ -220,5 +228,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
-
 

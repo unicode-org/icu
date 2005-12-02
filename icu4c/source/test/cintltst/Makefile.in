@@ -1,6 +1,10 @@
+#******************************************************************************
+#
+#   Copyright (C) 1999-2005, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
 ## Makefile.in for ICU - test/cintltst
-## Copyright (c) 1999-2005, International Business Machines Corporation and
-## others. All Rights Reserved.
 
 ## Source directory information
 srcdir = @srcdir@
@@ -8,6 +12,7 @@ top_srcdir = @top_srcdir@
 
 top_builddir = ../..
 
+## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
@@ -20,8 +25,8 @@ CLEANFILES = *~ $(DEPS)
 TARGET = cintltst$(EXEEXT)
 
 # Oh, this hurts my sensibility. This is supposedly a C test and we need to
-# link using a C++ compiler?! This must be done so that C++ static
-# initialization works in the libraries, like mutex.cpp, ustdio and iostream.
+# link using a C++ compiler?! This must be done so that library vtables
+# work correctly on all platforms.
 
 ifneq ($(ENABLE_STATIC),)
 LINK = $(LINK.cc)
@@ -37,8 +42,11 @@ BUILDDIR := $(BUILDDIR:test\\cintltst/../../=)
 # Simplify the path for Windows 98
 BUILDDIR := $(BUILDDIR:TEST\\CINTLTST/../../=)
 
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
 # we define ICU_UNICODE_VERSION so we can test it
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
 DEFS += -D'ICU_UNICODE_VERSION="$(UNICODE_VERSION)"' -D'ICU_VERSION="@VERSION@"' -D'ICUDATA_NAME="$(ICUDATA_PLATFORM_NAME)"' -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
@@ -56,6 +64,8 @@ uenumtst.o utmstest.o currtest.o \
 idnatest.o nfsprep.o spreptst.o sprpdata.o hpmufn.o tracetst.o reapits.o utexttst.o
 
 DEPS = $(OBJECTS:.o=.d)
+
+-include Makefile.local
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -85,8 +95,6 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 
--include Makefile.local
-
 check-local: all-local
 	$(INVOKE) ./$(TARGET) $(CINTLTST_OPTS)
 
@@ -106,3 +114,4 @@ ifneq ($(patsubst %install,,$(MAKECMDGOALS)),)
 endif
 endif
 endif
+
