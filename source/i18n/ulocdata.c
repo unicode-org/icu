@@ -25,7 +25,7 @@
  *  For usage in C programs.
  *  @draft ICU 3.4
  */
-typedef struct ULocaleData {
+struct ULocaleData {
     /**
      * Controls the "No Substitute" behavior of this locale data object
      */
@@ -35,7 +35,7 @@ typedef struct ULocaleData {
      * Pointer to the resource bundle associated with this locale data object
      */
     UResourceBundle *bundle;
-} ULocaleData;
+};
 
 U_CAPI ULocaleData* U_EXPORT2
 ulocdata_open(const char *localeID, UErrorCode *status)
