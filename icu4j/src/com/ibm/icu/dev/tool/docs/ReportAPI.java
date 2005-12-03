@@ -39,65 +39,6 @@ public class ReportAPI {
     TreeSet obsoleted;
     ArrayList changed;
 
-    static final class APIData {
-        private int version;
-        private String name;
-        private String base;
-        private TreeSet set;
-
-        static APIData read(BufferedReader br) {
-            try {
-                APIData data = new APIData();
-
-                data.version = Integer.parseInt(APIInfo.readToken(br)); // version
-                data.name = APIInfo.readToken(br);
-                data.base = APIInfo.readToken(br); // base
-                br.readLine();
-
-                data.set = new TreeSet(APIInfo.defaultComparator());
-                for (APIInfo info = new APIInfo(); info.read(br); info = new APIInfo()) {
-                    data.set.add(info);
-                }
-                return data;
-            }
-            catch (IOException e) {
-                RuntimeException re = new RuntimeException("error reading api data");
-                re.initCause(e);
-                throw re;
-            }
-        }
-
-        static APIData read(String fileName) {
-            try {
-                InputStream is;
-                if (fileName.endsWith(".zip")) {
-                    ZipFile zf = new ZipFile(fileName);
-                    Enumeration entryEnum = zf.entries();
-                    if (entryEnum.hasMoreElements()) {
-                        ZipEntry entry = (ZipEntry)entryEnum.nextElement();
-                        is = zf.getInputStream(entry);
-                        // we only handle one!!!
-                    } else {
-                        throw new IOException("zip file is empty");
-                    }
-                } else {
-                    File f = new File(fileName);
-                    is = new FileInputStream(f);
-                    if (fileName.endsWith(".gz")) {
-                        is = new GZIPInputStream(is);
-                    }
-                }
-                InputStreamReader isr = new InputStreamReader(is);
-                return read(new BufferedReader(isr));
-            }
-            catch (IOException e) {
-                RuntimeException re = new RuntimeException("error getting info stream: " + fileName);
-                re.initCause(e);
-                throw re;
-            }
-        }
-    }
-
     static final class DeltaInfo extends APIInfo {
         APIInfo added;
         APIInfo removed;
