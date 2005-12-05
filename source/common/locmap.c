@@ -286,7 +286,11 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
 /* This LCID is really four different locales.*/
 static const ILcidPosixElement hr[] = {
     {0x1a,   "hr"},
+    {0x141a, "bs_Latn_BA"},  /* Bosnian, Bosnia and Herzegovina */
+    {0x141a, "bs_Latn"},  /* Bosnian, Bosnia and Herzegovina */
     {0x141a, "bs_BA"},  /* Bosnian, Bosnia and Herzegovina */
+    {0x201a, "bs_Cyrl_BA"},  /* Bosnian, Bosnia and Herzegovina */
+    {0x201a, "bs_Cyrl"},  /* Bosnian, Bosnia and Herzegovina */
     {0x141a, "bs"},     /* Bosnian */
     {0x101a, "hr_BA"},  /* Croatian in Bosnia */
     {0x041a, "hr_HR"},  /* Croatian*/
@@ -429,6 +433,7 @@ static const ILcidPosixElement root[] = {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0419, ru, ru_RU)
+ILCID_POSIX_ELEMENT_ARRAY(0x0487, rw, rw_RW)
 ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0485, sah,sah_RU)
 
@@ -467,6 +472,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)
 ILCID_POSIX_ELEMENT_ARRAY(0x045A, syr, syr_SY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
+ILCID_POSIX_ELEMENT_ARRAY(0x0428, tg, tg_TJ) /* Cyrillic based by default */
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
 
 static const ILcidPosixElement ti[] = {
@@ -539,6 +545,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 0x48c   Dari
 0x466   Edo
 0x467   Fulfulde - Nigeria
+0x486   K'iche - Guatemala
 0x430   Sutu
 */
 static const ILcidPosixMap gPosixIDmap[] = {
@@ -637,6 +644,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(ro),    /*  ro  Romanian                  0x18 */
     ILCID_POSIX_MAP(root),  /*  root                          0x00 */
     ILCID_POSIX_MAP(ru),    /*  ru  Russian                   0x19 */
+    ILCID_POSIX_MAP(rw),    /*  rw  Kinyarwanda               0x87 */
     ILCID_POSIX_MAP(sa),    /*  sa  Sanskrit                  0x4f */
     ILCID_POSIX_MAP(sah),   /*  sah Yakut                     0x85 */
     ILCID_POSIX_MAP(sd),    /*  sd  Sindhi                    0x59 */
@@ -653,6 +661,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(syr),   /*  syr Syriac                    0x5A */
     ILCID_POSIX_MAP(ta),    /*  ta  Tamil                     0x49 */
     ILCID_POSIX_MAP(te),    /*  te  Telugu                    0x4a */
+    ILCID_POSIX_MAP(tg),    /*  tg  Tajik                     0x28 */
     ILCID_POSIX_MAP(th),    /*  th  Thai                      0x1e */
     ILCID_POSIX_MAP(ti),    /*  ti  Tigrigna                  0x73 */
     ILCID_POSIX_MAP(tk),    /*  tk  Turkmen                   0x42 */
