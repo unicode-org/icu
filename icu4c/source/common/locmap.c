@@ -211,7 +211,7 @@ static const ILcidPosixElement en[] = {
 };
 
 static const ILcidPosixElement en_US_POSIX[] = {
-    {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
+    {0x007f, "en_US_POSIX"} /* duplicate for roundtripping */
 };
 
 static const ILcidPosixElement es[] = {
@@ -241,7 +241,20 @@ static const ILcidPosixElement es[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
 ILCID_POSIX_ELEMENT_ARRAY(0x042d, eu, eu_ES)
-ILCID_POSIX_ELEMENT_ARRAY(0x0429, fa, fa_IR)
+
+/* ISO-639 doesn't distinguish between Persian and Dari.*/
+static const ILcidPosixElement fa[] = {
+    {0x29,   "fa"},
+    {0x0429, "fa_IR"},  /* Persian/Farsi (Iran) */
+    {0x048c, "fa_AF"}   /* Persian/Dari (Afghanistan) */
+};
+
+/* duplicate for roundtripping */
+static const ILcidPosixElement fa_AF[] = {
+    {0x8c,   "fa_AF"},  /* Persian/Dari (Afghanistan) */
+    {0x048c, "fa_AF"}   /* Persian/Dari (Afghanistan) */
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x040b, fi, fi_FI)
 ILCID_POSIX_ELEMENT_ARRAY(0x0464, fil,fil_PH)
 ILCID_POSIX_ELEMENT_ARRAY(0x0438, fo, fo_FO)
@@ -542,7 +555,6 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 
 /* non-existent ISO-639 codes */
 /*
-0x48c   Dari
 0x466   Edo
 0x467   Fulfulde - Nigeria
 0x486   K'iche - Guatemala
@@ -576,7 +588,8 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(es),    /*  es  Spanish                   0x0a */
     ILCID_POSIX_MAP(et),    /*  et  Estonian                  0x25 */
     ILCID_POSIX_MAP(eu),    /*  eu  Basque                    0x2d */
-    ILCID_POSIX_MAP(fa),    /*  fa  Farsi                     0x29 */
+    ILCID_POSIX_MAP(fa),    /*  fa  Persian/Farsi             0x29 */
+    ILCID_POSIX_MAP(fa_AF), /*  fa  Persian/Dari              0x8c */
     ILCID_POSIX_MAP(fi),    /*  fi  Finnish                   0x0b */
     ILCID_POSIX_MAP(fil),   /*  fil Filipino                  0x64 */
     ILCID_POSIX_MAP(fo),    /*  fo  Faroese                   0x38 */
