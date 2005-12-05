@@ -178,7 +178,8 @@ static const ILcidPosixElement de[] = {
     {0x0407, "de_DE"},
     {0x1407, "de_LI"},
     {0x1007, "de_LU"},
-    {0x10407,"de__PHONEBOOK"}  /*This is really de_DE_PHONEBOOK on Windows, maybe 10007*/
+    {0x10407,"de_DE@collation=phonebook"},  /*This is really de_DE_PHONEBOOK on Windows*/
+    {0x10407,"de@collation=phonebook"}  /*This is really de_DE_PHONEBOOK on Windows*/
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0465, dv, dv_MV)
@@ -236,7 +237,8 @@ static const ILcidPosixElement es[] = {
     {0x540a, "es_US"},
     {0x380a, "es_UY"},
     {0x200a, "es_VE"},
-    {0x040a, "es__TRADITIONAL"}  /*This is really es_ES_TRADITIONAL on Windows */
+    {0x040a, "es_ES@collation=traditional"},
+    {0x040a, "es@collation=traditional"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
@@ -544,9 +546,12 @@ static const ILcidPosixElement zh[] = {
     {0x0404, "zh_Hant_TW"},
     {0x0404, "zh_Hant"},
     {0x0404, "zh_TW"},
-    {0x30404,"zh_Hant_TW"},
+    {0x30404,"zh_Hant_TW"},     /* Bopomofo order */
     {0x30404,"zh_TW"},          /* Bopomofo order */
-    {0x20404,"zh_TW@collation=STROKE"}
+    {0x20404,"zh_Hant_TW@collation=stroke"},
+    {0x20404,"zh_TW@collation=stroke"},
+    {0x20804,"zh_Hans_CN@collation=stroke"},
+    {0x20804,"zh_CN@collation=stroke"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
