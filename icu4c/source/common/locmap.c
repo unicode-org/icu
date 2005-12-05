@@ -289,9 +289,9 @@ static const ILcidPosixElement hr[] = {
     {0x141a, "bs_Latn_BA"},  /* Bosnian, Bosnia and Herzegovina */
     {0x141a, "bs_Latn"},  /* Bosnian, Bosnia and Herzegovina */
     {0x141a, "bs_BA"},  /* Bosnian, Bosnia and Herzegovina */
+    {0x141a, "bs"},     /* Bosnian */
     {0x201a, "bs_Cyrl_BA"},  /* Bosnian, Bosnia and Herzegovina */
     {0x201a, "bs_Cyrl"},  /* Bosnian, Bosnia and Herzegovina */
-    {0x141a, "bs"},     /* Bosnian */
     {0x101a, "hr_BA"},  /* Croatian in Bosnia */
     {0x041a, "hr_HR"},  /* Croatian*/
     {0x181a, "sr_Latn_BA"}, /* Serbo-Croatian in Bosnia */
@@ -300,7 +300,7 @@ static const ILcidPosixElement hr[] = {
     {0x1c1a, "sr_Cyrl_BA"}, /* Serbo-Croatian in Bosnia */
     {0x0c1a, "sr_Cyrl_CS"}, /* Serbian*/
     {0x0c1a, "sr_Cyrl"},    /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
-    {0x0c1a, "sr"},         /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
+    {0x0c1a, "sr"},         /* In CLDR sr is sr_Cyrl. */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
