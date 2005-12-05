@@ -121,12 +121,14 @@ static const ILcidPosixElement ar[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x044d, as, as_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x045e, am, am_ET)
-ILCID_POSIX_ELEMENT_ARRAY(0x047a, arn, arn_CL)
+ILCID_POSIX_ELEMENT_ARRAY(0x047a, arn,arn_CL)
 
 static const ILcidPosixElement az[] = {
     {0x2c,   "az"},
     {0x082c, "az_Cyrl_AZ"},  /* Cyrillic based */
+    {0x082c, "az_Cyrl"},  /* Cyrillic based */
     {0x042c, "az_Latn_AZ"}, /* Latin based */
+    {0x042c, "az_Latn"}, /* Latin based */
     {0x042c, "az_AZ"} /* Latin based */
 };
 
@@ -137,7 +139,8 @@ static const ILcidPosixElement ber[] = {
     {0x5f,   "ber"},
     {0x045f, "ber_Arab_DZ"},
     {0x045f, "ber_Arab"},
-    {0x085f, "ber_Latn_DZ"}
+    {0x085f, "ber_Latn_DZ"},
+    {0x085f, "ber_Latn"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
@@ -230,6 +233,7 @@ static const ILcidPosixElement es[] = {
     {0x500a, "es_PR"},
     {0x3c0a, "es_PY"},
     {0x440a, "es_SV"},
+    {0x540a, "es_US"},
     {0x380a, "es_UY"},
     {0x200a, "es_VE"},
     {0x040a, "es__TRADITIONAL"}  /*This is really es_ES_TRADITIONAL on Windows */
@@ -311,7 +315,9 @@ static const ILcidPosixElement it[] = {
 static const ILcidPosixElement iu[] = {
     {0x5d,   "iu"},
     {0x045d, "iu_Cans_CA"},
-    {0x085d, "iu_Latn_CA"}
+    {0x045d, "iu_Cans"},
+    {0x085d, "iu_Latn_CA"},
+    {0x085d, "iu_Latn"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040d, iw, iw_IL)    /*Left in for compatibility*/
@@ -424,7 +430,7 @@ static const ILcidPosixElement root[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0419, ru, ru_RU)
 ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)
-ILCID_POSIX_ELEMENT_ARRAY(0x0485, sah, sah_RU)
+ILCID_POSIX_ELEMENT_ARRAY(0x0485, sah,sah_RU)
 
 static const ILcidPosixElement sd[] = {
     {0x59,   "sd"},
@@ -485,8 +491,10 @@ static const ILcidPosixElement ur[] = {
 static const ILcidPosixElement uz[] = {
     {0x43,   "uz"},
     {0x0843, "uz_Cyrl_UZ"},  /* Cyrillic based */
+    {0x0843, "uz_Cyrl"},  /* Cyrillic based */
     {0x0843, "uz_UZ"},  /* Cyrillic based */
-    {0x0443, "uz_Latn_UZ"} /* Latin based */
+    {0x0443, "uz_Latn_UZ"}, /* Latin based */
+    {0x0443, "uz_Latn"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0433, ve, ve_ZA)    /* TODO: Verify the country */
@@ -506,6 +514,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x046a, yo, yo_NG)
 static const ILcidPosixElement zh[] = {
     {0x04,   "zh"},
     {0x0804, "zh_Hans_CN"},
+    {0x0804, "zh_Hans"},
     {0x0804, "zh_CN"},
     {0x0c04, "zh_Hant_HK"},
     {0x0c04, "zh_HK"},
@@ -514,6 +523,7 @@ static const ILcidPosixElement zh[] = {
     {0x1004, "zh_Hans_SG"},
     {0x1004, "zh_SG"},
     {0x0404, "zh_Hant_TW"},
+    {0x0404, "zh_Hant"},
     {0x0404, "zh_TW"},
     {0x30404,"zh_Hant_TW"},
     {0x30404,"zh_TW"},          /* Bopomofo order */
@@ -587,6 +597,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(ja),    /*  ja  Japanese                  0x11 */
     ILCID_POSIX_MAP(ka),    /*  ka  Georgian                  0x37 */
     ILCID_POSIX_MAP(kk),    /*  kk  Kazakh                    0x3f */
+    ILCID_POSIX_MAP(kl),    /*  kl  Kalaallisut               0x6f */
     ILCID_POSIX_MAP(km),    /*  km  Khmer                     0x53 */
     ILCID_POSIX_MAP(kn),    /*  kn  Kannada                   0x4b */
     ILCID_POSIX_MAP(ko),    /*  ko  Korean                    0x12 */
