@@ -1,38 +1,22 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 2001-2003, International Business Machines
+# *   Copyright (C) 1995-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created on Dec 03 13:48 Pacific Standard Time 2002
+# File created by rptp2ucm (compiled on Nov 15 2005)
+# from source files 54B024E8.RXMAP100 and 24E854B0.TXMAP100
 #
-# File created by genmucm tool.
-# from windows 2000 using IMultiLanguage 5.50.4522.1800
-#
-# Table Version : 1.0
-# The 1st column is the Unicode scalar value.
-# The 2nd column is the codepage byte sequence.
-# The 3rd column is the fallback indicator.
-# The fallback indicator can have one of the following values:
-#   |0 for exact 1-1 roundtrip mapping
-#   |1 for the best fallback codepage byte sequence.
-#   |2 for the substitution character
-#   |3 for the best reverse fallback Unicode scaler value
-#
-# Encoding description: Arabic (Windows)
-# Encoding name: windows-1256
-#
-<code_set_name>               "windows-1256-2000"
+<code_set_name>               "ibm-9448_X100-2005"
+<char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
-<subchar>                     \x3F
+<subchar>                     \x1A
 <icu:charsetFamily>           "ASCII"
-# Suggested ICU specific alias information
-#<icu:alias>                  "windows-1256_STD"
+<icu:alias>                   "ibm-9448_STD"
 
-#
 CHARMAP
 <U0000> \x00 |0
 <U0001> \x01 |0
@@ -190,20 +174,7 @@ CHARMAP
 <U00BC> \xBC |0
 <U00BD> \xBD |0
 <U00BE> \xBE |0
-<U00C0> \x41 |1
-<U00C2> \x41 |1
-<U00C7> \x43 |1
-<U00C8> \x45 |1
-<U00C9> \x45 |1
-<U00CA> \x45 |1
-<U00CB> \x45 |1
-<U00CE> \x49 |1
-<U00CF> \x49 |1
-<U00D4> \x4F |1
 <U00D7> \xD7 |0
-<U00D9> \x55 |1
-<U00DB> \x55 |1
-<U00DC> \x55 |1
 <U00E0> \xE0 |0
 <U00E2> \xE2 |0
 <U00E7> \xE7 |0
@@ -223,6 +194,7 @@ CHARMAP
 <U0191> \x46 |1
 <U0192> \x83 |0
 <U02C6> \x88 |0
+<U02CB> \x60 |1
 <U060C> \xA1 |0
 <U061B> \xBA |0
 <U061F> \xBF |0
@@ -271,6 +243,18 @@ CHARMAP
 <U0650> \xF6 |0
 <U0651> \xF8 |0
 <U0652> \xFA |0
+<U0660> \x30 |1
+<U0661> \x31 |1
+<U0662> \x32 |1
+<U0663> \x33 |1
+<U0664> \x34 |1
+<U0665> \x35 |1
+<U0666> \x36 |1
+<U0667> \x37 |1
+<U0668> \x38 |1
+<U0669> \x39 |1
+<U066B> \x2C |1
+<U066C> \x2E |1
 <U0679> \x8A |0
 <U067E> \x81 |0
 <U0686> \x8D |0
@@ -284,6 +268,16 @@ CHARMAP
 <U06C1> \xC0 |0
 <U06CC> \xED |1
 <U06D2> \xFF |0
+<U06F0> \x30 |1
+<U06F1> \x31 |1
+<U06F2> \x32 |1
+<U06F3> \x33 |1
+<U06F4> \x34 |1
+<U06F5> \x35 |1
+<U06F6> \x36 |1
+<U06F7> \x37 |1
+<U06F8> \x38 |1
+<U06F9> \x39 |1
 <U200C> \x9D |0
 <U200D> \x9E |0
 <U200E> \xFD |0
@@ -303,6 +297,7 @@ CHARMAP
 <U2030> \x89 |0
 <U2039> \x8B |0
 <U203A> \x9B |0
+<U203E> \xAF |1
 <U20AC> \x80 |0
 <U2122> \x99 |0
 <UFB56> \x81 |1
@@ -346,6 +341,7 @@ CHARMAP
 <UFE70> \xF0 |1
 <UFE71> \xF0 |1
 <UFE72> \xF1 |1
+<UFE73> \x20 |1
 <UFE74> \xF2 |1
 <UFE76> \xF3 |1
 <UFE77> \xF3 |1
@@ -504,6 +500,7 @@ CHARMAP
 <UFF1C> \x3C |1
 <UFF1D> \x3D |1
 <UFF1E> \x3E |1
+<UFF1F> \x3F |1
 <UFF20> \x40 |1
 <UFF21> \x41 |1
 <UFF22> \x42 |1
