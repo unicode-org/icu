@@ -19,8 +19,11 @@ import com.ibm.icu.util.VersionInfo;
 
 /**
  * This class reads the *.res resource bundle format
- * 
- * File format for .res resource bundle files (formatVersion=1.1)
+ *
+ * (For the latest version of the file format documentation see
+ * ICU4C's source/common/uresdata.h file.)
+ *
+ * File format for .res resource bundle files (formatVersion=1.2)
  *
  * An ICU4C resource bundle file (.res) is a binary, memory-mappable file
  * with nested, hierarchical data structures.
@@ -30,7 +33,7 @@ import com.ibm.icu.util.VersionInfo;
  *                     currently, the root item must be a table or table32 resource item
  *   int32_t indexes[indexes[0]]; -- array of indexes for friendly
  *                                   reading and swapping; see URES_INDEX_* above
- *                                   new in formatVersion 1.1
+ *                                   new in formatVersion 1.1 (ICU 2.8)
  *   char keys[]; -- characters for key strings
  *                   (formatVersion 1.0: up to 65k of characters; 1.1: <2G)
  *                   (minus the space for root and indexes[]),
@@ -121,11 +124,10 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
      */
     private static final byte DATA_FORMAT_ID[] = {(byte)0x52, (byte)0x65, 
                                                      (byte)0x73, (byte)0x42};
-    private static final byte DATA_FORMAT_VERSION[] = {(byte)0x1, (byte)0x1, 
-                                                         (byte)0x0, (byte)0x0};
-    private byte[] version;
+
     private static final String ICU_RESOURCE_SUFFIX = ".res";
     
+    /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
     private static final int    URES_INDEX_LENGTH           = 0;        /* [0] contains URES_INDEX_TOP==the length of indexes[] */
     private static final int    URES_INDEX_STRINGS_TOP      = 1;        /* [1] contains the top of the strings, */
                                                                         /*     same as the bottom of resources, rounded up */
@@ -133,12 +135,34 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
     private static final int    URES_INDEX_BUNDLE_TOP       = 3;        /* [3] contains the top of the bundle, */
                                                                         /*     in case it were ever different from [2] */
     private static final int    URES_INDEX_MAX_TABLE_LENGTH = 4;        /* [4] max. length of any table */
-    private static final int    URES_INDEX_TOP              = 5;
+    private static final int    URES_INDEX_ATTRIBUTES       = 5;        /* [5] attributes bit set, see URES_ATT_* (new in formatVersion 1.2) */
+    private static final int    URES_INDEX_TOP              = 6;
+
     //private static final int    URES_STRINGS_BOTTOM=(1+URES_INDEX_TOP)*4;
+
+    /*
+     * Nofallback attribute, attribute bit 0 in indexes[URES_INDEX_ATTRIBUTES].
+     * New in formatVersion 1.2 (ICU 3.6).
+     *
+     * If set, then this resource bundle is a standalone bundle.
+     * If not set, then the bundle participates in locale fallback, eventually
+     * all the way to the root bundle.
+     * If indexes[] is missing or too short, then the attribute cannot be determined
+     * reliably. Dependency checking should ignore such bundles, and loading should
+     * use fallbacks.
+     */
+    private static final int URES_ATT_NO_FALLBACK = 1;
+
     private static final boolean DEBUG = false;
     
+    private byte[] /* formatVersion, */ dataVersion;
+
+    private int rootRes;
+    private int[] indexes;
+    private boolean noFallback; /* see URES_ATT_NO_FALLBACK */
+
     private byte[] data;
-    
+
     private ICUResourceBundleReader(InputStream stream, String resolvedName){
 
         BufferedInputStream bs = new BufferedInputStream(stream);
@@ -147,12 +171,11 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
             if(DEBUG) System.out.println("The BufferedInputStream class is: " + bs.getClass().getName());
             if(DEBUG) System.out.println("The bytes avialable in stream before reading the header: " + bs.available());
             
-            version = ICUBinary.readHeader(bs,DATA_FORMAT_ID,this);
+            dataVersion = ICUBinary.readHeader(bs,DATA_FORMAT_ID,this);
 
-            if(DEBUG) System.out.println("The bytes avialable in stream after reading the header: " + bs.available());
+            if(DEBUG) System.out.println("The bytes available in stream after reading the header: " + bs.available());
                  
-            data = readData(bs);
-
+            readData(bs);
             stream.close();
         }catch(IOException ex){
 //#ifndef FOUNDATION
@@ -172,33 +195,64 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
         ICUResourceBundleReader reader = new ICUResourceBundleReader(stream, resolvedName);
         return reader;
     }
-    /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
-        
-    private static byte[] readData(InputStream stream)
+
+    private static void writeInt(int i, byte[] bytes, int offset) {
+        bytes[offset++]=(byte)(i>>24);
+        bytes[offset++]=(byte)(i>>16);
+        bytes[offset++]=(byte)(i>>8);
+        bytes[offset]=(byte)i;
+    }
+
+    private void readData(InputStream stream)
             throws IOException{
         
         DataInputStream ds = new DataInputStream(stream);
 
         if(DEBUG) System.out.println("The DataInputStream class is: " + ds.getClass().getName());
         if(DEBUG) System.out.println("The available bytes in the stream before reading the data: "+ds.available());
-        
-        ds.mark((1+URES_INDEX_TOP)*4);
-        int[] indexes = new int[URES_INDEX_TOP];
-        ds.readInt(); // ignore the root resource
-        
-        for(int i=1; i< URES_INDEX_TOP; i++){
+
+        /*
+         * The following will read two integers before ds.mark().
+         * Later, the two integers need to be placed into data[],
+         * then ds.reset(), then ds.readFully(into rest of data[]).
+         *
+         * This is necessary because we don't know the readLimit for ds.mark()
+         * until we have read the second integer (indexLength).
+         */
+        rootRes = ds.readInt();
+
+        // read the variable-length indexes[] array
+        int indexLength = ds.readInt();
+        ds.mark((indexLength-1)*4);
+
+        indexes = new int[indexLength];
+        indexes[URES_INDEX_LENGTH] = indexLength;
+
+        for(int i=1; i<indexLength; i++){
             indexes[i] = ds.readInt();   
         }
-        ds.reset();
-        
+
+        // determine if this resource bundle falls back to a parent bundle
+        // along normal locale ID fallback
+        noFallback =
+            indexLength > URES_INDEX_ATTRIBUTES &&
+            (indexes[URES_INDEX_ATTRIBUTES]&URES_ATT_NO_FALLBACK)!=0;
+
+        // read the entire bundle (after the header) into data[]
+        // put rootRes and indexLength into data[0..7]
+        // and the rest of the data into data[8..length-1]
         int length = indexes[URES_INDEX_BUNDLE_TOP]*4;
         if(DEBUG) System.out.println("The number of bytes in the bundle: "+length);
     
-        byte[] data = new byte[length];
-        ds.readFully(data);
-        return data;
-       
+        data = new byte[length];
+        writeInt(rootRes, data, 0);
+        writeInt(indexLength, data, 4);
+
+        // now reset to the mark, which was set after reading rootRes and indexLength
+        ds.reset();
+        ds.readFully(data, 8, length-8);
     }
+
     /**
      * Gets the full name of the resource with suffix.
      */
@@ -228,17 +282,22 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
     }
     
     public VersionInfo getVersion(){
-        return VersionInfo.getInstance(version[0],version[1],version[2],version[3]);   
+        return VersionInfo.getInstance(dataVersion[0],dataVersion[1],dataVersion[2],dataVersion[3]);   
     }
     public boolean isDataVersionAcceptable(byte version[]){
-        return version[0] == DATA_FORMAT_VERSION[0] 
-               && version[1] == DATA_FORMAT_VERSION[1]
-               && version[2] == DATA_FORMAT_VERSION[2] 
-               && version[3] == DATA_FORMAT_VERSION[3];
+        // while ICU4C can read formatVersion 1.0 and up,
+        // ICU4J requires 1.1 as a minimum
+        // formatVersion = version;
+        return version[0] == 1 && version[1] >= 1;
     }
     
     public byte[] getData(){
         return data;   
     }
-    
+    public int getRootResource() {
+        return rootRes;
+    }
+    public boolean getNoFallback() {
+        return noFallback;
+    }
 }
