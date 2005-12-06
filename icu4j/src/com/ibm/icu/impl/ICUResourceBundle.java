@@ -174,6 +174,15 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     public int getLoadingStatus() {
         return loadingStatus;
     }
+
+    /**
+     * Get the noFallback flag specified in the loaded bundle.
+     * @return The noFallback flag.
+     */
+    protected boolean getNoFallback() {
+        return false;
+    }
+
     /**
      * Return the version number associated with this UResourceBundle as an
      * VersionInfo object.
@@ -1156,10 +1165,13 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         if (b == null) {
             b = ICUResourceBundleImpl.createBundle(baseName, localeName, root);
             
-            if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback);
-            if(disableFallback==true){
+            if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
+            if(disableFallback || (b!=null && b.getNoFallback())){
+                // no fallback because the caller said so or because the bundle says so
                 return b;
             }
+
+            // fallback to locale ID parent
             if(b == null){
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {

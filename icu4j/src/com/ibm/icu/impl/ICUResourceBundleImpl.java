@@ -27,6 +27,8 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     //protected byte[] version;
     private byte[] rawData;
     private long rootResource;
+    private boolean noFallback;
+
     private String localeID;
     private String baseName;
     private ULocale ulocale;
@@ -52,10 +54,8 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             return null;
         }
 
-        byte[] rawData = reader.getData();
-        long rootResource = (UNSIGNED_INT_MASK) & getInt(rawData, 0);
-        ICUResourceBundleImpl bundle = new ICUResourceBundleImpl(rawData,
-                baseName, localeID, rootResource, root);
+        ICUResourceBundleImpl bundle = new ICUResourceBundleImpl(reader,
+                baseName, localeID, root);
         return bundle.getBundle();
     }
 
@@ -77,6 +77,14 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 
     protected void setParent(ResourceBundle parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Get the noFallback flag specified in the loaded bundle.
+     * @return The noFallback flag.
+     */
+    protected boolean getNoFallback() {
+        return noFallback;
     }
 
     private ICUResourceBundle getBundle() {
@@ -106,10 +114,11 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             throw new InternalError("Invalid format error");
         }
     }
-    private ICUResourceBundleImpl(byte[] rawData, String baseName,
-            String localeID, long rootResource, ClassLoader loader) {
-        this.rawData = rawData;
-        this.rootResource = rootResource;
+    private ICUResourceBundleImpl(ICUResourceBundleReader reader, String baseName,
+            String localeID, ClassLoader loader) {
+        this.rawData = reader.getData();
+        this.rootResource = (UNSIGNED_INT_MASK) & reader.getRootResource();
+        this.noFallback = reader.getNoFallback();
         this.baseName = baseName;
         this.localeID = localeID;
         this.ulocale = new ULocale(localeID);
