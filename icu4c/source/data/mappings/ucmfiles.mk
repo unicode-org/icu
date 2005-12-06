@@ -85,6 +85,7 @@ ibm-971_P100-1995.ucm\
 ibm-1363_P110-1997.ucm\
 ibm-1375_P100-2003.ucm\
 ibm-9005_X100-2005.ucm\
+ibm-9448_X100-2005.ucm\
 ibm-33722_P120-1999.ucm\
 iso-8859_10-1998.ucm\
 iso-8859_11-2001.ucm\
@@ -99,7 +100,6 @@ windows-874-2000.ucm\
 windows-936-2000.ucm\
 windows-949-2000.ucm\
 windows-950-2000.ucm\
-windows-1256-2000.ucm\
 ibm-897_P100-1995.ucm jisx-208.ucm jisx-212.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm\
 ibm-5478_P100-1995.ucm\
