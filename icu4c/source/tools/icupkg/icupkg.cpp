@@ -156,6 +156,7 @@ printUsage(const char *pname, UBool isHelp) {
     fprintf(where,
             "%csage: %s [-h|-?|--help ] [-tl|-tb|-te] [-c] [-C comment]\n"
             "\t[-a list] [-r list] [-x list] [-l]\n"
+            "\t[-s path] [-d path] [-w] [-m mode]\n"
             "\tinfilename [outfilename]\n",
             isHelp ? 'U' : 'u', pname);
     if(isHelp) {
@@ -227,14 +228,17 @@ printUsage(const char *pname, UBool isHelp) {
             "\tdoes not match '/'.\n");
         fprintf(where,
             "\n"
-            "\tItems must be listed relative to the package, and the --dir path\n"
-            "\twill be prepended.\n"
-            "\tThe --dir path is only prepended to item filenames, not to\n"
-            "\tICU .dat package or list filenames.\n"
+            "\tItems must be listed relative to the package, and the --sourcedir or\n"
+            "\tthe --destdir path will be prepended.\n"
+            "\tThe paths are only prepended to item filenames while adding or\n"
+            "\textracting items, not to ICU .dat package or list filenames.\n");
+        fprintf(where,
             "\n"
-            "\t-d path or --dir path      directory for the add/remove/extract items\n"
-            "\t-l or --list               list the package items to stdout\n"
-            "\t                           (after modifying it)\n");
+            "\t-s path or --sourcedir path  directory for the --add items\n"
+            "\t-d path or --destdir path    directory for the --extract items\n"
+            "\n"
+            "\t-l or --list                 list the package items to stdout\n"
+            "\t                             (after modifying the package)\n");
     }
 }
 
@@ -246,7 +250,8 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DEF("comment", 'C', UOPT_REQUIRES_ARG),
 
-    UOPTION_DEF("dir", 'd', UOPT_REQUIRES_ARG),
+    UOPTION_SOURCEDIR,
+    UOPTION_DESTDIR,
 
     UOPTION_DEF("writepkg", 'w', UOPT_NO_ARG),
 
@@ -267,7 +272,8 @@ enum {
     OPT_COPYRIGHT,
     OPT_COMMENT,
 
-    OPT_DIR,
+    OPT_SOURCEDIR,
+    OPT_DESTDIR,
 
     OPT_WRITEPKG,
 
@@ -284,7 +290,7 @@ enum {
 
 extern int
 main(int argc, char *argv[]) {
-    const char *pname, *filesPath, *inFilename, *outFilename, *outComment;
+    const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
     char outType;
     UBool isHelp, isModified;
 
@@ -313,11 +319,17 @@ main(int argc, char *argv[]) {
     }
     isModified=FALSE;
 
-    if(options[OPT_DIR].doesOccur) {
-        filesPath=options[OPT_DIR].value;
+    if(options[OPT_SOURCEDIR].doesOccur) {
+        sourcePath=options[OPT_SOURCEDIR].value;
     } else {
         // work relative to the current working directory
-        filesPath=NULL;
+        sourcePath=NULL;
+    }
+    if(options[OPT_DESTDIR].doesOccur) {
+        destPath=options[OPT_DESTDIR].value;
+    } else {
+        // work relative to the current working directory
+        destPath=NULL;
     }
 
     if(0==strcmp(argv[1], "new")) {
@@ -398,7 +410,7 @@ main(int argc, char *argv[]) {
      * as long as the main Package
      */
     if(options[OPT_ADD_LIST].doesOccur) {
-        addListPkg=readList(filesPath, options[OPT_ADD_LIST].value, TRUE);
+        addListPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
         if(addListPkg!=NULL) {
             pkg->addItems(*addListPkg);
             // do not delete addListPkg;
@@ -415,7 +427,7 @@ main(int argc, char *argv[]) {
     if(options[OPT_EXTRACT_LIST].doesOccur) {
         listPkg=readList(NULL, options[OPT_EXTRACT_LIST].value, FALSE);
         if(listPkg!=NULL) {
-            pkg->extractItems(filesPath, *listPkg, outType);
+            pkg->extractItems(destPath, *listPkg, outType);
             delete listPkg;
         } else {
             printUsage(pname, FALSE);
