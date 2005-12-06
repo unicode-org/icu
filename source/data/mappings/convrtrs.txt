@@ -740,7 +740,7 @@ ibm-5348_P100-1997 { UTR22* }   ibm-5348 { IBM* } windows-1252 { IANA* JAVA* WIN
 ibm-5349_P100-1998 { UTR22* }   ibm-5349 { IBM* } windows-1253 { IANA* JAVA* WINDOWS* } cp1253 { JAVA }         # Windows Greek (w/ euro update)
 ibm-5350_P100-1998 { UTR22* }   ibm-5350 { IBM* } windows-1254 { IANA* JAVA* WINDOWS* } cp1254 { JAVA }         # Windows Turkish (w/ euro update)
 ibm-9447_P100-2002 { UTR22* }   ibm-9447 { IBM* } windows-1255 { IANA* JAVA* WINDOWS* } cp1255 { JAVA }         # Windows Hebrew (w/ euro update)
-windows-1256-2000 { UTR22* }    windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS JAVA }                   # Windows Arabic (w/ euro update)
+ibm-9448_X100-2005 { UTR22* }   ibm-9448 { IBM* } windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS JAVA } # Windows Arabic (w/ euro update)
 ibm-9449_P100-2002 { UTR22* }   ibm-9449 { IBM* } windows-1257 { IANA* JAVA* WINDOWS* } cp1257 { JAVA }         # Windows Baltic (w/ euro update)
 ibm-5354_P100-1998 { UTR22* }   ibm-5354 { IBM* } windows-1258 { IANA* JAVA* WINDOWS* } cp1258 { JAVA }         # Windows Vietnamese (w/ euro update)
 
@@ -884,6 +884,7 @@ ibm-1123_P100-1995 { UTR22* }   ibm-1123 { IBM* JAVA } cp1123 { JAVA* } 1123 { J
 ibm-1130_P100-1997 { UTR22* }   ibm-1130 { IBM* }       # EBCDIC Vietnamese
 ibm-1132_P100-1998 { UTR22* }   ibm-1132 { IBM* }       # EBCDIC Lao
 ibm-1137_P100-1999 { UTR22* }   ibm-1137 { IBM* }       # Devanagari EBCDIC (based on Unicode character set)
+ibm-4517_P100-2005 { UTR22* }   ibm-4517 { IBM* }       # EBCDIC Arabic. Update of ibm-421
 
 # with Euro
 ibm-1140_P100-1997 { UTR22* }   ibm-1140 { IBM* } IBM01140 { IANA* JAVA } CCSID01140 { IANA JAVA } CP01140 { IANA JAVA } cp1140 { JAVA* } ebcdic-us-37+euro { IANA } # EBCDIC US
@@ -912,10 +913,10 @@ ibm-1399_P110-2003 { UTR22* }   ibm-1399 { IBM* }                   # Host MBCS 
 ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }                   # Host Roman Jis. Euro update of ibm-1027. SBCS portion of ibm-1390.
 ibm-8482_P100-1999 { UTR22* }   ibm-8482 { IBM* }                   # host SBCS (Katakana). Euro update of ibm-290. SBCS portion of ibm-1399.
 ibm-16684_P110-2003 { UTR22* }  ibm-16684 { IBM* }                  # DBCS Jis + Roman Jis Host. This is the DBCS portion of ibm-1390 and ibm-1399 (JIS X 0213)
-ibm-4899_P100-1998 { UTR22* }   ibm-4899 { IBM* }                   # Old EBCDIC Hebrew
-ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek
-ibm-12712_P100-1998 { UTR22* }  ibm-12712 { IBM* } ebcdic-he        # EBCDIC Hebrew (new sheqel, control charaters update)
-ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } ebcdic-ar        # EBCDIC Arabic
+ibm-4899_P100-1998 { UTR22* }   ibm-4899 { IBM* }                   # Old EBCDIC Hebrew. Update of ibm-803
+ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek. Update of ibm-875
+ibm-12712_P100-1998 { UTR22* }  ibm-12712 { IBM* } ebcdic-he        # EBCDIC Hebrew (new sheqel, control charaters update). Update of ibm-424
+ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } ebcdic-ar        # EBCDIC Arabic. Update of ibm-420
 
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
