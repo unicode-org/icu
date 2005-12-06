@@ -258,6 +258,7 @@ icu4c/source/tools/genbrk/Debug
 icu4c/source/tools/genbrk/Makefile
 icu4c/source/tools/genbrk/Release
 icu4c/source/tools/genbrk/genbrk
+icu4c/source/tools/genbrk/genbrk.1
 icu4c/source/tools/gencase/*.d
 icu4c/source/tools/gencase/*.ncb
 icu4c/source/tools/gencase/*.o
