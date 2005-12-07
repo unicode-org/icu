@@ -66,7 +66,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* ISO-3 country */
     {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN", "DEU", "", "JPN"   },
     /* LCID */
-    {   "409", "40c", "403", "408", "814",  "804", "407", "a", "411"     },
+    {   "409", "40c", "403", "408", "814",  "804", "10407", "40a", "411"     },
 
     /* display language (English) */
     {   "English",  "French",   "Catalan", "Greek",    "Norwegian", "Chinese", "German", "Spanish", "Japanese"    },
