@@ -32,7 +32,7 @@ Developers of CLDR:
         export ANT_OPTS="-DCLDR_DTD_CACHE=<path>/temp/cldrdtd"
         export CLDR_DIR=<path>/cldr   
         export CLDR_CLASSES=<path>/cldr/tools/java/classes
-        export ICU4C_DIR=/work/icu
+        export ICU4C_DIR=<path>/icu
         export ICU4J_CLASSES=<path>/icu4j/classes
 5. Change directory to <path>/icu/source/data/
 6. Enter command
