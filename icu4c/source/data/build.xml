@@ -9,7 +9,7 @@
 *******************************************************************************
 */
 -->
-<project name="icu-build" default="util" basedir=".">
+<project name="icu-build" default="all" basedir=".">
     <target name="init">
         <tstamp/>
         
@@ -175,7 +175,7 @@
             </run>
         </cldr-build>
     </target>
-    <target name="currencydata" depends="init,setup" description="builds CurrencyData.txt from supplementalData.xml">
+    <target name="supplementalData" depends="init,setup" description="builds CurrencyData.txt from supplementalData.xml">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="CurrencyData.txt" srcFile="supplementalData.xml" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
             <run>
