@@ -10,14 +10,14 @@
 >
 <ldml draft="true">
 	<identity>
-		<version number="$Revision: 1.2 $"/>
-		<generation date="$Date: 2005/06/07 23:37:50 $"/>
+		<version number="$Revision: 1.3 $"/>
+		<generation date="$Date: 2005/12/09 19:00:12 $"/>
 		<language type="bs"/> 
 	</identity>
 	<characters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/">
 			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
+				<icu:script type="1">Latn</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
