@@ -175,7 +175,7 @@
         <include locale="vi_VN"/>
         <include locale="zh"/> 
         <include locale="zh_CN"/>
-        <include locale="zh_Hans"/>         
+        <include locale="zh_Hans" draft=".*"/>         
         <include locale="zh_Hans_CN"/> 
         <include locale="zh_Hans_SG"/>
         <include locale="zh_Hant"/>         
