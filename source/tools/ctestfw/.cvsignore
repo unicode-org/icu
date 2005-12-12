@@ -6,4 +6,6 @@ Debug
 Makefile
 Release
 libicutest*
-pkgdata
+*icutest*.lib
+*icutest*.dll
+*icutest*.exp
