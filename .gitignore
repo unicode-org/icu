@@ -390,6 +390,7 @@ icu4c/source/tools/gentest/Debug
 icu4c/source/tools/gentest/Makefile
 icu4c/source/tools/gentest/Release
 icu4c/source/tools/gentest/gentest
+icu4c/source/tools/gentest/gentest.exe
 icu4c/source/tools/gentz/*.d
 icu4c/source/tools/gentz/*.pdb
 icu4c/source/tools/gentz/*.plg
