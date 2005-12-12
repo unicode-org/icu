@@ -230,11 +230,13 @@ icu4c/source/tools/ctestfw/*.ao
 icu4c/source/tools/ctestfw/*.d
 icu4c/source/tools/ctestfw/*.o
 icu4c/source/tools/ctestfw/*.pdb
+icu4c/source/tools/ctestfw/*icutest*.dll
+icu4c/source/tools/ctestfw/*icutest*.exp
+icu4c/source/tools/ctestfw/*icutest*.lib
 icu4c/source/tools/ctestfw/Debug
 icu4c/source/tools/ctestfw/Makefile
 icu4c/source/tools/ctestfw/Release
 icu4c/source/tools/ctestfw/libicutest*
-icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/dumpce/*.css
 icu4c/source/tools/dumpce/*.d
 icu4c/source/tools/dumpce/*.html
