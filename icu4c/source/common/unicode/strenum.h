@@ -199,7 +199,7 @@ public:
      * @return TRUE if the enumerations are equal. FALSE if not.
      * @draft ICU 3.6 
      */
-    virtual UBool operator!=(const StringEnumeration& that)const {return !operator==(that);};
+    virtual UBool operator!=(const StringEnumeration& that)const;
 
 protected:
     /**
