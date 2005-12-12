@@ -614,7 +614,7 @@ uset_getItem(const USet* set, int32_t itemIndex,
 
 /**
  * Returns true if set1 contains all the characters and strings
- * of set2. It answers the question, 'Is set1 a subset of set2?'
+ * of set2. It answers the question, 'Is set1 a superset of set2?'
  * @param set1 set to be checked for containment
  * @param set2 set to be checked for containment
  * @return true if the test condition is met
