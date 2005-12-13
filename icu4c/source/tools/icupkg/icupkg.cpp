@@ -231,7 +231,10 @@ printUsage(const char *pname, UBool isHelp) {
             "\tItems must be listed relative to the package, and the --sourcedir or\n"
             "\tthe --destdir path will be prepended.\n"
             "\tThe paths are only prepended to item filenames while adding or\n"
-            "\textracting items, not to ICU .dat package or list filenames.\n");
+            "\textracting items, not to ICU .dat package or list filenames.\n"
+            "\t\n"
+            "\tPaths may contain '/' instead of the platform's\n"
+            "\tfile separator character, and are converted as appropriate.\n");
         fprintf(where,
             "\n"
             "\t-s path or --sourcedir path  directory for the --add items\n"
