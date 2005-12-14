@@ -119,6 +119,8 @@ public class CodeMangler {
                         force = true;
                     } else if (arg.startsWith("-c")) {
                         clean = true;
+                    } else if (arg.startsWith("-t")) {
+                        timestamp = true;
                     } else if (arg.startsWith("-h")) {
                         System.out.print(usage);
                         break; // stop before processing arguments, so we will do nothing
