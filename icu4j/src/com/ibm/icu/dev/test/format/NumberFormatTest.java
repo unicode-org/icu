@@ -1225,99 +1225,106 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-	public void TestRounding() {
-		DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
-		if (false) { // for debugging specific value
-			nf.setRoundingMode(BigDecimal.ROUND_HALF_UP);
-			checkRounding(nf, new BigDecimal("300.0300000000"), 0, new BigDecimal("0.020000000"));
-		}
-		// full tests
-		int[] roundingIncrements = {1, 2, 5, 20, 50, 100};
-		int[] testValues = {0, 300};
-		for (int j = 0; j < testValues.length; ++j) {
-			for (int mode = BigDecimal.ROUND_UP; mode < BigDecimal.ROUND_HALF_EVEN; ++mode) { 
-				nf.setRoundingMode(mode);
-				for (int increment = 0; increment < roundingIncrements.length; ++increment) {
-					BigDecimal base = new BigDecimal(testValues[j]);
-					BigDecimal rInc = new BigDecimal(roundingIncrements[increment]);
-					checkRounding(nf,  base, 20, rInc);
-					rInc = new BigDecimal("1.000000000").divide(rInc);
-					checkRounding(nf,  base, 20, rInc);
-				}
-			}
-		}
-	}
+    public void TestRounding() {
+        DecimalFormat nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        if (false) { // for debugging specific value
+            nf.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+            checkRounding(nf, new BigDecimal("300.0300000000"), 0, new BigDecimal("0.020000000"));
+        }
+        // full tests
+        int[] roundingIncrements = {1, 2, 5, 20, 50, 100};
+        int[] testValues = {0, 300};
+        for (int j = 0; j < testValues.length; ++j) {
+            for (int mode = BigDecimal.ROUND_UP; mode < BigDecimal.ROUND_HALF_EVEN; ++mode) { 
+                nf.setRoundingMode(mode);
+                for (int increment = 0; increment < roundingIncrements.length; ++increment) {
+                    BigDecimal base = new BigDecimal(testValues[j]);
+                    BigDecimal rInc = new BigDecimal(roundingIncrements[increment]);
+                    checkRounding(nf,  base, 20, rInc);
+                    rInc = new BigDecimal("1.000000000").divide(rInc);
+                    checkRounding(nf,  base, 20, rInc);
+                }
+            }
+        }
+    }
 	
-	void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
-		nf.setRoundingIncrement(increment.toBigDecimal());
-		BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
-		for (int i = -iterations; i <= iterations; ++i) {			
-			BigDecimal iValue = base.add(increment.multiply(new BigDecimal(i)).movePointLeft(1));
-			BigDecimal smallIncrement = new BigDecimal("0.00000001");
-			if (iValue.signum() != 0) {
-				smallIncrement.multiply(iValue); // scale unless zero
-			}
-			// we not only test the value, but some values in a small range around it.
-			lastParsed = checkRound(nf, iValue.subtract(smallIncrement), lastParsed);
-			lastParsed = checkRound(nf, iValue, lastParsed);
-			lastParsed = checkRound(nf, iValue.add(smallIncrement), lastParsed);
-		}
-	}
+    void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
+//#ifdef FOUNDATION
+//##        nf.setRoundingIncrement(increment);
+//#else
+        nf.setRoundingIncrement(increment.toBigDecimal());
+//#endif
+        BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
+        for (int i = -iterations; i <= iterations; ++i) {			
+            BigDecimal iValue = base.add(increment.multiply(new BigDecimal(i)).movePointLeft(1));
+            BigDecimal smallIncrement = new BigDecimal("0.00000001");
+            if (iValue.signum() != 0) {
+                smallIncrement.multiply(iValue); // scale unless zero
+            }
+            // we not only test the value, but some values in a small range around it.
+            lastParsed = checkRound(nf, iValue.subtract(smallIncrement), lastParsed);
+            lastParsed = checkRound(nf, iValue, lastParsed);
+            lastParsed = checkRound(nf, iValue.add(smallIncrement), lastParsed);
+        }
+    }
 	
-	private BigDecimal checkRound(DecimalFormat nf, BigDecimal iValue, BigDecimal lastParsed) {
-		String formatedBigDecimal = nf.format(iValue);
-		String formattedDouble = nf.format(iValue.doubleValue());
-		if (!equalButForTrailingZeros(formatedBigDecimal, formattedDouble)) {
-			errln("Failure at: " + iValue + " (" + iValue.doubleValue() + ")"
-					+ ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
-					+ ",\tRounding-increment: " + nf.getRoundingIncrement()
-					+ ",\tdouble: " + formattedDouble
-					+ ",\tBigDecimal: " + formatedBigDecimal);
-		} else {
-			logln("Value: " + iValue
-					+ ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
-					+ ",\tRounding-increment: " + nf.getRoundingIncrement()
-					+ ",\tdouble: " + formattedDouble
-					+ ",\tBigDecimal: " + formatedBigDecimal);
-		}
-		try {
-			// Number should have compareTo(...)
-			BigDecimal parsed = toBigDecimal(nf.parse(formatedBigDecimal));
-			if (lastParsed.compareTo(parsed) > 0) {
-				errln("Rounding wrong direction!: " + lastParsed + " > " + parsed);
-			}
-			lastParsed = parsed;
-		} catch (ParseException e) {
-			errln("Parse Failure with: " + formatedBigDecimal);
-		}
-		return lastParsed;
-	}
+    private BigDecimal checkRound(DecimalFormat nf, BigDecimal iValue, BigDecimal lastParsed) {
+        String formatedBigDecimal = nf.format(iValue);
+        String formattedDouble = nf.format(iValue.doubleValue());
+        if (!equalButForTrailingZeros(formatedBigDecimal, formattedDouble)) {
+            errln("Failure at: " + iValue + " (" + iValue.doubleValue() + ")"
+                  + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
+                  + ",\tRounding-increment: " + nf.getRoundingIncrement()
+                  + ",\tdouble: " + formattedDouble
+                  + ",\tBigDecimal: " + formatedBigDecimal);
+        } else {
+            logln("Value: " + iValue
+                  + ",\tRounding-mode: " + roundingModeNames[nf.getRoundingMode()]
+                  + ",\tRounding-increment: " + nf.getRoundingIncrement()
+                  + ",\tdouble: " + formattedDouble
+                  + ",\tBigDecimal: " + formatedBigDecimal);
+        }
+        try {
+            // Number should have compareTo(...)
+            BigDecimal parsed = toBigDecimal(nf.parse(formatedBigDecimal));
+            if (lastParsed.compareTo(parsed) > 0) {
+                errln("Rounding wrong direction!: " + lastParsed + " > " + parsed);
+            }
+            lastParsed = parsed;
+        } catch (ParseException e) {
+            errln("Parse Failure with: " + formatedBigDecimal);
+        }
+        return lastParsed;
+    }
 	
-	static BigDecimal toBigDecimal(Number number) {
-		return number instanceof BigDecimal ? (BigDecimal) number
-			: number instanceof BigInteger ? new BigDecimal((BigInteger)number)
-			: number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
-			: number instanceof Double ? new BigDecimal(number.doubleValue())
-			: number instanceof Float ? new BigDecimal(number.floatValue())
-			: new BigDecimal(number.longValue());
-	}
+    static BigDecimal toBigDecimal(Number number) {
+        return number instanceof BigDecimal ? (BigDecimal) number
+            : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
+//#ifndef FOUNDATION
+            : number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
+//#endif
+            : number instanceof Double ? new BigDecimal(number.doubleValue())
+            : number instanceof Float ? new BigDecimal(number.floatValue())
+            : new BigDecimal(number.longValue());
+    }
 
-	static String[] roundingModeNames = {
-			"ROUND_UP", "ROUND_DOWN", "ROUND_CEILING", "ROUND_FLOOR",
-			"ROUND_HALF_UP", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN",
-			"ROUND_UNNECESSARY"
-	};
+    static String[] roundingModeNames = {
+        "ROUND_UP", "ROUND_DOWN", "ROUND_CEILING", "ROUND_FLOOR",
+        "ROUND_HALF_UP", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN",
+        "ROUND_UNNECESSARY"
+    };
 	
-	private static boolean equalButForTrailingZeros(String formatted1, String formatted2) {
-		if (formatted1.length() == formatted2.length()) return formatted1.equals(formatted2);
-		return stripFinalZeros(formatted1).equals(stripFinalZeros(formatted2));
-	}
-	private static String stripFinalZeros(String formatted) {
-		int len1 = formatted.length();
-		char ch;
-		while (len1 > 0 && ((ch = formatted.charAt(len1-1)) == '0' || ch == '.')) --len1;
-		return formatted.substring(0,len1);
-	}
+    private static boolean equalButForTrailingZeros(String formatted1, String formatted2) {
+        if (formatted1.length() == formatted2.length()) return formatted1.equals(formatted2);
+        return stripFinalZeros(formatted1).equals(stripFinalZeros(formatted2));
+    }
+
+    private static String stripFinalZeros(String formatted) {
+        int len1 = formatted.length();
+        char ch;
+        while (len1 > 0 && ((ch = formatted.charAt(len1-1)) == '0' || ch == '.')) --len1;
+        return formatted.substring(0,len1);
+    }
 
     //------------------------------------------------------------------
     // Support methods

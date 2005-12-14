@@ -873,7 +873,7 @@ public class DecimalFormat extends NumberFormat {
         // domain in order to do divide/multiply correctly.
         // [NEW]
         if (roundingIncrementICU != null) {
-            return format(com.ibm.icu.math.BigDecimal.valueOf(number), result, fieldPosition);
+            return format(BigDecimal.valueOf(number), result, fieldPosition);
         }
 
         boolean isNegative = (number < 0);
@@ -918,7 +918,7 @@ public class DecimalFormat extends NumberFormat {
         // If we are to do rounding, we need to move into the BigDecimal
         // domain in order to do divide/multiply correctly.
         if (roundingIncrementICU != null) {
-            return format(new com.ibm.icu.math.BigDecimal(number), result, fieldPosition);
+            return format(new BigDecimal(number), result, fieldPosition);
         }
 
         if (multiplier != 1) {
@@ -963,7 +963,7 @@ public class DecimalFormat extends NumberFormat {
      * Format a BigDecimal number.
      * @stable ICU 2.0
      */
-    public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer result,
+    public StringBuffer format(BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
         /* This method is just a copy of the corresponding java.math.BigDecimal
          * method for now.  It isn't very efficient since it must create a
@@ -972,7 +972,7 @@ public class DecimalFormat extends NumberFormat {
          * to just one flavor of BigDecimal.
          */
         if (multiplier != 1) {
-            number = number.multiply(com.ibm.icu.math.BigDecimal.valueOf(multiplier));
+            number = number.multiply(BigDecimal.valueOf(multiplier));
         }
 
         if (roundingIncrementICU != null) {
@@ -1520,11 +1520,11 @@ public class DecimalFormat extends NumberFormat {
 
             // Handle non-integral values
             else {
-                com.ibm.icu.math.BigDecimal big = digitList.getBigDecimalICU(status[STATUS_POSITIVE]);
+                BigDecimal big = digitList.getBigDecimalICU(status[STATUS_POSITIVE]);
                 n = big;
                 if (mult != 1) {
-                    n = big.divide(com.ibm.icu.math.BigDecimal.valueOf(mult),
-                    		com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN);
+                    n = big.divide(BigDecimal.valueOf(mult),
+                    		BigDecimal.ROUND_HALF_EVEN);
                 }
             }
         }
@@ -2262,13 +2262,13 @@ public class DecimalFormat extends NumberFormat {
      */
 //#ifndef FOUNDATION
     public java.math.BigDecimal getRoundingIncrement() {
-    	if (roundingIncrementICU == null) return null;
+        if (roundingIncrementICU == null) return null;
         return roundingIncrementICU.toBigDecimal();
     }
 //#else
-//##    public com.ibm.icu.math.BigDecimal getRoundingIncrement() {
+//##    public BigDecimal getRoundingIncrement() {
 //##    	if (roundingIncrementICU == null) return null;
-//##        return new com.ibm.icu.math.BigDecimal(roundingIncrementICU.toString());
+//##        return new BigDecimal(roundingIncrementICU.toString());
 //##    }
 //#endif
     
@@ -2286,8 +2286,11 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public void setRoundingIncrement(java.math.BigDecimal newValue) {
-    	if (newValue == null) setRoundingIncrement((BigDecimal)null);
-    	else setRoundingIncrement(new com.ibm.icu.math.BigDecimal(newValue));
+        if (newValue == null) {
+            setRoundingIncrement((BigDecimal)null);
+        } else {
+            setRoundingIncrement(new BigDecimal(newValue));
+        }
     }
 //#endif
     
@@ -2305,48 +2308,20 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setRoundingIncrement(BigDecimal newValue) {
         int i = newValue == null
-                ? 0 : newValue.compareTo(BigDecimal.ZERO);
+            ? 0 : newValue.compareTo(BigDecimal.ZERO);
         if (i < 0) {
             throw new IllegalArgumentException("Illegal rounding increment");
         }
         if (i == 0) {
             setInternalRoundingIncrement(null);
         } else {
-        	setInternalRoundingIncrement(newValue);
+            setInternalRoundingIncrement(newValue);
         }
         setRoundingDouble();
     }
 
 
-//#ifdef FOUNDATION
-//##   /**
-//##     * Set the rounding increment.  This method also controls whether
-//##     * rounding is enabled.
-//##     * @param newValue A positive rounding increment, or <code>null</code> or
-//##     * <code>BigDecimal(0.0)</code> to disable rounding.
-//##     * @exception IllegalArgumentException if <code>newValue</code> is < 0.0
-//##     * @see #getRoundingIncrement
-//##     * @see #getRoundingMode
-//##     * @see #setRoundingMode
-//##     * @draft ICU 3.6
-//##     */
-//##    public void setRoundingIncrement(com.ibm.icu.math.BigDecimal newValue) {
-//##        int i = newValue == null
-//##                ? 0 : newValue.compareTo(com.ibm.icu.math.BigDecimal.valueOf(0));
-//##        if (i < 0) {
-//##            throw new IllegalArgumentException("Illegal rounding increment");
-//##        }
-//##        if (i == 0) {
-//##            roundingIncrementICU = null;
-//##            roundingDouble = 0.0;
-//##        } else {
-//##            roundingIncrementICU = newValue;
-//##            roundingDouble = newValue.doubleValue();
-//##        }
-//##    }
-//#endif
-
-     /**
+    /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding increment.  This method also controls whether
      * rounding is enabled.
@@ -2362,27 +2337,27 @@ public class DecimalFormat extends NumberFormat {
         if (newValue < 0.0) {
             throw new IllegalArgumentException("Illegal rounding increment");
         }
-	    roundingDouble = newValue;
-	    roundingDoubleReciprocal = 0.0d;
+        roundingDouble = newValue;
+        roundingDoubleReciprocal = 0.0d;
         if (newValue == 0.0d) {
-        	setRoundingIncrement((BigDecimal)null);       	
+            setRoundingIncrement((BigDecimal)null);       	
         } else {
-		    roundingDouble = newValue;
-		    if (roundingDouble < 1.0d) {
-			    double rawRoundedReciprocal = 1.0d/roundingDouble;
-			    setRoundingDoubleReciprocal(rawRoundedReciprocal);
-		    }
-        	setInternalRoundingIncrement(new com.ibm.icu.math.BigDecimal(newValue));
-       }
+            roundingDouble = newValue;
+            if (roundingDouble < 1.0d) {
+                double rawRoundedReciprocal = 1.0d/roundingDouble;
+                setRoundingDoubleReciprocal(rawRoundedReciprocal);
+            }
+            setInternalRoundingIncrement(new BigDecimal(newValue));
+        }
     }
 
 
-	private void setRoundingDoubleReciprocal(double rawRoundedReciprocal) {
-		roundingDoubleReciprocal = Math.rint(rawRoundedReciprocal);
-		if (Math.abs(rawRoundedReciprocal - roundingDoubleReciprocal) > roundingIncrementEpsilon) {
-			roundingDoubleReciprocal = 0.0d;
-		}
-	}
+    private void setRoundingDoubleReciprocal(double rawRoundedReciprocal) {
+        roundingDoubleReciprocal = Math.rint(rawRoundedReciprocal);
+        if (Math.abs(rawRoundedReciprocal - roundingDoubleReciprocal) > roundingIncrementEpsilon) {
+            roundingDoubleReciprocal = 0.0d;
+        }
+    }
     
     static final double roundingIncrementEpsilon = 0.000000001;
     
@@ -2417,8 +2392,8 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public void setRoundingMode(int roundingMode) {
-        if (roundingMode < com.ibm.icu.math.BigDecimal.ROUND_UP
-            || roundingMode > com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY) {
+        if (roundingMode < BigDecimal.ROUND_UP
+            || roundingMode > BigDecimal.ROUND_UNNECESSARY) {
             throw new IllegalArgumentException("Invalid rounding mode: "
                                                + roundingMode);
         }
@@ -3762,7 +3737,7 @@ public class DecimalFormat extends NumberFormat {
                     // this makes perfect sense), so we need to handle this.
                     int scale = incrementPos - effectiveDecimalPos;
                     roundingIncrementICU =
-                    	com.ibm.icu.math.BigDecimal.valueOf(incrementVal, scale > 0 ? scale : 0);
+                    	BigDecimal.valueOf(incrementVal, scale > 0 ? scale : 0);
                     if (scale < 0) {
                         roundingIncrementICU =
                             roundingIncrementICU.movePointRight(-scale);
@@ -3832,7 +3807,7 @@ public class DecimalFormat extends NumberFormat {
             roundingDoubleReciprocal = 0.0d;			
 		} else {
 			roundingDouble = roundingIncrementICU.doubleValue();
-			setRoundingDoubleReciprocal(com.ibm.icu.math.BigDecimal.ONE.divide(roundingIncrementICU,BigDecimal.ROUND_HALF_EVEN).doubleValue());
+			setRoundingDoubleReciprocal(BigDecimal.ONE.divide(roundingIncrementICU,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 		}
 	}
 
@@ -4089,18 +4064,18 @@ public class DecimalFormat extends NumberFormat {
 
 //#ifndef FOUNDATION
         if (roundingIncrement != null) {
-        	setInternalRoundingIncrement(new com.ibm.icu.math.BigDecimal(roundingIncrement));
+        	setInternalRoundingIncrement(new BigDecimal(roundingIncrement));
         	setRoundingDouble();
         }   
 //#endif
     }
 
 
-	private void setInternalRoundingIncrement(com.ibm.icu.math.BigDecimal value) {
+	private void setInternalRoundingIncrement(BigDecimal value) {
 		roundingIncrementICU = value;
-//		#ifndef FOUNDATION
+//#ifndef FOUNDATION
 		roundingIncrement = value == null ? null : value.toBigDecimal();
-//		#endif
+//#endif
 	}
 
     //----------------------------------------------------------------------
@@ -4343,7 +4318,7 @@ public class DecimalFormat extends NumberFormat {
      * @serial
      * @since AlphaWorks NumberFormat
      */
-    private transient com.ibm.icu.math.BigDecimal roundingIncrementICU = null;
+    private transient BigDecimal roundingIncrementICU = null;
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -4370,7 +4345,7 @@ public class DecimalFormat extends NumberFormat {
      * @serial
      * @since AlphaWorks NumberFormat
      */
-    private int roundingMode = com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN;
+    private int roundingMode = BigDecimal.ROUND_HALF_EVEN;
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -4541,9 +4516,6 @@ public class DecimalFormat extends NumberFormat {
     // Proclaim JDK 1.1 serial compatibility.
     private static final long serialVersionUID = 864413376551465018L;
 //#endif
-
-    // 'foundationize' by converting to ICU's BigDecimal only
-//    private com.ibm.icu.math.BigDecimal roundingIncrementICU;
 }
 
 //eof
