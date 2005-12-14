@@ -1185,12 +1185,12 @@
         <zip destfile="${zipTestSrc.file}"
             compress="true"
             basedir="${src.dir}"
-            includes="com/ibm/icu/dev/test/**/*"/>
+            includes="com/ibm/icu/dev/test/**/*"
+            excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*"/>
     </target>
 
-    <target name="undoEclipseMangle" depends="buildmangle">
+    <target name="undoEclipseMangle" depends="buildmangle" description="preprocess files back to default)">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-            <arg value="-v"/>
             <arg value="@eclipseCoreArgs.txt"/>
             <arg value="@eclipseTestArgs.txt"/>
         </java>
@@ -1199,6 +1199,7 @@
     <target name="eclipseCoreMangle" depends="buildmangle">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-dFOUNDATION"/>
+            <arg value="-t"/>
             <arg value="@eclipseCoreArgs.txt"/>
          </java>
     </target>
@@ -1206,13 +1207,14 @@
     <target name="eclipseTestMangle" depends="buildmangle">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-dFOUNDATION"/>
+            <arg value="-t"/>
             <arg value="@eclipseTestArgs.txt"/>
         </java>
     </target>
 
     <target name="eclipseCore" depends="init,coreData,icudata,eclipseCoreMangle">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
-            excludes="**/CVS/**/*"
+            excludes="**/CVS/**/*,**/GlobalizationPreferences*"
             compiler="javac1.3"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -1239,13 +1241,14 @@
         <move file="${zipCoreSrc.file}" toDir="${eclipse.dir}/com.ibm.icu"/>
         <zip destfile="eclipseICU4J_core.zip"
             basedir="${eclipse.dir}"
-            includes="com.ibm.icu,com.ibm.icu/**/*"/>
+            includes="com.ibm.icu,com.ibm.icu/**/*"
+            excludes="com.ibm.icu/CVS/**/*"/>
     </target>
 
     <target name="eclipseTestPkg" depends="eclipseCore,eclipseTestMangle" description="build tests trimmed for eclipse API">
         <antcall target="tests"/>
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
-            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*" excludes="/com/ibm/icu/dev/test/**/GlobalizationPreferences*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
         </jar>
         <copy file="${testjar.file}" toDir="${eclipse.dir}/com.ibm.icu.tests"/>
@@ -1254,5 +1257,21 @@
         <zip destfile="eclipseICU4J_tests.zip"
             basedir="${eclipse.dir}"
             includes="com.ibm.icu.tests,com.ibm.icu.tests/**/*"/>
-    </target>    
+    </target>
+
+    <target name="eclipseInterfacePkg" depends="init" description="build eclipse interface package">
+        <zip destfile="eclipseICU4J_intf.zip"
+            basedir="${eclipse.dir}"
+            includes="org.eclipse.icu/**/*"/>
+    </target>
+
+    <target name="eclipseImplementationPkg" depends="init" description="build eclipse implementation package">
+        <zip destfile="eclipseICU4J_impl.zip"
+            basedir="${eclipse.dir}"
+            includes="com.ibm.icu.eclipse/**/*"/>
+    </target>
+
+    <target name="eclipsePkgs" 
+        depends="eclipseCorePkg,eclipseTestPkg,eclipseInterfacePkg"
+        description="build all eclipse packages"/>
 </project>

@@ -32,15 +32,16 @@ import java.util.regex.Pattern;
  * commenting out lines based on the current flag settings.
  */
 public class CodeMangler {
-    private File indir;      // root of input
-    private File outdir;     // root of output
-    private String suffix;   // suffix to process, default '.jpp'
-    private boolean recurse; // true if recurse on directories
-    private boolean force;   // true if force reprocess of files
-    private boolean clean;   // true if output is to be cleaned
-    private HashMap map;     // defines
-    private ArrayList names; // files/directories to process
-    private String header;   // sorted list of defines passed in
+    private File indir;        // root of input
+    private File outdir;       // root of output
+    private String suffix;     // suffix to process, default '.jpp'
+    private boolean recurse;   // true if recurse on directories
+    private boolean force;     // true if force reprocess of files
+    private boolean clean;     // true if output is to be cleaned
+    private boolean timestamp; // true if we read/write timestamp
+    private HashMap map;       // defines
+    private ArrayList names;   // files/directories to process
+    private String header;     // sorted list of defines passed in
 
     private boolean verbose; // true if we emit debug output
 
@@ -59,6 +60,7 @@ public class CodeMangler {
         "-c[lean]               - remove all control flags from code on output (does not proceed if overwriting)\n" +
         "-r[ecurse]             - if present, recursively process subdirectories\n" +
         "-f[orce]               - force reprocessing of files even if timestamp and headers match\n" +
+        "-t[imestamp]           - expect/write timestamp in header\n" +
         "-dNAME[=VALUE]         - define NAME with optional value VALUE\n" +
         "  (or -d NAME[=VALUE])\n" +
         "-help                  - print this usage message and exit.\n" +
@@ -81,6 +83,7 @@ public class CodeMangler {
         names = new ArrayList();
         suffix = ".java";
         clean = false;
+        timestamp = false;
 
         String inname = null;
         String outname = null;
@@ -351,7 +354,10 @@ public class CodeMangler {
                     boolean hasHeader = line.startsWith(HEADER_PREFIX);
                     if (hasHeader && !force) {
                         long expectLastModified = ((infile.lastModified() + 999)/1000)*1000;
-                        String headerline = HEADER_PREFIX + ' ' + String.valueOf(expectLastModified) + ' ' + header;
+                        String headerline = HEADER_PREFIX + ' ' +
+                            (timestamp ? String.valueOf(expectLastModified) : "") 
+                            + ' ' + header;
+                        headerline = headerline.trim();
                         if (line.equals(headerline)) {
                             if (verbose) System.out.println("no changes necessary to " + infile.getCanonicalPath());
                             instream.close();
@@ -387,7 +393,10 @@ public class CodeMangler {
             
                     outModTime = ((outfile.lastModified()+999)/1000)*1000; // round up
                     outstream = new PrintStream(new FileOutputStream(outfile));
-                    String headerline = HEADER_PREFIX + ' ' + String.valueOf(outModTime) + ' ' + header;
+                    String headerline = HEADER_PREFIX + ' ' + 
+                        (timestamp ? String.valueOf(outModTime) : "")
+                        + ' ' + header;
+                    headerline = headerline.trim();
                     outstream.println(headerline);
                     if (verbose) System.out.println("header: " + headerline);
 
@@ -498,7 +507,9 @@ public class CodeMangler {
                 outfile.renameTo(backup);
             }
 
-            outfile.setLastModified(outModTime); // synch with timestamp
+            if (timestamp) {
+                outfile.setLastModified(outModTime); // synch with timestamp
+            }
 
             if (oldMap != null) {
                 map = oldMap;
