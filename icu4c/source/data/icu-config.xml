@@ -281,11 +281,8 @@
         <include xpath="//ldml/.*" draft="false"/> 
         <include xpath="//ldml/.*/weekendData/.*" draft=".*"/>
         <include xpath="//ldml/.*/dateTimeElements/.*" draft=".*"/>
-        <exclude xpath="//ldml/posix/messages/.*"/>
         <!--
         <include xpath="//ldml/.*/language.*" preferAlt="proposed" draft=".*"/>
-        <exclude xpath="//ldml/.*/language\[@type='[a-z]{3}'\]" draft=".*"/>
-        <include xpath="//ldml/.*/language\[@type='haw'\]" draft=".*"/>
         -->
         <!-- Exclude rarely used/deprecated ISO-4217 codes -->
         <exclude xpath="//ldml/.*/currency\[@type='AOK'\].*" draft=".*"/>
@@ -295,15 +292,21 @@
         <exclude xpath="//ldml/.*/currency\[@type='BEC'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BEL'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BOP'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='BOV'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BRB'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BRC'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BRE'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BRN'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BRR'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='BUK'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='CHE'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='CHW'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='CLF'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='CNX'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='COU'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='CSK'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='DDM'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='ECV'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='EQE'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='ESA'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='ESB'\].*" draft=".*"/>
@@ -321,6 +324,7 @@
         <exclude xpath="//ldml/.*/currency\[@type='MLF'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='MTP'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='MXP'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='MXV'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='NIC'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='PEI'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='PES'\].*" draft=".*"/>
@@ -329,16 +333,29 @@
         <exclude xpath="//ldml/.*/currency\[@type='SUR'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='UAK'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='UGS'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='USS'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='USN'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='UYP'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XAG'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XAU'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XBA'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XBB'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XBC'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XBD'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XDR'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='XEU'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XFO'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XFU'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XPD'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XPT'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XRE'\].*" draft=".*"/>
+        <exclude xpath="//ldml/.*/currency\[@type='XTS'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='YDD'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='YUD'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='YUN'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='ZAL'\].*" draft=".*"/>
         <exclude xpath="//ldml/.*/currency\[@type='ZRZ'\].*" draft=".*"/>
-        <!--
-         Exclude rarely used ISO-639 codes, except for codes that are used by someone 
-        -->
+        <!-- Exclude rarely used ISO-639 codes, except for codes that are used by someone -->
         <exclude xpath="//ldml/.*/language\[@type='[a-z]{3}'\]" draft=".*"/>
         <include xpath="//ldml/.*/language\[@type='arn'\]" draft="false"/>
         <include xpath="//ldml/.*/language\[@type='art'\]" draft="false"/>
@@ -367,10 +384,7 @@
         <include xpath="//ldml/.*/language\[@type='und'\]" draft="false"/>
         <include xpath="//ldml/.*/language\[@type='wal'\]" draft="false"/>
         <include xpath="//ldml/.*/language\[@type='wen'\]" draft="false"/>
-
-            <!--
-         Exclude ISO-15924 script codes that don't contain a Unicode Script 
-        -->
+        <!-- Exclude ISO-15924 script codes that don't contain a Unicode Script -->
         <exclude xpath="//ldml/.*/script\[@type='Bali'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/script\[@type='Batk'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/script\[@type='Blis'\]" draft=".*"/>
@@ -421,6 +435,8 @@
         <exclude xpath="//ldml/.*/territory\[@type='[0-9]{3}'\]" draft=".*"/>
         <include xpath="//ldml/.*/territory\[@type='830'\]" draft="false"/>
         <include xpath="//ldml/.*/territory\[@type='833'\]" draft="false"/>
+        <!-- Don't filter that much for English -->
+        <include xpath="//ldml/.*" locales="en" draft="false"/> 
         <!-- Exclude unavailable variants -->
         <exclude xpath="//ldml/.*/variant\[@type='1901'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/variant\[@type='1996'\]" draft=".*"/>
@@ -433,12 +449,11 @@
         <exclude xpath="//ldml/.*/variant\[@type='ROZAJ'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/variant\[@type='SCOUSE'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/variant\[@type='XIANG'\]" draft=".*"/>
+        <!-- Exclude unusable data -->
+        <exclude xpath="//ldml/posix/messages/.*"/>
     </paths>
-    <overrideFallback fallback="se_NO no_NO">
-        <locales>
-            <include locales="sms_FI" draft="false"/> 
-        </locales>
-        <paths>
+    <overrideFallback>
+        <paths fallback="se_NO no_NO" locales="sms_FI" draft="false">
             <include xpath="//ldml/displayNames/.*"/>
             <include xpath="//ldml/dates/timeZoneNames/.*"/>            
         </paths>
