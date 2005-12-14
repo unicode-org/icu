@@ -78,7 +78,7 @@ public final class APIData {
     }
 
     private static final String[] stanames = { "draft", "stable", "deprecated", "obsolete" };
-    private static final String[] catnames = { "class", "field", "constructor", "method" };
+    private static final String[] catnames = { "classes", "fields", "constructors", "methods" };
 
     public void printStats(PrintWriter pw) {
         // classes, methods, fields

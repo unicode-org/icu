@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -417,6 +418,7 @@ public class BigNumberFormatTest extends TestFmwk {
         }
     }
 
+//#ifndef FOUNDATION
     public void TestBigDecimalRounding() {
         // jb 3657
         java.text.DecimalFormat jdkFormat=new java.text.DecimalFormat("###,###,###,##0");
@@ -445,4 +447,5 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
+//#endif
 }

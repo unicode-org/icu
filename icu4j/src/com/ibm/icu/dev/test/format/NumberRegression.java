@@ -1,3 +1,4 @@
+//##header
 /*****************************************************************************************
  *
  * Copyright (C) 1996-2005, International Business Machines
@@ -1107,6 +1108,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+//#ifndef FOUNDATION
     /**
      * BigDecimal numbers get their fractions truncated by NumberFormat.
      */
@@ -1122,7 +1124,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             //e.printStackTrace();
         }
     }
-    
+//#endif
+
     /**
      * DecimalFormat toPattern() doesn't quote special characters or handle
      * single quotes.

@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -724,10 +725,12 @@ public class RbnfTest extends TestFmwk {
         fmt.format(bigI, buf, null);
         logln("big int: " + buf.toString());
 
+//#ifndef FOUNDATION
         buf.setLength(0);
         BigDecimal bigD = new BigDecimal(bigI);
         fmt.format(bigD, buf, null);
         logln("big dec: " + buf.toString());
+//#endif
     }
 
   public void TestTrailingSemicolon() {

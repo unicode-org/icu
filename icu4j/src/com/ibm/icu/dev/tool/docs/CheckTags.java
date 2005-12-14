@@ -12,12 +12,12 @@
  * - standard tags: @since, @deprecated
  *
  * Syntax of tags:
- * @draft ICU X.X.X
- * @stable ICU X.X.X
- * @internal
- * @since  (don't use)
- * @obsolete ICU X.X.X
- * @deprecated to be removed in ICU X.X. [Use ...]
+ * '@draft ICU X.X.X'
+ * '@stable ICU X.X.X'
+ * '@internal'
+ * '@since  (don't use)'
+ * '@obsolete ICU X.X.X'
+ * '@deprecated to be removed in ICU X.X. [Use ...]'
  *
  * flags names of classes and their members that have no tags or incorrect syntax.
  *
