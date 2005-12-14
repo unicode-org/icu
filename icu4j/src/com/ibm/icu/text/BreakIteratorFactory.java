@@ -10,16 +10,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author Ram
@@ -120,7 +119,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                              String dictionaryName) {
 
         BreakIterator iter = null;
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
+        UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.BreakIteratorRules", where);
         if (bundle == null) {
             throw new MissingResourceException("No ICU Data", "BreakIteratorRules", where.toString());
         }
