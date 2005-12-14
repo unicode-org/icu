@@ -1,4 +1,4 @@
-//##header 1132615047000 
+//##header
 /* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
 package com.ibm.icu.dev.test.bigdec;

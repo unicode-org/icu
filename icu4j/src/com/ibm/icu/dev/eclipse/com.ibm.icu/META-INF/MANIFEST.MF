@@ -20,4 +20,3 @@ Bundle-ClassPath: icu4j.jar,
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,
  J2SE-1.3
-Require-Bundle: org.eclipse.icu

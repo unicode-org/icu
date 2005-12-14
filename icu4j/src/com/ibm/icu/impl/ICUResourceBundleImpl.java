@@ -1,4 +1,4 @@
-//##header 1132616027000 
+//##header
 /*
  ******************************************************************************
  * Copyright (C) 2004-2005, International Business Machines Corporation and   *
