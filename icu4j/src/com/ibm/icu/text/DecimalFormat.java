@@ -7,19 +7,20 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.impl.UCharacterProperty;
-import java.text.ParsePosition;
-import java.text.FieldPosition;
-import java.text.ChoiceFormat;
-import java.math.BigInteger;
-import java.util.Locale;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+import java.text.ChoiceFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.ULocale;
 
 /**
  * <code>DecimalFormat</code> is a concrete subclass of
@@ -792,19 +793,19 @@ public class DecimalFormat extends NumberFormat {
     	// do the absolute cases first
     	
     	switch (mode) {
-    	case java.math.BigDecimal.ROUND_CEILING:
+    	case BigDecimal.ROUND_CEILING:
     		div = (isNegative ? Math.floor(div + epsilon) : Math.ceil(div - epsilon));
     		break;
-    	case java.math.BigDecimal.ROUND_FLOOR:
+    	case BigDecimal.ROUND_FLOOR:
     		div = (isNegative ? Math.ceil(div - epsilon) : Math.floor(div + epsilon));
     		break;
-    	case java.math.BigDecimal.ROUND_DOWN:
+    	case BigDecimal.ROUND_DOWN:
     		div = (Math.floor(div + epsilon));
     		break;
-    	case java.math.BigDecimal.ROUND_UP:
+    	case BigDecimal.ROUND_UP:
     		div = (Math.ceil(div - epsilon));
     		break;
-    	case java.math.BigDecimal.ROUND_UNNECESSARY:
+    	case BigDecimal.ROUND_UNNECESSARY:
     		if (div != Math.floor(div)) {
     			throw new ArithmeticException("Rounding necessary");
     		}
@@ -829,7 +830,7 @@ public class DecimalFormat extends NumberFormat {
 	    	// However, it didn't work in all cases. Am trying instead using an epsilon value.
 	    	
 	    	switch (mode) {
-	    	case java.math.BigDecimal.ROUND_HALF_EVEN:
+	    	case BigDecimal.ROUND_HALF_EVEN:
 	    		// We should be able to just return Math.rint(a), but this
 	    		// doesn't work in some VMs.
 	    		// if one is smaller than the other, take the corresponding side
@@ -842,10 +843,10 @@ public class DecimalFormat extends NumberFormat {
 	    			div = (testFloor == Math.floor(testFloor)) ? floor : ceil;
 	    		}
 	    		break;
-	    	case java.math.BigDecimal.ROUND_HALF_DOWN:
+	    	case BigDecimal.ROUND_HALF_DOWN:
 	    		div = ((floordiff <= ceildiff + epsilon) ? floor : ceil);
 	    		break;
-	    	case java.math.BigDecimal.ROUND_HALF_UP:
+	    	case BigDecimal.ROUND_HALF_UP:
 	    		div = ((ceildiff <= floordiff + epsilon) ? ceil : floor);
 	    		break;
 	    	default:
@@ -2285,19 +2286,37 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public void setRoundingIncrement(java.math.BigDecimal newValue) {
+    	if (newValue == null) setRoundingIncrement((BigDecimal)null);
+    	else setRoundingIncrement(new com.ibm.icu.math.BigDecimal(newValue));
+    }
+//#endif
+    
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Set the rounding increment.  This method also controls whether
+     * rounding is enabled.
+     * @param newValue A positive rounding increment, or <code>null</code> or
+     * <code>BigDecimal(0.0)</code> to disable rounding.
+     * @exception IllegalArgumentException if <code>newValue</code> is < 0.0
+     * @see #getRoundingIncrement
+     * @see #getRoundingMode
+     * @see #setRoundingMode
+     * @stable ICU 2.0
+     */
+    public void setRoundingIncrement(BigDecimal newValue) {
         int i = newValue == null
-                ? 0 : newValue.compareTo(java.math.BigDecimal.valueOf(0));
+                ? 0 : newValue.compareTo(BigDecimal.ZERO);
         if (i < 0) {
             throw new IllegalArgumentException("Illegal rounding increment");
         }
         if (i == 0) {
             setInternalRoundingIncrement(null);
         } else {
-        	setInternalRoundingIncrement(new com.ibm.icu.math.BigDecimal(newValue));
+        	setInternalRoundingIncrement(newValue);
         }
         setRoundingDouble();
     }
-//#endif
+
 
 //#ifdef FOUNDATION
 //##   /**
@@ -2346,7 +2365,7 @@ public class DecimalFormat extends NumberFormat {
 	    roundingDouble = newValue;
 	    roundingDoubleReciprocal = 0.0d;
         if (newValue == 0.0d) {
-        	setRoundingIncrement(null);       	
+        	setRoundingIncrement((BigDecimal)null);       	
         } else {
 		    roundingDouble = newValue;
 		    if (roundingDouble < 1.0d) {
@@ -3749,9 +3768,9 @@ public class DecimalFormat extends NumberFormat {
                             roundingIncrementICU.movePointRight(-scale);
                     }
                     setRoundingDouble();
-                    roundingMode = java.math.BigDecimal.ROUND_HALF_EVEN;
+                    roundingMode = BigDecimal.ROUND_HALF_EVEN;
                 } else {
-                    setRoundingIncrement(null);
+                    setRoundingIncrement((BigDecimal)null);
                 }
             } else {
                 /*Bug 4212072
@@ -3813,7 +3832,7 @@ public class DecimalFormat extends NumberFormat {
             roundingDoubleReciprocal = 0.0d;			
 		} else {
 			roundingDouble = roundingIncrementICU.doubleValue();
-			setRoundingDoubleReciprocal(com.ibm.icu.math.BigDecimal.ONE.divide(roundingIncrementICU,java.math.BigDecimal.ROUND_HALF_EVEN).doubleValue());
+			setRoundingDoubleReciprocal(com.ibm.icu.math.BigDecimal.ONE.divide(roundingIncrementICU,BigDecimal.ROUND_HALF_EVEN).doubleValue());
 		}
 	}
 
@@ -4051,7 +4070,7 @@ public class DecimalFormat extends NumberFormat {
             exponentSignAlwaysShown = false;
             setInternalRoundingIncrement(null);
             setRoundingDouble();
-            roundingMode = java.math.BigDecimal.ROUND_HALF_EVEN;
+            roundingMode = BigDecimal.ROUND_HALF_EVEN;
             formatWidth = 0;
             pad = ' ';
             padPosition = PAD_BEFORE_PREFIX;
