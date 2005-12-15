@@ -22,13 +22,13 @@
     }
 
 #define DUMP_R(fun, var, times) \
-    printf("\n========= " #fun " =============\n"); \
+    {printf("\n========= " #fun " =============\n"); \
     for (int i=0; i<times; i++) { \
         const char * t = var.next();\
         fwrite(t,strlen(t),1,stdout); \
         printf("\n");   \
     }   \
-    printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+    printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");}
 
 
 
@@ -250,22 +250,25 @@ static UBool TestScanner(void){
     return pass;
 }
 
-UBool TestParser(){
-    struct {
-    UBool operator () (const char *const str, const int exp_error_offset = -1, const UBool dump = TRUE){
-        Parser par(str);
-        if (par.rules()){
-            if ( exp_error_offset == -1){
-                return TRUE;
-            }else {
-                DumpScanner(par.s,dump);
-                return FALSE;
-            }
+class TestParserT {
+public:
+UBool operator () (const char *const str, const int exp_error_offset = -1, const UBool dump = TRUE){
+    Parser par(str);
+    if (par.rules()){
+        if ( exp_error_offset == -1){
+            return TRUE;
         }else {
-            return DumpScanner(par.s, dump) == exp_error_offset;
+            DumpScanner(par.s,dump);
+            return FALSE;
         }
+    }else {
+        return DumpScanner(par.s, dump) == exp_error_offset;
     }
-    } test;
+}
+};
+
+UBool TestParser(){
+    TestParserT test;
 
     UBool pass = TRUE;
     pass = pass && test ("$s = ' ' ? 50%;");
@@ -423,8 +426,6 @@ void TestWbnf(void){
     //TestQuote();
     //TestBuffer();
     //TestWeightedRand();
-    //TestVariableNode();
-
 
     //CALL(TestScanner);
     //CALL(TestParser);
