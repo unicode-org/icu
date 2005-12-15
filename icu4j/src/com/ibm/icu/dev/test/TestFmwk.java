@@ -69,7 +69,7 @@ public class TestFmwk extends AbstractTestLog {
         }
         
         String msg = ex.getMessage();
-        System.err.println("TF handleException msg: " + msg);
+        //System.err.println("TF handleException msg: " + msg);
         if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError) {
             if (params.warnings || params.nodata) {
                 warnln(msg);
@@ -297,7 +297,7 @@ public class TestFmwk extends AbstractTestLog {
                 TimeZone.setDefault(defaultTimeZone);
 
                 if (!validate()) {
-                    params.writeTestInvalid(name);
+                    params.writeTestInvalid(name, params.nodata);
                 } else {
                     params.push(name, getDescription(), f == 1);
                     execute();
@@ -1384,7 +1384,7 @@ public class TestFmwk extends AbstractTestLog {
             suppressIndent = !newln;
         }
 
-        private void writeTestInvalid(String name) {
+        private void writeTestInvalid(String name, boolean nodata) {
             //              msg("***" + name + "*** not found or not valid.", WARN, true,
             // true);
             if (inDocMode()) {
@@ -1397,8 +1397,10 @@ public class TestFmwk extends AbstractTestLog {
                     needLineFeed = false;
                 }
             } else {
-                msg("Test " + name + " not found or not valid.", WARN, true,
+                if(!nodata){
+                    msg("Test " + name + " not found or not valid.", WARN, true,
                         true);
+                }
             }
         }
 
