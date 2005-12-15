@@ -1236,7 +1236,7 @@ FAIL:
         }
         return FALSE;
     }
-
+public:
     UBool rules(){
         symbols.reset();
         token = s.getNextToken();
