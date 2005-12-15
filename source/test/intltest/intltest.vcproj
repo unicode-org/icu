@@ -296,6 +296,15 @@
 			<File
 				RelativePath=".\ucaconf.h">
 			</File>
+			<File
+				RelativePath=".\wbnf.cpp">
+			</File>
+			<File
+				RelativePath=".\wbnf.h">
+			</File>
+			<File
+				RelativePath=".\wbnftest.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="collections"
