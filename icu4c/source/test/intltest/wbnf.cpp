@@ -934,6 +934,9 @@ public:
 };//class Scanner
 
 class Parser{
+friend UBool TestParser();
+friend class TestParserT;
+friend class LanguageGenerator_impl;
 private:
     Scanner s;
     TokenType & token;
@@ -1250,8 +1253,6 @@ public:
         }
     }
 
-friend UBool TestParser();
-friend class LanguageGenerator_impl;
 public:
     SymbolTable symbols;
 
