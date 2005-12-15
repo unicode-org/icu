@@ -582,7 +582,21 @@
             </classpath>
         </java>
     </target>
-
+    
+    <target name="exhaustiveCheck" depends="tests, jar, deleteCore" description="run standard icu4j test suite in exhaustive mode">
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <arg value="-n"/>
+            <arg value="-e10"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="icu4j.jar"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
+    
     <target name="secure" depends="jarTests" description="builds icu4j.jar and icu4jtests.jar"/>
 
     <target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
