@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    AuxExemplarCharacters{"[]"}
     Currencies{
         EUR{
             "€",
@@ -264,12 +263,6 @@ root{
                         "12",
                     }
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
         hebrew{
