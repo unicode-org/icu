@@ -572,4 +572,28 @@ public class ChineseTest extends CalendarTest {
         }
         logln(locInd.toString());
     }
+
+    public void TestInitWithCurrentTime() {
+        // jb4555
+        // if the chinese calendar current millis isn't called, the default year is wrong.
+        // this test is assuming the 'year' is the current cycle
+        // so when we cross a cycle boundary, the target will need to change
+        // that shouldn't be for awhile yet... 
+
+        ChineseCalendar cc = new ChineseCalendar();
+        cc.set(Calendar.YEAR, 22);
+        cc.set(Calendar.MONTH, 0);
+        cc.set(Calendar.DATE, 19);
+        cc.set(Calendar.HOUR_OF_DAY, 0);
+        cc.set(Calendar.MINUTE, 0);
+        cc.set(Calendar.SECOND, 0);
+        cc.set(Calendar.MILLISECOND, 0);
+
+        cc.add(Calendar.DATE, 1);
+ 
+        Date target = new Date(105, Calendar.FEBRUARY, 28);
+        Date result = cc.getTime();
+
+        assertEquals("chinese and gregorian date should match", target, result);
+    }
 }

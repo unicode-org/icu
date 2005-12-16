@@ -138,6 +138,7 @@ public class ChineseCalendar extends Calendar {
      */
     public ChineseCalendar() {
         super();
+        //        setTimeInMillis(System.currentTimeMillis());
     }
 
     /**
@@ -148,6 +149,7 @@ public class ChineseCalendar extends Calendar {
      */
     public ChineseCalendar(TimeZone zone, Locale locale) {
         super(zone, locale);
+        setTimeInMillis(System.currentTimeMillis());
     }
 
     /**
@@ -159,6 +161,7 @@ public class ChineseCalendar extends Calendar {
      */
     public ChineseCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
+        setTimeInMillis(System.currentTimeMillis());
     }
 
     //------------------------------------------------------------------
