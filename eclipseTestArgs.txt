@@ -1,0 +1,13 @@
+# Copyright (C) 2005, International Business Machines Corporation and
+# others. All Rights Reserved.
+src/com/ibm/icu/dev/test/bigdec/DiagBigDecimal.java
+src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java
+src/com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java
+src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java
+src/com/ibm/icu/dev/test/format/NumberFormatTest.java
+src/com/ibm/icu/dev/test/format/NumberRegression.java
+src/com/ibm/icu/dev/test/format/RbnfTest.java
+src/com/ibm/icu/dev/test/util/ICUResourceBundleTest.java
+src/com/ibm/icu/dev/test/util/UtilityTest.java
+src/com/ibm/icu/dev/test/TestAll.java
+
