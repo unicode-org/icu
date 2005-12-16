@@ -138,7 +138,7 @@ public class ChineseCalendar extends Calendar {
      */
     public ChineseCalendar() {
         super();
-        //        setTimeInMillis(System.currentTimeMillis());
+        setTimeInMillis(System.currentTimeMillis());
     }
 
     /**
