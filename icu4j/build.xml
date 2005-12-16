@@ -1284,8 +1284,22 @@
             basedir="${eclipse.dir}"
             includes="com.ibm.icu.eclipse/**/*"/>
     </target>
-
+    
+    <target name="eclipseCheck" depends="eclipseCorePkg, eclipseTestPkg" description="run eclipse variant of icu4j test suite">
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${eclipse.dir}/com.ibm.icu/${jar.file}"/>
+                <pathelement location="${eclipse.dir}/com.ibm.icu.tests/${testjar.file}"/>
+                <pathelement location="clover.jar"/>
+            </classpath>
+        </java>
+    </target>
     <target name="eclipsePkgs" 
         depends="eclipseCorePkg,eclipseTestPkg,eclipseInterfacePkg"
         description="build all eclipse packages"/>
+    <!-- a noop target for build system! -->
+    <target name="eclipseCorePkgTests" />
+
 </project>
