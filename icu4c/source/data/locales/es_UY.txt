@@ -9,7 +9,7 @@
 es_UY{
     Currencies{
         UYU{
-            "UYU",
+            "$",
             "peso uruguayo",
         }
     }

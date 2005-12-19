@@ -10,11 +10,11 @@ om_ET{
     Currencies{
         ETB{
             "$",
-            "ETB",
+            "Itoophiyaa Birrii",
         }
         USD{
             "US$",
-            "USD",
+            "US Dollar",
         }
     }
     NumberPatterns{

@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/eo.xml
  */
 eo{
-    AuxExemplarCharacters{"[qw-y]"}
     Countries{
         AD{"Andoro"}
         AE{"Unuiĝintaj Arabaj Emirlandos"}
@@ -476,6 +475,12 @@ eo{
                         "decembro",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

@@ -22,14 +22,4 @@ sr_Cyrl{
         }
     }
     Version{"1.15"}
-    calendar{
-        gregorian{
-            eras{
-                wide{
-                    "Пре Христа",
-                    "После Христа",
-                }
-            }
-        }
-    }
 }

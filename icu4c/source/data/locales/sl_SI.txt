@@ -14,10 +14,4 @@ sl_SI{
         "#E0",
     }
     Version{"1.35"}
-    delimiters{
-        alternateQuotationEnd{"“"}
-        alternateQuotationStart{"„"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
-    }
 }

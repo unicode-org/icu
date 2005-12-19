@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    AuxExemplarCharacters{"[qwxy]"}
     Countries{
         AD{"Andora"}
         AE{"Apvienotie Arābu Emirāti"}
@@ -383,6 +382,12 @@ lv{
                         "decembris",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    AuxExemplarCharacters{"[qvx]"}
     Countries{
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
@@ -284,10 +283,6 @@ pl{
             "AOA",
             "kwanza angolańska",
         }
-        AOK{
-            "AOK",
-            "kwanza angolańska (1977-1990)",
-        }
         AON{
             "AON",
             "nowa kwanza angolańska (1990-2000)",
@@ -295,14 +290,6 @@ pl{
         AOR{
             "AOR",
             "kwanza angolańska Reajustado (1995-1999)",
-        }
-        ARA{
-            "ARA",
-            "austral argentyński",
-        }
-        ARP{
-            "ARP",
-            "peso argentyńskie (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -324,10 +311,6 @@ pl{
             "AZM",
             "manat azerbejdżański",
         }
-        BAD{
-            "BAD",
-            "dinar Bośni i Hercegowiny",
-        }
         BAM{
             "KM",
             "marka konwertybilna Bośni i Hercegowiny",
@@ -340,17 +323,17 @@ pl{
             "Tk",
             "taka bengalska",
         }
-        BEC{
-            "BEC",
-            "frank belgijski (zamienny)",
-        }
         BEF{
             "BF",
             "frank belgijski",
         }
-        BEL{
-            "BEL",
-            "frank belgijski (finansowy)",
+        BGL{
+            "lev",
+            "lew bułgarski",
+        }
+        BGN{
+            "BGN",
+            "nowy lew bułgarski",
         }
         BHD{
             "BD",
@@ -372,37 +355,9 @@ pl{
             "Bs",
             "boliviano",
         }
-        BOP{
-            "BOP",
-            "peso boliwijskie",
-        }
-        BOV{
-            "BOV",
-            "mvdol boliwijski",
-        }
-        BRB{
-            "BRB",
-            "cruzeiro novo brazylijskie (1967-1986)",
-        }
-        BRC{
-            "BRC",
-            "cruzado brazylijskie",
-        }
-        BRE{
-            "BRE",
-            "cruzeiro brazylijskie(1990-1993)",
-        }
         BRL{
             "R$",
             "real brazylijski",
-        }
-        BRN{
-            "BRN",
-            "cruzado brazylijskie",
-        }
-        BRR{
-            "BRR",
-            "cruzeiro brazylijskie",
         }
         BSD{
             "BSD",
@@ -411,10 +366,6 @@ pl{
         BTN{
             "Nu",
             "ngultrum  Bhutan",
-        }
-        BUK{
-            "BUK",
-            "kyat birmański",
         }
         BWP{
             "BWP",
@@ -460,10 +411,6 @@ pl{
             "C",
             "colon kostarykański",
         }
-        CSK{
-            "CSK",
-            "korona czechosłowacka",
-        }
         CUP{
             "CUP",
             "peso kubańskie",
@@ -479,10 +426,6 @@ pl{
         CZK{
             "CZK",
             "korona czeska",
-        }
-        DDM{
-            "DDM",
-            "wschodnia marka wschodnioniemiecka",
         }
         DEM{
             "DEM",
@@ -552,10 +495,6 @@ pl{
             "£",
             "funt szterling",
         }
-        GEK{
-            "GEK",
-            "Larit gruziński kupon",
-        }
         GEL{
             "lari",
             "lari gruzińskie",
@@ -576,14 +515,6 @@ pl{
             "GF",
             "frank gwinejski",
         }
-        GNS{
-            "GNS",
-            "syli gwinejskie",
-        }
-        GQE{
-            "GQE",
-            "ekwele gwinejskie Gwinei Równikowej",
-        }
         GRD{
             "GRD",
             "drachma grecka",
@@ -591,10 +522,6 @@ pl{
         GTQ{
             "Q",
             "quetzal gwatemalski",
-        }
-        GWE{
-            "GWE",
-            "escudo Gwinea Portugalska",
         }
         GWP{
             "GWP",
@@ -611,10 +538,6 @@ pl{
         HNL{
             "L",
             "lempira Hondurasu",
-        }
-        HRD{
-            "HRD",
-            "dinar chorwacki",
         }
         HRK{
             "HRK",
@@ -635,10 +558,6 @@ pl{
         IEP{
             "IR£",
             "funt irlandzki",
-        }
-        ILP{
-            "ILP",
-            "funt izraelski",
         }
         ILS{
             "ILS",
@@ -736,10 +655,6 @@ pl{
             "LTL",
             "lit litewski",
         }
-        LTT{
-            "LTT",
-            "talon litewski",
-        }
         LUF{
             "LUF",
             "frank luksemburski",
@@ -748,10 +663,6 @@ pl{
             "LVL",
             "łat łotewski",
         }
-        LVR{
-            "LVR",
-            "rubel łotewski",
-        }
         LYD{
             "LD",
             "dinar libijski",
@@ -759,10 +670,6 @@ pl{
         MAD{
             "MAD",
             "dirham marokański",
-        }
-        MAF{
-            "MAF",
-            "frank marokański",
         }
         MDL{
             "MDL",
@@ -779,10 +686,6 @@ pl{
         MKD{
             "MDen",
             "denar macedoński",
-        }
-        MLF{
-            "MLF",
-            "frank malijski",
         }
         MMK{
             "MMK",
@@ -804,10 +707,6 @@ pl{
             "Lm",
             "lira maltańska",
         }
-        MTP{
-            "MTP",
-            "funt maltański",
-        }
         MUR{
             "MUR",
             "rupia Mauritius",
@@ -823,10 +722,6 @@ pl{
         MXN{
             "MEX$",
             "peso meksykańskie",
-        }
-        MXP{
-            "MXP",
-            "peso srebrne meksykańskie (1861-1992)",
         }
         MYR{
             "RM",
@@ -847,10 +742,6 @@ pl{
         NGN{
             "NGN",
             "naira nigeryjska",
-        }
-        NIC{
-            "NIC",
-            "cordoba nikaraguańska",
         }
         NIO{
             "NIO",
@@ -880,17 +771,9 @@ pl{
             "PAB",
             "balboa panamski",
         }
-        PEI{
-            "PEI",
-            "inti peruwiański",
-        }
         PEN{
             "PEN",
             "nowy sol peruwiański",
-        }
-        PES{
-            "PES",
-            "sol peruwiański",
         }
         PGK{
             "PGK",
@@ -907,10 +790,6 @@ pl{
         PLN{
             "zł",
             "złoty polski",
-        }
-        PLZ{
-            "PLZ",
-            "złoty polski (1950-1995)",
         }
         PTE{
             "PTE",
@@ -996,10 +875,6 @@ pl{
             "Db",
             "dobra Wysp Świętego Tomasza i Książęcej",
         }
-        SUR{
-            "SUR",
-            "rubel radziecki",
-        }
         SVC{
             "SVC",
             "colon salwadorski",
@@ -1044,6 +919,10 @@ pl{
             "TL",
             "lir turecki",
         }
+        TRY{
+            "TRY",
+            "nowa lira turecka",
+        }
         TTD{
             "TT$",
             "dolar Trynidadu i Tobago",
@@ -1060,14 +939,6 @@ pl{
             "UAH",
             "hrywna ukraińska",
         }
-        UAK{
-            "UAK",
-            "karbowaniec ukraiński",
-        }
-        UGS{
-            "UGS",
-            "szyling ugandyjski (1966-1987)",
-        }
         UGX{
             "USh",
             "szyling ugandyjski",
@@ -1075,10 +946,6 @@ pl{
         USD{
             "US$",
             "dolar amerykański ",
-        }
-        UYP{
-            "UYP",
-            "peso urugwajskie (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -1108,25 +975,9 @@ pl{
             "XAF",
             "frank CFA BEAC",
         }
-        XAU{
-            "XAU",
-            "złoto",
-        }
         XCD{
             "EC$",
             "dolar wschodniokaraibski",
-        }
-        XDR{
-            "XDR",
-            "specjalne prawa ciągnienia",
-        }
-        XFO{
-            "XFO",
-            "frank złoty francuski",
-        }
-        XFU{
-            "XFU",
-            "UIC-frank francuski",
         }
         XOF{
             "XOF",
@@ -1136,29 +987,13 @@ pl{
             "CFPF",
             "frank CFP",
         }
-        YDD{
-            "YDD",
-            "dinar jemeński",
-        }
         YER{
             "YRl",
             "rial jemeński",
         }
-        YUD{
-            "YUD",
-            "dinar jugosławiański wymienny",
-        }
         YUM{
             "YUM",
             "nowy dinar jugosławiański",
-        }
-        YUN{
-            "YUN",
-            "dinar jugosławiański wymienny",
-        }
-        ZAL{
-            "ZAL",
-            "rand południowoafrykański (finansowy)",
         }
         ZAR{
             "R",
@@ -1171,10 +1006,6 @@ pl{
         ZRN{
             "ZRN",
             "nowy zair zairski",
-        }
-        ZRZ{
-            "ZRZ",
-            "zair zairski",
         }
         ZWD{
             "Z$",
@@ -1441,6 +1272,12 @@ pl{
                         "grudzień",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

@@ -17,6 +17,20 @@ es_MX{
             "Dólar Americano",
         }
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Version{"1.31"}
     calendar{
         gregorian{

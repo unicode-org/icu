@@ -10,11 +10,11 @@ so_DJ{
     Currencies{
         DJF{
             "$",
-            "DJF",
+            "Jabuuti Faran",
         }
         USD{
             "US$",
-            "USD",
+            "US Dollar",
         }
     }
     NumberPatterns{

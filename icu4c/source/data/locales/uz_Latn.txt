@@ -25,14 +25,6 @@ uz_Latn{
         UZ{"Oʿzbekiston"}
     }
     Currencies{
-        BRL{
-            "BRL",
-            "Brazil reali",
-        }
-        CNY{
-            "CNY",
-            "Xitoy yuani",
-        }
         EUR{
             "€",
             "Evro",
@@ -48,10 +40,6 @@ uz_Latn{
         JPY{
             "¥",
             "Yapon yenasi",
-        }
-        RUB{
-            "RUB",
-            "Rus rubli",
         }
         USD{
             "$",
@@ -99,13 +87,13 @@ uz_Latn{
                         "Shan",
                     }
                     wide{
-                        "yakshanba",
-                        "dushanba",
-                        "seshanba",
-                        "chorshanba",
-                        "payshanba",
-                        "juma",
-                        "shanba",
+                        "Yakshanba",
+                        "Dushanba",
+                        "Seshanba",
+                        "Chorshanba",
+                        "Payshanba",
+                        "Juma",
+                        "Shanba",
                     }
                 }
                 stand-alone{
@@ -137,18 +125,18 @@ uz_Latn{
                         "Dek",
                     }
                     wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiul-avval",
-                        "Rabiul-oxir",
-                        "Jumodiul-ulo",
-                        "Jumodiul-uxro",
-                        "Rajab",
-                        "Shaʿbon",
-                        "Ramazon",
-                        "Shavvol",
-                        "Zil-qaʿda",
-                        "Zil-hijja",
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "Iyun",
+                        "Iyul",
+                        "Avgust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
                     }
                 }
                 stand-alone{

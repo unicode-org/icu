@@ -13,6 +13,20 @@ es_PR{
             "Dólar Americano",
         }
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Version{"1.32"}
     calendar{
         gregorian{
