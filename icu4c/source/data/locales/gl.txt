@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
-    AuxExemplarCharacters{"[jkwy]"}
     Countries{
         ES{"España"}
     }

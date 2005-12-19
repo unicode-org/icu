@@ -10,7 +10,7 @@ am_ET{
     Currencies{
         USD{
             "US$",
-            "USD",
+            "የአሜሪካን ዶላር",
         }
     }
     NumberPatterns{

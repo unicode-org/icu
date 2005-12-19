@@ -10,35 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    AuxExemplarCharacters{"[qwxy]"}
     Countries{
-        001{"Svet"}
-        002{"Afrika"}
-        005{"Južna Amerika"}
-        009{"Oceanija"}
-        011{"Zahodna Afrika"}
-        013{"Centralna Amerika"}
-        014{"Vzhodna Afrika"}
-        015{"Severna Afrika"}
-        017{"Centralna Afrika"}
-        018{"Južna Afrika"}
-        019{"Amerike"}
-        021{"Severna Amerika"}
-        029{"Karibi"}
-        030{"Vzhodna Azija"}
-        035{"Jugovzhodna Azija"}
-        039{"Južna Evropa"}
-        053{"Avstralija i Nova Zelandija"}
-        054{"Melanezija"}
-        057{"Micronezija"}
-        061{"Polinezija"}
-        062{"Južno-centralna Azija"}
-        142{"Azija"}
-        145{"Zahodna Azija"}
-        150{"Evropa"}
-        151{"Vzhodna Evropa"}
-        154{"Severna Evropa"}
-        155{"Zapadna Evropa"}
         830{"Kanalski otoki"}
         833{"Otok Man"}
         AD{"Andora"}
@@ -222,7 +194,6 @@ sl{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
-        QO{"Ostala oceanija"}
         RE{"Reunion"}
         RO{"Romunija"}
         RU{"Ruska federacija"}
@@ -400,6 +371,10 @@ sl{
     Version{"1.55"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "dop.",
+                "pop.",
+            }
             DateTimeElements:intvector{
                 2,
                 1,
@@ -501,6 +476,12 @@ sl{
                         "d",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

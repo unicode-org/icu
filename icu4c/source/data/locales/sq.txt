@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/sq.xml
  */
 sq{
-    AuxExemplarCharacters{"[w]"}
     Countries{
         AD{"Andorrë"}
         AE{"Emiratet Arabe te Bashkuara"}
@@ -350,6 +349,12 @@ sq{
                         "D",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

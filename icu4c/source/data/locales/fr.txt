@@ -11,35 +11,6 @@
  */
 fr{
     Countries{
-        001{"Monde"}
-        002{"Afrique"}
-        003{"Le continent de l'Amérique du Nord"}
-        005{"Amérique du Sud"}
-        009{"Océanie"}
-        011{"Afrique occidentale"}
-        013{"Amérique centrale"}
-        014{"Afrique orientale"}
-        015{"Afrique septentrionale"}
-        017{"Afrique centrale"}
-        018{"Afrique australe"}
-        019{"Amériques"}
-        021{"Amérique du Nord"}
-        029{"Caraïbes"}
-        030{"Asie orientale"}
-        035{"Asie du Sud-Est"}
-        039{"Europe méridionale"}
-        053{"Australie et Nouvelle-Zélande"}
-        054{"Mélanésie"}
-        057{"Micronésie"}
-        061{"Polynésie"}
-        062{"Asie centrale et du Sud"}
-        142{"Asie"}
-        145{"Asie occidentale"}
-        150{"Europe"}
-        151{"Europe orientale"}
-        154{"Europe septentrionale"}
-        155{"Europe occidentale"}
-        419{"Amérique latine et Caraïbes"}
         830{"Îles Anglo-Normandes"}
         833{"Île de Man"}
         AD{"Andorre"}
@@ -316,10 +287,6 @@ fr{
             "AOA",
             "kwanza angolais",
         }
-        AOK{
-            "AOK",
-            "kwanza angolais (1977-1990)",
-        }
         AON{
             "AON",
             "nouveau kwanza angolais (1990-2000)",
@@ -327,14 +294,6 @@ fr{
         AOR{
             "AOR",
             "kwanza angolais réajusté (1995-1999)",
-        }
-        ARA{
-            "ARA",
-            "austral",
-        }
-        ARP{
-            "ARP",
-            "peso argentin (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -356,10 +315,6 @@ fr{
             "AZM",
             "Azerbaijanian Manat",
         }
-        BAD{
-            "BAD",
-            "dinar de Bosnie-Herzegovine",
-        }
         BAM{
             "KM",
             "mark convertible de Bosnie-Herzegovine",
@@ -372,17 +327,9 @@ fr{
             "BDT",
             "taka",
         }
-        BEC{
-            "BEC",
-            "franc belge (convertible)",
-        }
         BEF{
             "FB",
             "franc belge",
-        }
-        BEL{
-            "BEL",
-            "franc belge (financier)",
         }
         BGL{
             "BGL",
@@ -412,37 +359,9 @@ fr{
             "Bs",
             "boliviano",
         }
-        BOP{
-            "BOP",
-            "peso bolivien",
-        }
-        BOV{
-            "BOV",
-            "Bolivian Mvdol",
-        }
-        BRB{
-            "BRB",
-            "nouveau cruzeiro (1967-1986)",
-        }
-        BRC{
-            "BRC",
-            "cruzeiro",
-        }
-        BRE{
-            "BRE",
-            "cruzeiro (1990-1993)",
-        }
         BRL{
             "R$",
             "réal",
-        }
-        BRN{
-            "BRN",
-            "nouveau cruzado",
-        }
-        BRR{
-            "BRR",
-            "cruzeiro",
         }
         BSD{
             "BSD",
@@ -451,10 +370,6 @@ fr{
         BTN{
             "Nu",
             "ngultrum",
-        }
-        BUK{
-            "BUK",
-            "kyat",
         }
         BWP{
             "BWP",
@@ -484,10 +399,6 @@ fr{
             "sFr.",
             "franc suisse",
         }
-        CLF{
-            "CLF",
-            "Chilean Unidades de Fomento",
-        }
         CLP{
             "CLP",
             "peso chilien",
@@ -504,10 +415,6 @@ fr{
             "CRC",
             "colon",
         }
-        CSK{
-            "CSK",
-            "couronne tchèque",
-        }
         CUP{
             "CUP",
             "peso cubain",
@@ -523,10 +430,6 @@ fr{
         CZK{
             "CZK",
             "couronne tchèque",
-        }
-        DDM{
-            "DDM",
-            "mark est-allemand",
         }
         DEM{
             "DEM",
@@ -551,10 +454,6 @@ fr{
         ECS{
             "ECS",
             "sucre",
-        }
-        ECV{
-            "ECV",
-            "unité de valeur constante équatoriale (UVC)",
         }
         EEK{
             "EEK",
@@ -600,10 +499,6 @@ fr{
             "£",
             "livre sterling",
         }
-        GEK{
-            "GEK",
-            "Georgian Kupon Larit",
-        }
         GEL{
             "lari",
             "lari",
@@ -624,14 +519,6 @@ fr{
             "GF",
             "franc guinéen",
         }
-        GNS{
-            "GNS",
-            "syli",
-        }
-        GQE{
-            "GQE",
-            "ekwélé",
-        }
         GRD{
             "GRD",
             "drachme",
@@ -639,10 +526,6 @@ fr{
         GTQ{
             "GTQ",
             "quetzal",
-        }
-        GWE{
-            "GWE",
-            "Escudo de Guinée Portugaise",
         }
         GWP{
             "GWP",
@@ -659,10 +542,6 @@ fr{
         HNL{
             "HNL",
             "lempira",
-        }
-        HRD{
-            "HRD",
-            "dinar croate",
         }
         HRK{
             "HRK",
@@ -683,10 +562,6 @@ fr{
         IEP{
             "IEP",
             "livre irlandaise",
-        }
-        ILP{
-            "ILP",
-            "livre israélienne",
         }
         ILS{
             "ILS",
@@ -784,10 +659,6 @@ fr{
             "LTL",
             "Lita de Lithuanian",
         }
-        LTT{
-            "LTT",
-            "Talonas de Lithuanie",
-        }
         LUF{
             "LUF",
             "franc luxembourgeois",
@@ -796,10 +667,6 @@ fr{
             "LVL",
             "lats letton",
         }
-        LVR{
-            "LVR",
-            "rouble letton",
-        }
         LYD{
             "LD",
             "dinar Iibyen",
@@ -807,10 +674,6 @@ fr{
         MAD{
             "MAD",
             "dirham marocain",
-        }
-        MAF{
-            "MAF",
-            "franc marocain",
         }
         MDL{
             "MDL",
@@ -827,10 +690,6 @@ fr{
         MKD{
             "MDen",
             "dinar macédonien",
-        }
-        MLF{
-            "MLF",
-            "franc malien",
         }
         MMK{
             "MMK",
@@ -852,10 +711,6 @@ fr{
             "Lm",
             "lire maltaise",
         }
-        MTP{
-            "MTP",
-            "livre maltaise",
-        }
         MUR{
             "MUR",
             "roupie de l’île Maurice",
@@ -867,14 +722,6 @@ fr{
         MWK{
             "MWK",
             "kwacha",
-        }
-        MXP{
-            "MXP",
-            "peso d’argent mexicain (1861-1992)",
-        }
-        MXV{
-            "MXV",
-            "unité de conversion mexicaine (UDI)",
         }
         MYR{
             "MYR",
@@ -895,10 +742,6 @@ fr{
         NGN{
             "NGN",
             "naira",
-        }
-        NIC{
-            "NIC",
-            "cordoba",
         }
         NIO{
             "NIO",
@@ -928,17 +771,9 @@ fr{
             "PAB",
             "balboa",
         }
-        PEI{
-            "PEI",
-            "Inti péruvien",
-        }
         PEN{
             "PEN",
             "nouveau sol péruvien",
-        }
-        PES{
-            "PES",
-            "sol péruvien",
         }
         PGK{
             "PGK",
@@ -951,10 +786,6 @@ fr{
         PKR{
             "PKR",
             "roupie du Pakistan",
-        }
-        PLZ{
-            "PLZ",
-            "zloty (1950-1995)",
         }
         PTE{
             "PTE",
@@ -1040,10 +871,6 @@ fr{
             "STD",
             "dobra",
         }
-        SUR{
-            "SUR",
-            "rouble de C.E.I.",
-        }
         SVC{
             "SVC",
             "colon",
@@ -1104,14 +931,6 @@ fr{
             "UAH",
             "hryvnia",
         }
-        UAK{
-            "UAK",
-            "karbovanetz",
-        }
-        UGS{
-            "UGS",
-            "shilling ougandais (1966-1987)",
-        }
         UGX{
             "U Sh",
             "shilling ougandais",
@@ -1119,18 +938,6 @@ fr{
         USD{
             "$",
             "dollar des États-Unis",
-        }
-        USN{
-            "USN",
-            "dollar des Etats-Unis (jour suivant)",
-        }
-        USS{
-            "USS",
-            "dollar des Etats-Unis (jour même)",
-        }
-        UYP{
-            "UYP",
-            "peso uruguayen (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -1160,41 +967,9 @@ fr{
             "XAF",
             "franc CFA (BEAC)",
         }
-        XAU{
-            "XAU",
-            "Or",
-        }
-        XBA{
-            "XBA",
-            "unité composite européenne",
-        }
-        XBB{
-            "XBB",
-            "unité monétaire européenne",
-        }
-        XBC{
-            "XBC",
-            "unité de compte européenne (XBC)",
-        }
-        XBD{
-            "XBD",
-            "unité de compte européenne (XBD)",
-        }
         XCD{
             "XCD",
             "dollar des Caraïbes",
-        }
-        XEU{
-            "XEU",
-            "unité de compte européenne (ECU)",
-        }
-        XFO{
-            "XFO",
-            "franc or",
-        }
-        XFU{
-            "XFU",
-            "franc UIC",
         }
         XOF{
             "XOF",
@@ -1204,29 +979,13 @@ fr{
             "XPF",
             "franc CFP",
         }
-        YDD{
-            "YDD",
-            "dinar du Yémen",
-        }
         YER{
             "YER",
             "riyal du Yémen",
         }
-        YUD{
-            "YUD",
-            "nouveau dinar yougoslave",
-        }
         YUM{
             "YUM",
             "dinar yougoslave Noviy",
-        }
-        YUN{
-            "YUN",
-            "dinar yougoslave convertible",
-        }
-        ZAL{
-            "ZAL",
-            "rand sud-africain (financier)",
         }
         ZAR{
             "ZAR",
@@ -1239,10 +998,6 @@ fr{
         ZRN{
             "ZRN",
             "nouveau zaïre",
-        }
-        ZRZ{
-            "ZRZ",
-            "zaïre",
         }
         ZWD{
             "Z$",
@@ -1258,96 +1013,47 @@ fr{
     Languages{
         aa{"afar"}
         ab{"abkhaze"}
-        ace{"aceh"}
-        ach{"acoli"}
-        ada{"adangme"}
-        ady{"adygué"}
         ae{"avestique"}
         af{"afrikaans"}
-        afa{"afro-asiatique (autre)"}
-        afh{"afrihili"}
         ak{"akan"}
-        akk{"akkadien"}
-        ale{"aléoute"}
-        alg{"langues algiques"}
         am{"amharique"}
         an{"aragonais"}
-        ang{"vieil anglais (ca.450-1100)"}
-        apa{"langues apaches"}
         ar{"arabe"}
-        arc{"araméen"}
-        arp{"arapaho"}
         art{"artificielle (autre)"}
         as{"assamais"}
-        ast{"asturien"}
-        ath{"langues athapascanes"}
-        aus{"langues australiennes"}
         av{"avar"}
         ay{"aymara"}
         az{"azéri"}
         ba{"bachkir"}
-        bai{"langues bamilekes"}
-        bal{"baloutchi"}
-        ban{"Balinais"}
-        bas{"bassa"}
-        bat{"baltique (autre)"}
         be{"biélorusse"}
         ber{"berbère"}
         bg{"bulgare"}
         bh{"bihari"}
         bi{"bichlamar"}
-        bla{"pieds-noirs"}
         bm{"bambara"}
         bn{"bengali"}
-        bnt{"bantou"}
         bo{"tibétain"}
         br{"breton"}
         bs{"bosniaque"}
         byn{"blin"}
         ca{"catalan"}
-        cai{"indien d’Amérique Centrale (autre)"}
-        car{"caribe"}
-        cau{"langue caucasienne (autre)"}
         ce{"tchétchène"}
-        ceb{"cebuano"}
-        cel{"langue celtique (autre)"}
         ch{"chamorro"}
-        chb{"chibcha"}
-        chg{"jagataic"}
-        chk{"chuuk"}
-        chn{"jargon chinook"}
         chr{"cherokee"}
-        chy{"cheyenne"}
-        cmc{"langues chames"}
         co{"corse"}
-        cop{"copte"}
-        cpe{"pidgin anglais (autre)"}
-        cpf{"pidgin français (autre)"}
-        cpp{"pidgin portugais (autre)"}
         cr{"cree"}
-        crh{"turc de Crimée; tatar de Crimée"}
-        crp{"pidgins et langues créoles (autre)"}
         cs{"tchèque"}
-        csb{"cashubian"}
         cu{"slavon d’église"}
-        cus{"couchitiques (autre)"}
         cv{"tchouvache"}
         cy{"gallois"}
         da{"danois"}
         de{"allemand"}
-        den{"slave (athapascan)"}
-        doi{"dogra"}
-        dra{"langue dravidienne (autre)"}
         dsb{"bas-sorabe"}
-        dum{"néerlandais moyen (ca. 1050-1350)"}
         dv{"maldivien"}
         dz{"dzongkha"}
         ee{"éwé"}
-        egy{"égyptien (ancien)"}
         el{"grec"}
-        elx{"élamite"}
         en{"anglais"}
-        enm{"anglais moyen (1100-1500)"}
         eo{"espéranto"}
         es{"espagnol"}
         et{"estonien"}
@@ -1355,25 +1061,15 @@ fr{
         fa{"persan"}
         ff{"peul"}
         fi{"finnois"}
-        fiu{"langue finno-ougrienne (autre)"}
         fj{"fidjien"}
         fo{"féroïen"}
         fr{"français"}
-        frm{"français moyen (ca.1400-1600)"}
-        fro{"vieux français (842-ca.1400)"}
-        fur{"frioulan"}
         fy{"frison"}
         ga{"irlandais"}
         gd{"gaélique écossais"}
-        gem{"germanique (autre)"}
         gez{"guèze"}
-        gil{"gilbertais"}
         gl{"galicien"}
-        gmh{"allemand, moyen haut (ca. 1050-1500)"}
         gn{"guarani"}
-        goh{"allemand, vieux haut (ca. 750-1050)"}
-        got{"gotique"}
-        grc{"vieux grec (avant 1453)"}
         gu{"goudjrati"}
         gv{"manx"}
         ha{"haoussa"}
@@ -1393,47 +1089,30 @@ fr{
         ig{"igbo"}
         ii{"yi de Sichuan"}
         ik{"inupiaq"}
-        inc{"langue indo-aryenne (autre)"}
-        ine{"langue indo-européenne (autre)"}
-        inh{"ingouche"}
         io{"ido"}
-        ira{"iranien"}
-        iro{"langues iroquoiennes"}
         is{"islandais"}
         it{"italien"}
         iu{"inuktitut"}
         ja{"japonais"}
-        jpr{"judéo-persan"}
-        jrb{"judéo-arabe"}
         jv{"javanais"}
         ka{"géorgien"}
-        kab{"kabyle"}
-        kbd{"kabardine"}
         kg{"kongo"}
-        khi{"khoisan (autre)"}
-        kho{"khotanais"}
         ki{"kikuyu"}
         kj{"kuanyama"}
         kk{"kazakh"}
         kl{"groenlandais"}
         km{"khmer"}
-        kmb{"kiMboundou"}
         kn{"kannada"}
         ko{"coréen"}
         kok{"konkani"}
-        kos{"kusaien"}
-        kpe{"kpellé"}
         kr{"kanouri"}
         ks{"kashmiri"}
         ku{"kurde"}
-        kum{"koumyk"}
         kv{"komi"}
         kw{"cornique"}
         ky{"kirghize"}
         la{"latin"}
-        lad{"ladino"}
         lb{"luxembourgeois"}
-        lez{"lezghien"}
         lg{"ganda"}
         li{"limbourgeois"}
         ln{"lingala"}
@@ -1441,173 +1120,103 @@ fr{
         lt{"lituanien"}
         lu{"luba-katanga"}
         lv{"letton"}
-        mad{"madurais"}
-        man{"meninka"}
-        map{"malayo-polynésien"}
-        mas{"masai"}
-        men{"mendé"}
         mg{"malgache"}
-        mga{"irlandais moyen (900-1200)"}
         mh{"marshall"}
         mi{"maori"}
-        mic{"micmac"}
-        mis{"langues diverses"}
         mk{"macédonien"}
-        mkh{"mon-khmer (autre)"}
         ml{"malayalam"}
         mn{"mongol"}
-        mnc{"mandchou"}
         mni{"manipuri"}
-        mno{"langues manobo"}
         mo{"moldave"}
         moh{"mohawk"}
         mr{"marathe"}
         ms{"malais"}
         mt{"maltais"}
         mul{"langues multiples"}
-        mun{"langues mounda"}
-        mus{"creek"}
         my{"birman"}
-        myn{"langues maya"}
         na{"nauruan"}
-        nai{"indiennes d’Amérique du Nord (autre)"}
-        nap{"napolitain"}
         nb{"bokmål norvégien"}
         nd{"ndébélé du Nord"}
-        nds{"bas allemand, bas saxon"}
         ne{"népalais"}
         ng{"ndonga"}
-        nic{"nigéro-congolaise (autre)"}
-        niu{"niué"}
         nl{"néerlandais"}
         nn{"nynorsk norvégien"}
         no{"norvégien"}
-        nog{"nogaï, nogay"}
-        non{"vieux norrois"}
         nr{"ndébélé du Sud"}
         nso{"sotho du Sud	"}
-        nub{"langues nubiennes"}
         nv{"navaho"}
         ny{"nyanja"}
-        nzi{"nzema"}
         oc{"occitan (après 1500)"}
         oj{"ojibwa"}
         om{"galla"}
         or{"oriya"}
         os{"ossète"}
-        ota{"turc ottoman (1500-1928)"}
-        oto{"langues otomangues"}
         pa{"pendjabi"}
-        paa{"papoues (autre)"}
-        pag{"pangasinan"}
-        pau{"palau"}
-        peo{"vieux perser (ca. 600-400 av. J.-C.)"}
-        phi{"philippines (autre)"}
-        phn{"phénicien"}
         pi{"pali"}
         pl{"polonais"}
-        pon{"pohnpei"}
-        pra{"langues prâkrit"}
-        pro{"vieux provençal (jusqu’à 1500)"}
         ps{"pachto"}
         pt{"portugais"}
         qu{"quechua"}
-        raj{"rajasthani"}
-        rar{"Rarotonga"}
         rm{"rhéto-roman"}
         rn{"roundi"}
         ro{"roumain"}
-        roa{"romanes (autre)"}
-        rom{"tzigane"}
         root{"racine"}
         ru{"russe"}
         rw{"rwanda"}
         sa{"sanskrit"}
-        sai{"indiennes d’Amérique du Sud (autre)"}
-        sal{"langues salisha"}
-        sam{"samaritain"}
-        sat{"santal"}
         sc{"sarde"}
-        sco{"écossais"}
         sd{"sindhi"}
         se{"sami du Nord"}
-        sem{"sémitiques (autre)"}
         sg{"sango"}
-        sga{"irlandais ancien (jusqu’à 900)"}
-        sgn{"langues des signes"}
         sh{"serbo-croate"}
-        shn{"chan"}
         si{"singhalais"}
         sid{"sidamo"}
-        sio{"langues sioux"}
-        sit{"sino-tibétaines (autre)"}
         sk{"slovaque"}
         sl{"slovène"}
-        sla{"slaves (autre)"}
         sm{"samoan"}
-        smi{"sami (autre)"}
         smj{"sami de Lule"}
         smn{"sami d’Inari"}
         sms{"sami skolt"}
         sn{"shona"}
-        snk{"soninké"}
         so{"somali"}
-        sog{"sogdien"}
         sq{"albanais"}
         sr{"serbe"}
-        srr{"sérère"}
         ss{"swati"}
-        ssa{"nilo-sahariennes (autre)"}
         st{"sotho du Sud"}
         su{"soundanais"}
-        sus{"soussou"}
-        sux{"sumérien"}
         sv{"suédois"}
         sw{"swahili"}
         syr{"syriaque"}
         ta{"tamoul"}
-        tai{"thaï (autre)"}
         te{"télougou"}
-        tem{"temne"}
         tg{"tadjik"}
         th{"thaï"}
         ti{"tigrigna"}
         tig{"tigré"}
         tk{"turkmène"}
         tl{"tagalog"}
-        tmh{"tamacheq"}
         tn{"setswana"}
         to{"tongan (Îles Tonga)"}
         tr{"turc"}
         ts{"tsonga"}
         tt{"tatar"}
-        tup{"langues tupi"}
-        tut{"altaïques (autre)"}
         tw{"twi"}
         ty{"tahitien"}
-        tyv{"touva"}
-        udm{"oudmourte"}
         ug{"ouïgour"}
-        uga{"ougaritique"}
         uk{"ukrainien"}
         und{"indéterminée"}
         ur{"ourdou"}
         uz{"ouzbek"}
-        vai{"vaï"}
         ve{"venda"}
         vi{"vietnamien"}
         vo{"volapük"}
-        vot{"vote"}
         wa{"wallon"}
-        wak{"langues wakashennes"}
         wen{"langues sorabes"}
         wo{"wolof"}
         xh{"xhosa"}
         yi{"yiddish"}
         yo{"yoruba"}
-        ypk{"langues yupik"}
         za{"zhuang"}
-        zap{"zapotèque"}
         zh{"chinois"}
         zu{"zoulou"}
     }
@@ -1820,6 +1429,12 @@ fr{
                         "D",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
         hebrew{

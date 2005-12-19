@@ -8,10 +8,4 @@
 // ***************************************************************************
 hr_HR{
     Version{"1.33"}
-    delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
-    }
 }

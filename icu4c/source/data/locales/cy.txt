@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/cy.xml
  */
 cy{
-    AuxExemplarCharacters{"[jkqvxz]"}
     Countries{
         GB{"Prydain Fawr"}
     }

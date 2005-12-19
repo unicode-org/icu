@@ -14,7 +14,7 @@ ti_ER{
         }
         USD{
             "US$",
-            "USD",
+            "የአሜሪካን ዶላር",
         }
     }
     NumberPatterns{

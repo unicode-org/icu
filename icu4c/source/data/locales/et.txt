@@ -253,7 +253,7 @@ et{
     Currencies{
         EEK{
             "kr",
-            "EEK",
+            "kroon",
             {
                 /**
                  * Duplicated from NumberPatterns resource
@@ -394,6 +394,12 @@ et{
                         "detsember",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

@@ -10,11 +10,11 @@ so_SO{
     Currencies{
         SOS{
             "$",
-            "SOS",
+            "Somalia Schilling",
         }
         USD{
             "US$",
-            "USD",
+            "US Dollar",
         }
     }
     NumberPatterns{
