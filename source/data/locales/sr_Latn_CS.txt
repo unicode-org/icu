@@ -8,10 +8,4 @@
 // ***************************************************************************
 sr_Latn_CS{
     Version{"1.16"}
-    delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
-    }
 }

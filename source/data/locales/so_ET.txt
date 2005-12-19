@@ -10,11 +10,11 @@ so_ET{
     Currencies{
         ETB{
             "$",
-            "ETB",
+            "Itoobiya Bir",
         }
         USD{
             "US$",
-            "USD",
+            "US Dollar",
         }
     }
     NumberPatterns{

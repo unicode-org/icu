@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/fo.xml
  */
 fo{
-    AuxExemplarCharacters{"[cqwz]"}
     Countries{
         AE{"Sameindu Emirríkini"}
         AF{"Afganistan"}

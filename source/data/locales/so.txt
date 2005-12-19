@@ -112,29 +112,53 @@ so{
         ZW{"Simbaabwe"}
     }
     Currencies{
+        BRL{
+            "BRL",
+            "Brazilian Real",
+        }
+        CNY{
+            "CNY",
+            "Chinese Yuan Renminbi",
+        }
+        DJF{
+            "DJF",
+            "Jabuuti Faran",
+        }
+        ETB{
+            "ETB",
+            "Itoobiya Bir",
+        }
         EUR{
             "€",
-            "EUR",
+            "Euro",
         }
         GBP{
             "£",
-            "GBP",
+            "British Pound Sterling",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Indian Rupee",
         }
         JPY{
             "¥",
-            "JPY",
+            "Japanese Yen",
         }
         KES{
             "Ksh",
             "KES",
         }
+        RUB{
+            "RUB",
+            "Russian Ruble",
+        }
+        SOS{
+            "SOS",
+            "Somalia Schilling",
+        }
         USD{
             "$",
-            "USD",
+            "US Dollar",
         }
     }
     ExemplarCharacters{"[a-z]"}
@@ -187,6 +211,17 @@ so{
                         "Sabti",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "A",
+                        "I",
+                        "S",
+                        "A",
+                        "K",
+                        "J",
+                        "S",
+                    }
+                }
             }
             eras{
                 abbreviated{
@@ -225,6 +260,28 @@ so{
                         "Bisha Laba iyo Tobnaad",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "K",
+                        "L",
+                        "S",
+                        "A",
+                        "S",
+                        "L",
+                        "T",
+                        "S",
+                        "S",
+                        "T",
+                        "K",
+                        "L",
+                    }
+                }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

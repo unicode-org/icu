@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    AuxExemplarCharacters{"[cqwz]"}
     Countries{
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
@@ -269,14 +268,6 @@ is{
             "NA f.",
             "Hollenskt Antillugyllini",
         }
-        ARA{
-            "ARA",
-            "Argentine Austral",
-        }
-        ARP{
-            "ARP",
-            "Argentískur pesi (1983-1985)",
-        }
         ARS{
             "Arg$",
             "Argentískur pesi",
@@ -313,14 +304,6 @@ is{
             "BND",
             "Brúneiskur dalur",
         }
-        BOP{
-            "BOP",
-            "Bólivískur pesi",
-        }
-        BOV{
-            "BOV",
-            "Bolivian Mvdol",
-        }
         BRL{
             "R$",
             "Brasilískt ríal",
@@ -328,10 +311,6 @@ is{
         BSD{
             "BSD",
             "Bahameyskur dalur",
-        }
-        BUK{
-            "BUK",
-            "Búrmverskt kjat",
         }
         BZD{
             "BZ$",
@@ -345,10 +324,6 @@ is{
             "SwF",
             "Svissneskur franki",
         }
-        CLF{
-            "CLF",
-            "Chilean Unidades de Fomento",
-        }
         CLP{
             "Ch$",
             "Chileskur pesi",
@@ -360,10 +335,6 @@ is{
         COP{
             "Col$",
             "Kólumbískur pesi",
-        }
-        CSK{
-            "CSK",
-            "Tékknesk króna, eldri",
         }
         CUP{
             "CUP",
@@ -380,10 +351,6 @@ is{
         CZK{
             "CZK",
             "Tékknesk króna",
-        }
-        DDM{
-            "DDM",
-            "Austurþýskt mark",
         }
         DEM{
             "DEM",
@@ -457,10 +424,6 @@ is{
             "Q",
             "Guatemala Quetzal",
         }
-        GWE{
-            "GWE",
-            "Portúgalskur, gíneskur skúti",
-        }
         GYD{
             "G$",
             "Gvæjanskur dalur",
@@ -488,10 +451,6 @@ is{
         IEP{
             "IR£",
             "Írskt pund",
-        }
-        ILP{
-            "ILP",
-            "Ísraelskt pund",
         }
         ILS{
             "ILS",
@@ -569,10 +528,6 @@ is{
             "LTL",
             "Lít",
         }
-        LTT{
-            "LTT",
-            "Lithuanian Talonas",
-        }
         LUF{
             "LUF",
             "Lúxemborgarfranki",
@@ -581,10 +536,6 @@ is{
             "LVL",
             "Lat",
         }
-        LVR{
-            "LVR",
-            "Lettnesk rúbla",
-        }
         LYD{
             "LD",
             "Líbískur denari",
@@ -592,10 +543,6 @@ is{
         MAD{
             "MAD",
             "Marokkóskt dírham",
-        }
-        MAF{
-            "MAF",
-            "Marokkóskur franki",
         }
         MGA{
             "MGA",
@@ -608,10 +555,6 @@ is{
         MKD{
             "MDen",
             "Makedónskur denari",
-        }
-        MLF{
-            "MLF",
-            "Malískur franki",
         }
         MMK{
             "MMK",
@@ -633,21 +576,9 @@ is{
             "Lm",
             "Meltnesk líra",
         }
-        MTP{
-            "MTP",
-            "Maltneskt pund",
-        }
         MXN{
             "MEX$",
             "Mexíkóskur pesi",
-        }
-        MXP{
-            "MXP",
-            "Mexíkóskur silfurpesi  (1861-1992)",
-        }
-        MXV{
-            "MXV",
-            "Mexíkóskur pesi, UDI",
         }
         MYR{
             "RM",
@@ -689,10 +620,6 @@ is{
             "Pra",
             "Pakistönsk rúpía",
         }
-        PLZ{
-            "PLZ",
-            "Slot",
-        }
         PTE{
             "PTE",
             "Portúgalskur skúti",
@@ -700,6 +627,10 @@ is{
         ROL{
             "leu",
             "Rúmenskt lei",
+        }
+        RUB{
+            "RUB",
+            "Rússnesk rúbla",
         }
         RUR{
             "RUR",
@@ -757,10 +688,6 @@ is{
             "Db",
             "Sao Tome and Principe Dobra",
         }
-        SUR{
-            "SUR",
-            "Soviet Rouble",
-        }
         SVC{
             "SVC",
             "El Salvador Colon",
@@ -793,6 +720,10 @@ is{
             "TL",
             "Tyrknesk líra",
         }
+        TRY{
+            "TRY",
+            "Ný, tyrknesk líra",
+        }
         TTD{
             "TT$",
             "Trínidad og Tóbagó-dalur",
@@ -809,21 +740,9 @@ is{
             "UAH",
             "Hrinja",
         }
-        UAK{
-            "UAK",
-            "Ukrainian Karbovanetz",
-        }
         USD{
             "US$",
             "Bandaríkjadalur",
-        }
-        USN{
-            "USN",
-            "Bandaríkjadalur (næsta dag)",
-        }
-        USS{
-            "USS",
-            "Bandaríkjadalur (sama dag)",
         }
         VEB{
             "Be",
@@ -841,18 +760,6 @@ is{
             "EC$",
             "Austur-Karíbahafsdalur",
         }
-        XDR{
-            "XDR",
-            "Sérstök dráttarréttindi",
-        }
-        XFO{
-            "XFO",
-            "Franskur gullfranki",
-        }
-        XFU{
-            "XFU",
-            "Franskur franki, UIC",
-        }
         XOF{
             "XOF",
             "Miðafrískur franki, BCEAO",
@@ -861,10 +768,6 @@ is{
             "CFPF",
             "Pólinesískur franki",
         }
-        YDD{
-            "YDD",
-            "Jemenskur denari",
-        }
         YER{
             "YRl",
             "Jemenskt ríal",
@@ -872,10 +775,6 @@ is{
         YUM{
             "YUM",
             "Júgóslavneskur denari",
-        }
-        ZAL{
-            "ZAL",
-            "Rand (viðskipta)",
         }
         ZMK{
             "ZMK",
@@ -894,471 +793,215 @@ is{
     }
     Languages{
         ab{"Abkasíska"}
-        ace{"Akkíska"}
-        ach{"Akólí"}
-        ada{"Adangme"}
-        ady{"Adýge"}
         ae{"Avestíska"}
         af{"Afríkanska"}
-        afa{"Afróasísk mál (önnur)"}
-        afh{"Afríhílí"}
         ak{"Akan"}
-        akk{"Akkadíska"}
-        ale{"Aleúska"}
-        alg{"Algonkvínsk mál"}
         am{"Amharíska"}
         an{"Aragonska"}
-        ang{"Fornenska (um 450-1100)"}
-        apa{"Apatsjamál"}
         ar{"Arabíska"}
-        arc{"Arameíska"}
         arn{"Arákaníska"}
-        arp{"Arapahó"}
         art{"Alþjóðamál (önnur)"}
-        arw{"Aravakska"}
         as{"Assamska"}
-        ast{"Astúríska"}
-        ath{"Atapaskísk mál"}
-        aus{"Áströlsk mál"}
         av{"Avaríska"}
-        awa{"Avadí"}
         ay{"Aímara"}
         az{"Aserska"}
         ba{"Baskír"}
-        bad{"Banda"}
-        bai{"Bamílekemál"}
-        bal{"Balúkí"}
-        ban{"Balíska"}
-        bas{"Basa"}
-        bat{"Baltnesk mál (önnur)"}
         be{"Hvítrússneska"}
-        bej{"Beja"}
-        bem{"Bemba"}
         ber{"Berbamál"}
         bg{"Búlgarska"}
         bh{"Bíharí"}
-        bho{"Bojpúrí"}
         bi{"Bíslama"}
-        bik{"Bíkol"}
-        bin{"Bíní"}
-        bla{"Siksika"}
         bm{"Bambara"}
         bn{"Bengalska"}
-        bnt{"Bantúmál"}
         bo{"Tíbeska"}
         br{"Bretónska"}
-        bra{"Braí"}
         bs{"Bosníska"}
-        btk{"Batak"}
-        bua{"Búríat"}
-        bug{"Búgíska"}
         byn{"Blín"}
         ca{"Katalónska"}
-        cad{"Kaddó"}
-        cai{"Indíánamál Mið-Ameríku (önnur)"}
-        car{"Karíbamál"}
-        cau{"Kákasusmál (önnur)"}
         ce{"Tsjetsjenska"}
-        ceb{"Kebúanó"}
-        cel{"Keltnesk (önnur)"}
         ch{"Kamorró"}
-        chb{"Síbsja"}
-        chg{"Sjagataí"}
-        chk{"Sjúkíska"}
-        chm{"Marí"}
-        chn{"Sínúk"}
-        cho{"Sjoktá"}
-        chp{"Sípevíska"}
         chr{"Sjerókí"}
-        chy{"Sjeyen"}
-        cmc{"Kamísk mál"}
         co{"Korsíska"}
-        cop{"Koptíska"}
-        cpe{"Kreól- og pidginmál á enskum grunni"}
-        cpf{"Kreól- og pidginmál á frönskum grunni"}
-        cpp{"Kreól- og pidginmál á portúgölskum grunni"}
         cr{"Krí"}
-        crh{"Krímtyrkneska"}
-        crp{"Kreól- og pidginmál (önnur)"}
         cs{"Tékkneska"}
-        csb{"Kasúbíska"}
         cu{"Kirkjuslavneska"}
-        cus{"Kúsitísk mál (önnur)"}
         cv{"Sjúvas"}
         cy{"Velska"}
         da{"Danska"}
-        dak{"Dakóta"}
-        dar{"Dargva"}
-        day{"Dajak"}
         de{"Þýska"}
-        del{"Delaver"}
-        den{"Slav"}
-        dgr{"Dogríb"}
-        din{"Dinka"}
-        doi{"Dogrí"}
-        dra{"Dravidísk mál (önnur)"}
         dsb{"Lágsorbneska"}
-        dua{"Dúala"}
-        dum{"Miðhollenska (um 1050-1350)"}
         dv{"Dívehí"}
-        dyu{"Djúla"}
         dz{"Dsongka"}
         ee{"Eve"}
-        efi{"Efík"}
-        egy{"Fornegypska"}
-        eka{"Ekajúk"}
         el{"Nýgríska (1453-)"}
-        elx{"Elamít"}
         en{"Enska"}
-        enm{"Miðenska (1100-1500)"}
         eo{"Esperantó"}
         es{"Spænska"}
         et{"Eistneska"}
         eu{"Baskneska"}
-        ewo{"Evondó"}
         fa{"Persneska"}
-        fan{"Fang"}
-        fat{"Fantí"}
         ff{"Fúla"}
         fi{"Finnska"}
-        fiu{"Finnskúgrísk mál (önnur)"}
         fj{"Fídjeyska"}
         fo{"Færeyska"}
-        fon{"Fón"}
         fr{"Franska"}
-        frm{"Miðfranska (um 1400-1600)"}
-        fro{"Fornfranska (842 - um 1400)"}
-        fur{"Fríúlska"}
         fy{"Frísneska"}
         ga{"Írska"}
-        gaa{"Ga"}
-        gay{"Gajó"}
-        gba{"Gbaja"}
         gd{"Skosk gelíska"}
-        gem{"Germönsk mál (önnur)"}
         gez{"Gís"}
-        gil{"Gilberska"}
         gl{"Gallegska"}
-        gmh{"Miðháþýska (um 1050-1500"}
         gn{"Gvaraní"}
-        goh{"Fornháþýska (um 750-1050)"}
-        gon{"Gondí"}
-        gor{"Gorontaló"}
-        got{"Gotneska"}
-        grb{"Gerbó"}
-        grc{"Forngríska (til 1453)"}
         gu{"Gújaratí"}
         gv{"Manx"}
-        gwi{"Gvísín"}
         ha{"Hása"}
-        hai{"Haída"}
         haw{"Havaíska"}
         he{"Hebreska"}
         hi{"Hindí"}
-        hil{"Híligaínon"}
-        him{"Hímasjalí"}
-        hit{"Hettitíska"}
-        hmn{"Hmong"}
         ho{"Hírímótú"}
         hr{"Króatíska"}
         hsb{"Hásorbneska"}
         ht{"Haítíska"}
         hu{"Ungverska"}
-        hup{"Húpa"}
         hy{"Armenska"}
         hz{"Hereró"}
         ia{"Interlingva"}
-        iba{"Íban"}
         id{"Indónesíska"}
         ie{"Interlingva"}
         ig{"Ígbó"}
         ii{"Sísúanjí"}
-        ijo{"Íjó"}
         ik{"Ínúpíak"}
-        ilo{"Ílokó"}
-        inc{"Indversk mál (önnur)"}
-        ine{"Indóevrópsk mál (önnur)"}
-        inh{"Ingús"}
         io{"Ídó"}
-        ira{"Íranska"}
-        iro{"Írókesk mál"}
         is{"Íslenska"}
         it{"Ítalska"}
         iu{"Inúktitút"}
         ja{"Japanska"}
-        jbo{"Lojban"}
-        jpr{"Gyðingapersneska"}
-        jrb{"Gyðingaarabíska"}
         jv{"Javanska"}
         ka{"Georgíska"}
-        kaa{"Karakalpak"}
-        kab{"Kabíle"}
-        kac{"Kasín"}
-        kam{"Kamba"}
-        kar{"Karen"}
-        kaw{"Kaví"}
-        kbd{"Kabardíska"}
         kg{"Kongó"}
-        kha{"Kasí"}
-        khi{"Koímál (önnur)"}
-        kho{"Kotaska"}
         ki{"Kíkújú"}
         kj{"Kúanjama"}
         kk{"Kasakska"}
         kl{"Grænlenska"}
         km{"Kmer"}
-        kmb{"Kimbúndú"}
         kn{"Kannada"}
         ko{"Kóreska"}
         kok{"Konkaní"}
-        kos{"Kosraska"}
-        kpe{"Kpelle"}
         kr{"Kanúrí"}
-        krc{"Karasaíbalkar"}
-        kro{"Krú"}
-        kru{"Kúrúk"}
         ks{"Kasmírska"}
         ku{"Kúrdneska"}
-        kum{"Kúmík"}
-        kut{"Kútenaí"}
         kv{"Komíska"}
         kw{"Korníska"}
         ky{"Kirgiska"}
         la{"Latína"}
-        lad{"Ladínska"}
-        lah{"Landa"}
-        lam{"Lamba"}
         lb{"Lúxemborgíska"}
-        lez{"Lesgíska"}
         lg{"Ganda"}
         li{"Limbúrgíska"}
         ln{"Lingala"}
         lo{"Laó"}
-        lol{"Mongó"}
-        loz{"Losí"}
         lt{"Litháíska"}
         lu{"Lúbakatanga"}
-        lua{"Lúbalúlúa"}
-        lui{"Lúisenó"}
-        lun{"Lúnda"}
-        luo{"Lúó"}
-        lus{"Lúsaí"}
         lv{"Lettneska"}
-        mad{"Madúrska"}
-        mag{"Magahí"}
-        mai{"Maítílí"}
-        mak{"Makasar"}
-        man{"Mandingó"}
-        map{"Ástrónesíska"}
-        mas{"Masaí"}
-        mdf{"Moksa"}
-        mdr{"Mandar"}
-        men{"Mende"}
         mg{"Malagasíska"}
-        mga{"Miðírska (900-1200)"}
         mh{"Marshallska"}
         mi{"Maórí"}
-        mic{"Mikmak"}
-        min{"Mínangkabá"}
-        mis{"Ýmis mál"}
         mk{"Makedónska"}
-        mkh{"Monkmermál (önnur)"}
         ml{"Malajalam"}
         mn{"Mongólska"}
-        mnc{"Mansjú"}
         mni{"Manípúrí"}
-        mno{"Manóbómál"}
         mo{"Moldóvska"}
         moh{"Móhíska"}
-        mos{"Mossí"}
         mr{"Maratí"}
         ms{"Malaíska"}
         mt{"Maltneska"}
         mul{"Margvísleg mál"}
-        mun{"Múndamál"}
-        mus{"Krík"}
-        mwr{"Marvarí"}
         my{"Burmneska"}
-        myn{"Majamál"}
-        myv{"Ersja"}
         na{"Nárúska"}
-        nah{"Nahúatl"}
-        nai{"Indíánamál Norður-Ameríku (önnur)"}
-        nap{"Napólíska"}
         nb{"Norskt bókmál"}
         nd{"Norðurndebele"}
-        nds{"Lágþýska; Lágsaxneska"}
         ne{"Nepalska"}
-        new{"Nevarí"}
         ng{"Ndonga"}
-        nia{"Nías"}
-        nic{"Nígerkordófanmál (önnur)"}
-        niu{"Níveska"}
         nl{"Hollenska"}
         nn{"Nýnorska"}
         no{"Norska"}
-        nog{"Nógaí"}
-        non{"Norræna"}
         nr{"Suðurndebele"}
         nso{"Norðursótó"}
-        nub{"Núbísk mál"}
         nv{"Navahó"}
         ny{"Njanja; Sísjeva; Sjeva"}
-        nym{"Njamvesí"}
-        nyn{"Njankóle"}
-        nyo{"Njóró"}
-        nzi{"Nsíma"}
         oc{"Okkitíska (eftir 1500); Próvensalska"}
         oj{"Ojibva"}
         om{"Órómó"}
         or{"Óría"}
         os{"Ossetíska"}
-        osa{"Ósage"}
-        ota{"Tyrkneska, ottóman (1500-1928)"}
-        oto{"Ótommál"}
         pa{"Púnjabí"}
-        paa{"Papúsk mál (önnur)"}
-        pag{"Pangasínmál"}
-        pal{"Palaví"}
-        pam{"Pampanga"}
-        pap{"Papíamentó"}
-        pau{"Paláska"}
-        peo{"Fornpersneska"}
-        phi{"Filippseysk mál (önnur)"}
-        phn{"Fönikíska"}
         pi{"Palí"}
         pl{"Pólska"}
-        pon{"Ponpeiska"}
-        pra{"Prakrítmál"}
-        pro{"Fornpróvensalska (til 1500)"}
         ps{"Pastú"}
         pt{"Portúgalska"}
         qu{"Kvesjúa"}
-        raj{"Rajastaní"}
-        rap{"Rapanúí"}
-        rar{"Rarótongska"}
         rm{"Retórómanska"}
         rn{"Rúndí"}
         ro{"Rúmenska"}
-        roa{"Rómönsk mál (önnur)"}
-        rom{"Romaní"}
         ru{"Rússneska"}
         rw{"Kínjarvanda"}
         sa{"Sanskrít"}
-        sad{"Sandave"}
         sah{"Jakút"}
-        sai{"Indíánamál Suður-Ameríku (önnur)"}
-        sal{"Salísmál"}
-        sam{"Samversk arameíska"}
-        sas{"Sasak"}
-        sat{"Santalí"}
         sc{"Sardínska"}
-        sco{"Skoska"}
         sd{"Sindí"}
         se{"Norðursamíska"}
-        sel{"Selkúp"}
-        sem{"Semísk mál (önnur)"}
         sg{"Sangó"}
-        sga{"Fornírska (til 900)"}
-        sgn{"Táknmál"}
         sh{"Serbókróatíska"}
-        shn{"Sjan"}
         si{"Singalesíska"}
         sid{"Sídamó"}
-        sio{"Síúmál"}
-        sit{"Sínótíbesk mál (önnur)"}
         sk{"Slóvakíska"}
         sl{"Slóvenska"}
-        sla{"Slavnesk mál (önnur)"}
         sm{"Samóska"}
         sma{"Suðursamíska"}
-        smi{"Samísk mál (önnur)"}
         smj{"Lúlesamíska"}
         smn{"Enaresamíska"}
         sms{"Skoltesamíska"}
         sn{"Sínótíbesk mál (önnur)"}
-        snk{"Sóninke"}
         so{"Sómalska"}
-        sog{"Sogdíen"}
-        son{"Songhaí"}
         sq{"Albanska"}
         sr{"Serbneska"}
-        srr{"Serer"}
         ss{"Svatí"}
-        ssa{"Nílósaharamál (önnur)"}
         st{"Suðursótó"}
         su{"Súndanska"}
-        suk{"Súkúma"}
-        sus{"Súsú"}
-        sux{"Súmerska"}
         sv{"Sænska"}
         sw{"Svahílí"}
         syr{"Sýrlenska"}
         ta{"Tamílska"}
-        tai{"Taímál (önnur)"}
         te{"Telúgú"}
-        tem{"Tímne"}
-        ter{"Terenó"}
-        tet{"Tetúm"}
         tg{"Tadsjikska"}
         th{"Taílenska"}
         ti{"Tígrinja"}
         tig{"Tígre"}
-        tiv{"Tív"}
         tk{"Túrkmenska"}
-        tkl{"Tókeláska"}
         tl{"Tagalog"}
-        tli{"Tlingit"}
-        tmh{"Tamasjek"}
         tn{"Tsúana"}
         to{"Tongverska"}
-        tog{"Tongverska"}
-        tpi{"Tokpisin"}
         tr{"Tyrkneska"}
         ts{"Tsonga"}
-        tsi{"Tsimsíska"}
         tt{"Tatarska"}
-        tum{"Túmbúka"}
-        tup{"Túpímál"}
-        tut{"Altaísk mál (önnur)"}
-        tvl{"Túvalúska"}
         tw{"Tví"}
         ty{"Tahítíska"}
-        tyv{"Túvínska"}
-        udm{"Údmúrt"}
         ug{"Úígúr"}
-        uga{"Úgarítíska"}
         uk{"Úkraínska"}
-        umb{"Úmbúndú"}
         und{"Óljóst"}
         ur{"Úrdú"}
         uz{"Úsbekska"}
-        vai{"Vaí"}
         ve{"Venda"}
         vi{"Víetnamska"}
         vo{"Volapük"}
-        vot{"Votíska"}
         wa{"Vallónska"}
-        wak{"Vakasmál"}
         wal{"Valamó"}
-        war{"Varaí"}
-        was{"Vasjó"}
         wen{"Sorbnesk mál"}
         wo{"Volof"}
-        xal{"Kalmúkska"}
         xh{"Sósa"}
-        yao{"Jaó"}
-        yap{"Japíska"}
         yi{"Jiddíska"}
         yo{"Jórúba"}
-        ypk{"Júpísk mál"}
         za{"Súang"}
-        zap{"Sapótek"}
-        zen{"Senaga"}
         zh{"Kínverska"}
-        znd{"Sande"}
         zu{"Súlú"}
-        zun{"Súní"}
     }
     LocaleScript{
         "Latn",

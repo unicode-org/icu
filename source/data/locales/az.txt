@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    AuxExemplarCharacters{"[w]"}
     Countries{
         AZ{"Azərbaycan"}
     }
@@ -61,19 +60,9 @@ az{
                         "çərşənbə axşam",
                         "çərşənbə",
                         "cümə axşamı",
-                        "cümə axşamı",
+                        "cümə",
                         "şənbə",
                     }
-                }
-            }
-            eras{
-                abbreviated{
-                    "e.ə.",
-                    "b.e.",
-                }
-                wide{
-                    "eramızdan əvvəl",
-                    "bizim eramızın",
                 }
             }
             monthNames{
@@ -109,11 +98,5 @@ az{
                 }
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
     }
 }

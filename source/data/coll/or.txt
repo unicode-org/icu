@@ -6,13 +6,7 @@
 // * Source File:<path>/common/collation/or.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/collation/or.xml
- */
 or{
-    /**
-     * Draft
-     */
     Version{"1.6"}
     collations{
         standard{

@@ -278,10 +278,12 @@
         <include locales="uz_UZ" draft=".*" />
     </locales>
     <paths>
+        
         <include xpath="//ldml/.*" draft="false"/> 
         <include xpath="//ldml/.*/weekendData/.*" draft=".*"/>
         <include xpath="//ldml/.*/dateTimeElements/.*" draft=".*"/>
         <!--
+        <include plugin="coverage" value="3" group="G0"/>
         <include xpath="//ldml/.*/language.*" preferAlt="proposed" draft=".*"/>
         -->
         <!-- Exclude rarely used/deprecated ISO-4217 codes -->
@@ -449,11 +451,14 @@
         <exclude xpath="//ldml/.*/variant\[@type='ROZAJ'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/variant\[@type='SCOUSE'\]" draft=".*"/>
         <exclude xpath="//ldml/.*/variant\[@type='XIANG'\]" draft=".*"/>
+        <include xpath="//ldml/.*" locales="en" draft="false"/> 
+        <!-- for these locales include the draft data too -->
+        <include xpath="//ldml/.*" locales="as as_IN az_Cyrl az_Cyrl_AZ ml ml_IN or or_IN ur ur_PK uz uz_Cyrl uz_Cyrl_UZ uz_Latn uz_Latn_UZ" draft=".*"/>
         <!-- Exclude unusable data -->
         <exclude xpath="//ldml/posix/messages/.*"/>
     </paths>
     <overrideFallback>
-        <paths fallback="se_NO no_NO" locales="sms_FI" draft="false">
+        <paths fallback="se_NO no_NO" locales="sms_FI sm_FI" draft="false">
             <include xpath="//ldml/displayNames/.*"/>
             <include xpath="//ldml/dates/timeZoneNames/.*"/>            
         </paths>

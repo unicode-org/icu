@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    AuxExemplarCharacters{"[qwxy]"}
     Countries{
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
@@ -284,10 +283,6 @@ hu{
             "AOA",
             "Angolai kwanza",
         }
-        AOK{
-            "AOK",
-            "Angolai kwanza (1977-1990)",
-        }
         AON{
             "AON",
             "Angolai új kwanza (1990-2000)",
@@ -295,14 +290,6 @@ hu{
         AOR{
             "AOR",
             "Angolai kwanza reajustado (1995-1999)",
-        }
-        ARA{
-            "ARA",
-            "Argentín austral",
-        }
-        ARP{
-            "ARP",
-            "Argentín peso (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -324,10 +311,6 @@ hu{
             "AZM",
             "Azerbajdzsáni manat",
         }
-        BAD{
-            "BAD",
-            "Bosznia-hercegovinai dínár",
-        }
         BAM{
             "KM",
             "Bozsnia-hercegovinai konvertibilis márka",
@@ -340,17 +323,9 @@ hu{
             "Tk",
             "Bangladesi taka",
         }
-        BEC{
-            "BEC",
-            "Belga frank (konvertibilis)",
-        }
         BEF{
             "BF",
             "Belga frank",
-        }
-        BEL{
-            "BEL",
-            "Belga frank (pénzügyi)",
         }
         BGL{
             "lev",
@@ -380,37 +355,9 @@ hu{
             "Bs",
             "Boliviano",
         }
-        BOP{
-            "BOP",
-            "Bolíviai peso",
-        }
-        BOV{
-            "BOV",
-            "Bolíviai mvdol",
-        }
-        BRB{
-            "BRB",
-            "Brazi cruzeiro novo (1967-1986)",
-        }
-        BRC{
-            "BRC",
-            "Brazi cruzado",
-        }
-        BRE{
-            "BRE",
-            "Brazil cruzeiro (1990-1993)",
-        }
         BRL{
             "R$",
             "Brazil real",
-        }
-        BRN{
-            "BRN",
-            "Brazil cruzado novo",
-        }
-        BRR{
-            "BRR",
-            "Brazil cruzeiro",
         }
         BSD{
             "BSD",
@@ -419,10 +366,6 @@ hu{
         BTN{
             "Nu",
             "Bhutáni ngultrum",
-        }
-        BUK{
-            "BUK",
-            "Burmai kyat",
         }
         BWP{
             "BWP",
@@ -452,10 +395,6 @@ hu{
             "SwF",
             "Svájci frank",
         }
-        CLF{
-            "CLF",
-            "Chilei unidades de fomento",
-        }
         CLP{
             "Ch$",
             "Chilei peso",
@@ -472,10 +411,6 @@ hu{
             "C",
             "Costa Ricai colon",
         }
-        CSK{
-            "CSK",
-            "Csehszlovák kemény korona",
-        }
         CUP{
             "CUP",
             "Kubai peso",
@@ -491,10 +426,6 @@ hu{
         CZK{
             "CZK",
             "Cseh korona",
-        }
-        DDM{
-            "DDM",
-            "Kelet-Német márka",
         }
         DEM{
             "DEM",
@@ -519,10 +450,6 @@ hu{
         ECS{
             "ECS",
             "Ecuadori sucre",
-        }
-        ECV{
-            "ECV",
-            "Ecuadori Unidad de Valor Constante (UVC)",
         }
         EEK{
             "EEK",
@@ -568,10 +495,6 @@ hu{
             "£",
             "Brit font sterling",
         }
-        GEK{
-            "GEK",
-            "Grúz kupon larit",
-        }
         GEL{
             "lari",
             "Grúz lari",
@@ -592,14 +515,6 @@ hu{
             "GF",
             "Guineai frank",
         }
-        GNS{
-            "GNS",
-            "Guineai syli",
-        }
-        GQE{
-            "GQE",
-            "Egyenlítői-guineai ekwele guineana",
-        }
         GRD{
             "GRD",
             "Görög drachma",
@@ -607,10 +522,6 @@ hu{
         GTQ{
             "Q",
             "Guatemalai quetzal",
-        }
-        GWE{
-            "GWE",
-            "Portugál guinea escudo",
         }
         GWP{
             "GWP",
@@ -627,10 +538,6 @@ hu{
         HNL{
             "L",
             "Hodurasi lempira",
-        }
-        HRD{
-            "HRD",
-            "Horvát dínár",
         }
         HRK{
             "HRK",
@@ -652,17 +559,13 @@ hu{
             "IR£",
             "Ír font",
         }
-        ILP{
-            "ILP",
-            "Izraeli font",
-        }
         ILS{
             "ILS",
             "Izraeli új sékel",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
+            "Indiai rúpia",
         }
         IQD{
             "ID",
@@ -752,10 +655,6 @@ hu{
             "LTL",
             "Litvániai litas",
         }
-        LTT{
-            "LTT",
-            "Litvániai talonas",
-        }
         LUF{
             "LUF",
             "Luxemburgi frank",
@@ -764,10 +663,6 @@ hu{
             "LVL",
             "Lett lats",
         }
-        LVR{
-            "LVR",
-            "Lett rubel",
-        }
         LYD{
             "LD",
             "Líbiai dínár",
@@ -775,10 +670,6 @@ hu{
         MAD{
             "MAD",
             "Marokkói dirham",
-        }
-        MAF{
-            "MAF",
-            "Marokkói frank",
         }
         MDL{
             "MDL",
@@ -795,10 +686,6 @@ hu{
         MKD{
             "MDen",
             "Macedon dínár",
-        }
-        MLF{
-            "MLF",
-            "Mali frank",
         }
         MMK{
             "MMK",
@@ -820,10 +707,6 @@ hu{
             "Lm",
             "Máltai líra",
         }
-        MTP{
-            "MTP",
-            "Máltai font",
-        }
         MUR{
             "MUR",
             "Mauritiusi rúpia",
@@ -839,14 +722,6 @@ hu{
         MXN{
             "MEX$",
             "Mexikói peso",
-        }
-        MXP{
-            "MXP",
-            "Mexikói ezüst peso (1861-1992)",
-        }
-        MXV{
-            "MXV",
-            "Mexikói Unidad de Inversion (UDI)",
         }
         MYR{
             "RM",
@@ -867,10 +742,6 @@ hu{
         NGN{
             "NGN",
             "Nigériai naira",
-        }
-        NIC{
-            "NIC",
-            "Nikaraguai cordoba",
         }
         NIO{
             "NIO",
@@ -900,17 +771,9 @@ hu{
             "PAB",
             "Panamai balboa",
         }
-        PEI{
-            "PEI",
-            "Perui inti",
-        }
         PEN{
             "PEN",
             "Perui sol nuevo",
-        }
-        PES{
-            "PES",
-            "Perui sol",
         }
         PGK{
             "PGK",
@@ -927,10 +790,6 @@ hu{
         PLN{
             "Zl",
             "Lengyel zloty",
-        }
-        PLZ{
-            "PLZ",
-            "Lengyel zloty (1950-1995)",
         }
         PTE{
             "PTE",
@@ -1016,10 +875,6 @@ hu{
             "Db",
             "Sao tome-i és principe-i dobra",
         }
-        SUR{
-            "SUR",
-            "Szovjet rubel",
-        }
         SVC{
             "SVC",
             "Salvadori colón",
@@ -1060,6 +915,10 @@ hu{
             "TL",
             "Török líra",
         }
+        TRY{
+            "TRY",
+            "Új török líra",
+        }
         TTD{
             "TT$",
             "Trinidad és tobagoi dollár",
@@ -1076,14 +935,6 @@ hu{
             "UAH",
             "Ukrán hrivnya",
         }
-        UAK{
-            "UAK",
-            "Ukrán karbovanec",
-        }
-        UGS{
-            "UGS",
-            "Ugandai shilling (1966-1987)",
-        }
         UGX{
             "U Sh",
             "Ugandai shilling",
@@ -1091,18 +942,6 @@ hu{
         USD{
             "US$",
             "USA dollár",
-        }
-        USN{
-            "USN",
-            "USA dollár (következő napi)",
-        }
-        USS{
-            "USS",
-            "USA dollár (aznapi)",
-        }
-        UYP{
-            "UYP",
-            "Uruguay-i peso (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -1132,45 +971,9 @@ hu{
             "XAF",
             "CFA frank BEAC",
         }
-        XAU{
-            "XAU",
-            "Arany",
-        }
-        XBA{
-            "XBA",
-            "European Composite Unit",
-        }
-        XBB{
-            "XBB",
-            "European Monetary Unit",
-        }
-        XBC{
-            "XBC",
-            "European Unit of Account (XBC)",
-        }
-        XBD{
-            "XBD",
-            "European Unit of Account (XBD)",
-        }
         XCD{
             "EC$",
             "Kelet-karibi dollár",
-        }
-        XDR{
-            "XDR",
-            "Special Drawing Rights",
-        }
-        XEU{
-            "XEU",
-            "European Currency Unit",
-        }
-        XFO{
-            "XFO",
-            "Francia arany frank",
-        }
-        XFU{
-            "XFU",
-            "Francia UIC-frank",
         }
         XOF{
             "XOF",
@@ -1180,29 +983,13 @@ hu{
             "CFPF",
             "CFP frank",
         }
-        YDD{
-            "YDD",
-            "Jemeni dínár",
-        }
         YER{
             "YRl",
             "Jemeni rial",
         }
-        YUD{
-            "YUD",
-            "Jugoszláv kemény dínár",
-        }
         YUM{
             "YUM",
             "Jugoszláv új dínár",
-        }
-        YUN{
-            "YUN",
-            "Jugoszláv konvertibilis dínár",
-        }
-        ZAL{
-            "ZAL",
-            "Dél-afrikai rand (pénzügyi)",
         }
         ZAR{
             "R",
@@ -1215,10 +1002,6 @@ hu{
         ZRN{
             "ZRN",
             "Zairei új zaire",
-        }
-        ZRZ{
-            "ZRZ",
-            "Zairei zaire",
         }
         ZWD{
             "Z$",
@@ -1560,6 +1343,12 @@ hu{
                         "D",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
         hebrew{

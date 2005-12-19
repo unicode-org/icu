@@ -10,9 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    AuxExemplarCharacters{"[qwx]"}
     Countries{
-        200{"Čekoslovakija"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
         AF{"Afganistanas"}
@@ -466,6 +464,12 @@ lt{
                         "Gruodis",
                     }
                 }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
             }
         }
     }

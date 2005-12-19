@@ -10,11 +10,9 @@ ar_EG{
     Version{"1.31"}
     calendar{
         gregorian{
-            eras{
-                wide{
-                    "قبل الميلاد",
-                    "ميلادي",
-                }
+            DateTimeElements:intvector{
+                7,
+                1,
             }
             weekend:intvector{
                 6,
@@ -23,11 +21,5 @@ ar_EG{
                 86400000,
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"\""}
-        alternateQuotationStart{"\""}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
     }
 }

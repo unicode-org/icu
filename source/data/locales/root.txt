@@ -264,6 +264,12 @@ root{
                     }
                 }
             }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
+            }
         }
         hebrew{
             eras{
