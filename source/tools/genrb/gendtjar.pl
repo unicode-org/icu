@@ -63,7 +63,7 @@ sub main(){
     
     $path=$ENV{'PATH'};
     
-    if($platform eq "cygwin" ){
+    if(($platform eq "cygwin") || ($platform eq "linux")){
         $icuBinDir .= "/source/bin";
         $icuLibDir = abs_path($icuBinDir."/../lib");
         $path .=":$icuBinDir:$icuLibDir";
@@ -141,7 +141,7 @@ sub buildICU{
     unlink($icuBuildDir."../"); 
     unlink($icuTestDataDir."../"); 
     
-    if(($platform eq "cygwin")||($platform eq "darwin")){
+    if(($platform eq "cygwin")||($platform eq "darwin")||($platform eq "linux")){
         # make all in ICU
         cmd("make all", $verbose);
         chdir($icuSrcDataDir);
