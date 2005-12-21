@@ -245,6 +245,24 @@ public abstract class ICUResourceBundle extends UResourceBundle {
     }
 
     /**
+     * Returns a binary data from a binary resource.
+     *
+     * @param ba Establish the return type from this function.  The value of the parameter
+     *            is not used; a null variable is OK.  The thing that matters is the type
+     *            of the parameter
+     * @return an array unsigned bytes containing the binary data from the resource.
+     * @see #getIntVector
+     * @see #getInt
+     * @throws MissingResourceException
+     * @throws UResourceTypeMismatchException
+     * @draft ICU 3.6
+     */
+    public byte [] getBinary(byte []ba) {
+        throw new UResourceTypeMismatchException("");
+    }
+    
+    
+    /**
      * Returns a 32 bit integer array from a resource.
      *
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
