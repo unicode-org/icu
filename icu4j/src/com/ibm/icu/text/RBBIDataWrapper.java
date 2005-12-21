@@ -38,6 +38,31 @@ final class RBBIDataWrapper {
     String         fRuleSource;
     int            fStatusTable[];
     
+    //
+    // Indexes to fields in the ICU4C style binary form of the RBBI Data Header
+    //   Used by the rule compiler when flattening the data.
+    //
+    final static int    DH_SIZE           = 24;
+    final static int    DH_MAGIC          = 0;
+    final static int    DH_FORMATVERSION  = 1;
+    final static int    DH_LENGTH         = 2;
+    final static int    DH_CATCOUNT       = 3;
+    final static int    DH_FTABLE         = 4;
+    final static int    DH_FTABLELEN      = 5;
+    final static int    DH_RTABLE         = 6;
+    final static int    DH_RTABLELEN      = 7;
+    final static int    DH_SFTABLE        = 8;
+    final static int    DH_SFTABLELEN     = 9;
+    final static int    DH_SRTABLE        = 10;
+    final static int    DH_SRTABLELEN     = 11;
+    final static int    DH_TRIE           = 12;
+    final static int    DH_TRIELEN        = 13;
+    final static int    DH_RULESOURCE     = 14;
+    final static int    DH_RULESOURCELEN  = 15;
+    final static int    DH_STATUSTABLE    = 16;
+    final static int    DH_STATUSTABLELEN = 17;
+    
+    
     // Index offsets to the fields in a state table row.
     //    Corresponds to struct RBBIStateTableRow in the C version.
     //   
@@ -108,6 +133,7 @@ final class RBBIDataWrapper {
             fFormatVersion = new byte[4];
         };
     };
+    
     
     /**
      * RBBI State Table Indexing Function.  Given a state number, return the
@@ -309,7 +335,9 @@ final class RBBIDataWrapper {
         }
         This.fRuleSource = sb.toString();
         
-        // This.dump();
+        if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
+            This.dump();
+        };
         return This;
     }
     
@@ -363,21 +391,25 @@ final class RBBIDataWrapper {
     
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
     private void dumpTable(short table[]) {
-        int n;
-        int state;
-        String header = " Row  Acc Look  Tag";
-        for (n=0; n<fHeader.fCatCount; n++) {
-            header += intToString(n, 5);     
+        if (table == null)   {
+            System.out.println("  -- null -- ");
+        } else {
+            int n;
+            int state;
+            String header = " Row  Acc Look  Tag";
+            for (n=0; n<fHeader.fCatCount; n++) {
+                header += intToString(n, 5);     
+            }
+            System.out.println(header);
+            for (n=0; n<header.length(); n++) {
+                System.out.print("-");
+            }
+            System.out.println();
+            for (state=0; state< getNumStates(table); state++) {
+                dumpRow(table, state);   
+            }
+            System.out.println();
         }
-        System.out.println(header);
-        for (n=0; n<header.length(); n++) {
-            System.out.print("-");
-        }
-        System.out.println();
-        for (state=0; state< getNumStates(table); state++) {
-            dumpRow(table, state);   
-        }
-        System.out.println();
     }
     
     /**

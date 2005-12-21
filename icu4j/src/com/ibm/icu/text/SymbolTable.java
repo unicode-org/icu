@@ -10,6 +10,10 @@ import java.text.ParsePosition;
 /**
  * An interface that defines both lookup protocol and parsing of
  * symbolic names.
+ * 
+ * <p>This interface is used by UnicodeSet to resolve $Variable style
+ * references that appear in set patterns.  RBBI and Transliteration
+ * both independently implement this interface.
  *
  * <p>A symbol table maintains two kinds of mappings.  The first is
  * between symbolic names and their values.  For example, if the

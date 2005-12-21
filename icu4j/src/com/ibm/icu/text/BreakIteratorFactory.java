@@ -8,17 +8,21 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.impl.Assert;
 
 /**
  * @author Ram
@@ -29,7 +33,6 @@ import com.ibm.icu.util.UResourceBundle;
  * Window>Preferences>Java>Code Generation.
  */
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
-    private static final boolean ASSERT = false;
 
     public Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         iter.setText(new java.text.StringCharacterIterator(""));
@@ -86,102 +89,90 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     }
     static final ICULocaleService service = new BFService();
 
-    // KIND_NAMES are used in synthesizing the resource name that holds the source
-    //            break rules.   For old-style (ICU 2.8 and previous) break iterators.
-    //            The resources are com.ibm.icu.impl.data.BreakIteratorRules, and have
-    //            names like "CharacterBreakRules", where the "Character" part of the
-    //            name comes from here (this array).
-    private static final String[] KIND_NAMES = {
-        "Character", "Word", "Line", "Sentence", "Title"
-    };
 
-    /** KIND_NAMES_2 are used in synthesizing the names for
-     *  the precompiled break rules used with the new (ICU 3.0) RBBI.
-     *  The fully assembled names look like icudt30b_char.brk, which is the
-     *  file name of the brk file as produced by the ICU4C build.
+    /** KIND_NAMES are the resource key to be used to fetch the name of the
+     *             pre-compiled break rules.  The resource bundle name is "boundaries".
+     *             The value for each key will be the rules to be used for the
+     *             specified locale - "word" -> "word_th" for Thai, for example.
+     *  DICTIONARY_POSSIBLE indexes in the same way, and indicates whether a
+     *             dictionary is a possibility for that type of break.  This is just
+     *             an optimization to avoid a resource lookup where no dictionary is
+     *             ever possible.
      *  @internal
      */
-    private static final String[] KIND_NAMES_2 = {
-            "char", "word", "line", "sent", "title"
+    private static final String[] KIND_NAMES = {
+            "grapheme", "word", "line", "sentence", "title"
         };
+    private static final boolean[] DICTIONARY_POSSIBLE = {
+            false,      true,  true,   false,     false
+    };
 
 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
-        String prefix = KIND_NAMES[kind];
-        return createBreakInstance(locale, kind,
-                                   prefix + "BreakRules",
-                                   prefix + "BreakDictionary");
-    }
-
-    private static BreakIterator createBreakInstance(ULocale where,
-                             int kind,
-                             String rulesName,
-                             String dictionaryName) {
-
-        BreakIterator iter = null;
-        UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.BreakIteratorRules", where);
-        if (bundle == null) {
-            throw new MissingResourceException("No ICU Data", "BreakIteratorRules", where.toString());
+        
+        BreakIterator    iter       = null;
+        UResourceBundle  rb         = UResourceBundle.getBundleInstance(locale);
+        
+        //
+        //  Get the binary rules.  These are needed for both normal RulesBasedBreakIterators
+        //                         and for Dictionary iterators.
+        //
+        InputStream      ruleStream = null;
+        try {
+            ResourceBundle boundaries    = (ResourceBundle)rb.getObject("boundaries"); 
+            String         typeKey       = KIND_NAMES[kind];
+            String         brkfname      = boundaries.getString(typeKey);
+            String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +"/"+ brkfname + ".brk";
+                           ruleStream    = ICUData.getStream(rulesFileName);
         }
-        String[] classNames = bundle.getStringArray("BreakIteratorClasses");
-        String rules = bundle.getString(rulesName);
-        if (classNames[kind].equals("RuleBasedBreakIterator")) {
-            // Old style (2.8 and previous) Break Iterator.
-            // Not used by default, but if someone wants to specify the old class
-            //   in some locale's resources, it should still work.
-            iter = new RuleBasedBreakIterator_Old(rules);
+        catch (Exception e) {
+            throw new MissingResourceException(e.toString(),"","");
         }
-        else if (classNames[kind].equals("RuleBasedBreakIterator_New")) {
-            // Class for new RBBI engine.
-            // Open a stream to the .brk file.  Path to the brk files has this form:
-            //      data/icudt30b/line.brk      (30 is version number)
+ 
+        //
+        //  Check whether a dictionary exists, and create a DBBI iterator is
+        //   one does.
+        //
+        if (DICTIONARY_POSSIBLE[kind]) {
+            // This type of break iterator could potentially use a dictionary.
+            //
             try {
-                String rulesFileName = ICUResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
-                InputStream is = ICUData.getStream(rulesFileName);
-                iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);
+                ICUResourceBundle dictRes = (ICUResourceBundle)rb.getObject("BreakDictionaryData");
+                byte[] dictBytes = null;
+                dictBytes = dictRes.getBinary(dictBytes);
+                InputStream dictStream = new ByteArrayInputStream(dictBytes);
+                iter = new DictionaryBasedBreakIterator(ruleStream, dictStream);
+            } catch (MissingResourceException e) {
+                //  Couldn't find a dictionary.
+                //  This is normal, and will occur whenever creating a word or line
+                //  break iterator for a locale that does not have a BreakDictionaryData
+                //  resource - meaning for all but Thai.
+                //  Fall through to creating a normal RulebasedBreakIterator.
+            } catch (IOException e) {
+                Assert.fail(e);
+            }
+         }
+
+        if (iter == null) {
+            //
+            // Create a normal RuleBasedBreakIterator.
+            //    We have determined that this is not supposed to be a dictionary iterator.
+            //
+            try {
+                iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(ruleStream);
             }
             catch (IOException e) {
-                throw new MissingResourceException(e.toString(),"","");
-            }
+                // Shouldn't be possible to get here.
+                // If it happens, the compiled rules are probably corrupted in some way.
+                Assert.fail(e);
+           }
         }
-        else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
-            try {
-                InputStream dictionary = ICUData.getStream(bundle.getString(dictionaryName));
-//                System.out.println("bundle: " + bundle + " dn: " + dictionaryName);
-//                Object t = bundle.getObject(dictionaryName);
-//                // System.out.println(t);
-//                URL url = (URL)t;
-//                System.out.println("url: " + url);
-//                InputStream dictionary = url.openStream();
-//                System.out.println("stream: " + dictionary);
-                iter = new DictionaryBasedBreakIterator(rules, dictionary);
-            }
-            catch(IOException e) {
-                if (ASSERT) Assert.fail(e);
-            }
-            catch(MissingResourceException e) {
-                if (ASSERT) Assert.fail(e);
-            }
-        // TODO: we don't have 'bad' resource data, so this should never happen
-        // in our current tests.
-        ///CLOVER:OFF
-            if (iter == null) {
-                iter = new RuleBasedBreakIterator_Old(rules);
-            }
-        ///CLOVER:ON
-        }
-        else {
-        // TODO: we don't have 'bad' resource data, so this should never happen
-        // in our current tests.
-        ///CLOVER:OFF
-            throw new IllegalArgumentException("Invalid break iterator class \"" +
-                            classNames[kind] + "\"");
-        ///CLOVER:ON
-        }
-
         // TODO: Determine valid and actual locale correctly.
-        ULocale uloc = ULocale.forLocale(bundle.getLocale());
+        ULocale uloc = ULocale.forLocale(rb.getLocale());
         iter.setLocale(uloc, uloc);
+        
         return iter;
+
     }
+
 }

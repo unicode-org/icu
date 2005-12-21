@@ -11,7 +11,7 @@ import com.ibm.icu.lang.UCharacter;
 import java.util.Arrays;
 
 /**
- * Builder lass to manipulate and generate a trie.
+ * Builder class to manipulate and generate a trie.
  * This is useful for ICU data in primitive types.
  * Provides a compact way to store information that is indexed by Unicode 
  * values, such as character properties, types, keyboard values, etc. This is 

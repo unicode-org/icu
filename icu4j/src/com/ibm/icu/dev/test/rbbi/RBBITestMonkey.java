@@ -10,6 +10,7 @@
 // Monkey testing of RuleBasedBreakIterator
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.lang.UCharacter;
@@ -18,6 +19,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import java.io.FileReader;
+import java.io.Reader;
 
 
 /**
@@ -1798,6 +1802,90 @@ public void TestSentMonkey() {
     }
     RunMonkey(bi, m, "sent", seed, loopCount);
 }
+//
+//  Round-trip monkey tests.
+//  Verify that break iterators created from the rule source from the default
+//    break iterators still pass the monkey test for the iterator type.
+//
+//  This is a major test for the Rule Compiler.  The default break iterators are built
+//  from pre-compiled binary rule data that was created using ICU4C; these
+//  round-trip rule recompile tests verify that the Java rule compiler can
+//  rebuild break iterators from the original source rules.
+//
+public void TestRTCharMonkey() {
+    
+    int        loopCount = 200;
+    int        seed      = 1;
+    
+    if (params.inclusion >= 9) {
+        loopCount = 2000;
+    }
+    
+    RBBICharMonkey  m = new RBBICharMonkey();
+    BreakIterator   bi = BreakIterator.getCharacterInstance(Locale.US);
+    String rules = bi.toString();
+    BreakIterator rtbi = new RuleBasedBreakIterator(rules);
+    RunMonkey(rtbi, m, "char", seed, loopCount);
+}
+
+public void TestRTWordMonkey() {
+    
+    int        loopCount = 200;
+    int        seed      = 1;
+    
+    if (params.inclusion >= 9) {
+        loopCount = 2000;
+    }
+    
+    logln("Word Break Monkey Test");
+    RBBIWordMonkey  m = new RBBIWordMonkey();
+    BreakIterator   bi = BreakIterator.getWordInstance(Locale.US);
+    String rules = bi.toString();
+    BreakIterator rtbi = new RuleBasedBreakIterator(rules);
+    RunMonkey(rtbi, m, "word", seed, loopCount);
+}
+
+public void TestRTLineMonkey() {
+    
+    int        loopCount = 200;
+    int        seed      = 1;
+    
+    if (params.inclusion >= 9) {
+        loopCount = 2000;
+    }
+    
+    logln("Line Break Monkey Test");
+    RBBILineMonkey  m = new RBBILineMonkey();
+    BreakIterator   bi = BreakIterator.getLineInstance(Locale.US);
+    String rules = bi.toString();
+    BreakIterator rtbi = new RuleBasedBreakIterator(rules);
+    if (params == null) {
+        loopCount = 50;
+    }
+    RunMonkey(rtbi, m, "line", seed, loopCount);
+}
+
+public void TestRTSentMonkey() {
+    
+    int        loopCount = 200;
+    int        seed      = 1;
+    
+    if (params.inclusion >= 9) {
+        loopCount = 1000;
+    }
+    
+    logln("Sentence Break Monkey Test");
+    RBBISentenceMonkey  m = new RBBISentenceMonkey();
+    BreakIterator   bi = BreakIterator.getSentenceInstance(Locale.US);
+    String rules = bi.toString();
+    BreakIterator rtbi = new RuleBasedBreakIterator(rules);
+    if (params == null) {
+        loopCount = 30;
+    }
+    RunMonkey(rtbi, m, "sent", seed, loopCount);
+}
+
+
 
 }
 

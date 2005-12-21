@@ -10,6 +10,9 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import java.util.Arrays;
+import java.io.OutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Builder class to manipulate and generate a trie.
@@ -173,6 +176,31 @@ public class IntTrieBuilder extends TrieBuilder
     }
     
     /**
+     * Get a 32 bit data from the table data
+     * @param ch  code point for which data is to be retrieved.
+     * @param inBlockZero  Output parameter, inBlockZero[0] returns true if the
+     *                      char maps into block zero, otherwise false.
+     * @return the 32 bit data value.
+     */
+    public int getValue(int ch, boolean [] inBlockZero) 
+    {
+        // valid, uncompacted trie and valid c?
+        if (m_isCompacted_ || ch > UCharacter.MAX_VALUE || ch < 0) {
+            if (inBlockZero != null) {
+                inBlockZero[0] = true;
+            }
+            return 0;
+        }
+    
+        int block = m_index_[ch >> SHIFT_];
+        if (inBlockZero != null) {
+            inBlockZero[0] = (block == 0);
+        }
+        return m_data_[Math.abs(block) + (ch & MASK_)];
+    }
+    
+    
+    /**
      * Sets a 32 bit data in the table data
      * @param ch codepoint which data is to be set
      * @param value to set
@@ -241,6 +269,117 @@ public class IntTrieBuilder extends TrieBuilder
         return new IntTrie(index, data, m_initialValue_, options, 
                            triedatamanipulate);
     }
+    
+    
+    /**
+     * Serializes the build table to an output stream.
+     * 
+     * Compacts the build-time trie after all values are set, and then
+     * writes the serialized form onto an output stream.
+     * 
+     * After this, this build-time Trie can only be serialized again and/or closed;
+     * no further values can be added.
+     * 
+     * This function is the rough equivalent of utrie_seriaize() in ICU4C.
+     * 
+     * @param os the output stream to which the seriaized trie will be written.
+     *         If nul, the function still returns the size of the serialized Trie.
+     * @param reduceTo16Bits If true, reduce the data size to 16 bits.  The resulting
+     *         serialized form can then be used to create a CharTrie.
+     * @param datamanipulate builder raw fold method implementation
+     * @return the number of bytes written to the output stream.
+     */
+     public int serialize(OutputStream os, boolean reduceTo16Bits,
+            TrieBuilder.DataManipulate datamanipulate)  throws IOException {
+         if (datamanipulate == null) {
+             throw new IllegalArgumentException("Parameters can not be null");
+         }
+
+         // fold and compact if necessary, also checks that indexLength is 
+         // within limits 
+         if (!m_isCompacted_) {
+             // compact once without overlap to improve folding
+             compact(false);
+             // fold the supplementary part of the index array
+             fold(datamanipulate);
+             // compact again with overlap for minimum data array length
+             compact(true);
+             m_isCompacted_ = true;
+         }
+         
+         // is dataLength within limits? 
+         int length;
+         if (reduceTo16Bits) {
+             length = m_dataLength_ + m_indexLength_;
+         } else {
+             length = m_dataLength_;
+         }
+         if (length >= MAX_DATA_LENGTH_) {
+             throw new ArrayIndexOutOfBoundsException("Data length too small");
+         }
+         
+         //  struct UTrieHeader {
+         //      int32_t   signature;
+         //      int32_t   options  (a bit field)
+         //      int32_t   indexLength
+         //      int32_t   dataLength
+         length = Trie.HEADER_LENGTH_ + 2*m_indexLength_;
+         if(reduceTo16Bits) {
+             length+=2*m_dataLength_;
+         } else {
+             length+=4*m_dataLength_;
+         }
+         
+         if (os == null) {
+             // No output stream.  Just return the length of the serialized Trie, in bytes.
+             return length;
+         }
+
+         DataOutputStream dos = new DataOutputStream(os);
+         dos.writeInt(Trie.HEADER_SIGNATURE_);  
+         
+         int options = Trie.INDEX_STAGE_1_SHIFT_ | (Trie.INDEX_STAGE_2_SHIFT_<<Trie.HEADER_OPTIONS_INDEX_SHIFT_);
+         if(!reduceTo16Bits) {
+             options |= Trie.HEADER_OPTIONS_DATA_IS_32_BIT_;
+         }
+         if(m_isLatin1Linear_) {
+             options |= Trie.HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_;
+         }
+         dos.writeInt(options);
+         
+         dos.writeInt(m_indexLength_);
+         dos.writeInt(m_dataLength_);
+         
+         /* write the index (stage 1) array and the 16/32-bit data (stage 2) array */
+         if(reduceTo16Bits) {
+             /* write 16-bit index values shifted right by UTRIE_INDEX_SHIFT, after adding indexLength */
+             for (int i=0; i<m_indexLength_; i++) {
+                 int v = (m_index_[i] + m_indexLength_) >>> Trie.INDEX_STAGE_2_SHIFT_;
+                 dos.writeChar(v);
+             }
+             
+             /* write 16-bit data values */
+             for(int i=0; i<m_dataLength_; i++) {
+                 int v = m_data_[i] & 0x0000ffff;
+                 dos.writeChar(v);
+             }
+         } else {
+             /* write 16-bit index values shifted right by UTRIE_INDEX_SHIFT */
+             for (int i=0; i<m_indexLength_; i++) {
+                 int v = (m_index_[i]) >>> Trie.INDEX_STAGE_2_SHIFT_;
+                 dos.writeChar(v);
+             }
+             
+             /* write 32-bit data values */
+             for(int i=0; i<m_dataLength_; i++) {
+                 dos.writeInt(m_data_[i]);
+             }
+        }
+
+         return length;
+
+    }
+    
     
     /**
      * Set a value in a range of code points [start..limit].

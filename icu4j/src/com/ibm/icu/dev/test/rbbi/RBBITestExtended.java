@@ -200,7 +200,6 @@ public void TestExtended() {
             //parseState = PARSE_COMMENT;
             //savedState = PARSE_DATA;
             }
-            // break;   // TODO: don't stop on errors
 
         case PARSE_DATA:
             if (c == CH_BULLET) {
@@ -230,7 +229,8 @@ public void TestExtended() {
            if (testString.startsWith("\\N{", charIdx-1)) {
                int nameEndIdx = testString.indexOf('}', charIdx);
                if (nameEndIdx == -1) {
-                   errln("foo");  // TODO:
+                   errln("Error in named character in test file at line " + lineNum +
+                           ", col " + column);
                }
                 // Named character, e.g. \N{COMBINING GRAVE ACCENT}
                 // Get the code point from the name and insert it into the test data.

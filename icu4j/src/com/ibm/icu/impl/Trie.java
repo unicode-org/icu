@@ -411,26 +411,16 @@ public abstract class Trie
 
     // private data members --------------------------------------------
 
+    //  struct UTrieHeader {
+    //      int32_t   signature;
+    //      int32_t   options  (a bit field)
+    //      int32_t   indexLength
+    //      int32_t   dataLength
+
     /**
-    * Signature index
+    * Size of Trie header in bytes
     */
-    private static final int HEADER_SIGNATURE_INDEX_ = 0;
-    /**
-    * Options index
-    */
-    private static final int HEADER_OPTIONS_INDEX_ = 1 << 1;
-    /**
-    * Index length index
-    */
-    private static final int HEADER_INDEX_LENGTH_INDEX_ = 2 << 1;
-    /**
-    * Data length index
-    */
-    private static final int HEADER_DATA_LENGTH_INDEX_ = 3 << 1;
-    /**
-    * Size of header
-    */
-    private static final int HEADER_LENGTH_ = 4 << 1;
+    protected static final int HEADER_LENGTH_ = 4 * 4;
     /**
     * Latin 1 option mask
     */
@@ -438,12 +428,12 @@ public abstract class Trie
     /**
     * Constant number to authenticate the byte block
     */
-    private static final int HEADER_SIGNATURE_ = 0x54726965;
+    protected static final int HEADER_SIGNATURE_ = 0x54726965;
     /**
     * Header option formatting
     */
     private static final int HEADER_OPTIONS_SHIFT_MASK_ = 0xF;
-    private static final int HEADER_OPTIONS_INDEX_SHIFT_ = 4;
+    protected static final int HEADER_OPTIONS_INDEX_SHIFT_ = 4;
     protected static final int HEADER_OPTIONS_DATA_IS_32_BIT_ = 0x100;
     
     /**
