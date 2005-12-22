@@ -973,7 +973,7 @@ static void TestRegexCAPI(void) {
 
 }
 
-void TestBug4315(void) {
+static void TestBug4315(void) {
     UErrorCode		theICUError = U_ZERO_ERROR;
     URegularExpression	*theRegEx;
     UChar           *textBuff;
