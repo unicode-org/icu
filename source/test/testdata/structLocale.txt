@@ -1033,6 +1033,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        RON{
+            "",
+            "",
+        }
         RUB{
             "",
             "",
@@ -2145,6 +2149,96 @@ structLocale:table(nofallback){
                     ""
                 }
             }
+            fields{
+                day{
+                    dn{"Day"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                era{
+                    dn{"Era"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                hour{
+                    dn{"Hour"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                minute{
+                    dn{"Minute"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                month{
+                    dn{"Month"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                second{
+                    dn{"Second"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                week{
+                    dn{"Week"}                    
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                year{
+                    dn{"Year"}                    
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+                zone{
+                    dn{"Zone"}
+                    relative{
+                        "-1"{""}
+                        "0"{""}
+                        "1"{""}
+                    }
+                }
+            }
             monthNames{
                 default{""}
                 format{
@@ -2279,6 +2373,21 @@ structLocale:table(nofallback){
             }
         }
         islamic{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -2291,6 +2400,52 @@ structLocale:table(nofallback){
                 default{""}
                 format{
                     abbreviated:alias{"structLocale/calendar/islamic/monthNames/format/wide"}
+                    default{""}
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+            }
+        }
+        persian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
+            eras{
+                abbreviated{
+                    "",
+                }
+                wide{
+                    "",
+                }
+            }
+            monthNames{
+                default{""}
+                format{
+                    abbreviated:alias{"structLocale/calendar/persian/monthNames/format/wide"}
                     default{""}
                     wide{
                         "",
@@ -2568,7 +2723,18 @@ structLocale:table(nofallback){
             }
         }
     }
+    layout{
+        casing{""}
+        characters{""}
+        lines{""}
+    }
     localPatternChars{""}
+    messages{
+        nostr{""}
+        yesstr{""}
+        yesexpr{""}
+        noexpr{""}
+    }
     zoneStrings{
         hoursFormat{""}
         hourFormat{""}

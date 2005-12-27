@@ -10,12 +10,12 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.28 $"/>
-		<generation date="$Date: 2005/07/12 18:00:48 $"/>
+		<version number="$Revision: 1.29 $"/>
+		<generation date="$Date: 2005/12/27 22:19:37 $"/>
 		<language type="root"/> 
 	</identity>
 	<characters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/">
+		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
 				<icu:script type="1">Zyyy</icu:script>
 			</icu:scripts>
@@ -24,7 +24,7 @@
   <dates>
     <calendars>
      <calendar type="chinese">
-       <special xmlns:icu="http://oss.software.ibm.com/icu/">
+       <special xmlns:icu="http://www.icu-project.org/">
         <!--
          IsLeapMonth {
                 "",
@@ -97,7 +97,7 @@
       </zone>
     </timeZoneNames>
   </dates>
-  <special xmlns:icu="http://oss.software.ibm.com/icu/">
+  <special xmlns:icu="http://www.icu-project.org/">
     <icu:boundaries>
       <icu:grapheme icu:class="RuleBased" icu:import="char"/>
       <icu:word icu:class="RuleBased" icu:import="word"/>

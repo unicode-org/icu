@@ -11,6 +11,30 @@
  */
 ro{
     Countries{
+        001{"Lume"}
+        005{"America de Sud"}
+        011{"Africa occidentală"}
+        013{"America centrală"}
+        014{"Africa orientală"}
+        015{"Africa septentrională"}
+        017{"Africa centrală"}
+        018{"Africa australă"}
+        019{"Americi"}
+        021{"America de Nord"}
+        029{"Caraibe"}
+        030{"Asia orientală"}
+        035{"Asia de Sud-Est"}
+        039{"Europa meridională"}
+        053{"Australia și Noua Zeelandă"}
+        054{"Melanezia"}
+        057{"Micronezia"}
+        061{"Polinezia"}
+        062{"Asia centrala şi de Sud"}
+        145{"Asia occidentală"}
+        150{"Europa"}
+        151{"Europa de Est"}
+        154{"Europa septentrională"}
+        155{"Europa occidentală"}
         830{"Insulele Anglo-Normande"}
         AD{"Andora"}
         AE{"Emiratele Arabe Unite"}
@@ -193,6 +217,7 @@ ro{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Altă Oceania"}
         RE{"Reunion"}
         RO{"România"}
         RU{"Federaţia Rusă"}
@@ -273,10 +298,6 @@ ro{
         JPY{
             "¥",
             "Yen japonez",
-        }
-        ROL{
-            "lei",
-            "ROL",
         }
         RUB{
             "RUB",
@@ -446,15 +467,15 @@ ro{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    messages{
+        noexpr{"^[nN][oOuU]?"}
+        nostr{"nu:n"}
+        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
+        yesstr{"da:d"}
+    }
     zoneStrings{
         "Antarctica:South_Pole"{
             ec{"Polul Sud"}

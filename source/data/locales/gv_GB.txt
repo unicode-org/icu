@@ -31,12 +31,6 @@ gv_GB{
                 "dd/MM/yy",
                 "{1} {0}",
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
 }
