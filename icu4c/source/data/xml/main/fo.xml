@@ -10,12 +10,12 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.20 $"/>
-		<generation date="$Date: 2005/06/07 23:37:52 $"/>
+		<version number="$Revision: 1.21 $"/>
+		<generation date="$Date: 2005/12/27 22:19:34 $"/>
 		<language type="fo"/> 
 	</identity>
 	<characters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/">
+		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
 				<icu:script type="1">Latn</icu:script>
 			</icu:scripts>

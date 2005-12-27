@@ -10,18 +10,18 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.24 $"/>
-		<generation date="$Date: 2005/06/07 23:37:56 $"/>
+		<version number="$Revision: 1.25 $"/>
+		<generation date="$Date: 2005/12/27 22:19:38 $"/>
 		<language type="th"/> 
 	</identity>
 	<characters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/">
+		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
 				<icu:script type="1">Thai</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
-  <special xmlns:icu="http://oss.software.ibm.com/icu/">
+  <special xmlns:icu="http://www.icu-project.org/">
     <icu:boundaries>
       <icu:word icu:class="RuleBased" icu:import="word_th"/>
       <icu:line icu:class="RuleBased" icu:import="line_th"/>

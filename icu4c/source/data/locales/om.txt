@@ -43,10 +43,6 @@ om{
             "¥",
             "Japanese Yen",
         }
-        KES{
-            "Ksh",
-            "KES",
-        }
         RUB{
             "RUB",
             "Russian Ruble",
@@ -91,17 +87,6 @@ om{
                         "Sanbata",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -140,28 +125,6 @@ om{
                         "Muddee",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
-                }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

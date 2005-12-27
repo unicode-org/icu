@@ -6,6 +6,12 @@
 // * Source File:<path>/common/main/uz_Cyrl.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/uz_Cyrl.xml
+ */
 uz_Cyrl{
+    LocaleScript{
+        "Cyrl",
+    }
     Version{"1.8"}
 }

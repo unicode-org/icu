@@ -11,6 +11,32 @@
  */
 sv{
     Countries{
+        002{"Afrika"}
+        005{"Sydamerika"}
+        009{"Oceanien"}
+        011{"Västafrika"}
+        013{"Centralamerika"}
+        014{"Östafrika"}
+        015{"Nordafrika"}
+        017{"Centralafrika"}
+        018{"Södra Afrika"}
+        019{"Nord- och Sydamerika"}
+        021{"Nordamerika"}
+        029{"Karibien"}
+        030{"Ostasien"}
+        035{"Sydostasien"}
+        039{"Sydeuropa"}
+        053{"Australien och Nya Zeeland"}
+        054{"Melanesien"}
+        057{"Mikronesien"}
+        061{"Polynesien"}
+        062{"Södra Centralasien"}
+        142{"Asien"}
+        145{"Västasien"}
+        150{"Europa"}
+        151{"Östeuropa"}
+        154{"Nordeuropa"}
+        155{"Västeuropa"}
         830{"Kanalöarna"}
         833{"Isle of Man"}
         AD{"Andorra"}
@@ -194,6 +220,7 @@ sv{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Yttre öar i Oceanien"}
         RE{"Réunion"}
         RO{"Rumänien"}
         RU{"Ryssland"}
@@ -279,6 +306,10 @@ sv{
             "AOA",
             "Angolansk kwanza",
         }
+        AOK{
+            "AOK",
+            "Angolansk kwanza (1977-1990)",
+        }
         AON{
             "AON",
             "Angolansk ny kwanza (1990-2000)",
@@ -286,6 +317,14 @@ sv{
         AOR{
             "AOR",
             "Angolansk kwanza – Reajustado (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Argentinsk austral",
+        }
+        ARP{
+            "ARP",
+            "Argentinsk peso (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -307,6 +346,10 @@ sv{
             "AZM",
             "Azerbajdzjansk manat",
         }
+        BAD{
+            "BAD",
+            "Bosnisk-hercegovinsk dinar",
+        }
         BAM{
             "KM",
             "Konvertibel bosnisk-hercegovinsk mark",
@@ -319,9 +362,17 @@ sv{
             "Tk",
             "Bangladeshisk taka",
         }
+        BEC{
+            "BEC",
+            "Belgisk franc (konvertibel)",
+        }
         BEF{
             "BF",
             "Belgisk franc",
+        }
+        BEL{
+            "BEL",
+            "Belgisk franc (finansiell)",
         }
         BGL{
             "lev",
@@ -347,9 +398,37 @@ sv{
             "BND",
             "Bruneisk dollar",
         }
+        BOP{
+            "BOP",
+            "Boliviansk peso",
+        }
+        BOV{
+            "BOV",
+            "Boliviansk mvdol",
+        }
+        BRB{
+            "BRB",
+            "Brasiliansk cruzeiro novo (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Brasiliansk cruzado",
+        }
+        BRE{
+            "BRE",
+            "Brasiliansk cruzeiro (1990-1993)",
+        }
         BRL{
             "R$",
             "Brasiliansk real",
+        }
+        BRN{
+            "BRN",
+            "Brasiliansk cruzado novo",
+        }
+        BRR{
+            "BRR",
+            "Brasiliansk cruzeiro",
         }
         BSD{
             "BSD",
@@ -358,6 +437,10 @@ sv{
         BTN{
             "Nu",
             "Bhutanesisk ngultrum",
+        }
+        BUK{
+            "BUK",
+            "Burmesisk kyat",
         }
         BWP{
             "BWP",
@@ -387,6 +470,10 @@ sv{
             "SwF",
             "Schweizisk franc",
         }
+        CLF{
+            "CLF",
+            "Chilensk unidad de fomento",
+        }
         CLP{
             "Ch$",
             "Chilensk peso",
@@ -403,6 +490,10 @@ sv{
             "C",
             "Costarikansk colón",
         }
+        CSK{
+            "CSK",
+            "Tjeckisk hård koruna",
+        }
         CUP{
             "CUP",
             "Kubansk peso",
@@ -418,6 +509,10 @@ sv{
         CZK{
             "CZK",
             "Tjeckisk koruna",
+        }
+        DDM{
+            "DDM",
+            "Östtysk mark",
         }
         DEM{
             "DEM",
@@ -442,6 +537,10 @@ sv{
         ECS{
             "ECS",
             "Ecuadoriansk sucre",
+        }
+        ECV{
+            "ECV",
+            "Ecuadoriansk Unidad de Valor Constante (UVC)",
         }
         EEK{
             "EEK",
@@ -487,6 +586,10 @@ sv{
             "£",
             "Brittiskt pund sterling",
         }
+        GEK{
+            "GEK",
+            "Georgisk kupon larit",
+        }
         GEL{
             "lari",
             "Georgisk lari",
@@ -507,6 +610,14 @@ sv{
             "GF",
             "Guineansk franc",
         }
+        GNS{
+            "GNS",
+            "Guineansk syli",
+        }
+        GQE{
+            "GQE",
+            "Ekvatorialguineansk ekwele guineana",
+        }
         GRD{
             "GRD",
             "Grekisk drachma",
@@ -514,6 +625,10 @@ sv{
         GTQ{
             "Q",
             "Guatemalansk quetzal",
+        }
+        GWE{
+            "GWE",
+            "Portugisiska Guinea-escudo",
         }
         GWP{
             "GWP",
@@ -530,6 +645,10 @@ sv{
         HNL{
             "L",
             "Hoduransk lempira",
+        }
+        HRD{
+            "HRD",
+            "Kroatisk dinar",
         }
         HRK{
             "HRK",
@@ -550,6 +669,10 @@ sv{
         IEP{
             "IR£",
             "Irländskt pund",
+        }
+        ILP{
+            "ILP",
+            "Israeliskt pund",
         }
         ILS{
             "ILS",
@@ -647,6 +770,10 @@ sv{
             "LTL",
             "Lettisk lita",
         }
+        LTT{
+            "LTT",
+            "Lettisk talonas",
+        }
         LUF{
             "LUF",
             "Luxemburgsk franc",
@@ -655,6 +782,10 @@ sv{
             "LVL",
             "Lettisk lats",
         }
+        LVR{
+            "LVR",
+            "Lettisk rubel",
+        }
         LYD{
             "LD",
             "Libysk dinar",
@@ -662,6 +793,10 @@ sv{
         MAD{
             "MAD",
             "Marockansk dirham",
+        }
+        MAF{
+            "MAF",
+            "Marockansk franc",
         }
         MDL{
             "MDL",
@@ -678,6 +813,10 @@ sv{
         MKD{
             "MDen",
             "Makedonisk denar",
+        }
+        MLF{
+            "MLF",
+            "Malisk franc",
         }
         MMK{
             "MMK",
@@ -699,6 +838,10 @@ sv{
             "Lm",
             "Maltesisk lira",
         }
+        MTP{
+            "MTP",
+            "Maltesiskt pund",
+        }
         MUR{
             "MUR",
             "Mauritisk rupie",
@@ -714,6 +857,14 @@ sv{
         MXN{
             "MEX$",
             "Mexikansk peso",
+        }
+        MXP{
+            "MXP",
+            "Mexikansk silverpeso (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Mexikansk Unidad de Inversion (UDI)",
         }
         MYR{
             "RM",
@@ -734,6 +885,10 @@ sv{
         NGN{
             "NGN",
             "Nigeriansk naira",
+        }
+        NIC{
+            "NIC",
+            "Nicaraguansk córdoba",
         }
         NIO{
             "NIO",
@@ -763,9 +918,17 @@ sv{
             "PAB",
             "Panamansk balboa",
         }
+        PEI{
+            "PEI",
+            "Peruansk inti",
+        }
         PEN{
             "PEN",
             "Peruansk sol nuevo",
+        }
+        PES{
+            "PES",
+            "Peruansk sol",
         }
         PGK{
             "PGK",
@@ -782,6 +945,10 @@ sv{
         PLN{
             "Zl",
             "Polsk zloty",
+        }
+        PLZ{
+            "PLZ",
+            "Polsk zloty (1950-1995)",
         }
         PTE{
             "PTE",
@@ -867,6 +1034,10 @@ sv{
             "Db",
             "São Tomé och Príncipe-dobra",
         }
+        SUR{
+            "SUR",
+            "Sovjetisk rubel",
+        }
         SVC{
             "SVC",
             "Salvadoransk colón",
@@ -931,6 +1102,14 @@ sv{
             "UAH",
             "Ukrainsk hryvnia",
         }
+        UAK{
+            "UAK",
+            "Ukrainsk karbovanetz",
+        }
+        UGS{
+            "UGS",
+            "Ugandisk shilling (1966-1987)",
+        }
         UGX{
             "U Sh",
             "Ugandisk shilling",
@@ -938,6 +1117,18 @@ sv{
         USD{
             "US$",
             "US-dollar",
+        }
+        USN{
+            "USN",
+            "US-dollar (nästa dag)",
+        }
+        USS{
+            "USS",
+            "US-dollar (samma dag)",
+        }
+        UYP{
+            "UYP",
+            "Uruguayansk peso (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -971,6 +1162,14 @@ sv{
             "EC$",
             "Östkaribisk dollar",
         }
+        XFO{
+            "XFO",
+            "Fransk guldfranc",
+        }
+        XFU{
+            "XFU",
+            "French UIC-Franc",
+        }
         XOF{
             "XOF",
             "CFA Franc BCEAO",
@@ -979,13 +1178,29 @@ sv{
             "CFPF",
             "CFP-franc",
         }
+        YDD{
+            "YDD",
+            "Jemenitisk dinar",
+        }
         YER{
             "YRl",
             "Jemenitisk rial",
         }
+        YUD{
+            "YUD",
+            "Jugoslavisk hård dinar",
+        }
         YUM{
             "YUM",
             "Dinar (Serbien och Montenegro)",
+        }
+        YUN{
+            "YUN",
+            "Jugoslavisk konvertibel dinar",
+        }
+        ZAL{
+            "ZAL",
+            "Sydafrikansk rand (finansiell)",
         }
         ZAR{
             "R",
@@ -998,6 +1213,10 @@ sv{
         ZRN{
             "ZRN",
             "Zairisk ny zaire",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zairisk zaire",
         }
         ZWD{
             "Z$",
@@ -1013,215 +1232,465 @@ sv{
     Languages{
         aa{"afar"}
         ab{"abkhaziska"}
+        ace{"achinese"}
+        ach{"acholi"}
+        ada{"adangme"}
+        ady{"adygeiska"}
         ae{"avestiska"}
         af{"afrikaans"}
+        afa{"afro-asiatiskt (andra)"}
+        afh{"afrihili"}
         ak{"akan"}
+        akk{"akkadiska"}
+        ale{"aleutiska"}
+        alg{"algonquinspråk"}
         am{"amhariska"}
         an{"aragonesiska"}
+        ang{"fornengelska (ca 450-1100)"}
+        apa{"apachespråk"}
         ar{"arabiska"}
+        arc{"arameiska"}
         arn{"araukanska"}
+        arp{"arapaho"}
         art{"artificiellt (annat)"}
+        arw{"arawakiska"}
         as{"assami"}
+        ast{"asturiska"}
+        ath{"athapasiska språk"}
+        aus{"australiska språk"}
         av{"avariska"}
+        awa{"awadhi"}
         ay{"aymara"}
         az{"azerbajdzjanska"}
         ba{"basjkiriska"}
+        bad{"banda"}
+        bai{"bamilekiska språk"}
+        bal{"baluchi"}
+        ban{"balinesiska"}
+        bas{"basa"}
+        bat{"baltiskt (annat)"}
         be{"vitryska"}
+        bej{"beyja"}
+        bem{"bemba"}
         ber{"berber"}
         bg{"bulgariska"}
         bh{"bihari"}
+        bho{"bhojpuri"}
         bi{"bislama"}
+        bik{"bikol"}
+        bin{"bini"}
+        bla{"siksika"}
         bm{"bambara"}
         bn{"bengali"}
+        bnt{"bantuspråk"}
         bo{"tibetanska"}
         br{"bretonska"}
+        bra{"braj"}
         bs{"bosniska"}
+        btk{"batak"}
+        bua{"buriat"}
+        bug{"buginesiska"}
         byn{"blin"}
         ca{"katalanska"}
+        cad{"caddo"}
+        cai{"centralamerikanskt indianskt (annat)"}
+        car{"karibiska"}
+        cau{"kaukasiskt (annat)"}
         ce{"tjetjenska"}
+        ceb{"cebuano"}
+        cel{"keltiskt (annat)"}
         ch{"chamorro"}
+        chb{"chibcha"}
+        chg{"chagatai"}
+        chk{"chuukesiska"}
+        chm{"mari"}
+        chn{"chinook"}
+        cho{"choctaw"}
+        chp{"chipewyan"}
         chr{"cherokesiska"}
+        chy{"cheyenne"}
+        cmc{"chamispråk"}
         co{"korsikanska"}
+        cop{"koptiska"}
+        cpe{"kreolska och pidgin, engelskbaserade (övriga)"}
+        cpf{"kreolska och pidgin, franskbaserade (övriga)"}
+        cpp{"kreolska och pidgin, portugisiskbaserade (övriga)"}
         cr{"cree"}
+        crh{"krimturkiska; krimtatar"}
+        crp{"kreolska och pidgin (annat)"}
         cs{"tjeckiska"}
+        csb{"kasjubiska"}
         cu{"kyrkoslaviska"}
+        cus{"kushitiska (annat)"}
         cv{"tjuvasjiska"}
         cy{"walesiska"}
         da{"danska"}
+        dak{"dakota"}
+        dar{"dargwa"}
+        day{"dayak"}
         de{"tyska"}
+        del{"delaware"}
+        den{"slave"}
+        dgr{"dogrib"}
+        din{"dinka"}
+        doi{"dogri"}
+        dra{"dravidiskt (annat)"}
         dsb{"lågsorbiska"}
+        dua{"duala"}
+        dum{"medelnederländska (ca 1050-1350)"}
         dv{"divehi"}
+        dyu{"dyula"}
         dz{"dzongkha"}
         ee{"ewe"}
+        efi{"efik"}
+        egy{"fornegyptiska"}
+        eka{"ekajuk"}
         el{"grekiska"}
+        elx{"elamitiska"}
         en{"engelska"}
+        enm{"medelengelska (1100-1500)"}
         eo{"esperanto"}
         es{"spanska"}
         et{"estniska"}
         eu{"baskiska"}
+        ewo{"ewondo"}
         fa{"farsi"}
+        fan{"fang"}
+        fat{"fanti"}
         ff{"fulani"}
         fi{"finska"}
+        fiu{"finskugriskt (annat)"}
         fj{"fidjianska"}
         fo{"färöiska"}
         fr{"franska"}
+        frm{"medelfranska (ca 1400-1600)"}
+        fro{"fornfranska (842- ca 1400)"}
+        fur{"friulianska"}
         fy{"frisiska"}
         ga{"irländsk gaeliska"}
+        gaa{"ga"}
+        gay{"gayo"}
+        gba{"gbaya"}
         gd{"skotsk gaeliska"}
+        gem{"germanskt (annat)"}
         gez{"geez"}
+        gil{"gilbertesiska; kiribati"}
         gl{"galiciska"}
+        gmh{"medelhögtyska (ca.1050-1500)"}
         gn{"guaraní"}
+        goh{"fornhögtyska (ca.750-1050)"}
+        gon{"gondi"}
+        gor{"gorontalo"}
+        got{"gotiska"}
+        grb{"grebo"}
+        grc{"forngrekiska (till 1453)"}
         gu{"gujarati"}
         gv{"manx gaeliska"}
+        gwi{"gwich'in"}
         ha{"haussa"}
+        hai{"haida"}
         haw{"hawaiiska"}
         he{"hebreiska"}
         hi{"hindi"}
+        hil{"hiligaynon"}
+        him{"himachali"}
+        hit{"hettitiska"}
+        hmn{"hmong"}
         ho{"hiri motu"}
         hr{"kroatiska"}
         hsb{"högsorbiska"}
         ht{"haitiska"}
         hu{"ungerska"}
+        hup{"hupa"}
         hy{"armeniska"}
         hz{"herero"}
         ia{"interlingua"}
+        iba{"iban"}
         id{"indonesiska"}
         ie{"interlingue"}
         ig{"ibo"}
         ii{"sichuan yi"}
         ik{"inupiaq"}
+        ilo{"iloko"}
+        inc{"indiskt (annat)"}
+        ine{"indoeuropeiskt (annat)"}
+        inh{"ingusjiska"}
         io{"ido"}
+        ira{"iranska"}
+        iro{"irokesiska"}
         is{"isländska"}
         it{"italienska"}
         iu{"inuktitut"}
         ja{"japanska"}
+        jbo{"lojban"}
+        jpr{"judisk farsi"}
+        jrb{"judisk arabiska"}
         jv{"javanesiska"}
         ka{"georgiska"}
+        kaa{"karakalpakiska"}
+        kab{"kabyliska"}
+        kac{"kachin"}
+        kam{"kamba"}
+        kar{"karen"}
+        kaw{"kawi"}
+        kbd{"kabardinska"}
         kg{"kikongo"}
+        kha{"khasi"}
+        khi{"khoisan (annat)"}
+        kho{"khotanesiska"}
         ki{"kikuyu"}
         kj{"kuanyama"}
         kk{"kazakstanska"}
         kl{"grönländska"}
         km{"kambodjanska; khmeriska"}
+        kmb{"kinbundu"}
         kn{"kanaresiska; kannada"}
         ko{"koreanska"}
         kok{"konkani"}
+        kos{"kosreanska"}
+        kpe{"kpelle"}
         kr{"kanuri"}
+        krc{"karachay-balkar"}
+        kro{"kru"}
+        kru{"kurukh"}
         ks{"kashmiriska"}
         ku{"kurdiska"}
+        kum{"kumyk"}
+        kut{"kutenai"}
         kv{"kome"}
         kw{"korniska"}
         ky{"kirgisiska"}
         la{"latin"}
+        lad{"ladino"}
+        lah{"lahnda"}
+        lam{"lamba"}
         lb{"luxemburgiska"}
+        lez{"lezghien"}
         lg{"luganda"}
         li{"limburgiska"}
         ln{"lingala"}
         lo{"laotiska"}
+        lol{"lolo; mongo"}
+        loz{"lozi"}
         lt{"litauiska"}
         lu{"luba-katanga"}
+        lua{"luba-lulua"}
+        lui{"luiseño"}
+        lun{"lunda"}
+        lus{"lushai"}
         lv{"lettiska"}
+        mad{"madurese"}
+        mag{"magahi"}
+        mai{"maithili"}
+        mak{"makasar"}
+        man{"mande"}
+        map{"austronesiska"}
+        mas{"massajiska"}
+        mdf{"moksja"}
+        mdr{"mandar"}
+        men{"mende"}
         mg{"malagassiska"}
+        mga{"medeliriska (900-1200)"}
         mh{"marshalliska"}
         mi{"maori"}
+        mic{"mic-mac"}
+        min{"minangkabau"}
+        mis{"blandade språk"}
         mk{"makedonska"}
+        mkh{"mon-khmeriska (annat)"}
         ml{"malayalam"}
         mn{"mongoliska"}
+        mnc{"manchuriska"}
         mni{"manipuri"}
+        mno{"manobospråk"}
         mo{"moldaviska"}
         moh{"mohawk"}
+        mos{"mossi"}
         mr{"marathi"}
         ms{"malajiska"}
         mt{"maltesiska"}
         mul{"flera språk"}
+        mun{"mundaspråk"}
+        mus{"muskogee"}
+        mwr{"marwari"}
         my{"burmanska"}
+        myn{"maya"}
+        myv{"erjya"}
         na{"nauru"}
+        nah{"nahuatl; aztekiska"}
+        nai{"nordamerikanskt indianspråk (annat)"}
+        nap{"napolitanska"}
         nb{"norskt bokmål"}
         nd{"nord­ndebele"}
+        nds{"lågtyska; lågsaxiska"}
         ne{"nepalesisika"}
+        new{"newari"}
         ng{"ndonga"}
+        nia{"nias"}
+        nic{"kordofanspråk (annat)"}
+        niu{"niuean"}
         nl{"nederländska"}
         nn{"ny­norsk"}
         no{"norska"}
+        nog{"nogai"}
+        non{"fornnordiska"}
         nr{"syd­ndebele"}
         nso{"sotho, nord"}
+        nub{"nubiska språk"}
         nv{"navaho"}
         ny{"nyanja"}
+        nym{"nyamwezi"}
+        nyn{"nyankole"}
+        nyo{"nyoro"}
+        nzi{"nzima"}
         oc{"provensalska (efter 1500); occitanska"}
         oj{"odjibwa; chippewa"}
         om{"oromo"}
         or{"oriya"}
         os{"ossetiska"}
+        osa{"osage"}
+        ota{"ottomanturkiska (1500-1928)"}
+        oto{"otomanguespråk"}
         pa{"panjabi"}
+        paa{"papuaspråk (annat)"}
+        pag{"pangasinan"}
+        pal{"pahlavi"}
+        pam{"pampanga"}
+        pap{"papiamento"}
+        pau{"palau"}
+        peo{"fornpersiska (ca 600-400 f.Kr.)"}
+        phi{"filippinskt språk (annat)"}
+        phn{"kananeiska; feniciska"}
         pi{"pali"}
         pl{"polska"}
+        pon{"ponape"}
+        pra{"prakrit"}
+        pro{"fornprovensalska (till 1500)"}
         ps{"pashto; afghanska"}
         pt{"portugisiska"}
         qu{"quechua"}
+        raj{"rajasthani"}
+        rap{"rapanui"}
+        rar{"rarotongan"}
         rm{"räto­romanska"}
         rn{"rundi"}
         ro{"rumänska"}
+        roa{"romanskt (annat)"}
+        rom{"romani"}
         ru{"ryska"}
         rw{"rwanda; kinjarwanda"}
         sa{"sanskrit"}
+        sad{"sandawe"}
         sah{"jakutiska"}
+        sai{"nordamerikanskt indianskt (annat)"}
+        sal{"salishspråk"}
+        sam{"samariska"}
+        sas{"sasak"}
+        sat{"santali"}
         sc{"sardiska"}
+        sco{"skotska"}
         sd{"sindhi"}
         se{"nord­samiska"}
+        sel{"selkup"}
+        sem{"semitiskt (annat)"}
         sg{"sango"}
+        sga{"forniriska (till 900)"}
+        sgn{"teckenspråk"}
         sh{"serbokroatiska"}
+        shn{"shan"}
         si{"singalesiska"}
         sid{"sidamo"}
+        sio{"siouxspråk"}
+        sit{"sinotibetanska språk"}
         sk{"slovakiska"}
         sl{"slovenska"}
+        sla{"slaviskt (annat)"}
         sm{"samoanska"}
         sma{"sydsamiska"}
+        smi{"samiskt språk (annat)"}
         smj{"lulesamiska"}
         smn{"enaresamiska"}
         sms{"skoltsamiska"}
         sn{"shona; manshona"}
+        snk{"soninke"}
         so{"somaliska"}
+        sog{"sogdiska"}
+        son{"songhai"}
         sq{"albanska"}
         sr{"serbiska"}
+        srr{"serer"}
         ss{"swati"}
+        ssa{"nilosahariskt (annat)"}
         st{"syd­sotho"}
         su{"sundanesiska"}
+        suk{"sukuma"}
+        sus{"susu"}
+        sux{"sumeriska"}
         sv{"svenska"}
         sw{"swahili"}
         syr{"syriska"}
         ta{"tamil"}
+        tai{"tai (annat)"}
         te{"telugu"}
+        tem{"temne"}
+        ter{"tereno"}
+        tet{"tetum"}
         tg{"tadzjikiska"}
         th{"thailändska"}
         ti{"tigrinja"}
         tig{"tigré"}
+        tiv{"tivi"}
         tk{"turkmeniska"}
+        tkl{"tokelauiska"}
         tl{"tagalog"}
+        tli{"tlingit"}
+        tmh{"tamashek"}
         tn{"tswana"}
         to{"tonganska"}
+        tog{"tonganska (Nyasa)"}
+        tpi{"tok pisin"}
         tr{"turkiska"}
         ts{"tsonga"}
+        tsi{"tsimshian"}
         tt{"tatariska"}
+        tum{"tumbuka"}
+        tup{"tupispråk"}
+        tut{"altaiskt (annat)"}
+        tvl{"tuvaluanska"}
         tw{"twi"}
         ty{"tahitiska"}
+        tyv{"tuviniska"}
+        udm{"udmurtiska"}
         ug{"uiguriska"}
+        uga{"ugaritiska"}
         uk{"ukrainska"}
+        umb{"umbundu"}
         und{"obestämt"}
         ur{"urdu"}
         uz{"uzbekiska"}
         ve{"venda"}
         vi{"vietnamesiska"}
         vo{"volapük"}
+        vot{"votiska"}
         wa{"walloon"}
+        wak{"wakash"}
         wal{"walamo"}
+        war{"waray"}
+        was{"washo"}
         wen{"sorbiska språk"}
         wo{"wolof"}
+        xal{"kalmuckiska"}
         xh{"xhosa"}
         yi{"jiddisch"}
         yo{"yoruba"}
+        ypk{"yupiska språk"}
         za{"zhuang"}
+        zap{"zapotek"}
+        zen{"zenaga"}
         zh{"kinesiska"}
+        znd{"zandé"}
         zu{"zulu"}
+        zun{"zuñi"}
     }
     LocaleScript{
         "Latn",
@@ -1336,9 +1805,9 @@ sv{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
+                "EEEE d MMMM yyyy",
+                "EEEE d MMM yyyy",
+                "d MMM yyyy",
                 "yyyy-MM-dd",
                 "{1} {0}",
             }
@@ -1429,13 +1898,11 @@ sv{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
+    }
+    messages{
+        nostr{"nej:n"}
+        yesstr{"ja:j"}
     }
     zoneStrings{
         "Africa:Casablanca"{

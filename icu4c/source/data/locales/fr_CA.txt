@@ -41,12 +41,6 @@ fr_CA{
                 "yy-MM-dd",
                 "{1} {0}",
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
 }

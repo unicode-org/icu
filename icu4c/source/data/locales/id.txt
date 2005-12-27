@@ -245,28 +245,35 @@ id{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Currencies{
-        IDR{
-            "Rp",
-            "IDR",
-        }
-    }
     ExemplarCharacters{"[a-z]"}
     Languages{
         aa{"Afar"}
         ab{"Abkhaz"}
+        ace{"Aceh"}
         ae{"Avestan"}
         af{"Afrikaans"}
+        afa{"Afro-Asiatik (Lainnya)"}
         ak{"Akan"}
+        akk{"Akkadien"}
+        alg{"Bahasa Algonquia"}
         am{"Amharik"}
+        ang{"Inggris Kuno (kl.450-1100)"}
+        apa{"Bahasa-bahasa Apache"}
         ar{"Arab"}
+        arc{"Aram"}
         arn{"Araucan"}
         art{"Buatan (Lainnya)"}
         as{"Assam"}
+        ast{"Astur"}
+        ath{"Bahasa-bahasa Athapaska"}
+        aus{"Bahasa-bahasa Australia"}
         av{"Avarik"}
         ay{"Aymara"}
         az{"Azerbaijan"}
         ba{"Bashkir"}
+        bai{"Bahasa-bahasa Bamileke"}
+        ban{"Balin"}
+        bat{"Baltik (Lainnya)"}
         be{"Belarusia"}
         bg{"Bulgaria"}
         bh{"Bihari"}
@@ -276,10 +283,17 @@ id{
         bo{"Tibet"}
         br{"Breton"}
         bs{"Bosnia"}
+        bug{"Bugis"}
         ca{"Catalan"}
+        cai{"India Amerika Tengah (Lainnnya)"}
+        car{"Karib"}
+        cau{"Kaukasia (Lainnya)"}
         ce{"Chechen"}
+        cel{"Celtic (Lainnya)"}
         ch{"Chamorro"}
+        chk{"Chuuke"}
         co{"Korsika"}
+        cop{"Koptik"}
         cr{"Cree"}
         cs{"Ceko"}
         cv{"Chuvash"}
@@ -289,8 +303,10 @@ id{
         dv{"Divehi"}
         dz{"Dzongkha"}
         ee{"Ewe"}
+        egy{"Mesir Kuno"}
         el{"Yunani"}
         en{"Inggris"}
+        enm{"Inggris, Abad Pertengahan (1100-1500)"}
         eo{"Esperanto"}
         es{"Spanyol"}
         et{"Estonian"}
@@ -301,11 +317,20 @@ id{
         fj{"Fiji"}
         fo{"Faro"}
         fr{"Perancis"}
+        frm{"Perancis, Abad Pertengahan (kl.1400-1600)"}
+        fro{"Perancis Kuno (842-kl.1400)"}
+        fur{"Friuli"}
         fy{"Frisi"}
         ga{"Irlandia"}
         gd{"Gaelik Skotlandia"}
+        gem{"Jermanik (Lainnya)"}
+        gil{"Gilbert"}
         gl{"Gallegan"}
+        gmh{"Jerman, Abad Pertengahan (kl.1050-1500)"}
         gn{"Guarani"}
+        goh{"Jerman Kuno (kl.750-1050)"}
+        got{"Gothik"}
+        grc{"Yunani Kuno (sd 1453)"}
         gu{"Gujarati"}
         gv{"Manx"}
         ha{"Hausa"}
@@ -327,6 +352,8 @@ id{
         is{"Icelandic"}
         it{"Italian"}
         ja{"Japanese"}
+        jpr{"Judeo-Persia"}
+        jrb{"Judeo-Arab"}
         jv{"Jawa"}
         ka{"Georgian"}
         kg{"Kongo"}
@@ -338,6 +365,7 @@ id{
         kn{"Kannada"}
         ko{"Korea"}
         kok{"Konkani"}
+        kos{"Kosrae"}
         kr{"Kanuri"}
         ks{"Kashmir"}
         ku{"Kurdi"}
@@ -346,6 +374,7 @@ id{
         ky{"Kirghiz"}
         la{"Latin"}
         lb{"Luxembourg"}
+        lez{"Lezghia"}
         lg{"Ganda"}
         li{"Limburg"}
         ln{"Lingala"}
@@ -353,10 +382,16 @@ id{
         lt{"Lithuania"}
         lu{"Luba-Katanga"}
         lv{"Latvian"}
+        mad{"Madura"}
+        mak{"Makassar"}
+        map{"Austronesia"}
         mg{"Malagasi"}
+        mga{"Irlandia Abad Pertengahan (900-1200)"}
         mh{"Marshall"}
         mi{"Maori"}
+        mis{"Bahasa Lain-lain"}
         mk{"Macedonian"}
+        mkh{"Mon-Khmer (Lainnya)"}
         ml{"Malayalam"}
         mn{"Mongolian"}
         mo{"Moldavian"}
@@ -378,6 +413,9 @@ id{
         or{"Oriya"}
         os{"Ossetic"}
         pa{"Punjabi"}
+        paa{"Papuan (Lainnya)"}
+        peo{"Persia Kuno (kl.600-400 SM.)"}
+        phi{"Filipina (Lainnya)"}
         pi{"Pali"}
         pl{"Polish"}
         ps{"Pashto (Pushto)"}
@@ -404,6 +442,7 @@ id{
         sr{"Serbian"}
         ss{"Swati"}
         su{"Sundan"}
+        sux{"Sumeria"}
         sv{"Swedia"}
         sw{"Swahili"}
         syr{"Syria"}
@@ -519,12 +558,6 @@ id{
                         "Desember",
                     }
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

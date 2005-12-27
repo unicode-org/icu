@@ -1090,6 +1090,10 @@ static void TestExemplarSet(void){
             }
             for (j=0; j<codeLen; ++j) {
                 uprv_strcpy(cbuf, "[:");
+                if(code[j]==-1){
+                    log_err("USCRIPT_INVALID_CODE returned for locale: %s\n", locale);
+                    continue;
+                }
                 uprv_strcat(cbuf, uscript_getShortName(code[j]));
                 uprv_strcat(cbuf, ":]");
                 u_uastrcpy(ubuf, cbuf);
@@ -1106,14 +1110,14 @@ static void TestExemplarSet(void){
                 if (!assertSuccess("uset_getItem", &ec)) goto END;
                 if (strLen == 0) {
                     for (j=0; j<codeLen; ++j) {
-                        if (uset_containsRange(codeSets[j], start, end)) {
+                        if (codeSets[j]!=NULL && uset_containsRange(codeSets[j], start, end)) {
                             existsInScript = TRUE;
                             break;
                         }
                     }
                 } else {
                     for (j=0; j<codeLen; ++j) {
-                        if (uset_containsString(codeSets[j], ubuf, strLen)) {
+                        if (codeSets[j]!=NULL && uset_containsString(codeSets[j], ubuf, strLen)) {
                             existsInScript = TRUE;
                             break;
                         }

@@ -6,6 +6,13 @@
 // * Source File:<path>/common/main/zh_Hans.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/zh_Hans.xml
+ */
 zh_Hans{
+    LocaleScript{
+        "Hani",
+        "Bopo",
+    }
     Version{"1.19"}
 }

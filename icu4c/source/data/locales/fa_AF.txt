@@ -106,13 +106,61 @@ fa_AF{
         ZW{"زیمبابوی"}
     }
     Currencies{
+        AUD{
+            "AUD",
+            "دالر آسترالیا",
+        }
+        BND{
+            "BND",
+            "دالر برونی",
+        }
+        BYR{
+            "BYR",
+            "روبل روسیهٔ سفید",
+        }
+        CAD{
+            "CAD",
+            "دالر کانادا",
+        }
+        CHF{
+            "CHF",
+            "فرانک سویس",
+        }
+        DKK{
+            "DKK",
+            "کرون دنمارک",
+        }
         JPY{
             "¥",
-            "JPY",
+            "ین جاپان",
+        }
+        MXN{
+            "MXN",
+            "پزوی مکسیکو",
+        }
+        NLG{
+            "NLG",
+            "گیلدر هالند",
+        }
+        NOK{
+            "NOK",
+            "کرون ناروی",
+        }
+        SEK{
+            "SEK",
+            "کرون سویدن",
+        }
+        SGD{
+            "SGD",
+            "دالر سینگاپور",
+        }
+        TJS{
+            "TJS",
+            "سامانی تاجکستان",
         }
         USD{
             "$",
-            "USD",
+            "دالر امریکا",
         }
     }
     Languages{
@@ -149,6 +197,12 @@ fa_AF{
         "∞",
         "NaN",
         "+",
+    }
+    NumberPatterns{
+        "#,##0.###;'‪'-#,##0.###'‬'",
+        "#,##0.00 ¤",
+        "'‪'#,##0%'‬'",
+        "#E0",
     }
     Version{"1.37"}
     calendar{
@@ -189,11 +243,17 @@ fa_AF{
                     }
                 }
             }
-            weekend:intvector{
+        }
+        islamic{
+            DateTimeElements:intvector{
                 7,
-                0,
                 1,
-                86400000,
+            }
+        }
+        persian{
+            DateTimeElements:intvector{
+                7,
+                1,
             }
         }
     }

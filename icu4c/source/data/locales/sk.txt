@@ -11,6 +11,32 @@
  */
 sk{
     Countries{
+        001{"Svet"}
+        002{"Afrika"}
+        005{"Južná Amerika"}
+        013{"Stredná Amerika"}
+        014{"Východná Afrika"}
+        015{"Severná Afrika"}
+        017{"Stredná Afrika"}
+        018{"Južná Afrika"}
+        019{"Americký kontinent"}
+        021{"Severná Amerika"}
+        029{"Karibik"}
+        030{"Východná Ázia"}
+        035{"Juhovýchodná Ázia"}
+        039{"Južná Európa"}
+        053{"Austrália a Nový Zéland"}
+        054{"Melanézia"}
+        057{"Mikronésia"}
+        061{"Polynézia"}
+        062{"Južná Ázia"}
+        142{"Ázia"}
+        145{"Západná Ázia"}
+        150{"Európa"}
+        151{"Východná Európa"}
+        154{"Severná Európa"}
+        155{"Západná Európa"}
+        200{"Československo"}
         830{"Kanál La Manche"}
         833{"Ostrov Man"}
         AD{"Andorra"}
@@ -194,6 +220,7 @@ sk{
         PW{"Palau"}
         PY{"Paraguaj"}
         QA{"Katar"}
+        QO{"Tichomorie - ostatné"}
         RE{"Reunion"}
         RO{"Rumunsko"}
         RU{"Ruská federácia"}
@@ -279,6 +306,10 @@ sk{
             "AOA",
             "Angolská kwanza",
         }
+        AOK{
+            "AOK",
+            "Angolská kwanza (1977-1990)",
+        }
         AON{
             "AON",
             "Angolská nová kwanza (1990-2000)",
@@ -286,6 +317,14 @@ sk{
         AOR{
             "AOR",
             "Angolská kwanza Reajustado (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Argentinský austral",
+        }
+        ARP{
+            "ARP",
+            "Argentinské peso (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -307,6 +346,10 @@ sk{
             "AZM",
             "Azerbaidžanský manat",
         }
+        BAD{
+            "BAD",
+            "Bosnianský dinár",
+        }
         BAM{
             "KM",
             "Bosnianský konvertibilná marka",
@@ -319,9 +362,17 @@ sk{
             "Tk",
             "Bangladéšska taka",
         }
+        BEC{
+            "BEC",
+            "Belgický frank (konvertibilný)",
+        }
         BEF{
             "BF",
             "Belgický frank",
+        }
+        BEL{
+            "BEL",
+            "Belgický frank (finančný)",
         }
         BGL{
             "lev",
@@ -347,9 +398,37 @@ sk{
             "BND",
             "Bruneiský dolár",
         }
+        BOP{
+            "BOP",
+            "Bolivíjske peso",
+        }
+        BOV{
+            "BOV",
+            "Bolivíjske mvdol",
+        }
+        BRB{
+            "BRB",
+            "Bolivíjske Cruzeiro Novo (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Bolivíjske cruzado",
+        }
+        BRE{
+            "BRE",
+            "Bolivíjske cruzeiro (1990-1993)",
+        }
         BRL{
             "R$",
             "Bolivíjsky real",
+        }
+        BRN{
+            "BRN",
+            "Brazílske Cruzado Novo",
+        }
+        BRR{
+            "BRR",
+            "Brazílske cruzeiro",
         }
         BSD{
             "BSD",
@@ -358,6 +437,10 @@ sk{
         BTN{
             "Nu",
             "Bhutansky ngultrum",
+        }
+        BUK{
+            "BUK",
+            "Burmese Kyat",
         }
         BWP{
             "BWP",
@@ -387,6 +470,10 @@ sk{
             "SwF",
             "Švajčiarský frank",
         }
+        CLF{
+            "CLF",
+            "Čílske Unidades de Fomento",
+        }
         CLP{
             "Ch$",
             "Čílske peso",
@@ -403,6 +490,10 @@ sk{
             "C",
             "Kostarikský colon",
         }
+        CSK{
+            "CSK",
+            "Československá koruna",
+        }
         CUP{
             "CUP",
             "Kubánske peso",
@@ -418,6 +509,10 @@ sk{
         CZK{
             "CZK",
             "Česká koruna",
+        }
+        DDM{
+            "DDM",
+            "Východonemecká marka",
         }
         DEM{
             "DEM",
@@ -442,6 +537,10 @@ sk{
         ECS{
             "ECS",
             "Ekuadorský sucre",
+        }
+        ECV{
+            "ECV",
+            "Ekuadorský Unidad de Valor Constante (UVC)",
         }
         EEK{
             "EEK",
@@ -487,6 +586,10 @@ sk{
             "£",
             "Britská libra",
         }
+        GEK{
+            "GEK",
+            "Gruzínsky Kupon Larit",
+        }
         GEL{
             "lari",
             "Gruzínsky lari",
@@ -507,6 +610,14 @@ sk{
             "GF",
             "Guinejský frank",
         }
+        GNS{
+            "GNS",
+            "Guinejský syli",
+        }
+        GQE{
+            "GQE",
+            "Rovníková Guinea Ekwele Guineana",
+        }
         GRD{
             "GRD",
             "Grécka drachma",
@@ -514,6 +625,10 @@ sk{
         GTQ{
             "Q",
             "Guatemalský quetzal",
+        }
+        GWE{
+            "GWE",
+            "Portugalská Guinea eskudo",
         }
         GWP{
             "GWP",
@@ -530,6 +645,10 @@ sk{
         HNL{
             "L",
             "Hoduraská lempira",
+        }
+        HRD{
+            "HRD",
+            "Chorvátsky dinár",
         }
         HRK{
             "HRK",
@@ -550,6 +669,10 @@ sk{
         IEP{
             "IR£",
             "Írska libra",
+        }
+        ILP{
+            "ILP",
+            "Izraelská libra",
         }
         ILS{
             "ILS",
@@ -647,6 +770,10 @@ sk{
             "LTL",
             "Litevská lita",
         }
+        LTT{
+            "LTT",
+            "Litevský talonas",
+        }
         LUF{
             "LUF",
             "Luxemburský frank",
@@ -655,6 +782,10 @@ sk{
             "LVL",
             "Lotyšský lats",
         }
+        LVR{
+            "LVR",
+            "Lotyšský rubeľ",
+        }
         LYD{
             "LD",
             "Libyjský dinár",
@@ -662,6 +793,10 @@ sk{
         MAD{
             "MAD",
             "Marocký dirham",
+        }
+        MAF{
+            "MAF",
+            "Marocký frank",
         }
         MDL{
             "MDL",
@@ -678,6 +813,10 @@ sk{
         MKD{
             "MDen",
             "Macedónsky denár",
+        }
+        MLF{
+            "MLF",
+            "Malský frank",
         }
         MMK{
             "MMK",
@@ -699,6 +838,10 @@ sk{
             "Lm",
             "Maltská lira",
         }
+        MTP{
+            "MTP",
+            "Maltská libra",
+        }
         MUR{
             "MUR",
             "Mauritská rupia",
@@ -714,6 +857,14 @@ sk{
         MXN{
             "MEX$",
             "Mexické peso",
+        }
+        MXP{
+            "MXP",
+            "Mexické striborné peso (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Mexické Unidad de Inversion (UDI)",
         }
         MYR{
             "RM",
@@ -734,6 +885,10 @@ sk{
         NGN{
             "NGN",
             "Nigerská naira",
+        }
+        NIC{
+            "NIC",
+            "Nikaragujská cordoba",
         }
         NIO{
             "NIO",
@@ -763,9 +918,17 @@ sk{
             "PAB",
             "Panamská balboa",
         }
+        PEI{
+            "PEI",
+            "Peruvský inti",
+        }
         PEN{
             "PEN",
             "Peruvský sol Nuevo",
+        }
+        PES{
+            "PES",
+            "Peruvský sol",
         }
         PGK{
             "PGK",
@@ -782,6 +945,10 @@ sk{
         PLN{
             "Zl",
             "Polský zloty",
+        }
+        PLZ{
+            "PLZ",
+            "Polský zloty (1950-1995)",
         }
         PTE{
             "PTE",
@@ -867,6 +1034,10 @@ sk{
             "Db",
             "Sao Tome a Principe dobra",
         }
+        SUR{
+            "SUR",
+            "Sovietský rubeľ",
+        }
         SVC{
             "SVC",
             "El Salvadorský colon",
@@ -927,6 +1098,14 @@ sk{
             "UAH",
             "Ukrainská hrivna",
         }
+        UAK{
+            "UAK",
+            "Ukrainský karbovanetz",
+        }
+        UGS{
+            "UGS",
+            "Ugandan šiling (1966-1987)",
+        }
         UGX{
             "U Sh",
             "Ugandský šiling",
@@ -934,6 +1113,18 @@ sk{
         USD{
             "US$",
             "US dolár",
+        }
+        USN{
+            "USN",
+            "US dolár (Next day)",
+        }
+        USS{
+            "USS",
+            "US dolár (Same day)",
+        }
+        UYP{
+            "UYP",
+            "Uruguajské peso (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -963,9 +1154,25 @@ sk{
             "XAF",
             "CFA frank BEAC",
         }
+        XAU{
+            "XAU",
+            "Zlato",
+        }
         XCD{
             "EC$",
             "East Caribbean dolár",
+        }
+        XDR{
+            "XDR",
+            "Špeciálne práva čerpania",
+        }
+        XFO{
+            "XFO",
+            "Francúzsky zlatý frank",
+        }
+        XFU{
+            "XFU",
+            "Francúzsky UIC-frank",
         }
         XOF{
             "XOF",
@@ -975,13 +1182,29 @@ sk{
             "CFPF",
             "CFP frank",
         }
+        YDD{
+            "YDD",
+            "Jemenský dinár",
+        }
         YER{
             "YRl",
             "Jemenský rial",
         }
+        YUD{
+            "YUD",
+            "Juhoslávsky dinár",
+        }
         YUM{
             "YUM",
             "Juhoslávsky Noviy dinár",
+        }
+        YUN{
+            "YUN",
+            "Juhoslávsky dinár",
+        }
+        ZAL{
+            "ZAL",
+            "Juhoafrický rand (financial)",
         }
         ZAR{
             "R",
@@ -994,6 +1217,10 @@ sk{
         ZRN{
             "ZRN",
             "Zairský nový zaire",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zairský Zaire",
         }
         ZWD{
             "Z$",
@@ -1080,7 +1307,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.53"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -1185,15 +1412,15 @@ sk{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    messages{
+        noexpr{"^[nN]([oO]|[iI][eE])?"}
+        nostr{"nie:n"}
+        yesexpr{"^(([yY]([eE][sS])?)|([aA]([nN][oO])?))"}
+        yesstr{"ano:a"}
+    }
     zoneStrings{
         "Antarctica:South_Pole"{
             ec{"Južný pól"}
