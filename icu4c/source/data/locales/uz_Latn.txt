@@ -25,6 +25,14 @@ uz_Latn{
         UZ{"Oʿzbekiston"}
     }
     Currencies{
+        BRL{
+            "BRL",
+            "Brazil reali",
+        }
+        CNY{
+            "CNY",
+            "Xitoy yuani",
+        }
         EUR{
             "€",
             "Evro",
@@ -40,6 +48,10 @@ uz_Latn{
         JPY{
             "¥",
             "Yapon yenasi",
+        }
+        RUB{
+            "RUB",
+            "Rus rubli",
         }
         USD{
             "$",
@@ -87,13 +99,13 @@ uz_Latn{
                         "Shan",
                     }
                     wide{
-                        "Yakshanba",
-                        "Dushanba",
-                        "Seshanba",
-                        "Chorshanba",
-                        "Payshanba",
-                        "Juma",
-                        "Shanba",
+                        "yakshanba",
+                        "dushanba",
+                        "seshanba",
+                        "chorshanba",
+                        "payshanba",
+                        "juma",
+                        "shanba",
                     }
                 }
                 stand-alone{
@@ -125,18 +137,18 @@ uz_Latn{
                         "Dek",
                     }
                     wide{
-                        "Yanvar",
-                        "Fevral",
-                        "Mart",
-                        "Aprel",
-                        "May",
-                        "Iyun",
-                        "Iyul",
-                        "Avgust",
-                        "Sentyabr",
-                        "Oktyabr",
-                        "Noyabr",
-                        "Dekabr",
+                        "Muharram",
+                        "Safar",
+                        "Rabiul-avval",
+                        "Rabiul-oxir",
+                        "Jumodiul-ulo",
+                        "Jumodiul-uxro",
+                        "Rajab",
+                        "Shaʿbon",
+                        "Ramazon",
+                        "Shavvol",
+                        "Zil-qaʿda",
+                        "Zil-hijja",
                     }
                 }
                 stand-alone{

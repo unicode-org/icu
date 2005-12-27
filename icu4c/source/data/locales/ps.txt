@@ -87,6 +87,7 @@ ps{
     }
     Languages{
         ar{"عربي"}
+        bal{"بلوڅي"}
         de{"الماني"}
         el{"یوناني"}
         en{"انګلیسي"}
@@ -97,6 +98,7 @@ ps{
         he{"عبري"}
         hi{"هندي"}
         hy{"ارمني"}
+        ine{"هند و اروپایي"}
         it{"ایټالوي"}
         ja{"جاپانی"}
         ku{"کردي"}
@@ -199,6 +201,10 @@ ps{
                 }
             }
         }
+    }
+    layout{
+        characters{"right-to-left"}
+        lines{"top-to-bottom"}
     }
     zoneStrings{
         "Asia:Kabul"{

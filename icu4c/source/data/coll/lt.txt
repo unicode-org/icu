@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/lt.xml
  */
 lt{
-    Version{"1.19"}
+    Version{"1.21"}
     collations{
         standard{
             Sequence{

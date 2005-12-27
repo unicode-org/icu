@@ -2347,7 +2347,7 @@ static void TestDirectAccess(void) {
         }
     }
 
-    t = ures_findResource("root/calendar/islamic-civil/DateTimePatterns", t, &status);
+    t = ures_findResource("root/calendar/islamic-civil/DateTime", t, &status);
     if(U_SUCCESS(status)) {
         log_err("This resource does not exist. How did it get here?\n");
     }
@@ -2364,7 +2364,7 @@ static void TestDirectAccess(void) {
     t2 = ures_open(NULL, "he", &status);
     t2 = ures_getByKeyWithFallback(t2, "calendar", t2, &status);
     t2 = ures_getByKeyWithFallback(t2, "islamic-civil", t2, &status);
-    t2 = ures_getByKeyWithFallback(t2, "DateTimePatterns", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "DateTime", t2, &status);
     if(U_SUCCESS(status)) {
         log_err("This resource does not exist. How did it get here?\n");
     }
@@ -2385,7 +2385,7 @@ static void TestDirectAccess(void) {
     t2 = ures_open(NULL, "root", &status);
     t2 = ures_getByKeyWithFallback(t2, "calendar", t2, &status);
     t2 = ures_getByKeyWithFallback(t2, "islamic-civil", t2, &status);
-    t2 = ures_getByKeyWithFallback(t2, "DateTimePatterns", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "DateTime", t2, &status);
     if(U_SUCCESS(status)) {
         log_err("This resource does not exist. How did it get here?\n");
     }

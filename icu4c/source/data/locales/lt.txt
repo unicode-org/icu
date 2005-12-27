@@ -11,6 +11,7 @@
  */
 lt{
     Countries{
+        200{"Čekoslovakija"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
         AF{"Afganistanas"}
@@ -150,7 +151,7 @@ lt{
         ML{"Malis"}
         MM{"Mianmaras"}
         MN{"Mongolija"}
-        MO{"Kinijos S.A.R. Makao"}
+        MO{"Macao"}
         MP{"Marianos šiaurinės salos"}
         MQ{"Martinika"}
         MR{"Mauritanija"}
@@ -342,7 +343,7 @@ lt{
     Scripts{
         Latn{"Latin"}
     }
-    Version{"1.53"}
+    Version{"1.57"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -465,13 +466,13 @@ lt{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    messages{
+        noexpr{"^[nN][oOeE]?"}
+        nostr{"ne:n"}
+        yesexpr{"^(([yY]([eE][sS])?)|([tT]([aA][iI][pP])?))"}
+        yesstr{"taip:t"}
+    }
 }

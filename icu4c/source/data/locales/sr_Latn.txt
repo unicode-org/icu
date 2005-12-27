@@ -11,6 +11,33 @@
  */
 sr_Latn{
     Countries{
+        001{"Svet"}
+        002{"Afrika"}
+        005{"Južna Amerika"}
+        009{"Okeanija"}
+        011{"Zapadna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Istočna Afrika"}
+        015{"Severna Afrika"}
+        017{"Centralna Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Severna Amerika"}
+        029{"Karibi"}
+        030{"Istočna Azija"}
+        035{"Jugoistočna Azija"}
+        039{"Južna Evropa"}
+        053{"Australija i Novi Zeland"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        145{"Zapadna Azija"}
+        150{"Evropa"}
+        151{"Istočna Evropa"}
+        154{"Severna Evropa"}
+        155{"Zapadna Evropa"}
         830{"Kanalska ostrva"}
         833{"Ostrvo Man"}
         AD{"Andora"}
@@ -194,6 +221,7 @@ sr_Latn{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        QO{"Ostala okeanija"}
         RE{"Rejunion"}
         RO{"Rumunija"}
         RU{"Rusija"}
@@ -322,6 +350,10 @@ sr_Latn{
         GRD{
             "GRD",
             "Drahma",
+        }
+        HRD{
+            "HRD",
+            "Hrvatski dinar",
         }
         HRK{
             "HRK",
@@ -595,6 +627,12 @@ sr_Latn{
                 }
             }
         }
+    }
+    messages{
+        noexpr{"^[nN][oOeE]?"}
+        nostr{"ne:n"}
+        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
+        yesstr{"da:d"}
     }
     zoneStrings{
         "Africa:Kinshasa"{

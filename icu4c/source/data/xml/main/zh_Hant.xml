@@ -10,13 +10,13 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.7 $"/>
-		<generation date="$Date: 2005/06/07 23:37:57 $"/>
+		<version number="$Revision: 1.8 $"/>
+		<generation date="$Date: 2005/12/27 22:19:39 $"/>
 		<language type="zh"/> 
 		<script type="Hant"/> 
 	</identity>
 	<characters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/">
+		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
 				<icu:script type="1">Hani</icu:script>
 				<icu:script type="2">Bopo</icu:script>

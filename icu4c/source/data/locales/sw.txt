@@ -92,10 +92,6 @@ sw{
         ZA{"Afrika ya Kusini"}
     }
     Currencies{
-        KES{
-            "KSh",
-            "KES",
-        }
         TZS{
             "TSh",
             "Shilingi ya Tanzania",
@@ -174,12 +170,6 @@ sw{
                         "Desemba",
                     }
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

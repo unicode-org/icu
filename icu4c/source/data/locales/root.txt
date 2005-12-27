@@ -214,6 +214,41 @@ root{
                 }
                 wide:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
             }
+            fields{
+                day{
+                    dn{"Day"}
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hour"}
+                }
+                minute{
+                    dn{"Minute"}
+                }
+                month{
+                    dn{"Month"}
+                }
+                second{
+                    dn{"Second"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                }
+                year{
+                    dn{"Year"}
+                }
+                zone{
+                    dn{"Zone"}
+                }
+            }
             monthNames{
                 default{"format"}
                 format{
@@ -301,6 +336,17 @@ root{
             }
         }
         islamic{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
             eras{
                 abbreviated{
                     "AH",
@@ -583,6 +629,17 @@ root{
             }
         }
         persian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
             monthNames{
                 default{"format"}
                 format{
@@ -598,6 +655,12 @@ root{
         quotationStart{"“"}
     }
     localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZvcL"}
+    messages{
+        noexpr{"^[nN][oO]?"}
+        nostr{"no:n"}
+        yesexpr{"^[yY]([eE][sS])?"}
+        yesstr{"yes:y"}
+    }
     zoneStrings{
         ""{
             ec{""}

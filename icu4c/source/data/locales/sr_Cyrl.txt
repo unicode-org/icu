@@ -6,6 +6,9 @@
 // * Source File:<path>/common/main/sr_Cyrl.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/sr_Cyrl.xml
+ */
 sr_Cyrl{
     Currencies{
         BRL{
@@ -20,6 +23,9 @@ sr_Cyrl{
             "CSD",
             "Српски Динар",
         }
+    }
+    LocaleScript{
+        "Cyrl",
     }
     Version{"1.15"}
 }

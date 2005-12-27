@@ -11,6 +11,33 @@
  */
 hr{
     Countries{
+        001{"Svijet"}
+        002{"Afrika"}
+        005{"Južna Amerika"}
+        009{"Oceanija"}
+        011{"Zapadna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Istočna Afrika"}
+        015{"Sjeverna Afrika"}
+        017{"Središnja Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Sjeverna Amerika"}
+        029{"Karibi"}
+        030{"Istočna Azija"}
+        035{"Jugoistočna Azija"}
+        039{"Južna Europa"}
+        053{"Australija i Novi Zeland"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        145{"Zapadna Azija"}
+        150{"Europa"}
+        151{"Istočna Europa"}
+        154{"Sjeverna Europa"}
+        155{"Zapadna Europa"}
         830{"Kanalski otoci"}
         833{"Otok Man"}
         AD{"Andora"}
@@ -194,6 +221,7 @@ hr{
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        QO{"Ostala oceanija"}
         RE{"Reunion"}
         RO{"Rumunjska"}
         RU{"Ruska Federacija"}
@@ -267,6 +295,14 @@ hr{
             "AOA",
             "Angolska kvanza",
         }
+        AOK{
+            "AOK",
+            "Angolska kvanza (1977-1990)",
+        }
+        ARP{
+            "ARP",
+            "Argentinski pezo (1983-1985)",
+        }
         ARS{
             "Arg$",
             "Argentinski pezo",
@@ -319,6 +355,10 @@ hr{
             "SwF",
             "Švicarski franak",
         }
+        CLF{
+            "CLF",
+            "Chilean Unidades de Fomento",
+        }
         CLP{
             "Ch$",
             "Čileanski pezo",
@@ -335,6 +375,10 @@ hr{
             "C",
             "Kostarikanski kolon",
         }
+        CSK{
+            "CSK",
+            "Czechoslovak Hard Koruna",
+        }
         CUP{
             "CUP",
             "Kubanski pezo",
@@ -350,6 +394,10 @@ hr{
         CZK{
             "CZK",
             "Češka kruna",
+        }
+        DDM{
+            "DDM",
+            "East German Ostmark",
         }
         DEM{
             "DEM",
@@ -374,6 +422,10 @@ hr{
         ECS{
             "ECS",
             "Ecuador Sucre",
+        }
+        ECV{
+            "ECV",
+            "Ecuador Unidad de Valor Constante (UVC)",
         }
         EEK{
             "EEK",
@@ -419,6 +471,10 @@ hr{
             "£",
             "Britanska funta",
         }
+        GEK{
+            "GEK",
+            "Georgian Kupon Larit",
+        }
         GEL{
             "lari",
             "Gruzijski lari",
@@ -435,6 +491,14 @@ hr{
             "GF",
             "Gvinejski franak",
         }
+        GNS{
+            "GNS",
+            "Guinea Syli",
+        }
+        GQE{
+            "GQE",
+            "Equatorial Guinea Ekwele Guineana",
+        }
         GRD{
             "GRD",
             "Grčka drahma",
@@ -442,6 +506,10 @@ hr{
         GTQ{
             "Q",
             "Kvecal",
+        }
+        GWE{
+            "GWE",
+            "Portuguese Guinea Escudo",
         }
         GWP{
             "GWP",
@@ -458,6 +526,10 @@ hr{
         HNL{
             "L",
             "Hoduraška lempira",
+        }
+        HRD{
+            "HRD",
+            "Hrvatski dinar",
         }
         HRK{
             "HRK",
@@ -478,6 +550,10 @@ hr{
         IEP{
             "IR£",
             "Irska funta",
+        }
+        ILP{
+            "ILP",
+            "Israelska funta",
         }
         ILS{
             "ILS",
@@ -563,6 +639,10 @@ hr{
             "LTL",
             "Lithuanian Lita",
         }
+        LTT{
+            "LTT",
+            "Lithuanian Talonas",
+        }
         LUF{
             "LUF",
             "Luksemburški franak",
@@ -570,6 +650,10 @@ hr{
         LVL{
             "LVL",
             "Latvian Lats",
+        }
+        LVR{
+            "LVR",
+            "Latvian Ruble",
         }
         LYD{
             "LD",
@@ -579,6 +663,10 @@ hr{
             "MAD",
             "Morokanski dirham",
         }
+        MAF{
+            "MAF",
+            "Morokanski franak",
+        }
         MDL{
             "MDL",
             "Moldovski lej",
@@ -586,6 +674,10 @@ hr{
         MKD{
             "MDen",
             "Makedonski denar",
+        }
+        MLF{
+            "MLF",
+            "Mali Franc",
         }
         MMK{
             "MMK",
@@ -607,6 +699,10 @@ hr{
             "Lm",
             "Malteška lira",
         }
+        MTP{
+            "MTP",
+            "Malteška funta",
+        }
         MUR{
             "MUR",
             "Mauricijska rupija",
@@ -618,6 +714,10 @@ hr{
         MXN{
             "MEX$",
             "Meksički pezo",
+        }
+        MXP{
+            "MXP",
+            "Meksički srebrni pezo (1861-1992)",
         }
         MYR{
             "RM",
@@ -663,9 +763,17 @@ hr{
             "PAB",
             "Panamska balboa",
         }
+        PEI{
+            "PEI",
+            "Peruanski inti",
+        }
         PEN{
             "PEN",
             "Peruanski novi sol",
+        }
+        PES{
+            "PES",
+            "Peruanski sol",
         }
         PHP{
             "PHP",
@@ -678,6 +786,10 @@ hr{
         PLN{
             "Zl",
             "Poljska zlota",
+        }
+        PLZ{
+            "PLZ",
+            "Poljska zlota (1950-1995)",
         }
         PTE{
             "PTE",
@@ -787,6 +899,10 @@ hr{
             "UAH",
             "Ukrajinska hrivnja",
         }
+        UGS{
+            "UGS",
+            "Ugandski šiling (1966-1987)",
+        }
         UGX{
             "U Sh",
             "Ugandski šiling",
@@ -794,6 +910,18 @@ hr{
         USD{
             "US$",
             "Američki dolar",
+        }
+        USN{
+            "USN",
+            "Američki dolar (sljedeći dan)",
+        }
+        USS{
+            "USS",
+            "Američki dolar (isti dan)",
+        }
+        UYP{
+            "UYP",
+            "Urugvajski pezo (1975-1993)",
         }
         VEB{
             "Be",
@@ -803,13 +931,41 @@ hr{
             "VND",
             "Viejetnamski dong",
         }
+        XAU{
+            "XAU",
+            "Zlato",
+        }
+        XBA{
+            "XBA",
+            "Europska složena jedinica",
+        }
+        XBB{
+            "XBB",
+            "Europska monetarna jedinica",
+        }
+        YDD{
+            "YDD",
+            "jemenski dinar",
+        }
         YER{
             "YRl",
             "Jemenski rial",
         }
+        YUD{
+            "YUD",
+            "Jugoslavenski čvrsti dinar",
+        }
         YUM{
             "YUM",
             "Jugoslavenski novi dinar",
+        }
+        YUN{
+            "YUN",
+            "Jugoslavenski konvertibilni dinar",
+        }
+        ZAL{
+            "ZAL",
+            "Južnoafrički rand (financijski)",
         }
         ZAR{
             "R",
@@ -823,6 +979,10 @@ hr{
             "ZRN",
             "Zairski novi zair",
         }
+        ZRZ{
+            "ZRZ",
+            "Zairski zair",
+        }
         ZWD{
             "Z$",
             "Zimbabveanski dolar",
@@ -835,31 +995,47 @@ hr{
         currency{"Valuta"}
     }
     Languages{
+        ang{"engleski, stari (ca.450-1100)"}
+        apa{"apaški"}
         ar{"arapski"}
         art{"umjetni (ostali)"}
         av{"avarski"}
+        bat{"baltički (ostali)"}
         be{"bjeloruski"}
         bg{"bugarski"}
+        cel{"keltski (ostali)"}
         cs{"češki"}
         cu{"crkvenoslavenski"}
         cy{"velški"}
         da{"danski"}
         de{"njemački"}
+        dum{"nizozemski, srednji (ca. 1050-1350)"}
+        egy{"egipatski (antički)"}
         el{"grčki"}
         en{"engleski"}
+        enm{"engleski, srednji (1100-1500)"}
         eo{"esperanto"}
         es{"španjolski"}
         et{"estonijski"}
         fa{"perzijski"}
         fi{"finski"}
         fr{"francuski"}
+        frm{"francuski, srednji (ca.1400-1600)"}
+        fro{"francuski, stari (842-ca.1400)"}
         fy{"frizijski"}
         ga{"irski"}
+        gem{"germanski (ostali)"}
+        gmh{"njemački, srednji visoki (ca.1050-1500)"}
+        goh{"njemački, stari visoki (ca.750-1050)"}
+        grc{"grčki, antički (do 1453)"}
         haw{"havajski"}
         he{"hebrejski"}
         hr{"hrvatski"}
         hu{"mađarski"}
         hy{"armenski"}
+        inc{"indijski (drugi)"}
+        ine{"indoevropski (drugi)"}
+        ira{"iranski"}
         is{"islandski"}
         it{"talijanski"}
         ja{"japanski"}
@@ -868,6 +1044,7 @@ hr{
         la{"latinski"}
         lt{"litvanski"}
         lv{"latvijski"}
+        mga{"irski, srednji (900-1200)"}
         mk{"makedonski"}
         mn{"mongolski"}
         mt{"malteški"}
@@ -877,9 +1054,11 @@ hr{
         pl{"poljski"}
         pt{"portugalski"}
         ro{"rumunjski"}
+        roa{"romanski (ostali)"}
         ru{"ruski"}
         sk{"slovački"}
         sl{"slovenski"}
+        sla{"slavenski (drugi)"}
         sq{"albanski"}
         sr{"srpski"}
         sv{"švedski"}
@@ -1067,15 +1246,15 @@ hr{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    messages{
+        noexpr{"^[nN][oOeE]?"}
+        nostr{"ne:n"}
+        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
+        yesstr{"da:d"}
+    }
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}

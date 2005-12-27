@@ -34,11 +34,17 @@ fa_IR{
                 7,
                 1,
             }
-            weekend:intvector{
+        }
+        islamic{
+            DateTimeElements:intvector{
                 7,
-                0,
                 1,
-                86400000,
+            }
+        }
+        persian{
+            DateTimeElements:intvector{
+                7,
+                1,
             }
         }
     }

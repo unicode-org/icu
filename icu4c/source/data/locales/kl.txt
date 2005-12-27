@@ -13,12 +13,6 @@ kl{
     Countries{
         GL{"Kalaallit Nunaat"}
     }
-    Currencies{
-        DKK{
-            "kr",
-            "DKK",
-        }
-    }
     ExemplarCharacters{"[a á-ã b-e é ê f-i í î ĩ j-o ô p q ĸ r-u ú û ũ v-z æ ø å]"}
     Languages{
         kl{"kalaallisut"}

@@ -21,4 +21,8 @@ ur{
         "Arab",
     }
     Version{"1.24"}
+    layout{
+        characters{"right-to-left"}
+        lines{"top-to-bottom"}
+    }
 }

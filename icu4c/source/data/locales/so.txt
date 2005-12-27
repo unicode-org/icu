@@ -144,10 +144,6 @@ so{
             "¥",
             "Japanese Yen",
         }
-        KES{
-            "Ksh",
-            "KES",
-        }
         RUB{
             "RUB",
             "Russian Ruble",
@@ -211,17 +207,6 @@ so{
                         "Sabti",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "A",
-                        "I",
-                        "S",
-                        "A",
-                        "K",
-                        "J",
-                        "S",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -260,28 +245,6 @@ so{
                         "Bisha Laba iyo Tobnaad",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "K",
-                        "L",
-                        "S",
-                        "A",
-                        "S",
-                        "L",
-                        "T",
-                        "S",
-                        "S",
-                        "T",
-                        "K",
-                        "L",
-                    }
-                }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

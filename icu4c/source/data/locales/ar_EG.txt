@@ -10,10 +10,6 @@ ar_EG{
     Version{"1.31"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                7,
-                1,
-            }
             weekend:intvector{
                 6,
                 0,

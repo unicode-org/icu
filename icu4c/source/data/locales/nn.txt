@@ -346,17 +346,6 @@ nn{
                         "laurdag",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "O",
-                        "T",
-                        "F",
-                        "L",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -395,12 +384,6 @@ nn{
                         "desember",
                     }
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

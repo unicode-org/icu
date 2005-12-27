@@ -11,6 +11,33 @@
  */
 nl{
     Countries{
+        001{"Wereld"}
+        002{"Afrika"}
+        005{"Zuid-Amerika"}
+        009{"Oceanië"}
+        011{"West-Afrika"}
+        013{"Midden-Amerika"}
+        014{"Oost-Afrika"}
+        015{"Noord-Afrika"}
+        017{"Centraal-Afrika"}
+        018{"Zuidelijk Afrika"}
+        019{"Amerika"}
+        021{"Noord-Amerika"}
+        029{"Caribisch gebied"}
+        030{"Oost-Azië"}
+        035{"Zuidoost-Azië"}
+        039{"Zuid-Europa"}
+        053{"Australië en Nieuw-Zeeland"}
+        054{"Melanesië"}
+        057{"Micronesië"}
+        061{"Polynesië"}
+        062{"Zuidelijk Centraal-Azië"}
+        142{"Azië"}
+        145{"West-Azië"}
+        150{"Europa"}
+        151{"Oost-Europa"}
+        154{"Noord-Europa"}
+        155{"West-Europa"}
         830{"Kanaaleilanden"}
         833{"Isle of Man"}
         AD{"Andorra"}
@@ -194,6 +221,7 @@ nl{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Oceanië (overige)"}
         RE{"Réunion"}
         RO{"Roemenië"}
         RU{"Russische Federatie"}
@@ -287,6 +315,10 @@ nl{
             "AOA",
             "Angolese kwanza",
         }
+        AOK{
+            "AOK",
+            "Angolese kwanza (1977-1990)",
+        }
         AON{
             "AON",
             "Angolese nieuwe kwanza (1990-2000)",
@@ -294,6 +326,14 @@ nl{
         AOR{
             "AOR",
             "Angolese kwanza reajustado (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Argentijnse austral",
+        }
+        ARP{
+            "ARP",
+            "Argentijnse peso (1983-1985)",
         }
         ARS{
             "Arg$",
@@ -315,6 +355,10 @@ nl{
             "AZM",
             "Azerbeidzjaanse manat",
         }
+        BAD{
+            "BAD",
+            "Bosnische dinar",
+        }
         BAM{
             "KM",
             "Bosnische convertibele mark",
@@ -327,9 +371,17 @@ nl{
             "Tk",
             "Bengalese taka",
         }
+        BEC{
+            "BEC",
+            "Belgische frank (convertibel)",
+        }
         BEF{
             "BF",
             "Belgische frank",
+        }
+        BEL{
+            "BEL",
+            "Belgische frank (financieel)",
         }
         BGL{
             "lev",
@@ -359,9 +411,37 @@ nl{
             "Bs",
             "Boliviano",
         }
+        BOP{
+            "BOP",
+            "Boliviaanse peso",
+        }
+        BOV{
+            "BOV",
+            "Boliviaanse mvdol",
+        }
+        BRB{
+            "BRB",
+            "Braziliaanse cruzeiro novo (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Braziliaanse cruzado",
+        }
+        BRE{
+            "BRE",
+            "Braziliaanse cruzeiro (1990-1993)",
+        }
         BRL{
             "R$",
             "Braziliaanse real",
+        }
+        BRN{
+            "BRN",
+            "Braziliaanse cruzado novo",
+        }
+        BRR{
+            "BRR",
+            "Braziliaanse cruzeiro",
         }
         BSD{
             "BSD",
@@ -370,6 +450,10 @@ nl{
         BTN{
             "Nu",
             "Bhutaanse ngultrum",
+        }
+        BUK{
+            "BUK",
+            "Birmese kyat",
         }
         BWP{
             "BWP",
@@ -399,6 +483,10 @@ nl{
             "SwF",
             "Zwitserse franc",
         }
+        CLF{
+            "CLF",
+            "Chileense unidades de fomento",
+        }
         CLP{
             "Ch$",
             "Chileense peso",
@@ -415,6 +503,10 @@ nl{
             "C",
             "Costaricaanse colón",
         }
+        CSK{
+            "CSK",
+            "Tsjechoslowaakse harde koruna",
+        }
         CUP{
             "CUP",
             "Cubaanse peso",
@@ -430,6 +522,10 @@ nl{
         CZK{
             "CZK",
             "Tsjechische koruna",
+        }
+        DDM{
+            "DDM",
+            "Oost-Duitse ostmark",
         }
         DEM{
             "DEM",
@@ -454,6 +550,10 @@ nl{
         ECS{
             "ECS",
             "Ecuadoraanse sucre",
+        }
+        ECV{
+            "ECV",
+            "Ecuadoraanse unidad de valor constante (UVC)",
         }
         EEK{
             "EEK",
@@ -499,6 +599,10 @@ nl{
             "£",
             "Brits pond sterling",
         }
+        GEK{
+            "GEK",
+            "Georgische kupon larit",
+        }
         GEL{
             "lari",
             "Georgische lari",
@@ -519,6 +623,14 @@ nl{
             "GF",
             "Guinese franc",
         }
+        GNS{
+            "GNS",
+            "Guinese syli",
+        }
+        GQE{
+            "GQE",
+            "Equatoriaal-Guinese ekwele guineana",
+        }
         GRD{
             "GRD",
             "Griekse drachme",
@@ -526,6 +638,10 @@ nl{
         GTQ{
             "Q",
             "Guatemalteekse quetzal",
+        }
+        GWE{
+            "GWE",
+            "Portuguees-Guinese escudo",
         }
         GWP{
             "GWP",
@@ -542,6 +658,10 @@ nl{
         HNL{
             "L",
             "Hodurese lempira",
+        }
+        HRD{
+            "HRD",
+            "Kroatische dinar",
         }
         HRK{
             "HRK",
@@ -562,6 +682,10 @@ nl{
         IEP{
             "IR£",
             "Iers pond",
+        }
+        ILP{
+            "ILP",
+            "Israëlisch pond",
         }
         ILS{
             "ILS",
@@ -659,6 +783,10 @@ nl{
             "LTL",
             "Litouwse litas",
         }
+        LTT{
+            "LTT",
+            "Litouwse talonas",
+        }
         LUF{
             "LUF",
             "Luxemburgse frank",
@@ -667,6 +795,10 @@ nl{
             "LVL",
             "Letse lats",
         }
+        LVR{
+            "LVR",
+            "Letse roebel",
+        }
         LYD{
             "LD",
             "Libische dinar",
@@ -674,6 +806,10 @@ nl{
         MAD{
             "MAD",
             "Marokkaanse dirham",
+        }
+        MAF{
+            "MAF",
+            "Marokkaanse franc",
         }
         MDL{
             "MDL",
@@ -690,6 +826,10 @@ nl{
         MKD{
             "MDen",
             "Macedonische denar",
+        }
+        MLF{
+            "MLF",
+            "Malinese franc",
         }
         MMK{
             "MMK",
@@ -711,6 +851,10 @@ nl{
             "Lm",
             "Maltese lire",
         }
+        MTP{
+            "MTP",
+            "Maltees pond",
+        }
         MUR{
             "MUR",
             "Mauritiaanse rupee",
@@ -726,6 +870,14 @@ nl{
         MXN{
             "MEX$",
             "Mexicaanse peso",
+        }
+        MXP{
+            "MXP",
+            "Mexicaanse zilveren peso (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Mexicaanse unidad de inversion (UDI)",
         }
         MYR{
             "RM",
@@ -746,6 +898,10 @@ nl{
         NGN{
             "NGN",
             "Nigeriaanse naira",
+        }
+        NIC{
+            "NIC",
+            "Nicaraguaanse córdoba",
         }
         NIO{
             "NIO",
@@ -775,9 +931,17 @@ nl{
             "PAB",
             "Panamese balboa",
         }
+        PEI{
+            "PEI",
+            "Peruaanse inti",
+        }
         PEN{
             "PEN",
             "Peruaanse nieuwe sol",
+        }
+        PES{
+            "PES",
+            "Peruaanse sol",
         }
         PGK{
             "PGK",
@@ -794,6 +958,10 @@ nl{
         PLN{
             "Zl",
             "Poolse zloty",
+        }
+        PLZ{
+            "PLZ",
+            "Poolse zloty (1950-1995)",
         }
         PTE{
             "PTE",
@@ -883,6 +1051,10 @@ nl{
             "Db",
             "Santomese dobra",
         }
+        SUR{
+            "SUR",
+            "Sovjet-roebel",
+        }
         SVC{
             "SVC",
             "Salvadoraanse colón",
@@ -947,6 +1119,14 @@ nl{
             "UAH",
             "Oekraïense hryvnia",
         }
+        UAK{
+            "UAK",
+            "Oekraïense karbovanetz",
+        }
+        UGS{
+            "UGS",
+            "Oegandese shilling (1966-1987)",
+        }
         UGX{
             "U Sh",
             "Oegandese shilling",
@@ -954,6 +1134,18 @@ nl{
         USD{
             "US$",
             "Amerikaanse dollar",
+        }
+        USN{
+            "USN",
+            "Amerikaanse dollar (volgende dag)",
+        }
+        USS{
+            "USS",
+            "Amerikaanse dollar (zelfde dag)",
+        }
+        UYP{
+            "UYP",
+            "Uruguayaanse peso (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -983,9 +1175,45 @@ nl{
             "XAF",
             "CFA-franc BEAC",
         }
+        XAU{
+            "XAU",
+            "Goud",
+        }
+        XBA{
+            "XBA",
+            "Europese samengestelde eenheid",
+        }
+        XBB{
+            "XBB",
+            "Europese monetaire eenheid",
+        }
+        XBC{
+            "XBC",
+            "Europese rekeneenheid (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Europese rekeneenheid (XBD)",
+        }
         XCD{
             "EC$",
             "Oost-Caribische dollar",
+        }
+        XDR{
+            "XDR",
+            "Special Drawing Rights",
+        }
+        XEU{
+            "XEU",
+            "European Currency Unit",
+        }
+        XFO{
+            "XFO",
+            "Franse gouden franc",
+        }
+        XFU{
+            "XFU",
+            "Franse UIC-franc",
         }
         XOF{
             "XOF",
@@ -995,13 +1223,29 @@ nl{
             "CFPF",
             "CFP-franc",
         }
+        YDD{
+            "YDD",
+            "Jemenitische dinar",
+        }
         YER{
             "YRl",
             "Jemenitische rial",
         }
+        YUD{
+            "YUD",
+            "Joegoslavische harde dinar",
+        }
         YUM{
             "YUM",
             "Joegoslavische noviy-dinar",
+        }
+        YUN{
+            "YUN",
+            "Joegoslavische convertibele dinar",
+        }
+        ZAL{
+            "ZAL",
+            "Zuid-Afrikaanse rand (financieel)",
         }
         ZAR{
             "R",
@@ -1014,6 +1258,10 @@ nl{
         ZRN{
             "ZRN",
             "Zaïrese nieuwe zaïre",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zaïrese zaïre",
         }
         ZWD{
             "Z$",
@@ -1029,215 +1277,470 @@ nl{
     Languages{
         aa{"Afar"}
         ab{"Abchazisch"}
+        ace{"Atjees"}
+        ach{"Akoli"}
+        ada{"Adangme"}
+        ady{"Adyghe"}
         ae{"Avestisch"}
         af{"Afrikaans"}
+        afa{"Afro-Aziatisch (overige)"}
+        afh{"Afrihili"}
         ak{"Akan"}
+        akk{"Akkadisch"}
+        ale{"Aleut"}
+        alg{"Algonkium-talen"}
         am{"Amhaars"}
         an{"Aragonees"}
+        ang{"Engels, oud (ca. 450-1100)"}
+        apa{"Apache-talen"}
         ar{"Arabisch"}
+        arc{"Aramees"}
         arn{"Araukaans"}
+        arp{"Arapaho"}
         art{"Kunstmatige talen (overige)"}
+        arw{"Arawak"}
         as{"Assamees"}
+        ast{"Asturisch"}
+        ath{"Athapascaanse talen"}
+        aus{"Australische talen"}
         av{"Avarisch"}
+        awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerbeidzjaans"}
         ba{"Basjkiers"}
+        bad{"Banda"}
+        bai{"Bamileke-talen"}
+        bal{"Baloetsji"}
+        ban{"Balinees"}
+        bas{"Basa"}
+        bat{"Baltisch (overige)"}
         be{"Wit-Russisch"}
+        bej{"Beja"}
+        bem{"Bemba"}
         ber{"Berber (overige)"}
         bg{"Bulgaars"}
         bh{"Bihari"}
+        bho{"Bhojpuri"}
         bi{"Bislama"}
+        bik{"Bikol"}
+        bin{"Bini"}
+        bla{"Siksika"}
         bm{"Bambara"}
         bn{"Bengalees"}
+        bnt{"Bantoe (overige)"}
         bo{"Tibetaans"}
         br{"Bretons"}
+        bra{"Braj"}
         bs{"Bosnisch"}
+        btk{"Bataks (Indonesië)"}
+        bua{"Buriat"}
+        bug{"Buginees"}
         byn{"Blin"}
         ca{"Catalaans"}
+        cad{"Caddo"}
+        cai{"Midden-Amerikaans Indiaans (overige)"}
+        car{"Caribisch"}
+        cau{"Kaukasisch (overige)"}
         ce{"Chechen"}
+        ceb{"Cebuano"}
+        cel{"Keltisch (overige)"}
         ch{"Chamorro"}
+        chb{"Chibcha"}
+        chg{"Chagatai"}
+        chk{"Chuukees"}
+        chm{"Mari"}
+        chn{"Chinook-jargon"}
+        cho{"Choctaw"}
+        chp{"Chipewyan"}
         chr{"Cherokee"}
+        chy{"Cheyenne"}
+        cmc{"Chamische talen"}
         co{"Corsicaans"}
+        cop{"Koptisch"}
+        cpe{"Creools en Pidgin, op Engels gebaseerd (overige)"}
+        cpf{"Creools en Pidgin, op Frans gebaseerd (overige)"}
+        cpp{"Creools en Pidgin, op Portugees gebaseerd (overige)"}
         cr{"Cree"}
+        crh{"Krim-Tataars"}
+        crp{"Creools en Pidgin (overige)"}
         cs{"Tsjechisch"}
+        csb{"Kasjoebisch"}
         cu{"Kerkslavisch"}
+        cus{"Koesjitisch (overige)"}
         cv{"Tsjoevasjisch"}
         cy{"Welsh"}
         da{"Deens"}
+        dak{"Dakota"}
+        dar{"Dargwa"}
+        day{"Dajak"}
         de{"Duits"}
+        del{"Delaware"}
+        den{"Slave (Athapascan)"}
+        dgr{"Dogrib"}
+        din{"Dinka"}
+        doi{"Dogri"}
+        dra{"Dravidisch (overige)"}
         dsb{"Nedersorbisch"}
+        dua{"Duala"}
+        dum{"Nederlands, middel- (ca. 1050-1350)"}
         dv{"Divehi"}
+        dyu{"Dyula"}
         dz{"Dzongkha"}
         ee{"Ewe"}
+        efi{"Efik"}
+        egy{"Egyptisch (klassiek)"}
+        eka{"Ekajuk"}
         el{"Grieks"}
+        elx{"Elamitisch"}
         en{"Engels"}
+        enm{"Engels, middel- (1100-1500)"}
         eo{"Esperanto"}
         es{"Spaans"}
         et{"Estlands"}
         eu{"Baskisch"}
+        ewo{"Ewondo"}
         fa{"Perzisch"}
+        fan{"Fang"}
+        fat{"Fanti"}
         ff{"Fulah"}
         fi{"Fins"}
+        fiu{"Finoegrische talen (overige)"}
         fj{"Fijisch"}
         fo{"Faeröers"}
+        fon{"Fon"}
         fr{"Frans"}
+        frm{"Frans, middel- (ca. 1400-1800)"}
+        fro{"Frans, oud- (ca. 842-1400)"}
+        fur{"Friulisch"}
         fy{"Fries"}
         ga{"Iers"}
+        gaa{"Ga"}
+        gay{"Gayo"}
+        gba{"Gbaya"}
         gd{"Schots Gaelic"}
+        gem{"Germaans (overige)"}
         gez{"Geez"}
+        gil{"Gilbertees"}
         gl{"Galicisch"}
+        gmh{"Duits, middelhoog- (ca. 1050-1500)"}
         gn{"Guarani"}
+        goh{"Duits, oudhoog- (ca. 750-1050)"}
+        gon{"Gondi"}
+        gor{"Gorontalo"}
+        got{"Gothisch"}
+        grb{"Grebo"}
+        grc{"Grieks, klassiek (tot 1453)"}
         gu{"Gujarati"}
         gv{"Manx"}
+        gwi{"Gwichʼin"}
         ha{"Hausa"}
+        hai{"Haida"}
         haw{"Hawaïaans"}
         he{"Hebreeuws"}
         hi{"Hindi"}
+        hil{"Hiligaynon"}
+        him{"Himachali"}
+        hit{"Hettitisch"}
+        hmn{"Hmong"}
         ho{"Hiri Motu"}
         hr{"Kroatisch"}
         hsb{"Oppersorbisch"}
         ht{"Haïtiaans"}
         hu{"Hongaars"}
+        hup{"Hupa"}
         hy{"Armeens"}
         hz{"Herero"}
         ia{"Interlingua"}
+        iba{"Iban"}
         id{"Indonesisch"}
         ie{"Interlingue"}
         ig{"Igbo"}
         ii{"Sichuan Yi"}
+        ijo{"Ijo"}
         ik{"Inupiaq"}
+        ilo{"Iloko"}
+        inc{"Indisch (overige)"}
+        ine{"Indo-Europees (overige)"}
+        inh{"Ingoesj"}
         io{"Ido"}
+        ira{"Iraans (overige)"}
+        iro{"Irokese talen"}
         is{"IJslands"}
         it{"Italiaans"}
         iu{"Inuktitut"}
         ja{"Japans"}
+        jbo{"Lojban"}
+        jpr{"Judeo-Perzisch"}
+        jrb{"Judeo-Arabisch"}
         jv{"Javaans"}
         ka{"Georgisch"}
+        kaa{"Karakalpaks"}
+        kab{"Kabyle"}
+        kac{"Kachin"}
+        kam{"Kamba"}
+        kar{"Karen"}
+        kaw{"Kawi"}
+        kbd{"Kabardisch"}
         kg{"Kongo"}
+        kha{"Khasi"}
+        khi{"Khoisan (overige)"}
+        kho{"Khotanees"}
         ki{"Kikuyu"}
         kj{"Kuanyama"}
         kk{"Kazachs"}
         kl{"Kalaallisut"}
         km{"Khmer"}
+        kmb{"Kimbundu"}
         kn{"Kannada"}
         ko{"Koreaans"}
         kok{"Konkani"}
+        kos{"Kosraeaans"}
+        kpe{"Kpelle"}
         kr{"Kanuri"}
+        krc{"Karachay-Balkar"}
+        kro{"Kru"}
+        kru{"Kurukh"}
         ks{"Kashmiri"}
         ku{"Koerdisch"}
+        kum{"Kumyk"}
+        kut{"Kutenai"}
         kv{"Komi"}
         kw{"Cornish"}
         ky{"Kirgizisch"}
         la{"Latijn"}
+        lad{"Ladino"}
+        lah{"Lahnda"}
+        lam{"Lamba"}
         lb{"Luxemburgs"}
+        lez{"Lezgisch"}
         lg{"Ganda"}
         li{"Limburgs"}
         ln{"Lingala"}
         lo{"Lao"}
+        lol{"Mongo"}
+        loz{"Lozi"}
         lt{"Litouws"}
         lu{"Luba-Katanga"}
+        lua{"Luba-Lulua"}
+        lui{"Luiseno"}
+        lun{"Lunda"}
+        luo{"Luo (Kenia en Tanzania)"}
+        lus{"Lushai"}
         lv{"Letlands"}
+        mad{"Madurees"}
+        mag{"Magahi"}
+        mai{"Maithili"}
+        mak{"Makassaars"}
+        man{"Mandingo"}
+        map{"Austronesisch (overige)"}
+        mas{"Masai"}
+        mdf{"Moksha"}
+        mdr{"Mandar"}
+        men{"Mende"}
         mg{"Malagasisch"}
+        mga{"Iers, middel- (900-1200)"}
         mh{"Marshallees"}
         mi{"Maori"}
+        mic{"Mi'kmaq"}
+        min{"Minangkabau"}
+        mis{"Diverse talen"}
         mk{"Macedonisch"}
+        mkh{"Mon-Khmer (overige)"}
         ml{"Malayalam"}
         mn{"Mongools"}
+        mnc{"Mantsjoe"}
         mni{"Manipoeri"}
+        mno{"Manobo-talen"}
         mo{"Moldavisch"}
         moh{"Mohawk"}
+        mos{"Mossi"}
         mr{"Marathi"}
         ms{"Maleis"}
         mt{"Maltees"}
         mul{"Meerdere talen"}
+        mun{"Munda-talen"}
+        mus{"Creek"}
+        mwr{"Marwari"}
         my{"Birmees"}
+        myn{"Mayan-talen"}
+        myv{"Erzya"}
         na{"Nauru"}
+        nah{"Nahuatl"}
+        nai{"Noord-Amerikaans Indiaans"}
+        nap{"Napolitaans"}
         nb{"Noors - Bokmål"}
         nd{"Ndebele, noord-"}
+        nds{"Laagduits"}
         ne{"Nepalees"}
+        new{"Newari"}
         ng{"Ndonga"}
+        nia{"Nias"}
+        nic{"Niger-Kordofanisch (overige)"}
+        niu{"Niueaans"}
         nl{"Nederlands"}
         nn{"Noors - Nynorsk"}
         no{"Noors"}
+        nog{"Nogai"}
+        non{"Noors, oud-"}
         nr{"Ndebele, zuid-"}
         nso{"Noord-Sotho"}
+        nub{"Nubische talen"}
         nv{"Navajo"}
         ny{"Nyanja"}
+        nym{"Nyamwezi"}
+        nyn{"Nyankole"}
+        nyo{"Nyoro"}
+        nzi{"Nzima"}
         oc{"Langue d’Oc (na 1500)"}
         oj{"Ojibwa"}
         om{"Oromo"}
         or{"Oriya"}
         os{"Ossetisch"}
+        osa{"Osage"}
+        ota{"Turks, Ottomaans (1500-1928)"}
+        oto{"Otomi-talen"}
         pa{"Punjabi"}
+        paa{"Papoeaas (overige)"}
+        pag{"Pangasinan"}
+        pal{"Pahlavi"}
+        pam{"Pampanga"}
+        pap{"Papiamento"}
+        pau{"Palauaans"}
+        peo{"Perzisch, oud- (ca. 600-400 v. Chr.)"}
+        phi{"Filippijns (overige)"}
+        phn{"Foenicisch"}
         pi{"Pali"}
         pl{"Pools"}
+        pon{"Pohnpeiaans"}
+        pra{"Prakrit-talen"}
+        pro{"Provençaals, oud- (tot 1500)"}
         ps{"Pashto"}
         pt{"Portugees"}
         qu{"Quechua"}
+        raj{"Rajasthani"}
+        rap{"Rapanui"}
+        rar{"Rarotongan"}
         rm{"Retoromaans"}
         rn{"Rundi"}
         ro{"Roemeens"}
+        roa{"Romaans (overige)"}
+        rom{"Romani"}
         ru{"Russisch"}
         rw{"Kinyarwanda"}
         sa{"Sanskrit"}
+        sad{"Sandawe"}
         sah{"Yakut"}
+        sai{"Zuid-Amerikaans Indiaans (overige)"}
+        sal{"Salishan-talen"}
+        sam{"Samaritaans-Aramees"}
+        sas{"Sasak"}
+        sat{"Santali"}
         sc{"Sardinisch"}
+        sco{"Schots"}
         sd{"Sindhi"}
         se{"Noord-Samisch"}
+        sel{"Selkup"}
+        sem{"Semitisch (overige)"}
         sg{"Sango"}
+        sga{"Iers, oud- (tot 900)"}
+        sgn{"Gebarentalen"}
         sh{"Servokroatisch"}
+        shn{"Shan"}
         si{"Singalees"}
         sid{"Sidamo"}
+        sio{"Siouaanse talen"}
+        sit{"Sino-Tibetaans (overige)"}
         sk{"Slowaaks"}
         sl{"Sloveens"}
+        sla{"Slavisch (overige)"}
         sm{"Samoaans"}
         sma{"Zuid-Samisch"}
+        smi{"Sami-talen (overige)"}
         smj{"Lule Sami"}
         smn{"Inari Sami"}
         sms{"Skolt Sami"}
         sn{"Shona"}
+        snk{"Soninke"}
         so{"Somalisch"}
+        sog{"Sogdisch"}
+        son{"Songhai"}
         sq{"Albanees"}
         sr{"Servisch"}
+        srr{"Serer"}
         ss{"Swati"}
         st{"Sotho, zuid"}
         su{"Sundanees"}
+        suk{"Sukuma"}
+        sus{"Soesoe"}
+        sux{"Soemerisch"}
         sv{"Zweeds"}
         sw{"Swahili"}
         syr{"Syriac"}
         ta{"Tamil"}
+        tai{"Tai (overige)"}
         te{"Teloegoe"}
+        tem{"Timne"}
+        ter{"Tereno"}
+        tet{"Tetum"}
         tg{"Tadzjik"}
         th{"Thai"}
         ti{"Tigrinya"}
         tig{"Tigre"}
+        tiv{"Tiv"}
         tk{"Turkmeens"}
+        tkl{"Tokelau"}
         tl{"Tagalog"}
+        tli{"Tlingit"}
+        tmh{"Tamashek"}
         tn{"Tswana"}
         to{"Tonga (Tonga-eilanden)"}
+        tog{"Tonga (Nyasa)"}
+        tpi{"Tok Pisin"}
         tr{"Turks"}
         ts{"Tsonga"}
+        tsi{"Tsimshian"}
         tt{"Tataars"}
+        tum{"Toemboeka"}
+        tup{"Tupi-talen"}
+        tut{"Altaïsch (overige)"}
+        tvl{"Tuvalu"}
         tw{"Twi"}
         ty{"Tahitisch"}
+        tyv{"Tuvinisch"}
+        udm{"Udmurt"}
         ug{"Uighur"}
+        uga{"Oegaritisch"}
         uk{"Oekraïens"}
+        umb{"Umbundu"}
         und{"Onbepaald"}
         ur{"Urdu"}
         uz{"Oezbeeks"}
+        vai{"Vai"}
         ve{"Venda"}
         vi{"Vietnamees"}
         vo{"Volapük"}
+        vot{"Votisch"}
         wa{"Wallonisch"}
+        wak{"Wakashan-talen"}
         wal{"Walamo"}
+        war{"Waray"}
+        was{"Washo"}
         wen{"Sorbische talen"}
         wo{"Wolof"}
+        xal{"Kalmyk"}
         xh{"Xhosa"}
+        yao{"Yao"}
+        yap{"Yapees"}
         yi{"Jiddisch"}
         yo{"Joruba"}
+        ypk{"Yupik-talen"}
         za{"Zhuang"}
+        zap{"Zapotec"}
+        zen{"Zenaga"}
         zh{"Chinees"}
+        znd{"Zande"}
         zu{"Zulu"}
+        zun{"Zuni"}
     }
     LocaleScript{
         "Latn",
@@ -1481,6 +1984,10 @@ nl{
                 }
             }
         }
+    }
+    messages{
+        nostr{"nee:n"}
+        yesstr{"ja:j"}
     }
     zoneStrings{
         "Africa:Casablanca"{

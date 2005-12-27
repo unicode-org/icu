@@ -284,6 +284,10 @@ it{
             "AOA",
             "Kwanza Angolano",
         }
+        AOK{
+            "AOK",
+            "Kwanza Angolano (1977-1990)",
+        }
         AON{
             "AON",
             "Nuovo Kwanza Angolano (1990-2000)",
@@ -291,6 +295,14 @@ it{
         AOR{
             "AOR",
             "Kwanza Reajustado Angolano (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Austral Argentino",
+        }
+        ARP{
+            "ARP",
+            "Peso Argentino (vecchio Cod.)",
         }
         ARS{
             "ARS",
@@ -312,6 +324,10 @@ it{
             "AZM",
             "Manat Azero",
         }
+        BAD{
+            "BAD",
+            "Dinar Bosnia-Herzegovina",
+        }
         BAM{
             "KM",
             "Marco Conv. Bosnia-Erzegovina",
@@ -324,9 +340,17 @@ it{
             "Tk",
             "Taka Bangladese",
         }
+        BEC{
+            "BEC",
+            "Franco Belga (convertibile)",
+        }
         BEF{
             "BEF",
             "Franco Belga",
+        }
+        BEL{
+            "BEL",
+            "Franco Belga (finanziario)",
         }
         BGL{
             "BGL",
@@ -356,9 +380,37 @@ it{
             "BOB",
             "Boliviano",
         }
+        BOP{
+            "BOP",
+            "Peso Boliviano",
+        }
+        BOV{
+            "BOV",
+            "Mvdol Boliviano",
+        }
+        BRB{
+            "BRB",
+            "Cruzeiro Novo Brasiliano (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Cruzado Brasiliano",
+        }
+        BRE{
+            "BRE",
+            "Cruzeiro Brasiliano (1990-1993)",
+        }
         BRL{
             "BRL",
             "Real Brasiliano",
+        }
+        BRN{
+            "BRN",
+            "Cruzado Novo Brasiliano",
+        }
+        BRR{
+            "BRR",
+            "Cruzeiro Brasiliano",
         }
         BSD{
             "BSD",
@@ -367,6 +419,10 @@ it{
         BTN{
             "Nu",
             "Ngultrum Butanese",
+        }
+        BUK{
+            "BUK",
+            "Kyat Birmano",
         }
         BWP{
             "BWP",
@@ -396,6 +452,10 @@ it{
             "SFr.",
             "Franco Svizzero",
         }
+        CLF{
+            "CLF",
+            "Unidades de Fomento Chilene",
+        }
         CLP{
             "CLP",
             "Peso Cileno",
@@ -412,6 +472,10 @@ it{
             "C",
             "Colón Costaricano",
         }
+        CSK{
+            "CSK",
+            "Corona forte cecoslovacca",
+        }
         CUP{
             "CUP",
             "Peso Cubano",
@@ -427,6 +491,10 @@ it{
         CZK{
             "CZK",
             "Corona Ceca",
+        }
+        DDM{
+            "DDM",
+            "Ostmark della Germania Orientale",
         }
         DEM{
             "DEM",
@@ -451,6 +519,10 @@ it{
         ECS{
             "ECS",
             "Sucre dell’Ecuador",
+        }
+        ECV{
+            "ECV",
+            "Unidad de Valor Constante (UVC) dell’Ecuador",
         }
         EEK{
             "EEK",
@@ -496,6 +568,10 @@ it{
             "£",
             "Sterlina Inglese",
         }
+        GEK{
+            "GEK",
+            "Kupon Larit Georgiano",
+        }
         GEL{
             "lari",
             "Lari Georgiano",
@@ -516,6 +592,14 @@ it{
             "GF",
             "Franco della Guinea",
         }
+        GNS{
+            "GNS",
+            "Syli della Guinea",
+        }
+        GQE{
+            "GQE",
+            "Ekwele della Guinea Equatoriale",
+        }
         GRD{
             "GRD",
             "Dracma Greca",
@@ -523,6 +607,10 @@ it{
         GTQ{
             "Q",
             "Quetzal Guatemalteco",
+        }
+        GWE{
+            "GWE",
+            "Escudo della Guinea portoghese",
         }
         GWP{
             "GWP",
@@ -539,6 +627,10 @@ it{
         HNL{
             "L",
             "Lempira Hoduregno",
+        }
+        HRD{
+            "HRD",
+            "Dinaro Croato",
         }
         HRK{
             "HRK",
@@ -559,6 +651,10 @@ it{
         IEP{
             "IR£",
             "Lira Irlandese",
+        }
+        ILP{
+            "ILP",
+            "Sterlina Israeliana",
         }
         ILS{
             "ILS",
@@ -656,6 +752,10 @@ it{
             "LTL",
             "Lita Lituana",
         }
+        LTT{
+            "LTT",
+            "Talonas Lituani",
+        }
         LUF{
             "LUF",
             "Franco del Lussemburgo",
@@ -664,6 +764,10 @@ it{
             "LVL",
             "Lat Lettone",
         }
+        LVR{
+            "LVR",
+            "Rublo Lettone",
+        }
         LYD{
             "LD",
             "Dinaro Libico",
@@ -671,6 +775,10 @@ it{
         MAD{
             "MAD",
             "Dirham Marocchino",
+        }
+        MAF{
+            "MAF",
+            "Franco Marocchino",
         }
         MDL{
             "MDL",
@@ -687,6 +795,10 @@ it{
         MKD{
             "MDen",
             "Dinaro Macedone",
+        }
+        MLF{
+            "MLF",
+            "Franco di Mali",
         }
         MMK{
             "MMK",
@@ -708,6 +820,10 @@ it{
             "Lm",
             "Lira Maltese",
         }
+        MTP{
+            "MTP",
+            "Sterlina Maltese",
+        }
         MUR{
             "MUR",
             "Rupia Mauriziana",
@@ -723,6 +839,14 @@ it{
         MXN{
             "MEX$",
             "Peso Messicano",
+        }
+        MXP{
+            "MXP",
+            "Peso messicano d’argento (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Unidad de Inversion (UDI) Messicana",
         }
         MYR{
             "RM",
@@ -743,6 +867,10 @@ it{
         NGN{
             "NGN",
             "Naira Nigeriana",
+        }
+        NIC{
+            "NIC",
+            "Cordoba Nicaraguense",
         }
         NIO{
             "NIO",
@@ -772,9 +900,17 @@ it{
             "PAB",
             "Balboa di Panama",
         }
+        PEI{
+            "PEI",
+            "Inti Peruviano",
+        }
         PEN{
             "PEN",
             "Sol Nuevo Peruviano",
+        }
+        PES{
+            "PES",
+            "Sol Peruviano",
         }
         PGK{
             "PGK",
@@ -791,6 +927,10 @@ it{
         PLN{
             "Zl",
             "Zloty Polacco",
+        }
+        PLZ{
+            "PLZ",
+            "Zloty Polacco (1950-1995)",
         }
         PTE{
             "PTE",
@@ -876,6 +1016,10 @@ it{
             "Db",
             "Dobra di São Tomé e Principe",
         }
+        SUR{
+            "SUR",
+            "Rublo Sovietico",
+        }
         SVC{
             "SVC",
             "Colón Salvadoregno",
@@ -936,6 +1080,14 @@ it{
             "UAH",
             "Hrivna Ucraina",
         }
+        UAK{
+            "UAK",
+            "Karbovanetz Ucraino",
+        }
+        UGS{
+            "UGS",
+            "Scellino Ugandese (1966-1987)",
+        }
         UGX{
             "U Sh",
             "Scellino Ugandese",
@@ -943,6 +1095,18 @@ it{
         USD{
             "$",
             "Dollaro Statunitense",
+        }
+        USN{
+            "USN",
+            "Dollaro Statunitense (Next day)",
+        }
+        USS{
+            "USS",
+            "Dollaro Statunitense (Same day)",
+        }
+        UYP{
+            "UYP",
+            "Peso Uruguaiano (1975-1993)",
         }
         UYU{
             "Ur$",
@@ -972,9 +1136,45 @@ it{
             "XAF",
             "Franco CFA BEAC",
         }
+        XAU{
+            "XAU",
+            "Oro",
+        }
+        XBA{
+            "XBA",
+            "Unità composita europea",
+        }
+        XBB{
+            "XBB",
+            "Unità monetaria europea",
+        }
+        XBC{
+            "XBC",
+            "Unità di acconto europea (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Unità di acconto europea (XBD)",
+        }
         XCD{
             "EC$",
             "Dollaro dei Caraibi Orientali",
+        }
+        XDR{
+            "XDR",
+            "Diritti Speciali di Incasso",
+        }
+        XEU{
+            "XEU",
+            "Unità Monetaria Europea",
+        }
+        XFO{
+            "XFO",
+            "Franco Oro Francese",
+        }
+        XFU{
+            "XFU",
+            "Franco UIC Francese",
         }
         XOF{
             "XOF",
@@ -984,13 +1184,29 @@ it{
             "CFPF",
             "Franco CFP",
         }
+        YDD{
+            "YDD",
+            "Dinaro dello Yemen",
+        }
         YER{
             "YRl",
             "Rial dello Yemen",
         }
+        YUD{
+            "YUD",
+            "Dinaro Forte Yugoslavo",
+        }
         YUM{
             "YUM",
             "Dinaro Noviy Yugoslavo",
+        }
+        YUN{
+            "YUN",
+            "Dinaro Convertibile Yugoslavo",
+        }
+        ZAL{
+            "ZAL",
+            "Rand Sudafricano (finanziario)",
         }
         ZAR{
             "ZAR",
@@ -1003,6 +1219,10 @@ it{
         ZRN{
             "ZRN",
             "Nuovo Zaire dello Zaire",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zaire dello Zaire",
         }
         ZWD{
             "Z$",
@@ -1018,215 +1238,465 @@ it{
     Languages{
         aa{"afar"}
         ab{"abkhazian"}
+        ace{"accinese"}
+        ach{"acioli"}
+        ada{"adangme"}
+        ady{"adyghe"}
         ae{"avestan"}
         af{"afrikaans"}
+        afa{"afro-asiatica (altra lingua)"}
+        afh{"afrihili"}
         ak{"akan"}
+        akk{"accado"}
+        ale{"aleuto"}
+        alg{"lingue algonchine"}
         am{"amarico"}
         an{"aragonese"}
+        ang{"inglese, antico (ca.450-1100)"}
+        apa{"lingue apache"}
         ar{"arabo"}
+        arc{"aramaico"}
         arn{"araucano"}
+        arp{"arapaho"}
         art{"artificiale (altra lingua)"}
+        arw{"aruaco"}
         as{"assamese"}
+        ast{"asturiano"}
+        ath{"lingue athabaska"}
+        aus{"lingue australiane"}
         av{"avaro"}
+        awa{"awadhi"}
         ay{"aymara"}
         az{"azerbaigiano"}
         ba{"baschiro"}
+        bad{"banda"}
+        bai{"lingue bamileke"}
+        bal{"beluci"}
+        ban{"balinese"}
+        bas{"basa"}
+        bat{"baltica (altra lingua)"}
         be{"bielorusso"}
+        bej{"begia"}
+        bem{"wemba"}
         ber{"berbero"}
         bg{"bulgaro"}
         bh{"bihari"}
+        bho{"bhojpuri"}
         bi{"bislama"}
+        bik{"bicol"}
+        bin{"bini"}
+        bla{"siksika"}
         bm{"bambara"}
         bn{"bengalese"}
+        bnt{"bantu"}
         bo{"tibetano"}
         br{"bretone"}
+        bra{"braj"}
         bs{"bosniaco"}
+        btk{"batak"}
+        bua{"buriat"}
+        bug{"bugi"}
         byn{"blin"}
         ca{"catalano"}
+        cad{"caddo"}
+        cai{"indiana dell’America Centrale (altra lingua)"}
+        car{"caribico"}
+        cau{"caucasica (altra lingua)"}
         ce{"ceceno"}
+        ceb{"cebuano"}
+        cel{"celtica altra lingua"}
         ch{"chamorro"}
+        chb{"chibcha"}
+        chg{"ciagataico"}
+        chk{"chuukese"}
+        chm{"mari"}
+        chn{"gergo chinook"}
+        cho{"choctaw"}
+        chp{"chipewyan"}
         chr{"cherokee"}
+        chy{"cheyenne"}
+        cmc{"lingue chamic"}
         co{"corso"}
+        cop{"copto"}
+        cpe{"creolo e pidgins, basato sull’inglese (altra lingua)"}
+        cpf{"creolo e pidgins, basato sul francese (altra lingua)"}
+        cpp{"creolo e pidgins, basato sul portoghese (altra lingua)"}
         cr{"cree"}
+        crh{"turco crimeo; tatar crimeo"}
+        crp{"creola e Pidgins (altra lingua)"}
         cs{"ceco"}
+        csb{"kashubian"}
         cu{"slavo della Chiesa"}
+        cus{"cuscitica (altra lingua)"}
         cv{"chuvash"}
         cy{"gallese"}
         da{"danese"}
+        dak{"dakota"}
+        dar{"dargwa"}
+        day{"dayak"}
         de{"tedesco"}
+        del{"delaware"}
+        den{"slave"}
+        dgr{"dogrib"}
+        din{"dinca"}
+        doi{"dogri"}
+        dra{"dravidica (altra lingua)"}
         dsb{"basso sorabo"}
+        dua{"duala"}
+        dum{"olandese, medio (ca. 1050-1350)"}
         dv{"divehi"}
+        dyu{"diula"}
         dz{"dzongkha"}
         ee{"ewe"}
+        efi{"efik"}
+        egy{"egiziano (antico)"}
+        eka{"ekajuka"}
         el{"greco"}
+        elx{"elamitico"}
         en{"inglese"}
+        enm{"inglese, medio (1100-1500)"}
         eo{"esperanto"}
         es{"spagnolo"}
         et{"estone"}
         eu{"basco"}
+        ewo{"ewondo"}
         fa{"persiano"}
+        fat{"fanti"}
         ff{"fulah"}
         fi{"finlandese"}
+        fiu{"ugrofinnica (altra lingua)"}
         fj{"figiano"}
         fo{"faroese"}
         fr{"francese"}
+        frm{"francese, medio (ca.1400-1600)"}
+        fro{"francese, antico (842-ca.1400)"}
+        fur{"friulano"}
         fy{"frisone"}
         ga{"irlandese"}
+        gaa{"ga"}
+        gay{"gayo"}
+        gba{"gbaya"}
         gd{"gaelico scozzese"}
+        gem{"germanica (altra lingua)"}
         gez{"geez"}
+        gil{"gilbertese"}
         gl{"galiziano"}
+        gmh{"tedesco, medio alto (ca.1050-1500)"}
         gn{"guarana"}
+        goh{"tedesco, antico alto (ca.750-1050)"}
+        gon{"gondi"}
+        gor{"gorontalo"}
+        got{"gotico"}
+        grb{"gerbo"}
+        grc{"greco, antico (fino al 1453)"}
         gu{"gujarati"}
         gv{"manx"}
+        gwi{"gwichʼin"}
         ha{"haussa"}
+        hai{"haida"}
         haw{"hawaiano"}
         he{"ebraico"}
         hi{"hindi"}
+        hil{"hiligayna"}
+        him{"himachali"}
+        hit{"hittite"}
+        hmn{"hmong"}
         ho{"hiri motu"}
         hr{"croato"}
         hsb{"alto sorabo"}
         ht{"haitiano"}
         hu{"ungherese"}
+        hup{"hupa"}
         hy{"armeno"}
         hz{"herero"}
         ia{"interlingua"}
+        iba{"iban"}
         id{"indonesiano"}
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuan yi"}
         ik{"inupiak"}
+        ilo{"ilocano"}
+        inc{"indiana (altra lingua)"}
+        ine{"indoeuropea (altra lingua)"}
+        inh{"ingush"}
         io{"ido"}
+        ira{"iraniana"}
+        iro{"lingue irochesi"}
         is{"islandese"}
         it{"italiano"}
         iu{"inuktitut"}
         ja{"giapponese"}
+        jbo{"lojban"}
+        jpr{"giudeo persiano"}
+        jrb{"giudeo arabo"}
         jv{"giavanese"}
         ka{"georgiano"}
+        kaa{"kara-kalpak"}
+        kab{"kabyle"}
+        kac{"kachin"}
+        kam{"kamba"}
+        kar{"karen"}
+        kaw{"kawi"}
+        kbd{"kabardia"}
         kg{"kongo"}
+        kha{"khasi"}
+        khi{"khoisan (altra lingua)"}
+        kho{"khotanese"}
         ki{"kikuyu"}
         kj{"kuanyama"}
         kk{"kazako"}
         kl{"kalaallisut"}
         km{"khmer"}
+        kmb{"kimbundu"}
         kn{"kannada"}
         ko{"coreano"}
         kok{"konkani"}
+        kos{"Kosraean"}
+        kpe{"kpelle"}
         kr{"kanuri"}
+        krc{"karachay-Balkar"}
+        kro{"kru"}
+        kru{"kurukh"}
         ks{"kashmiri"}
         ku{"curdo"}
+        kum{"kumyk"}
+        kut{"kutenai"}
         kv{"komi"}
         kw{"cornico"}
         ky{"kirghiso"}
         la{"latino"}
+        lad{"ladino"}
+        lah{"lahnda"}
+        lam{"lamba"}
         lb{"lussemburghese"}
+        lez{"lezghian"}
         lg{"ganda"}
         li{"limburgese"}
         ln{"lingala"}
         lo{"lao"}
+        lol{"lolo (bantu)"}
+        loz{"lozi"}
         lt{"lituano"}
         lu{"luba-katanga"}
+        lua{"luba-lulua"}
+        lui{"luiseno"}
+        lun{"lunda"}
+        luo{"luo (Kenia e Tanzania)"}
+        lus{"lushai"}
         lv{"lettone"}
+        mad{"madurese"}
+        mag{"magahi"}
+        mai{"maithili"}
+        mak{"makasar"}
+        man{"mandingo"}
+        map{"austronesiano"}
+        mas{"masai"}
+        mdf{"moksha"}
+        mdr{"mandar"}
+        men{"mende"}
         mg{"malgascio"}
+        mga{"irlandese medio (900-1200)"}
         mh{"marshallese"}
         mi{"maori"}
+        mic{"micmac"}
+        min{"menangkabau"}
+        mis{"lingue diverse"}
         mk{"macedone"}
+        mkh{"mon-khmer (altra lingua)"}
         ml{"malayalam"}
         mn{"mongolo"}
+        mnc{"manchu"}
         mni{"manipuri"}
+        mno{"manobo"}
         mo{"moldavo"}
         moh{"mohawk"}
+        mos{"mossi"}
         mr{"marathi"}
         ms{"malese"}
         mt{"maltese"}
         mul{"multilingua"}
+        mun{"munda (altra lingua)"}
+        mus{"creek"}
+        mwr{"marwari"}
         my{"birmano"}
+        myn{"lingue maya"}
+        myv{"erzya"}
         na{"nauru"}
+        nah{"nahuatl"}
+        nai{"indiano del Nord America (altra lingua)"}
+        nap{"napoletano"}
         nb{"norvegese bokmål"}
         nd{"ndebele del nord"}
+        nds{"basso tedesco; basso sassone"}
         ne{"nepalese"}
+        new{"newari"}
         ng{"ndonga"}
+        nic{"niger - cordofan (altra lingua)"}
+        niu{"niue"}
         nl{"olandese"}
         nn{"norvegese nynorsk"}
         no{"norvegese"}
+        nog{"nogai"}
+        non{"norse antico"}
         nr{"ndebele del sud"}
         nso{"sotho del nord"}
+        nub{"nubiano"}
         nv{"navajo"}
         ny{"nyanja; chichewa; chewa"}
+        nym{"nyamwezi"}
+        nyn{"nyankole"}
+        nyo{"nyoro"}
+        nzi{"nzima"}
         oc{"occitano (post 1500); provenzale"}
         oj{"ojibwa"}
         om{"oromo"}
         or{"oriya"}
         os{"ossetico"}
+        osa{"osage"}
+        ota{"turco ottomano (1500-1928)"}
+        oto{"lingue otomi"}
         pa{"punjabi"}
+        paa{"papuano-australiano (altra lingua)"}
+        pag{"pangasinan"}
+        pal{"pahlavi"}
+        pam{"pampanga"}
+        pap{"papiamento"}
+        pau{"palau"}
+        peo{"antico persiano (600-400 A.C.)"}
+        phi{"filippino (altra lingua)"}
+        phn{"fenicio"}
         pi{"pali"}
         pl{"polacco"}
+        pon{"ponape"}
+        pra{"pracrito"}
+        pro{"provenzale, antico (fino al 1500)"}
         ps{"pashto"}
         pt{"portoghese"}
         qu{"quechua"}
+        raj{"rajasthani"}
+        rap{"rapanui"}
+        rar{"rarotonga"}
         rm{"lingua rhaeto-romance"}
         rn{"rundi"}
         ro{"rumeno"}
+        roa{"lingua romanza (altra lingua)"}
+        rom{"romani"}
         ru{"russo"}
         rw{"kinyarwanda"}
         sa{"sanscrito"}
+        sad{"sandawe"}
         sah{"yakut"}
+        sai{"indiano del Sud America (altra lingua)"}
+        sal{"lingue salish"}
+        sam{"aramaico samaritano"}
+        sas{"sasak"}
+        sat{"santali"}
         sc{"sardo"}
+        sco{"scozzese"}
         sd{"sindhi"}
         se{"sami del nord"}
+        sel{"selkup"}
+        sem{"semitico (altra lingua)"}
         sg{"sango"}
+        sga{"irlandese, antico (fino al ’900)"}
+        sgn{"lingue sign"}
         sh{"serbo-croato"}
+        shn{"shan"}
         si{"singalese"}
         sid{"sidamo"}
+        sio{"lingue sioux"}
+        sit{"sino-tibetano (altra lingua)"}
         sk{"slovacco"}
         sl{"sloveno"}
+        sla{"slavo (altra lingua)"}
         sm{"samoano"}
         sma{"sami del sud"}
+        smi{"lingue sami (altra lingua)"}
         smj{"sami lule"}
         smn{"sami inari"}
         sms{"sami skolt"}
         sn{"shona"}
+        snk{"soninke"}
         so{"somalo"}
+        sog{"sogdiano"}
+        son{"songhai"}
         sq{"albanese"}
         sr{"serbo"}
+        srr{"serer"}
         ss{"swati"}
+        ssa{"nilo-sahariana (altra lingua)"}
         st{"sotho del sud"}
         su{"sundanese"}
+        suk{"sukuma"}
+        sus{"susu"}
+        sux{"sumero"}
         sv{"svedese"}
         sw{"swahili"}
         syr{"siriaco"}
         ta{"tamil"}
+        tai{"tailandese (altra lingua)"}
         te{"telugu"}
+        tem{"temne"}
+        ter{"tereno"}
+        tet{"tetum"}
         tg{"tagicco"}
         th{"thai"}
         ti{"tigrinya"}
         tig{"tigre"}
         tk{"turcomanno"}
+        tkl{"tokelau"}
         tl{"tagalog"}
+        tli{"tlingit"}
+        tmh{"tamashek"}
         tn{"tswana"}
         to{"tonga (Isole Tonga)"}
+        tog{"tonga (nyasa)"}
+        tpi{"tok pisin"}
         tr{"turco"}
         ts{"tsonga"}
+        tsi{"tsimshian"}
         tt{"tatarico"}
+        tum{"tumbuka"}
+        tup{"lingue tupi"}
+        tut{"turco-tatarica (altra lingua)"}
+        tvl{"tuvalu"}
         tw{"ci"}
         ty{"taitiano"}
+        tyv{"tuvinian"}
+        udm{"udmurt"}
         ug{"uigurico"}
+        uga{"ugaritico"}
         uk{"ucraino"}
+        umb{"mbundu"}
         und{"lingua imprecisata"}
         ur{"urdu"}
         uz{"usbeco"}
         ve{"venda"}
         vi{"vietnamita"}
         vo{"volapük"}
+        vot{"voto"}
         wa{"vallone"}
+        wak{"lingue wakash"}
         wal{"walamo"}
+        war{"waray"}
+        was{"washo"}
         wen{"sorabo"}
         wo{"volof"}
+        xal{"kalmyk"}
         xh{"xosa"}
+        yao{"yao (bantu)"}
+        yap{"Yapese"}
         yi{"yiddish"}
         yo{"yoruba"}
+        ypk{"lingue yupik"}
         za{"zhuang"}
+        zap{"zapotec"}
+        zen{"zenaga"}
         zh{"cinese"}
+        znd{"zande"}
         zu{"zulu"}
+        zun{"zuni"}
     }
     LocaleScript{
         "Latn",
@@ -1324,7 +1794,7 @@ it{
     Variants{
         REVISED{"Modificato"}
     }
-    Version{"1.54"}
+    Version{"1.55"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1432,12 +1902,6 @@ it{
                         "D",
                     }
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
     }

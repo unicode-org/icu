@@ -134,12 +134,6 @@ fo{
         ZM{"Sambia"}
         ZW{"Simbabvi"}
     }
-    Currencies{
-        DKK{
-            "kr",
-            "DKK",
-        }
-    }
     ExemplarCharacters{"[a á b-d ð e-i í j-o ó p-u ú v-y ý z æ ø]"}
     Languages{
         fo{"føroyskt"}

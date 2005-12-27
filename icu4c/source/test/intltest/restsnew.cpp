@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1127,9 +1127,9 @@ NewResourceBundleTest::TestGetByFallback() {
 
     ResourceBundle heRes(NULL, "he", status);
 
-    heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTimePatterns", status);
+    heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTime", status);
     if(U_SUCCESS(status)) {
-        errln("he locale's Islamic DateTimePatterns resource exists. How did it get here?\n");
+        errln("he locale's Islamic-civil DateTime resource exists. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
 
@@ -1140,9 +1140,9 @@ NewResourceBundleTest::TestGetByFallback() {
     status = U_ZERO_ERROR;
 
     ResourceBundle rootRes(NULL, "root", status);
-    rootRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTimePatterns", status);
+    rootRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTime", status);
     if(U_SUCCESS(status)) {
-        errln("Root's Islamic DateTimePatterns resource exists. How did it get here?\n");
+        errln("Root's Islamic-civil's DateTime resource exists. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
 
