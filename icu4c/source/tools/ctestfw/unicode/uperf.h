@@ -82,6 +82,10 @@ public:
     virtual long getEventsPerIteration(){
         return -1;
     }
+    /**
+     * destructor
+     */
+    virtual ~UPerfFunction() {}
 
     /**
      * Call call() n times in a tight loop and return the elapsed
