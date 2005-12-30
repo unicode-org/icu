@@ -1415,12 +1415,6 @@ sk{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN]([oO]|[iI][eE])?"}
-        nostr{"nie:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([aA]([nN][oO])?))"}
-        yesstr{"ano:a"}
-    }
     zoneStrings{
         "Antarctica:South_Pole"{
             ec{"Južný pól"}

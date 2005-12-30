@@ -1031,10 +1031,6 @@ en{
             "leu",
             "Romanian Leu",
         }
-        RON{
-            "1#leu|1<lei",
-            "Romanian Leu",
-        }
         RUB{
             "RUB",
             "Russian Ruble",

@@ -1695,12 +1695,6 @@ tr{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([hH]([aA][yY][ıiIİ][rR])?))"}
-        nostr{"hayır:hayir:h"}
-        yesexpr{"^(([yY]([eE][sS])?)|([eE]([vV][eE][tT])?))"}
-        yesstr{"evet:e"}
-    }
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}

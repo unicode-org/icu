@@ -28,6 +28,10 @@ be{
             "BRL",
             "бразільскі рэал",
         }
+        BYB{
+            "Руб",
+            "BYB",
+        }
         BYR{
             "BYR",
             "беларускі рубель",
@@ -205,10 +209,4 @@ be{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([нН][еЕ]?))"}
-        nostr{"не:н"}
-        yesexpr{"^(([yY]([eE][sS])?)|([тТ]([аА][кК])?))"}
-        yesstr{"так:т"}
-    }
 }

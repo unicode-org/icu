@@ -1830,12 +1830,6 @@ ko{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|아니오)"}
-        nostr{"아니오"}
-        yesexpr{"^(([yY]([eE][sS])?)|예)"}
-        yesstr{"예"}
-    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"카사블랑카"}

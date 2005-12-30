@@ -399,10 +399,6 @@ sl{
     Version{"1.55"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "dop.",
-                "pop.",
-            }
             DateTimeElements:intvector{
                 2,
                 1,
@@ -508,12 +504,6 @@ sl{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN][oOeE]?"}
-        nostr{"no:NO:n:N:ne:NE"}
-        yesexpr{"^(([yY]([eE][sS])?)|([dDjJ][aA]?))"}
-        yesstr{"da:d:ja:j"}
-    }
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}

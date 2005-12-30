@@ -92,9 +92,13 @@ sw{
         ZA{"Afrika ya Kusini"}
     }
     Currencies{
+        KES{
+            "KSh",
+            "KES",
+        }
         TZS{
             "TSh",
-            "Shilingi ya Tanzania",
+            "TZS",
         }
     }
     ExemplarCharacters{"[a-z]"}

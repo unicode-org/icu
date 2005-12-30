@@ -2043,12 +2043,6 @@ fi{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[eE].*"}
-        nostr{"ei:e"}
-        yesexpr{"^[kK].*"}
-        yesstr{"kyllä:kylla:k"}
-    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}

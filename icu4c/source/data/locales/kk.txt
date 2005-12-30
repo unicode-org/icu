@@ -13,6 +13,12 @@ kk{
     Countries{
         KZ{"Қазақстан"}
     }
+    Currencies{
+        KZT{
+            "тңг.",
+            "KZT",
+        }
+    }
     ExemplarCharacters{"[а ә б-е ё ж-й і к қ л-н ң о-у ұ ү ф-я]"}
     Languages{
         kk{"Қазақ"}
@@ -107,11 +113,5 @@ kk{
                 }
             }
         }
-    }
-    messages{
-        noexpr{"^(([nN][oO]?)|([жЖ]([оО][қҚ])?))"}
-        nostr{"жоқ:ж"}
-        yesexpr{"^(([yY]([eE][sS])?)|([иИ][әӘ]?))"}
-        yesstr{"иә:и"}
     }
 }

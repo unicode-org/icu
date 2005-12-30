@@ -251,33 +251,9 @@ nn{
         ZW{"Zimbabwe"}
     }
     Currencies{
-        BRL{
-            "BRL",
-            "Brasilianske real",
-        }
-        CNY{
-            "CNY",
-            "Kinesiske yuan renminbi",
-        }
-        GBP{
-            "£",
-            "Britiske pund",
-        }
-        INR{
-            "=0#Rs.|1#Re.|1<Rs.",
-            "Indiske rupi",
-        }
         NOK{
             "kr",
-            "Norske kroner",
-        }
-        RUB{
-            "RUB",
-            "Russiske rubler",
-        }
-        USD{
-            "$",
-            "Amerikanske dollar",
+            "NOK",
         }
     }
     ExemplarCharacters{"[a à ǎ b-e é f-o ó ô p-y ü z æ ø å]"}
@@ -306,10 +282,6 @@ nn{
     Version{"1.46"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
             DateTimeElements:intvector{
                 2,
                 4,

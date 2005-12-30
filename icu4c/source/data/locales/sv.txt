@@ -1900,10 +1900,6 @@ sv{
             }
         }
     }
-    messages{
-        nostr{"nej:n"}
-        yesstr{"ja:j"}
-    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}

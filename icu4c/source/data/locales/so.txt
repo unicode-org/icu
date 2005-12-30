@@ -112,49 +112,9 @@ so{
         ZW{"Simbaabwe"}
     }
     Currencies{
-        BRL{
-            "BRL",
-            "Brazilian Real",
-        }
-        CNY{
-            "CNY",
-            "Chinese Yuan Renminbi",
-        }
-        DJF{
-            "DJF",
-            "Jabuuti Faran",
-        }
-        ETB{
-            "ETB",
-            "Itoobiya Bir",
-        }
-        EUR{
-            "€",
-            "Euro",
-        }
-        GBP{
-            "£",
-            "British Pound Sterling",
-        }
-        INR{
-            "=0#Rs.|1#Re.|1<Rs.",
-            "Indian Rupee",
-        }
-        JPY{
-            "¥",
-            "Japanese Yen",
-        }
-        RUB{
-            "RUB",
-            "Russian Ruble",
-        }
-        SOS{
-            "SOS",
-            "Somalia Schilling",
-        }
-        USD{
-            "$",
-            "US Dollar",
+        KES{
+            "Ksh",
+            "KES",
         }
     }
     ExemplarCharacters{"[a-z]"}
