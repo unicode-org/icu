@@ -378,6 +378,10 @@ bg{
             "BEL",
             "Белгийски франк (финансов)",
         }
+        BGL{
+            "лв",
+            "BGL",
+        }
         BGN{
             "лв.",
             "Български лев",
@@ -1501,12 +1505,6 @@ bg{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([нН][еЕ]?))"}
-        nostr{"не:н"}
-        yesexpr{"^(([yY]([eE][sS])?)|([дД][аА]?))"}
-        yesstr{"да:д"}
-    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Казабланка"}

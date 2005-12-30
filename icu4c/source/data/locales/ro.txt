@@ -279,37 +279,9 @@ ro{
         ZW{"Zimbabwe"}
     }
     Currencies{
-        BRL{
-            "BRL",
-            "Real brazilian",
-        }
-        CNY{
-            "CNY",
-            "Yuan Renminbi chinezesc",
-        }
-        GBP{
-            "£",
-            "Liră sterlină britanică",
-        }
-        INR{
-            "=0#Rs.|1#Re.|1<Rs.",
-            "Rupie indiană",
-        }
-        JPY{
-            "¥",
-            "Yen japonez",
-        }
-        RUB{
-            "RUB",
-            "Rublă rusească",
-        }
-        TRY{
-            "TRY",
-            "Noua liră turcească",
-        }
-        USD{
-            "$",
-            "Dolar SUA",
+        ROL{
+            "lei",
+            "ROL",
         }
     }
     ExemplarCharacters{"[a ă â b-i î j-s ş t ţ u-z]"}
@@ -470,12 +442,6 @@ ro{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN][oOuU]?"}
-        nostr{"nu:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
-        yesstr{"da:d"}
-    }
     zoneStrings{
         "Antarctica:South_Pole"{
             ec{"Polul Sud"}

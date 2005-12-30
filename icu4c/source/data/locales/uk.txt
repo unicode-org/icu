@@ -1619,12 +1619,6 @@ uk{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([нН][іІ]?))"}
-        nostr{"ні:н"}
-        yesexpr{"^(([yY]([eE][sS])?)|([тТ]([аА][кК])?))"}
-        yesstr{"так:т"}
-    }
     zoneStrings{
         "Africa:Lubumbashi"{
             ec{"Лубумбаші"}

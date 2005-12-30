@@ -245,6 +245,12 @@ id{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
+    Currencies{
+        IDR{
+            "Rp",
+            "IDR",
+        }
+    }
     ExemplarCharacters{"[a-z]"}
     Languages{
         aa{"Afar"}

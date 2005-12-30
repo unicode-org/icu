@@ -166,6 +166,10 @@ sq{
         ZW{"Zimbabve"}
     }
     Currencies{
+        ALL{
+            "Lek",
+            "ALL",
+        }
         BRL{
             "BRL",
             "Real Brazilian",
@@ -349,10 +353,4 @@ sq{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nNjJ][oO]?"}
-        nostr{"jo:j"}
-        yesexpr{"^(([yY]([eE][sS])?)|([pP][oO]?))"}
-        yesstr{"po:p"}
-    }
 }

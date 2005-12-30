@@ -305,11 +305,11 @@ sr{
             "Швајцарски франак",
         }
         CNY{
-            "У",
+            "CNY",
             "Кинески Јуан Ренминби",
         }
         CSD{
-            "YUN",
+            "CSD",
             "Српски Динар",
         }
         DEM{
@@ -407,6 +407,10 @@ sr{
         USD{
             "US$",
             "Амерички долар",
+        }
+        YUN{
+            "Дин",
+            "YUN",
         }
     }
     ExemplarCharacters{"[а-д ђ е-и ј к л љ м н њ о-т ћ у-ч џ ш]"}
@@ -641,12 +645,6 @@ sr{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([нН][еЕ]?))"}
-        nostr{"не:н"}
-        yesexpr{"^(([yY]([eE][sS])?)|([дД][аА]?))"}
-        yesstr{"да:д"}
-    }
     zoneStrings{
         "Africa:Lubumbashi"{
             ec{"Лумумбаши"}

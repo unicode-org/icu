@@ -1871,12 +1871,6 @@ fr{
         quotationStart{"«"}
     }
     localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN]([oO][nN]?)?"}
-        nostr{"non:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([oO]([uU][iI])?))"}
-        yesstr{"oui:o"}
-    }
     zoneStrings{
         "Africa:Timbuktu"{
             ec{"Tombouctou"}

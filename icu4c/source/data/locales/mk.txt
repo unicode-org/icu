@@ -1124,10 +1124,4 @@ mk{
         }
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
-    messages{
-        noexpr{"^(([nN][oO]?)|([нН][еЕ]?))"}
-        nostr{"не:н"}
-        yesexpr{"^(([yY]([eE][sS])?)|([дД][аА]?))"}
-        yesstr{"да:д"}
-    }
 }

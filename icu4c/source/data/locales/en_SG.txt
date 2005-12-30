@@ -21,14 +21,14 @@ en_SG{
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, dd MMMM yyyy",
+                "a hh:mm:ss",
+                "a hh:mm:ss",
+                "a hh:mm",
+                "a hh:mm",
                 "dd MMMM yyyy",
                 "dd MMM yyyy",
-                "dd/MM/yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
                 "{1} {0}",
             }
         }

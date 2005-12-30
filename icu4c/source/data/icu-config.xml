@@ -286,10 +286,15 @@
         <coverageLevel group="G2" level="moderate" org="IBM" draft="false" />
         <coverageLevel group="G3" level="basic" org="IBM" draft="false" />
         <coverageLevel group="G4" level="basic" org="IBM" draft="false" />
-        <include xpath="//ldml/.*" draft="false"/> 
-        <include xpath="//ldml/.*/weekendData/.*" draft=".*"/>
-        <include xpath="//ldml/.*/dateTimeElements/.*" draft=".*"/>
-        <include xpath=".*Formats/.*FormatLength\[@type='.*'\]/.*Format\[@type='.*'\]/pattern.*" locales="fa.*" draft=".*"/>
+        <include xpath="//ldml/.*" draft="false"/>
+        <!-- the data for below items are included irrespective of draft status. Should not be required --> 
+        <include xpath="//ldml/.*/week/.*" draft=".*"/>
+        <!-- for DateTimePatterns -->
+        <include xpath=".*Formats/.*FormatLength\[@type='.*'\]/.*Format\[@type='.*'\]/pattern.*" locales="en_PK fa.* he nb root sl_SI sv th vi" draft=".*"/>
+        <!-- for NumberPatterns -->
+        <include xpath=".*Formats/.*FormatLength/.*Format\[@type='.*'\]/pattern.*" locales="en_PK fa.* he nb root sl_SI sv th vi" draft=".*"/>
+        <!-- for NumberElements -->
+        <include xpath="//ldml/.*/symbols/.*" locales="az es_DO es_EC es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_SV fa.* nb root sv vi" draft=".*"/>
         <!-- for these locales include the draft data too -->
         <include xpath="//ldml/.*" locales="as as_IN az_Cyrl az_Cyrl_AZ ml ml_IN or or_IN ur ur_PK uz uz_Cyrl uz_Cyrl_UZ uz_Latn uz_Latn_UZ" draft=".*"/>
         <!-- backwards compatibility for @currency=preeuro -->

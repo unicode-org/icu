@@ -312,7 +312,7 @@ sr_Latn{
             "Švajcarski franak",
         }
         CNY{
-            "U",
+            "CNY",
             "Kineski Juan Renminbi",
         }
         CSD{
@@ -414,6 +414,10 @@ sr_Latn{
         USD{
             "US$",
             "Američki dolar",
+        }
+        YUN{
+            "Din",
+            "YUN",
         }
     }
     ExemplarCharacters{"[a-c ć č d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
@@ -627,12 +631,6 @@ sr_Latn{
                 }
             }
         }
-    }
-    messages{
-        noexpr{"^[nN][oOeE]?"}
-        nostr{"ne:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
-        yesstr{"da:d"}
     }
     zoneStrings{
         "Africa:Kinshasa"{
