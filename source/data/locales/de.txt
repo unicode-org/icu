@@ -1909,12 +1909,6 @@ de{
         quotationStart{"‚"}
     }
     localPatternChars{"GjMtkHmsSEDFwWahKzJeugAZvcL"}
-    messages{
-        noexpr{"^([nN]([oO]|([eE][iI][nN]))?)"}
-        nostr{"nein:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([jJ][aA]?))"}
-        yesstr{"ja:j"}
-    }
     zoneStrings{
         "America:Mexico_City"{
             ec{"Mexiko-Stadt"}

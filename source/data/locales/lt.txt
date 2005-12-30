@@ -469,10 +469,4 @@ lt{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN][oOeE]?"}
-        nostr{"ne:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([tT]([aA][iI][pP])?))"}
-        yesstr{"taip:t"}
-    }
 }

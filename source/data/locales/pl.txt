@@ -351,14 +351,6 @@ pl{
             "BEL",
             "frank belgijski (finansowy)",
         }
-        BGL{
-            "lev",
-            "lewa bułgarskie",
-        }
-        BGN{
-            "BGN",
-            "nowe lewa bułgarskie",
-        }
         BHD{
             "BD",
             "dinar bahrański",
@@ -1051,10 +1043,6 @@ pl{
             "TL",
             "lir turecki",
         }
-        TRY{
-            "TRY",
-            "nowa lira turecka",
-        }
         TTD{
             "TT$",
             "dolar Trynidadu i Tobago",
@@ -1321,7 +1309,7 @@ pl{
                 "EEEE, d MMMM yyyy",
                 "d MMMM yyyy",
                 "yyyy-MM-dd",
-                "dd.MM.yy",
+                "yy-MM-dd",
                 "{1} {0}",
             }
             dayNames{

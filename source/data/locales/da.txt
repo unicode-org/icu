@@ -1716,7 +1716,7 @@ da{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE 'den' dd. MMM yyyy",
+                "EEEE 'den' d. MMMM yyyy",
                 "d. MMM yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
@@ -1812,12 +1812,6 @@ da{
         }
     }
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZvcL"}
-    messages{
-        noexpr{"^([nN]([oO]|([eE][jJ]))?)"}
-        nostr{"nej:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([jJ][aA]?))"}
-        yesstr{"ja:j"}
-    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}

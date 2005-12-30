@@ -249,6 +249,12 @@ lv{
         ZM{"Zambija"}
         ZW{"Zimbabve"}
     }
+    Currencies{
+        LVL{
+            "Ls",
+            "LVL",
+        }
+    }
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī y j k ķ l ļ m n ņ o ō p-r ŗ s š t u ū v-x z ž]"}
     Languages{
         ar{"arābu"}

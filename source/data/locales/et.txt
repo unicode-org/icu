@@ -253,7 +253,7 @@ et{
     Currencies{
         EEK{
             "kr",
-            "kroon",
+            "EEK",
             {
                 /**
                  * Duplicated from NumberPatterns resource

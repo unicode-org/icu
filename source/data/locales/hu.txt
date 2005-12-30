@@ -659,10 +659,6 @@ hu{
             "ILS",
             "Izraeli új sékel",
         }
-        INR{
-            "=0#Rs.|1#Re.|1<Rs.",
-            "Indiai rúpia",
-        }
         IQD{
             "ID",
             "Iraki dínár",
@@ -1058,10 +1054,6 @@ hu{
         TRL{
             "TL",
             "Török líra",
-        }
-        TRY{
-            "TRY",
-            "Új török líra",
         }
         TTD{
             "TT$",

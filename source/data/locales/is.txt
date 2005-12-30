@@ -700,10 +700,6 @@ is{
             "leu",
             "Rúmenskt lei",
         }
-        RUB{
-            "RUB",
-            "Rússnesk rúbla",
-        }
         RUR{
             "RUR",
             "Rússnesk rúbla",
@@ -795,10 +791,6 @@ is{
         TRL{
             "TL",
             "Tyrknesk líra",
-        }
-        TRY{
-            "TRY",
-            "Ný, tyrknesk líra",
         }
         TTD{
             "TT$",

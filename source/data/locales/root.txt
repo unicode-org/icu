@@ -655,12 +655,6 @@ root{
         quotationStart{"“"}
     }
     localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZvcL"}
-    messages{
-        noexpr{"^[nN][oO]?"}
-        nostr{"no:n"}
-        yesexpr{"^[yY]([eE][sS])?"}
-        yesstr{"yes:y"}
-    }
     zoneStrings{
         ""{
             ec{""}

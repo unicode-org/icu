@@ -1249,12 +1249,6 @@ hr{
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
-    messages{
-        noexpr{"^[nN][oOeE]?"}
-        nostr{"ne:n"}
-        yesexpr{"^(([yY]([eE][sS])?)|([dD][aA]?))"}
-        yesstr{"da:d"}
-    }
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
