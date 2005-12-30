@@ -27,6 +27,7 @@ structLocale:table(nofallback){
         021{""}
         029{""}
         030{""}
+        034{""}
         035{""}
         039{""}
         053{""}
@@ -35,6 +36,7 @@ structLocale:table(nofallback){
         061{""}
         062{""}
         142{""}
+        143{""}
         145{""}
         150{""}
         151{""}
@@ -226,6 +228,7 @@ structLocale:table(nofallback){
         PW{""}
         PY{""}
         QA{""}
+        QE{""}
         QO{""}
         RE{""}
         RO{""}
