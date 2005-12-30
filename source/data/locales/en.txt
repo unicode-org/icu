@@ -30,14 +30,15 @@ en{
         021{"Northern America"}
         029{"Caribbean"}
         030{"Eastern Asia"}
+        034{"Southern Asia"}
         035{"South-eastern Asia"}
         039{"Southern Europe"}
         053{"Australia and New Zealand"}
         054{"Melanesia"}
         057{"Micronesian Region"}
         061{"Polynesia"}
-        062{"South-central Asia"}
         142{"Asia"}
+        143{"Central Asia"}
         145{"Western Asia"}
         150{"Europe"}
         151{"Eastern Europe"}
@@ -229,6 +230,7 @@ en{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QE{"European Union"}
         QO{"Outlying Oceania"}
         RE{"Reunion"}
         RO{"Romania"}
@@ -1975,7 +1977,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.81"}
+    Version{"1.84"}
     calendar{
         gregorian{
             DateTimePatterns{
