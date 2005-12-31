@@ -93,7 +93,7 @@ public:
      * result may be zero.  Small return values have limited
      * meaningfulness, depending on the underlying CPU and OS.
      */
-     double time(int32_t n, UErrorCode* status) {
+     virtual double time(int32_t n, UErrorCode* status) {
         UTimer start, stop;
         utimer_getTime(&start); 
         while (n-- > 0) {
