@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1213,7 +1213,7 @@ extern U_IMPORT char *U_TZNAME[];
 #if defined(U_DARWIN)   /* For Mac OS X */
 #define TZZONELINK      "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
-static char gTimeZoneBuffer[MAXPATHLEN + 2]; /* Heap allocated */
+static char gTimeZoneBuffer[MAXPATHLEN + 2];
 static char *gTimeZoneBufferPtr = NULL;
 #endif
 
