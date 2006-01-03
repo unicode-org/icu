@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2005, International Business Machines
+*   Copyright (C) 2005-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -49,6 +49,31 @@
 
 static const char *reservedChars="\"%&'()*+,-./:;<=>?_";
 
+static const struct {
+    const char *suffix;
+    int32_t length;
+} listFileSuffixes[]={
+    { ".txt", 4 },
+    { ".lst", 4 },
+    { ".tmp", 4 }
+};
+
+/* check for multiple text file suffixes to see if this list name is a text file name */
+static UBool
+isListTextFile(const char *listname) {
+    const char *listNameEnd=strchr(listname, 0);
+    const char *suffix;
+    int32_t i, length;
+    for(i=0; i<LENGTHOF(listFileSuffixes); ++i) {
+        suffix=listFileSuffixes[i].suffix;
+        length=listFileSuffixes[i].length;
+        if((listNameEnd-listname)>length && 0==memcmp(listNameEnd-length, suffix, length)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 /*
  * Read a file list.
  * If the listname ends with ".txt", then read the list file
@@ -74,7 +99,7 @@ readList(const char *filesPath, const char *listname, UBool readContents) {
     }
 
     listNameEnd=strchr(listname, 0);
-    if((listNameEnd-listname)>4 && 0==memcmp(listNameEnd-4, ".txt", 4)) {
+    if(isListTextFile(listname)) {
         // read the list file
         char line[1024];
         char *end;
