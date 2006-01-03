@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -22,15 +22,21 @@ import java.io.InputStreamReader;
 import java.lang.reflect.*;
 
 /**
- * Base class for performance testing framework.  To use, subclass and
+ * Base class for performance testing framework.  To use, subclass should
  * define one or more instance methods with names beginning with
- * "test" (case ignored).  Each such method must then call two
- * functions, setTestFunction(), and setEventsPerCall().  In addition,
- * the subclass should define a main() method that calls run() as
+ * "test" (case ignored).  Each such method must return an (subclass) instance
+ * of PerfTest.Function and requires no argument. The prototype of the method is 
+ * 
+ *  PerfTest.Function testTheName()
+ *  
+ * In addition, the subclass should define a main() method that calls run() as
  * defined here.  If the subclasses uses any command line arguments
  * (beyond those handled automatically by this calss) then it should
  * override setup() to handle its arguments.
- *
+ *  
+ * To call a test from command line, the 'test' prefix of the test method name 
+ * should be ignored/removed.
+ * 
  * Example invocation:
  * java -cp classes -verbose:gc com.ibm.icu.dev.test.perf.UnicodeSetPerf --gc --passes 4 --iterations 100 UnicodeSetAdd [[:l:][:c:]]
  *
@@ -67,7 +73,7 @@ import java.lang.reflect.*;
  *
  * Raw times are given as integer ms, because this is what the system
  * measures.
- *
+ * 
  * @author Alan Liu
  * @since ICU 2.4
  */
@@ -246,7 +252,7 @@ public abstract class PerfTest {
         //bufferLen = 0;
         verbose = false;
         bulk_mode = false;
-        passes = iterations = time = 0;
+        passes = iterations = time = -1;
         locale = null;
 
         UOption[] options = getOptions();
@@ -277,21 +283,25 @@ public abstract class PerfTest {
         }
 
         if (options[TIME].doesOccur && options[ITERATIONS].doesOccur) {
-            throw new UsageException("Cannot specify both time and iterations");
+            throw new UsageException("Cannot specify both '-t time' and '-i iterations'");
         }
 
+        if (!options[TIME].doesOccur && !options[ITERATIONS].doesOccur) {
+            throw new UsageException("Either '-t time' or '-i iteration' must be specified");
+        }
+        
         if(options[PASSES].doesOccur) {
             passes = Integer.parseInt(options[PASSES].value);
+        } else {
+            throw new UsageException("'-p pass' must be specified");
         }
 
         if(options[ITERATIONS].doesOccur) {
             iterations = Integer.parseInt(options[ITERATIONS].value);
-            time =0;
         }
 
         if(options[TIME].doesOccur) {
             time = Integer.parseInt(options[TIME].value);
-            iterations = 0;
         }
 
         if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur) {
@@ -380,45 +390,10 @@ public abstract class PerfTest {
 
             int n;
             long t;
-            // ---------------------------------------------------------------------------------------------------
-            //The rest of this method is modified by GCL Shanghai. To synchronize this class with ICU4C's uperf.cpp
-            //----------------------------------------------------------------------------------------------------
-            long loops = 0;
-            //for (j=0; j<passes; ++j) {
-                if (iterations > 0) {
-                    // Run specified number of iterations
-                    loops = iterations;
-//                    System.out.println("= " + meth.getName() + " begin " + iterations + " iterations");
-//                    t = testFunction.time(iterations);
-//                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration());
-                } else {
-                    // Run for specified duration in seconds
-                    //first calibrate to determine iterations/pass
-                    if (verbose) {
-                        System.out.println("= " + meth.getName() + " calibrating " + time + " seconds" );
-                    }
-                    n = time * 1000; // s => ms
-                    //System.out.println("# " + meth.getName() + " " + n + " sec");
-
-                    int failsafe = 1; // last resort for very fast methods
-                    t = 0;
-                    while (t < (int)(n * 0.9)) { // 90% is close enough
-                        if (loops == 0 || t == 0) {
-                            loops = failsafe;
-                            failsafe *= 10;
-                        } else {
-                            //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);
-                            loops = (int)((double)n / t * loops + 0.5);
-                            if (loops == 0) {
-                                throw new RuntimeException("Unable to converge on desired duration");
-                            }
-                        }
-                        //System.out.println("# " + meth.getName() + " x " + loops);
-                        t = testFunction.time(loops);
-                    }
-
-                }
-            //}
+            //long b = System.currentTimeMillis();
+            long loops = getIteration(meth, testFunction);
+            //System.out.println("The guess cost: " + (System.currentTimeMillis() - b)/1000. + " s.");
+            
             for (j=0; j<passes; ++j) {
                 long events = -1;
                 if (verbose) {
@@ -454,6 +429,56 @@ public abstract class PerfTest {
 
             }
         }
+    }
+
+    /**
+     * Translate '-t time' to iterations (or just return '-i iteration')
+     * 
+     * @param meth
+     * @param fn
+     * @return
+     */
+    private long getIteration(Method meth, Function fn) {
+        long iter = 0;
+        if(time < 0) { // && iterations > 0
+            iter = iterations;
+        } else {  // && iterations < 0
+            // Translate time to iteration
+            // Assuming there is a linear relation between time and iterations
+
+            if(verbose){
+                System.out.println("= " + meth.getName() + " calibrating " + time + " seconds" );
+            }
+
+            long base = time * 1000;
+//            System.out.println("base :" + base);
+            long seed = 1;               
+            long t=0;
+            while (t < base * 0.9 || base * 1.1 < t) { // + - 10%  
+                if (iter == 0 || t == 0) {
+                    iter = seed;    // start up from 1
+                    seed *= 100;    // if the method is too fast (t == 0), multiply 100 times
+                    // 100 is rational because 'base' is always larger than 1000
+                } else {
+                    // If 't' is large enough, use linear function to calculate new iteration
+                    //
+                    // new iter(base)    old iter
+                    // -------------- = -------- = k
+                    // new time          old time
+                    //
+//                    System.out.println("before guess t: " + t);
+//                    System.out.println("before guess iter: " + iter);
+                    iter = (long) ((double)iter / t * base) ;  // avoid long cut, eg. 1/10 == 0
+                    if (iter == 0) {
+                        throw new RuntimeException("Unable to converge on desired duration");
+                    }
+                }
+                t = fn.time(iter);
+            }
+//            System.out.println("final t : " + t);
+//            System.out.println("final i : " + iter);
+        }
+        return iter;    
     }
 
     /**
