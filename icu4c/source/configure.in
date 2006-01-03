@@ -1,6 +1,6 @@
 dnl -*-m4-*-
 dnl configure.in for ICU
-dnl Copyright (c) 1999-2005, International Business Machines Corporation and
+dnl Copyright (c) 1999-2006, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
@@ -1050,7 +1050,6 @@ AC_OUTPUT([icudefs.mk \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
 		tools/icupkg/Makefile \
-		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
 		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \

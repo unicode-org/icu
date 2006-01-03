@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -141,7 +141,7 @@ ICUDATA_ARCHIVE = $(firstword $(wildcard $(srcdir)/in/$(ICUDATA_BASENAME_VERSION
 ifneq ($(ICUDATA_ARCHIVE),)
 ICUDATA_SOURCE_ARCHIVE = $(OUTDIR)/$(ICUDATA_PLATFORM_NAME).dat
 $(ICUDATA_SOURCE_ARCHIVE): $(ICUDATA_ARCHIVE) $(OUTDIR)
-	$(INVOKE) $(BINDIR)/icuswap -t$(ICUDATA_CHAR) $(ICUDATA_ARCHIVE) $(ICUDATA_SOURCE_ARCHIVE)
+	$(INVOKE) $(BINDIR)/icupkg -t$(ICUDATA_CHAR) $(ICUDATA_ARCHIVE) $(ICUDATA_SOURCE_ARCHIVE)
 endif
 else
 ifneq ($(ENABLE_STATIC),YES)
@@ -325,7 +325,7 @@ $(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) $(ICUDATA_SOURCE_ARCHIVE) $(MAINBUILDDI
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
 	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
 	@-$(RMV) $@
-	$(INVOKE) $(BINDIR)/decmn -d $(MAINBUILDDIR) --pkgdata $(ICUDATA_SOURCE_ARCHIVE) > $@
+	$(INVOKE) $(BINDIR)/icupkg -d $(BUILDDIR) --list -x \* $(ICUDATA_SOURCE_ARCHIVE) > $@
 else
 	@echo "$@" > $@
 endif
