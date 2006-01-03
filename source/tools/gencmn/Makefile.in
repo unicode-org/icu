@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/gencmn
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -15,19 +15,17 @@ include $(top_builddir)/icudefs.mk
 subdir = tools/gencmn
 
 TARGET_STUB_NAME = gencmn
-DECMN_STUB_NAME = decmn
 
 SECTION = 8
 
-MAN_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DECMN_STUB_NAME).$(SECTION)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(DECMN_DEP) $(MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(MAN_FILES)
 
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
-DECMN = $(BINDIR)/$(DECMN_STUB_NAME)$(EXEEXT)
 
 ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
@@ -36,10 +34,8 @@ CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gencmn.o
-DECMN_OBJ = decmn.o
 
 DEPS = $(OBJECTS:.o=.d)
-DECMN_DEP = $(DECMN_OBJ:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -56,12 +52,11 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(DECMN) $(MAN_FILES)
+all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)
 
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
@@ -71,7 +66,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(TARGET) $(OBJECTS) $(DECMN) $(DECMN_OBJ)
+	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -85,12 +80,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS)
 
-$(DECMN) : $(DECMN_OBJ)
-	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS)
-
-# This line is needed to serialize builds when the gmake -j option is used.
-$(DECMN:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
-
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
@@ -98,11 +87,9 @@ $(DECMN:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
--include $(DECMN_DEP)
 else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
--include $(DECMN_DEP)
 endif
 endif
 
