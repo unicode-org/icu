@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2005, International Business Machines Corporation and   *
+* Copyright (C) 2003-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -689,6 +689,7 @@ public final class ULocale implements Serializable {
                 { "sr_SP_CYRL",     "sr_Cyrl_CS", null, null }, /* .NET name */
                 { "sr_SP_LATN",     "sr_Latn_CS", null, null }, /* .NET name */
                 { "sr_YU_CYRILLIC", "sr_Cyrl_CS", null, null }, /* Linux name */
+                { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", null, null }, /* Linux name */
                 { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
                 { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
                 { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
