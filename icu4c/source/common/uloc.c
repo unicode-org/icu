@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -517,6 +517,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "sr_SP_CYRL",     "sr_Cyrl_CS", NULL, NULL }, /* .NET name */
     { "sr_SP_LATN",     "sr_Latn_CS", NULL, NULL }, /* .NET name */
     { "sr_YU_CYRILLIC", "sr_Cyrl_CS", NULL, NULL }, /* Linux name */
+    { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", NULL, NULL }, /* Linux name */
     { "uz_UZ_CYRL",     "uz_Cyrl_UZ", NULL, NULL }, /* .NET name */
     { "uz_UZ_LATN",     "uz_Latn_UZ", NULL, NULL }, /* .NET name */
     { "zh_CHS",         "zh_Hans", NULL, NULL }, /* .NET name */
