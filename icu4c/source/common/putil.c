@@ -1514,32 +1514,48 @@ static const char *uprv_getPOSIXID(void)
 {
     static const char* posixID = NULL;
     if (posixID == 0) {
-        posixID = getenv("LC_ALL");
-        if (posixID == 0) {
-            posixID = getenv("LANG");
+        /*
+        * On Solaris two different calls to setlocale can result in 
+        * different values. Only get this value once.
+        *
+        * We must check this first because an application can set this.
+        *
+        * LC_ALL can't be used because it's platform dependent. The LANG
+        * environment variable seems to affect LC_CTYPE variable by default.
+        * Here is what setlocale(LC_ALL, NULL) can return.
+        * HPUX can return 'C C C C C C C'
+        * Solaris can return /en_US/C/C/C/C/C on the second try.
+        * Linux can return LC_CTYPE=C;LC_NUMERIC=C;...
+        *
+        * The default codepage detection also needs to use LC_CTYPE.
+        * 
+        * Do not call setlocale(LC_*, "")! Using an empty string instead
+        * of NULL, will modify the libc behavior.
+        */
+        posixID = setlocale(LC_CTYPE, NULL);
+        if ((posixID == 0)
+            || (uprv_strcmp("C", posixID) == 0)
+            || (uprv_strcmp("POSIX", posixID) == 0))
+        {
+            /* Maybe we got some garbage.  Try something more reasonable */
+            posixID = getenv("LC_ALL");
             if (posixID == 0) {
-                /*
-                * On Solaris two different calls to setlocale can result in 
-                * different values. Only get this value once.
-                */
-                posixID = setlocale(LC_ALL, NULL);
+                posixID = getenv("LC_CTYPE");
+                if (posixID == 0) {
+                    posixID = getenv("LANG");
+                }
             }
+        }
+
+        if ((posixID==0)
+            || (uprv_strcmp("C", posixID) == 0)
+            || (uprv_strcmp("POSIX", posixID) == 0))
+        {
+            /* Nothing worked.  Give it a nice POSIX default value. */
+            posixID = "en_US_POSIX";
         }
     }
 
-    if (posixID==0)
-    {
-        /* Nothing worked.  Give it a nice value. */
-        posixID = "en_US";
-    }
-    else if ((uprv_strcmp("C", posixID) == 0)
-        || (uprv_strchr(posixID, ' ') != NULL)
-        || (uprv_strchr(posixID, '/') != NULL))
-    {   /* HPUX returns 'C C C C C C C' */
-        /* Solaris can return /en_US/C/C/C/C/C on the second try. */
-        /* Maybe we got some garbage.  Give it a nice value. */
-        posixID = "en_US_POSIX";
-    }
     return posixID;
 }
 #endif
@@ -1924,29 +1940,16 @@ int_getDefaultCodepage()
 
     uprv_memset(codesetName, 0, sizeof(codesetName));
 
-    /* Check setlocale before the environment variables
-       because the application may have set it first */
-
-    /* Use setlocale in a nice way.
+    /* Use setlocale in a nice way, and then check some environment variables.
        Maybe the application used setlocale already.
-       Normally this won't work. */
-    localeName = setlocale(LC_CTYPE, NULL);
+    */
+    localeName = uprv_getPOSIXID();
     name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
     if (name) {
         /* if we can find the codeset name from setlocale, return that. */
         return name;
     }
     /* else "C" was probably returned. That's underspecified. */
-
-    /* Use setlocale a little more forcefully.
-       The application didn't use setlocale */
-    localeName = setlocale(LC_CTYPE, "");
-    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
-    if (name) {
-        /* if we can find the codeset name from setlocale, return that. */
-        return name;
-    }
-    /* else "C" or something like it was returned. That's still underspecified. */
 
 #if U_HAVE_NL_LANGINFO_CODESET
     if (*codesetName) {
@@ -1965,17 +1968,6 @@ int_getDefaultCodepage()
         }
     }
 #endif
-
-    /* Try a locale specified by the user.
-       This is usually underspecified and usually checked by setlocale already.
-       We're getting desperate to find something useful.
-     */
-    localeName = uprv_getPOSIXID();
-    name = getCodepageFromPOSIXID(localeName, codesetName, sizeof(codesetName));
-    if (name) {
-        /* if we can find the codeset name, return that. */
-        return name;
-    }
 
     if (*codesetName == 0)
     {
