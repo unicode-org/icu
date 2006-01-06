@@ -288,10 +288,6 @@ icu4c/source/tools/gencmn/*.plg
 icu4c/source/tools/gencmn/Debug
 icu4c/source/tools/gencmn/Makefile
 icu4c/source/tools/gencmn/Release
-icu4c/source/tools/gencmn/decmn
-icu4c/source/tools/gencmn/decmn.[0-9]
-icu4c/source/tools/gencmn/decmn_win32_Debug
-icu4c/source/tools/gencmn/decmn_win32_Release
 icu4c/source/tools/gencmn/gencmn
 icu4c/source/tools/gencmn/gencmn.[0-9]
 icu4c/source/tools/gencnval/*.d
