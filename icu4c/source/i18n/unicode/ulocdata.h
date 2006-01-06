@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2005, International Business Machines                   *
+* Copyright (C) 2003-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -145,17 +145,15 @@ ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
 U_DRAFT int32_t U_EXPORT2 
 ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, UChar *result, int32_t resultLength, UErrorCode *status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for representing the measurement systems.
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
 typedef enum UMeasurementSystem {
     UMS_SI,     /** Measurement system specified by SI otherwise known as Metric system. */
     UMS_US,     /** Measurement system followed in the United States of America. */ 
     UMS_LIMIT
 } UMeasurementSystem;
-#endif /*U_HIDE_DRAFT_API */
 
 /**
  * Returns the measurement system used in the locale specified by the localeID.
@@ -165,9 +163,9 @@ typedef enum UMeasurementSystem {
  * @param status        Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return UMeasurementSystem the measurement system used in the locale.
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT UMeasurementSystem U_EXPORT2
+U_STABLE UMeasurementSystem U_EXPORT2
 ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
 
 /**
@@ -184,9 +182,9 @@ ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status);
  * @param width         A pointer to int to recieve the width information.
  * @param status        Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
- * @draft ICU 2.8
+ * @stable ICU 2.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ulocdata_getPaperSize(const char *localeID, int32_t *height, int32_t *width, UErrorCode *status);
 
 #endif
