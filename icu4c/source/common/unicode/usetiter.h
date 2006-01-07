@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -27,6 +27,10 @@ class UnicodeString;
  * iterates over either code points or code point ranges.  After all
  * code points or ranges have been returned, it returns the
  * multicharacter strings of the UnicodSet, if any.
+ *
+ * This class is not intended to be subclassed.  Consider any fields
+ *  or methods declared as "protected" to be private.  The use of
+ *  protected in this class is an artifact of history.
  *
  * <p>To iterate over code points, use a loop like this:
  * <pre>
@@ -145,10 +149,16 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
 
     /**
      * Returns the current string, if <tt>isString()</tt> returned
-     * true.  Otherwise returns an undefined result.
+     * true.  If the current iteration item is a code point, a UnicodeString
+     * containing that single code point is returned.
+     *
+     * Ownership of the returned string remains with the iterator.
+     * The string is guaranteed to remain valid only until the iterator is
+     *   advanced to the next item, or until the iterator is deleted.
+     * 
      * @stable ICU 2.4
      */
-    inline const UnicodeString& getString() const;
+    const UnicodeString& getString();
 
     /**
      * Returns the next element in the set, either a single code point
@@ -259,6 +269,13 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      */
     int32_t stringCount;
 
+    /**
+     *  Points to the string to use when the caller asks for a
+     *  string and the current iteration item is a code point, not a string.
+     *  @internal
+     */
+    UnicodeString *cpString;
+
     /** Copy constructor. Disallowed.
      * @stable ICU 2.4
      */
@@ -288,9 +305,6 @@ inline UChar32 UnicodeSetIterator::getCodepointEnd() const {
     return codepointEnd;
 }
 
-inline const UnicodeString& UnicodeSetIterator::getString() const {
-    return *string;
-}
 
 U_NAMESPACE_END
 
