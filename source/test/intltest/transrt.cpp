@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -271,6 +271,10 @@ UBool LegalGreek::isRho(UChar c) {
 }
 
 // AbbreviatedUnicodeSetIterator Interface ---------------------------------------------
+//
+//      Iterate over a UnicodeSet, only returning a sampling of the contained code points.
+//        density is the approximate total number of code points to returned for the entire set.
+//
 
 class AbbreviatedUnicodeSetIterator : public UnicodeSetIterator {
 public :
@@ -291,7 +295,7 @@ public :
 
 private :
     UBool abbreviated;
-    int32_t perRange;
+    int32_t perRange;           // The maximum number of code points to be returned from each range
     virtual void loadRange(int32_t range);
 
     /**
