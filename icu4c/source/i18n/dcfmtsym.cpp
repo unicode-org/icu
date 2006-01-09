@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -29,7 +29,7 @@
 #include "ucurrimp.h"
 #include "cstring.h"
 #include "locbased.h"
-
+#include "uresimp.h"
 // *****************************************************************************
 // class DecimalFormatSymbols
 // *****************************************************************************
@@ -120,13 +120,13 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                  UBool useLastResortData)
 {
     *validLocale = *actualLocale = 0;
-
+    currPattern = NULL;
     if (U_FAILURE(status))
         return;
-
+    
     const char* locStr = loc.getName();
     UResourceBundle *resource = ures_open((char *)0, locStr, &status);
-    UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, resource, &status);
+    UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.
@@ -183,7 +183,40 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                   ures_getLocaleByType(numberElementsRes,
                                        ULOC_ACTUAL_LOCALE, &status));
         }
+        //load the currency data
+        UChar ucc[4]={0}; //Currency Codes are always 3 chars long 
+        int32_t uccLen = 4;
+        const char* locName = loc.getName();
+        uccLen = ucurr_forLocale(locName, ucc, uccLen, &status);
+        if(U_SUCCESS(status) && uccLen > 0) {
+            char cc[4]={0};
+            u_UCharsToChars(ucc, cc, uccLen);
+            /* An explicit currency was requested */
+            UErrorCode localStatus = U_ZERO_ERROR;
+            UResourceBundle *currency = ures_getByKeyWithFallback(resource, "Currencies", NULL, &localStatus);
+            currency = ures_getByKeyWithFallback(currency, cc, currency, &localStatus);
+            if(U_SUCCESS(localStatus) && ures_getSize(currency)>2) { // the length is 3 if more data is present
+                currency = ures_getByIndex(currency, 2, currency, &localStatus);
+                int32_t currPatternLen = 0;
+                currPattern = ures_getStringByIndex(currency, (int32_t)0, &currPatternLen, &localStatus);
+                UnicodeString decimalSep = ures_getStringByIndex(currency, (int32_t)1, NULL, &localStatus);
+                UnicodeString groupingSep = ures_getStringByIndex(currency, (int32_t)2, NULL, &localStatus);
+                if(U_SUCCESS(localStatus)){
+                    fSymbols[kMonetaryGroupingSeparatorSymbol] = groupingSep;
+                    fSymbols[kMonetarySeparatorSymbol] = decimalSep;
+                    //pattern.setTo(TRUE, currPattern, currPatternLen);
+                    status = localStatus;
+                }
+            }
+            ures_close(currency);
+            /* else An explicit currency was requested and is unknown or locale data is malformed. */
+            /* ucurr_* API will get the correct value later on. */
+        }else{
+            // ignore the error if no currency
+            status = U_ZERO_ERROR;
+        }
     }
+    ures_close(resource);
     ures_close(numberElementsRes);
 }
 
@@ -222,6 +255,7 @@ DecimalFormatSymbols::initialize(const UChar** numberElements, int32_t *numberEl
     // TODO: read from locale data, if this makes it into CLDR
     fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // TODO: '*' Hard coded for now; get from resource later
+    fSymbols[kMonetaryGroupingSeparatorSymbol] = fSymbols[kGroupingSeparatorSymbol];
 }
 
 // initialize with default values

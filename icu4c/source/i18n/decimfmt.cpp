@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -832,7 +832,12 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     // Gets the localized zero Unicode character.
     UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
     int32_t zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
-    const UnicodeString *grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    const UnicodeString *grouping ;
+    if(fIsCurrencyFormat) {
+        grouping = &getConstSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol);
+    }else{
+        grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    }
     const UnicodeString *decimal;
     if(fIsCurrencyFormat) {
         decimal = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);

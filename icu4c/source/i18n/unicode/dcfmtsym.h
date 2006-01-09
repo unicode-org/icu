@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -121,6 +121,10 @@ public:
         /** Significant digit symbol
          * @draft ICU 3.0 */
         kSignificantDigitSymbol,
+        /** The monetary grouping separator 
+         * @draft ICU 3.6
+         */
+        kMonetaryGroupingSeparatorSymbol,
         /** count symbol constants */
         kFormatSymbolCount
     };
@@ -277,6 +281,12 @@ public:
      */
     inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
 
+    /**
+     * Returns that pattern stored in currecy info. Internal API for use by NumberFormat API.
+     * @internal
+     */
+    inline const UChar* getCurrencyPattern(void) const;
+
 private:
     /**
      * Private symbol strings.
@@ -305,6 +315,7 @@ private:
 
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     char validLocale[ULOC_FULLNAME_CAPACITY];
+    const UChar* currPattern;
 };
 
 // -------------------------------------
@@ -347,7 +358,10 @@ DecimalFormatSymbols::getLocale() const {
     return locale;
 }
 
-
+inline const UChar*
+DecimalFormatSymbols::getCurrencyPattern() const {
+    return currPattern;
+}
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
