@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2006, International Business Machines Corporation and others. All Rights Reserved.
 * Modification History:
 *
 *   Date        Name        Description
@@ -790,6 +790,10 @@ typedef enum UNumberFormatSymbol {
   /** Significant digit symbol
    * @draft ICU 3.0 */
   UNUM_SIGNIFICANT_DIGIT_SYMBOL,
+  /** The monetary grouping separator 
+   * @draft ICU 3.6
+   */
+  UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL,
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT
 } UNumberFormatSymbol;
