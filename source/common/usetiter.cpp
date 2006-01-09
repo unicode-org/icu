@@ -132,7 +132,7 @@ void UnicodeSetIterator::loadRange(int32_t iRange) {
 }
 
 
-const UnicodeString& UnicodeSetIterator::UnicodeSetIterator::getString()  {
+const UnicodeString& UnicodeSetIterator::getString()  {
     if (string==NULL && codepoint!=(UChar32)IS_STRING) {
        if (cpString == NULL) {
           cpString = new UnicodeString();
