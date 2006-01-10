@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1048,7 +1048,9 @@ public class DecimalFormat extends NumberFormat {
         int i;
         char zero = symbols.getZeroDigit();
         int zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
-        char grouping = symbols.getGroupingSeparator();
+        char grouping = isCurrencyFormat ?
+                    symbols.getMonetaryGroupingSeparator() :
+                    symbols.getGroupingSeparator();
         char decimal = isCurrencyFormat ?
             symbols.getMonetaryDecimalSeparator() :
             symbols.getDecimalSeparator();

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.text.ChoiceFormat;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -369,6 +370,25 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Return the monetary decimal separator.
+     * @return the monetary decimal separator character
+     * @draft ICU 3.6
+     * @deprecated
+     */
+    public char getMonetaryGroupingSeparator()
+    {
+        return monetaryGroupingSeparator;
+    }
+    
+    /**
+     * Internal API for NumberFormat
+     * @return String currency pattern string	
+     * @internal
+     */
+    String getCurrencyPattern(){
+        return currencyPattern;
+    }
+    /**
      * Set the monetary decimal separator.
      * @param sep the monetary decimal separator character
      * @stable ICU 2.0
@@ -376,6 +396,16 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     public void setMonetaryDecimalSeparator(char sep)
     {
         monetarySeparator = sep;
+    }
+    /**
+     * Set the monetary decimal separator.
+     * @param sep the monetary decimal separator character
+     * @draft ICU 3.6
+     * @deprecated
+     */
+    public void setMonetaryGroupingSeparator(char sep)
+    {
+        monetaryGroupingSeparator = sep;
     }
 
     /**
@@ -618,8 +648,30 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
         // If there is a currency decimal, use it.
-        monetarySeparator =
-            numberElements[0].charAt(0);
+        monetarySeparator = decimalSeparator;
+        monetaryGroupingSeparator = groupingSeparator;
+        Currency curr = Currency.getInstance(locale);
+        if(curr!=null){
+            String currencyCode = curr.getCurrencyCode();
+            if(currencyCode != null) {
+                /* An explicit currency was requested */
+                ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+                ICUResourceBundle currency = resource.getWithFallback("Currencies");
+                try{
+                    currency = currency.getWithFallback(currencyCode);
+                    if(currency.getSize()>2) {
+                        currency = currency.get(2);
+                        currencyPattern = currency.getString(0);
+                        monetarySeparator = currency.getString(1).charAt(0);
+                        monetaryGroupingSeparator = currency.getString(2).charAt(0);
+                    }
+                }catch(MissingResourceException ex){
+                    /* else An explicit currency was requested and is unknown or locale data is malformed. */
+                    /* decimal format API will get the correct value later on. */
+                }
+            }
+            /* else no currency keyword used. */
+        }
         //monetarySeparator = numberElements[11].charAt(0);
     }
 
@@ -667,6 +719,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (serialVersionOnStream < 4) {
             // use same default behavior as for versions with no Locale
             ulocale = ULocale.forLocale(locale);
+        }		   
+		if (serialVersionOnStream < 5) {
+			// use the same one for groupingSeparator
+			monetaryGroupingSeparator = groupingSeparator;
         }
         serialVersionOnStream = currentSerialVersion;
 
@@ -781,6 +837,13 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private  char    monetarySeparator; // Field new in JDK 1.1.6
 
     /**
+     * The decimal separator used when formatting currency values.
+     * @serial
+     * @see #getMonetaryGroupingSeparator
+     */
+    private  char    monetaryGroupingSeparator; // Field new in JDK 1.1.6
+
+    /**
      * The character used to distinguish the exponent in a number formatted
      * in exponential notation, e.g. 'E' for a number such as "1.23E45".
      * <p>
@@ -843,7 +906,8 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     //     padEscape, exponentSeparator, and plusSign.
     // - 3 for ICU 2.2, which includes the locale field
     // - 4 for ICU 3.2, which includes the ULocale field
-    private static final int currentSerialVersion = 4;
+    // - 5 for ICU 3.6, which includes the monetaryGroupingSeparator field
+    private static final int currentSerialVersion = 5;
     
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
@@ -868,7 +932,12 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * cache to hold the NumberElements of a Locale.
      */
     private static final Hashtable cachedLocaleData = new Hashtable(3);
- 
+    
+    /**
+     * 
+     */
+    private String  currencyPattern = null;
+    
     // -------- BEGIN ULocale boilerplate --------
 
     /**
