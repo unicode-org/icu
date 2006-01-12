@@ -22,7 +22,7 @@
  */
 
 U_CDECL_BEGIN
-// Forward declarations for Windows types...
+/* Forward declarations for Windows types... */
 typedef struct _TIME_ZONE_INFORMATION TIME_ZONE_INFORMATION;
 U_CDECL_END
 
@@ -32,6 +32,6 @@ u_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, in
 U_CAPI const char* U_EXPORT2
 u_detectWindowsTimeZone();
 
-#endif // #ifdef U_WINDOWS
+#endif /* #ifdef U_WINDOWS */
 
-#endif // __WINTZ
+#endif /* __WINTZ */
