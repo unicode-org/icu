@@ -1,7 +1,7 @@
-//##header 1133571410000 VERSION_1.4
+//##header  VERSION_1.4
 /**
 *******************************************************************************
-* Copyright (C) 2002-2005, International Business Machines Corporation and    *
+* Copyright (C) 2002-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */

@@ -2624,8 +2624,8 @@ public final class ULocale implements Serializable {
     * @deprecated This is a draft API and might change in a future release of ICU.
     */
 
-    public static ULocale acceptLanguage(String acceptLanguageList, ULocale[]
-    availableLocales, boolean[] fallback) {
+    public static ULocale acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, 
+                                         boolean[] fallback) {
         /**
          * @internal ICU 3.4
          */

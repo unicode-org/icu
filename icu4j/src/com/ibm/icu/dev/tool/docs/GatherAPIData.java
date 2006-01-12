@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2005, International Business Machines Corporation and         *
+* Copyright (C) 2004-2006, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -67,15 +67,15 @@ public class GatherAPIData {
             return 2;
         } else if (option.equals("-output")) {
             return 2;
-    } else if (option.equals("-base")) {
-        return 2;
-    } else if (option.equals("-filter")) {
-        return 2;
-    } else if (option.equals("-zip")) {
-        return 1;
-    } else if (option.equals("-gzip")) {
-        return 1;
-    }
+        } else if (option.equals("-base")) {
+            return 2;
+        } else if (option.equals("-filter")) {
+            return 2;
+        } else if (option.equals("-zip")) {
+            return 1;
+        } else if (option.equals("-gzip")) {
+            return 1;
+        }
         return 0;
     }
 
@@ -94,14 +94,14 @@ public class GatherAPIData {
             } else if (opt.equals("-output")) {
                 this.output = options[i][1];
             } else if (opt.equals("-base")) {
-        this.base = options[i][1]; // should not include '.'
-        } else if (opt.equals("-filter")) {
-        this.filter = options[i][1];
-        } else if (opt.equals("-zip")) {
-        this.zip = true;
-        } else if (opt.equals("-gzip")) {
-        this.gzip = true;
-        }
+                this.base = options[i][1]; // should not include '.'
+            } else if (opt.equals("-filter")) {
+                this.filter = options[i][1];
+            } else if (opt.equals("-zip")) {
+                this.zip = true;
+            } else if (opt.equals("-gzip")) {
+                this.gzip = true;
+            }
         }
 
         results = new TreeSet(APIInfo.defaultComparator());
@@ -113,15 +113,15 @@ public class GatherAPIData {
         OutputStream os = System.out;
         if (output != null) {
             try {
-        if (zip) {
-            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
-            zos.putNextEntry(new ZipEntry(output));
-            os = zos;
-        } else if (gzip) {
-            os = new GZIPOutputStream(new FileOutputStream(output + ".gz"));
-        } else {
-            os = new FileOutputStream(output);
-        }
+                if (zip) {
+                    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
+                    zos.putNextEntry(new ZipEntry(output));
+                    os = zos;
+                } else if (gzip) {
+                    os = new GZIPOutputStream(new FileOutputStream(output + ".gz"));
+                } else {
+                    os = new FileOutputStream(output);
+                }
             }
             catch (IOException e) {
                 RuntimeException re = new RuntimeException(e.getMessage());
@@ -135,16 +135,16 @@ public class GatherAPIData {
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
             bw = new BufferedWriter(osw);
 
-        // writing data file
-        bw.write(String.valueOf(APIInfo.VERSION) + APIInfo.SEP); // header version
-        bw.write(srcName + APIInfo.SEP); // source name
-        bw.write((base == null ? "" : base) + APIInfo.SEP); // base
-        bw.newLine();
-        writeResults(results, bw);
-        bw.close(); // should flush, close all, etc
-//          if (zip) {
-//          ((ZipOutputStream)os).finish();
-//          }
+            // writing data file
+            bw.write(String.valueOf(APIInfo.VERSION) + APIInfo.SEP); // header version
+            bw.write(srcName + APIInfo.SEP); // source name
+            bw.write((base == null ? "" : base) + APIInfo.SEP); // base
+            bw.newLine();
+            writeResults(results, bw);
+            bw.close(); // should flush, close all, etc
+            //          if (zip) {
+            //          ((ZipOutputStream)os).finish();
+            //          }
         } catch (IOException e) {
             try { bw.close(); } catch (IOException e2) {}
             RuntimeException re = new RuntimeException("write error: " + e.getMessage());
@@ -174,17 +174,19 @@ public class GatherAPIData {
             doDocs(cdoc.innerClasses());
         }
 
-    APIInfo info = createInfo(doc);
-    if (info != null) {
-        results.add(info);
-    }
+        APIInfo info = createInfo(doc);
+        if (info != null) {
+            results.add(info);
+        }
     }
 
     private boolean ignore(ProgramElementDoc doc) {
         if (doc == null) return true;
         if (doc.isPrivate() || doc.isPackagePrivate()) return true;
         if (doc instanceof ConstructorDoc && ((ConstructorDoc)doc).isSynthetic()) return true;
-        if (doc.qualifiedName().indexOf(".misc") != -1) { System.out.println("misc: " + doc.qualifiedName()); return true; }
+        if (doc.qualifiedName().indexOf(".misc") != -1) { 
+            System.out.println("misc: " + doc.qualifiedName()); return true; 
+        }
         Tag[] tags = doc.tags();
         for (int i = 0; i < tags.length; ++i) {
             if (tagKindIndex(tags[i].kind()) == INTERNAL) return true;
@@ -197,130 +199,131 @@ public class GatherAPIData {
         Iterator iter = c.iterator();
         while (iter.hasNext()) {
             APIInfo info = (APIInfo)iter.next();
-        info.writeln(w);
+            info.writeln(w);
         }
     }
 
     private String trimBase(String arg) {
-    if (base != null) {
-        for (int n = arg.indexOf(base); n != -1; n = arg.indexOf(base, n)) {
-        arg = arg.substring(0, n) + arg.substring(n+base.length());
+        if (base != null) {
+            for (int n = arg.indexOf(base); n != -1; n = arg.indexOf(base, n)) {
+                arg = arg.substring(0, n) + arg.substring(n+base.length());
+            }
         }
-    }
-    return arg;
+        return arg;
     }
 
     public APIInfo createInfo(ProgramElementDoc doc) {
 
-    // Doc. name
-    // Doc. isField, isMethod, isConstructor, isClass, isInterface
-    // ProgramElementDoc. containingClass, containingPackage
-    // ProgramElementDoc. isPublic, isProtected, isPrivate, isPackagePrivate
-    // ProgramElementDoc. isStatic, isFinal
-    // MemberDoc.isSynthetic
-    // ExecutableMemberDoc isSynchronized, signature
-    // Type.toString() // e.g. "String[][]"
-    // ClassDoc.isAbstract, superClass, interfaces, fields, methods, constructors, innerClasses
-    // FieldDoc type
-    // ConstructorDoc qualifiedName
-    // MethodDoc isAbstract, returnType
+        // Doc. name
+        // Doc. isField, isMethod, isConstructor, isClass, isInterface
+        // ProgramElementDoc. containingClass, containingPackage
+        // ProgramElementDoc. isPublic, isProtected, isPrivate, isPackagePrivate
+        // ProgramElementDoc. isStatic, isFinal
+        // MemberDoc.isSynthetic
+        // ExecutableMemberDoc isSynchronized, signature
+        // Type.toString() // e.g. "String[][]"
+        // ClassDoc.isAbstract, superClass, interfaces, fields, methods, constructors, innerClasses
+        // FieldDoc type
+        // ConstructorDoc qualifiedName
+        // MethodDoc isAbstract, returnType
 
-    APIInfo info = new APIInfo();
+        APIInfo info = new APIInfo();
             
-    // status
-    info.setType(APIInfo.STA, tagStatus(doc));
+        // status
+        info.setType(APIInfo.STA, tagStatus(doc));
 
-    // visibility
-    if (doc.isPublic()) {
-        info.setPublic();
-    } else if (doc.isProtected()) {
-        info.setProtected();
-    } else if (doc.isPrivate()) {
-        info.setPrivate();
-    } else {
-        // default is package
-    }
-
-    // static
-    if (doc.isStatic()) {
-        info.setStatic();
-    } else {
-        // default is non-static
-    }
-
-    // final
-    if (doc.isFinal()) {
-        info.setFinal();
-    } else {
-        // default is non-final
-    }
-
-    // type
-    if (doc.isField()) {
-        info.setField();
-    } else if (doc.isMethod()) {
-        info.setMethod();
-    } else if (doc.isConstructor()) {
-        info.setConstructor();
-    } else if (doc.isClass() || doc.isInterface()) {
-        info.setClass();
-    }
-
-    info.setPackage(trimBase(doc.containingPackage().name()));
-    info.setClassName((doc.isClass() || doc.isInterface() || (doc.containingClass() == null)) 
-              ? "" 
-              : trimBase(doc.containingClass().name()));
-    info.setName(trimBase(doc.name()));
-    
-    if (doc instanceof FieldDoc) {
-        FieldDoc fdoc = (FieldDoc)doc;
-        info.setSignature(trimBase(fdoc.type().toString()));
-    } else if (doc instanceof ClassDoc) {
-        ClassDoc cdoc = (ClassDoc)doc;
-
-        if (cdoc.isClass() && cdoc.isAbstract()) { // interfaces are abstract by default, don't mark them as abstract
-        info.setAbstract();
-        }
-
-        StringBuffer buf = new StringBuffer();
-        if (cdoc.isClass()) {
-        buf.append("extends ");
-        buf.append(cdoc.superclass().qualifiedName());
-        }
-        ClassDoc[] imp = cdoc.interfaces();
-        if (imp != null && imp.length > 0) {
-        if (buf.length() > 0) {
-            buf.append(" ");
-        }
-        buf.append("implements");
-        for (int i = 0; i < imp.length; ++i) {
-            if (i != 0) {
-            buf.append(",");
-            }
-            buf.append(" ");
-            buf.append(imp[i].qualifiedName());
-        }
-        }
-        info.setSignature(trimBase(buf.toString()));
-    } else {
-        ExecutableMemberDoc emdoc = (ExecutableMemberDoc)doc;
-        if (emdoc.isSynchronized()) {
-        info.setSynchronized();
-        }
-
-        if (doc instanceof MethodDoc) {
-        MethodDoc mdoc = (MethodDoc)doc;
-        if (mdoc.isAbstract()) {
-            info.setAbstract();
-        }
-        info.setSignature(trimBase(mdoc.returnType().toString() + emdoc.signature()));
+        // visibility
+        if (doc.isPublic()) {
+            info.setPublic();
+        } else if (doc.isProtected()) {
+            info.setProtected();
+        } else if (doc.isPrivate()) {
+            info.setPrivate();
         } else {
-        // constructor
-        info.setSignature(trimBase(emdoc.signature()));
+            // default is package
         }
-    }
 
-    return info;
+        // static
+        if (doc.isStatic()) {
+            info.setStatic();
+        } else {
+            // default is non-static
+        }
+
+        // final
+        if (doc.isFinal()) {
+            info.setFinal();
+        } else {
+            // default is non-final
+        }
+
+        // type
+        if (doc.isField()) {
+            info.setField();
+        } else if (doc.isMethod()) {
+            info.setMethod();
+        } else if (doc.isConstructor()) {
+            info.setConstructor();
+        } else if (doc.isClass() || doc.isInterface()) {
+            info.setClass();
+        }
+
+        info.setPackage(trimBase(doc.containingPackage().name()));
+        info.setClassName((doc.isClass() || doc.isInterface() || (doc.containingClass() == null)) 
+                          ? "" 
+                          : trimBase(doc.containingClass().name()));
+        info.setName(trimBase(doc.name()));
+    
+        if (doc instanceof FieldDoc) {
+            FieldDoc fdoc = (FieldDoc)doc;
+            info.setSignature(trimBase(fdoc.type().toString()));
+        } else if (doc instanceof ClassDoc) {
+            ClassDoc cdoc = (ClassDoc)doc;
+
+            if (cdoc.isClass() && cdoc.isAbstract()) { 
+                // interfaces are abstract by default, don't mark them as abstract
+                info.setAbstract();
+            }
+
+            StringBuffer buf = new StringBuffer();
+            if (cdoc.isClass()) {
+                buf.append("extends ");
+                buf.append(cdoc.superclass().qualifiedName());
+            }
+            ClassDoc[] imp = cdoc.interfaces();
+            if (imp != null && imp.length > 0) {
+                if (buf.length() > 0) {
+                    buf.append(" ");
+                }
+                buf.append("implements");
+                for (int i = 0; i < imp.length; ++i) {
+                    if (i != 0) {
+                        buf.append(",");
+                    }
+                    buf.append(" ");
+                    buf.append(imp[i].qualifiedName());
+                }
+            }
+            info.setSignature(trimBase(buf.toString()));
+        } else {
+            ExecutableMemberDoc emdoc = (ExecutableMemberDoc)doc;
+            if (emdoc.isSynchronized()) {
+                info.setSynchronized();
+            }
+
+            if (doc instanceof MethodDoc) {
+                MethodDoc mdoc = (MethodDoc)doc;
+                if (mdoc.isAbstract()) {
+                    info.setAbstract();
+                }
+                info.setSignature(trimBase(mdoc.returnType().toString() + emdoc.signature()));
+            } else {
+                // constructor
+                info.setSignature(trimBase(emdoc.signature()));
+            }
+        }
+
+        return info;
     }
 
     private static int tagStatus(final Doc doc) {

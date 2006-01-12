@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -126,7 +126,6 @@ public abstract class UResourceBundle extends ResourceBundle{
     protected static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback){
         return instantiateBundle(baseName, localeName, root, disableFallback);   
     }
-    
 
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
@@ -205,7 +204,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                If null the bundle for default locale is opened.  
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.4.2
+     * @internal revisit for ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader){
@@ -221,7 +220,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                If null the bundle for default locale is opened.
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale               
-     * @draft ICU 3.4.2
+     * @internal revisit for ICU 3.6
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader){
@@ -288,10 +287,16 @@ public abstract class UResourceBundle extends ResourceBundle{
         m.put(key, b);
     }
 
+    /**
+     * @internal revisit for ICU 3.6
+     */
     protected static synchronized void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
         cacheKey.setKeyValues(cl, fullName, defaultLocale);
         addToCache(cacheKey, b);
     }
+    /**
+     * @internal revisit for ICU 3.6
+     */
     protected static synchronized UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
         cacheKey.setKeyValues(cl, fullName, defaultLocale);
         return loadFromCache(cacheKey);
@@ -306,8 +311,6 @@ public abstract class UResourceBundle extends ResourceBundle{
         return null;
     }   
     
-
-
     /**
      * Key used for cached resource bundles.  The key checks
      * the resource name, the class root, and the default

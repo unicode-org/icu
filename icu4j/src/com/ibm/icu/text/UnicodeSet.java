@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -624,8 +624,20 @@ public class UnicodeSet extends UnicodeFilter {
      * Generate and append a string representation of this set to result.
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
+     * @param result the buffer into which to generate the pattern
+     * @param escapeUnprintable escape unprintable characters if true
      * @stable ICU 2.0
+     */
+    public StringBuffer _generatePattern(StringBuffer result, boolean escapeUnprintable) {
+        return _generatePattern(result, escapeUnprintable, true);
+    }
+
+    /**
+     * Generate and append a string representation of this set to result.
+     * This does not use this.pat, the cleaned up copy of the string
+     * passed to applyPattern().
      * @param includeStrings if false, doesn't include the strings.
+     * @internal
      */
     public StringBuffer _generatePattern(StringBuffer result,
                                          boolean escapeUnprintable, boolean includeStrings) {
