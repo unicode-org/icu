@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -97,8 +97,12 @@
 
 /* Define 64 bit limits */
 #if !U_INT64_IS_LONG_LONG
-#define INT64_C(x) ((int64_t)x)
-#define UINT64_C(x) ((uint64_t)x)
+# ifndef INT64_C
+#  define INT64_C(x) ((int64_t)x)
+# endif
+# ifndef UINT64_C
+#  define UINT64_C(x) ((uint64_t)x)
+# endif
 /* else use the umachine.h definition */
 #endif
 
