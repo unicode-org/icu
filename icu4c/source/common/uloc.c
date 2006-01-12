@@ -1532,6 +1532,9 @@ uloc_openKeywords(const char* localeID,
 
 #define OPTION_SET(options, mask) ((options & mask) != 0)
 
+static const char i_default[] = {'i', '-', 'd', 'e', 'f', 'a', 'u', 'l', 't'};
+#define I_DEFAULT_LENGTH (sizeof i_default / sizeof i_default[0])
+
 /**
  * Canonicalize the given localeID, to level 1 or to level 2,
  * depending on the options.  To specify level 1, pass in options=0.
@@ -1576,7 +1579,13 @@ _canonicalize(const char* localeID,
 
     /* get all pieces, one after another, and separate with '_' */
     len=_getLanguage(localeID, name, nameCapacity, &localeID);
-    if(_isIDSeparator(*localeID)) {
+
+    if(len == I_DEFAULT_LENGTH && uprv_strncmp(name, i_default, len) == 0) {
+        const char *d = uloc_getDefault();
+        
+        len = uprv_strlen(d);
+        uprv_strncpy(name, d, len);
+    } else if(_isIDSeparator(*localeID)) {
         const char *scriptID;
 
         ++fieldCount;

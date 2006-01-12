@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2005, International Business Machines
+ *   Copyright (C) 1997-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -357,7 +357,7 @@ Locale::Locale( const   char * newLanguage,
 
         /*if the whole string is longer than our internal limit, we need
         to go to the heap for temporary buffers*/
-        if (size > ULOC_FULLNAME_CAPACITY)
+        if (size >= ULOC_FULLNAME_CAPACITY)
         {
             togo_heap = (char *)uprv_malloc(sizeof(char)*(size+1));
             togo = togo_heap;

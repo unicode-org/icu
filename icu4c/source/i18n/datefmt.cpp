@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -13,7 +13,7 @@
 *   03/31/97    aliu        Modified extensively to work with 50 locales.
 *   04/01/97    aliu        Added support for centuries.
 *   08/12/97    aliu        Fixed operator== to use Calendar::equivalentTo.
-*    07/20/98    stephen        Changed ParsePosition initialization
+*   07/20/98    stephen     Changed ParsePosition initialization
 ********************************************************************************
 */
 
@@ -24,6 +24,9 @@
 #include "unicode/ures.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
+
+#include "cstring.h"
+#include "windtfmt.h"
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
 #include <stdio.h>
@@ -267,8 +270,25 @@ DateFormat::createInstance()
 DateFormat* U_EXPORT2
 DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 {
-    // Try to create a SimpleDateFormat of the desired style.
     UErrorCode status = U_ZERO_ERROR;
+#ifdef U_WINDOWS
+    char buffer[8];
+    int32_t count = locale.getKeywordValue("compat", buffer, sizeof(buffer), status);
+
+    // if the locale has "@compat=host", create a host-specific DateFormat...
+    if (count > 0 && uprv_strcmp(buffer, "host") == 0) {
+        Win32DateFormat *f = new Win32DateFormat(dateStyle, timeStyle, locale, status);
+
+        if (U_SUCCESS(status)) {
+            return f;
+        }
+
+        delete f;
+    }
+#endif
+
+
+    // Try to create a SimpleDateFormat of the desired style.
     SimpleDateFormat *f = new SimpleDateFormat(timeStyle, dateStyle, locale, status);
     if (U_SUCCESS(status)) return f;
     delete f;
