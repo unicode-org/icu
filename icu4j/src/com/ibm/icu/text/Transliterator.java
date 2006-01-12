@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1668,6 +1668,7 @@ public abstract class Transliterator {
      * Register a Transliterator object with the given ID.
      * @param ID the ID of this transliterator
      * @param trans the Transliterator object
+     * @internal
      */
     static void registerInstance(Transliterator trans, boolean visible) {
         registry.put(trans.getID(), trans, visible);
@@ -1679,6 +1680,7 @@ public abstract class Transliterator {
      * This is generally used to create short aliases of compound IDs.
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
+     * @draft ICU 3.4.1
      */
     public static void registerAlias(String aliasID, String realID) {
         registry.put(aliasID, realID, true);
@@ -1715,6 +1717,7 @@ public abstract class Transliterator {
      * Any-target.getInverse() => Any-inverseTarget
      * @param bidirectional if true, register the reverse relation
      * as well, that is, Any-inverseTarget.getInverse() => Any-target
+     * @internal
      */
     static void registerSpecialInverse(String target,
                                        String inverseTarget,

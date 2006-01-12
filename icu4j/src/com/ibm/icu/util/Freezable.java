@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and        *
+ * Copyright (C) 200-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
 */
@@ -305,6 +305,8 @@ package com.ibm.icu.util;
  * </pre>
  * 
  * </blockquote>
+ *
+ * @internal revisit for ICU 3.6
  */
 public interface Freezable extends Cloneable {
 	/**

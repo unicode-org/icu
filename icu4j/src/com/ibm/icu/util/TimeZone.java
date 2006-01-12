@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2005, International Business Machines
+ * Copyright (C) 1996-2006, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -309,10 +309,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * The number of milliseconds in an hour.
+     * @internal
      */
     protected static final int MILLIS_PER_HOUR = 60*60*1000;
+
     /**
      * The number of milliseconds in one day.
+     * @internal
      */
     protected static final int MILLIS_PER_DAY = 24*MILLIS_PER_HOUR;
     
@@ -745,14 +748,23 @@ abstract public class TimeZone implements Serializable, Cloneable {
             throw new InternalError();
         }
     }
+
+    /**
+     * @draft ICU 3.4.2
+     */
     public boolean equals(Object obj){
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         return (ID.equals(((TimeZone)obj).ID));
     }
+
+    /**
+     * @draft ICU 3.4.2
+     */
     public int hashCode(){
     	return ID.hashCode();
     }
+
     // =======================privates===============================
 
     /**
