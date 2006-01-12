@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2005, International Business Machines
+#   Copyright (C) 1999-2006, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -79,7 +79,7 @@ brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
 serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o locutil.o \
 uenum.o ustrenum.o uidna.o usprep.o punycode.o \
-cwchar.o util.o parsepos.o utrace.o locbased.o
+cwchar.o util.o parsepos.o utrace.o locbased.o wintz.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h unicode/*.h
