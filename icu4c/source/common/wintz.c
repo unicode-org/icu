@@ -34,7 +34,7 @@
 
 #define ICUID_STACK_BUFFER_SIZE 32
 
-// The layout of the Tzi value in the registry
+/* The layout of the Tzi value in the registry */
 typedef struct
 {
     int32_t bias;
@@ -103,9 +103,10 @@ enum {
     WIN_2K_XP_TYPE = 2
 };
 
-// TODO: Sort on ICU ID?
-// TODO: No static initialization!
-// TODO: This data should come from ICU/CLDR...
+/*
+ * TODO: Sort on ICU ID?
+ * TODO: This data should come from ICU/CLDR...
+ */
 static const WindowsICUMap ZONE_MAP[] = {
     {"Etc/GMT+12",           "Dateline"}, /* S (GMT-12:00) International Date Line West */
 
@@ -265,8 +266,10 @@ static int32_t detectWindowsType()
     return winType;
 }
 
-// TODO: Binary search sorted ZONE_MAP...
-// (u_detectWindowsTimeZone() needs them sorted by offset...)
+/*
+ * TODO: Binary search sorted ZONE_MAP...
+ * (u_detectWindowsTimeZone() needs them sorted by offset...)
+ */
 static const char *findWindowsZoneID(const UChar *icuid, int32_t length)
 {
     char stackBuffer[ICUID_STACK_BUFFER_SIZE];
@@ -274,8 +277,10 @@ static const char *findWindowsZoneID(const UChar *icuid, int32_t length)
     const char *result = NULL;
     int i;
 
-    // NOTE: >= because length doesn't include
-    // trailing null.
+    /*
+     * NOTE: >= because length doesn't include
+     * trailing null.
+     */
     if (length >= ICUID_STACK_BUFFER_SIZE) {
         buffer = NEW_ARRAY(char, length);
     }
@@ -299,11 +304,11 @@ static const char *findWindowsZoneID(const UChar *icuid, int32_t length)
 
 static LONG openTZRegKey(HKEY *hkey, const char *winid)
 {
-    char subKeyName[96]; // TODO: why 96??
+    char subKeyName[96]; /* TODO: why 96?? */
     char *name;
     LONG result;
 
-    // TODO: This isn't thread safe, but it's probably good enough.
+    /* TODO: This isn't thread safe, but it's probably good enough. */
     if (fWinType < 0) {
         fWinType = detectWindowsType();
     }
@@ -355,11 +360,6 @@ static LONG getTZI(const char *winid, TZI *tzi)
     LONG result;
     HKEY hkey;
 
-    // TODO: This isn't thread safe, but it's probably good enough.
-    if (fWinType < 0) {
-        fWinType = detectWindowsType();
-    }
-
     result = openTZRegKey(&hkey, winid);
 
     if (result == ERROR_SUCCESS) {
@@ -397,7 +397,7 @@ u_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, in
             return;
     }
 
-    // Can't find a match - use Windows default zone.
+    /* Can't find a match - use Windows default zone. */
     GetTimeZoneInformation(zoneInfo);
 }
 
@@ -541,9 +541,11 @@ u_detectWindowsTimeZone() {
                                      &stdNameSize);
             RegCloseKey(hkey);
 
-            /* Scan through the Windows time zone data in the registry
-               again (just the range of zones with matching TZIs) and
-               look for a standard display name match. */
+            /*
+             * Scan through the Windows time zone data in the registry
+             * again (just the range of zones with matching TZIs) and
+             * look for a standard display name match.
+             */
             for (j = firstMatch; j <= lastMatch; j += 1) {
                 result = openTZRegKey(&hkey, ZONE_MAP[j].winid);
 
@@ -574,4 +576,4 @@ u_detectWindowsTimeZone() {
     return ZONE_MAP[firstMatch].icuid;
 }
 
-#endif // #ifdef U_WINDOWS
+#endif /* #ifdef U_WINDOWS */
