@@ -33,6 +33,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucurr.h"
 #include "unicode/curramt.h"
+#include "winnmfmt.h"
 #include "uresimp.h"
 #include "uhash.h"
 #include "cmemory.h"
@@ -824,6 +825,36 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
+
+#ifdef U_WINDOWS
+    char buffer[8];
+    int32_t count = desiredLocale.getKeywordValue("compat", buffer, sizeof(buffer), status);
+
+    // if the locale has "@compat=host", create a host-specific NumberFormat
+    if (count > 0 && uprv_strcmp(buffer, "host") == 0) {
+        Win32NumberFormat *f = NULL;
+        UBool curr = TRUE;
+
+        switch (style) {
+        case kNumberStyle:
+            curr = FALSE;
+            // fall-through
+
+        case kCurrencyStyle:
+            f = new Win32NumberFormat(desiredLocale, curr, status);
+
+            if (U_SUCCESS(status)) {
+                return f;
+            }
+
+            delete f;
+            break;
+            
+        default:
+            break;
+        }
+    }
+#endif
 
     NumberFormat* f = NULL;
     DecimalFormatSymbols* symbolsToAdopt = NULL;
