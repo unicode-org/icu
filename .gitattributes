@@ -109,6 +109,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j32.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j34.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text
+icu4j/src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/impl/data/th.brk -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
