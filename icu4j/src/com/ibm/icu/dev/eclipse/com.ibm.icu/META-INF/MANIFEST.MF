@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: International Components for Unicode for Java (ICU4J)
+Bundle-Name: International Components for Unicode for Java (ICU4J) - Eclipse
 Bundle-SymbolicName: com.ibm.icu; singleton:=true
 Bundle-Version: 3.4.2
 Bundle-Vendor: IBM
 Bundle-Localization: plugin
 Bundle-Copyright: Licensed Materials - Property of IBM 
- (C) Copyright IBM Corp. 2000, 2005. All Rights Reserved. 
+ (C) Copyright IBM Corp. 2000, 2006. All Rights Reserved. 
  IBM is a registered trademark of IBM Corp.
 Eclipse-AutoStart: true
 Export-Package: com.ibm.icu.impl;x-friends:="com.ibm.icu.tests",
