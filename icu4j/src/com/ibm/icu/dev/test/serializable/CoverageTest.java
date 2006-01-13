@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -166,7 +166,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                                 out.close();
                                 byteOut.close();
                             } catch (IOException e) {
-                                warnln("Eror writing test objects: " + e.toString());
+                                warnln("Error writing test objects: " + e.toString());
                                 return;
                             }
                             
@@ -176,8 +176,10 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                         }
                     }
                 }
-           } catch (Exception e) {
-                warnln("Error processing " + className + ": " + e.toString());
+            } catch (Exception e) {
+                warnln("coverage of " + className + ": " + e.toString());
+            } catch (Throwable e) {
+                warnln("coverage of " + className + ": " + e.toString());
             }
         }
     }
