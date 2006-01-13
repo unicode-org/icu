@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1558,7 +1558,7 @@ void initParser(UBool makeBinaryCollation)
     gMakeBinaryCollation = makeBinaryCollation;
 }
 
-static U_INLINE isTable(enum EResourceType type) {
+static U_INLINE UBool isTable(enum EResourceType type) {
     return (UBool)(type==RT_TABLE || type==RT_TABLE_NO_FALLBACK);
 }
 
