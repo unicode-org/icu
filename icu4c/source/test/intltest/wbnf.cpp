@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -782,7 +782,7 @@ enum TokenType {STRING, VAR, NUMBER, STREAM_END, ERROR, QUESTION, STAR, PLUS, LB
 class Scanner{
 friend int DumpScanner(Scanner & s, UBool dumb);
 private:
-    const char *const source;
+    const char * source;
     const char * working;
     const char * history; // for debug
     enum StateType {START, IN_NUM, IN_VAR_FIRST, IN_VAR, IN_QUOTE, IN_QUOTE_BSLASH, IN_BSLASH, IN_STRING, DONE};
@@ -795,8 +795,8 @@ private:
     }
 public:
     // the buffer of "source" is owned by caller
-    Scanner(const char *const source/*[in] c-string*/ = NULL):source(source){
-        working = source;
+    Scanner(const char *src/*[in] c-string*/ = NULL):source(src){
+        working = src;
         history = working;
         state = DONE;
         tokenType = ERROR;
