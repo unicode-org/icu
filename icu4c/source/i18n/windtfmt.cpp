@@ -152,7 +152,7 @@ UnicodeString &Win32DateFormat::format(Calendar &cal, UnicodeString &appendTo, F
         UnicodeString icuid;
 
         tz.getID(icuid);
-        u_getWindowsTimeZoneInfo(&tzi, icuid.getBuffer(), icuid.length());
+        uprv_getWindowsTimeZoneInfo(&tzi, icuid.getBuffer(), icuid.length());
     }
 
     uct = utmscale_fromInt64((int64_t) cal.getTime(status), UDTS_ICU4C_TIME, &status);
@@ -294,7 +294,7 @@ void Win32DateFormat::setTimeZoneInfo(const TimeZone &zone)
         fZoneID = zoneID;
 
         zone.getID(icuid);
-        u_getWindowsTimeZoneInfo(fTZI, icuid.getBuffer(), icuid.length());
+        uprv_getWindowsTimeZoneInfo(fTZI, icuid.getBuffer(), icuid.length());
     }
 }
 
