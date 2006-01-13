@@ -27,10 +27,10 @@ typedef struct _TIME_ZONE_INFORMATION TIME_ZONE_INFORMATION;
 U_CDECL_END
 
 U_CAPI void U_EXPORT2
-u_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length);
+uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length);
 
 U_CAPI const char* U_EXPORT2
-u_detectWindowsTimeZone();
+uprv_detectWindowsTimeZone();
 
 #endif /* #ifdef U_WINDOWS */
 
