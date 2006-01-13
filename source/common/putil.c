@@ -741,7 +741,7 @@ U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
 #ifdef U_WINDOWS
-    const char *id = u_detectWindowsTimeZone();
+    const char *id = uprv_detectWindowsTimeZone();
 
     if (id != NULL) {
         return id;
