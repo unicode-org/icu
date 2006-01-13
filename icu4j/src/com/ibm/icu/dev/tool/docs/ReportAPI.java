@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2005, International Business Machines Corporation and    *
+* Copyright (C) 2004-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -280,7 +280,7 @@ public class ReportAPI {
 
             pw.println();
             pw.println("<hr/>");
-            pw.println("<h2>Obsoleted in " + newData.name + "</h2>");
+            pw.println("<h2>Deprecated or Obsoleted in " + newData.name + "</h2>");
             if (obsoleted.size() > 0) {
                 printResults(obsoleted, pw, true, false);
             } else {
@@ -332,7 +332,7 @@ public class ReportAPI {
 
             pw.println();
             pw.println();
-            pw.println("=== Obsoleted in " + newData.name + " ===");
+            pw.println("=== Deprecatd or Obsoleted in " + newData.name + " ===");
             if (obsoleted.size() > 0) {
                 printResults(obsoleted, pw, false, false);
             } else {

@@ -1681,6 +1681,7 @@ public abstract class Transliterator {
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
      * @draft ICU 3.4.1
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static void registerAlias(String aliasID, String realID) {
         registry.put(aliasID, realID, true);

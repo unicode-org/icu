@@ -1,7 +1,7 @@
 //##header
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -2947,7 +2947,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param ch the code point
      * @return true if the code point is a space character as
      * defined by java.lang.Character.isSpace.
-     * @deprecated (Java)
+     * @deprecated ICU 3.4 (Java)
      */
     public static boolean isSpace(int ch) {
     	return ch <= 0x20 &&
@@ -3066,7 +3066,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * java.lang.Character.isJavaIdentifierStart.
      * @param cp the code point
      * @return true if the code point can start a java identifier.
-     * @deprecated (Java)
+     * @deprecated ICU 3.4 (Java)
      */
     public static boolean isJavaLetter(int cp) {
 	return isJavaIdentifierStart(cp);
@@ -3078,7 +3078,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * java.lang.Character.isJavaIdentifierPart.
      * @param cp the code point
      * @return true if the code point can continue a java identifier.
-     * @deprecated (Java)
+     * @deprecated ICU 3.4 (Java)
      */
     public static boolean isJavaLetterOrDigit(int cp) {
 	return isJavaIdentifierPart(cp);

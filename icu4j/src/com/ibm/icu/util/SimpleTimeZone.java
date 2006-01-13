@@ -450,8 +450,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * java.util.SimpleTimeZone.  Do not call; use the TimeZone
      * API.
      * @internal
-     * @deprecated
-     * @obsolete
      */
     public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
         super(tz);
@@ -498,8 +496,9 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
     /**
      * Returns a string representation of this object.
-     * @return  a string representation of this object.
+     * @return  a string representation of this object
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toString() {
         return "SimpleTimeZone: " + getID();
@@ -1014,7 +1013,10 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
 
     /**
+     * Return true if obj is a SimpleTimeZone equivalent to this.
+     * @return true if obj is a SimpleTimeZone equivalent to this
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -1052,7 +1054,10 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
 
     /**
+     * Return the hash code.
+     * @return the hash code
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int hashCode(){
     	int ret = (int)( super.hashCode() +
@@ -1078,7 +1083,10 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
 
     /**
+     * Return a clone of this time zone.
+     * @return a clone of this time zone
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object clone() {
         SimpleTimeZone clone = new SimpleTimeZone( raw, getID());
