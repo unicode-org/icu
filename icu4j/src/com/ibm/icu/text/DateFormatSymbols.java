@@ -394,7 +394,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
      * @stable ICU 2.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getMonths() {
         return duplicate(months);

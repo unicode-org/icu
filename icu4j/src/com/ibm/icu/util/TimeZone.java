@@ -750,7 +750,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
+     * Return true if obj is a TimeZone with the same class and ID as this.
+     * @return true if obj is a TimeZone with the same class and ID as this
+     * @param obj the object to compare against
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -759,7 +763,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
+     * Return the hash code.
+     * @return the hash code
      * @draft ICU 3.4.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int hashCode(){
     	return ID.hashCode();
