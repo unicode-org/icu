@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1554,7 +1554,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           } else { /* there is both explicit and implicit expansion. We need to make a combination */
             uprv_memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
             uprv_memcpy(src->extraCurrent+(expandNext >> 24), src->source + src->parsedToken.extensionOffset, src->parsedToken.extensionLen*sizeof(UChar));
-            sourceToken->expansion = (uint32_t)(((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (src->extraCurrent - src->source));
+            sourceToken->expansion = (uint32_t)(((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (uint32_t)(src->extraCurrent - src->source));
             src->extraCurrent += (expandNext >> 24) + src->parsedToken.extensionLen;
           }
         }
