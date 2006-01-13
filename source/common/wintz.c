@@ -378,7 +378,7 @@ static LONG getTZI(const char *winid, TZI *tzi)
 }
 
 U_CAPI void U_EXPORT2
-u_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length)
+uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length)
 {
     const char *winid;
     TZI tzi;
@@ -454,7 +454,7 @@ u_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, in
  * time zone, translated to an ICU time zone, or NULL upon failure.
  */
 U_CAPI const char* U_EXPORT2
-u_detectWindowsTimeZone() {
+uprv_detectWindowsTimeZone() {
     LONG result;
     HKEY hkey;
     TZI tziKey;
