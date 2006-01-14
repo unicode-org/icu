@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -542,15 +542,6 @@ private:
      */
     void            dispose(void);
 
-    /**
-     * Creates a new Formattable array and copies the values from the specified
-     * original.
-     * @param array the original array
-     * @param count the original array count
-     * @return the new Formattable array.
-     */
-    static Formattable* createArrayCopy(const Formattable* array, int32_t count);
-
     UnicodeString* getBogus() const;
 
     union {
@@ -568,14 +559,6 @@ private:
     Type                fType;
     UnicodeString       fBogus; // Bogus string when it's needed.
 };
-
-inline Formattable*
-Formattable::createArrayCopy(const Formattable* array, int32_t count)
-{
-    Formattable *result = new Formattable[count];
-    for (int32_t i=0; i<count; ++i) result[i] = array[i]; // Don't memcpy!
-    return result;
-}
 
 inline UDate Formattable::getDate(UErrorCode& status) const {
     if (fType != kDate) {
