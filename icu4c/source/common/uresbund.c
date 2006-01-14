@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and   *
+* Copyright (C) 1997-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -2514,7 +2514,6 @@ ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
 }
 U_INTERNAL UResourceBundle* U_EXPORT2
 ures_clone(const UResourceBundle* res, UErrorCode* status){
-    int32_t pos = 0;
     UResourceBundle* bundle = NULL;
     UResourceBundle* ret = NULL;
     if(U_FAILURE(*status) || res == NULL){

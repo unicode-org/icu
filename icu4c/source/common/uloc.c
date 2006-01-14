@@ -2036,9 +2036,6 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
     const UChar *item=NULL;
     UErrorCode errorCode;
     char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
-    int32_t efnLen =0;
-    const UChar* ef = NULL;
-    UBool overrideExplicitFallback = FALSE;
 
     /*
      * open the bundle for the current locale
