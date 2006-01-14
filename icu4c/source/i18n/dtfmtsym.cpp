@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -486,38 +486,44 @@ DateFormatSymbols::getMonths(int32_t &count, DtContextType context, DtWidthType 
     UnicodeString *returnValue = NULL;
 
     switch (context) {
-       case FORMAT :
-          switch(width) {
-             case WIDE :
-                count = fMonthsCount;
-                returnValue = fMonths;
-                break;
-             case ABBREVIATED :
-                count = fShortMonthsCount;
-                returnValue = fShortMonths;
-                break;
-             case NARROW :
-                count = fNarrowMonthsCount;
-                returnValue = fNarrowMonths;
-                break;
-          }
-          break;
-       case STANDALONE :
-          switch(width) {
-             case WIDE :
-                count = fStandaloneMonthsCount;
-                returnValue = fStandaloneMonths;
-                break;
-             case ABBREVIATED :
-                count = fStandaloneShortMonthsCount;
-                returnValue = fStandaloneShortMonths;
-                break;
-             case NARROW :
-                count = fStandaloneNarrowMonthsCount;
-                returnValue = fStandaloneNarrowMonths;
-                break;
-          }
-          break;
+    case FORMAT :
+        switch(width) {
+        case WIDE :
+            count = fMonthsCount;
+            returnValue = fMonths;
+            break;
+        case ABBREVIATED :
+            count = fShortMonthsCount;
+            returnValue = fShortMonths;
+            break;
+        case NARROW :
+            count = fNarrowMonthsCount;
+            returnValue = fNarrowMonths;
+            break;
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case STANDALONE :
+        switch(width) {
+        case WIDE :
+            count = fStandaloneMonthsCount;
+            returnValue = fStandaloneMonths;
+            break;
+        case ABBREVIATED :
+            count = fStandaloneShortMonthsCount;
+            returnValue = fStandaloneShortMonths;
+            break;
+        case NARROW :
+            count = fStandaloneNarrowMonthsCount;
+            returnValue = fStandaloneNarrowMonths;
+            break;
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
     }
     return returnValue;
 }
@@ -541,38 +547,44 @@ DateFormatSymbols::getWeekdays(int32_t &count, DtContextType context, DtWidthTyp
 {
     UnicodeString *returnValue = NULL;
     switch (context) {
-       case FORMAT :
-          switch(width) {
-             case WIDE :
+    case FORMAT :
+        switch(width) {
+            case WIDE :
                 count = fWeekdaysCount;
                 returnValue = fWeekdays;
                 break;
-             case ABBREVIATED :
+            case ABBREVIATED :
                 count = fShortWeekdaysCount;
                 returnValue = fShortWeekdays;
                 break;
-             case NARROW :
+            case NARROW :
                 count = fNarrowWeekdaysCount;
                 returnValue = fNarrowWeekdays;
                 break;
-          }
-          break;
-       case STANDALONE :
-          switch(width) {
-             case WIDE :
+            case DT_WIDTH_COUNT :
+                break;
+        }
+        break;
+    case STANDALONE :
+        switch(width) {
+            case WIDE :
                 count = fStandaloneWeekdaysCount;
                 returnValue = fStandaloneWeekdays;
                 break;
-             case ABBREVIATED :
+            case ABBREVIATED :
                 count = fStandaloneShortWeekdaysCount;
                 returnValue = fStandaloneShortWeekdays;
                 break;
-             case NARROW :
+            case NARROW :
                 count = fStandaloneNarrowWeekdaysCount;
                 returnValue = fStandaloneNarrowWeekdays;
                 break;
-          }
-          break;
+            case DT_WIDTH_COUNT :
+                break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
     }
     return returnValue;
 }
@@ -590,7 +602,8 @@ void
 DateFormatSymbols::setEras(const UnicodeString* erasArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fEras) delete[] fEras;
+    if (fEras)
+        delete[] fEras;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
@@ -603,7 +616,8 @@ void
 DateFormatSymbols::setEraNames(const UnicodeString* eraNamesArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fEraNames) delete[] fEraNames;
+    if (fEraNames)
+        delete[] fEraNames;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
@@ -616,7 +630,8 @@ void
 DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fMonths) delete[] fMonths;
+    if (fMonths)
+        delete[] fMonths;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
@@ -629,7 +644,8 @@ void
 DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fShortMonths) delete[] fShortMonths;
+    if (fShortMonths)
+        delete[] fShortMonths;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
@@ -646,58 +662,70 @@ DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count, Dt
     // than adopting the list passed in)
 
     switch (context) {
-      case FORMAT :
-         switch (width) {
-            case WIDE :
-               if (fMonths) delete[] fMonths;
-               fMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fMonths,count);
-               fMonthsCount = count;
-               break;
-            case ABBREVIATED :
-               if (fShortMonths) delete[] fShortMonths;
-               fShortMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fShortMonths,count);
-               fShortMonthsCount = count;
-               break;
-            case NARROW :
-               if (fNarrowMonths) delete[] fNarrowMonths;
-               fNarrowMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fNarrowMonths,count);
-               fNarrowMonthsCount = count;
-               break; 
-         }
-         break;
-      case STANDALONE :
-         switch (width) {
-            case WIDE :
-               if (fStandaloneMonths) delete[] fStandaloneMonths;
-               fStandaloneMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fStandaloneMonths,count);
-               fStandaloneMonthsCount = count;
-               break;
-            case ABBREVIATED :
-               if (fStandaloneShortMonths) delete[] fStandaloneShortMonths;
-               fStandaloneShortMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fStandaloneShortMonths,count);
-               fStandaloneShortMonthsCount = count;
-               break;
-            case NARROW :
-               if (fStandaloneNarrowMonths) delete[] fStandaloneNarrowMonths;
-               fStandaloneNarrowMonths = newUnicodeStringArray(count);
-               uprv_arrayCopy( monthsArray,fStandaloneNarrowMonths,count);
-               fStandaloneNarrowMonthsCount = count;
-               break; 
-         }
-         break;
-
+    case FORMAT :
+        switch (width) {
+        case WIDE :
+            if (fMonths)
+                delete[] fMonths;
+            fMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fMonths,count);
+            fMonthsCount = count;
+            break;
+        case ABBREVIATED :
+            if (fShortMonths)
+                delete[] fShortMonths;
+            fShortMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fShortMonths,count);
+            fShortMonthsCount = count;
+            break;
+        case NARROW :
+            if (fNarrowMonths)
+                delete[] fNarrowMonths;
+            fNarrowMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fNarrowMonths,count);
+            fNarrowMonthsCount = count;
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case STANDALONE :
+        switch (width) {
+        case WIDE :
+            if (fStandaloneMonths)
+                delete[] fStandaloneMonths;
+            fStandaloneMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fStandaloneMonths,count);
+            fStandaloneMonthsCount = count;
+            break;
+        case ABBREVIATED :
+            if (fStandaloneShortMonths)
+                delete[] fStandaloneShortMonths;
+            fStandaloneShortMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fStandaloneShortMonths,count);
+            fStandaloneShortMonthsCount = count;
+            break;
+        case NARROW :
+           if (fStandaloneNarrowMonths)
+                delete[] fStandaloneNarrowMonths;
+            fStandaloneNarrowMonths = newUnicodeStringArray(count);
+            uprv_arrayCopy( monthsArray,fStandaloneNarrowMonths,count);
+            fStandaloneNarrowMonthsCount = count;
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
     }
 }
 
 void DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fWeekdays) delete[] fWeekdays;
+    if (fWeekdays)
+        delete[] fWeekdays;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
@@ -710,12 +738,13 @@ void
 DateFormatSymbols::setShortWeekdays(const UnicodeString* shortWeekdaysArray, int32_t count)
 {
     // delete the old list if we own it
-    if (fShortWeekdays) delete[] fShortWeekdays;
+    if (fShortWeekdays)
+        delete[] fShortWeekdays;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
     fShortWeekdays = newUnicodeStringArray(count);
-    uprv_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
+    uprv_arrayCopy(shortWeekdaysArray, fShortWeekdays, count);
     fShortWeekdaysCount = count;
 }
 
@@ -727,51 +756,62 @@ DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count
     // than adopting the list passed in)
 
     switch (context) {
-      case FORMAT :
-         switch (width) {
-            case WIDE :
-               if (fWeekdays) delete[] fWeekdays;
-               fWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fWeekdays,count);
-               fWeekdaysCount = count;
-               break;
-            case ABBREVIATED :
-               if (fShortWeekdays) delete[] fShortWeekdays;
-               fShortWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fShortWeekdays,count);
-               fShortWeekdaysCount = count;
-               break;
-            case NARROW :
-               if (fNarrowWeekdays) delete[] fNarrowWeekdays;
-               fNarrowWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fNarrowWeekdays,count);
-               fNarrowWeekdaysCount = count;
-               break; 
-         }
-         break;
-      case STANDALONE :
-         switch (width) {
-            case WIDE :
-               if (fStandaloneWeekdays) delete[] fStandaloneWeekdays;
-               fStandaloneWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fStandaloneWeekdays,count);
-               fStandaloneWeekdaysCount = count;
-               break;
-            case ABBREVIATED :
-               if (fStandaloneShortWeekdays) delete[] fStandaloneShortWeekdays;
-               fStandaloneShortWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fStandaloneShortWeekdays,count);
-               fStandaloneShortWeekdaysCount = count;
-               break;
-            case NARROW :
-               if (fStandaloneNarrowWeekdays) delete[] fStandaloneNarrowWeekdays;
-               fStandaloneNarrowWeekdays = newUnicodeStringArray(count);
-               uprv_arrayCopy( weekdaysArray,fStandaloneNarrowWeekdays,count);
-               fStandaloneNarrowWeekdaysCount = count;
-               break; 
-         }
-         break;
-
+    case FORMAT :
+        switch (width) {
+        case WIDE :
+            if (fWeekdays)
+                delete[] fWeekdays;
+            fWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fWeekdays, count);
+            fWeekdaysCount = count;
+            break;
+        case ABBREVIATED :
+            if (fShortWeekdays)
+                delete[] fShortWeekdays;
+            fShortWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fShortWeekdays, count);
+            fShortWeekdaysCount = count;
+            break;
+        case NARROW :
+            if (fNarrowWeekdays)
+                delete[] fNarrowWeekdays;
+            fNarrowWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fNarrowWeekdays, count);
+            fNarrowWeekdaysCount = count;
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case STANDALONE :
+        switch (width) {
+        case WIDE :
+            if (fStandaloneWeekdays)
+                delete[] fStandaloneWeekdays;
+            fStandaloneWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fStandaloneWeekdays, count);
+            fStandaloneWeekdaysCount = count;
+            break;
+        case ABBREVIATED :
+            if (fStandaloneShortWeekdays)
+                delete[] fStandaloneShortWeekdays;
+            fStandaloneShortWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fStandaloneShortWeekdays, count);
+            fStandaloneShortWeekdaysCount = count;
+            break;
+        case NARROW :
+            if (fStandaloneNarrowWeekdays)
+                delete[] fStandaloneNarrowWeekdays;
+            fStandaloneNarrowWeekdays = newUnicodeStringArray(count);
+            uprv_arrayCopy(weekdaysArray, fStandaloneNarrowWeekdays, count);
+            fStandaloneNarrowWeekdaysCount = count;
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
     }
 }
 
@@ -1258,14 +1298,13 @@ public:
 
     virtual StringEnumeration * clone() const
     {
-        UErrorCode status = U_ZERO_ERROR;
         return new TimeZoneKeysEnumeration(strings, length);
     }
 
     virtual int32_t count(UErrorCode &/*status*/) const {
         return length;
     }
-    virtual const UChar* unext(int32_t *resultLength, UErrorCode& status){
+    virtual const UChar* unext(int32_t *resultLength, UErrorCode& /*status*/){
         if(current < length){
             const UChar* ret = strings[current].getBuffer();
             *resultLength = strings[current].length();
