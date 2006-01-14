@@ -486,7 +486,7 @@ AC_MSG_CHECKING([for namespace support])
 AC_CACHE_VAL(ac_cv_namespace_ok,
     [AC_TRY_LINK(
     changequote(<<, >>)dnl
-    <<namespace x_version {void f(){}};
+    <<namespace x_version {void f(){}}
     namespace x = x_version;
     using namespace x_version;
     >>,

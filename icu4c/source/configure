@@ -6033,7 +6033,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-    namespace x_version {void f(){}};
+    namespace x_version {void f(){}}
     namespace x = x_version;
     using namespace x_version;
 
