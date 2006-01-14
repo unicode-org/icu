@@ -1141,7 +1141,7 @@ _copyCount(char *dest, int32_t destCapacity, const char *src) {
     }
 }
 
-U_CFUNC const char* 
+static const char* 
 uloc_getCurrentCountryID(const char* oldID){
     int32_t offset = _findIndex(DEPRECATED_COUNTRIES, oldID);
     if (offset >= 0) {
@@ -1149,7 +1149,7 @@ uloc_getCurrentCountryID(const char* oldID){
     }
     return oldID;
 }
-U_CFUNC const char* 
+static const char* 
 uloc_getCurrentLanguageID(const char* oldID){
     int32_t offset = _findIndex(DEPRECATED_LANGUAGES, oldID);
     if (offset >= 0) {
