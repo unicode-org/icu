@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -186,7 +186,7 @@ extractPackageName(const char *filename,
 
     if(len>=capacity) {
         fprintf(stderr, "icupkg: the package name \"%s\" is too long (>=%ld)\n",
-                         (long)capacity);
+                         basename, (long)capacity);
         exit(U_ILLEGAL_ARGUMENT_ERROR);
     }
 
