@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -366,6 +366,7 @@ u_scanf_count_handler(UFILE         *input,
         else
             *(int32_t*)(args[0].ptrValue) = (int32_t)(UINT32_MAX & info->fWidth);
     }
+    *argConverted = 0;
 
     /* we converted 0 args */
     return 0;
