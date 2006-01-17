@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  strtst.c
@@ -728,9 +728,11 @@ static void TestVargs(void) {
 
 static void TestCount(void) {
 #if !UCONFIG_NO_FORMATTING
+    static const UChar x15[] = { 0x78, 0x31, 0x35, 0 };
     UChar testStr[16];
+    UChar character;
     int16_t i16 = -1;
-    int32_t i32 = -1;
+    int32_t i32 = -1, actual_count, actual_result;
     int64_t i64 = -1;
     u_uastrcpy(testStr, "1233456789");
     if (u_sscanf(testStr, "%*3[123]%n%*[1-9]", &i32) != 0) {
@@ -750,6 +752,19 @@ static void TestCount(void) {
     }
     if (i64 != 10) {
         log_err("test 3: scanf did not return 10\n", i64);
+    }
+    actual_result = u_sscanf(x15, "%C%d%n", &character, &i32, &actual_count);
+    if (actual_result != 2) {
+        log_err("scanf should return 2, but returned %d\n", actual_result);
+    }
+    if (character != 0x78) {
+        log_err("scanf should return 0x78 for the character, but returned %X\n", character);
+    }
+    if (i32 != 15) {
+        log_err("scanf should return 15 for the number, but returned %d\n", i32);
+    }
+    if (actual_count != 3) {
+        log_err("scanf should return 3 for actual_count, but returned %d\n", actual_count);
     }
 #endif
 }
