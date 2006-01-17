@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -97,7 +97,10 @@ public class JDKTimeZone extends TimeZone {
             return zone.getOffset(era, year, month, day,
                                       dayOfWeek, milliseconds);
         }
-        //should never occur except while serializing JDKTimeZone object
+        // should never occur except 
+        // when old object of older version of JDKTimeZone are de-serialized.
+        // these objects may contain ids that OlsonTimeZone may not understand 
+        // in such cases zone will be null
         return 0;
     }
 
@@ -127,7 +130,10 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.getRawOffset();
         }
-        // should never happen except when serializing the JDKTimeZone object
+        // should never occur except 
+        // when old object of older version of JDKTimeZone are de-serialized.
+        // these objects may contain ids that OlsonTimeZone may not understand 
+        // in such cases zone will be null
         return 0;
     }
 
@@ -138,7 +144,10 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.useDaylightTime();
         }
-        // should never happen except when serializing the JDKTimeZone object
+        // should never occur except 
+        // when old object of older version of JDKTimeZone are de-serialized.
+        // these objects may contain ids that OlsonTimeZone may not understand 
+        // in such cases zone will be null
         return false;
     }
 
@@ -149,7 +158,10 @@ public class JDKTimeZone extends TimeZone {
         if(zone!=null){
             return zone.inDaylightTime(date);
         }
-        //should never happen except when serializing the JDKTimeZone object
+        // should never occur except 
+        // when old object of older version of JDKTimeZone are de-serialized.
+        // these objects may contain ids that OlsonTimeZone may not understand 
+        // in such cases zone will be null
         return false;
     }
 
@@ -237,8 +249,9 @@ public class JDKTimeZone extends TimeZone {
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         if(zone!=null){
             out.writeObject(zone.getID());
+        }else{
+            out.writeObject(getID());
         }
-        out.writeObject(getID());
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
