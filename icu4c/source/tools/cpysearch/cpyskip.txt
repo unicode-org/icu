@@ -1,4 +1,4 @@
-# Copyright (c) 2005 International Business Machines 
+# Copyright (c) 2005-2006 International Business Machines 
 # Corporation and others. All Rights Reserved.
 # suffix matches
 *.brk
@@ -65,6 +65,7 @@ icu/source/samples/ufortune/resources/res-file-list.txt
 icu/source/test/testdata/CollationTest_NON_IGNORABLE_STUB.txt
 icu/source/test/testdata/CollationTest_SHIFTED_STUB.txt
 icu/source/test/testdata/GraphemeClusterBreakTest.txt
+icu/source/test/testdata/ra.xlf
 icu/source/test/testdata/re_tests.txt
 icu/source/test/testdata/riwords.txt
 icu/source/test/testdata/SentenceBreakTest.txt
