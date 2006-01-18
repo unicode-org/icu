@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2005, International Business Machines Corporation and
+ * Copyright (c) 1996-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  */
@@ -29,6 +29,9 @@ typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharItera
 
 U_NAMESPACE_BEGIN
 /**
+ * The Normalizer class supports the standard normalization forms described in
+ * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
+ * Unicode Standard Annex #15: Unicode Normalization Forms
  *
  * The Normalizer class consists of two parts:
  * - static functions that normalize strings or test if strings are normalized

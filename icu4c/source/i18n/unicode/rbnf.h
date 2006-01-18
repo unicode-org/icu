@@ -22,7 +22,7 @@
  *
  * @stable ICU 2.4
  */
-#if defined(U_INT64_T_UNAVAILABLE) || UCONFIG_NO_FORMATTING
+#if UCONFIG_NO_FORMATTING
 #define U_HAVE_RBNF 0
 #else
 #define U_HAVE_RBNF 1
@@ -57,16 +57,13 @@ class Collator;
 #endif
 
 /**
- *
- * <h2> Rule Based Number Format C++ API </h2>
- *
- * <p>A class that formats numbers according to a set of rules. This number formatter is
+ * The RuleBasedNumberFormat class formats numbers according to a set of rules. This number formatter is
  * typically used for spelling out numeric values in words (e.g., 25,3476 as
  * &quot;twenty-five thousand three hundred seventy-six&quot; or &quot;vingt-cinq mille trois
  * cents soixante-seize&quot; or
  * &quot;f&uuml;nfundzwanzigtausenddreihundertsechsundsiebzig&quot;), but can also be used for
  * other complicated formatting tasks, such as formatting a number of seconds as hours,
- * minutes and seconds (e.g., 3,730 as &quot;1:02:10&quot;).</p>
+ * minutes and seconds (e.g., 3,730 as &quot;1:02:10&quot;).
  *
  * <p>The resources contain three predefined formatters for each locale: spellout, which
  * spells out a value in words (123 is &quot;one hundred twenty-three&quot;); ordinal, which
