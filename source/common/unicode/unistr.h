@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -63,7 +63,7 @@ class BreakIterator;        // unicode/brkiter.h
  * therefore recommended over ones taking a charset name string
  * (where the empty string "" indicates invariant-character conversion).
  *
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
 #define US_INV UnicodeString::kInvariant
 
@@ -192,12 +192,12 @@ public:
    * Use the macro US_INV instead of the full qualification for this value.
    *
    * @see US_INV
-   * @draft ICU 3.2
+   * @stable ICU 3.2
    */
   enum EInvariant {
     /**
      * @see EInvariant
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     kInvariant
   };
@@ -1438,7 +1438,7 @@ public:
    * @param targetCapacity the length of the target buffer
    * @param inv Signature-distinguishing paramater, use US_INV.
    * @return the output string length, not including the terminating NUL
-   * @draft ICU 3.2
+   * @stable ICU 3.2
    */
   int32_t extract(int32_t start,
            int32_t startLength,
@@ -2817,7 +2817,7 @@ public:
    * @param inv Signature-distinguishing paramater, use US_INV.
    *
    * @see US_INV
-   * @draft ICU 3.2
+   * @stable ICU 3.2
    */
   UnicodeString(const char *src, int32_t length, enum EInvariant inv);
 

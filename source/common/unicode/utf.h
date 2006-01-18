@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -157,8 +157,6 @@
          (uint32_t)(c)<=0x10ffff && \
          !U_IS_UNICODE_NONCHAR(c)))
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Is this code point a BMP code point (U+0000..U+ffff)?
  * @param c 32-bit code point
@@ -174,8 +172,6 @@
  * @stable ICU 2.8
  */
 #define U_IS_SUPPLEMENTARY(c) ((uint32_t)((c)-0x10000)<=0xfffff)
-
-#endif /*U_HIDE_DRAFT_API*/
  
 /**
  * Is this code point a lead surrogate (U+d800..U+dbff)?

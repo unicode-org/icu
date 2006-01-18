@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -420,7 +420,7 @@ uloc_getScript(const char*    localeID,
  * than countryCapacity, the returned country code will be truncated.  
  * @stable ICU 2.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getCountry(const char*    localeID,
         char* country,
         int32_t countryCapacity,
@@ -852,9 +852,9 @@ uloc_getKeywordValue(const char* localeID,
  * @param status containing error code - buffer not big enough.
  * @return the length needed for the buffer
  * @see uloc_getKeywordValue
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_setKeywordValue(const char* keywordName,
                      const char* keywordValue,
                      char* buffer, int32_t bufferCapacity,
@@ -864,7 +864,7 @@ uloc_setKeywordValue(const char* keywordName,
  * enums for the 'outResult' parameter return value
  * @see uloc_acceptLanguageFromHTTP
  * @see uloc_acceptLanguage
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
 typedef enum {
   ULOC_ACCEPT_FAILED   = 0,  /* No exact match was found. */
@@ -885,9 +885,9 @@ typedef enum {
  * @param availableLocales - list of available locales to match
  * @param status Error status, may be BUFFER_OVERFLOW_ERROR
  * @return length needed for the locale.
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
                             UAcceptResult *outResult,
                             const char *httpAcceptLanguage,
@@ -905,9 +905,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
  * @param availableLocales - list of available locales to match
  * @param status Error status, may be BUFFER_OVERFLOW_ERROR
  * @return length needed for the locale.
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
                     UAcceptResult *outResult, const char **acceptList,
                     int32_t acceptListCount,

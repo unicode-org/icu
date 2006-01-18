@@ -1,6 +1,8 @@
 /*
-* Copyright (C) 1996-2005, International Business Machines Corporation and others. All Rights Reserved.
-*****************************************************************************************
+******************************************************************************
+* Copyright (C) 1996-2006, International Business Machines Corporation and others.
+* All Rights Reserved.
+******************************************************************************
 */
 
 #ifndef UBRK_H
@@ -453,9 +455,9 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  * @param status    receives error codes.  
  * @return          The number of rule status values from rules that determined 
  *                  the most recent boundary returned by the break iterator.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT  int32_t U_EXPORT2
+U_STABLE  int32_t U_EXPORT2
 ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
 
 /**
@@ -465,9 +467,9 @@ ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, 
  * @param type locale type (valid or actual)
  * @param status error code
  * @return locale string
- * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+ * @stable ICU 2.8
  */
-U_DRAFT const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
 
 

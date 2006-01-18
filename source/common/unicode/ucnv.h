@@ -673,8 +673,6 @@ ucnv_resetFromUnicode(UConverter *converter);
 U_STABLE int8_t U_EXPORT2
 ucnv_getMaxCharSize(const UConverter *converter);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Calculates the size of a buffer for conversion from Unicode to a charset.
  * The calculated size is guaranteed to be sufficient for this conversion.
@@ -696,8 +694,6 @@ ucnv_getMaxCharSize(const UConverter *converter);
  */
 #define UCNV_GET_MAX_BYTES_FOR_STRING(length, maxCharSize) \
      (((int32_t)(length)+10)*(int32_t)(maxCharSize))
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Returns the minimum byte length for characters in this codepage. 
