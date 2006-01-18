@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2005, International Business Machines
+* Copyright (C) 1999-2006, International Business Machines
 * Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -889,7 +889,7 @@ public:
      * @return the number of transliterators that compose this
      * transliterator, or 1 if this transliterator is not composed of
      * multiple transliterators
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     int32_t countElements() const;
 
@@ -910,7 +910,7 @@ public:
      * transliterator, if this transliterator is made up of multiple
      * transliterators, otherwise a reference to this object if given
      * an index of 0
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     const Transliterator& getElement(int32_t index, UErrorCode& ec) const;
 
@@ -1102,7 +1102,7 @@ public:
      * @return a newly-created StringEnumeration over the transliterators
      * available at the time of the call. The caller should delete this object
      * when done using it.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     static StringEnumeration* U_EXPORT2 getAvailableIDs(UErrorCode& ec);
 

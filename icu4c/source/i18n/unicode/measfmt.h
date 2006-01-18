@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -36,7 +36,7 @@ U_NAMESPACE_BEGIN
  *
  * @see Format
  * @author Alan Liu
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class U_I18N_API MeasureFormat : public Format {
 
@@ -48,7 +48,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @param locale desired locale
      * @param ec input-output error code
      * @return a formatter object, or NULL upon error
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     static MeasureFormat* U_EXPORT2 createCurrencyFormat(const Locale& locale,
                                                UErrorCode& ec);
@@ -58,7 +58,7 @@ class U_I18N_API MeasureFormat : public Format {
      * locale.
      * @param ec input-output error code
      * @return a formatter object, or NULL upon error
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     static MeasureFormat* U_EXPORT2 createCurrencyFormat(UErrorCode& ec);
 
@@ -66,7 +66,7 @@ class U_I18N_API MeasureFormat : public Format {
 
     /**
      * Default constructor.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     MeasureFormat();
 };

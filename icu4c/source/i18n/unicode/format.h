@@ -1,6 +1,7 @@
 /*
 ********************************************************************************
-* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2006, International Business Machines Corporation and others.
+* All Rights Reserved.
 ********************************************************************************
 *
 * File FORMAT.H
@@ -236,7 +237,7 @@ public:
      *  @param type type of the locale we're looking for (valid or actual) 
      *  @param status error code for the operation
      *  @return the locale
-     *  @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+     *  @stable ICU 2.8
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
