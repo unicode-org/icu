@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -79,7 +79,7 @@ typedef enum UCurrNameStyle {
 
 #if !UCONFIG_NO_SERVICE
 /**
- * @internal
+ * @stable ICU 2.6
  */
 typedef const void* UCurrRegistryKey;
 
@@ -145,9 +145,9 @@ ucurr_getName(const UChar* currency,
  * @param ec input-output error code
  * @return a non-negative number of fraction digits to be
  * displayed, or 0 if there is an error
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucurr_getDefaultFractionDigits(const UChar* currency,
                                UErrorCode* ec);
 
@@ -158,9 +158,9 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
  * @param ec input-output error code
  * @return the non-negative rounding increment, or 0.0 if none,
  * or 0.0 if there is an error
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT double U_EXPORT2
+U_STABLE double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
 
@@ -168,12 +168,12 @@ ucurr_getRoundingIncrement(const UChar* currency,
  * Selector constants for ucurr_openCurrencies().
  *
  * @see ucurr_openCurrencies
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
 typedef enum UCurrCurrencyType {
     /**
      * Select all ISO-4217 currency codes.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     UCURR_ALL = INT32_MAX,
     /**
@@ -182,7 +182,7 @@ typedef enum UCurrCurrencyType {
      * bank notes or coins associated with the currency code.
      * This does not include fund codes, precious metals and other
      * various ISO-4217 codes limited to special financial products.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     UCURR_COMMON = 1,
     /**
@@ -190,19 +190,19 @@ typedef enum UCurrCurrencyType {
      * These codes respresent fund codes, precious metals and other
      * various ISO-4217 codes limited to special financial products.
      * A fund code is a monetary resource associated with a currency.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     UCURR_UNCOMMON = 2,
     /**
      * Select only deprecated ISO-4217 codes.
      * These codes are no longer in general public use.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     UCURR_DEPRECATED = 4,
     /**
      * Select only non-deprecated ISO-4217 codes.
      * These codes are in general public use.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     UCURR_NON_DEPRECATED = 8
 } UCurrCurrencyType;
@@ -214,9 +214,9 @@ typedef enum UCurrCurrencyType {
  *      currencies. Most people will want to use the (UCURR_CURRENCY|UCURR_NON_DEPRECATED) value to
  *      get a list of current currencies.
  * @param pErrorCode Error code
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UEnumeration * U_EXPORT2
+U_STABLE UEnumeration * U_EXPORT2
 ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
 
 
@@ -244,7 +244,7 @@ U_NAMESPACE_BEGIN
  *
  * @internal
  */
-void
+U_INTERNAL void
 uprv_parseCurrency(const char* locale,
                    const UnicodeString& text,
                    ParsePosition& pos,

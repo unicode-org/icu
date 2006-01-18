@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2005, International Business Machines Corporation and others.
+* Copyright (c) 1996-2006, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -319,10 +319,10 @@ ucol_openRules( const UChar        *rules,
  * @see ucol_setVariableTop
  * @see ucol_getShortDefinitionString
  * @see ucol_normalizeShortDefinitionString
- * @draft ICU 3.0
+ * @stable ICU 3.0
  *
  */
-U_CAPI UCollator* U_EXPORT2
+U_STABLE UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
                           UBool forceDefaults,
                           UParseError *parseError,
@@ -341,7 +341,7 @@ ucol_openFromShortString( const char *definition,
  *
  * @deprecated ICU 3.4, use ucol_getContractionsAndExpansions instead
  */
-U_CAPI int32_t U_EXPORT2
+U_DEPRECATED int32_t U_EXPORT2
 ucol_getContractions( const UCollator *coll,
                   USet *conts,
                   UErrorCode *status);
@@ -357,7 +357,7 @@ ucol_getContractions( const UCollator *coll,
  *
  * @draft ICU 3.4
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 ucol_getContractionsAndExpansions( const UCollator *coll,
                   USet *contractions, USet *expansions,
                   UBool addPrefixes, UErrorCode *status);
@@ -546,9 +546,9 @@ ucol_countAvailable(void);
  * @param status input-output error code
  * @return a string enumeration over locale strings. The caller is
  * responsible for closing the result.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucol_openAvailableLocales(UErrorCode *status);
 #endif
 
@@ -559,9 +559,9 @@ ucol_openAvailableLocales(UErrorCode *status);
  * @param status input-output error code
  * @return a string enumeration over locale strings. The caller is
  * responsible for closing the result.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucol_getKeywords(UErrorCode *status);
 
 /**
@@ -573,9 +573,9 @@ ucol_getKeywords(UErrorCode *status);
  * @param status input-output error code
  * @return a string enumeration over collation keyword values, or NULL
  * upon error. The caller is responsible for closing the result.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucol_getKeywordValues(const char *keyword, UErrorCode *status);
 
 /**
@@ -606,9 +606,9 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status);
  * @return the actual buffer size needed for the locale.  If greater
  * than resultCapacity, the returned full name will be truncated and
  * an error code will be returned.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                              const char* keyword, const char* locale,
                              UBool* isAvailable, UErrorCode* status);
@@ -643,9 +643,9 @@ ucol_getRules(    const    UCollator    *coll,
  *  @return length of the resulting string
  *  @see ucol_openFromShortString
  *  @see ucol_normalizeShortDefinitionString
- *  @draft ICU 3.0
+ *  @stable ICU 3.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucol_getShortDefinitionString(const UCollator *coll,
                               const char *locale,
                               char *buffer,
@@ -669,10 +669,10 @@ ucol_getShortDefinitionString(const UCollator *coll,
  *  @see ucol_openFromShortString
  *  @see ucol_getShortDefinitionString
  * 
- *  @draft ICU 3.0
+ *  @stable ICU 3.0
  */
 
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucol_normalizeShortDefinitionString(const char *source,
                                     char *destination,
                                     int32_t capacity,
@@ -808,7 +808,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * @param info the version # information, the result will be filled in
  * @stable ICU 2.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
 
 /** 
@@ -994,9 +994,9 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
- * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+ * @stable ICU 2.8
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
 /**
@@ -1185,9 +1185,9 @@ ucol_prepareShortStringOpen( const char *definition,
  *  @param status for catching errors
  *  @return size of the image
  *  @see ucol_openBinary
- *  @draft ICU 3.2
+ *  @stable ICU 3.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucol_cloneBinary(const UCollator *coll,
                  uint8_t *buffer, int32_t capacity,
                  UErrorCode *status);
@@ -1207,9 +1207,9 @@ ucol_cloneBinary(const UCollator *coll,
  *  @param status for catching errors
  *  @return newly created collator
  *  @see ucol_cloneBinary
- *  @draft ICU 3.2
+ *  @stable ICU 3.2
  */
-U_DRAFT UCollator* U_EXPORT2
+U_STABLE UCollator* U_EXPORT2
 ucol_openBinary(const uint8_t *bin, int32_t length, 
                 const UCollator *base, 
                 UErrorCode *status);
