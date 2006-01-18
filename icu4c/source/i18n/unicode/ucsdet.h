@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucsdet.h
@@ -21,6 +21,25 @@
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
 
+/**
+ * \file 
+ * \brief C API: Charset Detection API
+ *
+ * This API provides a facility for detecting the
+ * charset or encoding of character data in an unknown text format.
+ * The input data can be from an array of bytes.
+ * <p>
+ * Character set detection is at best an imprecise operation.  The detection
+ * process will attempt to identify the charset that best matches the characteristics
+ * of the byte data, but the process is partly statistical in nature, and
+ * the results can not be guaranteed to always be correct.
+ * <p>
+ * For best accuracy in charset detection, the input data should be primarily
+ * in a single language, and a minimum of a few hundred bytes worth of plain text
+ * in the language are needed.  The detection process will attempt to
+ * ignore html or xml style markup that could otherwise obscure the content.
+ */
+ 
 #ifndef U_HIDE_DRAFT_API
 
 
@@ -104,64 +123,64 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t 
 
 
 /**
-  * Return the charset that best matches the supplied input data.
-  * 
-  * Note though, that because the detection 
-  * only looks at the start of the input data,
-  * there is a possibility that the returned charset will fail to handle
-  * the full set of input data.
-  * <p/>
-  * The returned UCharsetMatch object is owned by the UCharsetDetector.
-  * It will remain valid until the detector input is reset, or until
-  * the detector is closed.
-  * <p/>
-  * The function will fail if
-  *  <ul>
-  *    <li>no charset appears to match the data.</li>
-  *    <li>no input text has been provided</li>
-  *  </ul>
-  *
-  * @param csd       the charset detector to be used.
-  * @param status    any error conditions are reported back in this variable.
-  * @return          a UCharsetMatch  representing the best matching charset,
-  *                  or NULL if no charset matches the byte data.
-  *
-  * @draft ICU 3.6
-  */
+ * Return the charset that best matches the supplied input data.
+ * 
+ * Note though, that because the detection 
+ * only looks at the start of the input data,
+ * there is a possibility that the returned charset will fail to handle
+ * the full set of input data.
+ * <p>
+ * The returned UCharsetMatch object is owned by the UCharsetDetector.
+ * It will remain valid until the detector input is reset, or until
+ * the detector is closed.
+ * <p>
+ * The function will fail if
+ *  <ul>
+ *    <li>no charset appears to match the data.</li>
+ *    <li>no input text has been provided</li>
+ *  </ul>
+ *
+ * @param csd       the charset detector to be used.
+ * @param status    any error conditions are reported back in this variable.
+ * @return          a UCharsetMatch  representing the best matching charset,
+ *                  or NULL if no charset matches the byte data.
+ *
+ * @draft ICU 3.6
+ */
 U_DRAFT const UCharsetMatch * U_EXPORT2
 ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
     
 
 /**
-  *  Find all charset matches that appear to be consistent with the input,
-  *  returning an array of results.  The results are ordered with the
-  *  best quality match first.
-  *
-  *  Because the detection only looks at a limited amount of the
-  *  input byte data, some of the returned charsets may fail to handle
-  *  the all of input data.
-  *  <p/>
-  *  The returned UCharsetMatch objects are owned by the UCharsetDetector.
-  *  They will remain valid until the detector is closed or modified
-  *  
-  * <p/>
-  * Return an error if 
-  *  <ul>
-  *    <li>no charsets appear to match the input data.</li>
-  *    <li>no input text has been provided</li>
-  *  </ul>
-  * 
-  * @param csd           the charset detector to be used.
-  * @param matchesFound  pointer to a variable that will be set to the
-  *                      number of charsets identified that are consistent with
-  *                      the input data.  Output only.
-  * @param status        any error conditions are reported back in this variable.
-  * @return              A pointer to an array of pointers to UCharSetMatch objects.
-  *                      This array, and the UCharSetMatch instances to which it refers,
-  *                      are owned by the UCharsetDetector, and will remain valid until
-  *                      the detector is closed or modified.
-  * @draft ICU 3.4
-  */
+ *  Find all charset matches that appear to be consistent with the input,
+ *  returning an array of results.  The results are ordered with the
+ *  best quality match first.
+ *
+ *  Because the detection only looks at a limited amount of the
+ *  input byte data, some of the returned charsets may fail to handle
+ *  the all of input data.
+ *  <p>
+ *  The returned UCharsetMatch objects are owned by the UCharsetDetector.
+ *  They will remain valid until the detector is closed or modified
+ *  
+ * <p>
+ * Return an error if 
+ *  <ul>
+ *    <li>no charsets appear to match the input data.</li>
+ *    <li>no input text has been provided</li>
+ *  </ul>
+ * 
+ * @param csd           the charset detector to be used.
+ * @param matchesFound  pointer to a variable that will be set to the
+ *                      number of charsets identified that are consistent with
+ *                      the input data.  Output only.
+ * @param status        any error conditions are reported back in this variable.
+ * @return              A pointer to an array of pointers to UCharSetMatch objects.
+ *                      This array, and the UCharSetMatch instances to which it refers,
+ *                      are owned by the UCharsetDetector, and will remain valid until
+ *                      the detector is closed or modified.
+ * @draft ICU 3.4
+ */
 U_DRAFT const UCharsetMatch ** U_EXPORT2
 ucsdet_detectAll(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *status);
 
@@ -310,15 +329,16 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *csd);
 
 
 /**
-  * Enable filtering of input text. If filtering is enabled,
-  * text within angle brackets ("<" and ">") will be removed
-  * before detection, which will remove most HTML or xml markup.
-  *
-  * @param filter <code>true</code> to enable input text filtering.
-  * @return The previous setting.
-  *
-  * @draft ICU 3.6
-  */
+ * Enable filtering of input text. If filtering is enabled,
+ * text within angle brackets ("<" and ">") will be removed
+ * before detection, which will remove most HTML or xml markup.
+ *
+ * @param csd           the charset detector to be modified.
+ * @param filter <code>true</code> to enable input text filtering.
+ * @return The previous setting.
+ *
+ * @draft ICU 3.6
+ */
 U_DRAFT  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter);
 
