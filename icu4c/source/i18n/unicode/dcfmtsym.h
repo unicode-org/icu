@@ -119,7 +119,7 @@ public:
         /** Nan symbol */
         kNaNSymbol,
         /** Significant digit symbol
-         * @draft ICU 3.0 */
+         * @stable ICU 3.0 */
         kSignificantDigitSymbol,
         /** The monetary grouping separator 
          * @draft ICU 3.6
@@ -218,7 +218,7 @@ public:
     /**
      * Returns the locale for this object. Two flavors are available:
      * valid and actual locale.
-     * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+     * @stable ICU 2.8
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -30,7 +30,7 @@ U_NAMESPACE_BEGIN
  * subclasses MeasureUnit, for use with Measure and MeasureFormat.
  *
  * @author Alan Liu
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class U_I18N_API CurrencyUnit: public MeasureUnit {
  public:
@@ -40,39 +40,39 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * NULL and must have length 3
      * @param ec input-output error code. If the isoCode is invalid,
      * then this will be set to a failing value.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     CurrencyUnit(const UChar* isoCode, UErrorCode &ec);
 
     /**
      * Copy constructor
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     CurrencyUnit(const CurrencyUnit& other);
 
     /**
      * Assignment operator
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     CurrencyUnit& operator=(const CurrencyUnit& other);
 
     /**
      * Return a polymorphic clone of this object.  The result will
      * have the same class as returned by getDynamicClassID().
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual UObject* clone() const;
 
     /**
      * Destructor
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual ~CurrencyUnit();
 
     /**
      * Equality operator.  Return true if this object is equal
      * to the given object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UBool operator==(const UObject& other) const;
 
@@ -82,7 +82,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual UClassID getDynamicClassID() const;
 
@@ -90,13 +90,13 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * Returns the class ID for this class. This is used to compare to
      * the return value of getDynamicClassID().
      * @return The class ID for all objects of this class.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Return the ISO currency code of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     inline const UChar* getISOCurrency() const;
 

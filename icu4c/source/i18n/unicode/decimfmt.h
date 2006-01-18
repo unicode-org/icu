@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -1540,7 +1540,7 @@ public:
      * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the fewest significant digits that will be shown
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     int32_t getMinimumSignificantDigits() const;
 
@@ -1549,7 +1549,7 @@ public:
      * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the most significant digits that will be shown
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     int32_t getMaximumSignificantDigits() const;
 
@@ -1560,7 +1560,7 @@ public:
      * <code>min</code>, then it is set to <code>min</code>. This
      * value has no effect unless areSignificantDigits() returns true.
      * @param min the fewest significant digits to be shown 
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     void setMinimumSignificantDigits(int32_t min);
 
@@ -1572,7 +1572,7 @@ public:
      * This value has no effect unless areSignificantDigits() returns
      * true.
      * @param max the most significant digits to be shown 
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     void setMaximumSignificantDigits(int32_t max);
 
@@ -1580,7 +1580,7 @@ public:
      * Returns true if significant digits are in use, or false if
      * integer and fraction digit counts are in use.
      * @return true if significant digits are in use
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UBool areSignificantDigitsUsed() const;
 
@@ -1589,7 +1589,7 @@ public:
      * fraction digit counts are in use.
      * @param useSignificantDigits true to use significant digits, or
      * false to use integer and fraction digit counts
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     void setSignificantDigitsUsed(UBool useSignificantDigits);
 
