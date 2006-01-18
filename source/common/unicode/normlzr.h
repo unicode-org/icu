@@ -31,7 +31,7 @@ U_NAMESPACE_BEGIN
 /**
  * The Normalizer class supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
- * Unicode Standard Annex #15: Unicode Normalization Forms
+ * Unicode Standard Annex #15: Unicode Normalization Forms</a>.
  *
  * The Normalizer class consists of two parts:
  * - static functions that normalize strings or test if strings are normalized
