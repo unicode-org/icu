@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -322,7 +322,7 @@ typedef void* UClassID;
  * \def U_DATA_API
  * Set to export library symbols from inside the stubdata library,
  * and to import them from outside.
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 
 /**

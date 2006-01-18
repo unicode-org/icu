@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -93,7 +93,7 @@ enum {
      * match all except 'a', 'A', 'b', and 'B'. This adds the lower-,
      * title-, and uppercase mappings as well as the case folding
      * of each existing element in the set.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     USET_ADD_CASE_MAPPINGS = 4,
 
@@ -192,9 +192,9 @@ uset_close(USet* set);
  * @param set the object to set to the given range
  * @param start first character in the set, inclusive
  * @param end last character in the set, inclusive
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_set(USet* set,
          UChar32 start, UChar32 end);
 
@@ -243,9 +243,9 @@ uset_applyPattern(USet *set,
  *
  * @param ec error code input/output parameter
  *
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_applyIntPropertyValue(USet* set,
                            UProperty prop, int32_t value, UErrorCode* ec);
 
@@ -281,9 +281,9 @@ uset_applyIntPropertyValue(USet* set,
  *
  * @param ec error code input/output parameter
  *
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_applyPropertyAlias(USet* set,
                         const UChar *prop, int32_t propLength,
                         const UChar *value, int32_t valueLength,
@@ -296,9 +296,9 @@ uset_applyPropertyAlias(USet* set,
  * @param pattern a string specifying the pattern
  * @param patternLength the length of the pattern, or -1 if NULL
  * @param pos the given position
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
                       int32_t pos);
 
@@ -420,9 +420,9 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen);
  * @param set the object from which the elements are to be removed
  * @param removeSet the object that defines which elements will be
  * removed from this set
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_removeAll(USet* set, const USet* removeSet);
 
 /**
@@ -436,9 +436,9 @@ uset_removeAll(USet* set, const USet* removeSet);
  * to this set.
  * @param end last character, inclusive, of range to be retained
  * to this set.
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_retain(USet* set, UChar32 start, UChar32 end);
 
 /**
@@ -450,9 +450,9 @@ uset_retain(USet* set, UChar32 start, UChar32 end);
  *
  * @param set the object on which to perform the retain
  * @param retain set that defines which elements this set will retain
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_retainAll(USet* set, const USet* retain);
 
 /**
@@ -460,9 +460,9 @@ uset_retainAll(USet* set, const USet* retain);
  * possible space, without changing this object's value.
  *
  * @param set the object on which to perfrom the compact
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_compact(USet* set);
 
 /**
@@ -483,9 +483,9 @@ uset_complement(USet* set);
  * @param set the set with which to complement
  * @param complement set that defines which elements will be xor'ed
  * from this set.
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_complementAll(USet* set, const USet* complement);
 
 /**
@@ -548,9 +548,9 @@ uset_containsString(const USet* set, const UChar* str, int32_t strLen);
  * @param set the set
  * @param c the character to obtain the index for
  * @return an index from 0..size()-1, or -1
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uset_indexOf(const USet* set, UChar32 c);
 
 /**
@@ -561,9 +561,9 @@ uset_indexOf(const USet* set, UChar32 c);
  * @param set the set
  * @param index an index from 0..size()-1 to obtain the char for
  * @return the character at the given index, or (UChar32)-1.
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 uset_charAt(const USet* set, int32_t index);
 
 /**
@@ -618,9 +618,9 @@ uset_getItem(const USet* set, int32_t itemIndex,
  * @param set1 set to be checked for containment
  * @param set2 set to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_containsAll(const USet* set1, const USet* set2);
 
 /**
@@ -642,9 +642,9 @@ uset_containsAllCodePoints(const USet* set, const UChar *str, int32_t strLen);
  * @param set1 set to be checked for containment
  * @param set2 set to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_containsNone(const USet* set1, const USet* set2);
 
 /**
@@ -653,9 +653,9 @@ uset_containsNone(const USet* set1, const USet* set2);
  * @param set1 set to be checked for containment
  * @param set2 set to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_containsSome(const USet* set1, const USet* set2);
 
 /**
@@ -664,9 +664,9 @@ uset_containsSome(const USet* set1, const USet* set2);
  * @param set1 set to be checked for containment
  * @param set2 set to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_equals(const USet* set1, const USet* set2);
 
 /*********************************************************************

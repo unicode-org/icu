@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -310,13 +310,13 @@ typedef enum UProperty {
     /** Binary property STerm (new in Unicode 4.0.1).
         Sentence Terminal. Used in UAX #29: Text Boundaries
         (http://www.unicode.org/reports/tr29/)
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_S_TERM,
     /** Binary property Variation_Selector (new in Unicode 4.0.1).
         Indicates all those characters that qualify as Variation Selectors.
         For details on the behavior of these characters,
         see StandardizedVariants.html and 15.6 Variation Selectors.
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_VARIATION_SELECTOR,
     /** Binary property NFD_Inert.
         ICU-specific property for characters that are inert under NFD,
@@ -339,7 +339,7 @@ typedef enum UProperty {
 
         See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
         and icu/source/common/unormimp.h .
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_NFD_INERT,
     /** Binary property NFKD_Inert.
         ICU-specific property for characters that are inert under NFKD,
@@ -348,7 +348,7 @@ typedef enum UProperty {
         to find the boundary of safely normalizable text despite possible
         text additions.
         @see UCHAR_NFD_INERT
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_NFKD_INERT,
     /** Binary property NFC_Inert.
         ICU-specific property for characters that are inert under NFC,
@@ -357,7 +357,7 @@ typedef enum UProperty {
         to find the boundary of safely normalizable text despite possible
         text additions.
         @see UCHAR_NFD_INERT
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_NFC_INERT,
     /** Binary property NFKC_Inert.
         ICU-specific property for characters that are inert under NFKC,
@@ -366,7 +366,7 @@ typedef enum UProperty {
         to find the boundary of safely normalizable text despite possible
         text additions.
         @see UCHAR_NFD_INERT
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_NFKC_INERT,
     /** Binary Property Segment_Starter.
         ICU-specific property for characters that are starters in terms of
@@ -377,7 +377,7 @@ typedef enum UProperty {
         ICU uses this property for segmenting a string for generating a set of
         canonically equivalent strings, e.g. for canonical closure while
         processing collation tailoring rules.
-        @draft ICU 3.0 */
+        @stable ICU 3.0 */
     UCHAR_SEGMENT_STARTER,
     /** Binary property Pattern_Syntax (new in Unicode 4.1).
         See UAX #31 Identifier and Pattern Syntax
@@ -457,30 +457,30 @@ typedef enum UProperty {
         Returns UHangulSyllableType values. @stable ICU 2.6 */
     UCHAR_HANGUL_SYLLABLE_TYPE,
     /** Enumerated property NFD_Quick_Check.
-        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+        Returns UNormalizationCheckResult values. @stable ICU 3.0 */
     UCHAR_NFD_QUICK_CHECK,
     /** Enumerated property NFKD_Quick_Check.
-        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+        Returns UNormalizationCheckResult values. @stable ICU 3.0 */
     UCHAR_NFKD_QUICK_CHECK,
     /** Enumerated property NFC_Quick_Check.
-        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+        Returns UNormalizationCheckResult values. @stable ICU 3.0 */
     UCHAR_NFC_QUICK_CHECK,
     /** Enumerated property NFKC_Quick_Check.
-        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+        Returns UNormalizationCheckResult values. @stable ICU 3.0 */
     UCHAR_NFKC_QUICK_CHECK,
     /** Enumerated property Lead_Canonical_Combining_Class.
         ICU-specific property for the ccc of the first code point
         of the decomposition, or lccc(c)=ccc(NFD(c)[0]).
         Useful for checking for canonically ordered text;
         see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
-        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @draft ICU 3.0 */
+        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @stable ICU 3.0 */
     UCHAR_LEAD_CANONICAL_COMBINING_CLASS,
     /** Enumerated property Trail_Canonical_Combining_Class.
         ICU-specific property for the ccc of the last code point
         of the decomposition, or tccc(c)=ccc(NFD(c)[last]).
         Useful for checking for canonically ordered text;
         see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
-        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @draft ICU 3.0 */
+        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @stable ICU 3.0 */
     UCHAR_TRAIL_CANONICAL_COMBINING_CLASS,
     /** Enumerated property Grapheme_Cluster_Break (new in Unicode 4.1).
         Used in UAX #29: Text Boundaries
@@ -1128,7 +1128,7 @@ enum UBlockCode {
      * @stable ICU 2.2
      */
     UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, 
-    /** @draft ICU 3.0  */
+    /** @stable ICU 3.0  */
     UBLOCK_CYRILLIC_SUPPLEMENT = UBLOCK_CYRILLIC_SUPPLEMENTARY, /*[0500]*/
     /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -49,8 +49,6 @@
  *
  */
 
-#ifndef U_HIDE_DRAFT_API
-
 /** 
  * Option to prohibit processing of unassigned codepoints in the input and
  * do not check if the input conforms to STD-3 ASCII rules.
@@ -74,8 +72,6 @@
  */
 #define UIDNA_USE_STD3_RULES   0x0002
 
-#endif /*U_HIDE_DRAFT_API*/
-    
 /**
  * This function implements the ToASCII operation as defined in the IDNA RFC.
  * This operation is done on <b>single labels</b> before sending it to something that expects

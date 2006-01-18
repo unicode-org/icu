@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -85,7 +85,7 @@
  * ICU will not completely build with this switch turned on.
  * This switch turns off all converters.
  *
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
 #ifndef UCONFIG_NO_CONVERSION
 #   define UCONFIG_NO_CONVERSION 0
@@ -199,7 +199,7 @@
  * \def UCONFIG_NO_SERVICE
  * This switch turns off service registration.
  *
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
 #ifndef UCONFIG_NO_SERVICE
 #   define UCONFIG_NO_SERVICE 0
