@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -509,7 +509,7 @@ public:
     /**
      * Returns the locale for this break iterator. Two flavors are available: valid and
      * actual locale.
-     * @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+     * @stable ICU 2.8
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
