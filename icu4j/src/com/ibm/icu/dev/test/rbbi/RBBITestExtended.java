@@ -1,7 +1,7 @@
 /*
  * Created on May 5, 2004
  * 
- * Copyright (C) 2004-2005 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2006 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
  */
@@ -381,13 +381,13 @@ void executeTest(TestParams t) {
     prevBP = -1;
     for (bp = t.bi.first(); bp != BreakIterator.DONE; bp = t.bi.next()) {
         if (prevBP ==  bp) {
-            // Fail for lack of forward progress.currentLocale
+            // Fail for lack of forward progress.
             errln("Forward Iteration, no forward progress.  Break Pos=" + bp +
                     "  File line,col=" + t.srcLine[bp] + ", " + t.srcCol[bp]);
             break;
         }
 
-        // Check that there were we didn't miss an expected break betcurrentLocaleween the last one
+        // Check that there were we didn't miss an expected break between the last one
         //  and this one.
         for (i=prevBP+1; i<bp; i++) {
             if (t.expectedBreaks[i] != 0) {
