@@ -452,7 +452,7 @@ utext_previous32(UText *ut);
   * \code
   *    utext_setIndex();
   *    utext_next32();
-  * \code
+  * \endcode
   *
   *  @param ut the text to be accessed.
   *  @param nativeIndex Iteration index, in the native units of the text provider.
@@ -499,47 +499,47 @@ U_DRAFT int64_t U_EXPORT2
 utext_getNativeIndex(UText *ut);
 
 /**
-  * Set the current iteration position to the nearest code point
-  * boundary at or preceding the specified index.
-  * The index is in the native units of the original input text.
-  * If the index is out of range, it will be pinned to be within
-  * the range of the input text.
-  * <p/>
-  * It will usually be more efficient to begin an iteration
-  * using the functions utext_next32From() or utext_previous32From()
-  * rather than setIndex().
-  * <p/>
-  * Moving the index position to an adjacent character is best done
-  * with utext_next32(), utext_previous32() or utext_moveIndex32().
-  * Attempting to do direct arithmetic on the index position is
-  * complicated by the fact that the size (in native units) of a
-  * character depends on the underlying representation of the character
-  * (UTF-8, UTF-16, UTF-32, arbitrary codepage), and is not
-  * easily knowable.
-  *
-  * @param ut the text to be accessed.
-  * @param nativeIndex the native unit index of the new iteration position.
-  * @draft ICU 3.4
-  */
+ * Set the current iteration position to the nearest code point
+ * boundary at or preceding the specified index.
+ * The index is in the native units of the original input text.
+ * If the index is out of range, it will be pinned to be within
+ * the range of the input text.
+ * <p>
+ * It will usually be more efficient to begin an iteration
+ * using the functions utext_next32From() or utext_previous32From()
+ * rather than setIndex().
+ * <p>
+ * Moving the index position to an adjacent character is best done
+ * with utext_next32(), utext_previous32() or utext_moveIndex32().
+ * Attempting to do direct arithmetic on the index position is
+ * complicated by the fact that the size (in native units) of a
+ * character depends on the underlying representation of the character
+ * (UTF-8, UTF-16, UTF-32, arbitrary codepage), and is not
+ * easily knowable.
+ *
+ * @param ut the text to be accessed.
+ * @param nativeIndex the native unit index of the new iteration position.
+ * @draft ICU 3.4
+ */
 U_DRAFT void U_EXPORT2
 utext_setNativeIndex(UText *ut, int64_t nativeIndex);
 
 /**
-  * Move the iterator postion by delta code points.  The number of code points
-  * is a signed number; a negative delta will move the iterator backwards,
-  * towards the start of the text.
-  * <p/>
-  * The index is moved by <code>delta</code> code points
-  * forward or backward, but no further backward than to 0 and
-  * no further forward than to utext_nativeLength().
-  * The resulting index value will be in between 0 and length, inclusive.
-  *
-  * @param ut the text to be accessed.
-  * @param delta the signed number of code points to move the iteration position.
-  * @return TRUE if the position could be moved the requested number of positions while
-  *              staying within the range [0 - text length].
-  * @draft ICU 3.4
-  */
+ * Move the iterator postion by delta code points.  The number of code points
+ * is a signed number; a negative delta will move the iterator backwards,
+ * towards the start of the text.
+ * <p>
+ * The index is moved by <code>delta</code> code points
+ * forward or backward, but no further backward than to 0 and
+ * no further forward than to utext_nativeLength().
+ * The resulting index value will be in between 0 and length, inclusive.
+ *
+ * @param ut the text to be accessed.
+ * @param delta the signed number of code points to move the iteration position.
+ * @return TRUE if the position could be moved the requested number of positions while
+ *              staying within the range [0 - text length].
+ * @draft ICU 3.4
+ */
 U_DRAFT UBool U_EXPORT2
 utext_moveIndex32(UText *ut, int32_t delta);
 
@@ -549,15 +549,15 @@ utext_moveIndex32(UText *ut, int32_t delta);
  * Extract text from a UText into a UChar buffer.  The range of text to be extracted
  * is specified in the native indices of the UText provider.  These may not necessarily
  * be UTF-16 indices.
- * <p/>
+ * <p>
  * The size (number of 16 bit UChars) of the data to be extracted is returned.  The
  * full number of UChars is returned, even when the extracted text is truncated
  * because the specified buffer size is too small.
- *
+ * <p>
  * The extracted string will (if you are a user) / must (if you are a text provider)
  * be NUL-terminated if there is sufficient space in the destination buffer.  This
  * terminating NUL is not included in the returned length.
- *
+ * <p>
  * The iteration index is at the position following the last extracted character.
  *
  * @param  ut    the UText from which to extract data.
@@ -865,10 +865,10 @@ UTextAccess(UText *ut, int64_t nativeIndex, UBool forward);
  * Extract text from a UText into a UChar buffer.  The range of text to be extracted
  * is specified in the native indices of the UText provider.  These may not necessarily
  * be UTF-16 indices.
- * <p/>
+ * <p>
  * The size (number of 16 bit UChars) in the data to be extracted is returned.  The
  * full amount is returned, even when the specified buffer size is smaller.
- *
+ * <p>
  * The extracted string will (if you are a user) / must (if you are a text provider)
  * be NUL-terminated if there is sufficient space in the destination buffer.
  *
