@@ -64,22 +64,22 @@ typedef const void* URegistryKey;
  * of boundaries in text. BreakIterator is an abstract base class.
  * Instances of BreakIterator maintain a current position and scan over
  * text returning the index of characters where boundaries occur.
- * <P>
+ * <p>
  * Line boundary analysis determines where a text string can be broken
  * when line-wrapping. The mechanism correctly handles punctuation and
  * hyphenated words.
- * <P>
+ * <p>
  * Sentence boundary analysis allows selection with correct
  * interpretation of periods within numbers and abbreviations, and
  * trailing punctuation marks such as quotation marks and parentheses.
- * <P>
+ * <p>
  * Word boundary analysis is used by search and replace functions, as
  * well as within text editing applications that allow the user to
  * select words with a double click. Word selection provides correct
  * interpretation of punctuation marks within and following
  * words. Characters that are not part of a word, such as symbols or
  * punctuation marks, have word-breaks on both sides.
- * <P>
+ * <p>
  * Character boundary analysis allows users to interact with
  * characters as they expect to, for example, when moving the cursor
  * through a text string. Character boundary analysis provides correct
@@ -87,17 +87,17 @@ typedef const void* URegistryKey;
  * character is stored.  For example, an accented character might be
  * stored as a base character and a diacritical mark. What users
  * consider to be a character can differ between languages.
- * <P>
+ * <p>
  * The text boundary positions are found according to the rules
  * described in Unicode Standard Annex #29, Text Boundaries, and
  * Unicode Standard Annex #14, Line Breaking Properties.  These
  * are available at http://www.unicode.org/reports/tr14/ and
  * http://www.unicode.org/reports/tr29/.
- * <p/>
+ * <p>
  * In addition to the C++ API defined in this header file, a
  * plain C API with equivalent functionality is defined in the
  * file ubrk.h
- * <p/>
+ * <p>
  * Code snippits illustrating the use of the Break Iterator APIs
  * are available in the ICU User Guide, 
  * http://icu.sourceforge.net/userguide/boundaryAnalysis.html
