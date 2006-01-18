@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -161,10 +161,9 @@ typedef struct UTextChunk UTextChunk; /**< C typedef for struct UTextChunk. @dra
 
 
 /**
-  * utext_close    Close function for UText instances.
-  *                Cleans up, releases any resources being held by an
-  *                open UText.
-  * <p/>
+  * Close function for UText instances.
+  * Cleans up, releases any resources being held by an open UText.
+  * <p>
   *   If the UText was originally allocated by one of the utext_open functions,
   *   the storage associated with the utext will also be freed.
   *   If the UText storage originated with the application, as it would with
