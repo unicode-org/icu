@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and others.
+* Copyright (C) 1997-2006, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -517,7 +517,7 @@ public:
      * syntax.
      * @param perror The parse error if an error was encountered.
      * @param status The status indicating whether the constructor succeeded.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     RuleBasedNumberFormat(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
 
@@ -542,7 +542,7 @@ public:
      * names in the description.  These will be copied by the constructor.
      * @param perror The parse error if an error was encountered.
      * @param status The status indicating whether the constructor succeeded.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
                         UParseError& perror, UErrorCode& status);
@@ -589,7 +589,7 @@ public:
      * lenient parsing.
      * @param perror The parse error if an error was encountered.
      * @param status The status indicating whether the constructor succeeded.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
                         const Locale& locale, UParseError& perror, UErrorCode& status);
@@ -680,7 +680,7 @@ public:
   /**
    * Return the number of locales for which we have localized rule set display names.
    * @return the number of locales for which we have localized rule set display names.
-   * @draft ICU 3.2
+   * @stable ICU 3.2
    */
   virtual int32_t getNumberOfRuleSetDisplayNameLocales(void) const;
 
@@ -690,7 +690,7 @@ public:
    * @param status set to a failure code when this function fails
    * @return the locale
    * @see #getNumberOfRuleSetDisplayNameLocales
-   * @draft ICU 3.2
+   * @stable ICU 3.2
    */
   virtual Locale getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const;
 
@@ -705,7 +705,7 @@ public:
      * display name is desired
      * @return the display name for the given index, which might be bogus if there is an error
      * @see #getRuleSetName
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
   virtual UnicodeString getRuleSetDisplayName(int32_t index, 
                           const Locale& locale = Locale::getDefault());
@@ -715,7 +715,7 @@ public:
      * The locale is matched against the locales for which there is display name data, using
      * normal fallback rules.  If no locale matches, the default display name is returned.
      * @return the display name for the rule set
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      * @see #getRuleSetDisplayNames
      */
   virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName, 
@@ -942,7 +942,7 @@ public:
    * Return the name of the current default rule set.  If the current rule set is
    * not public, returns a bogus (and empty) UnicodeString.
    * @return the name of the current default rule set
-   * @draft ICU 3.0
+   * @stable ICU 3.0
    */
   virtual UnicodeString getDefaultRuleSetName() const;
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -31,34 +31,34 @@ U_NAMESPACE_BEGIN
  * <p>This is an abstract class.
  *
  * @author Alan Liu
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class U_I18N_API MeasureUnit: public UObject {
  public:
     /**
      * Return a polymorphic clone of this object.  The result will
      * have the same class as returned by getDynamicClassID().
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual UObject* clone() const = 0;
 
     /**
      * Destructor
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual ~MeasureUnit();
     
     /**
      * Equality operator.  Return true if this object is equal
      * to the given object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual UBool operator==(const UObject& other) const = 0;
 
  protected:
     /**
      * Default constructor.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     MeasureUnit();
 };

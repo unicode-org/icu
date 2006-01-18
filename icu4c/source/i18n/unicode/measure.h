@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -40,7 +40,7 @@ class MeasureUnit;
  * <p>This is an abstract class.
  *
  * @author Alan Liu
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class U_I18N_API Measure: public UObject {
  public:
@@ -52,40 +52,40 @@ class U_I18N_API Measure: public UObject {
      * @param adoptedUnit the unit object, which must not be NULL
      * @param ec input-output error code. If the amount or the unit
      * is invalid, then this will be set to a failing value.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     Measure(const Formattable& number, MeasureUnit* adoptedUnit,
             UErrorCode& ec);
 
     /**
      * Copy constructor
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     Measure(const Measure& other);
 
     /**
      * Assignment operator
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     Measure& operator=(const Measure& other);
 
     /**
      * Return a polymorphic clone of this object.  The result will
      * have the same class as returned by getDynamicClassID().
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual UObject* clone() const = 0;
 
     /**
      * Destructor
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual ~Measure();
     
     /**
      * Equality operator.  Return true if this object is equal
      * to the given object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UBool operator==(const UObject& other) const;
 
@@ -93,20 +93,20 @@ class U_I18N_API Measure: public UObject {
      * Return a reference to the numeric value of this object.  The
      * numeric value may be of any numeric type supported by
      * Formattable.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     inline const Formattable& getNumber() const;
 
     /**
      * Return a reference to the unit of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     inline const MeasureUnit& getUnit() const;
 
  protected:
     /**
      * Default constructor.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     Measure();
 

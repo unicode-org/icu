@@ -127,7 +127,7 @@ public:
     /**
      * Creates a Formattable object that adopts the given UObject.
      * @param objectToAdopt the UObject to set this object to
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     Formattable(UObject* objectToAdopt);
 
@@ -232,7 +232,7 @@ public:
         /**
          * Selector indicating a UObject value.  Use getObject to
          * retrieve the value.
-         * @draft ICU 3.0
+         * @stable ICU 3.0
          */
         kObject
    };
@@ -248,7 +248,7 @@ public:
      * Returns TRUE if the data type of this Formattable object
      * is kDouble, kLong, or kInt64.
      * @return TRUE if this is a pure numeric object
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UBool           isNumeric() const;
     
@@ -270,7 +270,7 @@ public:
      * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return the double value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
     double          getDouble(UErrorCode& status) const;
 
@@ -296,7 +296,7 @@ public:
      * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return    the long value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
     int32_t         getLong(UErrorCode& status) const;
 
@@ -321,7 +321,7 @@ public:
      * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return    the int64 value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
     int64_t         getInt64(UErrorCode& status) const;
 
@@ -339,7 +339,7 @@ public:
      * undefined.
      * @param status the error code.
      * @return    the Date value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
      UDate          getDate(UErrorCode& status) const;
 
@@ -360,7 +360,7 @@ public:
      * @param result    Output param to receive the Date value of this object.
      * @param status    the error code. 
      * @return          A reference to 'result'.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
     UnicodeString&  getString(UnicodeString& result, UErrorCode& status) const;
 
@@ -379,7 +379,7 @@ public:
      * U_INVALID_FORMAT_ERROR and the result is a bogus string.
      * @param status    the error code.
      * @return   a const reference to the string value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     const UnicodeString& getString(UErrorCode& status) const;
 
@@ -397,7 +397,7 @@ public:
      * and the result is a bogus string.
      * @param status    the error code. 
      * @return   a reference to the string value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UnicodeString& getString(UErrorCode& status);
 
@@ -418,7 +418,7 @@ public:
      * @param count    fill-in with the count of this object.
      * @param status the error code. 
      * @return         the array value of this object.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */ 
     const Formattable* getArray(int32_t& count, UErrorCode& status) const;
 
@@ -436,7 +436,7 @@ public:
      * Returns a pointer to the UObject contained within this
      * formattable, or NULL if this object does not contain a UObject.
      * @return a UObject pointer, or NULL
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     const UObject*  getObject() const;
 
@@ -509,7 +509,7 @@ public:
      * the type to kObject.  After this call, the caller must not
      * delete the given object.
      * @param objectToAdopt the UObject value to be adopted
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     void            adoptObject(UObject* objectToAdopt);
 

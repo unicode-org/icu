@@ -1,7 +1,9 @@
-/*******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
+/*
+*******************************************************************************
+* Copyright (C) 1996-2006, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
 
 #ifndef UCAL_H
 #define UCAL_H
@@ -503,7 +505,7 @@ typedef enum UCalendarAMPMs UCalendarAMPMs;
  *
  * @stable ICU 2.6
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucal_openTimeZones(UErrorCode* ec);
 
 /**
@@ -522,7 +524,7 @@ ucal_openTimeZones(UErrorCode* ec);
  *
  * @stable ICU 2.6
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
 
 /**
@@ -541,7 +543,7 @@ ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
  *
  * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
 
 /**
@@ -553,7 +555,7 @@ ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
  *
  * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
 
 /**
@@ -572,7 +574,7 @@ ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
  *
  * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec);
 
 /**
@@ -1049,9 +1051,9 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
  *  @param type type of the locale we're looking for (valid or actual) 
  *  @param status error code for the operation
  *  @return the locale name
- *  @draft ICU 2.8 likely to change after ICU 3.0, based on feedback
+ *  @stable ICU 2.8
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
