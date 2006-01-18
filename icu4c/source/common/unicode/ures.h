@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -299,9 +299,9 @@ ures_getLocale(const UResourceBundle* resourceBundle,
  *             ULocDataLocaleType in uloc.h
  * @param status just for catching illegal arguments
  * @return  A Locale name
- * @draft ICU 2.8 likely to change in the future
+ * @stable ICU 2.8
  */
-U_DRAFT const char* U_EXPORT2 
+U_STABLE const char* U_EXPORT2 
 ures_getLocaleByType(const UResourceBundle* resourceBundle, 
                      ULocDataLocaleType type, 
                      UErrorCode* status);
@@ -692,9 +692,9 @@ U_NAMESPACE_END
  * @param packageName name of the tree, such as (NULL) or U_ICUDATA_ALIAS or  or "ICUDATA-coll"
  * This call is similar to uloc_getAvailable().
  * @param status error code
- * @draft ICU 3.2
+ * @stable ICU 3.2
  */
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ures_openAvailableLocales(const char *packageName, UErrorCode *status);
 
 

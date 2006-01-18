@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,8 +29,6 @@
  */
  
 U_CDECL_BEGIN
-
-#ifndef U_HIDE_DRAFT_API
 
 /**
  * Trace severity levels.  Higher levels increase the verbosity of the trace output.
@@ -84,8 +82,6 @@ typedef enum UTraceFunctionNumber {
     UTRACE_UCOL_OPEN_FROM_SHORT_STRING,
     UTRACE_COLLATION_LIMIT
 } UTraceFunctionNumber;
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Setter for the trace level.

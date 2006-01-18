@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -88,7 +88,7 @@ typedef enum UScriptCode {
       USCRIPT_TAI_LE,             /* Tale */
       USCRIPT_UGARITIC,           /* Ugar */
 
-      /** New script code in Unicode 4.0.1 @draft ICU 3.0 */
+      /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
       USCRIPT_KATAKANA_OR_HIRAGANA,/*Hrkt */
 
       /* New scripts in Unicode 4.1 @draft ICU 3.4 */

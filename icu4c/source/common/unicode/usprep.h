@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -59,8 +59,6 @@
 
 #include "unicode/parseerr.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * The StringPrep profile
  * @stable ICU 2.8
@@ -84,8 +82,6 @@ typedef struct UStringPrepProfile UStringPrepProfile;
  */
 #define USPREP_ALLOW_UNASSIGNED 0x0001
 
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Creates a StringPrep profile from the data file.
