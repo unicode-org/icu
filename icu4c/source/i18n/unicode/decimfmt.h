@@ -1119,7 +1119,7 @@ public:
      * The width is counted in 16-bit code units.
      * @return the format width, or zero if no padding is in effect
      * @see #setFormatWidth
-     * @see #getPadCharacter
+     * @see #getPadCharacterString
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
@@ -1135,7 +1135,7 @@ public:
      * format(), or zero to disable padding.  A negative
      * width is equivalent to 0.
      * @see #getFormatWidth
-     * @see #getPadCharacter
+     * @see #getPadCharacterString
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
@@ -1166,7 +1166,7 @@ public:
      * padChar.char32At(0) will be used as the pad character.
      * @see #setFormatWidth
      * @see #getFormatWidth
-     * @see #getPadCharacter
+     * @see #getPadCharacterString
      * @see #getPadPosition
      * @see #setPadPosition
      * @stable ICU 2.0
@@ -1183,7 +1183,7 @@ public:
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
-     * @see #getPadCharacter
+     * @see #getPadCharacterString
      * @see #setPadPosition
      * @see #kPadBeforePrefix
      * @see #kPadAfterPrefix
@@ -1204,7 +1204,7 @@ public:
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
-     * @see #getPadCharacter
+     * @see #getPadCharacterString
      * @see #getPadPosition
      * @see #kPadBeforePrefix
      * @see #kPadAfterPrefix
