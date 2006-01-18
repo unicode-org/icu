@@ -716,7 +716,7 @@ public:
      * normal fallback rules.  If no locale matches, the default display name is returned.
      * @return the display name for the rule set
      * @stable ICU 3.2
-     * @see #getRuleSetDisplayNames
+     * @see #getRuleSetDisplayName
      */
   virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName, 
                           const Locale& locale = Locale::getDefault());
@@ -861,7 +861,7 @@ public:
    * @param parsePosition On entry, contains the position of the first character
    * in "text" to examine.  On exit, has been updated to contain the position
    * of the first character in "text" that wasn't consumed by the parse.
-   * @see #setLenientParseMode
+   * @see #setLenient
    * @stable ICU 2.0
    */
   virtual void parse(const UnicodeString& text,
@@ -921,7 +921,7 @@ public:
    * Returns true if lenient-parse mode is turned on.  Lenient parsing is off
    * by default.
    * @return true if lenient-parse mode is turned on.
-   * @see #setLenientParseMode
+   * @see #setLenient
    * @stable ICU 2.0
    */
   virtual inline UBool isLenient(void) const;
