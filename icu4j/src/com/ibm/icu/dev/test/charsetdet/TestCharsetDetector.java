@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and         *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UTF32;
@@ -115,7 +116,7 @@ public class TestCharsetDetector extends TestFmwk
     
     private void checkEncoding(String testString, String encoding, String id)
     {
-        String enc = null, from = null, lang = null;
+        String enc = null, lang = null;
         String[] split = encoding.split("/");
         
         enc = split[0];
@@ -124,30 +125,40 @@ public class TestCharsetDetector extends TestFmwk
             lang = split[1];
         }
 
-        if (enc.equals("ISO-2022-CN")) {
-            
-            // Don't test ISO-2022-CN on older runtimes.
-            if (! have_ISO_2022_CN) {
-                return;
-            }
-            
-            // ISO-2022-CN only works for converting *to* Unicode,
-            // we need to use x-ISO-2022-CN-GB to convert *from* unicode...
-            from = "x-ISO-2022-CN-GB";
-        } else {
-            from = enc;
-        }
-        
         try {
             CharsetDetector det = new CharsetDetector();
             byte[] bytes;
             
-            if (from.startsWith("UTF-32")) {
-                UTF32 utf32 = UTF32.getInstance(from);
+            if (enc.startsWith("UTF-32")) {
+                UTF32 utf32 = UTF32.getInstance(enc);
                 
                 bytes = utf32.toBytes(testString);
             } else {
-                bytes = testString.getBytes(from);
+                String from = enc;
+
+                while (true) {
+                    try {
+                        bytes = testString.getBytes(from);
+                    } catch (UnsupportedOperationException uoe) {
+                         // In some runtimes, the ISO-2022-CN converter
+                         // only converts *to* Unicode - we have to use
+                         // x-ISO-2022-CN-GB to convert *from* Unicode.
+                        if (from.equals("ISO-2022-CN")) {
+                            from = "x-ISO-2022-CN-GB";
+                            continue;
+                        }
+                        
+                        // Ignore any other converters that can't
+                        // convert from Unicode.
+                        return;
+                    } catch (UnsupportedEncodingException uee) {
+                        // Ignore any encodings that this runtime
+                        // doesn't support.
+                        return;
+                    }
+                    
+                    break;
+                }
             }
         
             det.setText(bytes);
@@ -158,7 +169,6 @@ public class TestCharsetDetector extends TestFmwk
          } catch (Exception e) {
             errln(id + ": " + e.toString());
         }
-        
     }
     
     public void TestConstruction() {
@@ -344,7 +354,4 @@ public class TestCharsetDetector extends TestFmwk
             errln("exception while processing test cases: " + e.toString());
         }
     }
-    
-    // Before Java 1.5, we cannot convert from Unicode to ISO-2022-CN, so checkEncoding() can't test it...
-    private boolean have_ISO_2022_CN = VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1, 5)) >= 0;
 }
