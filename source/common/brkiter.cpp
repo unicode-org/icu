@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -74,8 +74,8 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
         brkName = ures_getByKeyWithFallback(brkRules, type, brkName, &status);
         // Get the actual string
         brkfname = ures_getString(brkName, &size, &status);
-        U_ASSERT(size<sizeof(fnbuff));
-        if (size>=sizeof(fnbuff)) {
+        U_ASSERT((size_t)size<sizeof(fnbuff));
+        if ((size_t)size>=sizeof(fnbuff)) {
             size=0;
             if (U_SUCCESS(status)) {
                 status = U_BUFFER_OVERFLOW_ERROR;

@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2005 International Business Machines Corporation   *
+*   Copyright (C) 1999-2006 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -420,7 +420,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
 
     fText->previous32();
     int32_t lastResult    = handlePrevious(fData->fReverseTable);
-    if (lastResult = UBRK_DONE) {
+    if (lastResult == UBRK_DONE) {
         lastResult = fText->startIndex();
         fText->setIndex(lastResult);
     }
