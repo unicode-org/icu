@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2005, International Business Machines Corporation and
+# Copyright (c) 2002-2006, International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line.txt
@@ -169,5 +169,5 @@ $H3 $JT* $Extend*;
 $SpaceGlue  = ([$ZW $CL $IS $NS $OP]  ($Extend* $SP)) | (($Extend* $SP)+ $OP);
 $ClumpingChars = [^$SP $BK $CR $LF];
 
-!. . $ClumpingChars*  ($SpaceGlue $ClumpingChars*)* (. | $LF $CR);
+!. . $ClumpingChars*  ($SpaceGlue $ClumpingChars*)* (. | $LF $CR)?;
 
