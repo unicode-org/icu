@@ -184,7 +184,7 @@ UnicodeString &Win32DateFormat::format(Calendar &cal, UnicodeString &appendTo, F
         MessageFormat::format(*pattern, timeDateArray, 2, appendTo, status);
     } else if (fDateStyle != DateFormat::kNone) {
         formatDate(&st_local, appendTo);
-    } else if (fDateStyle != DateFormat::kNone) {
+    } else if (fTimeStyle != DateFormat::kNone) {
         formatTime(&st_local, appendTo);
     }
 
@@ -238,7 +238,7 @@ void Win32DateFormat::formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) 
     UChar stackBuffer[STACK_BUFFER_SIZE];
     UChar *buffer = stackBuffer;
 
-    result = GetDateFormatW(fLCID, dfFlags[fDateStyle], st, NULL, buffer, STACK_BUFFER_SIZE);
+    result = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, STACK_BUFFER_SIZE);
 
     if (result == 0) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
