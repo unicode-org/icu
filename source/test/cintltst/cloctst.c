@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1779,7 +1779,10 @@ static void TestCanonicalization(void)
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
         { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
         { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" },
-        { "ja_JP", "ja_JP", "ja_JP" }
+        { "ja_JP", "ja_JP", "ja_JP" },
+
+        /* test case for "i-default" */
+        { "i-default", NULL, NULL }
     };
     
     static const char* label[] = { "getName", "canonicalize" };
@@ -1793,6 +1796,11 @@ static void TestCanonicalization(void)
             const char* expected = (j==0) ? testCases[i].getNameID : testCases[i].canonicalID;
             *buffer = 0;
             status = U_ZERO_ERROR;
+
+            if (expected == NULL) {
+                expected = uloc_getDefault();
+            }
+
             /* log_verbose("testing %s -> %s\n", testCases[i], testCases[i].canonicalID); */
             origResultLen = _canonicalize(j, testCases[i].localeID, NULL, 0, &status);
             if (status != U_BUFFER_OVERFLOW_ERROR) {

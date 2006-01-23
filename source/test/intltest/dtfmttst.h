@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -162,6 +162,12 @@ public: // package
     void TestGenericTime(void);
 
     void TestGenericTimeZoneOrder(void);
+
+public:
+    /**
+        * Test host-specific formatting.
+        */
+    void TestHost(void);
 
  private:
     void expectParse(const char** data, int32_t data_length,

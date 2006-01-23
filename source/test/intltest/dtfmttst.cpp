@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -19,6 +19,10 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
+
+#ifdef U_WINDOWS
+#include "windttst.h"
+#endif
 
 // *****************************************************************************
 // class DateFormatTest
@@ -55,6 +59,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(24,TestGenericTime);
         TESTCASE(25,TestGenericTimeZoneOrder);
         TESTCASE(26,TestTimeZoneStringsAPI);
+        TESTCASE(27,TestHost);
         default: name = ""; break;
     }
 }
@@ -1562,6 +1567,14 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
         errln("setZoneString() did not succeed. Expected: " + exemplarCity + " Got: " + result); 
     }
 }
+
+void DateFormatTest::TestHost(void)
+{
+#ifdef U_WINDOWS
+    Win32DateTimeTest::testLocales(this);
+#endif
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

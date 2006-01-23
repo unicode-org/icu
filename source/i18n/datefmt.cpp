@@ -277,7 +277,7 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 
     // if the locale has "@compat=host", create a host-specific DateFormat...
     if (count > 0 && uprv_strcmp(buffer, "host") == 0) {
-        Win32DateFormat *f = new Win32DateFormat(dateStyle, timeStyle, locale, status);
+        Win32DateFormat *f = new Win32DateFormat(timeStyle, dateStyle, locale, status);
 
         if (U_SUCCESS(status)) {
             return f;
