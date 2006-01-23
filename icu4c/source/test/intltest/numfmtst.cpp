@@ -24,6 +24,7 @@
 #include "tokiter.h"
 #include "charstr.h"
 #include "putilimp.h"
+#include "winnmtst.h"
 #include <float.h>
 #include <string.h>
 
@@ -80,6 +81,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(30,TestCurrencyUnit);
         CASE(31,TestCoverage);
         CASE(32,TestJB3832);
+        CASE(33,TestHost);
         default: name = ""; break;
     }
 }
@@ -2193,6 +2195,13 @@ void NumberFormatTest::TestJB3832(){
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
     }
     delete currencyFmt;
+}
+
+void NumberFormatTest::TestHost()
+{
+#ifdef U_WINDOWS
+    Win32NumberTest::testLocales(this);
+#endif
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

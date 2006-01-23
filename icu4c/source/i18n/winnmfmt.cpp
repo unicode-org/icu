@@ -49,14 +49,27 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Win32NumberFormat)
 
 #define STACK_BUFFER_SIZE 32
 
+/*
+ * Turns a string of the form "3;2;0" into the grouping UINT
+ * needed for NUMBERFMT and CURRENCYFMT. If there's only one
+ * group in the string, that means that there's only one group,
+ * and the return value should be multiplied by 10. (e.g. "3" => 30)
+ */
 UINT getGrouping(const char *grouping)
 {
     UINT g = 0;
+    UINT c = 0;
 
     for (const char *s = grouping; *s != '\0'; s += 1) {
         if (*s > '0' && *s < '9') {
             g = g * 10 + (*s - '0');
+        } else if (*s == ';') {
+            c += 1;
         }
+    }
+
+    if (c == 0) {
+        g *= 10;
     }
 
     return g;
@@ -90,13 +103,12 @@ void freeNumberFormat(NUMBERFMTW *fmt)
 
 void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
 {
-    int STR_LEN = 100;
     char buf[10];
 
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_IDIGITS, (LPWSTR) &fmt->NumDigits, STR_LEN);
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ILZERO,  (LPWSTR) &fmt->LeadingZero, STR_LEN);
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ICURRDIGITS, (LPWSTR) &fmt->NumDigits, sizeof(UINT));
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ILZERO, (LPWSTR) &fmt->LeadingZero, sizeof(UINT));
 
-    GetLocaleInfoA(lcid, LOCALE_SMONGROUPING, buf, 10);
+    GetLocaleInfoA(lcid, LOCALE_SMONGROUPING, buf, sizeof(buf));
     fmt->Grouping = getGrouping(buf);
 
     fmt->lpDecimalSep = NEW_ARRAY(UChar, 6);
@@ -105,8 +117,8 @@ void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
     fmt->lpThousandSep = NEW_ARRAY(UChar, 6);
     GetLocaleInfoW(lcid, LOCALE_SMONTHOUSANDSEP, fmt->lpThousandSep, 6);
 
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGCURR,  (LPWSTR) &fmt->NegativeOrder, STR_LEN);
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ICURRENCY, (LPWSTR) &fmt->PositiveOrder, STR_LEN);
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGCURR,  (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ICURRENCY, (LPWSTR) &fmt->PositiveOrder, sizeof(UINT));
 
     fmt->lpCurrencySymbol = NEW_ARRAY(UChar, 8);
     GetLocaleInfoW(lcid, LOCALE_SCURRENCY, (LPWSTR) fmt->lpCurrencySymbol, 8);
@@ -216,6 +228,8 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
     va_list args;
     int result;
 
+    nBuffer[0] = 0x0000;
+
     va_start(args, fmt);
     result = vswprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
     va_end(args);
@@ -227,10 +241,10 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
         newLength = _vscwprintf(fmt, args);
         va_end(args);
 
-        nBuffer = NEW_ARRAY(UChar, newLength);
+        nBuffer = NEW_ARRAY(UChar, newLength + 1);
 
         va_start(args, fmt);
-        result = vswprintf(nBuffer, newLength, fmt, args);
+        result = vswprintf(nBuffer, newLength + 1, fmt, args);
         va_end(args);
     }
 
@@ -239,6 +253,7 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
     FormatInfo formatInfo;
 
     formatInfo = *fFormatInfo;
+    buffer[0] = 0x0000;
 
     if (fCurrency) {
         if (fFractionDigitsSet) {
@@ -252,10 +267,13 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
         result = GetCurrencyFormatW(fLCID, 0, nBuffer, &formatInfo.currency, buffer, STACK_BUFFER_SIZE);
 
         if (result == 0) {
-            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+            DWORD lastError = GetLastError();
+
+            if (lastError == ERROR_INSUFFICIENT_BUFFER) {
                 int newLength = GetCurrencyFormatW(fLCID, 0, nBuffer, &formatInfo.currency, NULL, 0);
 
                 buffer = NEW_ARRAY(UChar, newLength);
+                buffer[0] = 0x0000;
                 GetCurrencyFormatW(fLCID, 0, nBuffer,  &formatInfo.currency, buffer, newLength);
             }
         }
@@ -275,6 +293,7 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
                 int newLength = GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, NULL, 0);
 
                 buffer = NEW_ARRAY(UChar, newLength);
+                buffer[0] = 0x0000;
                 GetNumberFormatW(fLCID, 0, nBuffer, &formatInfo.number, buffer, newLength);
             }
         }

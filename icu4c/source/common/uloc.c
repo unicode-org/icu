@@ -1550,6 +1550,7 @@ _canonicalize(const char* localeID,
               UErrorCode* err) {
     int32_t j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
+    const char* id = localeID;
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
     const char* addKeyword = NULL;
@@ -1580,11 +1581,14 @@ _canonicalize(const char* localeID,
     /* get all pieces, one after another, and separate with '_' */
     len=_getLanguage(localeID, name, nameCapacity, &localeID);
 
-    if(len == I_DEFAULT_LENGTH && uprv_strncmp(name, i_default, len) == 0) {
+    if(len == I_DEFAULT_LENGTH && uprv_strncmp(id, i_default, len) == 0) {
         const char *d = uloc_getDefault();
         
         len = uprv_strlen(d);
-        uprv_strncpy(name, d, len);
+
+        if (name != NULL) {
+            uprv_strncpy(name, d, len);
+        }
     } else if(_isIDSeparator(*localeID)) {
         const char *scriptID;
 
