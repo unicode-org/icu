@@ -78,7 +78,22 @@ void Win32DateTimeTest::testLocales(TestLog *log)
     TIME_ZONE_INFORMATION tzi;
 
     tz->getID(zoneID);
-    uprv_getWindowsTimeZoneInfo(&tzi, zoneID.getBuffer(), zoneID.length());
+    if (! uprv_getWindowsTimeZoneInfo(&tzi, zoneID.getBuffer(), zoneID.length())) {
+        UBool found = FALSE;
+        int32_t ec = TimeZone::countEquivalentIDs(zoneID);
+
+        for (int z = 0; z < ec; z += 1) {
+            UnicodeString equiv = TimeZone::getEquivalentID(zoneID, z);
+
+            if (found = uprv_getWindowsTimeZoneInfo(&tzi, equiv.getBuffer(), equiv.length())) {
+                break;
+            }
+        }
+
+        if (! found) {
+            GetTimeZoneInformation(&tzi);
+        }
+    }
 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ft);

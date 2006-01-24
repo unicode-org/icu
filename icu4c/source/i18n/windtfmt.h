@@ -124,7 +124,7 @@ private:
     void formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) const;
     void formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) const;
 
-    void setTimeZoneInfo(const TimeZone &zone);
+    UnicodeString setTimeZoneInfo(TIME_ZONE_INFORMATION *tzi, const TimeZone &zone) const;
 
     UnicodeString *fDateTimeMsg;
     DateFormat::EStyle fTimeStyle;
