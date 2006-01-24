@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -1651,7 +1651,11 @@ void TestIDNA::TestIDNAMonkeyTest(){
     int i;
 
     getInstance(status);    // Init prep
-    
+    if (U_FAILURE(status)) {
+        errln("Test could not initialize. Got %s", u_errorName(status));
+        return;
+    }
+
     for(i=0; i<loopCount; i++){
         source.truncate(0);
         getTestSource(source);
@@ -1720,6 +1724,13 @@ void TestIDNA::TestCompareReferenceImpl(){
 }
 
 void TestIDNA::TestRefIDNA(){
+    UErrorCode status = U_ZERO_ERROR;
+    getInstance(status);    // Init prep
+    if (U_FAILURE(status)) {
+        errln("Test could not initialize. Got %s", u_errorName(status));
+        return;
+    }
+
     testToASCII("idnaref_toASCII", idnaref_toASCII);
     testToUnicode("idnaref_toUnicode", idnaref_toUnicode);
     testIDNToASCII("idnaref_IDNToASCII", idnaref_IDNToASCII);
