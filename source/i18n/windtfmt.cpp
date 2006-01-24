@@ -140,20 +140,12 @@ UnicodeString &Win32DateFormat::format(Calendar &cal, UnicodeString &appendTo, F
     FILETIME ft;
     SYSTEMTIME st_gmt;
     SYSTEMTIME st_local;
-    UnicodeString zoneID;
     TIME_ZONE_INFORMATION tzi = *fTZI;
     UErrorCode status = U_ZERO_ERROR;
     const TimeZone &tz = cal.getTimeZone();
     int64_t uct, uft;
 
-    tz.getID(zoneID);
-
-    if (zoneID.compare(fZoneID) != 0) {
-        UnicodeString icuid;
-
-        tz.getID(icuid);
-        uprv_getWindowsTimeZoneInfo(&tzi, icuid.getBuffer(), icuid.length());
-    }
+    setTimeZoneInfo(&tzi, tz);
 
     uct = utmscale_fromInt64((int64_t) cal.getTime(status), UDTS_ICU4C_TIME, &status);
     uft = utmscale_toInt64(uct, UDTS_WINDOWS_FILE_TIME, &status);
@@ -210,7 +202,7 @@ void Win32DateFormat::adoptCalendar(Calendar *newCalendar)
     delete fCalendar;
     fCalendar = newCalendar;
 
-    setTimeZoneInfo(fCalendar->getTimeZone());
+    fZoneID = setTimeZoneInfo(fTZI, fCalendar->getTimeZone());
 }
 
 void Win32DateFormat::setCalendar(const Calendar &newCalendar)
@@ -220,13 +212,13 @@ void Win32DateFormat::setCalendar(const Calendar &newCalendar)
 
 void Win32DateFormat::adoptTimeZone(TimeZone *zoneToAdopt)
 {
-    setTimeZoneInfo(*zoneToAdopt);
+    fZoneID = setTimeZoneInfo(fTZI, *zoneToAdopt);
     fCalendar->adoptTimeZone(zoneToAdopt);
 }
 
 void Win32DateFormat::setTimeZone(const TimeZone& zone)
 {
-    setTimeZoneInfo(zone);
+    fZoneID = setTimeZoneInfo(fTZI, zone);
     fCalendar->setTimeZone(zone);
 }
 
@@ -282,7 +274,7 @@ void Win32DateFormat::formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) 
     }
 }
 
-void Win32DateFormat::setTimeZoneInfo(const TimeZone &zone)
+UnicodeString Win32DateFormat::setTimeZoneInfo(TIME_ZONE_INFORMATION *tzi, const TimeZone &zone) const
 {
     UnicodeString zoneID;
 
@@ -291,11 +283,26 @@ void Win32DateFormat::setTimeZoneInfo(const TimeZone &zone)
     if (zoneID.compare(fZoneID) != 0) {
         UnicodeString icuid;
 
-        fZoneID = zoneID;
-
         zone.getID(icuid);
-        uprv_getWindowsTimeZoneInfo(fTZI, icuid.getBuffer(), icuid.length());
+        if (! uprv_getWindowsTimeZoneInfo(tzi, icuid.getBuffer(), icuid.length())) {
+            UBool found = FALSE;
+            int32_t ec = TimeZone::countEquivalentIDs(icuid);
+
+            for (int z = 0; z < ec; z += 1) {
+                UnicodeString equiv = TimeZone::getEquivalentID(icuid, z);
+
+                if (found = uprv_getWindowsTimeZoneInfo(tzi, equiv.getBuffer(), equiv.length())) {
+                    break;
+                }
+            }
+
+            if (! found) {
+                GetTimeZoneInformation(tzi);
+            }
+        }
     }
+
+    return zoneID;
 }
 
 U_NAMESPACE_END

@@ -377,7 +377,7 @@ static LONG getTZI(const char *winid, TZI *tzi)
     return result;
 }
 
-U_CAPI void U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length)
 {
     const char *winid;
@@ -385,6 +385,11 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
     LONG result;
     
     winid = findWindowsZoneID(icuid, length);
+
+    if (winid == NULL) {
+        return FALSE;
+    }
+
     result = getTZI(winid, &tzi);
 
     if (result == ERROR_SUCCESS) {
@@ -394,11 +399,10 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
             zoneInfo->DaylightDate = tzi.daylightDate;
             zoneInfo->StandardDate = tzi.standardDate;
 
-            return;
+            return TRUE;
     }
 
-    /* Can't find a match - use Windows default zone. */
-    GetTimeZoneInformation(zoneInfo);
+    return FALSE;
 }
 
 /*
