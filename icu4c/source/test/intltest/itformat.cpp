@@ -61,7 +61,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
     Locale  saveDefaultLocale = Locale::getDefault();
     if (exec) {
         saveDefaultTimeZone = TimeZone::createDefault();
-        TimeZone *tz = TimeZone::createTimeZone("America/Los_Angeles" /*"PST"*/);
+        TimeZone *tz = TimeZone::createTimeZone("PST");
         TimeZone::setDefault(*tz);
         delete tz;
         UErrorCode status = U_ZERO_ERROR;
