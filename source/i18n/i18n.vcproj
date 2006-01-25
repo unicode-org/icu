@@ -1094,24 +1094,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\wincoll.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\wincoll.h">
-			</File>
-			<File
 				RelativePath=".\windtfmt.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
