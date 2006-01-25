@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## os/390, z/OS specific setup 
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ###################################################################
@@ -42,10 +42,13 @@ else
 ICU_IEEE          = -DIEEE_754=0#M#
 endif
 
+# -Wc,expo is used to export all functions
+SHAREDLIBCFLAGS	= -Wc,expo
+SHAREDLIBCXXFLAGS	= -Wc,expo
 # TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
 #       -Wc,"ros" seems to work, but not the "roc"
-CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros' $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
-CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros' $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
+CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 ARFLAGS         = -cr
 
@@ -54,7 +57,7 @@ ifeq (${OS390_XPLINK}, 1)
 # Note:  The following options require the PTF for PQ69418 on z/OS 1.2
 #        and later.
 # These lines must be the last options specified.
-ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,RENT,SSCOMM'
+ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,RENT'
 ICU_XPLINK_CPP    = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,NOTEMPINC'
 ICU_XPLINK_L      = -Wl,dll,xplink -Wl,EDIT=NO
 #SH# fi
