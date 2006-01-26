@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2004, 2006 International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -58,7 +58,7 @@ STATIC_O = ao
 	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.c) $< > /dev/null
 	@mv $@ $@~
-	@echo -n "$@ " > $@
+	@printf "%s" "$@ " > $@
 	@cat < $@~ >> $@
 	@-rm $@~
 
@@ -66,7 +66,7 @@ STATIC_O = ao
 	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.cc) $< >/dev/null
 	@mv $@ $@~
-	@echo -n "$@ " > $@
+	@printf "%s" "$@ " > $@
 	@cat < $@~ >> $@
 	@-rm $@~
 
