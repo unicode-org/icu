@@ -282,7 +282,7 @@ static const char *findWindowsZoneID(const UChar *icuid, int32_t length)
      * trailing null.
      */
     if (length >= ICUID_STACK_BUFFER_SIZE) {
-        buffer = NEW_ARRAY(char, length);
+        buffer = NEW_ARRAY(char, length + 1);
     }
 
     u_UCharsToChars(icuid, buffer, length);
