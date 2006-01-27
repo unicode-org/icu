@@ -1,6 +1,6 @@
 /*
 **************************************************************************************
-*   Copyright (C) 1999-2005 Alan Liu ,International Business Machines Corporation and
+*   Copyright (C) 1999-2006 Alan Liu ,International Business Machines Corporation and
 *   others. All Rights Reserved.
 **************************************************************************************
 *   Date        Name        Description
@@ -68,6 +68,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(17,TestSymbolTable);
         CASE(18,TestSurrogate);
         CASE(19,TestPosixClasses);
+        CASE(20,TestIteration);
         default: name = ""; break;
     }
 }
@@ -673,6 +674,87 @@ void UnicodeSetTest::TestAPI() {
         return;
     }
 }
+
+void UnicodeSetTest::TestIteration() {
+    UErrorCode ec = U_ZERO_ERROR;
+    int i = 0;
+    int outerLoop;
+    
+    // 6 code points, 3 ranges, 2 strings, 8 total elements
+    //   Iteration will access them in sorted order -  a, b, c, y, z, U0001abcd, "str1", "str2"
+    UnicodeSet set("[zabyc\\U0001abcd{str1}{str2}]", ec);
+    TEST_ASSERT_SUCCESS(ec);
+    UnicodeSetIterator it(set);
+
+    for (outerLoop=0; outerLoop<3; outerLoop++) {
+        // Run the test multiple times, to check that iterator.reset() is working.
+        for (i=0; i<10; i++) {
+            UBool         nextv        = it.next();
+            UBool         isString     = it.isString();
+            int32_t       codePoint    = it.getCodepoint();
+            int32_t       codePointEnd = it.getCodepointEnd();
+            UnicodeString s   = it.getString();
+            switch (i) {
+            case 0:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x61);
+                TEST_ASSERT(s == "a");
+                break;
+            case 1:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x62);
+                TEST_ASSERT(s == "b");
+                break;
+            case 2:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x63);
+                TEST_ASSERT(s == "c");
+                break;
+            case 3:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x79);
+                TEST_ASSERT(s == "y");
+                break;
+            case 4:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x7a);
+                TEST_ASSERT(s == "z");
+                break;
+            case 5:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == FALSE);
+                TEST_ASSERT(codePoint==0x1abcd);
+                TEST_ASSERT(s == UnicodeString((UChar32)0x1abcd));
+                break;
+            case 6:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == TRUE);
+                TEST_ASSERT(s == "str1");
+                break;
+            case 7:
+                TEST_ASSERT(nextv == TRUE);
+                TEST_ASSERT(isString == TRUE);
+                TEST_ASSERT(s == "str2");
+                break;
+            case 8:
+                TEST_ASSERT(nextv == FALSE);
+                break;
+            case 9:
+                TEST_ASSERT(nextv == FALSE);
+                break;
+            }
+        }
+        it.reset();  // prepare to run the iteration again.
+    }
+}
+                
+
+
 
 void UnicodeSetTest::TestStrings() {
     UErrorCode ec = U_ZERO_ERROR;
