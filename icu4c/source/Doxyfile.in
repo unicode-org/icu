@@ -1,7 +1,7 @@
 # Doxyfile 1.3.7
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2004-2005, International Business Machines Corporation
+#  * Copyright (c) 2004-2006, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ********************************************************************
 
@@ -30,12 +30,12 @@ INHERIT_DOCS           = YES
 DISTRIBUTE_GROUP_DOC   = NO
 TAB_SIZE               = 8
 ALIASES                = "memo=\par Note:\n" \
-                         "draft=\par Draft: \n This API may be changed in the future versions and was introduced in \n" \
-                         "stable=\par Stable:\n" \
-                         "deprecated=\par Deprecated:\n" \
-                         "obsolete=\par Obsolete:\n" \
-                         "system=\par System:\n Do not use unless you know what you are doing. \n" \
-                         "internal=\par Internal:\n Do not use. This API is for interal use only. \n" \
+                         "draft=\xrefitem draft \"Draft\" \"Draft List\"  This API may be changed in the future versions and was introduced in \n" \
+                         "stable=\xrefitem stable \"Stable\" \"Stable List\" \n" \
+                         "deprecated=\xrefitem deprecated \"Deprecated\" \"Deprecated List\" \n" \
+                         "obsolete=\xrefitem obsolete \"Obsolete\" \"Obsolete List\" \n" \
+                         "system=\xrefitem system \"System\" \"System List\" \n Do not use unless you know what you are doing. \n" \
+                         "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for interal use only. \n" 
 
 OPTIMIZE_OUTPUT_FOR_C  = YES
 OPTIMIZE_OUTPUT_JAVA   = NO
