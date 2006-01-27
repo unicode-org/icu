@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 **********************************************************************
@@ -46,6 +46,8 @@ private:
     void TestMinimalRep(void);
 
     void TestAPI(void);
+
+    void TestIteration(void);
 
     void TestStrings(void);
 
