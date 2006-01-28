@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2005, International Business Machines Corporation and
+ * Copyright (c) 2001-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -3379,7 +3379,7 @@ static void TestStrCollIdenticalPrefix(void) {
     "ab\\ud9b0\\udc70",
     "ab\\ud9b0\\udc71"
   };
-  genericRulesTestWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
+  genericRulesStarterWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
 }
 /* Contractions should have all their canonically equivalent */
 /* strings included */
@@ -3398,7 +3398,7 @@ static void TestContractionClosure(void) {
 
 
   for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
-    genericRulesTestWithResult(tests[i].rules, tests[i].data, tests[i].len, UCOL_EQUAL);
+    genericRulesStarterWithResult(tests[i].rules, tests[i].data, tests[i].len, UCOL_EQUAL);
   }
 }
 
@@ -4663,6 +4663,26 @@ TestUpperFirstQuaternary(void)
   genericLocaleStarterWithOptions("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]));
 }
 
+static void
+TestJ4960(void)
+{
+  const char* tests[] = { "\\u00e2T", "aT" };
+  UColAttribute att[] = { UCOL_STRENGTH, UCOL_CASE_LEVEL };
+  UColAttributeValue attVals[] = { UCOL_PRIMARY, UCOL_ON };
+  const char* tests2[] = { "a", "A" };
+  const char* rule = "&[first tertiary ignorable]=A=a";
+  UColAttribute att2[] = { UCOL_CASE_LEVEL };
+  UColAttributeValue attVals2[] = { UCOL_ON };
+  /* Test whether we correctly ignore primary ignorables on case level when */
+  /* we have only primary & case level */
+  genericLocaleStarterWithOptionsAndResult("root", tests, sizeof(tests)/sizeof(tests[0]), att, attVals, sizeof(att)/sizeof(att[0]), UCOL_EQUAL);
+  /* Test whether ICU4J will make case level for sortkeys that have primary strength */
+  /* and case level */
+  genericLocaleStarterWithOptions("root", tests2, sizeof(tests2)/sizeof(tests2[0]), att, attVals, sizeof(att)/sizeof(att[0]));
+  /* Test whether completely ignorable letters have case level info (they shouldn't) */
+  genericRulesStarterWithOptionsAndResult(rule, tests2, sizeof(tests2)/sizeof(tests2[0]), att2, attVals2, sizeof(att2)/sizeof(att2[0]), UCOL_EQUAL);
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4728,6 +4748,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestTailorNULL);
     TEST(TestThaiSortKey);
     TEST(TestUpperFirstQuaternary);
+    TEST(TestJ4960);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
