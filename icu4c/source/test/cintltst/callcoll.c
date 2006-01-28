@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -335,7 +335,8 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
 
         partialSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);
         if(partialSKResult != result) {
-          log_err("Partial sortkey comparison returned wrong result: %s, %s (size %i)\n", 
+          log_err("Partial sortkey comparison returned wrong result (%i exp. %i): %s, %s (size %i)\n", 
+            partialSKResult, result,
             aescstrdup(source,-1), aescstrdup(target,-1), partialSizes[i]);
         }
 
@@ -608,9 +609,8 @@ void genericLocaleStarterWithResult(const char *locale, const char *s[], uint32_
   ucol_close(coll);
 }
 
-#if 0
 /* currently not used with options */
-void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
+void genericRulesStarterWithOptionsAndResult(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[RULE_BUFFER_LEN] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
@@ -626,15 +626,14 @@ void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t
       ucol_setAttribute(coll, attrs[i], values[i], &status);
     }
 
-    genericOrderingTest(coll, s, size);
+    genericOrderingTestWithResult(coll, s, size, result);
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
   ucol_close(coll);
 }
-#endif
 
-void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
+void genericLocaleStarterWithOptionsAndResult(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   uint32_t i;
 
@@ -649,14 +648,18 @@ void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32
       ucol_setAttribute(coll, attrs[i], values[i], &status);
     }
 
-    genericOrderingTest(coll, s, size);
+    genericOrderingTestWithResult(coll, s, size, result);
   } else {
     log_err("Unable to open collator for locale %s\n", locale);
   }
   ucol_close(coll);
 }
 
-void genericRulesTestWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result) {
+void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
+  genericLocaleStarterWithOptionsAndResult(locale, s, size, attrs, values, attsize, UCOL_LESS);
+}
+
+void genericRulesStarterWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[RULE_BUFFER_LEN] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
@@ -676,7 +679,7 @@ void genericRulesTestWithResult(const char *rules, const char *s[], uint32_t siz
 }
 
 void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
-  genericRulesTestWithResult(rules, s, size, UCOL_LESS);
+  genericRulesStarterWithResult(rules, s, size, UCOL_LESS);
 }
 
 static void TestTertiary()
