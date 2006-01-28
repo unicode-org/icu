@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1605,19 +1605,21 @@ final class CollationParsedRuleBuilder
     }
           
     // Case bits handling for expansion
-    int startoftokenrule = token.m_source_ & 0xFF;
-    if ((token.m_source_ >>> 24) > 1) {
-        // Do it manually
-        int length = token.m_source_ >>> 24;
-        String tokenstr = token.m_rules_.substring(startoftokenrule, 
-                               startoftokenrule + length);
-        token.m_CE_[0] |= getCaseBits(tokenstr);
-    } 
-    else {
-        // Copy it from the UCA
-        int caseCE 
-        = getFirstCE(token.m_rules_.charAt(startoftokenrule));
-        token.m_CE_[0] |= (caseCE & 0xC0);
+    if(token.m_CE_[0] != 0) { // case bits should be set only for non-ignorables
+        int startoftokenrule = token.m_source_ & 0xFF;
+        if ((token.m_source_ >>> 24) > 1) {
+            // Do it manually
+            int length = token.m_source_ >>> 24;
+            String tokenstr = token.m_rules_.substring(startoftokenrule, 
+                                   startoftokenrule + length);
+            token.m_CE_[0] |= getCaseBits(tokenstr);
+        } 
+        else {
+            // Copy it from the UCA
+            int caseCE 
+            = getFirstCE(token.m_rules_.charAt(startoftokenrule));
+            token.m_CE_[0] |= (caseCE & 0xC0);
+        }
     }
     }
 
