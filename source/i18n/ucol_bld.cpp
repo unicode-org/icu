@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -687,17 +687,19 @@ U_CFUNC void ucol_doCE(UColTokenParser *src, uint32_t *CEparts, UColToken *tok, 
 
   // we want to set case bits here and now, not later.
   // Case bits handling 
-  tok->CEs[0] &= 0xFFFFFF3F; // Clean the case bits field
-  int32_t cSize = (tok->source & 0xFF000000) >> 24;
-  UChar *cPoints = (tok->source & 0x00FFFFFF) + src->source;
+  if(tok->CEs[0] != 0) { // case bits should be set only for non-ignorables
+    tok->CEs[0] &= 0xFFFFFF3F; // Clean the case bits field
+    int32_t cSize = (tok->source & 0xFF000000) >> 24;
+    UChar *cPoints = (tok->source & 0x00FFFFFF) + src->source;
 
-  if(cSize > 1) {
-    // Do it manually
-    tok->CEs[0] |= ucol_uprv_getCaseBits(src->UCA, cPoints, cSize, status);
-  } else {
-    // Copy it from the UCA
-    uint32_t caseCE = ucol_getFirstCE(src->UCA, cPoints[0], status);
-    tok->CEs[0] |= (caseCE & 0xC0);
+    if(cSize > 1) {
+      // Do it manually
+      tok->CEs[0] |= ucol_uprv_getCaseBits(src->UCA, cPoints, cSize, status);
+    } else {
+      // Copy it from the UCA
+      uint32_t caseCE = ucol_getFirstCE(src->UCA, cPoints[0], status);
+      tok->CEs[0] |= (caseCE & 0xC0);
+    }
   }
 
 #if UCOL_DEBUG==2
