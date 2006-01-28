@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -4172,7 +4172,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
               }
             }
 
-            if(doCase) {
+            if(doCase && (primary1 > 0 || strength >= UCOL_SECONDARY)) {
+                // do the case level if we need to do it. We don't want to calculate
+                // case level for primary ignorables if we have only primary strength and case level
+                // otherwise we would break well formedness of CEs 
               if (caseShift  == 0) {
                 currentSize++;
                 caseShift = UCOL_CASE_SHIFT_START;
@@ -4631,7 +4634,10 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }
 
-              if(doCase) {
+              if(doCase && (primary1 > 0 || strength >= UCOL_SECONDARY)) {
+                // do the case level if we need to do it. We don't want to calculate
+                // case level for primary ignorables if we have only primary strength and case level
+                // otherwise we would break well formedness of CEs 
                 doCaseShift(&cases, caseShift);
                 if(notIsContinuation) {
                   caseBits = (uint8_t)(tertiary & 0xC0);
@@ -5874,7 +5880,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
           }
 
           if(!isShiftedCE(CE, LVT, &wasShifted)) {
-            if(!isContinuation(CE)) {
+            if(!isContinuation(CE) && ((CE & UCOL_PRIMARYMASK) != 0 || strength > UCOL_PRIMARY)) {
+                // do the case level if we need to do it. We don't want to calculate
+                // case level for primary ignorables if we have only primary strength and case level
+                // otherwise we would break well formedness of CEs 
               CE = (uint8_t)(CE & UCOL_BYTE_SIZE_MASK);
               caseBits = (uint8_t)(CE & 0xC0);
               // this copies the case level logic from the
@@ -7470,8 +7479,15 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
       for(;;) {
         while((secS & UCOL_REMOVE_CASE) == 0) {
           if(!isContinuation(*sCE++)) {
-            secS =*(sCE-1) & UCOL_TERT_CASE_MASK;
-            secS ^= caseSwitch;
+            secS =*(sCE-1);
+            if(((secS & UCOL_PRIMARYMASK) != 0) || strength > UCOL_PRIMARY) {  
+            // primary ignorables should not be considered on the case level when the strength is primary
+            // otherwise, the CEs stop being well-formed
+              secS &= UCOL_TERT_CASE_MASK;
+              secS ^= caseSwitch;
+            } else {
+              secS = 0;
+            }
           } else {
             secS = 0;
           }
@@ -7479,8 +7495,15 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
 
         while((secT & UCOL_REMOVE_CASE) == 0) {
           if(!isContinuation(*tCE++)) {
-            secT = *(tCE-1) & UCOL_TERT_CASE_MASK;
-            secT ^= caseSwitch;
+            secT = *(tCE-1);
+            if(((secT & UCOL_PRIMARYMASK) != 0) || strength > UCOL_PRIMARY) {
+            // primary ignorables should not be considered on the case level when the strength is primary
+            // otherwise, the CEs stop being well-formed
+              secT &= UCOL_TERT_CASE_MASK;
+              secT ^= caseSwitch;
+            } else {
+              secT = 0;
+            }
           } else {
             secT = 0;
           }
