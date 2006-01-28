@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -171,10 +171,10 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     void genericRulesStarter(String rules, String[] s) {
-        genericRulesTestWithResult(rules, s, -1);
+        genericRulesStarterWithResult(rules, s, -1);
     }
     
-    void genericRulesTestWithResult(String rules, String[] s, int result) {
+    void genericRulesStarterWithResult(String rules, String[] s, int result) {
         
         RuleBasedCollator coll = null;
         try {
@@ -186,6 +186,16 @@ public class CollationMiscTest extends TestFmwk {
         }
     }
     
+    void genericRulesStarterWithOptionsAndResult(String rules, String[] s, String[] atts, Object[] attVals, int result) {
+        RuleBasedCollator coll = null;
+        try {
+            coll = new RuleBasedCollator(rules);
+            genericOptionsSetter(coll, atts, attVals);
+            genericOrderingTestWithResult(coll, s, result);
+        } catch (Exception e) {
+            warnln("Unable to open collator with rules " + rules);
+        }
+    }
     void genericOrderingTestWithResult(Collator coll, String[] s, int result) {
         String t1 = "";
         String t2 = "";
@@ -305,7 +315,7 @@ public class CollationMiscTest extends TestFmwk {
         };
         
         for(int i = 0; i< rules.length; i++) {
-            genericRulesTestWithResult(rules[i], data[i], 0);
+            genericRulesStarterWithResult(rules[i], data[i], 0);
         }
     }
     
@@ -327,7 +337,7 @@ public class CollationMiscTest extends TestFmwk {
             "ab\ud9b0\udc70",
             "ab\ud9b0\udc71"
         };
-        genericRulesTestWithResult(rule, test, 0);
+        genericRulesStarterWithResult(rule, test, 0);
     }
     
     public void TestPrefix() {
@@ -493,17 +503,10 @@ public class CollationMiscTest extends TestFmwk {
     }
     
     void genericLocaleStarterWithOptions(Locale locale, String[] s, String[] attrs, Object[] values) {
-        RuleBasedCollator coll = null;
-        try {
-            coll = (RuleBasedCollator)Collator.getInstance(locale);
-        } catch (Exception e) {
-            warnln("Unable to open collator for locale " + locale);
-            return;
-        }
-        // logln("Locale starter for " +locale);
-        
-        // logln("Setting attributes");
-        
+        genericLocaleStarterWithOptionsAndResult(locale, s, attrs, values, -1);
+    }
+    
+    private void genericOptionsSetter(RuleBasedCollator coll, String[] attrs, Object[] values) {
         for(int i = 0; i < attrs.length; i++) {
             if (attrs[i].equals("strength")) {
                 coll.setStrength(((Integer)values[i]).intValue());
@@ -524,9 +527,26 @@ public class CollationMiscTest extends TestFmwk {
             else if (attrs[i].equals("LowerFirst")) {
                 coll.setLowerCaseFirst(((Boolean)values[i]).booleanValue());
             }
+            else if (attrs[i].equals("CaseLevel")) {
+                coll.setCaseLevel(((Boolean)values[i]).booleanValue());
+            }
+        }        
+    }
+    
+    void genericLocaleStarterWithOptionsAndResult(Locale locale, String[] s, String[] attrs, Object[] values, int result) {
+        RuleBasedCollator coll = null;
+        try {
+            coll = (RuleBasedCollator)Collator.getInstance(locale);
+        } catch (Exception e) {
+            warnln("Unable to open collator for locale " + locale);
+            return;
         }
+        // logln("Locale starter for " +locale);
         
-        genericOrderingTest(coll, s);
+        // logln("Setting attributes");
+        genericOptionsSetter(coll, attrs, values);
+        
+        genericOrderingTestWithResult(coll, s, result);
     }
     
     void genericOrderingTest(Collator coll, String[] s) {
@@ -2119,5 +2139,24 @@ public class CollationMiscTest extends TestFmwk {
       String[] att = { "strength", "UpperFirst" };
       Object attVals[] = { new Integer(Collator.QUATERNARY), new Boolean(true) };
       genericLocaleStarterWithOptions(new Locale("root"), tests, att, attVals);
+    }
+    public void
+    TestJ4960()
+    {
+        String tests[] = { "\\u00e2T", "aT" };
+        String att[] = { "strength", "CaseLevel" };
+        Object attVals[] = { new Integer(Collator.PRIMARY), new Boolean(true) };
+        String tests2[] = { "a", "A" };
+        String rule = "&[first tertiary ignorable]=A=a";
+        String att2[] = { "CaseLevel" };        
+        Object attVals2[] = { new Boolean(true) };
+        // Test whether we correctly ignore primary ignorables on case level when
+        // we have only primary & case level
+        genericLocaleStarterWithOptionsAndResult(new Locale("root"), tests, att, attVals, 0);
+        // Test whether ICU4J will make case level for sortkeys that have primary strength
+        // and case level
+        genericLocaleStarterWithOptions(new Locale("root"), tests2, att, attVals);
+        // Test whether completely ignorable letters have case level info (they shouldn't)
+        genericRulesStarterWithOptionsAndResult(rule, tests2, att2, attVals2, 0);        
     }
 }
