@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -41,6 +41,7 @@
 #if (defined(U_WINDOWS) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
+#if defined(U_WINDOWS)
 #define USE_FILENO_BINARY_MODE 1
 /* Windows likes to rename Unix-like functions */
 #ifndef fileno
@@ -51,6 +52,7 @@
 #endif
 #ifndef O_BINARY
 #define O_BINARY _O_BINARY
+#endif
 #endif
 #endif
 
