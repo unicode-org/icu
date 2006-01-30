@@ -56,5 +56,5 @@ install: res-install
 
 es.res: es.txt
 	@echo "generating $@"
-	$(GENRB) $(GENRBOPT) -e UTF-8 $^
+	$(GENRB) $(GENRBOPT) $^
 
