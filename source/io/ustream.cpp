@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.cpp
@@ -103,20 +103,25 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             }
             /* Was the character consumed? */
             if (us != uBuffer) {
-                U16_GET(uBuffer, 0, 0, us-uBuffer, ch32);
-                if (u_isWhitespace(ch32)) {
-                    if (!intialWhitespace) {
-                        buffer[idx++] = ch;
-                        while (idx > 0) {
-                            stream.putback(buffer[--idx]);
+                /* Reminder: ibm-1390 & JISX0213 can output 2 Unicode code points */
+                int32_t uBuffSize = us-uBuffer;
+                int32_t uBuffIdx = 0;
+                while (uBuffIdx < uBuffSize) {
+                    U16_NEXT(uBuffer, uBuffIdx, uBuffSize, ch32);
+                    if (u_isWhitespace(ch32)) {
+                        if (!intialWhitespace) {
+                            buffer[idx++] = ch;
+                            while (idx > 0) {
+                                stream.putback(buffer[--idx]);
+                            }
+                            goto STOP_READING;
                         }
-                        break;
+                        /* else skip intialWhitespace */
                     }
-                    /* else skip intialWhitespace */
-                }
-                else {
-                    str.append(ch32);
-                    intialWhitespace = FALSE;
+                    else {
+                        str.append(ch32);
+                        intialWhitespace = FALSE;
+                    }
                 }
                 idx = 0;
             }
@@ -124,6 +129,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
                 buffer[idx++] = ch;
             }
         }
+STOP_READING:
         u_releaseDefaultConverter(converter);
     }
 
