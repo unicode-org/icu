@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2005 IBM, Inc. and others
+# Copyright (c) 2001-2006 IBM, Inc. and others
 #
 # File
 #    icu/source/samples/ufortune/resources/Makefile
@@ -56,5 +56,5 @@ install: res-install
 
 es.res: es.txt
 	@echo "generating $@"
-	$(GENRB) $(GENRBOPT) -e latin-1 $^
+	$(GENRB) $(GENRBOPT) -e UTF-8 $^
 
