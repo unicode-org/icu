@@ -42,14 +42,19 @@ else
 ICU_IEEE          = -DIEEE_754=0#M#
 endif
 
+# For a dynamically called DLL module to share access to the POSIX external
+# variables, with its caller, the DLL module must define these _SHR_* macros.
+SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE
+
 # -Wc,expo is used to export all functions
 SHAREDLIBCFLAGS	= -Wc,expo
 SHAREDLIBCXXFLAGS	= -Wc,expo
+
 # TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
 #       -Wc,"ros" seems to work, but not the "roc"
 CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
 CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
-DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 ARFLAGS         = -cr
 
 ifeq (${OS390_XPLINK}, 1)
