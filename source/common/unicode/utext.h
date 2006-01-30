@@ -148,10 +148,6 @@ U_CDECL_BEGIN
 struct UText;
 typedef struct UText UText; /**< C typedef for struct UText. @draft ICU 3.4 */
 
-struct UTextChunk;
-typedef struct UTextChunk UTextChunk; /**< C typedef for struct UTextChunk. @draft ICU 3.4 */
-
-
 
 /***************************************************************************************
  *
@@ -279,7 +275,7 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
 
 
 /**
-  *  Clone a UText.  Much like opening a UText where the source text is itself
+  *  Clone a UText.  This is much like opening a UText where the source text is itself
   *  another UText.
   *
   *  A deep clone will copy both the UText data structures and the underlying text.
@@ -291,6 +287,10 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   *  The standard UText implementations for UTF8, UChar *, UnicodeString and
   *  Replaceable all support deep cloning.
   *
+  *  The UText returned from a deep clone will be writable, assuming that the text
+  *  provider is able to support writing, even if the source UText had been made
+  *  non-writable by means of UText_freeze().
+  *
   *  A shallow clone replicates only the UText data structures; it does not make
   *  a copy of the underlying text.  Shallow clones can be used as an efficient way to 
   *  have multiple iterators active in a single text string that is not being
@@ -299,8 +299,15 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   *  A shallow clone operation will not fail, barring truly exceptional conditions such
   *  as memory allocation failures.
   *
+  *  A shallow clone will preserve the utext_isWritable() state of the source object.
+  *  Note, however, that any writing (modification) to the text is while more than one
+  *  UText is referring to the same underlying text storage is an error with unpredictable
+  *  results, much like modifying the underlying text directly, bypassing a
+  *  UText wrapper.
+  *
   *  A UText and its clone may be safely concurrently accessed by separate threads.
-  *  This is true for both shallow and deep clones.
+  *  This is true for read access only with shallow clones, and for both read and
+  *  write access with deep clones.
   *  It is the responsibility of the Text Provider to ensure that this thread safety
   *  constraint is met.
   *
@@ -644,12 +651,20 @@ utext_extract(UText *ut,
 
 
 /**
- *  Return TRUE if the text can be written with utext_replace() or
+ *  Return TRUE if the text can be written (modified) with utext_replace() or
  *  utext_copy().  For the text to be writable, the text provider must
- *  be of a type that supports writing.
+ *  be of a type that supports writing and the UText must not be frozen.
+ *
+ *  Attempting to modify text when utext_isWriteable() is FALSE will fail -
+ *  the text will not be modified, and an error will be returned from the function
+ *  that attempted the modification.
  *
  * @param  ut   the UText to be tested.
  * @return TRUE if the text is modifiable.
+ *
+ * @see    utext_freeze()
+ * @see    utext_replace()
+ * @see    utext_copy()
  * @draft ICU 3.4
  *
  */
@@ -738,6 +753,26 @@ utext_copy(UText *ut,
           UBool move,
           UErrorCode *status);
 
+
+/**
+  *  Freeze a UText.  This prevents any modification to the underlying text itself
+  *  by means of functions operating on this UText.
+  *  <p/>
+  *  Once frozen, a UText can not be unfrozen.  The intent is to provide some
+  *  assurance that a the text underlying a frozen UText wrapper will not
+  *  be unexpectedly changing.
+  *  <p/>
+  *  Caution:  freezing a UText will disable changes made via the specific
+  *   frozen UText wrapper only; it will not have any effect on the ability to
+  *   directly modify the text by bypassing the UText.  Any such backdoor modifications
+  *   are always an error while UText access is occuring because the underlying
+  *   text can get out of sync with UText's buffering.
+  *
+  *  @param ut  The UText to be frozen.
+  *  @see   utext_isWritable()
+  */
+U_DRAFT void U_EXPORT2
+utext_freeze(UText *ut);
 
 /**
  * UText provider properties (bit field indexes).
