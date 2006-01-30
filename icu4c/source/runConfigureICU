@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2005, International Business Machines Corporation and
+# Copyright (c) 1999-2006, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -279,7 +279,7 @@ case $platform in
         ;;
     zOS)
         THE_OS="z/OS (OS/390)"
-        THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
+        THE_COMP="z/OS C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
         export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
