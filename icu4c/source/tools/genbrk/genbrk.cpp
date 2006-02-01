@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -43,8 +43,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define DATA_TYPE "brk"
 
 static char *progName;
 static UOption options[]={
@@ -179,35 +177,14 @@ int  main(int argc, char **argv) {
 #if UCONFIG_NO_BREAK_ITERATION
 
     UNewDataMemory *pData;
-    char msg[1024], folder[2048], name[256];
-    char *basename;
-    int length;
-
-    /* split the outFileName into folder + name + type */
-    strcpy(folder, outFileName);
-    basename = strrchr(folder, U_FILE_SEP_CHAR);
-    if(basename == NULL) {
-        basename = folder;
-    } else {
-        ++basename;
-    }
-
-    /* copy the data name and remove it from the folder */
-    strcpy(name, basename);
-    *basename = 0;
+    char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h", name);
+    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
-    /* remove the type suffix (hardcode to DATA_TYPE) */
-    length = strlen(name);
-    if(length > 4 && name[length - 4] == '.') {
-        name[length - 4] = 0;
-    }
-
     /* write the dummy data file */
-    pData = udata_create(folder, DATA_TYPE, name, &dummyDataInfo, NULL, &status);
+    pData = udata_create(outDir, NULL, outFileName, &dummyDataInfo, NULL, &status);
     udata_writeBlock(pData, msg, strlen(msg));
     udata_finish(pData, &status);
     return (int)status;
