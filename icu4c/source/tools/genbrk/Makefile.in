@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genbrk
-## Copyright (c) 2002-2005 International Business Machines Corporation and
+## Copyright (c) 2002-2006 International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -53,7 +53,7 @@ check: all check-local
 
 all-local: $(TARGET) $(MAN_FILES)
 
-install-local: all-local
+install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
