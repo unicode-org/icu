@@ -1,4 +1,5 @@
 /*
+********************************************************************************
 * Copyright (C) 1997-2006, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
@@ -40,11 +41,6 @@ U_NAMESPACE_BEGIN
 #if !UCONFIG_NO_SERVICE
 class NumberFormatFactory;
 class StringEnumeration;
-
-/**
- * @internal
- */
-typedef const void* URegistryKey;
 #endif
 
 /**

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  umisc.h
@@ -23,7 +23,9 @@
  *
  *  This file contains miscellaneous definitions for the C APIs. 
  */
- 
+
+U_CDECL_BEGIN
+
 /** A struct representing a range of text containing a specific field 
  *  @stable ICU 2.0
  */
@@ -44,5 +46,15 @@ typedef struct UFieldPosition {
    */
   int32_t endIndex;
 } UFieldPosition;
+
+#if !UCONFIG_NO_SERVICE
+/**
+ * Opaque type returned by registerInstance, registerFactory and unregister for service registration.
+ * @stable ICU 2.6
+ */
+typedef const void* URegistryKey;
+#endif
+
+U_CDECL_END
 
 #endif

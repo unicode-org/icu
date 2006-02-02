@@ -58,17 +58,13 @@
 #include "unicode/normlzr.h"
 #include "unicode/locid.h"
 #include "unicode/uniset.h"
+#include "unicode/umisc.h"
 
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
 
 #if !UCONFIG_NO_SERVICE
-/**
- * @stable ICU 2.6
- */
-typedef const void* URegistryKey;
-
 /**
  * @stable ICU 2.6
  */
