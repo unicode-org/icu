@@ -748,8 +748,6 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         int32_t                 resultLength,
         UErrorCode*             status);
 
-/** The maximum size for a textual number format symbol. @internal*/
-#define UNFSYMBOLSMAXSIZE 10
 
 /**
  * Constants for specifying a number format symbol.
