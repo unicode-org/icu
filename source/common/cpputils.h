@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -15,6 +15,7 @@
 #define CPPUTILS_H
 
 #include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "cmemory.h"
 
 /*==========================================================================*/
@@ -62,5 +63,22 @@ inline void
 uprv_arrayCopy(const UChar *src, int32_t srcStart,
         UChar *dst, int32_t dstStart, int32_t count)
 { uprv_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
+
+/**
+ * Copy an array of UnicodeString OBJECTS (not pointers).
+ * @internal
+ */
+static inline void
+uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t count)
+{ while(count-- > 0) *dst++ = *src++; }
+
+/**
+ * Copy an array of UnicodeString OBJECTS (not pointers).
+ * @internal
+ */
+static inline void
+uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart,
+        U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t dstStart, int32_t count)
+{ uprv_arrayCopy(src+srcStart, dst+dstStart, count); }
 
 #endif /* _CPPUTILS */

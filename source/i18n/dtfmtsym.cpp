@@ -26,6 +26,7 @@
 
 #include "unicode/dtfmtsym.h"
 #include "unicode/smpdtfmt.h"
+#include "cpputils.h"
 #include "ucln_in.h"
 #include "mutex.h"
 #include "cmemory.h"

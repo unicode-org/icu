@@ -3201,32 +3201,6 @@ private:
 U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
 
-U_NAMESPACE_END
-
-// inline implementations -------------------------------------------------- ***
-
-//========================================
-// Array copying
-//========================================
-/**
- * Copy an array of UnicodeString OBJECTS (not pointers).
- * @internal
- */
-inline void
-uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t count)
-{ while(count-- > 0) *dst++ = *src++; }
-
-/**
- * Copy an array of UnicodeString OBJECTS (not pointers).
- * @internal
- */
-inline void
-uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart,
-        U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t dstStart, int32_t count)
-{ uprv_arrayCopy(src+srcStart, dst+dstStart, count); }
-
-U_NAMESPACE_BEGIN
-
 //========================================
 // Inline members
 //========================================
