@@ -1122,7 +1122,7 @@ void UnicodeSetTest::TestIndexOf() {
 void UnicodeSetTest::TestCloseOver() {
     UErrorCode ec = U_ZERO_ERROR;
 
-    char CASE[] = {(char)USET_CASE};
+    char CASE[] = {(char)USET_CASE_INSENSITIVE};
     char CASE_MAPPINGS[] = {(char)USET_ADD_CASE_MAPPINGS};
     const char* DATA[] = {
         // selector, input, output
