@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation.       *
+ * Copyright (C) 2001-2006, International Business Machines Corporation.       *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -26,6 +26,7 @@ U_NAMESPACE_END
 
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
+#include "unicode/umisc.h"
 
 #include "hash.h"
 #include "uvector.h"
@@ -435,11 +436,6 @@ private:
  */
 U_CAPI void U_EXPORT2
 userv_deleteStringPair(void *obj);
-
-/**
- * Opaque type returned by registerInstance and registerFactory.
- */
-typedef const void* URegistryKey;
 
 /*******************************************************************
  * ICUService

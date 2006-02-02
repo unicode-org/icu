@@ -48,16 +48,9 @@ U_NAMESPACE_END
 #include "unicode/ubrk.h"
 #include "unicode/strenum.h"
 #include "unicode/utext.h"
+#include "unicode/umisc.h"
 
 U_NAMESPACE_BEGIN
-
-#if !UCONFIG_NO_SERVICE
-/**
- * Opaque type returned by registerInstance.
- * @stable
- */
-typedef const void* URegistryKey;
-#endif
 
 /**
  * The BreakIterator class implements methods for finding the location

@@ -37,15 +37,11 @@
 #include "unicode/locid.h"
 #include "unicode/timezone.h"
 #include "unicode/ucal.h"
+#include "unicode/umisc.h"
 
 U_NAMESPACE_BEGIN
 
 class ICUServiceFactory;
-
-/**
- * @internal
- */
-typedef const void* URegistryKey;
 
 /**
  * @internal
