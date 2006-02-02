@@ -81,13 +81,6 @@ enum {
     USET_CASE_INSENSITIVE = 2,  
 
     /**
-     * Bitmask for UnicodeSet::closeOver() indicating letter case.
-     * This may be ORed together with other selectors.
-     * @internal
-     */
-    USET_CASE = 2,
-
-    /**
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
      * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
      * match all except 'a', 'A', 'b', and 'B'. This adds the lower-,
