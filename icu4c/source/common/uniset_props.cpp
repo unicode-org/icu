@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -774,7 +774,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
      * patterns like /[^abc]/i work.
      */
     if ((options & USET_CASE_INSENSITIVE) != 0) {
-        closeOver(USET_CASE);
+        closeOver(USET_CASE_INSENSITIVE);
     }
     else if ((options & USET_ADD_CASE_MAPPINGS) != 0) {
         closeOver(USET_ADD_CASE_MAPPINGS);
@@ -1360,7 +1360,7 @@ addCaseMapping(UnicodeSet &set, int32_t result, const UChar *full, UnicodeString
 }
 
 UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
-    if (attribute & (USET_CASE | USET_ADD_CASE_MAPPINGS)) {
+    if (attribute & (USET_CASE_INSENSITIVE | USET_ADD_CASE_MAPPINGS)) {
         UErrorCode status = U_ZERO_ERROR;
         const UCaseProps *csp = ucase_getSingleton(&status);
         if (U_SUCCESS(status)) {
@@ -1377,7 +1377,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
             // start with input set to guarantee inclusion
             // USET_CASE: remove strings because the strings will actually be reduced (folded);
             //            therefore, start with no strings and add only those needed
-            if (attribute & USET_CASE) {
+            if (attribute & USET_CASE_INSENSITIVE) {
                 foldSet.strings->removeAllElements();
             }
 
@@ -1390,7 +1390,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 UChar32 start = getRangeStart(i);
                 UChar32 end   = getRangeEnd(i);
 
-                if (attribute & USET_CASE) {
+                if (attribute & USET_CASE_INSENSITIVE) {
                     // full case closure
                     for (UChar32 cp=start; cp<=end; ++cp) {
                         ucase_addCaseClosure(csp, cp, &sa);
@@ -1414,7 +1414,7 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 }
             }
             if (strings != NULL && strings->size() > 0) {
-                if (attribute & USET_CASE) {
+                if (attribute & USET_CASE_INSENSITIVE) {
                     for (int32_t j=0; j<strings->size(); ++j) {
                         str = *(const UnicodeString *) strings->elementAt(j);
                         str.foldCase();

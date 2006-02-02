@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2005 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2006 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -2243,7 +2243,7 @@ void   RegexCompile::matchStartType() {
                     // character may have distinct cased forms.  Add all of them
                     //   to the set of possible starting match chars.
                     UnicodeSet s(c, c);
-                    s.closeOver(USET_CASE);
+                    s.closeOver(USET_CASE_INSENSITIVE);
                     fRXPat->fInitialChars->addAll(s);
                 } else {
                     // Char has no case variants.  Just add it as-is to the
@@ -2369,7 +2369,7 @@ void   RegexCompile::matchStartType() {
                     int32_t stringStartIdx = URX_VAL(op);
                     UChar32  c = fRXPat->fLiteralText.char32At(stringStartIdx);
                     UnicodeSet s(c, c);
-                    s.closeOver(USET_CASE);
+                    s.closeOver(USET_CASE_INSENSITIVE);
                     fRXPat->fInitialChars->addAll(s);
                     numInitialStrings += 2;  // Matching on an initial string not possible.
                 }
