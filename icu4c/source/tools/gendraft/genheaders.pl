@@ -46,7 +46,6 @@ $internalAppend = "INTERNAL_API_DO_NOT_USE";
 $internalDefine = "U_HIDE_INTERNAL_API";
 
 $versionAppend="";
-
 #run the program
 main();
 
@@ -59,6 +58,7 @@ sub main(){
            "--destdir=s" => \$destDir,
            "--version=s"  => \$version,
            "--exclusion-list=s"  => \$exclude,
+           "--include-types" => \$includeTypes
            );
   usage() unless defined $srcDir;
   usage() unless defined $destDir;
@@ -100,6 +100,8 @@ sub getHeaderDef{
 sub writeFile{
   ($infile,$outfile,$destDir, $symbolAppend, $symbolDef, $exclude) = @_;
 
+  $headerDef = getHeaderDef($outfile);
+  
   $outfile = $destDir."/".$outfile;
 
   $inFH = IO::File->new($infile,"r")
@@ -107,8 +109,7 @@ sub writeFile{
   $outFH = IO::File->new($outfile,"w")
             or die  "could not open the file $outfile for writing: $! \n";
 
-  $headerDef = getHeaderDef($outFileName);
-
+  #print "$headerDef>>> $outfile\n";
   printHeader($outFH, $outFileName, $headerDef, $symbolDef);
   parseWriteFile($inFH, $outFH, $symbolAppend, $exclude);
   printFooter($outFH, $headerDef, $symbolDef);
@@ -176,7 +177,7 @@ sub parseWriteFile{
                 #print "$value  $exclude->{$value}\n";
                 next;
             }
-            #next if(isStringAllCaps($value)==1);
+            next if(!(defined $includeTypes) && (isStringAcceptable($value)==1));
             $realSymbol = $value."_".$versionAppend;
             $nonExSymbol = $value."_".$symbolAppend;
             $disableRenaming{$value} = $nonExSymbol;
@@ -200,16 +201,19 @@ sub parseWriteFile{
     print $outFH "#    endif /* U_DISABLE_RENAMING */\n";
 }
 #-----------------------------------------------------------------------
-sub isStringAllCaps{
+sub isStringAcceptable{
     ($string) = @_;
     @str = split(//, $string);
     foreach  $val (@str){
         $ret = 1;
-        if(($val ne "_") && !($val =~ /[A-Z]/)){
+        if(($val ne "_") && !($val =~ /[0-9A-Z]/)){
         #print "$val\n";
             $ret = 0;
         }
     }
+    #if($ret==0 && $str[0] eq 'U'){
+    #    $ret=1;
+    #}
     return $ret;
 }
 
@@ -235,6 +239,7 @@ Options:
         --destdir=<directory>
         --version=<current version of ICU>
         --exclusion-list=<file name>
+        --include-types
 e.g.: genheaders.pl  --srcdir=<icu>/source/common/docs/html --destdir=<icu>/source/common/unicode --version=2.8 --exclusion-list=exclude.txt
 END
   exit(0);
