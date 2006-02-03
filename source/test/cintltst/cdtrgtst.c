@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -389,7 +389,7 @@ void Test4073003()
         return;
     }
     u_uastrcpy(temp, "m/D/yy");
-    udat_applyPattern(fmt, TRUE, temp, u_strlen(temp));
+    udat_applyPattern(fmt, FALSE, temp, u_strlen(temp));
     
         for(i= 0; i < 4; i+=2) {
             status=U_ZERO_ERROR;
