@@ -77,11 +77,10 @@ UINT getGrouping(const char *grouping)
 
 void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
 {
-    int STR_LEN = 100;
     char buf[10];
 
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_IDIGITS, (LPWSTR) &fmt->NumDigits, STR_LEN);
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ILZERO,  (LPWSTR) &fmt->LeadingZero, STR_LEN);
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_IDIGITS, (LPWSTR) &fmt->NumDigits, sizeof(UINT));
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ILZERO,  (LPWSTR) &fmt->LeadingZero, sizeof(UINT));
 
     GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
     fmt->Grouping = getGrouping(buf);
@@ -92,7 +91,7 @@ void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
     fmt->lpThousandSep = NEW_ARRAY(UChar, 6);
     GetLocaleInfoW(lcid, LOCALE_STHOUSAND, fmt->lpThousandSep, 6);
 
-    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER, (LPWSTR) &fmt->NegativeOrder, STR_LEN);
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER, (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
 }
 
 void freeNumberFormat(NUMBERFMTW *fmt)
