@@ -40,6 +40,7 @@
 #   include <windows.h>
 #   include <stdio.h>
 #   include <time.h>
+#   include <float.h>
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
@@ -85,10 +86,12 @@ static double randomDouble(void)
         initialized = TRUE;
     }
 
-    /* Assume rand has at least 12 bits of precision */
-    for (i = 0; i < sizeof(ran); i += 1) {
-        ((char*)&ran)[i] = (char)((rand() & 0x0FF0) >> 4);
-    }
+    do {
+        /* Assume rand has at least 12 bits of precision */
+        for (i = 0; i < sizeof(ran); i += 1) {
+            ((char*)&ran)[i] = (char)((rand() & 0x0FF0) >> 4);
+        }
+    } while (_isnan(ran));
 
     return ran;
 }
