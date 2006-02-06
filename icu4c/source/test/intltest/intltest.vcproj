@@ -913,6 +913,16 @@
 				RelativePath=".\convtest.h">
 			</File>
 		</Filter>
+		<Filter
+			Name="charset detection"
+			Filter="">
+			<File
+				RelativePath=".\csdetest.cpp">
+			</File>
+			<File
+				RelativePath=".\csdetest.h">
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
