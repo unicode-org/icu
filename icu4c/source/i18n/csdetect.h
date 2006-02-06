@@ -15,13 +15,13 @@ U_NAMESPACE_BEGIN
 
 class InputText;
 class CharsetRecognizer;
-struct UCharsetMatch;
+class CharsetMatch;
 
-struct UCharsetDetector : public UMemory
+class CharsetDetector : public UMemory
 {
 private:
     InputText *textIn;
-    UCharsetMatch **resultArray;
+    CharsetMatch **resultArray;
     UBool fStripTags;   // If true, setText() will strip tags from input text.
     UBool fFreshTextSet;
     static CharsetRecognizer **fCSRecognizers;
@@ -29,15 +29,15 @@ private:
     static void setRecognizers();
 
 public:
-    UCharsetDetector();
+    CharsetDetector();
 
-    ~UCharsetDetector();
+    ~CharsetDetector();
 
     void setText(const char *in, int32_t len);
 
-    const UCharsetMatch * const *detectAll(int32_t &maxMatchesFound, UErrorCode &status);
+    const CharsetMatch * const *detectAll(int32_t &maxMatchesFound, UErrorCode &status);
 
-    const UCharsetMatch *detect(UErrorCode& status);
+    const CharsetMatch *detect(UErrorCode& status);
 
     void setDeclaredEncoding(const char *encoding, int32_t len) const;
 

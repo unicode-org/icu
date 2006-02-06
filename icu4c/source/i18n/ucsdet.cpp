@@ -16,13 +16,14 @@
 #include "cmemory.h"
 #include "uenumimp.h"
 
-U_NAMESPACE_BEGIN
+U_NAMESPACE_USE
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
+U_CDECL_BEGIN
 
 U_DRAFT UCharsetDetector * U_EXPORT2
 ucsdet_open(UErrorCode   *status)
@@ -30,85 +31,100 @@ ucsdet_open(UErrorCode   *status)
     if(U_FAILURE(*status)) {
         return 0;
     }
-    UCharsetDetector* ucsd = new UCharsetDetector();
-    return ucsd;
+    CharsetDetector* csd = new CharsetDetector();
+    return (UCharsetDetector *) csd;
 }
 
 U_DRAFT void U_EXPORT2
-ucsdet_close(UCharsetDetector *csd)
+ucsdet_close(UCharsetDetector *ucsd)
 {
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
     delete csd;
 }
 
 U_DRAFT void U_EXPORT2
-ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCode *status)
+ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return;
     }
+
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
 
     csd->setText(textIn, len);
 }
 
 U_DRAFT const char * U_EXPORT2
-ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status)
+ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;
     }
+
+    CharsetMatch *csm = (CharsetMatch *) ucsm;
 
     return csm->getName();
 }
 
 U_DRAFT int32_t U_EXPORT2
-ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status)
+ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return -1;
     }
 
+    CharsetMatch *csm = (CharsetMatch *) ucsm;
+
     return csm->getConfidence();
 }
 
 U_DRAFT const char * U_EXPORT2
-ucsdet_getLanguage(const UCharsetMatch *csm, UErrorCode *status)
+ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;
     }
+
+    CharsetMatch *csm = (CharsetMatch *) ucsm;
 
     return csm->getLanguage();
 }
 
 U_DRAFT const UCharsetMatch * U_EXPORT2
-ucsdet_detect(UCharsetDetector *csd, UErrorCode *status)
+ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;
     }
 
-    return csd->detect(*status);
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
+
+    return (const UCharsetMatch *) csd->detect(*status);
 }
 
 U_DRAFT void U_EXPORT2
-ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t length, UErrorCode *status)
+ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t length, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return;
     }
 
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
+
     csd->setDeclaredEncoding(encoding,length);
 }
 
-U_DRAFT UCharsetMatch**
-ucsdet_detectAll(UCharsetDetector *csd,
+U_DRAFT const UCharsetMatch**
+ucsdet_detectAll(UCharsetDetector *ucsd,
                  int32_t *maxMatchesFound, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;
     }
 
-    return (UCharsetMatch**)csd->detectAll(*maxMatchesFound,*status);
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
+
+    return (const UCharsetMatch**)csd->detectAll(*maxMatchesFound,*status);
 }
 
 // U_DRAFT  const char * U_EXPORT2
@@ -128,6 +144,7 @@ ucsdet_detectAll(UCharsetDetector *csd,
 //     }
 //     return UCharsetDetector::getDetectableCount();
 // }
+U_CDECL_END
 
 typedef struct {
     int32_t currIndex;
@@ -215,33 +232,38 @@ static UEnumeration *getEnum(const char** source, int32_t size) {
     return en;
 }
 
-static const char** charsets = NEW_ARRAY(const char *, UCharsetDetector::getDetectableCount());
+static const char** charsets = NEW_ARRAY(const char *, CharsetDetector::getDetectableCount());
 
+U_CDECL_BEGIN
 U_DRAFT  UEnumeration * U_EXPORT2
-ucsdet_getAllDetectableCharsets(const UCharsetDetector *csd,  UErrorCode *status)
+ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;
     }
 
-    int32_t size = UCharsetDetector::getDetectableCount();
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
+    int32_t size = CharsetDetector::getDetectableCount();
 
-    for(int32_t index=0;index<size;index++) {
+    for(int32_t index=0; index<size; index += 1) {
         charsets[index] = csd->getCharsetName(index, *status);
     }
 
-    return getEnum(charsets,size);
+    return getEnum(charsets, size);
 }
 
 U_DRAFT  UBool U_EXPORT2
-ucsdet_isInputFilterEnabled(const UCharsetDetector *csd)
+ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd)
 {
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
+
     return csd->getStripTagsFlag();
 }
 
 U_DRAFT  UBool U_EXPORT2
-ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter)
+ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter)
 {
+    CharsetDetector *csd = (CharsetDetector *) ucsd;
     UBool prev = csd->getStripTagsFlag();
     csd->setStripTagsFlag(filter);
 
@@ -249,14 +271,16 @@ ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter)
 }
 
 U_DRAFT  int32_t U_EXPORT2
-ucsdet_getUChars(const UCharsetMatch *csm,
+ucsdet_getUChars(const UCharsetMatch *ucsm,
                  UChar *buf, int32_t cap, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return -1;
     }
 
+    CharsetMatch *csm = (CharsetMatch *) ucsm;
+    
     return csm->getUChars(buf, cap, status);
 }
+U_CDECL_END
 
-U_NAMESPACE_END
