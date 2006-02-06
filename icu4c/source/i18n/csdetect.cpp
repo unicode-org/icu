@@ -30,15 +30,15 @@ U_NAMESPACE_BEGIN
 U_CDECL_BEGIN
 static UBool U_CALLCONV csdet_cleanup(void)
 {
-    return UCharsetDetector::cleanup();
+    return CharsetDetector::cleanup();
 }
 U_CDECL_END
 
-CharsetRecognizer **UCharsetDetector::fCSRecognizers = NULL;
+CharsetRecognizer **CharsetDetector::fCSRecognizers = NULL;
 
-int32_t UCharsetDetector::fCSRecognizers_size = 0;
+int32_t CharsetDetector::fCSRecognizers_size = 0;
 
-void UCharsetDetector::setRecognizers()
+void CharsetDetector::setRecognizers()
 {
     UBool needsInit;
     CharsetRecognizer **recognizers;
@@ -117,7 +117,7 @@ void UCharsetDetector::setRecognizers()
     }
 }
 
-UBool UCharsetDetector::cleanup()
+UBool CharsetDetector::cleanup()
 {
     if (fCSRecognizers != NULL) {
         for(int32_t r = 0; r < fCSRecognizers_size; r += 1) {
@@ -133,19 +133,19 @@ UBool UCharsetDetector::cleanup()
     return TRUE;
 }
 
-UCharsetDetector::UCharsetDetector()
+CharsetDetector::CharsetDetector()
   : textIn(new InputText()), fStripTags(FALSE), fFreshTextSet(FALSE)
 {
     setRecognizers();
 
-    resultArray = new UCharsetMatch *[fCSRecognizers_size];
+    resultArray = new CharsetMatch *[fCSRecognizers_size];
 
     for(int32_t i = 0; i < fCSRecognizers_size; i += 1) {
-        resultArray[i] = new UCharsetMatch;
+        resultArray[i] = new CharsetMatch();
     }
 }
 
-UCharsetDetector::~UCharsetDetector()
+CharsetDetector::~CharsetDetector()
 {
     delete textIn;
 
@@ -156,13 +156,13 @@ UCharsetDetector::~UCharsetDetector()
     delete [] resultArray;
 }
 
-void UCharsetDetector::setText(const char *in, int32_t len)
+void CharsetDetector::setText(const char *in, int32_t len)
 {
     textIn->setText(in, len);
     fFreshTextSet = TRUE;
 }
 
-UBool UCharsetDetector::setStripTagsFlag(UBool flag)
+UBool CharsetDetector::setStripTagsFlag(UBool flag)
 {
     UBool temp = fStripTags;
     fStripTags = flag;
@@ -170,24 +170,24 @@ UBool UCharsetDetector::setStripTagsFlag(UBool flag)
     return temp;
 }
 
-UBool UCharsetDetector::getStripTagsFlag() const
+UBool CharsetDetector::getStripTagsFlag() const
 {
     return fStripTags;
 }
 
-void UCharsetDetector::setDeclaredEncoding(const char *encoding, int32_t len) const
+void CharsetDetector::setDeclaredEncoding(const char *encoding, int32_t len) const
 {
     textIn->setDeclaredEncoding(encoding,len);
 }
 
-int32_t UCharsetDetector::getDetectableCount()
+int32_t CharsetDetector::getDetectableCount()
 {
     setRecognizers();
 
     return fCSRecognizers_size; 
 }
 
-const UCharsetMatch* UCharsetDetector::detect(UErrorCode &status)
+const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
 {
     int32_t maxMatchesFound = 0;
 
@@ -215,7 +215,7 @@ const UCharsetMatch* UCharsetDetector::detect(UErrorCode &status)
 // 		*pcc = &c;
 // 		*pc = 'C';//2: modifies a const object
 // 	    }
-const UCharsetMatch * const *UCharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
+const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
 {
     int32_t resultCount = 0;
 
@@ -238,7 +238,7 @@ const UCharsetMatch * const *UCharsetDetector::detectAll(int32_t &maxMatchesFoun
             confidence = detectResults;
 
             if (confidence > 0)  {
-                resultArray[resultCount++]->set(textIn,csr,confidence);
+                resultArray[resultCount++]->set(textIn, csr, confidence);
             }
         }
 
@@ -250,7 +250,7 @@ const UCharsetMatch * const *UCharsetDetector::detectAll(int32_t &maxMatchesFoun
         for(int32_t i = resultCount; i > 1; i -= 1) {
             for(int32_t j = 0; j < i-1; j += 1) {
                 if(resultArray[j]->getConfidence() < resultArray[j+1]->getConfidence()) {
-                    UCharsetMatch *temp = resultArray[j];
+                    CharsetMatch *temp = resultArray[j];
                     resultArray[j]= resultArray[j+1];
                     resultArray[j+1]=temp;
                 }
@@ -265,7 +265,7 @@ const UCharsetMatch * const *UCharsetDetector::detectAll(int32_t &maxMatchesFoun
     return resultArray;
 }
 
-const char *UCharsetDetector::getCharsetName(int32_t index, UErrorCode &status) const
+const char *CharsetDetector::getCharsetName(int32_t index, UErrorCode &status) const
 {
     if( index > fCSRecognizers_size-1 || index < 0) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;

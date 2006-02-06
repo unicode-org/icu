@@ -16,35 +16,35 @@
 
 U_NAMESPACE_BEGIN
 
-UCharsetMatch::UCharsetMatch()
+CharsetMatch::CharsetMatch()
   : csr(0), confidence(0)
 {
     // nothing else to do.
 }
 
-void UCharsetMatch::set(InputText *input, CharsetRecognizer *cr, int32_t conf)
+void CharsetMatch::set(InputText *input, CharsetRecognizer *cr, int32_t conf)
 {
     textIn = input;
     csr = cr;
     confidence = conf; 
 }
 
-const char* UCharsetMatch::getName()const
+const char* CharsetMatch::getName()const
 {
     return csr->getName(); 
 }
 
-const char* UCharsetMatch::getLanguage()const
+const char* CharsetMatch::getLanguage()const
 {
     return csr->getLanguage(); 
 }
 
-int32_t UCharsetMatch::getConfidence()const
+int32_t CharsetMatch::getConfidence()const
 {
     return confidence;
 }
 
-int32_t UCharsetMatch::getUChars(UChar *buf, int32_t cap, UErrorCode *status) const
+int32_t CharsetMatch::getUChars(UChar *buf, int32_t cap, UErrorCode *status) const
 {
     UConverter *conv = ucnv_open(getName(), status);
     int32_t result = ucnv_toUChars(conv, buf, cap, (const char *) textIn->fRawInput, textIn->fRawLength, status);
