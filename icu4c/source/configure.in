@@ -745,6 +745,7 @@ AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
 #if STDC_HEADERS
 #include <stddef.h>
 #endif
+#include <stdlib.h>
 #if HAVE_WCHAR_H
 #include <string.h>
 #include <wchar.h>
