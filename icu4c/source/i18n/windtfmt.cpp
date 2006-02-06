@@ -90,9 +90,10 @@ UnicodeString *getTimeDateFormat(const Calendar *cal, const Locale *locale, UErr
 Win32DateFormat::Win32DateFormat(DateFormat::EStyle timeStyle, DateFormat::EStyle dateStyle, const Locale &locale, UErrorCode &status)
   : DateFormat(), fDateTimeMsg(NULL), fTimeStyle(timeStyle), fDateStyle(dateStyle), fLocale(&locale), fZoneID(NULL)
 {
-    if (!U_FAILURE(status)) {
+    if (U_SUCCESS(status)) {
         fLCID = locale.getLCID();
-        fTZI = new TIME_ZONE_INFORMATION();
+        fTZI = NEW_ARRAY(TIME_ZONE_INFORMATION, 1);
+        uprv_memset(fTZI, 0, sizeof(TIME_ZONE_INFORMATION));
         adoptCalendar(Calendar::createInstance(locale, status));
     }
 }
@@ -105,25 +106,26 @@ Win32DateFormat::Win32DateFormat(const Win32DateFormat &other)
 
 Win32DateFormat::~Win32DateFormat()
 {
-    delete fCalendar;
-    delete fTZI;
+//    delete fCalendar;
+    uprv_free(fTZI);
     delete fDateTimeMsg;
 }
 
 Win32DateFormat &Win32DateFormat::operator=(const Win32DateFormat &other)
 {
+    // The following handles fCalendar
     DateFormat::operator=(other);
 
-    delete fCalendar;
+//    delete fCalendar;
 
     this->fDateTimeMsg = other.fDateTimeMsg;
     this->fTimeStyle   = other.fTimeStyle;
     this->fDateStyle   = other.fDateStyle;
     this->fLCID        = other.fLCID;
-    this->fCalendar    = other.fCalendar->clone();
+//    this->fCalendar    = other.fCalendar->clone();
     this->fZoneID      = other.fZoneID;
 
-    this->fTZI  = new TIME_ZONE_INFORMATION();
+    this->fTZI = NEW_ARRAY(TIME_ZONE_INFORMATION, 1);
     *this->fTZI = *other.fTZI;
 
     return *this;

@@ -76,6 +76,7 @@ void Win32DateTimeTest::testLocales(TestLog *log)
     const TimeZone *tz = TimeZone::createDefault();
     TIME_ZONE_INFORMATION tzi;
 
+    uprv_memset(&tzi, 0, sizeof(tzi));
     tz->getID(zoneID);
     if (! uprv_getWindowsTimeZoneInfo(&tzi, zoneID.getBuffer(), zoneID.length())) {
         UBool found = FALSE;
@@ -177,9 +178,13 @@ void Win32DateTimeTest::testLocales(TestLog *log)
             log->errln("Time format error for locale " + baseName + ": expected \"" + expected +
                        "\" got \"" + utBuffer + "\"");
         }
+        delete wbf;
+        delete wdf;
+        delete wtf;
     }
 
     Win32Utilities::freeLocales(lcidRecords);
+    delete tz;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
