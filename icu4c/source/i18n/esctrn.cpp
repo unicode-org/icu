@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -32,28 +32,28 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EscapeTransliterator)
 /**
  * Factory methods
  */
-static Transliterator* _createUnicode(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscUnicode(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Unicode: "U+10FFFF" hex, min=4, max=6
     return new EscapeTransliterator(ID, UNIPRE, EMPTY, 16, 4, TRUE, NULL);
 }
-static Transliterator* _createJava(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscJava(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Java: "\\uFFFF" hex, min=4, max=4
     return new EscapeTransliterator(ID, BS_u, EMPTY, 16, 4, FALSE, NULL);
 }
-static Transliterator* _createC(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscC(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // C: "\\uFFFF" hex, min=4, max=4; \\U0010FFFF hex, min=8, max=8
     return new EscapeTransliterator(ID, BS_u, EMPTY, 16, 4, TRUE,
              new EscapeTransliterator(EMPTY, BS_U, EMPTY, 16, 8, TRUE, NULL));
 }
-static Transliterator* _createXML(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscXML(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // XML: "&#x10FFFF;" hex, min=1, max=6
     return new EscapeTransliterator(ID, XMLPRE, SEMI, 16, 1, TRUE, NULL);
 }
-static Transliterator* _createXML10(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscXML10(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // XML10: "&1114111;" dec, min=1, max=7 (not really "Any-Hex")
     return new EscapeTransliterator(ID, XML10PRE, SEMI, 10, 1, TRUE, NULL);
 }
-static Transliterator* _createPerl(const UnicodeString& ID, Transliterator::Token /*context*/) {
+static Transliterator* _createEscPerl(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Perl: "\\x{263A}" hex, min=1, max=6
     return new EscapeTransliterator(ID, PERLPRE, RBRACE, 16, 1, TRUE, NULL);
 }
@@ -65,19 +65,19 @@ static Transliterator* _createPerl(const UnicodeString& ID, Transliterator::Toke
 void EscapeTransliterator::registerIDs() {
     Token t = integerToken(0);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Unicode"), _createUnicode, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Unicode"), _createEscUnicode, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Java"), _createJava, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Java"), _createEscJava, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/C"), _createC, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/C"), _createEscC, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML"), _createXML, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML"), _createEscXML, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML10"), _createXML10, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML10"), _createEscXML10, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Perl"), _createPerl, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Perl"), _createEscPerl, t);
 
-    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex"), _createJava, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex"), _createEscJava, t);
 }
 
 /**
