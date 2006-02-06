@@ -57,7 +57,7 @@ static const UDataInfo dataInfo={
 
 U_CDECL_BEGIN
 static void U_CALLCONV
-printError(void *context, const char *fmt, va_list args) {
+printPackageError(void *context, const char *fmt, va_list args) {
     vfprintf((FILE *)context, fmt, args);
 }
 U_CDECL_END
@@ -440,7 +440,7 @@ Package::readPackage(const char *filename) {
         exit(errorCode);
     }
 
-    ds->printError=printError;
+    ds->printError=printPackageError;
     ds->printErrorContext=stderr;
 
     headerLength=sizeof(header);
@@ -668,7 +668,7 @@ Package::writePackage(const char *filename, char outType, const char *comment) {
     }
     for(i=0; i<TYPE_COUNT; ++i) {
         if(ds[i]!=NULL) {
-            ds[i]->printError=printError;
+            ds[i]->printError=printPackageError;
             ds[i]->printErrorContext=stderr;
         }
     }
@@ -1075,7 +1075,7 @@ Package::extractItem(const char *filesPath, int32_t index, char outType) {
             exit(errorCode);
         }
 
-        ds->printError=printError;
+        ds->printError=printPackageError;
         ds->printErrorContext=stderr;
 
         // swap the item from its platform properties to the desired ones

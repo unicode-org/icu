@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved 
  *
  * Developed at DIT - Government of Bhutan
  *
@@ -126,7 +126,7 @@ const TibetanClassTable *TibetanClassTable::getTibetanClassTable()
 
 
 
-class ReorderingOutput : public UMemory {
+class TibetanReorderingOutput : public UMemory {
 private:
     le_int32 fOutIndex;
     LEUnicode *fOutChars;
@@ -135,13 +135,13 @@ private:
 
 
 public:
-    ReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
+    TibetanReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
         : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
     {
         // nothing else to do...
     }
 
-    ~ReorderingOutput()
+    ~TibetanReorderingOutput()
     {
         // nothing to do here...
     }
@@ -315,7 +315,7 @@ le_int32 TibetanReordering::reorder(const LEUnicode *chars, le_int32 charCount, 
 {
     const TibetanClassTable *classTable = TibetanClassTable::getTibetanClassTable();
 
-    ReorderingOutput output(outChars, glyphStorage);
+    TibetanReorderingOutput output(outChars, glyphStorage);
     TibetanClassTable::CharClass charClass;
     le_int32 i, prev = 0;
 

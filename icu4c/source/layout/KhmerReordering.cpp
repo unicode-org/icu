@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved 
  *
  * This file is a modification of the ICU file IndicReordering.cpp
  * by Jens Herden and Javier Sola for Khmer language 
@@ -124,7 +124,7 @@ const KhmerClassTable *KhmerClassTable::getKhmerClassTable()
 
 
 
-class ReorderingOutput : public UMemory {
+class KhmerReorderingOutput : public UMemory {
 private:
     le_int32 fOutIndex;
     LEUnicode *fOutChars;
@@ -133,13 +133,13 @@ private:
 
 
 public:
-    ReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
+    KhmerReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
         : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
     {
         // nothing else to do...
     }
 
-    ~ReorderingOutput()
+    ~KhmerReorderingOutput()
     {
         // nothing to do here...
     }
@@ -355,7 +355,7 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 {
     const KhmerClassTable *classTable = KhmerClassTable::getKhmerClassTable();
 
-    ReorderingOutput output(outChars, glyphStorage);
+    KhmerReorderingOutput output(outChars, glyphStorage);
     KhmerClassTable::CharClass charClass;
     le_int32 i, prev = 0, coengRo;
 

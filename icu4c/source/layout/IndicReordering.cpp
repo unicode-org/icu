@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -48,7 +48,7 @@ U_NAMESPACE_BEGIN
 #define distFeatureMask 0x00020000UL
 #define initFeatureMask 0x00010000UL
 
-class ReorderingOutput : public UMemory {
+class IndicReorderingOutput : public UMemory {
 private:
     le_int32   fOutIndex;
     LEUnicode *fOutChars;
@@ -127,7 +127,7 @@ private:
     }
 
 public:
-    ReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
+    IndicReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
         : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
           fMpre(0), fMpreIndex(0), fMbelow(0), fMbelowIndex(0), fMabove(0), fMaboveIndex(0),
           fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fVirama(0), fViramaIndex(0),
@@ -138,7 +138,7 @@ public:
         // nothing else to do...
     }
 
-    ~ReorderingOutput()
+    ~IndicReorderingOutput()
     {
         // nothing to do here...
     }
@@ -419,7 +419,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         mpreFixups = new MPreFixups(charCount);
     }
 
-    ReorderingOutput output(outChars, glyphStorage, mpreFixups);
+    IndicReorderingOutput output(outChars, glyphStorage, mpreFixups);
     le_int32 i, prev = 0;
     le_bool lastInWord = FALSE;
 
