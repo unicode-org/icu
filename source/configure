@@ -7737,6 +7737,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 #if STDC_HEADERS
 #include <stddef.h>
 #endif
+#include <stdlib.h>
 #if HAVE_WCHAR_H
 #include <string.h>
 #include <wchar.h>
@@ -8101,7 +8102,7 @@ then
     CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 fi
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files icudefs.mk Makefile data/icupkg.inc config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/pkgdata/Makefile tools/toolutil/Makefile tools/dumpce/Makefile test/Makefile test/testdata/Makefile test/testdata/pkgdata.inc test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/thaitest/Makefile test/testmap/Makefile test/letest/Makefile test/threadtest/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files icudefs.mk Makefile data/icupkg.inc config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/pkgdata/Makefile tools/toolutil/Makefile tools/dumpce/Makefile test/Makefile test/testdata/Makefile test/testdata/pkgdata.inc test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/thaitest/Makefile test/testmap/Makefile test/letest/Makefile test/threadtest/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -8184,9 +8185,10 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
