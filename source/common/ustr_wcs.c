@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,8 @@
 #include "cmemory.h"
 #include "ustr_imp.h"
 #include "ustr_cnv.h"
+
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && !UCONFIG_NO_CONVERSION
 
 #define _STACK_BUFFER_CAPACITY 1000
 #define _BUFFER_CAPACITY_MULTIPLIER 2
@@ -62,7 +64,6 @@ _strToWCS(wchar_t *dest,
            int32_t srcLength,
            UErrorCode *pErrorCode){
 
-#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
     char stackBuffer [_STACK_BUFFER_CAPACITY];
     char* tempBuf = stackBuffer;
     int32_t tempBufCapacity = _STACK_BUFFER_CAPACITY;
@@ -215,12 +216,6 @@ cleanup:
     u_releaseDefaultConverter(conv);
 
     return dest;
-#else
-    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)){
-        *pErrorCode = U_UNSUPPORTED_ERROR;
-    }
-    return NULL;
-#endif
 }
 #endif
 
@@ -279,9 +274,8 @@ _strFromWCS( UChar   *dest,
              int32_t *pDestLength,
              const wchar_t *src,
              int32_t srcLength,
-             UErrorCode *pErrorCode){
-
-#if (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION)
+             UErrorCode *pErrorCode)
+{
     int32_t retVal =0, count =0 ;
     UConverter* conv = NULL;
     UChar* pTarget = NULL;
@@ -474,12 +468,6 @@ cleanup:
     u_releaseDefaultConverter(conv);
 
     return dest;
-#else
-    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)){
-        *pErrorCode = U_UNSUPPORTED_ERROR;
-    }
-    return NULL;
-#endif
 }
 #endif
 
@@ -530,3 +518,5 @@ u_strFromWCS(UChar   *dest,
 #endif
 
 }
+
+#endif /* #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && !UCONFIG_NO_CONVERSION */
