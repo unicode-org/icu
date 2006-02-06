@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2004, International Business Machines                   *
+* Copyright (C) 2001-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -38,6 +38,7 @@ typedef enum ECleanupI18NType {
     UCLN_I18N_COLLATOR,
     UCLN_I18N_UCOL,
     UCLN_I18N_UCOL_BLD,
+    UCLN_I18N_CSDET,
     UCLN_I18N_COUNT /* This must be last */
 } ECleanupI18NType;
 

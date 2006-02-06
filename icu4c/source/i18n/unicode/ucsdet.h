@@ -1,22 +1,23 @@
 /*
-**********************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   file name:  ucsdet.h
-*   encoding:   US-ASCII
-*   indentation:4
-*
-*   created on: 2005Aug04
-*   created by: Andy Heninger
-*
-*   ICU Character Set Detection, API for C
-*
-*   Draft version 18 Oct 2005
-*
-*/
-#ifndef CSDET_H
-#define CSDET_H
+ **********************************************************************
+ *   Copyright (C) 2005-2006, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   file name:  ucsdet.h
+ *   encoding:   US-ASCII
+ *   indentation:4
+ *
+ *   created on: 2005Aug04
+ *   created by: Andy Heninger
+ *
+ *   ICU Character Set Detection, API for C
+ *
+ *   Draft version 18 Oct 2005
+ *
+ */
+
+#ifndef __UCSDET_H
+#define __UCSDET_H
 
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
@@ -344,6 +345,6 @@ ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter);
 
 
 #endif   /* U_HIDE_DRAFT_API */
-#endif   /* CSDET_H */
+#endif   /* __UCSDET_H */
 
 

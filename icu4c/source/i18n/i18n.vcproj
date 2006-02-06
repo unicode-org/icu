@@ -1430,6 +1430,60 @@
 			Name="charset detect"
 			Filter="">
 			<File
+				RelativePath=".\csdetect.cpp">
+			</File>
+			<File
+				RelativePath=".\csdetect.h">
+			</File>
+			<File
+				RelativePath=".\csmatch.cpp">
+			</File>
+			<File
+				RelativePath=".\csmatch.h">
+			</File>
+			<File
+				RelativePath=".\csr2022.cpp">
+			</File>
+			<File
+				RelativePath=".\csr2022.h">
+			</File>
+			<File
+				RelativePath=".\csrecog.cpp">
+			</File>
+			<File
+				RelativePath=".\csrecog.h">
+			</File>
+			<File
+				RelativePath=".\csrmbcs.cpp">
+			</File>
+			<File
+				RelativePath=".\csrmbcs.h">
+			</File>
+			<File
+				RelativePath=".\csrsbcs.cpp">
+			</File>
+			<File
+				RelativePath=".\csrsbcs.h">
+			</File>
+			<File
+				RelativePath=".\csrucode.cpp">
+			</File>
+			<File
+				RelativePath=".\csrucode.h">
+			</File>
+			<File
+				RelativePath=".\csrutf8.cpp">
+			</File>
+			<File
+				RelativePath=".\csrutf8.h">
+			</File>
+			<File
+				RelativePath=".\inputext.cpp">
+			</File>
+			<File
+				RelativePath=".\inputext.h">
+			</File>
+			<File
 				RelativePath=".\ucsdet.cpp">
 			</File>
 			<File
