@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN
 class InputText;
 class CharsetRecognizer;
 
-struct UCharsetMatch : public UMemory
+class CharsetMatch : public UMemory
 {
  private:
     CharsetRecognizer *csr;
@@ -24,7 +24,7 @@ struct UCharsetMatch : public UMemory
     int32_t confidence;
 
  public:
-    UCharsetMatch();
+    CharsetMatch();
 
     void set(InputText *input, CharsetRecognizer *cr, int32_t conf);
 

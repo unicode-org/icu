@@ -80,7 +80,7 @@ ucsdet_open(UErrorCode   *status);
   *  @draft ICU 3.6
   */
 U_DRAFT void U_EXPORT2
-ucsdet_close(UCharsetDetector *csd);
+ucsdet_close(UCharsetDetector *ucsd);
 
 /**
   * Set the input byte data whose charset is to detected.
@@ -98,7 +98,7 @@ ucsdet_close(UCharsetDetector *csd);
   * @draft ICU 3.6
   */
 U_DRAFT void U_EXPORT2
-ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCode *status);
+ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCode *status);
 
 
 /** Set the declared encoding for charset detection.
@@ -120,7 +120,7 @@ ucsdet_setText(UCharsetDetector *csd, const char *textIn, int32_t len, UErrorCod
  * @draft ICU 3.6
  */
 U_DRAFT void U_EXPORT2
-ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t length, UErrorCode *status);
+ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t length, UErrorCode *status);
 
 
 /**
@@ -149,7 +149,7 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *csd, const char *encoding, int32_t 
  * @draft ICU 3.6
  */
 U_DRAFT const UCharsetMatch * U_EXPORT2
-ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
+ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status);
     
 
 /**
@@ -183,7 +183,7 @@ ucsdet_detect(UCharsetDetector *csd, UErrorCode *status);
  * @draft ICU 3.4
  */
 U_DRAFT const UCharsetMatch ** U_EXPORT2
-ucsdet_detectAll(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *status);
+ucsdet_detectAll(UCharsetDetector *ucsd, int32_t *matchesFound, UErrorCode *status);
 
 
 
@@ -203,7 +203,7 @@ ucsdet_detectAll(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *statu
  *  @draft ICU 3.6
  */
 U_DRAFT const char * U_EXPORT2
-ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status);
+ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status);
 
 /**
  *  Get a confidence number for the quality of the match of the byte
@@ -229,7 +229,7 @@ ucsdet_getName(const UCharsetMatch *csm, UErrorCode *status);
  *  @draft ICU 3.6
  */
 U_DRAFT int32_t U_EXPORT2
-ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status);
+ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status);
 
 /**
  *  Get the RFC 3066 code for the language of the input data.
@@ -260,7 +260,7 @@ ucsdet_getConfidence(const UCharsetMatch *csm, UErrorCode *status);
  *  @draft ICU 3.6
  */
 U_DRAFT const char * U_EXPORT2
-ucsdet_getLanguage(const UCharsetMatch *csm, UErrorCode *status);
+ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status);
 
 
 /**
@@ -286,7 +286,7 @@ ucsdet_getLanguage(const UCharsetMatch *csm, UErrorCode *status);
   * @draft ICU 3.6
   */
 U_DRAFT  int32_t U_EXPORT2
-ucsdet_getUChars(const UCharsetMatch *csm,
+ucsdet_getUChars(const UCharsetMatch *ucsm,
                  UChar *buf, int32_t cap, UErrorCode *status);
 
 
@@ -312,7 +312,7 @@ ucsdet_getUChars(const UCharsetMatch *csm,
   */
 
 U_DRAFT  UEnumeration * U_EXPORT2
-ucsdet_getAllDetectableCharsets(const UCharsetDetector *csd,  UErrorCode *status);
+ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status);
 
 
 /**
@@ -326,7 +326,7 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *csd,  UErrorCode *status
   *  @draft ICU 3.4
   */
 U_DRAFT  UBool U_EXPORT2
-ucsdet_isInputFilterEnabled(const UCharsetDetector *csd);
+ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd);
 
 
 /**
@@ -341,7 +341,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *csd);
  * @draft ICU 3.6
  */
 U_DRAFT  UBool U_EXPORT2
-ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter);
+ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
 
 
 #endif   /* U_HIDE_DRAFT_API */
