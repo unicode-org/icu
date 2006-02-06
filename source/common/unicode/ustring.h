@@ -1157,7 +1157,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
               uint32_t options,
               UErrorCode *pErrorCode);
 
-#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && !UCONFIG_NO_CONVERSION
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) && !UCONFIG_NO_CONVERSION
 /**
  * Converts a sequence of UChars to wchar_t units.
  *
@@ -1210,7 +1210,7 @@ u_strFromWCS(UChar   *dest,
              const wchar_t *src,
              int32_t srcLength,
              UErrorCode *pErrorCode);
-#endif /* !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && !UCONFIG_NO_CONVERSION */
+#endif /* (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) && !UCONFIG_NO_CONVERSION */
 
 /**
  * Converts a sequence of UChars (UTF-16) to UTF-8 bytes

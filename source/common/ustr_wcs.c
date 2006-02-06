@@ -25,7 +25,7 @@
 #include "ustr_imp.h"
 #include "ustr_cnv.h"
 
-#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32) && !UCONFIG_NO_CONVERSION
+#if (defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32)) && !UCONFIG_NO_CONVERSION
 
 #define _STACK_BUFFER_CAPACITY 1000
 #define _BUFFER_CAPACITY_MULTIPLIER 2
