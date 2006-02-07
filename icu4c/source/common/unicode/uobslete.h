@@ -1,15 +1,15 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  uobslete.h
+*   file name:  
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   Created by: gendraft.pl, a perl script written by Ram Viswanadha
+*   Created by: genheaders.pl, a perl script written by Ram Viswanadha
 *
 *  Contains data for commenting out APIs.
 *  Gets included by umachine.h
@@ -23,6 +23,9 @@
 
 #ifdef U_HIDE_OBSOLETE_API
 
+#    if U_DISABLE_RENAMING
+#    else
+#    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_OBSOLETE_API */
 #endif /* UOBSLETE_H */

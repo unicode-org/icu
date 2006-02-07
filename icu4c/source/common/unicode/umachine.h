@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -354,6 +354,8 @@ typedef int32_t UChar32;
 /*                             the OS in use.                               */
 /*==========================================================================*/
 
+#ifndef U_HIDE_INTERNAL_API
+
 /**
  * \def U_ALIGN_CODE
  * This is used to align code fragments to a specific byte boundary.
@@ -363,6 +365,8 @@ typedef int32_t UChar32;
 #ifndef U_ALIGN_CODE
 #   define U_ALIGN_CODE(n)
 #endif
+
+#endif /* U_HIDE_INTERNAL_API */
 
 #ifndef U_INLINE
 #   ifdef XP_CPLUSPLUS

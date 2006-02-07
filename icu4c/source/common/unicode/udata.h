@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -35,7 +35,8 @@ U_CDECL_BEGIN
  *
  * See the User Guide Data Management chapter.
  */
-
+ 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Character used to separate package names from tree names 
  * @internal ICU 3.0
@@ -65,6 +66,8 @@ U_CDECL_BEGIN
  * @internal ICU 3.0
  */
 #define U_ICUDATA_ALIAS "ICUDATA"
+
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * UDataInfo contains the properties about the requested data.

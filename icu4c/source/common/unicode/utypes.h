@@ -190,6 +190,8 @@
  * @stable ICU 2.4
  */
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
+
+#ifndef U_HIDE_INTERNAL_API
 /**
  * @internal
  */
@@ -198,6 +200,8 @@
  * @internal
  */
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
+
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * \def U_CALLCONV
@@ -480,6 +484,7 @@ typedef void* UClassID;
  */
 #if defined(XP_CPLUSPLUS) && defined(U_WINDOWS) && (_MSC_Ver>=1200) && (defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_USTDIO_IMPLEMENTATION))
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Global operator new, defined only inside ICU4C, must not be used.
  * Crashes intentionally.
@@ -526,6 +531,7 @@ operator delete[](void * /*p*/) {
     *q=5; /* break it */
 }
 
+#endif /* U_HIDE_INTERNAL_API */
 #endif
 
 /*===========================================================================*/
