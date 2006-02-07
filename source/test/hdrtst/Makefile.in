@@ -1,5 +1,5 @@
 ##
-##  Copyright (c) 1999-2005, International Business Machines Corporation and
+##  Copyright (c) 1999-2006, International Business Machines Corporation and
 ##  others. All Rights Reserved.
 ##
 ##
@@ -33,7 +33,7 @@ all:
 	@echo Please read this Makefile for more information.
 	@echo run \'$(MAKE) check\' to run the test 
 
-check: dtest ctest cpptest lotest doclean
+check: dtest ctest cpptest lotest doclean drafttest deprecatedtest internaltest obsoletetest
 	@echo "All header tests have finished. If deprecation #errors appeared, "
 	@echo "       add files to hdrtst/dfiles.txt"
 	@echo "#################################################################"
@@ -108,7 +108,75 @@ ctest:
 	  RES=$$? ; \
 	  echo $$RES ; \
 	done
+    
+drafttest:
+	@echo "C U_HIDE_DRAFT_API Test #######################################################"
+	@rm -f Makefile.sub
+	@echo Building test harness for header files in ../../common and ../../i18n
+	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
+	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
+	  incfile=`basename $$file .h` ; \
+	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo '#define U_HIDE_DRAFT_API' > hd_$$incfile.c; \
+	  echo '#include "'unicode/$$incfile'.h"' >> ht_$$incfile.c ; \
+	  echo 'void junk(void);' >> hd_$$incfile.c ; \
+	  echo 'void junk(){}' >> hd_$$incfile.c ; \
+          $(COMPILE.cc) -c $(cppflags) hd_$$incfile.c ; \
+	  RES=$$? ; \
+	  echo $$RES ; \
+	done
+    
+deprtest:
+	@echo "C U_HIDE_DEPRECATED_API Test #######################################################"
+	@rm -f Makefile.sub
+	@echo Building test harness for header files in ../../common and ../../i18n
+	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
+	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
+	  incfile=`basename $$file .h` ; \
+	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo '#define U_HIDE_DEPRECATED_API' > hdp_$$incfile.c; \
+	  echo '#include "'unicode/$$incfile'.h"' >> hdp_$$incfile.c ; \
+	  echo 'void junk(void);' >> hdp_$$incfile.c ; \
+	  echo 'void junk(){}' >> hdp_$$incfile.c ; \
+          $(COMPILE.cc) -c $(cppflags) hdp_$$incfile.c ; \
+	  RES=$$? ; \
+	  echo $$RES ; \
+	done
 
+internaltest:
+	@echo "C U_HIDE_INTERNAL_API Test #######################################################"
+	@rm -f Makefile.sub
+	@echo Building test harness for header files in ../../common and ../../i18n
+	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
+	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
+	  incfile=`basename $$file .h` ; \
+	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo '#define U_HIDE_INTERNAL_API' > hin_$$incfile.c; \
+	  echo '#include "'unicode/$$incfile'.h"' >> hin_$$incfile.c ; \
+	  echo 'void junk(void);' >> hin_$$incfile.c ; \
+	  echo 'void junk(){}' >> hin_$$incfile.c ; \
+          $(COMPILE.cc) -c $(cppflags) hin_$$incfile.c ; \
+	  RES=$$? ; \
+	  echo $$RES ; \
+	done
+
+obsoletetest:
+	@echo "C U_HIDE_OBSOLETE_API Test #######################################################"
+	@rm -f Makefile.sub
+	@echo Building test harness for header files in ../../common and ../../i18n
+	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
+	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
+	  incfile=`basename $$file .h` ; \
+	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo '#define U_HIDE_OBSOLETE_API' > hob_$$incfile.c; \
+	  echo '#include "'unicode/$$incfile'.h"' >> hob_$$incfile.c ; \
+	  echo 'void junk(void);' >> hob_$$incfile.c ; \
+	  echo 'void junk(){}' >> hob_$$incfile.c ; \
+          $(COMPILE.cc) -c $(cppflags) hob_$$incfile.c ; \
+	  RES=$$? ; \
+	  echo $$RES ; \
+	done
+    
 clean:
 	-@rm -f *.h *.c *.cpp *.o *.junk
 
@@ -117,3 +185,4 @@ distclean: clean
 
 
 .PHONY:	doclean check all cpptest lotest dtest ctest clean distclean
+
