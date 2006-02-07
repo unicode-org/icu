@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2005, International Business Machines Corporation and
+ * Copyright (c) 2004-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -67,7 +67,6 @@ void addURegexTest(TestNode** root)
 {
     addTest(root, &TestRegexCAPI, "regex/TestRegexCAPI");
     addTest(root, &TestBug4315,   "regex/TestBug4315");
-/*  addTest(root, &TestBreakIteratorSafeClone, "tstxtbd/cbiapts/TestBreakIteratorSafeClone"); */
 }
 
 
@@ -99,6 +98,17 @@ static void TestRegexCAPI(void) {
     TEST_ASSERT(status == U_REGEX_INVALID_FLAG);
     uregex_close(re);
 
+    /* openC with an invalid parameter */
+    status = U_ZERO_ERROR;
+    re = uregex_openC(NULL,
+        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD, 0, &status);
+    TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR && re == NULL);
+
+    /* openC with an invalid parameter */
+    status = U_USELESS_COLLATOR_ERROR;
+    re = uregex_openC(NULL,
+        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD, 0, &status);
+    TEST_ASSERT(status == U_USELESS_COLLATOR_ERROR && re == NULL);
 
     /* openC   open from a C string */
     {
