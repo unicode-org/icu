@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -108,5 +108,7 @@ static void TestCollation(void);
 static void TestULocale(void);
 static void TestUResourceBundle(void);
 static void TestDisplayName(void);
+
+static void TestAcceptLanguage(void);
 
 #endif
