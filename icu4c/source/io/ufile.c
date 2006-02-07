@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -72,10 +72,6 @@ u_finit(FILE        *f,
 
 #if !UCONFIG_NO_FORMATTING
         /* if locale is 0, use the default */
-        if(locale == 0) {
-            locale = uloc_getDefault();
-        }
-
         if(u_locbund_init(&result->str.fBundle, locale) == 0) {
             /* DO NOT FCLOSE HERE! */
             uprv_free(result);
@@ -146,10 +142,6 @@ u_fstropen(UChar *stringBuf,
 
 #if !UCONFIG_NO_FORMATTING
     /* if locale is 0, use the default */
-    if(locale == 0) {
-        locale = uloc_getDefault();
-    }
-
     if(u_locbund_init(&result->str.fBundle, locale) == 0) {
         /* DO NOT FCLOSE HERE! */
         uprv_free(result);
