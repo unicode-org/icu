@@ -41,8 +41,6 @@
  * ignore html or xml style markup that could otherwise obscure the content.
  */
  
-#ifndef U_HIDE_DRAFT_API
-
 
 struct UCharsetDetector;
 /**
@@ -343,8 +341,6 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd);
 U_DRAFT  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
 
-
-#endif   /* U_HIDE_DRAFT_API */
 #endif   /* __UCSDET_H */
 
 
