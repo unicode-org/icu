@@ -82,6 +82,8 @@ typedef enum {
      */
     URES_ALIAS=3,
 
+#ifndef U_HIDE_INTERNAL_API
+
     /**
      * Internal use only.
      * Alternative resource type constant for tables of key-value pairs.
@@ -89,6 +91,8 @@ typedef enum {
      * @internal
      */
     URES_TABLE32=4,
+
+#endif /* U_HIDE_INTERNAL_API */
 
     /**
      * Resource type constant for a single 28-bit integer, interpreted as
@@ -107,8 +111,7 @@ typedef enum {
      * @see ures_getIntVector
      * @stable ICU 2.6
      */
-    URES_INT_VECTOR=14,
-
+    URES_INT_VECTOR = 14,
 #ifndef U_HIDE_DEPRECATED_API
     /** @deprecated ICU 2.6 Use the URES_ constant instead. */
     RES_NONE=URES_NONE,
@@ -126,10 +129,11 @@ typedef enum {
     RES_ARRAY=URES_ARRAY,
     /** @deprecated ICU 2.6 Use the URES_ constant instead. */
     RES_INT_VECTOR=URES_INT_VECTOR,
+    /** @deprecated ICU 2.6 Not used. */
+    RES_RESERVED=15, 
 #endif /* U_HIDE_DEPRECATED_API */
 
-    /** @deprecated ICU 2.6 Not used. */
-    RES_RESERVED=15
+    URES_LIMIT = 16,
 } UResType;
 
 /*

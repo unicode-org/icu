@@ -261,25 +261,22 @@
  */
 #define ULOC_FULLNAME_CAPACITY 56
 
-
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Useful constant for the maximum size of the script part of a locale ID
  * (including the terminating NULL).
- * @internal ICU 2.8
+ * @stable ICU 2.8
  */
 #define ULOC_SCRIPT_CAPACITY 6
 
 /**
  * Useful constant for the maximum size of keywords in a locale
- * @internal ICU 2.8
+ * @stable ICU 2.8
  */
 #define ULOC_KEYWORDS_CAPACITY 50
 
 /**
- * Useful constant for the maximum size of keywords in a locale
- * @internal ICU 2.8
+ * Useful constant for the maximum SIZE of keywords in a locale
+ * @stable ICU 2.8
  */
 #define ULOC_KEYWORD_AND_VALUES_CAPACITY 100
 
@@ -299,8 +296,6 @@
  * @stable ICU 2.8
  */
 #define ULOC_KEYWORD_ITEM_SEPARATOR ';'
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Constants for *_getLocale()
@@ -333,7 +328,7 @@ typedef enum {
   ULOC_REQUESTED_LOCALE = 2,
 #endif /* U_HIDE_DEPRECATED_API */
 
-  ULOC_DATA_LOCALE_TYPE_LIMIT
+  ULOC_DATA_LOCALE_TYPE_LIMIT = 3
 } ULocDataLocaleType ;
 
 

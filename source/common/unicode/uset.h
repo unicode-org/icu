@@ -89,7 +89,7 @@ enum {
      * @stable ICU 3.2
      */
     USET_ADD_CASE_MAPPINGS = 4,
-
+    
     /**
      * Enough for any single-code point set
      * @internal
