@@ -43,11 +43,13 @@ typedef struct URegularExpression URegularExpression;
  * @stable ICU 2.4
  */
 typedef enum URegexpFlag{
+
+#ifndef U_HIDE_DRAFT_API 
     /** Forces normalization of pattern and strings. 
     Not implemented yet, just a placeholder, hence draft. 
     @draft ICU 2.4 */
     UREGEX_CANON_EQ         = 128,
-
+#endif
     /**  Enable case insensitive matching.  @stable ICU 2.4 */
     UREGEX_CASE_INSENSITIVE = 2,
 

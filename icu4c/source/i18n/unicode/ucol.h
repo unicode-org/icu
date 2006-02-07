@@ -1012,12 +1012,14 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
 U_STABLE USet * U_EXPORT2
 ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Returned by ucol_collatorToIdentifier to signify that collator is
  * not encodable as an identifier.
  * @internal ICU 3.0
  */
 #define UCOL_SIT_COLLATOR_NOT_ENCODABLE 0x80000000
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * Get a 31-bit identifier given a collator. 
