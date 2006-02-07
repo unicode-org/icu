@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -12,11 +12,9 @@
 *
 *   Date        Name        Description
 *   11/18/98    stephen        Creation.
-*   12/10/1999  bobbyr@optiosoftware.com       Fix for memory leak + string allocation bugs
+*   12/10/1999  bobbyr(at)optiosoftware.com       Fix for memory leak + string allocation bugs
 *******************************************************************************
 */
-
-#include <stdlib.h>
 
 #include "unicode/utypes.h"
 
@@ -25,6 +23,7 @@
 #include "locbund.h"
 
 #include "cmemory.h"
+#include "cstring.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
@@ -39,7 +38,7 @@ u_locbund_init(ULocaleBundle *result, const char *loc)
     if (loc == NULL) {
         loc = uloc_getDefault();
     }
-    
+
     uprv_memset(result, 0, sizeof(ULocaleBundle));
 
     len = (int32_t)strlen(loc);
@@ -47,9 +46,9 @@ u_locbund_init(ULocaleBundle *result, const char *loc)
     if(result->fLocale == 0) {
         return 0;
     }
-    
-    strcpy(result->fLocale, loc);
-    
+
+    uprv_strcpy(result->fLocale, loc);
+
     return result;
 }
 
