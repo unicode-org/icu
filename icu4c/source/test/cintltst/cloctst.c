@@ -227,6 +227,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestULocale);
     TESTCASE(TestUResourceBundle);
     TESTCASE(TestDisplayName); 
+    TESTCASE(TestAcceptLanguage); 
 }
 
 
