@@ -24,8 +24,6 @@ private:
     CharsetMatch **resultArray;
     UBool fStripTags;   // If true, setText() will strip tags from input text.
     UBool fFreshTextSet;
-    static CharsetRecognizer **fCSRecognizers;
-    static int32_t fCSRecognizers_size;
     static void setRecognizers();
 
 public:
@@ -48,8 +46,6 @@ public:
     const char *getCharsetName(int32_t index, UErrorCode& status) const;
 
     static int32_t getDetectableCount(); 
-
-    static UBool cleanup();
 };
 
 U_NAMESPACE_END

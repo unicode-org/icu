@@ -6,11 +6,14 @@
  */
 
 #include "unicode/utypes.h"
+#include "unicode/ucsdet.h"
 
 #include "csdetect.h"
 #include "csmatch.h"
+#include "uenumimp.h"
 
 #include "cmemory.h"
+#include "cstring.h"
 #include "umutex.h"
 #include "ucln_in.h"
 #include "inputext.h"
@@ -20,23 +23,34 @@
 #include "csrucode.h"
 #include "csr2022.h"
 
-U_NAMESPACE_BEGIN
-
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 U_CDECL_BEGIN
+static CharsetRecognizer **fCSRecognizers = NULL;
+
+static int32_t fCSRecognizers_size = 0;
+
 static UBool U_CALLCONV csdet_cleanup(void)
 {
-    return CharsetDetector::cleanup();
+    if (fCSRecognizers != NULL) {
+        for(int32_t r = 0; r < fCSRecognizers_size; r += 1) {
+            delete fCSRecognizers[r];
+            fCSRecognizers[r] = NULL;
+        }
+
+        DELETE_ARRAY(fCSRecognizers);
+        fCSRecognizers = NULL;
+        fCSRecognizers_size = 0;
+    }
+
+    return TRUE;
 }
 U_CDECL_END
 
-CharsetRecognizer **CharsetDetector::fCSRecognizers = NULL;
-
-int32_t CharsetDetector::fCSRecognizers_size = 0;
+U_NAMESPACE_BEGIN
 
 void CharsetDetector::setRecognizers()
 {
@@ -115,22 +129,6 @@ void CharsetDetector::setRecognizers()
         recognizers = NULL;
         ucln_i18n_registerCleanup(UCLN_I18N_CSDET, csdet_cleanup);
     }
-}
-
-UBool CharsetDetector::cleanup()
-{
-    if (fCSRecognizers != NULL) {
-        for(int32_t r = 0; r < fCSRecognizers_size; r += 1) {
-            delete fCSRecognizers[r];
-            fCSRecognizers[r] = NULL;
-        }
-
-        DELETE_ARRAY(fCSRecognizers);
-        fCSRecognizers = NULL;
-        fCSRecognizers_size = 0;
-    }
-
-    return TRUE;
 }
 
 CharsetDetector::CharsetDetector()
@@ -278,3 +276,68 @@ const char *CharsetDetector::getCharsetName(int32_t index, UErrorCode &status) c
 
 U_NAMESPACE_END
 
+U_CDECL_BEGIN
+typedef struct {
+    int32_t currIndex;
+} Context;
+
+
+
+static void U_CALLCONV
+enumClose(UEnumeration *en) {
+    if(en->context != NULL) {
+        DELETE_ARRAY(en->context);
+    }
+
+    DELETE_ARRAY(en);
+}
+
+static int32_t U_CALLCONV
+enumCount(UEnumeration *en, UErrorCode *status) {
+    return fCSRecognizers_size;
+}
+
+static const char* U_CALLCONV
+enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+    if(((Context *)en->context)->currIndex >= fCSRecognizers_size) {
+        return NULL;
+    }
+    const char *currName = fCSRecognizers[((Context *)en->context)->currIndex]->getName();
+    *resultLength = (int32_t)uprv_strlen(currName);
+    ((Context *)en->context)->currIndex++;
+
+    return currName;
+}
+
+static void U_CALLCONV
+enumReset(UEnumeration *en, UErrorCode *status) {
+    ((Context *)en->context)->currIndex = 0;
+}
+
+UEnumeration enumeration = {
+    NULL,
+    NULL,
+    enumClose,
+    enumCount,
+    uenum_unextDefault,
+    enumNext,
+    enumReset
+};
+
+U_DRAFT  UEnumeration * U_EXPORT2
+ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
+{
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    /* Initialize recognized charsets. */
+    CharsetDetector::getDetectableCount();
+
+    UEnumeration *en = NEW_ARRAY(UEnumeration, 1);
+    memcpy(en, &enumeration, sizeof(UEnumeration));
+    en->context = (void*)NEW_ARRAY(Context, 1);
+    uprv_memset(en->context, 0, sizeof(Context));
+    return en;
+}
+U_CDECL_END
