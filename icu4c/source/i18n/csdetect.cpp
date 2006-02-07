@@ -132,7 +132,7 @@ void CharsetDetector::setRecognizers()
 }
 
 CharsetDetector::CharsetDetector()
-  : textIn(new InputText()), fStripTags(FALSE), fFreshTextSet(FALSE)
+  : textIn(new InputText()), resultCount(0), fStripTags(FALSE), fFreshTextSet(FALSE)
 {
     setRecognizers();
 
@@ -215,12 +215,10 @@ const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
 // 	    }
 const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
 {
-    int32_t resultCount = 0;
-
     if(!textIn->isSet()) {
         status = U_MISSING_RESOURCE_ERROR;// TODO:  Need to set proper status code for input text not set
 
-        return 0;
+        return NULL;
     } else if(fFreshTextSet) {
         CharsetRecognizer *csr;
         int32_t            detectResults;
@@ -230,6 +228,7 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
 
         // Iterate over all possible charsets, remember all that
         // give a match quality > 0.
+        resultCount = 0;
         for (int32_t i = 0; i < fCSRecognizers_size; i += 1) {
             csr = fCSRecognizers[i];
             detectResults = csr->match(textIn);
