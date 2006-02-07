@@ -133,7 +133,7 @@ typedef enum {
     RES_RESERVED=15, 
 #endif /* U_HIDE_DEPRECATED_API */
 
-    URES_LIMIT = 16,
+    URES_LIMIT = 16
 } UResType;
 
 /*
