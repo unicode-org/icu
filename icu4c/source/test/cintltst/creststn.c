@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -975,6 +975,7 @@ static void TestAPI() {
     const char* testdatapath;
     UChar* utestdatapath=NULL;
     char convOutput[256];
+    UChar largeBuffer[1024];
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
@@ -1002,8 +1003,17 @@ static void TestAPI() {
     }
 #endif
 
+    u_memset(largeBuffer, 0x0030, sizeof(largeBuffer)/sizeof(largeBuffer[0]));
+    largeBuffer[sizeof(largeBuffer)/sizeof(largeBuffer[0])-1] = 0;
+
     /*Test ures_openU */
 
+    ures_close(ures_openU(largeBuffer, "root", &status));
+    if(U_SUCCESS(status)){
+        log_err("ERROR: ures_openU() worked when the path is very large. It returned %s\n", myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
     ures_close(ures_openU(NULL, "root", &status));
     if(U_FAILURE(status)){
         log_err("ERROR: ures_openU() failed path = NULL with %s\n", myErrorName(status));

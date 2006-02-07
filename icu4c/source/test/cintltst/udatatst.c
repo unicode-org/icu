@@ -1429,15 +1429,25 @@ TestSwapData() {
         log_err("udata_printError can't properly print error messages. Got = %s\n", name);
     }
     errorCode = U_USELESS_COLLATOR_ERROR;
-    if (udata_openSwapperForInputData(NULL, 0,
-                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
-                         &errorCode) != NULL) {
-        log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
-    }
     ds=udata_openSwapperForInputData(NULL, 0,
                          !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
                          &errorCode);
     if (ds != NULL || errorCode != U_USELESS_COLLATOR_ERROR) {
+        log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
+    }
+    errorCode=U_ZERO_ERROR;
+    ds=udata_openSwapperForInputData(NULL, 0,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode);
+    if (ds != NULL || errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
+    }
+    errorCode=U_ZERO_ERROR;
+    memset(buffer, 0, sizeof(2*SWAP_BUFFER_SIZE));
+    ds=udata_openSwapperForInputData(buffer, 2*SWAP_BUFFER_SIZE,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode);
+    if (ds != NULL || errorCode != U_UNSUPPORTED_ERROR) {
         log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
     }
     errorCode=U_ZERO_ERROR;
