@@ -194,7 +194,7 @@ const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
     if(maxMatchesFound > 0) {
         return resultArray[0];
     } else {
-        return 0;
+        return NULL;
     }
 }
 

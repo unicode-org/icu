@@ -140,10 +140,17 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     ucsdet_setText(csd, bytes, byteLength, &status);
 
     const UCharsetMatch *csm = ucsdet_detect(csd, &status);
+
+
     UnicodeString name(ucsdet_getName(csm, &status));
     UnicodeString lang(ucsdet_getLanguage(csm, &status));
     UChar *decoded = NULL;
     int32_t dLength = 0;
+
+    if (csm == NULL) {
+        errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got no matches");
+        goto bail;
+    }
 
     if (name.compare(eSplit[0]) != 0) {
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got " + name);
@@ -240,12 +247,20 @@ void CharsetDetectionTest::UTF8Test()
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
 
+    if (match == NULL) {
+        errln("Detection failure for UTF-8: got no matches.");
+        goto bail;
+    }
+
     ucsdet_getUChars(match, detected, sLength, &status);
 
     if (s.compare(detected, sLength) != 0) {
         errln("Round-trip test failed!");
     }
 
+    ucsdet_setDeclaredEncoding(csd, "UTF-8", 5, &status); /* for coverage */
+
+bail:
     DELETE_ARRAY(detected);
     freeBytes(bytes);
     ucsdet_close(csd);
@@ -268,23 +283,49 @@ void CharsetDetectionTest::UTF16Test()
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
     const char *name;
+    int32_t conf;
 
     ucsdet_setText(csd, beBytes, beLength, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("Encoding detection failure for UTF-16BE: got no matches.");
+        goto try_le;
+    }
+
     name  = ucsdet_getName(match, &status);
+    conf  = ucsdet_getConfidence(match, &status);
 
     if (strcmp(name, "UTF-16BE") != 0) {
         errln("Encoding detection failure for UTF-16BE: got %s", name);
     }
 
+    if (conf != 100) {
+        errln("Did not get 100%% confidence for UTF-16BE: got %d", conf);
+    }
+
+try_le:
     ucsdet_setText(csd, leBytes, leLength, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("Encoding detection failure for UTF-16LE: got no matches.");
+        goto bail;
+    }
+
     name  = ucsdet_getName(match, &status);
+    conf = ucsdet_getConfidence(match, &status);
+
 
     if (strcmp(name, "UTF-16LE") != 0) {
         errln("Enconding detection failure for UTF-16LE: got %s", name);
     }
 
+    if (conf != 100) {
+        errln("Did not get 100%% confidence for UTF-16LE: got %d", conf);
+    }
+
+bail:
     freeBytes(leBytes);
     freeBytes(beBytes);
     ucsdet_close(csd);
@@ -309,21 +350,35 @@ void CharsetDetectionTest::InputFilterTest()
 
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("Turning on the input filter resulted in no matches.");
+        goto turn_off;
+    }
+
     lang = ucsdet_getLanguage(match, &status);
 
     if (strcmp(lang, "fr") != 0) {
         errln("Input filter did not strip markup!");
     }
 
+turn_off:
     ucsdet_enableInputFilter(csd, FALSE);
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("Turning off the input filter resulted in no matches.");
+        goto bail;
+    }
+
     lang = ucsdet_getLanguage(match, &status);
 
     if (strcmp(lang, "en") != 0) {
         errln("Unfiltered input did not detect as English!");
     }
 
+bail:
     freeBytes(bytes);
     ucsdet_close(csd);
 }
@@ -343,6 +398,12 @@ void CharsetDetectionTest::C1BytesTest()
 
     ucsdet_setText(csd, bWindows, lWindows, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("English test with C1 bytes got no matches.");
+        goto bail;
+    }
+
     name  = ucsdet_getName(match, &status);
 
     if (strcmp(name, "windows-1252") != 0) {
@@ -351,12 +412,19 @@ void CharsetDetectionTest::C1BytesTest()
 
     ucsdet_setText(csd, bISO, lISO, &status);
     match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        errln("English text without C1 bytes got no matches.");
+        goto bail;
+    }
+
     name  = ucsdet_getName(match, &status);
 
     if (strcmp(name, "ISO-8859-1") != 0) {
         errln("English text without C1 bytes does not detect as ISO-8859-1, but as %s", name);
     }
 
+bail:
     freeBytes(bWindows);
     freeBytes(bISO);
 

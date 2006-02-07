@@ -158,7 +158,7 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
         totalCharCount += 1;
 
         if (iter->error) {
-            badCharCount++; 
+            badCharCount += 1; 
         } else {
             if (iter->charValue <= 0xFF) {
                 singleByteCharCount += 1;
@@ -206,7 +206,7 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
     if (commonChars == 0) {
         // We have no statistics on frequently occuring characters.
         //  Assess confidence purely on having a reasonable number of
-        //  multi-byte characters (the more the better
+        //  multi-byte characters (the more the better)
         confidence = 30 + doubleByteCharCount - 20*badCharCount;
         if (confidence > 100) {
             confidence = 100;
@@ -215,11 +215,14 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
         //
         // Frequency of occurence statistics exist.
         //
-        double maxVal = log10((float)doubleByteCharCount / 4);
+        double maxVal = log10((double)doubleByteCharCount / 4); /*(float)?*/
         double scaleFactor = 90.0 / maxVal;
         confidence = (int32_t)(log10((double)commonCharCount+1) * scaleFactor + 10.0);
         confidence = min(confidence, 100);
-        if(confidence<0)confidence=0;
+    }
+
+    if (confidence < 0) {
+        confidence = 0;
     }
 
     return confidence;
