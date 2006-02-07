@@ -94,6 +94,7 @@ const int32_t CharsetRecog_gb_18030::commonCharsLen =
 
 static int32_t binarySearch(const int32_t *array, int32_t len, int32_t value)
 {
+#if 0
     int32_t start = 0, end = len-1;
     int32_t mid = (start+end)/2;
 
@@ -110,6 +111,14 @@ static int32_t binarySearch(const int32_t *array, int32_t len, int32_t value)
 
         mid = (start+end)/2;
     }
+#else
+    // um... the commonChars arrays aren't sorted...
+    for(int32_t i = 0; i < len; i += 1) {
+        if(array[i] == value) {
+            return i;
+        }
+    }
+#endif
 
     return -1;
 }
@@ -253,7 +262,7 @@ UBool CharsetRecog_sjis::nextChar(iteratedChar* it, InputText* det) {
         return FALSE;          
     }
     it->charValue = (firstByte << 8) | secondByte;
-    if (! ((secondByte >= 0x40 && secondByte <= 0x7F) || (secondByte >= 0x80 && secondByte <= 0xFF))) {
+    if (! ((secondByte >= 0x40 && secondByte <= 0x7F) || (secondByte >= 0x80 && secondByte <= 0xFE))) {
         // Illegal second byte value.
         it->error = TRUE;
     }
