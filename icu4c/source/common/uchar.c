@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -154,11 +154,9 @@ _openProps(UCharProps *ucp, UErrorCode *pErrorCode) {
 
 #endif
 
-U_CFUNC int8_t
+#if !UCHAR_HARDCODE_DATA
+static int8_t
 uprv_loadPropsData(UErrorCode *pErrorCode) {
-#if UCHAR_HARDCODE_DATA
-    return TRUE;
-#else
     /* load Unicode character properties data from file if necessary */
 
     /*
@@ -213,10 +211,7 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
     }
 
     return havePropsData;
-#endif
 }
-
-#if !UCHAR_HARDCODE_DATA
 
 static int8_t 
 loadPropsData(void) {

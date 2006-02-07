@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2005, International Business Machines                   *
+* Copyright (C) 2001-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -118,7 +118,7 @@ u_init(UErrorCode *status) {
      */
 
     /* Char Properties */
-    uprv_loadPropsData(status);
+    uprv_haveProperties(status);
 
     /* load the case and bidi properties but don't fail if they are not available */
     u_isULowercase(0x61);
