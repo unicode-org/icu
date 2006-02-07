@@ -975,7 +975,7 @@ static void TestAPI() {
     const char* testdatapath;
     UChar* utestdatapath=NULL;
     char convOutput[256];
-    UChar largeBuffer[1024];
+    UChar largeBuffer[1025];
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
@@ -1008,8 +1008,9 @@ static void TestAPI() {
 
     /*Test ures_openU */
 
+    status = U_ZERO_ERROR;
     ures_close(ures_openU(largeBuffer, "root", &status));
-    if(U_SUCCESS(status)){
+    if(status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_openU() worked when the path is very large. It returned %s\n", myErrorName(status));
     }
 

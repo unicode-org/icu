@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_imp.h
@@ -67,8 +67,8 @@ uprv_haveProperties(UErrorCode *pErrorCode);
   * NOT thread safe.
   * @internal
   */
-U_CFUNC int8_t
-uprv_loadPropsData(UErrorCode *errorCode);
+/*U_CFUNC int8_t
+uprv_loadPropsData(UErrorCode *errorCode);*/
 
 /**
  * Type of a function that may be passed to the internal case mapping functions
