@@ -141,7 +141,6 @@
 #include "unicode/unistr.h"
 #endif
 
-#ifndef U_HIDE_DRAFT_API
 
 U_CDECL_BEGIN
 
@@ -592,7 +591,7 @@ utext_extract(UText *ut,
              UErrorCode *status);
 
 
-
+#ifndef U_HIDE_DRAFT_API
 /************************************************************************************
  *
  *  #define inline versions of selected performance-critical text access functions
@@ -639,7 +638,7 @@ utext_extract(UText *ut,
           (ut)->chunkContents[--((ut)->chunkOffset)]  :  utext_previous32(ut))
 
 
-
+#endif
 
 /************************************************************************************
  *
@@ -774,6 +773,8 @@ utext_copy(UText *ut,
 U_DRAFT void U_EXPORT2
 utext_freeze(UText *ut);
 
+
+#ifndef U_HIDE_DRAFT_API
 /**
  * UText provider properties (bit field indexes).
  *
@@ -810,7 +811,7 @@ enum {
      * There is meta data associated with the text.
      * @see Replaceable::hasMetaData()
      * @draft ICU 3.4
-     */
+     */ 
     UTEXT_PROVIDER_HAS_META_DATA = 4
 };
 
@@ -1055,7 +1056,12 @@ UTextMapNativeIndexToUTF16(UText *ut, int64_t nativeIndex);
 typedef void U_CALLCONV
 UTextClose(UText *ut);
 
+#endif
 
+/**
+ * Forward declaration
+ */
+struct UText;
 /**
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
@@ -1067,6 +1073,13 @@ UTextClose(UText *ut);
   *
   * @draft ICU 3.4
   */
+typedef struct UText UText;
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Struct definition
+ * @draft ICU 3.4
+ */
 struct UText {
     /**
      * (protected) Pointer to string or wrapped object or similar.
@@ -1259,6 +1272,7 @@ struct UText {
     UTextClose  *close;
 };
 
+#endif 
 
 /**
  *  Common function for use by Text Provider implementations to allocate and/or initialize
@@ -1279,15 +1293,16 @@ struct UText {
 U_DRAFT UText * U_EXPORT2
 utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
   * @internal
   */
 enum {
     UTEXT_MAGIC = 0x345ad82c
 };
+#endif
 
-
-
+#ifndef U_HIDE_DRAFT_API
 
 /**
  * initializer to be used with local (stack) instances of a UText
@@ -1325,12 +1340,10 @@ enum {
                   }
 
 
-
+#endif /* U_HIDE_DRAFT_API */
 
 U_CDECL_END
 
 
-
-#endif /* U_HIDE_DRAFT_API */
 
 #endif
