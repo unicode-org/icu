@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2005, International Business Machines Corporation and
+ * Copyright (c) 1998-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -1614,6 +1614,10 @@ static void SetBadCommonData(void) {
     /* It's difficult to test that udata_setCommonData really works within the test framework.
        So we just test that foolish people can't do bad things. */
     UErrorCode status;
+    char badBuffer[sizeof(gOffsetTOCAppData_dat)];
+
+    memset(badBuffer, 0, sizeof(badBuffer));
+    strcpy(badBuffer, "Hello! I'm not good data.");
 
     /* Check that we don't do anything */
     status = U_FILE_ACCESS_ERROR;
@@ -1638,6 +1642,13 @@ static void SetBadCommonData(void) {
     }
     else {
         log_verbose("Can't test setting common data because files mode may have been used.\n");
+    }
+
+    /* Check that we verify that the data isn't bad */
+    status = U_ZERO_ERROR;
+    udata_setAppData("invalid path", badBuffer, &status);
+    if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("FAIL: udata_setAppData doesn't verify data validity.\n");
     }
 }
 
