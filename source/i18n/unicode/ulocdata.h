@@ -32,24 +32,30 @@ struct ULocaleData;
 /** A locale data object. @draft ICU 3.6 */
 typedef struct ULocaleData ULocaleData;
 
+
+
 /** The possible types of exemplar character sets.
   * @draft ICU 3.4
   */
-typedef enum ULocaleDataExemplarSetType {
-     ULOCDATA_ES_STANDARD,      /* Basic set */
-     ULOCDATA_ES_AUXILIARY,     /* Auxiliary set */
-     ULOCDATA_ES_COUNT
+typedef enum ULocaleDataExemplarSetType  {
+#ifndef U_HIDE_DRAFT_API 
+     ULOCDATA_ES_STANDARD=0,      /* Basic set */
+     ULOCDATA_ES_AUXILIARY=1,     /* Auxiliary set */
+#endif
+     ULOCDATA_ES_COUNT=3
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
   * @draft ICU 3.4
   */
 typedef enum ULocaleDataDelimiterType {
-     ULOCDATA_QUOTATION_START,     /* Quotation start */
-     ULOCDATA_QUOTATION_END,       /* Quotation end */
-     ULOCDATA_ALT_QUOTATION_START, /* Alternate quotation start */
-     ULOCDATA_ALT_QUOTATION_END,   /* Alternate quotation end */
-     ULOCDATA_DELIMITER_COUNT
+#ifndef U_HIDE_DRAFT_API 
+    ULOCDATA_QUOTATION_START = 0,     /* Quotation start */
+     ULOCDATA_QUOTATION_END = 1,       /* Quotation end */
+     ULOCDATA_ALT_QUOTATION_START = 2, /* Alternate quotation start */
+     ULOCDATA_ALT_QUOTATION_END = 3,   /* Alternate quotation end */
+#endif
+     ULOCDATA_DELIMITER_COUNT = 4
 } ULocaleDataDelimiterType;
 
 /**

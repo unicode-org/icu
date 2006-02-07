@@ -755,46 +755,50 @@ unum_toPattern(    const    UNumberFormat*          fmt,
  */
 typedef enum UNumberFormatSymbol {
   /** The decimal separator */
-  UNUM_DECIMAL_SEPARATOR_SYMBOL,
+  UNUM_DECIMAL_SEPARATOR_SYMBOL = 0,
   /** The grouping separator */
-  UNUM_GROUPING_SEPARATOR_SYMBOL,
+  UNUM_GROUPING_SEPARATOR_SYMBOL = 1,
   /** The pattern separator */
-  UNUM_PATTERN_SEPARATOR_SYMBOL,
+  UNUM_PATTERN_SEPARATOR_SYMBOL = 2,
   /** The percent sign */
-  UNUM_PERCENT_SYMBOL,
+  UNUM_PERCENT_SYMBOL = 3,
   /** Zero*/
-  UNUM_ZERO_DIGIT_SYMBOL,
+  UNUM_ZERO_DIGIT_SYMBOL = 4,
   /** Character representing a digit in the pattern */
-  UNUM_DIGIT_SYMBOL,
+  UNUM_DIGIT_SYMBOL = 5,
   /** The minus sign */
-  UNUM_MINUS_SIGN_SYMBOL,
+  UNUM_MINUS_SIGN_SYMBOL = 6,
   /** The plus sign */
-  UNUM_PLUS_SIGN_SYMBOL,
+  UNUM_PLUS_SIGN_SYMBOL = 7,
   /** The currency symbol */
-  UNUM_CURRENCY_SYMBOL,
+  UNUM_CURRENCY_SYMBOL = 8,
   /** The international currency symbol */
-  UNUM_INTL_CURRENCY_SYMBOL,
+  UNUM_INTL_CURRENCY_SYMBOL = 9,
   /** The monetary separator */
-  UNUM_MONETARY_SEPARATOR_SYMBOL,
+  UNUM_MONETARY_SEPARATOR_SYMBOL = 10,
   /** The exponential symbol */
-  UNUM_EXPONENTIAL_SYMBOL,
+  UNUM_EXPONENTIAL_SYMBOL = 11,
   /** Per mill symbol */
-  UNUM_PERMILL_SYMBOL,
+  UNUM_PERMILL_SYMBOL = 12,
   /** Escape padding character */
-  UNUM_PAD_ESCAPE_SYMBOL,
+  UNUM_PAD_ESCAPE_SYMBOL = 13,
   /** Infinity symbol */
-  UNUM_INFINITY_SYMBOL,
+  UNUM_INFINITY_SYMBOL = 14,
   /** Nan symbol */
-  UNUM_NAN_SYMBOL,
+  UNUM_NAN_SYMBOL = 15,
   /** Significant digit symbol
    * @stable ICU 3.0 */
-  UNUM_SIGNIFICANT_DIGIT_SYMBOL,
+  UNUM_SIGNIFICANT_DIGIT_SYMBOL = 16,
+
+#ifndef U_HIDE_DRAFT_API  
   /** The monetary grouping separator 
    * @draft ICU 3.6
    */
-  UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL,
+  UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,  
+#endif /*U_HIDE_DRAFT_API*/
+
   /** count symbol constants */
-  UNUM_FORMAT_SYMBOL_COUNT
+  UNUM_FORMAT_SYMBOL_COUNT = 18
 } UNumberFormatSymbol;
 
 /**

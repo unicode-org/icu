@@ -342,7 +342,9 @@ typedef enum UDateFormatField {
      */
     UDAT_TIMEZONE_RFC_FIELD = 23,
 
-     /**
+#ifndef U_HIDE_DRAFT_API
+
+    /**
      * FieldPosition and UFieldPosition selector for 'v' field alignment,
      * corresponding to the UCAL_ZONE_OFFSET field.
      * @draft ICU 3.4
@@ -364,6 +366,8 @@ typedef enum UDateFormatField {
      */
     UDAT_STANDALONE_MONTH_FIELD = 26,
 
+#endif /*U_HIDE_DRAFT_API*/
+   
    /**
      * Number of FieldPosition and UFieldPosition selectors for 
      * DateFormat and UDateFormat.
@@ -372,7 +376,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT
+    UDAT_FIELD_COUNT = 27
 
 } UDateFormatField;
 

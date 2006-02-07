@@ -266,9 +266,7 @@ typedef enum UDateTimeScale {
     UDTS_DB2_TIME,
 
     /**
-     * The first unused time scale value.
-     *
-     * @stable ICU 3.2
+     * The first unused time scale value. The limit of this enum
      */
     UDTS_MAX_SCALE
 } UDateTimeScale;
@@ -300,7 +298,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_EPOCH_OFFSET_VALUE,
+    UTSV_EPOCH_OFFSET_VALUE=1,
 
     /**
      * The constant used to select the minimum from value
@@ -310,7 +308,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_FROM_MIN_VALUE,
+    UTSV_FROM_MIN_VALUE=2,
 
     /**
      * The constant used to select the maximum from value
@@ -320,7 +318,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_FROM_MAX_VALUE,
+    UTSV_FROM_MAX_VALUE=3,
 
     /**
      * The constant used to select the minimum to value
@@ -330,7 +328,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_TO_MIN_VALUE,
+    UTSV_TO_MIN_VALUE=4,
 
     /**
      * The constant used to select the maximum to value
@@ -340,7 +338,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_TO_MAX_VALUE,
+    UTSV_TO_MAX_VALUE=5,
 
     /**
      * The constant used to select the epoch plus one value
@@ -353,7 +351,7 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_EPOCH_OFFSET_PLUS_1_VALUE,
+    UTSV_EPOCH_OFFSET_PLUS_1_VALUE=6,
 
     /**
      * The constant used to select the epoch plus one value
@@ -366,8 +364,9 @@ typedef enum UTimeScaleValue {
      *
      * @stable ICU 3.2
      */
-    UTSV_EPOCH_OFFSET_MINUS_1_VALUE,
+    UTSV_EPOCH_OFFSET_MINUS_1_VALUE=7,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * The constant used to select the units round value
      * for a time scale.
@@ -378,7 +377,7 @@ typedef enum UTimeScaleValue {
      *
      * @internal
      */
-    UTSV_UNITS_ROUND_VALUE,
+    UTSV_UNITS_ROUND_VALUE=8,
 
     /**
      * The constant used to select the minimum safe rounding value
@@ -390,7 +389,7 @@ typedef enum UTimeScaleValue {
      *
      * @internal
      */
-    UTSV_MIN_ROUND_VALUE,
+    UTSV_MIN_ROUND_VALUE=9,
 
     /**
      * The constant used to select the maximum safe rounding value
@@ -402,18 +401,17 @@ typedef enum UTimeScaleValue {
      *
      * @internal
      */
-    UTSV_MAX_ROUND_VALUE,
+    UTSV_MAX_ROUND_VALUE=10,
+
+#endif /* U_HIDE_INTERNAL_API */
 
     /**
-     * The number of time scale values.
-     * 
-     * NOTE: This is an internal value. DO NOT USE IT.
+     * The number of time scale values, in other words limit of this enum.
      * 
      * @see utmscale_getTimeScaleValue
-     *
-     * @internal
      */
-    UTSV_MAX_SCALE_VALUE
+    UTSV_MAX_SCALE_VALUE=11,
+
 } UTimeScaleValue;
 
 /**
