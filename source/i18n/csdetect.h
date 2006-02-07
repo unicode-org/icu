@@ -22,6 +22,7 @@ class CharsetDetector : public UMemory
 private:
     InputText *textIn;
     CharsetMatch **resultArray;
+    int32_t resultCount;
     UBool fStripTags;   // If true, setText() will strip tags from input text.
     UBool fFreshTextSet;
     static void setRecognizers();
