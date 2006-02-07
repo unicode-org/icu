@@ -147,6 +147,18 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     if (name.compare(eSplit[0]) != 0) {
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got " + name);
+
+        int32_t matchCount;
+        const UCharsetMatch **matches = ucsdet_detectAll(csd, &matchCount, &status);
+
+        for (int32_t m = 0; m < matchCount; m += 1) {
+            const char *name = ucsdet_getName(matches[m], &status);
+            const char *lang = ucsdet_getLanguage(matches[m], &status);
+            int32_t confidence = ucsdet_getConfidence(matches[m], &status);
+
+            errln("%s (%s) %d\n", name, lang, confidence);
+        }
+
         goto bail;
     }
 
@@ -334,7 +346,7 @@ void CharsetDetectionTest::C1BytesTest()
     name  = ucsdet_getName(match, &status);
 
     if (strcmp(name, "windows-1252") != 0) {
-        errln("English text with C1 bytes does not detect as windows-1252!");
+        errln("English text with C1 bytes does not detect as windows-1252, but as %s", name);
     }
 
     ucsdet_setText(csd, bISO, lISO, &status);
@@ -342,7 +354,7 @@ void CharsetDetectionTest::C1BytesTest()
     name  = ucsdet_getName(match, &status);
 
     if (strcmp(name, "ISO-8859-1") != 0) {
-        errln("English text without C1 bytes does not detect as ISO-8859-1!");
+        errln("English text without C1 bytes does not detect as ISO-8859-1, but as %s", name);
     }
 
     freeBytes(bWindows);
