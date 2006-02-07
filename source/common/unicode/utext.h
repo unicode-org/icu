@@ -1058,11 +1058,8 @@ UTextClose(UText *ut);
 
 #endif
 
-/**
- * Forward declaration
- */
-struct UText;
-/**
+#ifndef U_HIDE_DRAFT_API
+ /**
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
   *                  text  (UTF-8, noncontiguous UTF-16, whatever.)
@@ -1073,13 +1070,6 @@ struct UText;
   *
   * @draft ICU 3.4
   */
-typedef struct UText UText;
-
-#ifndef U_HIDE_DRAFT_API
-/**
- * Struct definition
- * @draft ICU 3.4
- */
 struct UText {
     /**
      * (protected) Pointer to string or wrapped object or similar.
