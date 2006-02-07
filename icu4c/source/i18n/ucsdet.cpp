@@ -26,7 +26,9 @@ ucsdet_open(UErrorCode   *status)
     if(U_FAILURE(*status)) {
         return 0;
     }
+
     CharsetDetector* csd = new CharsetDetector();
+
     return (UCharsetDetector *) csd;
 }
 
@@ -44,6 +46,11 @@ ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCo
         return;
     }
 
+    if (ucsd == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
     CharsetDetector *csd = (CharsetDetector *) ucsd;
 
     csd->setText(textIn, len);
@@ -53,7 +60,12 @@ U_DRAFT const char * U_EXPORT2
 ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return 0;
+        return NULL;
+    }
+
+    if (ucsm == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
 
     CharsetMatch *csm = (CharsetMatch *) ucsm;
@@ -65,7 +77,12 @@ U_DRAFT int32_t U_EXPORT2
 ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return -1;
+        return 0;
+    }
+
+    if (ucsm == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     CharsetMatch *csm = (CharsetMatch *) ucsm;
@@ -77,7 +94,12 @@ U_DRAFT const char * U_EXPORT2
 ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return 0;
+        return NULL;
+    }
+
+    if (ucsm == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
 
     CharsetMatch *csm = (CharsetMatch *) ucsm;
@@ -89,7 +111,12 @@ U_DRAFT const UCharsetMatch * U_EXPORT2
 ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return 0;
+        return NULL;
+    }
+
+    if (ucsd == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
 
     CharsetDetector *csd = (CharsetDetector *) ucsd;
@@ -104,6 +131,11 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t
         return;
     }
 
+    if (ucsd == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
     CharsetDetector *csd = (CharsetDetector *) ucsd;
 
     csd->setDeclaredEncoding(encoding,length);
@@ -114,7 +146,12 @@ ucsdet_detectAll(UCharsetDetector *ucsd,
                  int32_t *maxMatchesFound, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return 0;
+        return NULL;
+    }
+
+    if (ucsd == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
 
     CharsetDetector *csd = (CharsetDetector *) ucsd;
@@ -143,6 +180,11 @@ ucsdet_detectAll(UCharsetDetector *ucsd,
 U_DRAFT  UBool U_EXPORT2
 ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd)
 {
+    // todo: could use an error return...
+    if (ucsd == NULL) {
+        return FALSE;
+    }
+
     CharsetDetector *csd = (CharsetDetector *) ucsd;
 
     return csd->getStripTagsFlag();
@@ -151,8 +193,14 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd)
 U_DRAFT  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter)
 {
+    // todo: could use an error return...
+    if (ucsd == NULL) {
+        return FALSE;
+    }
+
     CharsetDetector *csd = (CharsetDetector *) ucsd;
     UBool prev = csd->getStripTagsFlag();
+
     csd->setStripTagsFlag(filter);
 
     return prev;
@@ -163,7 +211,12 @@ ucsdet_getUChars(const UCharsetMatch *ucsm,
                  UChar *buf, int32_t cap, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return -1;
+        return 0;
+    }
+
+    if (ucsm == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     CharsetMatch *csm = (CharsetMatch *) ucsm;
