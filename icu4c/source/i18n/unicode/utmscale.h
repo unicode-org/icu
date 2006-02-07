@@ -410,7 +410,7 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      */
-    UTSV_MAX_SCALE_VALUE=11,
+    UTSV_MAX_SCALE_VALUE=11
 
 } UTimeScaleValue;
 

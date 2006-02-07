@@ -1435,7 +1435,7 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_T = 8,                /*[T]*/
     U_GCB_V = 9,                /*[V]*/
 #endif /*U_HIDE_DRAFT_API*/
-    U_GCB_COUNT
+    U_GCB_COUNT = 10
 } UGraphemeClusterBreak;
 
 /**
