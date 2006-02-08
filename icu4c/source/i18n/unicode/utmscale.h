@@ -340,6 +340,7 @@ typedef enum UTimeScaleValue {
      */
     UTSV_TO_MAX_VALUE=5,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * The constant used to select the epoch plus one value
      * for a time scale.
@@ -349,7 +350,7 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      *
-     * @stable ICU 3.2
+     * @internal ICU 3.2
      */
     UTSV_EPOCH_OFFSET_PLUS_1_VALUE=6,
 
@@ -362,11 +363,10 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      *
-     * @stable ICU 3.2
+     * @internal ICU 3.2
      */
     UTSV_EPOCH_OFFSET_MINUS_1_VALUE=7,
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * The constant used to select the units round value
      * for a time scale.
@@ -375,7 +375,7 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      *
-     * @internal
+     * @internal ICU 3.2
      */
     UTSV_UNITS_ROUND_VALUE=8,
 
@@ -387,7 +387,7 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      *
-     * @internal
+     * @internal ICU 3.2
      */
     UTSV_MIN_ROUND_VALUE=9,
 
@@ -399,7 +399,7 @@ typedef enum UTimeScaleValue {
      * 
      * @see utmscale_getTimeScaleValue
      *
-     * @internal
+     * @internal ICU 3.2
      */
     UTSV_MAX_ROUND_VALUE=10,
 
