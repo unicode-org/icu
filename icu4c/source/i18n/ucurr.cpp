@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -791,7 +791,7 @@ static const struct CurrencyList {
     {"CHW", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"CLF", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"CLP", UCURR_COMMON|UCURR_NON_DEPRECATED},
-    {"CNX", UCURR_COMMON|UCURR_DEPRECATED},
+    {"CNX", UCURR_UNCOMMON|UCURR_DEPRECATED},
     {"CNY", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"COP", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"COU", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
@@ -922,7 +922,7 @@ static const struct CurrencyList {
     {"PYG", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"QAR", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"RHD", UCURR_COMMON|UCURR_DEPRECATED},
-    {"ROL", UCURR_COMMON|UCURR_NON_DEPRECATED},
+    {"ROL", UCURR_COMMON|UCURR_DEPRECATED},
     {"RON", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"RUB", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"RUR", UCURR_COMMON|UCURR_DEPRECATED},
