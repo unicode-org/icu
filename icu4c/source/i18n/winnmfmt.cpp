@@ -55,7 +55,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Win32NumberFormat)
  * group in the string, that means that there's only one group,
  * and the return value should be multiplied by 10. (e.g. "3" => 30)
  */
-UINT getGrouping(const char *grouping)
+static UINT getGrouping(const char *grouping)
 {
     UINT g = 0;
     UINT c = 0;
@@ -75,7 +75,7 @@ UINT getGrouping(const char *grouping)
     return g;
 }
 
-void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
+static void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
 {
     char buf[10];
 
@@ -94,13 +94,13 @@ void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
     GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER, (LPWSTR) &fmt->NegativeOrder, sizeof(UINT));
 }
 
-void freeNumberFormat(NUMBERFMTW *fmt)
+static void freeNumberFormat(NUMBERFMTW *fmt)
 {
     DELETE_ARRAY(fmt->lpThousandSep);
     DELETE_ARRAY(fmt->lpDecimalSep);
 }
 
-void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
+static void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
 {
     char buf[10];
 
@@ -123,7 +123,7 @@ void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
     GetLocaleInfoW(lcid, LOCALE_SCURRENCY, (LPWSTR) fmt->lpCurrencySymbol, 8);
 }
 
-void freeCurrencyFormat(CURRENCYFMTW *fmt)
+static void freeCurrencyFormat(CURRENCYFMTW *fmt)
 {
     DELETE_ARRAY(fmt->lpCurrencySymbol);
     DELETE_ARRAY(fmt->lpThousandSep);
