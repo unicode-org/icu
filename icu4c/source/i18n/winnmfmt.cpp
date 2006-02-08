@@ -311,21 +311,6 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
     return appendTo;
 }
 
-UnicodeString &Win32NumberFormat::format(double number, UnicodeString &appendTo) const
-{
-    return NumberFormat::format(number, appendTo);
-}
-
-UnicodeString &Win32NumberFormat::format(int32_t number, UnicodeString &appendTo) const
-{
-    return NumberFormat::format(number, appendTo);
-}
-
-UnicodeString &Win32NumberFormat::format(int64_t number, UnicodeString &appendTo) const
-{
-    return NumberFormat::format(number, appendTo);
-}
-
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

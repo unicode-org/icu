@@ -92,9 +92,10 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
 
-    virtual UnicodeString &format(double number, UnicodeString &appendTo) const;
-    virtual UnicodeString &format(int32_t number, UnicodeString &appendTo) const;
-    virtual UnicodeString &format(int64_t number, UnicodeString &appendTo) const;
+// Use the default behavior for the following.
+//    virtual UnicodeString &format(double number, UnicodeString &appendTo) const;
+//    virtual UnicodeString &format(int32_t number, UnicodeString &appendTo) const;
+//    virtual UnicodeString &format(int64_t number, UnicodeString &appendTo) const;
 
     virtual void parse(const UnicodeString& text, Formattable& result, ParsePosition& parsePosition) const;
 
