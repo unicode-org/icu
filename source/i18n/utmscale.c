@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and
+* Copyright (C) 2004-2006, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -19,30 +19,7 @@
 #define hours        (minutes * 60)
 #define days         (hours * 24)
 
-#define TIME_SCALE_CHECK(scale,status) \
-    if(scale < 0 || scale >= UDTS_MAX_SCALE) { \
-        *status = U_ILLEGAL_ARGUMENT_ERROR; \
-        return 0; \
-    }
-
-typedef struct
-{
-    int64_t units;
-    int64_t epochOffset;
-
-    int64_t fromMin;
-    int64_t fromMax;
-    int64_t toMin;
-    int64_t toMax;
-
-    int64_t epochOffsetP1;
-    int64_t epochOffsetM1;
-    int64_t unitsRound;
-    int64_t minRound;
-    int64_t maxRound;
-} InternalTimeScaleData;
-
-static const InternalTimeScaleData timeScaleTable[] = {
+static const int64_t timeScaleTable[UDTS_MAX_SCALE][UTSV_MAX_SCALE_VALUE] = {
   /*    units             epochOffset                     fromMin                        fromMax                            toMin                        toMax                    epochOffsetP1                epochOffsetM1              unitsRound                    minRound                     maxRound          */
     {milliseconds, INT64_C(62135769600000),     INT64_C(-984472973285477),     INT64_C(860201434085477),     INT64_C(-9223372036854774999), INT64_C(9223372036854774999), INT64_C(62135769600001),     INT64_C(62135769599999),     INT64_C(5000),         INT64_C(-9223372036854770808), INT64_C(9223372036854770807)},
     {seconds,      INT64_C(62135769600),        INT64_C(-984472973285),        INT64_C(860201434085),        U_INT64_MIN,                   INT64_C(9223372036854775807), INT64_C(62135769601),        INT64_C(62135769599),        INT64_C(5000000),      INT64_C(-9223372036849775808), INT64_C(9223372036849775807)},
@@ -58,64 +35,24 @@ static const InternalTimeScaleData timeScaleTable[] = {
 U_CAPI int64_t U_EXPORT2
 utmscale_getTimeScaleValue(UDateTimeScale timeScale, UTimeScaleValue value, UErrorCode *status)
 {
-    const InternalTimeScaleData *internalData;
-
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
     }
 
-    if (timeScale < 0 || timeScale >= UDTS_MAX_SCALE) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    internalData = &timeScaleTable[timeScale];
-
-    switch (value)
+    if (timeScale < UDTS_JAVA_TIME || UDTS_MAX_SCALE <= timeScale
+        || value < UTSV_UNITS_VALUE || UTSV_MAX_SCALE_VALUE <= value)
     {
-    case UTSV_UNITS_VALUE:
-        return internalData->units;
-        
-    case UTSV_EPOCH_OFFSET_VALUE:
-        return internalData->epochOffset;
-    
-    case UTSV_FROM_MIN_VALUE:
-        return internalData->fromMin;
-        
-    case UTSV_FROM_MAX_VALUE:
-        return internalData->fromMax;
-        
-    case UTSV_TO_MIN_VALUE:
-        return internalData->toMin;
-        
-    case UTSV_TO_MAX_VALUE:
-        return internalData->toMax;
-        
-    case UTSV_EPOCH_OFFSET_PLUS_1_VALUE:
-        return internalData->epochOffsetP1;
-        
-    case UTSV_EPOCH_OFFSET_MINUS_1_VALUE:
-        return internalData->epochOffsetM1;
-        
-    case UTSV_UNITS_ROUND_VALUE:
-        return internalData->unitsRound;
-    
-    case UTSV_MIN_ROUND_VALUE:
-        return internalData->minRound;
-        
-    case UTSV_MAX_ROUND_VALUE:
-        return internalData->maxRound;
-        
-    default:
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+
+    return timeScaleTable[timeScale][value];
 }
 
 U_CAPI int64_t U_EXPORT2
 utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *status)
 {
-    const InternalTimeScaleData *data;
+    const int64_t *data;
     
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
@@ -126,20 +63,20 @@ utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *stat
         return 0;
     }
 
-    data = &timeScaleTable[timeScale];
+    data = (const int64_t *)(&timeScaleTable[timeScale]);
 
-    if (otherTime < data->fromMin || otherTime > data->fromMax) {
+    if (otherTime < data[UTSV_FROM_MIN_VALUE] || otherTime > data[UTSV_FROM_MAX_VALUE]) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     
-    return (otherTime + data->epochOffset) * data->units;
+    return (otherTime + data[UTSV_EPOCH_OFFSET_VALUE]) * data[UTSV_UNITS_VALUE];
 }
 
 U_CAPI int64_t U_EXPORT2
 utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status)
 {
-    const InternalTimeScaleData *data;
+    const int64_t *data;
     
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
@@ -150,26 +87,26 @@ utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *st
         return 0;
     }
 
-    data = &timeScaleTable[timeScale];
+    data = (const int64_t *)(&timeScaleTable[timeScale]);
 
-    if (universalTime < data->toMin || universalTime > data->toMax) {
+    if (universalTime < data[UTSV_TO_MIN_VALUE] || universalTime > data[UTSV_TO_MAX_VALUE]) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     
     if (universalTime < 0) {
-        if (universalTime < data->minRound) {
-            return (universalTime + data->unitsRound) / data->units - data->epochOffsetP1;
+        if (universalTime < data[UTSV_MIN_ROUND_VALUE]) {
+            return (universalTime + data[UTSV_UNITS_ROUND_VALUE]) / data[UTSV_UNITS_VALUE] - data[UTSV_EPOCH_OFFSET_PLUS_1_VALUE];
         }
         
-        return (universalTime - data->unitsRound) / data->units - data->epochOffset;
+        return (universalTime - data[UTSV_UNITS_ROUND_VALUE]) / data[UTSV_UNITS_VALUE] - data[UTSV_EPOCH_OFFSET_VALUE];
     }
     
-    if (universalTime > data->maxRound) {
-        return (universalTime - data->unitsRound) / data->units - data->epochOffsetM1;
+    if (universalTime > data[UTSV_MAX_ROUND_VALUE]) {
+        return (universalTime - data[UTSV_UNITS_ROUND_VALUE]) / data[UTSV_UNITS_VALUE] - data[UTSV_EPOCH_OFFSET_MINUS_1_VALUE];
     }
     
-    return (universalTime + data->unitsRound) / data->units - data->epochOffset;
+    return (universalTime + data[UTSV_UNITS_ROUND_VALUE]) / data[UTSV_UNITS_VALUE] - data[UTSV_EPOCH_OFFSET_VALUE];
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
