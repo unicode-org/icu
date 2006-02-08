@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -284,7 +284,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
     TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
-    //TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
+    TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
 #if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
 #endif
