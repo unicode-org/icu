@@ -1,5 +1,5 @@
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -96,12 +96,12 @@ HOWTO
 5. Copy the data files to the correct location in the ICU4C/ICU4J
    source trees:
 
-   $ cp zoneinfo.txt ../../../data/misc/
+   $ cp zoneinfo.txt ../../data/misc/
    $ cp ZoneMetaData.java {path_to}/icu4j/src/com/ibm/icu/impl
 
 6. Rebuild ICU:
 
-   $ cd ../../../
+   $ cd ../..
    $ {*make}
 
 7. Don't forget to check in the new zoneinfo.txt (from its location at

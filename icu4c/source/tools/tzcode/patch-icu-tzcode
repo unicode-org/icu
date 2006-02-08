@@ -29,7 +29,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  
 -all:		tzselect zic zdump $(LIBOBJS)
 +LS=		/bin/ls
-+SED=		/bin/sed
++SED=		sed
 +
 +all:		tzselect zic zdump $(LIBOBJS) tz2icu
  
@@ -59,9 +59,8 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  # In earlier versions of this makefile, the other two directories were
  # subdirectories of $(TZDIR).  However, this led to configuration errors.
  # For example, with posix_right under the earlier scheme,
-diff -ur ../tzcode.orig/zic.c ./zic.c
---- ../tzcode.orig/zic.c	2005-05-26 11:54:07.000000000 -0700
-+++ ./zic.c	2005-06-30 16:39:56.000000000 -0700
+--- zic.c.orig	2005-12-22 06:31:15.000000000 -0800
++++ zic.c	2006-01-19 19:34:06.000000000 -0800
 @@ -23,6 +23,20 @@
  #define MKDIR_UMASK 0755
  #endif
@@ -130,7 +129,7 @@ diff -ur ../tzcode.orig/zic.c ./zic.c
  static unsigned char	abbrinds[TZ_MAX_TYPES];
  static char		ttisstds[TZ_MAX_TYPES];
 @@ -459,6 +496,62 @@
- 	(void) exit(EXIT_FAILURE);
+ 	exit(EXIT_FAILURE);
  }
  
 +#ifdef ICU
@@ -234,7 +233,7 @@ diff -ur ../tzcode.orig/zic.c ./zic.c
  				_("%s: Can't link from %s to %s: %s\n"),
  				progname, fromname, toname, e);
 +#ifndef ICU_LINKS
- 			(void) exit(EXIT_FAILURE);
+ 			exit(EXIT_FAILURE);
 +#endif
  		}
  	}
@@ -438,7 +437,7 @@ diff -ur ../tzcode.orig/zic.c ./zic.c
  const int		ttisstd;
 @@ -1859,12 +2082,25 @@
  		error(_("internal error - addtype called with bad ttisgmt"));
- 		(void) exit(EXIT_FAILURE);
+ 		exit(EXIT_FAILURE);
  	}
 +#ifdef ICU
 +	if (isdst != (dstoff != 0)) {
@@ -463,7 +462,7 @@ diff -ur ../tzcode.orig/zic.c ./zic.c
  			ttisstd == ttisstds[i] &&
  			ttisgmt == ttisgmts[i])
 @@ -1879,6 +2115,10 @@
- 		(void) exit(EXIT_FAILURE);
+ 		exit(EXIT_FAILURE);
  	}
  	gmtoffs[i] = gmtoff;
 +#ifdef ICU
