@@ -1,8 +1,8 @@
 /*
- **************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                           *
- **************************************************************************
+ ****************************************************************************
+ * Copyright (C) 2005-2006, International Business Machines Corporation and *
+ * others. All Rights Reserved.                                             *
+ ****************************************************************************
  *
  */
 package com.ibm.icu.text;
@@ -25,6 +25,16 @@ import java.util.Arrays;
  */
 abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
+    private static int search(int[] array, int value)
+    {
+        for (int i = 0; i < array.length; i += 1) {
+            if (array[i] == value) {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
     
      
     /**
@@ -67,7 +77,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                     } else {
                         doubleByteCharCount++;
                         if (commonChars != null) {
-                            if (Arrays.binarySearch(commonChars, iter.charValue) >= 0){
+                            if (search(commonChars, iter.charValue) >= 0){
                                 commonCharCount++;
                             }
                         }
