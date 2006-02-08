@@ -198,8 +198,7 @@
 
     </test-case>
 
-    <!-- No EUC-JP in this test because it detects as GB18030 -->
-    <test-case id="IUC10-jp" encodings="UTF-8 UTF-32BE UTF-32LE Shift_JIS ISO-2022-JP">
+    <test-case id="IUC10-jp" encodings="UTF-8 UTF-32BE UTF-32LE Shift_JIS EUC-JP ISO-2022-JP">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     ヨーロッパ、ソフトウェア、そしてインターネット:
@@ -377,10 +376,9 @@
 
     </test-case>
 
-    <!-- test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030" -->
+    <test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
-    <!--
     歐洲，軟體及網際網路：
     讓統一碼（Unicode）領你進入全世界
     IUC10
@@ -390,9 +388,8 @@
 
     Unicode
     當世界需要溝通時，請用統一碼（Unicode）
-    -->
 
-    <!-- /test-case -->
+    </test-case>
 
     <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
     <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030">
