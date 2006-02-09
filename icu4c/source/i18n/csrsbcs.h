@@ -18,9 +18,6 @@ U_NAMESPACE_BEGIN
 class NGramParser : public UMemory
 {
  private:
-    static const int32_t N_GRAM_SIZE = 3;
-    static const int32_t N_GRAM_MASK = 0xFFFFFF;
-
     int32_t byteIndex;
     int32_t ngram;
         

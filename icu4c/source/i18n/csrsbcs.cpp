@@ -9,6 +9,11 @@
 
 #include "csrsbcs.h"
 
+#include <stdio.h>
+
+#define N_GRAM_SIZE 3
+#define N_GRAM_MASK 0xFFFFFF
+
 U_NAMESPACE_BEGIN
 
 NGramParser::NGramParser(const int32_t *theNgramList, const uint8_t *theCharMap)
@@ -75,7 +80,7 @@ void NGramParser::lookup(int32_t thisNgram)
 
 void NGramParser::addByte(int32_t b)
 {
-    ngram = ((ngram << 8) + (b & 0xFF)) & N_GRAM_MASK;
+    ngram = ((ngram << 8) + b) & N_GRAM_MASK;
     lookup(ngram);
 }
 
@@ -681,7 +686,10 @@ CharsetRecog_8859_1_en::~CharsetRecog_8859_1_en()
 
 int32_t CharsetRecog_8859_1_en::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams, charMap);
+    int32_t result = match_sbcs(textIn, ngrams, charMap);
+
+   // printf("8859_1_en: result = %d\n", result);
+	return result; //match_sbcs(textIn, ngrams, charMap);
 }
 
 CharsetRecog_8859_1_da::~CharsetRecog_8859_1_da()

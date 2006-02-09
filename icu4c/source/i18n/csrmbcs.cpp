@@ -193,9 +193,9 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
 
     delete iter;
 
-    if (doubleByteCharCount == 0 && badCharCount == 0) {
-        // No multi-byte chars.
-        //   ASCII file?  It's probably not our encoding,
+    if (doubleByteCharCount <= 10 && badCharCount == 0) {
+        // Not many multi-byte chars.
+        //   ASCII or ISO file?  It's probably not our encoding,
         //   but is not incompatible with our encoding, so don't give it a zero.
         confidence = 10;
 
@@ -217,6 +217,7 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
         //  Assess confidence purely on having a reasonable number of
         //  multi-byte characters (the more the better)
         confidence = 30 + doubleByteCharCount - 20*badCharCount;
+
         if (confidence > 100) {
             confidence = 100;
         }
@@ -224,9 +225,11 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
         //
         // Frequency of occurence statistics exist.
         //
+
         double maxVal = log10((double)doubleByteCharCount / 4); /*(float)?*/
         double scaleFactor = 90.0 / maxVal;
         confidence = (int32_t)(log10((double)commonCharCount+1) * scaleFactor + 10.0);
+
         confidence = min(confidence, 100);
     }
 
