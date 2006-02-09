@@ -924,7 +924,7 @@ dnl set ICUDATA_CHAR to 'e' for any EBCDIC (which should be big endian) platform
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
-	*-*-*bsd*) 	platform=U_BSD ;;
+	*-*-*bsd*|*-*-dragonfly*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=U_AIX ;;
 	*-*-hpux*) 	platform=U_HPUX ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
@@ -956,7 +956,7 @@ dnl Handle -rpath options for shared library paths
 case "${host}" in
 	*-*-solaris*) 	ld_rpath_suf=":" ;;
 	*-*-linux*) 	ld_rpath_suf=" " ;;
-	*-*-*bsd*) 	ld_rpath_suf=" " ;;
+	*-*-*bsd*|*-*-dragonfly*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;

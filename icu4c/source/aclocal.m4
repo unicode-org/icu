@@ -1,5 +1,5 @@
 dnl aclocal.m4 for ICU
-dnl Copyright (c) 1999-2005, International Business Machines Corporation and
+dnl Copyright (c) 1999-2006, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth
 
@@ -43,7 +43,7 @@ powerpc*-*-linux*)
 	else
 	  	icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
-*-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
+*-*-*bsd*|*-*-dragonfly*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-aix-gcc
