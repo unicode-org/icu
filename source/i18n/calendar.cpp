@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -2723,15 +2723,15 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
 
    int32_t minDays = getMinimalDaysInFirstWeek();
    UBool jan1InPrevYear = FALSE;  // January 1st in the year of WOY is the 1st week?  (i.e. first week is < minimal )
-   UBool nextJan1InPrevYear = FALSE; // January 1st of Year of WOY + 1 is in the first week? 
+   //UBool nextJan1InPrevYear = FALSE; // January 1st of Year of WOY + 1 is in the first week? 
 
    if((7 - first) < minDays) { 
      jan1InPrevYear = TRUE;
    }
 
-   if((7 - nextFirst) < minDays) {
-     nextJan1InPrevYear = TRUE;
-   }
+//   if((7 - nextFirst) < minDays) {
+//     nextJan1InPrevYear = TRUE;
+//   }
    
    switch(bestField) {
    case UCAL_WEEK_OF_YEAR:

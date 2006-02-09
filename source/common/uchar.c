@@ -166,7 +166,6 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
      */
     if(havePropsData==0) {
         UCharProps ucp={ NULL };
-        UCaseProps *csp;
 
         if(U_FAILURE(*pErrorCode)) {
             return havePropsData;
@@ -185,7 +184,6 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
                 ucp.pData32=NULL;
                 uprv_memcpy(&propsTrie, &ucp.propsTrie, sizeof(propsTrie));
                 uprv_memcpy(&propsVectorsTrie, &ucp.propsVectorsTrie, sizeof(propsVectorsTrie));
-                csp=NULL;
             }
 
             /* initialize some variables */

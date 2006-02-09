@@ -308,13 +308,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
 #define LF       0x000D
 #define AT_SIGN  0x0040
 
-static const UChar tokens[][11] = {
-    {0x0040, 0x0074, 0x0072, 0x0061, 0x006e, 0x0073, 0x006c, 0x0061, 0x0074, 0x0065, 0x0000}, /* @translate */
-    {0x0040, 0x006e, 0x006f, 0x0074, 0x0065, 0x0000}                                          /* @note */
-};
 
-static const UChar yes[] = {  0x0079, 0x0065, 0x0073, 0x0000}; /* yes */
-static const UChar no[] ={ 0x006e, 0x006f, 0x0000 };           /* no */
 
 
 

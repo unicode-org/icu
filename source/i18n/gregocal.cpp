@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -144,7 +144,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(GregorianCalendar)
 //const UDate GregorianCalendar::kPapalCutover = -12219292800000L;
 static const uint32_t kCutoverJulianDay = 2299161;
 static const UDate kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * U_MILLIS_PER_DAY;
-static const UDate kPapalCutoverJulian = (2299161.0 - kEpochStartAsJulianDay);
+//static const UDate kPapalCutoverJulian = (2299161.0 - kEpochStartAsJulianDay);
 
 // -------------------------------------
 

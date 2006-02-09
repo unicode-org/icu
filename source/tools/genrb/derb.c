@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -55,8 +55,6 @@ static UConverter *defaultConverter = 0;
 static const int32_t indentsize = 4;
 static int32_t truncsize = DERB_DEFAULT_TRUNC;
 static UBool trunc = FALSE;
-
-static const UChar baderror[] = { 0x0042, 0x0041, 0x0044, 0x0000 };
 
 static const char *getEncodingName(const char *encoding);
 static void reportError(const char *pname, UErrorCode *status, const char *when);

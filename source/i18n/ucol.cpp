@@ -7724,7 +7724,7 @@ ucol_strcollUseLatin1( const UCollator    *coll,
     UChar sChar = 0, tChar = 0;
     uint32_t sOrder=0, tOrder=0;
 
-    UBool endOfSource = FALSE, endOfTarget = FALSE;
+    UBool endOfSource = FALSE;
 
     uint32_t *elements = coll->latinOneCEs;
 
@@ -7848,7 +7848,7 @@ endOfPrimLoop:
     if(strength >= UCOL_SECONDARY) {
       // adjust the table beggining
       elements += coll->latinOneTableLen;
-      endOfSource = FALSE; endOfTarget = FALSE;
+      endOfSource = FALSE;
 
       if(coll->frenchCollation == UCOL_OFF) { // non French
         // This loop is a simplified copy of primary loop
@@ -7962,7 +7962,7 @@ endOfSecLoop:
       // tertiary loop is the same as secondary (except no French)
       elements += coll->latinOneTableLen;
       sIndex = 0; tIndex = 0;
-      endOfSource = FALSE; endOfTarget = FALSE;
+      endOfSource = FALSE;
       for(;;) {
         while(sOrder==0) {
           if(sIndex==sLen) {

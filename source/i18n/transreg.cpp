@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
+*   Copyright (c) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -40,8 +40,8 @@
 
 // UChar constants
 static const UChar LOCALE_SEP  = 95; // '_'
-static const UChar ID_SEP      = 0x002D; /*-*/
-static const UChar VARIANT_SEP = 0x002F; // '/'
+//static const UChar ID_SEP      = 0x002D; /*-*/
+//static const UChar VARIANT_SEP = 0x002F; // '/'
 
 // String constants
 static const UChar NO_VARIANT[] = { 0 }; // empty string
@@ -50,7 +50,7 @@ static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
 /**
  * Resource bundle key for the RuleBasedTransliterator rule.
  */
-static const char RB_RULE[] = "Rule";
+//static const char RB_RULE[] = "Rule";
 
 U_NAMESPACE_BEGIN
 

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrule.cpp
@@ -58,7 +58,7 @@ static const UChar gLessThan = 0x003c;
 static const UChar gComma = 0x002c;
 static const UChar gDot = 0x002e;
 static const UChar gTick = 0x0027;
-static const UChar gMinus = 0x002d;
+//static const UChar gMinus = 0x002d;
 static const UChar gSemicolon = 0x003b;
 
 static const UChar gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
