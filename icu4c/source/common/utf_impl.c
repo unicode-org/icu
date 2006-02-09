@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -82,6 +82,28 @@ utf8_errorValue[6]={
     0x3ffffff, 0x7fffffff
 };
 
+/*
+ * Handle the non-inline part of the U8_NEXT() macro and its obsolete sibling
+ * UTF8_NEXT_CHAR_SAFE().
+ *
+ * The "strict" parameter controls the error behavior:
+ * <0  "Safe" behavior of U8_NEXT(): All illegal byte sequences yield a negative
+ *     code point result.
+ *  0  Obsolete "safe" behavior of UTF8_NEXT_CHAR_SAFE(..., FALSE):
+ *     All illegal byte sequences yield a positive code point such that this
+ *     result code point would be encoded with the same number of bytes as
+ *     the illegal sequence.
+ * >0  Obsolete "strict" behavior of UTF8_NEXT_CHAR_SAFE(..., TRUE):
+ *     Same as the obsolete "safe" behavior, but non-characters are also treated
+ *     like illegal sequences.
+ *
+ * The special negative (<0) value -2 is used for lenient treatment of surrogate
+ * code points as legal. Some implementations use this for roundtripping of
+ * Unicode 16-bit strings that are not well-formed UTF-16, that is, they
+ * contain unpaired surrogates.
+ *
+ * Note that a UBool is the same as an int8_t.
+ */
 U_CAPI UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
     int32_t i=*pi;
@@ -139,7 +161,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
 
         /* correct sequence - all trail bytes have (b7..b6)==(10)? */
         /* illegal is also set if count>=4 */
-        if(illegal || (c)<utf8_minLegal[count] || UTF_IS_SURROGATE(c)) {
+        if(illegal || (c)<utf8_minLegal[count] || (UTF_IS_SURROGATE(c) && strict!=-2)) {
             /* error handling */
             uint8_t errorCount=count;
             /* don't go beyond this sequence */
@@ -250,7 +272,7 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                     *pi=i;
                     UTF8_MASK_LEAD_BYTE(b, count);
                     c|=(UChar32)b<<shift;
-                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c) || (strict>0 && UTF_IS_UNICODE_NONCHAR(c))) {
+                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || (UTF_IS_SURROGATE(c) && strict!=-2) || (strict>0 && UTF_IS_UNICODE_NONCHAR(c))) {
                         /* illegal sequence or (strict and non-character) */
                         if(count>=4) {
                             count=3;

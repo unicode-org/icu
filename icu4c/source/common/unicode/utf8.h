@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -213,7 +213,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_NEXT_UNSAFE(s, i, c) { \
-    (c)=(s)[(i)++]; \
+    (c)=(uint8_t)(s)[(i)++]; \
     if((uint8_t)((c)-0xc0)<0x35) { \
         uint8_t __count=U8_COUNT_TRAIL_BYTES(c); \
         U8_MASK_LEAD_BYTE(c, __count); \
@@ -250,8 +250,8 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_NEXT(s, i, length, c) { \
-    (c)=(s)[(i)++]; \
-    if(((uint8_t)(c))>=0x80) { \
+    (c)=(uint8_t)(s)[(i)++]; \
+    if((c)>=0x80) { \
         if(U8_IS_LEAD(c)) { \
             (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (int32_t)(length), c, -1); \
         } else { \
@@ -293,7 +293,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 }
 
 /**
- * Append a code point to a string, overwriting 1 or 2 code units.
+ * Append a code point to a string, overwriting 1 to 4 bytes.
  * The offset points to the current end of the string contents
  * and is advanced (post-increment).
  * "Safe" macro, checks for a valid code point.
@@ -343,7 +343,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_FWD_1(s, i, length) { \
-    uint8_t __b=(s)[(i)++]; \
+    uint8_t __b=(uint8_t)(s)[(i)++]; \
     if(U8_IS_LEAD(__b)) { \
         uint8_t __count=U8_COUNT_TRAIL_BYTES(__b); \
         if((i)+__count>(length)) { \
@@ -456,14 +456,14 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_PREV_UNSAFE(s, i, c) { \
-    (c)=(s)[--(i)]; \
+    (c)=(uint8_t)(s)[--(i)]; \
     if(U8_IS_TRAIL(c)) { \
         uint8_t __b, __count=1, __shift=6; \
 \
         /* c is a trail byte */ \
         (c)&=0x3f; \
         for(;;) { \
-            __b=(s)[--(i)]; \
+            __b=(uint8_t)(s)[--(i)]; \
             if(__b>=0xc0) { \
                 U8_MASK_LEAD_BYTE(__b, __count); \
                 (c)|=(UChar32)__b<<__shift; \
@@ -498,10 +498,10 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_PREV(s, start, i, c) { \
-    (c)=(s)[--(i)]; \
+    (c)=(uint8_t)(s)[--(i)]; \
     if((c)>=0x80) { \
         if((c)<=0xbf) { \
-            (c)=utf8_prevCharSafeBody(s, start, &(i), c, -1); \
+            (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -1); \
         } else { \
             (c)=U_SENTINEL; \
         } \
