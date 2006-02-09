@@ -67,11 +67,11 @@
 #define UPPER_N         ((UChar)78)     /*N*/
 #define EQUALS          ((UChar)0x003D) /*=*/
 
-static const UChar POSIX_OPEN[]  = { SET_OPEN,COLON,0 };  // "[:"
+//static const UChar POSIX_OPEN[]  = { SET_OPEN,COLON,0 };  // "[:"
 static const UChar POSIX_CLOSE[] = { COLON,SET_CLOSE,0 };  // ":]"
-static const UChar PERL_OPEN[]   = { BACKSLASH,LOWER_P,0 }; // "\\p"
+//static const UChar PERL_OPEN[]   = { BACKSLASH,LOWER_P,0 }; // "\\p"
 static const UChar PERL_CLOSE[]  = { CLOSE_BRACE,0 };    // "}"
-static const UChar NAME_OPEN[]   = { BACKSLASH,UPPER_N,0 };  // "\\N"
+//static const UChar NAME_OPEN[]   = { BACKSLASH,UPPER_N,0 };  // "\\N"
 static const UChar HYPHEN_RIGHT_BRACE[] = {HYPHEN,SET_CLOSE,0}; /*-]*/
 
 // Special property set IDs
@@ -83,47 +83,11 @@ static const char ASSIGNED[] = "Assigned"; // [:^Cn:]
 #define NAME_PROP "na"
 #define NAME_PROP_LENGTH 2
 
-// TEMPORARY: Remove when deprecated category code constructor is removed.
-static const UChar CATEGORY_NAMES[] = {
-    // Must be kept in sync with uchar.h/UCharCategory
-    0x43, 0x6E, /* "Cn" */
-    0x4C, 0x75, /* "Lu" */
-    0x4C, 0x6C, /* "Ll" */
-    0x4C, 0x74, /* "Lt" */
-    0x4C, 0x6D, /* "Lm" */
-    0x4C, 0x6F, /* "Lo" */
-    0x4D, 0x6E, /* "Mn" */
-    0x4D, 0x65, /* "Me" */
-    0x4D, 0x63, /* "Mc" */
-    0x4E, 0x64, /* "Nd" */
-    0x4E, 0x6C, /* "Nl" */
-    0x4E, 0x6F, /* "No" */
-    0x5A, 0x73, /* "Zs" */
-    0x5A, 0x6C, /* "Zl" */
-    0x5A, 0x70, /* "Zp" */
-    0x43, 0x63, /* "Cc" */
-    0x43, 0x66, /* "Cf" */
-    0x43, 0x6F, /* "Co" */
-    0x43, 0x73, /* "Cs" */
-    0x50, 0x64, /* "Pd" */
-    0x50, 0x73, /* "Ps" */
-    0x50, 0x65, /* "Pe" */
-    0x50, 0x63, /* "Pc" */
-    0x50, 0x6F, /* "Po" */
-    0x53, 0x6D, /* "Sm" */
-    0x53, 0x63, /* "Sc" */
-    0x53, 0x6B, /* "Sk" */
-    0x53, 0x6F, /* "So" */
-    0x50, 0x69, /* "Pi" */
-    0x50, 0x66, /* "Pf" */
-    0x00
-};
-
 /**
  * Delimiter string used in patterns to close a category reference:
  * ":]".  Example: "[:Lu:]".
  */
-static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
+//static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
 U_NAMESPACE_BEGIN
 
@@ -242,40 +206,6 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     }
     _dbgct(this);
 }
-
-#ifdef U_USE_UNICODESET_DEPRECATES
-/**
- * DEPRECATED Constructs a set from the given Unicode character category.
- * @param category an integer indicating the character category as
- * defined in uchar.h.
- * @deprecated To be removed after 2002-DEC-31
- */
-UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
-{
-    static const UChar OPEN[] = { 91, 58, 0 }; // "[:"
-    static const UChar CLOSE[]= { 58, 93, 0 }; // ":]"
-    if (U_SUCCESS(status)) {
-        if (category < 0 || category >= U_CHAR_CATEGORY_COUNT) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else {
-            UnicodeString pattern(FALSE, CATEGORY_NAMES + category*2, 2);
-            pattern.insert(0, OPEN);
-            pattern.append(CLOSE);
-            list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-            /* test for NULL */
-            if(list == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }else{
-                allocateStrings();
-                applyPattern(pattern, status);
-            }
-        }
-    }
-    _dbgct(this);
-}
-#endif
 
 //----------------------------------------------------------------
 // Public API

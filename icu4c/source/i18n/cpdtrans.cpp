@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -20,7 +20,7 @@
 #include "cmemory.h"
 
 // keep in sync with Transliterator
-static const UChar ID_SEP   = 0x002D; /*-*/
+//static const UChar ID_SEP   = 0x002D; /*-*/
 static const UChar ID_DELIM = 0x003B; /*;*/
 static const UChar NEWLINE  = 10;
 

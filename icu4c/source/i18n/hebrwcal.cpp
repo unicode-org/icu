@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2004, International Business Machines Corporation
+ * Copyright (C) 2003-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -31,7 +31,7 @@
  * time of day in sync with that of the Gregorian calendar, we use
  * midnight, rather than sunset the day before.
  */
-static const double EPOCH_MILLIS = -180799862400000.; // 1/1/1 HY
+//static const double EPOCH_MILLIS = -180799862400000.; // 1/1/1 HY
 
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
   // Minimum  Greatest    Least  Maximum

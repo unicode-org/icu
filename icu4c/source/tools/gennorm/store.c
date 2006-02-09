@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1035,7 +1035,9 @@ reorderString(uint32_t *s, int32_t length) {
     return (uint16_t)(((uint16_t)ccs[0]<<8)|ccs[length-1]);
 }
 
+#if 0
 static UBool combineAndQC[64]={ 0 };
+#endif
 
 /*
  * canonically reorder the up to two decompositions
