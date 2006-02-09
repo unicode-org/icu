@@ -15,11 +15,14 @@
 #include "intltest.h"
 #include "csdetest.h"
 
-//#include "cmemory.h"
 #include "xmlparser.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef DEBUG_DETECT
+#include <stdio.h>
+#endif
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
@@ -155,6 +158,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     if (name.compare(eSplit[0]) != 0) {
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got " + name);
 
+#ifdef DEBUG_DETECT
         int32_t matchCount;
         const UCharsetMatch **matches = ucsdet_detectAll(csd, &matchCount, &status);
 
@@ -163,9 +167,9 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
             const char *lang = ucsdet_getLanguage(matches[m], &status);
             int32_t confidence = ucsdet_getConfidence(matches[m], &status);
 
-            errln("%s (%s) %d\n", name, lang, confidence);
+            printf("%s (%s) %d\n", name, lang, confidence);
         }
-
+#endif
         goto bail;
     }
 
@@ -180,12 +184,15 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     if (testString.compare(decoded, dLength) != 0) {
         errln("Round-trip error for " + id + ", " + eSplit[0] + ": getUChars() didn't yeild the original string.");
 
-        //for(int32_t i = 0; i < testLength; i += 1) {
-        //    if(testString[i] != decoded[i]) {
-        //        printf("Strings differ at byte %d\n", i);
-        //        break;
-        //    }
-        //}
+#ifdef DEBUG_DETECT
+        for(int32_t i = 0; i < testLength; i += 1) {
+            if(testString[i] != decoded[i]) {
+                printf("Strings differ at byte %d\n", i);
+                break;
+            }
+        }
+#endif
+
     }
 
     DELETE_ARRAY(decoded);
@@ -217,13 +224,21 @@ void CharsetDetectionTest::ConstructionTest()
     UEnumeration *e = ucsdet_getAllDetectableCharsets(csd, &status);
     int32_t count = uenum_count(e, &status);
 
+#ifdef DEBUG_DETECT
+    printf("There are %d recognizers.\n", count);
+#endif
+
     for(int32_t i = 0; i < count; i += 1) {
         int32_t length;
         const char *name = uenum_next(e, &length, &status);
 
         if(name == NULL || length <= 0) {
-            errln("ucsdet_getAllDetectableCharsets() returned an null or empty name!");
+            errln("ucsdet_getAllDetectableCharsets() returned a null or empty name!");
         }
+
+#ifdef DEBUG_DETECT
+        printf("%s\n", name);
+#endif
     }
 
     uenum_close(e);
@@ -340,13 +355,14 @@ void CharsetDetectionTest::InputFilterTest()
     char *bytes = extractBytes(s, "ISO-8859-1", byteLength);
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
-    const char *lang;
+    const char *lang, *name;
 
     ucsdet_enableInputFilter(csd, TRUE);
 
     if (!ucsdet_isInputFilterEnabled(csd)) {
         errln("ucsdet_enableInputFilter(csd, TRUE) did not enable input filter!");
     }
+
 
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
@@ -356,10 +372,16 @@ void CharsetDetectionTest::InputFilterTest()
         goto turn_off;
     }
 
-    lang = ucsdet_getLanguage(match, &status);
+    name = ucsdet_getName(match, &status);
 
-    if (strcmp(lang, "fr") != 0) {
-        errln("Input filter did not strip markup!");
+    if (name == NULL || strcmp(name, "ISO-8859-1") != 0) {
+        errln("Turning on the input filter resulted in %s rather than ISO-8859-1\n", name);
+    } else {
+        lang = ucsdet_getLanguage(match, &status);
+
+        if (lang == NULL || strcmp(lang, "fr") != 0) {
+            errln("Input filter did not strip markup!");
+        }
     }
 
 turn_off:
@@ -372,10 +394,16 @@ turn_off:
         goto bail;
     }
 
-    lang = ucsdet_getLanguage(match, &status);
+    name = ucsdet_getName(match, &status);
 
-    if (strcmp(lang, "en") != 0) {
-        errln("Unfiltered input did not detect as English!");
+    if (name == NULL || strcmp(name, "ISO-8859-1") != 0) {
+        errln("Turning off the input filter resulted in %s rather than ISO-8859-1\n", name);
+    } else {
+        lang = ucsdet_getLanguage(match, &status);
+
+        if (lang == NULL || strcmp(lang, "en") != 0) {
+            errln("Unfiltered input did not detect as English!");
+        }
     }
 
 bail:

@@ -16,13 +16,15 @@
 
 U_NAMESPACE_BEGIN
 
+#define BUFFER_SIZE 8192
+
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 InputText::InputText()
-    : fInputBytes(NEW_ARRAY(uint8_t, kBufSize)), // The text to be checked.  Markup will have been
+    : fInputBytes(NEW_ARRAY(uint8_t, BUFFER_SIZE)), // The text to be checked.  Markup will have been
                                                  //   removed if appropriate.
       fByteStats(NEW_ARRAY(int16_t, 256)),       // byte frequency statistics for the input text.
                                                  //   Value is percent, not absolute.
@@ -84,7 +86,7 @@ void InputText::MungeInput(UBool fStripTags) {
     //     Count how many total '<' and illegal (nested) '<' occur, so we can make some
     //     guess as to whether the input was actually marked up at all.
     if (fStripTags) {
-        for (srci = 0; srci < fRawLength; srci += 1) {
+        for (srci = 0; srci < fRawLength && dsti < BUFFER_SIZE; srci += 1) {
             b = fRawInput[srci];
 
             if (b == (uint8_t)'<') {
@@ -117,8 +119,8 @@ void InputText::MungeInput(UBool fStripTags) {
         (fInputLen < 100 && fRawLength>600)) {
             int32_t limit = fRawLength;
 
-            if (limit > kBufSize) {
-                limit = kBufSize;
+            if (limit > BUFFER_SIZE) {
+                limit = BUFFER_SIZE;
             }
 
             for (srci=0; srci<limit; srci++) {
