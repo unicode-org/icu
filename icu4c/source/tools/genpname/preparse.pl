@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2005, International Business Machines Corporation and
+# Copyright (c) 2002-2006, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -65,8 +65,9 @@ my $UNIDATA_DIR = "$ICU_DIR/source/data/unidata";
 # Get the current year from the system
 my $YEAR = 1900+@{[localtime]}[5]; # Get the current year
 
-# Used to make "n/a" property aliases (Unicode or Synthetic) unique
+# Used to make "n/a" property [value] aliases (Unicode or Synthetic) unique
 my $propNA = 0;
+my $valueNA = 0;
 
 #----------------------------------------------------------------------
 # Top level property keys for binary, enumerated, string, and double props
@@ -428,7 +429,9 @@ sub readAndMerge {
     my $pa = {};
     read_PropertyAliases($pa, "$unidataDir/PropertyAliases.txt");
     read_PropertyAliases($pa, "SyntheticPropertyAliases.txt");
-    my $va = read_PropertyValueAliases("$unidataDir/PropertyValueAliases.txt");
+    my $va = {};
+    read_PropertyValueAliases($va, "$unidataDir/PropertyValueAliases.txt");
+    read_PropertyValueAliases($va, "SyntheticPropertyValueAliases.txt");
     
     # Extract property family hash
     my $fam = $pa->{'_family'};
@@ -667,7 +670,7 @@ sub merge_PropertyValueAliases {
             # look up both long and short & ignore case
             my $n;
             if (exists $pva->{$name}) {
-                $n = $name;
+                $n = $name; 
             } else {
                 # iterate (slow)
                 for my $a (keys %$pva) {
@@ -680,7 +683,7 @@ sub merge_PropertyValueAliases {
                     }
                 }
             }
-
+                
             # For blocks, do a loose match from Blocks.txt pseudo-name
             # to PropertyValueAliases long name.
             if (!$n && $prop eq 'blk') {
@@ -853,14 +856,12 @@ sub read_PropertyAliases {
 # @return a hash reference.
 sub read_PropertyValueAliases {
 
-    my $filename = shift; 
+    my $hash = shift;         # result
 
-    my $hash = {};         # result
+    my $filename = shift; 
 
     my $in = new FileHandle($filename, 'r');
     die "Error: Cannot open $filename" if (!defined $in);
-
-    my $valueNA = 0; # Used to make "n/a" strings unique
 
     while (<$in>) {
 
@@ -912,8 +913,6 @@ sub read_PropertyValueAliases {
     # are of the same form as the 'ccc' value aliases.
     $hash->{'binprop'}->{'0'} = 'F|False';
     $hash->{'binprop'}->{'1'} = 'T|True';
-
-    $hash;
 }
 
 #----------------------------------------------------------------------
