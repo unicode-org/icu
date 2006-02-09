@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -2416,6 +2416,7 @@ TestAdditionalProperties() {
     UChar32 c;
     int32_t i, result, uVersion;
     UProperty which;
+    int32_t n = 0xdeadbeef;
 
     /* what is our Unicode version? */
     u_getUnicodeVersion(version);
@@ -2447,21 +2448,46 @@ TestAdditionalProperties() {
     ) {
         log_err("error: u_getIntPropertyMinValue() wrong\n");
     }
-
-    if( u_getIntPropertyMaxValue(UCHAR_DASH)!=1 ||
-        u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE)!=1 ||
-        u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1)!=1 ||
-        u_getIntPropertyMaxValue(UCHAR_BIDI_CLASS)!=(int32_t)U_CHAR_DIRECTION_COUNT-1 ||
-        u_getIntPropertyMaxValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_COUNT-1 ||
-        u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1 ||
-        u_getIntPropertyMaxValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_CODE_LIMIT-1 ||
-        u_getIntPropertyMaxValue(0x2345)!=-1 /*JB#2410*/ ||
-        u_getIntPropertyMaxValue(UCHAR_DECOMPOSITION_TYPE) != (int32_t) (U_DT_COUNT - 1) ||
-        u_getIntPropertyMaxValue(UCHAR_JOINING_GROUP) !=  (int32_t) (U_JG_COUNT -1) ||
-        u_getIntPropertyMaxValue(UCHAR_JOINING_TYPE) != (int32_t) (U_JT_COUNT -1) ||
-        u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) != (int32_t) (U_EA_COUNT -1)
-    ) {
-        log_err("error: u_getIntPropertyMaxValue() wrong\n");
+    n=0xdeadbeef;
+    if( (n= u_getIntPropertyMaxValue(UCHAR_DASH))!=1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_DASH) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE)!=1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE) wrong\n");
+    }
+    n=0xdeadbeef;
+    if( (n=u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1))!=1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_BIDI_CLASS)!=(int32_t)U_CHAR_DIRECTION_COUNT-1 ) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_BIDI_CLASS) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_COUNT-1 ) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_BLOCK) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_LINE_BREAK) wrong\n");
+    }
+    n=0xdeadbeef;
+    if( (n=u_getIntPropertyMaxValue(UCHAR_SCRIPT))!=(int32_t)USCRIPT_UNICODE_LIMIT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_SCRIPT) wrong\n");
+    }
+    /*JB#2410*/
+    n=0xdeadbeef;
+    if( (n=u_getIntPropertyMaxValue(0x2345))!=-1) {
+        log_err("error: u_getIntPropertyMaxValue(0x2345) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_DECOMPOSITION_TYPE) != (int32_t) (U_DT_COUNT - 1)) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_DECOMPOSITION_TYPE) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_JOINING_GROUP) !=  (int32_t) (U_JG_COUNT -1)) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_JOINING_GROUP) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_JOINING_TYPE) != (int32_t) (U_JT_COUNT -1)) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_JOINING_TYPE) wrong\n");
+    }
+    if( u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) != (int32_t) (U_EA_COUNT -1)) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) wrong\n");
     }
 
     /* test u_hasBinaryProperty() and u_getIntPropertyValue() */
