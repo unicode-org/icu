@@ -22,7 +22,23 @@
  */
  
 /**
- * Constants for Unicode script values from ScriptNames.txt.
+ * Constants for ISO 15924 script codes.
+ *
+ * Many of these script codes - those from Unicode's ScriptNames.txt -
+ * are character property values for Unicode's Script property.
+ * See UAX #24 Script Names (http://www.unicode.org/reports/tr24/).
+ *
+ * Starting with ICU 3.6, constants for most ISO 15924 script codes
+ * are included (currently excluding private-use codes Qaaa..Qabx).
+ * For scripts for which there are codes in ISO 15924 but which are not
+ * used in the Unicode Character Database (UCD), there are no Unicode characters
+ * associated with those scripts.
+ *
+ * For example, there are no characters that have a UCD script code of
+ * Hans or Hant. All Han ideographs have the Hani script code.
+ * The Hans and Hant script codes are used with CLDR data.
+ *
+ * ISO 15924 script codes are included for use with CLDR and similar.
  *
  * @stable ICU 2.2
  */
@@ -101,10 +117,10 @@ typedef enum UScriptCode {
       USCRIPT_TIFINAGH      = 60, /* Tfng */
       USCRIPT_OLD_PERSIAN   = 61, /* Xpeo */
 
-      /* end of scripts codes that are in Unicode */
+      /* end of script codes that are in Unicode */
       USCRIPT_UNICODE_LIMIT = 62, 
 
-      /* New scripts from iso-15924 @draft ICU 3.6 */
+      /* New script codes from ISO 15924 @draft ICU 3.6 */
       USCRIPT_BALINESE      = 63, /* Bali */
       USCRIPT_BATAK         = 64, /* Batk */
       USCRIPT_BLISSYMBOLS   = 65, /* Blis */
