@@ -1070,7 +1070,9 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
     }
 
     /* see which combinations of combiningFlags and qcFlags are used for NFC/NFKC */
+#if 0
     combineAndQC[(norm->qcFlags&0x33)|((norm->combiningFlags&3)<<2)]=1;
+#endif
 
     if(norm->combiningFlags&1) {
         if(norm->udataCC!=0) {
