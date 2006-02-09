@@ -3378,7 +3378,7 @@ powerpc*-*-linux*)
 	else
 	  	icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
-*-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
+*-*-*bsd*|*-*-dragonfly*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-aix-gcc
@@ -8012,7 +8012,7 @@ ICUDATA_CHAR=$U_ENDIAN_CHAR
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
-	*-*-*bsd*) 	platform=U_BSD ;;
+	*-*-*bsd*|*-*-dragonfly*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=U_AIX ;;
 	*-*-hpux*) 	platform=U_HPUX ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
@@ -8043,7 +8043,7 @@ platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
 case "${host}" in
 	*-*-solaris*) 	ld_rpath_suf=":" ;;
 	*-*-linux*) 	ld_rpath_suf=" " ;;
-	*-*-*bsd*) 	ld_rpath_suf=" " ;;
+	*-*-*bsd*|*-*-dragonfly*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
