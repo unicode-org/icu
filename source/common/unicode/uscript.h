@@ -36,11 +36,11 @@ typedef enum UScriptCode {
       USCRIPT_BOPOMOFO     =  5,  /* Bopo */
       USCRIPT_CHEROKEE     =  6,  /* Cher */
       USCRIPT_COPTIC       =  7,  /* Copt */
-      USCRIPT_CYRILLIC     =  8,  /* Cyrl (Cyrs) */
+      USCRIPT_CYRILLIC     =  8,  /* Cyrl */
       USCRIPT_DESERET      =  9,  /* Dsrt */
       USCRIPT_DEVANAGARI   = 10,  /* Deva */
       USCRIPT_ETHIOPIC     = 11,  /* Ethi */
-      USCRIPT_GEORGIAN     = 12,  /* Geor (Geon, Geoa) */
+      USCRIPT_GEORGIAN     = 12,  /* Geor */
       USCRIPT_GOTHIC       = 13,  /* Goth */
       USCRIPT_GREEK        = 14,  /* Grek */
       USCRIPT_GUJARATI     = 15,  /* Gujr */
@@ -53,7 +53,7 @@ typedef enum UScriptCode {
       USCRIPT_KATAKANA     = 22,  /* Kana */
       USCRIPT_KHMER        = 23,  /* Khmr */
       USCRIPT_LAO          = 24,  /* Laoo */
-      USCRIPT_LATIN        = 25,  /* Latn (Latf, Latg) */
+      USCRIPT_LATIN        = 25,  /* Latn */
       USCRIPT_MALAYALAM    = 26,  /* Mlym */
       USCRIPT_MONGOLIAN    = 27,  /* Mong */
       USCRIPT_MYANMAR      = 28,  /* Mymr */
@@ -62,7 +62,7 @@ typedef enum UScriptCode {
       USCRIPT_ORIYA        = 31,  /* Orya */
       USCRIPT_RUNIC        = 32,  /* Runr */
       USCRIPT_SINHALA      = 33,  /* Sinh */
-      USCRIPT_SYRIAC       = 34,  /* Syrc (Syrj, Syrn, Syre) */
+      USCRIPT_SYRIAC       = 34,  /* Syrc */
       USCRIPT_TAMIL        = 35,  /* Taml */
       USCRIPT_TELUGU       = 36,  /* Telu */
       USCRIPT_THAANA       = 37,  /* Thaa */
@@ -79,28 +79,77 @@ typedef enum UScriptCode {
       USCRIPT_TAGBANWA     = 45,  /* Tagb */
 
       /* New scripts in Unicode 4 @stable ICU 2.6 */
-      USCRIPT_BRAILLE,            /* Brai */
-      USCRIPT_CYPRIOT,            /* Cprt */
-      USCRIPT_LIMBU,              /* Limb */
-      USCRIPT_LINEAR_B,           /* Linb */
-      USCRIPT_OSMANYA,            /* Osma */
-      USCRIPT_SHAVIAN,            /* Shaw */
-      USCRIPT_TAI_LE,             /* Tale */
-      USCRIPT_UGARITIC,           /* Ugar */
+      USCRIPT_BRAILLE      = 46,  /* Brai */
+      USCRIPT_CYPRIOT      = 47,  /* Cprt */
+      USCRIPT_LIMBU        = 48,  /* Limb */
+      USCRIPT_LINEAR_B     = 49,  /* Linb */
+      USCRIPT_OSMANYA      = 50,  /* Osma */
+      USCRIPT_SHAVIAN      = 51,  /* Shaw */
+      USCRIPT_TAI_LE       = 52,  /* Tale */
+      USCRIPT_UGARITIC     = 53,  /* Ugar */
 
       /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
-      USCRIPT_KATAKANA_OR_HIRAGANA,/*Hrkt */
-
+      USCRIPT_KATAKANA_OR_HIRAGANA = 54,/*Hrkt */
+      
+#ifndef U_HIDE_DRAFT_API
       /* New scripts in Unicode 4.1 @draft ICU 3.4 */
-      USCRIPT_BUGINESE,           /* Bugi */
-      USCRIPT_GLAGOLITIC,         /* Glag */
-      USCRIPT_KHAROSHTHI,         /* Khar */
-      USCRIPT_SYLOTI_NAGRI,       /* Sylo */
-      USCRIPT_NEW_TAI_LUE,        /* Talu */
-      USCRIPT_TIFINAGH,           /* Tfng */
-      USCRIPT_OLD_PERSIAN,        /* Xpeo */
+      USCRIPT_BUGINESE      = 55, /* Bugi */
+      USCRIPT_GLAGOLITIC    = 56, /* Glag */
+      USCRIPT_KHAROSHTHI    = 57, /* Khar */
+      USCRIPT_SYLOTI_NAGRI  = 58, /* Sylo */
+      USCRIPT_NEW_TAI_LUE   = 59, /* Talu */
+      USCRIPT_TIFINAGH      = 60, /* Tfng */
+      USCRIPT_OLD_PERSIAN   = 61, /* Xpeo */
 
-      USCRIPT_CODE_LIMIT
+      /* end of scripts codes that are in Unicode */
+      USCRIPT_UNICODE_LIMIT = 62, 
+
+      /* New scripts from iso-15924 @draft ICU 3.6 */
+      USCRIPT_BALINESE      = 63, /* Bali */
+      USCRIPT_BATAK         = 64, /* Batk */
+      USCRIPT_BLISSYMBOLS   = 65, /* Blis */
+      USCRIPT_BRAHMI        = 66, /* Brah */
+      USCRIPT_CHAM          = 67, /* Cham */
+      USCRIPT_CIRTH         = 68, /* Cirt */
+      USCRIPT_CYRS          = 69, /* Cyrs */
+      USCRIPT_EGYD          = 70, /* Egyd */
+      USCRIPT_EGYH          = 71, /* Egyh */
+      USCRIPT_EGYP          = 72, /* Egyp */
+      USCRIPT_GEOK          = 73, /* Geok */
+      USCRIPT_HANS          = 74, /* Hans */
+      USCRIPT_HANT          = 75, /* Hant */
+      USCRIPT_HMNG          = 76, /* Hmng */
+      USCRIPT_HUNG          = 77, /* Hung */
+      USCRIPT_INDS          = 78, /* Inds */
+      USCRIPT_JAVANESE      = 79, /* Java */
+      USCRIPT_KALI          = 80, /* Kali */
+      USCRIPT_LATF          = 81, /* Latf */
+      USCRIPT_LATG          = 82, /* Latg */
+      USCRIPT_LEPC          = 83, /* Lepc */
+      USCRIPT_LINA          = 84, /* Lina */
+      USCRIPT_MANDAEAN      = 85, /* Mand */
+      USCRIPT_MAYA          = 86, /* Maya */
+      USCRIPT_MEROITIC      = 87, /* Mero */
+      USCRIPT_NKOO          = 88, /* Nkoo */
+      USCRIPT_ORKHON        = 89, /* Orkh */
+      USCRIPT_PERM          = 90, /* Perm */
+      USCRIPT_PHAGS_PA      = 91, /* Phag */
+      USCRIPT_PHOENICIAN    = 92, /* Phnx */
+      USCRIPT_PLRD          = 93, /* Plrd */
+      USCRIPT_RONGORONGO    = 94, /* Roro */
+      USCRIPT_SARATI        = 95, /* Sara */
+      USCRIPT_SYRE          = 96, /* Syre */
+      USCRIPT_SYRJ          = 97, /* Syrj */
+      USCRIPT_SYRN          = 98, /* Syrn */
+      USCRIPT_TENGWAR       = 99, /* Teng */
+      USCRIPT_VAI           = 100, /* Vaii */
+      USCRIPT_VISP          = 101, /* Visp */
+      USCRIPT_XSUX          = 102,/* Xsux */
+      USCRIPT_ZXXX          = 103,/* Zxxx */
+      USCRIPT_ZZZZ          = 104,/* Zzzz */
+      /* Private use codes from Qaaa - Qabx are not supported*/
+#endif /* U_HIDE_DRAFT_API */
+      USCRIPT_CODE_LIMIT    = 105
 } UScriptCode;
 
 /**
