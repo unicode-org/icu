@@ -56,7 +56,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
      *             <br/>
      *             bits 8-15: The match reason, an enum-like value.
      */
-    int         match(CharsetDetector det, int [] commonChars) {
+    int match(CharsetDetector det, int [] commonChars) {
         int   singleByteCharCount = 0;
         int   doubleByteCharCount = 0;
         int   commonCharCount     = 0;
@@ -89,9 +89,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                 }
             }
             
-            if (doubleByteCharCount == 0 && badCharCount== 0) {
-                // No multi-byte chars.
-                //   ASCII file?  It's probably not our encoding,
+            if (doubleByteCharCount <= 10 && badCharCount== 0) {
+                // Not many multi-byte chars.
+                //   ASCII or ISO file?  It's probably not our encoding,
                 //   but is not incompatible with our encoding, so don't give it a zero.
                 confidence = 10;
                 break detectBlock;
