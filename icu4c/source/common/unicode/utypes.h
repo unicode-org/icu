@@ -54,6 +54,13 @@
 #include "unicode/uobslete.h"
 #endif
 
+#ifdef U_HIDE_INTERNAL_API
+#include "unicode/uintrnal.h"
+#endif
+
+#ifdef U_HIDE_SYSTEM_API
+#include "unicode/usystem.h"
+#endif
 
 /*!
  * \file

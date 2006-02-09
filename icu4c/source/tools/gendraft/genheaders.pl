@@ -41,7 +41,7 @@ $systemHeaderName = "usystem.h";
 $systemAppend = "SYSTEM_API_DO_NOT_USE";
 $systemDefine = "U_HIDE_SYSTEM_API";
 
-$internalHeaderName = "uinternal.h";
+$internalHeaderName = "uintrnal.h";
 $internalAppend = "INTERNAL_API_DO_NOT_USE";
 $internalDefine = "U_HIDE_INTERNAL_API";
 
@@ -119,12 +119,14 @@ sub writeFile{
 
 #-----------------------------------------------------------------------
 sub printHeader{
-      ($outFH, $headername, $HEADERDEF, $symbolDef) = @_;
+    ($outFH, $headername, $HEADERDEF, $symbolDef) = @_;
+    ($DAY, $MONTH, $YEAR) = (localtime)[3,4,5];
+    $YEAR += 1900;
 #We will print our copyright here + warnings
 print $outFH <<END_HEADER_COMMENT;
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-$YEAR, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -136,7 +138,7 @@ print $outFH <<END_HEADER_COMMENT;
 *   Created by: genheaders.pl, a perl script written by Ram Viswanadha
 *
 *  Contains data for commenting out APIs.
-*  Gets included by umachine.h
+*  Gets included by utypes.h
 *
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
 *  YOU ARE DOING, OTHERWISE VERY BAD THINGS WILL HAPPEN!
@@ -157,7 +159,7 @@ sub parseWriteFile{
     %enableRenaning;
     while (defined ($line = <$inFH>)){
           #just process C APIs for now
-          if($line =~ /\<dt\>/ ){
+        if($line =~ /\<dt\>/ ){
             #special cases
             if( ($line =~ /LEUnicode/)|| ($line =~ /LanguageCodes/) ||
                 ($line =~ /ScriptCodes/) || ($line =~ /\:+/) || 
@@ -177,14 +179,15 @@ sub parseWriteFile{
                 #print "$value  $exclude->{$value}\n";
                 next;
             }
-            next if(!(defined $includeTypes) && (isStringAcceptable($value)==1));
+            #print  "$value $realSymbol $nonExSymbol\n";
+            next if(isStringAcceptable($value)==1);
             $realSymbol = $value."_".$versionAppend;
             $nonExSymbol = $value."_".$symbolAppend;
             $disableRenaming{$value} = $nonExSymbol;
             $enableRenaming{$realSymbol} = $nonExSymbol;
             #print  "$value $realSymbol $nonExSymbol\n";
             
-          }
+        }
     }
     print "size of disableRenaming:  " . keys( %disableRenaming) . ".\n";
     print "size of enableRenaming:  " . keys( %enableRenaming) . ".\n";
@@ -204,16 +207,19 @@ sub parseWriteFile{
 sub isStringAcceptable{
     ($string) = @_;
     @str = split(//, $string);
+    $ret = 1;
     foreach  $val (@str){
-        $ret = 1;
         if(($val ne "_") && !($val =~ /[0-9A-Z]/)){
         #print "$val\n";
             $ret = 0;
         }
     }
-    #if($ret==0 && $str[0] eq 'U'){
-    #    $ret=1;
-    #}
+    #print "$string : $ret\n";
+    if(!(defined $includeTypes)){
+        if($ret==0 && $str[0] eq 'U'){
+            $ret=1;
+        }
+    }
     return $ret;
 }
 
