@@ -220,7 +220,6 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2 /Op'
         RELEASE_CXXFLAGS='/O2 /Ob2 /Op'
-        # The some debug flags are defined by the mh file because configure can't handle them.
         DEBUG_CFLAGS='/Zi'
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'
@@ -233,7 +232,6 @@ case $platform in
         # The Intel compiler has optimization bugs. So we disable optimization.
         RELEASE_CFLAGS='/Od'
         RELEASE_CXXFLAGS='/Od'
-        # The some debug flags are defined by the mh file because configure can't handle them.
         DEBUG_CFLAGS='/Zi'
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'
