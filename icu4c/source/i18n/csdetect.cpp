@@ -240,7 +240,7 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
         }
 
         for(int32_t i = resultCount; i < fCSRecognizers_size; i += 1) {
-            resultArray[i]->set(textIn,0,0);
+            resultArray[i]->set(textIn, 0, 0);
         }
 
         //Bubble sort
@@ -248,8 +248,8 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
             for(int32_t j = 0; j < i-1; j += 1) {
                 if(resultArray[j]->getConfidence() < resultArray[j+1]->getConfidence()) {
                     CharsetMatch *temp = resultArray[j];
-                    resultArray[j]= resultArray[j+1];
-                    resultArray[j+1]=temp;
+                    resultArray[j] = resultArray[j+1];
+                    resultArray[j+1] = temp;
                 }
             }
         }

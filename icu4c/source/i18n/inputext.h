@@ -24,8 +24,6 @@ public:
     UBool isSet() const; 
     void MungeInput(UBool fStripTags);
 
-
-    static const int32_t kBufSize = 8192;
     // The text to be checked.  Markup will have been
     //   removed if appropriate.
     uint8_t    *fInputBytes;
