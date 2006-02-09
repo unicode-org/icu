@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2005, International Business Machines Corporation
+* Copyright (C) 1999-2006, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -362,16 +362,6 @@ public:
                uint32_t options,
                const SymbolTable* symbols,
                UErrorCode& status);
-
-#ifdef U_USE_UNICODESET_DEPRECATES
-    /**
-     * Obsolete: Constructs a set from the given Unicode character category.
-     * @param category an integer indicating the character category as
-     * defined in uchar.h.
-     * @obsolete ICU 2.6. Use a pattern with the category instead since this API will be removed in that release.
-     */
-    UnicodeSet(int8_t category, UErrorCode& status);
-#endif
 
     /**
      * Constructs a set that is identical to the given UnicodeSet.

@@ -793,7 +793,6 @@ uloc_getKeywordValue(const char* localeID,
                      UErrorCode* status)
 { 
     const char* nextSeparator = NULL;
-    int32_t keywordNameLen;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     int32_t i = 0;
@@ -807,7 +806,7 @@ uloc_getKeywordValue(const char* localeID,
           return 0;
       }
 
-      keywordNameLen = locale_canonKeywordName(keywordNameBuffer, keywordName, status);
+      locale_canonKeywordName(keywordNameBuffer, keywordName, status);
       if(U_FAILURE(*status)) {
         return 0;
       }
@@ -1871,7 +1870,6 @@ uloc_getVariant(const char* localeID,
                 UErrorCode* err) 
 {
     int32_t i=0;
-    UBool haveVariant=FALSE;
     
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
@@ -1895,7 +1893,6 @@ uloc_getVariant(const char* localeID,
         if (_isIDSeparator(*localeID)) {
             _getCountry(localeID+1, NULL, 0, &localeID);
             if(_isIDSeparator(*localeID)) {
-                haveVariant=TRUE;
                 i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
             }
         }
