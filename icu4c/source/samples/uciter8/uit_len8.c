@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,150 +45,17 @@
  * but it is sufficient for a UCharIterator that returns only UChars anyway.
  *
  * The code is copied and modified from utf_impl.c and utf8.h.
- * The "strict" argument in the implementation functions is completely removed,
- * using the "<0" branch from the original code.
- * Checks for surrogate code points are removed for the leniency
- * described above.
+ *
+ * Change 2006feb08: Much of the implementation code is replaced by calling
+ * the utf_impl.c functions which accept a new "strict" parameter value
+ * of -2 implementing exactly this leniency.
  */
 
-static const UChar32
-lenient8_minLegal[4]={ 0, 0x80, 0x800, 0x10000 };
-
-static UChar32
-lenient8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c) {
-    int32_t i=*pi;
-    uint8_t count=U8_COUNT_TRAIL_BYTES(c);
-    if((i)+count<=(length)) {
-        uint8_t trail, illegal=0;
-
-        U8_MASK_LEAD_BYTE((c), count);
-        /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
-        switch(count) {
-        /* each branch falls through to the next one */
-        case 5:
-        case 4:
-            /* count>=4 is always illegal: no more than 3 trail bytes in Unicode's UTF-8 */
-            illegal=1;
-            break;
-        case 3:
-            trail=s[(i)++];
-            (c)=((c)<<6)|(trail&0x3f);
-            if(c<0x110) {
-                illegal|=(trail&0xc0)^0x80;
-            } else {
-                /* code point>0x10ffff, outside Unicode */
-                illegal=1;
-                break;
-            }
-        case 2:
-            trail=s[(i)++];
-            (c)=((c)<<6)|(trail&0x3f);
-            illegal|=(trail&0xc0)^0x80;
-        case 1:
-            trail=s[(i)++];
-            (c)=((c)<<6)|(trail&0x3f);
-            illegal|=(trail&0xc0)^0x80;
-            break;
-        case 0:
-            return U_SENTINEL;
-        /* no default branch to optimize switch()  - all values are covered */
-        }
-
-        /* correct sequence - all trail bytes have (b7..b6)==(10)? */
-        /* illegal is also set if count>=4 */
-        if(illegal || (c)<lenient8_minLegal[count]) {
-            /* error handling */
-            uint8_t errorCount=count;
-            /* don't go beyond this sequence */
-            i=*pi;
-            while(count>0 && U8_IS_TRAIL(s[i])) {
-                ++(i);
-                --count;
-            }
-            c=U_SENTINEL;
-        }
-    } else /* too few bytes left */ {
-        /* error handling */
-        int32_t i0=i;
-        /* don't just set (i)=(length) in case there is an illegal sequence */
-        while((i)<(length) && U8_IS_TRAIL(s[i])) {
-            ++(i);
-        }
-        c=U_SENTINEL;
-    }
-    *pi=i;
-    return c;
-}
-
-static UChar32
-lenient8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c) {
-    int32_t i=*pi;
-    uint8_t b, count=1, shift=6;
-
-    /* extract value bits from the last trail byte */
-    c&=0x3f;
-
-    for(;;) {
-        if(i<=start) {
-            /* no lead byte at all */
-            return U_SENTINEL;
-        }
-
-        /* read another previous byte */
-        b=s[--i];
-        if((uint8_t)(b-0x80)<0x7e) { /* 0x80<=b<0xfe */
-            if(b&0x40) {
-                /* lead byte, this will always end the loop */
-                uint8_t shouldCount=U8_COUNT_TRAIL_BYTES(b);
-
-                if(count==shouldCount) {
-                    /* set the new position */
-                    *pi=i;
-                    U8_MASK_LEAD_BYTE(b, count);
-                    c|=(UChar32)b<<shift;
-                    if(count>=4 || c>0x10ffff || c<lenient8_minLegal[count]) {
-                        /* illegal sequence */
-                        if(count>=4) {
-                            count=3;
-                        }
-                        c=U_SENTINEL;
-                    } else {
-                        /* exit with correct c */
-                    }
-                } else {
-                    /* the lead byte does not match the number of trail bytes */
-                    /* only set the position to the lead byte if it would
-                       include the trail byte that we started with */
-                    if(count<shouldCount) {
-                        *pi=i;
-                    }
-                    c=U_SENTINEL;
-                }
-                break;
-            } else if(count<5) {
-                /* trail byte */
-                c|=(UChar32)(b&0x3f)<<shift;
-                ++count;
-                shift+=6;
-            } else {
-                /* more than 5 trail bytes is illegal */
-                c=U_SENTINEL;
-                break;
-            }
-        } else {
-            /* single-byte character precedes trailing bytes */
-            c=U_SENTINEL;
-            break;
-        }
-    }
-    return c;
-}
-
 #define L8_NEXT(s, i, length, c) { \
-    (c)=(s)[(i)++]; \
+    (c)=(uint8_t)(s)[(i)++]; \
     if((c)>=0x80) { \
         if(U8_IS_LEAD(c)) { \
-            (c)=lenient8_nextCharSafeBody(s, &(i), (int32_t)(length), c); \
+            (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (int32_t)(length), c, -2); \
         } else { \
             (c)=U_SENTINEL; \
         } \
@@ -196,10 +63,10 @@ lenient8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 
 }
 
 #define L8_PREV(s, start, i, c) { \
-    (c)=(s)[--(i)]; \
+    (c)=(uint8_t)(s)[--(i)]; \
     if((c)>=0x80) { \
         if((c)<=0xbf) { \
-            (c)=lenient8_prevCharSafeBody(s, start, &(i), c); \
+            (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -2); \
         } else { \
             (c)=U_SENTINEL; \
         } \

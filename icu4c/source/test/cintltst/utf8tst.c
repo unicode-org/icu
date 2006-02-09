@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2003, International Business Machines Corporation and
+ * Copyright (c) 1998-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -20,6 +20,44 @@
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
+/* lenient UTF-8 ------------------------------------------------------------ */
+
+/*
+ * Lenient UTF-8 differs from conformant UTF-8 in that it allows surrogate
+ * code points with their "natural" encoding.
+ * Effectively, this allows a mix of UTF-8 and CESU-8 as well as encodings of
+ * single surrogates.
+ *
+ * This is not conformant with UTF-8.
+ *
+ * Supplementary code points may be encoded as pairs of 3-byte sequences, but
+ * the macros below do not attempt to assemble such pairs.
+ */
+
+#define L8_NEXT(s, i, length, c) { \
+    (c)=(uint8_t)(s)[(i)++]; \
+    if((c)>=0x80) { \
+        if(U8_IS_LEAD(c)) { \
+            (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (int32_t)(length), c, -2); \
+        } else { \
+            (c)=U_SENTINEL; \
+        } \
+    } \
+}
+
+#define L8_PREV(s, start, i, c) { \
+    (c)=(uint8_t)(s)[--(i)]; \
+    if((c)>=0x80) { \
+        if((c)<=0xbf) { \
+            (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -2); \
+        } else { \
+            (c)=U_SENTINEL; \
+        } \
+    } \
+}
+
+/* -------------------------------------------------------------------------- */
+
 static void printUChars(const uint8_t *uchars, int16_t len);
 
 static void TestCodeUnitValues(void);
@@ -30,6 +68,7 @@ static void TestFwdBack(void);
 static void TestSetChar(void);
 static void TestAppendChar(void);
 static void TestAppend(void);
+static void TestSurrogates(void);
 
 void addUTF8Test(TestNode** root);
 
@@ -44,6 +83,7 @@ addUTF8Test(TestNode** root)
   addTest(root, &TestSetChar,           "utf8tst/TestSetChar"       );
   addTest(root, &TestAppendChar,        "utf8tst/TestAppendChar"    );
   addTest(root, &TestAppend,            "utf8tst/TestAppend"        );
+  addTest(root, &TestSurrogates,        "utf8tst/TestSurrogates"    );
 }
 
 static void TestCodeUnitValues()
@@ -814,6 +854,97 @@ static void TestAppend() {
     }
     if(length!=LENGTHOF(expectSafe) || 0!=memcmp(buffer, expectSafe, length)) {
         log_err("U8_APPEND did not generate the expected output\n");
+    }
+}
+
+static void
+TestSurrogates() {
+    static const uint8_t b[]={
+        0xc3, 0x9f,             /*  00DF */
+        0xed, 0x9f, 0xbf,       /*  D7FF */
+        0xed, 0xa0, 0x81,       /*  D801 */
+        0xed, 0xbf, 0xbe,       /*  DFFE */
+        0xee, 0x80, 0x80,       /*  E000 */
+        0xf0, 0x97, 0xbf, 0xbe  /* 17FFE */
+    };
+    static const UChar32 cp[]={
+        0xdf, 0xd7ff, 0xd801, 0xdffe, 0xe000, 0x17ffe
+    };
+
+    UChar32 cu, cs, cl;
+    int32_t i, j, k, iu, is, il, length;
+
+    k=0; /* index into cp[] */
+    length=LENGTHOF(b);
+    for(i=0; i<length;) {
+        j=i;
+        U8_NEXT_UNSAFE(b, j, cu);
+        iu=j;
+
+        j=i;
+        U8_NEXT(b, j, length, cs);
+        is=j;
+
+        j=i;
+        L8_NEXT(b, j, length, cl);
+        il=j;
+
+        if(cu!=cp[k]) {
+            log_err("U8_NEXT_UNSAFE(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cu, (long)cp[k]);
+        }
+
+        /* U8_NEXT() returns <0 for surrogate code points */
+        if(U_IS_SURROGATE(cu) ? cs>=0 : cs!=cu) {
+            log_err("U8_NEXT(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cs, (long)cu);
+        }
+
+        /* L8_NEXT() returns surrogate code points like U8_NEXT_UNSAFE() */
+        if(cl!=cu) {
+            log_err("L8_NEXT(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cl, (long)cu);
+        }
+
+        if(is!=iu || il!=iu) {
+            log_err("U8_NEXT(b[%ld]) or L8_NEXT(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        }
+
+        ++k;    /* next code point */
+        i=iu;   /* advance by one UTF-8 sequence */
+    }
+
+    while(i>0) {
+        --k; /* previous code point */
+
+        j=i;
+        U8_PREV_UNSAFE(b, j, cu);
+        iu=j;
+
+        j=i;
+        U8_PREV(b, 0, j, cs);
+        is=j;
+
+        j=i;
+        L8_PREV(b, 0, j, cl);
+        il=j;
+
+        if(cu!=cp[k]) {
+            log_err("U8_PREV_UNSAFE(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cu, (long)cp[k]);
+        }
+
+        /* U8_PREV() returns <0 for surrogate code points */
+        if(U_IS_SURROGATE(cu) ? cs>=0 : cs!=cu) {
+            log_err("U8_PREV(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cs, (long)cu);
+        }
+
+        /* L8_PREV() returns surrogate code points like U8_PREV_UNSAFE() */
+        if(cl!=cu) {
+            log_err("L8_PREV(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cl, (long)cu);
+        }
+
+        if(is!=iu || il !=iu) {
+            log_err("U8_PREV(b[%ld]) or L8_PREV(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        }
+
+        i=iu;   /* go back by one UTF-8 sequence */
     }
 }
 
