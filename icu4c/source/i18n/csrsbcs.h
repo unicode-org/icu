@@ -64,9 +64,6 @@ class CharsetRecog_sbcs : public CharsetRecognizer
 
 class CharsetRecog_8859_1 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_1();
 	
@@ -75,8 +72,6 @@ class CharsetRecog_8859_1 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_2 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
  public:
     virtual ~CharsetRecog_8859_2();
 	
@@ -85,9 +80,6 @@ class CharsetRecog_8859_2 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_5 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_5();
 	
@@ -96,9 +88,6 @@ class CharsetRecog_8859_5 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_6 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_6();
 	
@@ -107,9 +96,6 @@ class CharsetRecog_8859_6 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_7 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_7();
 	
@@ -118,9 +104,6 @@ class CharsetRecog_8859_7 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_8 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_8();
 	
@@ -129,9 +112,6 @@ class CharsetRecog_8859_8 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_9 : public CharsetRecog_sbcs
 {
- protected:
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_8859_9();
 	
@@ -140,9 +120,6 @@ class CharsetRecog_8859_9 : public CharsetRecog_sbcs
 
 class CharsetRecog_8859_1_en : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_en();
 	
@@ -153,9 +130,6 @@ class CharsetRecog_8859_1_en : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_da : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_da();
 	
@@ -166,9 +140,6 @@ class CharsetRecog_8859_1_da : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_de : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_de();
 	
@@ -179,9 +150,6 @@ class CharsetRecog_8859_1_de : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_es : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_es();
 	
@@ -192,9 +160,6 @@ class CharsetRecog_8859_1_es : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_fr : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_fr();
 	
@@ -205,9 +170,6 @@ class CharsetRecog_8859_1_fr : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_it : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_it();
 	
@@ -218,9 +180,6 @@ class CharsetRecog_8859_1_it : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_nl : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_nl();
 	
@@ -231,9 +190,6 @@ class CharsetRecog_8859_1_nl : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_no : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_no();
 	
@@ -244,9 +200,6 @@ class CharsetRecog_8859_1_no : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_pt : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_pt();
 	
@@ -257,9 +210,6 @@ class CharsetRecog_8859_1_pt : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_1_sv : public CharsetRecog_8859_1
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_1_sv();
 	
@@ -270,9 +220,6 @@ class CharsetRecog_8859_1_sv : public CharsetRecog_8859_1
 
 class CharsetRecog_8859_2_cs : public CharsetRecog_8859_2
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_2_cs();
 	
@@ -283,9 +230,6 @@ class CharsetRecog_8859_2_cs : public CharsetRecog_8859_2
 
 class CharsetRecog_8859_2_hu : public CharsetRecog_8859_2
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_2_hu();
 	
@@ -296,9 +240,6 @@ class CharsetRecog_8859_2_hu : public CharsetRecog_8859_2
 
 class CharsetRecog_8859_2_pl : public CharsetRecog_8859_2
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_2_pl();
 	
@@ -309,9 +250,6 @@ class CharsetRecog_8859_2_pl : public CharsetRecog_8859_2
 
 class CharsetRecog_8859_2_ro : public CharsetRecog_8859_2
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_2_ro();
 	
@@ -322,9 +260,6 @@ class CharsetRecog_8859_2_ro : public CharsetRecog_8859_2
 
 class CharsetRecog_8859_5_ru : public CharsetRecog_8859_5
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_5_ru();
 	
@@ -335,9 +270,6 @@ class CharsetRecog_8859_5_ru : public CharsetRecog_8859_5
 
 class CharsetRecog_8859_6_ar : public CharsetRecog_8859_6
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_6_ar();
 	
@@ -348,9 +280,6 @@ class CharsetRecog_8859_6_ar : public CharsetRecog_8859_6
 
 class CharsetRecog_8859_7_el : public CharsetRecog_8859_7
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_7_el();
 	
@@ -361,9 +290,6 @@ class CharsetRecog_8859_7_el : public CharsetRecog_8859_7
 
 class CharsetRecog_8859_8_I_he : public CharsetRecog_8859_8
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_8_I_he();
 	
@@ -374,9 +300,6 @@ class CharsetRecog_8859_8_I_he : public CharsetRecog_8859_8
 
 class CharsetRecog_8859_8_he : public CharsetRecog_8859_8
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_8_he ();
 	
@@ -387,9 +310,6 @@ class CharsetRecog_8859_8_he : public CharsetRecog_8859_8
 
 class CharsetRecog_8859_9_tr : public CharsetRecog_8859_9
 {
- private:
-    static const int32_t ngrams[];
-
  public:
     virtual ~CharsetRecog_8859_9_tr ();
 	
@@ -400,10 +320,6 @@ class CharsetRecog_8859_9_tr : public CharsetRecog_8859_9
 
 class CharsetRecog_windows_1256 : public CharsetRecog_sbcs
 {
- private:
-    static const int32_t ngrams[];
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_windows_1256();
 	
@@ -416,10 +332,6 @@ class CharsetRecog_windows_1256 : public CharsetRecog_sbcs
 
 class CharsetRecog_windows_1251 : public CharsetRecog_sbcs
 {
- private:
-    static const int32_t ngrams[];
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_windows_1251();
 	
@@ -433,10 +345,6 @@ class CharsetRecog_windows_1251 : public CharsetRecog_sbcs
         
 class CharsetRecog_KOI8_R : public CharsetRecog_sbcs
 {
- private:
-    static const int32_t ngrams[];
-    static const uint8_t charMap[];
-
  public:
     virtual ~CharsetRecog_KOI8_R();
 	

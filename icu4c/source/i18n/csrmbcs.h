@@ -92,10 +92,6 @@ public:
  *
  */
 class CharsetRecog_sjis : public CharsetRecog_mbcs {
-private:
-    static const int32_t commonChars [];
-    static const int32_t commonCharsLen;
-
 public:
     virtual ~CharsetRecog_sjis();
 
@@ -137,10 +133,6 @@ public:
  */
 class CharsetRecog_euc_jp : public CharsetRecog_euc
 {
-private:
-    static const int32_t commonChars[];
-    static const int32_t commonCharsLen;
-
 public:             
     virtual ~CharsetRecog_euc_jp();
 
@@ -155,10 +147,6 @@ public:
  */
 class CharsetRecog_euc_kr : public CharsetRecog_euc
 {
-private:
-    static const int32_t commonChars[];
-    static const int32_t commonCharsLen;
-
 public:
     virtual ~CharsetRecog_euc_kr();
 
@@ -175,17 +163,6 @@ public:
  */
 class CharsetRecog_gb_18030 : public CharsetRecog_mbcs 
 {
-private:
-
-    static const int32_t commonChars[];                 
-    static const int32_t commonCharsLen;
-    /*
-     *  (non-Javadoc)
-     *  Get the next character value for EUC based encodings.
-     *  Character "value" is simply the raw bytes that make up the character
-     *     packed into an int.
-     */
-
 public:
     virtual ~CharsetRecog_gb_18030();
 
