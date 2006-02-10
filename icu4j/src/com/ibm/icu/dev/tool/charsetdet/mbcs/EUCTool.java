@@ -25,10 +25,12 @@
  *
  */
 
+package com.ibm.icu.dev.tool.charsetdet.mbcs;
+
 import java.util.*;
 import java.io.*;
 
-public class euc_tool {
+public class EUCTool {
 
     // The file buffer and file data length need to be out in class member variables
     //  so that the code lifted from charSet detection for scanning the multi-byte chars
@@ -42,7 +44,7 @@ public class euc_tool {
 
 
     public static void main(String[] args) {
-        euc_tool  This = new euc_tool();
+        EUCTool  This = new EUCTool();
         This.Main(args);
     }
 
@@ -162,11 +164,13 @@ public class euc_tool {
         int cumulativeChars = 0;
         int cumulativePercent = 0;
         if (option_v) {
+            System.out.println("# <char code> <occurences>  <Cumulative %>");
             for (i=0; i<encounteredChars.length; i++) {
                 ChEl c = (ChEl)encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars*100/totalMbcsChars;
-                System.out.println(i + " " + Integer.toHexString(c.charCode) + " " + c.occurences + " " + cumulativePercent);
+                System.out.println(i + "   " + Integer.toHexString(c.charCode) + "        " 
+                        + c.occurences + "         " + cumulativePercent);
             }
         }
         if (option_d) {
