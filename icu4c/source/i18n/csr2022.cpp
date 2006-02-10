@@ -13,6 +13,8 @@
 
 U_NAMESPACE_BEGIN
 
+#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
+
 /**
  * Matching function shared among the 2022 detectors JP, CN and KR
  * Counts up the number of legal an unrecognized escape sequences in
@@ -96,7 +98,7 @@ scanInput:
 }
 
 
-const uint8_t CharsetRecog_2022JP::escapeSequences[][5] = {
+static const uint8_t escapeSequences_2022JP[][5] = {
     {0x1b, 0x24, 0x28, 0x43, 0x00},   // KS X 1001:1992
     {0x1b, 0x24, 0x28, 0x44, 0x00},   // JIS X 212-1990
     {0x1b, 0x24, 0x40, 0x00, 0x00},   // JIS C 6226-1978
@@ -111,11 +113,11 @@ const uint8_t CharsetRecog_2022JP::escapeSequences[][5] = {
     {0x1b, 0x2e, 0x46, 0x00, 0x00}    // ISO 8859-7
 };
 
-const uint8_t CharsetRecog_2022KR::escapeSequences[][5] = {
+static const uint8_t escapeSequences_2022KR[][5] = {
     {0x1b, 0x24, 0x29, 0x43, 0x00}   
 };
 
-const uint8_t CharsetRecog_2022CN::escapeSequences[][5] = {
+static const uint8_t escapeSequences_2022CN[][5] = {
     {0x1b, 0x24, 0x29, 0x41, 0x00},   // GB 2312-80
     {0x1b, 0x24, 0x29, 0x47, 0x00},   // CNS 11643-1992 Plane 1
     {0x1b, 0x24, 0x2A, 0x48, 0x00},   // CNS 11643-1992 Plane 2
@@ -129,15 +131,6 @@ const uint8_t CharsetRecog_2022CN::escapeSequences[][5] = {
     {0x1b, 0x4f, 0x00, 0x00, 0x00},   // SS3
 };
 
-const int32_t CharsetRecog_2022JP::escapeSequences_length =
-    sizeof(CharsetRecog_2022JP::escapeSequences) / sizeof(CharsetRecog_2022JP::escapeSequences[0]);
-
-const int32_t CharsetRecog_2022KR::escapeSequences_length =
-    sizeof(CharsetRecog_2022KR::escapeSequences) / sizeof(CharsetRecog_2022KR::escapeSequences[0]);
-
-const int32_t CharsetRecog_2022CN::escapeSequences_length =
-    sizeof(CharsetRecog_2022CN::escapeSequences) / sizeof(CharsetRecog_2022CN::escapeSequences[0]);
-
 const char *CharsetRecog_2022JP::getName() const
 {
     return "ISO-2022-JP";
@@ -145,7 +138,7 @@ const char *CharsetRecog_2022JP::getName() const
 
 int32_t CharsetRecog_2022JP::match(InputText *textIn)
 {
-    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences, escapeSequences_length);
+    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences_2022JP, ARRAY_SIZE(escapeSequences_2022JP));
 }
 
 const char *CharsetRecog_2022KR::getName() const
@@ -155,7 +148,7 @@ const char *CharsetRecog_2022KR::getName() const
 
 int32_t CharsetRecog_2022KR::match(InputText *textIn)
 {
-    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences, escapeSequences_length);
+    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences_2022KR, ARRAY_SIZE(escapeSequences_2022KR));
 }
 
 const char *CharsetRecog_2022CN::getName() const
@@ -165,7 +158,7 @@ const char *CharsetRecog_2022CN::getName() const
 
 int32_t CharsetRecog_2022CN::match(InputText *textIn)
 {
-    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences, escapeSequences_length);
+    return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences_2022CN, ARRAY_SIZE(escapeSequences_2022CN));
 }
 
 CharsetRecog_2022::~CharsetRecog_2022()
