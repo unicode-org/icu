@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2005, International Business Machines Corporation and
+ * Copyright (c) 1996-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -38,6 +38,7 @@ void addHeapMutexTest(TestNode **root);
 void addUTraceTest(TestNode** root);
 void addURegexTest(TestNode** root);
 void addUTextTest(TestNode** root);
+void addUCsdetTest(TestNode** root);
 
 
 void addAllTests(TestNode** root)
@@ -76,5 +77,6 @@ void addAllTests(TestNode** root)
     addURegexTest(root);
 #endif
     addUTextTest(root);
+    addUCsdetTest(root);
 }
 

@@ -375,7 +375,7 @@ void CharsetDetectionTest::InputFilterTest()
     name = ucsdet_getName(match, &status);
 
     if (name == NULL || strcmp(name, "ISO-8859-1") != 0) {
-        errln("Turning on the input filter resulted in %s rather than ISO-8859-1\n", name);
+        errln("Turning on the input filter resulted in %s rather than ISO-8859-1.", name);
     } else {
         lang = ucsdet_getLanguage(match, &status);
 
@@ -397,7 +397,7 @@ turn_off:
     name = ucsdet_getName(match, &status);
 
     if (name == NULL || strcmp(name, "ISO-8859-1") != 0) {
-        errln("Turning off the input filter resulted in %s rather than ISO-8859-1\n", name);
+        errln("Turning off the input filter resulted in %s rather than ISO-8859-1.", name);
     } else {
         lang = ucsdet_getLanguage(match, &status);
 
