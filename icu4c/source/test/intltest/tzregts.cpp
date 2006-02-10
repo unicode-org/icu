@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -223,25 +223,36 @@ void TimeZoneRegressionTest:: Test4084933() {
      *  The following was added just for consistency.  It shows that going *to* Daylight
      *  Savings Time (PDT) does work at 2am.
      */
-
     int32_t offset5 = tz->getOffset(1,
         1997, UCAL_APRIL, 6, UCAL_SUNDAY, (2*60*60*1000), status);
     int32_t offset6 = tz->getOffset(1,
         1997, UCAL_APRIL, 6, UCAL_SUNDAY, (2*60*60*1000)-1, status);
-
+    int32_t offset5a = tz->getOffset(1,
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (3*60*60*1000), status);
+    int32_t offset6a = tz->getOffset(1,
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (3*60*60*1000)-1, status);
     int32_t offset7 = tz->getOffset(1,
         1997, UCAL_APRIL, 6, UCAL_SUNDAY, (1*60*60*1000), status);
     int32_t offset8 = tz->getOffset(1,
         1997, UCAL_APRIL, 6, UCAL_SUNDAY, (1*60*60*1000)-1, status);
-
     int32_t SToffset = (int32_t)(-8 * 60*60*1000L);
     int32_t DToffset = (int32_t)(-7 * 60*60*1000L);
-    if (offset1 != SToffset || offset2 != SToffset ||
-        offset3 != SToffset || offset4 != DToffset ||
-        offset5 != DToffset || offset6 != SToffset ||
-        offset7 != SToffset || offset8 != SToffset
-        || U_FAILURE(status))
-        errln("Fail: TimeZone misbehaving");
+        
+#define ERR_IF_FAIL(x) if(x) { errln("FAIL: TimeZone misbehaving - %s", #x); }
+
+        ERR_IF_FAIL(U_FAILURE(status))
+        ERR_IF_FAIL(offset1 != SToffset)
+        ERR_IF_FAIL(offset2 != SToffset)
+        ERR_IF_FAIL(offset3 != SToffset)
+        ERR_IF_FAIL(offset4 != DToffset)
+        ERR_IF_FAIL(offset5 != DToffset)
+        ERR_IF_FAIL(offset6 != SToffset)
+        ERR_IF_FAIL(offset5a != DToffset)
+        ERR_IF_FAIL(offset6a != DToffset)
+        ERR_IF_FAIL(offset7 != SToffset)
+        ERR_IF_FAIL(offset8 != SToffset)
+
+#undef ERR_IF_FAIL
 
     delete tz;
 }
