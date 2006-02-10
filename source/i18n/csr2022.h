@@ -50,10 +50,6 @@ protected:
 
 class CharsetRecog_2022JP :public CharsetRecog_2022
 {
-private:
-    static const uint8_t escapeSequences[][5];
-    static const int32_t escapeSequences_length;
-
 public:        
     virtual ~CharsetRecog_2022JP() {}
 
@@ -63,10 +59,6 @@ public:
 };
 
 class CharsetRecog_2022KR :public CharsetRecog_2022 {
-private:
-    static const uint8_t escapeSequences[][5];
-    static const int32_t escapeSequences_length;
-
 public:       
     virtual ~CharsetRecog_2022KR() {}
 
@@ -78,10 +70,6 @@ public:
 
 class CharsetRecog_2022CN :public CharsetRecog_2022
 {
-private:
-    static const uint8_t escapeSequences[][5];
-    static const int32_t escapeSequences_length;
-
 public:        
     virtual ~CharsetRecog_2022CN() {}
 

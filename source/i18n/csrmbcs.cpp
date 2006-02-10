@@ -13,13 +13,15 @@
 
 U_NAMESPACE_BEGIN
 
-#define min(x,y) ((x<y)?(x):(y))
+#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-const int32_t CharsetRecog_sjis::commonChars []= 
+#define min(x,y) (((x)<(y))?(x):(y))
+
+const int32_t commonChars_sjis [] = {
 // TODO:  This set of data comes from the character frequency-
 //        of-occurence analysis tool.  The data needs to be moved
 //        into a resource and loaded from there.
-{0x82cc, 0x82c5, 0x82a2, 0x815b, 0x8141, 0x82b5, 0x82c9, 0x82b7, 0x8142, 0x82c4, 
+0x82cc, 0x82c5, 0x82a2, 0x815b, 0x8141, 0x82b5, 0x82c9, 0x82b7, 0x8142, 0x82c4, 
 0x82c6, 0x82cd, 0x82dc, 0x82f0, 0x82e9, 0x82c8, 0x82aa, 0x8393, 0x82bd, 0x8358, 
 0x82ea, 0x8343, 0x82a4, 0x82a9, 0x8367, 0x82b1, 0x8145, 0x82e0, 0x838b, 0x834e, 
 0x82e8, 0x82e7, 0x8140, 0x8362, 0x8389, 0x82c1, 0x838a, 0x82ab, 0x8376, 0x82b3, 
@@ -30,7 +32,7 @@ const int32_t CharsetRecog_sjis::commonChars []=
 0x838d, 0x8346, 0x834f, 0x8380, 0x82ed, 0x8d73, 0x8349, 0x8365, 0x8fee, 0x95b6, 
 0x8169, 0x816a, 0x836a, 0x8dec, 0x82bf, 0x834c, 0x8366, 0x82e2, 0x838c, 0x945c};
 
-const int32_t CharsetRecog_euc_jp::commonChars[] = 
+const int32_t commonChars_euc_jp[] = 
 // TODO:  This set of data comes from the character frequency-
 //        of-occurence analysis tool.  The data needs to be moved
 //        into a resource and loaded from there.
@@ -45,7 +47,7 @@ const int32_t CharsetRecog_euc_jp::commonChars[] =
 0xa5ed, 0xa5a7, 0xa5b0, 0xa5e0, 0xa4ef, 0xb9d4, 0xa5aa, 0xa5c6, 0xbef0, 0xcab8, 
 0xa1ca, 0xa1cb, 0xa5cb, 0xbaee, 0xa4c1, 0xa5ad, 0xa5c7, 0xa4e4, 0xa5ec, 0xc7bd};
 
-const int32_t CharsetRecog_euc_kr::commonChars[] = 
+const int32_t commonChars_euc_kr[] = 
 // TODO:  This set of data comes from the character frequency-
 //        of-occurence analysis tool.  The data needs to be moved
 //        into a resource and loaded from there.
@@ -60,7 +62,7 @@ const int32_t CharsetRecog_euc_kr::commonChars[] =
 0xb9ab, 0xc0af, 0xbef8, 0xb5a5, 0xbcd2, 0xb9ce, 0xc1df, 0xbfc0, 0xc1f8, 0xb0e6, 
 0xb1c7, 0xbad0, 0xbefa, 0xc0e5, 0xbec8, 0xc1b6, 0xb8bb, 0xb0f8, 0xb9cc, 0xb0c5};
 
-const int32_t CharsetRecog_gb_18030::commonChars[] = 
+const int32_t commonChars_gb_18030[] = 
 // TODO:  This set of data comes from the character frequency-
 //        of-occurence analysis tool.  The data needs to be moved
 //        into a resource and loaded from there.
@@ -79,18 +81,6 @@ const int32_t CharsetRecog_gb_18030::commonChars[] =
 0xb4c5, 0xc6b7, 0xc4da, 0xd0c4, 0xb9a4, 0xd4aa, 0xc2bc, 0xc3c0, 0xbaf3, 0xcabd, 
 0xbcd2, 0xcef1, 0xbdab, 0xa3ad, 0xa3bf, 0xb3a4, 0xb9fb, 0xd6ae, 0xc1bf, 0xbbd8, 
 0xb8f1, 0xb6f8, 0xb6a8, 0xcde2, 0xbac3, 0xb3cc, 0xccd8, 0xd7d4, 0xcbb5};
-
-const int32_t CharsetRecog_sjis::commonCharsLen =
-    sizeof(CharsetRecog_sjis::commonChars) / sizeof(CharsetRecog_sjis::commonChars[0]);
-
-const int32_t CharsetRecog_euc_jp::commonCharsLen =
-    sizeof(CharsetRecog_euc_jp::commonChars) / sizeof(CharsetRecog_euc_jp::commonChars[0]);
-
-const int32_t CharsetRecog_euc_kr::commonCharsLen =
-    sizeof(CharsetRecog_euc_kr::commonChars) / sizeof(CharsetRecog_euc_kr::commonChars[0]);
-
-const int32_t CharsetRecog_gb_18030::commonCharsLen =
-    sizeof(CharsetRecog_gb_18030::commonChars) / sizeof(CharsetRecog_gb_18030::commonChars[0]);
 
 static int32_t binarySearch(const int32_t *array, int32_t len, int32_t value)
 {
@@ -275,7 +265,7 @@ UBool CharsetRecog_sjis::nextChar(iteratedChar* it, InputText* det) {
 
 int32_t CharsetRecog_sjis::match(InputText* det)
 {
-    return match_mbcs(det, commonChars, commonCharsLen);
+    return match_mbcs(det, commonChars_sjis, ARRAY_SIZE(commonChars_sjis));
 }
 
 const char *CharsetRecog_sjis::getName() const
@@ -363,7 +353,7 @@ const char *CharsetRecog_euc_jp::getName() const
 
 int32_t CharsetRecog_euc_jp::match(InputText *det)
 {
-    return match_mbcs(det, commonChars, commonCharsLen);
+    return match_mbcs(det, commonChars_euc_jp, ARRAY_SIZE(commonChars_euc_jp));
 }
 
 CharsetRecog_euc_kr::~CharsetRecog_euc_kr()
@@ -378,7 +368,7 @@ const char *CharsetRecog_euc_kr::getName() const
 
 int32_t CharsetRecog_euc_kr::match(InputText *det)
 {
-    return match_mbcs(det, commonChars, commonCharsLen);
+    return match_mbcs(det, commonChars_euc_kr, ARRAY_SIZE(commonChars_euc_kr));
 }
 
 CharsetRecog_gb_18030::~CharsetRecog_gb_18030()
@@ -447,7 +437,7 @@ const char *CharsetRecog_gb_18030::getName() const
 
 int32_t CharsetRecog_gb_18030::match(InputText *det)
 {
-    return match_mbcs(det, commonChars, commonCharsLen);
+    return match_mbcs(det, commonChars_gb_18030, ARRAY_SIZE(commonChars_gb_18030));
 }
 
 U_NAMESPACE_END
