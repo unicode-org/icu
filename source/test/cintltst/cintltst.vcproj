@@ -396,6 +396,9 @@
 				RelativePath=".\currtest.c">
 			</File>
 			<File
+				RelativePath=".\ucsdetst.c">
+			</File>
+			<File
 				RelativePath=".\utmstest.c">
 			</File>
 		</Filter>
