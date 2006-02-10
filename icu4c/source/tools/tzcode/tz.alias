@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (C) 1999-2004, International Business Machines
+# Copyright (C) 1999-2006, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # A simple alias list. We use this to retain backward compatibility.
@@ -29,7 +29,7 @@ EAT Africa/Addis_Ababa
 ECT Europe/Paris
 # EET Europe/Istanbul # EET is a standard UNIX zone
 #### EST America/New_York # Linked to America/Indianapolis in Olson
-# HST Pacific/Honolulu # Olson LINK
+HST Pacific/Honolulu # Olson LINK - was removed 2005-Nov-21, confirmed gone in 2006a.
 IET America/Indianapolis
 IST Asia/Calcutta
 JST Asia/Tokyo
