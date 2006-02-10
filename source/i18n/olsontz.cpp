@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -133,10 +133,18 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         if(U_SUCCESS(ec)) {
           int32_t jj;
           for(jj=0;jj<transitionCount;jj++) {
-            U_DEBUG_TZ_MSG(("   Transition %d:  time %d, typedata%d\n", jj, transitionTimes[jj], typeData[jj]));
-          }
-          for(jj=0;jj<transitionCount;jj++) {
-            U_DEBUG_TZ_MSG(("   Type %d:  offset%d\n", jj, typeOffsets[jj]));
+            int32_t year, month, dom, dow;
+            double millis=0;
+            double days = Math::floorDivide(((double)transitionTimes[jj])*1000.0, (double)U_MILLIS_PER_DAY, millis);
+            
+            Grego::dayToFields(days, year, month, dom, dow);
+            U_DEBUG_TZ_MSG(("   Transition %d:  time %d (%04d.%02d.%02d+%.1fh), typedata%d\n", jj, transitionTimes[jj],
+                            year, month+1, dom, (millis/kOneHour), typeData[jj]));
+//            U_DEBUG_TZ_MSG(("     offset%d\n", typeOffsets[jj]));
+            int16_t f = jj;
+            f <<= 1;
+            U_DEBUG_TZ_MSG(("     offsets[%d+%d]=(%d+%d)=(%d==%d)\n", (int)f,(int)f+1,(int)typeOffsets[f],(int)typeOffsets[f+1],(int)zoneOffset(jj),
+                (int)typeOffsets[f]+(int)typeOffsets[f+1]));
           }
         }
 #endif
@@ -174,7 +182,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                         data = ures_getIntVector(r, &len, &ec);
                         if (U_SUCCESS(ec) && len == 11) {
                             UnicodeString emptyStr;
-                            U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}", zKey, ures_getKey(r), 
+                            U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}\n", zKey, ures_getKey(r), 
                                           data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]));
                             finalZone = new SimpleTimeZone(rawOffset, emptyStr,
                                 (int8_t)data[0], (int8_t)data[1], (int8_t)data[2],
@@ -393,6 +401,18 @@ int32_t OlsonTimeZone::getRawOffset() const {
     return raw;
 }
 
+#if defined U_DEBUG_TZ
+void printTime(double ms) {
+            int32_t year, month, dom, dow;
+            double millis=0;
+            double days = Math::floorDivide(((double)ms), (double)U_MILLIS_PER_DAY, millis);
+            
+            Grego::dayToFields(days, year, month, dom, dow);
+            U_DEBUG_TZ_MSG(("   findTransition:  time %.1f (%04d.%02d.%02d+%.1fh)\n", ms,
+                            year, month+1, dom, (millis/kOneHour)));
+    }
+#endif
+
 /**
  * Find the smallest i (in 0..transitionCount-1) such that time >=
  * transition(i), where transition(i) is either the GMT or the local
@@ -406,6 +426,10 @@ int32_t OlsonTimeZone::getRawOffset() const {
  */
 int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
     int16_t i = 0;
+    U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)\n", time, local?"T":"F"));
+#if defined U_DEBUG_TZ
+        printTime(time*1000.0);
+#endif
     
     if (transitionCount != 0) {
         // Linear search from the end is the fastest approach, since
@@ -413,10 +437,41 @@ int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
         for (i = transitionCount - 1; i > 0; --i) {
             int32_t transition = transitionTimes[i];
             if (local) {
-                transition += zoneOffset(typeData[i]);
+                int32_t zoneOffsetPrev = zoneOffset(typeData[i-1]);
+                int32_t zoneOffsetCurr = zoneOffset(typeData[i]);
+                
+                // use the lowest offset ( == standard time ). as per tzregts.cpp which says:
+
+                    /**
+                     * @bug 4084933
+                     * The expected behavior of TimeZone around the boundaries is:
+                     * (Assume transition time of 2:00 AM)
+                     *    day of onset 1:59 AM STD  = display name 1:59 AM ST
+                     *                 2:00 AM STD  = display name 3:00 AM DT
+                     *    day of end   0:59 AM STD  = display name 1:59 AM DT
+                     *                 1:00 AM STD  = display name 1:00 AM ST
+                     */
+                if(zoneOffsetPrev<zoneOffsetCurr) {
+                    transition += zoneOffsetPrev;
+                } else {
+                    transition += zoneOffsetCurr;
+                }
             }
             if (time >= transition) {
+                U_DEBUG_TZ_MSG(("Found@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, time, transition, transitionTimes[i],
+                    zoneOffset(typeData[i-1])));
+#if defined U_DEBUG_TZ
+        printTime(transition*1000.0);
+        printTime(transitionTimes[i]*1000.0);
+#endif
                 break;
+            } else {
+                U_DEBUG_TZ_MSG(("miss@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, time, transition, transitionTimes[i],
+                    zoneOffset(typeData[i-1])));
+#if defined U_DEBUG_TZ
+        printTime(transition*1000.0);
+        printTime(transitionTimes[i]*1000.0);
+#endif
             }
         }
 
@@ -427,11 +482,13 @@ int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
         U_ASSERT(local || time < transitionTimes[0] || time >= transitionTimes[i]);
         U_ASSERT(local || i == transitionCount-1 || time < transitionTimes[i+1]);
 
+        U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)= trans %d\n", time, local?"T":"F", i));
         i = typeData[i];
     }
 
     U_ASSERT(i>=0 && i<typeCount);
     
+    U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)=%d, offset %d\n", time, local?"T":"F", i, zoneOffset(i)));
     return i;
 }
 
