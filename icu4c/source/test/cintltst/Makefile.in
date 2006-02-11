@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2005, International Business Machines
+#   Copyright (C) 1999-2006, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -61,7 +61,7 @@ cbiditst.o cbididat.o eurocreg.o udatatst.o utf16tst.o utransts.o \
 ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o utf8tst.o ucmptst.o \
 stdnmtst.o ctstdep.o usrchtst.o custrtrn.o sorttest.o trietest.o usettest.o \
 uenumtst.o utmstest.o currtest.o \
-idnatest.o nfsprep.o spreptst.o sprpdata.o hpmufn.o tracetst.o reapits.o utexttst.o
+idnatest.o nfsprep.o spreptst.o sprpdata.o hpmufn.o tracetst.o reapits.o utexttst.o ucsdetst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
