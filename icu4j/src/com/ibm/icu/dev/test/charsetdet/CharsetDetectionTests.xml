@@ -377,7 +377,7 @@
     </test-case>
 
     <!-- No ISO-2022-CN in this test because Java can't round-trip it... -->
-    <test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE GB18030">
+    <test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE GB18030 Big5">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     歐洲，軟體及網際網路：
