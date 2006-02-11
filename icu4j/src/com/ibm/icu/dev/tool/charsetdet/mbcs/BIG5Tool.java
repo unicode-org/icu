@@ -1,36 +1,38 @@
 /*
  ***********************************************************************
  *
- * Copyright (C) 2005-2006, International Business Machines Corporation and
+ * Copyright (C) 2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  ***********************************************************************
  *
- * euc_tool
+ * BIG5Tool
  *
- *    This tool produces the character usage frequency statistics for the EUC family
- *    of charsets, for use by the ICU charset detectors.
+ *    This tool produces the character usage frequency statistics for the Big5
+ *    Chinese charset, for use by the ICU charset detectors.
  *
- *    usage:  java euc_tool [-d] [directory path]
+ *    usage:  java BIG5Tool [-d] [directory path]
  *
  *        -d:   Produce the data in a form to be exported to the ICU implementation
  *              Default is to produce an informative dump.
  *
  *        directory path
- *              Source directory for the files to be analyzed.
- *              Default is the current directory.
- *              There should be three subdirectories under the specified directory, one
- *              each for EUC_JP, EUC_CN and EUC_KR.  Within each of these subdirectories
- *              should be text files in the specified encoding.
+ *              Source directory for the text files to be analyzed.
+ *              All files in the specified directory must be in the Big5 encoding.
  *
  */
 
 package com.ibm.icu.dev.tool.charsetdet.mbcs;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-public class EUCTool {
+
+public class BIG5Tool {
 
     // The file buffer and file data length need to be out in class member variables
     //  so that the code lifted from charSet detection for scanning the multi-byte chars
@@ -44,7 +46,7 @@ public class EUCTool {
 
 
     public static void main(String[] args) {
-        EUCTool  This = new EUCTool();
+        BIG5Tool  This = new BIG5Tool();
         This.Main(args);
     }
 
@@ -78,21 +80,8 @@ public class EUCTool {
             System.err.println("\"" + dirName + "\" is not a directory");
             System.exit(-1);
         }
-
-        //
-        //  Do each subdirectory of the specified directory.  There should be
-        //    one per each encoding - euc-kr, euc-cn, euc-jp
-        //
-        File[] dirs  = dir.listFiles();
-        for (i=0; i<dirs.length; i++) {
-            if (dirs[i].isDirectory()) {
-                String nam = dirs[i].getName();
-                if (nam.equalsIgnoreCase("CVS")) {
-                    continue;
-                }
-                processDir(dirs[i]);
-            }
-        }
+        processDir(dir);
+        
     }
 
     //
@@ -287,8 +276,6 @@ public class EUCTool {
         it.error = false;
         int firstByte  = 0;
         int secondByte = 0;
-        int thirdByte  = 0;
-        int fourthByte = 0;
 
         buildChar: {
             firstByte = it.charValue = it.nextByte();
@@ -297,7 +284,7 @@ public class EUCTool {
                 it.done = true;
                 break buildChar;
             }
-            if (firstByte <= 0x8d) {
+            if (firstByte <= 0x80) {
                 // single byte char
                 break buildChar;
             }
@@ -305,41 +292,14 @@ public class EUCTool {
             secondByte = it.nextByte();
             it.charValue = (it.charValue << 8) | secondByte;
 
-            if (firstByte >= 0xA1 && firstByte <= 0xfe) {
-                // Two byte Char
-                if (secondByte < 0xa1) {
+            if (secondByte < 0x40 ||
+                secondByte >=0x7f && secondByte <= 0xa0 ||
+                secondByte == 0xff) {
                     it.error = true;
-                }
-                break buildChar;
             }
-            if (firstByte == 0x8e) {
-                // Code Set 2.
-                //   In EUC-JP, total char size is 2 bytes, only one byte of actual char value.
-                //   In EUC-TW, total char size is 4 bytes, three bytes contribute to char value.
-                // We don't know which we've got.
-                // Treat it like EUC-JP.  If the data really was EUC-TW, the following two
-                //   bytes will look like a well formed 2 byte char.
-                if (secondByte < 0xa1) {
-                    it.error = true;
-                }
-                break buildChar;
-            }
-
-            if (firstByte == 0x8f) {
-                // Code set 3.
-                // Three byte total char size, two bytes of actual char value.
-                thirdByte    = it.nextByte();
-                it.charValue = (it.charValue << 8) | thirdByte;
-                if (thirdByte < 0xa1) {
-                    it.error = true;
-                }
-            }
-         }
+       }
 
         return (it.done == false);
     }
+
 }
-
-
-
-
