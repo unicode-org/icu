@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -493,6 +493,7 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_gb_18030());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_jp());
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_euc.CharsetRecog_euc_kr());
+        recognizers.add(new CharsetRecog_mbcs.CharsetRecog_big5());
         
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_da());
         recognizers.add(new CharsetRecog_sbcs.CharsetRecog_8859_1_de());
