@@ -97,6 +97,7 @@ void CharsetDetector::setRecognizers()
             new CharsetRecog_gb_18030(),
             new CharsetRecog_euc_jp(),
             new CharsetRecog_euc_kr(),
+            new CharsetRecog_big5(),
 
             new CharsetRecog_2022JP(),
             new CharsetRecog_2022KR(),
