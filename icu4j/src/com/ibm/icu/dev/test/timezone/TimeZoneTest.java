@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1178,7 +1178,22 @@ public class TimeZoneTest extends TestFmwk
         if(!list.contains(tzid)){
             errln("Could create the time zone but it is not in getAvailableIDs");
         }
-
+    }
+    public void TestZoneMeta() {
+        java.util.TimeZone save = java.util.TimeZone.getDefault();
+        java.util.TimeZone newZone = java.util.TimeZone.getTimeZone("GMT-08:00");
+        com.ibm.icu.util.TimeZone.setDefault(null);
+        java.util.TimeZone.setDefault(newZone);
+        SimpleTimeZone zone = new SimpleTimeZone(0, "GMT");
+        com.ibm.icu.util.TimeZone defaultZone = com.ibm.icu.util.TimeZone.getDefault();
+        if(defaultZone==null){
+            errln("TimeZone.getDefault() failed for GMT-08:00");
+        }
+        if(zone==null){
+            errln("SimpleTimeZone(0, GMT-08:00) failed for GMT-08:00");
+        }
+        //reset
+        java.util.TimeZone.setDefault(save);
     }
 }
 

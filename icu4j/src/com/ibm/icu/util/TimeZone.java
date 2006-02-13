@@ -695,7 +695,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     public static synchronized TimeZone getDefault() {
         if (defaultZone == null) {
             java.util.TimeZone temp=java.util.TimeZone.getDefault();
-            defaultZone = ZoneMeta.getSystemTimeZone(temp.getID());
+            defaultZone = getTimeZone(temp.getID());
         }
         return (TimeZone) defaultZone.clone();
     }
