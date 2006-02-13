@@ -67,7 +67,8 @@ public:
      * @return the charset name.
      */
 
-    const char *getName() const = 0 ;
+    const char *getName() const = 0;
+    const char *getLanguage() const = 0;
     int32_t match(InputText* det) = 0;
 
     /**
@@ -100,6 +101,7 @@ public:
     int32_t match(InputText *det);
 
     const char *getName() const;
+    const char *getLanguage() const;
 
 };
 
@@ -115,7 +117,8 @@ class CharsetRecog_euc : public CharsetRecog_mbcs
 public:
     virtual ~CharsetRecog_euc();
 
-    const char* getName() const = 0;
+    const char *getName() const = 0;
+    const char *getLanguage() const = 0;
 
     int32_t match(InputText* det) = 0;
     /*
@@ -137,6 +140,7 @@ public:
     virtual ~CharsetRecog_euc_jp();
 
     const char *getName() const;
+    const char *getLanguage() const;
 
     int32_t match(InputText *det);
 };
@@ -151,6 +155,25 @@ public:
     virtual ~CharsetRecog_euc_kr();
 
     const char *getName() const;
+    const char *getLanguage() const;
+
+    int32_t match(InputText *det);
+};
+
+/**
+ * 
+ *   Big5 charset recognizer.
+ *
+ */
+class CharsetRecog_big5 : public CharsetRecog_mbcs 
+{
+public:
+    virtual ~CharsetRecog_big5();
+
+    UBool nextChar(iteratedChar* it, InputText* det);
+
+    const char *getName() const;
+    const char *getLanguage() const;
 
     int32_t match(InputText *det);
 };
@@ -169,6 +192,7 @@ public:
     UBool nextChar(iteratedChar* it, InputText* det);
 
     const char *getName() const;
+    const char *getLanguage() const;
 
     int32_t match(InputText *det);
 };

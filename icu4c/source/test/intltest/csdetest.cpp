@@ -142,15 +142,16 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     ucsdet_setText(csd, bytes, byteLength, &status);
 
-    const UCharsetMatch *csm = ucsdet_detect(csd, &status);
+    int32_t matchCount = 0;
+    const UCharsetMatch **matches = ucsdet_detectAll(csd, &matchCount, &status);
 
 
-    UnicodeString name(ucsdet_getName(csm, &status));
-    UnicodeString lang(ucsdet_getLanguage(csm, &status));
+    UnicodeString name(ucsdet_getName(matches[0], &status));
+    UnicodeString lang(ucsdet_getLanguage(matches[0], &status));
     UChar *decoded = NULL;
     int32_t dLength = 0;
 
-    if (csm == NULL) {
+    if (matchCount == 0) {
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got no matches");
         goto bail;
     }
@@ -159,9 +160,6 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got " + name);
 
 #ifdef DEBUG_DETECT
-        int32_t matchCount;
-        const UCharsetMatch **matches = ucsdet_detectAll(csd, &matchCount, &status);
-
         for (int32_t m = 0; m < matchCount; m += 1) {
             const char *name = ucsdet_getName(matches[m], &status);
             const char *lang = ucsdet_getLanguage(matches[m], &status);
@@ -179,7 +177,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     }
 
     decoded = NEW_ARRAY(UChar, testLength);
-    dLength = ucsdet_getUChars(csm, decoded, testLength, &status);
+    dLength = ucsdet_getUChars(matches[0], decoded, testLength, &status);
 
     if (testString.compare(decoded, dLength) != 0) {
         errln("Round-trip error for " + id + ", " + eSplit[0] + ": getUChars() didn't yeild the original string.");
