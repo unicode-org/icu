@@ -25,19 +25,7 @@ import java.util.Arrays;
  */
 abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
-    private static int search(int[] array, int value)
-    {
-        for (int i = 0; i < array.length; i += 1) {
-            if (array[i] == value) {
-                return i;
-            }
-        }
-        
-        return -1;
-    }
-    
-     
-    /**
+   /**
      * Get the IANA name of this charset.
      * @return the charset name.
      */
@@ -77,7 +65,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                     } else {
                         doubleByteCharCount++;
                         if (commonChars != null) {
-                            if (search(commonChars, iter.charValue) >= 0){
+                            if (Arrays.binarySearch(commonChars, iter.charValue) >= 0) {
                                 commonCharCount++;
                             }
                         }
@@ -231,6 +219,12 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              return "Shift_JIS";
          }
          
+         public String getLanguage()
+         {
+             return "ja";
+         }
+
+         
      }
      
      
@@ -290,6 +284,11 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              return "Big5";
          }
          
+         
+         public String getLanguage()
+         {
+             return "zh";
+         }
      }
      
      
@@ -390,6 +389,11 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              int match(CharsetDetector det) {
                  return match(det, commonChars);
              }
+             
+             public String getLanguage()
+             {
+                 return "ja";
+             }
          }
          
          /**
@@ -418,6 +422,11 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              
              int match(CharsetDetector det) {
                  return match(det, commonChars);
+             }
+             
+             public String getLanguage()
+             {
+                 return "ko";
              }
          }
      }
@@ -510,6 +519,11 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
          
          int match(CharsetDetector det) {
              return match(det, commonChars);
+         }
+         
+         public String getLanguage()
+         {
+             return "zh";
          }
      }
      
