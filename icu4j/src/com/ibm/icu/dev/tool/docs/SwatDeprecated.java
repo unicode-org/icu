@@ -11,12 +11,16 @@ import java.io.*;
 public class SwatDeprecated {
     private File srcFile;
     private File dstFile;
-    private PrintWriter pw = new PrintWriter(System.out);
     private int maxLength = 85;
     private String srcPrefix;
     private String dstPrefix;
     private String srcTag;
     private String trgTag;
+    private boolean overwrite;
+    private int verbosity;
+    private int cc; // changed file count
+
+    private PrintWriter pw = new PrintWriter(System.out);
 
     private static FilenameFilter ff = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -28,7 +32,9 @@ public class SwatDeprecated {
     public static void main(String[] args) {
         String src = System.getProperty("user.dir");
         String dst = src;
-        boolean dep = false;
+        boolean dep = true;
+        boolean ovr = false;
+        int vrb = 1;
 
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i].toLowerCase();
@@ -41,18 +47,40 @@ public class SwatDeprecated {
                 }
                 else if (arg.equals("-dep")) {
                     dep = true;
-                } else if (arg.equals("-prov")) {
+                } 
+                else if (arg.equals("-prov")) {
                     dep = false;
+                }
+                else if (arg.equals("-overwrite")) {
+                    ovr = true;
+                }
+                else if (arg.equals("-silent")) { // no output
+                    vrb = 0;
+                }
+                else if (arg.equals("-quiet")) { // output parameters and count of changed files (default)
+                    vrb = 1;
+                } 
+                else if (arg.equals("-verbose")) { // output names of modified files
+                    vrb = 2;
+                } 
+                else if (arg.equals("-noisy")) { // output names of files not modified
+                    vrb = 3;
+                } 
+                else if (arg.equals("-debug")) { // output copyright debugging
+                    vrb = 4;
                 }
             }
         }
 
-        new SwatDeprecated(src, dst, dep).run();
+        new SwatDeprecated(src, dst, dep, ovr, vrb).run();
     }
 
-    public SwatDeprecated(String src, String dst, boolean dep) {
+    public SwatDeprecated(String src, String dst, boolean dep, boolean overwrite, int verbosity) {
         this.srcFile = new File(src);
         this.dstFile = new File(dst);
+        this.overwrite = overwrite;
+        this.verbosity = verbosity;
+
         this.srcTag = "@deprecated This is a draft API and might change in a future release of ICU.";
         this.trgTag = "@provisional";
         if (!dep) {
@@ -69,16 +97,27 @@ public class SwatDeprecated {
             re.initCause(e);
             throw re;
         }
-        pw.println("src: '" + srcPrefix + "'");
-        pw.println("dst: '" + dstPrefix + "'");
-        pw.println("name: '" + srcFile.getName() + "'");
-        pw.println("isDir: " + srcFile.isDirectory());
+
+        this.cc = 0;
+
+        if (verbosity >= 1) {
+            pw.println("replacing '" + srcTag + "'");
+            pw.println("     with '" + trgTag + "'");
+            pw.println();
+            pw.println("     source: '" + srcPrefix + "'");
+            pw.println("destination: '" + dstPrefix + "'");
+            pw.println("  overwrite: " + overwrite);
+            pw.println("  verbosity: " + verbosity);
+            pw.flush();
+        }
     }
 
     public void run() {
         doList(srcFile);
-        pw.println();
-        pw.flush();
+        if (verbosity >= 1) {
+            pw.println("changed " + cc + " file(s)");
+            pw.flush();
+        }
     }
 
     public void doList(File file) {
@@ -91,9 +130,6 @@ public class SwatDeprecated {
                 processFile(f);
             }
         }
-    }
-
-    public void ensureDirectories(File file) {
     }
 
     public void processFile(File inFile) {
@@ -109,24 +145,57 @@ public class SwatDeprecated {
             BufferedReader br = new BufferedReader(fr);
             String line;
             int n = 0;
+            int tc = 0;
+            boolean debug = false;
             while (null != (line = br.readLine())) {
+                int temp = line.indexOf("@deprecated");
                 int ix = line.indexOf(srcTag);
+                if (temp != -1 && ix == -1) {
+                    if (debug == false) {
+                        debug = true;
+                        pw.println("file: " + name);
+                    }
+                    pw.println("[" + n + "] " + line);
+                    pw.flush();
+                }
                 if (ix != -1) {
                     line = line.substring(0,ix) + trgTag;
+                    ++tc;
                 } else if (n < 20) {
                     ix = line.indexOf("opyright");
                     if (ix != -1) {
-                        // pw.println("[" + n + "] " + line);
-                        ix = line.indexOf("-200");
-                        if (ix != -1) {
-                            line = line.substring(0, ix) + "-2006" + line.substring(ix+5);
-                            // pw.println("  --> " + line);
-                        } else {
+                        String nline = null;
+                        do {
+                            if (verbosity == 4) {
+                                pw.println("[" + n + "] " + line);
+                            }
+                            ix = line.indexOf("-200");
+                            if (ix != -1) {
+                                nline = line.substring(0, ix) + "-2006" + line.substring(ix+5);
+                                break;
+                            }
+                            ix = line.indexOf("-199");
+                            if (ix != -1) {
+                                nline = line.substring(0, ix) + "-2006" + line.substring(ix+5);
+                                break;
+                            }
                             ix = line.indexOf("200");
                             if (ix != -1) {
-                                line = line.substring(0, ix) + "2006" + line.substring(ix+4);
-                                // pw.println("  --> " + line);
+                                nline = line.substring(0, ix) + "2006" + line.substring(ix+4);
+                                break;
                             }
+                            ix = line.indexOf("199");
+                            if (ix != -1) {
+                                nline = line.substring(0, ix) + "2006" + line.substring(ix+4);
+                                break;
+                            }
+                        } while (false);
+
+                        if (nline != null) {
+                            if (verbosity >= 4) {
+                                pw.println("  --> " + nline);
+                            }
+                            line = nline;
                         }
                     }
                 }
@@ -136,18 +205,43 @@ public class SwatDeprecated {
             }
             bw.flush();
             bw.close();
+
+            if (tc == 0) { // nothing changed, forget this file
+                if (verbosity >= 3) {
+                    pw.println("no changes in file: " + name);
+                }
+                if (!outFile.delete()) {
+                    throw new RuntimeException("unable to delete unneeded temporary file: " + name + ".tmp");
+                }
+                return;
+            }
+
             outFile.setLastModified(inFile.lastModified());
-            if (!outFile.renameTo(new File(name))) {
+            File newFile = new File(name);
+            if (newFile.exists()) {
+                if (!overwrite) {
+                    throw new RuntimeException("file " + name + " already exists");
+                } else {
+                    if (!newFile.delete()) {
+                        throw new RuntimeException("could not delete existing file: " + name);
+                    }
+                }
+            }
+            if (!outFile.renameTo(newFile)) {
                  throw new RuntimeException("could not rename file to " + name);
             }
-            pw.println(name);
-            pw.flush();
+            if (verbosity >= 2) {
+                pw.println(name);
+                pw.flush();
+            }
         }
         catch (IOException e) {
             RuntimeException re = new RuntimeException(e.getMessage());
             re.initCause(e);
             throw re;
         }
+
+        ++cc;
     }
 
     public void dumpList(String[] names) {
