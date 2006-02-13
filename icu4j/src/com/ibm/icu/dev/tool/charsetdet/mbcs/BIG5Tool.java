@@ -15,6 +15,8 @@
  *
  *        -d:   Produce the data in a form to be exported to the ICU implementation
  *              Default is to produce an informative dump.
+ *              
+ *        -sjis Do Shift_JIS.  The structure of sjis is very similar to Big5.
  *
  *        directory path
  *              Source directory for the text files to be analyzed.
@@ -42,6 +44,7 @@ public class BIG5Tool {
 
     boolean    option_d = false;    // data option.  Produce exportable data
     boolean    option_v = true;     // verbose informaional output.
+    boolean    sjis     = false;    // True if input text files are Shift_JIS encoded.
 
 
 
@@ -58,18 +61,30 @@ public class BIG5Tool {
         //
         //   Command Line Option Handling
         //
-        String     dirName  = ".";
+        String     dirName  = null;
         for (i=0; i<args.length; i++) {
             if (args[i].equals("-d")) {
                 option_d = true;
                 option_v = false;
                 continue;
             }
+            if (args[i].equals("-sjis")) {
+                sjis = true;
+                continue;
+            }
             if (args[i].startsWith("-")) {
-                System.err.println("Unrecongized option: " + args[i]);
+                System.err.println("Unrecognized option: " + args[i]);
                 System.exit(-1);
             }
-            dirName = args[i];
+            if (dirName == null) {
+                dirName = args[i];
+            } else {
+                System.err.println("Unrecognized option: " + dirName);
+                System.exit(-1);
+            }
+        }
+        if (dirName == null) {
+            dirName = ".";
         }
 
         //
@@ -175,7 +190,7 @@ public class BIG5Tool {
             //
             List  charList = new ArrayList();
             
-            for (i=0; i<100 || cumulativePercent<50; i++) {
+            for (i=0; i<100 && cumulativePercent<50; i++) {
                 ChEl c = (ChEl)encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars*100/totalMbcsChars;
@@ -284,7 +299,9 @@ public class BIG5Tool {
                 it.done = true;
                 break buildChar;
             }
-            if (firstByte <= 0x80) {
+            if (firstByte <= 0x0080 ||
+                    (sjis && firstByte>=0x00a0 && firstByte< 0x00e0) ||
+                    (sjis && firstByte>=0x00fd && firstByte<=0x00ff)) {
                 // single byte char
                 break buildChar;
             }
@@ -292,10 +309,15 @@ public class BIG5Tool {
             secondByte = it.nextByte();
             it.charValue = (it.charValue << 8) | secondByte;
 
-            if (secondByte < 0x40 ||
-                secondByte >=0x7f && secondByte <= 0xa0 ||
-                secondByte == 0xff) {
+            if (secondByte <  0x40 ||
+                secondByte == 0x007f ||
+                secondByte == 0x00ff ||
+                sjis && secondByte >= 0x00fd) {
                     it.error = true;
+            }
+            
+            if (it.error) {
+                System.out.println("Error " + Integer.toHexString(firstByte) + " " + Integer.toHexString(secondByte));
             }
        }
 

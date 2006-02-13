@@ -186,7 +186,7 @@ public class EUCTool {
             //
             List  charList = new ArrayList();
             
-            for (i=0; i<100 || cumulativePercent<50; i++) {
+            for (i=0; i<100 && cumulativePercent<50; i++) {
                 ChEl c = (ChEl)encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars*100/totalMbcsChars;
@@ -334,8 +334,12 @@ public class EUCTool {
                     it.error = true;
                 }
             }
-         }
-
+            
+        }
+        if (it.error) {
+            System.out.println("Error " + Integer.toHexString(firstByte) + " " + Integer.toHexString(secondByte)
+                    + " " +  Integer.toHexString(thirdByte) + " " + Integer.toHexString(fourthByte));
+        }
         return (it.done == false);
     }
 }
