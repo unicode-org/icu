@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP U_MAKE DOXYGEN build build_cpu build_vendor build_os host host_cpu host_vendor host_os ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H CXXCPP U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thesysconfdir thedatadir thelibdir pkgicudatadir thepkgicudatadir DATA_PACKAGING_CPPFLAGS DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H CXXCPP U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thesysconfdir thedatadir thelibdir pkgicudatadir thepkgicudatadir DATA_PACKAGING_CPPFLAGS DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1364,9 +1364,90 @@ echo "${ECHO_T}release $VERSION, library $LIB_VERSION" >&6
 UNICODE_VERSION="4.1"
 
 
+ac_aux_dir=
+for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  elif test -f $ac_dir/shtool; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/shtool install -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
+echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+ac_config_guess="$SHELL $ac_aux_dir/config.guess"
+ac_config_sub="$SHELL $ac_aux_dir/config.sub"
+ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
+
+# Make sure we can run config.sub.
+$ac_config_sub sun4 >/dev/null 2>&1 ||
+  { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
+echo "$as_me: error: cannot run $ac_config_sub" >&2;}
+   { (exit 1); exit 1; }; }
+
+echo "$as_me:$LINENO: checking build system type" >&5
+echo $ECHO_N "checking build system type... $ECHO_C" >&6
+if test "${ac_cv_build+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_build_alias=$build_alias
+test -z "$ac_cv_build_alias" &&
+  ac_cv_build_alias=`$ac_config_guess`
+test -z "$ac_cv_build_alias" &&
+  { { echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
+echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
+   { (exit 1); exit 1; }; }
+ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_build_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_build" >&5
+echo "${ECHO_T}$ac_cv_build" >&6
+build=$ac_cv_build
+build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+echo "$as_me:$LINENO: checking host system type" >&5
+echo $ECHO_N "checking host system type... $ECHO_C" >&6
+if test "${ac_cv_host+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_host_alias=$host_alias
+test -z "$ac_cv_host_alias" &&
+  ac_cv_host_alias=$ac_cv_build_alias
+ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_host_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_host" >&5
+echo "${ECHO_T}$ac_cv_host" >&6
+host=$ac_cv_host
+host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+
 
 
 _CXX_CXXSUFFIX=cc
+export _CXX_CXXSUFFIX
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2652,31 +2733,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-ac_aux_dir=
-for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
-  if test -f $ac_dir/install-sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f $ac_dir/install.sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  elif test -f $ac_dir/shtool; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/shtool install -c"
-    break
-  fi
-done
-if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
-echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-ac_config_guess="$SHELL $ac_aux_dir/config.guess"
-ac_config_sub="$SHELL $ac_aux_dir/config.sub"
-ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
-
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -2889,61 +2945,6 @@ else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
-
-
-# Make sure we can run config.sub.
-$ac_config_sub sun4 >/dev/null 2>&1 ||
-  { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
-echo "$as_me: error: cannot run $ac_config_sub" >&2;}
-   { (exit 1); exit 1; }; }
-
-echo "$as_me:$LINENO: checking build system type" >&5
-echo $ECHO_N "checking build system type... $ECHO_C" >&6
-if test "${ac_cv_build+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_build_alias=$build_alias
-test -z "$ac_cv_build_alias" &&
-  ac_cv_build_alias=`$ac_config_guess`
-test -z "$ac_cv_build_alias" &&
-  { { echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
-echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
-   { (exit 1); exit 1; }; }
-ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
-  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_build_alias failed" >&5
-echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed" >&2;}
-   { (exit 1); exit 1; }; }
-
-fi
-echo "$as_me:$LINENO: result: $ac_cv_build" >&5
-echo "${ECHO_T}$ac_cv_build" >&6
-build=$ac_cv_build
-build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-
-
-echo "$as_me:$LINENO: checking host system type" >&5
-echo $ECHO_N "checking host system type... $ECHO_C" >&6
-if test "${ac_cv_host+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_host_alias=$host_alias
-test -z "$ac_cv_host_alias" &&
-  ac_cv_host_alias=$ac_cv_build_alias
-ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
-  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_host_alias failed" >&5
-echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
-   { (exit 1); exit 1; }; }
-
-fi
-echo "$as_me:$LINENO: result: $ac_cv_host" >&5
-echo "${ECHO_T}$ac_cv_host" >&6
-host=$ac_cv_host
-host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-
 
 
 
@@ -8770,6 +8771,14 @@ s,@VERSION@,$VERSION,;t t
 s,@LIB_VERSION@,$LIB_VERSION,;t t
 s,@LIB_VERSION_MAJOR@,$LIB_VERSION_MAJOR,;t t
 s,@UNICODE_VERSION@,$UNICODE_VERSION,;t t
+s,@build@,$build,;t t
+s,@build_cpu@,$build_cpu,;t t
+s,@build_vendor@,$build_vendor,;t t
+s,@build_os@,$build_os,;t t
+s,@host@,$host,;t t
+s,@host_cpu@,$host_cpu,;t t
+s,@host_vendor@,$host_vendor,;t t
+s,@host_os@,$host_os,;t t
 s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
@@ -8786,14 +8795,6 @@ s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@STRIP@,$STRIP,;t t
 s,@U_MAKE@,$U_MAKE,;t t
 s,@DOXYGEN@,$DOXYGEN,;t t
-s,@build@,$build,;t t
-s,@build_cpu@,$build_cpu,;t t
-s,@build_vendor@,$build_vendor,;t t
-s,@build_os@,$build_os,;t t
-s,@host@,$host,;t t
-s,@host_cpu@,$host_cpu,;t t
-s,@host_vendor@,$host_vendor,;t t
-s,@host_os@,$host_os,;t t
 s,@ARFLAGS@,$ARFLAGS,;t t
 s,@COMPILE_LINK_ENVVAR@,$COMPILE_LINK_ENVVAR,;t t
 s,@LIB_M@,$LIB_M,;t t
@@ -9363,3 +9364,5 @@ if test $ICU_USE_THREADS = 0; then
 fi
 
 echo "You must use $U_MAKE to build ICU."
+
+unset _CXX_CXXSUFFIX

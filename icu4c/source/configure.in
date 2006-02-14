@@ -37,10 +37,14 @@ AC_MSG_RESULT([release $VERSION, library $LIB_VERSION])
 UNICODE_VERSION="4.1"
 AC_SUBST(UNICODE_VERSION)
 
+dnl Determine the host system
+AC_CANONICAL_HOST
+
 AC_SUBST(CPPFLAGS)
 
 dnl This variable is needed on z/OS because the C++ compiler only recognizes .C
 _CXX_CXXSUFFIX=cc
+export _CXX_CXXSUFFIX
 dnl Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
@@ -63,9 +67,6 @@ AC_SUBST(U_MAKE)
 
 dnl Check for doxygen to generate documentation
 AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
-
-dnl Determine the host system and Makefile fragment
-AC_CANONICAL_HOST
 
 dnl Check that the linker is usable
 ICU_PROG_LINK
@@ -90,6 +91,7 @@ AC_CHECK_64BIT_LIBS
 AC_SUBST(ARFLAGS)
 AC_SUBST(COMPILE_LINK_ENVVAR)
 
+dnl Determine the Makefile fragment
 ICU_CHECK_MH_FRAG
 
 dnl Checks for libraries and other host specific stuff
@@ -1074,3 +1076,5 @@ if test $ICU_USE_THREADS = 0; then
 fi
 
 echo "You must use $U_MAKE to build ICU."
+
+unset _CXX_CXXSUFFIX
