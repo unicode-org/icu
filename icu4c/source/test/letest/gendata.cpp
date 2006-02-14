@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -349,7 +349,7 @@ int main(int /*argc*/, char *argv[])
         engine->getGlyphPositions(positions, success);
 
         //fprintf(outputFile, "font: %s\n", testInputs[test].fontName);
-        dumpShorts(outputFile, "LEUnicode inputText%d[] =\n{\n", test, testInputs[test].text, testInputs[test].textLength);
+        dumpShorts(outputFile, "LEUnicode inputText%d[] =\n{\n", test, (le_uint16 *) testInputs[test].text, testInputs[test].textLength);
 
         dumpLongs(outputFile, "LEGlyphID resultGlyphs%d[] =\n{\n", test, (le_int32 *) glyphs, glyphCount);
         fprintf(outputFile, "le_int32 resultGlyphCount%d = %d;\n\n", test, glyphCount);
