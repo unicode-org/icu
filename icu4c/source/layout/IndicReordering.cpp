@@ -372,12 +372,12 @@ static const le_int8 stateTable[][CC_COUNT] =
     {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
     {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
-    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - ZWJ, ZWNJ
+    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, 10,  5, -1, -1}, //  9 - first part of split vowel
     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  5, -1, -1}, // 10 - second part of split vowel
     {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, // 11 - independent vowels that can take an iv
-    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}  // 12 - consonant ZWJ (TODO: Take everything else that can be after a consonant?)
+    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  7, -1}  // 12 - consonant ZWJ (TODO: Take everything else that can be after a consonant?)
 };
 
 
