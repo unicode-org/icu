@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -23,18 +23,24 @@ import com.ibm.icu.text.UTF16;
  * specified either at creation time or on a per-token basis. 
  * </p>
  * <p>
- * An instance of <code>StringTokenizer</code> behaves in one of two ways, 
+ * An instance of <code>StringTokenizer</code> behaves in one of three ways, 
  * depending on whether it was created with the <code>returnDelims</code> 
- * flag having the value <code>true</code> or <code>false</code>: 
+ * and <code>coalesceDelims</code>
+ * flags having the value <code>true</code> or <code>false</code>: 
  * <ul>
- * <li>If the flag is <code>false</code>, delimiter code points serve to 
+ * <li>If returnDelims is <code>false</code>, delimiter code points serve to 
  * separate tokens. A token is a maximal sequence of consecutive 
  * code points that are not delimiters. 
- * <li>If the flag is <code>true</code>, delimiter code points are 
- * themselves considered to be tokens. A token is thus either one 
- * delimiter code point, or a maximal sequence of consecutive code 
- * point that are not delimiters.
+ * <li>If returnDelims is <code>true</code>, delimiter code points are 
+ * themselves considered to be tokens. In this case, if coalesceDelims is
+ * <code>true</code>, such tokens will be the maximal sequence of consecutive
+ * code points that <em>are</em> delimiters.  If coalesceDelims is false,
+ * a token will be received for each delimiter code point.
  * </ul>
+ * <p>A token is thus either one 
+ * delimiter code point, a maximal sequence of consecutive code points that
+ * are delimiters, or a maximal sequence of consecutive code 
+ * points that are not delimiters.
  * </p>
  * <p>
  * A <tt>StringTokenizer</tt> object internally maintains a current 
@@ -99,10 +105,10 @@ public final class StringTokenizer implements Enumeration
      * <p>Constructs a string tokenizer for the specified string. All 
      * characters in the delim argument are the delimiters for separating 
      * tokens.</p> 
-     * <p>If the returnDelims flag is true, then the delimiter characters 
-     * are also returned as tokens. Each delimiter is returned as a string 
-     * of length one. If the flag is false, the delimiter characters are 
+     * <p>If the returnDelims flag is false, the delimiter characters are 
      * skipped and only serve as separators between tokens.</p>
+     * <p>If the returnDelims flag is true, then the delimiter characters 
+     * are also returned as tokens, one per delimiter.
      * @param str a string to be parsed.
      * @param delim the delimiters.
      * @param returndelims flag indicating whether to return the delimiters 
@@ -111,6 +117,33 @@ public final class StringTokenizer implements Enumeration
      * @stable ICU 2.4
      */
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims)
+    {
+        this(str, delim, returndelims, false);
+    }
+
+    /**
+     * <p>Constructs a string tokenizer for the specified string. All 
+     * characters in the delim argument are the delimiters for separating 
+     * tokens.</p> 
+     * <p>If the returnDelims flag is false, the delimiter characters are 
+     * skipped and only serve as separators between tokens.</p>
+     * <p>If the returnDelims flag is true, then the delimiter characters 
+     * are also returned as tokens.  If coalescedelims is true, one token
+     * is returned for each run of delimiter characters, otherwise one
+     * token is returned per delimiter.  Since surrogate pairs can be
+     * delimiters, the returned token might be two chars in length.</p>
+     * @param str a string to be parsed.
+     * @param delim the delimiters.
+     * @param returndelims flag indicating whether to return the delimiters 
+     *        as tokens.
+     * @param coalescedelims flag indicating whether to return a run of 
+     *        delimiters as a single token or as one token per delimiter.  
+     *        This only takes effect if returndelims is true.
+     * @exception throws a NullPointerException if str is null
+     * @draft ICU 3.4.3
+     * @provisional
+     */
+    public StringTokenizer(String str, UnicodeSet delim, boolean returndelims, boolean coalescedelims)
     {
         m_source_ = str;
         m_length_ = str.length();
@@ -121,6 +154,7 @@ public final class StringTokenizer implements Enumeration
             m_delimiters_ = delim;   
         }
         m_returnDelimiters_ = returndelims;
+        m_coalesceDelimiters_ = coalescedelims;
         m_tokenOffset_ = -1;
         m_tokenSize_ = -1;
         if (m_length_ == 0) {
@@ -147,17 +181,17 @@ public final class StringTokenizer implements Enumeration
      */
     public StringTokenizer(String str, UnicodeSet delim)
     {
-        this(str, delim, false);
+        this(str, delim, false, false);
     }
        
     /**
      * <p>Constructs a string tokenizer for the specified string. All 
      * characters in the delim argument are the delimiters for separating 
      * tokens.</p> 
-     * <p>If the returnDelims flag is true, then the delimiter characters 
-     * are also returned as tokens. Each delimiter is returned as a string 
-     * of length one. If the flag is false, the delimiter characters are 
+     * <p>If the returnDelims flag is false, the delimiter characters are 
      * skipped and only serve as separators between tokens.</p>
+     * <p>If the returnDelims flag is true, then the delimiter characters 
+     * are also returned as tokens, one per delimiter.
      * @param str a string to be parsed.
      * @param delim the delimiters.
      * @param returndelims flag indicating whether to return the delimiters 
@@ -167,12 +201,40 @@ public final class StringTokenizer implements Enumeration
      */
     public StringTokenizer(String str, String delim, boolean returndelims)
     {
+        this(str, delim, returndelims, false); // java default behavior
+    }
+
+    /**
+     * <p>Constructs a string tokenizer for the specified string. All 
+     * characters in the delim argument are the delimiters for separating 
+     * tokens.</p> 
+     * <p>If the returnDelims flag is false, the delimiter characters are 
+     * skipped and only serve as separators between tokens.</p>
+     * <p>If the returnDelims flag is true, then the delimiter characters 
+     * are also returned as tokens.  If coalescedelims is true, one token
+     * is returned for each run of delimiter characters, otherwise one
+     * token is returned per delimiter.  Since surrogate pairs can be
+     * delimiters, the returned token might be two chars in length.</p>
+     * @param str a string to be parsed.
+     * @param delim the delimiters.
+     * @param returndelims flag indicating whether to return the delimiters 
+     *        as tokens.
+     * @param coalescedelims flag indicating whether to return a run of 
+     *        delimiters as a single token or as one token per delimiter.  
+     *        This only takes effect if returndelims is true.
+     * @exception throws a NullPointerException if str is null
+     * @draft ICU 3.4.3
+     * @provisional
+     */
+    public StringTokenizer(String str, String delim, boolean returndelims, boolean coalescedelims)
+    {
         // don't ignore whitespace
         m_delimiters_ = EMPTY_DELIMITER_;
         if (delim != null && delim.length() > 0) {
             m_delimiters_ = new UnicodeSet();
             m_delimiters_.addAll(delim);
         }
+        m_coalesceDelimiters_ = coalescedelims;
         m_source_ = str;
         m_length_ = str.length();
         m_returnDelimiters_ = returndelims;
@@ -203,7 +265,7 @@ public final class StringTokenizer implements Enumeration
     public StringTokenizer(String str, String delim)
     {
         // don't ignore whitespace
-        this(str, delim, false);
+        this(str, delim, false, false);
     }
 
     /**
@@ -219,7 +281,7 @@ public final class StringTokenizer implements Enumeration
      */
     public StringTokenizer(String str) 
     {
-        this(str, DEFAULT_DELIMITERS_, false);
+        this(str, DEFAULT_DELIMITERS_, false, false);
     }
     
     // public methods --------------------------------------------------
@@ -255,9 +317,13 @@ public final class StringTokenizer implements Enumeration
             // pre-calculations of tokens not done
             if (m_returnDelimiters_) {
                 int tokenlimit = 0;
-                if (m_delimiters_.contains(UTF16.charAt(m_source_, 
-                                                        m_nextOffset_))) {
-                    tokenlimit = getNextNonDelimiter(m_nextOffset_);
+                int c = UTF16.charAt(m_source_, m_nextOffset_);
+                if (m_delimiters_.contains(c)) {
+                     if (m_coalesceDelimiters_) {
+                        tokenlimit = getNextNonDelimiter(m_nextOffset_);
+                     } else {
+                        tokenlimit = m_nextOffset_ + UTF16.getCharCount(c);
+                     }
                 }
                 else {
                     tokenlimit = getNextDelimiter(m_nextOffset_);
@@ -489,6 +555,12 @@ public final class StringTokenizer implements Enumeration
      * Flag indicator if delimiters are to be treated as tokens too
      */
     private boolean m_returnDelimiters_;
+
+    /**
+     * Flag indicating whether to coalesce runs of delimiters into single tokens
+     */
+    private boolean m_coalesceDelimiters_;
+
     /**
      * Default set of delimiters &#92;t&#92;n&#92;r&#92;f
      */
