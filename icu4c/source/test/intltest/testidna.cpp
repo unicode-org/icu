@@ -1423,7 +1423,7 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
 // runIndexedTest
 //---------------------------------------------
 
-void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
+void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par)
 {
     if (exec) logln((UnicodeString)"TestSuite IDNA API ");
     switch (index) {
@@ -1448,7 +1448,7 @@ void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                     logln("TestSuite IDNA conf----"); logln();
                     IdnaConfTest test;
                     const char* name = "idnaconf";
-                    test.runIndexedTest(0,TRUE,name);
+                    callTest(test, par);
                 }
                 break;
             }
