@@ -140,8 +140,8 @@ public final class StringTokenizer implements Enumeration
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
      * @exception throws a NullPointerException if str is null
-     * @draft ICU 3.4.3
-     * @provisional
+     * @internal ICU 3.4.3
+     * @deprecated This API is ICU internal only.
      */
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims, boolean coalescedelims)
     {
@@ -223,8 +223,8 @@ public final class StringTokenizer implements Enumeration
      *        delimiters as a single token or as one token per delimiter.  
      *        This only takes effect if returndelims is true.
      * @exception throws a NullPointerException if str is null
-     * @draft ICU 3.4.3
-     * @provisional
+     * @internal ICU 3.4.3
+     * @deprecated This API is ICU internal only.
      */
     public StringTokenizer(String str, String delim, boolean returndelims, boolean coalescedelims)
     {
