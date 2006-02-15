@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -185,13 +185,16 @@ public final class UTF16
      */
     public static int charAt(String source, int offset16)
     {
-        if (offset16 < 0 || offset16 >= source.length()) {
-            throw new StringIndexOutOfBoundsException(offset16);
-        }
-
         char single = source.charAt(offset16);
-        if (single < LEAD_SURROGATE_MIN_VALUE ||
-            single > TRAIL_SURROGATE_MAX_VALUE) {
+        if (single < LEAD_SURROGATE_MIN_VALUE) {
+            return single;
+        }
+        return _charAt(source, offset16, single);
+    }
+
+    private static int _charAt(String source, int offset16, char single)
+    {
+        if (single > TRAIL_SURROGATE_MAX_VALUE) {
             return single;
         }
 
