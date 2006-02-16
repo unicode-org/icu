@@ -1,7 +1,7 @@
 //##header
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1044,6 +1044,18 @@ public final class ICUResourceBundleTest extends TestFmwk {
         UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR", testLoader);
         if(bundle==null){
             errln("Could not load bundle fr_Latn_FR");
+        }
+    }
+    public void TestAliasFallback(){
+        try{
+            ULocale loc = new ULocale("en_US");
+            ICUResourceBundle b = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc);
+            ICUResourceBundle b1 = (ICUResourceBundle)b.getWithFallback("calendar/hebrew/monthNames/format/abbreviated");
+            if(b1!=null){
+                logln("loaded data for abbreviated month names: "+ b1.getKey()); 
+            }
+        }catch(MissingResourceException ex){
+            errln("Failed to load data for abbreviated month names");
         }
     }
 }
