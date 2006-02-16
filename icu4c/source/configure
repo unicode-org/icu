@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H CXXCPP U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thesysconfdir thedatadir thelibdir pkgicudatadir thepkgicudatadir DATA_PACKAGING_CPPFLAGS DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thesysconfdir thedatadir thelibdir pkgicudatadir thepkgicudatadir DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -778,10 +778,6 @@ ac_env_CPP_set=${CPP+set}
 ac_env_CPP_value=$CPP
 ac_cv_env_CPP_set=${CPP+set}
 ac_cv_env_CPP_value=$CPP
-ac_env_CXXCPP_set=${CXXCPP+set}
-ac_env_CXXCPP_value=$CXXCPP
-ac_cv_env_CXXCPP_set=${CXXCPP+set}
-ac_cv_env_CXXCPP_value=$CXXCPP
 
 #
 # Report the --help message.
@@ -870,7 +866,6 @@ Optional Features:
   --enable-extras         build ICU extras default=yes
   --enable-icuio          build ICU's icuio library default=yes
   --enable-layout         build ICU's layout library default=yes
-
   --enable-tests          build ICU tests default=yes
   --enable-samples        build ICU samples default=yes
 Additionally, the variable FORCE_LIBS may be set before calling configure. If set, it will REPLACE any automatic list of libraries.
@@ -892,7 +887,6 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CPP         C preprocessor
-  CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -5095,8 +5089,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
             CXXFLAGS="${CXXFLAGS} -AA"
         ;;
     esac
-    echo "$as_me:$LINENO: checking iostream usability" >&5
-echo $ECHO_N "checking iostream usability... $ECHO_C" >&6
+    echo "$as_me:$LINENO: checking for iostream usability" >&5
+echo $ECHO_N "checking for iostream usability... $ECHO_C" >&6
 
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -5154,380 +5148,9 @@ echo "${ECHO_T}$ac_cv_header_iostream" >&6
         U_IOSTREAM_SOURCE=199711
     else
         CXXFLAGS="${OLD_CXXFLAGS}"
-        ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-echo "$as_me:$LINENO: checking how to run the C++ preprocessor" >&5
-echo $ECHO_N "checking how to run the C++ preprocessor... $ECHO_C" >&6
-if test -z "$CXXCPP"; then
-  if test "${ac_cv_prog_CXXCPP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-      # Double quotes because CXXCPP needs to be expanded
-    for CXXCPP in "$CXX -E" "/lib/cpp"
-    do
-      ac_preproc_ok=false
-for ac_cxx_preproc_warn_flag in '' yes
-do
-  # Use a header file that comes with gcc, so configuring glibc
-  # with a fresh cross-compiler works.
-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-  # <limits.h> exists even on freestanding compilers.
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp. "Syntax error" is here to catch this case.
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-		     Syntax error
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_cxx_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  :
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  # Broken: fails on valid input.
-continue
-fi
-rm -f conftest.err conftest.$ac_ext
-
-  # OK, works on sane cases.  Now check whether non-existent headers
-  # can be detected and how.
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <ac_nonexistent.h>
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_cxx_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  # Broken: success on invalid input.
-continue
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  # Passes both tests.
-ac_preproc_ok=:
-break
-fi
-rm -f conftest.err conftest.$ac_ext
-
-done
-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-rm -f conftest.err conftest.$ac_ext
-if $ac_preproc_ok; then
-  break
-fi
-
-    done
-    ac_cv_prog_CXXCPP=$CXXCPP
-
-fi
-  CXXCPP=$ac_cv_prog_CXXCPP
-else
-  ac_cv_prog_CXXCPP=$CXXCPP
-fi
-echo "$as_me:$LINENO: result: $CXXCPP" >&5
-echo "${ECHO_T}$CXXCPP" >&6
-ac_preproc_ok=false
-for ac_cxx_preproc_warn_flag in '' yes
-do
-  # Use a header file that comes with gcc, so configuring glibc
-  # with a fresh cross-compiler works.
-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-  # <limits.h> exists even on freestanding compilers.
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp. "Syntax error" is here to catch this case.
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-		     Syntax error
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_cxx_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  :
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  # Broken: fails on valid input.
-continue
-fi
-rm -f conftest.err conftest.$ac_ext
-
-  # OK, works on sane cases.  Now check whether non-existent headers
-  # can be detected and how.
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <ac_nonexistent.h>
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_cxx_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  # Broken: success on invalid input.
-continue
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  # Passes both tests.
-ac_preproc_ok=:
-break
-fi
-rm -f conftest.err conftest.$ac_ext
-
-done
-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-rm -f conftest.err conftest.$ac_ext
-if $ac_preproc_ok; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: C++ preprocessor \"$CXXCPP\" fails sanity check
-See \`config.log' for more details." >&5
-echo "$as_me: error: C++ preprocessor \"$CXXCPP\" fails sanity check
-See \`config.log' for more details." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-if test "${ac_cv_header_iostream_h+set}" = set; then
-  echo "$as_me:$LINENO: checking for iostream.h" >&5
-echo $ECHO_N "checking for iostream.h... $ECHO_C" >&6
-if test "${ac_cv_header_iostream_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-echo "$as_me:$LINENO: result: $ac_cv_header_iostream_h" >&5
-echo "${ECHO_T}$ac_cv_header_iostream_h" >&6
-else
-  # Is the header compilable?
-echo "$as_me:$LINENO: checking iostream.h usability" >&5
-echo $ECHO_N "checking iostream.h usability... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <iostream.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_header_compiler=no
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6
-
-# Is the header present?
-echo "$as_me:$LINENO: checking iostream.h presence" >&5
-echo $ECHO_N "checking iostream.h presence... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <iostream.h>
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_cxx_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-rm -f conftest.err conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: iostream.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: iostream.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: iostream.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: iostream.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: iostream.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: iostream.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: iostream.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: iostream.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: iostream.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: iostream.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: iostream.h: in the future, the compiler will take precedence" >&2;}
-    (
-      cat <<\_ASBOX
-## ------------------------------------------ ##
-## Report this to the AC_PACKAGE_NAME lists.  ##
-## ------------------------------------------ ##
-_ASBOX
-    ) |
-      sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-echo "$as_me:$LINENO: checking for iostream.h" >&5
-echo $ECHO_N "checking for iostream.h... $ECHO_C" >&6
-if test "${ac_cv_header_iostream_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_iostream_h=$ac_header_preproc
-fi
-echo "$as_me:$LINENO: result: $ac_cv_header_iostream_h" >&5
-echo "${ECHO_T}$ac_cv_header_iostream_h" >&6
-
-fi
-
-
-        if test $ac_cv_header_iostream_h = yes; then
-            echo "$as_me:$LINENO: checking whether ostream is really defined" >&5
-echo $ECHO_N "checking whether ostream is really defined... $ECHO_C" >&6
-            if test "${ac_cv_iostream_ok+set}" = set; then
+        echo "$as_me:$LINENO: checking whether ostream in iostream.h is really defined" >&5
+echo $ECHO_N "checking whether ostream in iostream.h is really defined... $ECHO_C" >&6
+        if test "${ac_cv_iostream_ok+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -5578,12 +5201,11 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 fi
 
-            echo "$as_me:$LINENO: result: $ac_cv_iostream_ok" >&5
+        echo "$as_me:$LINENO: result: $ac_cv_iostream_ok" >&5
 echo "${ECHO_T}$ac_cv_iostream_ok" >&6
-            if test $ac_cv_iostream_ok = yes
-            then
-                U_IOSTREAM_SOURCE=198506
-            fi
+        if test $ac_cv_iostream_ok = yes
+        then
+            U_IOSTREAM_SOURCE=198506
         fi
     fi
     if test x$streams != x
@@ -7887,58 +7509,21 @@ thepkgicudatadir=$thedatadir
 
 
 
-# Check whether --enable-mapped or --disable-mapped was given.
-if test "${enable_mapped+set}" = set; then
-  enableval="$enable_mapped"
-  case "${enableval}" in
-               yes) mapped=archive ;;
-               no)  mapped=library ;;
-               *) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-mapped; use --with-data-packaging now" >&5
-echo "$as_me: error: bad value ${enableval} for --enable-mapped; use --with-data-packaging now" >&2;}
-   { (exit 1); exit 1; }; } ;;
-	esac
-else
-  mapped=
-fi;
-
-if test x"$mapped" != x; then
-    case $mapped in
-	archive)
-    	    { echo "$as_me:$LINENO: WARNING: use --with-data-packaging=archive instead of --enable-mapped" >&5
-echo "$as_me: WARNING: use --with-data-packaging=archive instead of --enable-mapped" >&2;}
-	    ;;
-	library)
-    	    { echo "$as_me:$LINENO: WARNING: use --with-data-packaging=library instead of --disable-mapped" >&5
-echo "$as_me: WARNING: use --with-data-packaging=library instead of --disable-mapped" >&2;}
-	    ;;
-    esac
-    if test x"$datapackaging" != x -a x"$mapped" != x"$datapackaging"; then
-	{ { echo "$as_me:$LINENO: error: conflicting values used for --with-data-packaging and deprecated --enable-mapped" >&5
-echo "$as_me: error: conflicting values used for --with-data-packaging and deprecated --enable-mapped" >&2;}
-   { (exit 1); exit 1; }; }
-    fi
-    datapackaging=$mapped
-fi
-
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
 	datapackaging=library
 fi
 
 case "$datapackaging" in
     files)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_FILES
 	DATA_PACKAGING_MODE=files
 	;;
     archive)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_MAP
 	DATA_PACKAGING_MODE=common
 	;;
     library)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_DLL
 	DATA_PACKAGING_MODE=dll
 	;;
 esac
-
 
 
 echo "$as_me:$LINENO: checking for a library suffix to use" >&5
@@ -8817,7 +8402,6 @@ s,@GENCCODE_ASSEMBLY@,$GENCCODE_ASSEMBLY,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@U_HAVE_INTTYPES_H@,$U_HAVE_INTTYPES_H,;t t
-s,@CXXCPP@,$CXXCPP,;t t
 s,@U_IOSTREAM_SOURCE@,$U_IOSTREAM_SOURCE,;t t
 s,@U_IS_BIG_ENDIAN@,$U_IS_BIG_ENDIAN,;t t
 s,@U_HAVE_NL_LANGINFO@,$U_HAVE_NL_LANGINFO,;t t
@@ -8852,7 +8436,6 @@ s,@thedatadir@,$thedatadir,;t t
 s,@thelibdir@,$thelibdir,;t t
 s,@pkgicudatadir@,$pkgicudatadir,;t t
 s,@thepkgicudatadir@,$thepkgicudatadir,;t t
-s,@DATA_PACKAGING_CPPFLAGS@,$DATA_PACKAGING_CPPFLAGS,;t t
 s,@DATA_PACKAGING_MODE@,$DATA_PACKAGING_MODE,;t t
 s,@ICULIBSUFFIX@,$ICULIBSUFFIX,;t t
 s,@U_HAVE_LIB_SUFFIX@,$U_HAVE_LIB_SUFFIX,;t t

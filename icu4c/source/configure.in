@@ -402,7 +402,7 @@ then
             CXXFLAGS="${CXXFLAGS} -AA"
         ;;
     esac
-    AC_MSG_CHECKING([iostream usability])
+    AC_MSG_CHECKING([for iostream usability])
     AC_TRY_COMPILE([#include <iostream>],[],
         [ac_cv_header_iostream=yes],[ac_cv_header_iostream=no])
     if test $icu_cv_host_frag = mh-cygwin-msvc
@@ -418,16 +418,13 @@ then
         U_IOSTREAM_SOURCE=199711
     else
         CXXFLAGS="${OLD_CXXFLAGS}"
-        AC_CHECK_HEADER(iostream.h)
-        if test $ac_cv_header_iostream_h = yes; then
-            AC_MSG_CHECKING([whether ostream is really defined])
-            AC_CACHE_VAL(ac_cv_iostream_ok,
-                AC_TRY_LINK([#include <iostream.h>],[ostream &testout = cout; testout << "test" << endl;],ac_cv_iostream_ok=yes,ac_cv_iostream_ok=no))
-            AC_MSG_RESULT($ac_cv_iostream_ok)
-            if test $ac_cv_iostream_ok = yes
-            then
-                U_IOSTREAM_SOURCE=198506
-            fi
+        AC_MSG_CHECKING([whether ostream in iostream.h is really defined])
+        AC_CACHE_VAL(ac_cv_iostream_ok,
+            AC_TRY_LINK([#include <iostream.h>],[ostream &testout = cout; testout << "test" << endl;],ac_cv_iostream_ok=yes,ac_cv_iostream_ok=no))
+        AC_MSG_RESULT($ac_cv_iostream_ok)
+        if test $ac_cv_iostream_ok = yes
+        then
+            U_IOSTREAM_SOURCE=198506
         fi
     fi
     if test x$streams != x
@@ -826,30 +823,6 @@ AC_SUBST(pkgicudatadir)
 AC_SUBST(thepkgicudatadir)
 
 dnl Shouldn't need the AC_SUBST
-dnl Deprecated support for --enable-mapped
-
-AC_ARG_ENABLE(mapped,,
-       [case "${enableval}" in
-               yes) mapped=archive ;;
-               no)  mapped=library ;;
-               *) AC_MSG_ERROR(bad value ${enableval} for --enable-mapped; use --with-data-packaging now) ;;
-	esac],
-       [mapped=])
-
-if test x"$mapped" != x; then
-    case $mapped in
-	archive)
-    	    AC_MSG_WARN(use --with-data-packaging=archive instead of --enable-mapped)
-	    ;;
-	library)
-    	    AC_MSG_WARN(use --with-data-packaging=library instead of --disable-mapped)
-	    ;;
-    esac
-    if test x"$datapackaging" != x -a x"$mapped" != x"$datapackaging"; then
-	AC_MSG_ERROR(conflicting values used for --with-data-packaging and deprecated --enable-mapped)
-    fi
-    datapackaging=$mapped
-fi
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
 	datapackaging=library
@@ -857,19 +830,15 @@ fi
 
 case "$datapackaging" in
     files)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_FILES
 	DATA_PACKAGING_MODE=files
 	;;
     archive)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_MAP
 	DATA_PACKAGING_MODE=common
 	;;
     library)
-	DATA_PACKAGING_CPPFLAGS=-DUDATA_DLL
 	DATA_PACKAGING_MODE=dll
 	;;
 esac
-AC_SUBST(DATA_PACKAGING_CPPFLAGS)
 AC_SUBST(DATA_PACKAGING_MODE)
 
 dnl Sets a library suffix
