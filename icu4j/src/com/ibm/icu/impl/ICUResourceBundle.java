@@ -1,7 +1,7 @@
 //##header
 /*
  * *****************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and * others.
+ * Copyright (C) 2005-2006, International Business Machines Corporation and * others.
  * All Rights Reserved. *
  * *****************************************************************************
  */
@@ -415,7 +415,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         return obj;
     }
 
-    private void setLoadingStatus(ICUResourceBundle bundle, String requestedLocale){
+    private static void setLoadingStatus(ICUResourceBundle bundle, String requestedLocale){
        String locale = bundle.getLocaleID(); 
        if(locale.equals("root")){
            bundle.setLoadingStatus(FROM_ROOT);
@@ -1103,7 +1103,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         return ae;
     }
 
-    private ICUResourceBundle findResourceWithFallback(String path,
+    protected static final ICUResourceBundle findResourceWithFallback(String path,
             ICUResourceBundle actualBundle, ICUResourceBundle requested) {
         ICUResourceBundle sub = null;
         if (requested == null) {
@@ -1125,7 +1125,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                 break;
             }
             if (actualBundle.resPath.length() != 0) {
-                path = resPath + "/" + path;
+                path = actualBundle.resPath + "/" + path;
             }
             // if not try the parent bundle
             actualBundle = (ICUResourceBundle) actualBundle.getParent();
