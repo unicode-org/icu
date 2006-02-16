@@ -24,6 +24,13 @@
  * The switches are fairly coarse, controlling large modules.
  * Basic services cannot be turned off.
  *
+ * Building with any of these options does not guarantee that the
+ * ICU build process will completely work. It is recommended that
+ * the ICU libraries and data be built using the normal build.
+ * At that time you should remove the data used by those services.
+ * After building the ICU data library, you should rebuild the ICU
+ * libraries with these switches customized to your needs.
+ *
  * @stable ICU 2.4
  */
 
