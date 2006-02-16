@@ -2468,10 +2468,11 @@ TestAdditionalProperties() {
     if(u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_LINE_BREAK) wrong\n");
     }
-    n=0xdeadbeef;
+/*    n=0xdeadbeef;
     if( (n=u_getIntPropertyMaxValue(UCHAR_SCRIPT))!=(int32_t)USCRIPT_UNICODE_LIMIT-1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_SCRIPT) wrong\n");
     }
+*/
     /*JB#2410*/
     n=0xdeadbeef;
     if( (n=u_getIntPropertyMaxValue(0x2345))!=-1) {
