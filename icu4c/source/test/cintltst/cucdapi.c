@@ -282,8 +282,7 @@ void TestUScriptCodeAPI(){
         }
     }
     {
-        for(i=0; (UScriptCode)i< USCRIPT_CODE_LIMIT && (UScriptCode)i == USCRIPT_UNICODE_LIMIT; 
-               i++){
+        for(i=0; (UScriptCode)i< USCRIPT_CODE_LIMIT; i++){
             const char* name = uscript_getName((UScriptCode)i);
             if(name==NULL || strcmp(name,"")==0){
                 log_err("uscript_getName failed for code : %i\n",i);
