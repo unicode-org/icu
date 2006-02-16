@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/testmap
-## Copyright (c) 2003, International Business Machines Corporation and
+## Copyright (c) 2003-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -25,13 +25,6 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 #CXXFLAGS = @CXXFLAGS@
 
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
-
-# Data packaging options are set at configure time with --with-data-packaging.
-CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
-
-#ifeq ($(PKGDATA_MODE),dll)
-#CPPFLAGS += -DUDATA_MAP_DLL
-#LIBICUDATA= -L$(top_srcdir)/../data -licudata
 
 OBJECTS = testmap.o
 
