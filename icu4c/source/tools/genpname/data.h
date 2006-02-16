@@ -11,7 +11,7 @@
  *   PropertyAliases.txt
  *   PropertyValueAliases.txt
  *
- * Date: Wed Feb  8 17:17:01 2006
+ * Date: Wed Feb 15 17:11:17 2006
  * Unicode version: 4.1.0
  * Script: ./preparse.pl
  */
@@ -1294,16 +1294,16 @@ int32_t NAME_GROUP[] = {
     117, -117,          /* 966: "Cirt", "Cirt" */
     714, -127,          /* 968: "Zyyy", "Common" */
     136, 137, -531,     /* 970: "Copt", "Coptic", "Qaac" */
-    138, -142,          /* 973: "Cprt", "Cypriot" */
-    147, -144,          /* 975: "Cyrl", "Cyrillic" */
-    148, -148,          /* 977: "Cyrs", "Cyrs" */
-    174, -164,          /* 979: "Dsrt", "Deseret" */
-    165, -166,          /* 981: "Deva", "Devanagari" */
-    182, -182,          /* 983: "Egyd", "Egyd" */
-    183, -183,          /* 985: "Egyh", "Egyh" */
+    692, -692,          /* 973: "Xsux", "Xsux" */
+    138, -142,          /* 975: "Cprt", "Cypriot" */
+    147, -144,          /* 977: "Cyrl", "Cyrillic" */
+    182, -182,          /* 979: "Egyd", "Egyd" */
+    174, -164,          /* 981: "Dsrt", "Deseret" */
+    165, -166,          /* 983: "Deva", "Devanagari" */
+    615, -615,          /* 985: "Syrn", "Syrn" */
     184, -184,          /* 987: "Egyp", "Egyp" */
-    188, -189,          /* 989: "Ethi", "Ethiopic" */
-    220, -220,          /* 991: "Geok", "Geok" */
+    611, -611,          /* 989: "Syre", "Syre" */
+    188, -189,          /* 991: "Ethi", "Ethiopic" */
     222, -223,          /* 993: "Geor", "Georgian" */
     225, -226,          /* 995: "Glag", "Glagolitic" */
     228, -229,          /* 997: "Goth", "Gothic" */
@@ -1312,75 +1312,75 @@ int32_t NAME_GROUP[] = {
     244, -243,          /* 1003: "Guru", "Gurmukhi" */
     260, -253,          /* 1005: "Hani", "Han" */
     254, -255,          /* 1007: "Hang", "Hangul" */
-    262, -262,          /* 1009: "Hans", "Hans" */
-    263, -263,          /* 1011: "Hant", "Hant" */
-    261, -264,          /* 1013: "Hano", "Hanunoo" */
-    266, -267,          /* 1015: "Hebr", "Hebrew" */
+    261, -264,          /* 1009: "Hano", "Hanunoo" */
+    297, -297,          /* 1011: "Inds", "Inds" */
+    266, -267,          /* 1013: "Hebr", "Hebrew" */
+    183, -183,          /* 1015: "Egyh", "Egyh" */
     275, -276,          /* 1017: "Hira", "Hiragana" */
-    277, -277,          /* 1019: "Hmng", "Hmng" */
-    279, -279,          /* 1021: "Hung", "Hung" */
-    297, -297,          /* 1023: "Inds", "Inds" */
-    532, -299,          /* 1025: "Qaai", "Inherited" */
-    310, -310,          /* 1027: "Java", "Java" */
+    532, -299,          /* 1019: "Qaai", "Inherited" */
+    310, -310,          /* 1021: "Java", "Java" */
+    335, -324,          /* 1023: "Knda", "Kannada" */
+    320, -326,          /* 1025: "Kana", "Katakana" */
+    278, -327,          /* 1027: "Hrkt", "Katakana_Or_Hiragana" */
     319, -319,          /* 1029: "Kali", "Kali" */
-    335, -324,          /* 1031: "Knda", "Kannada" */
-    320, -326,          /* 1033: "Kana", "Katakana" */
-    278, -327,          /* 1035: "Hrkt", "Katakana_Or_Hiragana" */
-    330, -331,          /* 1037: "Khar", "Kharoshthi" */
-    334, -332,          /* 1039: "Khmr", "Khmer" */
-    352, -351,          /* 1041: "Laoo", "Lao" */
-    353, -353,          /* 1043: "Latf", "Latf" */
-    354, -354,          /* 1045: "Latg", "Latg" */
-    360, -355,          /* 1047: "Latn", "Latin" */
-    368, -368,          /* 1049: "Lepc", "Lepc" */
-    372, -373,          /* 1051: "Limb", "Limbu" */
-    374, -374,          /* 1053: "Lina", "Lina" */
-    375, -379,          /* 1055: "Linb", "Linear_B" */
-    419, -396,          /* 1057: "Mlym", "Malayalam" */
-    397, -397,          /* 1059: "Mand", "Mand" */
-    404, -404,          /* 1061: "Maya", "Maya" */
-    410, -410,          /* 1063: "Mero", "Mero" */
-    424, -425,          /* 1065: "Mong", "Mongolian" */
-    428, -427,          /* 1067: "Mymr", "Myanmar" */
-    625, -455,          /* 1069: "Talu", "New_Tai_Lue" */
-    457, -457,          /* 1071: "Nkoo", "Nkoo" */
-    483, -484,          /* 1073: "Ogam", "Ogham" */
+    330, -331,          /* 1031: "Khar", "Kharoshthi" */
+    334, -332,          /* 1033: "Khmr", "Khmer" */
+    220, -220,          /* 1035: "Geok", "Geok" */
+    352, -351,          /* 1037: "Laoo", "Lao" */
+    360, -355,          /* 1039: "Latn", "Latin" */
+    353, -353,          /* 1041: "Latf", "Latf" */
+    354, -354,          /* 1043: "Latg", "Latg" */
+    368, -368,          /* 1045: "Lepc", "Lepc" */
+    372, -373,          /* 1047: "Limb", "Limbu" */
+    374, -374,          /* 1049: "Lina", "Lina" */
+    375, -379,          /* 1051: "Linb", "Linear_B" */
+    419, -396,          /* 1053: "Mlym", "Malayalam" */
+    397, -397,          /* 1055: "Mand", "Mand" */
+    404, -404,          /* 1057: "Maya", "Maya" */
+    410, -410,          /* 1059: "Mero", "Mero" */
+    424, -425,          /* 1061: "Mong", "Mongolian" */
+    428, -427,          /* 1063: "Mymr", "Myanmar" */
+    625, -455,          /* 1065: "Talu", "New_Tai_Lue" */
+    457, -457,          /* 1067: "Nkoo", "Nkoo" */
+    483, -484,          /* 1069: "Ogam", "Ogham" */
+    148, -148,          /* 1071: "Cyrs", "Cyrs" */
+    279, -279,          /* 1073: "Hung", "Hung" */
     306, -485,          /* 1075: "Ital", "Old_Italic" */
-    691, -486,          /* 1077: "Xpeo", "Old_Persian" */
-    491, -489,          /* 1079: "Orya", "Oriya" */
-    490, -490,          /* 1081: "Orkh", "Orkh" */
-    492, -493,          /* 1083: "Osma", "Osmanya" */
-    513, -513,          /* 1085: "Perm", "Perm" */
-    515, -515,          /* 1087: "Phag", "Phag" */
-    516, -516,          /* 1089: "Phnx", "Phnx" */
-    520, -520,          /* 1091: "Plrd", "Plrd" */
-    548, -548,          /* 1093: "Roro", "Roro" */
-    550, -549,          /* 1095: "Runr", "Runic" */
-    563, -563,          /* 1097: "Sara", "Sara" */
-    575, -574,          /* 1099: "Shaw", "Shavian" */
-    581, -582,          /* 1101: "Sinh", "Sinhala" */
-    607, -608,          /* 1103: "Sylo", "Syloti_Nagri" */
-    611, -611,          /* 1105: "Syre", "Syre" */
-    610, -612,          /* 1107: "Syrc", "Syriac" */
-    614, -614,          /* 1109: "Syrj", "Syrj" */
-    615, -615,          /* 1111: "Syrn", "Syrn" */
-    637, -617,          /* 1113: "Tglg", "Tagalog" */
-    618, -619,          /* 1115: "Tagb", "Tagbanwa" */
-    624, -622,          /* 1117: "Tale", "Tai_Le" */
-    627, -626,          /* 1119: "Taml", "Tamil" */
-    630, -631,          /* 1121: "Telu", "Telugu" */
-    632, -632,          /* 1123: "Teng", "Teng" */
-    638, -639,          /* 1125: "Thaa", "Thaana" */
-    640, -640,          /* 1127: "Thai", "Thai" */
-    642, -641,          /* 1129: "Tibt", "Tibetan" */
-    636, -643,          /* 1131: "Tfng", "Tifinagh" */
+    513, -513,          /* 1077: "Perm", "Perm" */
+    691, -486,          /* 1079: "Xpeo", "Old_Persian" */
+    491, -489,          /* 1081: "Orya", "Oriya" */
+    490, -490,          /* 1083: "Orkh", "Orkh" */
+    492, -493,          /* 1085: "Osma", "Osmanya" */
+    277, -277,          /* 1087: "Hmng", "Hmng" */
+    515, -515,          /* 1089: "Phag", "Phag" */
+    516, -516,          /* 1091: "Phnx", "Phnx" */
+    520, -520,          /* 1093: "Plrd", "Plrd" */
+    548, -548,          /* 1095: "Roro", "Roro" */
+    550, -549,          /* 1097: "Runr", "Runic" */
+    563, -563,          /* 1099: "Sara", "Sara" */
+    575, -574,          /* 1101: "Shaw", "Shavian" */
+    262, -262,          /* 1103: "Hans", "Hans" */
+    581, -582,          /* 1105: "Sinh", "Sinhala" */
+    607, -608,          /* 1107: "Sylo", "Syloti_Nagri" */
+    610, -612,          /* 1109: "Syrc", "Syriac" */
+    637, -617,          /* 1111: "Tglg", "Tagalog" */
+    618, -619,          /* 1113: "Tagb", "Tagbanwa" */
+    624, -622,          /* 1115: "Tale", "Tai_Le" */
+    627, -626,          /* 1117: "Taml", "Tamil" */
+    630, -631,          /* 1119: "Telu", "Telugu" */
+    632, -632,          /* 1121: "Teng", "Teng" */
+    638, -639,          /* 1123: "Thaa", "Thaana" */
+    640, -640,          /* 1125: "Thai", "Thai" */
+    642, -641,          /* 1127: "Tibt", "Tibetan" */
+    636, -643,          /* 1129: "Tfng", "Tifinagh" */
+    263, -263,          /* 1131: "Hant", "Hant" */
     653, -654,          /* 1133: "Ugar", "Ugaritic" */
-    667, -667,          /* 1135: "Vaii", "Vaii" */
-    674, -674,          /* 1137: "Visp", "Visp" */
-    692, -692,          /* 1139: "Xsux", "Xsux" */
-    701, -698,          /* 1141: "Yiii", "Yi" */
-    713, -713,          /* 1143: "Zxxx", "Zxxx" */
-    715, -715,          /* 1145: "Zzzz", "Zzzz" */
+    715, -715,          /* 1135: "Zzzz", "Zzzz" */
+    713, -713,          /* 1137: "Zxxx", "Zxxx" */
+    667, -667,          /* 1139: "Vaii", "Vaii" */
+    674, -674,          /* 1141: "Visp", "Visp" */
+    614, -614,          /* 1143: "Syrj", "Syrj" */
+    701, -698,          /* 1145: "Yiii", "Yi" */
 };
 
 #define MAX_NAMES_PER_GROUP 3
@@ -1952,16 +1952,16 @@ const Alias VALUES_sc[] = {
     Alias((int32_t) USCRIPT_CIRTH, 966),
     Alias((int32_t) USCRIPT_COMMON, 968),
     Alias((int32_t) USCRIPT_COPTIC, 970),
-    Alias((int32_t) USCRIPT_CYPRIOT, 973),
-    Alias((int32_t) USCRIPT_CYRILLIC, 975),
-    Alias((int32_t) USCRIPT_CYRS, 977),
-    Alias((int32_t) USCRIPT_DESERET, 979),
-    Alias((int32_t) USCRIPT_DEVANAGARI, 981),
-    Alias((int32_t) USCRIPT_EGYD, 983),
-    Alias((int32_t) USCRIPT_EGYH, 985),
-    Alias((int32_t) USCRIPT_EGYP, 987),
-    Alias((int32_t) USCRIPT_ETHIOPIC, 989),
-    Alias((int32_t) USCRIPT_GEOK, 991),
+    Alias((int32_t) USCRIPT_CUNEIFORM, 973),
+    Alias((int32_t) USCRIPT_CYPRIOT, 975),
+    Alias((int32_t) USCRIPT_CYRILLIC, 977),
+    Alias((int32_t) USCRIPT_DEMOTIC_EGYPTIAN, 979),
+    Alias((int32_t) USCRIPT_DESERET, 981),
+    Alias((int32_t) USCRIPT_DEVANAGARI, 983),
+    Alias((int32_t) USCRIPT_EASTERN_SYRIAC, 985),
+    Alias((int32_t) USCRIPT_EGYPTIAN_HIEROGLYPHS, 987),
+    Alias((int32_t) USCRIPT_ESTRANGELO_SYRIAC, 989),
+    Alias((int32_t) USCRIPT_ETHIOPIC, 991),
     Alias((int32_t) USCRIPT_GEORGIAN, 993),
     Alias((int32_t) USCRIPT_GLAGOLITIC, 995),
     Alias((int32_t) USCRIPT_GOTHIC, 997),
@@ -1970,75 +1970,75 @@ const Alias VALUES_sc[] = {
     Alias((int32_t) USCRIPT_GURMUKHI, 1003),
     Alias((int32_t) USCRIPT_HAN, 1005),
     Alias((int32_t) USCRIPT_HANGUL, 1007),
-    Alias((int32_t) USCRIPT_HANS, 1009),
-    Alias((int32_t) USCRIPT_HANT, 1011),
-    Alias((int32_t) USCRIPT_HANUNOO, 1013),
-    Alias((int32_t) USCRIPT_HEBREW, 1015),
+    Alias((int32_t) USCRIPT_HANUNOO, 1009),
+    Alias((int32_t) USCRIPT_HARAPPAN_INDUS, 1011),
+    Alias((int32_t) USCRIPT_HEBREW, 1013),
+    Alias((int32_t) USCRIPT_HIERATIC_EGYPTIAN, 1015),
     Alias((int32_t) USCRIPT_HIRAGANA, 1017),
-    Alias((int32_t) USCRIPT_HMNG, 1019),
-    Alias((int32_t) USCRIPT_HUNG, 1021),
-    Alias((int32_t) USCRIPT_INDS, 1023),
-    Alias((int32_t) USCRIPT_INHERITED, 1025),
-    Alias((int32_t) USCRIPT_JAVANESE, 1027),
-    Alias((int32_t) USCRIPT_KALI, 1029),
-    Alias((int32_t) USCRIPT_KANNADA, 1031),
-    Alias((int32_t) USCRIPT_KATAKANA, 1033),
-    Alias((int32_t) USCRIPT_KATAKANA_OR_HIRAGANA, 1035),
-    Alias((int32_t) USCRIPT_KHAROSHTHI, 1037),
-    Alias((int32_t) USCRIPT_KHMER, 1039),
-    Alias((int32_t) USCRIPT_LAO, 1041),
-    Alias((int32_t) USCRIPT_LATF, 1043),
-    Alias((int32_t) USCRIPT_LATG, 1045),
-    Alias((int32_t) USCRIPT_LATIN, 1047),
-    Alias((int32_t) USCRIPT_LEPC, 1049),
-    Alias((int32_t) USCRIPT_LIMBU, 1051),
-    Alias((int32_t) USCRIPT_LINA, 1053),
-    Alias((int32_t) USCRIPT_LINEAR_B, 1055),
-    Alias((int32_t) USCRIPT_MALAYALAM, 1057),
-    Alias((int32_t) USCRIPT_MANDAEAN, 1059),
-    Alias((int32_t) USCRIPT_MAYA, 1061),
-    Alias((int32_t) USCRIPT_MEROITIC, 1063),
-    Alias((int32_t) USCRIPT_MONGOLIAN, 1065),
-    Alias((int32_t) USCRIPT_MYANMAR, 1067),
-    Alias((int32_t) USCRIPT_NEW_TAI_LUE, 1069),
-    Alias((int32_t) USCRIPT_NKOO, 1071),
-    Alias((int32_t) USCRIPT_OGHAM, 1073),
+    Alias((int32_t) USCRIPT_INHERITED, 1019),
+    Alias((int32_t) USCRIPT_JAVANESE, 1021),
+    Alias((int32_t) USCRIPT_KANNADA, 1023),
+    Alias((int32_t) USCRIPT_KATAKANA, 1025),
+    Alias((int32_t) USCRIPT_KATAKANA_OR_HIRAGANA, 1027),
+    Alias((int32_t) USCRIPT_KAYAH_LI, 1029),
+    Alias((int32_t) USCRIPT_KHAROSHTHI, 1031),
+    Alias((int32_t) USCRIPT_KHMER, 1033),
+    Alias((int32_t) USCRIPT_KHUTSURI, 1035),
+    Alias((int32_t) USCRIPT_LAO, 1037),
+    Alias((int32_t) USCRIPT_LATIN, 1039),
+    Alias((int32_t) USCRIPT_LATIN_FRAKTUR, 1041),
+    Alias((int32_t) USCRIPT_LATIN_GAELIC, 1043),
+    Alias((int32_t) USCRIPT_LEPCHA, 1045),
+    Alias((int32_t) USCRIPT_LIMBU, 1047),
+    Alias((int32_t) USCRIPT_LINEAR_A, 1049),
+    Alias((int32_t) USCRIPT_LINEAR_B, 1051),
+    Alias((int32_t) USCRIPT_MALAYALAM, 1053),
+    Alias((int32_t) USCRIPT_MANDAEAN, 1055),
+    Alias((int32_t) USCRIPT_MAYAN_HIEROGLYPHS, 1057),
+    Alias((int32_t) USCRIPT_MEROITIC, 1059),
+    Alias((int32_t) USCRIPT_MONGOLIAN, 1061),
+    Alias((int32_t) USCRIPT_MYANMAR, 1063),
+    Alias((int32_t) USCRIPT_NEW_TAI_LUE, 1065),
+    Alias((int32_t) USCRIPT_NKO, 1067),
+    Alias((int32_t) USCRIPT_OGHAM, 1069),
+    Alias((int32_t) USCRIPT_OLD_CHURCH_SLAVONIC_CYRILLIC, 1071),
+    Alias((int32_t) USCRIPT_OLD_HUNGARIAN, 1073),
     Alias((int32_t) USCRIPT_OLD_ITALIC, 1075),
-    Alias((int32_t) USCRIPT_OLD_PERSIAN, 1077),
-    Alias((int32_t) USCRIPT_ORIYA, 1079),
-    Alias((int32_t) USCRIPT_ORKHON, 1081),
-    Alias((int32_t) USCRIPT_OSMANYA, 1083),
-    Alias((int32_t) USCRIPT_PERM, 1085),
-    Alias((int32_t) USCRIPT_PHAGS_PA, 1087),
-    Alias((int32_t) USCRIPT_PHOENICIAN, 1089),
-    Alias((int32_t) USCRIPT_PLRD, 1091),
-    Alias((int32_t) USCRIPT_RONGORONGO, 1093),
-    Alias((int32_t) USCRIPT_RUNIC, 1095),
-    Alias((int32_t) USCRIPT_SARATI, 1097),
-    Alias((int32_t) USCRIPT_SHAVIAN, 1099),
-    Alias((int32_t) USCRIPT_SINHALA, 1101),
-    Alias((int32_t) USCRIPT_SYLOTI_NAGRI, 1103),
-    Alias((int32_t) USCRIPT_SYRE, 1105),
-    Alias((int32_t) USCRIPT_SYRIAC, 1107),
-    Alias((int32_t) USCRIPT_SYRJ, 1109),
-    Alias((int32_t) USCRIPT_SYRN, 1111),
-    Alias((int32_t) USCRIPT_TAGALOG, 1113),
-    Alias((int32_t) USCRIPT_TAGBANWA, 1115),
-    Alias((int32_t) USCRIPT_TAI_LE, 1117),
-    Alias((int32_t) USCRIPT_TAMIL, 1119),
-    Alias((int32_t) USCRIPT_TELUGU, 1121),
-    Alias((int32_t) USCRIPT_TENGWAR, 1123),
-    Alias((int32_t) USCRIPT_THAANA, 1125),
-    Alias((int32_t) USCRIPT_THAI, 1127),
-    Alias((int32_t) USCRIPT_TIBETAN, 1129),
-    Alias((int32_t) USCRIPT_TIFINAGH, 1131),
+    Alias((int32_t) USCRIPT_OLD_PERMIC, 1077),
+    Alias((int32_t) USCRIPT_OLD_PERSIAN, 1079),
+    Alias((int32_t) USCRIPT_ORIYA, 1081),
+    Alias((int32_t) USCRIPT_ORKHON, 1083),
+    Alias((int32_t) USCRIPT_OSMANYA, 1085),
+    Alias((int32_t) USCRIPT_PAHAWH_HMONG, 1087),
+    Alias((int32_t) USCRIPT_PHAGS_PA, 1089),
+    Alias((int32_t) USCRIPT_PHOENICIAN, 1091),
+    Alias((int32_t) USCRIPT_PHONETIC_POLLARD, 1093),
+    Alias((int32_t) USCRIPT_RONGORONGO, 1095),
+    Alias((int32_t) USCRIPT_RUNIC, 1097),
+    Alias((int32_t) USCRIPT_SARATI, 1099),
+    Alias((int32_t) USCRIPT_SHAVIAN, 1101),
+    Alias((int32_t) USCRIPT_SIMPLIFIED_HAN, 1103),
+    Alias((int32_t) USCRIPT_SINHALA, 1105),
+    Alias((int32_t) USCRIPT_SYLOTI_NAGRI, 1107),
+    Alias((int32_t) USCRIPT_SYRIAC, 1109),
+    Alias((int32_t) USCRIPT_TAGALOG, 1111),
+    Alias((int32_t) USCRIPT_TAGBANWA, 1113),
+    Alias((int32_t) USCRIPT_TAI_LE, 1115),
+    Alias((int32_t) USCRIPT_TAMIL, 1117),
+    Alias((int32_t) USCRIPT_TELUGU, 1119),
+    Alias((int32_t) USCRIPT_TENGWAR, 1121),
+    Alias((int32_t) USCRIPT_THAANA, 1123),
+    Alias((int32_t) USCRIPT_THAI, 1125),
+    Alias((int32_t) USCRIPT_TIBETAN, 1127),
+    Alias((int32_t) USCRIPT_TIFINAGH, 1129),
+    Alias((int32_t) USCRIPT_TRADITIONAL_HAN, 1131),
     Alias((int32_t) USCRIPT_UGARITIC, 1133),
-    Alias((int32_t) USCRIPT_VAI, 1135),
-    Alias((int32_t) USCRIPT_VISP, 1137),
-    Alias((int32_t) USCRIPT_XSUX, 1139),
-    Alias((int32_t) USCRIPT_YI, 1141),
-    Alias((int32_t) USCRIPT_ZXXX, 1143),
-    Alias((int32_t) USCRIPT_ZZZZ, 1145),
+    Alias((int32_t) USCRIPT_UNCODED_SCRIPT, 1135),
+    Alias((int32_t) USCRIPT_UNWRITTEN_LANGUAGES, 1137),
+    Alias((int32_t) USCRIPT_VAI, 1139),
+    Alias((int32_t) USCRIPT_VISIBLE_SPEECH, 1141),
+    Alias((int32_t) USCRIPT_WESTERN_SYRIAC, 1143),
+    Alias((int32_t) USCRIPT_YI, 1145),
 };
 
 const int32_t VALUES_tccc_COUNT = 19;
