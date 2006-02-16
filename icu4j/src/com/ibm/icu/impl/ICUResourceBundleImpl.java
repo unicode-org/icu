@@ -1,7 +1,7 @@
 //##header
 /*
  ******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and   *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -621,10 +621,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         return -1;
     }
     private ICUResourceBundle findResource(String key, long resource,
-            HashMap table, ICUResourceBundle requested) {
-
+                                            HashMap table, 
+                                            ICUResourceBundle requested) {
         ClassLoader loaderToUse = loader;
-
         String locale = null, keyPath = null;
         String bundleName;
         String resPath = getStringValue(resource);
@@ -663,41 +662,45 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             bundleName = baseName;
         }
         ICUResourceBundle bundle = null;
+        ICUResourceBundle sub = null;
         if(bundleName.equals(LOCALE)){
             bundleName = baseName;
             bundle = requested;
             keyPath = resPath.substring(LOCALE.length() + 2/* prepending and appending / */, resPath.length());
             locale = requested.getLocaleID();
-        }else if (locale == null) {
-            // {dlf} must use requestor's class loader to get resources from same jar
-            bundle = (ICUResourceBundle) getBundleInstance(bundleName, "",
-                     loaderToUse, false); 
-        } else {
-            bundle = (ICUResourceBundle) getBundleInstance(bundleName, locale,
-                     loaderToUse, false);
-        }
-        ICUResourceBundle sub = null;
-        if (keyPath != null) {
-            StringTokenizer st = new StringTokenizer(keyPath, "/");
-            ICUResourceBundle current = bundle;
-            while (st.hasMoreTokens()) {
-                String subKey = st.nextToken();
-                sub = current.getImpl(subKey, table, requested);
-                if (sub == null) {
-                    break;
-                }
-                current = sub;
+            sub = ICUResourceBundle.findResourceWithFallback(keyPath, requested, null);
+            sub.resPath = "/" + sub.getLocaleID() + "/" + keyPath;
+        }else{
+            if (locale == null) {
+                // {dlf} must use requestor's class loader to get resources from same jar
+                bundle = (ICUResourceBundle) getBundleInstance(bundleName, "",
+                         loaderToUse, false); 
+            } else {
+                bundle = (ICUResourceBundle) getBundleInstance(bundleName, locale,
+                         loaderToUse, false);
             }
-        } else {
-            // if the sub resource is not found
-            // try fetching the sub resource with
-            // the key of this alias resource
-            sub = bundle.get(key);
+            if (keyPath != null) {
+                StringTokenizer st = new StringTokenizer(keyPath, "/");
+                ICUResourceBundle current = bundle;
+                while (st.hasMoreTokens()) {
+                    String subKey = st.nextToken();
+                    sub = current.getImpl(subKey, table, requested);
+                    if (sub == null) {
+                        break;
+                    }
+                    current = sub;
+                }
+            } else {
+                // if the sub resource is not found
+                // try fetching the sub resource with
+                // the key of this alias resource
+                sub = bundle.get(key);
+            }
+            sub.resPath = resPath;
         }
         if (sub == null) {
             throw new MissingResourceException(localeID, baseName, key);
         }
-        sub.resPath = resPath;
         return sub;
     }
 }
