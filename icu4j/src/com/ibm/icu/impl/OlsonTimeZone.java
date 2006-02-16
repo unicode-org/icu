@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2006, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -476,7 +476,13 @@ public class OlsonTimeZone extends TimeZone {
             for (i = transitionCount - 1; i > 0; --i) {
                 int transition = transitionTimes[i];
                 if (local) {
-                    transition += zoneOffset(getInt(typeData[i]));
+                    int zoneOffsetPrev = zoneOffset(getInt(typeData[i-1]));
+                    int zoneOffsetCurr = zoneOffset(getInt(typeData[i]));
+                    if(zoneOffsetPrev < zoneOffsetCurr) {
+                        transition += zoneOffsetPrev;
+                    } else {
+                        transition += zoneOffsetCurr;
+                    }
                 }
                 if (time >= transition) {
                     break;
