@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -121,7 +121,7 @@ public final class LocaleData {
      *                  ES_STANDARD or ES_AUXILIARY
      * @return          The set of exemplar characters for the given locale.
      * @draft ICU 3.4
-     * @deprecated      This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UnicodeSet getExemplarSet(int options, int extype) {
         String [] exemplarSetTypes = { "ExemplarCharacters", "AuxExemplarCharacters" };
