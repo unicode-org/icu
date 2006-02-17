@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -49,6 +49,8 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
             if (exec) TextTest();    break;
         case 1: name = "ErrorTest";
             if (exec) ErrorTest();   break;
+        case 2: name = "FreezeTest";
+            if (exec) FreezeTest();  break;
         default: name = "";          break;
     }
 }
@@ -385,7 +387,7 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
     //  clone the UText.  The test will be run in the cloned copy
     //  so that we don't alter the original.
     //
-    targetUT = utext_clone(NULL, ut, TRUE, &status);
+    targetUT = utext_clone(NULL, ut, TRUE, FALSE, &status);
     TEST_SUCCESS(status);
     UnicodeString targetUS(us);    // And copy the reference string.
 
@@ -463,7 +465,7 @@ void UTextTest::TestReplace(
     //  clone the target UText.  The test will be run in the cloned copy
     //  so that we don't alter the original.
     //
-    targetUT = utext_clone(NULL, ut, TRUE, &status);
+    targetUT = utext_clone(NULL, ut, TRUE, FALSE, &status);
     TEST_SUCCESS(status);
     UnicodeString targetUS(us);    // And copy the reference string.
 
@@ -1091,8 +1093,94 @@ void UTextTest::ErrorTest()
 
         utext_close(ut);
     }
+}
 
 
+void UTextTest::FreezeTest() {
+    // Check isWritable() and freeze() behavior.
+    //
+
+    UnicodeString  ustr("Hello, World.");
+    const char u8str[] = {char(0x31), (char)0x32, (char)0x33, 0};  
+    const UChar u16str[] = {(UChar)0x31, (UChar)0x32, (UChar)0x44, 0};
+
+    UErrorCode status = U_ZERO_ERROR;
+    UText  *ut        = NULL;
+    UText  *ut2       = NULL;
+
+    ut = utext_openUTF8(ut, u8str, -1, &status);
+    TEST_SUCCESS(status);
+    UBool writable = utext_isWritable(ut);
+    TEST_ASSERT(writable == FALSE);
+    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+    status = U_ZERO_ERROR;
+    ut = utext_openUChars(ut, u16str, -1, &status);
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut);
+    TEST_ASSERT(writable == FALSE);
+    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+    status = U_ZERO_ERROR;
+    ut = utext_openUnicodeString(ut, &ustr, &status);
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut);
+    TEST_ASSERT(writable == TRUE);
+    utext_freeze(ut);
+    writable = utext_isWritable(ut);
+    TEST_ASSERT(writable == FALSE);
+    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+    
+    status = U_ZERO_ERROR;
+    ut = utext_openUnicodeString(ut, &ustr, &status);
+    TEST_SUCCESS(status);
+    ut2 = utext_clone(ut2, ut, FALSE, FALSE, &status);  // clone with readonly = false
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut2);
+    TEST_ASSERT(writable == TRUE);
+    ut2 = utext_clone(ut2, ut, FALSE, TRUE, &status);  // clone with readonly = true
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut2);
+    TEST_ASSERT(writable == FALSE);
+    utext_copy(ut2, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+    status = U_ZERO_ERROR;
+    ut = utext_openConstUnicodeString(ut, (const UnicodeString *)&ustr, &status);
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut);
+    TEST_ASSERT(writable == FALSE);
+    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
+
+    // Deep Clone of a frozen UText should re-enable writing in the copy.
+    status = U_ZERO_ERROR;
+    ut = utext_openUnicodeString(ut, &ustr, &status);
+    TEST_SUCCESS(status);
+    utext_freeze(ut);
+    ut2 = utext_clone(ut2, ut, TRUE, FALSE, &status);   // deep clone
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut2);
+    TEST_ASSERT(writable == TRUE);
+
+
+    // Deep clone of a frozen UText, where the base type is intrinsically non-writable,
+    //  should NOT enable writing in the copy.
+    status = U_ZERO_ERROR;
+    ut = utext_openUChars(ut, u16str, -1, &status);
+    TEST_SUCCESS(status);
+    utext_freeze(ut);
+    ut2 = utext_clone(ut2, ut, TRUE, FALSE, &status);   // deep clone
+    TEST_SUCCESS(status);
+    writable = utext_isWritable(ut2);
+    TEST_ASSERT(writable == FALSE);
+
+    // cleanup
+    utext_close(ut);
+    utext_close(ut2);
 }
 
 

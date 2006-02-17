@@ -1413,7 +1413,7 @@ CharacterIteratorUT::CharacterIteratorUT(UText *ut) {
     }
 
     UErrorCode status = U_ZERO_ERROR;
-    fUText = utext_clone(NULL, ut, FALSE, &status);
+    fUText = utext_clone(NULL, ut, FALSE, TRUE, &status);  // Shallow, Read-only clone.
     if (fUText != NULL) {
         // Set the inherited CharacterItertor fields
         textLength = (int32_t)utext_nativeLength(ut);
@@ -1541,7 +1541,7 @@ default:
 
 void  CharacterIteratorUT::resetTo(const UText *ut, UErrorCode *status) {
     // Reset this CharacterIteratorUT to use a new UText.
-    fUText = utext_clone(fUText, ut, FALSE, status);
+    fUText = utext_clone(fUText, ut, FALSE, TRUE, status);
     utext_setNativeIndex(fUText, 0);
     textLength = (int32_t)utext_nativeLength(fUText);
     pos = 0;
@@ -1574,7 +1574,8 @@ UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const
         fText->getDynamicClassID() == CharacterIteratorUT::getStaticClassID()) 
     {
         CharacterIteratorUT *utcr = (CharacterIteratorUT *)fText;
-        result = utext_clone(fillIn, utcr->fUText, FALSE, &status);
+        // Shallow, Readonly clone.
+        result = utext_clone(fillIn, utcr->fUText, FALSE, TRUE, &status);  
     }
     return result;
 }

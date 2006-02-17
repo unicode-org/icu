@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -259,6 +259,13 @@ utext_isWritable(const UText *ut)
 }
 
 
+U_DRAFT void U_EXPORT2
+utext_freeze(UText *ut) {
+    // Zero out the WRITABLE flag.
+    ut->providerProperties &= ~(I32_FLAG(UTEXT_PROVIDER_WRITABLE));
+}
+
+
 U_DRAFT UBool U_EXPORT2
 utext_hasMetaData(const UText *ut)
 {
@@ -305,8 +312,13 @@ utext_copy(UText *ut,
 
 
 U_DRAFT UText * U_EXPORT2
-utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
-    return src->clone(dest, src, deep, status);
+utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status) {
+    UText *result;
+    result = src->clone(dest, src, deep, status);
+    if (readOnly) {
+        utext_freeze(result);
+    }
+    return result;
 }
 
 
@@ -1026,6 +1038,8 @@ repTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
         const Replaceable *replSrc = (const Replaceable *)src->context;
         dest->context = replSrc->clone();
         dest->p       = dest->context;
+        // with deep clone, the copy is writable, even when the source is not.
+        dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     }
     return dest;
 }
@@ -1398,6 +1412,9 @@ unistrTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
         const UnicodeString *srcString = (const UnicodeString *)src->context;
         dest->context = new UnicodeString(*srcString);
         dest->p       = dest->context;
+
+        // with deep clone, the copy is writable, even when the source is not.
+        dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     }
     return dest;
 }
