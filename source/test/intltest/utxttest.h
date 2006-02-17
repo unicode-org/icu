@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -30,6 +30,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
     void TextTest();
     void ErrorTest();
+    void FreezeTest();
 
 private:
     struct m {                              // Map between native indices & code points.
