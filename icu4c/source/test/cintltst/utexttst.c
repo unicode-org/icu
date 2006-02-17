@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -93,7 +93,7 @@ static void TestAPI(void) {
         status = U_ZERO_ERROR;
         uta = utext_openUChars(NULL, uString, -1, &status);
         TEST_SUCCESS(status);
-        utb = utext_clone(NULL, uta, FALSE, &status);
+        utb = utext_clone(NULL, uta, FALSE, FALSE, &status);
         TEST_SUCCESS(status);
         TEST_ASSERT(utb != NULL);
         TEST_ASSERT(utb != uta);

@@ -298,11 +298,16 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   *  A shallow clone operation will not fail, barring truly exceptional conditions such
   *  as memory allocation failures.
   *
-  *  A shallow clone will preserve the utext_isWritable() state of the source object.
-  *  Note, however, that any writing (modification) to the text is while more than one
-  *  UText is referring to the same underlying text storage is an error with unpredictable
-  *  results, much like modifying the underlying text directly, bypassing a
-  *  UText wrapper.
+  *  Shallow UText clones should be avoided if the UText functions that modify the
+  *  text are expected to be used, either on the original or the cloned UText.
+  *  Any such modifications  can cause unpredictable behavior.  Read Only
+  *  shallow clones provide some protection against errors of this type by
+  *  disabling text modification via the cloned UText.
+  *
+  *  A shallow clone made with the readOnly parameter == FALSE will preserve the 
+  *  utext_isWritable() state of the source object.  Use with caution, however.
+  *  Write operations must be avoided while more than one UTexts exist that refer
+  *  to the same underlying text.
   *
   *  A UText and its clone may be safely concurrently accessed by separate threads.
   *  This is true for read access only with shallow clones, and for both read and
@@ -316,6 +321,9 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   *                be reset to become the clone.
   *  @param src    The UText to be cloned.
   *  @param deep   TRUE to request a deep clone, FALSE for a shallow clone.
+  *  @param readOnly TRUE to request that the cloned UText have read only access to the 
+  *                underlying text.  
+
   *  @param status Errors are returned here.  For deep clones, U_UNSUPPORTED_ERROR
   *                will be returned if the text provider is unable to clone the
   *                original text.
@@ -323,7 +331,7 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   *  @draft ICU 3.4
   */
 U_DRAFT UText * U_EXPORT2
-utext_clone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
+utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status);
 
 
 /*****************************************************************************
@@ -757,9 +765,9 @@ utext_copy(UText *ut,
   *  Freeze a UText.  This prevents any modification to the underlying text itself
   *  by means of functions operating on this UText.
   *  <p/>
-  *  Once frozen, a UText can not be unfrozen.  The intent is to provide some
-  *  assurance that a the text underlying a frozen UText wrapper will not
-  *  be unexpectedly changing.
+  *  Once frozen, a UText can not be unfrozen.  The intent is to ensure
+  *  that a the text underlying a frozen UText wrapper cannot be modified via that UText.
+  *  
   *  <p/>
   *  Caution:  freezing a UText will disable changes made via the specific
   *   frozen UText wrapper only; it will not have any effect on the ability to
@@ -769,6 +777,7 @@ utext_copy(UText *ut,
   *
   *  @param ut  The UText to be frozen.
   *  @see   utext_isWritable()
+  *  @draft ICU 3.6
   */
 U_DRAFT void U_EXPORT2
 utext_freeze(UText *ut);
