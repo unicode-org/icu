@@ -145,46 +145,6 @@ public class SwatDeprecated {
         }
     }
 
-    /*
-      if infile != outfile
-      - if not overwrite and outfile exists, exit with error
-      - if outfile.tmp exists, delete it
-      --  exit with error if fail to delete
-      - create new outfile.tmp
-      - if don't need it, 
-      --  delete outfile.tmp
-      --  exit with nothing done
-      - if outfile.old exists, delete it
-      --  if fail to delete
-      ---   delete outfile.tmp
-      ---   exit with error (extra error if outfile doesn't exist)
-<     - if outfile exists, 
-<     --  rename it to outfile.old
-      - rename outfile.tmp to outfile
-      - return success
-
-      if infile == outfile
-      - if not overwrite (we know outfile exists) exit with error
-      - if outfile.tmp exists, delete it
-      --  exit with error if fail to delete
->     - get infile out of the way for creation
->     --  if infile.bak exists, delete it
->     ---   exit with error if fail to delete
->     --  rename infile to infile.bak
-      - create new outfile.tmp
-      - if don't need it,
-      --  delete outfile.tmp
->     --  rename infile.bak to infile
-      --  exit with nothing done
-      - if outfile.old exists, delete it
-      --  if fail to delete
-      ---   delete outfile.tmp
->     ---   rename infile.bak to infile
-      ---   exit with error
->     - rename infile.bak to outfile.old
-      - rename outfile.tmp to outfile
-      - exit with success
-     */
     public void processFile(File inFile) {
         File bakFile = null;
         File oldFile = null;
