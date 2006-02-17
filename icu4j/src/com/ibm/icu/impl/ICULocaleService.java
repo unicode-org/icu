@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -182,6 +182,9 @@ public class ICULocaleService extends ICUService {
         public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
             if (primaryID == null) {
                 return null;
+            }
+            if (primaryID.length() == 0) {
+                primaryID = "root";
             }
             String canonicalPrimaryID = ULocale.getName(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
@@ -531,7 +534,8 @@ public class ICULocaleService extends ICUService {
          * Return the supported IDs.  This is the set of all locale names for the bundleName.
          */
         protected Set getSupportedIDs() {
-              return ICUResourceBundle.getFullLocaleNameSet(bundleName);
+            // note: "root" is one of the ids, but "" is not.  Must convert ULocale.ROOT.
+            return ICUResourceBundle.getFullLocaleNameSet(bundleName); 
         }
 
         /**
