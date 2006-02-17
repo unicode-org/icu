@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2005, International Business Machines Corporation and         *
+* Copyright (C) 2004-2006, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -21,8 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+// import java.util.regex.*;
 
 /**
  * A simple facility for adding C-like preprocessing to .java files.
@@ -48,9 +47,126 @@ public class CodeMangler {
     private static final String IGNORE_PREFIX = "//##";
     private static final String HEADER_PREFIX = "//##header";
 
+//     static final Pattern pat = Pattern.compile(
+//         "(?i)^(\\s*(?://+)??\\s*)#(ifdef\\s|ifndef\\s|else|endif|undef\\s|define\\s|if\\s|elif\\s)\\s*(.*)$");
+//     // static final Pattern pat2 = Pattern.compile("([^=!]+)\\s*([!=]?=)??\\s*(\\w+)");
+//     static final Pattern pat2 = Pattern.compile("\\s*(\\w+)\\s*([!=]?=)??\\s*([^\\s]?.*$)");
+//     static final Pattern pat3 = Pattern.compile("^(\\s*//##).*");
+
     public static void main(String[] args) {
+//         test();
         new CodeMangler(args).run();
     }
+
+//     private static final void test() {
+//         testPat();
+//         testPat2();
+//         testPat3();
+//     }
+//     private static final void testPat() {
+//         System.out.println("test pat");
+//         String[] tests = {
+//             "",
+//             " ",
+//             "#endif",
+//             "# endif",
+//             "#ENDIF",
+//             "#eNdIf",
+//             "//#endif",
+//             "// #endif",
+//             "// # endif",
+//             "  //  #ifdef foo",
+//             "  //  #ifndef foo",
+//             "  //  #else",
+//             "  //  #endif",
+//             "  //  #undef foo",
+//             "  //  #define foo bar",
+//             "  //  #if foo == bar",
+//             "  //  #elif bar != baz",
+//         };
+//         for (int i = 0; i < tests.length; ++i) {
+//             System.out.print("pat '" + tests[i] + "' --> ");
+//             Matcher m = pat.matcher(tests[i]);
+//             if (m.find()) {
+//                 System.out.println("'" + m.group(1) + "' '" + m.group(2) + "' '" + m.group(3) + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//             System.out.print("dug '" + tests[i] + "' --> ");
+//             String[] res = new String[3];
+//             if (patMatch(tests[i], res)) {
+//                 System.out.println("'" + res[0] + "' '" + res[1] + "' '" + res[2] + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//         }
+//     }
+
+//     private static final void testPat2() {
+//         System.out.println("test pat2");
+//         String[] tests = {
+//             "",
+//             " ",
+//             "test",
+//             " test",
+//             "test ",
+//             " test ",
+//             " test ==",
+//             " !=",
+//             " !=foo",
+//             "foo==bar",
+//             "foo ==bar",
+//             "foo== bar",
+//             "foo == bar",
+//             "foo bar baz, wompf",
+//             "foo=bar=baz, wompf a loo",
+//         };
+//         for (int i = 0; i < tests.length; ++i) {
+//             System.out.print("pat '" + tests[i] + "' --> ");
+//             Matcher m2 = pat2.matcher(tests[i]);
+//             if (m2.find()) {
+//                 System.out.println("'" + m2.group(1) + "' '" + m2.group(2) + "' '" + m2.group(3) + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//             System.out.print("dug '" + tests[i] + "' --> ");
+//             String[] res = new String[3];
+//             if (pat2Match(tests[i], res)) {
+//                 System.out.println("'" + res[0] + "' '" + res[1] + "' '" + res[2] + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//         }
+//     }
+//     private static final void testPat3() {
+//         System.out.println("test pat3");
+//         String[] tests = {
+//             "",
+//             " ",
+//             " //#",
+//             " /##",
+//             "//##",
+//             " //##",
+//             " //##//",
+//             " /////##",
+//         };
+//         for (int i = 0; i < tests.length; ++i) {
+//             System.out.print("pat '" + tests[i] + "' --> ");
+//             Matcher m = pat3.matcher(tests[i]);
+//             if (m.find()) {
+//                 System.out.println("'" + m.group(1) + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//             System.out.print("dug '" + tests[i] + "' --> ");
+//             String match = pat3Match(tests[i]);
+//             if (match != null) {
+//                 System.out.println("'" + match + "'");
+//             } else {
+//                 System.out.println("didn't match");
+//             }
+//         }
+//     }
 
     private static final String usage = "Usage:\n" +
         "    CodeMangler [flags] file... dir... @argfile... \n" +
@@ -206,7 +322,6 @@ public class CodeMangler {
         }
         if (verbose) System.out.println("outdir: " + outdir.getAbsolutePath());
 
-        
         if (clean && suffix.equals(".java")) {
             try {
                 if (outdir.getCanonicalPath().equals(indir.getCanonicalPath())) {
@@ -334,11 +449,7 @@ public class CodeMangler {
                 return next;
             }
         };
-
-        final Pattern pat = Pattern.compile(
-            "(?i)^(\\s*(?://+)??\\s*)#(ifdef\\s|ifndef\\s|else|endif|undef\\s|define\\s|if\\s|elif\\s)\\s*(.*)$");
-        final Pattern pat2 = Pattern.compile("([^=!]+)\\s*([!=]?=)??\\s*(\\w+)");
-        final Pattern pat3 = Pattern.compile("^(\\s*//##).*");
+          
         HashMap oldMap = null;
         
         long outModTime = 0;
@@ -408,16 +519,23 @@ public class CodeMangler {
                         continue;
                     }
                 }
-                        
-                Matcher m = pat.matcher(line);
-                if (m.find()) {
-                    String lead = m.group(1);
-                    String key = m.group(2).toLowerCase().trim();
-                    String val = m.group(3).trim();
+                
+                String[] res = new String[3];
+                if (patMatch(line, res)) {
+                    String lead = res[0];
+                    String key = res[1];
+                    String val = res[2];
+
+//                 Matcher m = pat.matcher(line);
+//                 if (m.find()) {
+//                     String lead = m.group(1);
+//                     String key = m.group(2).toLowerCase().trim();
+//                     String val = m.group(3).trim();
+                
                     if (verbose) System.out.println("directive: " + line
-                                                   + " key: '" + key
-                                                   + "' val: '" + val 
-                                                   + "' " + state);
+                                                    + " key: '" + key
+                                                    + "' val: '" + val 
+                                                    + "' " + state);
                     if (key.equals("ifdef")) {
                         state = state.push(lc, line, map.get(val) != null);
                     } else if (key.equals("ifndef")) {
@@ -434,15 +552,20 @@ public class CodeMangler {
                             map.remove(val);
                         }
                     } else { // #define, #if, #elif
-                        Matcher m2 = pat2.matcher(val);
-                        if (m2.find()) {
-                            String key2 = m2.group(1).trim();
-                            boolean neq = "!=".equals(m2.group(2)); // optional
-                            String val2 = m2.group(3).trim();
+                        if (pat2Match(val, res)) {
+                            String key2 = res[0];
+                            boolean neq = "!=".equals(res[1]); // optional
+                            String val2 = res[2];
+
+//                         Matcher m2 = pat2.matcher(val);
+//                         if (m2.find()) {
+//                             String key2 = m2.group(1).trim();
+//                             boolean neq = "!=".equals(m2.group(2)); // optional
+//                             String val2 = m2.group(3).trim();
                             if (verbose) System.out.println("val2: '" + val2 
-                                                           + "' neq: '" + neq 
-                                                           + "' key2: '" + key2 
-                                                           + "'");
+                                                            + "' neq: '" + neq 
+                                                            + "' key2: '" + key2 
+                                                            + "'");
                             if (key.equals("if")) {
                                 state = state.push(lc, line, val2.equals(map.get(key2)) != neq);
                             } else if (key.equals("elif")) {
@@ -469,17 +592,28 @@ public class CodeMangler {
                 }
 
                 lc++;
-                m = pat3.matcher(line);
-                boolean hasIgnore = m.find();
+                String found = pat3Match(line);
+                boolean hasIgnore = found != null;
                 if (state.emit == hasIgnore) {
                     if (state.emit) {
-                        line = line.substring(m.group(1).length());
+                        line = line.substring(found.length());
                     } else {
                         line = IGNORE_PREFIX + line;
                     }
-                } else if (hasIgnore && !m.group(1).equals(IGNORE_PREFIX)) {
-                    line = IGNORE_PREFIX + line.substring(m.group(1).length());
+                } else if (hasIgnore && !found.equals(IGNORE_PREFIX)) {
+                    line = IGNORE_PREFIX + line.substring(found.length());
                 }
+//                 m = pat3.matcher(line);
+//                 boolean hasIgnore = m.find();
+//                 if (state.emit == hasIgnore) {
+//                     if (state.emit) {
+//                         line = line.substring(m.group(1).length());
+//                     } else {
+//                         line = IGNORE_PREFIX + line;
+//                     }
+//                 } else if (hasIgnore && !m.group(1).equals(IGNORE_PREFIX)) {
+//                     line = IGNORE_PREFIX + line.substring(m.group(1).length());
+//                 }
                 if (!clean || state.emit) {
                     outstream.println(line);
                 }
@@ -523,4 +657,185 @@ public class CodeMangler {
         }
         return true;
     }
+
+
+    /**
+     * Perform same operation as matching on pat.  on exit
+     * leadKeyValue contains the three strings lead, key, and value.
+     * 'lead' is the portion before the #ifdef directive.  'key' is
+     * the directive.  'value' is the portion after the directive.  if
+     * there is a match, return true, else return false.
+     */
+    static boolean patMatch(String line, String[] leadKeyValue) {
+//       final Pattern pat = Pattern.compile(
+//         "(?i)^(\\s*(?://+)??\\s*)#(ifdef\\s|ifndef\\s|else|endif|undef\\s|define\\s|if\\s|elif\\s)\\s*(.*)$");
+
+        if (line.length() == 0) {
+            return false;
+        }
+        if (!line.endsWith("\n")) {
+            line = line + '\n';
+        }
+        int mark = 0;
+        int state = 0;
+        loop: for (int i = 0; i < line.length(); ++i) {
+            char c = line.charAt(i);
+            switch (state) {
+            case 0: // at start of line, haven't seen anything but whitespace yet
+                if (c == ' ' || c == '\t' || c == '\r') continue;
+                if (c == '/') { state = 1; continue; }
+                if (c == '#') { state = 4; continue; }
+                return false;
+            case 1: // have seen a single slash after start of line
+                if (c == '/') { state = 2; continue; }
+                return false;
+            case 2: // have seen two or more slashes
+                if (c == '/') continue;
+                if (c == ' ' || c == '\t' || c == '\r') { state = 3; continue; }
+                if (c == '#') { state = 4; continue; }
+                return false;
+            case 3: // have seen a space after two or more slashes
+                if (c == ' ' || c == '\t' || c == '\r') continue;
+                if (c == '#') { state = 4; continue; }
+                return false;
+            case 4: // have seen a '#' 
+                leadKeyValue[0] = line.substring(mark, i-1);
+                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) { mark = i; state = 5; continue; }
+                return false;
+            case 5: // an ascii char followed the '#'
+                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) continue;
+                if (c == ' ' || c == '\t' || c == '\n') {
+                    String key = line.substring(mark, i).toLowerCase();
+                    if (key.equals("ifdef") ||
+                        key.equals("ifndef") ||
+                        key.equals("else") ||
+                        key.equals("endif") ||
+                        key.equals("undef") ||
+                        key.equals("define") ||
+                        key.equals("if") ||
+                        key.equals("elif")) {
+                        leadKeyValue[1] = key;
+                        mark = i;
+                        state = 6;
+                        break loop;
+                    }
+                }
+                return false;
+            default:
+                throw new InternalError();
+            }
+        }
+        if (state == 6) {
+            leadKeyValue[2] = line.substring(mark, line.length()).trim();
+            return true;
+        }
+        return false; // never reached, does the compiler know this?
+    }
+
+    /**
+     * Perform same operation as matching on pat2.  on exit
+     * keyRelValue contains the three strings key, rel, and value.
+     * 'key' is the portion before the relation (or final word).  'rel' is
+     * the relation, if present, either == or !=.  'value' is the final
+     * word.  if there is a match, return true, else return false.
+     */
+    static boolean pat2Match(String line, String[] keyRelVal) {
+//       final Pattern pat2 = Pattern.compile("([^=!]+)\\s*([!=]?=)??\\s*(\\w+)");
+// hmmm, this pattern doesn't look right.  a pattern consisting of 'abcd' should
+// return {"abcd", "", ""} but it looks like it returns {"", "", "abcd"}.
+
+        if (line.length() == 0) {
+            return false;
+        }
+        keyRelVal[0] = keyRelVal[1] = keyRelVal[2] = "";
+        int mark = 0;
+        int state = 0;
+        loop: for (int i = 0; i < line.length(); ++i) {
+            char c = line.charAt(i);
+            switch (state) {
+            case 0: // saw beginning or space, no rel yet
+                if (c == ' ' || c == '\t' || c == '\n') {
+                    continue;
+                }
+                if ((c == '!' || c == '=')) {
+                    return false;
+                }
+                state = 1;
+                continue;
+            case 1: // saw start of a word
+                if (c == ' ' || c == '\t') {
+                    state = 2;
+                }            
+                else if (c == '!' || c == '=') {
+                    state = 3;
+                }
+                continue;
+            case 2: // saw end of word, and space
+                if (c == ' ' || c == '\t') {
+                    continue;
+                }
+                else if (c == '!' || c == '=') {
+                    state = 3;
+                    continue;
+                }
+                keyRelVal[0] = line.substring(0, i-1).trim();
+                mark = i;
+                state = 4;
+                break loop;
+            case 3: // saw end of word, and '!' or '='
+                if (c == '=') {
+                    keyRelVal[0] = line.substring(0, i-1).trim();
+                    keyRelVal[1] = line.substring(i-1, i+1);
+                    mark = i+1;
+                    state = 4;
+                    break loop;
+                }
+                return false;
+            default:
+                break;
+            }
+        }
+        switch (state) {
+        case 0: 
+            return false; // found nothing
+        case 1: 
+        case 2:
+            keyRelVal[0] = line.trim(); break; // found only a word
+        case 3:
+            return false; // found a word and '!' or '=" then end of line, incomplete
+        case 4:
+            keyRelVal[2] = line.substring(mark).trim(); break; // found a word, possible rel, and who knows what
+        default: 
+            throw new InternalError();
+        }
+        return true;
+    }
+
+    static String pat3Match(String line) {
+        int state = 0;
+        loop: for (int i = 0; i < line.length(); ++i) {
+            char c = line.charAt(i);
+            switch(state) {
+            case 0: if (c == ' ' || c == '\t') continue;
+                if (c == '/') { state = 1; continue; }
+                break loop;
+            case 1:
+                if (c == '/') { state = 2; continue; }
+                break loop;
+            case 2:
+                if (c == '#') { state = 3; continue; }
+                break loop;
+            case 3:
+                if (c == '#') return line.substring(0, i+1);
+                break loop;
+            default:
+                break loop;
+            }
+        }
+        return null;
+    }
+
+        
+//       final Pattern pat3 = Pattern.compile("^(\\s*//##).*");
+        
 }
