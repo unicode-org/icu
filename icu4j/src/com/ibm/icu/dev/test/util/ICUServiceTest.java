@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -669,7 +669,7 @@ public class ICUServiceTest extends TestFmwk
 
     public void TestLocale() {
     ICULocaleService service = new ICULocaleService("test locale");
-    service.registerObject("root", "");
+    service.registerObject("root", ULocale.ROOT);
     service.registerObject("german", "de");
     service.registerObject("german_Germany", ULocale.GERMANY);
     service.registerObject("japanese", "ja");
