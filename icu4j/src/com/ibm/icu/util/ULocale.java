@@ -214,8 +214,26 @@ public final class ULocale implements Serializable {
      */
     public static final ULocale CANADA_FRENCH = new ULocale("fr_CA", Locale.CANADA_FRENCH);
 
+    /**
+     * Handy constant.
+     */
+    private static final String EMPTY_STRING = "";
+
+    // Used in both ULocale and IDParser, so moved up here.
+    private static final char UNDERSCORE            = '_';
+
+    // default empty locale
+    private static final Locale EMPTY_LOCALE = new Locale("", "");
+
+    /**
+     * The root ULocale.
+     * @stable ICU 2.8
+     */ 
+    public static final ULocale ROOT = new ULocale(EMPTY_STRING, EMPTY_LOCALE);
+    
     private static final HashMap CACHE = new HashMap(20);
     static {
+        CACHE.put(EMPTY_LOCALE, ROOT);
         CACHE.put(Locale.ENGLISH, ENGLISH);
         CACHE.put(Locale.FRENCH, FRENCH);
         CACHE.put(Locale.GERMAN, GERMAN);
@@ -238,20 +256,6 @@ public final class ULocale implements Serializable {
         CACHE.put(Locale.CANADA_FRENCH, CANADA_FRENCH);
     }
 
-    /**
-     * Handy constant.
-     */
-    private static final String EMPTY_STRING = "";
-
-    // Used in both ULocale and IDParser, so moved up here.
-    private static final char UNDERSCORE            = '_';
-
-    /**
-     * The root ULocale.
-     * @stable ICU 2.8
-     */ 
-    public static final ULocale ROOT = new ULocale(EMPTY_STRING, (Locale)null);
-    
     /**
      * Cache the locale.
      */
