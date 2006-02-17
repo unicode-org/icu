@@ -221,7 +221,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale               
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This API is ICU internal only.
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader){
          return getBundleInstance(baseName, locale.toString(),loader);  
@@ -472,7 +472,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeName, ClassLoader root, boolean disableFallback)
+    protected static synchronized UResourceBundle instantiateBundle(
+        String baseName, String localeName, ClassLoader root, boolean disableFallback)
     {
         UResourceBundle b = null;
         int rootType = getRootType(baseName, root);
