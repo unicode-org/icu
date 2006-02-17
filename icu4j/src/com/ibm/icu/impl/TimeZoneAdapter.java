@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -60,7 +60,7 @@ public class TimeZoneAdapter extends java.util.TimeZone {
      * Constructs an adapter for a com.ibm.icu.util.TimeZone object.
      * 
      * @internal
-     * @deprecated This is an internal and should not be used by client code.
+     * @deprecated This API is ICU internal only.
      */
     public TimeZoneAdapter(TimeZone zone) {
         this.zone = zone;
