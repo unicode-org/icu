@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -85,6 +85,9 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 //          }
 
         ULocale[] actualLoc = new ULocale[1];
+        if (desiredLocale.equals(ULocale.ROOT)) {
+            desiredLocale = ULocale.ROOT;
+        }
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
         if (fmt == null) {
