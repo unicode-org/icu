@@ -130,6 +130,11 @@ public class SwatDeprecated {
 
     public void doList(File file) {
         String[] filenames = file.list(ff);
+        if (verbosity >= 5) {
+            pw.println(file.getPath());
+            dumpList(filenames);
+            pw.flush();
+        }
         for (int i = 0; i < filenames.length; ++i) {
             File f = new File(file, filenames[i]);
             if (f.isDirectory()) {
@@ -179,7 +184,6 @@ public class SwatDeprecated {
 >     - rename infile.bak to outfile.old
       - rename outfile.tmp to outfile
       - exit with success
-
      */
     public void processFile(File inFile) {
         File bakFile = null;
@@ -192,57 +196,33 @@ public class SwatDeprecated {
 
             String outPath = dstPrefix + inPath.substring(srcPrefix.length());
             File outFile = new File(outPath);
-            if (!overwrite && outFile.exists()) {
-                throw new RuntimeException("no permission to overwrite file: " + outPath);
-            }
-            if (verbosity >= 5) {
-                pw.println("outFile: " + outPath);
+
+            File tmpFile = null;
+            if (outFile.exists()) {
+                if (!overwrite) {
+                    throw new RuntimeException("no permission to overwrite file: " + outPath);
+                } else {
+                    bakFile = outFile;
+                    tmpFile = File.createTempFile(inFile.getName(), null, inFile.getParentFile());
+                }
+            } else {
+                tmpFile = outFile;
+                File parent = tmpFile.getParentFile();
+                parent.mkdirs();
+                tmpFile.createNewFile();
             }
 
-            String tmpPath = outPath + ".tmp";
-            File tmpFile = new File(tmpPath);
-            if (tmpFile.exists()) {
-                if (!tmpFile.delete()) {
-                    tmpFile = null;
-                    throw new RuntimeException("could not delete existing temporary file: " + tmpPath);
-                }
-            }
+            String tmpPath = tmpFile.getPath();
             if (verbosity >= 5) {
                 pw.println("tmpFile: " + tmpPath);
             }
 
-            FileReader fr = null;
-            String bakPath = inPath + ".bak";
-            if (inPlace) {
-                bakFile = new File(bakPath);
-                if (bakFile.exists()) {
-                    if (!bakFile.delete()) {
-                        bakFile = null;
-                        throw new RuntimeException("could not delete existing backup file: " + bakPath);
-                    }
-                }
-                if (!inFile.renameTo(bakFile)) {
-                    bakFile = null;
-                    throw new InternalError("can't rename: " + inPath + " to: " + bakPath);
-                }
-                if (verbosity >= 5) {
-                    pw.println("bakFile: " + bakPath);
-                    pw.println("inFile.exists(): " + inFile.exists());
-                    pw.println("bakFile.exists(): " + bakFile.exists());
-                }
-                fr = new FileReader(bakFile);
-            } else {
-                fr = new FileReader(inFile);
-            }
+            InputStream is = new FileInputStream(inFile);
+            OutputStream os = new FileOutputStream(tmpFile);
 
-            // ensure parent directory tree exists
-            tmpFile.getParentFile().mkdirs();
+            PrintStream ps = new PrintStream(os);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            // operate on backup and temporary files
-            FileWriter fw = new FileWriter(tmpFile);
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            BufferedReader br = new BufferedReader(fr);
             String line;
             int n = 0;
             int tc = 0;
@@ -259,7 +239,9 @@ public class SwatDeprecated {
 //                     pw.flush();
 //                 }
                 if (ix != -1) {
-//                     pw.println("[" + n + "] " + line); // debug
+                    if (verbosity >= 5) {
+                        pw.println("[" + n + "] " + line);
+                    }
 
                     line = line.substring(0,ix) + trgTag;
                     
@@ -308,12 +290,12 @@ public class SwatDeprecated {
                         }
                     }
                 }
-                bw.write(line);
-                bw.newLine();
+                ps.println(line);
                 ++n;
             }
-            bw.flush();
-            bw.close();
+            ps.flush();
+            is.close();
+            os.close();
 
             if (tc == 0) { // nothing changed, forget this file
                 if (verbosity >= 3) {
@@ -322,47 +304,17 @@ public class SwatDeprecated {
                 if (!tmpFile.delete()) {
                     throw new RuntimeException("unable to delete unneeded temporary file: " + tmpPath);
                 }
-                if (bakFile != null ) {
-                    if (verbosity >= 5) {
-                        pw.println("trying to rename: " + bakFile.getPath() + " to: " + inFile.getPath());
-                        pw.println("bakFile.exists(): " + bakFile.exists());
-                        pw.println("inFile.exists(): " + inFile.exists());
-                    }
 
-                    if (!bakFile.renameTo(inFile)) {
-                        throw new RuntimeException("could not restore backup file: " + bakPath);
-                    }
-                }
                 return;
             }
 
-            String oldPath = outPath + ".old";
-            oldFile = new File(oldPath);
-            if (oldFile.exists()) {
-                if (!oldFile.delete()) {
-                    tmpFile.delete(); // ignore deletion error
-                    if (bakFile != null) {
-                        if (!bakFile.renameTo(inFile)) {
-                            throw new RuntimeException("could not restore backup file: " + bakPath);
-                        }
-                    }
-                    throw new RuntimeException("cannot remove existing old file: " + oldPath);
+            if (bakFile != null) {
+                if (bakFile.exists()) {
+                    bakFile.delete();
                 }
-            }
-
-            if (inPlace) {
-                if (!bakFile.renameTo(oldFile)) {
-                    throw new RuntimeException("cannot create old file from backup: " + bakPath);
+                if (!tmpFile.renameTo(bakFile)) {
+                    pw.println("warning: couldn't rename temp file to: " + outPath);
                 }
-            } else if (outFile.exists()) {
-                if (!outFile.renameTo(oldFile)) {
-                    // todo: error recovery
-                    throw new RuntimeException("cannot create old file from original: " + outPath);
-                }
-            }
-
-            if (!tmpFile.renameTo(outFile)) {
-                throw new RuntimeException("could not rename temporary file to output file: " + outPath);
             }
 
             outFile.setLastModified(inFile.lastModified());
