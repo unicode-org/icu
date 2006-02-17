@@ -28,7 +28,7 @@
   <h1>International Components for Unicode<br>
   <abbr title="International Components for Unicode">ICU</abbr> 3.4 ReadMe</h1>
 
-  <p>Version: 2006-January-17<br>
+  <p>Version: 2006-February-16<br>
   Copyright &copy; 1997-2006 International Business Machines Corporation and
   others. All Rights Reserved.</p>
   <!-- Remember that there is a copyright at the end too -->
@@ -1462,13 +1462,11 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
   <p>If you are building ICU with a newer aCC compiler and you are planning on
   using the older &lt;iostream.h&gt; instead of the newer &lt;iostream&gt;, you
   will need to use a special configure flag before building ICU. By default,
-  the aCC <a href=
-  "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
+  the aCC <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">
   -AA</a> flag is used on HP-UX when the compiler supports that option in order
   to make ICU thread safe with RogueWave and other libraries using the 2.0
   Standard C++ library. Your applications that use ICU will also need to use
-  the <a href=
-  "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
+  the <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">
   -AA</a> compiler flag. To turn off this behavior in ICU, you will need to use
   the --with-iostream= old configure option when you first use
   runConfigureICU.</p>
