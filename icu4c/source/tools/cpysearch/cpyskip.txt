@@ -99,6 +99,9 @@ icu4j/src/com/ibm/icu/dev/data/IDNATestInput.txt
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/.classpath
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/.project
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/build.properties
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/.classpath
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/.project
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/build.properties
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/.classpath
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/.project
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/build.properties
