@@ -33,7 +33,7 @@ all:
 	@echo Please read this Makefile for more information.
 	@echo run \'$(MAKE) check\' to run the test 
 
-check: dtest ctest cpptest lotest doclean drafttest deprecatedtest internaltest obsoletetest
+check: dtest ctest cpptest lotest doclean drafttest deprtest internaltest obsoletetest
 	@echo "All header tests have finished. If deprecation #errors appeared, "
 	@echo "       add files to hdrtst/dfiles.txt"
 	@echo "#################################################################"
