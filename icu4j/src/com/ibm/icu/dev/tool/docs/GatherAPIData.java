@@ -1,9 +1,9 @@
 /**
-*******************************************************************************
-* Copyright (C) 2004-2006, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 
 /**
  * Generate a list of ICU's public APIs, sorted by qualified name and signature
@@ -35,11 +35,11 @@
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: separate generation of data files (which requires taglet) from 
- * comparison and report generation (which does not require it)
+ *       comparison and report generation (which does not require it)
  * todo: provide command-line control of filters of which subclasses/packages to process
  * todo: record full inheritance heirarchy, not just immediate inheritance 
  * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it 
- * were in a different pkg/class heirarchy (facilitates comparison of icu4j and java)
+ *       were in a different pkg/class heirarchy (facilitates comparison of icu4j and java)
  */
 
 package com.ibm.icu.dev.tool.docs;
@@ -48,6 +48,7 @@ package com.ibm.icu.dev.tool.docs;
 import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -58,7 +59,7 @@ public class GatherAPIData {
     String srcName = "Current"; // default source name
     String output; // name of output file to write
     String base; // strip this prefix
-    String filter; // filter classes by name
+    Pattern pat;
     boolean zip;
     boolean gzip;
 
@@ -96,7 +97,7 @@ public class GatherAPIData {
             } else if (opt.equals("-base")) {
                 this.base = options[i][1]; // should not include '.'
             } else if (opt.equals("-filter")) {
-                this.filter = options[i][1];
+                this.pat = Pattern.compile(options[i][1], Pattern.CASE_INSENSITIVE);
             } else if (opt.equals("-zip")) {
                 this.zip = true;
             } else if (opt.equals("-gzip")) {
@@ -191,7 +192,11 @@ public class GatherAPIData {
         for (int i = 0; i < tags.length; ++i) {
             if (tagKindIndex(tags[i].kind()) == INTERNAL) return true;
         }
-
+        if (pat != null && (doc.isClass() || doc.isInterface())) {
+            if (!pat.matcher(doc.name()).matches()) {
+                return true;
+            }
+        }
         return false;
     }
 
