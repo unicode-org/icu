@@ -8948,4 +8948,4 @@ fi
 
 echo "You must use $U_MAKE to build ICU."
 
-unset _CXX_CXXSUFFIX
+$as_unset _CXX_CXXSUFFIX
