@@ -913,7 +913,6 @@ case "${host}" in
 	*-*-beos)		platform=U_BEOS ;;
 	*-*-irix*)		platform=U_IRIX ;;
 	*-ncr-*)		platform=U_MPRAS ;;
-	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 AC_SUBST(ICUDATA_CHAR)
@@ -932,7 +931,6 @@ case "${host}" in
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
-	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -49,7 +49,7 @@
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
 /* ### Todo: properly auto detect mmap(). Until then, just add your platform here. */
-#elif U_HAVE_MMAP || defined(U_AIX) || defined(U_HPUX) || defined(OS390) || defined(PTX)
+#elif U_HAVE_MMAP || defined(U_AIX) || defined(U_HPUX) || defined(OS390)
     typedef size_t MemoryMap;
 
 #   define IS_MAP(map) ((map)!=0)

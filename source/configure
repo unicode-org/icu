@@ -3402,7 +3402,6 @@ powerpc*-*-linux*)
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
 *-ncr-*)	icu_cv_host_frag=mh-mpras ;;
-*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 
@@ -7616,7 +7615,6 @@ case "${host}" in
 	*-*-beos)		platform=U_BEOS ;;
 	*-*-irix*)		platform=U_IRIX ;;
 	*-ncr-*)		platform=U_MPRAS ;;
-	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 
@@ -7634,7 +7632,6 @@ case "${host}" in
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
-	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
