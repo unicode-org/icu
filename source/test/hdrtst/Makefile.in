@@ -110,13 +110,13 @@ ctest:
 	done
     
 drafttest:
-	@echo "C U_HIDE_DRAFT_API Test #######################################################"
+	@echo "U_HIDE_DRAFT_API Test #######################################################"
 	@rm -f Makefile.sub
 	@echo Building test harness for header files in ../../common and ../../i18n
 	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
 	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
 	  incfile=`basename $$file .h` ; \
-	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo -n "    unicode/$$incfile.h 	- " ; \
 	  echo '#define U_HIDE_DRAFT_API' > hd_$$incfile.c; \
 	  echo '#include "'unicode/$$incfile'.h"' >> ht_$$incfile.c ; \
 	  echo 'void junk(void);' >> hd_$$incfile.c ; \
@@ -127,13 +127,13 @@ drafttest:
 	done
     
 deprtest:
-	@echo "C U_HIDE_DEPRECATED_API Test #######################################################"
+	@echo "U_HIDE_DEPRECATED_API Test #######################################################"
 	@rm -f Makefile.sub
 	@echo Building test harness for header files in ../../common and ../../i18n
 	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
 	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
 	  incfile=`basename $$file .h` ; \
-	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo -n "    unicode/$$incfile.h 	- " ; \
 	  echo '#define U_HIDE_DEPRECATED_API' > hdp_$$incfile.c; \
 	  echo '#include "'unicode/$$incfile'.h"' >> hdp_$$incfile.c ; \
 	  echo 'void junk(void);' >> hdp_$$incfile.c ; \
@@ -144,13 +144,13 @@ deprtest:
 	done
 
 internaltest:
-	@echo "C U_HIDE_INTERNAL_API Test #######################################################"
+	@echo "U_HIDE_INTERNAL_API Test #######################################################"
 	@rm -f Makefile.sub
 	@echo Building test harness for header files in ../../common and ../../i18n
 	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
 	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
 	  incfile=`basename $$file .h` ; \
-	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo -n "    unicode/$$incfile.h 	- " ; \
 	  echo '#define U_HIDE_INTERNAL_API' > hin_$$incfile.c; \
 	  echo '#include "'unicode/$$incfile'.h"' >> hin_$$incfile.c ; \
 	  echo 'void junk(void);' >> hin_$$incfile.c ; \
@@ -161,13 +161,13 @@ internaltest:
 	done
 
 obsoletetest:
-	@echo "C U_HIDE_OBSOLETE_API Test #######################################################"
+	@echo "U_HIDE_OBSOLETE_API Test #######################################################"
 	@rm -f Makefile.sub
 	@echo Building test harness for header files in ../../common and ../../i18n
 	@echo 'the number after the hyphen (-) refers to the exit code - should be zero!'
 	@for file in `ls $(prefix)/include/unicode/*.h | fgrep -v -f $(srcdir)/pfiles.txt`; do \
 	  incfile=`basename $$file .h` ; \
-	  echo -n "C    unicode/$$incfile.h 	- " ; \
+	  echo -n "   unicode/$$incfile.h 	- " ; \
 	  echo '#define U_HIDE_OBSOLETE_API' > hob_$$incfile.c; \
 	  echo '#include "'unicode/$$incfile'.h"' >> hob_$$incfile.c ; \
 	  echo 'void junk(void);' >> hob_$$incfile.c ; \
