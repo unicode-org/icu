@@ -39,7 +39,6 @@ The following names can be supplied as the argument for platform:
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
     Linux               Use the GNU gcc/g++ compilers on Linux
     Linux/ECC           Use the Intel ECC compiler on Linux
-    Linux/ICC6          Use the Intel ICC 6 and older compilers on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
     Linux/VA            Use the IBM Visual Age compiler on Power PC Linux
     MacOSX              Use the GNU gcc/g++ compilers on MacOS X (Darwin)
@@ -177,19 +176,11 @@ case $platform in
         RELEASE_CFLAGS='-O2'
         RELEASE_CXXFLAGS='-O2'
         ;;
-    Linux/ICC6)
-        THE_OS="Linux"
-        THE_COMP="Intel ICC 6.0"
-        CC=icc; export CC
-        CXX=icpc; export CXX
-        RELEASE_CFLAGS='-O0'
-        RELEASE_CXXFLAGS='-O0'
-        ;;
     Linux/ICC)
         THE_OS="Linux"
-        THE_COMP="Intel ICC 8.0"
-        CC=icc; export CC
-        CXX=icpc; export CXX
+        THE_COMP="Intel ICC 9.0"
+        CC=`which icc`; export CC
+        CXX=`which icpc`; export CXX
         RELEASE_CFLAGS='-O'
         RELEASE_CXXFLAGS='-O'
         ;;
