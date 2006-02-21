@@ -2466,7 +2466,7 @@ u_charFromName(UCharNameChoice nameChoice,
  * @see u_enumCharNames
  * @stable ICU 1.7
  */
-typedef UBool UEnumCharNamesFn(void *context,
+typedef UBool U_CALLCONV UEnumCharNamesFn(void *context,
                                UChar32 code,
                                UCharNameChoice nameChoice,
                                const char *name,
