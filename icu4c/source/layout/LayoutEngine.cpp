@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -13,6 +13,7 @@
 #include "ArabicLayoutEngine.h"
 #include "CanonShaping.h"
 #include "HanLayoutEngine.h"
+#include "HangulLayoutEngine.h"
 #include "IndicLayoutEngine.h"
 #include "KhmerLayoutEngine.h"
 #include "ThaiLayoutEngine.h"
@@ -461,6 +462,10 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 
         case arabScriptCode:
             result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            break;
+
+        case hangScriptCode:
+            result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
             break;
 
         case haniScriptCode:
