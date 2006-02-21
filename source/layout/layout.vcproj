@@ -223,6 +223,9 @@
 				RelativePath=".\GXLayoutEngine.cpp">
 			</File>
 			<File
+				RelativePath=".\HangulLayoutEngine.cpp">
+			</File>
+			<File
 				RelativePath=".\HanLayoutEngine.cpp">
 			</File>
 			<File
@@ -453,6 +456,9 @@
 			</File>
 			<File
 				RelativePath=".\GXLayoutEngine.h">
+			</File>
+			<File
+				RelativePath=".\HangulLayoutEngine.h">
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.h">
