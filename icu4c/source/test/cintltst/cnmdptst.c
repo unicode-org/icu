@@ -193,7 +193,7 @@ static void TestExponential(void)
     char tempMsgBug[256];
     double a;
     UErrorCode status = U_ZERO_ERROR;
-#ifndef IEEE_754
+#ifdef OS390
     static const double val[] = { 0.01234, 123456789, 1.23e75, -3.141592653e-78 };
 #else
     static const double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
@@ -217,7 +217,7 @@ static void TestExponential(void)
     };
     static const double valParse[] =
     {
-#ifndef IEEE_754
+#ifdef OS390
         0.01234, 123460000, 1.23E75, -3.1416E-78,
         0.01234, 123460000, 1.23E75, -3.1416E-78,
         0.01234, 123456800, 1.23E75, -3.141593E-78,
