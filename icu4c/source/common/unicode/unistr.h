@@ -3979,23 +3979,6 @@ UnicodeString::setTo(UChar32 srcChar)
 }
 
 inline UnicodeString&
-UnicodeString::operator+= (UChar ch)
-{ return doReplace(fLength, 0, &ch, 0, 1); }
-
-inline UnicodeString&
-UnicodeString::operator+= (UChar32 ch) {
-  UChar buffer[U16_MAX_LENGTH];
-  int32_t _length = 0;
-  UBool isError = FALSE;
-  U16_APPEND(buffer, _length, U16_MAX_LENGTH, ch, isError);
-  return doReplace(fLength, 0, buffer, 0, _length);
-}
-
-inline UnicodeString&
-UnicodeString::operator+= (const UnicodeString& srcText)
-{ return doReplace(fLength, 0, srcText, 0, srcText.fLength); }
-
-inline UnicodeString&
 UnicodeString::append(const UnicodeString& srcText,
               int32_t srcStart,
               int32_t srcLength)
@@ -4028,6 +4011,19 @@ UnicodeString::append(UChar32 srcChar) {
   U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
   return doReplace(fLength, 0, buffer, 0, _length);
 }
+
+inline UnicodeString&
+UnicodeString::operator+= (UChar ch)
+{ return doReplace(fLength, 0, &ch, 0, 1); }
+
+inline UnicodeString&
+UnicodeString::operator+= (UChar32 ch) {
+  return append(ch);
+}
+
+inline UnicodeString&
+UnicodeString::operator+= (const UnicodeString& srcText)
+{ return doReplace(fLength, 0, srcText, 0, srcText.fLength); }
 
 inline UnicodeString&
 UnicodeString::insert(int32_t start,
