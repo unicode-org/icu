@@ -1,11 +1,13 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
+import java.util.ArrayList;
+
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -121,7 +123,7 @@ public final class Utility {
         return true;
     }
 
-    /**
+    /** 
      * Convenience utility to compare two int[]s.
      * @param len the length to compare.
      * The start indices and start+len must be valid.
@@ -1062,8 +1064,31 @@ public final class Utility {
             output[current++] = "";
         }
     }
+    /**
+     * Split a string into pieces based on the given divider character
+     * @param s the string to split
+     * @param divider the character on which to split.  Occurrences of
+     * this character are not included in the output
+     * @return output an array to receive the substrings between
+     * instances of divider. Adjacent instances of the divider
+     * character will place empty strings into output.
+     */
+    public static String[] split(String s, char divider) {
+        int last = 0;
+        int i;
+        ArrayList output = new ArrayList();
+        for (i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == divider) {
+                output.add(s.substring(last,i));
+                last = i+1;
+            }
+        }
+        output.add( s.substring(last,i));
+        return (String[]) output.toArray(new String[output.size()]);
+    }
+    
     ///CLOVER:ON
-
+    
     /**
      * Look up a given string in a string array.  Returns the index at
      * which the first occurrence of the string was found in the

@@ -1,9 +1,11 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.util;
 
 import java.io.PrintWriter;
@@ -1079,8 +1081,7 @@ Name: Unicode_1_Name
 			return (List) unicodeMap.getAvailableValues(result);
 		}
     }
-
-
-
 }
+//#endif
+
 
