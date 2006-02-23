@@ -82,21 +82,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Constant for context.
      * @draft ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int FORMAT = 0;
 
     /**
      * Constant for context.
      * @draft ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int STANDALONE = 1;
 
     /**
      * Constant for context.
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DT_CONTEXT_COUNT = 2;
 
@@ -105,28 +105,28 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Constant for width.
      * @draft ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ABBREVIATED = 0;
 
     /**
      * Constant for width.
      * @draft ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int WIDE = 1;
 
     /**
      * Constant for width.
      * @draft ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NARROW = 2;
 
     /**
      * Constant for width.
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DT_WIDTH_COUNT = 3;
 
@@ -166,7 +166,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      *          if the resources for the specified locale cannot be
      *          found or cannot be loaded.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormatSymbols(ULocale locale)
     {
@@ -376,7 +376,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets era name strings. For example: "Anno Domini" and "Before Christ".
      * @return the era strings.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String[] getEraNames() {
         return duplicate(eraNames);
@@ -406,7 +406,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      *                   either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String[] getMonths(int context, int width) {
         String [] returnValue = null;
@@ -457,7 +457,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      The width of the month string,
      *                   either WIDE, ABBREVIATED, or NARROW.
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setMonths(String[] newMonths, int context, int width) {
         switch (context) {
@@ -526,7 +526,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      Width of strings to be returned, either
      *                   WIDE, ABBREVIATED, or NARROW
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String[] getWeekdays(int context, int width) {
         String [] returnValue = null;
@@ -568,7 +568,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width       The width of the strings,
      *                    either WIDE, ABBREVIATED, or NARROW.
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setWeekdays(String[] newWeekdays, int context, int width) {
         switch (context) {
@@ -781,7 +781,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param desiredLocale
      * @param type
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected void initializeData(ULocale desiredLocale, String type)
     {
@@ -794,7 +794,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param desiredLocale
      * @param calData
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
@@ -1449,7 +1449,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      *
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormatSymbols(Calendar cal, ULocale locale) {
         initializeData(locale, cal.getType());
@@ -1470,7 +1470,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * instead of a Calandar instance.
      * @see #DateFormatSymbols(Calendar, Locale)
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormatSymbols(Class calendarClass, ULocale locale) {
         String fullName = calendarClass.getName();
@@ -1498,7 +1498,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * default DateFormatSymbols for the locale.
      * @see DateFormatSymbols#DateFormatSymbols
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
         initializeData(locale, 
@@ -1531,7 +1531,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
         throws MissingResourceException {
@@ -1578,7 +1578,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * a Calendar instance instead of a Calendar class.
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {
@@ -1609,7 +1609,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

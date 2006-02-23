@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -192,7 +192,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'S' field alignment,
      * corresponding to the {@link Calendar#MILLISECOND} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int FRACTIONAL_SECOND_FIELD = 8;
 
@@ -274,7 +274,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'Y' field alignment,
      * corresponding to the {@link Calendar#YEAR_WOY} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int YEAR_WOY_FIELD = 18;
 
@@ -282,7 +282,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'e' field alignment,
      * corresponding to the {@link Calendar#DOW_LOCAL} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int DOW_LOCAL_FIELD = 19;
 
@@ -290,7 +290,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'u' field alignment,
      * corresponding to the {@link Calendar#EXTENDED_YEAR} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int EXTENDED_YEAR_FIELD = 20;
 
@@ -298,7 +298,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'g' field alignment,
      * corresponding to the {@link Calendar#JULIAN_DAY} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int JULIAN_DAY_FIELD = 21;
 
@@ -306,7 +306,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'A' field alignment,
      * corresponding to the {@link Calendar#MILLISECONDS_IN_DAY} field.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int MILLISECONDS_IN_DAY_FIELD = 22;
 
@@ -315,7 +315,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int TIMEZONE_RFC_FIELD = 23;
 
@@ -325,7 +325,7 @@ public abstract class DateFormat extends UFormat {
      * {@link Calendar#DST_OFFSET} fields.  This displays the generic zone
      * name, if available.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int TIMEZONE_GENERIC_FIELD = 24;
  
@@ -336,7 +336,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#DAY_OF_WEEK} field. 
      * This displays the stand alone day name, if available.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int STANDALONE_DAY_FIELD = 25;
     
@@ -345,7 +345,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#MONTH} field.  
      * This displays the stand alone month name, if available.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int STANDALONE_MONTH_FIELD = 26;
     
@@ -353,7 +353,7 @@ public abstract class DateFormat extends UFormat {
      * Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int FIELD_COUNT = 27; // must == DateFormatSymbols.patternChars.length()
 
@@ -646,7 +646,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale the given ulocale.
      * @return a time formatter.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getTimeInstance(int style,
                                                  ULocale locale)
@@ -701,7 +701,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale the given ulocale.
      * @return a date formatter.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getDateInstance(int style,
                                                  ULocale locale)
@@ -759,7 +759,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale the given ulocale.
      * @return a date/time formatter.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, ULocale locale)
@@ -790,7 +790,7 @@ public abstract class DateFormat extends UFormat {
      * Gets the set of locales for which DateFormats are installed.
      * @return the set of locales for which DateFormats are installed.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()
     {
@@ -995,7 +995,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @param locale The locale for which the date format is desired.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle, ULocale locale)
     {
@@ -1042,7 +1042,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @see DateFormat#getTimeInstance
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, ULocale locale)
     {
@@ -1098,7 +1098,7 @@ public abstract class DateFormat extends UFormat {
      *
      * @see DateFormat#getDateTimeInstance
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, ULocale locale)
@@ -1117,7 +1117,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Convenience overload
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getInstance(Calendar cal, ULocale locale) {
         return getDateTimeInstance(cal, SHORT, SHORT, locale);

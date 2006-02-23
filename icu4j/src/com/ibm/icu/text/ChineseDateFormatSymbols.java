@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and
+ * Copyright (C) 2000-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ****************************************************************************
  */
@@ -50,7 +50,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * Construct a ChineseDateFormatSymbols for the provided locale.
      * @param locale the locale
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ChineseDateFormatSymbols(ULocale locale) {
         super(ChineseCalendar.class, locale);
@@ -71,7 +71,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * @param cal the Calendar
      * @param locale the locale
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ChineseDateFormatSymbols(Calendar cal, ULocale locale) {
         super(cal == null ? null : cal.getClass(), locale);
@@ -87,7 +87,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected void initializeData(ULocale loc, CalendarData calData) {
         super.initializeData(loc, calData);
