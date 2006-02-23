@@ -1202,7 +1202,7 @@ Data set name type  : PDS</samp>
   instructions</a>.</p>
 
   <ol>
-    <li>Create AS400 target library. This library will be the target for the
+    <li>Create i5/OS target library. This library will be the target for the
     resulting modules, programs and service programs. You will specify this
     library on the OUTPUTDIR environment variable in step 2.
       <pre>
@@ -1212,7 +1212,7 @@ Data set name type  : PDS</samp>
 
     <li>Set up the following environment variables in your build process (use
     the <i>libraryname</i> from the previous step). The <i>libraryname</i>
-    identifies target as400 library for *module, *pgm and *srvpgm objects.
+    identifies target i5/OS library for *module, *pgm and *srvpgm objects.
       <pre>
 <samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
