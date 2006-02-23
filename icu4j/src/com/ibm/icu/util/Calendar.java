@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -1535,7 +1535,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected Calendar(TimeZone zone, ULocale locale)
     {
@@ -1606,7 +1606,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param locale the ulocale for the week data
      * @return a Calendar.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static synchronized Calendar getInstance(ULocale locale)
     {
@@ -1631,7 +1631,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param locale the ulocale for the week data
      * @return a Calendar.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static synchronized Calendar getInstance(TimeZone zone,
                                                     ULocale locale) {
@@ -1752,7 +1752,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()
     {
@@ -2952,7 +2952,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Return the name of this calendar in the language of the given locale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName(ULocale loc) {
         return this.getClass().getName();
@@ -2976,7 +2976,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Calendar that) {
         long v = getTimeInMillis() - that.getTimeInMillis();
@@ -2987,7 +2987,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Implement comparable API as a convenience override of
      * {@link #compareTo(Calendar)}.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Object that) {
         return compareTo((Calendar)that);
@@ -3014,7 +3014,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * <code>handleGetDateFormat()</code>
      * @see #handleGetDateFormat
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);
@@ -3045,7 +3045,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param locale the locale for which the symbols should be drawn
      * @return a <code>DateFormat</code> appropriate to this calendar
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
         DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
@@ -5125,7 +5125,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
