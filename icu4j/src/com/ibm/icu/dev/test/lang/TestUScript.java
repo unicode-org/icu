@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -84,12 +84,10 @@ public class TestUScript extends TestFmwk {
 
     private void reportDataErrors(int numErrors) {
         if (numErrors >0) {
-            if (isModularBuild()) {
-                // assume missing locale data, so not an error, just a warning
-                if (!noData()) {
-                    // if nodata is set don't even warn
-                    warnln("Could not find locale data");
-                }
+            // assume missing locale data, so not an error, just a warning
+            if (isModularBuild() || !noData()) {
+                // if nodata is set don't even warn
+                warnln("Could not find locale data");
             } else {
                 errln("encountered " + numErrors + " errors.");
             }
