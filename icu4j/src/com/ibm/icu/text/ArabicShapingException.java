@@ -20,7 +20,7 @@ public final class ArabicShapingException extends Exception {
      * @param msg the error message for this exception
      * 
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This API is ICU internal only.
      */
     public ArabicShapingException(String message) {
         super(message);
