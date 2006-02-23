@@ -85,7 +85,7 @@ public class TestUScript extends TestFmwk {
     private void reportDataErrors(int numErrors) {
         if (numErrors >0) {
             // assume missing locale data, so not an error, just a warning
-            if (isModularBuild() || !noData()) {
+            if (isModularBuild() || noData()) {
                 // if nodata is set don't even warn
                 warnln("Could not find locale data");
             } else {
