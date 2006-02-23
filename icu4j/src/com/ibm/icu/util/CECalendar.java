@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and         *
+ * Copyright (C) 2006, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -266,7 +266,7 @@ class CECalendar extends Calendar {
 
     /**
      * @internal
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static Integer[] getDateFromJD(int julianDay, int jdEpochOffset) {
         // 1461 is the number of days in 4 years
