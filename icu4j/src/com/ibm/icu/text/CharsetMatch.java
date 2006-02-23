@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2006, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ import java.io.Reader;
  *        The natural ordering is based on the match confidence value.
  *
  * @draft ICU 3.4
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public class CharsetMatch implements Comparable {
 
@@ -42,7 +42,7 @@ public class CharsetMatch implements Comparable {
      * @return the Reader for the Unicode character data.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Reader getReader() {
         InputStream inputStream = fInputStream;
@@ -66,7 +66,7 @@ public class CharsetMatch implements Comparable {
      * @return a String created from the converted input data.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getString()  throws java.io.IOException {
         return getString(-1);
@@ -86,7 +86,7 @@ public class CharsetMatch implements Comparable {
      * @return a String created from the converted input data.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getString(int maxLength) throws java.io.IOException {
         String result = null;
@@ -121,7 +121,7 @@ public class CharsetMatch implements Comparable {
      * @return the confidence in the charset match
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getConfidence() {
         return fConfidence;
@@ -133,7 +133,7 @@ public class CharsetMatch implements Comparable {
      *
      * @see #getMatchType
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static public final int ENCODING_SCHEME    = 1;
     
@@ -142,7 +142,7 @@ public class CharsetMatch implements Comparable {
      * 
      * @see #getMatchType
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static public final int BOM                = 2;
     
@@ -151,7 +151,7 @@ public class CharsetMatch implements Comparable {
      * 
      * @see #getMatchType
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static public final int DECLARED_ENCODING  = 4;
     
@@ -160,7 +160,7 @@ public class CharsetMatch implements Comparable {
      *
      * @see #getMatchType
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     static public final int LANG_STATISTICS    = 8;
     
@@ -177,7 +177,7 @@ public class CharsetMatch implements Comparable {
      * @return the type of match found for this charset.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getMatchType() {
 //      TODO: create a list of enum-like constants for common combinations of types of matches.
@@ -198,7 +198,7 @@ public class CharsetMatch implements Comparable {
      * @return The name of the charset.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getName() {
         return fRecognizer.getName();
@@ -210,7 +210,7 @@ public class CharsetMatch implements Comparable {
      * @return The ISO code for the language or <code>null</code> if the language cannot be determined.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getLanguage() {
         return fRecognizer.getLanguage();
@@ -229,7 +229,7 @@ public class CharsetMatch implements Comparable {
      *          the argument.
      * @throws ClassCastException if the argument is not a CharsetMatch.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo (Object o) {
         CharsetMatch other = (CharsetMatch)o;

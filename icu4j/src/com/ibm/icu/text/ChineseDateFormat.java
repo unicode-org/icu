@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and
+ * Copyright (C) 2000-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -60,7 +60,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @param pattern the pattern
      * @param locale the locale
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        // TODO: convert CDFS to use ULocale
