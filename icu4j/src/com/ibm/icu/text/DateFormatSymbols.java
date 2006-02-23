@@ -384,7 +384,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Sets era name strings. For example: "Anno Domini" and "Before Christ".
-     * @param newEras the new era strings.
+     * @param newEraNames the new era strings.
      * @internal revisit for ICU 3.6
      */
     public void setEraNames(String[] newEraNames) {

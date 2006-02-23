@@ -1063,7 +1063,6 @@ public class GlobalizationPreferences implements Freezable {
     private boolean frozen;
 
     /**
-     * @inheritDocs
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1072,7 +1071,6 @@ public class GlobalizationPreferences implements Freezable {
     }
 
     /**
-     * @inheritDocs
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1082,7 +1080,6 @@ public class GlobalizationPreferences implements Freezable {
     }
 
     /**
-     * @inheritDocs
      * @internal
      * @deprecated This API is ICU internal only.
      */

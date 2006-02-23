@@ -54,6 +54,7 @@ public abstract class ICUTaglet implements Taglet {
 //#ifndef VERSION_1.5
         ICUDeprecatedTaglet.register(taglets);
 //#endif
+        ICUProvisionalTaglet.register(taglets);
         ICUObsoleteTaglet.register(taglets);
         ICUIgnoreTaglet.register(taglets);
     }
@@ -146,7 +147,7 @@ public abstract class ICUTaglet implements Taglet {
         }
 
         public String toString(Tag tag) {
-            return STATUS + "<dd><em>Internal</em>. <font color='red'>This API is <em>Internal Only</em> and can change at any time.</font></dd>";
+            return STATUS + "<dd><em>Internal</em>. <font color='red'>This API is <em>ICU internal only</em>.</font></dd>";
         }
     }
 
@@ -218,11 +219,31 @@ public abstract class ICUTaglet implements Taglet {
                 System.err.println("Warning: bad deprecated tag '" + text + "'");
                 return "<dd><em>Note</em>. " + text + "</dd>";
             } else {
+                if ("This API is ICU internal only.".equals(text)) {
+                    return null;
+                }
                 return "<dd><em>Note, " + text.substring(first, next) + "</em>. " + text.substring(next) + "</dd>";
             }
         }
     }
 //#endif
+
+    public static class ICUProvisionalTaglet extends ICUTaglet {
+        private static final String NAME = "provisional";
+
+        public static void register(Map taglets) {
+	    taglets.remove(NAME); // override standard deprecated taglet
+            taglets.put(NAME, new ICUProvisionalTaglet());
+        }
+
+        private ICUProvisionalTaglet() {
+            super(NAME, MASK_DEFAULT);
+        }
+
+        public String toString(Tag tag) {
+            return null;
+        }
+    }
 
     public static class ICUObsoleteTaglet extends ICUTaglet {
         private static final String NAME = "obsolete";
