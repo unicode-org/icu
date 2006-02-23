@@ -1,6 +1,7 @@
+//##header
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.File;
 
 public final class TestUtil {
     /**
@@ -61,9 +63,13 @@ public final class TestUtil {
             } catch (Throwable t) {
                 IOException ex =
                     new IOException("data resource '" + name + "' not found");
+//#ifndef FOUNDATION
                 //initCause API was introduced in JDK 1.4
                 ex.initCause(t);
-                //t.printStackTrace();
+//#else
+//##            t.printStackTrace();
+//#endif
+               
                 throw ex;
             }
         }
@@ -231,4 +237,16 @@ public final class TestUtil {
 
         lock.go();
     }
+    public static BufferedReader openUTF8Reader(String dir, String filename) throws IOException {
+        return openReader(dir,filename,"UTF-8");
+    }
+    public static BufferedReader openReader(String dir, String filename, String encoding) throws IOException {
+        File file = new File(dir + filename);
+        return new BufferedReader(
+            new InputStreamReader(
+                new FileInputStream(file),
+                encoding),
+            4*1024);
+    }
+
 }

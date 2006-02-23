@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import com.ibm.icu.text.Transliterator;
+
+import com.ibm.icu.dev.test.TestUtil;
 
 public class TransliteratorUtilities {
 	public static boolean DEBUG = false;
@@ -42,7 +45,11 @@ public class TransliteratorUtilities {
 			Transliterator.registerInstance(t);
 			if (DEBUG) System.out.println("Registered new Transliterator: " + id + ", " + rid);
 		} catch (IOException e) {
+//#ifndef FOUNDATION
 			throw (IllegalArgumentException) new IllegalArgumentException("Can't open " + dir + ", " + id).initCause(e);
+//#else
+//##        throw (IllegalArgumentException) new IllegalArgumentException("Can't open " + dir + ", " + id+" "+ e.getMessage());
+//#endif
 		}
 	}
 
@@ -50,7 +57,11 @@ public class TransliteratorUtilities {
 	 * 
 	 */
 	public static String getFileContents(String dir, String filename) throws IOException {
+//#ifndef FOUNDATION
 		BufferedReader br = BagFormatter.openUTF8Reader(dir, filename);
+//#else
+//##        BufferedReader br = TestUtil.openUTF8Reader(dir, filename);
+//#endif 
 		StringBuffer buffer = new StringBuffer();
 		while (true) {
 			String line = br.readLine();
@@ -60,6 +71,7 @@ public class TransliteratorUtilities {
 		}
 		br.close();
 		return buffer.toString();
+         
 	}
 
     private static final String BASE_RULES =

@@ -1,10 +1,11 @@
-
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
@@ -413,3 +414,4 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
         }
     }
 }
+//#endif

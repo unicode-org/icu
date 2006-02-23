@@ -1,3 +1,4 @@
+//##header
 /**
  *******************************************************************************
  * Copyright (C) 2005-2006, International Business Machines Corporation and    *
@@ -16,6 +17,9 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UTF32;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.VersionInfo;
+//#ifdef FOUNDATION
+//##import com.ibm.icu.impl.Utility;
+//#endif
 
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
@@ -56,9 +60,13 @@ public class TestCharsetDetector extends TestFmwk
                 throw new Exception();
             }
             catch (Exception e) {
+//#ifndef FOUNDATION
                 StackTraceElement failPoint = e.getStackTrace()[1];
                 msg = "Test failure in file " + failPoint.getFileName() +
                              " at line " + failPoint.getLineNumber();
+//#else
+//##           msg = "Test failure  " + e.getMessage() ;
+//#endif
             }
             errln(msg);
         }
@@ -117,7 +125,11 @@ public class TestCharsetDetector extends TestFmwk
     private void checkEncoding(String testString, String encoding, String id)
     {
         String enc = null, lang = null;
+//#ifndef FOUNDATION
         String[] split = encoding.split("/");
+//#else
+//##        String[] split = Utility.split(encoding,'/');
+//#endif
         
         enc = split[0];
         
@@ -343,7 +355,11 @@ public class TestCharsetDetector extends TestFmwk
                 
                 // Process test text with each encoding / language pair.
                 String testString = testText.toString();
+//#ifndef FOUNDATION
                 String[] encodingList = encodings.split(" ");
+//#else
+//##                String[] encodingList = Utility.split(encodings, ' ');
+//#endif
                 
                 for (int e = 0; e < encodingList.length; e += 1) {
                     checkEncoding(testString, encodingList[e], id);

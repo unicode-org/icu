@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,7 +27,9 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
-
+//#ifdef FOUNDATION
+//## import com.ibm.icu.impl.Utility;
+//#endif
 /**
  * TestFmwk is a base class for tests that can be run conveniently from the
  * command line as well as under the Java test harness.
@@ -60,7 +63,11 @@ public class TestFmwk extends AbstractTestLog {
         }
     }
     protected void handleException(Throwable e){
+//#ifndef FOUNDATION
         Throwable ex = e.getCause();
+//#else
+//##    Throwable ex = null;
+//#endif
         if(ex==null){
             ex = e;
         }
@@ -1008,7 +1015,12 @@ public class TestFmwk extends AbstractTestLog {
         }
         
         public static TestParams create(String arglist, PrintWriter log) {
+//#ifndef FOUNDATION
             return create(arglist.split("\\s"), log);
+//#else
+//##        return create(Utility.split(arglist, '\u0020'), log);
+//#endif
+
         }
         
         /**
