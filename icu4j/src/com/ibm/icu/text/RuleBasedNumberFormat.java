@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -627,7 +627,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param localizations a list of localizations for the rule set
      * names in the description.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedNumberFormat(String description, String[][] localizations) {
         locale = ULocale.getDefault();
@@ -663,7 +663,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * formatting values in numerals, and which characters are equivalent in
      * lenient parsing.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedNumberFormat(String description, ULocale locale) {
         this.locale = locale;
@@ -694,7 +694,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * formatting values in numerals, and determines which characters are equivalent in
      * lenient parsing.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedNumberFormat(String description, String[][] localizations, ULocale locale) {
         this.locale = locale;
@@ -728,7 +728,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
      * and DURATION, which formats a duration in seconds as hours, minutes, and seconds.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public RuleBasedNumberFormat(ULocale locale, int format) {
         this.locale = locale;
@@ -908,7 +908,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * for the rule sets in this formatter.  If there are no localized display names, return null.
      * @return an array of the ulocales for which there is rule set display name information
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
         if (ruleSetDisplayNames != null) {
@@ -950,7 +950,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return an array of the locales that have display name information
      * @see #getRuleSetNames
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String[] getRuleSetDisplayNames(ULocale locale) {
         String[] names = getNameListForLocale(locale);
@@ -969,7 +969,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return an array of the display names
      * @draft ICU 3.2
      * @see #getRuleSetDisplayNames(ULocale)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String[] getRuleSetDisplayNames() {
         return getRuleSetDisplayNames(ULocale.getDefault());
@@ -983,7 +983,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @draft ICU 3.2
      * @see #getRuleSetDisplayNames
      * @throws IllegalArgumentException if ruleSetName is not a valid rule set name for this format
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getRuleSetDisplayName(String ruleSetName, ULocale locale) {
         String[] rsnames = publicRuleSetNames;
@@ -1004,7 +1004,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return the display name for the rule set
      * @draft ICU 3.2
      * @see #getRuleSetDisplayName(String,ULocale)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getRuleSetDisplayName(String ruleSetName) {
         return getRuleSetDisplayName(ruleSetName, ULocale.getDefault());
@@ -1285,7 +1285,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Return the name of the current default rule set.
      * @return the name of the current default rule set, if it is public, else the empty string.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getDefaultRuleSetName() {
         if (defaultRuleSet != null && defaultRuleSet.isPublic()) {

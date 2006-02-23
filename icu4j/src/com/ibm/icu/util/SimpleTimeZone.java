@@ -169,7 +169,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      *
      * @param offsetMillis the raw offset of the time zone
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setRawOffset(int offsetMillis) {
         raw = offsetMillis;
@@ -180,7 +180,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      *
      * @return the raw offset
      * @internal revisit for ICU 3.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRawOffset() {
         return raw;
@@ -498,7 +498,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * Returns a string representation of this object.
      * @return  a string representation of this object
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String toString() {
         return "SimpleTimeZone: " + getID();
@@ -1016,7 +1016,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * Return true if obj is a SimpleTimeZone equivalent to this.
      * @return true if obj is a SimpleTimeZone equivalent to this
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -1057,7 +1057,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * Return the hash code.
      * @return the hash code
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int hashCode(){
     	int ret = (int)( super.hashCode() +
@@ -1086,7 +1086,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * Return a clone of this time zone.
      * @return a clone of this time zone
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Object clone() {
         SimpleTimeZone clone = new SimpleTimeZone( raw, getID());

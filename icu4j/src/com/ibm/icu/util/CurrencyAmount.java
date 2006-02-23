@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -20,7 +20,7 @@ import java.lang.Number;
  * @see Currency
  * @author Alan Liu
  * @draft ICU 3.0
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public class CurrencyAmount extends Measure {
     
@@ -29,7 +29,7 @@ public class CurrencyAmount extends Measure {
      * @param number the number
      * @param currency the currency
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CurrencyAmount(Number number, Currency currency) {
         super(number, currency);
@@ -40,7 +40,7 @@ public class CurrencyAmount extends Measure {
      * @param number a double value
      * @param currency the currency
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CurrencyAmount(double number, Currency currency) {
         super(new Double(number), currency);
@@ -50,7 +50,7 @@ public class CurrencyAmount extends Measure {
      * Returns the currency of this object.
      * @return this object's Currency
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Currency getCurrency() {
         return (Currency) getUnit();

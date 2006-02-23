@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,12 +13,12 @@ import java.util.Vector;
 /**
  * Implementation of DateRule that takes a range.
  * @draft ICU 2.8 (retainAll)
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public RangeDateRule() {
     }
@@ -36,7 +36,7 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void add(DateRule rule) {
         add(new Date(Long.MIN_VALUE), rule);
@@ -44,7 +44,7 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void add(Date start, DateRule rule) {
         // TODO: Insert in the right place
@@ -56,7 +56,7 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Date firstAfter(Date start) {
         // Find the range that I should look at
@@ -82,7 +82,7 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Date firstBetween(Date start, Date end) {
         if (end == null) {
@@ -111,7 +111,7 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isOn(Date date) {
         Range r = rangeAt(startIndex(date));
@@ -122,7 +122,7 @@ public class RangeDateRule implements DateRule {
      * Check whether this event occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isBetween(Date start, Date end) {
         return firstBetween(start,end) == null;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -311,7 +311,7 @@ public class HebrewCalendar extends Calendar {
      *
      * @param locale The locale for the new calendar.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public HebrewCalendar(ULocale locale) {
         this(TimeZone.getDefault(), locale);
@@ -339,7 +339,7 @@ public class HebrewCalendar extends Calendar {
      *
      * @param locale The locale for the new calendar.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public HebrewCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
