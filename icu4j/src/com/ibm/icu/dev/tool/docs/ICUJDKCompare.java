@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and         *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -190,6 +190,8 @@ public class ICUJDKCompare {
             processPairInfo(names);
         }
 
+        pw.flush();
+
         return this;
     }
 
@@ -227,7 +229,7 @@ public class ICUJDKCompare {
                 nl.add(jc.getName());
             }
             catch (Exception e) {
-                if (false) System.err.println("can't load class: " + e.getMessage());
+                if (DEBUG) System.err.println("can't load class: " + e.getMessage());
             }
         }
         classPairs = (Class[])cl.toArray(new Class[cl.size()]);
@@ -244,7 +246,6 @@ public class ICUJDKCompare {
 
     public int process() {
         // set defaults
-
         if (srcPrefix == null) {
             srcPrefix = kSrcPrefix;
         }
@@ -374,6 +375,8 @@ public class ICUJDKCompare {
                 dumpFieldSet(diffFields, pw);
             }
         }
+
+        flush();
 
         return result;
     }
