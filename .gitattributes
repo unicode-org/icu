@@ -268,6 +268,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j32.api.gz -text svneol=unset#applicatio
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j34.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text svneol=unset#application/gzip
+icu4j/src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
