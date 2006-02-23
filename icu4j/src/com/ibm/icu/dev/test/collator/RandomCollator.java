@@ -1,11 +1,11 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-
- 
+//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.collator;
 
 
@@ -292,3 +292,5 @@ public class RandomCollator extends TestFmwk {
     };
     */
 }
+//#endif
+

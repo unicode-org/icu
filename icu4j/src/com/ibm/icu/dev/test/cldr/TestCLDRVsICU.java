@@ -1,11 +1,13 @@
+//##header
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
 **********************************************************************
 */
+//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.cldr;
 
 import java.io.File;
@@ -560,3 +562,4 @@ public class TestCLDRVsICU extends TestFmwk {
 
     };
 }
+//#endif

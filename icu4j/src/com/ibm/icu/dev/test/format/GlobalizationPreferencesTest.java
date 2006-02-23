@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 
-import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
