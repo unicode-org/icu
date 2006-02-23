@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -94,7 +94,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      *
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public BuddhistCalendar(ULocale locale) {
         super(locale);
@@ -121,7 +121,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      *
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public BuddhistCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
