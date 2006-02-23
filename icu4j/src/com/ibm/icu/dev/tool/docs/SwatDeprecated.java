@@ -86,7 +86,7 @@ public class SwatDeprecated {
         this.verbosity = verbosity;
 
         this.srcTag = "@deprecated This is a draft API and might change in a future release of ICU.";
-        this.trgTag = "@provisional";
+        this.trgTag = "@provisional This API might change or be removed in a future release.";
         if (!dep) {
             String temp = srcTag;
             srcTag = trgTag;
