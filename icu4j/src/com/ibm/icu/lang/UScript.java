@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2005, International Business Machines Corporation and         *
+* Copyright (C) 2001-2006, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -329,7 +329,7 @@ public final class UScript {
     /**
      * New script code in Unicode 4.0.1
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int KATAKANA_OR_HIRAGANA = 54;  /*Hrkt */
 
@@ -338,43 +338,43 @@ public final class UScript {
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int BUGINESE = 55;           /* Bugi */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int GLAGOLITIC = 56;         /* Glag */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int KHAROSHTHI = 57;         /* Khar */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SYLOTI_NAGRI = 58;       /* Sylo */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NEW_TAI_LUE = 59;        /* Talu */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int TIFINAGH = 60;           /* Tfng */
     /**
      * New script code in Unicode 4.1
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int OLD_PERSIAN = 61;        /* Xpeo */
 
@@ -445,7 +445,7 @@ public final class UScript {
      * @param locale ULocale
      * @return The script codes array. null if the the code cannot be found.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int[] getCode(ULocale locale){
         return findCodeFromLocale(locale);

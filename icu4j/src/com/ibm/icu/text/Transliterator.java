@@ -1230,7 +1230,7 @@ public abstract class Transliterator {
      * localized.
      * @see java.text.MessageFormat
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static String getDisplayName(String id, ULocale inLocale) {
 
@@ -1524,7 +1524,7 @@ public abstract class Transliterator {
      * @return an array of one or more transliterators that make up
      * this transliterator
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Transliterator[] getElements() {
         Transliterator result[];
@@ -1681,7 +1681,7 @@ public abstract class Transliterator {
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
      * @draft ICU 3.4.1
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static void registerAlias(String aliasID, String realID) {
         registry.put(aliasID, realID, true);

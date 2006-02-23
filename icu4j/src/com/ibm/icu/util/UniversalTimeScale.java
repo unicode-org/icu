@@ -1,6 +1,6 @@
 /*
  *********************************************************************************
- * Copyright (C) 2004 - 2005, International Business Machines Corporation and    *
+ * Copyright (C) 2004 -2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                  *
  *********************************************************************************
  *
@@ -187,7 +187,7 @@ import java.lang.IllegalArgumentException;
  * precision and range.
  *
  * @draft ICU 3.2
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 
 public final class UniversalTimeScale
@@ -197,7 +197,7 @@ public final class UniversalTimeScale
      * is milliseconds since January 1, 1970.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int JAVA_TIME = 0;
 
@@ -206,7 +206,7 @@ public final class UniversalTimeScale
      * is seconds since January 1, 1970.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int UNIX_TIME = 1;
 
@@ -215,7 +215,7 @@ public final class UniversalTimeScale
      * is milliseconds since January 1, 1970.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ICU4C_TIME = 2;
 
@@ -224,7 +224,7 @@ public final class UniversalTimeScale
      * is ticks (1 tick == 100 nanoseconds) since January 1, 1601.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int WINDOWS_FILE_TIME = 3;
 
@@ -233,7 +233,7 @@ public final class UniversalTimeScale
      * Data is a <code>long</code>. Value is ticks (1 tick == 100 nanoseconds) since January 1, 0001.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DOTNET_DATE_TIME = 4;
 
@@ -242,7 +242,7 @@ public final class UniversalTimeScale
      * is seconds since January 1, 1904.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAC_OLD_TIME = 5;
 
@@ -251,7 +251,7 @@ public final class UniversalTimeScale
      * is milliseconds since January 1, 2001.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAC_TIME = 6;
 
@@ -260,7 +260,7 @@ public final class UniversalTimeScale
      * is days since December 31, 1899.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int EXCEL_TIME = 7;
 
@@ -269,7 +269,7 @@ public final class UniversalTimeScale
      * is days since December 31, 1899.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DB2_TIME = 8;
     
@@ -277,7 +277,7 @@ public final class UniversalTimeScale
      * This is the first unused time scale value.
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAX_SCALE = 9;
     
@@ -287,7 +287,7 @@ public final class UniversalTimeScale
      * 
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int UNITS_VALUE = 0;
     
@@ -298,7 +298,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int EPOCH_OFFSET_VALUE = 1;
     
@@ -309,7 +309,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int FROM_MIN_VALUE = 2;
     
@@ -320,7 +320,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int FROM_MAX_VALUE = 3;
     
@@ -331,7 +331,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int TO_MIN_VALUE = 4;
     
@@ -342,7 +342,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int TO_MAX_VALUE = 5;
     
@@ -356,7 +356,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int EPOCH_OFFSET_PLUS_1_VALUE = 6;
     
@@ -506,7 +506,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the universal time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static long from(long otherTime, int timeScale)
     {
@@ -526,7 +526,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the universal time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BigDecimal bigDecimalFrom(double otherTime, int timeScale)
     {
@@ -549,7 +549,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the universal time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BigDecimal bigDecimalFrom(long otherTime, int timeScale)
     {
@@ -572,7 +572,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the universal time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BigDecimal bigDecimalFrom(BigDecimal otherTime, int timeScale)
     {
@@ -623,7 +623,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the given time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static long toLong(long universalTime, int timeScale)
     {
@@ -653,7 +653,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the given time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BigDecimal toBigDecimal(long universalTime, int timeScale)
     {
@@ -674,7 +674,7 @@ public final class UniversalTimeScale
      * @return The datetime converted to the given time scale
      *
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BigDecimal toBigDecimal(BigDecimal universalTime, int timeScale)
     {
@@ -713,7 +713,7 @@ public final class UniversalTimeScale
      * @return - the value.
      * 
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static long getTimeScaleValue(int scale, int value)
     {

@@ -417,7 +417,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @return the human-readable name of this time zone in the given locale
      * or in the default ulocale if the given ulocale is not recognized.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final String getDisplayName(ULocale locale) {
         return _getDisplayName(false, LONG_GENERIC, locale);
@@ -469,7 +469,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * or in the default locale if the given locale is not recognized.
      * @exception IllegalArgumentException style is invalid.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName(boolean daylight, int style, ULocale locale) {
         if (style != SHORT && style != LONG) {
@@ -754,7 +754,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @return true if obj is a TimeZone with the same class and ID as this
      * @param obj the object to compare against
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -766,7 +766,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Return the hash code.
      * @return the hash code
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int hashCode(){
     	return ID.hashCode();

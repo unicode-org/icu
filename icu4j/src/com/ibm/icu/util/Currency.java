@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -106,7 +106,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Returns a currency object for the default currency in the given
      * locale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static Currency getInstance(ULocale locale) {
     String currency = locale.getKeywordValue("currency");
@@ -202,7 +202,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @return a registry key that can be used to unregister this currency
      * @see #unregister
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static Object registerInstance(Currency currency, ULocale locale) {
         return getShim().registerInstance(currency, locale);
@@ -293,7 +293,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * requests the symbol name.
      * @see #getName
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getSymbol() {
 	return getSymbol(ULocale.getDefault());
@@ -305,7 +305,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @param loc the Locale for the symbol
      * @see #getName
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getSymbol(Locale loc) {
 	return getSymbol(ULocale.forLocale(loc));
@@ -317,7 +317,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @param uloc the ULocale for the symbol
      * @see #getName
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getSymbol(ULocale uloc) {
 	return getName(uloc, SYMBOL_NAME, new boolean[1]);
@@ -337,7 +337,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getName(Locale locale,
                           int nameStyle,
@@ -359,7 +359,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getName(ULocale locale,
                           int nameStyle,
@@ -603,7 +603,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * 
      * @param theISOCode The iso code used to construct the currency.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected Currency(String theISOCode) {
         isoCode = theISOCode;
@@ -695,7 +695,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @obsolete ICU 3.2 to be removed
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
     return ULocale.ROOT;

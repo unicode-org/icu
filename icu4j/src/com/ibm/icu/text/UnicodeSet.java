@@ -426,7 +426,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols, int options) {
         this();
@@ -2965,7 +2965,7 @@ public class UnicodeSet extends UnicodeFilter {
      * is available. If true, then everything else is skipped.
      * @return this set
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
                                          String valueAlias, SymbolTable symbols) {
@@ -3313,7 +3313,7 @@ public class UnicodeSet extends UnicodeFilter {
      * also has both USET_CASE and USET_CASE_INSENSITIVE (see uset.h).
      * @see #CASE
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int CASE_INSENSITIVE = 2;
 
@@ -3328,7 +3328,7 @@ public class UnicodeSet extends UnicodeFilter {
      * title-, and uppercase mappings as well as the case folding
      * of each existing element in the set.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ADD_CASE_MAPPINGS = 4;
 

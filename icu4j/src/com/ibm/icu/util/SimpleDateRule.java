@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Simple implementation of DateRule.
  * @draft ICU 2.8 (retainAll)
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public class SimpleDateRule implements DateRule
 {
@@ -22,7 +22,7 @@ public class SimpleDateRule implements DateRule
      * @param month         The month in which this rule occurs (0-based).
      * @param dayOfMonth    The date in that month (1-based).
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public SimpleDateRule(int month, int dayOfMonth)
     {
@@ -50,7 +50,7 @@ public class SimpleDateRule implements DateRule
      *                      on or after dayOfMonth.  If false, the rule selects
      *                      the first dayOfWeek on or before dayOfMonth.
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public SimpleDateRule(int month, int dayOfMonth, int dayOfWeek, boolean after)
     {
@@ -70,7 +70,7 @@ public class SimpleDateRule implements DateRule
      *
      * @see #firstBetween
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Date firstAfter(Date start)
     {
@@ -90,7 +90,7 @@ public class SimpleDateRule implements DateRule
      *
      * @see #firstAfter
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Date firstBetween(Date start, Date end)
     {
@@ -108,7 +108,7 @@ public class SimpleDateRule implements DateRule
      * @param date  The date to check.
      * @return      true if this event occurs on the given date.
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isOn(Date date)
     {
@@ -132,7 +132,7 @@ public class SimpleDateRule implements DateRule
      * Check whether this event occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isBetween(Date start, Date end)
     {
@@ -210,7 +210,7 @@ public class SimpleDateRule implements DateRule
 
     /**
      * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
 //    public void setCalendar(Calendar c) {
 //        calendar = c;

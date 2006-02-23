@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -202,7 +202,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public IslamicCalendar(ULocale locale)
     {
@@ -230,7 +230,7 @@ public class IslamicCalendar extends Calendar {
      * @param zone the given time zone.
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public IslamicCalendar(TimeZone zone, ULocale locale)
     {

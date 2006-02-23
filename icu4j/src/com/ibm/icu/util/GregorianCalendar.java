@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2005, International Business Machines
+ * Copyright (C) 1996-2006, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 package com.ibm.icu.util;
@@ -361,7 +361,7 @@ public class GregorianCalendar extends Calendar {
      * in the default time zone with the given locale.
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public GregorianCalendar(ULocale locale) {
         this(TimeZone.getDefault(), locale);
@@ -385,7 +385,7 @@ public class GregorianCalendar extends Calendar {
      * @param zone the given time zone.
      * @param locale the given ulocale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public GregorianCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@ import com.ibm.icu.util.ULocale;
  * @author weiv
  * @author Alan Liu
  * @draft ICU 2.8 (retain)
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public abstract class UFormat extends Format {
     // jdk1.4.2 serialver
@@ -26,7 +26,7 @@ public abstract class UFormat extends Format {
 
     /**
      * @draft ICU 2.8 (retain)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public UFormat() {}
 
@@ -54,7 +54,7 @@ public abstract class UFormat extends Format {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

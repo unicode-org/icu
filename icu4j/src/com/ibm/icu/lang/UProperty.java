@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, international Business Machines Corporation and    *
+* Copyright (C) 1996-2006, international Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -318,7 +318,7 @@ public interface UProperty
      * Sentence Terminal. Used in UAX #29: Text Boundaries
      * (http://www.unicode.org/reports/tr29/)
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int S_TERM = 35;
 
@@ -328,7 +328,7 @@ public interface UProperty
      * For details on the behavior of these characters,
      * see StandardizedVariants.html and 15.6 Variation Selectors.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int VARIATION_SELECTOR = 36;
 
@@ -355,7 +355,7 @@ public interface UProperty
      * See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
      * and icu/source/common/unormimp.h .
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFD_INERT = 37;
 
@@ -368,7 +368,7 @@ public interface UProperty
      * text additions.
      * @see #NFD_INERT
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFKD_INERT = 38;
 
@@ -381,7 +381,7 @@ public interface UProperty
      * text additions.
      * @see #NFD_INERT
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFC_INERT = 39;
 
@@ -394,7 +394,7 @@ public interface UProperty
      * text additions.
      * @see #NFD_INERT
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFKC_INERT = 40;
 
@@ -409,7 +409,7 @@ public interface UProperty
      * canonically equivalent strings, e.g. for canonical closure while
      * processing collation tailoring rules.
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SEGMENT_STARTER = 41;
 
@@ -418,7 +418,7 @@ public interface UProperty
      * See UAX #31 Identifier and Pattern Syntax
      * (http://www.unicode.org/reports/tr31/)
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int PATTERN_SYNTAX = 42;
 
@@ -427,7 +427,7 @@ public interface UProperty
      * See UAX #31 Identifier and Pattern Syntax
      * (http://www.unicode.org/reports/tr31/)
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int PATTERN_WHITE_SPACE = 43;
 
@@ -436,7 +436,7 @@ public interface UProperty
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int POSIX_ALNUM = 44;
 
@@ -445,7 +445,7 @@ public interface UProperty
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int POSIX_BLANK = 45;
 
@@ -454,7 +454,7 @@ public interface UProperty
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int POSIX_GRAPH = 46;
 
@@ -463,7 +463,7 @@ public interface UProperty
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int POSIX_PRINT = 47;
 
@@ -472,7 +472,7 @@ public interface UProperty
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int POSIX_XDIGIT = 48;
 
@@ -578,7 +578,7 @@ public interface UProperty
      * Enumerated property NFD_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFD_QUICK_CHECK = 0x100C;
 
@@ -586,7 +586,7 @@ public interface UProperty
      * Enumerated property NFKD_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFKD_QUICK_CHECK = 0x100D;
 
@@ -594,7 +594,7 @@ public interface UProperty
      * Enumerated property NFC_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFC_QUICK_CHECK = 0x100E;
 
@@ -602,7 +602,7 @@ public interface UProperty
      * Enumerated property NFKC_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NFKC_QUICK_CHECK = 0x100F;
 
@@ -614,7 +614,7 @@ public interface UProperty
      * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
      * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int LEAD_CANONICAL_COMBINING_CLASS = 0x1010;
 
@@ -626,7 +626,7 @@ public interface UProperty
      * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
      * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int TRAIL_CANONICAL_COMBINING_CLASS = 0x1011;
 
@@ -636,7 +636,7 @@ public interface UProperty
      * (http://www.unicode.org/reports/tr29/)
      * Returns UGraphemeClusterBreak values.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int GRAPHEME_CLUSTER_BREAK = 0x1012;
 
@@ -646,7 +646,7 @@ public interface UProperty
      * (http://www.unicode.org/reports/tr29/)
      * Returns USentenceBreak values.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SENTENCE_BREAK = 0x1013;
 
@@ -656,7 +656,7 @@ public interface UProperty
      * (http://www.unicode.org/reports/tr29/)
      * Returns UWordBreakValues values.
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int WORD_BREAK = 0x1014;
 
