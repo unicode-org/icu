@@ -1,7 +1,7 @@
 //##header
 /**
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -62,7 +62,7 @@ public class ByteArrayWrapper implements Comparable
      * @throws IndexOutOfBoundsException if bytesToAdopt == null and size != 0, or
      * size < 0, or size > bytesToAdopt.length.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ByteArrayWrapper(byte[] bytesToAdopt, int size) {
         if ((bytesToAdopt == null && size != 0) || size < 0 || size > bytesToAdopt.length) {
@@ -76,7 +76,7 @@ public class ByteArrayWrapper implements Comparable
      * Construct a new ByteArrayWrapper from the contents of a ByteBuffer.
      * @param source the ByteBuffer from which to get the data.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ByteArrayWrapper(ByteBuffer source) {
         size = source.limit();
@@ -116,7 +116,7 @@ public class ByteArrayWrapper implements Comparable
      * @param capacity minimum length of internal byte array.
      * @return this ByteArrayWrapper
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public ByteArrayWrapper ensureCapacity(int capacity) 
     {
@@ -138,7 +138,7 @@ public class ByteArrayWrapper implements Comparable
      * @param limit end + 1 offset of src to copy from
      * @return this ByteArrayWrapper
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ByteArrayWrapper set(byte[] src, int start, int limit) 
     {
@@ -166,7 +166,7 @@ public class ByteArrayWrapper implements Comparable
      * @param limit end + 1 offset of src to copy from
      * @return this ByteArrayWrapper
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ByteArrayWrapper append(byte[] src, int start, int limit) 
     {
@@ -203,7 +203,7 @@ public class ByteArrayWrapper implements Comparable
     /**
      * Returns string value for debugging
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String toString() {
         StringBuffer result = new StringBuffer();
@@ -219,7 +219,7 @@ public class ByteArrayWrapper implements Comparable
      * @param other the object to compare to.
      * @return true if the two objects are equal.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -241,7 +241,7 @@ public class ByteArrayWrapper implements Comparable
      * Return the hashcode.
      * @return the hashcode.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int hashCode() {
         int result = bytes.length;
@@ -258,7 +258,7 @@ public class ByteArrayWrapper implements Comparable
      * greater than other.
      * @throws ClassCastException if the other object is not a ByteArrayWrapper
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Object other) {
         if (this == other) return 0;

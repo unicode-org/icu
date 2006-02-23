@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -458,7 +458,7 @@ public abstract class BreakIterator implements Cloneable
      * analyzed.
      * @return An instance of BreakIterator that locates word boundaries.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BreakIterator getWordInstance(ULocale where)
     {
@@ -498,7 +498,7 @@ public abstract class BreakIterator implements Cloneable
      * @return A new instance of BreakIterator that locates legal
      * line-wrapping positions.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BreakIterator getLineInstance(ULocale where)
     {
@@ -538,7 +538,7 @@ public abstract class BreakIterator implements Cloneable
      * @return A new instance of BreakIterator that locates logical-character
      * boundaries.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BreakIterator getCharacterInstance(ULocale where)
     {
@@ -573,7 +573,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates sentence boundaries.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BreakIterator getSentenceInstance(ULocale where)
     {
@@ -616,7 +616,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates title boundaries.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static BreakIterator getTitleInstance(ULocale where)
     {
@@ -648,7 +648,7 @@ public abstract class BreakIterator implements Cloneable
      * @param kind the type of iterator for which this instance is to be registered
      * @return a registry key that can be used to unregister this instance
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         // If the registered object matches the one in the cache, then
@@ -737,7 +737,7 @@ public abstract class BreakIterator implements Cloneable
      * @return An array of Locales.  All of the locales in the array can
      * be used when creating a BreakIterator.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static synchronized ULocale[] getAvailableULocales()
     {
@@ -823,7 +823,7 @@ public abstract class BreakIterator implements Cloneable
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
