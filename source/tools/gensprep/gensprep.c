@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -63,7 +63,6 @@ static UOption options[]={
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
     UOPTION_ICUDATADIR,
-    UOPTION_PACKAGE_NAME,
     UOPTION_BUNDLE_NAME,
     { "normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0 },
     { "check-bidi", NULL, NULL, NULL,  'k', UOPT_NO_ARG, 0},
@@ -78,7 +77,6 @@ enum{
     DESTDIR,
     SOURCEDIR,
     ICUDATADIR,
-    PACKAGE_NAME,
     BUNDLE_NAME,
     NORMALIZE,
     CHECK_BIDI,
@@ -110,7 +108,6 @@ static int printHelp(int argc, char* argv[]){
         "\t                         followed by path, defaults to %s\n",
         u_getDataDirectory());
     fprintf(stderr,
-        "\t-p or --package-name     prepend the output data file name with the package name specified\n"
         "\t-n or --normalize        turn on the option for normalization and include mappings\n"
         "\t                         from NormalizationCorrections.txt from the given path,\n"
         "\t                         e.g: /test/icu/source/data/unidata\n"
@@ -127,7 +124,7 @@ main(int argc, char* argv[]) {
     char* filename = NULL;
 #endif
     const char *srcDir=NULL, *destDir=NULL, *icuUniDataDir=NULL;
-    const char *packageName=NULL, *bundleName=NULL, *inputFileName = NULL;
+    const char *bundleName=NULL, *inputFileName = NULL;
     char *basename=NULL;
     int32_t sprepOptions = 0;
 
@@ -140,7 +137,6 @@ main(int argc, char* argv[]) {
     options[SOURCEDIR].value="";
     options[UNICODE_VERSION].value="0"; /* don't assume the unicode version */
     options[BUNDLE_NAME].value = DATA_NAME;
-    options[PACKAGE_NAME].value = NULL;
     options[NORMALIZE].value = "";
 
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -161,7 +157,6 @@ main(int argc, char* argv[]) {
     haveCopyright=options[COPYRIGHT].doesOccur;
     srcDir=options[SOURCEDIR].value;
     destDir=options[DESTDIR].value;
-    packageName = options[PACKAGE_NAME].value;
     bundleName = options[BUNDLE_NAME].value;
     icuUniDataDir = options[NORMALIZE].value;
 
@@ -183,7 +178,7 @@ main(int argc, char* argv[]) {
         "gensprep writes dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
         " because UCONFIG_NO_IDNA is set, \n"
         "see icu/source/common/unicode/uconfig.h\n");
-    generateData(destDir, packageName, bundleName);
+    generateData(destDir, bundleName);
 
 #else
 
@@ -243,9 +238,9 @@ main(int argc, char* argv[]) {
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
         /* write the data file */
-       generateData(destDir, packageName, bundleName);
+        generateData(destDir, bundleName);
 
-       cleanUpData();
+        cleanUpData();
     }
 
     uprv_free(filename);

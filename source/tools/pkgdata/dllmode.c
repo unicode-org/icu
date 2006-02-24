@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -165,13 +165,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
     
-    if(!o->embed) {
-      sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
+    sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
                  "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -s $(SRCDIR) -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
-    } else {
-      sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
-                 "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -E -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
-    }
 
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);

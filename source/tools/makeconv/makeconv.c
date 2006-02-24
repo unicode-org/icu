@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2005, International Business Machines
+ *   Copyright (C) 1998-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -76,7 +76,6 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
  * Global - verbosity
  */
 UBool VERBOSE = FALSE;
-UBool TOUCHFILE = FALSE;
 
 static void
 createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCode);
@@ -171,8 +170,6 @@ static UOption options[]={
     UOPTION_VERSION,             /* 3 */
     UOPTION_DESTDIR,             /* 4 */
     UOPTION_VERBOSE,             /* 5 */
-    UOPTION_PACKAGE_NAME,        /* 6 */
-    UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 7 */
 };
 
 int main(int argc, char* argv[])
@@ -180,9 +177,7 @@ int main(int argc, char* argv[])
     ConvData data;
     UErrorCode err = U_ZERO_ERROR, localError;
     char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-    char touchFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     const char* destdir, *arg;
-    const char *pkgName = NULL;
     size_t destdirlen;
     char* dot = NULL, *outBasename;
     char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
@@ -221,46 +216,14 @@ int main(int argc, char* argv[])
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-v or --verbose     Turn on verbose output\n",
             argv[0]);
-        fprintf(stderr,
-            "\t-p or --pkgname     sets the 'package' name for output files.\n"
-            "\t                    If name is ICUDATA, then the default icu package\n"
-            "\t                    name will be used.\n"
-            "\t-t or --touchfile   Generate additional small file without packagename, for nmake\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     if(options[3].doesOccur) {
-      fprintf(stderr,"makeconv version %hu.%hu, ICU tool to read .ucm codepage mapping files and write .cnv files\n",
+        fprintf(stderr,"makeconv version %hu.%hu, ICU tool to read .ucm codepage mapping files and write .cnv files\n",
             dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
-      fprintf(stderr, "Copyright (C) 1998-2000, International Business Machines\n");
-      fprintf(stderr,"Corporation and others.  All Rights Reserved.\n");
+        fprintf(stderr, U_COPYRIGHT_STRING "\n");
         exit(0);
-    }
-
-   TOUCHFILE = options[7].doesOccur;
-
-   if(!options[6].doesOccur)
-    {
-      pkgName=NULL;
-    }
-    else
-    {
-        pkgName =options[6].value;
-        if(!strcmp(pkgName, "ICUDATA"))
-        {
-            pkgName = U_ICUDATA_NAME;
-        }
-        if(pkgName[0] == 0)
-        {
-            pkgName = NULL;
-
-            if(TOUCHFILE)
-            {
-                fprintf(stderr, "%s: Don't use touchfile option with an empty packagename.\n",
-                        argv[0]);
-                exit(1);
-            }
-        }
     }
 
     /* get the options values */
@@ -323,21 +286,6 @@ int main(int argc, char* argv[])
         /* the basename without extension is the converter name */
         uprv_strcpy(cnvName, outBasename);
 
-        if(TOUCHFILE)
-        {
-            uprv_strcpy(touchFileName, outBasename);
-            uprv_strcat(touchFileName, ".cnv");
-        }
-
-        if(pkgName != NULL)
-        {
-            /* changes both basename and filename */
-            uprv_strcpy(outBasename, pkgName);
-            uprv_strcat(outBasename, "_");
-            uprv_strcat(outBasename, cnvName);
-        }
-
-
         /*Adds the target extension*/
         uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
 
@@ -381,40 +329,10 @@ int main(int argc, char* argv[])
                 }
             }
 
-            if(pkgName == NULL)
-            {
-                uprv_strcpy(cnvNameWithPkg, cnvName);
-            }
-            else
-            {
-                uprv_strcpy(cnvNameWithPkg, pkgName);
-                uprv_strcat(cnvNameWithPkg, "_");
-                uprv_strcat(cnvNameWithPkg, cnvName);
-            }
+            uprv_strcpy(cnvNameWithPkg, cnvName);
 
             localError = U_ZERO_ERROR;
             writeConverterData(&data, cnvNameWithPkg, destdir, &localError);
-            if(TOUCHFILE)
-            {
-                FileStream *q;
-                char msg[1024];
-
-                sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
-                    cnvName, pkgName);
-
-                q = T_FileStream_open(touchFileName, "w");
-                if(q == NULL)
-                {
-                    fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
-                    localError = U_FILE_ACCESS_ERROR;
-                }
-
-                else
-                {
-                    T_FileStream_write(q, msg, (int32_t)uprv_strlen(msg));
-                    T_FileStream_close(q);
-                }
-            }
 
             if(U_FAILURE(localError))
             {

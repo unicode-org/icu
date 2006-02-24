@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,7 +28,6 @@
 #include "uoptions.h"
 #include "gentest.h"
 
-#define DATA_PKG  "testdata"
 #define DATA_NAME "test"
 #define DATA_TYPE "icu"
 
@@ -73,7 +72,7 @@ main(int argc, char* argv[]) {
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options]\n"
-            "\tcreate the test file " DATA_PKG "_" DATA_NAME "." DATA_TYPE " unless the -r option is given.\n"
+            "\tcreate the test file " DATA_NAME "." DATA_TYPE " unless the -r option is given.\n"
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
@@ -101,7 +100,7 @@ createData(const char* outputDirectory, UErrorCode *errorCode) {
     long dataLength;
     uint32_t size;
 
-    pData=udata_create(outputDirectory, DATA_TYPE, DATA_PKG "_" DATA_NAME, &dataInfo,
+    pData=udata_create(outputDirectory, DATA_TYPE, DATA_NAME, &dataInfo,
                        U_COPYRIGHT_STRING, errorCode);
     if(U_FAILURE(*errorCode)) {
         fprintf(stderr, "gentest: unable to create data memory, error %d\n", *errorCode);
