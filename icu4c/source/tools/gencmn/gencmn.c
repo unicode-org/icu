@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -98,7 +98,6 @@ typedef struct {
 
 static File files[MAX_FILE_COUNT];
 static uint32_t fileCount=0;
-static UBool embed = FALSE;
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -131,7 +130,6 @@ static UOption options[]={
 /*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
 /*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
 /*10*/UOPTION_SOURCEDIR,
-/*11*/UOPTION_DEF( "embed", 'E', UOPT_NO_ARG)
 };
 
 static char *symPrefix = NULL;
@@ -163,10 +161,6 @@ main(int argc, char* argv[]) {
             argv[-argc]);
     } else if(argc<2) {
         argc=-1;
-    }
-
-    if(options[11].doesOccur) {
-      embed = TRUE;
     }
 
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
@@ -389,21 +383,6 @@ main(int argc, char* argv[]) {
         }
 
 
-#if 0
-        if(!embed) {
-          symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
-          
-          /* test for NULL */
-          if (symPrefix == NULL) {
-            sprintf(buffer, "U_MEMORY_ALLOCATION_ERROR");
-            exit(U_MEMORY_ALLOCATION_ERROR);
-          }
-          
-          uprv_strcpy(symPrefix, entrypointName);
-          uprv_strcat(symPrefix, "_");
-        }
-#endif
-
         /* write the source file */
         sprintf(buffer,
             "/*\n"
@@ -490,20 +469,11 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         fullPath = pathToFullPath(filename);
 
         /* store the pathname */
-        if(!embed) {
-            length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
-            s=allocString(length);
-            uprv_strcpy(s, options[6].value);
-            uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
-            uprv_strcat(s, filename);
-        } else {
-            /* compatibility mode */
-            const char *base;
-            base = findBasename(filename);
-            length = (uint32_t)(uprv_strlen(base) + 1);
-            s=allocString(length);
-            uprv_memcpy(s, base, length);
-        }
+        length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+        s=allocString(length);
+        uprv_strcpy(s, options[6].value);
+        uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
+        uprv_strcat(s, filename);
 
         /* get the basename */
         fixDirToTreePath(s);
@@ -541,22 +511,13 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
     } else {
         char *t;
 
-        if(embed) {
-            filename = findBasename(filename);
-        }
         /* get and store the basename */
-        if(!embed) {
-            /* need to include the package name */
-            length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
-            s=allocString(length);
-            uprv_strcpy(s, options[6].value);
-            uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
-            uprv_strcat(s, filename);
-        } else {
-            length = (uint32_t)(uprv_strlen(filename) + 1);
-            s=allocString(length);
-            uprv_memcpy(s, filename, length);
-        }
+        /* need to include the package name */
+        length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+        s=allocString(length);
+        uprv_strcpy(s, options[6].value);
+        uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
+        uprv_strcat(s, filename);
         fixDirToTreePath(s);
         files[fileCount].basename=s;
 
@@ -610,26 +571,24 @@ pathToFullPath(const char *path) {
     n = (int32_t)uprv_strlen(fullPath);
     uprv_strcat(fullPath, path);
 
-    if(!embed) {
 #if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
 #if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
-        /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
-        for(;fullPath[n];n++) {
-            if(fullPath[n] == U_FILE_ALT_SEP_CHAR) {
-                fullPath[n] = U_FILE_SEP_CHAR;
-            }
+    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+    for(;fullPath[n];n++) {
+        if(fullPath[n] == U_FILE_ALT_SEP_CHAR) {
+            fullPath[n] = U_FILE_SEP_CHAR;
         }
+    }
 #endif
 #endif
 #if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
-        /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
-        for(;fullPath[n];n++) {
-            if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR) {
-                fullPath[n] = U_FILE_SEP_CHAR;
-            }
+    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+    for(;fullPath[n];n++) {
+        if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR) {
+            fullPath[n] = U_FILE_SEP_CHAR;
         }
-#endif
     }
+#endif
     return fullPath;
 }
 

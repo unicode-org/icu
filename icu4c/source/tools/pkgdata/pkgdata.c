@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -72,6 +72,30 @@ static struct
 #endif /*#ifdef U_MAKE_IS_NMAKE*/
 };
 
+enum {
+    NAME,
+    BLDOPT,
+    MODE,
+    HELP,
+    HELP_QUESTION_MARK,
+    VERBOSE,
+    COPYRIGHT,
+    COMMENT,
+    DESTDIR,
+    CLEAN,
+    NOOUTPUT,
+    REBUILD,
+    TEMPDIR,
+    INSTALL,
+    SOURCEDIR,
+    ENTRYPOINT,
+    REVISION,
+    MAKEARG,
+    FORCE_PREFIX,
+    LIBNAME,
+    QUIET
+};
+
 static UOption options[]={
     /*00*/    UOPTION_DEF( "name",    'p', UOPT_REQUIRES_ARG),
     /*01*/    UOPTION_DEF( "bldopt",  'O', UOPT_REQUIRES_ARG), /* on Win32 it is release or debug */
@@ -90,12 +114,10 @@ static UOption options[]={
     /*14*/    UOPTION_SOURCEDIR ,
     /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
     /*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
-    /*17*/    UOPTION_DEF( 0, 'M', UOPT_REQUIRES_ARG),
+    /*17*/    UOPTION_DEF( "makearg", 'M', UOPT_REQUIRES_ARG),
     /*18*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG),
-    /*19*/    UOPTION_DEF( "numerictmp", 'N', UOPT_NO_ARG),
-    /*20*/    UOPTION_DEF( "embed", 'E', UOPT_NO_ARG),
-    /*21*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
-    /*22*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG)
+    /*19*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
+    /*20*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG)
 };
 
 const char options_help[][320]={
@@ -122,8 +144,6 @@ const char options_help[][320]={
     "Specify a version when packaging in DLL or static mode",
     "Pass the next argument to make(1)",
     "Add package to all file names if not present",
-    "Use short numeric temporary file names such as t1234.c",
-    "Use Embedded paths (such as 'mypackage_') - for compatibility.",
     "Library name to build (if different than package name)",
     "Quite mode. (e.g. Do not output a readme file for static libraries)"
 };
@@ -144,8 +164,8 @@ main(int argc, char* argv[]) {
 
     progname = argv[0];
 
-    options[2].value = "common";
-    options[17].value = "";
+    options[MODE].value = "common";
+    options[MAKEARG].value = "";
 
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -154,7 +174,7 @@ main(int argc, char* argv[]) {
     /* I've decided to simply print an error and quit. This tool has too
     many options to just display them all of the time. */
 
-    if(options[3].doesOccur || options[4].doesOccur) {
+    if(options[HELP].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         needsHelp = TRUE;
     }
     else {
@@ -167,7 +187,7 @@ main(int argc, char* argv[]) {
             return 1;
         }
 
-        if(!options[1].doesOccur) {
+        if(!options[BLDOPT].doesOccur) {
             /* Try to fill in from icu-config or equivalent */
             fillInMakefileFromICUConfig(&options[1]);
         }
@@ -179,13 +199,13 @@ main(int argc, char* argv[]) {
         }
 #endif
         
-        if(!options[1].doesOccur) {
+        if(!options[BLDOPT].doesOccur) {
             fprintf(stderr, " required parameter is missing: -O is required \n");
             fprintf(stderr, "Run '%s --help' for help.\n", progname);
             return 1;
         }
         
-        if(!options[0].doesOccur) /* -O we already have - don't report it. */
+        if(!options[NAME].doesOccur) /* -O we already have - don't report it. */
         {
             fprintf(stderr, " required parameter -p is missing \n");
             fprintf(stderr, "Run '%s --help' for help.\n", progname);
@@ -234,9 +254,9 @@ main(int argc, char* argv[]) {
     /* OK, fill in the options struct */
     uprv_memset(&o, 0, sizeof(o));
 
-    o.mode      = options[2].value;
-    o.version   = options[16].doesOccur ? options[16].value : 0;
-    o.makeArgs  = options[17].value;
+    o.mode      = options[MODE].value;
+    o.version   = options[REVISION].doesOccur ? options[REVISION].value : 0;
+    o.makeArgs  = options[MAKEARG].value;
 
     o.fcn = NULL;
 
@@ -274,24 +294,24 @@ main(int argc, char* argv[]) {
         o.cShortName = csname;
     }
 
-    if(options[21].doesOccur) { /* get libname from shortname, or explicit -L parameter */
-      o.libName = options[21].value;
+    if(options[LIBNAME].doesOccur) { /* get libname from shortname, or explicit -L parameter */
+      o.libName = options[LIBNAME].value;
     } else {
       o.libName = o.shortName;
     }
     
-    if(options[22].doesOccur) {
+    if(options[QUIET].doesOccur) {
       o.quiet = TRUE;
     } else {
       o.quiet = FALSE;
     }
 
-    o.verbose   = options[5].doesOccur;
+    o.verbose   = options[VERBOSE].doesOccur;
 #ifdef U_MAKE_IS_NMAKE /* format is R:pathtoICU or D:pathtoICU */
     {
-        char *pathstuff = (char *)options[1].value;
-        if(options[1].value[uprv_strlen(options[1].value)-1] == '\\') {
-            pathstuff[uprv_strlen(options[1].value)-1] = '\0';
+        char *pathstuff = (char *)options[BLDOPT].value;
+        if(options[1].value[uprv_strlen(options[BLDOPT].value)-1] == '\\') {
+            pathstuff[uprv_strlen(options[BLDOPT].value)-1] = '\0';
         }
         if(*pathstuff == PKGDATA_DERIVED_PATH || *pathstuff == 'R' || *pathstuff == 'D') {
             o.options = pathstuff;
@@ -314,48 +334,42 @@ main(int argc, char* argv[]) {
         }
     }
 #else /* on UNIX, we'll just include the file... */
-    o.options   = options[1].value;
+    o.options   = options[BLDOPT].value;
 #endif
-    if(options[6].doesOccur) {
+    if(options[COPYRIGHT].doesOccur) {
         o.comment = U_COPYRIGHT_STRING;
-    } else if (options[7].doesOccur) {
-        o.comment = options[7].value;
+    } else if (options[COMMENT].doesOccur) {
+        o.comment = options[COMMENT].value;
     }
 
-    if( options[8].doesOccur ) {
-        o.targetDir = options[8].value;
+    if( options[DESTDIR].doesOccur ) {
+        o.targetDir = options[DESTDIR].value;
     } else {
         o.targetDir = ".";  /* cwd */
     }
 
-    o.clean     = options[9].doesOccur;
-    o.nooutput  = options[10].doesOccur;
-    o.rebuild   = options[11].doesOccur;
-    o.numeric   = options[19].doesOccur;
-    if(o.numeric) { 
-      o.rebuild = TRUE; /* force rebuild if numeric */
-    }
+    o.clean     = options[CLEAN].doesOccur;
+    o.nooutput  = options[NOOUTPUT].doesOccur;
+    o.rebuild   = options[REBUILD].doesOccur;
 
-    o.embed = options[20].doesOccur;
-
-    if( options[12].doesOccur ) {
-        o.tmpDir    = options[12].value;
+    if( options[TEMPDIR].doesOccur ) {
+        o.tmpDir    = options[TEMPDIR].value;
     } else {
         o.tmpDir    = o.targetDir;
     }
 
-    if( options[13].doesOccur ) {
-        o.install  = options[13].value;
+    if( options[INSTALL].doesOccur ) {
+        o.install  = options[INSTALL].value;
     }
 
-    if( options[14].doesOccur ) {
-        o.srcDir   = options[14].value;
+    if( options[SOURCEDIR].doesOccur ) {
+        o.srcDir   = options[SOURCEDIR].value;
     } else {
         o.srcDir   = ".";
     }
 
-    if( options[15].doesOccur ) {
-        o.entryName = options[15].value;
+    if( options[ENTRYPOINT].doesOccur ) {
+        o.entryName = options[ENTRYPOINT].value;
     } else {
         o.entryName = o.cShortName;
     }
@@ -491,19 +505,9 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     char       *linePtr, *lineNext;
     const uint32_t   lineMax = 16300;
     char        tmp[1024];
-    char        pkgPrefix[1024];
-    int32_t     pkgPrefixLen;
-    const char *baseName;
     char       *s;
     int32_t     ln=0; /* line number */
-    UBool       fixPrefix;
     
-    
-    fixPrefix = options[18].doesOccur;
-    
-    strcpy(pkgPrefix, o->shortName);
-    strcat(pkgPrefix, "_");
-    pkgPrefixLen=(int32_t)uprv_strlen(pkgPrefix);
     for(l = o->fileListFiles; l; l = l->next) {
         if(o->verbose) {
             fprintf(stdout, "# Reading %s..\n", l->str);
@@ -518,100 +522,75 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
         }
                 
         while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) { /* for each line */
-          if((ln == 0) && (!o->embed)) { 
-            /* determine if we need to run in 'embed' (compatibility) mode */
-            if(!strncmp(findBasename(line), pkgPrefix, pkgPrefixLen)) {
-              fprintf(stderr, "Warning: Found path '%s' in file name. Assuming compatibility (-E) mode.\n", pkgPrefix);
-              o->embed = 1;
+            ln++;
+            if(uprv_strlen(line)>lineMax) {
+                fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, (int)ln, (int)lineMax);
+                exit(1);
             }
-          }
-          ln++;
-          if(uprv_strlen(line)>lineMax) {
-            fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, (int)ln, (int)lineMax);
-            exit(1);
-          }
-          /* remove spaces at the beginning */
-          linePtr = line;
-          while(isspace(*linePtr)) {
-            linePtr++;
-          }
-          s=linePtr;
-          /* remove trailing newline characters */
-          while(*s!=0) {
-            if(*s=='\r' || *s=='\n') {
-              *s=0;
-              break;
+            /* remove spaces at the beginning */
+            linePtr = line;
+            while(isspace(*linePtr)) {
+                linePtr++;
             }
-                ++s;
-          }
-          if((*linePtr == 0) || (*linePtr == '#')) {
-            continue; /* comment or empty line */
-          }
-          
-          /* Now, process the line */
-          lineNext = NULL;
-          
-          while(linePtr && *linePtr) { /* process space-separated items */
-            while(*linePtr == ' ') {
-              linePtr++;
-            }
-            /* Find the next quote */
-            if(linePtr[0] == '"')
-              {
-                lineNext = uprv_strchr(linePtr+1, '"');
-                if(lineNext == NULL) {
-                  fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
-                          l->str, (int)ln);
-                  exit(1);
-                } else {
-                  lineNext++;
-                  if(*lineNext) {
-                    if(*lineNext != ' ') {
-                      fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
-                              l->str, (int)ln, (int)(lineNext-line), (*lineNext)?*lineNext:'0');
-                      exit(1);
-                    }
-                    *lineNext = 0;
-                    lineNext++;
-                  }
+            s=linePtr;
+            /* remove trailing newline characters */
+            while(*s!=0) {
+                if(*s=='\r' || *s=='\n') {
+                    *s=0;
+                    break;
                 }
-              } else {
-              lineNext = uprv_strchr(linePtr, ' ');
-              if(lineNext) {
-                *lineNext = 0; /* terminate at space */
-                lineNext++;
-              }
+                ++s;
             }
-            
-            /* add the file */
-            s = (char*)getLongPathname(linePtr);
-            
-            if(o->embed == 0) {
-              /* normal mode.. o->files is just the bare list without package names */
-              o->files = pkg_appendToList(o->files, &tail, uprv_strdup(linePtr));
-              uprv_strcpy(tmp, o->srcDir);
-              uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
-              uprv_strcat(tmp, s);
-              o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
-            } else {/* embedded package_ mode */
-              baseName = findBasename(s);
-              
-              if(s != baseName) {
-                /* s was something 'long' with a path */
-                /* paths already have the prefix */
-                o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-                o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
-              } else { /* s was just a basename, we want to prepend source dir*/
-                /* check for prefix of package */
+            if((*linePtr == 0) || (*linePtr == '#')) {
+                continue; /* comment or empty line */
+            }
+
+            /* Now, process the line */
+            lineNext = NULL;
+
+            while(linePtr && *linePtr) { /* process space-separated items */
+                while(*linePtr == ' ') {
+                    linePtr++;
+                }
+                /* Find the next quote */
+                if(linePtr[0] == '"')
+                {
+                    lineNext = uprv_strchr(linePtr+1, '"');
+                    if(lineNext == NULL) {
+                        fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
+                            l->str, (int)ln);
+                        exit(1);
+                    } else {
+                        lineNext++;
+                        if(*lineNext) {
+                            if(*lineNext != ' ') {
+                                fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
+                                    l->str, (int)ln, (int)(lineNext-line), (*lineNext)?*lineNext:'0');
+                                exit(1);
+                            }
+                            *lineNext = 0;
+                            lineNext++;
+                        }
+                    }
+                } else {
+                    lineNext = uprv_strchr(linePtr, ' ');
+                    if(lineNext) {
+                        *lineNext = 0; /* terminate at space */
+                        lineNext++;
+                    }
+                }
+
+                /* add the file */
+                s = (char*)getLongPathname(linePtr);
+
+                /* normal mode.. o->files is just the bare list without package names */
+                o->files = pkg_appendToList(o->files, &tail, uprv_strdup(linePtr));
                 uprv_strcpy(tmp, o->srcDir);
                 uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
-                o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
                 uprv_strcat(tmp, s);
                 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
-              }
-            } /* end compatibility mode */
-            linePtr = lineNext;
-          } /* for each entry on line */
+                linePtr = lineNext;
+            } /* for each entry on line */
         } /* for each line */
         T_FileStream_close(in);
     } /* for each file list file */
