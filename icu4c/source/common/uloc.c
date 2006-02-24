@@ -174,10 +174,10 @@ NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
 };
-static const char* DEPRECATED_LANGUAGES[]={
+static const char* const DEPRECATED_LANGUAGES[]={
     "in", "iw", "ji", "jw", NULL, NULL
 };
-static const char* REPLACEMENT_LANGUAGES[]={
+static const char* const REPLACEMENT_LANGUAGES[]={
     "id", "he", "yi", "jv", NULL, NULL
 };
 
@@ -378,10 +378,10 @@ NULL,
 NULL
 };
 
-static const char* DEPRECATED_COUNTRIES[] ={
+static const char* const DEPRECATED_COUNTRIES[] ={
     "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR", NULL, NULL /* deprecated country list */
 };
-static const char*  REPLACEMENT_COUNTRIES[] = {
+static const char* const REPLACEMENT_COUNTRIES[] = {
 /*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
     "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "CS", "CD", NULL, NULL  /* replacement country codes */      
 };
