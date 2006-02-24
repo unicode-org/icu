@@ -6,7 +6,7 @@
   <meta name="COPYRIGHT" content=
   "Copyright (c) 1997-2006 IBM Corporation and others. All Rights Reserved.">
   <meta name="KEYWORDS" content=
-  "ICU; International Components for Unicode; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
+  "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
   <meta name="DESCRIPTION" content=
   "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
@@ -28,7 +28,7 @@
   <h1>International Components for Unicode<br>
   <abbr title="International Components for Unicode">ICU</abbr> 3.6 ReadMe</h1>
 
-  <p>Version: 2006-February-16<br>
+  <p>Version: 2006-February-24<br>
   Copyright &copy; 1997-2006 International Business Machines Corporation and
   others. All Rights Reserved.</p>
   <!-- Remember that there is a copyright at the end too -->
@@ -219,6 +219,45 @@
   this release, see the <a href=
   "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.6
   download page</a>.</p>
+
+  <h3><a name="News_app_packaging" id="News_app_packaging">Changes to
+  packaging resource bundles</a></h3>
+
+  <p>Since ICU 3.0, the old style of packaging was deprecated, and an alternate
+  packaging mode was made available. In this release, this compatibility mode of
+  packaging has been removed from ICU. If you're using the genrb -P or -t options,
+  you are probably using the older compatible mode of data packaging. This
+  compatibility file naming mode was removed for portability and performance reasons.</p>
+  
+  <p>Code changes should not be required to use the newer data file naming scheme,
+  but you will need to update your makefile scripts, if you're using the older
+  data file naming scheme. The example of using the new data file naming scheme
+  can be found in <a href="source/samples/ufortune/">the ufortune sample program</a>.</p>
+
+  <table border="1" cellpadding="0" summary=
+  "The following are examples of the file naming schemes.">
+    <caption>
+      The following are examples of the file naming schemes.
+    </caption>
+
+    <tr>
+      <th scope="col">Old File Naming Scheme</th>
+
+      <th scope="col">Current File Naming Scheme</th>
+    </tr>
+
+    <tr>
+      <td>MyApp_root.res</td>
+
+      <td>MyApp/root.res</td>
+    </tr>
+
+    <tr>
+      <td>MyApp_en.res</td>
+
+      <td>MyApp/en.res</td>
+    </tr>
+  </table>
 
   <h3><a name="News_wchar_t" id="News_wchar_t">Changes to wchar_t type for the
   Microsoft Visual Studio builds</a></h3>
