@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## QNX-specific setup
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
 ## Provided By: Chris McKillop <cdm@qnx.com>
@@ -84,9 +84,6 @@ FINAL_SO_TARGET = $(MIDDLE_SO_TARGET)
 
 # LDflags that pkgdata will use
 BIR_LDFLAGS= -Wl,-Bsymbolic
-
-# CPPflags for genccode/gencmn
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS=

@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using Sun's compilers
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -70,7 +70,6 @@ STATIC_O = o
 # 
 ifeq (strip $(GENCCODE_ASSEMBLY),)
 BIR_LDFLAGS=  -Wl,-M,$(NAME).map -Wl,-B,symbolic -Wl,-B,eliminate
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 BIR_DEPS=   $(NAME).map
 endif
 

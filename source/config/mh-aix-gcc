@@ -1,5 +1,5 @@
 ## -*-makefile-*-
-## Copyright (c) 2003-2005 IBM, Ken Foskey, and others. All rights reserved.
+## Copyright (c) 2003-2006 IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Aix-specific setup (for gcc)
 ##
@@ -113,9 +113,6 @@ STATIC_O = o
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 # LDflags that pkgdata will use
 BIR_LDFLAGS= -Wl,-bE:$(NAME).map,-bnoexpall
-
-# CPPflags for genccode/gencmn
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS= $(NAME).map

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genccode
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -30,7 +30,7 @@ TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
 endif
-CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
+CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = genccode.o
