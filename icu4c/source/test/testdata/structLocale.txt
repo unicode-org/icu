@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004-2005 International Business Machines
+// * Copyright (C) 2004-2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -2745,8 +2745,8 @@ structLocale:table(nofallback){
         regionFormat{""}
         fallbackFormat{""}
         abbreviationFallback{""}
-        preferenceOrdering:array{}
-        singleCountries:array{}
+        preferenceOrdering:array{""}
+        singleCountries:array{""}
         "ACT"{
             ld{""}
             lg{""}
