@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -52,7 +52,7 @@ storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status
 #endif
 
 extern void
-generateData(const char *dataDir, const char* packageName, const char* bundleName);
+generateData(const char *dataDir, const char* bundleName);
 
 extern void
 setOptions(int32_t options);

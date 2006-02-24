@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -40,19 +40,13 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
     char tmp[1024];
     CharList *infiles;
 
-    if(!o->embed) {
-      infiles = o->files; 
-    } else {
-      infiles = o->filePaths;
-    }
+    infiles = o->files; 
     sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n"
-        "\t%s\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" %s %s -n \"$(NAME)\" 0 <<\n",
+        "\t%s\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" -s \"$(SRCDIR)\" -n \"$(NAME)\" 0 <<\n",
         (o->verbose ? "" : "@"),
         (o->comment ? "-C \"" : ""),
         (o->comment ? o->comment : ""),
-        (o->comment ? "\" " : ""),
-        (o->embed ? "-E" : ""),
-         o->embed ? "" : "-s \"$(SRCDIR)\"");
+        (o->comment ? "\" " : ""));
     T_FileStream_writeLine(makefile, tmp);
 
     pkg_writeCharList(makefile, infiles, "\n", -1);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -574,7 +574,7 @@ getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
 #endif /* #if !UCONFIG_NO_IDNA */
 
 extern void
-generateData(const char *dataDir, const char *packageName, const char* bundleName) {
+generateData(const char *dataDir, const char* bundleName) {
     static uint8_t sprepTrieBlock[100000];
 
     UNewDataMemory *pData;
@@ -610,12 +610,7 @@ generateData(const char *dataDir, const char *packageName, const char* bundleNam
 
 #endif
 
-    if(packageName != NULL) {
-      uprv_strcpy(fileName,packageName);
-      uprv_strcat(fileName,"_");
-    } else {
-      fileName[0]=0;
-    }
+    fileName[0]=0;
     uprv_strcat(fileName,bundleName);
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, fileName, &dataInfo,

@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -271,14 +271,12 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
     CharList *infiles;
     CharList *parents = NULL, *commands = NULL;
     int32_t genFileOffset = 0;  /* offset from beginning of .c and .o file name, use to chop off package name for AS/400 */
-    static int serNo = 0; /* counter for numeric file names */
     char serName[100];
+    char *parentPath;
+    const char *tchar;
+    char tree[1024];
 
-    if(o->embed) {
-      infiles = o->filePaths;
-    } else {
-      infiles = o->files; /* raw files - no paths other than tree paths */
-    }
+    infiles = o->files; /* raw files - no paths other than tree paths */
     
 #if defined (OS400)
     if(infiles != NULL) {
@@ -291,36 +289,26 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
 #endif
     
     for(;infiles;infiles = infiles->next) {
-      if(o->embed) {
-        baseName = findBasename(infiles->str); 
-      } else {
-        baseName = infiles->str; /* skip the icudt28b/ part */
-      }
+      baseName = infiles->str; /* skip the icudt28b/ part */
       p = uprv_strrchr(baseName, '.');
       if( (p == NULL) || (*p == '\0' ) ) {
         continue;
       }
       
-      if(o->numeric) {
-        sprintf(serName, "t%04x", serNo++);
-        uprv_strcpy(tmp,serName);
-        uprv_strcat(tmp, objSuffix);
-      } else {
-        uprv_strncpy(tmp, baseName, p-baseName);
-        p++;
-        
-        uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
-        uprv_strcat(tmp, p);
-        uprv_strcat(tmp, objSuffix );
-        
-        /* iSeries cannot have '-' in the .o objects. */
-        for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
-          if ( *tmpPtr == U_FILE_SEP_CHAR ) { /* map tree names with underscores */
-            *tmpPtr = '_';
-          }
-          if ( *tmpPtr == '-' ) {
-            *tmpPtr = '_';
-          }
+      uprv_strncpy(tmp, baseName, p-baseName);
+      p++;
+      
+      uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
+      uprv_strcat(tmp, p);
+      uprv_strcat(tmp, objSuffix );
+      
+      /* iSeries cannot have '-' in the .o objects. */
+      for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
+        if ( *tmpPtr == U_FILE_SEP_CHAR ) { /* map tree names with underscores */
+          *tmpPtr = '_';
+        }
+        if ( *tmpPtr == '-' ) {
+          *tmpPtr = '_';
         }
       }
       
@@ -331,20 +319,12 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       uprv_strcpy(cfile+uprv_strlen(cfile)-uprv_strlen(objSuffix), ".c" ); /* replace .o with .c */
       
       /* Make up parents.. */
-      if(!o->embed) {
-        char *parentPath;
-        parentPath = uprv_malloc(1+uprv_strlen(baseName) + uprv_strlen("$(SRCDIR)/"));
-        sprintf(parentPath, "$(SRCDIR)/%s", baseName);
-        parents = pkg_appendToList(parents, NULL, parentPath);
-      } else {
-        parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
-      }
+      parentPath = uprv_malloc(1+uprv_strlen(baseName) + uprv_strlen("$(SRCDIR)/"));
+      sprintf(parentPath, "$(SRCDIR)/%s", baseName);
+      parents = pkg_appendToList(parents, NULL, parentPath);
       
       /* make up commands.. */
-      if(!o->embed) {
         /* search for tree.. */
-        const char *tchar;
-        char tree[1024];
         if((tchar=uprv_strchr(baseName, '/'))) {
           tree[0]='_';
           strncpy(tree+1,baseName,tchar-baseName);
@@ -357,18 +337,8 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
 #else
         sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(CNAME)%s -d $(TEMP_DIR) $<", tree);
 #endif
-      } else {
-#ifdef OS400
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) %s", infiles->str);
-#else
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) $<");
-#endif
-      }
       
-      if(o->numeric) {
-        strcat(stanza, " -f ");
-        strcat(stanza,serName);
-      } else if(!o->embed && uprv_strchr(baseName, '/')) {
+      if(uprv_strchr(baseName, '/')) {
         /* append actual file - ex:   coll_en_res  otherwise the tree name will be lost */
         strcat(stanza, " -f ");
         strncat(stanza, tmp, (strlen(tmp)-strlen(objSuffix)));
@@ -421,11 +391,7 @@ pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)
     T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST) $(DATAFILEPATHS)\n");
-    if(!o->embed) {
-      T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -s $(SRCDIR) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
-    } else {
-      T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -E -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
-    }
+    T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -s $(SRCDIR) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME).dat\n");
     T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCCODE) $(GENCCODE_ASSEMBLY) -n $(NAME) -e $(ENTRYPOINT) -d $(TEMP_DIR) $<\n");

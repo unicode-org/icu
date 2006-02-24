@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -50,7 +50,6 @@ enum
     PACKAGE_NAME,
     BUNDLE_NAME,
     WRITE_XLIFF,
-    TOUCHFILE,
     STRICT,
     NO_BINARY_COLLATION,
     /*added by Jing*/
@@ -72,16 +71,13 @@ UOption options[]={
                       UOPTION_PACKAGE_NAME,
                       UOPTION_BUNDLE_NAME,
                       UOPTION_DEF( "write-xliff", 'x', UOPT_OPTIONAL_ARG),
-                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG),
                       UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
                       UOPTION_DEF( "noBinaryCollation", 'C', UOPT_NO_ARG),/* 15 */
-                      /*added by Jing*/
                       UOPTION_DEF( "language",  'l', UOPT_REQUIRES_ARG)
                   };
 
 static     UBool       write_java = FALSE;
 static     UBool       write_xliff = FALSE;
-static     UBool       touchfile = FALSE;
 static     const char* outputEnc ="";
 static     const char* gPackageName=NULL;
 static     const char* bundleName=NULL;
@@ -146,9 +142,7 @@ main(int argc,
                 "\t-j or --write-java       write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
                 "\t                         defaults to ASCII and \\uXXXX format.\n"
                 "\t-p or --package-name     For ICU4J: package name for writing the ListResourceBundle for ICU4J,\n"
-                "\t                         defaults to com.ibm.icu.impl.data\n"
-                "\t                         For ICU4C: Package name for the .res files on output. Specfiying\n"
-                "\t                         'ICUDATA' defaults to the current ICU4C data name.\n");
+                "\t                         defaults to com.ibm.icu.impl.data\n");
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to LocaleElements\n"
@@ -191,15 +185,6 @@ main(int argc,
         {
             gPackageName = NULL;
         }
-    }
-
-    if(options[TOUCHFILE].doesOccur) {
-        if(gPackageName == NULL) {
-            fprintf(stderr, "%s: Don't use touchfile (-t) option with no package.\n",
-                    argv[0]);
-            return -1;
-        }
-        touchfile = TRUE;
     }
 
     if(options[ENCODING].doesOccur) {
@@ -388,37 +373,6 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     /* Determine the target rb filename */
     rbname = make_res_filename(filename, outputDir, packageName, status);
-    if(touchfile == TRUE) {
-        FileStream *q;
-        char msg[1024];
-        char *tfname = NULL;
-
-        tfname = make_res_filename(filename, outputDir, NULL, status);
-
-        if(U_FAILURE(*status))
-        {
-            fprintf(stderr, "Error writing touchfile for \"%s\"\n", filename);
-            *status = U_FILE_ACCESS_ERROR;
-        } else {
-            uprv_strcat(tfname, ".res");
-            sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
-                filename, packageName);
-
-            q = T_FileStream_open(tfname, "w");
-            if(q == NULL)
-            {
-                fprintf(stderr, "Error writing touchfile \"%s\"\n", tfname);
-                *status = U_FILE_ACCESS_ERROR;
-            }
-            else
-            {
-                T_FileStream_write(q, msg, (int32_t)uprv_strlen(msg));
-                T_FileStream_close(q);
-            }
-            uprv_free(tfname);
-        }
-
-    }
     if(U_FAILURE(*status)) {
         fprintf(stderr, "couldn't make the res fileName for  bundle %s. Error:%s\n", filename,u_errorName(*status));
         goto finish;

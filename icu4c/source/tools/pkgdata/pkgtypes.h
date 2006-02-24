@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -130,10 +130,7 @@ typedef struct UPKGOptions_
   UBool      verbose;
   UBool      quiet;
   UBool      hadStdin;     /* Stdin was a dependency - don't make anything depend on the file list coming in. */
-  UBool      numeric;      /* use numeric, short, temporary file names */
   
-  int32_t    embed;   /* embedded package - i.e.  .../mypkg_myfile.res  files */
-
   UPKGMODE  *fcn;          /* Handler function */
 } UPKGOptions;
 
