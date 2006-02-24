@@ -314,7 +314,7 @@ enumReset(UEnumeration *en, UErrorCode *status) {
     ((Context *)en->context)->currIndex = 0;
 }
 
-UEnumeration enumeration = {
+static const UEnumeration gCSDetEnumeration = {
     NULL,
     NULL,
     enumClose,
@@ -335,7 +335,7 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *statu
     CharsetDetector::getDetectableCount();
 
     UEnumeration *en = NEW_ARRAY(UEnumeration, 1);
-    memcpy(en, &enumeration, sizeof(UEnumeration));
+    memcpy(en, &gCSDetEnumeration, sizeof(UEnumeration));
     en->context = (void*)NEW_ARRAY(Context, 1);
     uprv_memset(en->context, 0, sizeof(Context));
     return en;
