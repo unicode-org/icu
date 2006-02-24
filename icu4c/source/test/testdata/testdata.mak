@@ -28,7 +28,7 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 	@copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\$(TESTDT)\nam.typ"
 	@copy "$(TESTDATA)\icu26_testtypes.res" "$(TESTDATABLD)"
 	@copy "$(TESTDATA)\icu26e_testtypes.res" "$(TESTDATABLD)"
-	"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<$(TESTDATAOUT)\out.lst
+	"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 casing.res
 conversion.res
 mc.res
@@ -60,13 +60,13 @@ nfscss.spp
 nfscis.spp
 nfsmxs.spp
 nfsmxp.spp
-<<KEEP
+<<
 
 
 # Inference rule for creating resource bundles
 # Some test data resource bundles are known to have warnings and bad data.
 # The -q option is there on purpose, so we don't see it normally.
-{$(TESTDATA)}.txt{$(TESTDATABLD)}.res:: 
+{$(TESTDATA)}.txt.res:: 
 	@echo Making Test Resource Bundle files $<
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
