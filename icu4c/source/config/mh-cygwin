@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin-specific setup
-## Copyright (c) 2001-2005, International Business Machines Corporation and
+## Copyright (c) 2001-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -97,9 +97,6 @@ INSTALL-L=$(INSTALL_PROGRAM)
 
 # LDflags that pkgdata will use
 BIR_LDFLAGS= -Wl,-Bsymbolic
-
-# CPPflags for genccode/gencmn
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS=

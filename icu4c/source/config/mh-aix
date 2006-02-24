@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for xlC)
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
@@ -109,7 +109,6 @@ STATIC_O = o
 
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 BIR_LDFLAGS= -E$(NAME).map -bnoexpall
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 BIR_DEPS= $(NAME).map
 
 

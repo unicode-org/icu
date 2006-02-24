@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## BeOS-specific setup
-## Copyright (c) 2003-2004, International Business Machines Corporation and
+## Copyright (c) 2003-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
 ## Original author: Andrew Bachmann
@@ -95,9 +95,6 @@ STATIC_O = ao
 
 # LDflags that pkgdata will use
 BIR_LDFLAGS= -Wl,-Bsymbolic
-
-# CPPflags for genccode/gencmn
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS=
