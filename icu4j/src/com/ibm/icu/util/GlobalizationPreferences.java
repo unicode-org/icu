@@ -93,7 +93,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @internal
  * @deprecated This API is ICU internal only.
  */
-class GlobalizationPreferences implements Freezable {
+public class GlobalizationPreferences implements Freezable {
     /**
      * Number Format types
      * @internal
