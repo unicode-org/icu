@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2003-2004, International Business Machines Corporation
+ * and others. All rights reserved.
+ *
+ */
+
+th	{ font-size: 60%; text-align: Center;
+	  width: 0.39%; font-family: monospace;
+	  border: 1px solid black; margin: 0; padding: 1px }
+td	{ font-size: 60%; text-align: Center;
+	  border-right: 1px solid #9999FF; border-top: 1px solid #9999FF; margin: 0; padding: 1px }
+table	{ border-spacing: 0; border-collapse: collapse;
+	  border: 1px solid black; margin: 0; padding: 0 }
+.d	{ border-top: 2px double blue }
+.u	{ background-color: #DDDDDD }
+.du	{ background-color: #DDDDDD; border-top: 2px double blue }
+.n	{ background-color: black }
+.dn	{ background-color: black; border-top: 2px double blue }
+.i	{ background-color: yellow }
+.di	{ background-color: yellow; border-top: 2px double blue }
+p	{ font-size: 50%; text-align: Right }
+.left	{ font-size: 75%; text-align: Left }
