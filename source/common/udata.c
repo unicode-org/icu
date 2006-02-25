@@ -1013,7 +1013,7 @@ checkDataItem
  * @return 0 if not loaded, 1 if loaded or err 
  */
 static UDataMemory *doLoadFromIndividualFiles(const char *pkgName, 
-        const char *dataPath, const char *tocEntryPathSuffix, const char *inBasename,
+        const char *dataPath, const char *tocEntryPathSuffix,
             /* following arguments are the same as doOpenChoice itself */
             const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
@@ -1035,8 +1035,7 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
 #ifdef UDATA_DEBUG
         fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
 #endif
-        if( uprv_mapFile(&dataMemory, pathBuffer) ||
-            (inBasename!=pathBuffer && uprv_mapFile(&dataMemory, inBasename)))
+        if(uprv_mapFile(&dataMemory, pathBuffer))
         {
             pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, subErrorCode, pErrorCode);
             if (pEntryData != NULL) {
@@ -1078,7 +1077,7 @@ commonReturn:
  * @return 0 if not loaded, 1 if loaded or err 
  */
 static UDataMemory *doLoadFromCommonData(UBool isICUData, const char *pkgName, 
-        const char *dataPath, const char *tocEntryPathSuffix, const char *tocEntryName, const char *inBasename,
+        const char *dataPath, const char *tocEntryPathSuffix, const char *tocEntryName,
             /* following arguments are the same as doOpenChoice itself */
             const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
@@ -1191,7 +1190,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char         *tocEntrySuffix;
     int32_t             tocEntrySuffixIndex;
     const char         *tocEntryPathSuffix;
-    const char         *inBasename;
     UErrorCode          subErrorCode=U_ZERO_ERROR;
     const char         *treeChar;
 
@@ -1313,16 +1311,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
     fprintf(stderr, " tocEntryPath = %s\n", tocEntryName.s);
 #endif    
 
-    /* try to get an individual data file */
     if(path == NULL) {
         path = COMMON_DATA_NAME; /* "icudt26e" */
-        inBasename = COMMON_DATA_NAME;
-    } else {
-        if(isICUData) {
-            inBasename=COMMON_DATA_NAME;
-        } else {
-            inBasename=findBasename(path);
-        }
     }
 
     /************************ Begin loop looking for ind. files ***************/
@@ -1340,8 +1330,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #endif
         /* #2 */
         retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, dataPath, tocEntryPathSuffix,
-                            tocEntryName.s, inBasename,
+                            pkgName.s, dataPath, tocEntryPathSuffix, tocEntryName.s,
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
             goto commonReturn;
@@ -1356,7 +1345,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #endif
         /* Check to make sure that there is a dataPath to iterate over */
         if ((dataPath && *dataPath) || !isICUData) {
-            retVal = doLoadFromIndividualFiles(pkgName.s, dataPath, tocEntryPathSuffix, inBasename,
+            retVal = doLoadFromIndividualFiles(pkgName.s, dataPath, tocEntryPathSuffix,
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
             if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
                 goto commonReturn;
@@ -1371,8 +1360,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         fprintf(stderr, "Trying packages (UDATA_ONLY_PACKAGES || UDATA_FILES_FIRST)\n");
 #endif
         retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, dataPath, tocEntryPathSuffix,
-                            tocEntryName.s, inBasename,
+                            pkgName.s, dataPath, tocEntryPathSuffix, tocEntryName.s,
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
             goto commonReturn;
@@ -1387,8 +1375,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         fprintf(stderr, "Trying common data (UDATA_NO_FILES)\n");
 #endif
         retVal = doLoadFromCommonData(isICUData, 
-                            pkgName.s, "", tocEntryPathSuffix,
-                            tocEntryName.s, inBasename,
+                            pkgName.s, "", tocEntryPathSuffix, tocEntryName.s,
                             path, type, name, isAcceptable, context, &subErrorCode, pErrorCode);
         if((retVal != NULL) || U_FAILURE(*pErrorCode)) {
             goto commonReturn;
