@@ -55,7 +55,7 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
 CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
 CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE) -+
-DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS
 ARFLAGS         = -cr
 
 ifeq (${OS390_XPLINK}, 1)
@@ -116,7 +116,7 @@ STATIC_O = o
 ifeq ($(OS390_STUBDATA),1)
 ## Suffix of the subset data library for dual common library support
 STUB_SUFFIX=_stub#M#
-DEFS      += -DOS390_STUBDATA#M#
+DEFS      += -DOS390_STUBDATA -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"#M#
 endif
 
 ifeq ($(OS390BATCH),1)
@@ -126,6 +126,7 @@ BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
 else
 BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
 BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
+PKGDATA_DEFS        += -DU_LIBICUDATA_NAME=\"$(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)\"
 endif
 
 BATCH_COMMON_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
