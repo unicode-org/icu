@@ -1,4 +1,10 @@
-﻿#Override	List
+﻿#/**
+# *******************************************************************************
+# * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# */
+#Override	List
 #Format is <code><tab><char><tab><pinyin>(<tab><comment>)?
 #Note: the 'code' field is currently discarded; only the char is important.
 #Note: if there is conflict, the FIRST char wins.
