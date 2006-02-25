@@ -1015,12 +1015,15 @@ public class TestFmwk extends AbstractTestLog {
         }
         
         public static TestParams create(String arglist, PrintWriter log) {
+            String[] args = null;
+            if (arglist != null && arglist.length() > 0) {
 //#ifndef FOUNDATION
-            return create(arglist.split("\\s"), log);
+                args = arglist.split("\\s"), log);
 //#else
-//##        return create(Utility.split(arglist, '\u0020'), log);
+//##            args = Utility.split(arglist, '\u0020'), log);
 //#endif
-
+            }
+            return create(args, log);
         }
         
         /**
@@ -1044,113 +1047,115 @@ public class TestFmwk extends AbstractTestLog {
             boolean usageError = false;
             String filter = null;
             int wx = 0; // write argets.
-            for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                if (arg == null) {
-                    continue;
-                }
-                if (arg.charAt(0) == '-') {
-                    arg = arg.toLowerCase();
-                    if (arg.equals("-verbose") || arg.equals("-v")) {
-                        params.verbose = true;
-                        params.quiet = false;
-                    } else if (arg.equals("-quiet") || arg.equals("-q")) {
-                        params.quiet = true;
-                        params.verbose = false;
-                    } else if (arg.equals("-help") || arg.equals("-h")) {
-                        usageError = true;
-                    } else if (arg.equals("-warning") || arg.equals("-w")) {
-                        params.warnings = true;
-                    } else if (arg.equals("-nodata") || arg.equals("-nd")) {
-                        params.nodata = true;
-                    } else if (arg.equals("-list") || arg.equals("-l")) {
-                        params.listlevel = 1;
-                    } else if (arg.equals("-listall") || arg.equals("-la")) {
-                        params.listlevel = 2;
-                    } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
-                        params.listlevel = 3;
-                    } else if (arg.equals("-memory") || arg.equals("-m")) {
-                        params.memusage = true;
-                    } else if (arg.equals("-nothrow") || arg.equals("-n")) {
-                        params.nothrow = true;
-                        params.errorSummary = new StringBuffer();
-                    } else if (arg.equals("-describe") || arg.equals("-d")) {
-                        params.describe = true;
-                    } else if (arg.startsWith("-r")) {
-                        String s = null;
-                        int n = arg.indexOf(':');
-                        if (n != -1) {
-                            s = arg.substring(n + 1);
-                            arg = arg.substring(0, n);
-                        }
-
-                        if (arg.equals("-r") || arg.equals("-random")) {
-                            if (s == null) {
-                                params.seed = System.currentTimeMillis();
-                            } else {
-                                params.seed = Long.parseLong(s);
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    String arg = args[i];
+                    if (arg == null || arg.length() == 0) {
+                        continue;
+                    }
+                    if (arg.charAt(0) == '-') {
+                        arg = arg.toLowerCase();
+                        if (arg.equals("-verbose") || arg.equals("-v")) {
+                            params.verbose = true;
+                            params.quiet = false;
+                        } else if (arg.equals("-quiet") || arg.equals("-q")) {
+                            params.quiet = true;
+                            params.verbose = false;
+                        } else if (arg.equals("-help") || arg.equals("-h")) {
+                            usageError = true;
+                        } else if (arg.equals("-warning") || arg.equals("-w")) {
+                            params.warnings = true;
+                        } else if (arg.equals("-nodata") || arg.equals("-nd")) {
+                            params.nodata = true;
+                        } else if (arg.equals("-list") || arg.equals("-l")) {
+                            params.listlevel = 1;
+                        } else if (arg.equals("-listall") || arg.equals("-la")) {
+                            params.listlevel = 2;
+                        } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
+                            params.listlevel = 3;
+                        } else if (arg.equals("-memory") || arg.equals("-m")) {
+                            params.memusage = true;
+                        } else if (arg.equals("-nothrow") || arg.equals("-n")) {
+                            params.nothrow = true;
+                            params.errorSummary = new StringBuffer();
+                        } else if (arg.equals("-describe") || arg.equals("-d")) {
+                            params.describe = true;
+                        } else if (arg.startsWith("-r")) {
+                            String s = null;
+                            int n = arg.indexOf(':');
+                            if (n != -1) {
+                                s = arg.substring(n + 1);
+                                arg = arg.substring(0, n);
                             }
-                        } else {
-                            log.println("*** Error: unrecognized argument: " + arg);
-                            usageError = true;
-                            break;
-                        }
-                    } else if (arg.startsWith("-e")) {
-                        // see above
-                        params.inclusion = (arg.length() == 2) 
-                            ? 5 
-                            : Integer.parseInt(arg.substring(2));
-                        if (params.inclusion < 0 || params.inclusion > 10) {
-                            usageError = true;
-                            break;
-                        }
-                    } else if (arg.startsWith("-tfilter:")) {
-                        params.tfilter = arg.substring(8);
-                    } else if (arg.startsWith("-time") || arg.startsWith("-t")) {
-                        long val = 0;
-                        int inx = arg.indexOf(':');
-                        if (inx > 0) {
-                            String num = arg.substring(inx + 1);
-                            try {
-                                val = Long.parseLong(num);
-                            } catch (Exception e) {
-                                log.println("*** Error: could not parse time threshold '"
-                                                + num + "'");
+
+                            if (arg.equals("-r") || arg.equals("-random")) {
+                                if (s == null) {
+                                    params.seed = System.currentTimeMillis();
+                                } else {
+                                    params.seed = Long.parseLong(s);
+                                }
+                            } else {
+                                log.println("*** Error: unrecognized argument: " + arg);
                                 usageError = true;
                                 break;
                             }
+                        } else if (arg.startsWith("-e")) {
+                            // see above
+                            params.inclusion = (arg.length() == 2) 
+                                ? 5 
+                                : Integer.parseInt(arg.substring(2));
+                            if (params.inclusion < 0 || params.inclusion > 10) {
+                                usageError = true;
+                                break;
+                            }
+                        } else if (arg.startsWith("-tfilter:")) {
+                            params.tfilter = arg.substring(8);
+                        } else if (arg.startsWith("-time") || arg.startsWith("-t")) {
+                            long val = 0;
+                            int inx = arg.indexOf(':');
+                            if (inx > 0) {
+                                String num = arg.substring(inx + 1);
+                                try {
+                                    val = Long.parseLong(num);
+                                } catch (Exception e) {
+                                    log.println("*** Error: could not parse time threshold '"
+                                                + num + "'");
+                                    usageError = true;
+                                    break;
+                                }
+                            }
+                            params.timing = val;
+                            String fmt = "#,00s";
+                            if (val <= 10) {
+                                fmt = "#,##0.000s";
+                            } else if (val <= 100) {
+                                fmt = "#,##0.00s";
+                            } else if (val <= 1000) {
+                                fmt = "#,##0.0s";
+                            }
+                            params.tformat = new DecimalFormat(fmt);
+                        } else if (arg.startsWith("-filter:")) {
+                            String temp = arg.substring(8).toLowerCase();
+                            filter = filter == null ? temp : filter + "," + temp;
+                        } else if (arg.startsWith("-f:")) {
+                            String temp = arg.substring(3).toLowerCase();
+                            filter = filter == null ? temp : filter + "," + temp;
+                        } else if (arg.startsWith("-s")) {
+                            params.log = new NullWriter();
+                        } else {
+                            log.println("*** Error: unrecognized argument: "
+                                        + args[i]);
+                            usageError = true;
+                            break;
                         }
-                        params.timing = val;
-                        String fmt = "#,00s";
-                        if (val <= 10) {
-                            fmt = "#,##0.000s";
-                        } else if (val <= 100) {
-                            fmt = "#,##0.00s";
-                        } else if (val <= 1000) {
-                            fmt = "#,##0.0s";
-                        }
-                        params.tformat = new DecimalFormat(fmt);
-                    } else if (arg.startsWith("-filter:")) {
-                        String temp = arg.substring(8).toLowerCase();
-                        filter = filter == null ? temp : filter + "," + temp;
-                    } else if (arg.startsWith("-f:")) {
-                        String temp = arg.substring(3).toLowerCase();
-                        filter = filter == null ? temp : filter + "," + temp;
-                    } else if (arg.startsWith("-s")) {
-                        params.log = new NullWriter();
                     } else {
-                        log.println("*** Error: unrecognized argument: "
-                                + args[i]);
-                        usageError = true;
-                        break;
+                        args[wx++] = arg; // shift down
                     }
-                } else {
-                    args[wx++] = arg; // shift down
                 }
-            }
 
-            while (wx < args.length) {
-                args[wx++] = null;
+                while (wx < args.length) {
+                    args[wx++] = null;
+                }
             }
             
             if (usageError) {
