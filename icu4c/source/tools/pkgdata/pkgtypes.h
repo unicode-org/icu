@@ -134,6 +134,8 @@ typedef struct UPKGOptions_
   UPKGMODE  *fcn;          /* Handler function */
 } UPKGOptions;
 
+char * convertToNativePathSeparators(char *path);
+
 
 /* set up common defines for library naming */
 
