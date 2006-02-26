@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -199,11 +199,21 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
   return l;
 }
 
+char * convertToNativePathSeparators(char *path) {
+#if defined(U_MAKE_IS_NMAKE)
+    char *itr;
+    while ((itr = uprv_strchr(path, U_FILE_ALT_SEP_CHAR))) {
+        *itr = U_FILE_SEP_CHAR;
+    }
+#endif
+    return path;
+}
+
 CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *strAlias) {
     char aBuf[1024];
     char *rPtr; 
     rPtr = uprv_strrchr(strAlias, U_FILE_SEP_CHAR);
-#if defined(U_FILE_ALT_SEP_CHAR) && (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
     {
         char *aPtr = uprv_strrchr(strAlias, U_FILE_ALT_SEP_CHAR);
         if(!rPtr || /* regular char wasn't found or.. */
@@ -222,6 +232,7 @@ CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *str
     }
     strncpy(aBuf, strAlias,(rPtr-strAlias));
     aBuf[rPtr-strAlias]=0;  /* no trailing slash */
+    convertToNativePathSeparators(aBuf);
 
     if(!pkg_listContains(l, aBuf)) {
         return pkg_appendToList(l, end, uprv_strdup(aBuf));

@@ -24,6 +24,7 @@
 #include "unicode/putil.h"
 #include "makefile.h"
 #include "cstring.h"
+#include "cmemory.h"
 #include <stdio.h>
 
 #ifdef U_MAKE_IS_NMAKE
@@ -35,6 +36,8 @@ void
 pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 {
     const char *appendVersion = NULL;
+    char *srcDir = convertToNativePathSeparators(uprv_strdup(o->srcDir));
+
     if(o->version && !uprv_strstr(o->shortName,o->version)) { /* do not append version if 
                                                                  already contained in the name */
       appendVersion = o->version;
@@ -59,12 +62,13 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     "ENTRYPOINT=%s\n"
                     "TARGET_VERSION=%s\n"
                     "MKINSTALLDIRS=mkdir\n"
+                    "INSTALL_DATA=copy\n"
                     "\n\n\n",
                     o->shortName,
                     (appendVersion ? appendVersion : ""),
                     o->cShortName,
                     o->libName,
-                    o->srcDir,
+                    srcDir,
                     o->targetDir,
                     o->tmpDir,
                     o->mode,
@@ -102,6 +106,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 
     T_FileStream_writeLine(f, "\n\n\n");
 
+    uprv_free(srcDir);
 }
 
 /* Write a stanza in the makefile, with specified   "target: parents...  \n\n\tcommands" [etc] */

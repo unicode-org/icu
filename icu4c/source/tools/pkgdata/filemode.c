@@ -51,7 +51,11 @@ install: all
 
 */
 
-
+#ifdef U_MAKE_IS_NMAKE
+#define DEPENDENT_FILE_RULE "$?"
+#else
+#define DEPENDENT_FILE_RULE "$<"
+#endif
 
 void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
@@ -100,7 +104,8 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
             /* fprintf(stderr, "### NOT copying: %s\n", tmp); */
             /*  no copy needed.. */
         } else {
-            sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp, srcPath);
+            sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) "DEPENDENT_FILE_RULE" $@\n", tmp, srcPath);
+            convertToNativePathSeparators(stanza);
             T_FileStream_writeLine(makefile, stanza);
         }
 
@@ -115,7 +120,8 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
             /* fprintf(stderr, "### NOT copying: %s\n", tmp2);   */
             /*  no copy needed.. */
         } else {
-            sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp2, tmp);
+            sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) "DEPENDENT_FILE_RULE" $@\n", tmp2, tmp);
+            convertToNativePathSeparators(stanza);
             T_FileStream_writeLine(makefile, stanza);
 
             /* left hand side: target path, target name */
