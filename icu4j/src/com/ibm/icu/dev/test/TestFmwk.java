@@ -1018,9 +1018,9 @@ public class TestFmwk extends AbstractTestLog {
             String[] args = null;
             if (arglist != null && arglist.length() > 0) {
 //#ifndef FOUNDATION
-                args = arglist.split("\\s"), log);
+                args = arglist.split("\\s");
 //#else
-//##            args = Utility.split(arglist, '\u0020'), log);
+//##            args = Utility.split(arglist, '\u0020');
 //#endif
             }
             return create(args, log);
