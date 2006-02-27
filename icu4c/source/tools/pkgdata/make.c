@@ -63,6 +63,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     "TARGET_VERSION=%s\n"
                     "MKINSTALLDIRS=mkdir\n"
                     "INSTALL_DATA=copy\n"
+                    "RMV=del /F"
                     "\n\n\n",
                     o->shortName,
                     (appendVersion ? appendVersion : ""),
