@@ -1334,6 +1334,27 @@ directory.</li>
 following command. <br>
     <i>$ant_home</i>/bin/ant resources</li>
 </ol>
+<h5> Generating Data from CLDR </h5>
+<i> Note: This procedure assumes that all 3 sources are in sibling directories</i>
+<ol>
+    <li>Checkout CLDR</li>
+    <li>Update <i>$cldr_root</i>/common to 'release-1-3-Corrigendum-2' tag</li>
+    <li>Update <i>$cldr_root</i>/tools to 'tag-for-icu4j-release-3-4-3' tag</li>
+    <li>Checkout ICU with tag 'release-3-4-1'</li>
+    <li>Checkout ICU4J with tag 'release-3-4-3'</li>
+    <li>Build ICU4J</li>
+    <li>Build ICU4C</li>
+    <li>Change to <i>$cldr_root</i>/tools/java directory</li>
+    <li>Build CLDR using ant after pointing ICU4J_CLASSES env var to the newly build ICU4J</li>
+    <li>cd to <i>$icu4c_root</i>/source/data directory</li>
+    <li>Follow the instructions in the cldr-icu-readme.txt</li>
+    <li>Build ICU data from CLDR</li>
+    <li>cd to <i>$icu4c_root/source/tools/genrb</i></li>
+    <li>run ./gendtjar.pl</li>
+    <li>cd to <i>$icu4j_root</i> dir</li>
+    <li>Build and test icu4j</li>
+</ol>
+
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
 <p><a href="http://ibm.com/software/globalization/icu/">http://ibm.com/software/globalization/icu/</a>
