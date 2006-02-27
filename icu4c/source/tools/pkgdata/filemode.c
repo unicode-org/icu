@@ -79,7 +79,10 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     const char *baseName;
 
-    T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME) all install clean\n\nall: $(NAME)\n\n");
+#ifndef U_MAKE_IS_NMAKE
+    T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME) all install clean\n");
+#endif
+    T_FileStream_writeLine(makefile, "\nall: $(NAME)\n\n");
 
     infiles = o->files; /* raw files - no paths other than tree paths */
 
