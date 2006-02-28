@@ -51,7 +51,7 @@ $H2 = [\p{LineBreak = H2}];
 $H3 = [\p{LineBreak = H3}];
 
 
-$Extend = [\{p{Grapheme_Cluster_Break = Extend}];
+$Extend = [\p{Grapheme_Cluster_Break = Extend}];
 
 
 #
