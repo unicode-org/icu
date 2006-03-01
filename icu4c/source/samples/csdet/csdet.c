@@ -67,5 +67,7 @@ int main(int argc, char *argv[])
 
         ucsdet_close(csd);
     }
+    
+    return 0;
 }
 
