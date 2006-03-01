@@ -19,8 +19,7 @@ binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML
 
 usage()
 {
-    echo "Enter archive filename as a parameter: $0 icu-archive.tar [strip]"
-    echo "(strip is an option to remove hex '0D' carriage returns)"
+    echo "Enter archive filename as a parameter: $0 icu-archive.tar"
 }
 # first make sure we at least one arg and it's a file we can read
 if [ $# -eq 0 ]; then
@@ -39,24 +38,6 @@ echo "Extracting from $tar_file ..."
 echo ""
 # extract files while converting them to EBCDIC
 pax -rvf $tar_file -o to=IBM-1047,from=ISO8859-1
-
-if test $# -gt 1 -a "$2" = "strip" ; then
-	echo ""
-	echo "Stripping hex 0d characters ..."
-	for i in $(pax -f $tar_file 2>/dev/null)
-	do
-		case $i in
-		*/) ;;	# then this entry is a directory
-		*)		# then this entry is NOT a directory
-			tr -d 
- <$i >@@@icu@tmp
-			chmod +w $i
-			rm $i
-			mv @@@icu@tmp $i
-			;;
-		esac
-	done
-fi
 
 echo ""
 echo "Determining binary files ..."
