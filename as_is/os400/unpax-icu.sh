@@ -1,11 +1,11 @@
 #!/usr/bin/qsh
-#   Copyright (C) 2000-2005, International Business Machines
+#   Copyright (C) 2000-2006, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
 # Ami Fixler
 # Barry Novinger
-# Steven R. Loomis <srl@jtcsv.com>
+# Steven R. Loomis
 # George Rhoten
 #
 # Shell script to unpax ICU and convert the files to an EBCDIC codepage.
@@ -16,84 +16,53 @@
 
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML'
 data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 usage()
 {
-  echo "Enter archive filename as a parameter: $0 icu-archive.tar [strip]"
-  echo "(strip is an option to remove hex '0D' carraige returns)"
+  echo "Enter archive filename as a parameter: $0 icu-archive.tar"
 }
 # first make sure we at least one arg and it's a file we can read
 if [ $# -eq 0 ]; then
   usage
   exit
 fi
-if [ ! -r $1 ]; then
-  echo "$1 does not exist or cannot be read."
+tar_file=$1
+if [ ! -r $tar_file ]; then
+  echo "$tar_file does not exist or cannot be read."
   usage
   exit
 fi
 # set up a few variables
 
 echo ""
-echo "Extracting from $1 ..."
+echo "Extracting from $tar_file ..."
 echo ""
 
 # determine which directories in the data_files list
 # are included in the provided archive
 for data_dir in $data_files
 do
-    if (pax -f $1 $data_dir >/dev/null 2>&1)
+    if (pax -f $tar_file $data_dir >/dev/null 2>&1)
     then
         ebcdic_data="$ebcdic_data `echo $data_dir`";
     fi
 done
 
 # extract everything as iso-8859-1 except these directories
-pax -C 819 -rcvf $1 $ebcdic_data
+pax -C 819 -rcvf $tar_file $ebcdic_data
 
 # extract files while converting them to EBCDIC
 echo ""
 echo "Extracting files which must be in ibm-37 ..."
 echo ""
-pax -C 37 -rvf $1 $ebcdic_data
-
-if [ $# -gt 1 ]; then
-  if [ $2 -eq strip ]; then
-    echo ""
-    echo "Stripping hex 0d characters ..."
-    for i in $(pax -f $1 2>/dev/null)
-    do
-      case $i in
-        */)
-         # then this entry is a directory
-         ;;
-        *)
-          # then this entry is NOT a directory
-          tr -d 
- <$i >@@@icu@tmp
-          chmod +w $i
-          rm $i
-          mv @@@icu@tmp $i
-          ;;
-       esac
-    done
-  fi
-fi
+pax -C 37 -rvf $tar_file $ebcdic_data
 
 echo ""
 echo "Determining binary files ..."
 echo ""
 
-#for dir in `find ./icu -type d \( -name CVS -o -print \)`; do
-#    if [ -f $dir/CVS/Entries ]; then
-#        binary_files="$binary_files`cat $dir/CVS/Entries | fgrep -- -kb \
-#                      | cut -d / -f2 | sed -e "s%^%$dir/%" \
-#                      | sed -e "s%^\./%%" | tr '\n' ' '`"
-#    fi
-#done
-#echo "Detecting Unicode files"
 for file in `find ./icu \( -name \*.txt -print \)`; do
     bom8=`head -n 1 $file|\
           od -t x1|\
@@ -101,7 +70,6 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
           sed 's/  */ /g'|\
           cut -f2-4 -d ' '|\
           tr 'A-Z' 'a-z'`;
-#    echo "bom8 is" $bom8 "for" $file
     #Find a converted UTF-8 BOM
     if [ "$bom8" = "057 08b 0ab" -o "$bom8" = "57 8b ab" ]
     then
@@ -114,10 +82,7 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
     fi
 done
 
-#echo $binary_files1
-#echo $binary_files2
-
-for i in $(pax -f $1 2>/dev/null)
+for i in $(pax -f $tar_file 2>/dev/null)
 do
   case $i in
     */)
@@ -150,8 +115,8 @@ else
   echo ""
   rm $binary_files1
   rm $binary_files2
-  pax -C 819 -rvf $1 $binary_files1
-  pax -C 819 -rvf $1 $binary_files2
+  pax -C 819 -rvf $tar_file $binary_files1
+  pax -C 819 -rvf $tar_file $binary_files2
 fi
 echo ""
-echo "$0 has completed extracting ICU from $1."
+echo "$0 has completed extracting ICU from $tar_file."
