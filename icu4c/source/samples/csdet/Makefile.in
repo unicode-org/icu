@@ -60,7 +60,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	$(INVOKE) ./$(TARGET)
+	$(INVOKE) ./$(TARGET) $(top_srcdir)/extra/uconv/samples/danish-ISO-8859-1.txt
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
