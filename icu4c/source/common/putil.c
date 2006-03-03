@@ -746,7 +746,8 @@ static char *gTimeZoneBufferPtr = NULL;
 static UBool isValidOlsonID(const char *id) {
     /* This is sometimes set to "PST8PDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
-    return (UBool)(uprv_strchr(id, '/') != NULL || uprv_strlen(id) < 7);
+    return (UBool)(uprv_strchr(id, '/') != NULL || uprv_strlen(id) < 7
+        || uprv_strcmp(id, "NZ-CHAT") == 0);
 }
 #endif
 
