@@ -108,6 +108,9 @@
 #elif defined(U_SOLARIS)
 #elif defined(U_HPUX)
 #elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
+#ifndef __USE_XOPEN_EXTENDED
+#define __USE_XOPEN_EXTENDED
+#endif
 #include <limits.h>
 #include <unistd.h>
 #elif defined(U_QNX)
