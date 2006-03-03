@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2003 IBM, Inc. and others
+# Copyright (c) 2000-2006 IBM, Inc. and others
 # sample code makefile
 
 # Usage:
@@ -12,7 +12,7 @@
 TARGET=datecal
 
 # All object files (C or C++)
-OBJECTS=datecal.o cdatcal.o
+OBJECTS=cal.o ccal.o
 
 #### rules
 # Load in standard makefile definitions
