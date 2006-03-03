@@ -748,6 +748,7 @@ uprv_tzname(int n)
     }
 #else
     const char *tzenv = NULL;
+
 #if defined(U_DARWIN)
     int ret;
 
@@ -755,25 +756,8 @@ uprv_tzname(int n)
     if (tzenv != NULL) {
         return tzenv;
     }
-
-#if !UCONFIG_NO_FILE_IO
-    /* Caller must handle threading issues */
-    if (gTimeZoneBufferPtr == NULL) {
-        ret = readlink(TZZONELINK, gTimeZoneBuffer, sizeof(gTimeZoneBuffer));
-        if (0 < ret) {
-            gTimeZoneBuffer[ret] = 0;
-            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
-                return (gTimeZoneBufferPtr = gTimeZoneBuffer + sizeof(TZZONEINFO) - 1);
-            }
-        }
-    }
-    else {
-        return gTimeZoneBufferPtr;
-    }
-#endif
 #endif
 
-#if !UCONFIG_NO_FILE_IO
     /* TZ is sometimes set to "PST8PDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
     tzenv = getenv("TZ");
@@ -788,6 +772,21 @@ uprv_tzname(int n)
         return tzenv;
     }
     /* else U_TZNAME will give a better result. */
+
+#if defined(U_DARWIN) && !UCONFIG_NO_FILE_IO
+    /* Caller must handle threading issues */
+    if (gTimeZoneBufferPtr == NULL) {
+        ret = readlink(TZZONELINK, gTimeZoneBuffer, sizeof(gTimeZoneBuffer));
+        if (0 < ret) {
+            gTimeZoneBuffer[ret] = 0;
+            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
+                return (gTimeZoneBufferPtr = gTimeZoneBuffer + sizeof(TZZONEINFO) - 1);
+            }
+        }
+    }
+    else {
+        return gTimeZoneBufferPtr;
+    }
 #endif
 #endif
 
