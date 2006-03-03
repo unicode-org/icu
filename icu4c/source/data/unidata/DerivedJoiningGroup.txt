@@ -1,8 +1,8 @@
-# DerivedJoiningGroup-4.1.0.txt
-# Date: 2004-12-15, 02:14:58 GMT [MD]
+# DerivedJoiningGroup-5.0.0.txt
+# Date: 2006-03-03, 08:23:01 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2005 Unicode, Inc.
+# Copyright (c) 1991-2006 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -12,6 +12,8 @@
 
 #  All code points not explicitly listed for Joining_Group
 #  have the value No_Joining_Group.
+
+#@ missing: 0000..10FFFF; No_Joining_Group
 
 # ================================================
 
@@ -387,3 +389,5 @@
 074F          ; Fe # Lo       SYRIAC LETTER SOGDIAN FE
 
 # Total code points: 1
+
+# EOF

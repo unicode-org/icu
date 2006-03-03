@@ -211,7 +211,8 @@ Checks LetterLike Symbols which were previously a source of confusion
 */
     for (i=0x2100;i<0x2138;i++)
     {
-        if(i!=0x2126 && i!=0x212a && i!=0x212b)
+        /* Unicode 5.0 adds lowercase U+214E (TURNED SMALL F) to U+2132 (TURNED CAPITAL F) */
+        if(i!=0x2126 && i!=0x212a && i!=0x212b && i!=0x2132)
         {
             if (i != (int)u_tolower(i)) /* itself */
                 log_err("Failed case conversion with itself: U+%04x\n", i);
@@ -324,57 +325,77 @@ Checks LetterLike Symbols which were previously a source of confusion
     }
 }
 
-/* compare two sets, which is not easy with the current (ICU 2.4) C API... */
-
+/* compare two sets and verify that their difference or intersection is empty */
 static UBool
 showADiffB(const USet *a, const USet *b,
            const char *a_name, const char *b_name,
            UBool expect, UBool diffIsError) {
+    USet *aa;
     int32_t i, start, end, length;
-    UBool equal;
     UErrorCode errorCode;
 
+    /*
+     * expect:
+     * TRUE  -> a-b should be empty, that is, b should contain all of a
+     * FALSE -> a&b should be empty, that is, a should contain none of b (and vice versa)
+     */
+    if(expect ? uset_containsAll(b, a) : uset_containsNone(a, b)) {
+        return TRUE;
+    }
+
+    /* clone a to aa because a is const */
+    aa=uset_open(1, 0);
+    if(aa==NULL) {
+        /* unusual problem - out of memory? */
+        return FALSE;
+    }
+    uset_addAll(aa, a);
+
+    /* compute the set in question */
+    if(expect) {
+        /* a-b */
+        uset_removeAll(aa, b);
+    } else {
+        /* a&b */
+        uset_retainAll(aa, b);
+    }
+
+    /* aa is not empty because of the initial tests above; show its contents */
     errorCode=U_ZERO_ERROR;
-    equal=TRUE;
     i=0;
     for(;;) {
-        length=uset_getItem(a, i, &start, &end, NULL, 0, &errorCode);
+        length=uset_getItem(aa, i, &start, &end, NULL, 0, &errorCode);
         if(errorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
-            return equal; /* done */
+            break; /* done */
         }
         if(U_FAILURE(errorCode)) {
-            log_err("error comparing %s with %s at item %d: %s\n",
+            log_err("error comparing %s with %s at difference item %d: %s\n",
                 a_name, b_name, i, u_errorName(errorCode));
-            return FALSE;
+            break;
         }
         if(length!=0) {
-            return equal; /* done with code points, got a string or -1 */
+            break; /* done with code points, got a string or -1 */
         }
 
-        if(expect!=uset_containsRange(b, start, end)) {
-            equal=FALSE;
-            while(start<=end) {
-                if(expect!=uset_contains(b, start)) {
-                    if(diffIsError) {
-                        if(expect) {
-                            log_err("error: %s contains U+%04x but %s does not\n", a_name, start, b_name);
-                        } else {
-                            log_err("error: %s and %s both contain U+%04x but should not intersect\n", a_name, b_name, start);
-                        }
-                    } else {
-                        if(expect) {
-                            log_verbose("info: %s contains U+%04x but %s does not\n", a_name, start, b_name);
-                        } else {
-                            log_verbose("info: %s and %s both contain U+%04x but should not intersect\n", a_name, b_name, start);
-                        }
-                    }
-                }
-                ++start;
+        if(diffIsError) {
+            if(expect) {
+                log_err("error: %s contains U+%04x..U+%04x but %s does not\n", a_name, start, end, b_name);
+            } else {
+                log_err("error: %s and %s both contain U+%04x..U+%04x but should not intersect\n", a_name, b_name, start, end);
+            }
+        } else {
+            if(expect) {
+                log_verbose("info: %s contains U+%04x..U+%04x but %s does not\n", a_name, start, end, b_name);
+            } else {
+                log_verbose("info: %s and %s both contain U+%04x..U+%04x but should not intersect\n", a_name, b_name, start, end);
             }
         }
 
         ++i;
     }
+
+    uset_close(aa);
+    return FALSE;
 }
 
 static UBool
@@ -395,8 +416,12 @@ static UBool
 compareUSets(const USet *a, const USet *b,
              const char *a_name, const char *b_name,
              UBool diffIsError) {
+    /*
+     * Use an arithmetic & not a logical && so that both branches
+     * are always taken and all differences are shown.
+     */
     return
-        showAMinusB(a, b, a_name, b_name, diffIsError) &&
+        showAMinusB(a, b, a_name, b_name, diffIsError) &
         showAMinusB(b, a, b_name, a_name, diffIsError);
 }
 
@@ -2229,7 +2254,8 @@ TestAdditionalProperties() {
         { 0x0590, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05cf, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
-        { 0x07f2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x07f2, UCHAR_BIDI_CLASS, U_DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
+        { 0x07fe, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT }, /* unassigned R */
         { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0xfb37, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0xfb42, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
@@ -2811,11 +2837,27 @@ TestConsistency() {
     U_STRING_DECL(formatPattern, "[:Cf:]", 6);
     U_STRING_DECL(alphaPattern, "[:Alphabetic:]", 14);
 
+    U_STRING_DECL(mathBlocksPattern,
+        "[[:block=Mathematical Operators:][:block=Miscellaneous Mathematical Symbols-A:][:block=Miscellaneous Mathematical Symbols-B:][:block=Supplemental Mathematical Operators:][:block=Mathematical Alphanumeric Symbols:]]",
+        1+32+46+46+45+43+1+1); /* +1 for NUL */
+    U_STRING_DECL(mathPattern, "[:Math:]", 8);
+    U_STRING_DECL(unassignedPattern, "[:Cn:]", 6);
+    U_STRING_DECL(unknownPattern, "[:sc=Unknown:]", 14);
+    U_STRING_DECL(reservedPattern, "[[:Cn:][:Co:][:Cs:]]", 20);
+
     U_STRING_INIT(hyphenPattern, "[:Hyphen:]", 10);
     U_STRING_INIT(dashPattern, "[:Dash:]", 8);
     U_STRING_INIT(lowerPattern, "[:Lowercase:]", 13);
     U_STRING_INIT(formatPattern, "[:Cf:]", 6);
     U_STRING_INIT(alphaPattern, "[:Alphabetic:]", 14);
+
+    U_STRING_INIT(mathBlocksPattern,
+        "[[:block=Mathematical Operators:][:block=Miscellaneous Mathematical Symbols-A:][:block=Miscellaneous Mathematical Symbols-B:][:block=Supplemental Mathematical Operators:][:block=Mathematical Alphanumeric Symbols:]]",
+        1+32+46+46+45+43+1+1); /* +1 for NUL */
+    U_STRING_INIT(mathPattern, "[:Math:]", 8);
+    U_STRING_INIT(unassignedPattern, "[:Cn:]", 6);
+    U_STRING_INIT(unknownPattern, "[:sc=Unknown:]", 14);
+    U_STRING_INIT(reservedPattern, "[[:Cn:][:Co:][:Cs:]]", 20);
 
     /*
      * It used to be that UCD.html and its precursors said
@@ -2936,6 +2978,39 @@ TestConsistency() {
     uset_close(set2);
 
 #endif
+
+    /* verify that all assigned characters in Math blocks are exactly Math characters */
+    errorCode=U_ZERO_ERROR;
+    set1=uset_openPattern(mathBlocksPattern, -1, &errorCode);
+    set2=uset_openPattern(mathPattern, 8, &errorCode);
+    set3=uset_openPattern(unassignedPattern, 6, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        uset_retainAll(set2, set1); /* [math blocks]&[:Math:] */
+        uset_complement(set3);      /* assigned characters */
+        uset_retainAll(set1, set3); /* [math blocks]&[assigned] */
+        compareUSets(set1, set2,
+                     "[assigned Math block chars]", "[math blocks]&[:Math:]",
+                     TRUE);
+    } else {
+        log_err("error opening [math blocks] or [:Math:] or [:Cn:] - %s\n", u_errorName(errorCode));
+    }
+    uset_close(set1);
+    uset_close(set2);
+    uset_close(set3);
+
+    /* new in Unicode 5.0: exactly all unassigned+PUA+surrogate code points have script=Unknown */
+    errorCode=U_ZERO_ERROR;
+    set1=uset_openPattern(unknownPattern, 14, &errorCode);
+    set2=uset_openPattern(reservedPattern, 20, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        compareUSets(set1, set2,
+                     "[:sc=Unknown:]", "[[:Cn:][:Co:][:Cs:]]",
+                     TRUE);
+    } else {
+        log_err("error opening [:sc=Unknown:] or [[:Cn:][:Co:][:Cs:]] - %s\n", u_errorName(errorCode));
+    }
+    uset_close(set1);
+    uset_close(set2);
 }
 
 /*

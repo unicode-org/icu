@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "4.1"
+#define U_UNICODE_VERSION "5.0"
 
 /**
  * \file
@@ -1238,10 +1238,31 @@ enum UBlockCode {
     /** @draft ICU 3.4 */
     UBLOCK_VERTICAL_FORMS = 145, /*[FE10]*/
 
+    /* New blocks in Unicode 5.0 */
+
+    /** @draft ICU 3.6 */
+    UBLOCK_NKO = 146, /*[07C0]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_BALINESE = 147, /*[1B00]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_LATIN_EXTENDED_C = 148, /*[2C60]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_LATIN_EXTENDED_D = 149, /*[A720]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_PHAGS_PA = 150, /*[A840]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_PHOENICIAN = 151, /*[10900]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_CUNEIFORM = 152, /*[12000]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_CUNEIFORM_NUMBERS_AND_PUNCTUATION = 153, /*[12400]*/
+    /** @draft ICU 3.6 */
+    UBLOCK_COUNTING_ROD_NUMERALS = 154, /*[1D360]*/
+
 #endif /*U_HIDE_DRAFT_API*/
     
     /** @stable ICU 2.0 */
-    UBLOCK_COUNT = 146,
+    UBLOCK_COUNT = 155,
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1

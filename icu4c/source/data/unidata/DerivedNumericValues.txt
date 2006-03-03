@@ -1,8 +1,8 @@
-# DerivedNumericValues-4.1.0.txt
-# Date: 2005-03-10, 03:07:57 GMT [MD]
+# DerivedNumericValues-5.0.0.txt
+# Date: 2006-02-27, 23:41:38 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2005 Unicode, Inc.
+# Copyright (c) 1991-2006 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -25,6 +25,7 @@
 0030          ; 0.0 # Nd       DIGIT ZERO
 0660          ; 0.0 # Nd       ARABIC-INDIC DIGIT ZERO
 06F0          ; 0.0 # Nd       EXTENDED ARABIC-INDIC DIGIT ZERO
+07C0          ; 0.0 # Nd       NKO DIGIT ZERO
 0966          ; 0.0 # Nd       DEVANAGARI DIGIT ZERO
 09E6          ; 0.0 # Nd       BENGALI DIGIT ZERO
 0A66          ; 0.0 # Nd       GURMUKHI DIGIT ZERO
@@ -43,6 +44,7 @@
 1810          ; 0.0 # Nd       MONGOLIAN DIGIT ZERO
 1946          ; 0.0 # Nd       LIMBU DIGIT ZERO
 19D0          ; 0.0 # Nd       NEW TAI LUE DIGIT ZERO
+1B50          ; 0.0 # Nd       BALINESE DIGIT ZERO
 2070          ; 0.0 # No       SUPERSCRIPT ZERO
 2080          ; 0.0 # No       SUBSCRIPT ZERO
 24EA          ; 0.0 # No       CIRCLED DIGIT ZERO
@@ -58,19 +60,21 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 1D7EC         ; 0.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT ZERO
 1D7F6         ; 0.0 # Nd       MATHEMATICAL MONOSPACE DIGIT ZERO
 
-# Total code points: 35
+# Total code points: 37
 
 # ================================================
 
 215B          ; 0.125 # No       VULGAR FRACTION ONE EIGHTH
+1245F         ; 0.125 # Nl       CUNEIFORM NUMERIC SIGN ONE EIGHTH ASH
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
 2159          ; 0.16666667 # No       VULGAR FRACTION ONE SIXTH
+12461         ; 0.16666667 # Nl       CUNEIFORM NUMERIC SIGN OLD ASSYRIAN ONE SIXTH
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
@@ -82,14 +86,18 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 
 00BC          ; 0.25 # No       VULGAR FRACTION ONE QUARTER
 10140         ; 0.25 # Nl       GREEK ACROPHONIC ATTIC ONE QUARTER
+12460         ; 0.25 # Nl       CUNEIFORM NUMERIC SIGN ONE QUARTER ASH
+12462         ; 0.25 # Nl       CUNEIFORM NUMERIC SIGN OLD ASSYRIAN ONE QUARTER
 
-# Total code points: 2
+# Total code points: 4
 
 # ================================================
 
 2153          ; 0.33333333 # No       VULGAR FRACTION ONE THIRD
+1245A         ; 0.33333333 # Nl       CUNEIFORM NUMERIC SIGN ONE THIRD DISH
+1245D         ; 0.33333333 # Nl       CUNEIFORM NUMERIC SIGN ONE THIRD VARIANT FORM A
 
-# Total code points: 1
+# Total code points: 3
 
 # ================================================
 
@@ -129,8 +137,10 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 
 2154          ; 0.66666667 # No       VULGAR FRACTION TWO THIRDS
 10177         ; 0.66666667 # No       GREEK TWO THIRDS SIGN
+1245B         ; 0.66666667 # Nl       CUNEIFORM NUMERIC SIGN TWO THIRDS DISH
+1245E         ; 0.66666667 # Nl       CUNEIFORM NUMERIC SIGN TWO THIRDS VARIANT FORM A
 
-# Total code points: 2
+# Total code points: 4
 
 # ================================================
 
@@ -148,8 +158,9 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 # ================================================
 
 215A          ; 0.83333333 # No       VULGAR FRACTION FIVE SIXTHS
+1245C         ; 0.83333333 # Nl       CUNEIFORM NUMERIC SIGN FIVE SIXTHS DISH
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
@@ -163,6 +174,7 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 00B9          ; 1.0 # No       SUPERSCRIPT ONE
 0661          ; 1.0 # Nd       ARABIC-INDIC DIGIT ONE
 06F1          ; 1.0 # Nd       EXTENDED ARABIC-INDIC DIGIT ONE
+07C1          ; 1.0 # Nd       NKO DIGIT ONE
 0967          ; 1.0 # Nd       DEVANAGARI DIGIT ONE
 09E7          ; 1.0 # Nd       BENGALI DIGIT ONE
 09F4          ; 1.0 # No       BENGALI CURRENCY NUMERATOR ONE
@@ -183,6 +195,7 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 1811          ; 1.0 # Nd       MONGOLIAN DIGIT ONE
 1947          ; 1.0 # Nd       LIMBU DIGIT ONE
 19D1          ; 1.0 # Nd       NEW TAI LUE DIGIT ONE
+1B51          ; 1.0 # Nd       BALINESE DIGIT ONE
 2081          ; 1.0 # No       SUBSCRIPT ONE
 215F          ; 1.0 # No       FRACTION NUMERATOR ONE
 2160          ; 1.0 # Nl       ROMAN NUMERAL ONE
@@ -210,7 +223,15 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 10320         ; 1.0 # No       OLD ITALIC NUMERAL ONE
 103D1         ; 1.0 # Nl       OLD PERSIAN NUMBER ONE
 104A1         ; 1.0 # Nd       OSMANYA DIGIT ONE
+10916         ; 1.0 # No       PHOENICIAN NUMBER ONE
 10A40         ; 1.0 # No       KHAROSHTHI DIGIT ONE
+12415         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE GESH2
+1241E         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE GESHU
+1242C         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE SHARU
+12434         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE BURU
+1244F         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE BAN2
+12458         ; 1.0 # Nl       CUNEIFORM NUMERIC SIGN ONE ESHE3
+1D360         ; 1.0 # No       COUNTING ROD UNIT DIGIT ONE
 1D7CF         ; 1.0 # Nd       MATHEMATICAL BOLD DIGIT ONE
 1D7D9         ; 1.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT ONE
 1D7E3         ; 1.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT ONE
@@ -218,7 +239,7 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 1D7F7         ; 1.0 # Nd       MATHEMATICAL MONOSPACE DIGIT ONE
 2092A         ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-2092A
 
-# Total code points: 60
+# Total code points: 70
 
 # ================================================
 
@@ -232,6 +253,7 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 00B2          ; 2.0 # No       SUPERSCRIPT TWO
 0662          ; 2.0 # Nd       ARABIC-INDIC DIGIT TWO
 06F2          ; 2.0 # Nd       EXTENDED ARABIC-INDIC DIGIT TWO
+07C2          ; 2.0 # Nd       NKO DIGIT TWO
 0968          ; 2.0 # Nd       DEVANAGARI DIGIT TWO
 09E8          ; 2.0 # Nd       BENGALI DIGIT TWO
 09F5          ; 2.0 # No       BENGALI CURRENCY NUMERATOR TWO
@@ -252,6 +274,7 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 1812          ; 2.0 # Nd       MONGOLIAN DIGIT TWO
 1948          ; 2.0 # Nd       LIMBU DIGIT TWO
 19D2          ; 2.0 # Nd       NEW TAI LUE DIGIT TWO
+1B52          ; 2.0 # Nd       BALINESE DIGIT TWO
 2082          ; 2.0 # No       SUBSCRIPT TWO
 2161          ; 2.0 # Nl       ROMAN NUMERAL TWO
 2171          ; 2.0 # Nl       SMALL ROMAN NUMERAL TWO
@@ -280,6 +303,16 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 103D2         ; 2.0 # Nl       OLD PERSIAN NUMBER TWO
 104A2         ; 2.0 # Nd       OSMANYA DIGIT TWO
 10A41         ; 2.0 # No       KHAROSHTHI DIGIT TWO
+12400         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO ASH
+12416         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO GESH2
+1241F         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO GESHU
+12423         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO SHAR2
+1242D         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO SHARU
+12435         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO BURU
+1244A         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO ASH TENU
+12450         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO BAN2
+12459         ; 2.0 # Nl       CUNEIFORM NUMERIC SIGN TWO ESHE3
+1D361         ; 2.0 # No       COUNTING ROD UNIT DIGIT TWO
 1D7D0         ; 2.0 # Nd       MATHEMATICAL BOLD DIGIT TWO
 1D7DA         ; 2.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT TWO
 1D7E4         ; 2.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT TWO
@@ -287,7 +320,7 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 1D7F8         ; 2.0 # Nd       MATHEMATICAL MONOSPACE DIGIT TWO
 22390         ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-22390
 
-# Total code points: 61
+# Total code points: 73
 
 # ================================================
 
@@ -301,6 +334,7 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 00B3          ; 3.0 # No       SUPERSCRIPT THREE
 0663          ; 3.0 # Nd       ARABIC-INDIC DIGIT THREE
 06F3          ; 3.0 # Nd       EXTENDED ARABIC-INDIC DIGIT THREE
+07C3          ; 3.0 # Nd       NKO DIGIT THREE
 0969          ; 3.0 # Nd       DEVANAGARI DIGIT THREE
 09E9          ; 3.0 # Nd       BENGALI DIGIT THREE
 09F6          ; 3.0 # No       BENGALI CURRENCY NUMERATOR THREE
@@ -321,6 +355,7 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 1813          ; 3.0 # Nd       MONGOLIAN DIGIT THREE
 1949          ; 3.0 # Nd       LIMBU DIGIT THREE
 19D3          ; 3.0 # Nd       NEW TAI LUE DIGIT THREE
+1B53          ; 3.0 # Nd       BALINESE DIGIT THREE
 2083          ; 3.0 # No       SUBSCRIPT THREE
 2162          ; 3.0 # Nl       ROMAN NUMERAL THREE
 2172          ; 3.0 # Nl       SMALL ROMAN NUMERAL THREE
@@ -343,6 +378,17 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 10109         ; 3.0 # No       AEGEAN NUMBER THREE
 104A3         ; 3.0 # Nd       OSMANYA DIGIT THREE
 10A42         ; 3.0 # No       KHAROSHTHI DIGIT THREE
+12401         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE ASH
+12408         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE DISH
+12417         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE GESH2
+12420         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE GESHU
+12424..12425  ; 3.0 # Nl   [2] CUNEIFORM NUMERIC SIGN THREE SHAR2..CUNEIFORM NUMERIC SIGN THREE SHAR2 VARIANT FORM
+1242E..1242F  ; 3.0 # Nl   [2] CUNEIFORM NUMERIC SIGN THREE SHARU..CUNEIFORM NUMERIC SIGN THREE SHARU VARIANT FORM
+12436..12437  ; 3.0 # Nl   [2] CUNEIFORM NUMERIC SIGN THREE BURU..CUNEIFORM NUMERIC SIGN THREE BURU VARIANT FORM
+1243A..1243B  ; 3.0 # Nl   [2] CUNEIFORM NUMERIC SIGN THREE VARIANT FORM ESH16..CUNEIFORM NUMERIC SIGN THREE VARIANT FORM ESH21
+1244B         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE ASH TENU
+12451         ; 3.0 # Nl       CUNEIFORM NUMERIC SIGN THREE BAN2
+1D362         ; 3.0 # No       COUNTING ROD UNIT DIGIT THREE
 1D7D1         ; 3.0 # Nd       MATHEMATICAL BOLD DIGIT THREE
 1D7DB         ; 3.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT THREE
 1D7E5         ; 3.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT THREE
@@ -353,7 +399,7 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 22998         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-22998
 23B1B         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-23B1B
 
-# Total code points: 58
+# Total code points: 75
 
 # ================================================
 
@@ -366,6 +412,7 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 0034          ; 4.0 # Nd       DIGIT FOUR
 0664          ; 4.0 # Nd       ARABIC-INDIC DIGIT FOUR
 06F4          ; 4.0 # Nd       EXTENDED ARABIC-INDIC DIGIT FOUR
+07C4          ; 4.0 # Nd       NKO DIGIT FOUR
 096A          ; 4.0 # Nd       DEVANAGARI DIGIT FOUR
 09EA          ; 4.0 # Nd       BENGALI DIGIT FOUR
 09F7          ; 4.0 # No       BENGALI CURRENCY NUMERATOR FOUR
@@ -386,6 +433,7 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 1814          ; 4.0 # Nd       MONGOLIAN DIGIT FOUR
 194A          ; 4.0 # Nd       LIMBU DIGIT FOUR
 19D4          ; 4.0 # Nd       NEW TAI LUE DIGIT FOUR
+1B54          ; 4.0 # Nd       BALINESE DIGIT FOUR
 2074          ; 4.0 # No       SUPERSCRIPT FOUR
 2084          ; 4.0 # No       SUBSCRIPT FOUR
 2163          ; 4.0 # Nl       ROMAN NUMERAL FOUR
@@ -408,6 +456,18 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 1010A         ; 4.0 # No       AEGEAN NUMBER FOUR
 104A4         ; 4.0 # Nd       OSMANYA DIGIT FOUR
 10A43         ; 4.0 # No       KHAROSHTHI DIGIT FOUR
+12402         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR ASH
+12409         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR DISH
+1240F         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR U
+12418         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR GESH2
+12421         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR GESHU
+12426         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR SHAR2
+12430         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR SHARU
+12438         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR BURU
+1243C..1243F  ; 4.0 # Nl   [4] CUNEIFORM NUMERIC SIGN FOUR VARIANT FORM LIMMU..CUNEIFORM NUMERIC SIGN FOUR VARIANT FORM LIMMU B
+1244C         ; 4.0 # Nl       CUNEIFORM NUMERIC SIGN FOUR ASH TENU
+12452..12453  ; 4.0 # Nl   [2] CUNEIFORM NUMERIC SIGN FOUR BAN2..CUNEIFORM NUMERIC SIGN FOUR BAN2 VARIANT FORM
+1D363         ; 4.0 # No       COUNTING ROD UNIT DIGIT FOUR
 1D7D2         ; 4.0 # Nd       MATHEMATICAL BOLD DIGIT FOUR
 1D7DC         ; 4.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT FOUR
 1D7E6         ; 4.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT FOUR
@@ -417,7 +477,7 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 200E2         ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-200E2
 2626D         ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-2626D
 
-# Total code points: 53
+# Total code points: 71
 
 # ================================================
 
@@ -430,6 +490,7 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 0035          ; 5.0 # Nd       DIGIT FIVE
 0665          ; 5.0 # Nd       ARABIC-INDIC DIGIT FIVE
 06F5          ; 5.0 # Nd       EXTENDED ARABIC-INDIC DIGIT FIVE
+07C5          ; 5.0 # Nd       NKO DIGIT FIVE
 096B          ; 5.0 # Nd       DEVANAGARI DIGIT FIVE
 09EB          ; 5.0 # Nd       BENGALI DIGIT FIVE
 0A6B          ; 5.0 # Nd       GURMUKHI DIGIT FIVE
@@ -449,6 +510,7 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 1815          ; 5.0 # Nd       MONGOLIAN DIGIT FIVE
 194B          ; 5.0 # Nd       LIMBU DIGIT FIVE
 19D5          ; 5.0 # Nd       NEW TAI LUE DIGIT FIVE
+1B55          ; 5.0 # Nd       BALINESE DIGIT FIVE
 2075          ; 5.0 # No       SUPERSCRIPT FIVE
 2085          ; 5.0 # No       SUBSCRIPT FIVE
 2164          ; 5.0 # Nl       ROMAN NUMERAL FIVE
@@ -476,6 +538,17 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 10173         ; 5.0 # Nl       GREEK ACROPHONIC DELPHIC FIVE MNAS
 10321         ; 5.0 # No       OLD ITALIC NUMERAL FIVE
 104A5         ; 5.0 # Nd       OSMANYA DIGIT FIVE
+12403         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE ASH
+1240A         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE DISH
+12410         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE U
+12419         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE GESH2
+12422         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE GESHU
+12427         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE SHAR2
+12431         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE SHARU
+12439         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE BURU
+1244D         ; 5.0 # Nl       CUNEIFORM NUMERIC SIGN FIVE ASH TENU
+12454..12455  ; 5.0 # Nl   [2] CUNEIFORM NUMERIC SIGN FIVE BAN2..CUNEIFORM NUMERIC SIGN FIVE BAN2 VARIANT FORM
+1D364         ; 5.0 # No       COUNTING ROD UNIT DIGIT FIVE
 1D7D3         ; 5.0 # Nd       MATHEMATICAL BOLD DIGIT FIVE
 1D7DD         ; 5.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT FIVE
 1D7E7         ; 5.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT FIVE
@@ -483,7 +556,7 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 1D7FB         ; 5.0 # Nd       MATHEMATICAL MONOSPACE DIGIT FIVE
 20121         ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-20121
 
-# Total code points: 55
+# Total code points: 69
 
 # ================================================
 
@@ -496,6 +569,7 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 0036          ; 6.0 # Nd       DIGIT SIX
 0666          ; 6.0 # Nd       ARABIC-INDIC DIGIT SIX
 06F6          ; 6.0 # Nd       EXTENDED ARABIC-INDIC DIGIT SIX
+07C6          ; 6.0 # Nd       NKO DIGIT SIX
 096C          ; 6.0 # Nd       DEVANAGARI DIGIT SIX
 09EC          ; 6.0 # Nd       BENGALI DIGIT SIX
 0A6C          ; 6.0 # Nd       GURMUKHI DIGIT SIX
@@ -515,6 +589,7 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 1816          ; 6.0 # Nd       MONGOLIAN DIGIT SIX
 194C          ; 6.0 # Nd       LIMBU DIGIT SIX
 19D6          ; 6.0 # Nd       NEW TAI LUE DIGIT SIX
+1B56          ; 6.0 # Nd       BALINESE DIGIT SIX
 2076          ; 6.0 # No       SUPERSCRIPT SIX
 2086          ; 6.0 # No       SUBSCRIPT SIX
 2165          ; 6.0 # Nl       ROMAN NUMERAL SIX
@@ -535,6 +610,14 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 1010C         ; 6.0 # No       AEGEAN NUMBER SIX
 104A6         ; 6.0 # Nd       OSMANYA DIGIT SIX
+12404         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX ASH
+1240B         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX DISH
+12411         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX U
+1241A         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX GESH2
+12428         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX SHAR2
+12440         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX VARIANT FORM ASH9
+1244E         ; 6.0 # Nl       CUNEIFORM NUMERIC SIGN SIX ASH TENU
+1D365         ; 6.0 # No       COUNTING ROD UNIT DIGIT SIX
 1D7D4         ; 6.0 # Nd       MATHEMATICAL BOLD DIGIT SIX
 1D7DE         ; 6.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT SIX
 1D7E8         ; 6.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT SIX
@@ -542,7 +625,7 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 1D7FC         ; 6.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SIX
 20AEA         ; 6.0 # Lo       CJK UNIFIED IDEOGRAPH-20AEA
 
-# Total code points: 48
+# Total code points: 58
 
 # ================================================
 
@@ -555,6 +638,7 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 0037          ; 7.0 # Nd       DIGIT SEVEN
 0667          ; 7.0 # Nd       ARABIC-INDIC DIGIT SEVEN
 06F7          ; 7.0 # Nd       EXTENDED ARABIC-INDIC DIGIT SEVEN
+07C7          ; 7.0 # Nd       NKO DIGIT SEVEN
 096D          ; 7.0 # Nd       DEVANAGARI DIGIT SEVEN
 09ED          ; 7.0 # Nd       BENGALI DIGIT SEVEN
 0A6D          ; 7.0 # Nd       GURMUKHI DIGIT SEVEN
@@ -574,6 +658,7 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 1817          ; 7.0 # Nd       MONGOLIAN DIGIT SEVEN
 194D          ; 7.0 # Nd       LIMBU DIGIT SEVEN
 19D7          ; 7.0 # Nd       NEW TAI LUE DIGIT SEVEN
+1B57          ; 7.0 # Nd       BALINESE DIGIT SEVEN
 2077          ; 7.0 # No       SUPERSCRIPT SEVEN
 2087          ; 7.0 # No       SUBSCRIPT SEVEN
 2166          ; 7.0 # Nl       ROMAN NUMERAL SEVEN
@@ -594,6 +679,13 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 1010D         ; 7.0 # No       AEGEAN NUMBER SEVEN
 104A7         ; 7.0 # Nd       OSMANYA DIGIT SEVEN
+12405         ; 7.0 # Nl       CUNEIFORM NUMERIC SIGN SEVEN ASH
+1240C         ; 7.0 # Nl       CUNEIFORM NUMERIC SIGN SEVEN DISH
+12412         ; 7.0 # Nl       CUNEIFORM NUMERIC SIGN SEVEN U
+1241B         ; 7.0 # Nl       CUNEIFORM NUMERIC SIGN SEVEN GESH2
+12429         ; 7.0 # Nl       CUNEIFORM NUMERIC SIGN SEVEN SHAR2
+12441..12443  ; 7.0 # Nl   [3] CUNEIFORM NUMERIC SIGN SEVEN VARIANT FORM IMIN3..CUNEIFORM NUMERIC SIGN SEVEN VARIANT FORM IMIN B
+1D366         ; 7.0 # No       COUNTING ROD UNIT DIGIT SEVEN
 1D7D5         ; 7.0 # Nd       MATHEMATICAL BOLD DIGIT SEVEN
 1D7DF         ; 7.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT SEVEN
 1D7E9         ; 7.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT SEVEN
@@ -601,7 +693,7 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 1D7FD         ; 7.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SEVEN
 20001         ; 7.0 # Lo       CJK UNIFIED IDEOGRAPH-20001
 
-# Total code points: 48
+# Total code points: 59
 
 # ================================================
 
@@ -614,6 +706,7 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 0038          ; 8.0 # Nd       DIGIT EIGHT
 0668          ; 8.0 # Nd       ARABIC-INDIC DIGIT EIGHT
 06F8          ; 8.0 # Nd       EXTENDED ARABIC-INDIC DIGIT EIGHT
+07C8          ; 8.0 # Nd       NKO DIGIT EIGHT
 096E          ; 8.0 # Nd       DEVANAGARI DIGIT EIGHT
 09EE          ; 8.0 # Nd       BENGALI DIGIT EIGHT
 0A6E          ; 8.0 # Nd       GURMUKHI DIGIT EIGHT
@@ -633,6 +726,7 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 1818          ; 8.0 # Nd       MONGOLIAN DIGIT EIGHT
 194E          ; 8.0 # Nd       LIMBU DIGIT EIGHT
 19D8          ; 8.0 # Nd       NEW TAI LUE DIGIT EIGHT
+1B58          ; 8.0 # Nd       BALINESE DIGIT EIGHT
 2078          ; 8.0 # No       SUPERSCRIPT EIGHT
 2088          ; 8.0 # No       SUBSCRIPT EIGHT
 2167          ; 8.0 # Nl       ROMAN NUMERAL EIGHT
@@ -652,13 +746,20 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 1010E         ; 8.0 # No       AEGEAN NUMBER EIGHT
 104A8         ; 8.0 # Nd       OSMANYA DIGIT EIGHT
+12406         ; 8.0 # Nl       CUNEIFORM NUMERIC SIGN EIGHT ASH
+1240D         ; 8.0 # Nl       CUNEIFORM NUMERIC SIGN EIGHT DISH
+12413         ; 8.0 # Nl       CUNEIFORM NUMERIC SIGN EIGHT U
+1241C         ; 8.0 # Nl       CUNEIFORM NUMERIC SIGN EIGHT GESH2
+1242A         ; 8.0 # Nl       CUNEIFORM NUMERIC SIGN EIGHT SHAR2
+12444..12445  ; 8.0 # Nl   [2] CUNEIFORM NUMERIC SIGN EIGHT VARIANT FORM USSU..CUNEIFORM NUMERIC SIGN EIGHT VARIANT FORM USSU3
+1D367         ; 8.0 # No       COUNTING ROD UNIT DIGIT EIGHT
 1D7D6         ; 8.0 # Nd       MATHEMATICAL BOLD DIGIT EIGHT
 1D7E0         ; 8.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT EIGHT
 1D7EA         ; 8.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT EIGHT
 1D7F4         ; 8.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT EIGHT
 1D7FE         ; 8.0 # Nd       MATHEMATICAL MONOSPACE DIGIT EIGHT
 
-# Total code points: 46
+# Total code points: 56
 
 # ================================================
 
@@ -671,6 +772,7 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 0039          ; 9.0 # Nd       DIGIT NINE
 0669          ; 9.0 # Nd       ARABIC-INDIC DIGIT NINE
 06F9          ; 9.0 # Nd       EXTENDED ARABIC-INDIC DIGIT NINE
+07C9          ; 9.0 # Nd       NKO DIGIT NINE
 096F          ; 9.0 # Nd       DEVANAGARI DIGIT NINE
 09EF          ; 9.0 # Nd       BENGALI DIGIT NINE
 0A6F          ; 9.0 # Nd       GURMUKHI DIGIT NINE
@@ -690,6 +792,7 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 1819          ; 9.0 # Nd       MONGOLIAN DIGIT NINE
 194F          ; 9.0 # Nd       LIMBU DIGIT NINE
 19D9          ; 9.0 # Nd       NEW TAI LUE DIGIT NINE
+1B59          ; 9.0 # Nd       BALINESE DIGIT NINE
 2079          ; 9.0 # No       SUPERSCRIPT NINE
 2089          ; 9.0 # No       SUBSCRIPT NINE
 2168          ; 9.0 # Nl       ROMAN NUMERAL NINE
@@ -710,13 +813,20 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 1010F         ; 9.0 # No       AEGEAN NUMBER NINE
 104A9         ; 9.0 # Nd       OSMANYA DIGIT NINE
+12407         ; 9.0 # Nl       CUNEIFORM NUMERIC SIGN NINE ASH
+1240E         ; 9.0 # Nl       CUNEIFORM NUMERIC SIGN NINE DISH
+12414         ; 9.0 # Nl       CUNEIFORM NUMERIC SIGN NINE U
+1241D         ; 9.0 # Nl       CUNEIFORM NUMERIC SIGN NINE GESH2
+1242B         ; 9.0 # Nl       CUNEIFORM NUMERIC SIGN NINE SHAR2
+12446..12449  ; 9.0 # Nl   [4] CUNEIFORM NUMERIC SIGN NINE VARIANT FORM ILIMMU..CUNEIFORM NUMERIC SIGN NINE VARIANT FORM ILIMMU A
+1D368         ; 9.0 # No       COUNTING ROD UNIT DIGIT NINE
 1D7D7         ; 9.0 # Nd       MATHEMATICAL BOLD DIGIT NINE
 1D7E1         ; 9.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT NINE
 1D7EB         ; 9.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT NINE
 1D7F5         ; 9.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT NINE
 1D7FF         ; 9.0 # Nd       MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 47
+# Total code points: 59
 
 # ================================================
 
@@ -744,9 +854,11 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 10160..10164  ; 10.0 # Nl   [5] GREEK ACROPHONIC TROEZENIAN TEN..GREEK ACROPHONIC THESPIAN TEN
 10322         ; 10.0 # No       OLD ITALIC NUMERAL TEN
 103D3         ; 10.0 # Nl       OLD PERSIAN NUMBER TEN
+10917         ; 10.0 # No       PHOENICIAN NUMBER TEN
 10A44         ; 10.0 # No       KHAROSHTHI NUMBER TEN
+1D369         ; 10.0 # No       COUNTING ROD TENS DIGIT ONE
 
-# Total code points: 29
+# Total code points: 31
 
 # ================================================
 
@@ -849,9 +961,11 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 5EFF          ; 20.0 # Lo       CJK UNIFIED IDEOGRAPH-5EFF
 10111         ; 20.0 # No       AEGEAN NUMBER TWENTY
 103D4         ; 20.0 # Nl       OLD PERSIAN NUMBER TWENTY
+10918         ; 20.0 # No       PHOENICIAN NUMBER TWENTY
 10A45         ; 20.0 # No       KHAROSHTHI NUMBER TWENTY
+1D36A         ; 20.0 # No       COUNTING ROD TENS DIGIT TWO
 
-# Total code points: 11
+# Total code points: 13
 
 # ================================================
 
@@ -915,9 +1029,10 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 5345          ; 30.0 # Lo       CJK UNIFIED IDEOGRAPH-5345
 10112         ; 30.0 # No       AEGEAN NUMBER THIRTY
 10165         ; 30.0 # Nl       GREEK ACROPHONIC THESPIAN THIRTY
+1D36B         ; 30.0 # No       COUNTING ROD TENS DIGIT THREE
 20983         ; 30.0 # Lo       CJK UNIFIED IDEOGRAPH-20983
 
-# Total code points: 7
+# Total code points: 8
 
 # ================================================
 
@@ -979,10 +1094,11 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 32B5          ; 40.0 # No       CIRCLED NUMBER FORTY
 534C          ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-534C
 10113         ; 40.0 # No       AEGEAN NUMBER FORTY
+1D36C         ; 40.0 # No       COUNTING ROD TENS DIGIT FOUR
 2098C         ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-2098C
 2099C         ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-2099C
 
-# Total code points: 6
+# Total code points: 7
 
 # ================================================
 
@@ -1051,36 +1167,42 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 10166..10169  ; 50.0 # Nl   [4] GREEK ACROPHONIC TROEZENIAN FIFTY..GREEK ACROPHONIC THESPIAN FIFTY
 10174         ; 50.0 # Nl       GREEK ACROPHONIC STRATIAN FIFTY MNAS
 10323         ; 50.0 # No       OLD ITALIC NUMERAL FIFTY
+1D36D         ; 50.0 # No       COUNTING ROD TENS DIGIT FIVE
 
-# Total code points: 14
+# Total code points: 15
 
 # ================================================
 
 1377          ; 60.0 # No       ETHIOPIC NUMBER SIXTY
 10115         ; 60.0 # No       AEGEAN NUMBER SIXTY
+1D36E         ; 60.0 # No       COUNTING ROD TENS DIGIT SIX
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
 
 1378          ; 70.0 # No       ETHIOPIC NUMBER SEVENTY
 10116         ; 70.0 # No       AEGEAN NUMBER SEVENTY
+1D36F         ; 70.0 # No       COUNTING ROD TENS DIGIT SEVEN
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
 
 1379          ; 80.0 # No       ETHIOPIC NUMBER EIGHTY
 10117         ; 80.0 # No       AEGEAN NUMBER EIGHTY
+1D370         ; 80.0 # No       COUNTING ROD TENS DIGIT EIGHT
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
 
 137A          ; 90.0 # No       ETHIOPIC NUMBER NINETY
 10118         ; 90.0 # No       AEGEAN NUMBER NINETY
+10341         ; 90.0 # Nl       GOTHIC LETTER NINETY
+1D371         ; 90.0 # No       COUNTING ROD TENS DIGIT NINE
 
-# Total code points: 2
+# Total code points: 4
 
 # ================================================
 
@@ -1096,9 +1218,10 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 10152         ; 100.0 # Nl       GREEK ACROPHONIC ATTIC ONE HUNDRED STATERS
 1016A         ; 100.0 # Nl       GREEK ACROPHONIC THESPIAN ONE HUNDRED
 103D5         ; 100.0 # Nl       OLD PERSIAN NUMBER HUNDRED
+10919         ; 100.0 # No       PHOENICIAN NUMBER ONE HUNDRED
 10A46         ; 100.0 # No       KHAROSHTHI NUMBER ONE HUNDRED
 
-# Total code points: 13
+# Total code points: 14
 
 # ================================================
 
@@ -1296,3 +1419,5 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 5146          ; 1000000000000.0 # Lo       CJK UNIFIED IDEOGRAPH-5146
 
 # Total code points: 1
+
+# EOF

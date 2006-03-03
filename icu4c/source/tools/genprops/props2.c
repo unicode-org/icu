@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -294,7 +294,13 @@ derCorePropsNames[]={
     /* new properties bits in ICU 2.6/format version 3.2 */
     { "ID_Start",                           1, UPROPS_ID_START },
     { "ID_Continue",                        1, UPROPS_ID_CONTINUE },
-    { "Grapheme_Base",                      1, UPROPS_GRAPHEME_BASE }
+    { "Grapheme_Base",                      1, UPROPS_GRAPHEME_BASE },
+
+    /*
+     * Unicode 5/ICU 3.6 moves Grapheme_Link from PropList.txt
+     * to DerivedCoreProperties.txt and deprecates it.
+     */
+    { "Grapheme_Link",                      1, UPROPS_GRAPHEME_LINK }
 };
 
 static const Binaries
@@ -514,8 +520,13 @@ ageLineFn(void *context,
     }
     ++limit;
 
-    /* parse version number */
+    /* ignore "unassigned" (the default is already set to 0.0) */
     s=(char *)u_skipWhitespace(fields[1][0]);
+    if(0==uprv_strncmp(s, "unassigned", 10)) {
+        return;
+    }
+
+    /* parse version number */
     value=(uint32_t)uprv_strtoul(s, &end, 10);
     if(s==end || value==0 || value>15 || (*end!='.' && *end!=' ' && *end!='\t' && *end!=0)) {
         fprintf(stderr, "genprops: syntax error in DerivedAge.txt field 1 at %s\n", fields[1][0]);
