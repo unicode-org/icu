@@ -33,6 +33,7 @@ icu/source/config.guess
 icu/source/config.sub
 icu/source/configure
 icu/source/data/brkitr/thaidict.brk
+icu/source/data/unidata/UnicodeData.txt
 icu/source/extra/uconv/pkgdatain.txt
 icu/source/extra/uconv/samples/danish-ISO-8859-1.txt
 icu/source/extra/uconv/samples/eucJP.txt
