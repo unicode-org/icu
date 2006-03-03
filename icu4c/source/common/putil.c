@@ -105,11 +105,11 @@
 #elif defined(OS390)
 #include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif defined(U_AIX)
-#elif defined(U_SOLARIS) || defined(U_LINUX)
+#elif defined(U_SOLARIS)
 #elif defined(U_HPUX)
-#elif defined(U_DARWIN)
-#include <sys/file.h>
-#include <sys/param.h>
+#elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
+#include <limits.h>
+#include <unistd.h>
 #elif defined(U_QNX)
 #include <sys/neutrino.h>
 #endif
@@ -730,11 +730,21 @@ uprv_timezone()
 extern U_IMPORT char *U_TZNAME[];
 #endif
 
-#if defined(U_DARWIN)   /* For Mac OS X */
+#if !UCONFIG_NO_FILE_IO && (defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD))
+/* These platforms are likely to use Olson timezone IDs. */
+#define CHECK_LOCALTIME_LINK 1
 #define TZZONELINK      "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
-static char gTimeZoneBuffer[MAXPATHLEN + 2];
+static char gTimeZoneBuffer[PATH_MAX];
 static char *gTimeZoneBufferPtr = NULL;
+#endif
+
+#ifndef U_WINDOWS
+static UBool isValidOlsonID(const char *id) {
+    /* This is sometimes set to "PST8PDT" or similar, so we cannot use it.
+    The rest of the time it could be an Olson ID. George */
+    return (UBool)(uprv_strchr(id, '/') != NULL || uprv_strlen(id) < 7);
+}
 #endif
 
 U_CAPI const char* U_EXPORT2
@@ -749,20 +759,17 @@ uprv_tzname(int n)
 #else
     const char *tzenv = NULL;
 
-#if defined(U_DARWIN)
+/*#if defined(U_DARWIN)
     int ret;
 
     tzenv = getenv("TZFILE");
     if (tzenv != NULL) {
         return tzenv;
     }
-#endif
+#endif*/
 
-    /* TZ is sometimes set to "PST8PDT" or similar, so we cannot use it.
-    The rest of the time it could be an Olson ID. George */
     tzenv = getenv("TZ");
-    if (tzenv != NULL
-        && (uprv_strchr(tzenv, '/') != NULL || uprv_strlen(tzenv) < 7))
+    if (tzenv != NULL && isValidOlsonID(tzenv))
     {
         /* This might be a good Olson ID. */
         if (uprv_strncmp(tzenv, "posix/", 6) == 0
@@ -775,14 +782,22 @@ uprv_tzname(int n)
     }
     /* else U_TZNAME will give a better result. */
 
-#if defined(U_DARWIN) && !UCONFIG_NO_FILE_IO
+#if defined(CHECK_LOCALTIME_LINK)
     /* Caller must handle threading issues */
     if (gTimeZoneBufferPtr == NULL) {
+        /*
+        This is a trick to look at the name of the link to get the Olson ID
+        because the tzfile contents is underspecified.
+        This isn't guaranteed to work because it may not be a symlink.
+        */
         ret = readlink(TZZONELINK, gTimeZoneBuffer, sizeof(gTimeZoneBuffer));
         if (0 < ret) {
+            int32_t tzZoneInfoLen = uprv_strlen(TZZONEINFO);
             gTimeZoneBuffer[ret] = 0;
-            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
-                return (gTimeZoneBufferPtr = gTimeZoneBuffer + sizeof(TZZONEINFO) - 1);
+            if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO, tzZoneInfoLen) == 0
+                && isValidOlsonID(gTimeZoneBuffer + tzZoneInfoLen))
+            {
+                return (gTimeZoneBufferPtr = gTimeZoneBuffer + tzZoneInfoLen);
             }
         }
     }
