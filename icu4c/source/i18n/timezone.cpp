@@ -525,15 +525,16 @@ TimeZone::initDefault()
     UnicodeString hostStrID(hostID, -1, US_INV);
     hostStrID.append((UChar)0);
     hostStrID.truncate(hostStrID.length()-1);
+    default_zone = createSystemTimeZone(hostStrID);
+
     int32_t hostIDLen = hostStrID.length();
-    if ((hostIDLen < 3 || 4 < hostIDLen)
-        || (hostStrID[hostIDLen-2] != 'S'
-        && hostStrID[hostIDLen-2] != 'D'
-        && hostStrID[hostIDLen-1] != 'T'))
+    if (default_zone != NULL && rawOffset != default_zone->getRawOffset()
+        && (3 <= hostIDLen && hostIDLen <= 4))
     {
-        /* If this doesn't look like a non-unique abbreviation,
-        try to create an Olson ID from it. */
-        default_zone = createSystemTimeZone(hostStrID);
+        // Uh oh. This probably wasn't a good id.
+        // It was probably an ambiguous abbreviation
+        delete default_zone;
+        default_zone = NULL;
     }
 
 #if 0
