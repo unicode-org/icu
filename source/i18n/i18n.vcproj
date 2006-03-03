@@ -436,12 +436,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\chnsecal.cpp">
-			</File>
-			<File
-				RelativePath=".\chnsecal.h">
-			</File>
-			<File
 				RelativePath=".\choicfmt.cpp">
 			</File>
 			<File

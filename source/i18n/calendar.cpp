@@ -34,7 +34,7 @@
 #include "japancal.h"
 #include "islamcal.h"
 #include "hebrwcal.h"
-#include "chnsecal.h"
+//#include "chnsecal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "servloc.h"
