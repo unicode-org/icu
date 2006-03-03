@@ -746,15 +746,17 @@ uprv_tzname(int n)
     if (id != NULL) {
         return id;
     }
-#elif defined(U_DARWIN)
+#else
+    const char *tzenv = NULL;
+#if defined(U_DARWIN)
     int ret;
-    char *tzenv;
 
     tzenv = getenv("TZFILE");
     if (tzenv != NULL) {
         return tzenv;
     }
 
+#if !UCONFIG_NO_FILE_IO
     /* Caller must handle threading issues */
     if (gTimeZoneBufferPtr == NULL) {
         ret = readlink(TZZONELINK, gTimeZoneBuffer, sizeof(gTimeZoneBuffer));
@@ -765,17 +767,35 @@ uprv_tzname(int n)
             }
         }
     }
-#endif
-
-#if 0
-    /* TZ is often set to "PST8PDT" or similar, so we cannot use it. Alan */
-    tzenv = getenv("TZ");
-    if (tzenv != NULL) {
-        return tzenv;
+    else {
+        return gTimeZoneBufferPtr;
     }
 #endif
-    
+#endif
+
+#if !UCONFIG_NO_FILE_IO
+    /* TZ is sometimes set to "PST8PDT" or similar, so we cannot use it.
+    The rest of the time it could be an Olson ID. George */
+    tzenv = getenv("TZ");
+    if (tzenv != NULL && uprv_strchr(tzenv, '/') != NULL) {
+        /* This might be a good Olson ID. */
+        if (uprv_strncmp(tzenv, "posix/", 6) == 0
+            || uprv_strncmp(tzenv, "right/", 6) == 0)
+        {
+            /* Remove the posix/ or right/ prefix. */
+            tzenv += 6;
+        }
+        return tzenv;
+    }
+    /* else U_TZNAME will give a better result. */
+#endif
+#endif
+
 #ifdef U_TZNAME
+    /*
+    U_TZNAME is usually a non-unique abbreviation,
+    which isn't normally usable.
+    */
     return U_TZNAME[n];
 #else
     return "";
