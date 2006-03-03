@@ -1,8 +1,8 @@
-# GraphemeBreakProperty-4.1.0.txt
-# Date: 2005-02-26, 02:40:18 GMT [MD]
+# GraphemeBreakProperty-5.0.0.txt
+# Date: 2006-03-03, 08:23:12 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2005 Unicode, Inc.
+# Copyright (c) 1991-2006 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -11,7 +11,9 @@
 # Property:	Grapheme_Cluster_Break
 
 #  All code points not explicitly listed for Grapheme_Cluster_Break
-#  have the value Other.
+#  have the value Other (XX).
+
+#@ missing: 0000..10FFFF; Other
 
 # ================================================
 
@@ -56,8 +58,7 @@ E0020..E007F  ; Control
 0300..036F    ; Extend
 0483..0486    ; Extend
 0488..0489    ; Extend
-0591..05B9    ; Extend
-05BB..05BD    ; Extend
+0591..05BD    ; Extend
 05BF          ; Extend
 05C1..05C2    ; Extend
 05C4..05C5    ; Extend
@@ -73,6 +74,7 @@ E0020..E007F  ; Control
 0711          ; Extend
 0730..074A    ; Extend
 07A6..07B0    ; Extend
+07EB..07F3    ; Extend
 0901..0902    ; Extend
 093C          ; Extend
 0941..0948    ; Extend
@@ -121,6 +123,7 @@ E0020..E007F  ; Control
 0CC6          ; Extend
 0CCC..0CCD    ; Extend
 0CD5..0CD6    ; Extend
+0CE2..0CE3    ; Extend
 0D3E          ; Extend
 0D41..0D43    ; Extend
 0D4D          ; Extend
@@ -168,13 +171,20 @@ E0020..E007F  ; Control
 1932          ; Extend
 1939..193B    ; Extend
 1A17..1A18    ; Extend
-1DC0..1DC3    ; Extend
+1B00..1B03    ; Extend
+1B34          ; Extend
+1B36..1B3A    ; Extend
+1B3C          ; Extend
+1B42          ; Extend
+1B6B..1B73    ; Extend
+1DC0..1DCA    ; Extend
+1DFE..1DFF    ; Extend
 200C..200D    ; Extend
 20D0..20DC    ; Extend
 20DD..20E0    ; Extend
 20E1          ; Extend
 20E2..20E4    ; Extend
-20E5..20EB    ; Extend
+20E5..20EF    ; Extend
 302A..302F    ; Extend
 3099..309A    ; Extend
 A806          ; Extend
@@ -197,7 +207,7 @@ FE20..FE23    ; Extend
 1D242..1D244  ; Extend
 E0100..E01EF  ; Extend
 
-# Total code points: 865
+# Total code points: 911
 
 # ================================================
 
@@ -1025,3 +1035,5 @@ D76D..D787    ; LVT
 D789..D7A3    ; LVT
 
 # Total code points: 10773
+
+# EOF

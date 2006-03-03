@@ -1,3 +1,72 @@
+* Copyright (C) 2004-2006, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*
+*   file name:  changes.txt
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004may06
+*   created by: Markus W. Scherer
+*
+* change log for Unicode updates
+
+---------------------------------------------------------------------------- ***
+
+Unicode 5.0 update
+
+*** related Jitterbugs
+
+5084 RFE: Update to Unicode 5.0
+
+*** data files & enums & parser code
+
+* file preparation
+- ucdstrip:
+    DerivedCoreProperties.txt
+    DerivedNormalizationProps.txt
+    NormalizationTest.txt
+    GraphemeBreakProperty.txt
+    SentenceBreakProperty.txt
+    WordBreakProperty.txt
+- ucdstrip and ucdmerge:
+    EastAsianWidth.txt
+    LineBreak.txt
+
+* update FractionalUCA.txt and UCARules.txt with new canonical closure
+
+* genpname
+- run preparse.pl
+  + perl preparse.pl \cvs\oss\icu > out.txt
+
+* uchar.h & uscript.h & uprops.h & uprops.c & genprops
+- new block & script values
+  + script values already added in ICU 3.6 because all of ISO 15924 is now covered
+
+* build Unicode data source code for hardcoding core data
+C:\cvs\oss\icu\source\data>NMAKE /f makedata.mak ICUMAKE=\cvs\oss\icu\source\data\ CFG=debug uni-core-data
+
+ICU data make path is \cvs\oss\icu\source\data\
+ICU root path is \cvs\oss\icu
+Information: cannot find "ucmlocal.mk". Not building user-additional converter files.
+[etc.]
+Creating data file for Unicode Character Properties
+Creating data file for Unicode Case Mapping Properties
+Creating data file for Unicode BiDi/Shaping Properties
+Creating data file for Unicode Normalization
+Unicode .icu files built to "\cvs\oss\icu\source\data\out\build\icudt35l"
+Unicode .c source files built to "\cvs\oss\icu\source\data\out\tmp"
+
+- copy the .c source files to C:\cvs\oss\icu\source\common
+  and rebuild the common library
+
+*** Unicode version numbers
+- makedata.mak
+- uchar.h
+- configure.in
+
+---------------------------------------------------------------------------- ***
+
 Unicode 4.1 update
 
 *** related Jitterbugs

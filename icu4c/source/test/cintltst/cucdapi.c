@@ -196,7 +196,7 @@ void TestUScriptCodeAPI(){
                 0x0001D1AA, /* USCRIPT_INHERITED*/
                 0x00020000, /* USCRIPT_HAN*/
                 0x00000D02, /* USCRIPT_MALAYALAM*/
-                0x00000D00, /* USCRIPT_COMMON */
+                0x00000D00, /* USCRIPT_UNKNOWN (new Zzzz value in Unicode 5.0) */
                 0x00000000, /* USCRIPT_COMMON*/
                 0x0001D169, /* USCRIPT_INHERITED*/
                 0x0001D182, /* USCRIPT_INHERITED*/
@@ -223,7 +223,7 @@ void TestUScriptCodeAPI(){
                 USCRIPT_INHERITED,
                 USCRIPT_HAN ,
                 USCRIPT_MALAYALAM,
-                USCRIPT_COMMON,
+                USCRIPT_UNKNOWN,
                 USCRIPT_COMMON,
                 USCRIPT_INHERITED ,
                 USCRIPT_INHERITED ,
@@ -285,13 +285,28 @@ void TestUScriptCodeAPI(){
         for(i=0; (UScriptCode)i< USCRIPT_CODE_LIMIT; i++){
             const char* name = uscript_getName((UScriptCode)i);
             if(name==NULL || strcmp(name,"")==0){
-                log_err("uscript_getName failed for code : %i\n",i);
+                log_err("uscript_getName failed for code %i: name is NULL or \"\"\n",i);
             }
         }
     }
                 
     {
-        static const char* expected[] = {
+        /*
+         * These script codes were originally added to ICU pre-3.6, so that ICU would
+         * have all ISO 15924 script codes. ICU was then based on Unicode 4.1.
+         * These script codes were added with only short names because we don't
+         * want to invent long names ourselves.
+         * Unicode 5 and later encode some of these scripts and give them long names.
+         * Whenever this happens, the long script names here need to be updated.
+         */
+        static const char* expectedLong[] = {
+            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
+            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
+            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Cuneiform", 
+            "Zxxx", "Unknown",
+        };
+        static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
             "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
             "Lepc", "Lina", "Mand", "Maya", "Mero", "Nkoo", "Orkh", "Perm", "Phag", "Phnx", 
@@ -301,27 +316,27 @@ void TestUScriptCodeAPI(){
         int32_t j = 0;
         for(i=USCRIPT_BALINESE; (UScriptCode)i<USCRIPT_CODE_LIMIT; i++, j++){
             const char* name = uscript_getName((UScriptCode)i);
-            if(name==NULL || strcmp(name,expected[j])!=0){
-                log_err("uscript_getName failed for code : %i\n",i);
+            if(name==NULL || strcmp(name,expectedLong[j])!=0){
+                log_err("uscript_getName failed for code %i: %s!=%s\n", i, name, expectedLong[j]);
             }
             name = uscript_getShortName((UScriptCode)i);
-            if(name==NULL || strcmp(name,expected[j])!=0){
-                log_err("uscript_getShortName failed for code : %i\n",i);
+            if(name==NULL || strcmp(name,expectedShort[j])!=0){
+                log_err("uscript_getShortName failed for code %i: %s!=%s\n", i, name, expectedShort[j]);
             }
         }
-        for(i=0; i<ARRAY_SIZE(expected); i++){
+        for(i=0; i<ARRAY_SIZE(expectedLong); i++){
             UScriptCode fillIn[5] = {USCRIPT_INVALID_CODE};
             UErrorCode status = U_ZERO_ERROR;
             int32_t len = 0;
-            len = uscript_getCode(expected[i], fillIn, ARRAY_SIZE(fillIn), &status);
+            len = uscript_getCode(expectedShort[i], fillIn, ARRAY_SIZE(fillIn), &status);
             if(U_FAILURE(status)){
-                log_err("uscript_getCode failed for script name %s. Error: %s\n",expected[i], u_errorName(status));
+                log_err("uscript_getCode failed for script name %s. Error: %s\n",expectedShort[i], u_errorName(status));
             }
             if(len>1){
-                log_err("uscript_getCode did not return expected number of codes for script %s. EXPECTED: 1 GOT: %i\n", expected[i], len);
+                log_err("uscript_getCode did not return expected number of codes for script %s. EXPECTED: 1 GOT: %i\n", expectedShort[i], len);
             }
             if(fillIn[0]!= (UScriptCode)(USCRIPT_BALINESE+i)){
-                log_err("uscript_getCode did not return expected code for script %s. EXPECTED: %i GOT: %i\n", expected[i], (USCRIPT_BALINESE+i), fillIn[0] );
+                log_err("uscript_getCode did not return expected code for script %s. EXPECTED: %i GOT: %i\n", expectedShort[i], (USCRIPT_BALINESE+i), fillIn[0] );
             }
         }
     }

@@ -159,7 +159,7 @@ typedef enum UScriptCode {
       USCRIPT_VISIBLE_SPEECH                = 100, /* Visp */
       USCRIPT_CUNEIFORM                     = 101,/* Xsux */
       USCRIPT_UNWRITTEN_LANGUAGES           = 102,/* Zxxx */
-      USCRIPT_UNCODED_SCRIPT                = 103,/* Zzzz */
+      USCRIPT_UNKNOWN                       = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
       /* Private use codes from Qaaa - Qabx are not supported*/
 #endif /* U_HIDE_DRAFT_API */
       USCRIPT_CODE_LIMIT    = 104

@@ -24,7 +24,6 @@
 
 # Script (sc)
 
-sc ; Bali ; Bali 
 sc ; Batk ; Batk 
 sc ; Blis ; Blis 
 sc ; Brah ; Brah 
@@ -49,11 +48,8 @@ sc ; Lina ; Lina
 sc ; Mand ; Mand 
 sc ; Maya ; Maya 
 sc ; Mero ; Mero 
-sc ; Nkoo ; Nkoo 
 sc ; Orkh ; Orkh 
 sc ; Perm ; Perm 
-sc ; Phag ; Phag 
-sc ; Phnx ; Phnx 
 sc ; Plrd ; Plrd 
 sc ; Roro ; Roro 
 sc ; Sara ; Sara 
@@ -63,6 +59,4 @@ sc ; Syrn ; Syrn
 sc ; Teng ; Teng 
 sc ; Vaii ; Vaii 
 sc ; Visp ; Visp 
-sc ; Xsux ; Xsux 
 sc ; Zxxx ; Zxxx 
-sc ; Zzzz ; Zzzz 

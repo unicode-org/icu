@@ -959,7 +959,7 @@ sub read_Blocks {
         s/\#.*//;
         next unless (/\S/);
 
-        if (/^([0-9a-f]+)\.\.[0-9a-f]+;\s*(.+?)\s*$/i) {
+        if (/^([0-9a-f]+)\.\.[0-9a-f]+\s*;\s*(.+?)\s*$/i) {
             die "Error: Duplicate range $1 in $filename"
                 if (exists $hash->{$1});
             $hash->{$1} = $2;
