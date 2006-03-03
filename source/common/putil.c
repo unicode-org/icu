@@ -762,7 +762,7 @@ uprv_tzname(int n)
     The rest of the time it could be an Olson ID. George */
     tzenv = getenv("TZ");
     if (tzenv != NULL
-        && (uprv_strchr(tzenv, '/') != NULL) || uprv_strlen(tzenv) < 7)
+        && (uprv_strchr(tzenv, '/') != NULL || uprv_strlen(tzenv) < 7))
     {
         /* This might be a good Olson ID. */
         if (uprv_strncmp(tzenv, "posix/", 6) == 0
