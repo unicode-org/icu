@@ -1,8 +1,8 @@
-# DerivedNormalizationProps-4.1.0.txt
-# Date: 2005-02-26, 02:37:43 GMT [MD]
+# DerivedNormalizationProps-5.0.0.txt
+# Date: 2006-03-03, 08:46:54 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2005 Unicode, Inc.
+# Copyright (c) 1991-2006 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -578,8 +578,9 @@
 1D7A7 ; FC_NFKC; 03C8
 1D7A8 ; FC_NFKC; 03C9
 1D7BB ; FC_NFKC; 03C3
+1D7CA ; FC_NFKC; 03DD
 
-# Total code points: 564
+# Total code points: 565
 
 # ================================================
 
@@ -670,6 +671,8 @@ FB46..FB4E    ; Full_Composition_Exclusion
 
 #  All code points not explicitly listed for NFD_Quick_Check
 #  have the value Yes (Y).
+
+#@ missing: 0000..10FFFF; NFD_QC; Yes
 
 # ================================================
 
@@ -910,6 +913,8 @@ FB46..FB4E    ; NFD_QC; N
 #  All code points not explicitly listed for NFC_Quick_Check
 #  have the value Yes (Y).
 
+#@ missing: 0000..10FFFF; NFC_QC; Yes
+
 # ================================================
 
 # NFC_Quick_Check=No
@@ -1038,6 +1043,8 @@ FB46..FB4E    ; NFC_QC; N
 
 #  All code points not explicitly listed for NFKD_Quick_Check
 #  have the value Yes (Y).
+
+#@ missing: 0000..10FFFF; NFKD_QC; Yes
 
 # ================================================
 
@@ -1517,11 +1524,11 @@ FFED..FFEE    ; NFKD_QC; N
 1D7A9         ; NFKD_QC; N
 1D7AA..1D7C2  ; NFKD_QC; N
 1D7C3         ; NFKD_QC; N
-1D7C4..1D7C9  ; NFKD_QC; N
+1D7C4..1D7CB  ; NFKD_QC; N
 1D7CE..1D7FF  ; NFKD_QC; N
 2F800..2FA1D  ; NFKD_QC; N
 
-# Total code points: 16561
+# Total code points: 16563
 
 # ================================================
 
@@ -1529,6 +1536,8 @@ FFED..FFEE    ; NFKD_QC; N
 
 #  All code points not explicitly listed for NFKC_Quick_Check
 #  have the value Yes (Y).
+
+#@ missing: 0000..10FFFF; NFKC_QC; Yes
 
 # ================================================
 
@@ -1872,11 +1881,11 @@ FFED..FFEE    ; NFKC_QC; N
 1D7A9         ; NFKC_QC; N
 1D7AA..1D7C2  ; NFKC_QC; N
 1D7C3         ; NFKC_QC; N
-1D7C4..1D7C9  ; NFKC_QC; N
+1D7C4..1D7CB  ; NFKC_QC; N
 1D7CE..1D7FF  ; NFKC_QC; N
 2F800..2FA1D  ; NFKC_QC; N
 
-# Total code points: 4484
+# Total code points: 4486
 
 # ================================================
 
@@ -2595,3 +2604,5 @@ FFE3          ; Expands_On_NFKC
 1D1BB..1D1C0  ; Expands_On_NFKC
 
 # Total code points: 1171
+
+# EOF

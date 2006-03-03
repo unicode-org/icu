@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -465,34 +465,6 @@ isToken(const char *token, const char *s) {
     return FALSE;
 }
 
-static int32_t
-getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
-    const char *t, *z;
-    int32_t i, j;
-
-    s=u_skipWhitespace(s);
-    for(i=0; i<countTokens; ++i) {
-        t=tokens[i];
-        if(t!=NULL) {
-            for(j=0;; ++j) {
-                if(t[j]!=0) {
-                    if(s[j]!=t[j]) {
-                        break;
-                    }
-                } else {
-                    z=u_skipWhitespace(s+j);
-                    if(*z==';' || *z==0 || *z=='#' || *z=='\r' || *z=='\n') {
-                        return i;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return -1;
-}
-
 /* parser for BidiMirroring.txt --------------------------------------------- */
 
 static void U_CALLCONV
@@ -532,12 +504,6 @@ parseBidiMirroring(const char *filename, UErrorCode *pErrorCode) {
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
-const char *const
-bidiNames[U_CHAR_DIRECTION_COUNT]={
-    "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
-    "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
-};
-
 static void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
@@ -545,7 +511,6 @@ unicodeDataLineFn(void *context,
     char *end;
     UErrorCode errorCode;
     UChar32 c;
-    int32_t i;
 
     errorCode=U_ZERO_ERROR;
 
@@ -553,21 +518,6 @@ unicodeDataLineFn(void *context,
     c=(UChar32)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genbidi: syntax error in field 0 at %s\n", fields[0][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* get BiDi class, field 4 */
-    i=getTokenIndex(bidiNames, U_CHAR_DIRECTION_COUNT, fields[4][0]);
-    if(i>=0) {
-        if(!upvec_setValue(pv, c, c+1, 0, (uint32_t)i, UBIDI_CLASS_MASK, &errorCode)) {
-            fprintf(stderr, "genbidi error: unable to set bidi class for U+%04lx, code: %s\n",
-                            (long)c, u_errorName(errorCode));
-            exit(errorCode);
-        }
-    } else {
-        fprintf(stderr, "genbidi: unknown BiDi class \"%s\" at U+%04lx\n",
-            fields[4][0], (long)c);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -618,6 +568,12 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
      * Set default Bidi classes for unassigned code points.
      * See the documentation for Bidi_Class in UCD.html in the Unicode data.
      * http://www.unicode.org/Public/
+     *
+     * Starting with Unicode 5.0, DerivedBidiClass.txt should (re)set
+     * the Bidi_Class values for all code points including unassigned ones
+     * and including L values for these.
+     * This code becomes unnecesary but harmless. Leave it for now in case
+     * someone uses genbidi on pre-Unicode 5.0 data.
      */
     for(i=0; i<LENGTHOF(defaultBidi); ++i) {
         start=defaultBidi[i][0];
@@ -643,8 +599,7 @@ bidiClassLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode) {
     char *s;
-    uint32_t oldStart, start, limit, value, props32;
-    UBool didSet;
+    uint32_t start, limit, value;
 
     /* get the code point range */
     u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
@@ -662,40 +617,10 @@ bidiClassLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
-    didSet=FALSE;
-    oldStart=start;
-    for(; start<limit; ++start) {
-        props32=upvec_getValue(pv, start, 0);
-
-        /* ignore if this bidi class is already set */
-        if(value==UBIDI_GET_CLASS(props32)) {
-            continue;
-        }
-
-        /*
-         * set only if the bidi class is 0 (L);
-         * intended to set only for unassigned code points (Cn)
-         * but we don't have general categories (like Cn) available here
-         */
-        if(UBIDI_GET_CLASS(props32)!=0) {
-            /* error if this one contradicts what we parsed from UnicodeData.txt */
-            fprintf(stderr, "genbidi error: different bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
-            exit(U_PARSE_ERROR);
-        }
-
-        /* set bidi class for Cn according to DerivedBidiClass.txt */
-        didSet=TRUE;
-    }
-
-    if(didSet) {
-        if(beVerbose) {
-            printf("setting U+%04x..U+%04x bidi class %d\n", (int)oldStart, (int)limit-1, (int)value);
-        }
-        if(!upvec_setValue(pv, oldStart, limit, 0, value, UBIDI_CLASS_MASK, pErrorCode)) {
-            fprintf(stderr, "genbidi error: unable to set derived bidi class for U+%04x..U+%04x - %s\n",
-                    (int)oldStart, (int)limit-1, u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
+    if(!upvec_setValue(pv, start, limit, 0, value, UBIDI_CLASS_MASK, pErrorCode)) {
+        fprintf(stderr, "genbidi error: unable to set derived bidi class for U+%04x..U+%04x - %s\n",
+                (int)start, (int)limit-1, u_errorName(*pErrorCode));
+        exit(*pErrorCode);
     }
 }
 

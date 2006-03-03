@@ -1,8 +1,8 @@
-# SentenceBreakProperty-4.1.0.txt
-# Date: 2005-02-26, 02:42:31 GMT [MD]
+# SentenceBreakProperty-5.0.0.txt
+# Date: 2006-03-03, 08:23:34 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2005 Unicode, Inc.
+# Copyright (c) 1991-2006 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -11,7 +11,9 @@
 # Property:	Sentence_Break
 
 #  All code points not explicitly listed for Sentence_Break
-#  have the value Other.
+#  have the value Other (XX).
+
+#@ missing: 0000..10FFFF; Other
 
 # ================================================
 
@@ -200,11 +202,18 @@ E0020..E007F  ; Format
 0233..0239    ; Lower
 023C          ; Lower
 023F..0240    ; Lower
-0250..02AF    ; Lower
+0242          ; Lower
+0247          ; Lower
+0249          ; Lower
+024B          ; Lower
+024D          ; Lower
+024F..0293    ; Lower
+0295..02AF    ; Lower
 02B0..02B8    ; Lower
 02C0..02C1    ; Lower
 02E0..02E4    ; Lower
 037A          ; Lower
+037B..037D    ; Lower
 0390          ; Lower
 03AC..03CE    ; Lower
 03D0..03D1    ; Lower
@@ -275,7 +284,7 @@ E0020..E007F  ; Format
 04C8          ; Lower
 04CA          ; Lower
 04CC          ; Lower
-04CE          ; Lower
+04CE..04CF    ; Lower
 04D1          ; Lower
 04D3          ; Lower
 04D5          ; Lower
@@ -297,6 +306,9 @@ E0020..E007F  ; Format
 04F5          ; Lower
 04F7          ; Lower
 04F9          ; Lower
+04FB          ; Lower
+04FD          ; Lower
+04FF          ; Lower
 0501          ; Lower
 0503          ; Lower
 0505          ; Lower
@@ -305,6 +317,8 @@ E0020..E007F  ; Format
 050B          ; Lower
 050D          ; Lower
 050F          ; Lower
+0511          ; Lower
+0513          ; Lower
 0561..0587    ; Lower
 1D00..1D2B    ; Lower
 1D2C..1D61    ; Lower
@@ -464,9 +478,18 @@ E0020..E007F  ; Format
 2139          ; Lower
 213C..213D    ; Lower
 2146..2149    ; Lower
+214E          ; Lower
 2170..217F    ; Lower
+2184          ; Lower
 24D0..24E9    ; Lower
 2C30..2C5E    ; Lower
+2C61          ; Lower
+2C65..2C66    ; Lower
+2C68          ; Lower
+2C6A          ; Lower
+2C6C          ; Lower
+2C74          ; Lower
+2C76..2C77    ; Lower
 2C81          ; Lower
 2C83          ; Lower
 2C85          ; Lower
@@ -549,8 +572,9 @@ FF41..FF5A    ; Lower
 1D78A..1D78F  ; Lower
 1D7AA..1D7C2  ; Lower
 1D7C4..1D7C9  ; Lower
+1D7CB         ; Lower
 
-# Total code points: 1764
+# Total code points: 1790
 
 # ================================================
 
@@ -693,6 +717,11 @@ FF41..FF5A    ; Lower
 023A..023B    ; Upper
 023D..023E    ; Upper
 0241          ; Upper
+0243..0246    ; Upper
+0248          ; Upper
+024A          ; Upper
+024C          ; Upper
+024E          ; Upper
 0386          ; Upper
 0388..038A    ; Upper
 038C          ; Upper
@@ -788,6 +817,9 @@ FF41..FF5A    ; Lower
 04F4          ; Upper
 04F6          ; Upper
 04F8          ; Upper
+04FA          ; Upper
+04FC          ; Upper
+04FE          ; Upper
 0500          ; Upper
 0502          ; Upper
 0504          ; Upper
@@ -796,6 +828,8 @@ FF41..FF5A    ; Lower
 050A          ; Upper
 050C          ; Upper
 050E          ; Upper
+0510          ; Upper
+0512          ; Upper
 0531..0556    ; Upper
 10A0..10C5    ; Upper
 1E00          ; Upper
@@ -946,13 +980,19 @@ FF41..FF5A    ; Lower
 2126          ; Upper
 2128          ; Upper
 212A..212D    ; Upper
-2130..2131    ; Upper
-2133          ; Upper
+2130..2133    ; Upper
 213E..213F    ; Upper
 2145          ; Upper
 2160..216F    ; Upper
+2183          ; Upper
 24B6..24CF    ; Upper
 2C00..2C2E    ; Upper
+2C60          ; Upper
+2C62..2C64    ; Upper
+2C67          ; Upper
+2C69          ; Upper
+2C6B          ; Upper
+2C75          ; Upper
 2C80          ; Upper
 2C82          ; Upper
 2C84          ; Upper
@@ -1035,14 +1075,16 @@ FF21..FF3A    ; Upper
 1D71C..1D734  ; Upper
 1D756..1D76E  ; Upper
 1D790..1D7A8  ; Upper
+1D7CA         ; Upper
 
-# Total code points: 1369
+# Total code points: 1393
 
 # ================================================
 
 00A0          ; OLetter
 01BB          ; OLetter
 01C0..01C3    ; OLetter
+0294          ; OLetter
 02B9..02BF    ; OLetter
 02C6..02D1    ; OLetter
 02EE          ; OLetter
@@ -1065,6 +1107,9 @@ FF21..FF3A    ; Upper
 074D..076D    ; OLetter
 0780..07A5    ; OLetter
 07B1          ; OLetter
+07CA..07EA    ; OLetter
+07F4..07F5    ; OLetter
+07FA          ; OLetter
 0903          ; OLetter
 0904..0939    ; OLetter
 093D          ; OLetter
@@ -1072,7 +1117,7 @@ FF21..FF3A    ; Upper
 0949..094C    ; OLetter
 0950          ; OLetter
 0958..0961    ; OLetter
-097D          ; OLetter
+097B..097F    ; OLetter
 0982..0983    ; OLetter
 0985..098C    ; OLetter
 098F..0990    ; OLetter
@@ -1272,8 +1317,15 @@ FF21..FF3A    ; Upper
 19C8..19C9    ; OLetter
 1A00..1A16    ; OLetter
 1A19..1A1B    ; OLetter
+1B04          ; OLetter
+1B05..1B33    ; OLetter
+1B35          ; OLetter
+1B3B          ; OLetter
+1B3D..1B41    ; OLetter
+1B43          ; OLetter
+1B45..1B4B    ; OLetter
 2135..2138    ; OLetter
-2180..2183    ; OLetter
+2180..2182    ; OLetter
 2D30..2D65    ; OLetter
 2D6F          ; OLetter
 2D80..2D96    ; OLetter
@@ -1308,12 +1360,14 @@ FF21..FF3A    ; Upper
 A000..A014    ; OLetter
 A015          ; OLetter
 A016..A48C    ; OLetter
+A717..A71A    ; OLetter
 A800..A801    ; OLetter
 A803..A805    ; OLetter
 A807..A80A    ; OLetter
 A80C..A822    ; OLetter
 A823..A824    ; OLetter
 A827          ; OLetter
+A840..A873    ; OLetter
 AC00..D7A3    ; OLetter
 F900..FA2D    ; OLetter
 FA30..FA6A    ; OLetter
@@ -1350,7 +1404,9 @@ FFDA..FFDC    ; OLetter
 10080..100FA  ; OLetter
 10140..10174  ; OLetter
 10300..1031E  ; OLetter
-10330..10349  ; OLetter
+10330..10340  ; OLetter
+10341         ; OLetter
+10342..10349  ; OLetter
 1034A         ; OLetter
 10380..1039D  ; OLetter
 103A0..103C3  ; OLetter
@@ -1363,14 +1419,17 @@ FFDA..FFDC    ; OLetter
 10837..10838  ; OLetter
 1083C         ; OLetter
 1083F         ; OLetter
+10900..10915  ; OLetter
 10A00         ; OLetter
 10A10..10A13  ; OLetter
 10A15..10A17  ; OLetter
 10A19..10A33  ; OLetter
+12000..1236E  ; OLetter
+12400..12462  ; OLetter
 20000..2A6D6  ; OLetter
 2F800..2FA1D  ; OLetter
 
-# Total code points: 88568
+# Total code points: 89727
 
 # ================================================
 
@@ -1378,6 +1437,7 @@ FFDA..FFDC    ; OLetter
 0660..0669    ; Numeric
 066B..066C    ; Numeric
 06F0..06F9    ; Numeric
+07C0..07C9    ; Numeric
 0966..096F    ; Numeric
 09E6..09EF    ; Numeric
 0A66..0A6F    ; Numeric
@@ -1395,10 +1455,11 @@ FFDA..FFDC    ; OLetter
 1810..1819    ; Numeric
 1946..194F    ; Numeric
 19D0..19D9    ; Numeric
+1B50..1B59    ; Numeric
 104A0..104A9  ; Numeric
 1D7CE..1D7FF  ; Numeric
 
-# Total code points: 262
+# Total code points: 282
 
 # ================================================
 
@@ -1416,6 +1477,7 @@ FFDA..FFDC    ; OLetter
 061F          ; STerm
 06D4          ; STerm
 0700..0702    ; STerm
+07F9          ; STerm
 0964..0965    ; STerm
 104A..104B    ; STerm
 1362          ; STerm
@@ -1424,9 +1486,12 @@ FFDA..FFDC    ; OLetter
 1803          ; STerm
 1809          ; STerm
 1944..1945    ; STerm
+1B5A..1B5B    ; STerm
+1B5E..1B5F    ; STerm
 203C..203D    ; STerm
 2047..2049    ; STerm
 3002          ; STerm
+A876..A877    ; STerm
 FE52          ; STerm
 FE56..FE57    ; STerm
 FF01          ; STerm
@@ -1434,7 +1499,7 @@ FF0E          ; STerm
 FF1F          ; STerm
 FF61          ; STerm
 
-# Total code points: 35
+# Total code points: 42
 
 # ================================================
 
@@ -1471,9 +1536,6 @@ FF61          ; STerm
 208E          ; Close
 2329          ; Close
 232A          ; Close
-23B4          ; Close
-23B5          ; Close
-23B6          ; Close
 275B..275E    ; Close
 2768          ; Close
 2769          ; Close
@@ -1597,4 +1659,6 @@ FF60          ; Close
 FF62          ; Close
 FF63          ; Close
 
-# Total code points: 166
+# Total code points: 163
+
+# EOF

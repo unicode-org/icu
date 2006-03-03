@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,6 +34,29 @@ u_skipWhitespace(const char *s) {
         ++s;
     }
     return s;
+}
+
+/*
+ * If the string starts with # @missing: then return the pointer to the
+ * following non-whitespace character.
+ * Otherwise return the original pointer.
+ * Unicode 5.0 adds such lines in some data files to document
+ * default property values.
+ * Poor man's regex for variable amounts of white space.
+ */
+static const char *
+getMissingLimit(const char *s) {
+    const char *s0=s;
+    if(
+        *(s=u_skipWhitespace(s))=='#' &&
+        *(s=u_skipWhitespace(s+1))=='@' &&
+        0==strncmp((s=u_skipWhitespace(s+1)), "missing", 7) &&
+        *(s=u_skipWhitespace(s+7))==':'
+    ) {
+        return u_skipWhitespace(s+1);
+    } else {
+        return s0;
+    }
 }
 
 U_CAPI void U_EXPORT2
@@ -74,16 +97,28 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             line[--length]=0;
         }
 
+        /*
+         * detect a line with # @missing:
+         * start parsing after that, or else from the beginning of the line
+         * set the default warning for @missing lines
+         */
+        start=(char *)getMissingLimit(line);
+        if(start==line) {
+            *pErrorCode=U_ZERO_ERROR;
+        } else {
+            *pErrorCode=U_USING_DEFAULT_WARNING;
+        }
+
         /* skip this line if it is empty or a comment */
-        if(line[0]==0 || line[0]=='#') {
+        if(*start==0 || *start=='#') {
             continue;
         }
 
         /* remove in-line comments */
-        limit=uprv_strchr(line, '#');
+        limit=uprv_strchr(start, '#');
         if(limit!=NULL) {
             /* get white space before the pound sign */
-            while(limit>line && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+            while(limit>start && (*(limit-1)==' ' || *(limit-1)=='\t')) {
                 --limit;
             }
 
@@ -92,12 +127,11 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         }
 
         /* skip lines with only whitespace */
-        if(u_skipWhitespace(line)[0]==0) {
+        if(u_skipWhitespace(start)[0]==0) {
             continue;
         }
 
         /* for each field, call the corresponding field function */
-        start=line;
         for(i=0; i<fieldCount; ++i) {
             /* set the limit pointer of this field */
             limit=start;
