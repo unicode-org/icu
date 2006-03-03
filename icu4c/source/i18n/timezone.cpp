@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -525,7 +525,16 @@ TimeZone::initDefault()
     UnicodeString hostStrID(hostID, -1, US_INV);
     hostStrID.append((UChar)0);
     hostStrID.truncate(hostStrID.length()-1);
-    default_zone = createSystemTimeZone(hostStrID);
+    int32_t hostIDLen = hostStrID.length();
+    if ((hostIDLen < 3 || 4 < hostIDLen)
+        || (hostStrID[hostIDLen-2] != 'S'
+        && hostStrID[hostIDLen-2] != 'D'
+        && hostStrID[hostIDLen-1] != 'T'))
+    {
+        /* If this doesn't look like a non-unique abbreviation,
+        try to create an Olson ID from it. */
+        default_zone = createSystemTimeZone(hostStrID);
+    }
 
 #if 0
     // NOTE: As of ICU 2.8, we no longer have an offsets table, since
