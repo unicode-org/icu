@@ -761,7 +761,9 @@ uprv_tzname(int n)
     /* TZ is sometimes set to "PST8PDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
     tzenv = getenv("TZ");
-    if (tzenv != NULL && uprv_strchr(tzenv, '/') != NULL) {
+    if (tzenv != NULL
+        && (uprv_strchr(tzenv, '/') != NULL) || uprv_strlen(tzenv) < 7)
+    {
         /* This might be a good Olson ID. */
         if (uprv_strncmp(tzenv, "posix/", 6) == 0
             || uprv_strncmp(tzenv, "right/", 6) == 0)
