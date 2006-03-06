@@ -304,9 +304,6 @@
 			<File
 				RelativePath=".\wbnf.h">
 			</File>
-			<File
-				RelativePath=".\wbnftest.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="collections"
