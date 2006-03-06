@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2002-2003 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2002-2006 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 
@@ -97,7 +97,8 @@ UBool processOptions(int argc, const char **argv, OptSpec opts[])
 {
     for (int argNum = 1; argNum < argc; argNum ++) {
         const char *pArgName = argv[argNum];
-        for (OptSpec *pOpt = opts;  pOpt->name != 0; pOpt ++) {
+        OptSpec *pOpt;
+        for (pOpt = opts;  pOpt->name != 0; pOpt ++) {
             if (strcmp(pOpt->name, pArgName) == 0) {
                 switch (pOpt->type) {
                 case OptSpec::FLAG:
