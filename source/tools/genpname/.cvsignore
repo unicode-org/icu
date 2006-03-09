@@ -1,0 +1,8 @@
+*.d
+*.o
+*.pdb
+Debug
+Makefile
+Release
+genpname
+*.plg

@@ -1,0 +1,13 @@
+Debug
+Release
+decmn_win32_Debug
+decmn_win32_Release
+Makefile
+*.d
+*.o
+*.pdb
+gencmn
+gencmn.[0-9]
+*.plg
+decmn
+decmn.[0-9]

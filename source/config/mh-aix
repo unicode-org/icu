@@ -1,0 +1,116 @@
+## -*-makefile-*-
+## Aix-specific setup (for xlC)
+## Copyright (c) 1999-2004, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
+## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+# Make the strings readonly. This helps in the common data library
+CFLAGS += -qroconst
+CXXFLAGS += -qroconst
+
+LDFLAGS += -brtl
+
+## We need to delete things prior to linking, or else we'll get
+## SEVERE ERROR: output file in use ..  on AIX.
+## But, shell script version should NOT delete target as we don't
+## have $@ in that context.  (SH = only shell script, icu-config)
+AIX_PREDELETE=rm -f $@ ;
+#SH# AIX_PREDELETE=
+
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS)
+SHLIB.cc=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS)
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## Override Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+
+# The following is for Makefile.inc's use.
+ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
+
+# this one is for icudefs.mk's use
+ifeq ($(ENABLE_SHARED),YES)
+SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+endif
+
+## Compiler switch to embed a library name. Not present on AIX.
+LD_SONAME = 
+
+## Shared object suffix
+SO=		so
+
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+## Special AIX rules
+
+## Build archive from shared object
+%.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
+
+%.u : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
+
+
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+%.$(SO): %$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+
+
+## BIR  - bind with internal references [so app data and icu data doesn't collide]
+BIR_LDFLAGS= -E$(NAME).map -bnoexpall
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+BIR_DEPS= $(NAME).map
+
+
+## End Aix-specific setup

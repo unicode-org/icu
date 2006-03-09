@@ -1,0 +1,102 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../cldr/common/main/as.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/main/as.xml
+ */
+as{
+    Countries{
+        IN{"ভাৰত"}
+    }
+    Currencies{
+        INR{
+            "Rs.",
+            "INR",
+        }
+    }
+    ExemplarCharacters{"[ঁ-ঃঅ-ঌএঐও-নপ-যলশ-হ়-ৄেৈো-ৎৗড়ঢ়য়-ৣৰ-৲‌‍]"}
+    Languages{
+        as{"অসমীয়া"}
+    }
+    LocaleScript{
+        "Beng",
+    }
+    Version{"1.18"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "পূৰ্বা",
+                "অপ",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ৰবি",
+                        "সোম",
+                        "মঙ্গল",
+                        "বুধ",
+                        "বৃহষ্পতি",
+                        "শুক্ৰ",
+                        "শনি",
+                    }
+                    wide{
+                        "দেওবাৰ",
+                        "সোমবাৰ",
+                        "মঙ্গলবাৰ",
+                        "বুধবাৰ",
+                        "বৃহষ্পতিবাৰ",
+                        "শুক্ৰবাৰ",
+                        "শনিবাৰ",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "জানু",
+                        "ফেব্ৰু",
+                        "মাৰ্চ",
+                        "এপ্ৰিল",
+                        "মে",
+                        "জুন",
+                        "জুলাই",
+                        "আগ",
+                        "সেপ্ট",
+                        "অক্টো",
+                        "নভে",
+                        "ডিসে",
+                    }
+                    wide{
+                        "জানুয়াৰী",
+                        "ফেব্ৰুয়াৰী",
+                        "মাৰ্চ",
+                        "এপ্ৰিল",
+                        "মে",
+                        "জুন",
+                        "জুলাই",
+                        "আগষ্ট",
+                        "সেপ্টেম্বৰ",
+                        "অক্টোবৰ",
+                        "নভেম্বৰ",
+                        "ডিসেম্বৰ",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings{
+        {
+            "Asia/Calcutta",
+            "ভাৰতীয় সময়",
+            "ভা. স.",
+            "ভাৰতীয় সময়",
+            "ভা. স.",
+            "এলাহাৱাদ",
+        }
+    }
+}
