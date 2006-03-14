@@ -155,6 +155,7 @@ icuhtml/icu.sf.net/docs/papers/foldedtrie_iuc21.ppt
 icuhtml/icu.sf.net/docs/papers/forms_of_unicode/index.html
 icuhtml/icu.sf.net/docs/papers/gb18030.html
 icuhtml/icu.sf.net/docs/papers/history_of_java_internationalization.html
+icuhtml/icu.sf.net/docs/papers/icu4j_in_eclipse_iuc29.sxi
 icuhtml/icu.sf.net/docs/papers/international_calendars_in_java.html
 icuhtml/icu.sf.net/docs/papers/international_text_in_jdk_1.2/index.html
 icuhtml/icu.sf.net/docs/papers/internationalization_support_for_javascript.html
