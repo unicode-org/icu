@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,19 +8,6 @@ package com.ibm.icu.dev.tool.layout;
 
 public class ScriptTagModuleWriter extends ScriptModuleWriter
 {
-    
-    private int scriptTag(String tag)
-    {
-        int result = 0;
-        
-        for (int i = 0; i < 4; i += 1) {
-            result <<= 8;
-            result += (int) (tag.charAt(i) & 0xFF);
-        }
-        
-        return result;
-    }
-    
     public ScriptTagModuleWriter(ScriptData theScriptData, LanguageData theLanguageData)
     {
         super(theScriptData, theLanguageData);
