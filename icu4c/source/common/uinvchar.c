@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -145,58 +145,49 @@ static const uint32_t invariantChars[4]={
 /* test signed types for invariant characters, adds test for positive values */
 #define SCHAR_IS_INVARIANT(c) ((0<=(c)) && UCHAR_IS_INVARIANT(c))
 
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#define CHAR_TO_UCHAR(c) c
+#define UCHAR_TO_CHAR(c) c
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#define CHAR_TO_UCHAR(u) asciiFromEbcdic[u]
+#define UCHAR_TO_CHAR(u) ebcdicFromAscii[u]
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
+
+
 U_CAPI void U_EXPORT2
 u_charsToUChars(const char *cs, UChar *us, int32_t length) {
     UChar u;
     uint8_t c;
-    UBool onlyInvariantChars;
 
     /*
      * Allow the entire ASCII repertoire to be mapped _to_ Unicode.
      * For EBCDIC systems, this works for characters with codes from
      * codepages 37 and 1047 or compatible.
      */
-    onlyInvariantChars=TRUE;
     while(length>0) {
         c=(uint8_t)(*cs++);
-#if U_CHARSET_FAMILY==U_ASCII_FAMILY
-        u=(UChar)c;
-#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-        u=(UChar)asciiFromEbcdic[c];
-#else
-#   error U_CHARSET_FAMILY is not valid
-#endif
-        if(u==0 && c!=0) {
-            onlyInvariantChars=FALSE;
-        }
+        u=(UChar)CHAR_TO_UCHAR(c);
+        U_ASSERT((u!=0 || c==0)); /* only invariant chars converted? */
         *us++=u;
         --length;
     }
-    U_ASSERT(onlyInvariantChars); /* only invariant chars? */
 }
 
 U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
     UChar u;
-    UBool onlyInvariantChars;
 
-    onlyInvariantChars=TRUE;
     while(length>0) {
         u=*us++;
         if(!UCHAR_IS_INVARIANT(u)) {
-            onlyInvariantChars=FALSE;
+            U_ASSERT(FALSE); /* Variant characters were used. These are not portable in ICU. */
             u=0;
         }
-#if U_CHARSET_FAMILY==U_ASCII_FAMILY
-        *cs++=(char)u;
-#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-        *cs++=(char)ebcdicFromAscii[u];
-#else
-#   error U_CHARSET_FAMILY is not valid
-#endif
+        *cs++=(char)UCHAR_TO_CHAR(u);
         --length;
     }
-    U_ASSERT(onlyInvariantChars); /* only invariant chars? */
 }
 
 U_CAPI UBool U_EXPORT2
@@ -232,7 +223,7 @@ uprv_isInvariantString(const char *s, int32_t length) {
             return FALSE; /* found a variant char */
         }
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-        c=asciiFromEbcdic[c];
+        c=CHAR_TO_UCHAR(c);
         if(c==0 || !UCHAR_IS_INVARIANT(c)) {
             return FALSE; /* found a variant char */
         }
