@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -65,16 +65,14 @@ static UErrorCode gLoadErrorCode=U_ZERO_ERROR;
 
 /*
  * Maximum length of character names (regular & 1.0).
- * Maximum length of ISO comments.
  */
-static int32_t gMaxNameLength=0, gMaxISOCommentLength=0;
+static int32_t gMaxNameLength=0;
 
 /*
  * Set of chars used in character names (regular & 1.0).
- * Set of chars used in ISO comments.
  * Chars are platform-dependent (can be EBCDIC).
  */
-static uint32_t gNameSet[8]={ 0 }, gISOCommentSet[8]={ 0 };
+static uint32_t gNameSet[8]={ 0 };
 
 #define U_NONCHARACTER_CODE_POINT U_CHAR_CATEGORY_COUNT
 #define U_LEAD_SURROGATE U_CHAR_CATEGORY_COUNT + 1
@@ -82,8 +80,41 @@ static uint32_t gNameSet[8]={ 0 }, gISOCommentSet[8]={ 0 };
 
 #define U_CHAR_EXTENDED_CATEGORY_COUNT (U_CHAR_CATEGORY_COUNT + 3)
 
-static const char * const
-charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT];
+static const char * const charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT] = {
+    "unassigned",
+    "uppercase letter",
+    "lowercase letter",
+    "titlecase letter",
+    "modifier letter",
+    "other letter",
+    "non spacing mark",
+    "enclosing mark",
+    "combining spacing mark",
+    "decimal digit number",
+    "letter number",
+    "other number",
+    "space separator",
+    "line separator",
+    "paragraph separator",
+    "control",
+    "format",
+    "private use area",
+    "surrogate",
+    "dash punctuation",   
+    "start punctuation",
+    "end punctuation",
+    "connector punctuation",
+    "other punctuation",
+    "math symbol",
+    "currency symbol",
+    "modifier symbol",
+    "other symbol",
+    "initial punctuation",
+    "final punctuation",
+    "noncharacter",
+    "lead surrogate",
+    "trail surrogate"
+};
 
 /* implementation ----------------------------------------------------------- */
 
@@ -371,42 +402,6 @@ compareName(UCharNames *names,
     /* complete match? */
     return (UBool)(*otherName==0);
 }
-
-static const char * const charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT] = {
-    "unassigned",
-    "uppercase letter",
-    "lowercase letter",
-    "titlecase letter",
-    "modifier letter",
-    "other letter",
-    "non spacing mark",
-    "enclosing mark",
-    "combining spacing mark",
-    "decimal digit number",
-    "letter number",
-    "other number",
-    "space separator",
-    "line separator",
-    "paragraph separator",
-    "control",
-    "format",
-    "private use area",
-    "surrogate",
-    "dash punctuation",   
-    "start punctuation",
-    "end punctuation",
-    "connector punctuation",
-    "other punctuation",
-    "math symbol",
-    "currency symbol",
-    "modifier symbol",
-    "other symbol",
-    "initial punctuation",
-    "final punctuation",
-    "noncharacter",
-    "lead surrogate",
-    "trail surrogate"
-};
 
 static uint8_t getCharCat(UChar32 cp) {
     uint8_t cat;
@@ -1333,7 +1328,6 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
     Group *group;
     const uint8_t *s, *line, *lineLimit;
 
-    int32_t maxISOCommentLength=0;
     int32_t groupCount, lineNumber, length;
 
     tokenLengths=(int8_t *)uprv_malloc(tokenCount);
@@ -1380,10 +1374,7 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
             }
 
             /* read ISO comment */
-            length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gISOCommentSet, &line, lineLimit);
-            if(length>maxISOCommentLength) {
-                maxISOCommentLength=length;
-            }
+            /*length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gISOCommentSet, &line, lineLimit);*/
         }
 
         ++group;
@@ -1395,7 +1386,6 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
     }
 
     /* set gMax... - name length last for threading */
-    gMaxISOCommentLength=maxISOCommentLength;
     gMaxNameLength=maxNameLength;
 }
 
@@ -1694,22 +1684,6 @@ uprv_getMaxCharNameLength() {
     }
 }
 
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-urename.h and uprops.h changed accordingly. 
-*/
-U_CAPI int32_t U_EXPORT2
-uprv_getMaxISOCommentLength() {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    if(calcNameSetsLengths(&errorCode)) {
-        return gMaxISOCommentLength;
-    } else {
-        return 0;
-    }
-}
-#endif
-
 /**
  * Converts the char set cset into a Unicode set uset.
  * @param cset Set of 256 bit flags corresponding to a set of chars.
@@ -1756,21 +1730,6 @@ U_CAPI void U_EXPORT2
 uprv_getCharNameCharacters(const USetAdder *sa) {
     charSetToUSet(gNameSet, sa);
 }
-
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-urename.h and uprops.h changed accordingly. 
-*/
-/**
- * Fills set with characters that are used in Unicode character names.
- * @param set USetAdder to receive characters.
- */
-U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(const USetAdder *sa) {
-    charSetToUSet(gISOCommentSet, sa);
-}
-#endif
 
 /* data swapping ------------------------------------------------------------ */
 
