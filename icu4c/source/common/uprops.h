@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -325,19 +325,6 @@ enum {
 U_CAPI int32_t U_EXPORT2
 uprv_getMaxCharNameLength(void);
 
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-urename.h and unames.c changed accordingly. 
-*/
-/**
- * Get the maximum length of an ISO comment.
- * @return 0 if no ISO comments available.
- */
-U_CAPI int32_t U_EXPORT2
-uprv_getMaxISOCommentLength();
-#endif
-
 /**
  * Fills set with characters that are used in Unicode character names.
  * Includes all characters that are used in regular/Unicode 1.0/extended names.
@@ -346,21 +333,6 @@ uprv_getMaxISOCommentLength();
  */
 U_CAPI void U_EXPORT2
 uprv_getCharNameCharacters(const USetAdder *sa);
-
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-urename.h and unames.c changed accordingly. 
-*/
-/**
- * Fills set with characters that are used in Unicode character names.
- * Just empties the set if no ISO comments are available.
- * @param sa USetAdder to receive characters.
- */
-U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(const USetAdder *sa);
-*/
-#endif
 
 /**
  * Constants for which data and implementation files provide which properties.
