@@ -2044,12 +2044,11 @@ uchar_swapNames(const UDataSwapper *ds,
             case 1:
                 {
                     /* swap factors and the prefix and factor strings */
-                    uint16_t factors[8];
-                    uint32_t j, factorsCount;
+                    uint32_t factorsCount;
 
                     factorsCount=inRange->variant;
-                    if(factorsCount==0 || factorsCount>LENGTHOF(factors)) {
-                        udata_printError(ds, "uchar_swapNames(): too many factors (%u) in algorithmic range %u\n",
+                    if(factorsCount==0) {
+                        udata_printError(ds, "uchar_swapNames(): incorrect number of factors (%u) in algorithmic range %u\n",
                                          factorsCount, i);
                         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                         return 0;
@@ -2058,9 +2057,6 @@ uchar_swapNames(const UDataSwapper *ds,
                     /* read and swap the factors */
                     p=(const uint16_t *)(inRange+1);
                     q=(uint16_t *)(outRange+1);
-                    for(j=0; j<factorsCount; ++j) {
-                        factors[j]=ds->readUInt16(p[j]);
-                    }
                     ds->swapArray16(ds, p, (int32_t)(factorsCount*2), q, pErrorCode);
 
                     /* swap the strings, up to the last terminating NUL */
