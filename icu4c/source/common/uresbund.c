@@ -257,7 +257,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     const char *myPath = NULL;
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
-    UBool isAlias = FALSE;
+    /*UBool isAlias = FALSE;*/
     UHashTok hashkey;
 
     if(U_FAILURE(*status)) {
@@ -340,7 +340,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
                 if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
                     u_UCharsToChars(alias, aliasName, aliasLen+1);
-                    isAlias = TRUE;
+                    /*isAlias = TRUE;*/
                     res_unload(&(r->fData));
                     result = res_load(&(r->fData), r->fPath, aliasName, status);
                     if (result == FALSE || U_FAILURE(*status)) { 
@@ -1744,14 +1744,13 @@ ures_open(const char* path,
     char canonLocaleID[100];
     UResourceDataEntry *hasData = NULL;
     UResourceBundle *r;
-    int32_t length;
 
     if(status == NULL || U_FAILURE(*status)) {
         return NULL;
     }
 
     /* first "canonicalize" the locale ID */
-    length = uloc_getBaseName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
+    uloc_getBaseName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
     if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -2433,7 +2432,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
             && U_SUCCESS(subStatus)) {
             const char *k;
             int32_t i;
-            k = ures_getKey(&subItem);
+            k = ures_getKey(subPtr);
             
 #if defined(URES_TREE_DEBUG)
             /* fprintf(stderr, "%s | %s | %s | %s\n", path?path:"<ICUDATA>", keyword, locale, k); */
