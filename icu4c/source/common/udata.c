@@ -1187,7 +1187,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     const char         *dataPath;
 
-    const char         *tocEntrySuffix;
     int32_t             tocEntrySuffixIndex;
     const char         *tocEntryPathSuffix;
     UErrorCode          subErrorCode=U_ZERO_ERROR;
@@ -1303,7 +1302,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
         TinyString_append(&tocEntryPath, ".");
         TinyString_append(&tocEntryPath, type);
     }
-    tocEntrySuffix = tocEntryName.s+tocEntrySuffixIndex; /* suffix starts here */
     tocEntryPathSuffix = tocEntryPath.s+tocEntrySuffixIndex; /* suffix starts here */
 
 #ifdef UDATA_DEBUG
