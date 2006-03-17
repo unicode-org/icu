@@ -139,7 +139,6 @@ setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to ca
         uprv_free(newCommonData);
     }
     umtx_unlock(NULL);
-    return;
 }
 
 static const char *
@@ -492,11 +491,6 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
     /** Item **/
     iter->basename = findBasename(item);
     iter->basenameLen = (int32_t)uprv_strlen(iter->basename);
-
-    if(iter->basename == NULL) {
-        iter->nextPath = NULL;
-        return;
-    }
 
     /** Item path **/
     iter->itemPath   = iter->itemPathBuf;
