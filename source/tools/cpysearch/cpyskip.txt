@@ -233,3 +233,4 @@ icuhtml/icu.sf.net/meetings/notes20050921.txt
 icuhtml/icu.sf.net/ssi/footer.html
 icuhtml/icu.sf.net/ssi/header.html
 icuapps/redemo/readme
+icuapps/configure
