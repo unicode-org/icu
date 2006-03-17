@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -78,6 +78,7 @@ derivedCorePropsNames[]={
     "XID_Continue",
     "Default_Ignorable_Code_Point",
     "Grapheme_Extend",
+    "Grapheme_Link", /* Unicode 5 moves this property here from PropList.txt */
     "Grapheme_Base"
 };
 
@@ -93,6 +94,7 @@ derivedCorePropsIndex[]={
     UCHAR_XID_CONTINUE,
     UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
     UCHAR_GRAPHEME_EXTEND,
+    UCHAR_GRAPHEME_LINK,
     UCHAR_GRAPHEME_BASE
 };
 
