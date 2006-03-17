@@ -502,11 +502,11 @@ ures_hasNext(const UResourceBundle *resourceBundle);
  * to iterate over. Features a fill-in parameter. 
  *
  * @param resourceBundle    a resource
- * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be closed by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code. You may still get a non NULL result even if an
  *                          error occured. Check status instead.
- * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must close it
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle* U_EXPORT2 
@@ -537,11 +537,11 @@ ures_getNextString(UResourceBundle *resourceBundle,
  *
  * @param resourceBundle    the resource bundle from which to get a sub-resource
  * @param indexR            an index to the wanted resource.
- * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be closed by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code. Don't count on NULL being returned if an error has
  *                          occured. Check status instead.
- * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must close it
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle* U_EXPORT2 
@@ -573,10 +573,10 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  *
  * @param resourceBundle    a resource
  * @param key               a key associated with the wanted resource
- * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be closed by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.
- * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must close it
  * @stable ICU 2.0
  */
 U_STABLE UResourceBundle* U_EXPORT2 
