@@ -1,6 +1,6 @@
 /***************************************************************************************
  *
- *   Copyright (C) 1996-2005, International Business Machines
+ *   Copyright (C) 1996-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -16,10 +16,11 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.ULocale;
 import java.text.FieldPosition;
 import java.text.ParseException;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Date;
 
@@ -53,12 +54,12 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
         new IntlTestDateFormat().run(args);
     }
 
-    public void TestLocale() {
-        localeTest(Locale.getDefault(), "Default Locale");
+    public void TestULocale() {
+        localeTest(ULocale.getDefault(), "Default Locale");
     }
 
     // This test does round-trip testing (format -> parse -> format -> parse -> etc.) of DateFormat.
-    public void localeTest(final Locale locale, final String localeName) {
+    public void localeTest(final ULocale locale, final String localeName) {
         int timeStyle, dateStyle;
 
         // For patterns including only time information and a timezone, it may take
@@ -225,7 +226,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestAvailableLocales() {
-        final Locale[] locales = DateFormat.getAvailableLocales();
+        final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;
         logln("" + count + " available locales");
         if (locales != null  &&  count != 0) {
@@ -239,9 +240,11 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
         else errln("********** FAIL: Zero available locales or null array pointer");
     }
 
-    /* This test is too slow; we disable it for now
     public void TestMonster() {
-        final Locale[] locales = DateFormat.getAvailableLocales();
+        if (isQuick()) {
+            logln("Skipping test (use -e for exhaustive)");
+        }
+        final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;
         if (locales != null  &&  count != 0) {
             for (int i=0; i<count; ++i) {
@@ -256,7 +259,6 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    */
 }
 
 //eof
