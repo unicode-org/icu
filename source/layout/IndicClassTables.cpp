@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -261,7 +261,7 @@ static const IndicClassTable sinhClassTable = {0x0D80, 0x0DF4, 3, SINH_SCRIPT_FL
 //
 // IndicClassTable addresses
 //
-static const IndicClassTable * const indicClassTables[] = {
+static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'zyyy' (COMMON) */
     NULL,            /* 'qaai' (INHERITED) */
     NULL,            /* 'arab' (ARABIC) */
