@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2005, International Business Machines
+ *   Copyright (C) 2002-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -10,6 +10,7 @@
  * BreakIterator...
  */
 #include "layout/LETypes.h"
+#include "layout/LEScripts.h"
 #include "layout/LELanguages.h"
 #include "layout/LayoutEngine.h"
 #include "layout/LEFontInstance.h"
@@ -131,7 +132,7 @@ le_int32 StyleRuns::getRuns(le_int32 runLimits[], le_int32 styleIndices[])
  * process, rather for all scripts which require
  * complex processing for correct rendering.
  */
-static const le_bool complexTable[] = {
+static const le_bool complexTable[scriptCodeCount] = {
     FALSE , /* Zyyy */
     FALSE,  /* Qaai */
     TRUE,   /* Arab */
