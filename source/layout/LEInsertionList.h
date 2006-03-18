@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2004, International Business Machines
+ *   Copyright (C) 1998-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -37,6 +37,11 @@ public:
      * @internal
      */
     virtual le_bool applyInsertion(le_int32 atPosition, le_int32 count, LEGlyphID newGlyphs[]) = 0;
+    
+    /**
+     * The descructor
+     */
+     virtual ~LEInsertionCallback();
 };
 
 /**

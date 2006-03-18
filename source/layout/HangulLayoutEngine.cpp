@@ -183,7 +183,7 @@ static le_int32 getCharClass(LEUnicode ch, LEUnicode &lead, LEUnicode &vowel, LE
     return CC_X;
 }
 
-HangulOpenTypeLayoutEngine::HangulOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+HangulOpenTypeLayoutEngine::HangulOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 /*languageCode*/,
                                        le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, korLanguageCode, typoFlags, gsubTable)
 {
@@ -192,7 +192,7 @@ HangulOpenTypeLayoutEngine::HangulOpenTypeLayoutEngine(const LEFontInstance *fon
     fFeatureOrder = TRUE;
 }
 
-HangulOpenTypeLayoutEngine::HangulOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+HangulOpenTypeLayoutEngine::HangulOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 /*languageCode*/,
 			                                   le_int32 typoFlags)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, korLanguageCode, typoFlags)
 {

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2005, International Business Machines
+ *   Copyright (C) 1998-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -12,6 +12,11 @@
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LEGlyphStorage)
+
+LEInsertionCallback::~LEInsertionCallback()
+{
+	// nothing to do...
+}
 
 LEGlyphStorage::LEGlyphStorage()
     : fGlyphCount(0), fGlyphs(NULL), fCharIndices(NULL), fPositions(NULL),
