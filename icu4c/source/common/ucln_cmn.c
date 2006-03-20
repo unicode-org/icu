@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2004, International Business Machines                   *
+* Copyright (C) 2001-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -38,9 +38,9 @@ void ucln_common_registerCleanup(ECleanupCommonType type,
 }
 
 U_CFUNC UBool ucln_common_lib_cleanup(void) {
-    ECleanupCommonType commonFunc;
+    ECleanupCommonType commonFunc = UCLN_COMMON_START;
 
-    for (commonFunc = UCLN_COMMON_START+1; commonFunc<UCLN_COMMON_COUNT; commonFunc++) {
+    for (commonFunc++; commonFunc<UCLN_COMMON_COUNT; commonFunc++) {
         if (gCommonCleanupFunctions[commonFunc])
         {
             gCommonCleanupFunctions[commonFunc]();

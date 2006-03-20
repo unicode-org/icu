@@ -50,13 +50,13 @@ ucln_registerCleanup(ECleanupLibraryType type,
 U_CAPI void U_EXPORT2
 u_cleanup(void)
 {
-    ECleanupLibraryType libType;
+    ECleanupLibraryType libType = UCLN_START;
 
     UTRACE_ENTRY_OC(UTRACE_U_CLEANUP);
     umtx_lock(NULL);     /* Force a memory barrier, so that we are sure to see   */
     umtx_unlock(NULL);   /*   all state left around by any other threads.        */
 
-    for (libType = UCLN_START+1; libType<UCLN_COMMON; libType++) {
+    for (libType++; libType<UCLN_COMMON; libType++) {
         if (gLibCleanupFunctions[libType])
         {
             gLibCleanupFunctions[libType]();

@@ -28,7 +28,6 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 {
     int32_t ln = 0;
     char buffer[1024];
-    const CharList *ol = NULL;
     while(l != NULL)
     {
         if(l->str)
@@ -56,8 +55,6 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
         }
 
         ln += (int32_t)uprv_strlen(l->str);
-
-        ol = l;
 
         if(l->next && delim)
         {
