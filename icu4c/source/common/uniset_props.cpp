@@ -106,10 +106,10 @@ isPerlOpen(const UnicodeString &pattern, int32_t pos) {
     return pattern.charAt(pos)==BACKSLASH && ((c=pattern.charAt(pos+1))==LOWER_P || c==UPPER_P);
 }
 
-static inline UBool
+/*static inline UBool
 isPerlClose(const UnicodeString &pattern, int32_t pos) {
     return pattern.charAt(pos)==CLOSE_BRACE;
-}
+}*/
 
 static inline UBool
 isNameOpen(const UnicodeString &pattern, int32_t pos) {
@@ -121,10 +121,10 @@ isPOSIXOpen(const UnicodeString &pattern, int32_t pos) {
     return pattern.charAt(pos)==SET_OPEN && pattern.charAt(pos+1)==COLON;
 }
 
-static inline UBool
+/*static inline UBool
 isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
     return pattern.charAt(pos)==COLON && pattern.charAt(pos+1)==SET_CLOSE;
-}
+}*/
 
 // TODO memory debugging provided inside uniset.cpp
 // could be made available here but probably obsolete with use of modern
