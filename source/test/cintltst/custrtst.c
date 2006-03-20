@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -16,15 +16,12 @@
 *   Tests of ustring.h Unicode string API functions.
 */
 
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
-#include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 #include "cintltst.h"
 #include "cucdtst.h"
 #include <string.h>
-#include <stdlib.h>
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
@@ -42,6 +39,7 @@ static void TestUnescape(void);
 static void TestCountChar32(void);
 static void TestUCharIterator(void);
 static void TestUNormIterator(void);
+static void TestBadUNormIterator(void);
 
 void addUStringTest(TestNode** root);
 
@@ -55,16 +53,7 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
     addTest(root, &TestUCharIterator, "tsutil/custrtst/TestUCharIterator");
     addTest(root, &TestUNormIterator, "tsutil/custrtst/TestUNormIterator");
-
-    /* cstrcase.c functions, declared in cucdtst.h */
-    addTest(root, &TestCaseLower, "tsutil/custrtst/TestCaseLower");
-    addTest(root, &TestCaseUpper, "tsutil/custrtst/TestCaseUpper");
-#if !UCONFIG_NO_BREAK_ITERATION
-    addTest(root, &TestCaseTitle, "tsutil/custrtst/TestCaseTitle");
-#endif
-    addTest(root, &TestCaseFolding, "tsutil/custrtst/TestCaseFolding");
-    addTest(root, &TestCaseCompare, "tsutil/custrtst/TestCaseCompare");
-    addTest(root, &TestUCaseMap, "tsutil/custrtst/TestUCaseMap");
+    addTest(root, &TestBadUNormIterator, "tsutil/custrtst/TestBadUNormIterator");
 }
 
 /* test data for TestStringFunctions ---------------------------------------- */
@@ -1793,6 +1782,32 @@ TestUNormIterator() {
     length=LENGTHOF(surrogateText);
     testUNormIteratorWithText(surrogateText, length, length/4, "UCharIterSurr", "UNormIterSurr1");
     testUNormIteratorWithText(surrogateText, length, length, "UCharIterSurrEnd", "UNormIterSurrEnd1");
+}
+
+static void
+TestBadUNormIterator(void) {
+#if !UCONFIG_NO_NORMALIZATION
+    UErrorCode status = U_ILLEGAL_ESCAPE_SEQUENCE;
+    UNormIterator *uni;
+
+    unorm_setIter(NULL, NULL, UNORM_NONE, &status);
+    if (status != U_ILLEGAL_ESCAPE_SEQUENCE) {
+        log_err("unorm_setIter changed the error code to: %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    unorm_setIter(NULL, NULL, UNORM_NONE, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("unorm_setIter didn't react correctly to bad arguments: %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    uni=unorm_openIter(NULL, 0, &status);
+    if(U_FAILURE(status)) {
+        log_err("unorm_openIter() fails: %s\n", u_errorName(status));
+        return;
+    }
+    unorm_setIter(uni, NULL, UNORM_NONE, &status);
+    unorm_closeIter(uni);
+#endif
 }
 
 #endif
