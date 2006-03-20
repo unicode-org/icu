@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -339,24 +339,27 @@ int32_t UnicodeSet::findCodePoint(UChar32 c) const {
 
     // Return the smallest i such that c < list[i].  Assume
     // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
-    if (c < list[0]) return 0;
+    if (c < list[0])
+        return 0;
     // High runner test.  c is often after the last range, so an
     // initial check for this condition pays off.
-    if (len >= 2 && c >= list[len-2]) return len-1;
+    if (len >= 2 && c >= list[len-2])
+        return len-1;
     int32_t lo = 0;
     int32_t hi = len - 1;
     // invariant: c >= list[lo]
     // invariant: c < list[hi]
     for (;;) {
         int32_t i = (lo + hi) >> 1;
-        if (i == lo) return hi;
-        if (c < list[i]) {
+        if (i == lo) {
+            break; // Found!
+        } else if (c < list[i]) {
             hi = i;
         } else {
             lo = i;
         }
     }
-    return 0; // To make compiler happy; never reached
+    return hi;
 }
 
 /**
