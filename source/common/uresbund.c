@@ -1120,7 +1120,6 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
     case URES_INT_VECTOR:
     default:
       return NULL;
-      break;
     }
   }
 
@@ -1616,13 +1615,10 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         switch(type) {
         case ULOC_ACTUAL_LOCALE:
             return resourceBundle->fData->fName;
-            break;
         case ULOC_VALID_LOCALE:
             return resourceBundle->fTopLevelData->fName;
-            break;
         case ULOC_REQUESTED_LOCALE:
             return NULL;
-            break;
         default:
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return NULL;
