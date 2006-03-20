@@ -25,7 +25,6 @@
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
 #include "cintltst.h"
-#include "cucdtst.h"
 
 /* test string case mapping functions --------------------------------------- */
 

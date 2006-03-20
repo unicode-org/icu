@@ -20,7 +20,6 @@
 #include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 #include "cintltst.h"
-#include "cucdtst.h"
 #include <string.h>
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
