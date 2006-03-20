@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -735,6 +735,41 @@ static void TestRegressionUTF32(){
     }
     free(standardForm);
     free(utf32);
+
+    {
+        /* Check for lone surrogate error handling. */
+        static const UChar   sampleBadStartSurrogate[] = { 0x0031, 0xD800, 0x0032 };
+        static const UChar   sampleBadEndSurrogate[] = { 0x0031, 0xDC00, 0x0032 };
+        static const uint8_t expectedUTF32BE[] = {
+            0x00, 0x00, 0x00, 0x31,
+            0x00, 0x00, 0xff, 0xfd,
+            0x00, 0x00, 0x00, 0x32
+        };
+        static const uint8_t expectedUTF32LE[] = {
+            0x31, 0x00, 0x00, 0x00,
+            0xfd, 0xff, 0x00, 0x00,
+            0x32, 0x00, 0x00, 0x00
+        };
+        static const int32_t offsetsUTF32[] = {
+            0x00, 0x00, 0x00, 0x00,
+            0x01, 0x01, 0x01, 0x01,
+            0x02, 0x02, 0x02, 0x02
+        };
+
+        if(!convertFromU(sampleBadStartSurrogate, sizeof(sampleBadStartSurrogate)/sizeof(sampleBadStartSurrogate[0]),
+                expectedUTF32BE, sizeof(expectedUTF32BE), "UTF-32BE", offsetsUTF32, TRUE, U_ZERO_ERROR))
+            log_err("u->UTF-32BE\n");
+        if(!convertFromU(sampleBadEndSurrogate, sizeof(sampleBadEndSurrogate)/sizeof(sampleBadEndSurrogate[0]),
+                expectedUTF32BE, sizeof(expectedUTF32BE), "UTF-32BE", offsetsUTF32, TRUE, U_ZERO_ERROR))
+            log_err("u->UTF-32BE\n");
+
+        if(!convertFromU(sampleBadStartSurrogate, sizeof(sampleBadStartSurrogate)/sizeof(sampleBadStartSurrogate[0]),
+                expectedUTF32LE, sizeof(expectedUTF32LE), "UTF-32LE", offsetsUTF32, TRUE, U_ZERO_ERROR))
+            log_err("u->UTF-32LE\n");
+        if(!convertFromU(sampleBadEndSurrogate, sizeof(sampleBadEndSurrogate)/sizeof(sampleBadEndSurrogate[0]),
+                expectedUTF32LE, sizeof(expectedUTF32LE), "UTF-32LE", offsetsUTF32, TRUE, U_ZERO_ERROR))
+            log_err("u->UTF-32LE\n");
+    }
 }
 
 /*Walk through the available converters*/
