@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -66,12 +66,6 @@ startsWithPrefix(const UChar* src , int32_t srcLength){
     return startsWithPrefix;
 }
 
-inline static void 
-toASCIILower(UChar* src, int32_t srcLen){
-    for(int32_t i=0; i<srcLen; i++){
-        src[i] = toASCIILower(src[i]);
-    }
-}
 
 inline static int32_t
 compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len, 
