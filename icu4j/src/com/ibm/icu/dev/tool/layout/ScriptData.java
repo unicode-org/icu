@@ -94,7 +94,9 @@ public class ScriptData extends TagValueData
     // TODO: short name longer than long name, replace repeated chars w/ space...
     private ScriptData.TagException exceptions[] = {
             new ScriptData.TagException("laoo", "lao "),
-            new ScriptData.TagException("yiii", "yi  "),
+            new ScriptData.TagException("nkoo", "nko "), // New code from ISO 15924, not sure this will be OT tag
+            new ScriptData.TagException("vaii", "vai "), // New code from ISO 15924, not sure this will be OT tag
+            new ScriptData.TagException("yiii", "yi  ")
         };
         
     
