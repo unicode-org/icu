@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -18,6 +18,7 @@ void addLocaleTest(TestNode**);
 void addCLDRTest(TestNode**);
 void addUnicodeTest(TestNode**);
 void addUStringTest(TestNode**);
+void addCaseTest(TestNode**);
 void addResourceBundleTest(TestNode**);
 void addNEWResourceBundleTest(TestNode**);
 void addHashtableTest(TestNode** root);
@@ -37,6 +38,7 @@ void addUtility(TestNode** root)
     addCLDRTest(root);
     addUnicodeTest(root);
     addUStringTest(root);
+    addCaseTest(root);
     addResourceBundleTest(root);
     addNEWResourceBundleTest(root);
     addHashtableTest(root);

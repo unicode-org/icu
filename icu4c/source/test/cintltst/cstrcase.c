@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,8 +29,8 @@
 
 /* test string case mapping functions --------------------------------------- */
 
-U_CFUNC void
-TestCaseLower() {
+static void
+TestCaseLower(void) {
     static const UChar
 
     beforeLower[]= { 0x61, 0x42, 0x49,  0x3a3, 0xdf, 0x3a3, 0x2f, 0xd93f, 0xdfff },
@@ -127,8 +127,8 @@ buffer[length]==0 ? "yes" : "no",
     }
 }
 
-U_CFUNC void
-TestCaseUpper() {
+static void
+TestCaseUpper(void) {
     static const UChar
 
     beforeUpper[]= { 0x61, 0x42, 0x69,  0x3c2, 0xdf,       0x3c3, 0x2f, 0xfb03,           0xd93f, 0xdfff },
@@ -223,8 +223,8 @@ TestCaseUpper() {
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-U_CFUNC void
-TestCaseTitle() {
+static void
+TestCaseTitle(void) {
     static const UChar
 
     beforeTitle[]= { 0x61, 0x42, 0x20, 0x69,  0x3c2, 0x20, 0xdf,       0x3c3, 0x2f, 0xfb03,           0xd93f, 0xdfff },
@@ -331,8 +331,8 @@ TestCaseTitle() {
 
 /* test case folding and case-insensitive string compare -------------------- */
 
-U_CFUNC void
-TestCaseFolding() {
+static void
+TestCaseFolding(void) {
     /*
      * CaseFolding.txt says about i and its cousins:
      *   0049; C; 0069; # LATIN CAPITAL LETTER I
@@ -557,8 +557,8 @@ TestCaseFolding() {
     }
 }
 
-U_CFUNC void
-TestCaseCompare() {
+static void
+TestCaseCompare(void) {
     static const UChar
 
     mixed[]=               { 0x61, 0x42, 0x131, 0x3a3, 0xdf,       0xfb03,           0xd93f, 0xdfff, 0 },
@@ -653,8 +653,8 @@ TestCaseCompare() {
  * test cases for actual case mappings using UCaseMap see
  * intltest utility/UnicodeStringTest/StringCaseTest/TestCasing
  */
-U_CFUNC void
-TestUCaseMap() {
+static void
+TestUCaseMap(void) {
     static const char
         aBc[] ={ 0x61, 0x42, 0x63, 0 },
         abc[] ={ 0x61, 0x62, 0x63, 0 },
@@ -778,4 +778,18 @@ TestUCaseMap() {
     }
 
     ucasemap_close(csm);
+}
+
+void addCaseTest(TestNode** root);
+
+void addCaseTest(TestNode** root) {
+    /* cstrcase.c functions, declared in cucdtst.h */
+    addTest(root, &TestCaseLower, "tsutil/cstrcase/TestCaseLower");
+    addTest(root, &TestCaseUpper, "tsutil/cstrcase/TestCaseUpper");
+#if !UCONFIG_NO_BREAK_ITERATION
+    addTest(root, &TestCaseTitle, "tsutil/cstrcase/TestCaseTitle");
+#endif
+    addTest(root, &TestCaseFolding, "tsutil/cstrcase/TestCaseFolding");
+    addTest(root, &TestCaseCompare, "tsutil/cstrcase/TestCaseCompare");
+    addTest(root, &TestUCaseMap, "tsutil/cstrcase/TestUCaseMap");
 }

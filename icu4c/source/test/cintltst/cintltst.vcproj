@@ -481,9 +481,6 @@
 				RelativePath=".\cucdtst.c">
 			</File>
 			<File
-				RelativePath=".\cucdtst.h">
-			</File>
-			<File
 				RelativePath=".\usettest.c">
 			</File>
 		</Filter>
