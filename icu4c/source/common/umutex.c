@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -564,7 +564,6 @@ umtx_atomic_dec(int32_t *p) {
 U_CAPI void U_EXPORT2
 u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *dp,
                                 UErrorCode *status) {
-    int32_t   testInt;
     if (U_FAILURE(*status)) {
         return;
     }
@@ -583,11 +582,15 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *
     pDecFn = dp;
     gIncDecContext = context;
 
-    testInt = 0;
-    U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
-    U_ASSERT(testInt == 1);
-    U_ASSERT(umtx_atomic_dec(&testInt) == 0);
-    U_ASSERT(testInt == 0);
+#if !U_RELEASE
+    {
+        int32_t   testInt = 0;
+        U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
+        U_ASSERT(testInt == 1);
+        U_ASSERT(umtx_atomic_dec(&testInt) == 0);
+        U_ASSERT(testInt == 0);
+    }
+#endif
 }
 
 
