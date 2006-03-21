@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -204,16 +204,20 @@ ucase_close(UCaseProps *csp) {
 /* UCaseProps singleton ----------------------------------------------------- */
 
 static UCaseProps *gCsp=NULL, *gCspDummy=NULL;
+#if !UCASE_HARDCODE_DATA
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
+#endif
 
 static UBool U_CALLCONV ucase_cleanup(void) {
     ucase_close(gCsp);
     gCsp=NULL;
-    gErrorCode=U_ZERO_ERROR;
-    gHaveData=0;
     ucase_close(gCspDummy);
     gCspDummy=NULL;
+#if !UCASE_HARDCODE_DATA
+    gErrorCode=U_ZERO_ERROR;
+    gHaveData=0;
+#endif
     return TRUE;
 }
 
@@ -605,7 +609,7 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
 U_CAPI UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa) {
     const UChar *unfold, *p;
-    int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth, unfoldCPWidth;
+    int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth;
 
     if(csp->unfold==NULL || s==NULL) {
         return FALSE; /* no reverse case folding data, or no string */
@@ -625,7 +629,6 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
     unfoldRows=unfold[UCASE_UNFOLD_ROWS];
     unfoldRowWidth=unfold[UCASE_UNFOLD_ROW_WIDTH];
     unfoldStringWidth=unfold[UCASE_UNFOLD_STRING_WIDTH];
-    unfoldCPWidth=unfoldRowWidth-unfoldStringWidth;
     unfold+=unfoldRowWidth;
 
     if(length>unfoldStringWidth) {
