@@ -1,20 +1,17 @@
-## Makefile.in for ICU - test/ubrkperf
-## Copyright (c) 2001, International Business Machines Corporation and
+## Makefile.in for ICU - test/perf/ubrkperf
+## Copyright (c) 2001-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
-subdir = test/ubrkperf
+subdir = test/perf/ubrkperf
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
@@ -22,16 +19,8 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = ubrkperf
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n 
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
+LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = ubrkperf.o
 
