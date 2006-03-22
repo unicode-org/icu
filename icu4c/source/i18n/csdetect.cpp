@@ -293,13 +293,14 @@ enumClose(UEnumeration *en) {
 }
 
 static int32_t U_CALLCONV
-enumCount(UEnumeration *en, UErrorCode *status) {
+enumCount(UEnumeration *, UErrorCode *) {
     return fCSRecognizers_size;
 }
 
 static const char* U_CALLCONV
 enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
     if(((Context *)en->context)->currIndex >= fCSRecognizers_size) {
+        *status = U_INDEX_OUTOFBOUNDS_ERROR;
         return NULL;
     }
     const char *currName = fCSRecognizers[((Context *)en->context)->currIndex]->getName();
@@ -310,7 +311,7 @@ enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
 }
 
 static void U_CALLCONV
-enumReset(UEnumeration *en, UErrorCode *status) {
+enumReset(UEnumeration *en, UErrorCode *) {
     ((Context *)en->context)->currIndex = 0;
 }
 
@@ -324,7 +325,7 @@ static const UEnumeration gCSDetEnumeration = {
     enumReset
 };
 
-U_DRAFT  UEnumeration * U_EXPORT2
+U_CAPI  UEnumeration * U_EXPORT2
 ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
