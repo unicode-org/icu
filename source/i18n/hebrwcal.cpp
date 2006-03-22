@@ -1,9 +1,10 @@
 /*
- * Copyright (C) 2003-2006, International Business Machines Corporation
- * and others. All Rights Reserved.
- ******************************************************************************
+******************************************************************************
+* Copyright (C) 2003-2006, International Business Machines Corporation
+* and others. All Rights Reserved.
+******************************************************************************
  *
- * File HEBRWCAL.H
+ * File HEBRWCAL.CPP
  *
  * Modification History:
  *
@@ -261,6 +262,14 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
     Calendar::add(field, amount, status);
     break;
   }
+}
+
+/**
+ * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
+ */
+void HebrewCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
+{
+    add((UCalendarDateFields)field, amount, status);
 }
 
 /**
