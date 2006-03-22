@@ -115,7 +115,7 @@ getDataInfo(const uint8_t *data, int32_t length,
         return NULL;
     }
     if( data==NULL ||
-        (length>=0 && length<sizeof(DataHeader))
+        (length>=0 && length<(int32_t)sizeof(DataHeader))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -123,7 +123,7 @@ getDataInfo(const uint8_t *data, int32_t length,
 
     pHeader=(const DataHeader *)data;
     pInfo=&pHeader->info;
-    if( (length>=0 && length<sizeof(DataHeader)) ||
+    if( (length>=0 && length<(int32_t)sizeof(DataHeader)) ||
         pHeader->dataHeader.magic1!=0xda ||
         pHeader->dataHeader.magic2!=0x27 ||
         pInfo->sizeofUChar!=2
@@ -140,8 +140,8 @@ getDataInfo(const uint8_t *data, int32_t length,
         infoLength=readSwapUInt16(pInfo->size);
     }
 
-    if( headerLength<sizeof(DataHeader) ||
-        infoLength<sizeof(UDataInfo) ||
+    if( headerLength<(int32_t)sizeof(DataHeader) ||
+        infoLength<(int32_t)sizeof(UDataInfo) ||
         headerLength<(int32_t)(sizeof(pHeader->dataHeader)+infoLength) ||
         (length>=0 && length<headerLength)
     ) {
@@ -207,9 +207,11 @@ getFileLength(FILE *f) {
 /*
  * Turn tree separators and alternate file separators into normal file separators.
  */
+#if U_TREE_ENTRY_SEP_CHAR==U_FILE_SEP_CHAR && U_FILE_ALT_SEP_CHAR==U_FILE_SEP_CHAR
+#define treeToPath(s)
+#else
 static void
 treeToPath(char *s) {
-#if U_TREE_ENTRY_SEP_CHAR!=U_FILE_SEP_CHAR || U_FILE_ALT_SEP_CHAR!=U_FILE_SEP_CHAR
     char *t;
 
     for(t=s; *t!=0; ++t) {
@@ -217,15 +219,17 @@ treeToPath(char *s) {
             *t=U_FILE_SEP_CHAR;
         }
     }
-#endif
 }
+#endif
 
 /*
  * Turn file separators into tree separators.
  */
+#if U_TREE_ENTRY_SEP_CHAR==U_FILE_SEP_CHAR && U_FILE_ALT_SEP_CHAR==U_FILE_SEP_CHAR
+#define pathToTree(s)
+#else
 static void
 pathToTree(char *s) {
-#if U_FILE_SEP_CHAR!=U_TREE_ENTRY_SEP_CHAR || U_FILE_ALT_SEP_CHAR!=U_TREE_ENTRY_SEP_CHAR
     char *t;
 
     for(t=s; *t!=0; ++t) {
@@ -233,8 +237,8 @@ pathToTree(char *s) {
             *t=U_TREE_ENTRY_SEP_CHAR;
         }
     }
-#endif
 }
+#endif
 
 /*
  * Prepend the path (if any) to the name and run the name through treeToName().

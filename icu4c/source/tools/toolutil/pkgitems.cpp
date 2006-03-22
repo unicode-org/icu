@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -54,11 +54,6 @@ printError(void *context, const char *fmt, va_list args) {
 U_CDECL_END
 
 typedef void CheckDependency(void *context, const char *itemName, const char *targetName);
-
-static uint16_t
-readSwapUInt16(uint16_t x) {
-    return (uint16_t)((x<<8)|(x>>8));
-}
 
 // check a dependency ------------------------------------------------------ ***
 
@@ -489,7 +484,7 @@ ucnv_enumDependencies(const UDataSwapper *ds,
     /* read the initial UConverterStaticData structure after the UDataInfo header */
     inStaticData=(const UConverterStaticData *)inBytes;
 
-    if( length<sizeof(UConverterStaticData) ||
+    if( length<(int32_t)sizeof(UConverterStaticData) ||
         (uint32_t)length<(staticDataSize=ds->readUInt32(inStaticData->structSize))
     ) {
         udata_printError(ds, "icupkg/ucnv_enumDependencies(): too few bytes (%d after header) for an ICU .cnv conversion table\n",
@@ -509,7 +504,7 @@ ucnv_enumDependencies(const UDataSwapper *ds,
 
         inMBCSHeader=(const _MBCSHeader *)inBytes;
 
-        if(length<sizeof(_MBCSHeader)) {
+        if(length<(int32_t)sizeof(_MBCSHeader)) {
             udata_printError(ds, "icupkg/ucnv_enumDependencies(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table\n",
                                 length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;

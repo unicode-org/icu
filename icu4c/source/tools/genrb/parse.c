@@ -1793,6 +1793,7 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
         {
             /* neither colon nor open brace */
             *status=U_PARSE_ERROR;
+            bundleType=RT_UNKNOWN;
             error(line, "parse error, did not find open-brace '{' or colon ':', stopped with %s", u_errorName(*status));
         }
     }
