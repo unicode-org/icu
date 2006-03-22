@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -350,3 +350,4 @@ int32_t WinNormNFKC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLe
 
 
 #endif // NORMPERF_H
+
