@@ -1,6 +1,8 @@
 /*
-* Copyright (C) 2003-2004, International Business Machines Corporation and others. All Rights Reserved.
-********************************************************************************
+******************************************************************************
+* Copyright (C) 2003-2006, International Business Machines Corporation
+* and others. All Rights Reserved.
+******************************************************************************
 *
 * File HEBRWCAL.H
 *
@@ -9,7 +11,7 @@
 *   Date        Name        Description
 *   05/13/2003  srl          copied from gregocal.h
 *   11/26/2003  srl          copied from buddhcal.h
-********************************************************************************
+******************************************************************************
 */
 
 #ifndef HEBRWCAL_H
@@ -242,7 +244,7 @@ public:
     /**
      * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
      */
-    inline virtual void add(EDateFields field, int32_t amount, UErrorCode& status) { add((UCalendarDateFields)field, amount, status); }
+    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
 
 
     /**
