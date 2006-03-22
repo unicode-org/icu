@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfsubs.h
@@ -472,6 +472,13 @@ class NumeratorSubstitution : public NFSubstitution {
     int64_t ldenominator;
     UBool withZeros;
 public:
+    static inline UnicodeString fixdesc(const UnicodeString& desc) {
+      if (desc.endsWith(LTLT, 2)) {
+        UnicodeString result(desc, 0, desc.length()-1);
+        return result;
+      }
+      return desc;
+    }
     NumeratorSubstitution(int32_t _pos,
         double _denominator,
         const NFRuleSet* _ruleSet,
@@ -504,13 +511,6 @@ public:
 private:
     static const char fgClassID;
     static const UChar LTLT[2];
-    static UnicodeString fixdesc(const UnicodeString& desc) {
-      if (desc.endsWith(LTLT, 2)) {
-        UnicodeString result(desc, 0, desc.length()-1);
-        return result;
-      }
-      return desc;
-    }
 
 public:
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
