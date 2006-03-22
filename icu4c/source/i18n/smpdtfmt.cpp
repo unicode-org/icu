@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -559,13 +559,15 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
  * Append symbols[value] to dst.  Make sure the array index is not out
  * of bounds.
  */
-inline void
+static inline void
 _appendSymbol(UnicodeString& dst,
               int32_t value,
               const UnicodeString* symbols,
               int32_t symbolsCount) {
-    U_ASSERT(value >= 0 && value < symbolsCount);
-    dst += symbols[value];
+    U_ASSERT(0 <= value && value < symbolsCount);
+    if (0 <= value && value < symbolsCount) {
+        dst += symbols[value];
+    }
 }
 
 //---------------------------------------------------------------------
