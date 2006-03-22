@@ -277,7 +277,6 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
     CharList *infiles;
     CharList *parents = NULL, *commands = NULL;
     int32_t genFileOffset = 0;  /* offset from beginning of .c and .o file name, use to chop off package name for AS/400 */
-    char serName[100];
     char *parentPath;
     const char *tchar;
     char tree[1024];
