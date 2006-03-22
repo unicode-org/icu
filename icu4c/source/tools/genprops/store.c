@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -392,7 +392,7 @@ generateData(const char *dataDir, UBool csource) {
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
-    uint32_t size;
+    uint32_t size = 0;
     int32_t trieSize, additionalPropsSize, offset;
     long dataLength;
 
