@@ -1339,12 +1339,6 @@ public:
         current = 0;
 
     }
-    virtual UBool operator==(const StringEnumeration& that)const{
-        return ((this == &that) ||
-            (getDynamicClassID() == that.getDynamicClassID() &&
-            StringEnumeration::operator==(that) &&
-            equals(that)));
-    }
 private:
     UBool equals(const StringEnumeration& other) const{
         if (other.getDynamicClassID() != TimeZoneKeysEnumeration::getStaticClassID()) {
@@ -1376,6 +1370,13 @@ private:
         }
         // if we reached here that means that the enumerations are equal
         return TRUE;
+    }
+public:
+    virtual UBool operator==(const StringEnumeration& that)const{
+        return ((this == &that) ||
+            (getDynamicClassID() == that.getDynamicClassID() &&
+            StringEnumeration::operator==(that) &&
+            equals(that)));
     }
 };
 
