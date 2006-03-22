@@ -141,41 +141,14 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 
 /* We return QNAN rather than SNAN*/
 #define SIGN 0x80000000U
-#if defined(__GNUC__) || defined(_MSC_VER)
-/*
-    This is an optimization for when u_topNBytesOfDouble
-    and u_bottomNBytesOfDouble can't be properly optimized by the compiler
-    or when faster infinity and NaN usage is helpful.
-*/
-#define USE_64BIT_DOUBLE_OPTIMIZATION 1
-#else
-#define USE_64BIT_DOUBLE_OPTIMIZATION 0
-#endif
 
-#if USE_64BIT_DOUBLE_OPTIMIZATION
-/* gcc 3.2 has an optimization bug */
-static const int64_t gNan64 = INT64_C(0x7FF8000000000000);
-static const int64_t gInf64 = INT64_C(0x7FF0000000000000);
-static const double * const fgNan = (const double * const)(&gNan64);
-static const double * const fgInf = (const double * const)(&gInf64);
-#else
-
-#if IEEE_754
-#define NAN_TOP ((int16_t)0x7FF8)
-#define INF_TOP ((int16_t)0x7FF0)
-#elif defined(OS390)
-#define NAN_TOP ((int16_t)0x7F08)
-#define INF_TOP ((int16_t)0x3F00)
-#endif
-
-/* statics */
-static UBool fgNaNInitialized = FALSE;
-static UBool fgInfInitialized = FALSE;
-static double gNan;
-static double gInf;
-static double * fgNan = &gNan;
-static double * fgInf = &gInf;
-#endif
+/* Make it easy to define certain types of constants */
+typedef union {
+    int64_t i64; /* This must be defined first in order to allow the initialization to work. This is a C89 feature. */
+    double d64;
+} BitPatternConversion;
+static const BitPatternConversion gNan = { (int64_t) INT64_C(0x7FF8000000000000) };
+static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000) };
 
 /*---------------------------------------------------------------------------
   Platform utilities
@@ -191,8 +164,11 @@ static double * fgInf = &gInf;
 #   define U_POSIX_LOCALE    1
 #endif
 
-/* Utilities to get the bits from a double */
-#if !USE_64BIT_DOUBLE_OPTIMIZATION
+/*
+    WARNING! u_topNBytesOfDouble and u_bottomNBytesOfDouble
+    can't be properly optimized by the gcc compiler sometimes (i.e. gcc 3.2).
+*/
+#if !IEEE_754
 static char*
 u_topNBytesOfDouble(double* d, int n)
 {
@@ -282,35 +258,10 @@ U_CAPI UBool U_EXPORT2
 uprv_isNaN(double number)
 {
 #if IEEE_754
-#if USE_64BIT_DOUBLE_OPTIMIZATION
-    /* gcc 3.2 has an optimization bug */
+    BitPatternConversion convertedNumber;
+    convertedNumber.d64 = number;
     /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
-    return (UBool)(((*((int64_t *)&number)) & U_INT64_MAX) > gInf64);
-
-#else
-    /* This should work in theory, but it doesn't, so we resort to the more*/
-    /* complicated method below.*/
-    /*  return number != number;*/
-
-    /* You can't return number == getNaN() because, by definition, NaN != x for*/
-    /* all x, including NaN (that is, NaN != NaN).  So instead, we compare*/
-    /* against the known bit pattern.  We must be careful of endianism here.*/
-    /* The pattern we are looking for id:*/
-
-    /*   7FFy yyyy yyyy yyyy  (some y non-zero)*/
-
-    /* There are two different kinds of NaN, but we ignore the distinction*/
-    /* here.  Note that the y value must be non-zero; if it is zero, then we*/
-    /* have infinity.*/
-
-    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
-                              sizeof(uint32_t));
-    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
-                             sizeof(uint32_t));
-
-    return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) &&
-      (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
-#endif
+    return (UBool)((convertedNumber.i64 & U_INT64_MAX) > gInf.i64);
 
 #elif defined(OS390)
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -333,32 +284,10 @@ U_CAPI UBool U_EXPORT2
 uprv_isInfinite(double number)
 {
 #if IEEE_754
-#if USE_64BIT_DOUBLE_OPTIMIZATION
-    /* gcc 3.2 has an optimization bug */
-    return (UBool)(((*((int64_t *)&number)) & U_INT64_MAX) == gInf64);
-#else
-
-    /* We know the top bit is the sign bit, so we mask that off in a copy of */
-    /* the number and compare against infinity. [LIU]*/
-    /* The following approach doesn't work for some reason, so we go ahead and */
-    /* scrutinize the pattern itself. */
-    /*  double a = number; */
-    /*  *(int8_t*)u_topNBytesOfDouble(&a, 1) &= 0x7F;*/
-    /*  return a == uprv_getInfinity();*/
-    /* Instead, We want to see either:*/
-
-    /*   7FF0 0000 0000 0000*/
-    /*   FFF0 0000 0000 0000*/
-
-    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
-                        sizeof(uint32_t));
-    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
-                        sizeof(uint32_t));
-
-    return (UBool)(((highBits  & ~SIGN) == 0x7FF00000U) &&
-      (lowBits == 0x00000000U));
-#endif
-
+    BitPatternConversion convertedNumber;
+    convertedNumber.d64 = number;
+    /* Infinity is exactly 0x7FF0000000000000U. */
+    return (UBool)((convertedNumber.i64 & U_INT64_MAX) == gInf.i64);
 #elif defined(OS390)
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
@@ -403,19 +332,7 @@ U_CAPI double U_EXPORT2
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
-#if !USE_64BIT_DOUBLE_OPTIMIZATION
-    if (!fgNaNInitialized) {
-        /* This variable is always initialized with the same value,
-        so a mutex isn't needed. */
-        int i;
-        int8_t* p = (int8_t*)fgNan;
-        for(i = 0; i < sizeof(double); ++i)
-            *p++ = 0;
-        *(int16_t*)u_topNBytesOfDouble(fgNan, sizeof(NAN_TOP)) = NAN_TOP;
-        fgNaNInitialized = TRUE;
-    }
-#endif
-    return *fgNan;
+    return gNan.d64;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
     /* you'll need to replace this default implementation with what's correct*/
@@ -428,20 +345,7 @@ U_CAPI double U_EXPORT2
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
-#if !USE_64BIT_DOUBLE_OPTIMIZATION
-    if (!fgInfInitialized)
-    {
-        /* This variable is always initialized with the same value,
-        so a mutex isn't needed. */
-        int i;
-        int8_t* p = (int8_t*)fgInf;
-        for(i = 0; i < sizeof(double); ++i)
-            *p++ = 0;
-        *(int16_t*)u_topNBytesOfDouble(fgInf, sizeof(INF_TOP)) = INF_TOP;
-        fgInfInitialized = TRUE;
-    }
-#endif
-    return *fgInf;
+    return gInf.d64;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
     /* value, you'll need to replace this default implementation with what's*/
