@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #ifndef _ALIASTST
@@ -20,7 +20,7 @@ public:
     void TestDisplayName(); 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     LocaleAliasTest();
-    ~LocaleAliasTest();
+    virtual ~LocaleAliasTest();
 private:
     UResourceBundle* resIndex;
     UBool isLocaleAvailable(const char*);
