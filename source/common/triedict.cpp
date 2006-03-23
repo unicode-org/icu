@@ -675,7 +675,7 @@ class BuildCompactTrieNode: public UMemory {
         return sizeof(uint16_t);
     }
     
-    virtual void write(uint8_t *bytes, uint32_t &offset, const UVector32 &translate) {
+    virtual void write(uint8_t *bytes, uint32_t &offset, const UVector32 &/*translate*/) {
         // Write flag/count
         *((uint16_t *)(bytes+offset)) = (fChars.length() & kCountMask)
             | (fVertical ? kVerticalNode : 0) | (fParentEndsWord ? kParentEndsWord : 0 );
@@ -854,7 +854,7 @@ static void walkHorizontal(const TernaryNode *node,
 U_NAMESPACE_END
 U_CDECL_BEGIN
 static int32_t U_CALLCONV
-_sortBuildNodes(const void *context, const void *voidl, const void *voidr) {
+_sortBuildNodes(const void */*context*/, const void *voidl, const void *voidr) {
     BuildCompactTrieNode *left = *(BuildCompactTrieNode **)voidl;
     BuildCompactTrieNode *right = *(BuildCompactTrieNode **)voidr;
     // Check for comparing a node to itself, to avoid spurious duplicates

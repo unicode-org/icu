@@ -36,7 +36,8 @@ DictionaryBreakEngine::~DictionaryBreakEngine() {
 
 UBool
 DictionaryBreakEngine::handles(UChar32 c, int32_t breakType) const {
-    return fSet.contains(c);
+    return (breakType >= 0 && breakType < 32 && (((uint32_t)1 << breakType) & fTypes)
+            && fSet.contains(c));
 }
 
 int32_t
