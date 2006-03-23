@@ -49,7 +49,7 @@ LanguageBreakFactory::~LanguageBreakFactory() {
  ******************************************************************
  */
 
-UnhandledEngine::UnhandledEngine(UErrorCode &status) {
+UnhandledEngine::UnhandledEngine(UErrorCode &/*status*/) {
     for (int32_t i = 0; i < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0])); ++i) {
         fHandled[i] = 0;
     }
@@ -75,7 +75,7 @@ UnhandledEngine::findBreaks( CharacterIterator *text,
                                  int32_t endPos,
                                  UBool reverse,
                                  int32_t breakType,
-                                 UStack &foundBreaks ) const {
+                                 UStack &/*foundBreaks*/ ) const {
     if (breakType >= 0 && breakType < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0]))) {
         UChar32 c = text->current32();
         if (reverse) {
@@ -114,7 +114,7 @@ UnhandledEngine::handleCharacter(UChar32 c, int32_t breakType) {
  ******************************************************************
  */
 
-ICULanguageBreakFactory::ICULanguageBreakFactory(UErrorCode &status) {
+ICULanguageBreakFactory::ICULanguageBreakFactory(UErrorCode &/*status*/) {
     fEngines = 0;
 }
 
