@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -84,6 +84,52 @@ void RandomCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* 
     }
 }
 
+/*
+class TestColltorCompare{
+public:
+    UBool operator()(Collator &coll, int count = 1000){
+        UnicodeString a(test_string.get_a_string());
+        UnicodeString b(test_string.get_a_string());
+        UnicodeString c(test_string.get_a_string());
+        do{
+            if (check_transitivity(coll, a, b, c)){
+                a = b;
+                b = c;
+                c = UnicodeString(test_string.get_a_string());
+            }
+        }while(count-- >= 0 );
+
+        return FALSE;
+    }
+    TestColltorCompare():test_string("$s = $c{1,8};", "$s", "$c", new Magic_SelectOneChar("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]&<")){
+    }
+private:
+    UBool check_transitivity(const Collator & coll, const UnicodeString &a, const UnicodeString &b, const UnicodeString &c){
+        int ab = coll.compare(a,b), ba = coll.compare(b,a);
+        int bc = coll.compare(b,c), cb = coll.compare(c,b);
+        int ca = coll.compare(c,a), ac = coll.compare(a,c);
+        //       a
+        //      / \ 
+        //     b - c
+        //
+        if (//counter-clockwise, maximum
+              (ab >=0 && bc >=0 && ac <0)
+            ||(bc >=0 && ca >=0 && ba <0)
+            ||(ca >=0 && ab >=0 && cb <0)
+
+            //counter-clockwise, minimum
+            ||(ab <=0 && bc <=0 && ca >0)
+            ||(bc <=0 && ca <=0 && ba >0)
+            ||(ca <=0 && ab <=0 && cb >0)
+            ){
+                return FALSE;
+            }
+          return TRUE;
+    }
+
+    LanguageGenerator test_string;
+};*/
+
 static const UVersionInfo ICU_35 = {3,5,0,0};
 
 void RandomCollatorTest::Test(){
@@ -96,51 +142,7 @@ void RandomCollatorTest::Test(){
         return;
     };
 
-    //class TestColltorCompare{
-    //public:
-    //    UBool operator()(Collator &coll, int count = 1000){
-    //        UnicodeString a(test_string.get_a_string());
-    //        UnicodeString b(test_string.get_a_string());
-    //        UnicodeString c(test_string.get_a_string());
-    //        do{
-    //            if (check_transitivity(coll, a, b, c)){
-    //                a = b;
-    //                b = c;
-    //                c = UnicodeString(test_string.get_a_string());
-    //            }
-    //        }while(count-- >= 0 );
-
-    //        return FALSE;
-    //    }
-    //    TestColltorCompare():test_string("$s = $c{1,8};", "$s", "$c", new Magic_SelectOneChar("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]&<")){
-    //    }
-    //private:
-    //    UBool check_transitivity(const Collator & coll, const UnicodeString &a, const UnicodeString &b, const UnicodeString &c){
-    //        int ab = coll.compare(a,b), ba = coll.compare(b,a);
-    //        int bc = coll.compare(b,c), cb = coll.compare(c,b);
-    //        int ca = coll.compare(c,a), ac = coll.compare(a,c);
-    //        //       a
-    //        //      / \ 
-    //        //     b - c
-    //        //
-    //        if (//counter-clockwise, maximum
-    //              (ab >=0 && bc >=0 && ac <0)
-    //            ||(bc >=0 && ca >=0 && ba <0)
-    //            ||(ca >=0 && ab >=0 && cb <0)
-
-    //            //counter-clockwise, minimum
-    //            ||(ab <=0 && bc <=0 && ca >0)
-    //            ||(bc <=0 && ca <=0 && ba >0)
-    //            ||(ca <=0 && ab <=0 && cb >0)
-    //            ){
-    //                return FALSE;
-    //            }
-    //          return TRUE;
-    //    }
-
-    //    LanguageGenerator test_string;
-    //} coll_test;
-
+    //TestColltorCompare coll_test;
 
     static const int CONSTRUCT_RANDOM_COUNT = 1000;
     int i;
