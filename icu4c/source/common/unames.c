@@ -2047,14 +2047,6 @@ uchar_swapNames(const UDataSwapper *ds,
                     uint32_t factorsCount;
 
                     factorsCount=inRange->variant;
-                    if(factorsCount==0) {
-                        udata_printError(ds, "uchar_swapNames(): incorrect number of factors (%u) in algorithmic range %u\n",
-                                         factorsCount, i);
-                        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                        return 0;
-                    }
-
-                    /* read and swap the factors */
                     p=(const uint16_t *)(inRange+1);
                     q=(uint16_t *)(outRange+1);
                     ds->swapArray16(ds, p, (int32_t)(factorsCount*2), q, pErrorCode);
