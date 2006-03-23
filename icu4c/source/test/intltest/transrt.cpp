@@ -85,12 +85,6 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 //--------------------------------------------------------------------
 static const UVersionInfo ICU_36 = {3,6,0,0};
 
-static UBool isICUVersionAtLeast(const UVersionInfo x) {
-    UVersionInfo v;
-    u_getVersion(v);
-    return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
-}
-
 
 //--------------------------------------------------------------------
 // TransliteratorPointer

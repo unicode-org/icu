@@ -994,15 +994,14 @@ TimeZoneTest::TestAliasedNames()
 
  };
 
- TimeZone::EDisplayType styles[] = { TimeZone::SHORT, TimeZone::LONG };
- UBool useDst[] = { FALSE, TRUE };
- int32_t noLoc = uloc_countAvailable();
+    TimeZone::EDisplayType styles[] = { TimeZone::SHORT, TimeZone::LONG };
+    UBool useDst[] = { FALSE, TRUE };
+    int32_t noLoc = uloc_countAvailable();
 
-    UErrorCode status = U_ZERO_ERROR;
     int32_t i, j, k, loc;
     UnicodeString fromName, toName;
     TimeZone *from = NULL, *to = NULL;
-    for(i = 0; i < sizeof(kData)/sizeof(kData[0]); i++) {
+    for(i = 0; i < (int32_t)(sizeof(kData)/sizeof(kData[0])); i++) {
       from = TimeZone::createTimeZone(kData[i].from);
       to = TimeZone::createTimeZone(kData[i].to);
       if(!from->hasSameRules(*to)) {
@@ -1010,8 +1009,8 @@ TimeZoneTest::TestAliasedNames()
       }
       if(!quick) {
         for(loc = 0; loc < noLoc; loc++) {
-          for(j = 0; j < sizeof(styles)/sizeof(styles[0]); j++) {
-            for(k = 0; k < sizeof(useDst)/sizeof(useDst[0]); k++) {
+          for(j = 0; j < (int32_t)(sizeof(styles)/sizeof(styles[0])); j++) {
+            for(k = 0; k < (int32_t)(sizeof(useDst)/sizeof(useDst[0])); k++) {
               fromName.remove();
               toName.remove();
               from->getDisplayName(useDst[k], styles[j], uloc_getAvailable(loc), fromName);
