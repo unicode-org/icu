@@ -68,14 +68,14 @@ TernaryNode::TernaryNode(UChar uc) {
     low = NULL;
     equal = NULL;
     high = NULL;
-};
+}
 
 // Not inline since it's recursive
 TernaryNode::~TernaryNode() {
     delete low;
     delete equal;
     delete high;
-};
+}
 
 MutableTrieDictionary::MutableTrieDictionary( UChar median, UErrorCode &status ) {
     // Start the trie off with something. Having the root node already present
@@ -255,16 +255,6 @@ public:
         return new MutableTrieEnumeration(fRoot, status);
     }
     
-    // Very expensive, but this should never be used.
-    virtual int32_t count(UErrorCode &status) const {
-        MutableTrieEnumeration counter(fRoot, status);
-        int32_t result = 0;
-        while (counter.snext(status) != NULL && U_SUCCESS(status)) {
-            ++result;
-        }
-        return result;
-    }
-    
     virtual const UnicodeString *snext(UErrorCode &status) {
         if (fNodeStack.empty() || U_FAILURE(status)) {
             return NULL;
@@ -326,6 +316,16 @@ public:
             }
         }
         return NULL;
+    }
+    
+    // Very expensive, but this should never be used.
+    virtual int32_t count(UErrorCode &status) const {
+        MutableTrieEnumeration counter(fRoot, status);
+        int32_t result = 0;
+        while (counter.snext(status) != NULL && U_SUCCESS(status)) {
+            ++result;
+        }
+        return result;
     }
     
     virtual void reset(UErrorCode &status) {
@@ -545,6 +545,8 @@ public:
         return new CompactTrieEnumeration(fHeader, status);
     }
     
+    virtual const UnicodeString * snext(UErrorCode &status);
+
     // Very expensive, but this should never be used.
     virtual int32_t count(UErrorCode &status) const {
         CompactTrieEnumeration counter(fHeader, status);
@@ -553,74 +555,6 @@ public:
             ++result;
         }
         return result;
-    }
-    
-    virtual const UnicodeString *snext(UErrorCode &status) {
-        if (fNodeStack.empty() || U_FAILURE(status)) {
-            return NULL;
-        }
-        const CompactTrieNode *node = getCompactNode(fHeader, fNodeStack.peeki());
-        int where = fIndexStack.peeki();
-        while (!fNodeStack.empty() && U_SUCCESS(status)) {
-            int nodeCount = (node->flagscount & kCountMask);
-            UBool goingDown = FALSE;
-            if (nodeCount == 0) {
-                // Terminal node; go up immediately
-                fNodeStack.popi();
-                fIndexStack.popi();
-                node = getCompactNode(fHeader, fNodeStack.peeki());
-                where = fIndexStack.peeki();
-            }
-            else if (node->flagscount & kVerticalNode) {
-                // Vertical node
-                const CompactTrieVerticalNode *vnode = (const CompactTrieVerticalNode *)node;
-                if (where == 0) {
-                    // Going down
-                    unistr.append((const UChar *)vnode->chars, (int32_t) nodeCount);
-                    fIndexStack.setElementAt(1, fIndexStack.size()-1);
-                    node = getCompactNode(fHeader, fNodeStack.push(vnode->equal, status));
-                    where = fIndexStack.push(0, status);
-                    goingDown = TRUE;
-                }
-                else {
-                    // Going up
-                    unistr.truncate(unistr.length()-nodeCount);
-                    fNodeStack.popi();
-                    fIndexStack.popi();
-                    node = getCompactNode(fHeader, fNodeStack.peeki());
-                    where = fIndexStack.peeki();
-                }
-            }
-            else {
-                // Horizontal node
-                const CompactTrieHorizontalNode *hnode = (const CompactTrieHorizontalNode *)node;
-                if (where > 0) {
-                    // Pop previous char
-                    unistr.truncate(unistr.length()-1);
-                }
-                if (where < nodeCount) {
-                    // Push on next node
-                    unistr.append(hnode->entries[where].ch);
-                    fIndexStack.setElementAt(where+1, fIndexStack.size()-1);
-                    node = getCompactNode(fHeader, fNodeStack.push(hnode->entries[where].equal, status));
-                    where = fIndexStack.push(0, status);
-                    goingDown = TRUE;
-                }
-                else {
-                    // Going up
-                    fNodeStack.popi();
-                    fIndexStack.popi();
-                    node = getCompactNode(fHeader, fNodeStack.peeki());
-                    where = fIndexStack.peeki();
-                }
-            }
-            // Check if the parent of the node we've just gone down to ends a
-            // word. If so, return it.
-            if (goingDown && (node->flagscount & kParentEndsWord)) {
-                return &unistr;
-            }
-        }
-        return NULL;
     }
     
     virtual void reset(UErrorCode &status) {
@@ -633,6 +567,75 @@ public:
 };
 
 const char CompactTrieEnumeration::fgClassID = '\0';
+
+const UnicodeString *
+CompactTrieEnumeration::snext(UErrorCode &status) {
+    if (fNodeStack.empty() || U_FAILURE(status)) {
+        return NULL;
+    }
+    const CompactTrieNode *node = getCompactNode(fHeader, fNodeStack.peeki());
+    int where = fIndexStack.peeki();
+    while (!fNodeStack.empty() && U_SUCCESS(status)) {
+        int nodeCount = (node->flagscount & kCountMask);
+        UBool goingDown = FALSE;
+        if (nodeCount == 0) {
+            // Terminal node; go up immediately
+            fNodeStack.popi();
+            fIndexStack.popi();
+            node = getCompactNode(fHeader, fNodeStack.peeki());
+            where = fIndexStack.peeki();
+        }
+        else if (node->flagscount & kVerticalNode) {
+            // Vertical node
+            const CompactTrieVerticalNode *vnode = (const CompactTrieVerticalNode *)node;
+            if (where == 0) {
+                // Going down
+                unistr.append((const UChar *)vnode->chars, (int32_t) nodeCount);
+                fIndexStack.setElementAt(1, fIndexStack.size()-1);
+                node = getCompactNode(fHeader, fNodeStack.push(vnode->equal, status));
+                where = fIndexStack.push(0, status);
+                goingDown = TRUE;
+            }
+            else {
+                // Going up
+                unistr.truncate(unistr.length()-nodeCount);
+                fNodeStack.popi();
+                fIndexStack.popi();
+                node = getCompactNode(fHeader, fNodeStack.peeki());
+                where = fIndexStack.peeki();
+            }
+        }
+        else {
+            // Horizontal node
+            const CompactTrieHorizontalNode *hnode = (const CompactTrieHorizontalNode *)node;
+            if (where > 0) {
+                // Pop previous char
+                unistr.truncate(unistr.length()-1);
+            }
+            if (where < nodeCount) {
+                // Push on next node
+                unistr.append(hnode->entries[where].ch);
+                fIndexStack.setElementAt(where+1, fIndexStack.size()-1);
+                node = getCompactNode(fHeader, fNodeStack.push(hnode->entries[where].equal, status));
+                where = fIndexStack.push(0, status);
+                goingDown = TRUE;
+            }
+            else {
+                // Going up
+                fNodeStack.popi();
+                fIndexStack.popi();
+                node = getCompactNode(fHeader, fNodeStack.peeki());
+                where = fIndexStack.peeki();
+            }
+        }
+        // Check if the parent of the node we've just gone down to ends a
+        // word. If so, return it.
+        if (goingDown && (node->flagscount & kParentEndsWord)) {
+            return &unistr;
+        }
+    }
+    return NULL;
+}
 
 StringEnumeration *
 CompactTrieDictionary::openWords( UErrorCode &status ) const {

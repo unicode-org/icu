@@ -50,13 +50,13 @@ LanguageBreakFactory::~LanguageBreakFactory() {
  */
 
 UnhandledEngine::UnhandledEngine(UErrorCode &status) {
-    for (int32_t i = 0; i < sizeof(fHandled)/sizeof(fHandled[0]); ++i) {
+    for (int32_t i = 0; i < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0])); ++i) {
         fHandled[i] = 0;
     }
 }
 
 UnhandledEngine::~UnhandledEngine() {
-    for (int32_t i = 0; i < sizeof(fHandled)/sizeof(fHandled[0]); ++i) {
+    for (int32_t i = 0; i < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0])); ++i) {
         if (fHandled[i] != 0) {
             delete fHandled[i];
         }
@@ -65,7 +65,7 @@ UnhandledEngine::~UnhandledEngine() {
 
 UBool
 UnhandledEngine::handles(UChar32 c, int32_t breakType) const {
-    return (breakType >= 0 && breakType < sizeof(fHandled)/sizeof(fHandled[0])
+    return (breakType >= 0 && breakType < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0]))
         && fHandled[breakType] != 0 && fHandled[breakType]->contains(c));
 }
 
@@ -76,7 +76,7 @@ UnhandledEngine::findBreaks( CharacterIterator *text,
                                  UBool reverse,
                                  int32_t breakType,
                                  UStack &foundBreaks ) const {
-    if (breakType >= 0 && breakType < sizeof(fHandled)/sizeof(fHandled[0])) {
+    if (breakType >= 0 && breakType < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0]))) {
         UChar32 c = text->current32();
         if (reverse) {
             while(text->getIndex() > startPos && fHandled[breakType]->contains(c)) {
@@ -94,7 +94,7 @@ UnhandledEngine::findBreaks( CharacterIterator *text,
 
 void
 UnhandledEngine::handleCharacter(UChar32 c, int32_t breakType) {
-    if (breakType >= 0 && breakType < sizeof(fHandled)/sizeof(fHandled[0])) {
+    if (breakType >= 0 && breakType < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0]))) {
         if (fHandled[breakType] == 0) {
             fHandled[breakType] = new UnicodeSet();
             if (fHandled[breakType] == 0) {
