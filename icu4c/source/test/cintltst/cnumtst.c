@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -44,7 +44,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNumberFormatPadding);
     TESTCASE(TestInt64Format);
     TESTCASE(TestNonExistentCurrency);
-    /*TESTCASE(TestCurrencyRegression);*/
+    TESTCASE(TestCurrencyRegression);
     TESTCASE(TestRBNFFormat);
 }
 
@@ -1287,7 +1287,8 @@ static void TestRBNFFormat() {
     }
 }
 
-static void TestCurrencyRegression() {
+static void TestCurrencyRegression(void) {
+#if U_ICU_VERSION_MAJOR_NUM > 3 || U_ICU_VERSION_MINOR_NUM > 5
 /* 
  I've found a case where unum_parseDoubleCurrency is not doing what I
 expect.  The value I pass in is $1234567890q123460000.00 and this
@@ -1342,6 +1343,7 @@ their data!
     }
     
     unum_close(cur);
+#endif
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
