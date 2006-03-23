@@ -1,6 +1,6 @@
 /*
 **************************************************************************************
-*   Copyright (C) 1999-2006 Alan Liu ,International Business Machines Corporation and
+*   Copyright (C) 1999-2006 International Business Machines Corporation and
 *   others. All Rights Reserved.
 **************************************************************************************
 *   Date        Name        Description
@@ -692,7 +692,7 @@ void UnicodeSetTest::TestIteration() {
             UBool         nextv        = it.next();
             UBool         isString     = it.isString();
             int32_t       codePoint    = it.getCodepoint();
-            int32_t       codePointEnd = it.getCodepointEnd();
+            //int32_t       codePointEnd = it.getCodepointEnd();
             UnicodeString s   = it.getString();
             switch (i) {
             case 0:
