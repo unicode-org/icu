@@ -112,7 +112,7 @@ static void TestConstruction(void)
 static void TestUTF8(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    char *ss = "This is a string with some non-ascii characters that will "
+    const char *ss = "This is a string with some non-ascii characters that will "
                "be converted to UTF-8, then shoved through the detection process.  "
                "\\u0391\\u0392\\u0393\\u0394\\u0395"
                "Sure would be nice if our source could contain Unicode directly!";
@@ -212,8 +212,8 @@ bail:
 static void TestC1Bytes(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    char *ssISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
-    char *ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
+    const char *ssISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+    const char *ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
     int32_t sISOLength = 0, sWindowsLength = 0;
     UChar *sISO = unescape(ssISO, &sISOLength);
     UChar *sWindows = unescape(ssWindows, &sWindowsLength);
@@ -262,7 +262,7 @@ bail:
 static void TestInputFilter(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    char *ss = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\\u00E8s petit peu de Fran\\u00E7ais. <to> <confuse> <the> <detector>";
+    const char *ss = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\\u00E8s petit peu de Fran\\u00E7ais. <to> <confuse> <the> <detector>";
     int32_t sLength = 0;
     UChar *s  = unescape(ss, &sLength);
     int32_t byteLength = 0;
