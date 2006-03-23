@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u16.c
@@ -40,7 +40,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source;
-    uint8_t *target;
+    char *target;
     int32_t *offsets;
 
     int32_t targetCapacity, length, sourceIndex;
@@ -73,7 +73,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         return;
     }
 
-    target=(uint8_t *)pArgs->target;
+    target=pArgs->target;
     offsets=pArgs->offsets;
     sourceIndex=0;
 
@@ -594,7 +594,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source;
-    uint8_t *target;
+    char *target;
     int32_t *offsets;
 
     int32_t targetCapacity, length, sourceIndex;
@@ -627,7 +627,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         return;
     }
 
-    target=(uint8_t *)pArgs->target;
+    target=pArgs->target;
     offsets=pArgs->offsets;
     sourceIndex=0;
 
@@ -777,7 +777,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         /* output length bytes with overflow (length>targetCapacity>0) */
         ucnv_fromUWriteBytes(cnv,
                              overflow, length,
-                             (char **)&target, pArgs->targetLimit,
+                             &target, pArgs->targetLimit,
                              &offsets, sourceIndex,
                              pErrorCode);
         targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
@@ -789,7 +789,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* write back the updated pointers */
     pArgs->source=source;
-    pArgs->target=(char *)target;
+    pArgs->target=target;
     pArgs->offsets=offsets;
 }
 
