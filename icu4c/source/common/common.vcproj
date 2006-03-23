@@ -216,6 +216,12 @@
 				RelativePath=".\brkdict.h">
 			</File>
 			<File
+				RelativePath=".\brkeng.cpp">
+			</File>
+			<File
+				RelativePath=".\brkeng.h">
+			</File>
+			<File
 				RelativePath=".\brkiter.cpp">
 			</File>
 			<File
@@ -238,9 +244,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\dbbi.cpp">
-			</File>
-			<File
 				RelativePath=".\unicode\dbbi.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -260,10 +263,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\dbbi_tbl.cpp">
+				RelativePath=".\dictbe.cpp">
 			</File>
 			<File
-				RelativePath=".\dbbi_tbl.h">
+				RelativePath=".\dictbe.h">
 			</File>
 			<File
 				RelativePath=".\rbbi.cpp">
@@ -330,6 +333,12 @@
 				RelativePath=".\rbbitblb.h">
 			</File>
 			<File
+				RelativePath=".\triedict.cpp">
+			</File>
+			<File
+				RelativePath=".\triedict.h">
+			</File>
+			<File
 				RelativePath=".\ubrk.cpp">
 			</File>
 			<File
@@ -350,6 +359,9 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ubrkimpl.h">
 			</File>
 		</Filter>
 		<Filter

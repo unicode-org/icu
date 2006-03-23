@@ -356,7 +356,7 @@ struct CompactTrieHeader {
     uint32_t        magic;          // Magic number (including version)
     uint16_t        nodeCount;      // Number of entries in offsets[]
     uint16_t        root;           // Node number of the root node
-    uint32_t        offsets[];      // Offsets to nodes from start of data
+    uint32_t        offsets[1];      // Offsets to nodes from start of data
 };
 
 // Note that to avoid platform-specific alignment issues, all members of the node
@@ -390,13 +390,13 @@ struct CompactTrieHorizontalEntry {
 
 struct CompactTrieHorizontalNode {
     uint16_t        flagscount;     // Count of sub-entries, plus flags
-    CompactTrieHorizontalEntry      entries[];
+    CompactTrieHorizontalEntry      entries[1];
 };
 
 struct CompactTrieVerticalNode {
     uint16_t        flagscount;     // Count of sub-entries, plus flags
     uint16_t        equal;          // Equal link node index
-    uint16_t        chars[];        // Code units
+    uint16_t        chars[1];       // Code units
 };
 
 // {'Dic', 1}, version 1
@@ -576,7 +576,7 @@ public:
                 const CompactTrieVerticalNode *vnode = (const CompactTrieVerticalNode *)node;
                 if (where == 0) {
                     // Going down
-                    unistr.append(vnode->chars, (int32_t) nodeCount);
+                    unistr.append((const UChar *)vnode->chars, (int32_t) nodeCount);
                     fIndexStack.setElementAt(1, fIndexStack.size()-1);
                     node = getCompactNode(fHeader, fNodeStack.push(vnode->equal, status));
                     where = fIndexStack.push(0, status);
@@ -748,7 +748,7 @@ class BuildCompactTrieVerticalNode: public BuildCompactTrieNode {
                     fEqual->fNodeID);
         }
 #endif
-        fChars.extract(0, fChars.length(), &node->chars[0]);
+        fChars.extract(0, fChars.length(), (UChar *)node->chars);
         offset += sizeof(uint16_t)*fChars.length();
     }
     
