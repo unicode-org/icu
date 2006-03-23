@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2005 International Business Machines
+﻿# Copyright (c) 2001-2006 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -512,14 +512,14 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 # Test data originally from the test code source file
 #      // @suwit -- Thai sample data from GVT Guideline
 #
-<data>•\u0E2B\u0E19\u0E36\u0E48\u0E07•\u0E04\u0E33•\u0E44\u0E17\u0E22•\
-\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16•\u0E1B\u0E23\u0E30\u0E01\u0E2D\u0E1A•\
-\u0E14\u0E49\u0E27\u0E22•\u0e2b\u0e25\u0e32\u0e22•\
-\u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c•</data>
+<data>•\u0E2B\u0E19\u0E36\u0E48\u0E07<200>\u0E04\u0E33<200>\u0E44\u0E17\u0E22<200>\
+\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16<200>\u0E1B\u0E23\u0E30\u0E01\u0E2D\u0E1A<200>\
+\u0E14\u0E49\u0E27\u0E22<200>\u0e2b\u0e25\u0e32\u0e22<200>\
+\u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c<200></data>
 
 #
 #  Jitterbug 3671 Test Case
 #
-<data>•สวัสดี•ครับ•สบาย•ดี•ไหม• •ครับ•</data>
+<data>•สวัสดี<200>ครับ<200>สบาย<200>ดี<200>ไหม<200> •ครับ<200></data>
 
 

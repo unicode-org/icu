@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2005-2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -1678,9 +1678,6 @@ ja{
         REVISED{"改訂版"}
     }
     Version{"1.68"}
-    boundaries{
-        word{"word_ja"}
-    }
     calendar{
         gregorian{
             AmPmMarkers{

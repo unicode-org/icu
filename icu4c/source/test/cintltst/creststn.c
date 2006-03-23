@@ -2155,6 +2155,8 @@ static void TestResourceLevelAliasing(void) {
         log_err("Referencing alias didn't get the right string\n");
       }
       
+#if 0
+      /* TODO: Needs to be replaced as this data is no longer present! */
       /* check whether the binary collation data is properly referenced by an alias */
       uk = ures_findResource("th/BreakDictionaryData", uk, &status);
       binSequence = ures_getBinary(uk, &binSeqLen, &status);
@@ -2167,6 +2169,7 @@ static void TestResourceLevelAliasing(void) {
       } else if(binSeqLen != binLen || memcmp(binSequence, binary, binSeqLen) != 0) {
         log_err("Referencing alias didn't get the right data\n");
       }
+#endif
       
       /* simple alias */
       testtypes = ures_open(testdatapath, "testtypes", &status);

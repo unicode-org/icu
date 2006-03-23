@@ -1010,6 +1010,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/genccode/Makefile \
 		tools/gencmn/Makefile \
 		tools/gencnval/Makefile \
+		tools/genctd/Makefile \
 		tools/gennames/Makefile \
 		tools/gentest/Makefile \
 		tools/gennorm/Makefile \

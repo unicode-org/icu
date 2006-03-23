@@ -1,0 +1,17 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ja.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ja.xml
+ */
+ja{
+    Version{"1.68"}
+    boundaries{
+        word{"word_ja"}
+    }
+}
