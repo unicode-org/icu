@@ -647,11 +647,25 @@ static char *gTimeZoneBufferPtr = NULL;
 #endif
 
 #ifndef U_WINDOWS
+#define isNonDigit(ch) (ch < '0' || '9' < ch)
 static UBool isValidOlsonID(const char *id) {
-    /* This is sometimes set to "PST8PDT" or similar, so we cannot use it.
+    int32_t idx;
+
+    /* Determine if this is something like Iceland (Olson ID)
+    or AST4ADT (non-Olson ID) */
+    while (id[idx] && isNonDigit(id[idx]) && id[idx] != ',') {
+        idx++;
+    }
+
+    /* If we went through the whole string, then it might be okay.
+    The timezone is sometimes set to "CST-7CDT", "CST6CDT5,J129,J131/19:30",
+    "GRNLNDST3GRNLNDDT" or similar, so we cannot use it.
     The rest of the time it could be an Olson ID. George */
-    return (UBool)(uprv_strchr(id, '/') != NULL || uprv_strlen(id) < 7
-        || uprv_strcmp(id, "NZ-CHAT") == 0);
+    return (UBool)(id[idx] == 0
+        || uprv_strcmp(id, "PST8PDT") == 0
+        || uprv_strcmp(id, "MST7MDT") == 0
+        || uprv_strcmp(id, "CST6CDT") == 0
+        || uprv_strcmp(id, "EST5EDT") == 0);
 }
 #endif
 
