@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -147,7 +147,6 @@ void LocaleAliasTest::TestCollation() {
     }
 }
 void LocaleAliasTest::TestULocale() {
-    UErrorCode status = U_ZERO_ERROR;
     for (int i=0; i<_LOCALE_NUMBER; i++) {
         Locale* oldLoc = new Locale(_LOCALE_ALIAS[i][0]);
         Locale* newLoc = new Locale(_LOCALE_ALIAS[i][1]);
@@ -200,7 +199,6 @@ UBool LocaleAliasTest::isLocaleAvailable(const char* loc){
     return TRUE;
 }
 void LocaleAliasTest::TestDisplayName() {
-    UErrorCode status = U_ZERO_ERROR;
     int32_t availableNum =0;
     const Locale* available = Locale::getAvailableLocales(availableNum);
     for (int i=0; i<_LOCALE_NUMBER; i++) {
