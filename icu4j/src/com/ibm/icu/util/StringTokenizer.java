@@ -323,6 +323,9 @@ public final class StringTokenizer implements Enumeration
                         tokenlimit = getNextNonDelimiter(m_nextOffset_);
                      } else {
                         tokenlimit = m_nextOffset_ + UTF16.getCharCount(c);
+                        if (tokenlimit == m_length_) {
+                            tokenlimit = -1;
+                        }
                      }
                 }
                 else {

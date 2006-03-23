@@ -286,7 +286,7 @@ public final class StringTokenizerTest extends TestFmwk
      * Test java compatibility, except we support surrogates.
      */
     public void TestNoCoalesce() {
-        String str = "This is   a test\rto see if\nwhitespace is handled \n\r unusually\r\n by our tokenizer\n\n\n!!!plus some other odd ones like \ttab\ttab\ttab\nand form\ffeed\ffoo.";
+        String str = "This is   a test\rto see if\nwhitespace is handled \n\r unusually\r\n by our tokenizer\n\n\n!!!plus some other odd ones like \ttab\ttab\ttab\nand form\ffeed\ffoo.\n";
         String delims = " \t\n\r\f\ud800\udc00";
 
         java.util.StringTokenizer jt = new java.util.StringTokenizer(str, delims, true);
@@ -298,12 +298,15 @@ public final class StringTokenizerTest extends TestFmwk
         assertFalse("java tokenizer has no more tokens", jt.hasMoreTokens());
         assertFalse("icu tokenizer has no more tokens", it.hasMoreTokens());
 
-        String sup = "Even\ud800\udc00 works.";
-        it = new com.ibm.icu.util.StringTokenizer(sup, delims, true); // no coalesce
-        assertEquals("sup1", it.nextToken(), "Even");
-        assertEquals("sup2", it.nextToken(), "\ud800\udc00");
-        assertEquals("sup3", it.nextToken(), " ");
-        assertEquals("sup4", it.nextToken(), "works.");
+        String sur = "Even\ud800\udc00 works.\n\n";
+        it = new com.ibm.icu.util.StringTokenizer(sur, delims, true); // no coalesce
+        assertEquals("sur1", it.nextToken(), "Even");
+        assertEquals("sur2", it.nextToken(), "\ud800\udc00");
+        assertEquals("sur3", it.nextToken(), " ");
+        assertEquals("sur4", it.nextToken(), "works.");
+        assertEquals("sur5", it.nextToken(), "\n");
+        assertEquals("sur6", it.nextToken(), "\n");
+        assertFalse("sur7", it.hasMoreTokens());
     }
 
     /**
