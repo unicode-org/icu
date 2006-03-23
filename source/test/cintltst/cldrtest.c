@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1170,8 +1170,8 @@ static void TestCoverage(void){
 
 
     for(i = 0; i < ULOCDATA_DELIMITER_COUNT; i++){
-        UErrorCode status = U_ZERO_ERROR;
         UChar result[32] = {0,};
+        status = U_ZERO_ERROR;
         ulocdata_getDelimiter(uld, types[i], result, 32, &status);
         if (U_FAILURE(status)){
             log_err("ulocdata_getgetDelimiter error with type %d", types[i]);
