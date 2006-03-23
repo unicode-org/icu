@@ -13,8 +13,8 @@ SHAREDLIBCXXFLAGS = -fPIC
 SHAREDLIBCPPFLAGS = -DPIC
 
 ## Additional flags when building libraries and with threads
-LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
+LIBCPPFLAGS =
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
