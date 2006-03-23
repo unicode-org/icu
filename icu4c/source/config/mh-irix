@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## IRIX-specific setup (for CC)
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -24,8 +24,8 @@ SHLIB.c=    $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.cc=   $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Additional flags when building libraries with thread safety
-LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
+LIBCPPFLAGS =
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=

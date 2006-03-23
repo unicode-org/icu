@@ -1,6 +1,6 @@
 ## -*-makefile-*-
-## FreeBSD-specific setup
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## BSD-specific setup (FreeBSD, OpenBSD, NetBSD, *BSD)
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -11,6 +11,10 @@ GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 SHAREDLIBCFLAGS = -fPIC
 SHAREDLIBCXXFLAGS = -fPIC
 SHAREDLIBCPPFLAGS = -DPIC
+
+## Additional flags when building libraries and with threads
+THREADSCPPFLAGS = -D_REENTRANT
+LIBCPPFLAGS =
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	

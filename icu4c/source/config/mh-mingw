@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin/MinGW specific setup
-## Copyright (c) 2001-2005, International Business Machines Corporation and
+## Copyright (c) 2001-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # TODO: Finish the rest of this port. This platform port is incomplete.
@@ -29,8 +29,8 @@ SHAREDLIBCXXFLAGS =
 SHAREDLIBCPPFLAGS = -DPIC
 
 ## Additional flags when building libraries and with threads
-LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
+LIBCPPFLAGS =
 
 # Commands to link. Link with C++ in case static libraries are used.
 LINK.c=       $(CXX) $(CXXFLAGS) $(LDFLAGS)
