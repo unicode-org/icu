@@ -1447,7 +1447,6 @@ void TestIDNA::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                 if(exec){
                     logln("TestSuite IDNA conf----"); logln();
                     IdnaConfTest test;
-                    const char* name = "idnaconf";
                     callTest(test, par);
                 }
                 break;
