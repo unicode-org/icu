@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
- * Copyright (C) 1998-2003, International Business Machines Corporation and   *
- * others. All Rights Reserved.                                               *
+ * Copyright (C) 1998-2003, 2006, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                           *
  ******************************************************************************
  */
 
@@ -15,6 +15,8 @@
 #include "unicode/brkiter.h"
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
+#include "unicode/uniset.h"
+#include "unicode/ustring.h"
 
 /*
  * This program takes a Unicode text file containing Thai text with
@@ -68,6 +70,9 @@ private:
 
     // current space count
     int32_t fSpaceCount;
+    
+    // UnicodeSet of SA characters
+    UnicodeSet fComplexContext;
 
     // true when fBreakIter has returned DONE
     UBool fDone;
@@ -387,6 +392,47 @@ const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count,
 }
 
 /*
+ * Generate a text file with spaces in it from a file without.
+ */
+int generateFile(const UChar *chars, int32_t length) {
+    Locale root("");
+    UCharCharacterIterator *noSpaceIter = new UCharCharacterIterator(chars, length);
+    UErrorCode status = U_ZERO_ERROR;
+    
+    UnicodeString saSet("[:LineBreak=SA:]", -1, US_INV);
+    UnicodeSet complexContext(saSet, status);
+    BreakIterator *breakIter = BreakIterator::createWordInstance(root, status);
+    breakIter->adoptText(noSpaceIter);
+    char outbuf[1024];
+    int32_t strlength;
+    UChar bom = 0xFEFF;
+    
+    printf("%s", u_strToUTF8(outbuf, sizeof(outbuf), &strlength, &bom, 1, &status));
+    int32_t prevbreak = 0;
+    while (U_SUCCESS(status)) {
+        int32_t nextbreak = breakIter->next();
+        if (nextbreak == BreakIterator::DONE) {
+            break;
+        }
+        printf("%s", u_strToUTF8(outbuf, sizeof(outbuf), &strlength, &chars[prevbreak],
+                                    nextbreak-prevbreak, &status));
+        if (nextbreak > 0 && complexContext.contains(chars[nextbreak-1])
+            && complexContext.contains(chars[nextbreak])) {
+            printf(" ");
+        }
+        prevbreak = nextbreak;
+    }
+    
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "generate failed: %s\n", u_errorName(status));
+        return status;
+    }
+    else {
+        return 0;
+    }
+}
+
+/*
  * The main routine. Read the command line arguments, read the text file,
  * remove the spaces, do the comparison and report the final results
  */
@@ -395,6 +441,12 @@ int main(int argc, char **argv)
     char *fileName = "space.txt";
     int arg = 1;
     UBool verbose = FALSE;
+    UBool generate = FALSE;
+
+    if (argc >= 2 && strcmp(argv[1], "-generate") == 0) {
+        generate = TRUE;
+        arg += 1;
+    }
 
     if (argc >= 2 && strcmp(argv[1], "-verbose") == 0) {
         verbose = TRUE;
@@ -417,6 +469,10 @@ int main(int argc, char **argv)
 
     if (spaces == 0) {
         return 1;
+    }
+    
+    if (generate) {
+        return generateFile(spaces, spaceCount);
     }
 
     noSpaces = ThaiWordbreakTest::crunchSpaces(spaces, spaceCount, nonSpaceCount);
@@ -441,11 +497,13 @@ int main(int argc, char **argv)
 SpaceBreakIterator::SpaceBreakIterator(const UChar *text, int32_t count)
   : fBreakIter(0), fText(text), fTextCount(count), fWordCount(0), fSpaceCount(0), fDone(FALSE)
 {
+    UnicodeString saSet("[:LineBreak=SA:]", -1, US_INV);
     UCharCharacterIterator *iter = new UCharCharacterIterator(text, count);
     UErrorCode status = U_ZERO_ERROR;
-    Locale us("us");
+    fComplexContext.applyPattern(saSet, status);
+    Locale root("");
 
-    fBreakIter = BreakIterator::createWordInstance(us, status);
+    fBreakIter = BreakIterator::createWordInstance(root, status);
     fBreakIter->adoptText(iter);
 }
 
@@ -471,12 +529,17 @@ int32_t SpaceBreakIterator::next()
         return BreakIterator::DONE;
     }
     
-    int32_t nextBreak = fBreakIter->next();
-    
-    if (nextBreak == BreakIterator::DONE) {
-        fDone = TRUE;
-        return BreakIterator::DONE;
+    int32_t nextBreak;
+    do {
+        nextBreak = fBreakIter->next();
+        
+        if (nextBreak == BreakIterator::DONE) {
+            fDone = TRUE;
+            return BreakIterator::DONE;
+        }
     }
+    while(nextBreak > 0 && fComplexContext.contains(fText[nextBreak-1])
+            && fComplexContext.contains(fText[nextBreak]));
     
    int32_t result = nextBreak - fSpaceCount;
     

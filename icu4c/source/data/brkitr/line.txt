@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2005  International Business Machines Corporation and
+# Copyright (c) 2002-2006  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line.txt
@@ -89,6 +89,12 @@ $WJ = [:LineBreak =  Word_Joiner:];
 $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
 
+#   Dictionary character set, for triggering language-based break engines. Currently
+#   limited to LineBreak=Complex_Context. Note that this set only works in Unicode
+#   5.0 or later as the definition of Complex_Context was corrected to include all
+#   characters requiring dictionary break.
+
+$dictionary = [:LineBreak = Complex_Context:];
 
 #
 #  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width),
@@ -551,6 +557,9 @@ $SP+ $CM* $B2;
 ($CM* ($IS | $SY))+ $CM* $NU;
 $CL $CM* ($NU | $IS | $SY);
 
+# For dictionary-based break
+$dictionary $dictionary;
+
 ## -------------------------------------------------
 
 !!safe_forward;
@@ -564,5 +573,6 @@ $CL $CM* ($NU | $IS | $SY);
 #  turn off rule chaining.  We don't want to move more
 #  than necessary.
 #
-[$CM $OP $QU $CL $B2 $PR $HY $SP]+ [^$CM $OP $QU $CL $B2 $PR $HY];
+[$CM $OP $QU $CL $B2 $PR $HY $SP $dictionary]+ [^$CM $OP $QU $CL $B2 $PR $HY $dictionary];
+$dictionary $dictionary;
 

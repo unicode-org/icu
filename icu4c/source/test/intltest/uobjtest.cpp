@@ -261,7 +261,7 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_BREAK_ITERATION
     /* TESTCLASSID_ABSTRACT(BreakIterator); No staticID!  */
     TESTCLASSID_FACTORY(RuleBasedBreakIterator, BreakIterator::createLineInstance("mt",status));
-    TESTCLASSID_FACTORY(DictionaryBasedBreakIterator, BreakIterator::createLineInstance("th",status));
+    //TESTCLASSID_FACTORY(DictionaryBasedBreakIterator, BreakIterator::createLineInstance("th",status));
 #endif
     
     //TESTCLASSID_DEFAULT(EscapeTransliterator);
