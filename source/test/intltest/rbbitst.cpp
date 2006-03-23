@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2005, International Business Machines Corporation and
+ * Copyright (c) 1999-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -493,9 +493,11 @@ void RBBITest::TestMaiyamok()
     ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e1b\\u0e46", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e21\\u0e32\\u0e46", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e01\\u0e23\\u0e38\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e17\\u0e1e", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e25\\u0e30", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e03\\u0e35", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e22\\u0e07", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
 
     RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(
@@ -2055,7 +2057,10 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0)
 
     fSets            = new UVector(status);
 
-    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
+    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}"
+                        "[\\p{Line_Break = Complex_Context}"
+                        "-\\p{Grapheme_Cluster_Break = Extend}"
+                        "-\\p{Grapheme_Cluster_Break = Control}]]",      status);
     fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]",     status);
     fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]",       status);
@@ -2063,6 +2068,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0)
     fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]", status);
+    
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
       deferredStatus = status;

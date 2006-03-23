@@ -73,11 +73,12 @@ TRANSLITSRCDIR=$(SRCDATADIR)/translit
 TRANSLITBLDDIR=$(BUILDDIR)/translit
 MISCSRCDIR=$(SRCDATADIR)/misc
 BRKSRCDIR=$(SRCDATADIR)/brkitr
+BRKBLDDIR=$(BUILDDIR)/brkitr
 MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
 COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
-BUILD_DIRS=$(OUTDIR) $(BUILDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(TESTOUTDIR) $(TESTBUILDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE)
+BUILD_DIRS=$(OUTDIR) $(BUILDDIR) $(BRKBLDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(TESTOUTDIR) $(TESTBUILDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) $(OUTTMPDIR)/$(BREAK_TREE)
 
 # relative lib links from pkgdata are the same as for tmp
 TOOLDIR=$(top_builddir)/tools
@@ -209,11 +210,19 @@ DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu ucadata.icu invuca.icu uidna.
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
+BREAK_TREE=brkitr
 -include $(BRKSRCDIR)/brkfiles.mk
 -include $(BRKSRCDIR)/brklocal.mk
 ALL_BRK_SOURCE=char.txt title.txt word.txt $(BRK_SOURCE) $(BRK_SOURCE_LOCAL)
-BRK_FILES_SHORT=$(ALL_BRK_SOURCE:%.txt=%.brk)
-BRK_FILES=$(BRK_FILES_SHORT:%=$(BUILDDIR)/%)
+BRK_FILES_SHORT=$(ALL_BRK_SOURCE:%.txt=$(BREAK_TREE)/%.brk)
+BRK_FILES=$(ALL_BRK_SOURCE:%.txt=$(BRKBLDDIR)/%.brk)
+
+## CTD files
+-include $(BRKSRCDIR)/ctdfiles.mk
+-include $(BRKSRCDIR)/ctdlocal.mk
+ALL_CTD_SOURCE=$(CTD_SOURCE) $(CTD_SOURCE_LOCAL)
+CTD_FILES_SHORT=$(ALL_CTD_SOURCE:%.txt=$(BREAK_TREE)/%.ctd)
+CTD_FILES=$(ALL_CTD_SOURCE:%.txt=$(BRKBLDDIR)/%.ctd)
 
 ## UCM files
 -include $(UCMSRCDIR)/ucmcore.mk
@@ -228,10 +237,12 @@ CNV_FILES_SHORT = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 ## RES files
 -include $(LOCSRCDIR)/resfiles.mk
 -include $(COLSRCDIR)/colfiles.mk
+-include $(BRKSRCDIR)/brsfiles.mk
 -include $(RBNFSRCDIR)/rbnffiles.mk
 -include $(TRANSLITSRCDIR)/trnsfiles.mk
 -include $(LOCSRCDIR)/reslocal.mk
 -include $(COLSRCDIR)/collocal.mk
+-include $(BRKSRCDIR)/brslocal.mk
 -include $(RBNFSRCDIR)/rbnflocal.mk
 -include $(TRANSLITSRCDIR)/trnslocal.mk
 ifdef GENRB_SOURCE
@@ -243,6 +254,11 @@ ifdef COLLATION_SOURCE
 COL_SRC= root.txt $(COLLATION_SOURCE) $(COLLATION_ALIAS_SOURCE) $(COLLATION_SOURCE_LOCAL)
 COL_SRC_FILES = $(COL_SRC:%=$(COLSRCDIR)/%)
 INSTALLED_COL_FILES = $(COLLATION_SOURCE:%.txt=%)  $(COLLATION_SOURCE_LOCAL:%.txt=%)
+endif
+ifdef BREAKRES_SOURCE
+BRS_SRC= root.txt $(BREAKRES_SOURCE) $(BREAKRES_SOURCE_LOCAL)
+BRS_SRC_FILES = $(BRS_SRC:%=$(BRKSRCDIR)/%)
+INSTALLED_BRS_FILES = $(BREAKRES_SOURCE:%.txt=%)  $(BREAKRES_SOURCE_LOCAL:%.txt=%)
 endif
 ifdef RBNF_SOURCE
 RBNF_SRC= root.txt $(RBNF_SOURCE) $(RBNF_ALIAS_SOURCE) $(RBNF_SOURCE_LOCAL)
@@ -286,6 +302,12 @@ COLLATION_INDEX_RES_SHORT=$(COLLATION_TREE)/$(INDEX_NAME).res
 COLLATION_FILES = $(COL_SRC:%.txt=$(COLBLDDIR)/%.res) $(COLLATION_INDEX_RES)
 COLLATION_FILES_SHORT = $(COL_SRC:%.txt=$(COLLATION_TREE)/%.res)
 
+BREAKRES_INDEX_FILE=$(OUTTMPDIR)/$(BREAK_TREE)/$(INDEX_NAME).txt
+BREAKRES_INDEX_RES=$(BRKBLDDIR)/$(INDEX_NAME).res
+BREAKRES_INDEX_RES_SHORT=$(BREAK_TREE)/$(INDEX_NAME).res
+BREAKRES_FILES = $(BRS_SRC:%.txt=$(BRKBLDDIR)/%.res) $(BREAKRES_INDEX_RES)
+BREAKRES_FILES_SHORT = $(BRS_SRC:%.txt=$(BREAK_TREE)/%.res)
+
 RBNF_TREE=rbnf
 RBNF_INDEX_FILE=$(OUTTMPDIR)/$(RBNF_TREE)/$(INDEX_NAME).txt
 RBNF_INDEX_RES=$(RBNFBLDDIR)/$(INDEX_NAME).res
@@ -301,9 +323,9 @@ TRANSLIT_FILES = $(TRANSLIT_SRC:%.txt=$(TRANSLITBLDDIR)/%.res)
 TRANSLIT_FILES_SHORT = $(TRANSLIT_SRC:%.txt=$(TRANSLIT_TREE)/%.res)
 
 ## All generated files
-ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(RBNF_FILES) $(TRANSLIT_FILES)
+ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(BREAKRES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES)
 # a list to use in the .lst files (package-relative)
-ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT)
+ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BREAKRES_FILES_SHORT) $(BREAKRES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT)
 
 #####################################################
 # General data build rules
@@ -387,11 +409,17 @@ $(BUILDDIR)/uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(BINDIR)/gensprep$(EXE
 ####################################################    BRK
 # BRK FILES
 
-thaidict.brk: $(SRCDATADIR)/thaidict.brk
-	$(RMV) $@ && ln -s $(BUILDDIR) $@
+#thaidict.brk: $(SRCDATADIR)/thaidict.brk
+#	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
-$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(BINDIR)/genbrk$(EXEEXT) $(DAT_FILES)
+$(BRKBLDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(BINDIR)/genbrk$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(BINDIR)/genbrk -c -i $(BUILDDIR) -r $< -o $@
+
+####################################################    CTD
+# CTD FILES
+
+$(BRKBLDDIR)/%.ctd: $(BRKSRCDIR)/%.txt $(BINDIR)/genctd$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genctd -c -i $(BUILDDIR) -o $@ $<
 
 ####################################################    CNV
 # CNV FILES
@@ -415,6 +443,25 @@ $(OUTTMPDIR)/$(COLLATION_TREE)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
 	echo "$(INDEX_NAME):table(nofallback) {" >> $@; \
 	echo "    InstalledLocales {" >> $@; \
 	for file in $(INSTALLED_COL_FILES); do \
+	  echo "        $$file {\"\"}" >> $@; \
+	done; \
+	echo "    }" >> $@; \
+	echo "}" >> $@;
+
+### brk res
+$(BRKBLDDIR)/%.res: $(BRKSRCDIR)/%.txt  $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(BRKSRCDIR) -d $(BRKBLDDIR) $(<F)
+
+$(BRKBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(BREAK_TREE)/$(INDEX_NAME).txt $(BINDIR)/genrb$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(OUTTMPDIR)/$(BREAK_TREE) -d $(BRKBLDDIR) $(INDEX_NAME).txt
+
+$(OUTTMPDIR)/$(BREAK_TREE)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
+	@echo "generating $@ (list of installed break locales)"; \
+	$(RMV) $@; \
+	echo "// Warning this file is automatically generated" > $@; \
+	echo "$(INDEX_NAME):table(nofallback) {" >> $@; \
+	echo "    InstalledLocales {" >> $@; \
+	for file in $(INSTALLED_BRS_FILES); do \
 	  echo "        $$file {\"\"}" >> $@; \
 	done; \
 	echo "    }" >> $@; \

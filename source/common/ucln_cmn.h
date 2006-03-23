@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2005, International Business Machines                   *
+* Copyright (C) 2001-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -35,6 +35,7 @@ typedef enum ECleanupCommonType {
     UCLN_COMMON_START = -1,
     UCLN_COMMON_USPREP,
     UCLN_COMMON_BREAKITERATOR,
+    UCLN_COMMON_BREAKITERATOR_DICT,
     UCLN_COMMON_SERVICE,
     UCLN_COMMON_URES,
     UCLN_COMMON_LOCALE,

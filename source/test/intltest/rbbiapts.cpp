@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2005, International Business Machines Corporation and
+ * Copyright (c) 1999-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -20,6 +20,7 @@
 #include "rbbiapts.h"
 #include "rbbidata.h"
 #include "cstring.h"
+#include "ubrkimpl.h"
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 
@@ -147,8 +148,8 @@ void RBBIAPITest::TestCloneEquals()
 void RBBIAPITest::TestBoilerPlate()
 {
     UErrorCode status = U_ZERO_ERROR;
-    BreakIterator* a = BreakIterator::createLineInstance(Locale("hi"), status);
-    BreakIterator* b = BreakIterator::createLineInstance(Locale("hi_IN"),status);
+    BreakIterator* a = BreakIterator::createWordInstance(Locale("hi"), status);
+    BreakIterator* b = BreakIterator::createWordInstance(Locale("hi_IN"),status);
     if (U_FAILURE(status)) {
         errln("Creation of break iterator failed %s", u_errorName(status));
         return;
@@ -156,7 +157,7 @@ void RBBIAPITest::TestBoilerPlate()
     if(*a!=*b){
         errln("Failed: boilerplate method operator!= does not return correct results");
     }
-    BreakIterator* c = BreakIterator::createLineInstance(Locale("th"),status);
+    BreakIterator* c = BreakIterator::createWordInstance(Locale("ja"),status);
     if(a && c){
         if(*c==*a){
             errln("Failed: boilerplate method opertator== does not return correct results");
@@ -864,17 +865,17 @@ void RBBIAPITest::TestBug2190() {
 void RBBIAPITest::TestRegistration() {
 #if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
-    BreakIterator* thai_word = BreakIterator::createWordInstance("th_TH", status);
+    BreakIterator* ja_word = BreakIterator::createWordInstance("ja_JP", status);
     
     // ok to not delete these if we exit because of error?
-    BreakIterator* thai_char = BreakIterator::createCharacterInstance("th_TH", status);
+    BreakIterator* ja_char = BreakIterator::createCharacterInstance("ja_JP", status);
     BreakIterator* root_word = BreakIterator::createWordInstance("", status);
     BreakIterator* root_char = BreakIterator::createCharacterInstance("", status);
     
-    URegistryKey key = BreakIterator::registerInstance(thai_word, "xx", UBRK_WORD, status);
+    URegistryKey key = BreakIterator::registerInstance(ja_word, "xx", UBRK_WORD, status);
     {
-        if (thai_word && *thai_word == *root_word) {
-            errln("thai not different from root");
+        if (ja_word && *ja_word == *root_word) {
+            errln("japan not different from root");
         }
     }
     
@@ -882,7 +883,7 @@ void RBBIAPITest::TestRegistration() {
         BreakIterator* result = BreakIterator::createWordInstance("xx_XX", status);
         UBool fail = TRUE;
         if(result){
-            fail = *result != *thai_word;
+            fail = *result != *ja_word;
         }
         delete result;
         if (fail) {
@@ -891,14 +892,14 @@ void RBBIAPITest::TestRegistration() {
     }
     
     {
-        BreakIterator* result = BreakIterator::createCharacterInstance("th_TH", status);
+        BreakIterator* result = BreakIterator::createCharacterInstance("ja_JP", status);
         UBool fail = TRUE;
         if(result){
-            fail = *result != *thai_char;
+            fail = *result != *ja_char;
         }
         delete result;
         if (fail) {
-            errln("bad result for th_TH/char");
+            errln("bad result for ja_JP/char");
         }
     }
     
@@ -983,8 +984,8 @@ void RBBIAPITest::TestRegistration() {
     }
     
     
-    // that_word was adopted by factory
-    delete thai_char;
+    // ja_word was adopted by factory
+    delete ja_char;
     delete root_word;
     delete root_char;
 #endif
@@ -995,7 +996,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     UParseError parseError;
     parseError.line = 0;
     parseError.offset = 0;
-    UDataMemory *data = udata_open(NULL, "brk", dataFile, &status);
+    UDataMemory *data = udata_open(U_ICUDATA_BRKITR, "brk", dataFile, &status);
     uint32_t length;
     const UChar *builtSource;
     const uint8_t *rbbiRules;

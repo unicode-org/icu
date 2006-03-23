@@ -37,6 +37,9 @@ struct RBBIDataHeader;
 class  RuleBasedBreakIteratorTables;
 class  BreakIterator;
 class  RBBIDataWrapper;
+class  UStack;
+class  LanguageBreakEngine;
+class  UnhandledEngine;
 struct RBBIStateTable;
 
 
@@ -86,13 +89,58 @@ protected:
 
     /**
      * Counter for the number of characters encountered with the "dictionary"
-     *   flag set.  Normal RBBI iterators don't use it, although the code
-     *   for updating it is live.  Dictionary Based break iterators (a subclass
-     *   of us) access this field directly.
+     *   flag set.
      * @internal
      */
-    uint32_t           fDictionaryCharCount;
+    uint32_t            fDictionaryCharCount;
 
+    /**
+     * When a range of characters is divided up using the dictionary, the break
+     * positions that are discovered are stored here, preventing us from having
+     * to use either the dictionary or the state table again until the iterator
+     * leaves this range of text. Has the most impact for line breaking.
+     * @internal
+     */
+    int32_t*            fCachedBreakPositions;
+
+    /**
+     * The number of elements in fCachedBreakPositions
+     * @internal
+     */
+    int32_t             fNumCachedBreakPositions;
+
+    /**
+     * if fCachedBreakPositions is not null, this indicates which item in the
+     * cache the current iteration position refers to
+     * @internal
+     */
+    int32_t             fPositionInCache;
+    
+    /**
+     *
+     * If present, UStack of LanguageBreakEngine objects that might handle
+     * dictionary characters. Searched from top to bottom to find an object to
+     * handle a given character.
+     * @internal
+     */
+    UStack              *fLanguageBreakEngines;
+    
+    /**
+     *
+     * If present, the special LanguageBreakEngine used for handling
+     * characters that are in the dictionary set, but not handled by any
+     * LangugageBreakEngine.
+     * @internal
+     */
+    UnhandledEngine     *fUnhandledBreakEngine;
+    
+    /**
+     *
+     * The type of the break iterator, or -1 if it has not been set.
+     * @internal
+     */
+    int32_t             fBreakType;
+    
     /**
      * Debugging flag.  Trace operation of state machine when true.
      * @internal
@@ -117,7 +165,7 @@ protected:
      */
     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
 
-    /** @internal */
+
     friend class RBBIRuleBuilder;
     /** @internal */
     friend class BreakIterator;
@@ -507,19 +555,8 @@ protected:
     // implementation
     //=======================================================================
     /**
-     * This method is the actual implementation of the next() method.  All iteration
-     * vectors through here.  This method initializes the state machine to state 1
-     * and advances through the text character by character until we reach the end
-     * of the text or the state machine transitions to state 0.  We update our return
-     * value every time the state machine passes through a possible end state.
-     * @internal
-     */
-    virtual int32_t handleNext(void);
-
-    /**
      * Dumps caches and performs other actions associated with a complete change
-     * in text or iteration position.  This function is a no-op in RuleBasedBreakIterator,
-     * but subclasses can and do override it.
+     * in text or iteration position.
      * @internal
      */
     virtual void reset(void);
@@ -533,6 +570,20 @@ protected:
       * @internal
       */
     virtual UBool isDictionaryChar(UChar32);
+
+    /**
+      * Get the type of the break iterator.
+      * @internal
+      */
+    virtual int32_t getBreakType() const;
+    /** @internal */
+
+    /**
+      * Set the type of the break iterator.
+      * @internal
+      */
+    virtual void setBreakType(int32_t type);
+    /** @internal */
 
     /**
       * Common initialization function, used by constructors and bufferClone.
@@ -564,6 +615,30 @@ private:
      * @internal
      */
     int32_t handleNext(const RBBIStateTable *statetable);
+
+    /**
+     * This is the function that actually implements dictionary-based
+     * breaking.  Covering at least the range from startPos to endPos,
+     * it checks for dictionary characters, and if it finds them determines
+     * the appropriate object to deal with them. It may cache found breaks in
+     * fCachedBreakPositions as it goes. It may well also look at text outside
+     * the range startPos to endPos.
+     * If going forward, endPos is the normal Unicode break result, and
+     * if goind in reverse, startPos is the normal Unicode break result
+     * @param startPos  The start position of a range of text
+     * @param endPos    The end position of a range of text
+     * @param reverse   The call is for the reverse direction
+     * @internal
+     */
+    int32_t checkDictionary(int32_t startPos, int32_t endPos, UBool reverse);
+
+    /**
+     * This function returns the appropriate LanguageBreakEngine for a
+     * given character c.
+     * @param c         A character in the dictionary set
+     * @internal
+     */
+    const LanguageBreakEngine *getLanguageBreakEngine(UChar32 c);
 
     /**
      *  @internal

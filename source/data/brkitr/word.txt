@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2002-2005, International Business Machines Corporation 
+# Copyright (C) 2002-2006, International Business Machines Corporation 
 # and others. All Rights Reserved.
 #
 # file:  word.txt
@@ -38,12 +38,21 @@ $LF             = \u000a;
 $Extend         = [\p{Grapheme_Cluster_Break = Extend}];
 $Control        = [\p{Grapheme_Cluster_Break = Control}];
 
+#   Dictionary character set, for triggering language-based break engines. Currently
+#   limited to LineBreak=Complex_Context. Note that this set only works in Unicode
+#   5.0 or later as the definition of Complex_Context was corrected to include all
+#   characters requiring dictionary break.
+
+$dictionary   = [:LineBreak = Complex_Context:];
+$ALetterPlus  = [$ALetter [$dictionary-$Extend-$Control]];
+
+
 #
 #  Rules 3    Grapheme Clusters behave like their first char.
 #  Rule  4    Ignore trailing Format characters  (Also see note in TR 29)
 #
 $KatakanaEx     = $Katakana     $Extend*  $Format*;
-$ALetterEx      = $ALetter      $Extend*  $Format*;
+$ALetterEx      = $ALetterPlus  $Extend*  $Format*;
 $MidLetterEx    = $MidLetter    $Extend*  $Format*;
 $MidNumEx       = $MidNum       $Extend*  $Format*;
 $NumericEx      = $Numeric      $Extend*  $Format*;
@@ -125,7 +134,7 @@ $ExtendNumLetEx $KatakanaEx {300};    #  (13b)
 
 !!reverse;
 
-$BackALetterEx     = $Format* $Extend* $ALetter;
+$BackALetterEx     = $Format* $Extend* $ALetterPlus;
 $BackNumericEx     = $Format* $Extend* $Numeric;
 $BackMidNumEx      = $Format* $Extend* $MidNum;
 $BackMidLetterEx   = $Format* $Extend* $MidLetter;
@@ -190,6 +199,9 @@ $MidLetter $BackALetterEx;
 # rule 11
 $MidNum $BackNumericEx;
 
+# For dictionary-based break
+$dictionary $dictionary;
+
 ## -------------------------------------------------
 
 !!safe_forward;
@@ -218,3 +230,5 @@ $MidLetterEx $ALetterEx;
 # rule 11
 $MidNumEx $NumericEx;
 
+# For dictionary-based break
+$dictionary $dictionary;

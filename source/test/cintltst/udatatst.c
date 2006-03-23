@@ -26,6 +26,7 @@
 #include "filestrm.h"
 #include "udatamem.h"
 #include "cintltst.h"
+#include "ubrkimpl.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1100,6 +1101,12 @@ static void TestICUDataName()
 
 /* test data swapping ------------------------------------------------------- */
 
+/* Unfortunately, trie dictionaries are in a C++ header */
+int32_t
+triedict_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode);
+
 /* test cases for maximum data swapping code coverage */
 static const struct {
     const char *name, *type;
@@ -1156,6 +1163,7 @@ static const struct {
 
 #if !UCONFIG_NO_BREAK_ITERATION
     {"char",                     "brk", ubrk_swap},
+    {"thaidict",                 "ctd", triedict_swap},
 #endif
 
     /* the last item should not be #if'ed so that it can reliably omit the last comma */
@@ -1459,6 +1467,11 @@ TestSwapData() {
             pkg=loadTestData(&errorCode);
             nm=swapCases[i].name+1;
             uprv_strcpy(name, "testdata");
+        } else if (uprv_strcmp(swapCases[i].type, "brk")==0
+            || uprv_strcmp(swapCases[i].type, "ctd")==0) {
+            pkg=U_ICUDATA_BRKITR;
+            nm=swapCases[i].name;
+            uprv_strcpy(name, U_ICUDATA_BRKITR);
         } else {
             pkg=NULL;
             nm=swapCases[i].name;

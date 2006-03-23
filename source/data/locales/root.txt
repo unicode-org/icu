@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2005-2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -66,13 +66,6 @@ root{
         210,
     }
     Version{"1.63"}
-    boundaries{
-        grapheme{"char"}
-        line{"line"}
-        sentence{"sent"}
-        title{"title"}
-        word{"word"}
-    }
     calendar{
         buddhist{
             DateTimePatterns{
