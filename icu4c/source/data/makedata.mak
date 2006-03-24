@@ -221,6 +221,24 @@ BRK_FILES=$(ICUBRK)\$(BRK_SOURCE:.txt =.brk brkitr\)
 BRK_FILES=$(BRK_FILES:.txt=.brk)
 BRK_FILES=$(BRK_FILES:brkitr\ =brkitr\)
 
+!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\ctdfiles.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\ctdfiles.mk"
+!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\ctdlocal.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\ctdlocal.mk"
+CTD_SOURCE=$(CTD_SOURCE) $(CTD_SOURCE_LOCAL)
+!ELSE
+!MESSAGE Information: cannot find "ctdlocal.mk". Not building user-additional break iterator dictionary files.
+!ENDIF
+!ELSE
+!MESSAGE Warning: cannot find "ctdfiles.mk"
+!ENDIF
+
+!IFDEF CTD_SOURCE
+CTD_FILES = $(ICUBRK)\$(CTD_SOURCE:.txt =.ctd brkitr\)
+CTD_FILES = $(CTD_FILES:.txt=.ctd)
+CTD_FILES = $(CTD_FILES:brkitr\ =)
+!ENDIF
+
 !IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brsfiles.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brsfiles.mk"
 !IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brslocal.mk")
@@ -394,7 +412,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
 !ELSE
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUP)\bin\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
@@ -415,6 +433,8 @@ $(RBNF_RES_FILES:.res =.res
 $(TRANSLIT_RES_FILES:.res =.res
 )
 $(BRK_FILES:.brk =.brk
+)
+$(CTD_FILES:.ctd =.ctd
 )
 $(BRK_RES_FILES:.res =.res
 )
@@ -483,13 +503,20 @@ CLEAN : GODATA
 	-@erase "*.txt"
 	@cd "$(TESTDATAOUT)"
 	-@erase "*.dat"
+	@cd "$(TESTDATAOUT)\testdata"
 	-@erase "*.typ"
 	@cd "$(ICUBLD_PKG)"
 
 
 # RBBI .brk file generation.
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.brk:
-	genbrk -c -r $< -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)"
+	@echo Creating $@
+	@"$(ICUTOOLS)\genbrk\$(CFG)\genbrk" -c -r $< -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)"
+
+# RBBI .ctd file generation.
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.ctd:
+	@echo Creating $@
+	@"$(ICUTOOLS)\genctd\$(CFG)\genctd" -c -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)" $<
 
 # Batch inference rule for creating converters
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)}.ucm.cnv::
