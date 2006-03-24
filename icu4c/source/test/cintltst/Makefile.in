@@ -58,10 +58,11 @@ cmsccoll.o cmsgtst.o cposxtst.o cldrtest.o \
 cnmdptst.o cnormtst.o cnumtst.o crestst.o creststn.o cturtst.o \
 cucdapi.o cucdtst.o custrtst.o cstrcase.o cutiltst.o nucnvtst.o nccbtst.o bocu1tst.o \
 cbiditst.o cbididat.o eurocreg.o udatatst.o utf16tst.o utransts.o \
-ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o utf8tst.o ucmptst.o \
+ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o utf8tst.o \
 stdnmtst.o ctstdep.o usrchtst.o custrtrn.o sorttest.o trietest.o usettest.o \
 uenumtst.o utmstest.o currtest.o \
-idnatest.o nfsprep.o spreptst.o sprpdata.o hpmufn.o tracetst.o reapits.o utexttst.o ucsdetst.o
+idnatest.o nfsprep.o spreptst.o sprpdata.o \
+hpmufn.o tracetst.o reapits.o utexttst.o ucsdetst.o
 
 DEPS = $(OBJECTS:.o=.d)
 

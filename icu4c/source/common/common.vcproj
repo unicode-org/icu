@@ -210,12 +210,6 @@
 			Name="break iteration"
 			Filter="">
 			<File
-				RelativePath=".\brkdict.cpp">
-			</File>
-			<File
-				RelativePath=".\brkdict.h">
-			</File>
-			<File
 				RelativePath=".\brkeng.cpp">
 			</File>
 			<File
@@ -416,12 +410,6 @@
 			</File>
 			<File
 				RelativePath=".\uarrsort.h">
-			</File>
-			<File
-				RelativePath=".\ucmp8.c">
-			</File>
-			<File
-				RelativePath=".\ucmp8.h">
 			</File>
 			<File
 				RelativePath=".\uenum.c">
