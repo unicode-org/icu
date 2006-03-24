@@ -28,7 +28,6 @@ void addUTF16Test(TestNode** root);
 void addUTF8Test(TestNode** root);
 void addUTransTest(TestNode** root);
 void addPUtilTest(TestNode** root);
-void addCompactArrayTest(TestNode** root);
 void addTestDeprecatedAPI(TestNode** root);
 void addUCharTransformTest(TestNode** root);
 void addUSetTest(TestNode** root);
@@ -51,7 +50,6 @@ void addAllTests(TestNode** root)
     addConvert(root);
     addUCharTransformTest(root);
     addStandardNamesTest(root);
-    addCompactArrayTest(root);
 #if !UCONFIG_NO_FORMATTING
     addFormatTest(root);
 #endif

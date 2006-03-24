@@ -61,25 +61,25 @@ LDFLAGS += $(LDFLAGSICUUC)
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
-OBJECTS = putil.o utypes.o uobject.o cmemory.o umutex.o ucln_cmn.o uinit.o \
-udata.o ucmndata.o udatamem.o udataswp.o umapfile.o ucol_swp.o \
-uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
-ucat.o locmap.o uloc.o locid.o \
-uhash.o uhash_us.o \
-ucnv.o ucnv_set.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_ext.o ucnv_io.o ucnvlat1.o \
+OBJECTS = putil.o utypes.o uinvchar.o umutex.o ucln_cmn.o uinit.o uobject.o cmemory.o \
+udata.o ucmndata.o udatamem.o umapfile.o udataswp.o ucol_swp.o utrace.o \
+uhash.o uhash_us.o uenum.o ustrenum.o uvector.o ustack.o uvectr32.o \
+ucnv.o ucnv_bld.o ucnv_cnv.o ucnv_io.o ucnv_cb.o ucnv_err.o ucnvlat1.o \
 ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
-ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o \
-unistr.o unistr_case.o unistr_cnv.o unistr_props.o \
-utf_impl.o ustring.o ustr_cnv.o ustrcase.o ucasemap.o cstring.o ustrfmt.o ustrtrns.o ustr_wcs.o uinvchar.o utext.o \
+ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_set.o \
+uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
+ucat.o locmap.o uloc.o locid.o locutil.o \
+ustr_cnv.o unistr_cnv.o unistr.o unistr_case.o unistr_props.o \
+utf_impl.o ustring.o ustrcase.o ucasemap.o cstring.o ustrfmt.o ustrtrns.o ustr_wcs.o utext.o \
 normlzr.o unorm.o unormcmp.o unorm_it.o chariter.o schriter.o uchriter.o uiter.o \
-uchar.o uprops.o ucase.o propname.o ubidi_props.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o \
-uscript.o usc_impl.o uvector.o ustack.o uvectr32.o ucmp8.o \
-uarrsort.o utrie.o uset.o uset_props.o uniset.o uniset_props.o ruleiter.o caniter.o unifilt.o unifunct.o usetiter.o \
-brkiter.o ubrk.o brkeng.o dictbe.o triedict.o \
+uchar.o uprops.o ucase.o propname.o ubidi_props.o ubidi.o ubidiwrt.o ubidiln.o ushape.o \
+uscript.o usc_impl.o unames.o \
+utrie.o uset_props.o uniset_props.o uset.o uniset.o usetiter.o ruleiter.o caniter.o unifilt.o unifunct.o \
+uarrsort.o brkiter.o ubrk.o brkeng.o dictbe.o triedict.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
-serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o locutil.o \
-uenum.o ustrenum.o uidna.o usprep.o punycode.o \
-util.o parsepos.o utrace.o locbased.o cwchar.o wintz.o
+serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o \
+uidna.o usprep.o punycode.o \
+util.o parsepos.o locbased.o cwchar.o wintz.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h unicode/*.h
