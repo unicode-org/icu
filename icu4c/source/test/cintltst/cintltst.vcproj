@@ -318,6 +318,9 @@
 			<File
 				RelativePath=".\stdnmtst.c">
 			</File>
+			<File
+				RelativePath=".\ucsdetst.c">
+			</File>
 		</Filter>
 		<Filter
 			Name="data &amp; memory"
@@ -391,9 +394,6 @@
 			</File>
 			<File
 				RelativePath=".\currtest.c">
-			</File>
-			<File
-				RelativePath=".\ucsdetst.c">
 			</File>
 			<File
 				RelativePath=".\utmstest.c">
