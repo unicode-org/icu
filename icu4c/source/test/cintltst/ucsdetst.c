@@ -26,16 +26,18 @@ static void TestUTF8(void);
 static void TestUTF16(void);
 static void TestC1Bytes(void);
 static void TestInputFilter(void);
+static void TestChaining(void);
 
 void addUCsdetTest(TestNode** root);
 
 void addUCsdetTest(TestNode** root)
 {
-    addTest(root, &TestConstruction, "tscsdet/TestConstruction");
-    addTest(root, &TestUTF8, "tscsdet/TestUTF8");
-    addTest(root, &TestUTF16, "tscsdet/TestUTF16");
-    addTest(root, &TestC1Bytes, "tscsdet/TestC1Bytes");
-    addTest(root, &TestInputFilter, "tscsdet/TestInputFilter");
+    addTest(root, &TestConstruction, "ucsdetst/TestConstruction");
+    addTest(root, &TestUTF8, "ucsdetst/TestUTF8");
+    addTest(root, &TestUTF16, "ucsdetst/TestUTF16");
+    addTest(root, &TestC1Bytes, "ucsdetst/TestC1Bytes");
+    addTest(root, &TestInputFilter, "ucsdetst/TestInputFilter");
+    addTest(root, &TestChaining, "ucsdetst/TestErrorChaining");
 }
 
 static int32_t preflight(const UChar *src, int32_t length, UConverter *cnv)
@@ -325,3 +327,23 @@ bail:
     ucsdet_close(csd);
 }
 
+static void TestChaining(void) {
+    UErrorCode status = U_USELESS_COLLATOR_ERROR;
+
+    ucsdet_open(&status);
+    ucsdet_setText(NULL, NULL, 0, &status);
+    ucsdet_getName(NULL, &status);
+    ucsdet_getConfidence(NULL, &status);
+    ucsdet_getLanguage(NULL, &status);
+    ucsdet_detect(NULL, &status);
+    ucsdet_setDeclaredEncoding(NULL, NULL, 0, &status);
+    ucsdet_detectAll(NULL, NULL, &status);
+    ucsdet_getUChars(NULL, NULL, 0, &status);
+    ucsdet_getUChars(NULL, NULL, 0, &status);
+    ucsdet_close(NULL);
+
+    /* All of this code should have done nothing. */
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Status got changed to %s\n", u_errorName(status));
+    }
+}
