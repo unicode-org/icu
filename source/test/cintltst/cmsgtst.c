@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1033,6 +1033,19 @@ static void MessageLength(void)
     }
 }
 
+static void TestErrorChaining(void) {
+    UErrorCode status = U_USELESS_COLLATOR_ERROR;
+
+    umsg_open(NULL, 0, NULL, NULL, &status);
+    umsg_applyPattern(NULL, NULL, 0, NULL, &status);
+    umsg_clone(NULL, &status);
+    umsg_close(NULL);
+
+    /* All of this code should have done nothing. */
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Status got changed to %s\n", u_errorName(status));
+    }
+}
 
 void addMsgForTest(TestNode** root);
 
@@ -1050,6 +1063,7 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestParseMessageWithValist, "tsformat/cmsgtst/TestParseMessageWithValist");
     addTest(root, &TestJ904, "tsformat/cmsgtst/TestJ904");
     addTest(root, &MessageLength, "tsformat/cmsgtst/MessageLength");
+    addTest(root, &TestErrorChaining, "tsformat/cmsgtst/TestErrorChaining");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
