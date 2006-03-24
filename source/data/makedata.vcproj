@@ -52,7 +52,13 @@
 				RelativePath=".\brkitr\brkfiles.mk">
 			</File>
 			<File
+				RelativePath=".\brkitr\brsfiles.mk">
+			</File>
+			<File
 				RelativePath=".\coll\colfiles.mk">
+			</File>
+			<File
+				RelativePath=".\brkitr\ctdfiles.mk">
 			</File>
 			<File
 				RelativePath=".\makedata.mak">
