@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2004-2004, International Business Machines Corporation and
+ * Copyright (c) 2004-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -114,6 +114,11 @@ void UVectorTest::UVector_API() {
     TEST_ASSERT(a->elementAti(1) == 15);
     TEST_ASSERT(a->elementAti(2) == 20);
     TEST_ASSERT(a->elementAti(3) == 30);
+    TEST_ASSERT(a->indexOf((int32_t)3) == -1);
+    TEST_ASSERT(a->indexOf((int32_t)15) == 1);
+    TEST_ASSERT(a->indexOf((int32_t)15, 2) == -1);
+    TEST_ASSERT(a->contains((int32_t)15));
+    TEST_ASSERT(!a->contains((int32_t)5));
     delete a;
 }
 
