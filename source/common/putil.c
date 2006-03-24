@@ -649,7 +649,7 @@ static char *gTimeZoneBufferPtr = NULL;
 #ifndef U_WINDOWS
 #define isNonDigit(ch) (ch < '0' || '9' < ch)
 static UBool isValidOlsonID(const char *id) {
-    int32_t idx;
+    int32_t idx = 0;
 
     /* Determine if this is something like Iceland (Olson ID)
     or AST4ADT (non-Olson ID) */
