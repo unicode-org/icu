@@ -1055,7 +1055,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 logln("loaded data for abbreviated month names: "+ b1.getKey()); 
             }
         }catch(MissingResourceException ex){
-            errln("Failed to load data for abbreviated month names");
+            warnln("Failed to load data for abbreviated month names");
         }
     }
 }

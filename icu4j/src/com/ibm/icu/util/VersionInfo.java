@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -98,14 +98,14 @@ public final class VersionInfo
     /**
      * Unicode 4.0.1 version
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final VersionInfo UNICODE_4_0_1;
 
     /**
      * Unicode 4.1 version
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final VersionInfo UNICODE_4_1;
 
@@ -119,7 +119,7 @@ public final class VersionInfo
      * Data version string for ICU's internal data
      * @internal
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ICU_DATA_VERSION = "35b";
 

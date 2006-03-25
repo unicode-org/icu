@@ -275,7 +275,7 @@ public abstract class NumberFormat extends UFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a CurrencyAmount.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public final String format(CurrencyAmount currAmt) {
         return format(currAmt, new StringBuffer(),
@@ -336,7 +336,7 @@ public abstract class NumberFormat extends UFormat {
      * Format a CurrencyAmount.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(CurrencyAmount currAmt,
                                StringBuffer toAppendTo,
@@ -466,7 +466,7 @@ public abstract class NumberFormat extends UFormat {
      * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale-dependent.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -491,7 +491,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Returns a general-purpose number format for the specified locale.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getNumberInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -541,7 +541,7 @@ public abstract class NumberFormat extends UFormat {
      * @param inLocale the locale for which a number format is needed
      * @return a number format for integer values
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getIntegerInstance(ULocale inLocale) {
         return getInstance(inLocale, INTEGERSTYLE);
@@ -569,7 +569,7 @@ public abstract class NumberFormat extends UFormat {
      * Returns a currency format for the specified locale.
      * @return a number format for currency
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getCurrencyInstance(ULocale inLocale) {
         return getInstance(inLocale, CURRENCYSTYLE);
@@ -597,7 +597,7 @@ public abstract class NumberFormat extends UFormat {
      * Returns a percentage format for the specified locale.
      * @return a number format for percents
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getPercentInstance(ULocale inLocale) {
         return getInstance(inLocale, PERCENTSTYLE);
@@ -628,7 +628,7 @@ public abstract class NumberFormat extends UFormat {
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static NumberFormat getScientificInstance(ULocale inLocale) {
         return getInstance(inLocale, SCIENTIFICSTYLE);
@@ -711,7 +711,7 @@ public abstract class NumberFormat extends UFormat {
          * @param formatType the type of format
          * @return the NumberFormat, or null.
          * @draft ICU 3.2
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @provisional This API might change or be removed in a future release.
          */
         public NumberFormat createFormat(ULocale loc, int formatType) {
             return createFormat(loc.toLocale(), formatType);
@@ -766,7 +766,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 3.2
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @provisional This API might change or be removed in a future release.
          */
         public SimpleNumberFormatFactory(ULocale locale) {
             this(locale, true);
@@ -774,7 +774,7 @@ public abstract class NumberFormat extends UFormat {
         
         /**
          * @draft ICU 3.2
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 * @provisional This API might change or be removed in a future release.
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());
@@ -845,7 +845,7 @@ public abstract class NumberFormat extends UFormat {
      * Get the list of Locales for which NumberFormats are available.
      * @return the available locales
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
@@ -1182,8 +1182,7 @@ public abstract class NumberFormat extends UFormat {
      * @param forLocale the locale of the data.
      * @param choice the pattern format.
      * @return the pattern
-     * @stable ICU 2.2
-     * @deprecated subclassers should override getPattern(ULocale, int) instead of this method.
+     * @deprecated ICU 3.4 subclassers should override getPattern(ULocale, int) instead of this method.
      */
     protected static String getPattern(Locale forLocale, int choice) {
         return getPattern(ULocale.forLocale(forLocale), choice);
@@ -1195,7 +1194,7 @@ public abstract class NumberFormat extends UFormat {
      * @param choice the pattern format.
      * @return the pattern
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     protected static String getPattern(ULocale forLocale, int choice) {
 
