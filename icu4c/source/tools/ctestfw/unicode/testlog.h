@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004, International Business Machines Corporation and
+ * Copyright (c) 2004-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -19,6 +19,7 @@
  */
 class TestLog {
 public:
+    virtual ~TestLog();
     virtual void errln( const UnicodeString &message ) = 0;
     virtual const char* getTestDataPath(UErrorCode& err) = 0;
 };
