@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -131,46 +131,6 @@ CLEANUP:
 
     return u_terminateChars(dest, destCapacity, reqLength, status);
 }
-
-static void
-syntaxError( const UChar* rules, 
-             int32_t pos,
-             int32_t rulesLen,
-             UParseError* parseError){
-    int32_t start, stop;
-    if(parseError == NULL){
-        return;
-    }
-    if(pos == rulesLen && rulesLen >0){
-        pos--;
-    }
-    parseError->offset = pos;
-    parseError->line = 0 ; /* we are not using line numbers */
-    
-    /* for pre-context */
-    start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-    stop  = pos;
-    
-    u_memcpy(parseError->preContext,rules+start,stop-start);
-    /* null terminate the buffer */
-    parseError->preContext[stop-start] = 0;
-    
-    /* for post-context */
-    start = pos;
-    if(start<rulesLen) {
-        U16_FWD_1(rules, start, rulesLen);
-    }
-
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN)) : 
-                                                            rulesLen;
-    if(start < stop){
-        u_memcpy(parseError->postContext,rules+start,stop-start);
-        /* null terminate the buffer */
-        parseError->postContext[stop-start]= 0;
-    }
-    
-}
-
 
 /* sorted array for binary search*/
 static const char* special_prefixes[]={
