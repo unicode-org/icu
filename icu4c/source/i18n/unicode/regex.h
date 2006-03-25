@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -282,7 +282,7 @@ private:
      *
      * @internal
      */
-    virtual RegexMatcher *matcher(const UChar *input,
+    RegexMatcher *matcher(const UChar *input,
         UErrorCode          &status) const;
 public:
 
