@@ -1,10 +1,10 @@
 /*
-*****************************************************************************************
+********************************************************************************
 *
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*****************************************************************************************
+********************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -429,7 +429,7 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
     }
     fprintf(stderr, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
-      fputs(prefix, stderr);
+        fputs(prefix, stderr);
     }
     vfprintf(stderr, pattern, ap);
     fflush(stderr);
@@ -441,7 +441,7 @@ vlog_info(const char *prefix, const char *pattern, va_list ap)
 {
     fprintf(stdout, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
-      fputs(prefix, stderr);
+        fputs(prefix, stdout);
     }
     vfprintf(stdout, pattern, ap);
     fflush(stdout);
@@ -455,7 +455,7 @@ static void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
 
     fprintf(stdout, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
-      fputs(prefix, stderr);
+        fputs(prefix, stdout);
     }
     vfprintf(stdout, pattern, ap);
     fflush(stdout);
