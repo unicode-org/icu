@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005 International Business Machines Corporation and          *
+ * Copyright (C) 2005-2006 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -149,28 +149,28 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Tag value for "words" that do not fit into any of other categories. 
      * Includes spaces and most punctuation. 
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_NONE           = 0;
 
     /**
      * Upper bound for tags for uncategorized words. 
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_NONE_LIMIT     = 100;
 
     /**
      * Tag value for words that appear to be numbers, lower limit. 
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_NUMBER         = 100;
 
     /** 
      * Tag value for words that appear to be numbers, upper limit.
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_NUMBER_LIMIT   = 200;
 
@@ -178,42 +178,42 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Tag value for words that contain letters, excluding
      * hiragana, katakana or ideographic characters, lower limit. 
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_LETTER         = 200;
 
     /** 
      * Tag value for words containing letters, upper limit 
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_LETTER_LIMIT   = 300;
 
     /** 
      * Tag value for words containing kana characters, lower limit
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_KANA           = 300;
 
     /** 
      * Tag value for words containing kana characters, upper limit
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_KANA_LIMIT     = 400;
 
     /**
      * Tag value for words containing ideographic characters, lower limit
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_IDEO           = 400;
 
     /**
      * Tag value for words containing ideographic characters, upper limit
      * @draft ICU 3.0 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This is a draft API and might change in a future release of ICU.
      */
     public static final int WORD_IDEO_LIMIT     = 500;
 
@@ -705,7 +705,7 @@ private void makeRuleStatusValid() {
  * returned break position.
  *
  * @draft ICU 3.0
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This is a draft API and might change in a future release of ICU.
  */
 
 public int  getRuleStatus() {
@@ -746,7 +746,7 @@ public int  getRuleStatus() {
  *                  is the total number of status values that were available,
  *                  not the reduced number that were actually returned.
  * @draft ICU 3.0
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This is a draft API and might change in a future release of ICU.
  */
 public int getRuleStatusVec(int[] fillInArray) {
     makeRuleStatusValid();
@@ -1333,19 +1333,32 @@ public int getRuleStatusVec(int[] fillInArray) {
 
 
 
-//-------------------------------------------------------------------------------
-//
-//  isDictionaryChar      Return true if the category lookup for this char
-//                        indicates that it is in the set of dictionary lookup
-//                        chars.
-//
-//                        This function is intended for use by dictionary based
-//                        break iterators.
-//
-//-------------------------------------------------------------------------------
-boolean isDictionaryChar(int c) {
-    short  category = (short) fRData.fTrie.getCodePointValue(c);
-    return (category & 0x4000) != 0;
-}
+    //-------------------------------------------------------------------------------
+    
+    //
+    
+    //  isDictionaryChar      Return true if the category lookup for this char
+    
+    //                        indicates that it is in the set of dictionary lookup
+    
+    //                        chars.
+    
+    //
+    
+    //                        This function is intended for use by dictionary based
+    
+    //                        break iterators.
+    
+    //
+    
+    //-------------------------------------------------------------------------------
+    
+    boolean isDictionaryChar(int c) {
+    
+        short  category = (short) fRData.fTrie.getCodePointValue(c);
+    
+        return (category & 0x4000) != 0;
+    
+    }
 
 }

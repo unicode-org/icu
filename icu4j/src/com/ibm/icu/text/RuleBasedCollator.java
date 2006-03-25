@@ -856,7 +856,7 @@ public final class RuleBasedCollator extends Collator
      * @param addPrefixes add the prefix contextual elements to contractions
      * @throws Exception 
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void
     getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,

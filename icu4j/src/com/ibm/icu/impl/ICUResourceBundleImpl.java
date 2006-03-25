@@ -529,7 +529,6 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         public byte [] getBinary(byte []ba) {
             return value;
         }
-        
         private byte[] getValue() {
             int offset = RES_GET_OFFSET(resource);
             int length = ICUResourceBundleImpl.getInt(rawData,offset);

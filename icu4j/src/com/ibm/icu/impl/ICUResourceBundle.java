@@ -261,7 +261,6 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         throw new UResourceTypeMismatchException("");
     }
     
-    
     /**
      * Returns a 32 bit integer array from a resource.
      *
@@ -1140,7 +1139,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         if (other instanceof ICUResourceBundle) {
             ICUResourceBundle o = (ICUResourceBundle) other;
             if (getBaseName().equals(o.getBaseName())
-                    && getULocale().equals(o.getULocale())) {
+                    && getLocaleID().equals(o.getLocaleID())) {
                 return true;
             }
         }

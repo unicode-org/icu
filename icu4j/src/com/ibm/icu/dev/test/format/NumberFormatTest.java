@@ -1221,7 +1221,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             }
         } catch (java.io.IOException e) {
+//#ifndef FOUNDATION
             throw new RuntimeException(e);
+//#else
+//##        throw new RuntimeException(e.getMessage());
+//#endif
         }
     }
 

@@ -34,7 +34,7 @@ import java.util.Arrays;
  * ignore html or xml style markup that could otherwise obscure the content.
  * <p/>
  * @draft ICU 3.4
- * @deprecated This is a draft API and might change in a future release of ICU.
+ * @provisional This API might change or be removed in a future release.
  */
 public class CharsetDetector {
 
@@ -52,7 +52,7 @@ public class CharsetDetector {
      *   Constructor
      * 
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetDetector() {
     }
@@ -72,7 +72,7 @@ public class CharsetDetector {
      *  @param encoding The declared encoding 
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetDetector setDeclaredEncoding(String encoding) {
         fDeclaredEncoding = encoding;
@@ -87,7 +87,7 @@ public class CharsetDetector {
      * @return This CharsetDetector
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetDetector setText(byte [] in) {
         fRawInput  = in;
@@ -114,7 +114,7 @@ public class CharsetDetector {
      * @return This CharsetDetector
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     
     public CharsetDetector setText(InputStream in) throws IOException {
@@ -159,7 +159,7 @@ public class CharsetDetector {
      *         <code>null</code> if there are no matches.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetMatch detect() {
 //   TODO:  A better implementation would be to copy the detect loop from
@@ -189,7 +189,7 @@ public class CharsetDetector {
      * @return An array of CharsetMatch objects representing possibly matching charsets.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetMatch[] detectAll() {
         CharsetRecognizer csr;
@@ -238,7 +238,7 @@ public class CharsetDetector {
      *           or null or an empty string if none is available.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public Reader getReader(InputStream in, String declaredEncoding) {
         fDeclaredEncoding = declaredEncoding;
@@ -273,7 +273,7 @@ public class CharsetDetector {
      *           or null or an empty string if none is available.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public String getString(byte[] in, String declaredEncoding)
     {
@@ -302,7 +302,7 @@ public class CharsetDetector {
      * by the charset detector.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public static String[] getAllDetectableCharsets() {
         return fCharsetNames;
@@ -316,7 +316,7 @@ public class CharsetDetector {
      * @see #enableInputFilter
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean inputFilterEnabled()
     {
@@ -333,7 +333,7 @@ public class CharsetDetector {
      * @return The previous setting.
      *
      * @draft ICU 3.4
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean enableInputFilter(boolean filter)
     {
