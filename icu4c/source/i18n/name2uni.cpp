@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -58,9 +58,10 @@ U_CDECL_END
 NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(UNICODE_STRING("Name-Any", 8), adoptedFilter) {
 
+    UnicodeSet *legalPtr = &legal;
     // Get the legal character set
     USetAdder sa = {
-        (USet *)&legal, // USet* == UnicodeSet*
+        (USet *)legalPtr, // USet* == UnicodeSet*
         _set_add,
         _set_addRange,
         _set_addString,
