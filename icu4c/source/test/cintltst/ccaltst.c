@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/******************************************************************************
 *
 * File CCALTST.C
 *
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda               Creation
-*********************************************************************************/
+*******************************************************************************/
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
@@ -894,7 +894,7 @@ static void TestGetLimits()
     val = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
     min = ucal_getLimit(cal, UCAL_DAY_OF_WEEK, UCAL_MINIMUM, &status);
     max = ucal_getLimit(cal, UCAL_DAY_OF_WEEK, UCAL_MAXIMUM, &status);
-    if ( (min != UCAL_SUNDAY || max != UCAL_SATURDAY ) && (min > val > max)  && (val != UCAL_FRIDAY)){
+    if ( (min != UCAL_SUNDAY || max != UCAL_SATURDAY ) && (min > val && val > max)  && (val != UCAL_FRIDAY)){
            log_err("FAIL: Min/max bad\n");
            log_err("FAIL: Day of week %d out of range\n", val);
            log_err("FAIL: FAIL: Day of week should be SUNDAY Got %d\n", val);
@@ -905,7 +905,7 @@ static void TestGetLimits()
     val = ucal_get(cal, UCAL_DAY_OF_WEEK_IN_MONTH, &status);
     min = ucal_getLimit(cal, UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_MINIMUM, &status);
     max = ucal_getLimit(cal, UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_MAXIMUM, &status);
-    if ( (min != 0 || max != 5 ) && (min > val > max)  && (val != 1)){
+    if ( (min != 0 || max != 5 ) && (min > val && val > max)  && (val != 1)){
            log_err("FAIL: Min/max bad\n");
            log_err("FAIL: Day of week in month %d out of range\n", val);
            log_err("FAIL: FAIL: Day of week in month should be SUNDAY Got %d\n", val);
@@ -937,7 +937,7 @@ static void TestGetLimits()
     ac_min=ucal_getLimit(cal, UCAL_MINUTE, UCAL_ACTUAL_MINIMUM, &status);
     ac_max=ucal_getLimit(cal, UCAL_SECOND, UCAL_ACTUAL_MAXIMUM, &status);
     if( (min!=0 || max!= 11 || gr_min!=0 || le_max!=60 || ac_min!=0 || ac_max!=60) &&
-        (min>val>max) && val!=4){
+        (min>val && val>max) && val!=4){
                 
         log_err("FAIL: Min/max bad\n");
         log_err("FAIL: Hour of Day %d out of range\n", val);
