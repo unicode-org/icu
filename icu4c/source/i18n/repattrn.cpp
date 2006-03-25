@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2004 International Business Machines Corporation   *
+*   Copyright (C) 2002-2006 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -324,6 +324,7 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
     return retMatcher;
 }
 
+#if 0
 RegexMatcher *RegexPattern::matcher(const UChar * /*input*/,
                                     UErrorCode          &status)  const 
 {
@@ -333,7 +334,7 @@ RegexMatcher *RegexPattern::matcher(const UChar * /*input*/,
     }
     return NULL;
 }
-
+#endif
 
 //---------------------------------------------------------------------
 //
