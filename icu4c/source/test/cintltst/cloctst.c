@@ -3,14 +3,14 @@
  * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CLOCTST.C
 *
 * Modification History:
 *        Name                     Description 
 *     Madhu Katragadda            Ported for C API
-*********************************************************************************
+********************************************************************************
 */
 #include "cloctst.h"
 #include <stdlib.h>
@@ -208,7 +208,6 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUninstalledISO3Names);
     TESTCASE(TestSimpleDisplayNames);
     TESTCASE(TestVariantParsing);
-    /*TESTCASE(MoreVariants);*/
     TESTCASE(TestKeywordVariants);
     TESTCASE(TestKeywordVariantParsing);
     TESTCASE(TestCanonicalization);
@@ -1356,35 +1355,6 @@ static void TestObsoleteNames(void)
 
 }
 
-static void MoreVariants(void) 
-{
-    struct {
-        const char *localeID;
-        const char *keyword;
-        const char *expectedValue;
-    } testCases[] = {
-        { "de_DE_EURO@collation=PHONEBOOK", "collation", "PHONEBOOK" },
-        { "es_ES.utf8@euro", "collation", ""},
-        { "es_ES.hello.utf8@euro", "", "" },
-        { " s pa c e d  _  more spaces _ spaced variant ", "", ""}
-    };
-    
-    UErrorCode status = U_ZERO_ERROR;
-    
-    int32_t i = 0;
-    int32_t resultLen = 0;
-    char buffer[256];
-    
-    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
-        *buffer = 0;
-        resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
-        if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
-            log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
-                testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
-        }
-    }
-}
-
 static void TestKeywordVariants(void) 
 {
     struct {
@@ -2485,11 +2455,12 @@ static void TestCollation() {
     for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
-        UErrorCode status = U_ZERO_ERROR;
         UCollator* c1 = NULL;
         UCollator* c2 = NULL;
         const char* l1 = NULL;
         const char* l2 = NULL;
+
+        status = U_ZERO_ERROR;
         if(!isLocaleAvailable(resIndex, newLoc)){
             continue;
         }
@@ -2525,10 +2496,11 @@ static void  TestULocale() {
     for (i=0; i<LENGTHOF(LOCALE_ALIAS); i++) {
         const char* oldLoc = LOCALE_ALIAS[i][0];
         const char* newLoc = LOCALE_ALIAS[i][1];
-        UErrorCode status = U_ZERO_ERROR;
         UChar name1[256], name2[256];
         char names1[256], names2[256];
         int32_t capacity = 256;
+
+        status = U_ZERO_ERROR;
         if(!isLocaleAvailable(resIndex, newLoc)){
             continue;
         }
