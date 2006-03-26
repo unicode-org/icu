@@ -1622,6 +1622,8 @@ _decompose(UChar *dest, int32_t destCapacity,
     /* avoid compiler warnings */
     norm32=0;
     c=0;
+    cc=0;
+    trailCC=0;
 
     if(srcLength>=0) {
         /* string with length */
