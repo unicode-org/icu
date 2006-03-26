@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -162,9 +162,12 @@ void die(const char* msg) {
  */
 class AliasList {
 public:
+    virtual ~AliasList();
     virtual const Alias& operator[](int32_t i) const = 0;
     virtual int32_t count() const = 0;
 };
+
+AliasList::~AliasList() {}
 
 /**
  * A single array.
