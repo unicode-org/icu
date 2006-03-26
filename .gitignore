@@ -301,6 +301,15 @@ icu4c/source/tools/gencnval/Makefile
 icu4c/source/tools/gencnval/Release
 icu4c/source/tools/gencnval/gencnval
 icu4c/source/tools/gencnval/gencnval.[0-9]
+icu4c/source/tools/genctd/*.d
+icu4c/source/tools/genctd/*.o
+icu4c/source/tools/genctd/*.pdb
+icu4c/source/tools/genctd/*.plg
+icu4c/source/tools/genctd/Debug
+icu4c/source/tools/genctd/Makefile
+icu4c/source/tools/genctd/Release
+icu4c/source/tools/genctd/genctd
+icu4c/source/tools/genctd/genctd.1
 icu4c/source/tools/genfchk/Debug
 icu4c/source/tools/genfchk/Makefile
 icu4c/source/tools/genfchk/genfchk
