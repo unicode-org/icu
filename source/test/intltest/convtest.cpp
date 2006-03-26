@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -325,6 +325,7 @@ ConversionTest::TestGetUnicodeSet() {
 
     ParsePosition pos;
     UnicodeSet cnvSet, mapSet, mapnotSet, diffSet;
+    UnicodeSet *cnvSetPtr = &cnvSet;
     UConverter *cnv;
 
     TestDataModule *dataModule;
@@ -395,7 +396,7 @@ ConversionTest::TestGetUnicodeSet() {
                     continue;
                 }
 
-                ucnv_getUnicodeSet(cnv, (USet *)&cnvSet, (UConverterUnicodeSet)which, &errorCode);
+                ucnv_getUnicodeSet(cnv, (USet *)cnvSetPtr, (UConverterUnicodeSet)which, &errorCode);
                 ucnv_close(cnv);
 
                 if(U_FAILURE(errorCode)) {
