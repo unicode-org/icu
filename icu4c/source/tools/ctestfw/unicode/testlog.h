@@ -12,12 +12,13 @@
 #define U_TESTFW_TESTLOG
 
 #include "unicode/unistr.h"
+#include "unicode/testtype.h"
 
 /** Facilitates internal logging of data driven test service 
  *  It would be interesting to develop this into a full      
  *  fledged control system as in Java.                       
  */
-class TestLog {
+class T_CTEST_EXPORT_API TestLog {
 public:
     virtual ~TestLog();
     virtual void errln( const UnicodeString &message ) = 0;
