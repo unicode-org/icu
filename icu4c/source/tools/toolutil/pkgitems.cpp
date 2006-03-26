@@ -86,7 +86,7 @@ checkIDSuffix(const char *itemName, const char *id, int32_t idLength, const char
     targetLength=treeLength+idLength+suffixLength;
     if(targetLength>=(int32_t)sizeof(target)) {
         fprintf(stderr, "icupkg/checkIDSuffix(%s) alias target item name length %ld too long\n",
-                        itemName, targetLength);
+                        itemName, (long)targetLength);
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
