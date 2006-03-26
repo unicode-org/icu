@@ -2528,7 +2528,6 @@ static void  TestULocale() {
 static void TestUResourceBundle() {
     const char* us1;
     const char* us2;
-    int32_t length = 0;
 
     UResourceBundle* rb1 = NULL;
     UResourceBundle* rb2 = NULL;
