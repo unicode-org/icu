@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2005, International Business Machines
+ *   Copyright (C) 2005-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -161,13 +161,13 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
     buf.remove();
     int t = 0;
     while (curOffset < len){
-        if (t = isNewlineMark()) {  // end of line
+        if ((t = isNewlineMark())) {  // end of line
             curOffset += t;
             break;
         }
         UChar c = base[curOffset];
         if (c == BACKSLASH && curOffset < len -1){  // escaped new line mark
-            if (t = isNewlineMark()){
+            if ((t = isNewlineMark())){
                 curOffset += 1 + t;  // BACKSLAH and NewlineMark
                 continue;
             }
