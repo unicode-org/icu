@@ -854,7 +854,7 @@ static void walkHorizontal(const TernaryNode *node,
 U_NAMESPACE_END
 U_CDECL_BEGIN
 static int32_t U_CALLCONV
-_sortBuildNodes(const void */*context*/, const void *voidl, const void *voidr) {
+_sortBuildNodes(const void * /*context*/, const void *voidl, const void *voidr) {
     BuildCompactTrieNode *left = *(BuildCompactTrieNode **)voidl;
     BuildCompactTrieNode *right = *(BuildCompactTrieNode **)voidr;
     // Check for comparing a node to itself, to avoid spurious duplicates
