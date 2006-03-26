@@ -1703,6 +1703,7 @@ U_CDECL_END
 void
 BasicNormalizerTest::TestSkippable() {
     UnicodeSet starts, diff, skipSets[UNORM_MODE_COUNT], expectSets[UNORM_MODE_COUNT];
+    UnicodeSet *startsPtr = &starts;
     UnicodeString s, pattern;
     UChar32 start, limit, rangeStart, rangeEnd;
     int32_t i, range, count;
@@ -1712,7 +1713,7 @@ BasicNormalizerTest::TestSkippable() {
     /* build NF*Skippable sets from runtime data */
     status=U_ZERO_ERROR;
     USetAdder sa = {
-        (USet *)&starts,
+        (USet *)startsPtr,
         _set_add,
         _set_addRange,
         _set_addString,
