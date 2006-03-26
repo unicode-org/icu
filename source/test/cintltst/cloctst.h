@@ -61,9 +61,6 @@ static  void TestDisplayNames(void);
  **/
  static void TestVariantParsing(void);
 
- /* Make sure we can pass "de_DE@Collation=PHONEBOOK" */
- static void MoreVariants(void);
- 
  /* Test getting keyword enumeratin */
  static void TestKeywordVariants(void);
 
