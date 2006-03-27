@@ -411,7 +411,12 @@ u_scanf_double_handler(UFILE        *input,
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     if (!info->fSkipArg) {
-        *(double*)(args[0].ptrValue) = num;
+        if (info->fIsLong)
+            *(double*)(args[0].ptrValue) = num;
+        else if (info->fIsLongDouble)
+            *(long double*)(args[0].ptrValue) = num;
+        else
+            *(float*)(args[0].ptrValue) = (float)num;
     }
 
     /* mask off any necessary bits */
@@ -465,7 +470,12 @@ u_scanf_scientific_handler(UFILE        *input,
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     if (!info->fSkipArg) {
-        *(double*)(args[0].ptrValue) = num;
+        if (info->fIsLong)
+            *(double*)(args[0].ptrValue) = num;
+        else if (info->fIsLongDouble)
+            *(long double*)(args[0].ptrValue) = num;
+        else
+            *(float*)(args[0].ptrValue) = (float)num;
     }
 
     /* mask off any necessary bits */
@@ -549,7 +559,12 @@ u_scanf_scidbl_handler(UFILE        *input,
     input->str.fPos += parsePos;
 
     if (!info->fSkipArg) {
-        *(double*)(args[0].ptrValue) = num;
+        if (info->fIsLong)
+            *(double*)(args[0].ptrValue) = num;
+        else if (info->fIsLongDouble)
+            *(long double*)(args[0].ptrValue) = num;
+        else
+            *(float*)(args[0].ptrValue) = (float)num;
     }
 
     /* mask off any necessary bits */

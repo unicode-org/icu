@@ -93,35 +93,35 @@ static void TestString(void) {
 
     u_sprintf(uStringBuf, "Float f: %f", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, "Float f: %f", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Float f: %lf", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%f Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, "Lowercase float e: %e", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, "Lowercase float e: %e", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Lowercase float e: %le", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%e Got: %e, Expected: %e\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, "Uppercase float E: %E", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, "Uppercase float E: %E", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Uppercase float E: %lE", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%E Got: %E, Expected: %E\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, "Lowercase float g: %g", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, "Lowercase float g: %g", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Lowercase float g: %lg", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%g Got: %g, Expected: %g\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, "Uppercase float G: %G", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, "Uppercase float G: %G", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Uppercase float G: %lG", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
