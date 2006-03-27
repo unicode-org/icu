@@ -1,6 +1,6 @@
 //*****************************************************************************
 //
-//  Copyright (C) 2004-2005, International Business Machines
+//  Copyright (C) 2004-2006, International Business Machines
 //  Corporation and others.  All Rights Reserved.
 //
 //  file name:  icuio.txt
@@ -24,6 +24,7 @@ icuio:table(nofallback) {
 
             "argumentType:\n"
             "\td: double\n"
+            "\tf: float\n"
             "\t1: int8_t (hexadecimal)\n"
             "\t2: int16_t (hexadecimal)\n"
             "\t4: int32_t (hexadecimal)\n"
@@ -117,8 +118,8 @@ icuio:table(nofallback) {
         scanf {
             Headers { "format", "argument", "argumentType", "result" }
             Cases {
-                { "%e", "1.200000e+000", "d", "1.2" }
-                { "%*e%e", "1.200000e+000 4.825000e+000", "d", "4.825" }
+                { "%e", "1.200000e+000", "f", "1.2" }
+                { "%*e%e", "1.200000e+000 4.825000e+000", "f", "4.825" }
                 { "%C", "1234", "2", "31" }
                 { "%*C%C", "1234", "2", "32" }
                 { "%S", "1234 5678", "S", "1234" }
@@ -132,12 +133,15 @@ icuio:table(nofallback) {
                 { "%4d", "123", "4", "7B" }
                 { "%2d", "123", "4", "C" }
                 { "%40d", "123", "4", "7B" }
-                { "%2e", "1.25", "d", "1" }
-                { "%2f", "1.25", "d", "1" }
-                { "%2g", "1.25", "d", "1" }
-                { "%*2e%2e", "1.25", "d", "25" }
-                { "%*2f%2f", "1.25", "d", "25" }
-                { "%*2g%2g", "1.25", "d", "25" }
+                { "%2e", "1.25", "f", "1" }
+                { "%2f", "1.25", "f", "1" }
+                { "%2g", "1.25", "f", "1" }
+                { "%2le", "1.25", "d", "1" }
+                { "%2lf", "1.25", "d", "1" }
+                { "%2lg", "1.25", "d", "1" }
+                { "%*2e%2e", "1.25", "f", "25" }
+                { "%*2f%2f", "1.25", "f", "25" }
+                { "%*2g%2g", "1.25", "f", "25" }
                 { "%*d%d", "1234 5678", "4", "162E" }
                 { "%x", "abcd ef01", "4", "abcd" }
                 { "%3x", "abcd ef01", "4", "abc" }

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -361,6 +361,7 @@ static void U_CALLCONV DataDrivenScanf(void)
     int32_t i32, expected32;
     int64_t i64, expected64;
     double dbl, expectedDbl;
+    float flt, expectedFlt;
     int32_t uBufferLenReturned;
 
     //const char *fileLocale = "en_US_POSIX";
@@ -408,6 +409,15 @@ static void U_CALLCONV DataDrivenScanf(void)
                     if (dbl != expectedDbl) {
                         log_err("error in scanf test case[%d] Got: %f Exp: %f\n",
                                 i, dbl, expectedDbl);
+                    }
+                    break;
+                case 0x66:  // 'f' float
+                    expectedFlt = (float)atof(u_austrcpy(cBuffer, expectedResult));
+                    uBufferLenReturned = u_sscanf_u(argument, format, &flt);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, flt);
+                    if (flt != expectedFlt) {
+                        log_err("error in scanf test case[%d] Got: %f Exp: %f\n",
+                                i, flt, expectedFlt);
                     }
                     break;
                 case 0x31:  // '1' int8_t
