@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2005, International Business Machines
+## *   Copyright (C) 1999-2006, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -151,6 +151,8 @@ ifneq ($(UCONVMSG_MODE),static)
 install-resfiles: $(RESFILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
 	$(INVOKE) $(BINDIR)/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+else
+install-resfiles:
 endif
 
 ##
