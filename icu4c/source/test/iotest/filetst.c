@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  filetst.c
@@ -163,27 +163,27 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("%%X Got: %X, Expected: %X\n", *newValuePtr, *n);
     }
     *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Float %%f: %f\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Float %%f: %lf\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%f Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Lowercase float %%e: %e\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Lowercase float %%e: %le\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%e Got: %e, Expected: %e\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Uppercase float %%E: %E\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Uppercase float %%E: %lE\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%E Got: %E, Expected: %E\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Lowercase float %%g: %g\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Lowercase float %%g: %lg\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%g Got: %g, Expected: %g\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Uppercase float %%G: %G\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Uppercase float %%G: %lG\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
