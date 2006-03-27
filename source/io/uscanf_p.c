@@ -1031,37 +1031,6 @@ u_scanf_pointer_handler(UFILE       *input,
         len = ufmt_min(len, info->fWidth);
     }
 
-#ifdef OS400
-    /* TODO: Fix this code so that it will work on all platforms */
-    {
-        int64_t result[2];
-        int32_t lenOrig = len;
-
-        /* Make sure that we don't consume too much */
-        if (len > (int32_t)(sizeof(int64_t)*2)) {
-            len = (int32_t)(sizeof(int64_t)*2);
-        }
-
-        /* parse the pointer - set first half of big endian pointer */
-        result[0] = (int64_t)ufmt_utop(input->str.fPos, &len);
-
-        /* update the input's position to reflect consumed data */
-        input->str.fPos += len;
-        len = lenOrig - len;
-
-        /* Make sure that we don't consume too much */
-        if (len > (int32_t)(sizeof(int64_t)*2)) {
-            len = (int32_t)(sizeof(int64_t)*2);
-        }
-
-        /* parse the pointer - set second half of big endian pointer */
-        result[1] = (int64_t)ufmt_utop(input->str.fPos, &len);
-
-        if (!info->fSkipArg) {
-            p = *((void **)result);
-        }
-    }
-#else
     /* Make sure that we don't consume too much */
     if (len > (int32_t)(sizeof(void*)*2)) {
         len = (int32_t)(sizeof(void*)*2);
@@ -1073,8 +1042,6 @@ u_scanf_pointer_handler(UFILE       *input,
     if (!info->fSkipArg) {
         *p = result;
     }
-
-#endif
 
     /* update the input's position to reflect consumed data */
     input->str.fPos += len;
