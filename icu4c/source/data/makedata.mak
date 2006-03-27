@@ -14,6 +14,7 @@ U_ICUDATA_NAME=icudt35
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=5.0
+ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 
 #  ICUMAKE
 #     Must be provided by whoever runs this makefile.
@@ -55,7 +56,7 @@ ICUP=$(ICUP:\source\data\\..\..=)
 #       The data directory in source
 #
 ICUSRCDATA=$(ICUP)\source\data
-ICUSRCDATA_RELATIVE_PATH=..\..\..\
+ICUSRCDATA_RELATIVE_PATH=..\..\..
 
 #  ICUUCM
 #       The directory that contains ucmcore.mk files along with *.ucm files
@@ -121,7 +122,7 @@ TESTDATA=$(ICUP)\source\test\testdata
 #
 #   TESTDATAOUT
 #      The destination directory for the built test data .dat file
-TESTDATAOUT=$(ICUP)\source\test\testdata\out\
+TESTDATAOUT=$(ICUP)\source\test\testdata\out
 
 #
 #   TESTDATABLD
@@ -373,7 +374,7 @@ COMMON_ICUDATA_ARGUMENTS=-f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -M"PKGDA
 #				Building the common dll in $(ICUBLD_PKG) unconditionally copies it to $(DLL_OUTPUT) too.
 #
 #############################################################################
-ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
+ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 	@echo All targets are up to date
 
 # Starting with ICU4C 3.4, the core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
@@ -402,7 +403,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 #  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
 #
 !IFDEF ICUDATA_SOURCE_ARCHIVE
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICUDATA_SOURCE_ARCHIVE)"
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICUDATA_SOURCE_ARCHIVE)"
 	@echo Building icu data from $(ICUDATA_SOURCE_ARCHIVE)
 	cd "$(ICUBLD_PKG)"
 	"$(ICUP)\bin\icupkg" -x * --list "$(ICUDATA_SOURCE_ARCHIVE)" > "$(ICUTMP)\icudata.lst"
@@ -412,7 +413,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
 !ELSE
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUP)\bin\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
@@ -439,7 +440,8 @@ $(CTD_FILES:.ctd =.ctd
 $(BRK_RES_FILES:.res =.res
 )
 <<KEEP
-	copy "$(U_ICUDATA_NAME).dll" "$(DLL_OUTPUT)"
+	-@erase "$(ICU_LIB_TARGET)"
+	copy "$(U_ICUDATA_NAME).dll" "$(ICU_LIB_TARGET)"
 	-@erase "$(U_ICUDATA_NAME).dll"
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
