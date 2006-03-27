@@ -24,8 +24,8 @@ CLEANFILES = *~
 SUBDIRS = 
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
-install-recursive clean clean-local clean-recursive distclean		\
+.PHONY : all all-local all-recursive install install-local	\
+install-recursive clean clean-local clean-recursive distclean	\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive build-dir
 
@@ -35,12 +35,12 @@ check check-local check-recursive build-dir
 .SUFFIXES :
 
 ## List of standard targets
-all: all-local all-recursive
-install: install-recursive install-local
-clean: clean-recursive clean-local
-distclean : distclean-recursive distclean-local
-dist: dist-recursive dist-local
-check: all check-recursive check-local
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
 
 all-local: build-dir build-testdata testdata packagetest
 
