@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HP/UX-specific setup using aCC
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -34,7 +34,7 @@ COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Common 'default' path to ensure the sanity of users.  Search the current
 ## directory, at least.
-LD_DEFAULTPATH= -Wl,+b,.:'$$'ORIGIN/
+LD_DEFAULTPATH= -Wl,+b,'$$'ORIGIN/
 
 # Use SHLIB_PATH and LD_LIBRARY_PATH to locate shared libraries
 LDFLAGS += -Wl,+s $(LD_DEFAULTPATH)
