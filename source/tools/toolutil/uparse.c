@@ -190,6 +190,7 @@ u_parseCodePoints(const char *s,
     }
     if(s==NULL || destCapacity<0 || (destCapacity>0 && dest==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     count=0;
@@ -295,6 +296,7 @@ u_parseCodePointRange(const char *s,
     }
     if(s==NULL || pStart==NULL || pEnd==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     s=u_skipWhitespace(s);
