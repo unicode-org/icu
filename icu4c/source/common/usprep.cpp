@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -317,7 +317,9 @@ usprep_getProfile(const char* path,
     stackKey.path = (char*) path;
 
     /* fetch the data from the cache */
+    umtx_lock(&usprepMutex);
     profile = (UStringPrepProfile*) (uhash_get(SHARED_DATA_HASHTABLE,&stackKey));
+    umtx_unlock(&usprepMutex);
     
     if(profile == NULL){
         UStringPrepKey* key   = (UStringPrepKey*) uprv_malloc(sizeof(UStringPrepKey));
@@ -356,7 +358,7 @@ usprep_getProfile(const char* path,
             key->path      = (char*) uprv_malloc(uprv_strlen(path)+1);
             if(key->path == NULL){
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                uprv_free(key->path);
+                uprv_free(key->name);
                 uprv_free(key);
                 uprv_free(profile);
                 return NULL;
@@ -366,6 +368,10 @@ usprep_getProfile(const char* path,
 
         /* load the data */
         if(!loadData(profile, path, name, _SPREP_DATA_TYPE, status) || U_FAILURE(*status) ){
+            uprv_free(key->path);
+            uprv_free(key->name);
+            uprv_free(key);
+            uprv_free(profile);
             return NULL;
         }
         
@@ -378,6 +384,7 @@ usprep_getProfile(const char* path,
             if(U_FAILURE(*status)) {
                 usprep_unload(profile);
                 uprv_free(key->path);
+                uprv_free(key->name);
                 uprv_free(key);
                 uprv_free(profile);
                 return NULL;
