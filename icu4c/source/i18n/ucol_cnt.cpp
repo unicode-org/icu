@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -241,11 +241,16 @@ static ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErro
   r->size = t->size;
 
   r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
-  r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
-  
-  /* test for NULL */
-  if((r->codePoints == NULL) || (r->CEs == NULL)) {
+  if(r->codePoints == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
+    uprv_free(r);
+    return NULL;
+  }
+  r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
+  if(r->CEs == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    uprv_free(r->codePoints);
+    uprv_free(r);
     return NULL;
   }
   uprv_memcpy(r->codePoints, t->codePoints, sizeof(UChar)*t->size);
@@ -277,6 +282,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
   /* test for NULL */
   if (r->elements == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
+    uprv_free(r);
     return NULL;
   }
   //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
@@ -290,6 +296,8 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     /* test for NULL */
     if (r->CEs == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(r->elements);
+        uprv_free(r);
         return NULL;
     }
     uprv_memcpy(r->CEs, t->CEs, t->position*sizeof(uint32_t));
@@ -302,6 +310,9 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     /* test for NULL */
     if (r->codePoints == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(r->CEs);
+        uprv_free(r->elements);
+        uprv_free(r);
         return NULL;
     }
     uprv_memcpy(r->codePoints, t->codePoints, t->position*sizeof(UChar));
@@ -314,6 +325,10 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     /* test for NULL */
     if (r->offsets == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(r->codePoints);
+        uprv_free(r->CEs);
+        uprv_free(r->elements);
+        uprv_free(r);
         return NULL;
     }
     uprv_memcpy(r->offsets, t->offsets, t->size*sizeof(int32_t));
