@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -121,7 +121,6 @@ _uFmtErrorName[U_FMT_PARSE_ERROR_LIMIT - U_FMT_PARSE_ERROR_START] = {
 
 static const char * const
 _uBrkErrorName[U_BRK_ERROR_LIMIT - U_BRK_ERROR_START] = {
-    "U_BRK_ERROR_START",
     "U_BRK_INTERNAL_ERROR",
     "U_BRK_HEX_DIGITS_EXPECTED",
     "U_BRK_SEMICOLON_EXPECTED",
@@ -140,7 +139,6 @@ _uBrkErrorName[U_BRK_ERROR_LIMIT - U_BRK_ERROR_START] = {
 
 static const char * const
 _uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
-    "U_REGEX_ERROR_START",
     "U_REGEX_INTERNAL_ERROR",
     "U_REGEX_RULE_SYNTAX",
     "U_REGEX_INVALID_STATE",
@@ -159,7 +157,6 @@ _uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
 
 static const char * const
 _uIDNAErrorName[U_IDNA_ERROR_LIMIT - U_IDNA_ERROR_START] = {
-     "U_IDNA_ERROR_START",
      "U_STRINGPREP_PROHIBITED_ERROR",
      "U_STRINGPREP_UNASSIGNED_ERROR",
      "U_STRINGPREP_CHECK_BIDI_ERROR",
@@ -184,7 +181,7 @@ u_errorName(UErrorCode code) {
         return _uBrkErrorName[code - U_BRK_ERROR_START];
     } else if (U_REGEX_ERROR_START <= code && code < U_REGEX_ERROR_LIMIT) {
         return _uRegexErrorName[code - U_REGEX_ERROR_START];
-    } else if( U_IDNA_ERROR_START <= code && code <= U_IDNA_ERROR_LIMIT) {
+    } else if(U_IDNA_ERROR_START <= code && code < U_IDNA_ERROR_LIMIT) {
         return _uIDNAErrorName[code - U_IDNA_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
