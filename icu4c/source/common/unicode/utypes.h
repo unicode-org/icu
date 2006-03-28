@@ -684,8 +684,8 @@ typedef enum UErrorCode {
     /*
      * the error code range 0x10200 0x102ff are reserved for Break Iterator related error
      */
+    U_BRK_INTERNAL_ERROR=0x10200,          /**< An internal error (bug) was detected.             */
     U_BRK_ERROR_START=0x10200,             /**< Start of codes indicating Break Iterator failures */
-    U_BRK_INTERNAL_ERROR,                  /**< An internal error (bug) was detected.             */
     U_BRK_HEX_DIGITS_EXPECTED,             /**< Hex digits expected as part of a escaped char in a rule. */
     U_BRK_SEMICOLON_EXPECTED,              /**< Missing ';' at the end of a RBBI rule.            */
     U_BRK_RULE_SYNTAX,                     /**< Syntax error in RBBI rule.                        */
@@ -704,8 +704,8 @@ typedef enum UErrorCode {
     /*
      * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
      */
+    U_REGEX_INTERNAL_ERROR=0x10300,       /**< An internal error (bug) was detected.              */
     U_REGEX_ERROR_START=0x10300,          /**< Start of codes indicating Regexp failures          */
-    U_REGEX_INTERNAL_ERROR,               /**< An internal error (bug) was detected.              */
     U_REGEX_RULE_SYNTAX,                  /**< Syntax error in regexp pattern.                    */
     U_REGEX_INVALID_STATE,                /**< RegexMatcher in invalid state for requested operation */
     U_REGEX_BAD_ESCAPE_SEQUENCE,          /**< Unrecognized backslash escape sequence in pattern  */
@@ -724,8 +724,8 @@ typedef enum UErrorCode {
     /*
      * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
      */
+    U_IDNA_PROHIBITED_ERROR=0x10400,
     U_IDNA_ERROR_START=0x10400,
-    U_IDNA_PROHIBITED_ERROR,
     U_IDNA_UNASSIGNED_ERROR,
     U_IDNA_CHECK_BIDI_ERROR,
     U_IDNA_STD3_ASCII_RULES_ERROR,
