@@ -42,9 +42,13 @@ u_finit(FILE        *f,
         const char    *locale,
         const char    *codepage)
 {
-    UErrorCode status     = U_ZERO_ERROR;
-    UFILE     *result     = (UFILE*) uprv_malloc(sizeof(UFILE));
-    if(result == NULL || f == NULL) {
+    UErrorCode status = U_ZERO_ERROR;
+    UFILE     *result;
+    if(f == NULL) {
+        return 0;
+    }
+    result = (UFILE*) uprv_malloc(sizeof(UFILE));
+    if(result == NULL) {
         return 0;
     }
 
