@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -230,23 +230,24 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
 
     uint32_t length = srcLen*8;
     uint32_t bufLen = 0;
+    uint32_t columnCount;
     char* buf = (char*) malloc(sizeof(char)*length);
 
-    uint32_t columnCount = getColumnCount(srcLen);
-
-    /* test for NULL */
     if(buf == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
+    columnCount = getColumnCount(srcLen);
     memset(buf,0,length);
 
     bufLen = uCharsToChars(buf,length,src,srcLen,status);
 
-    if(printEndLine) write_tabs(out);
+    if(printEndLine)
+        write_tabs(out);
 
     if(U_FAILURE(*status)){
+        uprv_free(buf);
         return;
     }
 
@@ -299,6 +300,7 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
     }else{
         T_FileStream_write(out,"\"",1);
     }
+    uprv_free(buf);
 }
 
 static void

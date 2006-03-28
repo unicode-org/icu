@@ -288,6 +288,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
             temp = (char*) uprv_malloc(sizeof(char)*destCap);
             if(temp==NULL){
                 *status=U_MEMORY_ALLOCATION_ERROR;
+                uprv_free(dest);
                 return NULL;
             }
             uprv_memmove(temp,dest,destLen);
@@ -981,10 +982,10 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         write_tabs(out);
         T_FileStream_write(out,end,(int32_t)uprv_strlen(end));
 
-        uprv_free(fn);
         uprv_free(sid);
         sid = NULL;
     }
+    uprv_free(fn);
 }
 
 
@@ -1269,14 +1270,14 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     }
 
     if (U_FAILURE(*status)) {
-        return;
+        goto cleanup_bundle_write_xml;
     }
 
     out= T_FileStream_open(xmlfileName,"w");
 
     if(out==NULL){
         *status = U_FILE_ACCESS_ERROR;
-        return;
+        goto cleanup_bundle_write_xml;
     }
     T_FileStream_write(out,xmlHeader, (int32_t)uprv_strlen(xmlHeader));
 
@@ -1285,7 +1286,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
         enc = outputEnc;
         conv=ucnv_open(enc,status);
         if(U_FAILURE(*status)){
-            return;
+            goto cleanup_bundle_write_xml;
         }
     }
     T_FileStream_write(out,bundleStart, (int32_t)uprv_strlen(bundleStart));
@@ -1332,6 +1333,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
 
     ucnv_close(conv);
 
+cleanup_bundle_write_xml:
     if(originalFileName!= NULL) {
         uprv_free(originalFileName);
         originalFileName = NULL;
