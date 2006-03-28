@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -151,9 +151,9 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     resolvedFileName = NULL;
     if(fileName!=NULL){
         //pre-flight
-        ucbuf_resolveFileName(sourceDir, fileName,resolvedFileName,&len, &status);
+        ucbuf_resolveFileName(sourceDir, fileName, NULL, &len, &status);
         resolvedFileName = (char*) uprv_malloc(len);
-        if(fileName==NULL){
+        if(resolvedFileName==NULL){
             status= U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -193,12 +193,12 @@ ULine* UPerfTest::getLines(UErrorCode& status){
             if(newLines == NULL) {
                 fprintf(stderr, "Out of memory reading line %d.\n", (int)numLines);
                 status= U_MEMORY_ALLOCATION_ERROR;
-                delete lines;
+                delete []lines;
                 return NULL;
             }
 
             memcpy(newLines, lines, numLines*sizeof(ULine));
-            delete lines;
+            delete []lines;
             lines = newLines;
         }
     }
@@ -463,6 +463,9 @@ UPerfTest::~UPerfTest(){
     }
     if(buffer!=NULL){
         uprv_free(buffer);
+    }
+    if(resolvedFileName!=NULL){
+        uprv_free(resolvedFileName);
     }
     ucbuf_close(ucharBuf);
 }
