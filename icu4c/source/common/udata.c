@@ -283,6 +283,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     }
     newElement->item = UDataMemory_createNewInstance(pErr);
     if (U_FAILURE(*pErr)) {
+        uprv_free(newElement);
         return NULL;
     }
     UDatamemory_assign(newElement->item, item);
@@ -292,6 +293,8 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     newElement->name = uprv_malloc(nameLen+1);
     if (newElement->name == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(newElement->item);
+        uprv_free(newElement);
         return NULL;
     }
     uprv_strcpy(newElement->name, baseName);
