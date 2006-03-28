@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -461,55 +461,61 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
     if(in!=NULL){
         UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
         fileSize = T_FileStream_size(in);
-        if(buf){
-            buf->in=in;
-            buf->conv=NULL;
-            buf->showWarning = showWarning;
-            buf->isBuffered = buffered;
-            buf->signatureLength=0;
-            if(*cp==NULL || **cp=='\0'){
-                /* don't have code page name... try to autodetect */
-                ucbuf_autodetect_fs(in,cp,&buf->conv,&buf->signatureLength,error);
-            }else if(ucbuf_isCPKnown(*cp)){
-                /* discard BOM */
-                ucbuf_autodetect_fs(in,&knownCp,&buf->conv,&buf->signatureLength,error);
-            }
-            if(U_SUCCESS(*error) && buf->conv==NULL) {
-                buf->conv=ucnv_open(*cp,error);
-            }
-            if(U_FAILURE(*error)){
-                ucnv_close(buf->conv);
-                uprv_free(buf);
-                return NULL;
-            }
-            
-            if((buf->conv==NULL) && (buf->showWarning==TRUE)){
-                fprintf(stderr,"###WARNING: No converter defined. Using codepage of system.\n");
-            }
-            buf->remaining=fileSize-buf->signatureLength;
-            if(buf->isBuffered){
-                buf->bufCapacity=MAX_U_BUF;
-            }else{
-                buf->bufCapacity=buf->remaining+buf->signatureLength+1/*for terminating nul*/;               
-            }
-            buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
-            if (buf->buffer == NULL) {
-                *error = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
-            }
-            buf->currentPos=buf->buffer;
-            buf->bufLimit=buf->buffer;
-            if(U_FAILURE(*error)){
-                fprintf(stderr, "Could not open codepage [%s]: %s\n", *cp, u_errorName(*error));
-                return NULL;
-            }
-            buf=ucbuf_fillucbuf(buf,error);
-            return buf;
-        }else{
+        if(buf == NULL){
             *error = U_MEMORY_ALLOCATION_ERROR;
+            T_FileStream_close(in);
             return NULL;
         }
-
+        buf->in=in;
+        buf->conv=NULL;
+        buf->showWarning = showWarning;
+        buf->isBuffered = buffered;
+        buf->signatureLength=0;
+        if(*cp==NULL || **cp=='\0'){
+            /* don't have code page name... try to autodetect */
+            ucbuf_autodetect_fs(in,cp,&buf->conv,&buf->signatureLength,error);
+        }else if(ucbuf_isCPKnown(*cp)){
+            /* discard BOM */
+            ucbuf_autodetect_fs(in,&knownCp,&buf->conv,&buf->signatureLength,error);
+        }
+        if(U_SUCCESS(*error) && buf->conv==NULL) {
+            buf->conv=ucnv_open(*cp,error);
+        }
+        if(U_FAILURE(*error)){
+            ucnv_close(buf->conv);
+            uprv_free(buf);
+            T_FileStream_close(in);
+            return NULL;
+        }
+        
+        if((buf->conv==NULL) && (buf->showWarning==TRUE)){
+            fprintf(stderr,"###WARNING: No converter defined. Using codepage of system.\n");
+        }
+        buf->remaining=fileSize-buf->signatureLength;
+        if(buf->isBuffered){
+            buf->bufCapacity=MAX_U_BUF;
+        }else{
+            buf->bufCapacity=buf->remaining+buf->signatureLength+1/*for terminating nul*/;               
+        }
+        buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
+        if (buf->buffer == NULL) {
+            *error = U_MEMORY_ALLOCATION_ERROR;
+            ucnv_close(buf->conv);
+            uprv_free(buf);
+            T_FileStream_close(in);
+            return NULL;
+        }
+        buf->currentPos=buf->buffer;
+        buf->bufLimit=buf->buffer;
+        if(U_FAILURE(*error)){
+            fprintf(stderr, "Could not open codepage [%s]: %s\n", *cp, u_errorName(*error));
+            ucnv_close(buf->conv);
+            uprv_free(buf);
+            T_FileStream_close(in);
+            return NULL;
+        }
+        buf=ucbuf_fillucbuf(buf,error);
+        return buf;
     }
     *error =U_FILE_ACCESS_ERROR;
     return NULL;
