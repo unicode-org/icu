@@ -1425,6 +1425,13 @@ TestSwapData() {
     }
 
     /* Test that printError works as expected. */
+    errorCode=U_USELESS_COLLATOR_ERROR;
+    ds=udata_openSwapper(U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode);
+    if (ds != NULL || errorCode != U_USELESS_COLLATOR_ERROR) {
+        log_err("udata_openSwapper should have returned NULL with bad argument\n", name);
+    }
     errorCode=U_ZERO_ERROR;
     ds=udata_openSwapper(U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
                          !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
