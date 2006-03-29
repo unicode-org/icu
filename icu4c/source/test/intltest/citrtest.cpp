@@ -948,6 +948,7 @@ void CharIterTest::TestUCharIterator() {
     if (status != U_UNSUPPORTED_ERROR) {
         errln("error: uiter_setState returned %s instead of U_UNSUPPORTED_ERROR", u_errorName(status));
     }
+    status = U_ZERO_ERROR;
     uiter_setState(NULL, 1, &status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("error: uiter_setState returned %s instead of U_ILLEGAL_ARGUMENT_ERROR", u_errorName(status));
