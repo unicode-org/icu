@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -48,6 +48,8 @@ noopCurrent(UCharIterator * /*iter*/) {
     return U_SENTINEL;
 }
 
+#if 0
+/* Setting/Getting the state on illegal input isn't allowed. */
 static uint32_t U_CALLCONV
 noopGetState(const UCharIterator * /*iter*/) {
     return 0;
@@ -56,6 +58,7 @@ noopGetState(const UCharIterator * /*iter*/) {
 static void U_CALLCONV
 noopSetState(UCharIterator * /*iter*/, uint32_t /*state*/, UErrorCode * /*pErrorCode*/) {
 }
+#endif
 
 static const UCharIterator noopIterator={
     0, 0, 0, 0, 0, 0,
@@ -67,8 +70,8 @@ static const UCharIterator noopIterator={
     noopCurrent,
     noopCurrent,
     NULL,
-    noopGetState,
-    noopSetState
+    NULL,
+    NULL
 };
 
 /* UCharIterator implementation for simple strings -------------------------- */
