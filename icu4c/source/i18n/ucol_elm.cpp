@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -594,6 +594,8 @@ static int uprv_uca_setMaxJamoExpansion(UChar                  ch,
     /* test for NULL */;
     if (maxexpansion->isV == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(maxexpansion->endExpansionCE);
+        maxexpansion->endExpansionCE = NULL;
         return 0;
     }
     *(maxexpansion->isV) = 0;
@@ -602,20 +604,27 @@ static int uprv_uca_setMaxJamoExpansion(UChar                  ch,
   }
 
   if (maxexpansion->position + 1 == maxexpansion->size) {
-    uint32_t *neweece = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
-                                   2 * maxexpansion->size * sizeof(uint32_t));
-    UBool    *newisV  = (UBool *)uprv_realloc(maxexpansion->isV, 
-                                   2 * maxexpansion->size * sizeof(UBool));
-    if (neweece == NULL || newisV == NULL) {
+    maxexpansion->size *= 2;
+    maxexpansion->endExpansionCE = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
+                                   maxexpansion->size * sizeof(uint32_t));
+    if (maxexpansion->endExpansionCE == NULL) {
 #ifdef UCOL_DEBUG
       fprintf(stderr, "out of memory for maxExpansions\n");
 #endif
       *status = U_MEMORY_ALLOCATION_ERROR;
-      return -1;
+      return 0;
     }
-    maxexpansion->endExpansionCE  = neweece;
-    maxexpansion->isV             = newisV;
-    maxexpansion->size *= 2;
+    maxexpansion->isV  = (UBool *)uprv_realloc(maxexpansion->isV, 
+                                   maxexpansion->size * sizeof(UBool));
+    if (maxexpansion->isV == NULL) {
+#ifdef UCOL_DEBUG
+      fprintf(stderr, "out of memory for maxExpansions\n");
+#endif
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_free(maxexpansion->endExpansionCE);
+      maxexpansion->endExpansionCE = NULL;
+      return 0;
+    }
   }
 
   uint32_t *pendexpansionce = maxexpansion->endExpansionCE;
@@ -1068,6 +1077,9 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
                                  (uint8_t)element->noOfCEs,
                                  t->maxJamoExpansions,
                                  status);
+        if (U_FAILURE(*status)) {
+            return 0;
+        }
       }
     }
   }
