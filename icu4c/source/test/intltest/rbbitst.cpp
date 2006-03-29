@@ -29,6 +29,7 @@
 #include <string.h>
 #include "uvector.h"
 #include "uvectr32.h"
+#include "triedict.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -568,6 +569,184 @@ void RBBITest::TestJapaneseWordBreak() {
     delete e;
 }
 
+void RBBITest::TestTrieDict() {
+    UErrorCode      status  = U_ZERO_ERROR;
+
+    //
+    //  Open and read the test data file.
+    //
+    const char *testDataDirectory = IntlTest::getSourceTestData(status);
+    char testFileName[1000];
+    if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
+        errln("Can't open test data.  Path too long.");
+        return;
+    }
+    strcpy(testFileName, testDataDirectory);
+    strcat(testFileName, "riwords.txt");
+
+    int    len;
+    UChar *testFile = ReadAndConvertFile(testFileName, len, status);
+    if (U_FAILURE(status)) {
+        return; /* something went wrong, error already output */
+    }
+    
+    MutableTrieDictionary mutableDict(0x0E1C, status);
+    
+    if (U_FAILURE(status)) {
+        errln("Error creating MutableTrieDictionary: %s\n", u_errorName(status));
+        return;
+    }
+    
+    UnicodeSet breaks;
+    breaks.add(0x000A);     // Line Feed
+    breaks.add(0x000D);     // Carriage Return
+    breaks.add(0x2028);     // Line Separator
+    breaks.add(0x2029);     // Paragraph Separator
+
+    // Now add each non-comment line of the file as a word.
+    UChar *current = testFile;
+    UChar *word = current;
+    UChar uc = *current++;
+    int32_t wordLen = 0;
+    int32_t wordCount = 0;
+    
+    while (uc) {
+        if (uc == 0x0023) {     // #comment line, skip
+            while (uc && !breaks.contains(uc)) {
+                uc = *current++;
+            }
+        }
+        else while (uc && !breaks.contains(uc)) {
+            ++wordLen;
+            uc = *current++;
+        }
+        if (wordLen > 0) {
+            mutableDict.addWord(word, wordLen, status);
+            if (U_FAILURE(status)) {
+                errln("Could not add word to mutable dictionary; status %s\n", u_errorName(status));
+                return;
+            }
+            wordCount += 1;
+        }
+        
+        // Find beginning of next line
+        while (uc && breaks.contains(uc)) {
+            uc = *current++;
+        }
+        word = current-1;
+        wordLen = 0;
+    }
+    
+    delete [] testFile;
+    
+    if (wordCount < 50) {
+        errln("Word count (%d) unreasonably small\n", wordCount);
+        return;
+    }
+
+    StringEnumeration *enumer = mutableDict.openWords(status);
+    if (U_FAILURE(status)) {
+        errln("Could not open mutable dictionary enumerator: %s\n", u_errorName(status));
+        return;
+    }
+    int32_t testCount = 0;
+    if (wordCount != (testCount = enumer->count(status))) {
+        errln("MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
+            testCount, wordCount, u_errorName(status));
+        delete enumer;
+        return;
+    }
+    
+    delete enumer;
+    
+    // Now compact it
+    CompactTrieDictionary compactDict(mutableDict, status);
+    if (U_FAILURE(status)) {
+        errln("Failed to create CompactTrieDictionary: %s\n", u_errorName(status));
+        return;
+    }
+    
+    enumer = compactDict.openWords(status);
+    if (U_FAILURE(status)) {
+        errln("Could not open compact trie dictionary enumerator: %s\n", u_errorName(status));
+        return;
+    }
+    
+    if (wordCount != (testCount = enumer->count(status))) {
+        errln("CompactTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
+            testCount, wordCount, u_errorName(status));
+        delete enumer;
+        return;
+    }
+    
+    delete enumer;
+    
+    // Now un-compact it
+    MutableTrieDictionary *mutable2 = compactDict.cloneMutable(status);
+    if (U_FAILURE(status)) {
+        errln("Could not clone CompactTrieDictionary to MutableTrieDictionary: %s\n", u_errorName(status));
+        return;
+    }
+    
+    StringEnumeration *cloneEnum = mutable2->openWords(status);
+    if (U_FAILURE(status)) {
+        errln("Could not create cloned mutable enumerator: %s\n", u_errorName(status));
+        delete mutable2;
+        return;
+    }
+    
+    if (wordCount != (testCount = cloneEnum->count(status))) {
+        errln("Cloned MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
+            testCount, wordCount, u_errorName(status));
+        delete cloneEnum;
+        delete mutable2;
+        return;
+    }
+    
+    // Compact original dictionary to clone. Note that we can only compare the same kind of
+    // dictionary as the order of the enumerators is not guaranteed to be the same between
+    // different kinds
+    enumer = mutableDict.openWords(status);
+    if (U_FAILURE(status)) {
+        errln("Could not re-open mutable dictionary enumerator: %s\n", u_errorName(status));
+        delete cloneEnum;
+        delete mutable2;
+        return;
+    }
+    
+    const UnicodeString *originalWord = enumer->snext(status);
+    const UnicodeString *cloneWord = cloneEnum->snext(status);
+    while (U_SUCCESS(status) && originalWord != NULL && cloneWord != NULL) {
+        if (*originalWord != *cloneWord) {
+            errln("Original and cloned MutableTrieDictionary word mismatch\n");
+            delete enumer;
+            delete cloneEnum;
+            delete mutable2;
+            return;
+        }
+        originalWord = enumer->snext(status);
+        cloneWord = cloneEnum->snext(status);
+    }
+    
+    if (U_FAILURE(status)) {
+        errln("Enumeration failed: %s\n", u_errorName(status));
+        delete enumer;
+        delete cloneEnum;
+        delete mutable2;
+        return;
+    }
+    
+    delete enumer;
+    delete cloneEnum;
+    delete mutable2;
+
+    if (originalWord != cloneWord) {
+        errln("Original and cloned MutableTrieDictionary ended enumeration at different points\n");
+        return;
+    }
+
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -630,6 +809,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestJapaneseWordBreak();                  break;
         case 20: name = "TestDebug";
             if(exec) TestDebug();                              break;
+        case 21: name = "TestTrieDict";
+            if(exec) TestTrieDict();                           break;
 
         default: name = ""; break; //needed to end loop
     }
