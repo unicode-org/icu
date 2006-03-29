@@ -74,7 +74,7 @@
  *  </tr>
  *  <tr>
  *    <td>UDTS_MAC_OLD_TIME</td>
- *    <td>int32_t</td>
+ *    <td>int32_t or int64_t</td>
  *    <td>seconds</td>
  *    <td>Jan 1, 1904</td>
  *
@@ -234,7 +234,7 @@ typedef enum UDateTimeScale {
     UDTS_DOTNET_DATE_TIME,
     
     /**
-     * Used in older Macintosh systems. Data is an <code>int32_t</code>. Value
+     * Used in older Macintosh systems. Data is <code>int32_t</code> or <code>int64_t</code>. Value
      * is seconds since January 1, 1904.
      *
      * @stable ICU 3.2
