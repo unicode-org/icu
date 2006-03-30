@@ -236,7 +236,7 @@ ucol_openRules( const UChar        *rules,
       return NULL;
   }
 
-  if(rulesLength < -1 || (rules == NULL && rulesLength != 0)) {
+  if(rules == NULL || rulesLength < -1) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
   }
