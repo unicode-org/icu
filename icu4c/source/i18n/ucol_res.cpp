@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -681,6 +681,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   }
   if(coll == NULL || coll->UCA == NULL) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
   }
   UParseError parseError;
   UColTokenParser src;
