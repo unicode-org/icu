@@ -6444,8 +6444,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
         {
           if((CE & 0x00FFF000) != 0) {
             *status = U_UNSUPPORTED_ERROR;
-            coll->latinOneFailed = TRUE;
-            return FALSE;
+            goto cleanup_after_failure;
           }
 
           const UChar *UCharOffset = (UChar *)coll->image+getContractOffset(CE);
@@ -6501,90 +6500,91 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
               primShift = 24; secShift = 24; terShift = 24;
               if(contractionOffset == coll->latinOneTableLen) { // we need to reallocate
                 if(!ucol_resizeLatinOneTable(coll, 2*coll->latinOneTableLen, status)) {
-                  coll->latinOneFailed = TRUE;
-                  return FALSE;
+                  goto cleanup_after_failure;
                 }
               }
           } while(*UCharOffset != 0xFFFF);
         }
         break;
       default:
-        coll->latinOneFailed = TRUE;
-        result = FALSE;
-        break;
+        goto cleanup_after_failure;
       }
     }
   }
-  ucol_closeElements(it);
   // compact table
   if(contractionOffset < coll->latinOneTableLen) {
     if(!ucol_resizeLatinOneTable(coll, contractionOffset, status)) {
-        coll->latinOneFailed = TRUE;
-        return FALSE;
+      goto cleanup_after_failure;
     }
   }
+  ucol_closeElements(it);
   return result;
+
+cleanup_after_failure:
+  // status should already be set before arriving here.
+  coll->latinOneFailed = TRUE;
+  ucol_closeElements(it);
+  return FALSE;
 }
 
 void ucol_updateInternalState(UCollator *coll, UErrorCode *status) {
-      if(U_SUCCESS(*status)) {
-        if(coll->caseFirst == UCOL_UPPER_FIRST) {
-          coll->caseSwitch = UCOL_CASE_SWITCH;
-        } else {
-          coll->caseSwitch = UCOL_NO_CASE_SWITCH;
-        }
+  if(U_SUCCESS(*status)) {
+    if(coll->caseFirst == UCOL_UPPER_FIRST) {
+      coll->caseSwitch = UCOL_CASE_SWITCH;
+    } else {
+      coll->caseSwitch = UCOL_NO_CASE_SWITCH;
+    }
 
-        if(coll->caseLevel == UCOL_ON || coll->caseFirst == UCOL_OFF) {
-          coll->tertiaryMask = UCOL_REMOVE_CASE;
-          coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
-          coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_OFF;
-          coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_OFF;
-          coll->tertiaryBottom = UCOL_COMMON_BOT3;
-        } else {
-          coll->tertiaryMask = UCOL_KEEP_CASE;
-          coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_ON;
-          if(coll->caseFirst == UCOL_UPPER_FIRST) {
-            coll->tertiaryCommon = UCOL_COMMON3_UPPERFIRST;
-            coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_UPPER;
-            coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_UPPER;
-          } else {
-            coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
-            coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_LOWER;
-            coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_LOWER;
-          }
-        }
+    if(coll->caseLevel == UCOL_ON || coll->caseFirst == UCOL_OFF) {
+      coll->tertiaryMask = UCOL_REMOVE_CASE;
+      coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
+      coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_OFF;
+      coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_OFF;
+      coll->tertiaryBottom = UCOL_COMMON_BOT3;
+    } else {
+      coll->tertiaryMask = UCOL_KEEP_CASE;
+      coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_ON;
+      if(coll->caseFirst == UCOL_UPPER_FIRST) {
+        coll->tertiaryCommon = UCOL_COMMON3_UPPERFIRST;
+        coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_UPPER;
+        coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_UPPER;
+      } else {
+        coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
+        coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_LOWER;
+        coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_LOWER;
+      }
+    }
 
-        /* Set the compression values */
-        uint8_t tertiaryTotal = (uint8_t)(coll->tertiaryTop - UCOL_COMMON_BOT3-1);
-        coll->tertiaryTopCount = (uint8_t)(UCOL_PROPORTION3*tertiaryTotal); /* we multilply double with int, but need only int */
-        coll->tertiaryBottomCount = (uint8_t)(tertiaryTotal - coll->tertiaryTopCount);
+    /* Set the compression values */
+    uint8_t tertiaryTotal = (uint8_t)(coll->tertiaryTop - UCOL_COMMON_BOT3-1);
+    coll->tertiaryTopCount = (uint8_t)(UCOL_PROPORTION3*tertiaryTotal); /* we multilply double with int, but need only int */
+    coll->tertiaryBottomCount = (uint8_t)(tertiaryTotal - coll->tertiaryTopCount);
 
-        if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
-          && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
-          coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
-        } else {
-          coll->sortKeyGen = ucol_calcSortKey;
-        }
-        if(coll->caseLevel == UCOL_OFF && coll->strength <= UCOL_TERTIARY && coll->numericCollation == UCOL_OFF
-          && coll->alternateHandling == UCOL_NON_IGNORABLE && !coll->latinOneFailed) {
-          if(coll->latinOneCEs == NULL || coll->latinOneRegenTable) {
-            if(ucol_setUpLatinOne(coll, status)) { // if we succeed in building latin1 table, we'll use it
-              //fprintf(stderr, "F");
-              coll->latinOneUse = TRUE;
-            } else {
-              coll->latinOneUse = FALSE;
-            }
-            if(*status == U_UNSUPPORTED_ERROR) {
-              *status = U_ZERO_ERROR;
-            }
-          } else { // latin1Table exists and it doesn't need to be regenerated, just use it
-            coll->latinOneUse = TRUE;
-          }
+    if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
+      && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
+      coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
+    } else {
+      coll->sortKeyGen = ucol_calcSortKey;
+    }
+    if(coll->caseLevel == UCOL_OFF && coll->strength <= UCOL_TERTIARY && coll->numericCollation == UCOL_OFF
+      && coll->alternateHandling == UCOL_NON_IGNORABLE && !coll->latinOneFailed) {
+      if(coll->latinOneCEs == NULL || coll->latinOneRegenTable) {
+        if(ucol_setUpLatinOne(coll, status)) { // if we succeed in building latin1 table, we'll use it
+          //fprintf(stderr, "F");
+          coll->latinOneUse = TRUE;
         } else {
           coll->latinOneUse = FALSE;
         }
+        if(*status == U_UNSUPPORTED_ERROR) {
+          *status = U_ZERO_ERROR;
+        }
+      } else { // latin1Table exists and it doesn't need to be regenerated, just use it
+        coll->latinOneUse = TRUE;
       }
-
+    } else {
+      coll->latinOneUse = FALSE;
+    }
+  }
 }
 
 U_CAPI uint32_t  U_EXPORT2
