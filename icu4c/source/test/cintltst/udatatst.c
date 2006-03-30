@@ -1123,6 +1123,8 @@ static const struct {
     {"el",                       "res", ures_swap},
     /* ICU's root */
     {"root",                     "res", ures_swap},
+    /* Test a 32-bit key table. This is large. */
+    {"*testtable32",             "res", ures_swap},
 
     /* ICU 2.6 resource bundle - data format 1.0, without indexes[] (little-endian ASCII) */
     {"*icu26_testtypes",         "res", ures_swap},
@@ -1191,7 +1193,8 @@ static const struct {
     {"unames",                   "icu", uchar_swapNames}
 };
 
-#define SWAP_BUFFER_SIZE 1000000
+/* Large enough for the largest swappable data item. */
+#define SWAP_BUFFER_SIZE 1800000
 
 static void U_CALLCONV
 printError(void *context, const char *fmt, va_list args) {
