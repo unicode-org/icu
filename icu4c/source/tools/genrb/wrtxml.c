@@ -865,9 +865,18 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
     if(res->u.fBinaryValue.fFileName!=NULL){
         uprv_strcpy(fileName, res->u.fBinaryValue.fFileName);
         f = uprv_strrchr(fileName, '\\');
-        f++;
+        if (f != NULL) {
+            f++;
+        }
+        else {
+            f = fileName;
+        }
         ext = uprv_strrchr(fileName, '.');
 
+        if (ext == NULL) {
+            fprintf(stderr, "Error: %s is an unknown binary filename type.\n", fileName);
+            exit(U_ILLEGAL_ARGUMENT_ERROR);
+        }
         if(uprv_strcmp(ext, ".jpg")==0 || uprv_strcmp(ext, ".jpeg")==0 || uprv_strcmp(ext, ".gif")==0 ){
             m_type = "\"image";
         } else if(uprv_strcmp(ext, ".wav")==0 || uprv_strcmp(ext, ".au")==0 ){
