@@ -372,8 +372,10 @@ getTest(const TestNode* root, const char* name)
     const TestNode* curNode;
     int nameLen; /* length of current 'name' */
 
-    if (root == NULL)
+    if (root == NULL) {
         log_err("TEST CAN'T BE FOUND!\n");
+        return NULL;
+    }
     /* remove leading slash */
     if ( *name == TEST_SEPARATOR )
         name++;
