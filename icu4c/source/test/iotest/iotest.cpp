@@ -413,6 +413,7 @@ static void U_CALLCONV DataDrivenScanf(void)
                     break;
                 case 0x66:  // 'f' float
                     expectedFlt = (float)atof(u_austrcpy(cBuffer, expectedResult));
+                    flt = 0.0f; // Initialize to 0 in order to get around an Intel compiler issue.
                     uBufferLenReturned = u_sscanf_u(argument, format, &flt);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, flt);
                     if (flt != expectedFlt) {
