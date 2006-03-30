@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2006 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -2490,11 +2490,13 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 #endif
     if (pattern == NULL || text == NULL || collator == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
 
     // string search does not really work when numeric collation is turned on
     if(ucol_getAttribute(collator, UCOL_NUMERIC_COLLATION, status) == UCOL_ON) {
         *status = U_UNSUPPORTED_ERROR;
+        return NULL;
     }
 
     if (U_SUCCESS(*status)) {
