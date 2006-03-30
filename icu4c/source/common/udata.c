@@ -573,7 +573,7 @@ static const char *udata_pathiter_next(UDataPathIterator *iter)
     do
     {
         if( iter->nextPath == NULL ) {
-            return NULL;
+            break;
         }
         
         path = iter->nextPath;
