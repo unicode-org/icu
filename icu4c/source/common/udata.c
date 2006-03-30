@@ -695,6 +695,10 @@ static void udata_pathiter_dt(UDataPathIterator *iter) {
          uprv_free(iter->pathBuffer);
          iter->pathBuffer = NULL;
      }
+     if (iter->packageStub != iter->packageStubBuf) {
+         uprv_free(iter->packageStub);
+         iter->packageStub = NULL;
+     }
 }
 
 /* ==================================================================================*/
