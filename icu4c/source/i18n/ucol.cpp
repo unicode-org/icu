@@ -7093,7 +7093,8 @@ inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
 /* This is a trick string compare function that goes in and uses sortkeys to compare */
 /* It is used when compare gets in trouble and needs to bail out                     */
 static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
-                                                  collIterate *tColl)
+                                                  collIterate *tColl,
+                                                  UErrorCode *status)
 {
     uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
     uint8_t *sourceKeyP = sourceKey;
@@ -7102,31 +7103,32 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
     const UCollator *coll = sColl->coll;
     UChar *source = NULL;
     UChar *target = NULL;
+    int32_t result = UCOL_EQUAL;
     UChar sStackBuf[256], tStackBuf[256];
     int32_t sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
     int32_t targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
 
     // TODO: Handle long strings. Do the same in ucol_checkIdent.
     if(sColl->flags & UCOL_USE_ITERATOR) {
-      sColl->iterator->move(sColl->iterator, 0, UITER_START);
-      tColl->iterator->move(tColl->iterator, 0, UITER_START);
-      source = sStackBuf;
-      UChar *sBufp = source;
-      target = tStackBuf;
-      UChar *tBufp = target;
-      while(sColl->iterator->hasNext(sColl->iterator)) {
-        *sBufp++ = (UChar)sColl->iterator->next(sColl->iterator);
-      }
-      while(tColl->iterator->hasNext(tColl->iterator)) {
-        *tBufp++ = (UChar)tColl->iterator->next(tColl->iterator);
-      }
-      sourceLength = sBufp - source;
-      targetLength = tBufp - target;
+        sColl->iterator->move(sColl->iterator, 0, UITER_START);
+        tColl->iterator->move(tColl->iterator, 0, UITER_START);
+        source = sStackBuf;
+        UChar *sBufp = source;
+        target = tStackBuf;
+        UChar *tBufp = target;
+        while(sColl->iterator->hasNext(sColl->iterator)) {
+            *sBufp++ = (UChar)sColl->iterator->next(sColl->iterator);
+        }
+        while(tColl->iterator->hasNext(tColl->iterator)) {
+            *tBufp++ = (UChar)tColl->iterator->next(tColl->iterator);
+        }
+        sourceLength = sBufp - source;
+        targetLength = tBufp - target;
     } else { // no iterators
-      sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
-      targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
-      source = sColl->string;
-      target = tColl->string;
+        sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
+        targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
+        source = sColl->string;
+        target = tColl->string;
     }
 
 
@@ -7134,26 +7136,31 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
     sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
     if(sourceKeyLen > UCOL_MAX_BUFFER) {
         sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
-        if(sourceKeyP != NULL) {
-          sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+        if(sourceKeyP == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup_and_do_compare;
         }
+        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
     }
 
     targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
     if(targetKeyLen > UCOL_MAX_BUFFER) {
         targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
-        if(targetKeyP != NULL) {
-          targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+        if(targetKeyP == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup_and_do_compare;
         }
+        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
     }
 
-    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
+    result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
 
-    if(sourceKeyP != sourceKey) {
+cleanup_and_do_compare:
+    if(sourceKeyP != NULL && sourceKeyP != sourceKey) {
         uprv_free(sourceKeyP);
     }
 
-    if(targetKeyP != targetKey) {
+    if(targetKeyP != NULL && targetKeyP != targetKey) {
         uprv_free(targetKeyP);
     }
 
@@ -7196,7 +7203,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
     UBool doHiragana = (coll->hiraganaQ == UCOL_ON) && checkQuad;
 
     if(doHiragana && shifted) {
-      return (ucol_compareUsingSortKeys(sColl, tColl));
+      return (ucol_compareUsingSortKeys(sColl, tColl, status));
     }
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
