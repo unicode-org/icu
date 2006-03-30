@@ -180,8 +180,11 @@ stringIteratorGetState(const UCharIterator *iter) {
 
 static void U_CALLCONV
 stringIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode) {
-    /* Some parameter checking has already been done by uiter_setState */
-    if((int32_t)state<iter->start || iter->limit<(int32_t)state) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        /* do nothing */
+    } else if(iter==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    } else if((int32_t)state<iter->start || iter->limit<(int32_t)state) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     } else {
         iter->index=(int32_t)state;
@@ -437,8 +440,9 @@ characterIteratorGetState(const UCharIterator *iter) {
 
 static void U_CALLCONV
 characterIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode) {
-    /* Some parameter checking has already been done by uiter_setState */
-    if(iter->context==NULL) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        /* do nothing */
+    } else if(iter==NULL || iter->context==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else if((int32_t)state<((CharacterIterator *)(iter->context))->startIndex() || ((CharacterIterator *)(iter->context))->endIndex()<(int32_t)state) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -960,8 +964,11 @@ utf8IteratorSetState(UCharIterator *iter,
                      uint32_t state,
                      UErrorCode *pErrorCode)
 {
-    /* Some parameter checking has already been done by uiter_setState */
-    if(state==utf8IteratorGetState(iter)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        /* do nothing */
+    } else if(iter==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    } else if(state==utf8IteratorGetState(iter)) {
         /* setting to the current state: no-op */
     } else {
         int32_t index=(int32_t)(state>>1); /* UTF-8 index */
