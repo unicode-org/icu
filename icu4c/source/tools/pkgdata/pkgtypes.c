@@ -52,9 +52,9 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
                 }
             }
             T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
-        }
 
-        ln += (int32_t)uprv_strlen(l->str);
+            ln += (int32_t)uprv_strlen(l->str);
+        }
 
         if(l->next && delim)
         {
