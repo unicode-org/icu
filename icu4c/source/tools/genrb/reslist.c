@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -451,6 +451,7 @@ struct SResource* res_open(const struct UString* comment, UErrorCode* status){
         res->fComment = (struct UString *) uprv_malloc(sizeof(struct UString));
         if(res->fComment == NULL){
             *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(res);
             return NULL;
         }
         ustr_init(res->fComment);
