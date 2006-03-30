@@ -99,14 +99,12 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="..\..\bin\icudt35.dll"
-				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Debug/icudt35.pdb"
 				ResourceOnlyDLL="TRUE"
