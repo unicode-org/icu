@@ -649,6 +649,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\umath.c">
+			</File>
+			<File
 				RelativePath=".\umutex.c">
 				<FileConfiguration
 					Name="Release|Win32">

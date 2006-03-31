@@ -424,12 +424,6 @@ uprv_fmax(double x, double y)
     return (x > y ? x : y);
 }
 
-U_CAPI int32_t U_EXPORT2
-uprv_max(int32_t x, int32_t y)
-{
-    return (x > y ? x : y);
-}
-
 U_CAPI double U_EXPORT2
 uprv_fmin(double x, double y)
 {
@@ -448,12 +442,6 @@ uprv_fmin(double x, double y)
 #endif
 
     /* this should work for all flt point w/o NaN and Inf special cases */
-    return (x > y ? y : x);
-}
-
-U_CAPI int32_t U_EXPORT2
-uprv_min(int32_t x, int32_t y)
-{
     return (x > y ? y : x);
 }
 
