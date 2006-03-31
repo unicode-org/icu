@@ -399,8 +399,7 @@ int generateFile(const UChar *chars, int32_t length) {
     UCharCharacterIterator *noSpaceIter = new UCharCharacterIterator(chars, length);
     UErrorCode status = U_ZERO_ERROR;
     
-    UnicodeString saSet("[:LineBreak=SA:]", -1, US_INV);
-    UnicodeSet complexContext(saSet, status);
+    UnicodeSet complexContext(UNICODE_STRING_SIMPLE("[:LineBreak=SA:]"), status);
     BreakIterator *breakIter = BreakIterator::createWordInstance(root, status);
     breakIter->adoptText(noSpaceIter);
     char outbuf[1024];
@@ -497,10 +496,9 @@ int main(int argc, char **argv)
 SpaceBreakIterator::SpaceBreakIterator(const UChar *text, int32_t count)
   : fBreakIter(0), fText(text), fTextCount(count), fWordCount(0), fSpaceCount(0), fDone(FALSE)
 {
-    UnicodeString saSet("[:LineBreak=SA:]", -1, US_INV);
     UCharCharacterIterator *iter = new UCharCharacterIterator(text, count);
     UErrorCode status = U_ZERO_ERROR;
-    fComplexContext.applyPattern(saSet, status);
+    fComplexContext.applyPattern(UNICODE_STRING_SIMPLE("[:LineBreak=SA:]"), status);
     Locale root("");
 
     fBreakIter = BreakIterator::createWordInstance(root, status);
