@@ -196,7 +196,9 @@ ucase_openBinary(const uint8_t *bin, int32_t length, UErrorCode *pErrorCode) {
 U_CAPI void U_EXPORT2
 ucase_close(UCaseProps *csp) {
     if(csp!=NULL) {
+#if !UCASE_HARDCODE_DATA
         udata_close(csp->mem);
+#endif
         uprv_free(csp);
     }
 }
@@ -1481,4 +1483,117 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
     }
 
     return (result==c) ? ~result : result;
+}
+
+/* case mapping properties API ---------------------------------------------- */
+
+/* get the UCaseProps singleton, or else its dummy, once and for all */
+static const UCaseProps *
+getCaseProps() {
+    /*
+     * This lazy intialization with double-checked locking (without mutex protection for
+     * the initial check) is transiently unsafe under certain circumstances.
+     * Check the readme and use u_init() if necessary.
+     */
+
+    /* the initial check is performed by the GET_CASE_PROPS() macro */
+    const UCaseProps *csp;
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    csp=ucase_getSingleton(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        errorCode=U_ZERO_ERROR;
+        csp=ucase_getDummy(&errorCode);
+        if(U_FAILURE(errorCode)) {
+            return NULL;
+        }
+    }
+
+    return csp;
+}
+
+/*
+ * In ICU 3.0, most Unicode properties were loaded from uprops.icu.
+ * ICU 3.2 adds ucase.icu for case mapping properties.
+ * ICU 3.4 adds ubidi.icu for bidi/shaping properties and
+ * removes case/bidi/shaping properties from uprops.icu.
+ *
+ * Loading of uprops.icu was never mutex-protected and required u_init()
+ * for thread safety.
+ * In order to maintain performance for all such properties,
+ * ucase.icu and ubidi.icu are loaded lazily, without mutexing.
+ * u_init() will try to load them for thread safety,
+ * but u_init() will not fail if they are missing.
+ *
+ * uchar.c maintains a tri-state flag for (not loaded/loaded/failed to load)
+ * and an error code for load failure.
+ * Instead, here we try to load at most once.
+ * If it works, we use the resulting singleton object.
+ * If it fails, then we get a dummy object, which always works unless
+ * we are seriously out of memory.
+ * After the first try, we have a never-changing pointer to either the
+ * real singleton or the dummy.
+ *
+ * This method is used in Unicode properties APIs (uchar.h) that
+ * do not have a service object and also do not have an error code parameter.
+ * Other API implementations get the singleton themselves
+ * (with mutexing), store it in the service object, and report errors.
+ */
+#define GET_CASE_PROPS() (gCsp!=NULL ? gCsp : getCaseProps())
+
+/* public API (see uchar.h) */
+
+U_CAPI UBool U_EXPORT2
+u_isULowercase(UChar32 c) {
+    return (UBool)(UCASE_LOWER==ucase_getType(GET_CASE_PROPS(), c));
+}
+
+U_CAPI UBool U_EXPORT2
+u_isUUppercase(UChar32 c) {
+    return (UBool)(UCASE_UPPER==ucase_getType(GET_CASE_PROPS(), c));
+}
+
+/* Transforms the Unicode character to its lower case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_tolower(UChar32 c) {
+    return ucase_tolower(GET_CASE_PROPS(), c);
+}
+    
+/* Transforms the Unicode character to its upper case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_toupper(UChar32 c) {
+    return ucase_toupper(GET_CASE_PROPS(), c);
+}
+
+/* Transforms the Unicode character to its title case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_totitle(UChar32 c) {
+    return ucase_totitle(GET_CASE_PROPS(), c);
+}
+
+/* return the simple case folding mapping for c */
+U_CAPI UChar32 U_EXPORT2
+u_foldCase(UChar32 c, uint32_t options) {
+    return ucase_fold(GET_CASE_PROPS(), c, options);
+}
+
+U_CFUNC int32_t U_EXPORT2
+ucase_hasBinaryProperty(UChar32 c, UProperty which) {
+    /* case mapping properties */
+    const UCaseProps *csp=GET_CASE_PROPS();
+    if(csp==NULL) {
+        return FALSE;
+    }
+    switch(which) {
+    case UCHAR_LOWERCASE:
+        return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
+    case UCHAR_UPPERCASE:
+        return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
+    case UCHAR_SOFT_DOTTED:
+        return ucase_isSoftDotted(csp, c);
+    case UCHAR_CASE_SENSITIVE:
+        return ucase_isCaseSensitive(csp, c);
+    default:
+        return FALSE;
+    }
 }
