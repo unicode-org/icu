@@ -36,26 +36,41 @@ utext_access(UText *ut, int64_t index, UBool forward) {
 
 U_DRAFT UBool U_EXPORT2
 utext_moveIndex32(UText *ut, int32_t delta) {
-    UBool retval = TRUE;
-    if(delta>0) {
+    UChar32  c;
+    if (delta > 0) {
         do {
             if(ut->chunkOffset>=ut->chunkLength && !utext_access(ut, ut->chunkNativeLimit, TRUE)) {
-                retval = FALSE;
-                break;
+                return FALSE;
             }
-            U16_FWD_1(ut->chunkContents, ut->chunkOffset, ut->chunkLength);
+            c = ut->chunkContents[ut->chunkOffset];
+            if (U16_IS_SURROGATE(c)) {
+                c = utext_next32(ut);
+                if (c == U_SENTINEL) {
+                    return FALSE;
+                }
+            } else {
+                ut->chunkOffset++;
+            }
         } while(--delta>0);
+
     } else if (delta<0) {
         do {
             if(ut->chunkOffset<=0 && !utext_access(ut, ut->chunkNativeStart, FALSE)) {
-                retval = FALSE;
-                break;
+                return FALSE;
             }
-            U16_BACK_1(ut->chunkContents, 0, ut->chunkOffset);
+            c = ut->chunkContents[ut->chunkOffset-1];
+            if (U16_IS_SURROGATE(c)) {
+                c = utext_previous32(ut);
+                if (c == U_SENTINEL) {
+                    return FALSE;
+                }
+            } else {
+                ut->chunkOffset--;
+            }
         } while(++delta<0);
     }   
 
-    return retval;
+    return TRUE;
 }
 
 
@@ -85,7 +100,7 @@ utext_getNativeIndex(UText *ut) {
 
 U_DRAFT void U_EXPORT2
 utext_setNativeIndex(UText *ut, int64_t index) {
-    if(index<ut->chunkNativeStart || ut->chunkNativeLimit<index) {
+    if(index<ut->chunkNativeStart || index>=ut->chunkNativeLimit) {
         // The desired position is outside of the current chunk.  
         // Access the new position.  Assume a forward iteration from here,
         // which will also be optimimum for a single random access.
@@ -94,14 +109,27 @@ utext_setNativeIndex(UText *ut, int64_t index) {
     } else if(ut->nonUTF16Indexes) {
         ut->chunkOffset=ut->mapNativeIndexToUTF16(ut, index);
     } else {
+        // utf-16 indexing.
         ut->chunkOffset=(int32_t)(index-ut->chunkNativeStart);
-        // Our convention is that the index must always be on a code point boundary.
-        //  If we are somewhere in the middle of a utf-16 buffer, check that new index
-        //  is not in the middle of a surrogate pair.
-        if (index>ut->chunkNativeStart && index < ut->chunkNativeLimit) {
-            U16_SET_CP_START(ut->chunkContents, 0, ut->chunkOffset)
+    }
+    // The convention is that the index must always be on a code point boundary.
+    // Adjust the index position if it is in the middle of a surrogate pair.
+    if (ut->chunkOffset<ut->chunkLength) {  
+        UChar c= ut->chunkContents[ut->chunkOffset];
+        if (UTF16_IS_TRAIL(c)) {
+            UChar lead  = 0;
+            if (ut->chunkOffset==0) {
+                ut->access(ut, ut->chunkNativeStart, FALSE);
+            }
+            if (ut->chunkOffset>0) {
+                UChar lead = ut->chunkContents[ut->chunkOffset-1];
+                if (UTF16_IS_LEAD(lead)) {
+                    ut->chunkOffset--;
+                }
+            }
         }
     }
+                    
 }
 
 
@@ -109,38 +137,78 @@ utext_setNativeIndex(UText *ut, int64_t index) {
   
 //
 //  utext_current32.  Get the UChar32 at the current position.
-//                    As a side effect, adjust the index if the current position
-//                    is on a trail surrogate.  This feature is used internally;
-//                    from an external view, indexes are never on trail surrogates.
+//                    UText iteration position is always on a code point boundary,
+//                    never on the trail half of a surrogate pair.
 //
 U_DRAFT UChar32 U_EXPORT2
 utext_current32(UText *ut) {
-    UChar32  c = U_SENTINEL;
+    UChar32  c;
     if (ut->chunkOffset==ut->chunkLength) {
         // Current position is just off the end of the chunk.
-        // Can also happen at startup, with a zero length chunk at zero offset.
-        ut->access(ut, ut->chunkNativeLimit, TRUE);
-    }
-    if (ut->chunkOffset < ut->chunkLength) {
-        c = ut->chunkContents[ut->chunkOffset];
-        if (U16_IS_SURROGATE(c)) {
-            // looking at a surrogate.  Could be unpaired, need to be careful.
-            U16_GET(ut->chunkContents, 0, ut->chunkOffset, ut->chunkLength, c);
-            U16_SET_CP_START(ut->chunkContents, 0, ut->chunkOffset)
+        if (ut->access(ut, ut->chunkNativeLimit, TRUE) == FALSE) {
+            // Off the end of the text.
+            return U_SENTINEL;
         }
     }
-    return c;
+
+    c = ut->chunkContents[ut->chunkOffset];
+    if (U16_IS_LEAD(c) == FALSE) {
+        // Normal, non-supplementary case.
+        return c;
+    }
+
+    //
+    //  Possible supplementary char.  
+    //
+    UChar32   trail = 0;
+    UChar32   supplementaryC = c;
+    if ((ut->chunkOffset+1) < ut->chunkLength) {
+        // The trail surrogate is in the same chunk.
+        trail = ut->chunkContents[ut->chunkOffset+1];
+    } else {
+        //  The trail surrogate is in a different chunk.
+        //     Because we must maintain the iteration position, we need to switch forward
+        //     into the new chunk, get the trail surrogate, then revert the chunk back to the
+        //     original one.          
+        int64_t  nativePosition = ut->chunkNativeLimit;
+        int32_t  originalOffset = ut->chunkOffset;
+        if (ut->access(ut, nativePosition, TRUE)) {
+            trail = ut->chunkContents[ut->chunkOffset];
+            UBool r = ut->access(ut, nativePosition, FALSE);  // reverse iteration flag loads preceding chunk
+            U_ASSERT(r==TRUE);
+            ut->chunkOffset = originalOffset;
+        }
+    }
+
+    if (U16_IS_TRAIL(trail)) {
+        supplementaryC = U16_GET_SUPPLEMENTARY(c, trail);
+    }
+    return supplementaryC;
+
 }
 
 
 U_DRAFT UChar32 U_EXPORT2
 utext_char32At(UText *ut, int64_t nativeIndex) {
     UChar32 c = U_SENTINEL;
+
+    // Fast path the common case.
+    if (!ut->nonUTF16Indexes && nativeIndex>=ut->chunkNativeStart && nativeIndex<ut->chunkNativeLimit) {
+        ut->chunkOffset = (int32_t)(nativeIndex - ut->chunkNativeStart);
+        c = ut->chunkContents[ut->chunkOffset];
+        if (U16_IS_SURROGATE(c) == FALSE) {
+            return c;
+        }
+    }
+
+
     utext_setNativeIndex(ut, nativeIndex);
-    if (nativeIndex>=0 && ut->chunkOffset < ut->chunkLength) {
+    if (nativeIndex>=ut->chunkNativeStart && ut->chunkOffset<ut->chunkLength) {
         c = ut->chunkContents[ut->chunkOffset];
         if (U16_IS_SURROGATE(c)) {
-            U16_GET(ut->chunkContents, 0, ut->chunkOffset, ut->chunkLength, c);
+            // For surrogates, let current32() deal with the complications
+            //    of supplementaries that may span chunk boundaries.
+            c = utext_current32(ut);
         }
     }
     return c;
@@ -157,8 +225,33 @@ utext_next32(UText *ut) {
         }
     }
             
-    U16_NEXT(ut->chunkContents, ut->chunkOffset, ut->chunkLength, c);
-    return c;
+    c = ut->chunkContents[ut->chunkOffset++];
+    if (U16_IS_LEAD(c) == FALSE) {
+        // Normal case, not supplementary.
+        //   (A trail surrogate seen here is just returned as is, as a surrogate value.
+        //    It cannot be part of a pair.)
+        return c;
+    }
+
+    if (ut->chunkOffset >= ut->chunkLength) {
+        if (ut->access(ut, ut->chunkNativeLimit, TRUE) == FALSE) {
+            // c is an unpaired lead surrogate at the end of the text.
+            // return it as it is.
+            return c;
+        }
+    }
+    UChar32 trail = ut->chunkContents[ut->chunkOffset];
+    if (U16_IS_TRAIL(trail) == FALSE) {
+        // c was an unpaired lead surrogate, not at the end of the text.
+        // return it as it is (unpaired).  Iteration position is on the
+        // following character, possibly in the next chunk, where the
+        //  trail surrogate would have been if it had existed.
+        return c;
+    }
+
+    UChar32 supplementary = U16_GET_SUPPLEMENTARY(c, trail);
+    ut->chunkOffset++;   // move iteration position over the trail surrogate.
+    return supplementary;
     }
 
 
@@ -171,8 +264,33 @@ utext_previous32(UText *ut) {
             return U_SENTINEL;
         }
     }
-    U16_PREV(ut->chunkContents, 0, ut->chunkOffset, c);
-    return c;
+    ut->chunkOffset--;
+    c = ut->chunkContents[ut->chunkOffset];
+    if (U16_IS_TRAIL(c) == FALSE) {
+        // Normal case, not supplementary.
+        //   (A lead surrogate seen here is just returned as is, as a surrogate value.
+        //    It cannot be part of a pair.)
+        return c;
+    }
+
+    if (ut->chunkOffset <= 0) {
+        if (ut->access(ut, ut->chunkNativeStart, FALSE) == FALSE) {
+            // c is an unpaired trail surrogate at the start of the text.
+            // return it as it is.
+            return c;
+        }
+    }
+
+    UChar32 lead = ut->chunkContents[ut->chunkOffset-1];
+    if (U16_IS_LEAD(lead) == FALSE) {
+        // c was an unpaired trail surrogate, not at the end of the text.
+        // return it as it is (unpaired).  Iteration position is at c
+        return c;
+    }
+
+    UChar32 supplementary = U16_GET_SUPPLEMENTARY(lead, c);
+    ut->chunkOffset--;   // move iteration position over the lead surrogate.
+    return supplementary;
 }
 
 
@@ -194,9 +312,9 @@ utext_next32From(UText *ut, int64_t index) {
 
     c = ut->chunkContents[ut->chunkOffset++];
     if (U16_IS_SURROGATE(c)) {
-        // Surrogate code unit.  Speed doesn't matter, let plain next32() do the work.
-        ut->chunkOffset--;  // undo the ++, above.
-        U16_SET_CP_START(ut->chunkContents, 0, ut->chunkOffset)
+        // Surrogates.  Many edge cases.  Use other functions that already
+        //              deal with the problems.
+        utext_setNativeIndex(ut, index);
         c = utext_next32(ut);  
     }
     return c;
@@ -205,38 +323,49 @@ utext_next32From(UText *ut, int64_t index) {
 
 U_DRAFT UChar32 U_EXPORT2
 utext_previous32From(UText *ut, int64_t index) {
-    UChar32     c;
+    //
+    //  Return the character preceding the specified index.
+    //  Leave the iteration position at the start of the character that was returned.
+    //
+    UChar32     cPrev;    // The character preceding cCurr, which is what we will return.
 
+    // Address the chunk containg the position preceding the incoming index
+    // A tricky edge case:
+    //   We try to test the requested native index against the chunkNativeStart to determine
+    //    whether the character preceding the one at the index is in the current chunk.
+    //    BUT, this test can fail with UTF-8 (or any other multibyte encoding), when the
+    //    requested index is on something other than the first position of the first char.
+    //
     if(index<=ut->chunkNativeStart || index>ut->chunkNativeLimit) {
         // Requested native index is outside of the current chunk.
         if(!ut->access(ut, index, FALSE)) {
             // no chunk available here
-            return U_SENTINEL;
+            return U_SENTINEL; 
         }
     } else if(ut->nonUTF16Indexes) {
         ut->chunkOffset=ut->mapNativeIndexToUTF16(ut, index);
+        if (ut->chunkOffset==0 && !ut->access(ut, index, FALSE)) {
+            // no chunk available here
+            return U_SENTINEL;
+        }
     } else {
         // This chunk uses UTF-16 indexing.  Index into it.
         ut->chunkOffset = (int32_t)(index - ut->chunkNativeStart);
-        // put offset onto a code point boundary if it isn't there already.
-        if (index>ut->chunkNativeStart && index < ut->chunkNativeLimit) {
-            U16_SET_CP_START(ut->chunkContents, 0, ut->chunkOffset)
-        }
     }
 
-    if (ut->chunkOffset<=0) {
-        // already at the start of text.  Return U_SENTINEL.
-        return  U_SENTINEL;
-    }
+    // 
+    // Simple case with no surrogates.  
+    //
+    ut->chunkOffset--;
+    cPrev = ut->chunkContents[ut->chunkOffset];
 
-    U16_PREV(ut->chunkContents, 0, ut->chunkOffset, c);
-    if (U_IS_LEAD(c)) {
-        // User supplied index might have been pointing to the trail surrogate
-        //  of a pair, in which case we need to get the whole supplemenary value.
-        c = utext_current32(ut);
+    if (U16_IS_SURROGATE(cPrev)) {
+        // Possible supplementary.  Many edge cases.
+        // Let other functions do the heavy lifting.
+        utext_setNativeIndex(ut, index);
+        cPrev = utext_previous32(ut);
     }
-
-    return c;
+    return cPrev;
 }
 
 
@@ -498,7 +627,7 @@ resetChunk(UText *ut, int64_t index) {
 
 //
 // invalidateChunk   Reset a chunk to have no contents, so that the next call
-//                   to access will new data to load.
+//                   to access will cause new data to load.
 //                   This is needed when copy/move/replace operate directly on the
 //                   backing text, potentially putting it out of sync with the
 //                   contents in the chunk.
@@ -531,7 +660,7 @@ U_CDECL_BEGIN
 
 //
 //  Clone.  This is a generic copy-the-utext-by-value clone function that can be
-//          used as-is with some utext types, and as helper by other clones. 
+//          used as-is with some utext types, and as a helper by other clones. 
 //
 static UText * U_CALLCONV
 shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
@@ -689,6 +818,7 @@ utf8TextAccess(UText *ut, int64_t index, UBool forward) {
     } else {
         // Reverse Access.  The chunk buffer must be filled so as to contain the
         //                  character preceding the specified index.
+        U8_SET_CP_START(s8, 0, index32);
         if(index32<=0) {
             resetChunk(ut, 0);
             return FALSE;
