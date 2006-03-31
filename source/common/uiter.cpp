@@ -48,17 +48,14 @@ noopCurrent(UCharIterator * /*iter*/) {
     return U_SENTINEL;
 }
 
-#if 0
-/* Setting/Getting the state on illegal input isn't allowed. */
 static uint32_t U_CALLCONV
 noopGetState(const UCharIterator * /*iter*/) {
-    return 0;
+    return UITER_NO_STATE;
 }
 
 static void U_CALLCONV
 noopSetState(UCharIterator * /*iter*/, uint32_t /*state*/, UErrorCode * /*pErrorCode*/) {
 }
-#endif
 
 static const UCharIterator noopIterator={
     0, 0, 0, 0, 0, 0,
@@ -70,8 +67,8 @@ static const UCharIterator noopIterator={
     noopCurrent,
     noopCurrent,
     NULL,
-    NULL,
-    NULL
+    noopGetState,
+    noopSetState
 };
 
 /* UCharIterator implementation for simple strings -------------------------- */
