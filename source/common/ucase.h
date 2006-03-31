@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -237,6 +237,9 @@ U_CAPI int32_t U_EXPORT2
 ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
                     const UChar **pString,
                     uint32_t options);
+
+U_CFUNC int32_t U_EXPORT2
+ucase_hasBinaryProperty(UChar32 c, UProperty which);
 
 /* file definitions --------------------------------------------------------- */
 
