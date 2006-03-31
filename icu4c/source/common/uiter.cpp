@@ -54,7 +54,8 @@ noopGetState(const UCharIterator * /*iter*/) {
 }
 
 static void U_CALLCONV
-noopSetState(UCharIterator * /*iter*/, uint32_t /*state*/, UErrorCode * /*pErrorCode*/) {
+noopSetState(UCharIterator * /*iter*/, uint32_t /*state*/, UErrorCode *pErrorCode) {
+    *pErrorCode=U_UNSUPPORTED_ERROR;
 }
 
 static const UCharIterator noopIterator={
