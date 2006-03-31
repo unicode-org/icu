@@ -210,14 +210,13 @@ PossibleWord::markCurrent() {
 
 ThaiBreakEngine::ThaiBreakEngine(const TrieWordDictionary *adoptDictionary, UErrorCode &status)
     : DictionaryBreakEngine((1<<UBRK_WORD) | (1<<UBRK_LINE)),
-      fDictionary(adoptDictionary) {
-    UnicodeString thaiSet("[[:Thai:]&[:LineBreak=SA:]]", -1, US_INV);
-    UnicodeString markSet("[[:Thai:]&[:LineBreak=SA:]&[:M:]]", -1, US_INV);
-    fThaiWordSet.applyPattern(thaiSet, status);
+      fDictionary(adoptDictionary)
+{
+    fThaiWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]]"), status);
     if (U_SUCCESS(status)) {
         setCharacters(fThaiWordSet);
     }
-    fMarkSet.applyPattern(markSet, status);
+    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]&[:M:]]"), status);
     fEndWordSet = fThaiWordSet;
     fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT
     fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI
