@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -735,6 +735,57 @@ U_CAPI int32_t U_EXPORT2
 utrie_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
+
+/* serialization ------------------------------------------------------------ */
+
+/**
+ * Trie data structure in serialized form:
+ *
+ * UTrieHeader header;
+ * uint16_t index[header.indexLength];
+ * uint16_t data[header.dataLength];
+ * @internal
+ */
+typedef struct UTrieHeader {
+    /** "Trie" in big-endian US-ASCII (0x54726965) */
+    uint32_t signature;
+
+    /**
+     * options bit field:
+     *     9    1=Latin-1 data is stored linearly at data+UTRIE_DATA_BLOCK_LENGTH
+     *     8    0=16-bit data, 1=32-bit data
+     *  7..4    UTRIE_INDEX_SHIFT   // 0..UTRIE_SHIFT
+     *  3..0    UTRIE_SHIFT         // 1..9
+     */
+    uint32_t options;
+
+    /** indexLength is a multiple of UTRIE_SURROGATE_BLOCK_COUNT */
+    int32_t indexLength;
+
+    /** dataLength>=UTRIE_DATA_BLOCK_LENGTH */
+    int32_t dataLength;
+} UTrieHeader;
+
+/**
+ * Constants for use with UTrieHeader.options.
+ * @internal
+ */
+enum {
+    /** Mask to get the UTRIE_SHIFT value from options. */
+    UTRIE_OPTIONS_SHIFT_MASK=0xf,
+
+    /** Shift options right this much to get the UTRIE_INDEX_SHIFT value. */
+    UTRIE_OPTIONS_INDEX_SHIFT=4,
+
+    /** If set, then the data (stage 2) array is 32 bits wide. */
+    UTRIE_OPTIONS_DATA_IS_32_BIT=0x100,
+
+    /**
+     * If set, then Latin-1 data (for U+0000..U+00ff) is stored in the data (stage 2) array
+     * as a simple, linear array at data+UTRIE_DATA_BLOCK_LENGTH.
+     */
+    UTRIE_OPTIONS_LATIN1_IS_LINEAR=0x200
+};
 
 U_CDECL_END
 

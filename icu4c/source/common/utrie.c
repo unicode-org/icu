@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -23,7 +23,6 @@
 #endif
 
 #include "unicode/utypes.h"
-#include "udataswp.h"
 #include "cmemory.h"
 #include "utrie.h"
 
@@ -686,55 +685,6 @@ utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
 
 /* serialization ------------------------------------------------------------ */
 
-/**
- * Trie data structure in serialized form:
- *
- * UTrieHeader header;
- * uint16_t index[header.indexLength];
- * uint16_t data[header.dataLength];
- */
-struct UTrieHeader {
-    /** "Trie" in big-endian US-ASCII (0x54726965) */
-    uint32_t signature;
-
-    /**
-     * options bit field:
-     *     9    1=Latin-1 data is stored linearly at data+UTRIE_DATA_BLOCK_LENGTH
-     *     8    0=16-bit data, 1=32-bit data
-     *  7..4    UTRIE_INDEX_SHIFT   // 0..UTRIE_SHIFT
-     *  3..0    UTRIE_SHIFT         // 1..9
-     */
-    uint32_t options;
-
-    /** indexLength is a multiple of UTRIE_SURROGATE_BLOCK_COUNT */
-    int32_t indexLength;
-
-    /** dataLength>=UTRIE_DATA_BLOCK_LENGTH */
-    int32_t dataLength;
-};
-
-typedef struct UTrieHeader UTrieHeader;
-
-/**
- * Constants for use with UTrieHeader.options.
- */
-enum {
-    /** Mask to get the UTRIE_SHIFT value from options. */
-    UTRIE_OPTIONS_SHIFT_MASK=0xf,
-
-    /** Shift options right this much to get the UTRIE_INDEX_SHIFT value. */
-    UTRIE_OPTIONS_INDEX_SHIFT=4,
-
-    /** If set, then the data (stage 2) array is 32 bits wide. */
-    UTRIE_OPTIONS_DATA_IS_32_BIT=0x100,
-
-    /**
-     * If set, then Latin-1 data (for U+0000..U+00ff) is stored in the data (stage 2) array
-     * as a simple, linear array at data+UTRIE_DATA_BLOCK_LENGTH.
-     */
-    UTRIE_OPTIONS_LATIN1_IS_LINEAR=0x200
-};
-
 /*
  * Default function for the folding value:
  * Just store the offset (16 bits) if there is any non-initial-value entry.
@@ -1075,79 +1025,6 @@ utrie_unserializeDummy(UTrie *trie,
     trie->getFoldingOffset=utrie_defaultGetFoldingOffset;
 
     return actualLength;
-}
-
-/* swapping ----------------------------------------------------------------- */
-
-U_CAPI int32_t U_EXPORT2
-utrie_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode) {
-    const UTrieHeader *inTrie;
-    UTrieHeader trie;
-    int32_t size;
-    UBool dataIs32;
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    if(ds==NULL || inData==NULL || (length>=0 && outData==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    /* setup and swapping */
-    if(length>=0 && length<sizeof(UTrieHeader)) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    }
-
-    inTrie=(const UTrieHeader *)inData;
-    trie.signature=ds->readUInt32(inTrie->signature);
-    trie.options=ds->readUInt32(inTrie->options);
-    trie.indexLength=udata_readInt32(ds, inTrie->indexLength);
-    trie.dataLength=udata_readInt32(ds, inTrie->dataLength);
-
-    if( trie.signature!=0x54726965 ||
-        (trie.options&UTRIE_OPTIONS_SHIFT_MASK)!=UTRIE_SHIFT ||
-        ((trie.options>>UTRIE_OPTIONS_INDEX_SHIFT)&UTRIE_OPTIONS_SHIFT_MASK)!=UTRIE_INDEX_SHIFT ||
-        trie.indexLength<UTRIE_BMP_INDEX_LENGTH ||
-        (trie.indexLength&(UTRIE_SURROGATE_BLOCK_COUNT-1))!=0 ||
-        trie.dataLength<UTRIE_DATA_BLOCK_LENGTH ||
-        (trie.dataLength&(UTRIE_DATA_GRANULARITY-1))!=0 ||
-        ((trie.options&UTRIE_OPTIONS_LATIN1_IS_LINEAR)!=0 && trie.dataLength<(UTRIE_DATA_BLOCK_LENGTH+0x100))
-    ) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UTrie */
-        return 0;
-    }
-
-    dataIs32=(UBool)((trie.options&UTRIE_OPTIONS_DATA_IS_32_BIT)!=0);
-    size=sizeof(UTrieHeader)+trie.indexLength*2+trie.dataLength*(dataIs32?4:2);
-
-    if(length>=0) {
-        UTrieHeader *outTrie;
-
-        if(length<size) {
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
-        }
-
-        outTrie=(UTrieHeader *)outData;
-
-        /* swap the header */
-        ds->swapArray32(ds, inTrie, sizeof(UTrieHeader), outTrie, pErrorCode);
-
-        /* swap the index and the data */
-        if(dataIs32) {
-            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
-            ds->swapArray32(ds, (const uint16_t *)(inTrie+1)+trie.indexLength, trie.dataLength*4,
-                                     (uint16_t *)(outTrie+1)+trie.indexLength, pErrorCode);
-        } else {
-            ds->swapArray16(ds, inTrie+1, (trie.indexLength+trie.dataLength)*2, outTrie+1, pErrorCode);
-        }
-    }
-
-    return size;
 }
 
 /* enumeration -------------------------------------------------------------- */
