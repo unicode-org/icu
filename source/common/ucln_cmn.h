@@ -26,7 +26,7 @@ U_CFUNC UBool umtx_cleanup(void);
 
 U_CFUNC UBool utrace_cleanup(void);
 
-U_CFUNC UBool ucln_common_lib_cleanup(void);
+U_CFUNC UBool ucln_lib_cleanup(void);
 
 /*
 Please keep the order of enums declared in same order
