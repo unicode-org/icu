@@ -30,19 +30,6 @@ static UBool gICUInitialized = FALSE;
 static UMTX  gICUInitMutex   = NULL;
 
 
-static cleanupFunc *gLibCleanupFunctions[UCLN_COMMON];
-
-U_CAPI void U_EXPORT2
-ucln_registerCleanup(ECleanupLibraryType type,
-                     cleanupFunc *func)
-{
-    U_ASSERT(UCLN_START < type && type < UCLN_COMMON);
-    if (UCLN_START < type && type < UCLN_COMMON)
-    {
-        gLibCleanupFunctions[type] = func;
-    }
-}
-
 /************************************************
  The cleanup order is important in this function.
  Please be sure that you have read ucln.h
@@ -50,21 +37,11 @@ ucln_registerCleanup(ECleanupLibraryType type,
 U_CAPI void U_EXPORT2
 u_cleanup(void)
 {
-    ECleanupLibraryType libType = UCLN_START;
-
     UTRACE_ENTRY_OC(UTRACE_U_CLEANUP);
     umtx_lock(NULL);     /* Force a memory barrier, so that we are sure to see   */
     umtx_unlock(NULL);   /*   all state left around by any other threads.        */
 
-    for (libType++; libType<UCLN_COMMON; libType++) {
-        if (gLibCleanupFunctions[libType])
-        {
-            gLibCleanupFunctions[libType]();
-            gLibCleanupFunctions[libType] = NULL;
-        }
-    }
-
-    ucln_common_lib_cleanup();
+    ucln_lib_cleanup();
 
     umtx_destroy(&gICUInitMutex);
     umtx_cleanup();
