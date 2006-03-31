@@ -1130,6 +1130,9 @@
 			<File
 				RelativePath=".\util.h">
 			</File>
+			<File
+				RelativePath=".\util_props.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="idna"
