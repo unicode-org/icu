@@ -191,7 +191,9 @@ ubidi_openBinary(const uint8_t *bin, int32_t length, UErrorCode *pErrorCode) {
 U_CAPI void U_EXPORT2
 ubidi_closeProps(UBiDiProps *bdp) {
     if(bdp!=NULL) {
+#if !UBIDI_HARDCODE_DATA
         udata_close(bdp->mem);
+#endif
         uprv_free(bdp);
     }
 }
