@@ -21,6 +21,8 @@
 static UBool  gFailed = FALSE;
 static int    gTestNum = 0;
 
+// Forward decl
+UText *openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
 
 #define TEST_ASSERT(x) \
 {if ((x)==FALSE) {errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__);\
@@ -223,6 +225,13 @@ void UTextTest::TestString(const UnicodeString &s) {
     TestCMR(sa, ut, cpCount, cpMap, cpMap);
     utext_close(ut);
 
+    // Fragmented UnicodeString  (Chunk size of one)
+    //
+    status = U_ZERO_ERROR;
+    ut = openFragmentedUnicodeString(NULL, &sa, &status);
+    TEST_SUCCESS(status);
+    TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
 
     //
     // UTF-8 test
@@ -934,6 +943,7 @@ void UTextTest::ErrorTest()
         
         // check utext_previous32From
         for (i=0; i<startMapLimit; i++) {
+            gTestNum++;
             UChar32 c32 = utext_previous32From(ut, i);
             TEST_ASSERT(c32 == pr32Map[i]);
             int64_t cpIndex = utext_getNativeIndex(ut);
@@ -1181,6 +1191,65 @@ void UTextTest::FreezeTest() {
     // cleanup
     utext_close(ut);
     utext_close(ut2);
+}
+
+
+//
+//  Fragmented UText
+//      A UText type that works with a chunk size of 1.
+//      Intended to test for edge cases.
+//      Input comes from a UnicodeString.
+//
+//       ut.b    the character.  Put into both halves.
+//
+
+static UBool
+fragTextAccess(UText *ut, int64_t index, UBool forward) {
+    const UnicodeString *us = (const UnicodeString *)ut->context;
+    UChar  c;
+    int32_t length = us->length();
+    if (forward && index>=0 && index<length) {
+        c = us->charAt((int32_t)index);
+        ut->b = c | c<<16;
+        ut->chunkOffset = 0;
+        ut->chunkLength = 1;
+        ut->chunkNativeStart = index;
+        ut->chunkNativeLimit = index+1;
+        return true;
+    }
+    if (!forward && index>0 && index <=length) {
+        c = us->charAt((int32_t)index-1);
+        ut->b = c | c<<16;
+        ut->chunkOffset = 1;
+        ut->chunkLength = 1;
+        ut->chunkNativeStart = index-1;
+        ut->chunkNativeLimit = index;
+        return true;
+    } 
+    ut->b = 0;
+    ut->chunkOffset = 0;
+    ut->chunkLength = 0;
+    if (index <= 0) {
+        ut->chunkNativeStart = 0;
+        ut->chunkNativeLimit = 0;
+    } else {
+        ut->chunkNativeStart = length;
+        ut->chunkNativeLimit = length;
+    }
+    return false;
+}
+
+
+UText *
+openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
+    ut = utext_openUnicodeString(ut, s, status);
+    if (U_FAILURE(*status)) {
+        return ut;
+    }
+    ut->access = fragTextAccess;
+    ut->chunkContents = (UChar *)&ut->b;
+    ut->access(ut, 0, TRUE);
+    return ut;
 }
 
 
