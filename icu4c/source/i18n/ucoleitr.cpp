@@ -31,19 +31,6 @@ typedef struct collIterate collIterator;
 
 /* public methods ---------------------------------------------------- */
 
-/**
-* Since this is going to be deprecated, I'll leave it as it is
-*/
-U_CAPI int32_t U_EXPORT2
-ucol_keyHashCode(const uint8_t *key, 
-                       int32_t  length)
-{
-
-    CollationKey newKey(key, length);
-    return newKey.hashCode();
-}
-
-
 U_CAPI UCollationElements* U_EXPORT2
 ucol_openElements(const UCollator  *coll,
                   const UChar      *text,

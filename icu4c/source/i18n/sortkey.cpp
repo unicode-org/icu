@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -391,5 +391,13 @@ CollationKey::hashCode() const
 }
 
 U_NAMESPACE_END
+
+U_CAPI int32_t U_EXPORT2
+ucol_keyHashCode(const uint8_t *key, 
+                       int32_t  length)
+{
+    CollationKey newKey(key, length);
+    return newKey.hashCode();
+}
 
 #endif /* #if !UCONFIG_NO_COLLATION */
