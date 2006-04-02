@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -912,12 +912,43 @@ CollationAPITest::TestDuplicate(/* char* par */)
     }
     Collator *col2 = col1->clone();
     doAssert((*col1 == *col2), "Cloned object is not equal to the orginal");
-    UnicodeString ruleset("< a, A < b, B < c, C < d, D, e, E");
-    RuleBasedCollator *col3 = new RuleBasedCollator(ruleset, status);
+    UnicodeString *ruleset = new UnicodeString("< a, A < b, B < c, C < d, D, e, E");
+    RuleBasedCollator *col3 = new RuleBasedCollator(*ruleset, status);
     doAssert((*col1 != *col3), "Cloned object is equal to some dummy");
     *col3 = *((RuleBasedCollator*)col1);
     doAssert((*col1 == *col3), "Copied object is not equal to the orginal");
+
+    if (U_FAILURE(status)) {
+        logln("Collation tailoring failed.");
+        return;
+    }
+
+    UCollationResult res;
+    UnicodeString first((UChar)0x0061);
+    UnicodeString second((UChar)0x0062);
+    UnicodeString copiedEnglishRules(((RuleBasedCollator*)col1)->getRules());
+
     delete col1;
+    delete ruleset;
+
+    // Try using the cloned collators after deleting the original data
+    res = col2->compare(first, second, status);
+    if(res != UCOL_LESS) {
+        errln("a should be less then b after tailoring");
+    }
+    if (((RuleBasedCollator*)col2)->getRules() != copiedEnglishRules) {
+        errln(UnicodeString("English rule difference. ")
+            + copiedEnglishRules + UnicodeString("\ngetRules=") + ((RuleBasedCollator*)col2)->getRules());
+    }
+    res = col3->compare(first, second, status);
+    if(res != UCOL_LESS) {
+        errln("a should be less then b after tailoring");
+    }
+    if (col3->getRules() != copiedEnglishRules) {
+        errln(UnicodeString("English rule difference. ")
+            + copiedEnglishRules + UnicodeString("\ngetRules=") + col3->getRules());
+    }
+
     delete col2;
     delete col3;
 }
