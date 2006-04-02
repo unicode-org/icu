@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2006 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -500,11 +500,6 @@ private :
     * @stable ICU 2.0
     */
     UnicodeString      m_pattern_;
-    /**
-    * Corresponding collation rules
-    * @stable ICU 2.0
-    */
-    UnicodeString      m_collation_rules_;
     /**
     * String search struct data
     * @stable ICU 2.0

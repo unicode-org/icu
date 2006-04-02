@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and
+* Copyright (C) 1996-2006, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -693,7 +693,7 @@ private:
     /**
     * Rule UnicodeString
     */
-    UnicodeString *urulestring;
+    UnicodeString urulestring;
 
     // friend classes --------------------------------------------------------
 
@@ -719,13 +719,6 @@ private:
      * Default constructor
      */
     RuleBasedCollator();
-
-    /**
-    * Constructor that takes in a UCollator struct
-    * @param collator UCollator struct
-    * @param rule     the rule for the collator.
-    */
-    RuleBasedCollator(UCollator *collator, UnicodeString *rule);
 
     /**
      * RuleBasedCollator constructor. This constructor takes a locale. The
@@ -776,7 +769,7 @@ private:
     * @param collator new ucollator data
     * @param rules corresponding collation rules
     */
-    void setUCollator(UCollator *collator, UnicodeString *rules);
+    void setUCollator(UCollator *collator);
 
 public:
     /**
@@ -801,7 +794,7 @@ private:
     void checkOwned(void);
 
     // utility to init rule string used by checkOwned and construct
-    void setRuleStringFromCollator(UErrorCode& status);
+    void setRuleStringFromCollator();
 
     /**
     * Converts C's UCollationResult to EComparisonResult
@@ -838,17 +831,16 @@ inline void RuleBasedCollator::setUCollator(const Locale &locale,
 }
 
 
-inline void RuleBasedCollator::setUCollator(UCollator     *collator,
-                                            UnicodeString *rules)
+inline void RuleBasedCollator::setUCollator(UCollator     *collator)
 {
+
     if (ucollator && dataIsOwned) {
         ucol_close(ucollator);
-        delete urulestring;
     }
     ucollator   = collator;
-    urulestring = rules;
     dataIsOwned = FALSE;
     isWriteThroughAlias = TRUE;
+	setRuleStringFromCollator();
 }
 
 inline const UCollator * RuleBasedCollator::getUCollator()
