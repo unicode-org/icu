@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and  *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -473,7 +473,6 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
 }
 
 Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status) {
-//Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status) {
 
     Hashtable *result = new Hashtable(status);
     /* test for NULL */
@@ -500,21 +499,21 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
         // see if any character is at the start of some decomposition
         UTF_GET_CHAR(segment, 0, i, segLen, cp);
         if (!unorm_getCanonStartSet(cp, &starts)) {
-          continue;
+            continue;
         }
         // if so, see which decompositions match 
         for(j = 0, cp = end+1; cp <= end || uset_getSerializedRange(&starts, j++, &cp, &end); ++cp) {
-            //Hashtable *remainder = extract(cp, segment, segLen, i, status);
             Hashtable *remainder = extract(cp, segment, segLen, i, status);
-            if (remainder == NULL) continue;
+            if (remainder == NULL) {
+                continue;
+            }
 
             // there were some matches, so add all the possibilities to the set.
             UnicodeString prefix(segment, i);
             prefix += cp;
 
-            const UHashElement *ne = NULL;
             int32_t el = -1;
-            ne = remainder->nextElement(el);
+            const UHashElement *ne = remainder->nextElement(el);
             while (ne != NULL) {
                 UnicodeString item = *((UnicodeString *)(ne->value.pointer));
                 UnicodeString *toAdd = new UnicodeString(prefix);
@@ -523,7 +522,7 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
                     status = U_MEMORY_ALLOCATION_ERROR;
                     delete result;
                     delete remainder;
-                    return 0;
+                    return NULL;
                 }
                 *toAdd += item;
                 result->put(*toAdd, toAdd, status);
@@ -539,7 +538,8 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
 
     /* Test for buffer overflows */
     if(U_FAILURE(status)) {
-        return 0;
+        delete result;
+        return NULL;
     }
     return result;
 }
