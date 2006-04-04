@@ -2397,12 +2397,12 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 * @param data collation iterator data
 */
 static
-inline void normalizePrevContraction(collIterate *data)
+inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
 {
     UChar      *buffer     = data->writableBuffer;
     uint32_t    buffersize = data->writableBufSize;
     uint32_t    nulltermsize;
-    UErrorCode  status     = U_ZERO_ERROR;
+    UErrorCode  localstatus = U_ZERO_ERROR;
     UChar      *pEnd       = data->pos + 1;         /* End normalize + 1 */
     UChar      *pStart;
     uint32_t    normLen;
@@ -2433,22 +2433,23 @@ inline void normalizePrevContraction(collIterate *data)
     }
 
     normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0,
-                              &status);
+                              &localstatus);
 
     if (nulltermsize <= normLen) {
         uint32_t  size = buffersize - nulltermsize + normLen + 1;
         UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
-        if(temp != NULL) {
-          nulltermsize   = normLen + 1;
-          uprv_memcpy(temp + normLen, buffer,
-                      sizeof(UChar) * (buffersize - nulltermsize));
-          freeHeapWritableBuffer(data);
-          data->writableBuffer = temp;
-          data->writableBufSize = size;
+        if (temp == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
+        nulltermsize   = normLen + 1;
+        uprv_memcpy(temp + normLen, buffer,
+                    sizeof(UChar) * (buffersize - nulltermsize));
+        freeHeapWritableBuffer(data);
+        data->writableBuffer = temp;
+        data->writableBufSize = size;
     }
 
-    status = U_ZERO_ERROR;
     /*
     this puts the null termination infront of the normalized string instead
     of the end
@@ -2456,7 +2457,7 @@ inline void normalizePrevContraction(collIterate *data)
     pStartNorm   = buffer + (nulltermsize - normLen);
     *(pStartNorm - 1) = 0;
     unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen,
-                    &status);
+                    status);
 
     data->pos        = data->writableBuffer + nulltermsize;
     data->origFlags  = data->flags;
@@ -2478,7 +2479,7 @@ inline void normalizePrevContraction(collIterate *data)
 * @return previous character
 */
 static
-inline UChar getPrevNormalizedChar(collIterate *data)
+inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
 {
     UChar  prevch;
     UChar  ch;
@@ -2540,7 +2541,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
         UChar *backuppos = data->pos;
         data->pos = start;
         if (collPrevIterFCD(data)) {
-            normalizePrevContraction(data);
+            normalizePrevContraction(data, status);
             return *(data->pos - 1);
         }
         data->pos = backuppos;
@@ -2631,7 +2632,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
           }
-          schar = getPrevNormalizedChar(source);
+          schar = getPrevNormalizedChar(source, status);
           goBackOne(source);
 
           while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -3240,7 +3241,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
           }
-          schar = getPrevNormalizedChar(source);
+          schar = getPrevNormalizedChar(source, status);
           goBackOne(source);
 
           while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -3272,7 +3273,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 //    that is explicitly set to zero.
                 if (!collIter_bos(source)) {
                   UChar lead;
-                  if(U16_IS_LEAD(lead = getPrevNormalizedChar(source))) {
+                  if(U16_IS_LEAD(lead = getPrevNormalizedChar(source, status))) {
                     isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
                     if(getCETag(isZeroCE) == SURROGATE_TAG) {
                       uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
@@ -3335,7 +3336,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             *(UCharOffset) = schar;
             noChars++;
             UCharOffset --;
-            schar = getPrevNormalizedChar(source);
+            schar = getPrevNormalizedChar(source, status);
             goBackOne(source);
             // TODO: when we exhaust the contraction buffer,
             // it needs to get reallocated. The problem is
@@ -3485,7 +3486,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
         if (U16_IS_TRAIL (ch)){
             if (!collIter_bos(source)){
-              UChar lead = getPrevNormalizedChar(source);
+              UChar lead = getPrevNormalizedChar(source, status);
               if(U16_IS_LEAD(lead)) {
                 char32 = U16_GET_SUPPLEMENTARY(lead,ch);
                 goBackOne(source);
@@ -3566,14 +3567,14 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 ++trailingZeroCount;
 
             if (!collIter_bos(source)){
-                ch = getPrevNormalizedChar(source);
+                ch = getPrevNormalizedChar(source, status);
                 //goBackOne(source);
                 if (U16_IS_TRAIL(ch)){
                     backupState(source, &state);
                     if (!collIter_bos(source))
                     {
                         goBackOne(source);
-                        UChar lead = getPrevNormalizedChar(source);
+                        UChar lead = getPrevNormalizedChar(source, status);
                         if(U16_IS_LEAD(lead)) {
                           char32 = U16_GET_SUPPLEMENTARY(lead,ch);
                         } else {
