@@ -71,7 +71,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
         brk_index.txt */
     if(status==U_USING_DEFAULT_WARNING){
         status=U_ZERO_ERROR;
-        b = ures_open(U_ICUDATA_BRKITR, "", &status);
+        ures_openFillIn(b, U_ICUDATA_BRKITR, "", &status);
     }
 
     // Get the "boundaries" array.
