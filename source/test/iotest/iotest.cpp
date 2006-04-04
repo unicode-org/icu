@@ -361,7 +361,7 @@ static void U_CALLCONV DataDrivenScanf(void)
     int32_t i32, expected32;
     int64_t i64, expected64;
     double dbl, expectedDbl;
-    float flt, expectedFlt;
+    float flt, expectedFlt; // Use volatile in order to get around an Intel compiler issue.
     int32_t uBufferLenReturned;
 
     //const char *fileLocale = "en_US_POSIX";
@@ -413,7 +413,6 @@ static void U_CALLCONV DataDrivenScanf(void)
                     break;
                 case 0x66:  // 'f' float
                     expectedFlt = (float)atof(u_austrcpy(cBuffer, expectedResult));
-                    flt = 0.0f; // Initialize to 0 in order to get around an Intel compiler issue.
                     uBufferLenReturned = u_sscanf_u(argument, format, &flt);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, flt);
                     if (flt != expectedFlt) {
