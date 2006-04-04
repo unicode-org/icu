@@ -361,7 +361,7 @@ static void U_CALLCONV DataDrivenScanf(void)
     int32_t i32, expected32;
     int64_t i64, expected64;
     double dbl, expectedDbl;
-    float flt, expectedFlt; // Use volatile in order to get around an Intel compiler issue.
+    volatile float flt, expectedFlt; // Use volatile in order to get around an Intel compiler issue.
     int32_t uBufferLenReturned;
 
     //const char *fileLocale = "en_US_POSIX";
