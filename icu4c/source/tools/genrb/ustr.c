@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -206,7 +206,6 @@ ustr_resize(struct UString *s,
     s->fChars = (UChar*) uprv_realloc(s->fChars, sizeof(UChar) * (len + 1));
     if(s->fChars == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        s->fChars = 0;
         s->fLength = s->fCapacity = 0;
         return;
     }
