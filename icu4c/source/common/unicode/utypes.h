@@ -198,17 +198,16 @@
  */
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
 
-#ifndef U_HIDE_INTERNAL_API
 /**
+ * Do not use.
  * @internal
  */
 #define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
 /**
+ * Do not use.
  * @internal
  */
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
-
-#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * \def U_CALLCONV
