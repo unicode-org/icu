@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.TransliteratorUtilities;
 import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeMap.Composer;
@@ -91,7 +92,7 @@ class GenerateStringPrep implements UCD_Types {
 
 	void genStringPrep() throws IOException {
 		//showScriptToBlock();
-		bf.setShowLiteral(BagFormatter.toHTMLControl);
+		bf.setShowLiteral(TransliteratorUtilities.toHTMLControl);
 		bf.setUnicodePropertyFactory(ups);
 		//bf.setValueSource(UnicodeLabel.NULL);
 		if (false) {
@@ -508,7 +509,7 @@ class GenerateStringPrep implements UCD_Types {
 		}	
 		return "<span title='" + ucd.getCodeAndName(string) + "'>"
 		+ pad1
-		+ BagFormatter.toHTMLControl.transliterate(string)
+		+ TransliteratorUtilities.toHTMLControl.transliterate(string)
 		+ pad
 		+ "</span> ";
 	}

@@ -5,30 +5,42 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2005/11/19 05:39:39 $
-* $Revision: 1.10 $
+* $Date: 2006/04/05 22:12:43 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 
-import java.util.*;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.dev.demo.translit.CaseIterator;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.UnicodeMap;
-import com.ibm.icu.dev.test.util.UnicodeProperty;
-import com.ibm.icu.dev.test.util.UnicodePropertySource;
-import com.ibm.icu.dev.test.util.UnicodeMap.MapIterator;
 import com.ibm.icu.impl.PrettyPrinter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.Normalizer;
+//import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
@@ -36,27 +48,27 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.ULocale;
 
-import com.ibm.text.utility.*;
-
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
 		try {
-			
+
+			checkCase();
+			if (true) return;
+
+			getCaseFoldingUnstable();
+
 			getCaseLengths("Lower", UCD.LOWER);
 			getCaseLengths("Upper", UCD.UPPER);
 			getCaseLengths("Title", UCD.TITLE);
 			getCaseLengths("Fold", UCD.FOLD);
 
-			if (true) return;
 			checkUnicodeSet();
 			getLengths("NFC", Default.nfc());
 			getLengths("NFD", Default.nfd());
 			getLengths("NFKC", Default.nfkc());
 			getLengths("NFKD", Default.nfkd());
 
-			//getCaseFoldingUnstable();
 			
-			checkCase();
 			if (true) return;
 			tem();
 			//checkPrettyPrint();
@@ -643,13 +655,13 @@ public class QuickTest implements UCD_Types {
 		if (!text.equals(x)) alpha.put("Lowercase", x);
 		String title = x = UCharacter.toTitleCase(ULocale.ENGLISH,text,null);
 		if (!text.equals(x)) alpha.put("Titlecase", x);
-		String nfc = x = Normalizer.normalize(text,Normalizer.NFC);
+		String nfc = x = com.ibm.icu.text.Normalizer.normalize(text,com.ibm.icu.text.Normalizer.NFC);
 		if (!text.equals(x)) alpha.put("NFC", x);
-		String nfd = x = Normalizer.normalize(text,Normalizer.NFD);
+		String nfd = x = com.ibm.icu.text.Normalizer.normalize(text,com.ibm.icu.text.Normalizer.NFD);
 		if (!text.equals(x)) alpha.put("NFD", x);
-		x = Normalizer.normalize(text,Normalizer.NFKD);
+		x = com.ibm.icu.text.Normalizer.normalize(text,com.ibm.icu.text.Normalizer.NFKD);
 		if (!text.equals(x)) alpha.put("NFKD", x);
-		x = Normalizer.normalize(text,Normalizer.NFKC);
+		x = com.ibm.icu.text.Normalizer.normalize(text,com.ibm.icu.text.Normalizer.NFKC);
 		if (!text.equals(x)) alpha.put("NFKC", x);
 		
 		CanonicalIterator ci = new CanonicalIterator(text);

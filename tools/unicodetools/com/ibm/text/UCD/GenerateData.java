@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2005/10/11 19:39:15 $
-* $Revision: 1.39 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -756,41 +756,41 @@ public class GenerateData implements UCD_Types {
 
         //log.println("# " + fileName + UnicodeDataFile.getFileSuffix(false));
         //log.println(UnicodeDataFile.generateDateLine());
-        log.println("#");
-        log.println("# Normalization Test Suite");
-        log.println("# Format:");
-        log.println("#");
-        log.println("#   Columns (c1, c2,...) are separated by semicolons");
-        log.println("#   Comments are indicated with hash marks");
-        log.println("#");
-        log.println("# CONFORMANCE:");
-        log.println("# 1. The following invariants must be true for all conformant implementations");
-        log.println("#");
-        log.println("#    NFC");
-        log.println("#      c2 ==  NFC(c1) ==  NFC(c2) ==  NFC(c3)");
-        log.println("#      c4 ==  NFC(c4) ==  NFC(c5)");
-        log.println("#");
-        log.println("#    NFD");
-        log.println("#      c3 ==  NFD(c1) ==  NFD(c2) ==  NFD(c3)");
-        log.println("#      c5 ==  NFD(c4) ==  NFD(c5)");
-        log.println("#");
-        log.println("#    NFKC");
-        log.println("#      c4 == NFKC(c1) == NFKC(c2) == NFKC(c3) == NFKC(c4) == NFKC(c5)");
-        log.println("#");
-        log.println("#    NFKD");
-        log.println("#      c5 == NFKD(c1) == NFKD(c2) == NFKD(c3) == NFKD(c4) == NFKD(c5)");
-        log.println("#");
-        log.println("# 2. For every code point X assigned in this version of Unicode that is not specifically");
-        log.println("#    listed in Part 1, the following invariants must be true for all conformant");
-        log.println("#    implementations:");
-        log.println("#");
-        log.println("#      X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X)");
+//        log.println("#");
+//        log.println("# Normalization Test Suite");
+//        log.println("# Format:");
+//        log.println("#");
+//        log.println("#   Columns (c1, c2,...) are separated by semicolons");
+//        log.println("#   Comments are indicated with hash marks");
+//        log.println("#");
+//        log.println("# CONFORMANCE:");
+//        log.println("# 1. The following invariants must be true for all conformant implementations");
+//        log.println("#");
+//        log.println("#    NFC");
+//        log.println("#      c2 ==  NFC(c1) ==  NFC(c2) ==  NFC(c3)");
+//        log.println("#      c4 ==  NFC(c4) ==  NFC(c5)");
+//        log.println("#");
+//        log.println("#    NFD");
+//        log.println("#      c3 ==  NFD(c1) ==  NFD(c2) ==  NFD(c3)");
+//        log.println("#      c5 ==  NFD(c4) ==  NFD(c5)");
+//        log.println("#");
+//        log.println("#    NFKC");
+//        log.println("#      c4 == NFKC(c1) == NFKC(c2) == NFKC(c3) == NFKC(c4) == NFKC(c5)");
+//        log.println("#");
+//        log.println("#    NFKD");
+//        log.println("#      c5 == NFKD(c1) == NFKD(c2) == NFKD(c3) == NFKD(c4) == NFKD(c5)");
+//        log.println("#");
+//        log.println("# 2. For every code point X assigned in this version of Unicode that is not specifically");
+//        log.println("#    listed in Part 1, the following invariants must be true for all conformant");
+//        log.println("#    implementations:");
+//        log.println("#");
+//        log.println("#      X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X)");
 
         System.out.println("Writing Part 1");
 
-        log.println("#");
-        log.println("@Part0 # Specific cases");
-        log.println("#");
+//        log.println("#");
+//        log.println("@Part0 # Specific cases");
+//        log.println("#");
 
         for (int j = 0; j < testSuiteCases.length; ++j) {
             writeLine(testSuiteCases[j], log, false);

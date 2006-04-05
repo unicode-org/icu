@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
@@ -17,9 +18,26 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.Utility;
 
 public class TestUnicodeInvariants {
+    private static final int
+    HELP1 = 0,
+    FILE = 1,
+    RANGE = 2
+    ;
 
+    private static final UOption[] options = {
+        UOption.HELP_H(),
+        UOption.create("file", 'f', UOption.REQUIRES_ARG),
+        UOption.create("range", 'r', UOption.NO_ARG),
+    };
+    
     public static void main(String[] args) throws IOException {
-        testInvariants();
+        UOption.parseArgs(args, options);
+
+    	String file = "UnicodeInvariants.txt";
+    	if (options[FILE].doesOccur) file = options[FILE].value;
+    	boolean doRange = options[RANGE].doesOccur;
+    	
+        testInvariants(file, doRange);
     }
 
     /**
@@ -68,19 +86,19 @@ public class TestUnicodeInvariants {
    
    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\~ \\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
    
-   public static void testInvariants() throws IOException {
+   public static void testInvariants(String outputFile, boolean doRange) throws IOException {
        String[][] variables = new String[100][2];
        int variableCount = 0;
        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
        out.write('\uFEFF'); // BOM
-       BufferedReader in = BagFormatter.openUTF8Reader("com/ibm/text/UCD/", "UnicodeInvariants.txt");
+       BufferedReader in = BagFormatter.openUTF8Reader("com/ibm/text/UCD/", outputFile);
        BagFormatter bf = new BagFormatter();
        bf.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
        BagFormatter bf2 = new BagFormatter();
        bf2.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
-       bf2.setMergeRanges(false);
+       bf2.setMergeRanges(doRange);
        ChainedSymbolTable st = new ChainedSymbolTable(new SymbolTable[] {
-           ToolUnicodePropertySource.make("4.0.0").getSymbolTable("\u00D7"),
+           ToolUnicodePropertySource.make(UCD.lastVersion).getSymbolTable("\u00D7"),
            ToolUnicodePropertySource.make(Default.ucdVersion()).getSymbolTable("")});
        ParsePosition pp = new ParsePosition(0);
        int parseErrorCount = 0;
@@ -113,10 +131,19 @@ public class TestUnicodeInvariants {
            // detect variables
            if (line.startsWith("Show")) {
            		String part = line.substring(4).trim();
+           		if (part.startsWith("Each")) {
+           			part = part.substring(4).trim();
+           			bf2.setMergeRanges(false);
+           		}
            		pp.setIndex(0);
            		UnicodeSet leftSet = new UnicodeSet(part, pp, st);
            		bf2.showSetNames(out, leftSet);
+           		bf2.setMergeRanges(doRange);
 				continue;
+           }
+           
+           if (line.startsWith("Test")) {
+        	   line = line.substring(4).trim();
            }
 
           char relation = 0;
@@ -166,7 +193,7 @@ public class TestUnicodeInvariants {
            
            boolean ok = true;
            switch(relation) {
-               case '=': ok = leftSet.equals(rightSet); break;
+               case '=': case '\u2261': ok = leftSet.equals(rightSet); break;
                case '<': case '\u2282': ok = rightSet.containsAll(leftSet) && !leftSet.equals(rightSet); break;
                case '>': case '\u2283': ok = leftSet.containsAll(rightSet) && !leftSet.equals(rightSet); break;
                case '\u2264': case '\u2286': ok = rightSet.containsAll(leftSet); break;

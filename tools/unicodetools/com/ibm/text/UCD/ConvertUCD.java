@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2005/11/01 00:10:53 $
-* $Revision: 1.17 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -840,6 +840,13 @@ public final class ConvertUCD implements UCD_Types {
 
             } else if (fieldName.equals("gc")) {
                 uData.generalCategory = Utility.lookup(fieldValue, UCD_Names.GENERAL_CATEGORY, true);
+//                if (major >= 5 && uData.script == Unknown_Script
+//                		&& uData.generalCategory != Cn
+//                		&& uData.generalCategory != Cs
+//                		&& uData.generalCategory != Co) {
+//                	uData.script = COMMON_SCRIPT;
+//                	System.out.println("Resetting to Common Script: " + Utility.hex(uData.codePoint));
+//                }
             } else if (fieldName.equals("bc")) {
                 uData.bidiClass = Utility.lookup(fieldValue, UCD_Names.BIDI_CLASS, true);
             } else if (fieldName.equals("dt")) {
@@ -878,8 +885,17 @@ public final class ConvertUCD implements UCD_Types {
                 uData.numericValue = Utility.doubleFrom(fieldValue);
             } else if (fieldName.equals("cc")) {
                 uData.combiningClass = (byte)Utility.intFrom(fieldValue);
+                if (uData.combiningClass == 9 && major >= 5) {
+                	System.out.println("setting Grapheme_Link " + Utility.hex(uData.codePoint) + "\t" + uData.name);
+                	uData.binaryProperties |= (1<<GraphemeLink);
+                	System.out.println(uData);
+            	}
             } else if (fieldName.equals("bp")) {
                 uData.binaryProperties = (byte)Utility.longFrom(fieldValue);
+//                if (major >= 5 && (uData.binaryProperties & 1<<Noncharacter_Code_Point) != 0) {
+//                	uData.script = Unknown_Script;
+//                }
+                System.out.println("Resetting: " + uData);
             } else {
                 throw new IllegalArgumentException("Unknown fieldName");
             }

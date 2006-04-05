@@ -68,6 +68,7 @@ public class MakeUnicodeFiles {
     
     public static void main(String[] args) throws IOException {
         generateFile();
+        System.out.println("DONE");
     }
 
     static class Format {
@@ -294,7 +295,7 @@ public class MakeUnicodeFiles {
             */
             try {
                 BufferedReader br =
-                    Utility.openReadFile("MakeUnicodeFiles.txt", Utility.UTF8);
+                    Utility.openReadFile("com/ibm/text/UCD/MakeUnicodeFiles.txt", Utility.UTF8);
                 String key = null;
                 String file = null, property = null, value = "", comments = "";
                 while (true) {
@@ -594,6 +595,7 @@ public class MakeUnicodeFiles {
         pw.println(SEPARATOR);
         pw.println("# Total:    " + count);
         pw.println();
+        pw.println("# EOF");
         udf.close();       
     }
     
@@ -710,6 +712,8 @@ public class MakeUnicodeFiles {
                 pw.println(line);
             }
         }
+        pw.println();
+        pw.println("# EOF");
         udf.close();
     }
     
@@ -769,10 +773,16 @@ public class MakeUnicodeFiles {
                  ps.valueStyle = "none";
              }
 
-             if (ps.noLabel) bf.setLabelSource(null);
-             if (ps.nameStyle.equals("none")) bf.setPropName(null);
-             else if (ps.nameStyle.equals("short")) bf.setPropName(prop.getFirstNameAlias());
-             else bf.setPropName(name);
+             if (ps.noLabel) {
+            	 bf.setLabelSource(null);
+             }
+             if (ps.nameStyle.equals("none")) {
+            	 bf.setPropName(null);
+             } else if (ps.nameStyle.equals("short")) {
+            	 bf.setPropName(prop.getFirstNameAlias());
+             } else {
+            	 bf.setPropName(name);
+             }
             
              if (ps.interleaveValues) {
                 writeInterleavedValues(pw, bf, prop, ps);
@@ -784,6 +794,8 @@ public class MakeUnicodeFiles {
                  writeEnumeratedValues(pw, bf, unassigned, prop, ps);
              }
          }
+         pw.println();
+         pw.println("# EOF");
          udf.close();
      }
      
@@ -808,6 +820,15 @@ public class MakeUnicodeFiles {
              TreeSet temp2 = new TreeSet(NUMERIC_STRING_COMPARATOR);
              temp2.addAll(aliases);
              aliases = temp2;
+         }
+         System.out.println("Check: " + prop.getValue(0xE000));
+         String missing = ps.skipUnassigned != null ? ps.skipUnassigned : ps.skipValue;
+         if (missing != null && !missing.equals("False")) {
+        	 pw.println();
+        	 String propName = bf.getPropName();
+        	 if (propName == null) propName = "";
+        	 else if (propName.length() != 0) propName = propName + "; ";
+        	 pw.println("# @missing: 0000..10FFFF; " + propName + missing);
          }
          for (Iterator it = aliases.iterator(); it.hasNext();) {
              String value = (String)it.next();
@@ -891,6 +912,7 @@ public class MakeUnicodeFiles {
              pw.println();
              //if (s.size() != 0) 
              bf.showSetNames(pw, s);
+             //System.out.println(bf.showSetNames(s));
         }
         
     }

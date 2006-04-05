@@ -10,7 +10,7 @@
 # The data supports both implementations that require simple case foldings
 # (where string lengths don't change), and implementations that allow full case folding
 # (where string lengths may grow). Note that where they can be supported, the
-# full case foldings are superior: for example, they allow "MASSE" and "Maﬂe" to match.
+# full case foldings are superior: for example, they allow "MASSE" and "Ma√üe" to match.
 #
 # All code points not listed in this file map to themselves.
 #

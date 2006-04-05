@@ -1,6 +1,6 @@
-Generate: NamedSequences
+Generate: .*
 DeltaVersion: 14
-CopyrightYear: 2005
+CopyrightYear: 2006
 
 File: auxiliary/GraphemeBreakProperty
 Property: Grapheme_Cluster_Break
@@ -65,7 +65,10 @@ Value:	4.0
 # Newly assigned in Unicode 4.0.0 (April, 2003)
 
 Value:	4.1
-# Newly assigned in Unicode 4.1.0 (XXX, 2005)
+# Newly assigned in Unicode 4.1.0 (March, 2005)
+
+Value:	5.0
+# Newly assigned in Unicode 5.0.0 (XXX, 2006)
 
 File:	extracted/DerivedBidiClass
 Property:	Bidi_Class
@@ -158,6 +161,10 @@ Property:	Grapheme_Base
 #  Note: depending on an application's interpretation of Co (private use),
 #  they may be either in Grapheme_Base, or in Grapheme_Extend, or in neither.
 
+Property:	Grapheme_Link
+# Derived Property: Grapheme_Link (deprecated)
+#  Generated from: Canonical_Combining_Class=Virama
+#  Use Canonical_Combining_Class=Virama directly instead
 
 File:	extracted/DerivedDecompositionType
 Property:	Decomposition_Type
@@ -316,8 +323,6 @@ Property:	Noncharacter_Code_Point
 
 Property:	Other_Grapheme_Extend
 
-Property:	Grapheme_Link
-
 Property:	IDS_Binary_Operator
 
 Property:	IDS_Trinary_Operator
@@ -353,7 +358,7 @@ Property: SPECIAL
 
 File:	Scripts
 Property:	Script
-Format:	nameStyle=none skipUnassigned=Common
+Format:	nameStyle=none skipValue=Unknown
 
 File:	SpecialCasing
 Property: SPECIAL

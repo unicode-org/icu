@@ -48,7 +48,7 @@ public class UnicodeDataFile {
 	        out.println("# For documentation, see UCD.html");
     	}
         try {
-            Utility.appendFile(filename + "Header" + fileType, Utility.UTF8_UNIX, out);
+            Utility.appendFile("com/ibm/text/UCD/" + filename + "Header" + fileType, Utility.UTF8_UNIX, out);
         } catch (FileNotFoundException e) {
             /*
             out.println("# Unicode Character Database: Derived Property Data");
