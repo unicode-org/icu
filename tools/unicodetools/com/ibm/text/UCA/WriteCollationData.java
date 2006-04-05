@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2005/06/08 01:44:48 $ 
-* $Revision: 1.42 $
+* $Date: 2006/04/05 22:12:46 $ 
+* $Revision: 1.43 $
 *
 *******************************************************************************
 */
@@ -18,6 +18,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.TransliteratorUtilities;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.dev.test.util.UnicodePropertySource;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -33,7 +34,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.ibm.text.UCD.*;
-import com.ibm.text.UCD.UCD_Types;
 import com.ibm.text.utility.*;
 import com.ibm.text.UCD.Normalizer;
 
@@ -4104,8 +4104,8 @@ F900..FAFF; CJK Compatibility Ideographs
         bf.setLineSeparator("<br>\r\n");
         ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
         bf.setUnicodePropertyFactory(ups);
-        bf.setShowLiteral(bf.toHTML);
-        bf.setFixName(bf.toHTML);
+        bf.setShowLiteral(TransliteratorUtilities.toHTML);
+        bf.setFixName(TransliteratorUtilities.toHTML);
         UCD ucd = Default.ucd();
         UnicodeProperty cat = ups.getProperty("gc");
         UnicodeSet ucd410 = cat.getSet("Cn")

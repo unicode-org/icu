@@ -1,6 +1,10 @@
 package com.ibm.text.UCD;
+import com.ibm.icu.impl.CollectionUtilities;
+import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
+
 import java.util.BitSet;
 import com.ibm.text.utility.*;
 import java.io.PrintWriter;
@@ -194,6 +198,7 @@ public final class NFSkippable extends UCDProperty {
         
         
         PrintWriter out = Utility.openPrintWriter("NFSafeSets.txt", Utility.UTF8_WINDOWS);
+        out.println(Utility.BOM);
         out.println("NFSafeSets");
         out.println("Version: " + Default.ucd().getVersion());
         out.println("Date: " + Default.getDate());
@@ -212,6 +217,8 @@ public final class NFSkippable extends UCDProperty {
         out.close();
     }
     
+    static Collator UCA = Collator.getInstance(ULocale.ROOT);
+    
     static void generateSet(PrintWriter out, String label, UCDProperty up) {
         System.out.println("Generating: " + up.getName(NORMAL));
         UnicodeSet result = new UnicodeSet();
@@ -227,11 +234,17 @@ public final class NFSkippable extends UCDProperty {
         out.println(label + " = new UnicodeSet(");
         writeStringInPieces(out, rSet, ", false);");
             
-        rSet = result.toPattern(false);
+        if (true) {
+        	rSet = result.toPattern(false);
+        } else {
+        	rSet = CollectionUtilities.prettyPrint(result, true, null, null, UCA, UCA);
+        }
+        
         out.println("/*Unicode: ");
         writeStringInPieces(out, rSet, "*/");
         out.println();
         out.flush();
+        System.out.println("Done");
     }
     
             /*

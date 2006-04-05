@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2005/10/11 19:39:15 $
-* $Revision: 1.36 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -160,8 +160,9 @@ public final class Main implements UCD_Types {
                 //else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();
                 else if (arg.equalsIgnoreCase("GenerateThaiBreaks")) GenerateThaiBreaks.main(null);
                 
-    			else if (arg.equalsIgnoreCase("TestData")) TestData.main(new String[]{args[++i]});
-                
+                else if (arg.equalsIgnoreCase("TestData")) TestData.main(new String[]{args[++i]});
+                else if (arg.equalsIgnoreCase("MakeUnicodeFiles")) MakeUnicodeFiles.main(new String[]{});
+
                 //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
                 else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
                 else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();

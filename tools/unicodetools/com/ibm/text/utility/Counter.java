@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Counter.java,v $
-* $Date: 2005/10/11 19:39:15 $
-* $Revision: 1.3 $
+* $Date: 2006/04/05 22:12:45 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,7 @@ import java.io.*;
 import java.text.*;
 
 public final class Counter {
-    Map map = new HashMap();
+    private Map map = new HashMap();
 
     static public final class RWInteger implements Comparable {
         static int uniqueCount;
@@ -92,5 +92,11 @@ public final class Counter {
         return result;
     }
 
-
+    public Set keySet() {
+        return map.keySet();
+    }
+    
+    public Map getMap() {
+        return Collections.unmodifiableMap(map);
+    }
 }

@@ -254,18 +254,19 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
 						, "Katakana");
         		Object foo = unicodeMap.getSet("Katakana");
         		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
+        		UnicodeProperty lineBreak = getProperty("Line_Break");
         		unicodeMap.putAll(getProperty("Alphabetic").getSet("true")
         				.add(0xA0).add(0x05F3)
 						.removeAll(getProperty("Ideographic").getSet("true"))
 						.removeAll(unicodeMap.getSet("Katakana"))
-						.removeAll(script.getSet("Thai"))
-						.removeAll(script.getSet("Lao"))
+						//.removeAll(script.getSet("Thai"))
+						//.removeAll(script.getSet("Lao"))
+						.removeAll(lineBreak.getSet("SA"))
 						.removeAll(script.getSet("Hiragana"))
 						.removeAll(graphemeExtend),
 						"ALetter");
         		unicodeMap.putAll(new UnicodeSet("[\\u0027\\u00B7\\u05F4\\u2019\\u2027\\u003A]")
 								,"MidLetter");
-        		UnicodeProperty lineBreak = getProperty("Line_Break");
         		unicodeMap.putAll(lineBreak.getSet("Infix_Numeric")
         				.remove(0x003A), "MidNum");
         		unicodeMap.putAll(lineBreak.getSet("Numeric"), "Numeric");

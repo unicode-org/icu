@@ -70,3 +70,6 @@
 # Note: the following case is already in the UnicodeData file.
 
 # 0131; 0131; 0049; 0049; tr; # LATIN SMALL LETTER DOTLESS I
+
+# EOF
+

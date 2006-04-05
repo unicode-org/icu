@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2005/11/01 00:10:54 $
-* $Revision: 1.32 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -398,8 +398,14 @@ public interface UCD_Types {
 	    SYLOTI_NAGRI = 60,
 	    OLD_PERSIAN = 61,
 	    KHAROSHTHI = 62,
+	    Balinese = 63,
+	    Cuneiform = 64,
+	    Phoenician = 65,
+	    Phags_Pa = 66,
+	    NKo = 67,
+	    Unknown_Script = 68,
 
-        LIMIT_SCRIPT = 63;
+        LIMIT_SCRIPT = 69;
 
   static final int
     UNKNOWN = 0,
@@ -411,7 +417,8 @@ public interface UCD_Types {
     AGE32 = 6,
     AGE40 = 7,
     AGE41 = 8,
-    LIMIT_AGE = 9;
+    AGE50 = 9,
+    LIMIT_AGE = 10;
 
     static final String[] AGE_VERSIONS = {
         "?",
@@ -422,7 +429,8 @@ public interface UCD_Types {
         "3.1.0",
         "3.2.0",
         "4.0.0",  
-        "4.1.0"       
+        "4.1.0",      
+        "5.0.0"       
     };
 
 public static byte

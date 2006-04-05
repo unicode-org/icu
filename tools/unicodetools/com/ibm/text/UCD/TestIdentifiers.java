@@ -26,8 +26,16 @@ public class TestIdentifiers {
 	public static void main(String[] args) throws IOException {
 		String[] tests = { "SØS", "façade", "MOPE", "VOP", "scope", "ibm", "vop",
 				"toys-я-us", "1iνе", "back", "boгing" };
+		
 		TestIdentifiers ti = new TestIdentifiers("L");
 		TestIdentifiers tiany = new TestIdentifiers("A");
+		ti.loadIdentifiers();
+		UnicodeSet idnCharSet = ti.idnChars.getSet("output", new UnicodeSet());
+		System.out.println("idnCharSet: " + idnCharSet.size());
+		UnicodeSet idnCharNonStarting = ti.nonstarting;
+		System.out.println("idnCharNonStarting: " + idnCharSet);
+		if (true) return;
+		
 		for (int i = 0; i < tests.length; ++i) {
 			System.out.print(tests[i]);
 			String folded = UCharacter.foldCase(tests[i], true);

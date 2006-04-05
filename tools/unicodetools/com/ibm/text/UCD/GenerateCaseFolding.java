@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2005/03/26 05:40:04 $
-* $Revision: 1.17 $
+* $Date: 2006/04/05 22:12:45 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -585,8 +585,8 @@ public class GenerateCaseFolding implements UCD_Types {
         out.println("# SpecialCasing" + UnicodeDataFile.getFileSuffix(false));
         out.println(UnicodeDataFile.generateDateLine());
         out.println("#");
-        Utility.appendFile("SpecialCasingHeader.txt", Utility.UTF8, out);
 */        
+        //Utility.appendFile("com/ibm/text/UCD/SpecialCasingHeader.txt", Utility.UTF8, out);
 
         Iterator it = sorted.keySet().iterator();
         int lastOrder = -1;
@@ -609,7 +609,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 case 3: out.println("# Ligatures"); break;
                 case 4: skipLine = true; break;
                 case 5: out.println("# No corresponding uppercase precomposed character"); break;
-                case 6: Utility.appendFile("SpecialCasingIota.txt", Utility.UTF8, out); break;
+                case 6: Utility.appendFile("com/ibm/text/UCD/SpecialCasingIota.txt", Utility.UTF8, out); break;
                 case 7: out.println("# Some characters with YPOGEGRAMMENI also have no corresponding titlecases"); break;
                 case 8: skipLine = true; break;
                 }
@@ -617,7 +617,7 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             out.println(line);
         }
-        //Utility.appendFile("SpecialCasingFooter.txt", Utility.UTF8, out);
+        Utility.appendFile("com/ibm/text/UCD/SpecialCasingFooter.txt", Utility.UTF8, out);
         udf.close();
         //Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }

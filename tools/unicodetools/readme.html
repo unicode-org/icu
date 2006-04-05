@@ -77,7 +77,10 @@ exist:<br>
 &lt;UCD_DIR&gt;/EXTRAS-Update</p>
 <h3>2. Download all of the UnicodeData files for each version into UCD_DIR.</h3>
 <p>The folder names must be of the form: &quot;3.2.0-Update&quot;, so rename the folders on the<br>
-Unicode site to this format.</p>
+Unicode site to this format. I<span style="background-color: #FFFF00">f the 
+folder contains ucd, then make the contents of that directory be the contents of 
+the x.x.x-Update directory. That is, each directory will directly contain files 
+like PropList....txt</span></p>
 <h4>2a Ensure Complete Release</h4>
 <p>If you are downloading any &quot;incomplete&quot; release (one that does not contain a complete set of data 
 files for that release, you need to also download the previous complete release). Most of the N.M-Update 
@@ -87,6 +90,7 @@ directoriess are complete, *except*:</p>
 <p>Also, make the following changes to UnicodeData for 1.1.5:</p>
 <p><b>Delete</b></p>
 <pre>3400;HANGUL SYLLABLE KIYEOK A;Lo;0;L;1100 1161;;;;N;;;;;
+...
 4DFF;HANGUL SYLLABLE MIEUM WEO RIEUL-THIEUTH;Lo;0;L;1106 116F 11B4;;;;N;;;;;
 4E00;<cjk IDEOGRAPH REPRESENTATIVE>;Lo;0;L;;;;;N;;;;;</pre>
 <p><b>Add:</b></p>
@@ -106,18 +110,19 @@ BASE_DIR + &quot;Collation\allkeys&quot; + VERSION + &quot;.txt&quot;.<br>
 <br>
 If you have it in a different location, change that value for KEYS in UCA.java, and <br>
 the value for BASE_DIR</p>
-<h4>2c. Here is an example of the default directory structure with files:</h4>
+<h4>2c. Here is an example of the default directory structure with files. All of 
+the yellow ones should exist</h4>
 <pre>C://DATA/
 
         BIN/
     
-        Collation/
+<span style="background-color: #FFFF00">        Collation/
             allkeys-3.1.1.txt
-        
+</span>        
         GEN/
             DerivedData/
                 ExtractedProperties
-        UCD/
+<span style="background-color: #FFFF00">        </span><span style="background-color: #FFFF00">UCD/
             3.0.0-Update/
                 Unihan-3.2.0.txt
                 ...
@@ -133,69 +138,145 @@ the value for BASE_DIR</p>
                 ArabicShaping-4.0.0d14b.txt
                 BidiMirroring-4.0.0d1b.txt
                 ...
-            EXTRAS-Update/</pre>
+            EXTRAS-Update/</span></pre>
 <h3>3. Versions</h3>
 <p>All of the following have &quot;version X&quot; in the options you give to Java (either on the&nbsp; 
 command line, or in the Eclipse 'run' options. If you want a specific version like 3.1.0, then you 
 would write &quot;version 3.1.1&quot;. If you want the latest version (4.1.0), you can omit the &quot;version X&quot;.</p>
-<h3>4. Running UCD, you will use com.ibm.text.UCD.Main as your main class.</h3>
-<p>The Working directory has to be C:\ICU4J\unicodetools\com\ibm\text\UCD<br>
-(In Eclipse you can also use ${workspace_loc:UnicodeTools/com/ibm/text/UCD}, which abstracts away 
-the location.)<br>
-<br>
-The same for UCA:</p>
-<p>main: com.ibm.text.UCD.Main<br>
-directory: <a href="file:///C:/ICU4J/unicodetools/com/ibm/text/UCA">
-C:\ICU4J\unicodetools\com\ibm\text\UCA</a></p>
-<h4>4a. BIN</h4>
-<p>For each version, the tools build a set of binary data in BIN that contain the information for 
-that release. This is done automatically, or you can manually do it with the options<br>
-<br>
-version X build<br>
-<br>
-This builds an compressed format of all the UCD data (except blocks and Unihan) into the BIN 
-directory. Don't worry about the voluminous console messages, unless one says &quot;FAIL&quot;.<br>
-<br>
-<font color="#FF0000"><i>You have to manually do this if you change any of the data files in that 
-version!!</i></font></p>
-<p>Note: if for any reason you modify the binary format of the BIN files, you also have to bump the 
-value in that file:<br>
-<br>
-static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes</p>
-<h4>4b. To build the Unicode files for a particular version X, run the Main with the following 
-argument:</h4>
-<p>MakeUnicodeFiles.generateFile</p>
-<p>This will execute the commands in the file MakeUnicodeFiles.txt.</p>
-<p>You will edit that file if you want a different 'd' version for the files, OR if you want to 
-change which files are built. At the top of the file you will see the following text:</p>
-<pre>Generate: </pre>
-<pre>DeltaVersion: 7</pre>
-<h4>4c. To change which files are built, put any number of regular expressions separated by spaces 
-after Generate. Eg,</h4>
-<pre>Generate: .*line.* prop.*</pre>
-<p>The matching is case-insensitive.</p>
-<h4>4d. To change the 'd' number that is appended to the generated files names, change the 
-DeltaVersion.</h4>
-<h4>4e. To run basic consistency checking, run:</h4>
-<p>version X verify<br>
-<br>
-Don't worry about any console messages except those that say FAIL.</p>
-<h4>4f. Output</h4>
-<p>The files will be generated in the GEN directories.</p>
-<ul>
-  <li>If they are the same as previous files (except for the first line and Date), they will be 
-  renamed to UNCHANGED... </li>
-  <li>If they are not, then a bat file will be generated in the DIFF directory. Double-clicking on 
-  this file will launch CompareIt, which is a nice diff program. Get compareIt from
-  <a class="xurl" href="http://www.grigsoft.com/files.htm">http://www.grigsoft.com/files.htm</a> (be 
-  sure to get the Unicode version),then you can also set it as the diff program in CVS with 
-  Admin/Preferences/WinCVS, External Diff = C:\Program Files\Compare It!\wincmp3.exe (or equiv).</li>
-</ul>
-<h3>5. Running UCA, you will use com.ibm.text.UCA.Main as your main class.</h3>
-<h4>5a. To build all the UCA files used by ICU, use the option:</h4>
-<p>java &lt;UCA&gt;Main ICU</p>
-<h4>6. To build all the charts, use the UCA project, with options: normalizationChart caseChart 
-scriptChart indexChart</h4>
+<h3>4. Building Files</h3>
+<ol>
+	<li><b>Setup</b><ol>
+		<li>In Eclipse, open the Package Explorer (Use Window&gt;Show View if you 
+		don't see it)</li>
+		<li>Open UnicodeTools<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>MakeUnicodeFiles.<span style="background-color: #FFFF00">txt</span><p>This file drives the production of 
+				the derived Unicode files. The first three lines contain 
+				parameters that you may want to modify at some times:</p>
+				<pre>Generate: <b>.*script.*</b> <i>// this is a regular expression. Use .* for all files</i>
+DeltaVersion: <b>10</b> <i>    // This gets appended to the file name. Pick 1+ the highest value in Public</i>
+CopyrightYear: <b>2006</b> <i> // Pick the current year</i></pre>
+				</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Open in Package Explorer 
+		<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>Main</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Run&gt;Run As...<ol>
+			<li>Choose Java Application<ul>
+				<li>it will fail, don't worry; you need to set some parameters</li>
+			</ul>
+			</li>
+		</ol>
+		</li>
+		<li>Run&gt;Run...<ul>
+			<li>Select the Arguments tab, and fill in the following<ul>
+				<li>Program arguments:<pre>build 5.0 MakeUnicodeFiles</pre>
+				</li>
+				<li>VM arguments: 
+				<pre>-Xms512m -Xmx512m</pre>
+				</li>
+			</ul>
+			</li>
+			<li>Close and Save</li>
+		</ul>
+		</li>
+	</ol>
+	</li>
+	<li><b>Run</b><ol>
+		<li>You'll see it build the 5.0 files, with something like the following 
+		results:<pre>Writing UCD_Data5.0.0
+Data Size: 109,802
+Wrote Data 109802</pre>
+		</li>
+		<li>For each version, the tools build a set of binary data in BIN that 
+		contain the information for that release. This is done automatically, or 
+		you can manually do it with the Program Arguments<pre>version X build</pre>
+		<p>This builds an compressed format of all the UCD data (except blocks 
+		and Unihan) into the BIN directory. Don't worry about the voluminous 
+		console messages, unless one says &quot;FAIL&quot;.</p>
+		<p><font color="#FF0000"><i>You have to manually do this if you change 
+		any of the data files in that version!</i></font></p>
+		<p>Note: if for any reason you modify the binary format of the BIN files, you also have to bump the 
+value in that file:</p>
+		<pre>static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes</pre>
+		</li>
+	</ol>
+	</li>
+	<li>Results in <a href="file:///C:/DATA/GEN/DerivedData">
+	C:\DATA\GEN\DerivedData</a><ol>
+		<li>The files will be in this directory.</li>
+		<li>There are also DIFF folders, that contain BAT files that you can run 
+		on Windows with CompareIt. (You can modify the code to build BATs with 
+		another Diff program if you want).<ol>
+			<li>For any file with a significant difference, it will build two 
+			BAT files, such as the first two below.<pre>Diff_PropList-5.0.0d10.txt.bat
+OLDER-Diff_PropList-5.0.0d10.txt.bat
+
+UNCHANGED-Diff_PropertyValueAliases-5.0.0d10.txt.bat</pre>
+			</li>
+		</ol>
+		</li>
+		<li>Any files without significant changes will have &quot;UNCHANGED&quot; as a 
+		prefix: ignore them.&nbsp; The OLDER prefix is the comparison to the 
+		last version of Unicode.</li>
+		<li>On Windows you can run these BATs to compare files:</li>
+	</ol>
+	</li>
+</ol>
+<h3>5. Invariant Checking</h3>
+<ol>
+	<li>Setup<ol>
+		<li>Open in Package Explorer<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>TestUnicodeInvariants.java</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Run&gt;Run As... Java Application<br>
+		Will create the following file of results:<pre><a href="file:///C:/DATA/GEN/UnicodeInvariantResults.txt/">C:\DATA\GEN\UnicodeInvariantResults.txt\</a></pre>
+		</li>
+		<li>Open that file and search for &quot;**** START Error Info ****&quot; Each such 
+		point provides a dump of comparison information.</li>
+	</ol>
+	</li>
+</ol>
+<h3>6. Options</h3>
+<ol>
+	<li>If you want to see files that are opened while processing, do the 
+	following:<ol>
+		<li>Run&gt;Run</li>
+		<li>Select the Arguments tab, and add the following<ol>
+			<li>VM arguments:
+			<pre>-DSHOW_FILES</pre>
+			</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+</ol>
+<h3>5. UCA</h3>
+<ol>
+	<li>
+	<h3>You will use com.ibm.text.UCA.Main as your main class, creating along 
+	the same lines as above.</h3></li>
+	<li>
+	<h4>To build all the UCA files used by ICU, use the Program arguments:</h4>
+	<pre>Main ICU</pre>
+	</li>
+	<li>
+	<h4>To build all the charts, use the UCA project, with options: </h4>
+	<pre>normalizationChart caseChart scriptChart indexChart</pre>
+	</li>
+</ol>
 
 </body>
 

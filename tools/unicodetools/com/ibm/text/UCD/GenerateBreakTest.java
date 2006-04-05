@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2005/03/30 17:19:32 $
-* $Revision: 1.13 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -310,7 +310,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         //printLine(out, samples[LB_ZW], "", samples[LB_CL]);
         //printLine(out, samples[LB_ZW], " ", samples[LB_CL]);
 
-        UnicodeDataFile fc = UnicodeDataFile.openHTMLAndWriteHeader("auxiliary\\", fileName + "BreakTest");
+        UnicodeDataFile fc = UnicodeDataFile.openHTMLAndWriteHeader("DerivedData\\auxiliary\\", fileName + "BreakTest");
         PrintWriter out = fc.out;
 
 /*        PrintWriter out = Utility.openPrintWriter("auxiliary\\" 
@@ -354,7 +354,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         String[] testCase = new String[50];
         // do main test
 
-        UnicodeDataFile fc = UnicodeDataFile.openAndWriteHeader("auxiliary\\", fileName + "BreakTest" 
+        UnicodeDataFile fc = UnicodeDataFile.openAndWriteHeader("DerivedData\\auxiliary\\", fileName + "BreakTest" 
                 + (shortVersion ? "_SHORT" : ""));
         PrintWriter out = fc.out;
 /*        PrintWriter out = Utility.openPrintWriter("TR29\\" + fileName + "BreakTest" 

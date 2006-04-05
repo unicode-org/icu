@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.TransliteratorUtilities;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodePropertySource;
 import com.ibm.icu.text.Collator;
@@ -71,7 +72,7 @@ public class MakeNamesChart {
 			System.out.println("file: " + chartPrefix + fileName);
 			PrintWriter out = BagFormatter.openUTF8Writer("C:/DATA/GEN/charts/namelist/", chartPrefix + fileName);
 			out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>" +
-					BagFormatter.toHTML.transliterate(getHeading(lineParts[2])) +
+					TransliteratorUtilities.toHTML.transliterate(getHeading(lineParts[2])) +
 					"</title><link rel='stylesheet' type='text/css' href='namelist.css'>" +
 					"<base target='names'></head><body>");
 
@@ -117,7 +118,7 @@ public class MakeNamesChart {
 					String hexcp = Utility.hex(it.codepoint, 4);
 					String title = "";
 					String name = Default.ucd().getName(it.codepoint);
-					if (name != null) title = " title='" + BagFormatter.toHTML.transliterate(name.toLowerCase()) + "'";
+					if (name != null) title = " title='" + TransliteratorUtilities.toHTML.transliterate(name.toLowerCase()) + "'";
 					out.println("<td class='" + tdclass + "'"
 							+ title
 							+ ">\u00A0"
@@ -347,7 +348,7 @@ public class MakeNamesChart {
 	static Matcher escapeMatch = Pattern.compile("\\&[A-Z][a-z]*\\;").matcher("");
 	
 	private static String showTextConvertingHex(String body, boolean addCharToHex) {
-		body = BagFormatter.toHTML.transliterate(body);
+		body = TransliteratorUtilities.toHTML.transliterate(body);
 		if (addCharToHex) {
 			int position = 0;
 			while (position < body.length()) {
@@ -411,7 +412,7 @@ public class MakeNamesChart {
 		if (type == UCD.Cn || type == UCD.Co || type == UCD.Cs) {
 			return "\u2588";
 		}
-		String result = BagFormatter.toHTML.transliterate(UTF16.valueOf(cp));
+		String result = TransliteratorUtilities.toHTML.transliterate(UTF16.valueOf(cp));
 		if (type == UCD.Me || type == UCD.Mn) {
 			result = "\u25CC" + result;
 		} else if (rtl.contains(cp)) {

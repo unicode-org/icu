@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2005/03/10 02:37:20 $
-* $Revision: 1.31 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -345,7 +345,12 @@ final class UCD_Names implements UCD_Types {
     "SYLOTI_NAGRI",
     "OLD_PERSIAN",
     "KHAROSHTHI",
-    
+    "Balinese",
+    "Cuneiform",
+    "Phoenician",
+    "Phags-pa",
+    "Nko",
+    "Unknown"
   };
 
 	public static final Map EXTRA_SCRIPT = new HashMap();
@@ -426,10 +431,13 @@ final class UCD_Names implements UCD_Types {
     "Sylo",
     "Xpeo",
     "Khar",
-
+    "Bali",
+    "Xsux",
+    "Phnx",
+    "Phag",
+    "Nkoo",
+    "Zzzz"
   };
-
-
 
   static final String[] AGE = {
     "unassigned",
@@ -441,8 +449,8 @@ final class UCD_Names implements UCD_Types {
     "3.2",
     "4.0",
 	"4.1",
+	"5.0",
   };
-
 
     static final String[] GENERAL_CATEGORY = {
         "Cn", // = Other, Not Assigned 0

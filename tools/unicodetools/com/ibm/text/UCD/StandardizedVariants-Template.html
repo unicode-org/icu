@@ -1,13 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-
-       "http://www.w3.org/TR/REC-html40/loose.dtd"> 
-
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta name="keywords" content="unicode, variant glyphs">
 <meta name="description" content="Describes and displays standardized variant glyphs">
@@ -19,8 +16,9 @@
 
 <table class="header">
   <tr>
-    <td class="icon"><a href="http://www.unicode.org"><img align="middle" alt="[Unicode]" border="0" src="http://www.unicode.org/webscripts/logo60s2.gif" width="34" height="33"></a>&nbsp;&nbsp;<a class="bar" href="http://www.unicode.org/ucd">Unicode 
-      Character Database</a></td>
+    <td class="icon"><a href="http://www.unicode.org">
+    <img align="middle" alt="[Unicode]" border="0" src="http://www.unicode.org/webscripts/logo60s2.gif" width="34" height="33"></a>&nbsp;&nbsp;<a class="bar" href="http://www.unicode.org/ucd">Unicode 
+    Character Database</a></td>
   </tr>
   <tr>
     <td class="gray">&nbsp;</td>
@@ -29,105 +27,78 @@
 <blockquote>
   <h1>Standardized Variants</h1>
   <table class="wide">
-    <tbody>
-      <tr>
-        <td valign="top" width="144">Revision</td>
-        <td valign="top">@revision@</td>
-      </tr>
-      <tr>
-        <td valign="top" width="144">Authors</td>
-        <td valign="top">Members of the Editorial Committee</td>
-      </tr>
-      <tr>
-        <td valign="top" width="144">Date</td>
-        <td valign="top">@date@</td>
-      </tr>
-      <tr>
-        <td valign="top" width="144">This Version</td>
-        <td valign="top"><a href="http://www.unicode.org/Public/@updateDirectory@/StandardizedVariants-@revision@.html">http://www.unicode.org/Public/@updateDirectory@/StandardizedVariants-@revision@.html</a></td>
-      </tr>
-      <tr>
-        <td valign="top" width="144">Previous Version</td>
-        <td valign="top"><a href="http://www.unicode.org/Public/3.2-Update/StandardizedVariants-3.2.0.html">http://www.unicode.org/Public/3.2-Update/StandardizedVariants-3.2.0.html</a></td>
-      </tr>
-      <tr>
-        <td valign="top" width="144">Latest Version</td>
-        <td valign="top"><a href="http://www.unicode.org/Public/UNIDATA/StandardizedVariants.html">http://www.unicode.org/Public/UNIDATA/StandardizedVariants.html</a></td>
-      </tr>
-    </tbody>
+    <tr>
+      <td valign="top" width="144">Revision</td>
+      <td valign="top">@revision@</td>
+    </tr>
+    <tr>
+      <td valign="top" width="144">Authors</td>
+      <td valign="top">Members of the Editorial Committee</td>
+    </tr>
+    <tr>
+      <td valign="top" width="144">Date</td>
+      <td valign="top">@date@</td>
+    </tr>
+    <tr>
+      <td valign="top" width="144">This Version</td>
+      <td valign="top"><a href="http://www.unicode.org/Public/@updateDirectory@/@filename@.html">
+      http://www.unicode.org/Public/@updateDirectory@/@filename@.html</a></td>
+    </tr>
+    <tr>
+      <td valign="top" width="144">Previous Version</td>
+      <td valign="top"><a href="http://www.unicode.org/Public/4.1.0/ucd/StandardizedVariants.html">
+      http://www.unicode.org/Public/4.1.0/ucd/StandardizedVariants.html</a></td>
+    </tr>
+    <tr>
+      <td valign="top" width="144">Latest Version</td>
+      <td valign="top"><a href="http://www.unicode.org/Public/UNIDATA/StandardizedVariants.html">
+      http://www.unicode.org/Public/UNIDATA/StandardizedVariants.html</a></td>
+    </tr>
   </table>
   <h3><br>
   <i>Summary</i></h3>
   <blockquote>
-    <p>This file provides a visual display of the standard variant sequences 
-    derived from StandardizedVariants.txt.</p>
+    <p>This file provides a visual display of the standard variant sequences derived from 
+    StandardizedVariants.txt.</p>
   </blockquote>
   <h3><i>Status</i></h3>
   <blockquote>
-    <p><i>The file and the files described herein are part of the <a href="http://www.unicode.org/ucd">Unicode 
-    Character Database</a> (UCD) and are governed by the <a href="#Terms of Use">UCD 
-    Terms of Use</a> stated at the end.</i></p>
+    <p><i>This file and the files described herein are part of the Unicode Character Database and 
+    are governed by the terms of use at <a href="http://www.unicode.org/terms_of_use.html">
+    http://www.unicode.org/terms_of_use.html</a>.</i></p>
   </blockquote>
   <hr width="50%">
   <h2>Introduction</h2>
-  <p>The tables here <i>exhaustively</i> lists the valid, registered 
-  combinations of base character plus variation indicator. All combinations not 
-  listed in StandardizedVariants.txt are unspecified and are reserved for future 
-  standardization; no conformant process may interpret them as standardized 
-  variants. Variation selectors and their use are described in The Unicode 
-  Standard.</p>
-  <p>These mathematical variants are all produced with the addition of Variation 
-  Selector 1 (VS1 or U+FE00) to mathematical operator base characters. There is 
-  no variation according to context. The Mongolian variants use the Mongolian 
-  Variant Selectors, and may vary according to context. That is, if a contextual 
-  shape is not listed below, then the variation sequence has an unmodified 
+  <p>The tables here <i>exhaustively</i> lists the valid, registered combinations of base character 
+  plus variation indicator. All combinations not listed in StandardizedVariants.txt are unspecified 
+  and are reserved for future standardization; no conformant process may interpret them as 
+  standardized variants. Variation selectors and their use are described in The Unicode Standard.</p>
+  <p>These mathematical variants are all produced with the addition of Variation Selector 1 (VS1 or 
+  U+FE00) to mathematical operator base characters. There is no variation according to context. The 
+  Mongolian variants use the Mongolian Variant Selectors, and may vary according to context. That 
+  is, if a contextual shape is not listed below, then the variation sequence has an unmodified 
   appearance. At this time no Han variants exist.</p>
   <blockquote>
-    <p><a name="fonts"><b>Note: </b></a>The glyphs used to show the variations 
-    are often derived from different physical fonts than the representative 
-    glyphs in the standard. They may therefore exhibit minor differences in 
-    size, proportion, or weight <i>unrelated</i> to the intentional difference 
-    in feature that is the defining element of the variation. Such minor 
-    differences should be ignored. Likewise, in some cases the existing 
-    representative fonts may not yet contain newly encoded characters and hence 
-    some representative glyphs shown in these tables may have a slightly 
-    different style than others.</p>
+    <p><a name="fonts"><b>Note: </b></a>The glyphs used to show the variations are often derived 
+    from different physical fonts than the representative glyphs in the standard. They may therefore 
+    exhibit minor differences in size, proportion, or weight <i>unrelated</i> to the intentional 
+    difference in feature that is the defining element of the variation. Such minor differences 
+    should be ignored. Likewise, in some cases the existing representative fonts may not yet contain 
+    newly encoded characters and hence some representative glyphs shown in these tables may have a 
+    slightly different style than others.</p>
   </blockquote>
   <p>@table@</p>
-  <hr width="50%">
-  <h2>UCD <a name="Terms of Use">Terms of Use</a></h2>
-  <h3><i>Disclaimer</i></h3>
-  <blockquote>
-    <p><i>The Unicode Character Database is provided as is by Unicode, Inc. No 
-    claims are made as to fitness for any particular purpose. No warranties of 
-    any kind are expressed or implied. The recipient agrees to determine 
-    applicability of information provided. If this file has been purchased on 
-    magnetic or optical media from Unicode, Inc., the sole remedy for any claim 
-    will be exchange of defective media within 90 days of receipt.</i></p>
-    <p><i>This disclaimer is applicable for all other data files accompanying 
-    the Unicode Character Database, some of which have been compiled by the 
-    Unicode Consortium, and some of which have been supplied by other sources.</i></p>
-  </blockquote>
-  <h3><i>Limitations on Rights to Redistribute This Data</i></h3>
-  <blockquote>
-    <p><i>Recipient is granted the right to make copies in any form for internal 
-    distribution and to freely use the information supplied in the creation of 
-    products supporting the Unicode<sup>TM</sup> Standard. The files in the 
-    Unicode Character Database can be redistributed to third parties or other 
-    organizations (whether for profit or not) as long as this notice and the 
-    disclaimer notice are retained. Information can be extracted from these 
-    files and used in documentation or programs, as long as there is an 
-    accompanying notice indicating the source.</i></p>
-  </blockquote>
   <hr width="50%">
   <div align="center">
     <center>
     <table cellspacing="0" cellpadding="0" border="0">
       <tr>
-        <td><a href="http://www.unicode.org/unicode/copyright.html"><img src="http://www.unicode.org/img/hb_notice.gif" border="0" alt="Access to Copyright and terms of use" width="216" height="50"></a></td>
+        <td><a href="http://www.unicode.org/unicode/copyright.html">
+        <img src="http://www.unicode.org/img/hb_notice.gif" border="0" alt="Access to Copyright and terms of use" width="216" height="50"></a></td>
       </tr>
     </table>
-    <script language="Javascript" type="text/javascript" src="http://www.unicode.org/webscripts/lastModified.js"></script>
+    <script language="Javascript" type="text/javascript" src="http://www.unicode.org/webscripts/lastModified.js">
+    </script>
     </center>
   </div>
 </blockquote>

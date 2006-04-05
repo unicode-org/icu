@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2005/11/01 00:10:54 $
-* $Revision: 1.40 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,8 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "5.1.0";
+    public static final String latestVersion = "5.0.0";
+    public static final String lastVersion = "4.1.0";
 
     /**
      * Create singleton instance for default (latest) version
@@ -803,6 +804,9 @@ public final class UCD implements UCD_Types {
     }
 
     public byte getScript(int codePoint) {
+    	if (codePoint == 0xE000) {
+    		codePoint += 0;
+    	}
         return get(codePoint, false).script;
     }
     
@@ -1398,6 +1402,7 @@ to guarantee identifier closure.
         }
         if (isHangul) {
             if (fixStrings) result.decompositionMapping = getHangulDecompositionPair(codePoint);
+            if (isLV(codePoint)) result.lineBreak = LB_H2; else result.lineBreak = LB_H3;
             result.decompositionType = CANONICAL;
         }
         return result;
@@ -1612,6 +1617,9 @@ to guarantee identifier closure.
                 }
 
                 combiningClassSet.set(uData.combiningClass & 0xFF);
+                if (cp == 0xE000) {
+                	System.out.println("Check: " + uData.script);
+                }
                 add(uData);
             }
             /*

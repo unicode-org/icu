@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2004/02/12 08:23:16 $
-* $Revision: 1.11 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -45,7 +45,7 @@ class UData implements UCD_Types {
     byte lineBreak = LB_XX;
     byte joiningType = -1;
     byte joiningGroup = NO_SHAPING;
-    byte script = COMMON_SCRIPT;
+    byte script = Unknown_Script;
     byte age = 0;
 
     static final UData UNASSIGNED = new UData();

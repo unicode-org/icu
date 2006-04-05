@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/11/19 05:39:39 $
-* $Revision: 1.24 $
+* $Date: 2006/04/05 22:12:43 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -27,6 +27,7 @@ import com.ibm.icu.impl.CollectionUtilities;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharArrayIterator;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
@@ -45,8 +46,17 @@ public class TestData implements UCD_Types {
     static UnicodeProperty.Factory upf;
     
 	public static void main (String[] args) throws IOException {
-		//checkChars(false);
-        
+		tryConsole2();
+		if (true) return;
+		
+		showNonCompatFull(false);
+		showNonCompatFull(true);
+		
+
+		checkForCaseStability(false);
+		//countChars();
+		foo();
+       
         System.out.println("main: " + Default.getDate());
         upf = ICUPropertyFactory.make();
         System.out.println("after factory: " + Default.getDate());
@@ -146,8 +156,152 @@ public class TestData implements UCD_Types {
 			}
 		} finally {
 			log.close();
+				}
+	}
+	
+	private static void showNonCompatFull(boolean compat) {
+		UCD ucd = UCD.make("4.1.0");
+		Normalizer nfkc = new Normalizer(Normalizer.NFKC, ucd.getVersion());
+		System.out.println();
+		System.out.println(compat ? "Full Fold = Simple Lower of NFKC" : "Full Fold != Simple Lower of NFKC");
+		System.out.println();
+		int count = 0;
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			int gc = ucd.getCategory(i);
+			if (gc == Cn || gc == PRIVATE_USE) continue;
+			//if (compat == (ucd.getDecompositionType(i) > UCD.CANONICAL)) continue;
+			String str = UTF16.valueOf(i);
+			String simpleLower = ucd.getCase(str, SIMPLE, LOWER);
+			String fullFold = ucd.getCase(str, FULL, FOLD);
+			
+			if (!simpleLower.equals(fullFold)) {
+				String nfkcStr = nfkc.normalize(str);
+				String simpleLowerNfkc = ucd.getCase(nfkcStr, SIMPLE, LOWER);
+				if (compat != (fullFold.equals(simpleLowerNfkc))) continue;
+				System.out.println(ucd.getCodeAndName(i));
+				System.out.println("\tSimple Lower:\t" + ucd.getCodeAndName(simpleLower));
+				System.out.println("\tFull Fold:\t" + ucd.getCodeAndName(fullFold));
+				count++;
+			}
+		}
+		System.out.println("Count:\t" + count);
+	}
+
+	private static void tryConsole() throws UnsupportedEncodingException {
+		for (int i = 1; i < 0xFFFF; ++i) {
+			String s = UTF32.valueOf32(i);
+			byte[] bytes = s.getBytes("UTF-8");
+			String utf8bytes = "";
+			for (int j = 0; j < bytes.length; ++j) {
+				if (j != 0) utf8bytes += " ";
+				utf8bytes += Utility.hex(bytes[j]&0xFF,2);
+			}
+			String name = UCharacter.getExtendedName(i);
+			System.out.println(Utility.hex(i) + "\t(" + s + ")\t[" + utf8bytes + "]\t" + name);
 		}
 	}
+	
+	private static void tryConsole2() throws UnsupportedEncodingException {
+		UnicodeSet failures = new UnicodeSet();
+		check:
+		for (int i = 1; i <= 0x10FFFF; ++i) {
+			String s = UTF32.valueOf32(i);
+			byte[] bytes = s.getBytes("UTF-8");
+			for (int j = 0; j < bytes.length; ++j) {
+				switch (bytes[j]&0xFF) {
+				case 0x81: case 0x8D: case 0x8F: case 0x90: case 0x9D:
+					failures.add(i);
+					continue check;
+				}
+			}
+		}
+		System.out.println("Total corrupted characters: " + failures.size());
+		System.out.println("Percent corrupted characters: " + ((failures.size() + 0.0) / 0x110000 * 100.0 + "%"));
+		//BagFormatter bf = new BagFormatter();
+		//System.out.println(bf.showSetNames(failures));
+	}
+
+
+	private static void countChars() {
+		int[][] count = new int[AGE_VERSIONS.length][50];
+		for (int j = 1; j < AGE_VERSIONS.length; ++j) {
+			UCD ucd = UCD.make(AGE_VERSIONS[j]);
+			UCDProperty alpha = DerivedProperty.make(ucd.PropAlphabetic, ucd);
+
+			int alphaCount = 0;
+			for (int i = 0; i <=0x10FFFF; ++i) {
+				int type = ucd.getCategory(i);
+				if (ucd.isNoncharacter(i)) type = LIMIT_CATEGORY;
+				++count[j][type];
+				if (alpha.hasValue(i) || type == ucd.Nd) ++count[j][LIMIT_CATEGORY+1];
+			}
+		}
+
+		for (byte i = -1; i < LIMIT_CATEGORY+2; ++i) {
+			switch(i) {
+			case -1: System.out.print("\t\t"); break;
+			default: System.out.print(UCD.getCategoryID_fromIndex(i,UCD.LONG) + "\t" + UCD.getCategoryID_fromIndex(i)); break;
+			case LIMIT_CATEGORY: System.out.print("Noncharacter" + "\t" + "NCCP"); break;
+			case LIMIT_CATEGORY+1: System.out.print("Alphabetic" + "\t" + "alpha"); break;
+			}
+			for (int j = 1; j < AGE_VERSIONS.length; ++j) {
+				if (i < 0) System.out.print("\t*" + AGE_VERSIONS[j] + "*");
+				else System.out.print("\t" + count[j][i]);
+			}
+			System.out.println();
+		}
+
+	}
+
+	private static void foo() {
+		String[] test = {
+				"vicepresident",
+				"vice president",
+				"vice-president",
+				"vice-président",
+				"vice-president's offices",
+				"vice-presidents' offices",
+				"vice-presidents offices",
+				"vice-presidentsoffices",
+		};
+		RuleBasedCollator col = (RuleBasedCollator) Collator.getInstance(new ULocale("fr"));
+		col.setStrength(col.QUATERNARY);
+		col.setAlternateHandlingShifted(false);
+
+		Arrays.sort(test, col);
+		List s = Arrays.asList(test);
+		String last = "";
+		int[] level = new int[1];
+		for (Iterator it = s.iterator(); it.hasNext();) {
+			String current = (String) it.next();
+			int order = levelCompare(col, last, current, level);
+			//System.out.print(levelStrings[level[0]]);
+			//System.out.print(order < 0 ? "<" : order == 0 ? "=" : ">");
+			System.out.println("\t" + current);
+			last = current;
+		}
+		for (int i = 0; i < test.length; ++i) {
+			System.out.print(test[i] + ";");
+		}
+		System.out.println();
+	}
+	
+	static String[] levelStrings = {".", "..", "...", "....", "....."};
+	
+	static int levelCompare(RuleBasedCollator col, String a, String b, int[] level) {
+		int diff = 0;
+		level[0] = 0;
+		for (int i = 0; i < 15; ++i) {
+			col.setStrength(i);
+			diff = col.compare(a, b);
+			if (diff != 0) {
+				level[0] = i;
+				break;
+			}
+		}
+		return diff;
+	}
+
 	Matcher m;
 	
 	/**
@@ -163,12 +317,12 @@ public class TestData implements UCD_Types {
 		return true;
 	}
 
-	private static void checkChars(boolean mergeRanges) {
+	private static void checkForCaseStability(boolean mergeRanges) {
 		UCD ucd = Default.ucd();
 		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
-		UnicodeSet isUpper = ups.getSet("Uppercase=true");
-		UnicodeSet isLower = ups.getSet("Lowercase=true");
-		UnicodeSet isTitle = ups.getSet("gc=Lt");
+		UnicodeSet propUppercase = ups.getSet("Uppercase=true");
+		UnicodeSet propLowercase = ups.getSet("Lowercase=true");
+		UnicodeSet isGcLt = ups.getSet("gc=Lt");
 		UnicodeSet otherAlphabetic = ups.getSet("Alphabetic=true").addAll(ups.getSet("gc=Sk"));
 		// create the following
 		UnicodeSet hasFold = new UnicodeSet();
@@ -177,6 +331,10 @@ public class TestData implements UCD_Types {
 		UnicodeSet hasTitle = new UnicodeSet();
 		UnicodeSet compat = new UnicodeSet();
 		UnicodeSet bicameralsScripts = new UnicodeSet();
+		
+		UnicodeSet isFUppercase = new UnicodeSet();
+		UnicodeSet isFLowercase = new UnicodeSet();
+		UnicodeSet isFTitlecase = new UnicodeSet();
 
 		UCD u40 = UCD.make("4.0.0");
 		BitSet scripts = new BitSet();
@@ -184,41 +342,83 @@ public class TestData implements UCD_Types {
 			int gc = ucd.getCategory(i);
 			if (gc == Cn || gc == PRIVATE_USE) continue;
 			String str = UTF16.valueOf(i);
-			if (!str.equals(ucd.getCase(str, FULL, FOLD))) hasFold.add(i);
-			if (!str.equals(ucd.getCase(str, FULL, UPPER))) hasUpper.add(i);
+			if (!str.equals(ucd.getCase(str, FULL, FOLD))) {
+				hasFold.add(i);
+				scripts.set(ucd.getScript(i));
+			}
+			if (!str.equals(ucd.getCase(str, FULL, UPPER))) {
+				hasUpper.add(i);
+				scripts.set(ucd.getScript(i));
+			} else {
+				isFUppercase.add(i);
+			}
 			if (!str.equals(ucd.getCase(str, FULL, LOWER))) {
 				hasLower.add(i);
 				scripts.set(ucd.getScript(i));
+			} else {
+				isFLowercase.add(i);
 			}
-			if (!str.equals(ucd.getCase(str, FULL, TITLE))) hasTitle.add(i);
+			if (!str.equals(ucd.getCase(str, FULL, TITLE))) {
+				hasTitle.add(i);
+				scripts.set(ucd.getScript(i));
+			} else {
+				isFTitlecase.add(i);
+			}
 			if (!str.equals(Default.nfkd().normalize(str))) compat.add(i);
 			//System.out.println(ucd.getCodeAndName(i) + "\t" + (u40.isAllocated(i) ? "already in 4.0" : "new in 4.1"));
 		}
 		BagFormatter bf = new BagFormatter();
+		Transliterator nullTrans = Transliterator.getInstance("null");
+		bf.setShowLiteral(nullTrans);
 		bf.setMergeRanges(mergeRanges);
 		bf.setUnicodePropertyFactory(ups);
-		printItems(bf, compat, "isUpper or isTitle without hasLower", 
-				new UnicodeSet(isUpper).addAll(isTitle).removeAll(hasLower));
-		printItems(bf, compat, "hasLower, but not isUpper or isTitle", 
-				new UnicodeSet(hasLower).removeAll(isTitle).removeAll(isUpper));
-		printItems(bf, compat, "isLower without hasUpper", 
-				new UnicodeSet(isLower).addAll(isTitle).removeAll(hasUpper));
-		printItems(bf, compat, "hasUpper, but not isLower or isTitle", 
-				new UnicodeSet(hasUpper).removeAll(isTitle).removeAll(isLower));
+		
+		UnicodeSet allCased = new UnicodeSet().addAll(hasUpper).addAll(hasLower).addAll(hasTitle);
+		isFUppercase.retainAll(allCased);
+		isFLowercase.retainAll(allCased);
+		isFTitlecase.retainAll(allCased);
+		System.out.println(Utility.BOM);
+
+		printItems(bf, compat, "Uppercase=true or gc=Lt without hasLower", 
+				new UnicodeSet(propUppercase).addAll(isGcLt).removeAll(hasLower));
+		printItems(bf, compat, "hasLower, but not (Uppercase=true or gc=Lt)", 
+				new UnicodeSet(hasLower).removeAll(isGcLt).removeAll(propUppercase));
+		printItems(bf, compat, "Lowercase=true without hasUpper", 
+				new UnicodeSet(propLowercase).addAll(isGcLt).removeAll(hasUpper));
+		printItems(bf, compat, "hasUpper, but not (Lowercase=true or gc=Lt)", 
+				new UnicodeSet(hasUpper).removeAll(isGcLt).removeAll(propLowercase));
+
+		
+		printItems(bf, compat, "Functionally Uppercase, but not Uppercase=true", 
+				new UnicodeSet(isFUppercase).removeAll(propUppercase));
+		printItems(bf, compat, "Uppercase=true, but not functionally Uppercase", 
+				new UnicodeSet(propUppercase).removeAll(isFUppercase));
+		
+		printItems(bf, compat, "Functionally Lowercase, but not Lowercase=true", 
+				new UnicodeSet(isFLowercase).removeAll(propLowercase));
+		printItems(bf, compat, "Lowercase=true, but not functionally Lowercase", 
+				new UnicodeSet(propLowercase).removeAll(isFLowercase));
+
 
 		UnicodeSet scriptSet = new UnicodeSet();
 		UnicodeProperty scriptProp = ups.getProperty("Script");
+		bf.setMergeRanges(true);
+		System.out.println();
+		System.out.println("Bicameral Scripts: those with at least one functionally cased character.");
+		System.out.println();
 		for (int i = 0; i < scripts.size(); ++i) {
 			if (!scripts.get(i)) continue;
-			if (i == COMMON_SCRIPT) continue;
+			//if (i == COMMON_SCRIPT) continue;
 			String scriptName = ucd.getScriptID_fromIndex((byte)i);
-			System.out.println(scriptName);
-			scriptSet.addAll(scriptProp.getSet(scriptName));
+			UnicodeSet scriptUSet = scriptProp.getSet(scriptName);
+			scriptSet.addAll(scriptUSet);
+			printItems(bf, compat, "Bicameral Script: " + scriptName,
+					new UnicodeSet(allCased).retainAll(scriptUSet));
 		}
-		UnicodeSet allCased = new UnicodeSet().addAll(isUpper).addAll(isLower).addAll(isTitle);
-		printItems(bf, compat, "(Bicameral) isAlpha or Symbol Modifier, but not isCased", 
+		bf.setMergeRanges(false);
+		printItems(bf, compat, "Bicameral Script: isAlpha or Symbol Modifier, but not isCased", 
 				new UnicodeSet(scriptSet).retainAll(otherAlphabetic).removeAll(allCased));
-		printItems(bf, compat, "(Bicameral) isCased, but not isAlpha or Symbol Modifier", 
+		printItems(bf, compat, "Bicameral Script: isCased, but not isAlpha or Symbol Modifier", 
 				new UnicodeSet(scriptSet).retainAll(allCased).removeAll(otherAlphabetic));
 	}
 
@@ -302,21 +502,21 @@ public class TestData implements UCD_Types {
     	}
 	}
 
-	public static class RegexMatcher implements UnicodeProperty.Matcher {
+	public static class RegexMatcher implements UnicodeProperty.PatternMatcher {
         private Matcher matcher;
         
-        public UnicodeProperty.Matcher set(String pattern) {
+        public UnicodeProperty.PatternMatcher set(String pattern) {
             matcher = Pattern.compile(pattern).matcher("");
             return this;
         }
-        public boolean matches(String value) {
-            matcher.reset(value);
+        public boolean matches(Object value) {
+            matcher.reset((String)value);
             return matcher.matches();
         }       
     }
 
     static BagFormatter bf = new BagFormatter();
-    static UnicodeProperty.Matcher matcher = new RegexMatcher();
+    static UnicodeProperty.PatternMatcher matcher = new RegexMatcher();
 
     private static void showPropDiff(String p1, UnicodeSet s1, String p2, UnicodeSet s2) {
         System.out.println("Property Listing");

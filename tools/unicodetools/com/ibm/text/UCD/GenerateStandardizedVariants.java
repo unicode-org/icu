@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateStandardizedVariants.java,v $
-* $Date: 2005/10/11 19:39:15 $
-* $Revision: 1.6 $
+* $Date: 2006/04/05 22:12:44 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -104,18 +104,31 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         
         String version = Default.ucd().getVersion();
         int lastDot = version.lastIndexOf('.');
-        String updateDirectory = version.substring(0,lastDot) + "-Update";
-        int updateV = version.charAt(version.length()-1) - '0';
-        if (updateV != 0) updateDirectory += (char)('1' + updateV);
-        if (DEBUG) System.out.println("updateDirectory: " + updateDirectory);
+        String updateDirectory;
+        String partialFilename;
+        if (version.compareTo("4.1.0") < 0) {
+        	updateDirectory = version.substring(0,lastDot) + "-Update";
+            int updateV = version.charAt(version.length()-1) - '0';
+            if (updateV != 0) updateDirectory += (char)('1' + updateV);
+            if (DEBUG) System.out.println("updateDirectory: " + updateDirectory);
+            partialFilename = "StandardizedVariants-" + Default.ucd().getVersion();
+        } else if (version.compareTo("4.1.0") == 0) {			
+        	updateDirectory = version.substring(0,lastDot) + "/ucd";
+            partialFilename = "StandardizedVariants";
+        } else {			
+        	updateDirectory = version + "/ucd";
+            partialFilename = "StandardizedVariants";
+        }
+
         
         String[] replacementList = {
             "@revision@", Default.ucd().getVersion(),
             "@updateDirectory@", updateDirectory,
+            "@filename@", partialFilename,
             "@date@", Default.getDate(),
             "@table@", table};
                 
-        Utility.appendFile("StandardizedVariants-Template.html", Utility.UTF8, out, replacementList);
+        Utility.appendFile("com/ibm/text/UCD/StandardizedVariants-Template.html", Utility.UTF8, out, replacementList);
      
         out.close();
         //Utility.renameIdentical(mostRecent, Utility.getOutputName(filename), batName[0]);
