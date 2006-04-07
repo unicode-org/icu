@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="letest"
+	ProjectGUID="{67351485-4D18-4245-BE39-A7EF0675ACD2}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -21,8 +22,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include\layout,..\..\..\include,..\..\common"
-				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE,LE_USE_CMEMORY"
+				AdditionalIncludeDirectories="..\..\..\include\layout;..\..\..\include;..\..\common;..\..\tools\ctestfw;..\..\tools\toolutil;..\..\layout"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
@@ -81,8 +82,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\layout,..\..\..\include,..\..\common"
-				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,LE_USE_CMEMORY"
+				AdditionalIncludeDirectories="..\..\..\include\layout;..\..\..\include;..\..\common;..\..\tools\ctestfw;..\..\tools\toolutil;..\..\layout"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -100,10 +101,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="../../../lib/iculed.lib ../../../lib/icuucd.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/letest.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/letest.pdb"
 				SubSystem="1"/>
@@ -151,7 +152,7 @@
 				RelativePath=".\PortableFontInstance.cpp">
 			</File>
 			<File
-				RelativePath=".\testdata.cpp">
+				RelativePath=".\SimpleFontInstance.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -171,6 +172,9 @@
 			</File>
 			<File
 				RelativePath=".\sfnt.h">
+			</File>
+			<File
+				RelativePath=".\SimpleFontInstance.h">
 			</File>
 		</Filter>
 		<Filter
