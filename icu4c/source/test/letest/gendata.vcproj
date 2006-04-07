@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\layout,..\..\..\include,..\..\common"
+				AdditionalIncludeDirectories="..\..\..\include\layout;..\..\..\include;..\..\common;..\..\layout;..\..\tools\toolutil"
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,LE_USE_CMEMORY"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icutud.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/gendata.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -82,7 +82,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include\layout,..\..\..\include,..\..\common"
+				AdditionalIncludeDirectories="..\..\..\include\layout;..\..\..\include;..\..\common;..\..\layout;..\..\tools\toolutil"
 				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE,LE_USE_CMEMORY"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
@@ -101,7 +101,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icutu.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/gendata.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -150,6 +150,9 @@
 			<File
 				RelativePath=".\PortableFontInstance.cpp">
 			</File>
+			<File
+				RelativePath=".\SimpleFontInstance.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -168,6 +171,9 @@
 			</File>
 			<File
 				RelativePath=".\sfnt.h">
+			</File>
+			<File
+				RelativePath=".\SimpleFontInstance.h">
 			</File>
 		</Filter>
 		<Filter

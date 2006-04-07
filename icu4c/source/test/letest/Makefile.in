@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/letest
-## Copyright (c) 2001-2003, International Business Machines Corporation and
+## Copyright (c) 2001-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -23,11 +23,12 @@ CLEANFILES = *~ $(DEPS)
 TESTTARGET = letest
 GENTARGET  = gendata
 
-CPPFLAGS += -DLE_USE_CMEMORY -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/layout -I$(top_srcdir)
-LIBS = $(LIBICULE) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/layout -I$(top_srcdir)
+DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
+LIBS = $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
-COMMONOBJECTS = cmaps.o FontTableCache.o PortableFontInstance.o
-TESTOBJECTS   = testdata.o letest.o
+COMMONOBJECTS = cmaps.o FontTableCache.o SimpleFontInstance.o PortableFontInstance.o
+TESTOBJECTS   = letest.o
 GENOBJECTS    = gendata.o
 
 OBJECTS = $(COMMONOBJECTS) $(TESTOBJECTS) $(GENOBJECTS)
