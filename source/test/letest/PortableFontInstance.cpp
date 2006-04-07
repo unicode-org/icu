@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -19,6 +19,7 @@
 
 #include "PortableFontInstance.h"
 
+#include "letest.h"
 #include "sfnt.h"
 
 #include <string.h>
@@ -92,7 +93,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 //  const NAMETable *nameTable = NULL;
     le_uint16 numTables = 0;
 
-    fDirectory = (const SFNTDirectory *) LE_NEW_ARRAY(char, dirSize);
+    fDirectory = (const SFNTDirectory *) NEW_ARRAY(char, dirSize);
 
     if (fDirectory == NULL) {
         status = LE_MEMORY_ALLOCATION_ERROR;
@@ -178,13 +179,13 @@ PortableFontInstance::~PortableFontInstance()
 
         delete fCMAPMapper;
 
-        LE_DELETE_ARRAY(fDirectory);
+        DELETE_ARRAY(fDirectory);
     }
 }
 
 void PortableFontInstance::deleteTable(const void *table) const
 {
-    LE_DELETE_ARRAY(table);
+    DELETE_ARRAY(table);
 }
 
 const DirectoryEntry *PortableFontInstance::findTable(LETag tag) const
@@ -224,7 +225,7 @@ const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 
     *length = SWAPL(entry->length);
 
-    void *table = LE_NEW_ARRAY(char, *length);
+    void *table = NEW_ARRAY(char, *length);
 
     if (table != NULL) {
         fseek(fFile, SWAPL(entry->offset), SEEK_SET);
@@ -279,9 +280,9 @@ const char *PortableFontInstance::getNameString(le_uint16 nameID, le_uint16 plat
             SWAPW(nameRecord->languageID) == languageID && SWAPW(nameRecord->nameID) == nameID) {
             char *name = ((char *) fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset);
             le_uint16 length = SWAPW(nameRecord->length);
-            char *result = LE_NEW_ARRAY(char, length + 2);
+            char *result = NEW_ARRAY(char, length + 2);
 
-            LE_ARRAY_COPY(result, name, length);
+            ARRAY_COPY(result, name, length);
             result[length] = result[length + 1] = 0;
 
             return result;
@@ -293,7 +294,7 @@ const char *PortableFontInstance::getNameString(le_uint16 nameID, le_uint16 plat
 
 void PortableFontInstance::deleteNameString(const char *name) const
 {
-    LE_DELETE_ARRAY(name);
+    DELETE_ARRAY(name);
 }
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const

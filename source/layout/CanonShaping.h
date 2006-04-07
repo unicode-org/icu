@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@ U_NAMESPACE_BEGIN
 
 class LEGlyphStorage;
 
-class CanonShaping /* not : public UObject because all members are static */
+class U_LAYOUT_API CanonShaping /* not : public UObject because all members are static */
 {
 public:
     static const le_uint8 glyphSubstitutionTable[];

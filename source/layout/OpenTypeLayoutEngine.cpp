@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -12,6 +12,7 @@
 #include "LayoutEngine.h"
 #include "OpenTypeLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
+#include "CharSubstitutionFilter.h"
 
 #include "GlyphSubstitutionTables.h"
 #include "GlyphDefinitionTables.h"
@@ -76,12 +77,16 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
     const GlyphPositioningTableHeader *gposTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
 
     // todo: switch to more flags and bitfield rather than list of feature tags?
-    switch (typoFlags) {
+    switch (typoFlags & ~0x80000000L) {
     case 0: break; // default
     case 1: fFeatureMask = kernFeatures; break;
     case 2: fFeatureMask = ligaFeatures; break;
     case 3: fFeatureMask = kernAndLigaFeatures; break;
     default: break;
+    }
+
+    if (typoFlags & 0x80000000L) {
+        fSubstitutionFilter = new CharSubstitutionFilter(fontInstance);
     }
 
     setScriptAndLanguageTags();
@@ -112,6 +117,10 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
 
 OpenTypeLayoutEngine::~OpenTypeLayoutEngine()
 {
+    if (fTypoFlags & 0x80000000L) {
+        delete fSubstitutionFilter;
+    }
+
     reset();
 }
 

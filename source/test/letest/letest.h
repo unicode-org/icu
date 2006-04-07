@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -11,24 +11,23 @@
  *   created by: Eric R. Mader
  */
 
+#ifndef __LETEST_H
+#define __LETEST_H
+
 #include "LETypes.h"
 
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
+#include <stdlib.h>
+#include <string.h>
 
-struct TestInput
-{
-    const char *fontName;
-    const char *fontVersionString;
-    le_uint32   fontChecksum;
-    LEUnicode  *text;
-    le_int32    textLength;
-    le_int32    scriptCode;
-    le_bool     rightToLeft;
-};
+#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-extern le_int32 testCount;
+#define ARRAY_COPY(dst, src, count) memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
 
-extern TestInput testInputs[];
+#define NEW_ARRAY(type,count) (type *) malloc((count) * sizeof(type))
+
+#define DELETE_ARRAY(array) free((void *) (array))
+
+#define GROW_ARRAY(array,newSize) realloc((void *) (array), (newSize) * sizeof (array)[0])
 
 struct TestResult
 {
@@ -37,7 +36,4 @@ struct TestResult
     le_int32  *indices;
     float     *positions;
 };
-
-extern TestResult testResults[];
-
-
+#endif
