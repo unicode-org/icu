@@ -1203,7 +1203,8 @@ void UTextTest::FreezeTest() {
 //       ut.b    the character.  Put into both halves.
 //
 
-static UBool
+U_CDECL_BEGIN
+static UBool U_CALLCONV
 fragTextAccess(UText *ut, int64_t index, UBool forward) {
     const UnicodeString *us = (const UnicodeString *)ut->context;
     UChar  c;
@@ -1238,6 +1239,7 @@ fragTextAccess(UText *ut, int64_t index, UBool forward) {
     }
     return false;
 }
+U_CDECL_END
 
 
 UText *
