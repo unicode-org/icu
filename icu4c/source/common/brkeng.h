@@ -30,7 +30,7 @@ class UStack;
  * <p>LanguageBreakEngines should normally be implemented so as to
  * be shared between threads without locking.</p>
  */
-class U_COMMON_API LanguageBreakEngine : public UMemory {
+class LanguageBreakEngine : public UMemory {
  public:
 
   /**
@@ -101,7 +101,7 @@ class U_COMMON_API LanguageBreakEngine : public UMemory {
  * not be deleted until the LanguageBreakEngines it has returned are no
  * longer needed.</p>
  */
-class U_COMMON_API LanguageBreakFactory : public UMemory {
+class LanguageBreakFactory : public UMemory {
  public:
 
   /**
@@ -146,7 +146,7 @@ class U_COMMON_API LanguageBreakFactory : public UMemory {
  * external synchronization.</p>
  */
 
-class U_COMMON_API UnhandledEngine : public LanguageBreakEngine {
+class UnhandledEngine : public LanguageBreakEngine {
  private:
 
     /**
@@ -220,7 +220,7 @@ class U_COMMON_API UnhandledEngine : public LanguageBreakEngine {
  * ICU. It creates dictionary-based LanguageBreakEngines from dictionary
  * data in the ICU data file.</p>
  */
-class U_COMMON_API ICULanguageBreakFactory : public LanguageBreakFactory {
+class ICULanguageBreakFactory : public LanguageBreakFactory {
  private:
 
     /**

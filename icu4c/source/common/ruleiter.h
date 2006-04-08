@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -11,7 +11,7 @@
 #ifndef _RULEITER_H_
 #define _RULEITER_H_
 
-#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -26,7 +26,7 @@ class SymbolTable;
  * @author Alan Liu
  * @since ICU 2.8
  */
-class U_COMMON_API RuleCharacterIterator {
+class RuleCharacterIterator : public UMemory {
 
     // TODO: Ideas for later.  (Do not implement if not needed, lest the
     // code coverage numbers go down due to unused methods.)
@@ -131,7 +131,7 @@ public:
     /**
      * An opaque object representing the position of a RuleCharacterIterator.
      */
-    struct Pos {
+    struct Pos : public UMemory {
     private:
         const UnicodeString* buf;
         int32_t pos;
