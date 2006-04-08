@@ -1,42 +1,13 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
 
 #include "cstring.h"
 #include "ustrfmt.h"
-#include <stdio.h>
 
-U_CAPI char*  U_EXPORT2
-uprv_dtostr(double value, char *buffer, int32_t maximumDigits,UBool fixedPoint)
-{
-    char *itrPtr = buffer + 1;  /* skip '-' or a number before the decimal */
-    char *startPtr;
-
-    sprintf(buffer,"%f",value);
-
-    /* Find the decimal point.
-       Some unusal machines use a comma when the system locale changes
-    */
-    while (isalnum(*itrPtr)) {
-        itrPtr++;
-    }
-    *itrPtr = '.';
-
-    /* truncate trailing zeros, except the one after '.' */
-    startPtr = itrPtr + 1;
-    itrPtr = uprv_strchr(startPtr, 0);
-    while(--itrPtr > startPtr){
-        if(*itrPtr == '0'){
-            *itrPtr = 0;
-        }else{
-            break;
-        }
-    }
-    return buffer;
-}
 
 /***
  * Fills in a UChar* string with the radix-based representation of a
