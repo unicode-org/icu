@@ -28,7 +28,7 @@ class TrieWordDictionary;
  * <p>After it is constructed a DictionaryBreakEngine may be shared between
  * threads without synchronization.</p>
  */
-class U_COMMON_API DictionaryBreakEngine : public LanguageBreakEngine {
+class DictionaryBreakEngine : public LanguageBreakEngine {
  private:
     /**
      * The set of characters handled by this engine
@@ -139,7 +139,7 @@ class U_COMMON_API DictionaryBreakEngine : public LanguageBreakEngine {
  * <p>After it is constructed a ThaiBreakEngine may be shared between
  * threads without synchronization.</p>
  */
-class U_COMMON_API ThaiBreakEngine : public DictionaryBreakEngine {
+class ThaiBreakEngine : public DictionaryBreakEngine {
  private:
     /**
      * The set of characters handled by this engine
