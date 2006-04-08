@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -31,9 +31,10 @@
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 #include "cpputils.h"
-#include "ustrfmt.h"
 #include "cstring.h"
 #include "putilimp.h"
+#include <stdio.h>
+#include <float.h>
 
 // *****************************************************************************
 // class ChoiceFormat
@@ -210,9 +211,33 @@ UnicodeString&
 ChoiceFormat::dtos(double value,
                    UnicodeString& string)
 {
-    char temp[256];
+    /* Buffer to contain the digits and any extra formatting stuff. */
+    char temp[DBL_DIG + 16];
+    char *itrPtr = temp;
+    char *startPtr;
 
-    uprv_dtostr(value, temp, 3, TRUE);
+    sprintf(temp, "%.*f", DBL_DIG, value);
+
+    /* Find and convert the decimal point.
+       Using setlocale on some machines will cause sprintf to use a comma for certain locales.
+    */
+    while (*itrPtr && (*itrPtr == '-' || isdigit(*itrPtr))) {
+        itrPtr++;
+    }
+    if (*itrPtr) {
+        *itrPtr = '.';
+    }
+
+    /* remove trailing zeros, except the one after '.' */
+    startPtr = itrPtr + 1;
+    itrPtr = uprv_strchr(startPtr, 0);
+    while(--itrPtr > startPtr){
+        if(*itrPtr == '0'){
+            *itrPtr = 0;
+        }else{
+            break;
+        }
+    }
     string = UnicodeString(temp, -1, US_INV);    /* invariant codepage */
     return string;
 }
