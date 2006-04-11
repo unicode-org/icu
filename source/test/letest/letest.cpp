@@ -15,7 +15,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
-#include "unicode/ucnv.h"
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
 #include "unicode/uscript.h"
@@ -859,8 +858,6 @@ int main(int argc, char* argv[])
             "*** check that the data files are present.\n", argv[0], u_errorName(errorCode));
         return 1;
     }
-
-    fprintf(stdout, "Default charset for this run is %s\n", ucnv_getDefaultName());
 
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);

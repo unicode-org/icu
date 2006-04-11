@@ -37,54 +37,30 @@ public:
 
     virtual const void *getFontTable(LETag tableTag) const;
 
-    virtual le_int32 getUnitsPerEM() const
-    {
-        return 2048;
-    };
+    virtual le_int32 getUnitsPerEM() const;
 
-    virtual le_int32 getAscent() const
-    {
-        return fAscent;
-    }
+    virtual le_int32 getAscent() const;
 
-    virtual le_int32 getDescent() const
-    {
-        return fDescent;
-    }
+    virtual le_int32 getDescent() const;
 
-    virtual le_int32 getLeading() const
-    {
-        return 0;
-    }
+    virtual le_int32 getLeading() const;
 
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const
-    {
-        return (LEGlyphID) ch;
-    }
+    //virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
+    //virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
+
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const;
 
     virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const;
 
     virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const;
 
-    float getXPixelsPerEm() const
-    {
-        return fPointSize;
-    };
+    float getXPixelsPerEm() const;
 
-    float getYPixelsPerEm() const
-    {
-        return fPointSize;
-    };
+    float getYPixelsPerEm() const;
 
-    float getScaleFactorX() const
-    {
-        return 1.0;
-    }
+    float getScaleFactorX() const;
 
-    float getScaleFactorY() const
-    {
-        return 1.0;
-    }
+    float getScaleFactorY() const;
 
 };
 

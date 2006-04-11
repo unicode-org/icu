@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -19,6 +19,16 @@
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LEFontInstance)
+
+LECharMapper::~LECharMapper()
+{
+    // nothing to do.
+}
+
+LEFontInstance::~LEFontInstance()
+{
+    // nothing to do
+}
 
 const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit,
                                                        le_int32 script, LEErrorCode &success) const
@@ -86,5 +96,54 @@ LEGlyphID LEFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *map
 
     return mapCharToGlyph(mappedChar);
 }
+
+le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
+{
+    return LE_GET_GLYPH(mapCharToGlyph(ch)) != 0;
+}
+
+float LEFontInstance::xUnitsToPoints(float xUnits) const
+{
+    return (xUnits * getXPixelsPerEm()) / (float) getUnitsPerEM();
+}
+
+float LEFontInstance::yUnitsToPoints(float yUnits) const
+{
+    return (yUnits * getYPixelsPerEm()) / (float) getUnitsPerEM();
+}
+
+void LEFontInstance::unitsToPoints(LEPoint &units, LEPoint &points) const
+{
+    points.fX = xUnitsToPoints(units.fX);
+    points.fY = yUnitsToPoints(units.fY);
+}
+
+float LEFontInstance::xPixelsToUnits(float xPixels) const
+{
+    return (xPixels * getUnitsPerEM()) / (float) getXPixelsPerEm();
+}
+
+float LEFontInstance::yPixelsToUnits(float yPixels) const
+{
+    return (yPixels * getUnitsPerEM()) / (float) getYPixelsPerEm();
+}
+
+void LEFontInstance::pixelsToUnits(LEPoint &pixels, LEPoint &units) const
+{
+    units.fX = xPixelsToUnits(pixels.fX);
+    units.fY = yPixelsToUnits(pixels.fY);
+}
+
+void LEFontInstance::transformFunits(float xFunits, float yFunits, LEPoint &pixels) const
+{
+    pixels.fX = xUnitsToPoints(xFunits) * getScaleFactorX();
+    pixels.fY = yUnitsToPoints(yFunits) * getScaleFactorY();
+}
+
+le_int32 LEFontInstance::getLineHeight() const
+{
+    return getAscent() + getDescent() + getLeading();
+}
+
 U_NAMESPACE_END
 

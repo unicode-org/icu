@@ -335,3 +335,52 @@ le_bool PortableFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*poin
     return FALSE;
 }
 
+le_int32 PortableFontInstance::getUnitsPerEM() const
+{
+    return fUnitsPerEM;
+};
+
+le_uint32 PortableFontInstance::getFontChecksum() const
+{
+    return fFontChecksum;
+}
+
+le_int32 PortableFontInstance::getAscent() const
+{
+    return fAscent;
+}
+
+le_int32 PortableFontInstance::getDescent() const
+{
+    return fDescent;
+}
+
+le_int32 PortableFontInstance::getLeading() const
+{
+    return fLeading;
+}
+
+LEGlyphID PortableFontInstance::mapCharToGlyph(LEUnicode32 ch) const
+{
+    return fCMAPMapper->unicodeToGlyph(ch);
+}
+
+float PortableFontInstance::getXPixelsPerEm() const
+{
+    return fPointSize;
+};
+
+float PortableFontInstance::getYPixelsPerEm() const
+{
+    return fPointSize;
+};
+
+float PortableFontInstance::getScaleFactorX() const
+{
+    return 1.0;
+}
+
+float PortableFontInstance::getScaleFactorY() const
+{
+    return 1.0;
+}
