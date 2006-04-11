@@ -338,7 +338,7 @@ le_bool PortableFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*poin
 le_int32 PortableFontInstance::getUnitsPerEM() const
 {
     return fUnitsPerEM;
-};
+}
 
 le_uint32 PortableFontInstance::getFontChecksum() const
 {
@@ -368,12 +368,12 @@ LEGlyphID PortableFontInstance::mapCharToGlyph(LEUnicode32 ch) const
 float PortableFontInstance::getXPixelsPerEm() const
 {
     return fPointSize;
-};
+}
 
 float PortableFontInstance::getYPixelsPerEm() const
 {
     return fPointSize;
-};
+}
 
 float PortableFontInstance::getScaleFactorX() const
 {

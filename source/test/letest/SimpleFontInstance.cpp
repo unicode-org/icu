@@ -65,7 +65,7 @@ void SimpleFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) cons
 le_int32 SimpleFontInstance::getUnitsPerEM() const
 {
     return 2048;
-};
+}
 
 le_int32 SimpleFontInstance::getAscent() const
 {
@@ -90,12 +90,12 @@ LEGlyphID SimpleFontInstance::mapCharToGlyph(LEUnicode32 ch) const
 float SimpleFontInstance::getXPixelsPerEm() const
 {
     return fPointSize;
-};
+}
 
 float SimpleFontInstance::getYPixelsPerEm() const
 {
     return fPointSize;
-};
+}
 
 float SimpleFontInstance::getScaleFactorX() const
 {
