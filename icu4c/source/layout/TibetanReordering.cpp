@@ -166,6 +166,7 @@ public:
 
 
 //TODO remove unused flags
+#define ccmpFeatureTag LE_CCMP_FEATURE_TAG
 #define blwfFeatureTag LE_BLWF_FEATURE_TAG
 #define pstfFeatureTag LE_PSTF_FEATURE_TAG
 #define presFeatureTag LE_PRES_FEATURE_TAG
@@ -192,6 +193,7 @@ public:
 #define abvsFeatureMask 0x02000000UL
 #define pstsFeatureMask 0x01000000UL
 #define cligFeatureMask 0x00800000UL 
+#define ccmpFeatureMask 0x00040000UL
 
 // Positioning features
 #define distFeatureMask 0x00400000UL
@@ -199,11 +201,11 @@ public:
 #define abvmFeatureMask 0x00100000UL
 #define mkmkFeatureMask 0x00080000UL
 
-#define tagPref    (prefFeatureMask | presFeatureMask | cligFeatureMask | distFeatureMask)
-#define tagAbvf    (abvfFeatureMask | abvsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | mkmkFeatureMask)
-#define tagPstf    (blwfFeatureMask | blwsFeatureMask | prefFeatureMask | presFeatureMask | pstfFeatureMask | pstsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask)
-#define tagBlwf    (blwfFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask | mkmkFeatureMask)
-#define tagDefault (prefFeatureMask | blwfFeatureMask | presFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | blwmFeatureMask | mkmkFeatureMask)
+#define tagPref    (ccmpFeatureMask | prefFeatureMask | presFeatureMask | cligFeatureMask | distFeatureMask)
+#define tagAbvf    (ccmpFeatureMask | abvfFeatureMask | abvsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | mkmkFeatureMask)
+#define tagPstf    (ccmpFeatureMask | blwfFeatureMask | blwsFeatureMask | prefFeatureMask | presFeatureMask | pstfFeatureMask | pstsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask)
+#define tagBlwf    (ccmpFeatureMask | blwfFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | blwmFeatureMask | mkmkFeatureMask)
+#define tagDefault (ccmpFeatureMask | prefFeatureMask | blwfFeatureMask | presFeatureMask | blwsFeatureMask | cligFeatureMask | distFeatureMask | abvmFeatureMask | blwmFeatureMask | mkmkFeatureMask)
 
 
 
@@ -212,6 +214,7 @@ public:
 static const FeatureMap featureMap[] =
 {
     // Shaping features
+    {ccmpFeatureTag, ccmpFeatureMask},
     {prefFeatureTag, prefFeatureMask},
     {blwfFeatureTag, blwfFeatureMask},
     {abvfFeatureTag, abvfFeatureMask},
