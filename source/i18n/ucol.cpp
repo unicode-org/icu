@@ -170,18 +170,19 @@ inline void backupState(const collIterate *data, collIterateState *backup)
     backup->pos         = data->pos;
     backup->bufferaddress = data->writableBuffer;
     backup->buffersize    = data->writableBufSize;
+    backup->iteratorMove = 0;
+    backup->iteratorIndex = 0;
     if(data->iterator != NULL) {
-      //backup->iteratorIndex = data->iterator->getIndex(data->iterator, UITER_CURRENT);
-      backup->iteratorIndex = data->iterator->getState(data->iterator);
-      // no we try to fixup if we're using a normalizing iterator and we get UITER_NO_STATE
-      backup->iteratorMove = 0;
-      if(backup->iteratorIndex == UITER_NO_STATE) {
-        while((backup->iteratorIndex = data->iterator->getState(data->iterator)) == UITER_NO_STATE) {
-          backup->iteratorMove++;
-          data->iterator->move(data->iterator, -1, UITER_CURRENT);
+        //backup->iteratorIndex = data->iterator->getIndex(data->iterator, UITER_CURRENT);
+        backup->iteratorIndex = data->iterator->getState(data->iterator);
+        // no we try to fixup if we're using a normalizing iterator and we get UITER_NO_STATE
+        if(backup->iteratorIndex == UITER_NO_STATE) {
+            while((backup->iteratorIndex = data->iterator->getState(data->iterator)) == UITER_NO_STATE) {
+                backup->iteratorMove++;
+                data->iterator->move(data->iterator, -1, UITER_CURRENT);
+            }
+            data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
         }
-        data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
-      }
     }
     backup->consumedChars = data->consumedChars;
 }
@@ -197,15 +198,15 @@ static
 inline void loadState(collIterate *data, const collIterateState *backup,
                       UBool        forwards)
 {
-  UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     data->flags       = backup->flags;
     data->origFlags   = backup->origFlags;
     if(data->iterator != NULL) {
-      //data->iterator->move(data->iterator, backup->iteratorIndex, UITER_ZERO);
-      data->iterator->setState(data->iterator, backup->iteratorIndex, &status);
-      if(backup->iteratorMove != 0) {
-        data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
-      }
+        //data->iterator->move(data->iterator, backup->iteratorIndex, UITER_ZERO);
+        data->iterator->setState(data->iterator, backup->iteratorIndex, &status);
+        if(backup->iteratorMove != 0) {
+            data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
+        }
     }
     data->pos         = backup->pos;
     if ((data->flags & UCOL_ITER_INNORMBUF) &&
