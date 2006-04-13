@@ -1087,10 +1087,10 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
   // processed differently if numeric collation is on. 
   UChar32 uniChar = 0;
   //printElement(element);
-  if ((element->cSize == 2) && U16_IS_LEAD(element->uchars[0])){
-      uniChar = U16_GET_SUPPLEMENTARY(element->uchars[0], element->uchars[1]);
+  if ((element->cSize == 2) && U16_IS_LEAD(element->cPoints[0])){
+      uniChar = U16_GET_SUPPLEMENTARY(element->cPoints[0], element->cPoints[1]);
   } else if (element->cSize == 1){
-      uniChar = element->uchars[0];
+      uniChar = element->cPoints[0];
   }
 
   // Here, we either have one normal CE OR mapCE is set. Therefore, we stuff only
@@ -1489,19 +1489,19 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV
 _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
 
-  UErrorCode *status = ((enumStruct *)context)->status;
-  tempUCATable *t = ((enumStruct *)context)->t;
-  UCollator *tempColl = ((enumStruct *)context)->tempColl;
-  UCollationElements* colEl = ((enumStruct *)context)->colEl;
-  UCAElements el;
-  UChar decomp[256] = { 0 };
-  int32_t noOfDec = 0;
-
-  UChar32 u32 = 0;
-  UChar comp[2];
-  uint32_t len = 0;
-
   if (type != U_UNASSIGNED && type != U_PRIVATE_USE_CHAR) { // if the range is assigned - we might ommit more categories later
+    UErrorCode *status = ((enumStruct *)context)->status;
+    tempUCATable *t = ((enumStruct *)context)->t;
+    UCollator *tempColl = ((enumStruct *)context)->tempColl;
+    UCollationElements* colEl = ((enumStruct *)context)->colEl;
+    UCAElements el;
+    UChar decomp[256] = { 0 };
+    int32_t noOfDec = 0;
+
+    UChar32 u32 = 0;
+    UChar comp[2];
+    uint32_t len = 0;
+
     for(u32 = start; u32 < limit; u32++) {
       noOfDec = unorm_getDecomposition(u32, FALSE, decomp, 256);
       //if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
@@ -1527,21 +1527,17 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
           el.prefixSize = 0;
 
           UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+          el.cPoints = comp;
+          el.cSize = len;
+          el.prefix = el.prefixChars;
+          el.prefixSize = 0;
           if(prefix == NULL) {
-            el.cPoints = comp;
-            el.cSize = len;
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
             el.noOfCEs = 0;
             ucol_setText(colEl, decomp, noOfDec, status);
             while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
               el.noOfCEs++;
             }
           } else {
-            el.cPoints = comp;
-            el.cSize = len;
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
             el.noOfCEs = 1;
             el.CEs[0] = prefix->mapCE;
             // This character uses a prefix. We have to add it 
