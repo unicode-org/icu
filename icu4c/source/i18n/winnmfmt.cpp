@@ -185,7 +185,7 @@ Format *Win32NumberFormat::clone(void) const
 
 UnicodeString& Win32NumberFormat::format(double number, UnicodeString& appendTo, FieldPosition& pos) const
 {
-    return format(getMaximumFractionDigits(), appendTo, L"%f", number);
+    return format(getMaximumFractionDigits(), appendTo, L"%.16f", number);
 }
 
 UnicodeString& Win32NumberFormat::format(int32_t number, UnicodeString& appendTo, FieldPosition& pos) const
@@ -245,6 +245,22 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
         va_start(args, fmt);
         result = vswprintf(nBuffer, newLength + 1, fmt, args);
         va_end(args);
+    }
+
+    // vswprintf is sensitive to the locale set by setlocale. For some locales
+    // it doesn't use "." as the decimal separator, which is what GetNumberFormatW
+    // and GetCurrencyFormatW both expect to see.
+    //
+    // To fix this, we scan over the string and replace the first non-digits, except
+    // for a leading "-", with a "."
+    //
+    // Note: (nBuffer[0] == L'-') will evaluate to 1 if there is a leading '-' in the
+    // number, and 0 otherwise.
+    for (wchar_t *p = &nBuffer[nBuffer[0] == L'-']; *p != L'\0'; p += 1) {
+        if (*p < L'0' || *p > L'9') {
+            *p = L'.';
+            break;
+        }
     }
 
     UChar stackBuffer[STACK_BUFFER_SIZE];
