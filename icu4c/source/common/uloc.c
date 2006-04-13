@@ -542,14 +542,16 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 
 static const char * 
 locale_getKeywordsStart(const char *localeID) {
-    /* TODO This seems odd. No matter what charset we're on, won't '@'
-       be '@'? Or are we building on one EBCDIC machine and moving the
-       library to another? */
     const char *result = NULL;
-    static const uint8_t ebcdicSigns[] = { 0x7C, 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
     if((result = uprv_strchr(localeID, '@')) != NULL) {
         return result;
-    } else if(U_CHARSET_FAMILY == U_EBCDIC_FAMILY) {
+    }
+#if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+    else {
+        /* We do this because the @ sign is variant, and the @ sign used on one
+        EBCDIC machine won't be compiled the same way on other EBCDIC based
+        machines. */
+        static const uint8_t ebcdicSigns[] = { 0x7C, 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
         const uint8_t *charToFind = ebcdicSigns;
         while(*charToFind) {
             if((result = uprv_strchr(localeID, *charToFind)) != NULL) {
@@ -558,6 +560,7 @@ locale_getKeywordsStart(const char *localeID) {
             charToFind++;
         }
     }
+#endif
     return NULL;
 }
 
@@ -899,6 +902,17 @@ uloc_setKeywordValue(const char* keywordName,
     if(U_FAILURE(*status)) { 
         return -1; 
     }
+    if(bufferCapacity>1) {
+        bufLen = (int32_t)uprv_strlen(buffer);
+    } else {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(bufferCapacity<bufLen) {
+        /* The capacity is less than the length?! Is this NULL terminated? */
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     if(keywordValue && !*keywordValue) { 
         keywordValue = NULL;
     }
@@ -912,12 +926,6 @@ uloc_setKeywordValue(const char* keywordName,
         return 0;
     }
     startSearchHere = (char*)locale_getKeywordsStart(buffer);
-    if(bufferCapacity>1) {
-        bufLen = (int32_t)uprv_strlen(buffer);
-    } else {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
     if(startSearchHere == NULL || (startSearchHere[1]==0)) {
         if(!keywordValue) { /* no keywords = nothing to remove */
             return bufLen; 
@@ -1779,7 +1787,7 @@ uloc_getParent(const char*    localeID,
         i=0;
     }
 
-    if(i>0) {
+    if(i>0 && parent != localeID) {
         uprv_memcpy(parent, localeID, uprv_min(i, parentCapacity));
     }
     return u_terminateChars(parent, parentCapacity, i, err);
