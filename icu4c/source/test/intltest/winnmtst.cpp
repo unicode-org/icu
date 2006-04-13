@@ -41,6 +41,7 @@
 #   include <stdio.h>
 #   include <time.h>
 #   include <float.h>
+#   include <locale.h>
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
@@ -144,6 +145,22 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
         va_end(args);
     }
 
+    // vswprintf is sensitive to the locale set by setlocale. For some locales
+    // it doesn't use "." as the decimal separator, which is what GetNumberFormatW
+    // and GetCurrencyFormatW both expect to see.
+    //
+    // To fix this, we scan over the string and replace the first non-digits, except
+    // for a leading "-", with a "."
+    //
+    // Note: (nBuffer[0] == L'-') will evaluate to 1 if there is a leading '-' in the
+    // number, and 0 otherwise.
+    for (wchar_t *p = &nBuffer[nBuffer[0] == L'-']; *p != L'\0'; p += 1) {
+        if (*p < L'0' || *p > L'9') {
+            *p = L'.';
+            break;
+        }
+    }
+
     wchar_t stackBuffer[STACK_BUFFER_SIZE];
     wchar_t *buffer = stackBuffer;
 
@@ -201,7 +218,7 @@ static void testLocale(const char *localeID, int32_t lcid, NumberFormat *wnf, UB
         int32_t i32 = randomInt32();
         int64_t i64 = randomInt64();
 
-        getWindowsFormat(lcid, currency, wdBuffer, L"%f", d);
+        getWindowsFormat(lcid, currency, wdBuffer, L"%.16f", d);
 
         getWindowsFormat(lcid, currency, w3Buffer, L"%I32d", i32);
 
@@ -258,6 +275,19 @@ void Win32NumberTest::testLocales(TestLog *log)
 
         testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, FALSE, log);
         testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, TRUE,  log);
+
+#if 0
+        char *old_locale = strdup(setlocale(LC_ALL, NULL));
+        
+        setlocale(LC_ALL, "German");
+
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, FALSE, log);
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, TRUE,  log);
+
+        setlocale(LC_ALL, old_locale);
+
+        free(old_locale);
+#endif
 
         delete wcf;
         delete wnf;
