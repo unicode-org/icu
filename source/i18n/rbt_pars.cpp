@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -807,32 +807,33 @@ UBool RuleHalf::isValidInput(TransliteratorParser& transParser) {
 /**
  * Constructor.
  */
-TransliteratorParser::TransliteratorParser() {
-    dataVector = NULL;
-    idBlockVector = NULL;
+TransliteratorParser::TransliteratorParser(UErrorCode &statusReturn) :
+status(U_ZERO_ERROR),
+dataVector(status),
+idBlockVector(status),
+variablesVector(status),
+segmentObjects(status)
+{
+    idBlockVector.setDeleter(uhash_deleteUnicodeString);
     curData = NULL;
     compoundFilter = NULL;
     parseData = NULL;
-    variablesVector = NULL;
-    variableNames = NULL;
-    segmentObjects = NULL;
+    variableNames.setValueDeleter(uhash_deleteUnicodeString);
+    if (U_FAILURE(status)) {
+        statusReturn = status;
+    }
 }
 
 /**
  * Destructor.
  */
 TransliteratorParser::~TransliteratorParser() {
-    while (dataVector != NULL && !dataVector->isEmpty())
-        delete (TransliterationRuleData*)(dataVector->orphanElementAt(0));
-    delete dataVector;
-    delete idBlockVector;
+    while (!dataVector.isEmpty())
+        delete (TransliterationRuleData*)(dataVector.orphanElementAt(0));
     delete compoundFilter;
     delete parseData;
-    while (variablesVector != NULL && !variablesVector->isEmpty())
-        delete (UnicodeFunctor*)variablesVector->orphanElementAt(0);
-    delete variablesVector;
-    delete variableNames;
-    delete segmentObjects;
+    while (!variablesVector.isEmpty())
+        delete (UnicodeFunctor*)variablesVector.orphanElementAt(0);
 }
 
 void
@@ -878,46 +879,26 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     UBool parsingIDs = TRUE;
     int32_t ruleCount = 0;
     
-    if (dataVector == NULL)
-        dataVector = new UVector(status);
-    else {
-        while (!dataVector->isEmpty())
-            delete (TransliterationRuleData*)(dataVector->orphanElementAt(0));
+    while (!dataVector.isEmpty()) {
+        delete (TransliterationRuleData*)(dataVector.orphanElementAt(0));
     }
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (idBlockVector == NULL) {
-        idBlockVector = new UVector(status);
-        idBlockVector->setDeleter(uhash_deleteUnicodeString);
-    }
-    else
-        idBlockVector->removeAllElements();
-    if (U_FAILURE(status)) {
-        return;
-    }
+    idBlockVector.removeAllElements();
     curData = NULL;
-    
     direction = theDirection;
     ruleCount = 0;
 
     delete compoundFilter;
     compoundFilter = NULL;
 
-    if (variablesVector == NULL) {
-        variablesVector = new UVector(status);
-    } else {
-        while (!variablesVector->isEmpty())
-            delete (UnicodeFunctor*)variablesVector->orphanElementAt(0);
+    while (!variablesVector.isEmpty()) {
+        delete (UnicodeFunctor*)variablesVector.orphanElementAt(0);
     }
-    if (variableNames == NULL) {
-        variableNames = new Hashtable(status);
-        variableNames->setValueDeleter(uhash_deleteUnicodeString);
-    } else {
-        variableNames->removeAll();
-    }
-    parseData = new ParseData(0, variablesVector, variableNames);
+    variableNames.removeAll();
+    parseData = new ParseData(0, &variablesVector, &variableNames);
     if (parseData == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -979,9 +960,9 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             if (!parsingIDs) {
                 if (curData != NULL) {
                     if (direction == UTRANS_FORWARD)
-                        dataVector->addElement(curData, status);
+                        dataVector.addElement(curData, status);
                     else
-                        dataVector->insertElementAt(curData, 0, status);
+                        dataVector.insertElementAt(curData, 0, status);
                     curData = NULL;
                 }
                 parsingIDs = TRUE;
@@ -1029,9 +1010,9 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
         } else {
             if (parsingIDs) {
                 if (direction == UTRANS_FORWARD)
-                    idBlockVector->addElement(new UnicodeString(idBlockResult), status);
+                    idBlockVector.addElement(new UnicodeString(idBlockResult), status);
                 else
-                    idBlockVector->insertElementAt(new UnicodeString(idBlockResult), 0, status);
+                    idBlockVector.insertElementAt(new UnicodeString(idBlockResult), 0, status);
                 idBlockResult.remove();
                 parsingIDs = FALSE;
                 curData = new TransliterationRuleData(status);
@@ -1059,23 +1040,23 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
     if (parsingIDs && idBlockResult.length() > 0) {
         if (direction == UTRANS_FORWARD)
-            idBlockVector->addElement(new UnicodeString(idBlockResult), status);
+            idBlockVector.addElement(new UnicodeString(idBlockResult), status);
         else
-            idBlockVector->insertElementAt(new UnicodeString(idBlockResult), 0, status);
+            idBlockVector.insertElementAt(new UnicodeString(idBlockResult), 0, status);
     }
     else if (!parsingIDs && curData != NULL) {
         if (direction == UTRANS_FORWARD)
-            dataVector->addElement(curData, status);
+            dataVector.addElement(curData, status);
         else
-            dataVector->insertElementAt(curData, 0, status);
+            dataVector.insertElementAt(curData, 0, status);
     }
     
     if (U_SUCCESS(status)) {
         // Convert the set vector to an array
-        int32_t i, dataVectorSize = dataVector->size();
+        int32_t i, dataVectorSize = dataVector.size();
         for (i = 0; i < dataVectorSize; i++) {
-            TransliterationRuleData* data = (TransliterationRuleData*)dataVector->elementAt(i);
-            data->variablesLength = variablesVector->size();
+            TransliterationRuleData* data = (TransliterationRuleData*)dataVector.elementAt(i);
+            data->variablesLength = variablesVector.size();
             if (data->variablesLength == 0) {
                 data->variables = 0;
             } else {
@@ -1085,19 +1066,19 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
             for (int32_t j = 0; j < data->variablesLength; j++) {
                 data->variables[j] =
-                    ((UnicodeSet*)variablesVector->elementAt(j));
+                    ((UnicodeSet*)variablesVector.elementAt(j));
             }
             
-            data->variableNames->removeAll();
+            data->variableNames.removeAll();
             int32_t pos = -1;
-            const UHashElement* he = variableNames->nextElement(pos);
+            const UHashElement* he = variableNames.nextElement(pos);
             while (he != NULL) {
-                data->variableNames->put(*((UnicodeString*)(he->key.pointer)),
+                data->variableNames.put(*((UnicodeString*)(he->key.pointer)),
                     ((UnicodeString*)(he->value.pointer))->clone(), status);
-                he = variableNames->nextElement(pos);
+                he = variableNames.nextElement(pos);
             }
         }
-        variablesVector->removeAllElements();   // keeps them from getting deleted when we succeed
+        variablesVector.removeAllElements();   // keeps them from getting deleted when we succeed
 
         // Index the rules
         if (compoundFilter != NULL) {
@@ -1108,11 +1089,11 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
         }        
 
         for (i = 0; i < dataVectorSize; i++) {
-            TransliterationRuleData* data = (TransliterationRuleData*)dataVector->elementAt(i);
+            TransliterationRuleData* data = (TransliterationRuleData*)dataVector.elementAt(i);
             data->ruleSet.freeze(parseError, status);
         }
-        if (idBlockVector->size() == 1 && ((UnicodeString*)idBlockVector->elementAt(0))->isEmpty()) {
-            idBlockVector->removeElementAt(0);
+        if (idBlockVector.size() == 1 && ((UnicodeString*)idBlockVector.elementAt(0))->isEmpty()) {
+            idBlockVector.removeElementAt(0);
         }
     }
 }
@@ -1127,7 +1108,7 @@ void TransliteratorParser::setVariableRange(int32_t start, int32_t end) {
     }
     
     curData->variablesBase = (UChar) start;
-    if (dataVector->size() == 0) {
+    if (dataVector.size() == 0) {
         variableNext = (UChar) start;
         variableLimit = (UChar) (end + 1);
     }
@@ -1250,11 +1231,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
 
     // Set up segments data
     segmentStandins.truncate(0);
-    if (segmentObjects == NULL) {
-        segmentObjects = new UVector(status);
-    } else {
-        segmentObjects->removeAllElements();
-    }
+    segmentObjects.removeAllElements();
 
     // Use pointers to automatics to make swapping possible.
     RuleHalf _left(*this), _right(*this);
@@ -1328,7 +1305,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         } 
         // We allow anything on the right, including an empty string.
         UnicodeString* value = new UnicodeString(right->text);
-        variableNames->put(undefinedVariableName, value, status);
+        variableNames.put(undefinedVariableName, value, status);
         ++variableLimit;
         return pos;
     }
@@ -1342,7 +1319,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     }
 
     // Verify segments
-    if (segmentStandins.length() > segmentObjects->size()) {
+    if (segmentStandins.length() > segmentObjects.size()) {
         syntaxError(U_UNDEFINED_SEGMENT_REFERENCE, rule, start);
     }
     for (i=0; i<segmentStandins.length(); ++i) {
@@ -1350,8 +1327,8 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
             syntaxError(U_INTERNAL_TRANSLITERATOR_ERROR, rule, start); // will never happen
         }
     }
-    for (i=0; i<segmentObjects->size(); ++i) {
-        if (segmentObjects->elementAt(i) == NULL) {
+    for (i=0; i<segmentObjects.size(); ++i) {
+        if (segmentObjects.elementAt(i) == NULL) {
             syntaxError(U_INTERNAL_TRANSLITERATOR_ERROR, rule, start); // will never happen
         }
     }
@@ -1410,16 +1387,16 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
 
     // Flatten segment objects vector to an array
     UnicodeFunctor** segmentsArray = NULL;
-    if (segmentObjects->size() > 0) {
-        segmentsArray = (UnicodeFunctor **)uprv_malloc(segmentObjects->size() * sizeof(UnicodeFunctor *));
-        segmentObjects->toArray((void**) segmentsArray);
+    if (segmentObjects.size() > 0) {
+        segmentsArray = (UnicodeFunctor **)uprv_malloc(segmentObjects.size() * sizeof(UnicodeFunctor *));
+        segmentObjects.toArray((void**) segmentsArray);
     }
 
     curData->ruleSet.addRule(new TransliterationRule(
                                  left->text, left->ante, left->post,
                                  right->text, right->cursor, right->cursorOffset,
                                  segmentsArray,
-                                 segmentObjects->size(),
+                                 segmentObjects.size(),
                                  left->anchorStart, left->anchorEnd,
                                  curData,
                                  status), status);
@@ -1484,8 +1461,8 @@ UChar TransliteratorParser::generateStandInFor(UnicodeFunctor* adopted) {
     
     // Look up previous stand-in, if any.  This is a short list
     // (typical n is 0, 1, or 2); linear search is optimal.
-    for (int32_t i=0; i<variablesVector->size(); ++i) {
-        if (variablesVector->elementAt(i) == adopted) { // [sic] pointer comparison
+    for (int32_t i=0; i<variablesVector.size(); ++i) {
+        if (variablesVector.elementAt(i) == adopted) { // [sic] pointer comparison
             return (UChar) (curData->variablesBase + i);
         }
     }
@@ -1495,7 +1472,7 @@ UChar TransliteratorParser::generateStandInFor(UnicodeFunctor* adopted) {
         status = U_VARIABLE_RANGE_EXHAUSTED;
         return 0;
     }
-    variablesVector->addElement(adopted, status);
+    variablesVector.addElement(adopted, status);
     return variableNext++;
 }
 
@@ -1518,7 +1495,7 @@ UChar TransliteratorParser::getSegmentStandin(int32_t seg) {
         // Set a placeholder in the master variables vector that will be
         // filled in later by setSegmentObject().  We know that we will get
         // called first because setSegmentObject() will call us.
-        variablesVector->addElement((void*) NULL, status);
+        variablesVector.addElement((void*) NULL, status);
         segmentStandins.setCharAt(seg-1, c);
     }
     return c;
@@ -1532,18 +1509,18 @@ void TransliteratorParser::setSegmentObject(int32_t seg, StringMatcher* adopted)
     // segments will result in segment i+1 getting parsed
     // and stored before segment i; be careful with the
     // vector handling here.
-    if (segmentObjects->size() < seg) {
-        segmentObjects->setSize(seg);
+    if (segmentObjects.size() < seg) {
+        segmentObjects.setSize(seg);
     }
     int32_t index = getSegmentStandin(seg) - curData->variablesBase;
-    if (segmentObjects->elementAt(seg-1) != NULL ||
-        variablesVector->elementAt(index) != NULL) {
+    if (segmentObjects.elementAt(seg-1) != NULL ||
+        variablesVector.elementAt(index) != NULL) {
         // should never happen
         status = U_INTERNAL_TRANSLITERATOR_ERROR;
         return;
     }
-    segmentObjects->setElementAt(adopted, seg-1);
-    variablesVector->setElementAt(adopted, index);
+    segmentObjects.setElementAt(adopted, seg-1);
+    variablesVector.setElementAt(adopted, index);
 }
 
 /**
@@ -1563,7 +1540,7 @@ UChar TransliteratorParser::getDotStandIn() {
  */
 void TransliteratorParser::appendVariableDef(const UnicodeString& name,
                                                   UnicodeString& buf) {
-    const UnicodeString* s = (const UnicodeString*) variableNames->get(name);
+    const UnicodeString* s = (const UnicodeString*) variableNames.get(name);
     if (s == NULL) {
         // We allow one undefined variable so that variable definition
         // statements work.  For the first undefined variable we return
