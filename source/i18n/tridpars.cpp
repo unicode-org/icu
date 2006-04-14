@@ -581,6 +581,10 @@ void TransliteratorIDParser::STVtoID(const UnicodeString& source,
     if (variant.length() != 0) {
         id.append(VARIANT_SEP).append(variant);
     }
+    // NUL-terminate the ID string for getTerminatedBuffer.
+    // This prevents valgrind and Purify warnings.
+    id.append((UChar)0);
+    id.truncate(id.length()-1);
 }
 
 /**
