@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 1997-2004, International Business Machines
+ *   Copyright (C) 1997-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   Date        Name        Description
@@ -605,6 +605,7 @@ static void _expect(const UTransliterator* trans,
     int32_t limit;
     UTransPosition pos;
     XReplaceable xrep;
+    XReplaceable *xrepPtr = &xrep;
     UReplaceableCallbacks xrepVtable;
 
     u_uastrcpy(from, cfrom);
@@ -659,7 +660,7 @@ static void _expect(const UTransliterator* trans,
     InitXReplaceableCallbacks(&xrepVtable);
     InitXReplaceable(&xrep, cfrom);
     limit = u_strlen(from);
-    utrans_trans(trans, (UReplaceable*)&xrep, &xrepVtable, 0, &limit, &status);
+    utrans_trans(trans, (UReplaceable*)xrepPtr, &xrepVtable, 0, &limit, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: utrans_trans() failed, error=%s\n",
                 u_errorName(status));
@@ -682,8 +683,8 @@ static void _expect(const UTransliterator* trans,
     InitXReplaceable(&xrep, cfrom);
     pos.start = pos.contextStart = 0;
     pos.limit = pos.contextLimit = u_strlen(from);
-    utrans_transIncremental(trans, (UReplaceable*)&xrep, &xrepVtable, &pos, &status);
-    utrans_trans(trans, (UReplaceable*)&xrep, &xrepVtable, pos.start, &pos.limit, &status);
+    utrans_transIncremental(trans, (UReplaceable*)xrepPtr, &xrepVtable, &pos, &status);
+    utrans_trans(trans, (UReplaceable*)xrepPtr, &xrepVtable, pos.start, &pos.limit, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: utrans_transIncremental() failed, error=%s\n",
                 u_errorName(status));
