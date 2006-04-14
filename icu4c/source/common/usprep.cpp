@@ -480,8 +480,12 @@ getValues(uint16_t trieWord, int16_t& value, UBool& isIndex){
          * the source codepoint is copied to the destination
          */
         type = USPREP_TYPE_LIMIT;
+        isIndex =FALSE;
+        value = 0;
     }else if(trieWord >= _SPREP_TYPE_THRESHOLD){
         type = (UStringPrepType) (trieWord - _SPREP_TYPE_THRESHOLD);
+        isIndex =FALSE;
+        value = 0;
     }else{
         /* get the type */
         type = USPREP_MAP;
@@ -489,12 +493,10 @@ getValues(uint16_t trieWord, int16_t& value, UBool& isIndex){
         if(trieWord & 0x02){
             isIndex = TRUE;
             value = trieWord  >> 2; //mask off the lower 2 bits and shift
-
         }else{
             isIndex = FALSE;
             value = (int16_t)trieWord;
             value =  (value >> 2);
-
         }
  
         if((trieWord>>2) == _SPREP_MAX_INDEX_VALUE){
