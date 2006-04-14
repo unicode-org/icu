@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
+*   Copyright (c) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -222,6 +222,7 @@ class TransliteratorRegistry : public UMemory {
     void put(const UnicodeString& ID,
              const UnicodeString& resourceName,
              UTransDirection dir,
+             UBool readonlyResourceAlias,
              UBool visible);
 
     /**
@@ -231,6 +232,7 @@ class TransliteratorRegistry : public UMemory {
      */
     void put(const UnicodeString& ID,
              const UnicodeString& alias,
+             UBool readonlyAliasAlias,
              UBool visible);
 
     /**
