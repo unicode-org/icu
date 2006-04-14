@@ -107,7 +107,7 @@ UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(Transliterator)
  * Return TRUE if the given UTransPosition is valid for text of
  * the given length.
  */
-inline UBool positionIsValid(UTransPosition& index, int32_t len) {
+static inline UBool positionIsValid(UTransPosition& index, int32_t len) {
     return !(index.contextStart < 0 ||
              index.start < index.contextStart ||
              index.limit < index.start ||
@@ -126,17 +126,20 @@ inline UBool positionIsValid(UTransPosition& index, int32_t len) {
 Transliterator::Transliterator(const UnicodeString& theID,
                                UnicodeFilter* adoptedFilter) :
     UObject(), ID(theID), filter(adoptedFilter),
-    maximumContextLength(0) {
-
-    // NUL-terminate the ID string
-    ID.getTerminatedBuffer();
+    maximumContextLength(0)
+{
+    // NUL-terminate the ID string, which is a non-aliased copy.
+    ID.append((UChar)0);
+    ID.truncate(ID.length()-1);
 }
 
 /**
  * Destructor.
  */
 Transliterator::~Transliterator() {
-    delete filter;
+    if (filter) {
+        delete filter;
+    }
 }
 
 /**
@@ -144,10 +147,11 @@ Transliterator::~Transliterator() {
  */
 Transliterator::Transliterator(const Transliterator& other) :
     UObject(other), ID(other.ID), filter(0),
-    maximumContextLength(other.maximumContextLength) {
-
-    // NUL-terminate the ID string
-    ID.getTerminatedBuffer();
+    maximumContextLength(other.maximumContextLength)
+{
+    // NUL-terminate the ID string, which is a non-aliased copy.
+    ID.append((UChar)0);
+    ID.truncate(ID.length()-1);
 
     if (other.filter != 0) {
         // We own the filter, so we must have our own copy
