@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -222,8 +222,12 @@ getValues(uint32_t result, int32_t& value, UBool& isIndex){
          * the source codepoint is copied to the destination
          */
         type = USPREP_TYPE_LIMIT;
+        isIndex =FALSE;
+        value = 0;
     }else if(result >= _SPREP_TYPE_THRESHOLD){
         type = (UStringPrepType) (result - _SPREP_TYPE_THRESHOLD);
+        isIndex =FALSE;
+        value = 0;
     }else{
         /* get the state */
         type = USPREP_MAP;
