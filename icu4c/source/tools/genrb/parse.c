@@ -203,14 +203,14 @@ expect(enum ETokenType expectedToken, struct UString **tokenValue, struct UStrin
 
     enum ETokenType token = getToken(tokenValue, comment, &line, status);
 
-    if (U_FAILURE(*status))
-    {
-        return;
-    }
-
     if (linenumber != NULL)
     {
         *linenumber = line;
+    }
+
+    if (U_FAILURE(*status))
+    {
+        return;
     }
 
     if (token != expectedToken)
