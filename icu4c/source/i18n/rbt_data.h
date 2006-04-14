@@ -1,5 +1,7 @@
 /*
-* Copyright (C) 1999-2005, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+* Copyright (C) 1999-2006, International Business Machines Corporation
+* and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -15,14 +17,13 @@
 
 #include "unicode/uobject.h"
 #include "rbt_set.h"
+#include "hash.h"
 
 U_NAMESPACE_BEGIN
 
 class UnicodeFunctor;
-class UnicodeString;
 class UnicodeMatcher;
 class UnicodeReplacer;
-class Hashtable;
 
 /**
  * The rule data for a RuleBasedTransliterators.  RBT objects hold
@@ -61,7 +62,7 @@ public:
      * data.variables.  The stand-in also represents the UnicodeMatcher in
      * the stored rules.
      */
-    Hashtable* variableNames;
+    Hashtable variableNames;
 
     /**
      * Map category variable (UChar) to set (UnicodeFunctor).

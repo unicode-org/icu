@@ -562,17 +562,17 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
         entry->entryType == Entry::RULES_REVERSE ||
         entry->entryType == Entry::LOCALE_RULES) {
         
-        if (parser.idBlockVector->isEmpty() && parser.dataVector->isEmpty()) {
+        if (parser.idBlockVector.isEmpty() && parser.dataVector.isEmpty()) {
             entry->u.data = 0;
             entry->entryType = Entry::ALIAS;
             entry->stringArg = UNICODE_STRING_SIMPLE("Any-NULL");
         }
-        else if (parser.idBlockVector->isEmpty() && parser.dataVector->size() == 1) {
-            entry->u.data = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
+        else if (parser.idBlockVector.isEmpty() && parser.dataVector.size() == 1) {
+            entry->u.data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
             entry->entryType = Entry::RBT_DATA;
         }
-        else if (parser.idBlockVector->size() == 1 && parser.dataVector->isEmpty()) {
-            entry->stringArg = *(UnicodeString*)(parser.idBlockVector->elementAt(0));
+        else if (parser.idBlockVector.size() == 1 && parser.dataVector.isEmpty()) {
+            entry->stringArg = *(UnicodeString*)(parser.idBlockVector.elementAt(0));
             entry->compoundFilter = parser.orphanCompoundFilter();
             entry->entryType = Entry::ALIAS;
         }
@@ -582,18 +582,18 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
             entry->u.dataVector = new UVector(status);
             entry->stringArg.remove();
 
-            int32_t limit = parser.idBlockVector->size();
-            if (parser.dataVector->size() > limit)
-                limit = parser.dataVector->size();
+            int32_t limit = parser.idBlockVector.size();
+            if (parser.dataVector.size() > limit)
+                limit = parser.dataVector.size();
 
             for (int32_t i = 0; i < limit; i++) {
-                if (i < parser.idBlockVector->size()) {
-                    UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector->elementAt(i);
+                if (i < parser.idBlockVector.size()) {
+                    UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector.elementAt(i);
                     if (!idBlock->isEmpty())
                         entry->stringArg += *idBlock;
                 }
-                if (!parser.dataVector->isEmpty()) {
-                    TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
+                if (!parser.dataVector.isEmpty()) {
+                    TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
                     entry->u.dataVector->addElement(data, status);
                     entry->stringArg += (UChar)0xffff;  // use U+FFFF to mark position of RBTs in ID block
                 }
@@ -625,20 +625,32 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  const UnicodeString& resourceName,
                                  UTransDirection dir,
+                                 UBool readonlyResourceAlias,
                                  UBool visible) {
     Entry *entry = new Entry();
     entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
         : Entry::RULES_REVERSE;
-    entry->stringArg = resourceName;
+    if (readonlyResourceAlias) {
+        entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
+    }
+    else {
+        entry->stringArg = resourceName;
+    }
     registerEntry(ID, entry, visible);
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  const UnicodeString& alias,
+                                 UBool readonlyAliasAlias,
                                  UBool visible) {
     Entry *entry = new Entry();
     entry->entryType = Entry::ALIAS;
-    entry->stringArg = alias;
+    if (readonlyAliasAlias) {
+        entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
+    }
+    else {
+        entry->stringArg = alias;
+    }
     registerEntry(ID, entry, visible);
 }
 
@@ -1251,7 +1263,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         // and possibly also into an ::id header and/or footer.  Then
         // we modify the registry with the parsed data and retry.
         {
-            TransliteratorParser parser;
+            TransliteratorParser parser(status);
             
             // We use the file name, taken from another resource bundle
             // 2-d array at static init time, as a locale language.  We're

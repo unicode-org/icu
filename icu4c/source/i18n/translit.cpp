@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -994,7 +994,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
         // Other aliases are handled with TransliteratorAlias::create().
         if (alias->isRuleBased()) {
             // Step 1. parse
-            TransliteratorParser parser;
+            TransliteratorParser parser(ec);
             alias->parse(parser, pe, ec);
             delete alias;
             alias = 0;
@@ -1045,7 +1045,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
 {
     Transliterator* t = NULL;
 
-    TransliteratorParser parser;
+    TransliteratorParser parser(status);
     parser.parse(rules, dir, parseError, status);
 
     if (U_FAILURE(status)) {
@@ -1053,13 +1053,13 @@ Transliterator::createFromRules(const UnicodeString& ID,
     }
 
     // NOTE: The logic here matches that in TransliteratorRegistry.
-    if (parser.idBlockVector->size() == 0 && parser.dataVector->size() == 0) {
+    if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 0) {
         t = new NullTransliterator();
     }
-    else if (parser.idBlockVector->size() == 0 && parser.dataVector->size() == 1) {
-        t = new RuleBasedTransliterator(ID, (TransliterationRuleData*)parser.dataVector->orphanElementAt(0), TRUE);
+    else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
+        t = new RuleBasedTransliterator(ID, (TransliterationRuleData*)parser.dataVector.orphanElementAt(0), TRUE);
     }
-    else if (parser.idBlockVector->size() == 1 && parser.dataVector->size() == 0) {
+    else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
         // idBlock, no data -- this is an alias.  The ID has
         // been munged from reverse into forward mode, if
         // necessary, so instantiate the ID in the forward
@@ -1068,10 +1068,10 @@ Transliterator::createFromRules(const UnicodeString& ID,
             UnicodeString filterPattern;
             parser.compoundFilter->toPattern(filterPattern, FALSE);
             t = createInstance(filterPattern + UnicodeString(ID_DELIM)
-                    + *((UnicodeString*)parser.idBlockVector->elementAt(0)), UTRANS_FORWARD, parseError, status);
+                    + *((UnicodeString*)parser.idBlockVector.elementAt(0)), UTRANS_FORWARD, parseError, status);
         }
         else
-            t = createInstance(*((UnicodeString*)parser.idBlockVector->elementAt(0)), UTRANS_FORWARD, parseError, status);
+            t = createInstance(*((UnicodeString*)parser.idBlockVector.elementAt(0)), UTRANS_FORWARD, parseError, status);
 
 
         if (t != NULL) {
@@ -1082,13 +1082,13 @@ Transliterator::createFromRules(const UnicodeString& ID,
         UVector transliterators(status);
         int32_t passNumber = 1;
 
-        int32_t limit = parser.idBlockVector->size();
-        if (parser.dataVector->size() > limit)
-            limit = parser.dataVector->size();
+        int32_t limit = parser.idBlockVector.size();
+        if (parser.dataVector.size() > limit)
+            limit = parser.dataVector.size();
 
         for (int32_t i = 0; i < limit; i++) {
-            if (i < parser.idBlockVector->size()) {
-                UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector->elementAt(i);
+            if (i < parser.idBlockVector.size()) {
+                UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector.elementAt(i);
                 if (!idBlock->isEmpty()) {
                     Transliterator* temp = createInstance(*idBlock, UTRANS_FORWARD, parseError, status);
                     if (temp != NULL && temp->getDynamicClassID() != NullTransliterator::getStaticClassID())
@@ -1097,8 +1097,8 @@ Transliterator::createFromRules(const UnicodeString& ID,
                         delete temp;
                 }
             }
-            if (!parser.dataVector->isEmpty()) {
-                TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector->orphanElementAt(0);
+            if (!parser.dataVector.isEmpty()) {
+                TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
                 transliterators.addElement(
                     new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
                     data, TRUE), status);
@@ -1251,7 +1251,7 @@ void U_EXPORT2 Transliterator::registerAlias(const UnicodeString& aliasID,
 
 void Transliterator::_registerAlias(const UnicodeString& aliasID,
 									const UnicodeString& realID) {
-	registry->put(aliasID, realID, TRUE);
+	registry->put(aliasID, realID, FALSE, TRUE);
 }
 
 /**
@@ -1507,13 +1507,13 @@ UBool Transliterator::initializeRegistry() {
                                 (ures_getUnicodeStringByKey(res, "direction", &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
-                            registry->put(id, UnicodeString(TRUE, resString, len), dir, visible);
+                            registry->put(id, UnicodeString(TRUE, resString, len), dir, TRUE, visible);
                         }
                         break;
                     case 0x61: // 'a'
                         // 'alias'; row[2]=createInstance argument
                         resString = ures_getString(res, &len, &status);
-                        registry->put(id, UnicodeString(TRUE, resString, len), TRUE);
+                        registry->put(id, UnicodeString(TRUE, resString, len), TRUE, TRUE);
                         break;
                     }
                 }

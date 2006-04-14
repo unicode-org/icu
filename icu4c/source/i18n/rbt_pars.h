@@ -1,5 +1,7 @@
 /*
-* Copyright (C) 1999-2005, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+* Copyright (C) 1999-2006, International Business Machines Corporation
+* and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -17,6 +19,8 @@
 #include "unicode/parseerr.h"
 #include "unicode/unorm.h"
 #include "rbt.h"
+#include "hash.h"
+#include "uvector.h"
 
 U_NAMESPACE_BEGIN
 
@@ -25,11 +29,17 @@ class UnicodeFunctor;
 class ParseData;
 class RuleHalf;
 class ParsePosition;
-class UVector;
-class Hashtable;
 class StringMatcher;
 
 class TransliteratorParser : public UMemory {
+
+ private:
+    /**
+     * We use a single error code during parsing.  Rather than pass it
+     * through each API, we keep it here.
+     * THIS MUST BE DEFINED FIRST!
+     */
+    UErrorCode status;
 
  public:
 
@@ -37,13 +47,13 @@ class TransliteratorParser : public UMemory {
      * A Vector of TransliterationRuleData objects, one for each discrete group
      * of rules in the rule set
      */
-    UVector* dataVector;
+    UVector dataVector;
 
     /**
      * PUBLIC data member.
      * A Vector of UnicodeStrings containing all of the ID blocks in the rule set
      */
-    UVector* idBlockVector;
+    UVector idBlockVector;
 
     /**
      * PUBLIC data member containing the parsed compound filter, if any.
@@ -60,12 +70,6 @@ class TransliteratorParser : public UMemory {
     UTransDirection direction;
 
     /**
-     * We use a single error code during parsing.  Rather than pass it
-     * through each API, we keep it here.
-     */
-    UErrorCode status;
-
-    /**
      * Parse error information.
      */
     UParseError parseError;
@@ -80,13 +84,13 @@ class TransliteratorParser : public UMemory {
      * is copied into the array data.variables.  As with data.variables,
      * element 0 corresponds to character data.variablesBase.
      */
-    UVector* variablesVector;
+    UVector variablesVector;
 
     /**
      * Temporary table of variable names.  When parsing is complete, this is
      * copied into data.variableNames.
      */
-    Hashtable* variableNames;    
+    Hashtable variableNames;    
     
     /**
      * String of standins for segments.  Used during the parsing of a single
@@ -101,7 +105,7 @@ class TransliteratorParser : public UMemory {
      * segmentStandins.charAt(0) is the standin for "$1" and corresponds
      * to StringMatcher object segmentObjects.elementAt(0), etc.
      */
-    UVector* segmentObjects;
+    UVector segmentObjects;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -139,7 +143,7 @@ public:
     /**
      * Constructor.
      */
-    TransliteratorParser();
+    TransliteratorParser(UErrorCode &statusReturn);
 
     /**
      * Destructor.
