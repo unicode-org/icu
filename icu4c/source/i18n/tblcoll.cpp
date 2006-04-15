@@ -128,7 +128,9 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 }
 RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length, 
                     const RuleBasedCollator *base, 
-                    UErrorCode &status) : dataIsOwned(TRUE)
+                    UErrorCode &status) :
+dataIsOwned(TRUE),
+isWriteThroughAlias(FALSE)
 {
   ucollator = ucol_openBinary(bin, length, base->ucollator, &status);
 }
@@ -174,7 +176,6 @@ RuleBasedCollator::~RuleBasedCollator()
         ucol_close(ucollator);
     }
     ucollator = 0;
-    urulestring = 0;
 }
 
 /* RuleBaseCollator public methods --------------------------------------- */
@@ -236,7 +237,7 @@ RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
 // aliasing, not write-through
 Collator* RuleBasedCollator::clone() const
 {
-  return new RuleBasedCollator(*this);
+    return new RuleBasedCollator(*this);
 }
 
 CollationElementIterator* RuleBasedCollator::createCollationElementIterator
