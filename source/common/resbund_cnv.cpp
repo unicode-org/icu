@@ -48,8 +48,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
     else {
         UnicodeString nullTerminatedPath(path);
         nullTerminatedPath.append((UChar)0);
-        nullTerminatedPath.truncate(nullTerminatedPath.length()-1);
-        fResource = ures_openU(nullTerminatedPath.getTerminatedBuffer(), locale.getName(), &error);
+        fResource = ures_openU(nullTerminatedPath.getBuffer(), locale.getName(), &error);
     }
 }
 
