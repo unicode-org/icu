@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -47,6 +47,8 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
     }
     else {
         UnicodeString nullTerminatedPath(path);
+        nullTerminatedPath.append((UChar)0);
+        nullTerminatedPath.truncate(nullTerminatedPath.length()-1);
         fResource = ures_openU(nullTerminatedPath.getTerminatedBuffer(), locale.getName(), &error);
     }
 }
