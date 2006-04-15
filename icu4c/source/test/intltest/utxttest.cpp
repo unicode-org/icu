@@ -762,7 +762,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         }
     }
 
-    delete buf;
+    delete []buf;
 }
 
 
