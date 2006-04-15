@@ -13,6 +13,7 @@
 
 struct UEnumeration;
 struct UDataSwapper;
+struct UDataMemory;
 
  /**
   * <p>UDataSwapFn function for use in swapping a compact dictionary.</p>
@@ -231,22 +232,20 @@ private:
  * to save space.</p>
  */
 class U_COMMON_API CompactTrieDictionary : public TrieWordDictionary {
- private:
+private:
     /**
      * The root node of the trie
-     * @internal
      */
-
-  const CompactTrieHeader   *fData;
+    const CompactTrieHeader   *fData;
 
     /**
-     * A UBool indicating whether or not we own the data.
-     * @internal
+     * A UBool indicating whether or not we own the fData.
      */
+    UBool                     fOwnData;
 
-  UBool                     fOwnData;
 
- public:
+    UDataMemory              *fUData;
+public:
 
   /**
    * <p>Construct a dictionary from raw saved data.</p>
@@ -254,7 +253,7 @@ class U_COMMON_API CompactTrieDictionary : public TrieWordDictionary {
    * @param data A pointer to the raw data, which is still owned by the caller
    * @param status A status code giving the result of the constructor
    */
-  CompactTrieDictionary( const void *data, UErrorCode &status );
+  CompactTrieDictionary(UDataMemory *dataObj, UErrorCode &status);
 
   /**
    * <p>Construct a dictionary from a MutableTrieDictionary.</p>
