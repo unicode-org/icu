@@ -151,20 +151,13 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
         // for the key of each particular subclass.
 
         // Open root from brkitr tree.
-        UResourceBundle dictBundleStack;
-        UResourceBundle dictNameStack;
-        UResourceBundle *dictBundle = &dictBundleStack;
-        UResourceBundle *dictName = &dictNameStack;
         char dictnbuff[256];
-        ures_initStackObject(dictBundle);
-        ures_initStackObject(dictName);
 
         UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
-        dictBundle = ures_getByKeyWithFallback(b, "dictionaries", dictBundle, &status);
-        dictName = ures_getByKeyWithFallback(dictBundle, "Thai", dictName, &status);
-        const UChar *dictfname = NULL;
+        b = ures_getByKeyWithFallback(b, "dictionaries", b, &status);
+        b = ures_getByKeyWithFallback(b, "Thai", b, &status);
         int32_t dictnlength = 0;
-        dictfname = ures_getString(dictName, &dictnlength, &status);
+        const UChar *dictfname = ures_getString(b, &dictnlength, &status);
         if (U_SUCCESS(status) && (size_t)dictnlength >= sizeof(dictnbuff)) {
             dictnlength = 0;
             status = U_BUFFER_OVERFLOW_ERROR;
@@ -172,13 +165,11 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
         if (U_SUCCESS(status) && dictfname) {
             u_UCharsToChars(dictfname, dictnbuff, dictnlength+1);
         }
-        ures_close(dictName);
-        ures_close(dictBundle);
         ures_close(b);
         UDataMemory *file = udata_open(U_ICUDATA_BRKITR, "ctd", dictnbuff, &status);
         if (U_SUCCESS(status)) {
             const CompactTrieDictionary *dict = new CompactTrieDictionary(
-                (const TrieWordDictionary *)udata_getMemory(file), status);
+                file, status);
             if (U_SUCCESS(status) && dict == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
             }

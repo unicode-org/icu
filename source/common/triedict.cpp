@@ -402,9 +402,11 @@ struct CompactTrieVerticalNode {
 // {'Dic', 1}, version 1
 #define COMPACT_TRIE_MAGIC_1 0x44696301
 
-CompactTrieDictionary::CompactTrieDictionary( const void *data,
-                                                UErrorCode &status ) {
-    fData = (const CompactTrieHeader *) data;
+CompactTrieDictionary::CompactTrieDictionary(UDataMemory *dataObj,
+                                                UErrorCode &status )
+: fUData(dataObj)
+{
+    fData = (const CompactTrieHeader *) udata_getMemory(dataObj);
     fOwnData = FALSE;
     if (fData->magic != COMPACT_TRIE_MAGIC_1) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -413,7 +415,9 @@ CompactTrieDictionary::CompactTrieDictionary( const void *data,
 }
 
 CompactTrieDictionary::CompactTrieDictionary( const MutableTrieDictionary &dict,
-                                                UErrorCode &status ) {
+                                                UErrorCode &status )
+: fUData(NULL)
+{
     fData = compactMutableTrieDictionary(dict, status);
     fOwnData = !U_FAILURE(status);
 }
@@ -421,6 +425,9 @@ CompactTrieDictionary::CompactTrieDictionary( const MutableTrieDictionary &dict,
 CompactTrieDictionary::~CompactTrieDictionary() {
     if (fOwnData) {
         uprv_free((void *)fData);
+    }
+    if (fUData) {
+        udata_close(fUData);
     }
 }
 
