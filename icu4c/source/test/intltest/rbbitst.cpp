@@ -762,39 +762,33 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestJapaneseLineBreak();                 break;
         case 2: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
-
         case 3: name = "TestLineBreakData";
             if(exec) TestLineBreakData();                      break;
         case 4: name = "TestEmptyString";
             if(exec) TestEmptyString();                        break;
-
         case 5: name = "TestGetAvailableLocales";
             if(exec) TestGetAvailableLocales();                break;
-
         case 6: name = "TestGetDisplayName";
             if(exec) TestGetDisplayName();                     break;
-
         case 7: name = "TestEndBehaviour";
             if(exec) TestEndBehaviour();                       break;
         case 8: name = "TestMixedThaiLineBreak";
              if(exec) TestMixedThaiLineBreak();                break;
-        case 9: name = "spare";
-             /*if(exec) spare(); */                            break;
-        case 10: name = "TestThaiLineBreak";
+        case 9: name = "TestThaiLineBreak";
              if(exec) TestThaiLineBreak();                     break;
-        case 11: name = "TestMaiyamok";
+        case 10: name = "TestMaiyamok";
              if(exec) TestMaiyamok();                          break;
-        case 12: name = "TestWordBreaks";
+        case 11: name = "TestWordBreaks";
              if(exec) TestWordBreaks();                        break;
-        case 13: name = "TestWordBoundary";
+        case 12: name = "TestWordBoundary";
              if(exec) TestWordBoundary();                      break;
-        case 14: name = "TestLineBreaks";
+        case 13: name = "TestLineBreaks";
              if(exec) TestLineBreaks();                        break;
-        case 15: name = "TestSentBreaks";
+        case 14: name = "TestSentBreaks";
              if(exec) TestSentBreaks();                        break;   
-        case 16: name = "TestExtended";
+        case 15: name = "TestExtended";
              if(exec) TestExtended();                          break;
-        case 17: name = "TestMonkey";
+        case 16: name = "TestMonkey";
              if(exec) {
  #if !UCONFIG_NO_REGULAR_EXPRESSIONS
                TestMonkey(params);
@@ -803,13 +797,13 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
  #endif
              }
                                                                break;
-        case 18: name = "TestBug3818";
+        case 17: name = "TestBug3818";
             if(exec) TestBug3818();                            break;
-        case 19: name = "TestJapaneseWordBreak";
+        case 18: name = "TestJapaneseWordBreak";
             if(exec) TestJapaneseWordBreak();                  break;
-        case 20: name = "TestDebug";
+        case 19: name = "TestDebug";
             if(exec) TestDebug();                              break;
-        case 21: name = "TestTrieDict";
+        case 20: name = "TestTrieDict";
             if(exec) TestTrieDict();                           break;
 
         default: name = ""; break; //needed to end loop
@@ -1823,7 +1817,7 @@ UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode 
 
 cleanUpAndReturn:
     fclose(f);
-    delete fileBuf;
+    delete []fileBuf;
     ucnv_close(conv);
     if (U_FAILURE(status)) {
         errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
@@ -3716,7 +3710,7 @@ void RBBITest::TestSentBreaks(void)
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
-    UChar         str[100];
+    UChar         str[200];
     static const char *strlist[] =
     {
      "Now\ris\nthe\r\ntime\n\rfor\r\r",
@@ -3737,7 +3731,7 @@ void RBBITest::TestSentBreaks(void)
         return;
     }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
-        u_unescape(strlist[loop], str, 100);
+        u_unescape(strlist[loop], str, (int32_t)(sizeof(str) / sizeof(str[0])));
         UnicodeString ustr(str);
 
         int count = 0;
