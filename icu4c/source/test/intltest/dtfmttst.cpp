@@ -1566,6 +1566,8 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
     if(result != exemplarCity){ 
         errln("setZoneString() did not succeed. Expected: " + exemplarCity + " Got: " + result); 
     }
+    delete keys;
+    delete keys2;
 }
 
 void DateFormatTest::TestHost(void)
