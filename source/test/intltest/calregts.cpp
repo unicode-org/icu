@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 1997-2006, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************/
  
 #include "unicode/utypes.h"
@@ -224,7 +224,7 @@ CalendarRegressionTest::test4031502()
     cl->get(UCAL_HOUR, status);
     failure(status, "cl->get(UCAL_HOUR, status)");
     status = U_ZERO_ERROR;
-    delete tz;
+    delete cl;
     for (int32_t i=0; i<ids->count(status); ++i) {
         TimeZone *zone = TimeZone::createTimeZone(*ids->snext(status));
         GregorianCalendar *cal = new GregorianCalendar(zone, status);
