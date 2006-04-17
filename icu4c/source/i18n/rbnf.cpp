@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation
+* Copyright (C) 1997-2006, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -1215,9 +1215,10 @@ RuleBasedNumberFormat::initDefaultRuleSet()
 
 void
 RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* localizationInfos,
-                            UParseError& /* pErr */, UErrorCode& status)
+                            UParseError& pErr, UErrorCode& status)
 {
     // TODO: implement UParseError
+    uprv_memset(&pErr, 0, sizeof(UParseError));
     // Note: this can leave ruleSets == NULL, so remaining code should check
     if (U_FAILURE(status)) {
         return;
