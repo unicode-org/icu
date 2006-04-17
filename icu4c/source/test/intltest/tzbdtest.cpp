@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -312,6 +312,7 @@ TimeZoneBoundaryTest::TestBoundaries()
         verifyDST(tempcal->getTime(status),pst, TRUE, inDST, -8*ONE_HOUR,inDST ? -7*ONE_HOUR : -8*ONE_HOUR);
     }
     TimeZone::setDefault(*save);
+    delete save;
     delete utccal;
     delete tempcal;
 

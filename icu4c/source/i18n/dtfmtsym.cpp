@@ -1490,43 +1490,43 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
                 //fetch the strings with fine grained fallback
                 const UChar* str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_STANDARD, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_STANDARD].setTo(str, len);
+                    array[TIMEZONE_SHORT_STANDARD].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_GENERIC, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_GENERIC].setTo(str, len);
+                    array[TIMEZONE_SHORT_GENERIC].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }                
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_DAYLIGHT, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_DAYLIGHT].setTo(str, len);
+                    array[TIMEZONE_SHORT_DAYLIGHT].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_STANDARD, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_STANDARD].setTo(str, len);
+                    array[TIMEZONE_LONG_STANDARD].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_GENERIC, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_GENERIC].setTo(str, len);
+                    array[TIMEZONE_LONG_GENERIC].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }                
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_DAYLIGHT, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_DAYLIGHT].setTo(str, len);
+                    array[TIMEZONE_LONG_DAYLIGHT].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_EXEMPLAR_CITY, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_EXEMPLAR_CITY].setTo(str, len);
+                    array[TIMEZONE_EXEMPLAR_CITY].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
@@ -1603,6 +1603,7 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
+    fZoneStringsHash->setValueDeleter(deleteUnicodeStringArray);
     for (int32_t row=0; row<rowCount; ++row){
         // the first string in the array is the key.
         UnicodeString key = strings[row][0];
@@ -1725,6 +1726,7 @@ DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
     if(U_FAILURE(status)){
         return NULL;
     }
+    hash->setValueDeleter(deleteUnicodeStringArray);
     int32_t pos = -1;
     const UHashElement* elem = NULL;
     // walk through the hash table and create a deep clone 
