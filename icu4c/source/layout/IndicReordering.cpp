@@ -365,7 +365,7 @@ static const le_int32 featureCount = LE_ARRAY_SIZE(featureMap);
 static const le_int8 stateTable[][CC_COUNT] =
 {
 //   xx  vm  sm  iv  i2  i3  ct  cn  nu  dv  s1  s2  s3  vr  zw
-    { 1,  1,  1,  5,  8, 11,  3,  2,  1,  5,  9,  5,  1,  1,  1}, //  0 - ground state
+    { 1,  6,  1,  5,  8, 11,  3,  2,  1,  5,  9,  5,  5,  1,  1}, //  0 - ground state
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  1 - exit state
     {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12}, //  2 - consonant with nukta
     {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12}, //  3 - consonant
@@ -434,7 +434,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             output.noteStressMark(classTable, chars[markStart], markStart, tagArray1);
         }
         
-        if (classTable->isVowelModifier(chars[markStart - 1])) {
+        if (markStart != prev && classTable->isVowelModifier(chars[markStart - 1])) {
             markStart -= 1;
             output.noteVowelModifier(classTable, chars[markStart], markStart, tagArray1);
         }
