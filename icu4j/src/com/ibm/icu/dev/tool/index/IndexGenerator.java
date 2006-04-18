@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -74,7 +74,7 @@ public class IndexGenerator {
 	System.out.println("Usage: IndexGenerator inDir outDir");
 	System.out.println("  inDir is an existing directory whose locale-based resources are to be enumerated");
 	System.out.println("  outDir is an existing directory in which the res_index.txt file will be placed");
-	throw new InternalError("Usage");
+	throw new IllegalStateException("Usage");
     }
 }
 	

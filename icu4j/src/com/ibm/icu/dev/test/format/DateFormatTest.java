@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2154,7 +2154,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 // hmmm... this shouldn't happen.  don't want to exit this
                 // fn with timezone improperly set, so just in case
                 TimeZone.setDefault(oldtz);
-                throw new InternalError(e.getMessage());
+                throw new IllegalStateException(e.getMessage());
             }
 
             // create DFS that recognizes our bogus time zone, sortof

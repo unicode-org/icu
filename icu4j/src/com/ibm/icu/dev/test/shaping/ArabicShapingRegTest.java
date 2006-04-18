@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -348,12 +348,12 @@ public class ArabicShapingRegTest extends TestFmwk {
             catch(MissingResourceException e){
                 throw e;
             }
+            catch (IllegalStateException ie){
+                warnln("IllegalStateException: "+ie.toString());
+                return;
+            }
             catch (Exception e) {
                 ex = e;
-            }
-            catch (InternalError ie){
-                warnln("InternalError: "+ie.toString());
-                return;
             }
 
             if (!test.result.equals(result)) {

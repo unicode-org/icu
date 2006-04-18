@@ -2732,7 +2732,7 @@ public class DecimalFormat extends NumberFormat {
             other.symbols = (DecimalFormatSymbols) symbols.clone();
             return other;
         } catch (Exception e) {
-            throw new InternalError();
+            throw new IllegalStateException();
         }
     }
 

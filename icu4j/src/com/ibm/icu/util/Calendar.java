@@ -1553,7 +1553,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         // todo: fix, difficult to test without subclassing
         if (fields == null || fields.length < BASE_FIELD_COUNT ||
             fields.length > MAX_FIELD_COUNT) {
-            throw new InternalError("Invalid fields[]");
+            throw new IllegalStateException("Invalid fields[]");
         }
         ///CLOVER:ON
         stamp = new int[fields.length];
@@ -1685,7 +1685,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             case JAPANESE:
                 return new JapaneseCalendar(zone, locale);
             default:
-                throw new InternalError();
+                throw new IllegalStateException();
             }
         } else {
             Calendar result = factory.create(zone, locale);
@@ -3814,7 +3814,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         }
         catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
-            throw new InternalError();
+            throw new IllegalStateException();
         }
     }
 
@@ -4880,8 +4880,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      */
     protected final void internalSet(int field, int value) {
         if (((1 << field) & internalSetMask) == 0) {
-            throw new InternalError("Subclass cannot set " +
-                                               fieldName(field));
+            throw new IllegalStateException("Subclass cannot set " +
+                                            fieldName(field));
         }
         fields[field] = value;
         stamp[field] = INTERNALLY_SET;

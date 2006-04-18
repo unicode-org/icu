@@ -111,7 +111,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             // genrb does not generate Table32 with %%ALIAS
             return new ResourceTable32(null, rootResource, "", true);
         } else {
-            throw new InternalError("Invalid format error");
+            throw new IllegalStateException("Invalid format error");
         }
     }
     private ICUResourceBundleImpl(ICUResourceBundleReader reader, String baseName,
@@ -183,7 +183,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
                 return new ResourceTable(key, resPath, resource);
             }
             default :
-                throw new InternalError("The resource type is unknown");
+                throw new IllegalStateException("The resource type is unknown");
         }
         //}
         //return null;
@@ -703,3 +703,4 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         return sub;
     }
 }
+

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -815,7 +815,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                     num = numFmt.parse(values[j]);
                 }
                 catch (Exception e) {
-                    throw new InternalError("failed to parse test argument");
+                    throw new IllegalStateException("failed to parse test argument");
                 }
                 args[0] = num;
                 String result = fmt.format(args);

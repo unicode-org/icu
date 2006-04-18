@@ -388,7 +388,7 @@ public class GlobalizationPreferences implements Freezable {
         try {
             return (Collator) collator.clone();  // clone for safety
         } catch (CloneNotSupportedException e) {
-            throw new InternalError("Error in cloning collator");
+            throw new IllegalStateException("Error in cloning collator");
         }
     }
 

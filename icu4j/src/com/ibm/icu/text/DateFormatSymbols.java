@@ -709,7 +709,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             return other;
         } catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
-            throw new InternalError();
+            throw new IllegalStateException();
             ///CLOVER:ON
         }
     }

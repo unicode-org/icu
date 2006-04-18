@@ -472,7 +472,7 @@ public final class Utility {
         }
 
         if (ai != length || i != maxI) {
-            throw new InternalError("Bad run-length encoded int array");
+            throw new IllegalStateException("Bad run-length encoded int array");
         }
 
         return array;
@@ -508,7 +508,7 @@ public final class Utility {
         }
 
         if (ai != length)
-            throw new InternalError("Bad run-length encoded short array");
+            throw new IllegalStateException("Bad run-length encoded short array");
 
         return array;
     }
@@ -539,7 +539,7 @@ public final class Utility {
         }
 
         if (ai != length)
-            throw new InternalError("Bad run-length encoded short array");
+            throw new IllegalStateException("Bad run-length encoded short array");
 
         return array;
     }
@@ -609,10 +609,10 @@ public final class Utility {
         }
 
         if (node != 0)
-            throw new InternalError("Bad run-length encoded byte array");
+            throw new IllegalStateException("Bad run-length encoded byte array");
 
         if (i != s.length())
-            throw new InternalError("Excess data in RLE byte array string");
+            throw new IllegalStateException("Excess data in RLE byte array string");
 
         return array;
     }

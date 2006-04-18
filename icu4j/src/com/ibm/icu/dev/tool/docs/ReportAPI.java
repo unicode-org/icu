@@ -248,7 +248,7 @@ public class ReportAPI {
             pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os, "UTF-8")));
         }
         catch (UnsupportedEncodingException e) {
-            throw new InternalError(); // UTF-8 should always be supported
+            throw new IllegalStateException(); // UTF-8 should always be supported
         }
 
         DateFormat fmt = new SimpleDateFormat("yyyy");

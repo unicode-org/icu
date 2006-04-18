@@ -421,7 +421,8 @@ public final class UScript {
         }
 
         if (w < result.length) {
-            throw new InternalError("bad locale data, listed " + result.length + " scripts but found only " + w);
+            throw new IllegalStateException("bad locale data, listed " + 
+                 result.length + " scripts but found only " + w);
         }
 
         return result;

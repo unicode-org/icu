@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -585,8 +585,8 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                     return (short) ((offset < 0) ? -i : i);
                 }
             }
-            throw new InternalError("Can't map string pool offset " + offset +
-                                       " to index");
+            throw new IllegalStateException("Can't map string pool offset " + 
+                                            offset + " to index");
         }
 
         /**
@@ -612,8 +612,8 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                     return i;
                 }
             }
-            throw new InternalError("Can't map value map offset " + offset +
-                                       " to index");
+            throw new IllegalStateException("Can't map value map offset " + 
+                                            offset + " to index");
         }
 
         /**

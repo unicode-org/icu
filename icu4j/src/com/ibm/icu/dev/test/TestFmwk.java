@@ -134,7 +134,7 @@ public class TestFmwk extends AbstractTestLog {
         protected TestGroup(String defaultPackage, String[] classnames,
                 String description) {
             if (classnames == null) {
-                throw new InternalError("classnames must not be null");
+                throw new IllegalStateException("classnames must not be null");
             }
 
             if (defaultPackage == null) {
@@ -241,9 +241,9 @@ public class TestFmwk extends AbstractTestLog {
                     subtest.params = params;
                     return subtest;
                 } catch (InstantiationException e) {
-                    throw new InternalError(e.getMessage());
+                    throw new IllegalStateException(e.getMessage());
                 } catch (IllegalAccessException e) {
-                    throw new InternalError(e.getMessage());
+                    throw new IllegalStateException(e.getMessage());
                 }
             }
             return null;
@@ -261,7 +261,7 @@ public class TestFmwk extends AbstractTestLog {
                     try {
                         Class cls = Class.forName(name);
                         if (!TestFmwk.class.isAssignableFrom(cls)) {
-                            throw new InternalError("class " + name
+                            throw new IllegalStateException("class " + name
                                     + " does not extend TestFmwk");
                         }
 
@@ -1530,7 +1530,7 @@ public class TestFmwk extends AbstractTestLog {
             Field f = testClass.getField("CLASS_TARGET_NAME");
             name = (String) f.get(null);
         } catch (IllegalAccessException e) {
-            throw new InternalError(
+            throw new IllegalStateException(
                     "static field CLASS_TARGET_NAME must be accessible");
         } catch (NoSuchFieldException e) {
             int n = Math.max(name.lastIndexOf('.'), name.lastIndexOf('$'));

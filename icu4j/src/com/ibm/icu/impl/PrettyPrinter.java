@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2005, international Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, international Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -128,7 +128,7 @@ public class PrettyPrinter {
 		String sresult = target.toString();
 		UnicodeSet doubleCheck = new UnicodeSet(sresult);
 		if (!uset.equals(doubleCheck)) {
-			throw new InternalError("Failure to round-trip in pretty-print");
+			throw new IllegalStateException("Failure to round-trip in pretty-print");
 		}
 		return sresult;
 	}

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -215,7 +215,7 @@ final class Punycode {
              * <n,i> state to <m,0>, but guard against overflow:
              */
             if(m-n>(0x7fffffff-MAX_CP_COUNT-delta)/(handledCPCount+1)) {
-                throw new InternalError("Internal program error");
+                throw new IllegalStateException("Internal program error");
             }
             delta+=(m-n)*(handledCPCount+1);
             n=m;
