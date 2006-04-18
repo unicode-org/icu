@@ -248,12 +248,20 @@ private:
 public:
 
   /**
+   * <p>Construct a dictionary from a UDataMemory.</p>
+   *
+   * @param data A pointer to a UDataMemory, which is adopted
+   * @param status A status code giving the result of the constructor
+   */
+  CompactTrieDictionary(UDataMemory *dataObj, UErrorCode &status);
+
+  /**
    * <p>Construct a dictionary from raw saved data.</p>
    *
    * @param data A pointer to the raw data, which is still owned by the caller
    * @param status A status code giving the result of the constructor
    */
-  CompactTrieDictionary(UDataMemory *dataObj, UErrorCode &status);
+  CompactTrieDictionary(const void *dataObj, UErrorCode &status);
 
   /**
    * <p>Construct a dictionary from a MutableTrieDictionary.</p>
