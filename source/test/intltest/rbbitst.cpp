@@ -745,6 +745,32 @@ void RBBITest::TestTrieDict() {
         return;
     }
 
+    // Test the data copying constructor for CompactTrieDict, and the data access APIs.
+    CompactTrieDictionary compact2(compactDict.data(), status);
+    if (U_FAILURE(status)) {
+        errln("CompactTrieDictionary(const void *,...) failed\n");
+        return;
+    }
+    
+    if (compact2.dataSize() == 0) {
+        errln("CompactTrieDictionary.dataSize() == 0\n");
+    }
+    
+    // Now count the words via the second dictionary
+    enumer = compact2.openWords(status);
+    if (U_FAILURE(status)) {
+        errln("Could not open compact trie dictionary 2 enumerator: %s\n", u_errorName(status));
+        return;
+    }
+    
+    if (wordCount != (testCount = enumer->count(status))) {
+        errln("CompactTrieDictionary 2 word count (%d) differs from file word count (%d), with status %s\n",
+            testCount, wordCount, u_errorName(status));
+        delete enumer;
+        return;
+    }
+    
+    delete enumer;
 }
 
 //---------------------------------------------

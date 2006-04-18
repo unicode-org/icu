@@ -414,6 +414,18 @@ CompactTrieDictionary::CompactTrieDictionary(UDataMemory *dataObj,
     }
 }
 
+CompactTrieDictionary::CompactTrieDictionary(const void *data,
+                                                UErrorCode &status )
+: fUData(NULL)
+{
+    fData = (const CompactTrieHeader *) data;
+    fOwnData = FALSE;
+    if (fData->magic != COMPACT_TRIE_MAGIC_1) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        fData = NULL;
+    }
+}
+
 CompactTrieDictionary::CompactTrieDictionary( const MutableTrieDictionary &dict,
                                                 UErrorCode &status )
 : fUData(NULL)
