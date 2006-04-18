@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -323,8 +323,6 @@ public final class UCharacterCaseTest extends TestFmwk
                 }                
             }
          }catch(Exception ex){
-            warnln("Could not find data for BreakIterators");
-         }catch(InternalError e){
             warnln("Could not find data for BreakIterators");
          }
     }

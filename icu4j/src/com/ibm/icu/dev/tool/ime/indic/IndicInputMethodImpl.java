@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -362,7 +362,7 @@ class IndicInputMethodImpl {
                 ACIText clone = (ACIText) super.clone();
                 return clone;
             } catch (CloneNotSupportedException e) {
-                throw new InternalError();
+                throw new IllegalStateException();
             }
         }
 

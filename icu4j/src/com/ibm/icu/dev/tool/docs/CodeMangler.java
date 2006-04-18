@@ -722,7 +722,7 @@ public class CodeMangler {
                 }
                 return false;
             default:
-                throw new InternalError();
+                throw new IllegalStateException();
             }
         }
         if (state == 6) {
@@ -806,7 +806,7 @@ public class CodeMangler {
         case 4:
             keyRelVal[2] = line.substring(mark).trim(); break; // found a word, possible rel, and who knows what
         default: 
-            throw new InternalError();
+            throw new IllegalStateException();
         }
         return true;
     }

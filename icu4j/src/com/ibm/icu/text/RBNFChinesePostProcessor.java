@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -146,7 +146,7 @@ final class RBNFChinesePostProcessor extends RBNFPostProcessor {
                 n = -1;
                 break;
             default:
-                throw new InternalError();
+                throw new IllegalStateException();
             }
         }
 

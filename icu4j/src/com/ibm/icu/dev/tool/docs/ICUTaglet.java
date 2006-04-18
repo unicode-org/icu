@@ -107,7 +107,7 @@ public abstract class ICUTaglet implements Taglet {
                 for (int i = 0; i < tags.length; ++i) {
                     msg += "  [" + i + "] " + tags[i] + "\n";
                 }
-                throw new InternalError(msg);
+                throw new IllegalStateException(msg);
             } else if (tags.length > 0) {
                 return toString(tags[0]);
             }

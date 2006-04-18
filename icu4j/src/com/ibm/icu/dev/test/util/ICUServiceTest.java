@@ -902,7 +902,7 @@ public class ICUServiceTest extends TestFmwk
         rwlock.releaseRead();
         errln("no error thrown");
     }
-    catch (InternalError e) {
+    catch (IllegalStateException e) {
         logln("OK: " + e.getMessage());
     }
 
@@ -910,7 +910,7 @@ public class ICUServiceTest extends TestFmwk
         rwlock.releaseWrite();
         errln("no error thrown");
     }
-    catch (InternalError e) {
+    catch (IllegalStateException e) {
         logln("OK: " + e.getMessage());
     }
 
@@ -961,7 +961,7 @@ public class ICUServiceTest extends TestFmwk
         nf.addListener(new WrongListener());
         errln("added wrong listener");
     }
-    catch (InternalError e) {
+    catch (IllegalStateException e) {
         logln(e.getMessage());
     }
     catch (Exception e) {

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -12,12 +12,12 @@ public class Assert {
         fail(e.toString()); // can't wrap exceptions in jdk 1.3
     }
     public static void fail(String msg) {
-        throw new InternalError("failure '" + msg + "'");
+        throw new IllegalStateException("failure '" + msg + "'");
     }
     public static void assrt(boolean val) {
-        if (!val) throw new InternalError("assert failed");
+        if (!val) throw new IllegalStateException("assert failed");
     }
     public static void assrt(String msg, boolean val) {
-        if (!val) throw new InternalError("assert '" + msg + "' failed");
+        if (!val) throw new IllegalStateException("assert '" + msg + "' failed");
     }
 }

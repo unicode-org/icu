@@ -299,7 +299,9 @@ public final class CollectionUtilities {
         result.append("]");
         String sresult = result.toString();
         UnicodeSet doubleCheck = new UnicodeSet(sresult);
-        if (!uset.equals(doubleCheck)) throw new InternalError("Failure to round-trip in pretty-print");
+        if (!uset.equals(doubleCheck)) {
+            throw new IllegalStateException("Failure to round-trip in pretty-print");
+        }
         return sresult;
     }
     

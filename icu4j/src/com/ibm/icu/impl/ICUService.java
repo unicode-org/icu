@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -433,7 +433,7 @@ public class ICUService extends ICUNotifier {
                         }
                     }
                     if (startIndex == 0) {
-                        throw new InternalError("Factory " + factory + "not registered with service: " + this);
+                        throw new IllegalStateException("Factory " + factory + "not registered with service: " + this);
                     }
                     cacheResult = false;
                 }

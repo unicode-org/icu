@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -74,7 +74,7 @@ public class ModuleTest extends TestFmwk {
                     }
                 }
                 catch (Exception e) {
-                    throw new InternalError(e.getMessage());
+                    throw new IllegalStateException(e.getMessage());
                 }
             }
             return target;
@@ -199,7 +199,7 @@ public class ModuleTest extends TestFmwk {
             }
         }
         catch (Exception e) {
-            throw new InternalError(e.getMessage());
+            throw new IllegalStateException(e.getMessage());
         }
     }
      */

@@ -1820,8 +1820,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         };
 
         static {
-            if(COUNT!=BLOCKS_.length) {
-                throw new java.lang.InternalError("UnicodeBlock fields are inconsistent!");
+            if (COUNT!=BLOCKS_.length) {
+                throw new java.lang.IllegalStateException("UnicodeBlock fields are inconsistent!");
             }
         }
         /**

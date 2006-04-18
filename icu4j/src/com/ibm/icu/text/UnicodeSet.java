@@ -2801,7 +2801,7 @@ public class UnicodeSet extends UnicodeFilter {
                 }
                 break;
             default:
-                throw new InternalError("UnicodeSet.getInclusions(unknown src "+src+")");
+                throw new IllegalStateException("UnicodeSet.getInclusions(unknown src "+src+")");
             }
             INCLUSIONS[src] = incl;
         }

@@ -1,7 +1,7 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,7 +49,7 @@ public abstract class UnicodePropertySource implements Cloneable {
             result.filter = (StringFilter)filter.clone();
             return result;             
         } catch (CloneNotSupportedException e) {
-            throw new InternalError("Should never happen.");
+            throw new IllegalStateException("Should never happen.");
         }
     }
     
@@ -128,7 +128,7 @@ public abstract class UnicodePropertySource implements Cloneable {
             try {
                 return super.clone();
             } catch (CloneNotSupportedException e) {
-                throw new InternalError("Should never happen.");
+                throw new IllegalStateException("Should never happen.");
             }
         }
     }

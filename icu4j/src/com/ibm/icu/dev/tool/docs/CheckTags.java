@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2005, International Business Machines Corporation and    *
+* Copyright (C) 2002-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -400,6 +400,9 @@ public class CheckTags {
         if (!foundRequiredTag) {
             errln("missing required tag [" + doc.position() + "]");
         }
+        if (foundInternalTag && !foundDeprecatedTag) {
+            errln("internal tag missing deprecated");
+        }
         if (foundDraftTag && !foundDeprecatedTag) {
             errln("draft tag missing deprecated");
         }
@@ -410,6 +413,6 @@ public class CheckTags {
 	    logln("stable deprecated");
 	}
 
-	return !foundInternalTag && !retainAll;
+	return !retainAll;
     }
 }

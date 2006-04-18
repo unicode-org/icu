@@ -137,7 +137,7 @@ public class ICUJDKCompare {
                 ignorelist = args[++i];
             } else {
                 System.err.println("unrecognized argument: " + arg);
-                throw new InternalError();
+                throw new IllegalStateException();
             }
         }
 
@@ -157,7 +157,7 @@ public class ICUJDKCompare {
                 }
                 catch (Exception e) {
                     System.err.println(e);
-                    throw new InternalError();
+                    throw new IllegalStateException();
                 }
             } else { // a list of ignoreinfo separated by semicolons
                 ignore = ignorelist.split("\\s*;\\s*");
@@ -181,7 +181,7 @@ public class ICUJDKCompare {
                 }
                 catch (Exception e) {
                     System.err.println(e);
-                    throw new InternalError();
+                    throw new IllegalStateException();
                 }
             } else { // a list of names separated by semicolons
                 names = namelist.split("\\s*;\\s*");
@@ -450,7 +450,7 @@ public class ICUJDKCompare {
                 MorC t = mr.overrides[i];
                 if (t == null) {
                     // this shouldn't happen, as the target record should not have been modified
-                    throw new InternalError();
+                    throw new IllegalStateException();
                 }
                 if (removeOverridden(t)) {
                     result = true;
@@ -701,7 +701,7 @@ public class ICUJDKCompare {
                 return i;
             }
         }
-        throw new InternalError("could not find primitive class: " + cls);
+        throw new IllegalStateException("could not find primitive class: " + cls);
     }
 
     static boolean assignableFrom(Class lhs, Class rhs) {

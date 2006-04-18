@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -287,7 +287,7 @@ public final class CompactByteArray implements Cloneable {
             if (hashes != null) other.hashes = (int[])hashes.clone();
             return other;
         } catch (CloneNotSupportedException e) {
-            throw new InternalError();
+            throw new IllegalStateException();
         }
     }
 

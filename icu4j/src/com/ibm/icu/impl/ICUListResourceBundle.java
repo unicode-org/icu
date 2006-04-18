@@ -177,7 +177,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     stream.reset();
                     length <<= 1;
                 } else {
-                    throw new InternalError("maximum input stream length exceeded");
+                    throw new IllegalStateException("maximum input stream length exceeded");
                 }
             }
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -806,7 +806,7 @@ public final class Normalizer implements Cloneable {
             this.mode     = mode;
             this.options  = options;
         } catch (CloneNotSupportedException e) {
-            throw new InternalError(e.toString());
+            throw new IllegalStateException(e.toString());
         }
     }
 
@@ -832,7 +832,7 @@ public final class Normalizer implements Cloneable {
             return copy;
         }
         catch (CloneNotSupportedException e) {
-            throw new InternalError(e.toString());
+            throw new IllegalStateException(e.toString());
         }
     }
     
@@ -2104,7 +2104,7 @@ public final class Normalizer implements Cloneable {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
-            throw new InternalError("Could not create a new UCharacterIterator");
+            throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
         reset();
@@ -2120,7 +2120,7 @@ public final class Normalizer implements Cloneable {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
-            throw new InternalError("Could not create a new UCharacterIterator");
+            throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
         reset();
@@ -2136,7 +2136,7 @@ public final class Normalizer implements Cloneable {
             
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
-            throw new InternalError("Could not create a new UCharacterIterator");
+            throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
         reset();
@@ -2152,7 +2152,7 @@ public final class Normalizer implements Cloneable {
         
         UCharacterIterator newIter = UCharacterIterator.getInstance(newText);
         if (newIter == null) {
-            throw new InternalError("Could not create a new UCharacterIterator");
+            throw new IllegalStateException("Could not create a new UCharacterIterator");
         }  
         text = newIter;
         reset();
@@ -2168,12 +2168,12 @@ public final class Normalizer implements Cloneable {
         try{
             UCharacterIterator newIter = (UCharacterIterator)newText.clone();
             if (newIter == null) {
-                throw new InternalError("Could not create a new UCharacterIterator");
+                throw new IllegalStateException("Could not create a new UCharacterIterator");
             }
             text = newIter;
             reset();
         }catch(CloneNotSupportedException e) {
-            throw new InternalError("Could not clone the UCharacterIterator");
+            throw new IllegalStateException("Could not clone the UCharacterIterator");
         }
     }
     

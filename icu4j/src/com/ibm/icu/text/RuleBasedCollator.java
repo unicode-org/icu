@@ -728,7 +728,8 @@ public final class RuleBasedCollator extends Collator
            CollationRuleParser src = new CollationRuleParser(getRules());
            return src.getTailoredSet();
         } catch(Exception e) {
-            throw new InternalError("A tailoring rule should not have errors. Something is quite wrong!");
+            throw new IllegalStateException("A tailoring rule should not " +
+                "have errors. Something is quite wrong!");
         }
     }
 

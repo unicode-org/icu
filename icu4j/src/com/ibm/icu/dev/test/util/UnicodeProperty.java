@@ -839,7 +839,7 @@ Name: Unicode_1_Name
             try {
                 return super.clone();
             } catch (CloneNotSupportedException e) {
-                throw new InternalError("Should never happen.");
+                throw new IllegalStateException("Should never happen.");
             }
         }
         */
