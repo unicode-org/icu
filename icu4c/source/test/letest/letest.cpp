@@ -11,8 +11,6 @@
  *   created by: Eric R. Mader
  */
 
-#include "math.h"
-
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
@@ -343,7 +341,7 @@ le_bool compareResults(const char *testID, TestResult *expected, TestResult *act
     }
 
     for (i = 0; i <= actual->glyphCount; i += 1) {
-        double xError = fabs(actual->positions[i * 2] - expected->positions[i * 2]);
+        double xError = uprv_fabs(actual->positions[i * 2] - expected->positions[i * 2]);
 
         if (xError > 0.0001) {
             log_err("Test %s: incorrect x position for glyph %d: expected %f, got %f\n",
@@ -351,7 +349,7 @@ le_bool compareResults(const char *testID, TestResult *expected, TestResult *act
             return FALSE;
         }
 
-        double yError = fabs(actual->positions[i * 2 + 1] - expected->positions[i * 2 + 1]);
+        double yError = uprv_fabs(actual->positions[i * 2 + 1] - expected->positions[i * 2 + 1]);
 
         if (yError < 0) {
             yError = -yError;
@@ -380,6 +378,7 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
         log_info("Your font's version string is \"%s\"\n", fontVersionString);
         log_info("The expected version string is \"%s\"\n", testVersionString);
         log_info("If you see errors, they may be due to the version of the font you're using.\n");
+        DELETE_ARRAY(fontVersionString);
     }
 }
 
@@ -520,6 +519,7 @@ LEFontInstance *openFont(const char *fontName, const char *checksum, const char 
 
     if (LE_FAILURE(fontStatus)) {
         log_info("Test %s: can't open font %s - test skipped.\n", testID, fontName);
+        delete font;
         return NULL;
     } else {
         le_uint32 cksum = 0;
