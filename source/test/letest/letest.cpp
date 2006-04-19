@@ -378,7 +378,8 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
         log_info("Your font's version string is \"%s\"\n", fontVersionString);
         log_info("The expected version string is \"%s\"\n", testVersionString);
         log_info("If you see errors, they may be due to the version of the font you're using.\n");
-        DELETE_ARRAY(fontVersionString);
+
+        fontInstance->deleteNameString(fontVersionString);
     }
 }
 
