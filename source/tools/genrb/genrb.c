@@ -364,7 +364,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         printf("autodetected encoding %s\n", cp);
     }
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, inputDir, status);
+    data = parse(ucbuf, inputDir, outputDir, status);
 
     if (data == NULL || U_FAILURE(*status)) {
         fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));

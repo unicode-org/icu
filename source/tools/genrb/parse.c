@@ -83,6 +83,8 @@ static UCHARBUF         *buffer;
 static struct SRBRoot *bundle;
 static const char     *inputdir;
 static uint32_t        inputdirLength;
+static const char     *outputdir;
+static uint32_t        outputdirLength;
 
 static UBool gMakeBinaryCollation = TRUE;
 
@@ -473,7 +475,70 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
 
     return result;
 }
+static struct SResource* dependencyArray = NULL;
 
+static struct SResource *
+parseDependency(char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
+{
+    struct SResource *result = NULL;
+    struct SResource *elem = NULL;
+    struct UString   *tokenValue;
+    uint32_t          line;
+    char              filename[256] = { '\0' };
+    char              cs[128]       = { '\0' };
+    
+    expect(TOK_STRING, &tokenValue, NULL, &line, status);
+
+    if(isVerbose()){
+        printf(" %s at line %i \n",  (tag == NULL) ? "(null)" : tag, (int)startline);
+    }
+
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+    /* make the filename including the directory */
+    if (outputdir != NULL)
+    {
+        uprv_strcat(filename, outputdir);
+
+        if (outputdir[outputdirLength - 1] != U_FILE_SEP_CHAR)
+        {
+            uprv_strcat(filename, U_FILE_SEP_STRING);
+        }
+    }
+    
+    u_UCharsToChars(tokenValue->fChars, cs, tokenValue->fLength);
+
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+    uprv_strcat(filename, cs);
+    if(!T_FileStream_file_exists(filename)){
+        if(isStrict()){
+            error(line, "The dependency file %s does not exist. Please make sure it exists.\n",filename);
+        }else{
+            warning(line, "The dependency file %s does not exist. Please make sure it exists.\n",filename);       
+        }
+    }
+    if(dependencyArray==NULL){
+        dependencyArray = array_open(bundle, "%%DEPENDENCY", NULL, status);
+    }
+    if(tag!=NULL){
+        result = string_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, comment, status);
+    }
+    elem = string_open(bundle, NULL, tokenValue->fChars, tokenValue->fLength, comment, status);
+
+    array_add(dependencyArray, elem, status);
+
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+    expect(TOK_CLOSE_BRACE, NULL, NULL, NULL, status);
+    return result;
+}
 static struct SResource *
 parseString(char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status)
 {
@@ -1488,6 +1553,7 @@ U_STRING_DECL(k_type_reserved,  "reserved",  8);
 U_STRING_DECL(k_type_plugin_uca_rules,      "process(uca_rules)",        18);
 U_STRING_DECL(k_type_plugin_collation,      "process(collation)",        18);
 U_STRING_DECL(k_type_plugin_transliterator, "process(transliterator)",   23);
+U_STRING_DECL(k_type_plugin_dependency,     "process(dependency)",       19);
 
 typedef enum EResourceType
 {
@@ -1505,6 +1571,7 @@ typedef enum EResourceType
     RT_PROCESS_UCA_RULES,
     RT_PROCESS_COLLATION,
     RT_PROCESS_TRANSLITERATOR,
+    RT_PROCESS_DEPENDENCY,
     RT_RESERVED
 } EResourceType;
 
@@ -1525,8 +1592,9 @@ static struct {
     {"import", k_type_import, parseImport},
     {"include", k_type_include, parseInclude},
     {"process(uca_rules)", k_type_plugin_uca_rules, parseUCARules},
-    {"process(collation)", k_type_plugin_collation, NULL},
+    {"process(collation)", k_type_plugin_collation, NULL /* not implemented yet */},
     {"process(transliterator)", k_type_plugin_transliterator, parseTransliterator},
+    {"process(dependency)", k_type_plugin_dependency, parseDependency},
     {"reserved", NULL, NULL}
 };
 
@@ -1551,6 +1619,8 @@ void initParser(UBool makeBinaryCollation)
     U_STRING_INIT(k_type_plugin_uca_rules,      "process(uca_rules)",        18);
     U_STRING_INIT(k_type_plugin_collation,      "process(collation)",        18);
     U_STRING_INIT(k_type_plugin_transliterator, "process(transliterator)",   23);
+    U_STRING_INIT(k_type_plugin_dependency,     "process(dependency)",       19);
+    
     for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
     {
         ustr_init(&lookahead[i].value);
@@ -1737,7 +1807,7 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
 
 /* parse the top-level resource */
 struct SRBRoot *
-parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
+parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *status)
 {
     struct UString    *tokenValue;
     struct UString    comment;
@@ -1748,8 +1818,10 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
 
     initLookahead(buf, status);
 
-    inputdir       = currentInputDir;
+    inputdir       = inputDir;
     inputdirLength = (inputdir != NULL) ? (uint32_t)uprv_strlen(inputdir) : 0;
+    outputdir       = outputDir;
+    outputdirLength = (outputdir != NULL) ? (uint32_t)uprv_strlen(outputdir) : 0;
 
     ustr_init(&comment);
     expect(TOK_STRING, &tokenValue, &comment, NULL, status);
@@ -1815,10 +1887,15 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     }
     /* top-level tables need not handle special table names like "collations" */
     realParseTable(bundle->fRoot, NULL, line, status);
-
+    
+    if(dependencyArray!=NULL){
+        table_add(bundle->fRoot, dependencyArray, 0, status);
+        dependencyArray = NULL;
+    }
     if (U_FAILURE(*status))
     {
         bundle_close(bundle, status);
+        array_close(dependencyArray, status);
         return NULL;
     }
 
