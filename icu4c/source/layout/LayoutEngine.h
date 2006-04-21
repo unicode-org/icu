@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -314,7 +314,7 @@ public:
 
     /**
      * This method will invoke the layout steps in their correct order by calling
-     * the computeGlyphs, positionGlyphs and adjustGlyphPosition methods.. It will
+     * the computeGlyphs, positionGlyphs and adjustGlyphPosition methods. It will
      * compute the glyph, character index and position arrays.
      *
      * @param chars - the input character context
@@ -328,8 +328,12 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * Note; the glyph, character index and position array can be accessed
-     * using the getter method below.
+     * Note: The glyph, character index and position array can be accessed
+     * using the getter methods below.
+     *
+     * Note: If you call this method more than once, you must call the reset()
+     * method first to free the glyph, character index and position arrays
+     * allocated by the previous call.
      *
      * @stable ICU 2.8
      */
