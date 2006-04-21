@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sq.xml
@@ -241,16 +241,12 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.46"}
+    Version{"1.47"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "PD",
                 "MD",
-            }
-            DateTimeElements:intvector{
-                2,
-                1,
             }
             DateTimePatterns{
                 "h.mm.ss.a z",

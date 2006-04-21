@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sk.xml
@@ -1307,13 +1307,9 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.54"}
+    Version{"1.57"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             DateTimePatterns{
                 "H:mm:ss z",
                 "H:mm:ss z",

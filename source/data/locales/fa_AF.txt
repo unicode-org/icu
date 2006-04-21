@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa_AF.xml
@@ -146,7 +146,7 @@ fa_AF{
         "'‪'#,##0%'‬'",
         "#E0",
     }
-    Version{"1.38"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -156,18 +156,18 @@ fa_AF{
             monthNames{
                 format{
                     abbreviated{
-                        "جنو",
-                        "فبر",
-                        "مار",
-                        "اپر",
-                        "مـی",
-                        "جون",
-                        "جول",
-                        "اگس",
-                        "سپت",
-                        "اکت",
-                        "نوم",
-                        "دسم",
+                        "ژانویهٔ",
+                        "فوریهٔ",
+                        "مارس",
+                        "آوریل",
+                        "مهٔ",
+                        "ژوئن",
+                        "ژوئیهٔ",
+                        "اوت",
+                        "سپتامبر",
+                        "اکتبر",
+                        "نوامبر",
+                        "دسامبر",
                     }
                     wide{
                         "جنوری",
@@ -185,17 +185,11 @@ fa_AF{
                     }
                 }
             }
-        }
-        islamic{
-            DateTimeElements:intvector{
+            weekend:intvector{
                 7,
-                1,
-            }
-        }
-        persian{
-            DateTimeElements:intvector{
-                7,
-                1,
+                0,
+                6,
+                86400000,
             }
         }
     }

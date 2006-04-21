@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2006, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -169,7 +169,7 @@
         <include locales="uk"/>         
         <include locales="uk_UA"/>
         <include locales="ur"/> 
-        <include locales="ur_IN"/> 
+        <include locales="ur_IN"/>
         <include locales="ur_PK"/>
         <include locales="vi"/> 
         <include locales="vi_VN"/>
@@ -300,8 +300,11 @@
         <!-- backwards compatibility for @currency=preeuro -->
         <include xpath="//ldml/numbers/currencies/currency\[@type='ESP'\]/.*" locales="ca_ES" draft=".*"/>
         <include xpath="//ldml/numbers/currencies/currency\[@type='PTE'\]/.*" locales="pt_PT" draft=".*"/>
+        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/quarters/quarterContext\[@type='.*'\]/quarterWidth\[@type='.*']/quarter\[@type='.*']" locales="root" draft=".*"/>
         <!-- Exclude unusable data -->
         <exclude xpath="//ldml/posix/messages/.*"/>
+        <include xpath="//supplementalData/.*" draft="false"/>
+        <include xpath="//supplementalMetaData/.*" draft="false"/>
     </paths>
     <overrideFallback>
         <paths fallback="se_NO no_NO" locales="sms_FI sm_FI" draft="false">

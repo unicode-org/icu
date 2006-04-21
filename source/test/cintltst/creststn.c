@@ -2043,18 +2043,20 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
-        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0031, 0x0000};
+        const UChar* version = NULL;
+        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0032, 0x0000};
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
             return;
         }
-        if(u_strcmp(ures_getString(resLocID, &resultLen, &err), versionStr) != 0){
+        version = ures_getString(resLocID, &resultLen, &err);
+        if(u_strcmp(version, versionStr) != 0){
             log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value\n");
         }
-        tResB = ures_getByKey(myResB, "calendar", NULL, &err);
+        tResB = ures_getByKey(myResB, "zoneStrings", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
-            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for calendar err=%s\n",u_errorName(err));
+            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for zoneStrings err=%s\n",u_errorName(err));
         }
         ures_close(resLocID);
         ures_close(myResB);
@@ -2503,10 +2505,10 @@ static void TestGetFunctionalEquivalentOf(const char *path, const char *resName,
       log_verbose("got:  %c   %s\n", expectAvail?'t':'f',equivLocale);
       
       if((gotAvail != expectAvail) || strcmp(equivLocale, expectLocale)) {
-      log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
-            gotAvail?'t':'f', equivLocale,
-            i/3,
-            expectAvail?'t':'f', inLocale, expectLocale);
+        log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
+                gotAvail?'t':'f', equivLocale,
+                i/3,
+                expectAvail?'t':'f', inLocale, expectLocale);
 
       }
     }
@@ -2553,8 +2555,8 @@ static void TestGetFunctionalEquivalent(void) {
 
   static const char *calCases[] = {
    /*   avail   locale                       equiv   */
-    "t",    "en_US",                         "en@calendar=gregorian",
-    "f",    "ja_JP_TOKYO",                   "ja@calendar=gregorian",
+    "t",    "en_US_POSIX",                   "en_US@calendar=gregorian",
+    "f",    "ja_JP_TOKYO",                   "ja_JP@calendar=gregorian",
     "f",    "ja_JP_TOKYO@calendar=japanese", "ja@calendar=japanese",
     "t",    "sr@calendar=gregorian", "sr@calendar=gregorian",
     "t",    "en", "en@calendar=gregorian",

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -1264,7 +1264,9 @@ zh{
         " 摘 展 占 战 站 张 章 彰 涨 掌 丈 帐 障 招 昭 找 召 赵 照 折 哲 者 这 贞 针 侦 珍 真 阵 振 镇 震 争 征 徵 整 正 证"
         " 郑 政 之 支 枝 知 织 执 直 值 职 植 止 旨 址 纸 指 至 志 制 治 质 秩 致 智 置 中 忠 终 钟 锺 仲 众 重 州 舟 周 洲"
         " 宙 骤 朱 珠 诸 竹 逐 主 煮 住 助 注 驻 祝 著 抓 专 转 赚 装 壮 状 撞 追 准 捉 桌 仔 姿 资 滋 子 姊 紫 字 自 宗 综"
-        " 总 纵 走 奏 租 足 卒 族 阻 组 祖 钻 嘴 最 罪 醉 尊 遵 昨 左 作 坐 座 做]"
+        " 总 纵 走 奏 租 足 卒 族 阻 组 祖 钻 嘴 最 罪 醉 尊 遵 昨 左 作 坐 座 做 			与丘丰乍伐伽佐佤俄俾偌僧兑兹内冈几划别券勋匈匹卓"
+        "卢厄厍叙呐咯喀喏嗒圣圭坎埃埔复夷夸奥奴娄娜嫩孜宁宛寇寨岗岘峡崩帕庞弗彝怀戈扎扑挝挪掸斐昂晒极柬梵棉檀汶沃浦涅淋淘渣温滨澳爪琊瑙瑟瑶甸疆矶磅种穆簿粹缅缶罕"
+        "翰脱腊腓舌 			芝芦茨莪萄葡蒂蓬蔑贾赫迦遮鄂酋铢锡镭霍靼鞑韦黄]"
     }
     Keys{
         calendar{"日历"}
@@ -1813,12 +1815,23 @@ zh{
     Variants{
         REVISED{"已修订"}
     }
-    Version{"1.57"}
+    Version{"1.62"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "上午",
                 "下午",
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
             }
             dayNames{
                 format{

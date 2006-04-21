@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eo.xml
@@ -394,16 +394,12 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.42"}
+    Version{"1.43"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "atm",
                 "ptm",
-            }
-            DateTimeElements:intvector{
-                2,
-                4,
             }
             DateTimePatterns{
                 "H'-a horo kaj 'm z",

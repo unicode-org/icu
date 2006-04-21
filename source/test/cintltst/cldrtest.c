@@ -756,7 +756,19 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
     uset_close(exemplarSet);
     return -1;
 }
-
+/* include non-invariant chars */
+static int32_t
+myUCharsToChars(const UChar* us, char* cs, int32_t len){
+    int32_t i=0;
+    for(; i< len; i++){
+        if(us[i] < 0x7f){
+            cs[i] = (char)us[i];
+        }else{
+            return -1;
+        }
+    }
+    return i;
+}
 static void 
 findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen, 
               USet *exemplarSet,
@@ -810,6 +822,16 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
                         }
                     }
                     if(existsInScript == FALSE){
+                        for( j = 0; j < scriptsLen; j++){
+                            UChar pattern[500]={'\0'};
+                            char pat[500]={'\0'};
+                            int32_t len = uset_toPattern(scripts[i], pattern, 500, TRUE, &status);
+                            len = myUCharsToChars(pattern, pat, len);
+                            log_err("uset_indexOf(\\u%04X)=%i uset_indexOf(\\u%04X)=%i\n", start, uset_indexOf(scripts[0], start), end, uset_indexOf(scripts[0], end));
+                            if(len!=-1){
+                                log_err("Pattern: %s\n",pat);
+                            }
+                        }
                         log_err("ExemplarCharacters and LocaleScript containment test failed for locale %s. \n", locale);
                     }
                 }else{

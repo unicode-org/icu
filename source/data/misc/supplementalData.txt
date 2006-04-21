@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/supplemental/supplementalData.xml
@@ -313,6 +313,13 @@ supplementalData:table(no fallback){
             }
         }
         AZ{
+            {
+                id{"AZN"}
+                from:intvector{
+                    264,
+                    -2063873440,
+                }
+            }
             {
                 id{"AZM"}
                 from:intvector{
@@ -4117,6 +4124,16 @@ supplementalData:table(no fallback){
                 }
             }
         }
+        cch{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
+        }
         ch{
             primary{
                 scripts{
@@ -4585,6 +4602,16 @@ supplementalData:table(no fallback){
                 }
             }
         }
+        gsw{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "CH",
+                }
+            }
+        }
         gu{
             primary{
                 scripts{
@@ -4804,6 +4831,36 @@ supplementalData:table(no fallback){
                 }
                 territories{
                     "GE",
+                }
+            }
+        }
+        kaj{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
+        }
+        kcg{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
+        }
+        kfo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
                 }
             }
         }
@@ -6300,9 +6357,9 @@ supplementalData:table(no fallback){
         142{
             "030",
             "035",
-            "062",
             "143",
             "145",
+            "034",
         }
         143{
             "TM",
@@ -6396,7 +6453,18 @@ supplementalData:table(no fallback){
             "013",
             "029",
         }
-        QE{
+        QO{
+            "AQ",
+            "BV",
+            "CC",
+            "CX",
+            "GS",
+            "HM",
+            "IO",
+            "TF",
+            "UM",
+        }
+        QU{
             "AT",
             "BE",
             "CY",
@@ -6422,17 +6490,6 @@ supplementalData:table(no fallback){
             "SE",
             "SI",
             "SK",
-        }
-        QO{
-            "AQ",
-            "BV",
-            "CC",
-            "CX",
-            "GS",
-            "HM",
-            "IO",
-            "TF",
-            "UM",
         }
     }
     zoneFormatting{

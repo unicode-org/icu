@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -567,7 +567,7 @@ void
 CalendarTest::TestDisambiguation765()
 {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *c = Calendar::createInstance(status);
+    Calendar *c = Calendar::createInstance("en_US", status);
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     c->setLenient(FALSE);
     c->clear();
@@ -676,15 +676,19 @@ CalendarTest::verify765(const UnicodeString& msg, Calendar* c, int32_t year, int
 {
     UnicodeString str;
     UErrorCode status = U_ZERO_ERROR;
-    if (c->get(UCAL_YEAR, status) == year &&
-        c->get(UCAL_MONTH, status) == month &&
-        c->get(UCAL_DATE, status) == day) {
+    int32_t y = c->get(UCAL_YEAR, status);
+    int32_t m = c->get(UCAL_MONTH, status);
+    int32_t d = c->get(UCAL_DATE, status);
+    if ( y == year &&
+         m == month &&
+         d == day) {
         if (U_FAILURE(status)) { errln("FAIL: Calendar::get failed"); return; }
         logln("PASS: " + msg + dateToString(c->getTime(status), str));
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     }
     else {
-        errln("FAIL: " + msg + dateToString(c->getTime(status), str) + "; expected " + (int32_t)year + "/" + (int32_t)(month + 1) + "/" + (int32_t)day);
+        errln("FAIL: " + msg + dateToString(c->getTime(status), str) + "; expected " + (int32_t)year + "/" + (int32_t)(month + 1) + "/" + (int32_t)day +
+            "; got " + (int32_t)y + "/" + (int32_t)(m + 1) + "/" + (int32_t)d + " for Locale: " + c->getLocaleID(ULOC_ACTUAL_LOCALE,status));
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     }
 }

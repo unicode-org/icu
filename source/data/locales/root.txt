@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005-2006 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -65,14 +65,14 @@ root{
         297,
         210,
     }
-    Version{"1.63"}
+    Version{"1.70"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, MMMM d, yyyy G",
                 "MMMM d, yyyy G",
                 "MMM d, yyyy G",
@@ -87,10 +87,10 @@ root{
         }
         chinese{
             DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE y'x'G-Ml-d",
                 "y'x'G-Ml-d",
                 "y'x'G-Ml-d",
@@ -103,45 +103,41 @@ root{
             }
         }
         coptic{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
             monthNames{
+                default{"format"}
                 format{
-                    wide{
-                        "Tout",
-                        "Baba",
-                        "Hator",
-                        "Kiahk",
-                        "Toba",
-                        "Amshir",
-                        "Baramhat",
-                        "Baramouda",
-                        "Bashans",
-                        "Paona",
-                        "Epep",
-                        "Mesra",
-                        "Nasie",
-                    }
+                    default{"wide"}
                 }
             }
         }
         default{"gregorian"}
         ethiopic{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
             monthNames{
+                default{"format"}
                 format{
-                    wide{
-                        "Meskerem",
-                        "Tekemt",
-                        "Hedar",
-                        "Tahsas",
-                        "Ter",
-                        "Yekatit",
-                        "Megabit",
-                        "Miazia",
-                        "Genbot",
-                        "Sene",
-                        "Hamle",
-                        "Nehasse",
-                        "Pagumen",
-                    }
+                    default{"wide"}
                 }
             }
         }
@@ -151,7 +147,7 @@ root{
                 "PM",
             }
             DateTimeElements:intvector{
-                1,
+                2,
                 1,
             }
             DateTimePatterns{
@@ -245,20 +241,7 @@ root{
             monthNames{
                 default{"format"}
                 format{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
                     default{"wide"}
                     wide{
                         "1",
@@ -289,6 +272,22 @@ root{
                         "10",
                         "11",
                         "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }
@@ -370,10 +369,10 @@ root{
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
         japanese{
             DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
@@ -648,6 +647,10 @@ root{
         quotationStart{"“"}
     }
     localPatternChars{"GyMdkHmsSEDFwWahKzYeugAZvcL"}
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metric"}
+    }
     zoneStrings{
         ""{
             ec{""}
