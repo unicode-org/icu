@@ -10,10 +10,9 @@
 >
 <ldml>
     <identity>
-        <version number="$Revision: 1.1 $"/>
-        <generation date="$Date: 2006/04/21 01:05:58 $"/>
+        <version number="$Revision: 1.2 $"/>
+        <generation date="$Date: 2006/04/21 16:09:28 $"/>
         <language type="ur"/>
         <territory type="IN"/>
     </identity>
-    بھارت
 </ldml>
