@@ -336,7 +336,7 @@ void DateFormatTest::TestFieldPosition() {
     // Fields are given in order of DateFormat field number
     const char* EXPECTED[] = {
         "", "1997", "August", "13", "", "", "34", "12", "",
-        "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "", "", "","",
+        "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT", "","",
 
         "", "1997", "ao\\u00FBt", "13", "", "14", "34", "", "",
         "mercredi", "", "", "", "", "", "", "", "HAP (\\u00C9UA)", "", "", "", "", "", "", "",  "","",
@@ -366,7 +366,8 @@ void DateFormatTest::TestFieldPosition() {
 
         for (i = 0; i < UDAT_FIELD_COUNT; ++i, ++exp) {
             FieldPosition pos(i);
-            df->format(aug13, buf.remove(), pos);    
+            buf.remove();
+            df->format(aug13, buf, pos);    
             UnicodeString field;
             buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), field);
             assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
@@ -1004,7 +1005,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
     UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HAP (\\u00C9UA)" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
-    UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PDT" );
+    UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
     logln((UnicodeString)"Date set to : " + dateToString(testDate));
     UnicodeString out; 
     if (dfUS == NULL || dfFrench == NULL){
@@ -1554,8 +1555,8 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
             errln("Did not get the expected string. Expected: "+expectedStrs[i]+ UnicodeString(" Got: ") + result ); 
         }
     }
-    expectedKey.setTo("America/Phoenix",0);
-    UnicodeString exemplarCity("San Francisco");
+    expectedKey.setTo("America/Los_Angeles",0);
+    UnicodeString exemplarCity("Phoenix");
     UnicodeString result;
     symbols.setZoneString(expectedKey,DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY, exemplarCity, status);
     if(U_FAILURE(status)){

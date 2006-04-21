@@ -114,7 +114,8 @@ static int32_t _installedLocalesCount = 0;
  */
 static const char * const LANGUAGES[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",
-    "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "apa",
+    "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  
+    "ang", "anp", "apa",
     "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
     "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
     "bai", "bal", "ban", "bas", "bat", "be",  "bej",
@@ -129,17 +130,18 @@ static const char * const LANGUAGES[] = {
     "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
     "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
     "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
-    "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",
-    "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",
-    "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",
-    "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
+    "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  
+    "ga",  "gaa", "gay", "gba", "gd",  "gem", "gez", "gil", 
+    "gl",  "gmh", "gn", "goh", "gon", "gor", "got", "grb", 
+    "grc", "gsw", "gu",  "gv", "gwi", 
+    "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
     "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
     "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
     "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
     "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
     "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",
     "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",
-    "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",
+    "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",
     "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",
     "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",
     "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",
@@ -169,7 +171,7 @@ static const char * const LANGUAGES[] = {
     "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
     "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
     "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
-    "zu",  "zun", 
+    "zu",  "zun", "zxx",
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
@@ -200,8 +202,8 @@ static const char* const REPLACEMENT_LANGUAGES[]={
 static const char * const LANGUAGES_3[] = {
 /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
-/*  "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "apa",    */
-    "afh", "ain", "aka", "akk", "ale", "alg", "alt", "amh", "arg", "ang", "apa",
+/*  "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "anp", "apa",    */
+    "afh", "ain", "aka", "akk", "ale", "alg", "alt", "amh", "arg", "ang", "anp", "apa",
 /*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
     "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
 /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
@@ -230,12 +232,12 @@ static const char * const LANGUAGES_3[] = {
     "enm", "epo", "spa", "est", "eus", "ewo", "fas",
 /*  "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",    */
     "fan", "fat", "ful", "fin", "fil", "fiu", "fij", "fao", "fon",
-/*  "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
-    "fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
+/*  "fr",  "frm", "fro", "fur", "frr", "frs", "fy",  "ga",  "gaa", "gay",    */
+    "fra", "frm", "fro", "fur", "frr", "frs", "fry", "gle", "gaa", "gay",
 /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
     "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
-/*  "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",     */
-    "goh", "gon", "gor", "got", "grb", "grc", "guj", "glv",
+/*  "goh", "gon", "gor", "got", "grb", "grc", "gsw", "gu",  "gv",     */
+    "goh", "gon", "gor", "got", "grb", "grc", "gsw", "guj", "glv",
 /*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
     "gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
 /*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
@@ -250,8 +252,8 @@ static const char * const LANGUAGES_3[] = {
     "kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
 /*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
     "kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
-/*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",     */
-    "kor", "kok", "kos", "kpe", "kau", "krc", "kro", "kru", "kas",
+/*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",     */
+    "kor", "kok", "kos", "kpe", "kau", "krc", "krl", "kro", "kru", "kas",
 /*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
     "kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad",
 /*  "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
@@ -311,7 +313,7 @@ static const char * const LANGUAGES_3[] = {
 /*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
     "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
 /*  "zu",  "zun",                                              */
-    "zul", "zun",  
+    "zul", "zun", "zxx", 
 NULL,
 /*  "in",  "iw",  "ji",  "jw",  "sh",                          */
     "ind", "heb", "yid", "jaw", "srp",

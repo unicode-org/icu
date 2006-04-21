@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hans_CN.xml
@@ -13,9 +13,13 @@ zh_Hans_CN{
         "#,##0%",
         "#E0",
     }
-    Version{"1.20"}
+    Version{"1.21"}
     calendar{
         gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
             DateTimePatterns{
                 "ahh'时'mm'分'ss'秒' z",
                 "ahh'时'mm'分'ss'秒'",

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hi.xml
@@ -351,12 +351,23 @@ hi{
         "NaN",
         "+",
     }
-    Version{"1.43"}
+    Version{"1.46"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "पूर्वाह्न",
                 "अपराह्न",
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
             }
             dayNames{
                 format{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko_KR.xml
@@ -13,9 +13,13 @@ ko_KR{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.35"}
     calendar{
         gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
             DateTimePatterns{
                 "a hh'시' mm'분' ss'초' z",
                 "a hh'시' mm'분' ss'초'",
