@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -46,25 +46,25 @@ CollationElementIterator::CollationElementIterator(
                                          const CollationElementIterator& other) 
                                          : UObject(other), isDataOwned_(TRUE)
 {
-  UErrorCode status = U_ZERO_ERROR;
-  m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, 
-                              &status);
+    UErrorCode status = U_ZERO_ERROR;
+    m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, 
+                                &status);
 
-  *this = other;
+    *this = other;
 }
 
 CollationElementIterator::~CollationElementIterator()
 {
-  if (isDataOwned_) {
-    ucol_closeElements(m_data_);
-  }
+    if (isDataOwned_) {
+        ucol_closeElements(m_data_);
+    }
 }
 
 /* CollationElementIterator public methods --------------------------------- */
 
 int32_t CollationElementIterator::getOffset() const
 {
-  return ucol_getOffset(m_data_);
+    return ucol_getOffset(m_data_);
 }
 
 /**
@@ -74,13 +74,13 @@ int32_t CollationElementIterator::getOffset() const
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
-  return ucol_next(m_data_, &status);
+    return ucol_next(m_data_, &status);
 }
 
 UBool CollationElementIterator::operator!=(
                                   const CollationElementIterator& other) const
 {
-  return !(*this == other);
+    return !(*this == other);
 }
 
 UBool CollationElementIterator::operator==(
@@ -152,7 +152,7 @@ UBool CollationElementIterator::operator==(
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {
-  return ucol_previous(m_data_, &status);
+    return ucol_previous(m_data_, &status);
 }
 
 /**
@@ -160,13 +160,13 @@ int32_t CollationElementIterator::previous(UErrorCode& status)
 */
 void CollationElementIterator::reset()
 {
-  ucol_reset(m_data_);
+    ucol_reset(m_data_);
 }
 
 void CollationElementIterator::setOffset(int32_t newOffset, 
                                          UErrorCode& status)
 {
-  ucol_setOffset(m_data_, newOffset, &status);
+    ucol_setOffset(m_data_, newOffset, &status);
 }
 
 /**
@@ -175,96 +175,96 @@ void CollationElementIterator::setOffset(int32_t newOffset,
 void CollationElementIterator::setText(const UnicodeString& source,
                                        UErrorCode& status)
 {
-  if (U_FAILURE(status)) {
-    return;
-  }
-
-  int32_t length = source.length();
-  UChar *string = NULL;
-  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
-    uprv_free(m_data_->iteratordata_.string);
-  }
-  m_data_->isWritable = TRUE;
-  if (length > 0) {
-    string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
-    /* test for NULL */
-    if (string == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (U_FAILURE(status)) {
         return;
     }
-    u_memcpy(string, source.getBuffer(), length);
-  }
-  else {
-    string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
-    /* test for NULL */
-    if (string == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    *string = 0;
-  }
-  uprv_init_collIterate(m_data_->iteratordata_.coll, string, length, 
-                   &m_data_->iteratordata_);
 
-  m_data_->reset_   = TRUE;
+    int32_t length = source.length();
+    UChar *string = NULL;
+    if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
+        uprv_free(m_data_->iteratordata_.string);
+    }
+    m_data_->isWritable = TRUE;
+    if (length > 0) {
+        string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+        /* test for NULL */
+        if (string == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        u_memcpy(string, source.getBuffer(), length);
+    }
+    else {
+        string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+        /* test for NULL */
+        if (string == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        *string = 0;
+    }
+    uprv_init_collIterate(m_data_->iteratordata_.coll, string, length, 
+        &m_data_->iteratordata_);
+
+    m_data_->reset_   = TRUE;
 }
 
 // Sets the source to the new character iterator.
 void CollationElementIterator::setText(CharacterIterator& source, 
                                        UErrorCode& status)
 {
-  if (U_FAILURE(status)) 
-    return;
-    
-  int32_t length = source.getLength();
-  UChar *buffer = NULL;
-
-  if (length == 0) {
-    buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
-    /* test for NULL */
-    if (buffer == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (U_FAILURE(status)) 
         return;
+
+    int32_t length = source.getLength();
+    UChar *buffer = NULL;
+
+    if (length == 0) {
+        buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+        /* test for NULL */
+        if (buffer == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        *buffer = 0;
     }
-    *buffer = 0;
-  }
-  else {
-      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
-      /* test for NULL */
-      if (buffer == NULL) {
-          status = U_MEMORY_ALLOCATION_ERROR;
-          return;
-      }
-      /* 
-      Using this constructor will prevent buffer from being removed when
-      string gets removed
-      */
-      UnicodeString string;
-      source.getText(string);
-      u_memcpy(buffer, string.getBuffer(), length);
-  }
-  
-  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
-      uprv_free(m_data_->iteratordata_.string);
-  }
-  m_data_->isWritable = TRUE;
-  uprv_init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
-                   &m_data_->iteratordata_);
-  m_data_->reset_   = TRUE;
+    else {
+        buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+        /* test for NULL */
+        if (buffer == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        /* 
+        Using this constructor will prevent buffer from being removed when
+        string gets removed
+        */
+        UnicodeString string;
+        source.getText(string);
+        u_memcpy(buffer, string.getBuffer(), length);
+    }
+
+    if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
+        uprv_free(m_data_->iteratordata_.string);
+    }
+    m_data_->isWritable = TRUE;
+    uprv_init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
+        &m_data_->iteratordata_);
+    m_data_->reset_   = TRUE;
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
 {
-  UCollationStrength s = ucol_getStrength(m_data_->iteratordata_.coll);
-  // Mask off the unwanted differences.
-  if (s == UCOL_PRIMARY) {
-      order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
-  }
-  else if (s == UCOL_SECONDARY) {
-      order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
-  }
-    
-  return order;
+    UCollationStrength s = ucol_getStrength(m_data_->iteratordata_.coll);
+    // Mask off the unwanted differences.
+    if (s == UCOL_PRIMARY) {
+        order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
+    }
+    else if (s == UCOL_SECONDARY) {
+        order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
+    }
+
+    return order;
 }
 
 /* CollationElementIterator private constructors/destructors --------------- */
@@ -279,42 +279,42 @@ CollationElementIterator::CollationElementIterator(
                                                UErrorCode& status)
                                                : isDataOwned_(TRUE)
 {
-  if (U_FAILURE(status)) {
-      return;
-  }
- 
-  int32_t length = sourceText.length();
-  UChar *string = NULL;
-  
-  if (length > 0) {
-      string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
-      /* test for NULL */
-      if (string == NULL) {
-          status = U_MEMORY_ALLOCATION_ERROR;
-          return;
-      }
-      /* 
-      Using this constructor will prevent buffer from being removed when
-      string gets removed
-      */
-      u_memcpy(string, sourceText.getBuffer(), length);
-  }
-  else {
-      string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
-      /* test for NULL */
-      if (string == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (U_FAILURE(status)) {
         return;
-      }
-      *string = 0;
-  }
-  m_data_ = ucol_openElements(order->ucollator, string, length, &status);
-  
-  /* Test for buffer overflows */
-  if (U_FAILURE(status)) {
-    return;
-  }
-  m_data_->isWritable = TRUE;
+    }
+
+    int32_t length = sourceText.length();
+    UChar *string = NULL;
+
+    if (length > 0) {
+        string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+        /* test for NULL */
+        if (string == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        /* 
+        Using this constructor will prevent buffer from being removed when
+        string gets removed
+        */
+        u_memcpy(string, sourceText.getBuffer(), length);
+    }
+    else {
+        string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+        /* test for NULL */
+        if (string == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        *string = 0;
+    }
+    m_data_ = ucol_openElements(order->ucollator, string, length, &status);
+
+    /* Test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
+    m_data_->isWritable = TRUE;
 }
 
 /** 
@@ -327,62 +327,62 @@ CollationElementIterator::CollationElementIterator(
                                            UErrorCode& status)
                                            : isDataOwned_(TRUE)
 {
-  if (U_FAILURE(status))
-    return;
-    
-  // **** should I just drop this test? ****
-  /*
-  if ( sourceText.endIndex() != 0 )
-  {
-    // A CollationElementIterator is really a two-layered beast.
-    // Internally it uses a Normalizer to munge the source text into a form 
-    // where all "composed" Unicode characters (such as \u00FC) are split into a 
-    // normal character and a combining accent character.  
-    // Afterward, CollationElementIterator does its own processing to handle
-    // expanding and contracting collation sequences, ignorables, and so on.
-    
-    Normalizer::EMode decomp = order->getStrength() == Collator::IDENTICAL
-                               ? Normalizer::NO_OP : order->getDecomposition();
-      
-    text = new Normalizer(sourceText, decomp);
-    if (text == NULL)
-      status = U_MEMORY_ALLOCATION_ERROR;    
-  }
-  */
-  int32_t length = sourceText.getLength();
-  UChar *buffer;
-  if (length > 0) {
-      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
-      /* test for NULL */
-      if (buffer == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (U_FAILURE(status))
         return;
-      }
-      /* 
-      Using this constructor will prevent buffer from being removed when
-      string gets removed
-      */
-      UnicodeString string(buffer, length, length);
-      ((CharacterIterator &)sourceText).getText(string);
-      const UChar *temp = string.getBuffer();
-      u_memcpy(buffer, temp, length);
-  }
-  else {
-      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
-      /* test for NULL */
-      if (buffer == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-      }
-      *buffer = 0;
-  }
-  m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
 
-  /* Test for buffer overflows */
-  if (U_FAILURE(status)) {
-    return;
-  }
-  m_data_->isWritable = TRUE;
+    // **** should I just drop this test? ****
+    /*
+    if ( sourceText.endIndex() != 0 )
+    {
+        // A CollationElementIterator is really a two-layered beast.
+        // Internally it uses a Normalizer to munge the source text into a form 
+        // where all "composed" Unicode characters (such as \u00FC) are split into a 
+        // normal character and a combining accent character.  
+        // Afterward, CollationElementIterator does its own processing to handle
+        // expanding and contracting collation sequences, ignorables, and so on.
+        
+        Normalizer::EMode decomp = order->getStrength() == Collator::IDENTICAL
+                                ? Normalizer::NO_OP : order->getDecomposition();
+          
+        text = new Normalizer(sourceText, decomp);
+        if (text == NULL)
+        status = U_MEMORY_ALLOCATION_ERROR;    
+    }
+    */
+    int32_t length = sourceText.getLength();
+    UChar *buffer;
+    if (length > 0) {
+        buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+        /* test for NULL */
+        if (buffer == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        /* 
+        Using this constructor will prevent buffer from being removed when
+        string gets removed
+        */
+        UnicodeString string(buffer, length, length);
+        ((CharacterIterator &)sourceText).getText(string);
+        const UChar *temp = string.getBuffer();
+        u_memcpy(buffer, temp, length);
+    }
+    else {
+        buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+        /* test for NULL */
+        if (buffer == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        *buffer = 0;
+    }
+    m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
+
+    /* Test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
+    m_data_->isWritable = TRUE;
 }
 
 /* CollationElementIterator protected methods ----------------------------- */
@@ -390,98 +390,100 @@ CollationElementIterator::CollationElementIterator(
 const CollationElementIterator& CollationElementIterator::operator=(
                                          const CollationElementIterator& other)
 {
-  if (this != &other)
-  {
-      UCollationElements *ucolelem      = this->m_data_;
-      UCollationElements *otherucolelem = other.m_data_;
-      collIterate        *coliter       = &(ucolelem->iteratordata_);
-      collIterate        *othercoliter  = &(otherucolelem->iteratordata_);
-      int                length         = 0;
-      
-      // checking only UCOL_ITER_HASLEN is not enough here as we may be in 
-      // the normalization buffer
-      length = othercoliter->endp - othercoliter->string;
-                                    
-      ucolelem->reset_         = otherucolelem->reset_;
-      ucolelem->isWritable     = TRUE;
-    
-      /* create a duplicate of string */
-      if (length > 0) {
-          coliter->string = (UChar *)uprv_malloc(length * U_SIZEOF_UCHAR);
-          if(coliter->string != NULL) {
-            uprv_memcpy(coliter->string, othercoliter->string,
-                        length * U_SIZEOF_UCHAR);
-          } else { // Error: couldn't allocate memory. No copying should be done
-            length = 0;
-          }
-      }
-      else {
-          coliter->string = NULL;
-      }
+    if (this != &other)
+    {
+        UCollationElements *ucolelem      = this->m_data_;
+        UCollationElements *otherucolelem = other.m_data_;
+        collIterate        *coliter       = &(ucolelem->iteratordata_);
+        collIterate        *othercoliter  = &(otherucolelem->iteratordata_);
+        int                length         = 0;
 
-      /* start and end of string */
-      coliter->endp = coliter->string + length;
+        // checking only UCOL_ITER_HASLEN is not enough here as we may be in 
+        // the normalization buffer
+        length = othercoliter->endp - othercoliter->string;
 
-      /* handle writable buffer here */
-      
-      if (othercoliter->flags & UCOL_ITER_INNORMBUF) {
-          uint32_t wlength = u_strlen(othercoliter->writableBuffer) + 1;
-          if (wlength < coliter->writableBufSize) {
-              uprv_memcpy(coliter->stackWritableBuffer, 
-                        othercoliter->stackWritableBuffer, 
-                        othercoliter->writableBufSize * U_SIZEOF_UCHAR);
-          }
-          else {
-              if (coliter->writableBuffer != coliter->stackWritableBuffer) {
-                  uprv_free(coliter->writableBuffer);
-              }
-              coliter->writableBuffer = (UChar *)uprv_malloc(
-                                         wlength * U_SIZEOF_UCHAR);
-              if(coliter->writableBuffer != NULL) {
-                uprv_memcpy(coliter->writableBuffer, 
-                            othercoliter->writableBuffer,
-                            wlength * U_SIZEOF_UCHAR);
-                coliter->writableBufSize = wlength;
-              } else { // Error: couldn't allocate memory for writableBuffer
-                coliter->writableBufSize = 0;
-              }
-          }
-      }
+        ucolelem->reset_         = otherucolelem->reset_;
+        ucolelem->isWritable     = TRUE;
 
-      /* current position */
-      if (othercoliter->pos >= othercoliter->string && 
-          othercoliter->pos <= othercoliter->endp) {
-          coliter->pos = coliter->string + 
-                        (othercoliter->pos - othercoliter->string);
-      }
-      else {
-        coliter->pos = coliter->writableBuffer + 
-                        (othercoliter->pos - othercoliter->writableBuffer);
-      }
+        /* create a duplicate of string */
+        if (length > 0) {
+            coliter->string = (UChar *)uprv_malloc(length * U_SIZEOF_UCHAR);
+            if(coliter->string != NULL) {
+                uprv_memcpy(coliter->string, othercoliter->string,
+                    length * U_SIZEOF_UCHAR);
+            } else { // Error: couldn't allocate memory. No copying should be done
+                length = 0;
+            }
+        }
+        else {
+            coliter->string = NULL;
+        }
 
-      /* CE buffer */
-      uprv_memcpy(coliter->CEs, othercoliter->CEs, 
-                  UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
-      coliter->toReturn = coliter->CEs + 
-                         (othercoliter->toReturn - othercoliter->CEs);
-      coliter->CEpos    = coliter->CEs + 
-                         (othercoliter->CEpos - othercoliter->CEs);
-    
-      if (othercoliter->fcdPosition != NULL) {
-          coliter->fcdPosition = coliter->string + 
-                                 (othercoliter->fcdPosition 
-                                                    - othercoliter->string);
-      }
-      else {
-          coliter->fcdPosition = NULL;
-      }
-      coliter->flags       = othercoliter->flags/*| UCOL_ITER_HASLEN*/;
-      coliter->origFlags   = othercoliter->origFlags;
-      coliter->coll = othercoliter->coll;
-      this->isDataOwned_ = TRUE;
-  }
+        /* start and end of string */
+        coliter->endp = coliter->string + length;
 
-  return *this;
+        /* handle writable buffer here */
+
+        if (othercoliter->flags & UCOL_ITER_INNORMBUF) {
+            uint32_t wlength = u_strlen(othercoliter->writableBuffer) + 1;
+            if (wlength < coliter->writableBufSize) {
+                uprv_memcpy(coliter->stackWritableBuffer, 
+                    othercoliter->stackWritableBuffer, 
+                    wlength * U_SIZEOF_UCHAR);
+            }
+            else {
+                if (coliter->writableBuffer != coliter->stackWritableBuffer) {
+                    uprv_free(coliter->writableBuffer);
+                }
+                coliter->writableBuffer = (UChar *)uprv_malloc(
+                    wlength * U_SIZEOF_UCHAR);
+                if(coliter->writableBuffer != NULL) {
+                    uprv_memcpy(coliter->writableBuffer, 
+                        othercoliter->writableBuffer,
+                        wlength * U_SIZEOF_UCHAR);
+                    coliter->writableBufSize = wlength;
+                } else { // Error: couldn't allocate memory for writableBuffer
+                    coliter->writableBufSize = 0;
+                }
+            }
+        }
+
+        /* current position */
+        if (othercoliter->pos >= othercoliter->string && 
+            othercoliter->pos <= othercoliter->endp)
+        {
+            coliter->pos = coliter->string + 
+                (othercoliter->pos - othercoliter->string);
+        }
+        else {
+            coliter->pos = coliter->writableBuffer + 
+                (othercoliter->pos - othercoliter->writableBuffer);
+        }
+
+        /* CE buffer */
+        int32_t CEsize = (int32_t)(othercoliter->CEpos - othercoliter->CEs);
+        if (CEsize > 0) {
+            uprv_memcpy(coliter->CEs, othercoliter->CEs, CEsize);
+        }
+        coliter->toReturn = coliter->CEs + 
+            (othercoliter->toReturn - othercoliter->CEs);
+        coliter->CEpos    = coliter->CEs + CEsize;
+
+        if (othercoliter->fcdPosition != NULL) {
+            coliter->fcdPosition = coliter->string + 
+                (othercoliter->fcdPosition 
+                - othercoliter->string);
+        }
+        else {
+            coliter->fcdPosition = NULL;
+        }
+        coliter->flags       = othercoliter->flags/*| UCOL_ITER_HASLEN*/;
+        coliter->origFlags   = othercoliter->origFlags;
+        coliter->coll = othercoliter->coll;
+        this->isDataOwned_ = TRUE;
+    }
+
+    return *this;
 }
 
 U_NAMESPACE_END
