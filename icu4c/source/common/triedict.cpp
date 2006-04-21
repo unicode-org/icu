@@ -633,7 +633,7 @@ CompactTrieEnumeration::snext(UErrorCode &status) {
             }
             if (where < nodeCount) {
                 // Push on next node
-                unistr.append(hnode->entries[where].ch);
+                unistr.append((UChar)hnode->entries[where].ch);
                 fIndexStack.setElementAt(where+1, fIndexStack.size()-1);
                 node = getCompactNode(fHeader, fNodeStack.push(hnode->entries[where].equal, status));
                 where = fIndexStack.push(0, status);
@@ -1024,7 +1024,7 @@ CompactTrieDictionary::compactMutableTrieDictionary( const MutableTrieDictionary
     UStack nodes(_deleteBuildNode, NULL, status);      // Index of nodes
 
     // Add node 0, used as the NULL pointer/sentinel.
-    nodes.addElement(0, status);
+    nodes.addElement((int32_t)0, status);
 
     // Start by creating the special empty node we use to indicate that the parent
     // terminates a word. This must be node 1, because the builder assumes

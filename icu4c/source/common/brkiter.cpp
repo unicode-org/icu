@@ -26,6 +26,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/ures.h"
+#include "unicode/ustring.h"
 #include "ucln_cmn.h"
 #include "cstring.h"
 #include "mutex.h"
@@ -50,6 +51,7 @@ BreakIterator*
 BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, UErrorCode &status)
 {
     char fnbuff[256];
+    char ext[4]={'\0'};
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     int32_t size;
     const UChar* brkfname = NULL;
@@ -94,14 +96,22 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
             uprv_strncpy(actualLocale,
                 ures_getLocale(brkName, &status),
                 sizeof(actualLocale)/sizeof(actualLocale[0]));
-            u_UCharsToChars(brkfname, fnbuff, size+1);
+            
+            UChar* extStart=u_strchr(brkfname, 0x002e);
+            int len = 0;
+            if(extStart!=NULL){
+                len = extStart-brkfname;
+                u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
+                u_UCharsToChars(brkfname, fnbuff, len);
+            }
+            fnbuff[len]=0; // nul terminate
         }
     }
 
     ures_close(brkRules);
     ures_close(brkName);
     
-    UDataMemory* file = udata_open(U_ICUDATA_BRKITR, "brk", fnbuff, &status);
+    UDataMemory* file = udata_open(U_ICUDATA_BRKITR, ext, fnbuff, &status);
     if (U_FAILURE(status)) {
         ures_close(b);
         return NULL;
