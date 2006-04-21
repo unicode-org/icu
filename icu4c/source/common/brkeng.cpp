@@ -18,6 +18,7 @@
 #include "unicode/ures.h"
 #include "unicode/udata.h"
 #include "unicode/putil.h"
+#include "unicode/ustring.h"
 #include "uvector.h"
 #include "mutex.h"
 #include "uresimp.h"
@@ -152,6 +153,7 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
 
         // Open root from brkitr tree.
         char dictnbuff[256];
+        char ext[4]={'\0'};
 
         UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
         b = ures_getByKeyWithFallback(b, "dictionaries", b, &status);
@@ -162,11 +164,19 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
             dictnlength = 0;
             status = U_BUFFER_OVERFLOW_ERROR;
         }
+
         if (U_SUCCESS(status) && dictfname) {
-            u_UCharsToChars(dictfname, dictnbuff, dictnlength+1);
+            UChar* extStart=u_strchr(dictfname, 0x002e);
+            int len = 0;
+            if(extStart!=NULL){
+                len = extStart-dictfname;
+                u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
+                u_UCharsToChars(dictfname, dictnbuff, len);
+            }
+            dictnbuff[len]=0; // nul terminate
         }
         ures_close(b);
-        UDataMemory *file = udata_open(U_ICUDATA_BRKITR, "ctd", dictnbuff, &status);
+        UDataMemory *file = udata_open(U_ICUDATA_BRKITR, ext, dictnbuff, &status);
         if (U_SUCCESS(status)) {
             const CompactTrieDictionary *dict = new CompactTrieDictionary(
                 file, status);
