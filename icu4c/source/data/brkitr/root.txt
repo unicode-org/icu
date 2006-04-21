@@ -3,22 +3,19 @@
 // * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/root.xml
+// * Source File:<path>/xml/brkitr/root.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/root.xml
- */
 root{
-    Version{"1.00"}
+    Version{"1.26"}
     boundaries{
-        grapheme{"char"}
-        line{"line"}
-        sentence{"sent"}
-        title{"title"}
-        word{"word"}
+        grapheme:process(dependency){"char.brk"}
+        line:process(dependency){"line.brk"}
+        sentence:process(dependency){"sent.brk"}
+        title:process(dependency){"title.brk"}
+        word:process(dependency){"word.brk"}
     }
     dictionaries{
-    	Thai{"thaidict"}
+        Thai:process(dependency){"thaidict.ctd"}
     }
 }
