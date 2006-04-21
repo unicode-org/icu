@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -230,8 +230,8 @@ en{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
-        QE{"European Union"}
         QO{"Outlying Oceania"}
+        QU{"European Union"}
         RE{"Reunion"}
         RO{"Romania"}
         RU{"Russia"}
@@ -1030,8 +1030,8 @@ en{
             "Rhodesian Dollar",
         }
         ROL{
-            "leu",
-            "Romanian Leu",
+            "=0#Old lei|1#Old leu|1<Old lei",
+            "Old Romanian Leu",
         }
         RUB{
             "RUB",
@@ -1363,6 +1363,7 @@ en{
         af{"Afrikaans"}
         afa{"Afro-Asiatic (Other)"}
         afh{"Afrihili"}
+        ain{"Ainu"}
         ak{"Akan"}
         akk{"Akkadian"}
         ale{"Aleut"}
@@ -1371,6 +1372,7 @@ en{
         am{"Amharic"}
         an{"Aragonese"}
         ang{"Old English (ca.450-1100)"}
+        anp{"Angika"}
         apa{"Apache Languages"}
         ar{"Arabic"}
         arc{"Aramaic"}
@@ -1491,8 +1493,10 @@ en{
         fr{"French"}
         frm{"Middle French"}
         fro{"Old French"}
+        frr{"Northern Frisian"}
+        frs{"Eastern Frisian"}
         fur{"Friulian"}
-        fy{"Frisian"}
+        fy{"Western Frisian"}
         ga{"Irish"}
         gaa{"Ga"}
         gay{"Gayo"}
@@ -1501,7 +1505,7 @@ en{
         gem{"Germanic (Other)"}
         gez{"Geez"}
         gil{"Gilbertese"}
-        gl{"Gallegan"}
+        gl{"Galician"}
         gmh{"Middle High German"}
         gn{"Guarani"}
         goh{"Old High German"}
@@ -1510,6 +1514,7 @@ en{
         got{"Gothic"}
         grb{"Grebo"}
         grc{"Ancient Greek"}
+        gsw{"Swiss German"}
         gu{"Gujarati"}
         gv{"Manx"}
         gwi{"Gwichʼin"}
@@ -1578,6 +1583,7 @@ en{
         kpe{"Kpelle"}
         kr{"Kanuri"}
         krc{"Karachay-Balkar"}
+        krl{"Karelian"}
         kro{"Kru"}
         kru{"Kurukh"}
         ks{"Kashmiri"}
@@ -1643,7 +1649,7 @@ en{
         mwl{"Mirandese"}
         mwr{"Marwari"}
         my{"Burmese"}
-        myn{"Mayan"}
+        myn{"Mayan languages"}
         myv{"Erzya"}
         na{"Nauru"}
         nah{"Nahuatl"}
@@ -1709,6 +1715,7 @@ en{
         rom{"Romany"}
         root{"Root"}
         ru{"Russian"}
+        rup{"Aromanian"}
         rw{"Kinyarwanda"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
@@ -1828,6 +1835,7 @@ en{
         znd{"Zande"}
         zu{"Zulu"}
         zun{"Zuni"}
+        zxx{"No linguistic content"}
     }
     LocaleScript{
         "Latn",
@@ -1851,6 +1859,7 @@ en{
         Bugi{"Buginese"}
         Buhd{"Buhid"}
         Cans{"Unified Canadian Aboriginal Symbols"}
+        Cham{"Cham"}
         Cher{"Cherokee"}
         Cirt{"Cirth"}
         Copt{"Coptic"}
@@ -1931,6 +1940,7 @@ en{
         Tfng{"Tifinagh (Berber)"}
         Tglg{"Tagalog"}
         Thaa{"Thaana"}
+        Thai{"Thai"}
         Tibt{"Tibetan"}
         Ugar{"Ugaritic"}
         Vaii{"Vai"}
@@ -1971,17 +1981,19 @@ en{
         HAKKA{"Hakka"}
         LOJBAN{"Lojban"}
         NEDIS{"Natisone dialect"}
+        POLYTONI{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
         ROZAJ{"Resian"}
+        SAAHO{"Saho"}
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.84"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a z",
+                "h:mm:ss a v",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -2094,6 +2106,22 @@ en{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "1st quarter",
+                        "2nd quarter",
+                        "3rd quarter",
+                        "4th quarter",
+                    }
+                }
+            }
         }
     }
     delimiters{
@@ -2148,15 +2176,6 @@ en{
             sg{"AT"}
             ss{"AST"}
         }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Eastern Daylight Time"}
-            lg{"Eastern Time"}
-            ls{"Eastern Standard Time"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
-        }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
             ld{"Pacific Daylight Time"}
@@ -2183,15 +2202,6 @@ en{
             sd{"EDT"}
             sg{"ET"}
             ss{"EST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Mountain Daylight Time"}
-            lg{"Mountain Time"}
-            ls{"Mountain Standard Time"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
@@ -2224,15 +2234,11 @@ en{
             ec{"Jerusalem"}
             ld{"Israel Daylight Time"}
             ls{"Israel Standard Time"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "Asia:Shanghai"{
             ec{"Shanghai"}
             ld{"China Daylight Time"}
             ls{"China Standard Time"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}

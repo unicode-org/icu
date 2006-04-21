@@ -230,6 +230,7 @@ structLocale:table(nofallback){
         QA{""}
         QE{""}
         QO{""}
+        QU{""}
         RE{""}
         RO{""}
         RU{""}
@@ -1386,6 +1387,7 @@ structLocale:table(nofallback){
         am{""}
         an{""}
         ang{""}
+        anp{""}
         apa{""}
         ar{""}
         arc{""}
@@ -1506,6 +1508,8 @@ structLocale:table(nofallback){
         fr{""}
         frm{""}
         fro{""}
+        frr{""}
+        frs{""}
         fur{""}
         fy{""}
         ga{""}
@@ -1525,6 +1529,7 @@ structLocale:table(nofallback){
         got{""}
         grb{""}
         grc{""}
+        gsw{""}
         gu{""}
         gv{""}
         gwi{""}
@@ -1593,6 +1598,7 @@ structLocale:table(nofallback){
         kpe{""}
         kr{""}
         krc{""}
+        krl{""}
         kro{""}
         kru{""}
         ks{""}
@@ -1844,6 +1850,7 @@ structLocale:table(nofallback){
         znd{""}
         zu{""}
         zun{""}
+        zxx{""}
     }
     LocaleScript{
         "",
@@ -2003,6 +2010,7 @@ structLocale:table(nofallback){
         1901{""}
         1996{""}
         POSIX{""}
+        POLYTONI{""}
         REVISED{""}
         BOONT{""}
         GAULISH{""}
@@ -2010,6 +2018,7 @@ structLocale:table(nofallback){
         HAKKA{""}
         LOJBAN{""}
         NEDIS{""}
+        SAAHO{""}
         ROZAJ{""}
         SCOUSE{""}
         XIANG{""}
@@ -2065,7 +2074,7 @@ structLocale:table(nofallback){
                 "",
             }
             DateTimeElements:intvector{
-                1,
+                2,
                 1,
             }
             DateTimePatterns{
@@ -2332,6 +2341,22 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

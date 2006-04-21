@@ -1,4 +1,4 @@
-# *   Copyright (C) 1998-2005, International Business Machines
+# *   Copyright (C) 1998-2006, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
@@ -34,8 +34,6 @@ GENRB_SYNTHETIC_ALIAS = en_RH.txt in.txt in_ID.txt iw.txt\
 GENRB_ALIAS_SOURCE = $(GENRB_SYNTHETIC_ALIAS) az_AZ.txt sh.txt sh_CS.txt sh_YU.txt\
  sr_CS.txt sr_Cyrl_YU.txt sr_Latn_YU.txt sr_YU.txt uz_UZ.txt\
  zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
-
-
 
 
 # Ordinary resources
@@ -84,8 +82,8 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  sw.txt sw_KE.txt sw_TZ.txt ta.txt ta_IN.txt\
  te.txt te_IN.txt th.txt th_TH.txt ti.txt\
  ti_ER.txt ti_ET.txt tr.txt tr_TR.txt uk.txt\
- uk_UA.txt ur.txt ur_PK.txt uz.txt uz_Cyrl.txt\
- uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt vi.txt vi_VN.txt\
- zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant.txt\
- zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
+ uk_UA.txt ur.txt ur_IN.txt ur_PK.txt uz.txt\
+ uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt vi.txt\
+ vi_VN.txt zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt\
+ zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 

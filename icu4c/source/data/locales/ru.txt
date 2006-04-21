@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ru.xml
@@ -1473,13 +1473,9 @@ ru{
             japanese{"Японский календарь"}
         }
     }
-    Version{"1.70"}
+    Version{"1.73"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "H:mm:ss z",
                 "H:mm:ss z",

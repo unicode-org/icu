@@ -1959,7 +1959,7 @@ void CalendarRegressionTest::TestJ81() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString temp, temp2, temp3;
     int32_t i;
-    GregorianCalendar cal(TimeZone::createTimeZone("GMT"), status);
+    GregorianCalendar cal(TimeZone::createTimeZone("GMT"), Locale::getUS(), status);
     SimpleDateFormat fmt("HH:mm 'w'w 'd'D E d MMM yyyy", Locale::getUS(), status);
     if (U_FAILURE(status)) {
         errln("Error: Cannot create calendar or format");

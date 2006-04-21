@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/el.xml
@@ -1320,16 +1320,12 @@ el{
             traditional{"Παραδοσιακή"}
         }
     }
-    Version{"1.56"}
+    Version{"1.59"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "ΠΜ",
                 "ΜΜ",
-            }
-            DateTimeElements:intvector{
-                2,
-                1,
             }
             DateTimePatterns{
                 "h:mm:ss a z",

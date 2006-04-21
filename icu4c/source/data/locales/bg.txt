@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bg.xml
@@ -1139,7 +1139,7 @@ bg{
             "Зимбабвийски долар",
         }
     }
-    ExemplarCharacters{"[а-ь ѣ ю я ѫ]"}
+    ExemplarCharacters{"[а-ь ю я]"}
     Keys{
         calendar{"Календар"}
         collation{"Сортиране"}
@@ -1393,16 +1393,12 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.57"}
+    Version{"1.61"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "пр. об.",
                 "сл. об.",
-            }
-            DateTimeElements:intvector{
-                2,
-                1,
             }
             DateTimePatterns{
                 "HH:mm:ss z",

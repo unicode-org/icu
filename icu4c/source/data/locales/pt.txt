@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt.xml
@@ -1783,13 +1783,9 @@ pt{
     Variants{
         REVISED{"Revisado"}
     }
-    Version{"1.49"}
+    Version{"1.52"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "HH'H'mm'm'ss's' z",
                 "HH:mm:ss z",

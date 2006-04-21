@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -1192,7 +1192,9 @@ zh_Hant{
         " 職 舊 藏 薩 藍 藉 薦 蟲 覆 豐 蹤 蹟 轉 醫 鎖 鎮 離 雜 雙 雞 額 顏 題 騎 鬆 鵝 壞 壢 懷 懶 爆 獸 癡 礙 穩 簽 繪 羅"
         " 繳 藝 藤 藥 蠍 蟹 譜 識 證 贈 贊 辭 邊 鏡 關 難 霧 韻 類 願 騙 麗 勸 嚴 寶 爐 獻 競 籌 籃 籍 繼 耀 艦 蘇 覺 觸 議"
         " 警 譯 贏 釋 鐘 闡 飄 騷 麵 黨 齡 屬 懼 攝 欄 灌 爛 犧 續 蘭 覽 護 譽 躍 轟 辯 鐵 霸 霹 露 響 顧 驅 魔 囉 彎 權 歡"
-        " 聽 讀 鑑 戀 變 邏 顯 驚 驗 體 讓 靂 靈 鷹 廳 灣 蠻 觀 讚 鬱]"
+        " 聽 讀 鑑 戀 變 邏 顯 驚 驗 體 讓 靂 靈 鷹 廳 灣 蠻 觀 讚 鬱 			丘伐伽俄俾僧匈匹卓厄厘吞喀圜圭坎垂埃埔堡夷夸奎奴婁嫩宅宛寨寮岡岩"
+        "峽崙崴帕帛弗彊彞戈扎扥挪撒撣撾敍敘斐旺昂昆晉晒曆札杉杰柬柴梨梵棉檀汗汶沃泊浦涇潘濱爪玻珊琉瑙瑟瑤甸疆盧盲磯祕穆简簫簿糾紐緬緯罕翰腓腔臘臣舌芝茅 			茲"
+        "萄葡蒂蒲蔕蘆諺賈赫跎迦遮鄂銖錫鎊闐陶霍靼韃韋魁]"
     }
     Keys{
         calendar{"曆法"}
@@ -1646,7 +1648,7 @@ zh_Hant{
     Variants{
         REVISED{"已修訂"}
     }
-    Version{"1.43"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{

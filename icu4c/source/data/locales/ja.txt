@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005-2006 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -1311,7 +1311,7 @@ ja{
         "裕 誘 遊 郵 雄 融 夕 予 余 与 誉 預 幼 容 庸 揚 揺 擁 曜 様 洋 溶 用 窯 羊 葉 要 謡 踊 陽 養 抑 欲 浴 翌 翼 羅 裸 "
         "来 頼 雷 絡 落 酪 乱 卵 欄 濫 覧 利 吏 履 理 痢 裏 里 離 陸 律 率 立 略 流 留 硫 粒 隆 竜 慮 旅 虜 了 僚 両 寮 料 "
         "涼 猟 療 糧 良 量 陵 領 力 緑 倫 厘 林 臨 輪 隣 塁 涙 累 類 令 例 冷 励 礼 鈴 隷 零 霊 麗 齢 暦 歴 列 劣 烈 裂 廉 "
-        "恋 練 連 錬 炉 路 露 労 廊 朗 楼 浪 漏 老 郎 六 録 論 和 話 賄 惑 枠 湾 腕]"
+        "恋 練 連 錬 炉 路 露 労 廊 朗 楼 浪 漏 老 郎 六 録 論 和 話 賄 惑 枠 湾 腕 					亀亨嘉弘拼昌祚禄禎錄雉韓鳯]"
     }
     Keys{
         calendar{"暦"}
@@ -1677,7 +1677,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.68"}
+    Version{"1.73"}
     calendar{
         gregorian{
             AmPmMarkers{

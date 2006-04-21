@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2005 International Business Machines
+// * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mt.xml
@@ -732,13 +732,9 @@ mt{
     LocaleScript{
         "Latn",
     }
-    Version{"1.43"}
+    Version{"1.44"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                1,
-                4,
-            }
             DateTimePatterns{
                 "HH:mm:ss z",
                 "HH:mm:ss z",
