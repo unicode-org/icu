@@ -3,15 +3,12 @@
 // * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/en_US_POSIX.xml
+// * Source File:<path>/xml/brkitr/en_US_POSIX.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/en_US_POSIX.xml
- */
 en_US_POSIX{
-    Version{"1.36"}
+    Version{"1.26"}
     boundaries{
-        word{"word_POSIX"}
+        word:process(dependency){"word_POSIX.brk"}
     }
 }

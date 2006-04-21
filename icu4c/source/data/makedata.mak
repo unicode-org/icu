@@ -207,13 +207,14 @@ CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 !IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk"
 BRK_SOURCE=$(BRK_SOURCE) $(BRK_SOURCE_LOCAL)
+BRK_CTD_SOURCE=$(BRK_CTD_SOURCE) $(BRK_CTD_SOURCE_LOCAL)
+BRK_RES_SOURCE=$(BRK_RES_SOURCE) $(BRK_RES_SOURCE_LOCAL)
 !ELSE
 !MESSAGE Information: cannot find "brklocal.mk". Not building user-additional break iterator files.
 !ENDIF
 !ELSE
 !MESSAGE Warning: cannot find "brkfiles.mk"
 !ENDIF
-BRK_SOURCE=char.txt title.txt word.txt $(BRK_SOURCE)
 
 #
 #  Break iterator data files.
@@ -222,38 +223,14 @@ BRK_FILES=$(ICUBRK)\$(BRK_SOURCE:.txt =.brk brkitr\)
 BRK_FILES=$(BRK_FILES:.txt=.brk)
 BRK_FILES=$(BRK_FILES:brkitr\ =brkitr\)
 
-!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\ctdfiles.mk")
-!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\ctdfiles.mk"
-!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\ctdlocal.mk")
-!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\ctdlocal.mk"
-CTD_SOURCE=$(CTD_SOURCE) $(CTD_SOURCE_LOCAL)
-!ELSE
-!MESSAGE Information: cannot find "ctdlocal.mk". Not building user-additional break iterator dictionary files.
-!ENDIF
-!ELSE
-!MESSAGE Warning: cannot find "ctdfiles.mk"
+!IFDEF BRK_CTD_SOURCE
+BRK_CTD_FILES = $(ICUBRK)\$(BRK_CTD_SOURCE:.txt =.ctd brkitr\)
+BRK_CTD_FILES = $(BRK_CTD_FILES:.txt=.ctd)
+BRK_CTD_FILES = $(BRK_CTD_FILES:brkitr\ =)
 !ENDIF
 
-!IFDEF CTD_SOURCE
-CTD_FILES = $(ICUBRK)\$(CTD_SOURCE:.txt =.ctd brkitr\)
-CTD_FILES = $(CTD_FILES:.txt=.ctd)
-CTD_FILES = $(CTD_FILES:brkitr\ =)
-!ENDIF
-
-!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brsfiles.mk")
-!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brsfiles.mk"
-!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brslocal.mk")
-!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brslocal.mk"
-BREAKRES_SOURCE=$(BREAKRES_SOURCE) $(BREAKRES_SOURCE_LOCAL)
-!ELSE
-!MESSAGE Information: cannot find "brslocal.mk". Not building user-additional break iterator resource files.
-!ENDIF
-!ELSE
-!MESSAGE Warning: cannot find "brsfiles.mk"
-!ENDIF
-
-!IFDEF BREAKRES_SOURCE
-BRK_RES_SOURCE = $(ICUBRK)\root.txt $(BREAKRES_SOURCE)
+!IFDEF BRK_RES_SOURCE
+BRK_RES_SOURCE = $(ICUBRK)\root.txt $(BRK_RES_SOURCE)
 BRK_RES_FILES = $(BRK_RES_SOURCE:.txt =.res brkitr\)
 BRK_RES_FILES = $(BRK_RES_FILES:.txt=.res)
 BRK_RES_FILES = $(BRK_RES_FILES:brkitr\ =)
@@ -413,7 +390,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUP)\bin\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
@@ -435,7 +412,7 @@ $(TRANSLIT_RES_FILES:.res =.res
 )
 $(BRK_FILES:.brk =.brk
 )
-$(CTD_FILES:.ctd =.ctd
+$(BRK_CTD_FILES:.ctd =.ctd
 )
 $(BRK_RES_FILES:.res =.res
 )
