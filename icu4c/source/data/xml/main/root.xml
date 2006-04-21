@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2002-2005 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2002-2006 International Business Machines Corporation and others. All rights reserved.
 -->
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd"
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd"
 [
-   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.3/ldmlICU.dtd">
+   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.4/ldmlICU.dtd">
    %icu;
 ]
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.29 $"/>
-		<generation date="$Date: 2005/12/27 22:19:37 $"/>
+		<version number="$Revision: 1.30 $"/>
+		<generation date="$Date: 2006/04/21 01:05:56 $"/>
 		<language type="root"/> 
 	</identity>
 	<characters>
@@ -23,65 +23,20 @@
 	</characters>
   <dates>
     <calendars>
-     <calendar type="chinese">
-       <special xmlns:icu="http://www.icu-project.org/">
-        <!--
-         IsLeapMonth {
-                "",
-                "*"
-           }
-         -->
-          <icu:isLeapMonth>
-            <icu:nonLeapSymbol/>
-            <icu:leapSymbol>*</icu:leapSymbol>
-          </icu:isLeapMonth>
-        </special>
-      </calendar>
-       <!-- Note: LDML2ICUConverter wants to make a separate calendars{} 
-		in ICU. It works to simply merge them together. -->
-
-      <calendar type="coptic"> <!-- from CopticCalendar.java -->
-        <months>
-          <monthContext type="format">
-            <monthWidth type="wide">
-                <month type="1">Tout</month>
-                <month type="2">Baba</month>
-                <month type="3">Hator</month>
-                <month type="4">Kiahk</month>
-                <month type="5">Toba</month>
-                <month type="6">Amshir</month>
-                <month type="7">Baramhat</month>
-                <month type="8">Baramouda</month>
-                <month type="9">Bashans</month>
-                <month type="10">Paona</month>
-                <month type="11">Epep</month>
-                <month type="12">Mesra</month>
-                <month type="13">Nasie</month>
-            </monthWidth>
-          </monthContext>
-        </months>
-      </calendar>
-      <calendar type="ethiopic"> <!-- from EthiopicCalendar.java -->
-        <months>
-          <monthContext type="format">
-            <monthWidth type="wide">
-                <month type="1">Meskerem</month>
-                <month type="2">Tekemt</month>
-                <month type="3">Hedar</month>
-                <month type="4">Tahsas</month>
-                <month type="5">Ter</month>
-                <month type="6">Yekatit</month>
-                <month type="7">Megabit</month>
-                <month type="8">Miazia</month>
-                <month type="9">Genbot</month>
-                <month type="10">Sene</month>
-                <month type="11">Hamle</month>
-                <month type="12">Nehasse</month>
-                <month type="13">Pagumen</month>
-            </monthWidth>
-          </monthContext>
-        </months>
-      </calendar>
+        <calendar type="chinese">
+            <special xmlns:icu="http://www.icu-project.org/">
+                <!--
+                 IsLeapMonth {
+                        "",
+                        "*"
+                   }
+                 -->
+                <icu:isLeapMonth>
+                    <icu:nonLeapSymbol/>
+                    <icu:leapSymbol>*</icu:leapSymbol>
+                </icu:isLeapMonth>
+            </special>
+        </calendar>
     </calendars>
     <timeZoneNames>
       <zone type="">
@@ -97,14 +52,5 @@
       </zone>
     </timeZoneNames>
   </dates>
-  <special xmlns:icu="http://www.icu-project.org/">
-    <icu:boundaries>
-      <icu:grapheme icu:class="RuleBased" icu:import="char"/>
-      <icu:word icu:class="RuleBased" icu:import="word"/>
-      <icu:line icu:class="RuleBased" icu:import="line"/>
-      <icu:sentence icu:class="RuleBased" icu:import="sent"/>
-      <icu:title icu:class="RuleBased" icu:import="title"/>
-    </icu:boundaries>
-  </special>
 </ldml>
 
