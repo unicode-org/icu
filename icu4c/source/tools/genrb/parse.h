@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -27,7 +27,7 @@ U_CDECL_BEGIN
 void initParser(UBool makeBinaryCollation);
 
 /* Parse a ResourceBundle text file */
-struct SRBRoot* parse(UCHARBUF *buf, const char* inputDir, UErrorCode *status);
+struct SRBRoot* parse(UCHARBUF *buf, const char* inputDir, const char* outputDir, UErrorCode *status);
 
 U_CDECL_END
 

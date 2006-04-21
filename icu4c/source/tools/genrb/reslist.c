@@ -754,9 +754,12 @@ void table_close(struct SResource *table, UErrorCode *status) {
 void array_close(struct SResource *array, UErrorCode *status) {
     struct SResource *current = NULL;
     struct SResource *prev    = NULL;
-
+    
+    if(array==NULL){
+        return;
+    }
     current = array->u.fArray.fFirst;
-
+    
     while (current != NULL) {
         prev    = current;
         current = current->fNext;
