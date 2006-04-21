@@ -235,6 +235,10 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
 
     outCharCount = characterProcessing(chars, offset, count, max, rightToLeft, outChars, fakeGlyphStorage, success);
 
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
     if (outChars != NULL) {
         fakeGlyphCount = glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fakeGlyphStorage, success);
         LE_DELETE_ARRAY(outChars); // FIXME: a subclass may have allocated this, in which case this delete might not work...
@@ -242,6 +246,10 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
     } else {
         fakeGlyphCount = glyphProcessing(chars, offset, count, max, rightToLeft, fakeGlyphStorage, success);
         //adjustGlyphs(chars, offset, count, rightToLeft, fakeGlyphs, fakeGlyphCount);
+    }
+
+    if (LE_FAILURE(success)) {
+        return 0;
     }
 
     outGlyphCount = glyphPostProcessing(fakeGlyphStorage, glyphStorage, success);
