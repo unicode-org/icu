@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2002-2005 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2002-2006 International Business Machines Corporation and others. All rights reserved.
 -->
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd"
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd"
 [
-   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.3/ldmlICU.dtd">
+   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.4/ldmlICU.dtd">
    %icu;
 ]
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.22 $"/>
-		<generation date="$Date: 2005/12/27 22:19:37 $"/>
+		<version number="$Revision: 1.23 $"/>
+		<generation date="$Date: 2006/04/21 01:05:57 $"/>
 		<language type="sq"/> 
 	</identity>
 	<characters>

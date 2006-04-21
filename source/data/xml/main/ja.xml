@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2002-2005 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2002-2006 International Business Machines Corporation and others. All rights reserved.
 -->
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd"
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd"
 [
-   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.3/ldmlICU.dtd">
+   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.4/ldmlICU.dtd">
    %icu;
 ]
 >
 <ldml>
-	<identity>
-		<version number="$Revision: 1.26 $"/>
-		<generation date="$Date: 2005/12/27 22:19:35 $"/>
-		<language type="ja"/> 
-	</identity>
-	<characters>
-		<special xmlns:icu="http://www.icu-project.org/">
-			<icu:scripts>
-				<icu:script type="1">Kana</icu:script>
-				<icu:script type="2">Hira</icu:script>
-				<icu:script type="3">Hani</icu:script>
-			</icu:scripts>
-		</special>
-	</characters>
-  <special xmlns:icu="http://www.icu-project.org/">
-    <icu:boundaries>
-      <icu:word icu:class="RuleBased" icu:append="true" icu:import="word_ja"/>
-    </icu:boundaries>
-  </special>
+    <identity>
+        <version number="$Revision: 1.27 $"/>
+        <generation date="$Date: 2006/04/21 01:05:53 $"/>
+        <language type="ja"/> 
+    </identity>
+    <characters>
+        <special xmlns:icu="http://www.icu-project.org/">
+            <icu:scripts>
+                <icu:script type="1">Kana</icu:script>
+                <icu:script type="2">Hira</icu:script>
+                <icu:script type="3">Hani</icu:script>
+            </icu:scripts>
+        </special>
+    </characters>
 </ldml>
 
