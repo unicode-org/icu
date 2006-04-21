@@ -139,6 +139,7 @@
 #ifdef XP_CPLUSPLUS
 #include "unicode/rep.h"
 #include "unicode/unistr.h"
+#include "unicode/chariter.h"
 #endif
 
 
@@ -270,6 +271,21 @@ utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *stat
 U_DRAFT UText * U_EXPORT2
 utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
 
+/**
+ * Open a  UText implementation over an ICU CharacterIterator.
+ * @param ut    Pointer to a UText struct.  If NULL, a new UText will be created.
+ *               If non-NULL, must refer to an already existing UText, which will then
+ *               be reset to reference the specified replaceable text.
+ * @param ci     A Character Iterator.
+ * @param status Errors are returned here.
+ * @return       Pointer to the UText.  If a UText was supplied as input, this
+ *               will always be used and returned.
+ * @see Replaceable
+ * @draft ICU 3.4
+ */
+U_DRAFT UText * U_EXPORT2
+utext_openCharacterIterator(UText *ut, CharacterIterator *ic, UErrorCode *status);
+
 #endif
 
 
@@ -332,6 +348,20 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
   */
 U_DRAFT UText * U_EXPORT2
 utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status);
+
+
+/**
+  *  Compare two UText objects for equality.
+  *  UTexts are equal if they are iterating over the same text, and
+  *    have the same iteration position within the text.
+  *    If either or both of the parameters are NULL, the comparison is FALSE.
+  *
+  *  @param a   The first of the two UTexts to compare.
+  *  @param b   The other UText to be compared.
+  *  @return    TRUE if the two UTexts are equal.
+  */
+U_DRAFT UBool U_EXPORT2
+utext_equals(const UText *a, const UText *b);
 
 
 /*****************************************************************************
@@ -1081,28 +1111,6 @@ UTextClose(UText *ut);
   */
 struct UText {
     /**
-     * (protected) Pointer to string or wrapped object or similar.
-     * Not used by caller.
-     * @draft ICU 3.4
-     */
-    const void   *context;
-
-    /**
-     *  (protected)  pointer to a chunk of text in UTF-16 format.
-     *  May refer either to original storage of the source of the text, or
-     *  if conversion was required, to a buffer owned by the UText.
-     *  @draft ICU 3.6
-     */
-    const UChar  *chunkContents;
-
-    /**
-     * (protected) Pointer fields available for use by the text provider.
-     * Not used by UText common code.
-     * @draft ICU 3.4
-     */
-    const void   *p, *q, *r;
-
-    /**
      *  (protected)  Pointer to additional space requested by the
      *               text provider during the utext_open operation.
      * @draft ICU 3.4
@@ -1144,9 +1152,40 @@ struct UText {
      */
     int32_t         sizeOfStruct;
 
+    /*
+     *  NOTE:  Everything above this point in the UText struct is explicitly
+     *         initialized by the UText framework, in the common
+     *         UText initialization code.
+     *         Everything below this point will be preset to zero, and must
+     *         be subsequently initialized by the various utext_openXXX functions.
+     */
+
     /**
-      * (protected) Integer fields reserved for use by text provider.
-      * Not used by caller.
+     * (protected) Pointer to string or wrapped object or similar.
+     * Not used by caller.
+     * @draft ICU 3.4
+     */
+    const void   *context;
+
+    /**
+     *  (protected)  pointer to a chunk of text in UTF-16 format.
+     *  May refer either to original storage of the source of the text, or
+     *  if conversion was required, to a buffer owned by the UText.
+     *  @draft ICU 3.6
+     */
+    const UChar  *chunkContents;
+
+    /**
+     * (protected) Pointer fields available for use by the text provider.
+     * Not used by UText common code.
+     * @draft ICU 3.4
+     */
+    const void   *p, *q, *r;
+
+    /**
+      * (protected) Integer fields reserved for use by the text provider.
+      * Not used by the UText framework, or by the client (user) of the
+      *  UText.
       * @draft ICU 3.4
       */
     int64_t         a;
@@ -1195,7 +1234,15 @@ struct UText {
 
     UBool           bPadding1, bPadding2, bPadding3;   /* pad UBools to 32 bit boudary */
 
-    int32_t         iPadding;                          /* pad int32 fields out to a 64 bit boudary. */
+    /**
+      *  Private fields, reserved for future use by the UText framework
+      *     itself.  These are not to be touched by the text providers.
+      */
+    int32_t         privA;
+    int32_t         privB;
+    int32_t         privC;
+    int64_t         privD;
+    void           *privP;
 
     /**
      * (public) Function pointer for UTextClone
@@ -1311,14 +1358,14 @@ enum {
  * @draft ICU 3.4
  */
 #define UTEXT_INITIALIZER {                                 \
-                  NULL,                 /* context       */ \
-                  NULL,                 /* chunkContents */ \
-                  NULL, NULL, NULL,     /* p, q, r       */ \
                   NULL,                 /* pExtra        */ \
                   0,                    /* extraSize     */ \
                   0,                    /* flags         */ \
                   UTEXT_MAGIC,          /* magic         */ \
                   sizeof(UText),        /* sizeOfStruct  */ \
+                  NULL,                 /* context       */ \
+                  NULL,                 /* chunkContents */ \
+                  NULL, NULL, NULL,     /* p, q, r       */ \
                   0, 0, 0,              /* a, b, c       */ \
                   0,                    /* providerProps */ \
                   0,                    /* chunkOffset   */ \
@@ -1327,7 +1374,8 @@ enum {
                   0,                    /* chunkLimit    */ \
                   FALSE,                /* nonUTF16idx   */ \
                   FALSE, FALSE, FALSE,  /* padding 8     */ \
-                  0,                    /* padding 32    */ \
+                  0, 0, 0, 0,           /* privA,B,C,D   */ \
+                  NULL,                 /* privP         */ \
                   NULL,                 /* clone ()      */ \
                   NULL,                 /* length ()     */ \
                   NULL,                 /* access ()     */ \
