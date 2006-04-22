@@ -260,8 +260,10 @@ void RBBIAPITest::TestGetSetAdoptText()
     CharacterIterator* text3= new StringCharacterIterator(str2, 3, 10, 3); //  "ond str"
     
     wordIter1->setText(str1);
-    if(wordIter1->getText() != *text1)
-       errln((UnicodeString)"ERROR:1 error in setText or getText ");
+    CharacterIterator *tci = &wordIter1->getText();
+    UnicodeString      tstr;
+    tci->getText(tstr);
+    TEST_ASSERT(tstr == str1);
     if(wordIter1->current() != 0)
         errln((UnicodeString)"ERROR:1 setText did not set the iteration position to the beginning of the text, it is" + wordIter1->current() + (UnicodeString)"\n");
 
@@ -273,9 +275,14 @@ void RBBIAPITest::TestGetSetAdoptText()
 
 
     charIter1->adoptText(text1Clone);
-    if( wordIter1->getText() == charIter1->getText() || 
-        wordIter1->getText() != *text2 ||  charIter1->getText() != *text1 )
-        errln((UnicodeString)"ERROR:2 error is getText or setText()");
+    TEST_ASSERT(wordIter1->getText() != charIter1->getText());
+    tci = &wordIter1->getText();
+    tci->getText(tstr);
+    TEST_ASSERT(tstr == str2);
+    tci = &charIter1->getText();
+    tci->getText(tstr);
+    TEST_ASSERT(tstr == str1);
+
 
     RuleBasedBreakIterator* rb=(RuleBasedBreakIterator*)wordIter1->clone();
     rb->adoptText(text1);
@@ -286,13 +293,17 @@ void RBBIAPITest::TestGetSetAdoptText()
         errln((UnicodeString)"ERROR:2 error in adoptText ");
 
     // Adopt where iterator range is less than the entire orignal source string.
+    //   (With the change of the break engine to working with UText internally,
+    //    CharacterIterators starting at positions other than zero are not supported)
     rb->adoptText(text3);
-    if(rb->preceding(2) != 3) {
-        errln((UnicodeString)"ERROR:3 error in adoptText ");
-    }
-    if(rb->following(11) != BreakIterator::DONE) {
-        errln((UnicodeString)"ERROR:4 error in adoptText ");
-    }
+    TEST_ASSERT(rb->preceding(2) == 0);
+    TEST_ASSERT(rb->following(11) == BreakIterator::DONE);
+    //if(rb->preceding(2) != 3) {
+    //    errln((UnicodeString)"ERROR:3 error in adoptText ");
+    //}
+    //if(rb->following(11) != BreakIterator::DONE) {
+    //    errln((UnicodeString)"ERROR:4 error in adoptText ");
+    //}
 
     // UText API
     //
@@ -344,7 +355,8 @@ void RBBIAPITest::TestGetSetAdoptText()
     TEST_ASSERT(pos==UBRK_DONE);
 
     status = U_ZERO_ERROR;
-    UText *gut2 = utext_openUnicodeString(NULL,NULL,&status);
+    UnicodeString sEmpty;
+    UText *gut2 = utext_openUnicodeString(NULL, &sEmpty, &status);
     wordIter1->getUText(gut2, status);
     TEST_ASSERT_SUCCESS(status);
     utext_close(gut2);

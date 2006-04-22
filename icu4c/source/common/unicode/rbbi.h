@@ -63,10 +63,17 @@ class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
 
 protected:
     /**
-     * The character iterator through which this BreakIterator accesses the text
+     * The UText through which this BreakIterator accesses the text
      * @internal
      */
-    CharacterIterator*  fText;
+    UText  *fText;
+
+    /**
+     *   A character iterator that refers to the same text as the UText, above.
+     *   Lazily created when requested by a caller.
+     *   Only included for compatibility with old API, which was based on CharacterIterators.
+     */
+    CharacterIterator  *fCharIter;
 
     /**
      * The rule data for this BreakIterator instance
@@ -280,14 +287,27 @@ public:
     //=======================================================================
 
     /**
-     * Return a CharacterIterator over the text being analyzed.  This version
-     * of this method returns the actual CharacterIterator we're using internally.
-     * Changing the state of this iterator can have undefined consequences.  If
-     * you need to change it, clone it first.
+     * Return a CharacterIterator over the text being analyzed.
+     * The returned character iterator is owned by the break iterator, and must
+     * not be deleted by the caller.  Repeated calls to this function may
+     * return the same CharacterIterator.
+     * <p/>
+     * The returned character iterator must not be used concurrently with
+     * the break iterator.  If concurrent operation is needed, clone the
+     * returned character iterator first and operate on the clone.
+     * <p/>
+     * This function is not thread safe.  Two threads must not make concurrent
+     * calls to BreakIterator::getText(). This is an exception to the general
+     * rules for thread safety in ICU, which are that const functions are
+     * thread safe.
+     * <p/>
+     * The function getUText() provides similar functionality, and is more efficient.
+     * TODO:  deprecate this function?
+     *
      * @return An iterator over the text being analyzed.
-     *  @stable ICU 2.0
+     * @stable ICU 2.0
      */
-    virtual const CharacterIterator& getText(void) const;
+    virtual  CharacterIterator& getText(void) const;
 
 
     /**
@@ -340,7 +360,6 @@ public:
 
     /**
      * Sets the current iteration position to the beginning of the text.
-     * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
      *  @stable ICU 2.0
      */
@@ -348,7 +367,6 @@ public:
 
     /**
      * Sets the current iteration position to the end of the text.
-     * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
      *  @stable ICU 2.0
      */

@@ -10,11 +10,12 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uniset.h"
+#include "unicode/utext.h"
+
 #include "brkeng.h"
 
 U_NAMESPACE_BEGIN
 
-class CharacterIterator;
 class TrieWordDictionary;
 
 /*******************************************************************
@@ -78,7 +79,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
  /**
   * <p>Find any breaks within a run in the supplied text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left at the end of the run of characters which the engine
   * is capable of handling.
   * @param startPos The start of the run within the supplied text.
@@ -89,7 +90,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
   * @param foundBreaks An allocated C array of the breaks found, if any
   * @return The number of breaks found.
   */
-  virtual int32_t findBreaks( CharacterIterator *text,
+  virtual int32_t findBreaks( UText *text,
                               int32_t startPos,
                               int32_t endPos,
                               UBool reverse,
@@ -115,13 +116,13 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
  /**
   * <p>Divide up a range of known dictionary characters.</p>
   *
-  * @param text A CharacterIterator representing the text
+  * @param text A UText representing the text
   * @param rangeStart The start of the range of dictionary characters
   * @param rangeEnd The end of the range of dictionary characters
   * @param foundBreaks Output of C array of int32_t break positions, or 0
   * @return The number of breaks found
   */
-  virtual int32_t divideUpDictionaryRange( CharacterIterator *text,
+  virtual int32_t divideUpDictionaryRange( UText *text,
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UStack &foundBreaks ) const = 0;
@@ -172,13 +173,13 @@ class ThaiBreakEngine : public DictionaryBreakEngine {
  /**
   * <p>Divide up a range of known dictionary characters.</p>
   *
-  * @param text A CharacterIterator representing the text
+  * @param text A UText representing the text
   * @param rangeStart The start of the range of dictionary characters
   * @param rangeEnd The end of the range of dictionary characters
   * @param foundBreaks Output of C array of int32_t break positions, or 0
   * @return The number of breaks found
   */
-  virtual int32_t divideUpDictionaryRange( CharacterIterator *text,
+  virtual int32_t divideUpDictionaryRange( UText *text,
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UStack &foundBreaks ) const;

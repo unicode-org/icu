@@ -10,10 +10,10 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "unicode/utext.h"
 
 U_NAMESPACE_BEGIN
 
-class CharacterIterator;
 class UnicodeSet;
 class UStack;
 
@@ -58,7 +58,7 @@ class LanguageBreakEngine : public UMemory {
  /**
   * <p>Find any breaks within a run in the supplied text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left at the end of the run of characters which the engine
   * is capable of handling.
   * @param startPos The start of the run within the supplied text.
@@ -69,7 +69,7 @@ class LanguageBreakEngine : public UMemory {
   * @param foundBreaks An allocated C array of the breaks found, if any
   * @return The number of breaks found.
   */
-  virtual int32_t findBreaks( CharacterIterator *text,
+  virtual int32_t findBreaks( UText *text,
                               int32_t startPos,
                               int32_t endPos,
                               UBool reverse,
@@ -183,7 +183,7 @@ class UnhandledEngine : public LanguageBreakEngine {
  /**
   * <p>Find any breaks within a run in the supplied text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text (TODO: UText). The
   * iterator is left at the end of the run of characters which the engine
   * is capable of handling.
   * @param startPos The start of the run within the supplied text.
@@ -194,7 +194,7 @@ class UnhandledEngine : public LanguageBreakEngine {
   * @param foundBreaks An allocated C array of the breaks found, if any
   * @return The number of breaks found.
   */
-  virtual int32_t findBreaks( CharacterIterator *text,
+  virtual int32_t findBreaks( UText *text,
                               int32_t startPos,
                               int32_t endPos,
                               UBool reverse,
