@@ -412,64 +412,7 @@ void RBBITest::TestMixedThaiLineBreak()
 
     // @suwit - end of changes
 
-    // Arabic numerals should always be separated from surrounding Thai text
-/*
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e04\\u0e48\\u0e32", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e07\\u0e34\\u0e19", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e15\\u0e30", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a", 0, status);
-        thaiLineSelection->addElement("39");
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17 ", 0, status);
 
-        // words in non-Thai scripts should always be separated from surrounding Thai text
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e14", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e2a\\u0e2d\\u0e1a", 0, status);
-        thaiLineSelection->addElement("Java");
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e19", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e04\\u0e23\\u0e37\\u0e48\\u0e2d\\u0e07", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21 ", 0, status);
-
-        // Thai numerals should always be separated from the text surrounding them
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e04\\u0e48\\u0e32", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e07\\u0e34\\u0e19", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e15\\u0e30", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e53\\u0e59", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17 ", 0, status);
-
-        // Thai text should interact correctly with punctuation and symbols
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21", 0, status);
-//        ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28", 0, status);
-//        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e17\\u0e22)", 0, status);
-ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u0e44\\u0e17\\u0e22)", 0, status);
-// I believe the commented-out reading above to be the correct one, but this is what passes with our current dictionary
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e08\\u0e33\\u0e01\\u0e31\\u0e14", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e1b\\u0e34\\u0e14", 0, status);
-        ADD_DATACHUNK(thaiLineSelection, "\\u0e15\\u0e31\\u0e27\"", 0, status);
-*/
-
-    /*  remove the old data sample.
-    // The Unicode Linebreak TR says do not break before or after quotes.
-    //    So this test is changed ot not break around the quote.
-    //    TODO:  should Thai break around the around the quotes, like the original behavior here?
-//    ADD_DATACHUNK(thaiLineSelection, "\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\"", 0, status);
-//    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e38\\u0e48\\u0e19", 0, status);
-      ADD_DATACHUNK(thaiLineSelection, "\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""
-                                                         "\\u0e23\\u0e38\\u0e48\\u0e19", 0, status);
-
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
-
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34.", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e22.", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e35\\u0e49", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e32\\u0e04\\u0e32", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "$200", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e17\\u0e48\\u0e32", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e31\\u0e49\\u0e19 ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\").", 0, status);
-*/
     RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale("th"), status);
     if (U_FAILURE(status))
     {
@@ -788,14 +731,18 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestJapaneseLineBreak();                 break;
         case 2: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
+
         case 3: name = "TestLineBreakData";
             if(exec) TestLineBreakData();                      break;
         case 4: name = "TestEmptyString";
             if(exec) TestEmptyString();                        break;
+
         case 5: name = "TestGetAvailableLocales";
             if(exec) TestGetAvailableLocales();                break;
+
         case 6: name = "TestGetDisplayName";
             if(exec) TestGetDisplayName();                     break;
+
         case 7: name = "TestEndBehaviour";
             if(exec) TestEndBehaviour();                       break;
         case 8: name = "TestMixedThaiLineBreak";
@@ -1176,15 +1123,19 @@ void RBBITest::TestBug4153072() {
     UnicodeString str("...Hello, World!...");
     int32_t begin = 3;
     int32_t end = str.length() - 3;
-    UBool dummy;
+    UBool onBoundary;
 
     StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
     iter->adoptText(textIterator);
     int index;
+    // Note: with the switch to UText, there is no way to restrict the
+    //       iteration range to begin at an index other than zero.
+    //       String character iterators created with a non-zero bound are
+    //         treated by RBBI as being empty.
     for (index = -1; index < begin + 1; ++index) {
-        dummy = iter->isBoundary(index);
-        if (index < begin && dummy == TRUE) {
-            errln((UnicodeString)"Didn't handle preceeding correctly with offset = " + index +
+        onBoundary = iter->isBoundary(index);
+        if (index == 0?  !onBoundary : onBoundary) {
+            errln((UnicodeString)"Didn't handle isBoundary correctly with offset = " + index +
                             " and begin index = " + begin);
         }
     }
@@ -1323,11 +1274,12 @@ void RBBITest::executeTest(TestParams *t) {
             if (expectedTagVal == -1) {
                 expectedTagVal = 0;
             }
+            int32_t line = t->srcLine->elementAti(bp);
             int32_t rs = ((RuleBasedBreakIterator *)t->bi)->getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for forward break.  Pos=%4d  File line,col= %4d,%4d.\n"
                       "          Actual, Expected status = %4d, %4d",
-                    bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp), rs, expectedTagVal);
+                    bp, line, t->srcCol->elementAti(bp), rs, expectedTagVal);
             }
         }
 
@@ -1375,6 +1327,7 @@ void RBBITest::executeTest(TestParams *t) {
             if (expectedTagVal == -1) {
                 expectedTagVal = 0;
             }
+            int line = t->srcLine->elementAti(bp);
             int32_t rs = ((RuleBasedBreakIterator *)t->bi)->getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for reverse break.  Pos=%4d  File line,col= %4d,%4d.\n"

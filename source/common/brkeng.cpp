@@ -71,22 +71,23 @@ UnhandledEngine::handles(UChar32 c, int32_t breakType) const {
 }
 
 int32_t
-UnhandledEngine::findBreaks( CharacterIterator *text,
+UnhandledEngine::findBreaks( UText *text,
                                  int32_t startPos,
                                  int32_t endPos,
                                  UBool reverse,
                                  int32_t breakType,
                                  UStack &/*foundBreaks*/ ) const {
     if (breakType >= 0 && breakType < (int32_t)(sizeof(fHandled)/sizeof(fHandled[0]))) {
-        UChar32 c = text->current32();
+        UChar32 c = utext_current32(text); 
         if (reverse) {
-            while(text->getIndex() > startPos && fHandled[breakType]->contains(c)) {
-                c = text->previous32();
+            while((int32_t)utext_getNativeIndex(text) > startPos && fHandled[breakType]->contains(c)) {
+                c = utext_previous32(text);
             }
         }
         else {
-            while(text->getIndex() < endPos && fHandled[breakType]->contains(c)) {
-                c = text->next32();
+            while((int32_t)utext_getNativeIndex(text) < endPos && fHandled[breakType]->contains(c)) {
+                utext_next32(text);            // TODO:  recast loop to work with post-increment operations.
+                c = utext_current32(text);
             }
         }
     }
@@ -164,7 +165,6 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
             dictnlength = 0;
             status = U_BUFFER_OVERFLOW_ERROR;
         }
-
         if (U_SUCCESS(status) && dictfname) {
             UChar* extStart=u_strchr(dictfname, 0x002e);
             int len = 0;

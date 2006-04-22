@@ -87,27 +87,27 @@ MutableTrieDictionary::MutableTrieDictionary( UChar median, UErrorCode &status )
     if (fTrie == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
-    fIter = new UCharCharacterIterator(0, 0);
-    if (fIter == NULL) {
+    fIter = utext_openUChars(NULL, NULL, 0, &status);
+    if (U_SUCCESS(status) && fIter == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
 
 MutableTrieDictionary::MutableTrieDictionary( UErrorCode &status ) {
     fTrie = NULL;
-    fIter = new UCharCharacterIterator(NULL, 0);
-    if (fIter == NULL) {
+    fIter = utext_openUChars(NULL, NULL, 0, &status);
+    if (U_SUCCESS(status) && fIter == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
 
 MutableTrieDictionary::~MutableTrieDictionary() {
     delete fTrie;
-    delete fIter;
+    utext_close(fIter);
 }
 
 int32_t
-MutableTrieDictionary::search( CharacterIterator *text,
+MutableTrieDictionary::search( UText *text,
                                    int32_t maxLength,
                                    int32_t *lengths,
                                    int &count,
@@ -121,7 +121,7 @@ MutableTrieDictionary::search( CharacterIterator *text,
     pMatched = TRUE;
     int i;
 
-    UChar uc = text->current();
+    UChar uc = utext_current32(text);
     for (i = 0; i < maxLength && p != NULL; ++i) {
         while (p != NULL) {
             if (uc < p->ch) {
@@ -147,7 +147,8 @@ MutableTrieDictionary::search( CharacterIterator *text,
         }
         up = p;
         p = p->equal;
-        uc = text->next();
+        uc = utext_next32(text);
+        uc = utext_current32(text);
     }
     
     // Note that there is no way to reach here with up == 0 unless
@@ -170,13 +171,14 @@ MutableTrieDictionary::addWord( const UChar *word,
     TernaryNode *parent;
     UBool pMatched;
     int count;
-    fIter->setText(word, length);
+    fIter = utext_openUChars(fIter, word, length, &status);
     
     int matched;
     matched = search(fIter, length, NULL, count, 0, parent, pMatched);
     
     while (matched++ < length) {
-        UChar uc = fIter->nextPostInc();
+        UChar uc = utext_next32(fIter);  // TODO:  supplemetary support?
+        U_ASSERT(uc != U_SENTINEL);
         TernaryNode *newNode = new TernaryNode(uc);
         if (newNode == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -211,7 +213,7 @@ MutableTrieDictionary::addWords( UEnumeration *words,
 }
 
 int32_t
-MutableTrieDictionary::matches( CharacterIterator *text,
+MutableTrieDictionary::matches( UText *text,
                                 int32_t maxLength,
                                 int32_t *lengths,
                                 int &count,
@@ -413,8 +415,7 @@ CompactTrieDictionary::CompactTrieDictionary(UDataMemory *dataObj,
         fData = NULL;
     }
 }
-
-CompactTrieDictionary::CompactTrieDictionary(const void *data,
+CompactTrieDictionary::CompactTrieDictionary( const void *data,
                                                 UErrorCode &status )
 : fUData(NULL)
 {
@@ -460,7 +461,7 @@ getCompactNode(const CompactTrieHeader *header, uint16_t node) {
 }
 
 int32_t
-CompactTrieDictionary::matches( CharacterIterator *text,
+CompactTrieDictionary::matches( UText *text,
                                 int32_t maxLength,
                                 int32_t *lengths,
                                 int &count,
@@ -469,7 +470,7 @@ CompactTrieDictionary::matches( CharacterIterator *text,
     const CompactTrieNode *node = getCompactNode(fData, fData->root);
     int mycount = 0;
 
-    UChar uc = text->current();
+    UChar uc = utext_current32(text);
     int i = 0;
 
     while (node != NULL) {
@@ -498,7 +499,8 @@ CompactTrieDictionary::matches( CharacterIterator *text,
                     // We hit a non-equal character; return
                     goto exit;
                 }
-                uc = text->next();
+                utext_next32(text);
+                uc = utext_current32(text);
                 ++i;
             }
             // To get here we must have come through the whole list successfully;
@@ -518,7 +520,8 @@ CompactTrieDictionary::matches( CharacterIterator *text,
                 if (uc == hnode->entries[middle].ch) {
                     // We hit a match; get the next node and next character
                     node = getCompactNode(fData, hnode->entries[middle].equal);
-                    uc = text->next();
+                    utext_next32(text);
+                    uc = utext_current32(text);
                     ++i;
                     break;
                 }
