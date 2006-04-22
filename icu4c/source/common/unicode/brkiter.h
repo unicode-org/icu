@@ -144,8 +144,6 @@ public:
 
     /**
      * Return a CharacterIterator over the text being analyzed.
-     * Changing the state of the returned iterator can have undefined consequences
-     * on the operation of the break iterator.  If you need to change it, clone it first.
      * @stable ICU 2.0
      */
     virtual const CharacterIterator& getText(void) const = 0;
@@ -193,6 +191,8 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     * Note that setText(UText *) provides similar functionality to this function,
+     * and is more efficient.
      * @param it The CharacterIterator used to change the text.
      * @stable ICU 2.0
      */

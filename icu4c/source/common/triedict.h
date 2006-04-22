@@ -10,6 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "unicode/utext.h"
 
 struct UEnumeration;
 struct UDataSwapper;
@@ -45,8 +46,6 @@ triedict_swap(const UDataSwapper *ds,
 
 U_NAMESPACE_BEGIN
 
-class CharacterIterator;
-class UCharCharacterIterator;
 class StringEnumeration;
 struct CompactTrieHeader;
 
@@ -76,7 +75,7 @@ class U_COMMON_API TrieWordDictionary : public UMemory {
  /**
   * <p>Find dictionary words that match the text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left after the longest prefix match in the dictionary.
   * @param start The current position in text.
   * @param maxLength The maximum number of code units to match.
@@ -85,7 +84,7 @@ class U_COMMON_API TrieWordDictionary : public UMemory {
   * @param limit The size of the lengths array; this limits the number of words output.
   * @return The number of characters in text that were matched.
   */
-  virtual int32_t matches( CharacterIterator *text,
+  virtual int32_t matches( UText *text,
                               int32_t maxLength,
                               int32_t *lengths,
                               int &count,
@@ -123,11 +122,11 @@ class U_COMMON_API MutableTrieDictionary : public TrieWordDictionary {
   TernaryNode               *fTrie;
 
     /**
-     * A UCharCharacterIterator for internal use
+     * A UText for internal use
      * @internal
      */
 
-  UCharCharacterIterator    *fIter;
+  UText    *fIter;
 
   friend class CompactTrieDictionary;   // For fast conversion
 
@@ -150,7 +149,7 @@ class U_COMMON_API MutableTrieDictionary : public TrieWordDictionary {
  /**
   * <p>Find dictionary words that match the text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left after the longest prefix match in the dictionary.
   * @param maxLength The maximum number of code units to match.
   * @param lengths An array that is filled with the lengths of words that matched.
@@ -158,7 +157,7 @@ class U_COMMON_API MutableTrieDictionary : public TrieWordDictionary {
   * @param limit The size of the lengths array; this limits the number of words output.
   * @return The number of characters in text that were matched.
   */
-  virtual int32_t matches( CharacterIterator *text,
+  virtual int32_t matches( UText *text,
                               int32_t maxLength,
                               int32_t *lengths,
                               int &count,
@@ -196,7 +195,7 @@ protected:
  /**
   * <p>Search the dictionary for matches.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left after the longest prefix match in the dictionary.
   * @param maxLength The maximum number of code units to match.
   * @param lengths An array that is filled with the lengths of words that matched.
@@ -206,7 +205,7 @@ protected:
   * @param pMatched The returned parent node matched the input
   * @return The number of characters in text that were matched.
   */
-  virtual int32_t search( CharacterIterator *text,
+  virtual int32_t search( UText *text,
                               int32_t maxLength,
                               int32_t *lengths,
                               int &count,
@@ -232,21 +231,21 @@ private:
  * to save space.</p>
  */
 class U_COMMON_API CompactTrieDictionary : public TrieWordDictionary {
-private:
+ private:
     /**
      * The root node of the trie
      */
-    const CompactTrieHeader   *fData;
+
+  const CompactTrieHeader   *fData;
 
     /**
      * A UBool indicating whether or not we own the fData.
      */
-    UBool                     fOwnData;
 
+  UBool                     fOwnData;
 
     UDataMemory              *fUData;
-public:
-
+ public:
   /**
    * <p>Construct a dictionary from a UDataMemory.</p>
    *
@@ -279,7 +278,7 @@ public:
  /**
   * <p>Find dictionary words that match the text.</p>
   *
-  * @param text A CharacterIterator representing the text (TODO: UText). The
+  * @param text A UText representing the text. The
   * iterator is left after the longest prefix match in the dictionary.
   * @param maxLength The maximum number of code units to match.
   * @param lengths An array that is filled with the lengths of words that matched.
@@ -287,7 +286,7 @@ public:
   * @param limit The size of the lengths array; this limits the number of words output.
   * @return The number of characters in text that were matched.
   */
-  virtual int32_t matches( CharacterIterator *text,
+  virtual int32_t matches( UText *text,
                               int32_t rangeEnd,
                               int32_t *lengths,
                               int &count,
