@@ -7,5 +7,13 @@
 // *
 // ***************************************************************************
 en_US{
-    Version{"1.25"}
+    Version{"1.1"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+        }
+    }
 }
