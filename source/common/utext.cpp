@@ -577,6 +577,16 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
     }
     if (U_SUCCESS(*status)) {
         ut->flags |= UTEXT_OPEN;
+
+        // Initialize all fields of the UText from ut->context to the end.
+        //
+        int32_t*  pi = (int32_t *)&ut->context;
+        int32_t*  pEnd = (int32_t *)(((char *)ut)+ sizeof(UText));
+        do {
+            *pi++ = 0;
+        } while (pi<pEnd);
+
+        /*
         ut->context = NULL;
         ut->p       = NULL;
         ut->q       = NULL;
@@ -585,6 +595,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         ut->chunkOffset = 0;
         // TODO:  double check that all opens initialize adequately.
         //        Maybe zero all fields here for safety.
+        */
     }
     return ut;
 }
