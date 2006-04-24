@@ -520,152 +520,162 @@ void RBBITest::TestTrieDict() {
     //
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
     char testFileName[1000];
-    if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
+    if (testDataDirectory == NULL || strlen(testDataDirectory) + strlen("riwords.txt") + 10 >= sizeof(testFileName)) {
         errln("Can't open test data.  Path too long.");
         return;
     }
     strcpy(testFileName, testDataDirectory);
     strcat(testFileName, "riwords.txt");
 
+    // Items needing deleting at the end
+    MutableTrieDictionary *mutableDict = NULL;
+    CompactTrieDictionary *compactDict = NULL;
+    UnicodeSet            *breaks      = NULL;
+    UChar                 *testFile    = NULL;
+    StringEnumeration     *enumer      = NULL;
+    MutableTrieDictionary *mutable2    = NULL;
+    StringEnumeration     *cloneEnum   = NULL;
+    CompactTrieDictionary *compact2    = NULL;
+
+    
+    const UnicodeString *originalWord = NULL;
+    const UnicodeString *cloneWord    = NULL;
+    UChar *current;
+    UChar *word;
+    UChar uc;
+    int32_t wordLen;
+    int32_t wordCount;
+    int32_t testCount;
+    
     int    len;
-    UChar *testFile = ReadAndConvertFile(testFileName, len, status);
+    testFile = ReadAndConvertFile(testFileName, len, status);
     if (U_FAILURE(status)) {
-        return; /* something went wrong, error already output */
+        goto cleanup; /* something went wrong, error already output */
     }
-    
-    MutableTrieDictionary mutableDict(0x0E1C, status);
-    
+
+    mutableDict = new MutableTrieDictionary(0x0E1C, status);
     if (U_FAILURE(status)) {
         errln("Error creating MutableTrieDictionary: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
-    UnicodeSet breaks;
-    breaks.add(0x000A);     // Line Feed
-    breaks.add(0x000D);     // Carriage Return
-    breaks.add(0x2028);     // Line Separator
-    breaks.add(0x2029);     // Paragraph Separator
+    breaks = new UnicodeSet;
+    breaks->add(0x000A);     // Line Feed
+    breaks->add(0x000D);     // Carriage Return
+    breaks->add(0x2028);     // Line Separator
+    breaks->add(0x2029);     // Paragraph Separator
 
     // Now add each non-comment line of the file as a word.
-    UChar *current = testFile;
-    UChar *word = current;
-    UChar uc = *current++;
-    int32_t wordLen = 0;
-    int32_t wordCount = 0;
+    current = testFile;
+    word = current;
+    uc = *current++;
+    wordLen = 0;
+    wordCount = 0;
     
     while (uc) {
         if (uc == 0x0023) {     // #comment line, skip
-            while (uc && !breaks.contains(uc)) {
+            while (uc && !breaks->contains(uc)) {
                 uc = *current++;
             }
         }
-        else while (uc && !breaks.contains(uc)) {
+        else while (uc && !breaks->contains(uc)) {
             ++wordLen;
             uc = *current++;
         }
         if (wordLen > 0) {
-            mutableDict.addWord(word, wordLen, status);
+            mutableDict->addWord(word, wordLen, status);
             if (U_FAILURE(status)) {
                 errln("Could not add word to mutable dictionary; status %s\n", u_errorName(status));
-                return;
+                goto cleanup;
             }
             wordCount += 1;
         }
         
         // Find beginning of next line
-        while (uc && breaks.contains(uc)) {
+        while (uc && breaks->contains(uc)) {
             uc = *current++;
         }
         word = current-1;
         wordLen = 0;
     }
     
-    delete [] testFile;
-    
     if (wordCount < 50) {
         errln("Word count (%d) unreasonably small\n", wordCount);
-        return;
+        goto cleanup;
     }
 
-    StringEnumeration *enumer = mutableDict.openWords(status);
+    enumer = mutableDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open mutable dictionary enumerator: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
-    int32_t testCount = 0;
+
+    testCount = 0;
     if (wordCount != (testCount = enumer->count(status))) {
         errln("MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
-        delete enumer;
-        return;
+        goto cleanup;
     }
     
     delete enumer;
+    enumer = NULL;
     
     // Now compact it
-    CompactTrieDictionary compactDict(mutableDict, status);
+    compactDict = new CompactTrieDictionary(*mutableDict, status);
     if (U_FAILURE(status)) {
         errln("Failed to create CompactTrieDictionary: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
-    enumer = compactDict.openWords(status);
+    enumer = compactDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open compact trie dictionary enumerator: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
     if (wordCount != (testCount = enumer->count(status))) {
         errln("CompactTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
-        delete enumer;
-        return;
+        goto cleanup;
     }
     
     delete enumer;
+    enumer = NULL;
     
     // Now un-compact it
-    MutableTrieDictionary *mutable2 = compactDict.cloneMutable(status);
+    mutable2 = compactDict->cloneMutable(status);
     if (U_FAILURE(status)) {
         errln("Could not clone CompactTrieDictionary to MutableTrieDictionary: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
-    StringEnumeration *cloneEnum = mutable2->openWords(status);
+    cloneEnum = mutable2->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not create cloned mutable enumerator: %s\n", u_errorName(status));
-        delete mutable2;
-        return;
+        goto cleanup;
     }
     
     if (wordCount != (testCount = cloneEnum->count(status))) {
         errln("Cloned MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
-        delete cloneEnum;
-        delete mutable2;
-        return;
+        goto cleanup;
     }
     
     // Compact original dictionary to clone. Note that we can only compare the same kind of
     // dictionary as the order of the enumerators is not guaranteed to be the same between
     // different kinds
-    enumer = mutableDict.openWords(status);
+    enumer = mutableDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not re-open mutable dictionary enumerator: %s\n", u_errorName(status));
-        delete cloneEnum;
-        delete mutable2;
-        return;
-    }
+        goto cleanup;
+     }
     
-    const UnicodeString *originalWord = enumer->snext(status);
-    const UnicodeString *cloneWord = cloneEnum->snext(status);
+    originalWord = enumer->snext(status);
+    cloneWord = cloneEnum->snext(status);
     while (U_SUCCESS(status) && originalWord != NULL && cloneWord != NULL) {
         if (*originalWord != *cloneWord) {
             errln("Original and cloned MutableTrieDictionary word mismatch\n");
-            delete enumer;
-            delete cloneEnum;
-            delete mutable2;
-            return;
+            goto cleanup;
         }
         originalWord = enumer->snext(status);
         cloneWord = cloneEnum->snext(status);
@@ -673,47 +683,49 @@ void RBBITest::TestTrieDict() {
     
     if (U_FAILURE(status)) {
         errln("Enumeration failed: %s\n", u_errorName(status));
-        delete enumer;
-        delete cloneEnum;
-        delete mutable2;
-        return;
+        goto cleanup;
     }
     
-    delete enumer;
-    delete cloneEnum;
-    delete mutable2;
-
     if (originalWord != cloneWord) {
         errln("Original and cloned MutableTrieDictionary ended enumeration at different points\n");
-        return;
+        goto cleanup;
     }
 
     // Test the data copying constructor for CompactTrieDict, and the data access APIs.
-    CompactTrieDictionary compact2(compactDict.data(), status);
+    compact2 = new CompactTrieDictionary(compactDict->data(), status);
     if (U_FAILURE(status)) {
         errln("CompactTrieDictionary(const void *,...) failed\n");
-        return;
+        goto cleanup;
     }
     
-    if (compact2.dataSize() == 0) {
-        errln("CompactTrieDictionary.dataSize() == 0\n");
+    if (compact2->dataSize() == 0) {
+        errln("CompactTrieDictionary->dataSize() == 0\n");
+        goto cleanup;
     }
     
     // Now count the words via the second dictionary
-    enumer = compact2.openWords(status);
+    delete enumer;
+    enumer = compact2->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open compact trie dictionary 2 enumerator: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
     if (wordCount != (testCount = enumer->count(status))) {
         errln("CompactTrieDictionary 2 word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
-        delete enumer;
-        return;
+        goto cleanup;
     }
     
+cleanup:
+    delete compactDict;
+    delete mutableDict;
+    delete breaks;
+    delete[] testFile;
     delete enumer;
+    delete mutable2;
+    delete cloneEnum;
+    delete compact2;
 }
 
 //---------------------------------------------
