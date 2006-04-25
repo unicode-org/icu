@@ -44,4 +44,24 @@
       <test-font name="Devamt.ttf"/>
       <test-text>रू क़् क्ष क्कि क्रि ट्रि हिन्दी र्क्रिं क्षत्रज्ञत्रक्ष श्र थ्र श्र कके र्कें केूकूेकेृ र्कू क़ क क् क्ष क्ष् क्ष्क  ज़ ज ज् ज्ञ ज्ञ् ज्ञ्क र्क र्क्क ड्र क्क क़्क क़्क क़् क्ष्क क्ष् त्र्क द्द कि हि रू रु र्के र्कं क् कु के द्द्द क़्ष क्ष र्क्षे द्दत्र्क ज्ञ क्त्व ज्ञ्क र्कँ र्किँ र्केँ र्क्रिँ हिंदी ह्मिह्यिखि ङ्क ङ्म ङ्क्त ङ्ख ङ्ग ङ्घ ङ्क्ष ङ्क्ष्व ङ्क्ष्य र्क्त्वि र्र्र्र कै के कु कू कृ कॅ कॆ हु हू हॆ है हे</test-text>
     </test-case>
+    
+    <test-case id="Japanese Han" script="hani" lang="JAN">
+      <test-font name="ARIALUNI.TTF"/>
+      <test-text>中华人民共和国 台湾 中華人民共和國 臺灣</test-text>
+    </test-case>
+    
+    <test-case id="Korean Han" script="hani" lang="KOR">
+      <test-font name="ARIALUNI.TTF"/>
+      <test-text>中华人民共和国 台湾 中華人民共和國 臺灣</test-text>
+    </test-case>
+     
+    <test-case id="Traditional Han" script="hani" lang="ZHT">
+      <test-font name="ARIALUNI.TTF"/>
+      <test-text>中华人民共和国 台湾 中華人民共和國 臺灣</test-text>
+    </test-case>
+    
+    <test-case id="Simplified Han" script="hani" lang="ZHS">
+      <test-font name="ARIALUNI.TTF"/>
+      <test-text>中华人民共和国 台湾 中華人民共和國 臺灣</test-text>
+    </test-case>
 </layout-tests>

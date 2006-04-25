@@ -149,6 +149,9 @@
 				RelativePath=".\letest.cpp">
 			</File>
 			<File
+				RelativePath=".\letsutil.cpp">
+			</File>
+			<File
 				RelativePath=".\PortableFontInstance.cpp">
 			</File>
 			<File
@@ -166,6 +169,9 @@
 			</File>
 			<File
 				RelativePath=".\letest.h">
+			</File>
+			<File
+				RelativePath=".\letsutil.h">
 			</File>
 			<File
 				RelativePath=".\PortableFontInstance.h">
