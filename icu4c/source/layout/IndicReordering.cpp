@@ -13,6 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
+#define loclFeatureTag LE_LOCL_FEATURE_TAG
 #define initFeatureTag LE_INIT_FEATURE_TAG
 #define nuktFeatureTag LE_NUKT_FEATURE_TAG
 #define akhnFeatureTag LE_AKHN_FEATURE_TAG
@@ -31,22 +32,23 @@ U_NAMESPACE_BEGIN
 #define abvmFeatureTag LE_ABVM_FEATURE_TAG
 #define distFeatureTag LE_DIST_FEATURE_TAG
 
-#define rphfFeatureMask 0x80000000UL
-#define blwfFeatureMask 0x40000000UL
-#define halfFeatureMask 0x20000000UL
-#define pstfFeatureMask 0x10000000UL
-#define nuktFeatureMask 0x08000000UL
-#define akhnFeatureMask 0x04000000UL
-#define vatuFeatureMask 0x02000000UL
-#define presFeatureMask 0x01000000UL
-#define blwsFeatureMask 0x00800000UL
-#define abvsFeatureMask 0x00400000UL
-#define pstsFeatureMask 0x00200000UL
-#define halnFeatureMask 0x00100000UL
-#define blwmFeatureMask 0x00080000UL
-#define abvmFeatureMask 0x00040000UL
-#define distFeatureMask 0x00020000UL
-#define initFeatureMask 0x00010000UL
+#define loclFeatureMask 0x80000000UL
+#define rphfFeatureMask 0x40000000UL
+#define blwfFeatureMask 0x20000000UL
+#define halfFeatureMask 0x10000000UL
+#define pstfFeatureMask 0x08000000UL
+#define nuktFeatureMask 0x04000000UL
+#define akhnFeatureMask 0x02000000UL
+#define vatuFeatureMask 0x01000000UL
+#define presFeatureMask 0x00800000UL
+#define blwsFeatureMask 0x00400000UL
+#define abvsFeatureMask 0x00200000UL
+#define pstsFeatureMask 0x00100000UL
+#define halnFeatureMask 0x00080000UL
+#define blwmFeatureMask 0x00040000UL
+#define abvmFeatureMask 0x00020000UL
+#define distFeatureMask 0x00010000UL
+#define initFeatureMask 0x00008000UL
 
 class IndicReorderingOutput : public UMemory {
 private:
@@ -334,7 +336,7 @@ enum
 };
 
 // TODO: Find better names for these!
-#define tagArray4 (nuktFeatureMask | akhnFeatureMask | vatuFeatureMask | presFeatureMask | blwsFeatureMask | abvsFeatureMask | pstsFeatureMask | halnFeatureMask | blwmFeatureMask | abvmFeatureMask | distFeatureMask)
+#define tagArray4 (loclFeatureMask | nuktFeatureMask | akhnFeatureMask | vatuFeatureMask | presFeatureMask | blwsFeatureMask | abvsFeatureMask | pstsFeatureMask | halnFeatureMask | blwmFeatureMask | abvmFeatureMask | distFeatureMask)
 #define tagArray3 (pstfFeatureMask | tagArray4)
 #define tagArray2 (halfFeatureMask | tagArray3)
 #define tagArray1 (blwfFeatureMask | tagArray2)
@@ -342,6 +344,7 @@ enum
 
 static const FeatureMap featureMap[] =
 {
+    {loclFeatureTag, loclFeatureMask},
     {initFeatureTag, initFeatureMask},
     {nuktFeatureTag, nuktFeatureMask},
     {akhnFeatureTag, akhnFeatureMask},

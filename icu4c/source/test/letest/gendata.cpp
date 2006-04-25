@@ -29,9 +29,10 @@
 
 #include "xmlparser.h"
 
-U_NAMESPACE_USE
+#include "letsutil.h"
+#include "letest.h"
 
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
+U_NAMESPACE_USE
 
 struct TestInput
 {
@@ -108,59 +109,6 @@ void dumpFloats(FILE *file, const char *tag, float *floats, le_int32 count) {
     fprintf(file, "        </%s>\n", tag);
 }
 
-char *getCString(const UnicodeString *uString)
-{
-    if (uString == NULL) {
-        return NULL;
-    }
-
-    le_int32 uLength = uString->length();
-    le_int32 cLength = uString->extract(0, uLength, NULL, 0, US_INV);
-    char *cString = NEW_ARRAY(char, cLength + 1);
-
-    uString->extract(0, uLength, cString, cLength, US_INV);
-
-    cString[cLength] = '\0';
-
-    return cString;
-}
-
-char *getUTF8String(const UnicodeString *uString)
-{
-    if (uString == NULL) {
-        return NULL;
-    }
-
-    le_int32 uLength = uString->length();
-    le_int32 cLength = uString->extract(0, uLength, NULL, 0, "UTF-8");
-    char *cString = NEW_ARRAY(char, cLength + 1);
-
-    uString->extract(0, uLength, cString, cLength, "UTF-8");
-
-    cString[cLength] = '\0';
-
-    return cString;
-}
-
-void freeCString(char *cString)
-{
-    DELETE_ARRAY(cString);
-}
-
-le_bool getRTL(const UnicodeString &text)
-{
-    UBiDiLevel paraLevel;
-    UErrorCode status = U_ZERO_ERROR;
-    le_int32 charCount = text.length();
-    UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);
-
-    ubidi_setPara(ubidi, text.getBuffer(), charCount, UBIDI_DEFAULT_LTR, NULL, &status);
-    paraLevel = ubidi_getParaLevel(ubidi);
-    ubidi_close(ubidi);
-
-    return paraLevel & 1;
-}
-
 int main(int /*argc*/, char *argv[])
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -189,6 +137,7 @@ int main(int /*argc*/, char *argv[])
     // test-case attributes
     UnicodeString id_attr     = UNICODE_STRING_SIMPLE("id");
     UnicodeString script_attr = UNICODE_STRING_SIMPLE("script");
+    UnicodeString lang_attr   = UNICODE_STRING_SIMPLE("lang");
 
     // test-font attributes
     UnicodeString name_attr   = UNICODE_STRING_SIMPLE("name");
@@ -200,12 +149,14 @@ int main(int /*argc*/, char *argv[])
         if (testCase->getTagName().compare(test_case) == 0) {
             char *id = getCString(testCase->getAttribute(id_attr));
             char *script = getCString(testCase->getAttribute(script_attr));
+            char *lang   = getCString(testCase->getAttribute(lang_attr));
             LEFontInstance *font = NULL;
             const UXMLElement *element;
             int32_t ec = 0;
             int32_t charCount = 0;
             int32_t typoFlags = 3; // kerning + ligatures...
             UScriptCode scriptCode;
+            le_int32 languageCode = -1;
             UnicodeString text;
             int32_t glyphCount = 0;
             LEErrorCode leStatus = LE_NO_ERROR;
@@ -220,7 +171,18 @@ int main(int /*argc*/, char *argv[])
                 goto free_c_strings;
             }
 
-            fprintf(outputFile, "    <test-case id=\"%s\" script=\"%s\">\n", id, script);
+            if (lang != NULL) {
+                languageCode = getLanguageCode(lang);
+
+                if (languageCode < 0) {
+                    printf("Error: invalid language name: %s.\n", lang);
+                    goto free_c_strings;
+                }
+
+                fprintf(outputFile, "    <test-case id=\"%s\" script=\"%s\" lang=\"%s\">\n", id, script, lang);
+            } else {
+                fprintf(outputFile, "    <test-case id=\"%s\" script=\"%s\">\n", id, script);
+            }
 
             while((element = testCase->nextChildElement(ec)) != NULL) {
                 UnicodeString tag = element->getTagName();
@@ -270,7 +232,7 @@ int main(int /*argc*/, char *argv[])
                 typoFlags |= 0x80000000L;  // use CharSubstitutionFilter...
             }
 
-            engine = LayoutEngine::layoutEngineFactory(font, scriptCode, -1, typoFlags, leStatus);
+            engine = LayoutEngine::layoutEngineFactory(font, scriptCode, languageCode, typoFlags, leStatus);
 
             if (LE_FAILURE(leStatus)) {
                 printf("Error for test %s: could not create a LayoutEngine.\n", id);
@@ -305,6 +267,7 @@ delete_font:
             delete font;
 
 free_c_strings:
+            freeCString(lang);
             freeCString(script);
             freeCString(id);
         }
