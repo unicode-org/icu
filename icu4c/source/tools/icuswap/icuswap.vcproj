@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="icuswap"
+	ProjectGUID="{39690C2A-AD89-45E4-893A-899496B85785}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
