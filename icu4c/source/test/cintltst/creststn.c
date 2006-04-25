@@ -1168,8 +1168,8 @@ static void TestErrorConditions(){
     log_verbose("Testing ures_openFillIn with UResourceBundle = NULL.....\n");
     status=U_ZERO_ERROR;
     ures_openFillIn(NULL, testdatapath, "te", &status);
-    if(status != U_INTERNAL_PROGRAM_ERROR){
-        log_err("ERROR: ures_openFillIn with UResourceBundle= NULL should fail.  Expected U_INTERNAL_PROGRAM_ERROR, Got: %s\n",
+    if(status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_openFillIn with UResourceBundle= NULL should fail.  Expected U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
                         myErrorName(status));
     }
     /*Test ures_getLocale() with status != U_ZERO_ERROR*/

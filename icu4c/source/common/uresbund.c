@@ -580,6 +580,80 @@ static void entryClose(UResourceDataEntry *resB) {
   umtx_unlock(&resbMutex);
 }
 
+/*
+U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
+  if(resB->fResPath == NULL) {
+    resB->fResPath = resB->fResBuf;
+    *(resB->fResPath) = 0;
+  } 
+  resB->fResPathLen = uprv_strlen(toAdd);
+  if(RES_BUFSIZE <= resB->fResPathLen+1) {
+    if(resB->fResPath == resB->fResBuf) {
+      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+    } else {
+      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+    }
+  }
+  uprv_strcpy(resB->fResPath, toAdd);
+}
+*/
+static void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd) {
+  int32_t resPathLenOrig = resB->fResPathLen;
+  if(resB->fResPath == NULL) {
+    resB->fResPath = resB->fResBuf;
+    *(resB->fResPath) = 0;
+    resB->fResPathLen = 0;
+  } 
+  resB->fResPathLen += lenToAdd;
+  if(RES_BUFSIZE <= resB->fResPathLen+1) {
+    if(resB->fResPath == resB->fResBuf) {
+      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+      uprv_strcpy(resB->fResPath, resB->fResBuf);
+    } else {
+      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+    }
+  }
+  uprv_strcpy(resB->fResPath + resPathLenOrig, toAdd);
+}
+
+static void ures_freeResPath(UResourceBundle *resB) {
+    if (resB->fResPath && resB->fResPath != resB->fResBuf) {
+        uprv_free(resB->fResPath);
+    }
+    resB->fResPath = NULL;
+    resB->fResPathLen = 0;
+}
+
+static void
+ures_closeBundle(UResourceBundle* resB, UBool freeBundleObj)
+{
+    if(resB != NULL) {
+        if(resB->fData != NULL) {
+            entryClose(resB->fData);
+        }
+        if(resB->fVersion != NULL) {
+            uprv_free(resB->fVersion);
+        }
+        ures_freeResPath(resB);
+
+        if(ures_isStackObject(resB) == FALSE && freeBundleObj) {
+            uprv_free(resB);
+        }
+#if 0 /*U_DEBUG*/
+        else {
+            /* poison the data */
+            uprv_memset(resB, -1, sizeof(UResourceBundle));
+        }
+#endif
+    }
+}
+
+U_CAPI void  U_EXPORT2
+ures_close(UResourceBundle* resB)
+{
+    ures_closeBundle(resB, TRUE);
+}
+
 static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
                                          const char *key, int32_t index, UResourceDataEntry *realData, 
                                          const UResourceBundle *parent, int32_t noAlias,
@@ -888,18 +962,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             }
         } else {
             isStackObject = ures_isStackObject(r);
-            if(U_FAILURE(*status)) {
-                return r;
-            }
-            ures_close(r);
-            if(isStackObject == FALSE) {
-                r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
-                /* test for NULL */
-                if (r == NULL) {
-                    *status = U_MEMORY_ALLOCATION_ERROR;
-                    return NULL;
-                }
-            }
+            ures_closeBundle(r, FALSE);
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fResPath = NULL;
@@ -911,10 +974,8 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
         if(r->fData != NULL) {
           entryIncrease(r->fData);
         }
-        return r;
-    } else {
-        return r;
     }
+    return r;
 }
 
 /**
@@ -1626,52 +1687,6 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
     }
 }
 
-
-/*
-U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
-  if(resB->fResPath == NULL) {
-    resB->fResPath = resB->fResBuf;
-    *(resB->fResPath) = 0;
-  } 
-  resB->fResPathLen = uprv_strlen(toAdd);
-  if(RES_BUFSIZE <= resB->fResPathLen+1) {
-    if(resB->fResPath == resB->fResBuf) {
-      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
-    } else {
-      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
-    }
-  }
-  uprv_strcpy(resB->fResPath, toAdd);
-}
-*/
-U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd) {
-  int32_t resPathLenOrig = resB->fResPathLen;
-  if(resB->fResPath == NULL) {
-    resB->fResPath = resB->fResBuf;
-    *(resB->fResPath) = 0;
-    resB->fResPathLen = 0;
-  } 
-  resB->fResPathLen += lenToAdd;
-  if(RES_BUFSIZE <= resB->fResPathLen+1) {
-    if(resB->fResPath == resB->fResBuf) {
-      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
-      uprv_strcpy(resB->fResPath, resB->fResBuf);
-    } else {
-      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
-    }
-  }
-  uprv_strcpy(resB->fResPath + resPathLenOrig, toAdd);
-}
-
-U_CFUNC void ures_freeResPath(UResourceBundle *resB) {
-  if (resB->fResPath && resB->fResPath != resB->fResBuf) {
-    uprv_free(resB->fResPath);
-  }
-  resB->fResPath = NULL;
-  resB->fResPathLen = 0;
-}
-
-
 U_CFUNC const char* ures_getName(const UResourceBundle* resB) {
   if(resB == NULL) {
     return NULL;
@@ -1699,21 +1714,18 @@ U_CAPI void  U_EXPORT2
 ures_openFillIn(UResourceBundle *r, const char* path,
                     const char* localeID, UErrorCode* status) {
     if(r == NULL) {
-        *status = U_INTERNAL_PROGRAM_ERROR;
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
     } else {
         UResourceDataEntry *firstData;
+        ures_closeBundle(r, FALSE);
+        uprv_memset(r, 0, sizeof(UResourceBundle));
         r->fHasFallback = TRUE;
         r->fIsTopLevel = TRUE;
-        r->fKey = NULL;
-        r->fVersion = NULL;
         r->fIndex = -1;
-        if(r->fData != NULL) {
-            entryClose(r->fData);
-        }
-        if(r->fVersion != NULL) {
-            uprv_free(r->fVersion);
-        }
         r->fData = entryOpen(path, localeID, status);
+        if(U_FAILURE(*status)) {
+            return;
+        }
         /* this is a quick fix to get regular data in bundle - until construction is cleaned up */
         firstData = r->fData;
         while(firstData->fBogus != U_ZERO_ERROR && firstData->fParent != NULL) {
@@ -1723,12 +1735,7 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fHasFallback=(UBool)!r->fResData.noFallback;
         r->fRes = r->fResData.rootRes;
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
-        /*r->fParent = RES_BOGUS;*/
-        /*r->fResPath = NULL;*/
-        r->fParentRes = NULL;
         r->fTopLevelData = r->fData;
-
-        ures_freeResPath(r);
     }
 }
 
@@ -1758,18 +1765,16 @@ ures_open(const char* path,
         return NULL;
     }
 
+    uprv_memset(r, 0, sizeof(UResourceBundle));
     r->fHasFallback = TRUE;
     r->fIsTopLevel = TRUE;
     ures_setIsStackObject(r, FALSE);
-    r->fKey = NULL;
-    r->fVersion = NULL;
     r->fIndex = -1;
     r->fData = entryOpen(path, canonLocaleID, status);
     if(U_FAILURE(*status)) {
         uprv_free(r);
         return NULL;
     }
-    r->fParentRes = NULL;
     r->fTopLevelData = r->fData;
 
     hasData = r->fData;
@@ -1788,10 +1793,7 @@ ures_open(const char* path,
     uprv_memcpy(&r->fResData, &hasData->fData, sizeof(ResourceData));
     r->fHasFallback=(UBool)!r->fResData.noFallback;
     r->fRes = r->fResData.rootRes;
-    /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
-    r->fResPath = NULL;
-    r->fResPathLen = 0;
     /*
     if(r->fData->fPath != NULL) {
       ures_setResPath(r, r->fData->fPath);
@@ -1890,30 +1892,6 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
     }
 }
 
-U_CAPI void  U_EXPORT2
-ures_close(UResourceBundle*    resB)
-{
-    if(resB != NULL) {
-        if(resB->fData != NULL) {
-            entryClose(resB->fData);
-        }
-        if(resB->fVersion != NULL) {
-            uprv_free(resB->fVersion);
-        }
-        ures_freeResPath(resB);
-
-        if(ures_isStackObject(resB) == FALSE) {
-            uprv_free(resB);
-        }
-        else {
-#if 0 /*U_DEBUG*/
-            /* poison the data */
-            uprv_memset(resB, -1, sizeof(UResourceBundle));
-#endif
-        }
-    }
-}
-
 U_CAPI const char*  U_EXPORT2
 ures_getVersionNumber(const UResourceBundle*   resourceBundle)
 {
@@ -1947,7 +1925,7 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
             resourceBundle->fVersion[len] =  '\0';
         }
         else {
-          uprv_strcpy(resourceBundle->fVersion, kDefaultMinorVersion);
+            uprv_strcpy(resourceBundle->fVersion, kDefaultMinorVersion);
         }
     }
 
@@ -2391,8 +2369,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
     locs = ures_openAvailableLocales(path, status);
     
     if(U_FAILURE(*status)) {
-      ures_close(&item);
-      ures_close(&subItem);
+        ures_close(&item);
+        ures_close(&subItem);
         return NULL;
     }
     
@@ -2527,7 +2505,7 @@ U_INTERNAL const UResourceBundle* U_EXPORT2
 ures_getParentBundle(const UResourceBundle* res){
     if(res==NULL){
         return NULL;
-        }
+    }
     return res->fParentRes;
 }
 /* eof */

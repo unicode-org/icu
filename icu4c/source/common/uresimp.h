@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -84,9 +84,9 @@ U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
 /* Some getters used by the copy constructor */
 U_CFUNC const char* ures_getName(const UResourceBundle* resB);
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
-U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);
+/*U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);*/
 /*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
-U_CFUNC void ures_freeResPath(UResourceBundle *resB);
+/*U_CFUNC void ures_freeResPath(UResourceBundle *resB);*/
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
