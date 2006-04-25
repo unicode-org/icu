@@ -13,9 +13,9 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools
 
-SUBDIRS = toolutil ctestfw makeconv genrb genuca genbrk \
+SUBDIRS = toolutil ctestfw makeconv genrb genuca genbrk genctd \
 gennames genpname gencnval gensprep genccode gencmn icupkg pkgdata \
-gentest genprops gencase genbidi gennorm genctd
+gentest genprops gencase genbidi gennorm icuswap
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local	\
