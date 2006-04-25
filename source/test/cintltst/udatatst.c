@@ -601,10 +601,12 @@ static void TestUDataOpenChoiceDemo1() {
     const char* name[]={
         "cnvalias",
         "unames",
-        "test"
+        "test",
+        "nam"
     };
     const char* type="icu";
     const char* testPath="testdata";
+    const char* fullTestDataPath = loadTestData(&status);
 
     result=udata_openChoice(NULL, "icu", name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
@@ -614,6 +616,7 @@ static void TestUDataOpenChoiceDemo1() {
         udata_close(result);
     }
 
+    status=U_ZERO_ERROR;
     result=udata_openChoice(NULL, type, name[1], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         status=U_ZERO_ERROR;
@@ -622,11 +625,15 @@ static void TestUDataOpenChoiceDemo1() {
             log_err("FAIL: udata_openChoice() failed name=%s, type=%s, \n errorcode=%s\n", name[1], type, myErrorName(status));
         }
     }
+    else {
+        log_err("FAIL: udata_openChoice() unexpectedly passed. name=%s, type=%s, \n errorcode=%s\n", name[1], type, myErrorName(status));
+    }
 
     if(U_SUCCESS(status)){
         udata_close(result);
     }
 
+    status=U_ZERO_ERROR;
     result=udata_openChoice(testPath, type, name[2], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         status=U_ZERO_ERROR;
@@ -635,9 +642,25 @@ static void TestUDataOpenChoiceDemo1() {
             log_err("FAIL: udata_openChoice() failed path=%s name=%s, type=%s, \n errorcode=%s\n", testPath, name[2], type, myErrorName(status));
         }
     }
+    else {
+        log_err("FAIL: udata_openChoice() unexpectedly passed. name=%s, type=%s, \n errorcode=%s\n", name[2], type, myErrorName(status));
+    }
 
     if(U_SUCCESS(status)){
         udata_close(result);
+    }
+
+    status=U_ZERO_ERROR;
+    type="typ";
+    result=udata_openChoice(fullTestDataPath, type, name[3], isAcceptable1, NULL, &status);
+    if(status != U_INVALID_FORMAT_ERROR){
+        log_err("FAIL: udata_openChoice() did not fail as expected. name=%s, type=%s, \n errorcode=%s\n", name[3], type, myErrorName(status));
+    }
+
+    status=U_USELESS_COLLATOR_ERROR;
+    result=udata_openChoice(fullTestDataPath, type, name[3], isAcceptable1, NULL, &status);
+    if(status != U_USELESS_COLLATOR_ERROR){
+        log_err("FAIL: udata_openChoice() did not fail as expected. name=%s, type=%s, \n errorcode=%s\n", name[3], type, myErrorName(status));
     }
 }
 
