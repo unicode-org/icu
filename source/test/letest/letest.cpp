@@ -16,16 +16,17 @@
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
 #include "unicode/uscript.h"
-#include "unicode/ubidi.h"
 #include "unicode/putil.h"
 #include "unicode/ctest.h"
 
 #include "layout/LETypes.h"
 #include "layout/LEScripts.h"
 #include "layout/LayoutEngine.h"
+
 #include "PortableFontInstance.h"
 #include "SimpleFontInstance.h"
 
+#include "letsutil.h"
 #include "letest.h"
 
 #include "xmlparser.h"
@@ -533,41 +534,6 @@ LEFontInstance *openFont(const char *fontName, const char *checksum, const char 
     return font;
 }
 
-char *getCString(const UnicodeString *uString)
-{
-    if (uString == NULL) {
-        return NULL;
-    }
-
-    le_int32 uLength = uString->length();
-    le_int32 cLength = uString->extract(0, uLength, NULL, 0, US_INV);
-    char *cString = NEW_ARRAY(char, cLength + 1);
-
-    uString->extract(0, uLength, cString, cLength, US_INV);
-    cString[cLength] = '\0';
-
-    return cString;
-}
-
-void freeCString(char *cString)
-{
-    DELETE_ARRAY(cString);
-}
-
-le_bool getRTL(const UnicodeString &text)
-{
-    UBiDiLevel paraLevel;
-    UErrorCode status = U_ZERO_ERROR;
-    le_int32 charCount = text.length();
-    UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);
-
-    ubidi_setPara(ubidi, text.getBuffer(), charCount, UBIDI_DEFAULT_LTR, NULL, &status);
-    paraLevel = ubidi_getParaLevel(ubidi);
-    ubidi_close(ubidi);
-
-    return paraLevel & 1;
-}
-
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenTest(void)
 {
@@ -594,6 +560,7 @@ static void U_CALLCONV DataDrivenTest(void)
     // test-case attributes
     UnicodeString id_attr     = UNICODE_STRING_SIMPLE("id");
     UnicodeString script_attr = UNICODE_STRING_SIMPLE("script");
+    UnicodeString lang_attr   = UNICODE_STRING_SIMPLE("lang");
 
     // test-font attributes
     UnicodeString name_attr   = UNICODE_STRING_SIMPLE("name");
@@ -607,12 +574,14 @@ static void U_CALLCONV DataDrivenTest(void)
         if (testCase->getTagName().compare(test_case) == 0) {
             char *id = getCString(testCase->getAttribute(id_attr));
             char *script = getCString(testCase->getAttribute(script_attr));
+            char *lang   = getCString(testCase->getAttribute(lang_attr));
             LEFontInstance *font = NULL;
             const UXMLElement *element;
             int32_t ec = 0;
             int32_t charCount = 0;
             int32_t typoFlags = 3; // kerning + ligatures...
             UScriptCode scriptCode;
+            le_int32 languageCode = -1;
             UnicodeString text, glyphs, indices, positions;
             int32_t glyphCount = 0, indexCount = 0, positionCount = 0;
             TestResult expected = {0, NULL, NULL, NULL};
@@ -622,8 +591,17 @@ static void U_CALLCONV DataDrivenTest(void)
 
             uscript_getCode(script, &scriptCode, 1, &status);
             if (LE_FAILURE(status)) {
-                log_err("invalid script name.\n");
+                log_err("invalid script name: %s.\n", script);
                 goto free_c_strings;
+            }
+
+            if (lang != NULL) {
+                languageCode = getLanguageCode(lang);
+
+                if (languageCode < 0) {
+                    log_err("invalid language name: %s.\n", lang);
+                    goto free_c_strings;
+                }
             }
 
             while((element = testCase->nextChildElement(ec)) != NULL) {
@@ -683,7 +661,7 @@ static void U_CALLCONV DataDrivenTest(void)
                 goto free_expected;
             };
 
-            engine = LayoutEngine::layoutEngineFactory(font, scriptCode, -1, typoFlags, success);
+            engine = LayoutEngine::layoutEngineFactory(font, scriptCode, languageCode, typoFlags, success);
 
             if (LE_FAILURE(success)) {
                 log_err("Test %s: could not create a LayoutEngine.\n", id);
@@ -716,6 +694,7 @@ free_expected:
             delete font;
 
 free_c_strings:
+            freeCString(lang);
             freeCString(script);
             freeCString(id);
         }

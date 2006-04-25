@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -42,7 +42,7 @@ U_NAMESPACE_BEGIN
  *
  * @internal
  */
-class OpenTypeLayoutEngine : public LayoutEngine
+class U_LAYOUT_API OpenTypeLayoutEngine : public LayoutEngine
 {
 public:
     /**
@@ -122,6 +122,13 @@ public:
      */
     static UClassID getStaticClassID();
 
+    /**
+     * The array of language tags, indexed by language code.
+     *
+     * @internal
+     */
+    static const LETag languageTags[];
+
 private:
 
     /**
@@ -134,11 +141,6 @@ private:
      * The array of script tags, indexed by script code.
      */
     static const LETag scriptTags[];
-
-    /**
-     * The array of language tags, indexed by language code.
-     */
-    static const LETag languageTags[];
 
 protected:
     /**
