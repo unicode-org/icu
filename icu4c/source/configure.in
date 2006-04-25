@@ -1021,6 +1021,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
 		tools/icupkg/Makefile \
+		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
 		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \
