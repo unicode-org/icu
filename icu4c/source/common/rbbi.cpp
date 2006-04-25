@@ -1650,7 +1650,8 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
     //
     RuleBasedBreakIterator localIter;        // Empty break iterator, source for memcpy
     RuleBasedBreakIterator *clone = (RuleBasedBreakIterator *)buf;
-    uprv_memcpy(clone, &localIter, sizeof(RuleBasedBreakIterator)); // clone = empty, but initialized, iterator.
+    uprv_memcpy(clone, &localIter, sizeof(RuleBasedBreakIterator)); // init C++ gorp, BreakIterator base class part
+    clone->init();              // Init RuleBasedBreakIterator part, (user constructor)
     *clone = *this;                          // clone = the real one we want.
     if (status != U_SAFECLONE_ALLOCATED_WARNING) {
         clone->fBufferClone = TRUE;
