@@ -1717,8 +1717,11 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
     } else {
         UResourceDataEntry *firstData;
+        UBool isStackObject = ures_isStackObject(r);
+
         ures_closeBundle(r, FALSE);
         uprv_memset(r, 0, sizeof(UResourceBundle));
+        ures_setIsStackObject(r, isStackObject);
         r->fHasFallback = TRUE;
         r->fIsTopLevel = TRUE;
         r->fIndex = -1;
