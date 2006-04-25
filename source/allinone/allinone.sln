@@ -227,6 +227,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "letest", "..\test\letest\le
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icuswap", "..\tools\icuswap\icuswap.vcproj", "{39690C2A-AD89-45E4-893A-899496B85785}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -365,6 +371,10 @@ Global
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Debug.Build.0 = Debug|Win32
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Release.ActiveCfg = Release|Win32
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Release.Build.0 = Release|Win32
+		{39690C2A-AD89-45E4-893A-899496B85785}.Debug.ActiveCfg = Debug|Win32
+		{39690C2A-AD89-45E4-893A-899496B85785}.Debug.Build.0 = Debug|Win32
+		{39690C2A-AD89-45E4-893A-899496B85785}.Release.ActiveCfg = Release|Win32
+		{39690C2A-AD89-45E4-893A-899496B85785}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
