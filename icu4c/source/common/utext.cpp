@@ -118,7 +118,6 @@ utext_setNativeIndex(UText *ut, int64_t index) {
     if (ut->chunkOffset<ut->chunkLength) {  
         UChar c= ut->chunkContents[ut->chunkOffset];
         if (UTF16_IS_TRAIL(c)) {
-            UChar lead  = 0;
             if (ut->chunkOffset==0) {
                 ut->access(ut, ut->chunkNativeStart, FALSE);
             }
@@ -130,7 +129,6 @@ utext_setNativeIndex(UText *ut, int64_t index) {
             }
         }
     }
-                    
 }
 
 
@@ -728,7 +726,7 @@ static void adjustPointer(UText *dest, const void **destPtr, const UText *src) {
     } else if (dptr>=sUText && dptr < sUText+src->sizeOfStruct) {
         // target ptr was pointing to somewhere within the source UText itself.
         //   Move it to the same offset within the target UText.
-        *destPtr = sUText + (dptr-sUText);
+        *destPtr = dUText + (dptr-sUText);
     }
 }
 
@@ -1657,8 +1655,6 @@ unistrTextLength(UText *t) {
 
 static UBool U_CALLCONV
 unistrTextAccess(UText *ut, int64_t index, UBool  forward) {
-    const UnicodeString *us   = (const UnicodeString *)ut->context;
-
     int32_t length  = ut->chunkLength;
     ut->chunkOffset = pinIndex(index, length);
 
