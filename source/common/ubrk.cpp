@@ -17,6 +17,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/rbbi.h"
 #include "rbbirb.h"
+#include "uassert.h"
 
 U_NAMESPACE_USE
 
@@ -59,6 +60,9 @@ ubrk_open(UBreakIteratorType type,
   case UBRK_TITLE:
     result = BreakIterator::createTitleInstance(Locale(locale), *status);
     break;
+
+  default:
+    U_ASSERT(FALSE);
   }
 
   // check for allocation error

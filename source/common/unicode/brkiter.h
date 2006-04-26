@@ -146,7 +146,7 @@ public:
      * Return a CharacterIterator over the text being analyzed.
      * @stable ICU 2.0
      */
-    virtual const CharacterIterator& getText(void) const = 0;
+    virtual CharacterIterator& getText(void) const = 0;
 
 
     /**
