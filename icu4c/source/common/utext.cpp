@@ -2143,8 +2143,9 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status) 
 //                       Null otherwise.
 //            
 //------------------------------------------------------------------------------
-static int32_t  CIBufSize = 16;
+#define CIBufSize 16
 
+U_CDECL_BEGIN
 static void U_CALLCONV
 charIterTextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
@@ -2296,6 +2297,7 @@ charIterTextExtract(UText *ut,
     }
     return desti;
 }
+U_CDECL_END
 
 
 
