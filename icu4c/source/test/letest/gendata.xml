@@ -64,4 +64,14 @@
       <test-font name="ARIALUNI.TTF"/>
       <test-text>中华人民共和国 台湾 中華人民共和國 臺灣</test-text>
     </test-case>
+    
+    <test-case id="Deva locl Hindi" script="deva" lang="HIN">
+      <test-font name="TestFont1.otf"/>
+      <test-text>शङ़ु</test-text>
+    </test-case>
+    
+    <test-case id="Deva locl Marathi" script="deva" lang="MAR">
+      <test-font name="TestFont1.otf"/>
+      <test-text>शङ़ु</test-text>
+    </test-case>
 </layout-tests>
