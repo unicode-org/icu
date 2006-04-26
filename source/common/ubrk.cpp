@@ -70,18 +70,12 @@ ubrk_open(UBreakIteratorType type,
     return 0;
   }
 
-  if (text != NULL) {
-      UCharCharacterIterator *iter = 0;
-      iter = new UCharCharacterIterator(text, textLength);
-      if(iter == 0) {
-          *status = U_MEMORY_ALLOCATION_ERROR;
-          delete result;
-          return 0;
-      }
-      result->adoptText(iter);
-  }
 
-  return (UBreakIterator*)result;
+  UBreakIterator *uBI = (UBreakIterator *)result;
+  if (text != NULL) {
+      ubrk_setText(uBI, text, textLength, status);
+  }
+  return uBI;
 }
 
 
@@ -111,17 +105,11 @@ ubrk_openRules(  const UChar        *rules,
         return 0;
     }
 
+    UBreakIterator *uBI = (UBreakIterator *)result;
     if (text != NULL) {
-        UCharCharacterIterator *iter = 0;
-        iter = new UCharCharacterIterator(text, textLength);
-        if(iter == 0) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            delete result;
-            return 0;
-        }
-        result->adoptText(iter);
+        ubrk_setText(uBI, text, textLength, status);
     }
-    return (UBreakIterator *)result;
+    return uBI;
 }
 
 
