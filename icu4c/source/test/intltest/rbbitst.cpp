@@ -1344,7 +1344,7 @@ void RBBITest::executeTest(TestParams *t) {
             if (rs != expectedTagVal) {
                 errln("Incorrect status for reverse break.  Pos=%4d  File line,col= %4d,%4d.\n"
                       "          Actual, Expected status = %4d, %4d",
-                    bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp), rs, expectedTagVal);
+                    bp, line, t->srcCol->elementAti(bp), rs, expectedTagVal);
             }
         }
 
