@@ -301,7 +301,12 @@ public:
      * rules for thread safety in ICU, which are that const functions are
      * thread safe.
      * <p/>
-     * The function getUText() provides similar functionality, and is more efficient.
+     * When the break iterator is operating on text supplied via a UText,
+     * this function will fail.  Lacking any way to signal failures, it
+     * returns an CharacterIterator containing no text in this case.
+     * The function getUText() provides similar functionality,
+     * is reliable, and is more efficient.
+     *
      * TODO:  deprecate this function?
      *
      * @return An iterator over the text being analyzed.
