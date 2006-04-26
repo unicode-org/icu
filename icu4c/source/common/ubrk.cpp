@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 */
@@ -168,25 +168,15 @@ ubrk_setText(UBreakIterator* bi,
              int32_t         textLength,
              UErrorCode*     status)
 {
-
-  if (U_FAILURE(*status)) return;
-
-  const CharacterIterator& biText = ((BreakIterator*)bi)->getText();
-
-  int32_t textLen = (textLength == -1 ? u_strlen(text) : textLength);
-  if (biText.getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) {
-      ((UCharCharacterIterator&)biText).setText(text, textLen);
-  }
-  else {
-      UCharCharacterIterator *iter = 0;
-      iter = new UCharCharacterIterator(text, textLen);
-      if(iter == 0) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-      }
-      ((BreakIterator*)bi)->adoptText(iter);
-  }
+    BreakIterator *brit = (BreakIterator *)bi;
+    UText  ut = UTEXT_INITIALIZER;
+    utext_openUChars(&ut, text, textLength, status);
+    brit->setText(&ut, *status);
+    // A stack allocated UText wrapping a UCHar * string
+    //   can be dumped without explicitly closing it.
 }
+
+
 
 U_DRAFT void U_EXPORT2
 ubrk_setUText(UBreakIterator *bi,
