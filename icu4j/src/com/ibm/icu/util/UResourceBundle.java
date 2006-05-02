@@ -292,7 +292,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      */
     protected static synchronized void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
         cacheKey.setKeyValues(cl, fullName, defaultLocale);
-        addToCache(cacheKey, b);
+        addToCache(cacheKey.clone(), b);
     }
     /**
      * @internal revisit for ICU 3.6
