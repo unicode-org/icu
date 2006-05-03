@@ -2923,10 +2923,10 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         }
 
             // Skipping over leading zeroes.
-            if (digVal != 0 || nonZeroValReached){
-                if (digVal != 0 && !nonZeroValReached)
-                    nonZeroValReached = TRUE;
-
+            if (digVal != 0) {
+                nonZeroValReached = TRUE;
+            }
+            if (nonZeroValReached) {
                 /*
                     We parse the digit string into base 100 numbers (this fits into a byte).
                     We only add to the buffer in twos, thus if we are parsing an odd character,
