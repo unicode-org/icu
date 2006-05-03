@@ -335,6 +335,12 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
+    
+    // If it was a currency format, apply the appropriate rounding by
+    // resetting the currency. NOTE: this copies fCurrency on top of itself.
+    if (fIsCurrencyFormat) {
+        setCurrency(getCurrency(), status);
+    }
 }
 
 /**
