@@ -62,7 +62,7 @@ ubrk_open(UBreakIteratorType type,
     break;
 
   default:
-    U_ASSERT(FALSE);
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
 
   // check for allocation error
