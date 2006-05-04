@@ -288,8 +288,8 @@ public class ICULocaleService extends ICUService {
          * otherwise return false.</p>
          *
          * <p>First falls back through the primary ID, then through
-         * the fallbackID.  The final fallback is the empty string,
-         * unless the primary id was the empty string, in which case
+         * the fallbackID.  The final fallback is "root"
+         * unless the primary id was "root", in which case
          * there is no fallback.  
          */
         public boolean fallback() {
@@ -301,8 +301,13 @@ public class ICULocaleService extends ICUService {
                 return true;
             }
             if (fallbackID != null) {
-                currentID = fallbackID;
-                fallbackID = fallbackID.length() == 0 ? null : "";
+                if (fallbackID.length() == 0) {
+                    currentID = "root";
+                    fallbackID = null;
+                } else {
+                    currentID = fallbackID;
+                    fallbackID = "";
+                }
                 return true;
             }
             currentID = null;
