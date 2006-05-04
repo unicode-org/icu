@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv_cb.c:
@@ -104,7 +104,7 @@ ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     /* && (*source < sourceLimit && args->target >= args->targetLimit)
     -- S. Hrcek */
     {
-    /* Overflowed the target.  Now, we'll write into the charErrorBuffer.
+        /* Overflowed the target.  Now, we'll write into the charErrorBuffer.
         It's a fixed size. If we overflow it... Hmm */
         char *newTarget;
         const char *newTargetLimit;
@@ -126,49 +126,48 @@ ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
             return;
         }
 
-       /* We're going to tell the converter that the errbuff len is empty.
-       This prevents the existing errbuff from being 'flushed' out onto
-       itself.  If the errbuff is needed by the converter this time,
-       we're hosed - we're out of space! */
+        /* We're going to tell the converter that the errbuff len is empty.
+        This prevents the existing errbuff from being 'flushed' out onto
+        itself.  If the errbuff is needed by the converter this time,
+        we're hosed - we're out of space! */
 
-       args->converter->charErrorBufferLength = 0;
+        args->converter->charErrorBufferLength = 0;
 
-       ucnv_fromUnicode(args->converter,
-                        &newTarget,
-                        newTargetLimit,
-                        source,
-                        sourceLimit,
-                        NULL,
-                        FALSE,
-                        &err2);
+        ucnv_fromUnicode(args->converter,
+                         &newTarget,
+                         newTargetLimit,
+                         source,
+                         sourceLimit,
+                         NULL,
+                         FALSE,
+                         &err2);
 
-       /* We can go ahead and overwrite the  length here. We know just how
-       to recalculate it. */
+        /* We can go ahead and overwrite the  length here. We know just how
+        to recalculate it. */
 
-       args->converter->charErrorBufferLength = (int8_t)(
-           newTarget - (char*)args->converter->charErrorBuffer);
+        args->converter->charErrorBufferLength = (int8_t)(
+            newTarget - (char*)args->converter->charErrorBuffer);
 
-       if((newTarget >= newTargetLimit) || (err2 == U_BUFFER_OVERFLOW_ERROR))
-       {
-           /* now we're REALLY in trouble.
-           Internal program error - callback shouldn't have written this much
-           data!
-           */
-           *err = U_INTERNAL_PROGRAM_ERROR;
-           return;
-       }
-       else
-       {
-           /* sub errs could be invalid/truncated/illegal chars or w/e.
-           These might want to be passed on up.. But the problem is, we already
-           need to pass U_BUFFER_OVERFLOW_ERROR. That has to override these
-           other errs.. */
+        if((newTarget >= newTargetLimit) || (err2 == U_BUFFER_OVERFLOW_ERROR))
+        {
+            /* now we're REALLY in trouble.
+            Internal program error - callback shouldn't have written this much
+            data!
+            */
+            *err = U_INTERNAL_PROGRAM_ERROR;
+            return;
+        }
+        /*else {*/
+            /* sub errs could be invalid/truncated/illegal chars or w/e.
+            These might want to be passed on up.. But the problem is, we already
+            need to pass U_BUFFER_OVERFLOW_ERROR. That has to override these
+            other errs.. */
 
-           /*
-           if(U_FAILURE(err2))
-           ??
-           */
-       }
+            /*
+            if(U_FAILURE(err2))
+            ??
+            */
+        /*}*/
     }
 }
 
@@ -177,19 +176,27 @@ ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
                            int32_t offsetIndex,
                            UErrorCode * err)
 {
+    UConverter *converter;
     if(U_FAILURE(*err)) {
         return;
     }
+    converter = args->converter;
 
-    if(args->converter->sharedData->impl->writeSub!=NULL) {
-        args->converter->sharedData->impl->writeSub(args, offsetIndex, err);
-    } else if(args->converter->subChar1!=0 && args->converter->invalidUCharBuffer[0]<=0xff) {
+    if(converter->sharedData->impl->writeSub!=NULL) {
+        converter->sharedData->impl->writeSub(args, offsetIndex, err);
+    }
+    else if(converter->subChar1!=0 && (uint16_t)converter->invalidUCharBuffer[0]<=(uint16_t)0xffu) {
+        /*
+        TODO: Is this untestable because the MBCS converter has a writeSub function to call
+        and the other converters don't use subChar1?
+        */
         ucnv_cbFromUWriteBytes(args,
-                               (const char *)&args->converter->subChar1, 1,
+                               (const char *)&converter->subChar1, 1,
                                offsetIndex, err);
-    } else {
+    }
+    else {
         ucnv_cbFromUWriteBytes(args,
-                               (const char *)args->converter->subChar, args->converter->subCharLen,
+                               (const char *)converter->subChar, converter->subCharLen,
                                offsetIndex, err);
     }
 }
