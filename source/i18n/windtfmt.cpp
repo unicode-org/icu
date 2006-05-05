@@ -236,10 +236,10 @@ void Win32DateFormat::formatDate(const SYSTEMTIME *st, UnicodeString &appendTo) 
 
     if (result == 0) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle], st, NULL, NULL, 0);
+            int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0);
 
             buffer = NEW_ARRAY(UChar, newLength);
-            GetDateFormatW(fLCID, dfFlags[fDateStyle], st, NULL, buffer, newLength);
+            GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, buffer, newLength);
         }
     }
 
