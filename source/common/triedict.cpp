@@ -177,7 +177,7 @@ MutableTrieDictionary::addWord( const UChar *word,
     matched = search(fIter, length, NULL, count, 0, parent, pMatched);
     
     while (matched++ < length) {
-        UChar uc = utext_next32(fIter);  // TODO:  supplemetary support?
+        UChar32 uc = utext_next32(fIter);  // TODO:  supplemetary support?
         U_ASSERT(uc != U_SENTINEL);
         TernaryNode *newNode = new TernaryNode(uc);
         if (newNode == NULL) {
