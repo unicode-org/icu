@@ -315,7 +315,7 @@ static const ILcidPosixElement hr[] = {
     {0x1c1a, "sr_Cyrl_BA"}, /* Serbo-Croatian in Bosnia */
     {0x0c1a, "sr_Cyrl_CS"}, /* Serbian*/
     {0x0c1a, "sr_Cyrl"},    /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
-    {0x0c1a, "sr"},         /* In CLDR sr is sr_Cyrl. */
+    {0x0c1a, "sr"}          /* In CLDR sr is sr_Cyrl. */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
@@ -371,7 +371,13 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0426, lv, lv_LV)
 ILCID_POSIX_ELEMENT_ARRAY(0x0481, mi, mi_NZ)
 ILCID_POSIX_ELEMENT_ARRAY(0x042f, mk, mk_MK)
 ILCID_POSIX_ELEMENT_ARRAY(0x044c, ml, ml_IN)
-ILCID_POSIX_ELEMENT_ARRAY(0x0450, mn, mn_MN)
+
+static const ILcidPosixElement mn[] = {
+    {0x50,   "mn"},
+    {0x0850, "mn_CN"},
+    {0x0450, "mn_MN"}
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x0458, mni,mni_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x047c, moh,moh_CA)
 ILCID_POSIX_ELEMENT_ARRAY(0x044e, mr, mr_IN)
@@ -382,8 +388,8 @@ static const ILcidPosixElement ms[] = {
     {0x043e, "ms_MY"}    /* Malaysia*/
 };
 
-/* The MSJDK documentation says this is maltese, but it's not supported.*/
 ILCID_POSIX_ELEMENT_ARRAY(0x043a, mt, mt_MT)
+ILCID_POSIX_ELEMENT_ARRAY(0x0455, my, my_MM)
 
 static const ILcidPosixElement ne[] = {
     {0x61,   "ne"},
@@ -434,10 +440,10 @@ static const ILcidPosixElement pt[] = {
 };
 
 static const ILcidPosixElement qu[] = {
-    {0x6B,   "qu"},
-    {0x046B, "qu_BO"},
-    {0x086B, "qu_EC"},
-    {0x0C6B, "qu_PE"}
+    {0x6b,   "qu"},
+    {0x046b, "qu_BO"},
+    {0x086b, "qu_EC"},
+    {0x0C6b, "qu_PE"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0486, qut, qut_GT) /* qut is an ISO-639-3 code */
@@ -645,6 +651,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(mr),    /*  mr  Marathi                   0x4e */
     ILCID_POSIX_MAP(ms),    /*  ms  Malay                     0x3e */
     ILCID_POSIX_MAP(mt),    /*  mt  Maltese                   0x3a */
+    ILCID_POSIX_MAP(my),    /*  my  Burmese                   0x55 */
 /*    ILCID_POSIX_MAP(nb),    //  no  Norwegian                 0x14 */
     ILCID_POSIX_MAP(ne),    /*  ne  Nepali                    0x61 */
     ILCID_POSIX_MAP(nl),    /*  nl  Dutch                     0x13 */
