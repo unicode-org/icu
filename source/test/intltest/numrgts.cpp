@@ -1687,8 +1687,8 @@ void NumberFormatRegressionTest::Test4122840(void)
             // Get the currency (if there is one) so we can set the rounding and fraction
             const UChar *currency = fmt1->getCurrency();
             if (*currency != 0) {
-                double rounding = ucurr_getRoundingIncrement(fmt1->getCurrency(), &status);
-                int32_t frac = ucurr_getDefaultFractionDigits(fmt1->getCurrency(), &status);
+                double rounding = ucurr_getRoundingIncrement(currency, &status);
+                int32_t frac = ucurr_getDefaultFractionDigits(currency, &status);
                 if (U_SUCCESS(status)) {
                     fmt2->setRoundingIncrement(rounding);
                     fmt2->setMinimumFractionDigits(frac);
