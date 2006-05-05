@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2005, International Business Machines
+ *   Copyright (C) 1996-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -440,6 +440,7 @@ static const ILcidPosixElement qu[] = {
     {0x0C6B, "qu_PE"}
 };
 
+ILCID_POSIX_ELEMENT_ARRAY(0x0486, qut, qut_GT) /* qut is an ISO-639-3 code */
 ILCID_POSIX_ELEMENT_ARRAY(0x0417, rm, rm_CH)
 ILCID_POSIX_ELEMENT_ARRAY(0x0418, ro, ro_RO)
 
@@ -522,10 +523,10 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0433, ve, ve_ZA)    /* TODO: Verify the country */
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
 
 static const ILcidPosixElement wen[] = {
-    {0x20,   "wen"},
-    {0x0420, "wen_DE"},
-    {0x0420, "hsb_DE"},
-    {0x0820, "dsb_DE"}
+    {0x2E,   "wen"},
+    {0x042E, "wen_DE"},
+    {0x042E, "hsb_DE"},
+    {0x082E, "dsb_DE"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0488, wo, wo_SN)
@@ -558,7 +559,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 
 /* This must be static and grouped by LCID. */
 
-/* non-existent ISO-639 codes */
+/* non-existent ISO-639-2 codes */
 /*
 0x466   Edo
 0x467   Fulfulde - Nigeria
@@ -658,6 +659,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(ps),    /*  ps  Pashto                    0x63 */
     ILCID_POSIX_MAP(pt),    /*  pt  Portuguese                0x16 */
     ILCID_POSIX_MAP(qu),    /*  qu  Quechua                   0x6B */
+    ILCID_POSIX_MAP(qut),   /*  qut K'iche                    0x86 */
     ILCID_POSIX_MAP(rm),    /*  rm  Raeto-Romance/Romansh     0x17 */
     ILCID_POSIX_MAP(ro),    /*  ro  Romanian                  0x18 */
     ILCID_POSIX_MAP(root),  /*  root                          0x00 */
