@@ -699,6 +699,39 @@ static void TestRegressionUTF8(){
     }
     free(standardForm);
     free(utf8);
+
+    {
+        static const char src8[] = { (char)0xCC, (char)0x81, (char)0xCC, (char)0x80 };
+        static const UChar expected[] = { 0x0301, 0x0300 };
+        UConverter *conv8;
+        UErrorCode err = U_ZERO_ERROR;
+        UChar pivotBuffer[100];
+        const UChar* const pivEnd = pivotBuffer + 100;
+        const char* srcBeg;
+        const char* srcEnd;
+        UChar* pivBeg;
+
+        conv8 = ucnv_open("UTF-8", &err);
+
+        srcBeg = src8;
+        pivBeg = pivotBuffer;
+        srcEnd = src8 + 3;
+        ucnv_toUnicode(conv8, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, FALSE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on first call.\n");
+        }
+
+        srcEnd = src8 + 4;
+        ucnv_toUnicode(conv8, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, TRUE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on second call.\n");
+        }
+
+        if (U_FAILURE(err) || (int32_t)(pivBeg - pivotBuffer) != 2 || u_strncmp(pivotBuffer, expected, 2) != 0) {
+            log_err("Did not get expected results for UTF-8.\n");
+        }
+        ucnv_close(conv8);
+    }
 }
 
 #define MAX_UTF32_LEN 1
@@ -769,6 +802,71 @@ static void TestRegressionUTF32(){
         if(!convertFromU(sampleBadEndSurrogate, sizeof(sampleBadEndSurrogate)/sizeof(sampleBadEndSurrogate[0]),
                 expectedUTF32LE, sizeof(expectedUTF32LE), "UTF-32LE", offsetsUTF32, TRUE, U_ZERO_ERROR))
             log_err("u->UTF-32LE\n");
+    }
+
+    {
+        static const char srcBE[] = { 0, 0, 0, 0x31, 0, 0, 0, 0x30 };
+        static const UChar expected[] = { 0x0031, 0x0030 };
+        UConverter *convBE;
+        UErrorCode err = U_ZERO_ERROR;
+        UChar pivotBuffer[100];
+        const UChar* const pivEnd = pivotBuffer + 100;
+        const char* srcBeg;
+        const char* srcEnd;
+        UChar* pivBeg;
+
+        convBE = ucnv_open("UTF-32BE", &err);
+
+        srcBeg = srcBE;
+        pivBeg = pivotBuffer;
+        srcEnd = srcBE + 5;
+        ucnv_toUnicode(convBE, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, FALSE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on first call.\n");
+        }
+
+        srcEnd = srcBE + 8;
+        ucnv_toUnicode(convBE, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, TRUE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on second call.\n");
+        }
+
+        if (U_FAILURE(err) || (int32_t)(pivBeg - pivotBuffer) != 2 || u_strncmp(pivotBuffer, expected, 2) != 0) {
+            log_err("Did not get expected results for UTF-32BE.\n");
+        }
+        ucnv_close(convBE);
+    }
+    {
+        static const char srcLE[] = { 0x31, 0, 0, 0, 0x30, 0, 0, 0 };
+        static const UChar expected[] = { 0x0031, 0x0030 };
+        UConverter *convLE;
+        UErrorCode err = U_ZERO_ERROR;
+        UChar pivotBuffer[100];
+        const UChar* const pivEnd = pivotBuffer + 100;
+        const char* srcBeg;
+        const char* srcEnd;
+        UChar* pivBeg;
+
+        convLE = ucnv_open("UTF-32LE", &err);
+
+        srcBeg = srcLE;
+        pivBeg = pivotBuffer;
+        srcEnd = srcLE + 5;
+        ucnv_toUnicode(convLE, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, FALSE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on first call.\n");
+        }
+
+        srcEnd = srcLE + 8;
+        ucnv_toUnicode(convLE, &pivBeg, pivEnd, &srcBeg, srcEnd, 0, TRUE, &err);
+        if (srcBeg != srcEnd) {
+            log_err("Did not consume whole buffer on second call.\n");
+        }
+
+        if (U_FAILURE(err) || (int32_t)(pivBeg - pivotBuffer) != 2 || u_strncmp(pivotBuffer, expected, 2) != 0) {
+            log_err("Did not get expected results for UTF-32LE.\n");
+        }
+        ucnv_close(convLE);
     }
 }
 

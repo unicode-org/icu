@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u32.c
@@ -51,9 +51,10 @@ T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
     unsigned char *toUBytes = args->converter->toUBytes;
     uint32_t ch, i;
 
-    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    /* Restore state of current sequence */
     if (args->converter->toUnicodeStatus && myTarget < targetLimit) {
         i = args->converter->toULength;       /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         ch = args->converter->toUnicodeStatus - 1;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -131,8 +132,10 @@ T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
     uint32_t ch, i;
     int32_t offsetNum = 0;
 
+    /* Restore state of current sequence */
     if (args->converter->toUnicodeStatus && myTarget < targetLimit) {
         i = args->converter->toULength;       /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         ch = args->converter->toUnicodeStatus - 1;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -510,10 +513,11 @@ T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
     unsigned char *toUBytes = args->converter->toUBytes;
     uint32_t ch, i;
 
-    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    /* Restore state of current sequence */
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
         i = args->converter->toULength;       /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         /* Stores the previously calculated ch from a previous call*/
         ch = args->converter->toUnicodeStatus - 1;
@@ -596,10 +600,11 @@ T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
     uint32_t ch, i;
     int32_t offsetNum = 0;
 
-    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    /* Restore state of current sequence */
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
         i = args->converter->toULength;       /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         /* Stores the previously calculated ch from a previous call*/
         ch = args->converter->toUnicodeStatus - 1;
