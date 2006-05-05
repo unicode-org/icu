@@ -160,7 +160,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
         // first.
         byte raw[] = new byte[total_size];
         d.reset();
-        d.read(raw);
+        d.readFully(raw);
         d.close();
 
         Builder builder = new Builder(raw);
