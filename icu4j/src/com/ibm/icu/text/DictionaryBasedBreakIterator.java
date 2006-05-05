@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -246,7 +246,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * @return the status from the break rule that determined the most recently
      * returned break position.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
      public int getRuleStatus() {
         return 0;
@@ -268,7 +268,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRuleStatusVec(int[] fillInArray) {
         if (fillInArray != null && fillInArray.length>=1) {  
@@ -519,5 +519,4 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         }
         positionInCache = 0;
     }
-
 }
