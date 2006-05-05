@@ -86,13 +86,19 @@ static double randomDouble(void)
         srand((unsigned)time(NULL));
         initialized = TRUE;
     }
-
+#if 0
     do {
         /* Assume rand has at least 12 bits of precision */
         for (i = 0; i < sizeof(ran); i += 1) {
             ((char*)&ran)[i] = (char)((rand() & 0x0FF0) >> 4);
         }
     } while (_isnan(ran));
+#else
+	int64_t numerator = randomInt64();
+	int64_t denomenator = randomInt64();
+
+	ran = (double)numerator / (double)denomenator;
+#endif
 
     return ran;
 }
@@ -258,6 +264,11 @@ void Win32NumberTest::testLocales(TestLog *log)
     for(int i = 0; i < lcidCount; i += 1) {
         UErrorCode status = U_ZERO_ERROR;
         char localeID[128];
+
+		// NULL localeID means ICU didn't recognize the lcid
+		if (lcidRecords[i].localeID == NULL) {
+			continue;
+		}
 
         strcpy(localeID, lcidRecords[i].localeID);
 
