@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -101,6 +101,7 @@ static void ucnv_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     {
         inBytes = args->converter->mode;            /* restore # of bytes to consume */
         i = args->converter->toULength;             /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -165,7 +166,6 @@ morebytes:
                 (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                args->converter->toULength = 0;
                 if (ch <= MAXIMUM_UCS2) 
                 {
                     /* fits in 16 bits */
@@ -230,6 +230,7 @@ static void ucnv_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
     {
         inBytes = args->converter->mode;            /* restore # of bytes to consume */
         i = args->converter->toULength;             /* restore # of bytes consumed */
+        args->converter->toULength = 0;
 
         ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -292,7 +293,6 @@ morebytes:
                 (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                args->converter->toULength = 0;
                 if (ch <= MAXIMUM_UCS2) 
                 {
                     /* fits in 16 bits */
