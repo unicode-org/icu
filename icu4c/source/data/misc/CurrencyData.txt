@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2005, International Business Machines
+// *   Copyright (C) 1997-2006, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -32,7 +32,9 @@ CurrencyData:table(nofallback){
         KMF:intvector { 0, 0 } // Comoro Franc: COMOROS (KM)
         KRW:intvector { 0, 0 } // Won: KOREA, REPUBLIC OF (KR)
         KWD:intvector { 3, 0 } // Kuwaiti Dinar: KUWAIT (KW)
+        LUF:intvector { 0, 0 } // LUXEMBOURG Franc: LUXEMBOURG (LU)
         LYD:intvector { 3, 0 } // Lybian Dinar: LIBYAN ARAB JAMAHIRIYA (LY)
+        MGA:intvector { 0, 0 } // Malagascy Ariary: MADAGASCAR (MG)
         MGF:intvector { 0, 0 } // Malagasy Franc: MADAGASCAR (MG)
         OMR:intvector { 3, 0 } // Rial Omani: OMAN (OM)
         PYG:intvector { 0, 0 } // Guarani: PARAGUAY (PY)
