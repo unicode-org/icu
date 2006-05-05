@@ -1684,18 +1684,19 @@ void NumberFormatRegressionTest::Test4122840(void)
             DecimalFormat *fmt2 = new DecimalFormat(buf, *symbols, status);
             failure(status, "new DecimalFormat");
             
-            // Get the currency so we can set the rounding and fraction
-            UChar intlCurrencySymbol[4];
-            (symbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)).extract(intlCurrencySymbol, 4, status);
-            double rounding = ucurr_getRoundingIncrement(intlCurrencySymbol, &status);
-            int32_t frac = ucurr_getDefaultFractionDigits(intlCurrencySymbol, &status);
-            if (U_SUCCESS(status)) {
-                fmt2->setRoundingIncrement(rounding);
-                fmt2->setMinimumFractionDigits(frac);
-                fmt2->setMaximumFractionDigits(frac);
-            }
-            else {
-                failure(status, "Fetching currency rounding/fractions");
+            // Get the currency (if there is one) so we can set the rounding and fraction
+            const UChar *currency = fmt1->getCurrency();
+            if (*currency != 0) {
+                double rounding = ucurr_getRoundingIncrement(fmt1->getCurrency(), &status);
+                int32_t frac = ucurr_getDefaultFractionDigits(fmt1->getCurrency(), &status);
+                if (U_SUCCESS(status)) {
+                    fmt2->setRoundingIncrement(rounding);
+                    fmt2->setMinimumFractionDigits(frac);
+                    fmt2->setMaximumFractionDigits(frac);
+                }
+                else {
+                    failure(status, "Fetching currency rounding/fractions");
+                }
             }
             
             UnicodeString result2;
