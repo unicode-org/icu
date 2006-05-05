@@ -2307,7 +2307,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingMode
      * @see #setRoundingMode
      * @draft ICU 3.4.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setRoundingIncrement(BigDecimal newValue) {
         int i = newValue == null
@@ -3840,7 +3840,7 @@ public class DecimalFormat extends NumberFormat {
      * returns true.
      * @return the fewest significant digits that will be shown
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getMinimumSignificantDigits() {
         return minSignificantDigits;
@@ -3852,7 +3852,7 @@ public class DecimalFormat extends NumberFormat {
      * returns true.
      * @return the most significant digits that will be shown
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public int getMaximumSignificantDigits() {
         return maxSignificantDigits;
@@ -3866,7 +3866,7 @@ public class DecimalFormat extends NumberFormat {
      * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param min the fewest significant digits to be shown 
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setMinimumSignificantDigits(int min) {
         if (min < 1) {
@@ -3886,7 +3886,7 @@ public class DecimalFormat extends NumberFormat {
      * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param max the most significant digits to be shown 
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setMaximumSignificantDigits(int max) {
         if (max < 1) {
@@ -3903,7 +3903,7 @@ public class DecimalFormat extends NumberFormat {
      * integer and fraction digit counts are in use.
      * @return true if significant digits are in use
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean areSignificantDigitsUsed() {
         return useSignificantDigits;
@@ -3915,7 +3915,7 @@ public class DecimalFormat extends NumberFormat {
      * @param useSignificantDigits true to use significant digits, or
      * false to use integer and fraction digit counts
      * @draft ICU 3.0
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @provisional This API might change or be removed in a future release.
      */
     public void setSignificantDigitsUsed(boolean useSignificantDigits) {
         this.useSignificantDigits = useSignificantDigits;
