@@ -26,6 +26,8 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/parseerr.h"
+#include "unicode/schriter.h"
+#include "unicode/uchriter.h"
 
 
 struct UTrie;
@@ -41,6 +43,7 @@ class  UStack;
 class  LanguageBreakEngine;
 class  UnhandledEngine;
 struct RBBIStateTable;
+
 
 
 
@@ -70,10 +73,24 @@ protected:
 
     /**
      *   A character iterator that refers to the same text as the UText, above.
-     *   Lazily created when requested by a caller.
      *   Only included for compatibility with old API, which was based on CharacterIterators.
+     *   Value may be adopted from outside, or one of fSCharIter or fDCharIter, below.
      */
     CharacterIterator  *fCharIter;
+
+    /**
+     *   When the input text is provided by a UnicodeString, this will point to
+     *    a characterIterator that wraps that data.  Needed only for the
+     *    implementation of getText(), a backwards compatibility issue.
+     */
+    StringCharacterIterator *fSCharIter;
+
+    /**
+     *  When the input text is provided by a UText, this
+     *    dummy CharacterIterator over an empty string will
+     *    be returned from getText()
+     */
+    UCharCharacterIterator *fDCharIter;
 
     /**
      * The rule data for this BreakIterator instance
@@ -296,14 +313,9 @@ public:
      * the break iterator.  If concurrent operation is needed, clone the
      * returned character iterator first and operate on the clone.
      * <p/>
-     * This function is not thread safe.  Two threads must not make concurrent
-     * calls to BreakIterator::getText(). This is an exception to the general
-     * rules for thread safety in ICU, which are that const functions are
-     * thread safe.
-     * <p/>
      * When the break iterator is operating on text supplied via a UText,
      * this function will fail.  Lacking any way to signal failures, it
-     * returns an CharacterIterator containing no text in this case.
+     * returns an CharacterIterator containing no text.
      * The function getUText() provides similar functionality,
      * is reliable, and is more efficient.
      *

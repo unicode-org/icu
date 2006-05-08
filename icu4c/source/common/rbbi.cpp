@@ -16,6 +16,7 @@
 
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
+#include "unicode/uchriter.h"
 #include "unicode/udata.h"
 #include "unicode/uclean.h"
 #include "rbbidata.h"
@@ -37,243 +38,6 @@ static const int16_t STOP_STATE  = 0;     // The state-transition value indicati
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
-
-
-
-
-
-//-------------------------------------------------------------------------------
-//
-//  UText functions      As a temporary implementation, create a type of CharacterIterator
-//                       that works over UText, and let the RBBI engine continue to
-//                       work on CharacterIterator, which it always has.
-//
-//                       The permanent solution is to rework the RBBI engine to use
-//                       UText directly, which will be more efficient for all input
-//                       sources.
-//
-//                       This CharacterIterator implementation over UText is not complete,
-//                       it has only what is needed for RBBI, and is not intended
-//                       to ever become public.
-//
-//        TODO:  Move this to some other file.
-//
-//-------------------------------------------------------------------------------
-
-
-class CharacterIteratorUT: public CharacterIterator {
-public:
-    CharacterIteratorUT(UText  *ut);
-    virtual ~CharacterIteratorUT();
-
-    virtual CharacterIterator *clone() const;
-    virtual UBool       operator==(const ForwardCharacterIterator& that) const;
-    virtual UChar       setIndex(int32_t position);
-    virtual UChar32     previous32(void);
-    virtual UChar32     next32(void);
-    virtual UBool       hasNext();
-    virtual UChar32     current32(void) const;
-    virtual UBool       hasPrevious();
-    virtual int32_t     move(int32_t delta, EOrigin origin);
-    virtual int32_t     move32(int32_t, EOrigin);
-    virtual void        getText(UnicodeString  &);
-    static  UClassID    getStaticClassID(void);
-    virtual UClassID    getDynamicClassID(void) const;
-
-    UText   *fText;
-    virtual void        resetTo(const UText *ut, UErrorCode *status);
-
-private:
-    CharacterIteratorUT();
-
-    // The following functions are not needed by RBBI,
-    //   but are pure virtual in CharacterIterator, so must be defined.
-    //   Only stubs are provided in this implementation.
-    //   TODO:  need them all if we are going to really support RBBI::getText().
-    virtual int32_t       hashCode(void) const                   {U_ASSERT(FALSE); return 0;};
-    virtual UChar         nextPostInc(void)                      {U_ASSERT(FALSE); return 0;};
-    virtual UChar32       next32PostInc(void)                    {U_ASSERT(FALSE); return 0;};
-    virtual UChar         first(void)                            {U_ASSERT(FALSE); return 0;};
-    virtual UChar32       first32(void)                          {U_ASSERT(FALSE); return 0;};
-    virtual UChar         last(void)                             {U_ASSERT(FALSE); return 0;};
-    virtual UChar32       last32(void)                           {U_ASSERT(FALSE); return 0;};
-    virtual UChar32       setIndex32(int32_t)                    {U_ASSERT(FALSE); return 0;};
-    virtual UChar         current(void) const                    {U_ASSERT(FALSE); return 0;};
-    virtual UChar         next(void)                             {U_ASSERT(FALSE); return 0;};
-    virtual UChar         previous(void)                         {U_ASSERT(FALSE); return 0;};
-};
-
-
-
-//
-//  The following fields are inherited from CharacterIterator.
-//  This implementation __MUST__ keep them current because of non-virtual inline
-//  functions defined in CharacterIterator.
-//    int32_t  textLength;       // length of the text.
-//    int32_t  pos;              // current index position
-//    int32_t  begin;            // starting index.  Always 0 for us.
-//    int32_t  end;              // ending index
-//
-// CharacterIterator was designed assuming that utf-16 indexing would be used,
-// but native indexing will pass through OK.  This partial implementation only
-// provides the '32' flavored code point access, not UChar access.
-//
-
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CharacterIteratorUT)
-
-CharacterIteratorUT::CharacterIteratorUT(UText *ut) {
-    fText      = 0;
-    textLength = 0;
-    pos        = 0;
-    begin      = 0;
-    end        = 0;
-    if (ut == NULL) {
-        return;
-    }
-
-    UErrorCode status = U_ZERO_ERROR;
-    fText = utext_clone(NULL, ut, FALSE, TRUE, &status);  // Shallow, Read-only clone.
-    if (fText != NULL) {
-        // Set the inherited CharacterItertor fields
-        textLength = (int32_t)utext_nativeLength(ut);
-        end = textLength;
-    }
-}
-
-CharacterIteratorUT::CharacterIteratorUT() {
-    fText     = NULL;
-    textLength = 0;
-    pos        = 0;
-    begin      = 0;
-    end        = 0;
-}
-
-CharacterIteratorUT::~CharacterIteratorUT() {
-    utext_close(fText);
-}
-
-
-CharacterIterator *CharacterIteratorUT::clone() const {
-    CharacterIteratorUT *result = new CharacterIteratorUT(this->fText);
-    return result;
-}
-
-UBool CharacterIteratorUT::operator==(const ForwardCharacterIterator& that) const {
-    if (this->getDynamicClassID() != that.getDynamicClassID()) {
-        return FALSE;
-    }
-    const CharacterIteratorUT *realThat = (const CharacterIteratorUT *)&that;
-    UBool result = this->fText->context == realThat->fText->context;
-    return result;
-}
-
-UChar CharacterIteratorUT::setIndex(int32_t position) {
-    pos = position;
-    if (pos < 0) {
-        pos = 0;
-    } else if (pos > end) {
-        pos = end;
-    }
-    utext_setNativeIndex(fText, pos);
-    pos = (int32_t)utext_getNativeIndex(fText);  // because utext snaps to code point boundary.
-    return 0x0000ffff;  // RBBI doesn't use return value, and UText can't return a UChar easily.
-}
-
-UChar32 CharacterIteratorUT::previous32(void) {
-    UChar32 result = UTEXT_PREVIOUS32(fText);
-    pos = (int32_t)utext_getNativeIndex(fText);  // TODO:  maybe optimize common case?
-    if (result < 0) {
-        result = 0x0000ffff;
-    }
-    return result;
-}
-
-UChar32 CharacterIteratorUT::next32(void) {
-    // TODO: optimize.
-    UTEXT_NEXT32(fText);
-    pos = (int32_t)utext_getNativeIndex(fText);
-    UChar32 result = UTEXT_NEXT32(fText);
-    if (result < 0) {
-        result = 0x0000ffff;
-    } else {
-        UTEXT_PREVIOUS32(fText);
-    }
-    return result;
-}
-
-UBool CharacterIteratorUT::hasNext() {
-    // What would really be best for RBBI is a hasNext32()
-    UBool result = TRUE;
-    if (pos >= end) { 
-        result  = FALSE;
-    }
-    return result;
-}
-
-UChar32 CharacterIteratorUT::current32(void) const {
-    UChar32 result = utext_current32(fText);
-    if (result < 0) {
-        result = 0x0000ffff;
-    }
-    return result;
-}
-
-UBool CharacterIteratorUT::hasPrevious() {
-    UBool result = pos > 0;
-    return result;
-}
-
-int32_t CharacterIteratorUT::move(int32_t delta, EOrigin origin) {
-    // only needed for the inherited inline implementation of setToStart().
-    int32_t result = pos;
-    switch (origin) {
-case kStart:
-    result = delta;
-    break;
-case kCurrent: 
-    result = pos + delta;
-    break;
-case kEnd:
-    result = end + delta;
-    break;
-default:
-    U_ASSERT(FALSE);
-    }
-    utext_setNativeIndex(fText, result);
-    pos = (int32_t)utext_getNativeIndex(fText);  // align to cp boundary
-    return result;
-}
-
-int32_t  CharacterIteratorUT::move32(int32_t amt, EOrigin origin) {
-    switch (origin) {
-case kCurrent: 
-    utext_moveIndex32(fText, amt);
-    break;
-default:
-    // don't bother with kStart, kEnd.  Not Used by break iteration.
-    U_ASSERT(FALSE);
-    }
-    pos = (int32_t)utext_getNativeIndex(fText);
-    return pos;
-}
-
-
-void  CharacterIteratorUT::resetTo(const UText *ut, UErrorCode *status) {
-    // Reset this CharacterIteratorUT to use a new UText.
-    fText = utext_clone(fText, ut, FALSE, TRUE, status);
-    utext_setNativeIndex(fText, 0);
-    textLength = (int32_t)utext_nativeLength(fText);
-    pos = 0;
-    end = textLength;
-}
-
-void  CharacterIteratorUT::getText(UnicodeString  &dest) {
-    dest.truncate(0);
-    for (UChar32 c=utext_next32From(fText, 0); c!=U_SENTINEL; c=utext_next32(fText)) {
-        dest.append(c);
-    }
-}
-
 
 
 //=======================================================================
@@ -368,8 +132,16 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& oth
  * Destructor
  */
 RuleBasedBreakIterator::~RuleBasedBreakIterator() {
-    delete fCharIter;
+    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+        // fCharIter was adopted from the outside.
+        delete fCharIter;
+    }
     fCharIter = NULL;
+    delete fSCharIter;
+    fCharIter = NULL;
+    delete fDCharIter;
+    fDCharIter = NULL;
+    
     utext_close(fText);
 
     if (fData != NULL) {
@@ -408,10 +180,18 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     // TODO: clone fLanguageBreakEngines from "that"
     UErrorCode status = U_ZERO_ERROR;
     fText = utext_clone(fText, that.fText, FALSE, TRUE, &status);
-    if (that.fCharIter != NULL) {
+
+    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+        delete fCharIter;
+    }
+    fCharIter = NULL;
+
+    if (that.fCharIter != NULL ) {
+        // This is a little bit tricky - it will intially appear that
+        //  this->fCharIter is adopted, even if that->fCharIter was
+        //  not adopted.  That's ok.
         fCharIter = that.fCharIter->clone();
     }
-
 
     if (fData != NULL) {
         fData->removeReference();
@@ -438,6 +218,8 @@ void RuleBasedBreakIterator::init() {
     UErrorCode  status    = U_ZERO_ERROR;
     fText                 = utext_openUChars(NULL, NULL, 0, &status);
     fCharIter             = NULL;
+    fSCharIter            = NULL;
+    fDCharIter            = NULL;
     fData                 = NULL;
     fLastRuleStatusIndex  = 0;
     fLastStatusIndexValid = TRUE;
@@ -524,8 +306,24 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     }
     reset();
     fText = utext_clone(fText, ut, FALSE, TRUE, &status);
-    delete fCharIter;    // A CharacterIterator will be lazily created if user asks.
-    fCharIter = NULL;    //   It's obsolete, usually wont be needed.
+
+    // Set up a dummy CharacterIterator to be returned if anyone
+    //   calls getText().  With input from UText, there is no reasonable
+    //   way to return a characterIterator over the actual input text.
+    //   Return one over an empty string instead - this is the closest
+    //   we can come to signaling a failure.
+    //   (GetText() is obsolete, this failure is sort of OK)
+    if (fDCharIter == NULL) {
+        static UChar c = 0;
+        fDCharIter = new UCharCharacterIterator(&c, 0);
+    }
+
+    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+        // existing fCharIter was adopted from the outside.  Delete it now.
+        delete fCharIter;
+    }
+    fCharIter = fDCharIter;
+
     this->first();
 }
 
@@ -563,17 +361,10 @@ RuleBasedBreakIterator::getRules() const {
 
 /**
  * Return a CharacterIterator over the text being analyzed.  
- * @return An iterator over the text being analyzed.
  */
 CharacterIterator&
 RuleBasedBreakIterator::getText() const {
-    RuleBasedBreakIterator* nonConstThis = (RuleBasedBreakIterator*)this;
-
-    //
-    if (nonConstThis->fCharIter == NULL) {
-        nonConstThis->fCharIter = new CharacterIteratorUT(fText);
-    }
-    return *nonConstThis->fCharIter;
+    return *fCharIter;
 }
 
 /**
@@ -583,7 +374,12 @@ RuleBasedBreakIterator::getText() const {
  */
 void
 RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
-    delete fCharIter;
+    // If we are holding a CharacterIterator adopted from a 
+    //   previous call to this function, delete it now.
+    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+        delete fCharIter;
+    }
+
     fCharIter = newText;
     UErrorCode status = U_ZERO_ERROR;
     reset();
@@ -607,8 +403,23 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     UErrorCode status = U_ZERO_ERROR;
     reset();
     fText = utext_openConstUnicodeString(fText, &newText, &status);
-    delete fCharIter;
-    fCharIter = NULL;
+
+    // Set up a character iterator on the string.  
+    //   Needed in case someone calls getText().
+    //  Can not, unfortunately, do this lazily on the (probably never)
+    //  call to getText(), because getText is const.
+    if (fSCharIter == NULL) {
+        fSCharIter = new StringCharacterIterator(newText);
+    } else {
+        fSCharIter->setText(newText);
+    }
+
+    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+        // old fCharIter was adopted from the outside.  Delete it.
+        delete fCharIter;
+    }
+    fCharIter = fSCharIter;
+
     this->first();
 }
 
