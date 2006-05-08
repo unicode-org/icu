@@ -63,7 +63,7 @@ public class ICULocaleService extends ICUService {
      * getKey (stripping any prefix) into a ULocale.  
      */
     public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
-        Key key = createKey(locale.toString(), kind);
+        Key key = createKey(locale, kind);
         if (actualReturn == null) {
             return getKey(key);
         }
@@ -188,6 +188,17 @@ public class ICULocaleService extends ICUService {
             }
             String canonicalPrimaryID = ULocale.getName(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
+        }
+            
+        /**
+         * Create a LocaleKey with canonical primary and fallback IDs.
+         */
+        public static LocaleKey createWithCanonical(ULocale locale, String canonicalFallbackID, int kind) {
+            if (locale == null) {
+                return null;
+            }
+            String canonicalPrimaryID = locale.getName();
+            return new LocaleKey(canonicalPrimaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
             
         /**
@@ -592,5 +603,9 @@ public class ICULocaleService extends ICUService {
 
     public Key createKey(String id, int kind) {
         return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale(), kind);
+    }
+
+    public Key createKey(ULocale l, int kind) {
+        return LocaleKey.createWithCanonical(l, validateFallbackLocale(), kind);
     }
 }
