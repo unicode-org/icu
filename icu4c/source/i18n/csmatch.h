@@ -8,8 +8,9 @@
 #ifndef __CSMATCH_H
 #define __CSMATCH_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 U_NAMESPACE_BEGIN
 
@@ -39,4 +40,5 @@ class CharsetMatch : public UMemory
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSMATCH_H */

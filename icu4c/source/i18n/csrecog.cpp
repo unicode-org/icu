@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrecog.h"
 
 U_NAMESPACE_BEGIN
@@ -22,3 +24,5 @@ const char *CharsetRecognizer::getLanguage() const
 }
 
 U_NAMESPACE_END    
+
+#endif

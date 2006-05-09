@@ -20,6 +20,8 @@
 #define __UCSDET_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
 #include "unicode/uenum.h"
 
 /**
@@ -341,6 +343,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd);
 U_DRAFT  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
 
+#endif
 #endif   /* __UCSDET_H */
 
 

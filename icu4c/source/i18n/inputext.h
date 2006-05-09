@@ -8,8 +8,9 @@
 #ifndef __INPUTEXT_H
 #define __INPUTEXT_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 U_NAMESPACE_BEGIN 
 
@@ -45,4 +46,5 @@ public:
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __INPUTEXT_H */

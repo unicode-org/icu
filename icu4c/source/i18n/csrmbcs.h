@@ -10,6 +10,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrecog.h"
 
 U_NAMESPACE_BEGIN
@@ -199,4 +201,5 @@ public:
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSRMBCS_H */

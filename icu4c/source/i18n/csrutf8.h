@@ -10,6 +10,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrecog.h"
 
 U_NAMESPACE_BEGIN
@@ -36,4 +38,5 @@ class CharsetRecog_UTF8: public CharsetRecognizer {
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSRUTF8_H */

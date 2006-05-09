@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "cstring.h"
 
 #include "csr2022.h"
@@ -167,3 +169,4 @@ CharsetRecog_2022::~CharsetRecog_2022()
 }
 
 U_NAMESPACE_END
+#endif
