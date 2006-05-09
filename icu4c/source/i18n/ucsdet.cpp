@@ -7,6 +7,7 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
 #include "unicode/ucsdet.h"
 #include "csdetect.h"
 #include "csmatch.h"
@@ -225,3 +226,4 @@ ucsdet_getUChars(const UCharsetMatch *ucsm,
 }
 U_CDECL_END
 
+#endif

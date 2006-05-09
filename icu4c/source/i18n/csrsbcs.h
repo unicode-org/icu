@@ -8,8 +8,9 @@
 #ifndef __CSRSBCS_H
 #define __CSRSBCS_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #include "csrecog.h"
 
@@ -357,4 +358,5 @@ class CharsetRecog_KOI8_R : public CharsetRecog_sbcs
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSRSBCS_H */

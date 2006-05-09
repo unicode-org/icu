@@ -8,8 +8,9 @@
 #ifndef __CSRECOG_H
 #define __CSRECOG_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #include "inputext.h"
 
@@ -37,4 +38,5 @@ class CharsetRecognizer : public UMemory
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSRECOG_H */

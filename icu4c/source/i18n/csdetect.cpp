@@ -6,6 +6,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucsdet.h"
 
 #include "csdetect.h"
@@ -342,3 +345,5 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *statu
     return en;
 }
 U_CDECL_END
+
+#endif

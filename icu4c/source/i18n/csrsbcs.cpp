@@ -7,6 +7,7 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
 #include "csrsbcs.h"
 
 #include <stdio.h>
@@ -1089,3 +1090,5 @@ int32_t CharsetRecog_KOI8_R::match(InputText *textIn)
 }
 
 U_NAMESPACE_END
+#endif
+

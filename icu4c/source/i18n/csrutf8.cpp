@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrutf8.h"
 
 U_NAMESPACE_BEGIN
@@ -106,3 +108,4 @@ int32_t CharsetRecog_UTF8::match(InputText* det) {
 }
 
 U_NAMESPACE_END
+#endif
