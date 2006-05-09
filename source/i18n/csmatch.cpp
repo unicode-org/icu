@@ -6,6 +6,8 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
 
@@ -55,3 +57,5 @@ int32_t CharsetMatch::getUChars(UChar *buf, int32_t cap, UErrorCode *status) con
 }
 
 U_NAMESPACE_END
+
+#endif

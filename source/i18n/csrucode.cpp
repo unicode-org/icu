@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrucode.h"
 
 U_NAMESPACE_BEGIN
@@ -140,3 +142,5 @@ int32_t CharsetRecog_UTF_32_LE::getChar(const uint8_t *input, int32_t index) con
 }
 
 U_NAMESPACE_END
+#endif
+

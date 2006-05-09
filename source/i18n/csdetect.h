@@ -8,8 +8,9 @@
 #ifndef __CSDETECT_H
 #define __CSDETECT_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 U_NAMESPACE_BEGIN
 
@@ -51,4 +52,5 @@ public:
 
 U_NAMESPACE_END
 
+#endif
 #endif /* __CSDETECT_H */

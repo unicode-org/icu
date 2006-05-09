@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "csrmbcs.h"
 
 #include <math.h>
@@ -512,3 +514,4 @@ int32_t CharsetRecog_gb_18030::match(InputText *det)
 }
 
 U_NAMESPACE_END
+#endif

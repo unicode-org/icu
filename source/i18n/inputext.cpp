@@ -7,6 +7,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 #include "inputext.h"
 
 #include "cmemory.h"
@@ -150,3 +152,5 @@ void InputText::MungeInput(UBool fStripTags) {
 }
 
 U_NAMESPACE_END
+#endif
+
