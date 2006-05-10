@@ -749,6 +749,9 @@ public final class ULocale implements Serializable {
         if (loc == null) {
             return null;
         }
+        if (loc.toString().length() == 0) {
+            return ROOT;
+        }
         ULocale result = (ULocale)CACHE.get(loc);
         if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
             result = defaultULocale;
