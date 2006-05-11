@@ -231,9 +231,12 @@ public final class RuleBasedCollator extends Collator
     public Object clone() throws CloneNotSupportedException
     {
         RuleBasedCollator result = (RuleBasedCollator)super.clone();
+        if (latinOneCEs_ != null) {
+            result.m_reallocLatinOneCEs_ = true;
+        }
         // since all collation data in the RuleBasedCollator do not change
         // we can safely assign the result.fields to this collator
-        result.initUtility(); // let the new clone have their own util
+        result.initUtility(false);  // let the new clone have their own util
                                     // iterators
         return result;
     }
@@ -619,7 +622,10 @@ public final class RuleBasedCollator extends Collator
             throw new IllegalArgumentException(
             "Variable top argument string can not be null or zero in length.");
         }
-        
+        if (m_srcUtilIter_ == null) {
+            initUtility(true);
+        }
+
         m_srcUtilColEIter_.setText(varTop);
         int ce = m_srcUtilColEIter_.next();
         
@@ -1797,7 +1803,7 @@ public final class RuleBasedCollator extends Collator
     RuleBasedCollator()
     {
         checkUCA();
-        initUtility();
+        initUtility(false);
     }
 
     /**
@@ -1810,7 +1816,7 @@ public final class RuleBasedCollator extends Collator
     {
         checkUCA();
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
-        initUtility();
+        initUtility(false);
         if (rb != null) {
             try {
                 // Use keywords, if supplied for lookup
@@ -2263,10 +2269,13 @@ public final class RuleBasedCollator extends Collator
         builder.setRules(this);
         m_rules_ = rules;
         init();
-        initUtility();
+        initUtility(false);
     }
     
     private final int compareRegular(String source, String target, int offset) {
+        if (m_srcUtilIter_ == null) {
+            initUtility(true);
+        }
         int strength = getStrength();
         // setting up the collator parameters
         m_utilCompare0_ = m_isCaseLevel_;
@@ -2410,7 +2419,7 @@ public final class RuleBasedCollator extends Collator
                                                    m_utilBytesCount1_,
                                     ((p1 > leadPrimary)
                                             ? BYTE_UNSHIFTED_MAX_
-                                            : BYTE_UNSHIFTED_MIN_));
+                                            : BYTE_UNSHIFTED_MIN_)); 
                             m_utilBytesCount1_ ++;
                         }
                         if (p2 == CollationElementIterator.IGNORABLE) {
@@ -2738,6 +2747,9 @@ public final class RuleBasedCollator extends Collator
                                        int bottomCount4)
 
     {
+        if (m_srcUtilIter_ == null) {
+            initUtility(true);
+        }
         int backupDecomposition = getDecomposition();
         setDecomposition(NO_DECOMPOSITION); // have to revert to backup later
         m_srcUtilIter_.setText(source);
@@ -4027,21 +4039,35 @@ public final class RuleBasedCollator extends Collator
     /**
      *  Initializes utility iterators and byte buffer used by compare
      */
-    private final void initUtility() {
-       m_srcUtilIter_ = new StringUCharacterIterator();
-       m_srcUtilColEIter_ = new CollationElementIterator(m_srcUtilIter_, this);
-       m_tgtUtilIter_ = new StringUCharacterIterator();
-       m_tgtUtilColEIter_ = new CollationElementIterator(m_tgtUtilIter_, this);
-       m_utilBytes0_ = new byte[SORT_BUFFER_INIT_SIZE_CASE_]; // case
-       m_utilBytes1_ = new byte[SORT_BUFFER_INIT_SIZE_1_]; // primary
-       m_utilBytes2_ = new byte[SORT_BUFFER_INIT_SIZE_2_]; // secondary
-       m_utilBytes3_ = new byte[SORT_BUFFER_INIT_SIZE_3_]; // tertiary
-       m_utilBytes4_ = new byte[SORT_BUFFER_INIT_SIZE_4_];  // Quaternary
-       m_srcUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
-       m_tgtUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
+    private final void initUtility(boolean allocate) {
+        if (allocate) {
+            if (m_srcUtilIter_ == null) {
+                m_srcUtilIter_ = new StringUCharacterIterator();
+                m_srcUtilColEIter_ = new CollationElementIterator(m_srcUtilIter_, this);
+                m_tgtUtilIter_ = new StringUCharacterIterator();
+                m_tgtUtilColEIter_ = new CollationElementIterator(m_tgtUtilIter_, this);
+                m_utilBytes0_ = new byte[SORT_BUFFER_INIT_SIZE_CASE_]; // case
+                m_utilBytes1_ = new byte[SORT_BUFFER_INIT_SIZE_1_]; // primary
+                m_utilBytes2_ = new byte[SORT_BUFFER_INIT_SIZE_2_]; // secondary
+                m_utilBytes3_ = new byte[SORT_BUFFER_INIT_SIZE_3_]; // tertiary
+                m_utilBytes4_ = new byte[SORT_BUFFER_INIT_SIZE_4_];  // Quaternary
+                m_srcUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
+                m_tgtUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
+            }
+        } else {
+            m_srcUtilIter_ = null;
+            m_srcUtilColEIter_ = null;
+            m_tgtUtilIter_ = null;
+            m_tgtUtilColEIter_ = null;
+            m_utilBytes0_ = null;
+            m_utilBytes1_ = null;
+            m_utilBytes2_ = null;
+            m_utilBytes3_ = null;
+            m_utilBytes4_ = null;
+            m_srcUtilCEBuffer_ = null;
+            m_tgtUtilCEBuffer_ = null;
+        }
     }
-
-
 
     // Consts for Latin-1 special processing
     private static final int ENDOFLATINONERANGE_ = 0xFF;
@@ -4118,9 +4144,10 @@ public final class RuleBasedCollator extends Collator
     }
 
     private final boolean setUpLatinOne() {
-      if(latinOneCEs_ == null) {
+      if(latinOneCEs_ == null || m_reallocLatinOneCEs_) {
         latinOneCEs_ = new int[3*LATINONETABLELEN_];
         latinOneTableLen_ = LATINONETABLELEN_;
+        m_reallocLatinOneCEs_ = false;
       } else {
         Arrays.fill(latinOneCEs_, 0);
       }
@@ -4646,4 +4673,6 @@ public final class RuleBasedCollator extends Collator
     public VersionInfo getUCAVersion() {
         return UCA_.m_UCA_version_;
     }
+
+    private transient boolean m_reallocLatinOneCEs_;
 }
