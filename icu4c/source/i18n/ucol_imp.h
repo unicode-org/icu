@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -862,16 +862,18 @@ struct UCollator {
     uint32_t *latinOneCEs;
     char* validLocale;
     char* requestedLocale;
+    const UChar *rules;
+    const UCollator *UCA;
+    ResourceCleaner *resCleaner;
     UResourceBundle *rb;
     UResourceBundle *elements;
     const UCATableHeader *image;
-    /*CompactEIntArray *mapping;*/
     UTrie *mapping;
     const uint32_t *latinOneMapping;
     const uint32_t *expansion;
     const UChar    *contractionIndex;
     const uint32_t *contractionCEs;
-    const uint8_t  *scriptOrder;
+    /*const uint8_t  *scriptOrder;*/
 
     const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
                                           corresponds to expansionCESize */
@@ -885,11 +887,8 @@ struct UCollator {
     UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
     UChar          minContrEndCP;      /* Smallest code point at end of a contraction */
 
-    const UChar *rules;
     int32_t rulesLength;
     int32_t latinOneTableLen;
-
-    /*UErrorCode errorCode;*/             /* internal error code */
 
     uint32_t variableTopValue;
     UColAttributeValue frenchCollation;
@@ -931,10 +930,7 @@ struct UCollator {
     uint8_t tertiaryTopCount;
     uint8_t tertiaryBottomCount;
 
-    UDataInfo dataInfo;               /* Data info of UCA table */
-    const UCollator *UCA;
-    ResourceCleaner *resCleaner;
-
+    UVersionInfo dataVersion;               /* Data info of UCA table */
 };
 
 U_CDECL_END
