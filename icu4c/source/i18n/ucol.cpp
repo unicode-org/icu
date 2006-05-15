@@ -667,14 +667,14 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->hiraganaQisDefault = TRUE;
     result->numericCollationisDefault = TRUE;
 
-    result->scriptOrder = NULL;
+    /*result->scriptOrder = NULL;*/
 
     result->rules = NULL;
     result->rulesLength = 0;
 
     /* get the version info from UCATableHeader and populate the Collator struct*/
-    result->dataInfo.dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
-    result->dataInfo.dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
+    result->dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
+    result->dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
 
     result->unsafeCP = (uint8_t *)result->image + result->image->unsafeCP;
     result->minUnsafeCP = 0;
@@ -4396,7 +4396,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     //UBool  qShifted = shifted && (compareQuad == 0);
     UBool  doHiragana = (coll->hiraganaQ == UCOL_ON) && (compareQuad == 0);
-    const uint8_t *scriptOrder = coll->scriptOrder;
+    /*const uint8_t *scriptOrder = coll->scriptOrder;*/
 
     uint32_t variableTopValue = coll->variableTopValue;
     // TODO: UCOL_COMMON_BOT4 should be a function of qShifted. If we have no
@@ -4522,11 +4522,9 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >> 8);
 
-            if(notIsContinuation) {
-              if(scriptOrder != NULL) {
-                primary1 = scriptOrder[primary1];
-              }
-            }
+            /*if(notIsContinuation && scriptOrder != NULL) {
+              primary1 = scriptOrder[primary1];
+            }*/
 
             if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
               || (!notIsContinuation && wasShifted))
