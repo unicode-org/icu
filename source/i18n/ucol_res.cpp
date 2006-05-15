@@ -74,124 +74,122 @@ U_CFUNC UCollator*
 ucol_open_internal(const char *loc,
                    UErrorCode *status)
 {
-  const UCollator* UCA = ucol_initUCA(status);
+    const UCollator* UCA = ucol_initUCA(status);
 
-  /* New version */
-  if(U_FAILURE(*status)) return 0;
+    /* New version */
+    if(U_FAILURE(*status)) return 0;
 
 
 
-  UCollator *result = NULL;
-  UResourceBundle *b = ures_open(U_ICUDATA_COLL, loc, status);
+    UCollator *result = NULL;
+    UResourceBundle *b = ures_open(U_ICUDATA_COLL, loc, status);
 
-  /* we try to find stuff from keyword */
-  UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
-  UResourceBundle *collElem = NULL;
-  char keyBuffer[256];
-  // if there is a keyword, we pick it up and try to get elements
-  if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
-    // no keyword. we try to find the default setting, which will give us the keyword value
-    UErrorCode intStatus = U_ZERO_ERROR;
-    // finding default value does not affect collation fallback status
-    UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, &intStatus);
-    if(U_SUCCESS(intStatus)) {
-      int32_t defaultKeyLen = 0;
-      const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, &intStatus);
-      u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
-      keyBuffer[defaultKeyLen] = 0;
-    } else {
-      *status = U_INTERNAL_PROGRAM_ERROR;
-      return NULL;
-    }
-    ures_close(defaultColl);
-  }
-  collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
-
-  UResourceBundle *binary = NULL;
-  UErrorCode binaryStatus = U_ZERO_ERROR;
-
-  if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
-    *status = U_USING_DEFAULT_WARNING;
-    result = ucol_initCollator(UCA->image, result, UCA, status);
-    // if we use UCA, real locale is root
-    result->rb = ures_open(U_ICUDATA_COLL, "", status);
-    result->elements = ures_open(U_ICUDATA_COLL, "", status);
-    if(U_FAILURE(*status)) {
-      goto clean;
-    }
-    ures_close(b);
-    result->hasRealData = FALSE;
-  } else if(U_SUCCESS(*status)) {
-    binary = ures_getByKey(collElem, "%%CollationBin", NULL, &binaryStatus);
-
-    if(binaryStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
-      binary = NULL;
-      result = tryOpeningFromRules(collElem, status);
-      if(U_FAILURE(*status)) {
-        goto clean;
-      }
-    } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
-      int32_t len = 0;
-      const uint8_t *inData = ures_getBinary(binary, &len, status);
-      UCATableHeader *colData = (UCATableHeader *)inData;
-      if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
-        uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
-        colData->version[0] != UCOL_BUILDER_VERSION) {
-        *status = U_DIFFERENT_UCA_VERSION;
-        result = tryOpeningFromRules(collElem, status);
-      } else {
-        if(U_FAILURE(*status)){
-          goto clean;
-        }
-        if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
-          result = ucol_initCollator((const UCATableHeader *)inData, result, UCA, status);
-          if(U_FAILURE(*status)){
-            goto clean;
-          }
-          result->hasRealData = TRUE;
+    /* we try to find stuff from keyword */
+    UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
+    UResourceBundle *collElem = NULL;
+    char keyBuffer[256];
+    // if there is a keyword, we pick it up and try to get elements
+    if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
+        // no keyword. we try to find the default setting, which will give us the keyword value
+        UErrorCode intStatus = U_ZERO_ERROR;
+        // finding default value does not affect collation fallback status
+        UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, &intStatus);
+        if(U_SUCCESS(intStatus)) {
+            int32_t defaultKeyLen = 0;
+            const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, &intStatus);
+            u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
+            keyBuffer[defaultKeyLen] = 0;
         } else {
-          result = ucol_initCollator(UCA->image, result, UCA, status);
-          ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
-          if(U_FAILURE(*status)){
-            goto clean;
-          }
-          result->hasRealData = FALSE;
+            *status = U_INTERNAL_PROGRAM_ERROR;
+            return NULL;
         }
-        result->freeImageOnClose = FALSE;
-      }
+        ures_close(defaultColl);
     }
-    result->rb = b;
-    result->elements = collElem;
-  } else { /* There is another error, and we're just gonna clean up */
+    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
+
+    UResourceBundle *binary = NULL;
+    UErrorCode binaryStatus = U_ZERO_ERROR;
+
+    if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
+        *status = U_USING_DEFAULT_WARNING;
+        result = ucol_initCollator(UCA->image, result, UCA, status);
+        // if we use UCA, real locale is root
+        result->rb = ures_open(U_ICUDATA_COLL, "", status);
+        result->elements = ures_open(U_ICUDATA_COLL, "", status);
+        if(U_FAILURE(*status)) {
+            goto clean;
+        }
+        ures_close(b);
+        result->hasRealData = FALSE;
+    } else if(U_SUCCESS(*status)) {
+        binary = ures_getByKey(collElem, "%%CollationBin", NULL, &binaryStatus);
+
+        if(binaryStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
+            binary = NULL;
+            result = tryOpeningFromRules(collElem, status);
+            if(U_FAILURE(*status)) {
+                goto clean;
+            }
+        } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
+            int32_t len = 0;
+            const uint8_t *inData = ures_getBinary(binary, &len, status);
+            UCATableHeader *colData = (UCATableHeader *)inData;
+            if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+                uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
+                colData->version[0] != UCOL_BUILDER_VERSION) {
+                    *status = U_DIFFERENT_UCA_VERSION;
+                    result = tryOpeningFromRules(collElem, status);
+                } else {
+                    if(U_FAILURE(*status)){
+                        goto clean;
+                    }
+                    if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
+                        result = ucol_initCollator((const UCATableHeader *)inData, result, UCA, status);
+                        if(U_FAILURE(*status)){
+                            goto clean;
+                        }
+                        result->hasRealData = TRUE;
+                    } else {
+                        result = ucol_initCollator(UCA->image, result, UCA, status);
+                        ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
+                        if(U_FAILURE(*status)){
+                            goto clean;
+                        }
+                        result->hasRealData = FALSE;
+                    }
+                    result->freeImageOnClose = FALSE;
+                }
+        }
+        result->rb = b;
+        result->elements = collElem;
+    } else { /* There is another error, and we're just gonna clean up */
+        goto clean;
+    }
+
+    result->validLocale = NULL; // default is to use rb info
+
+    if(loc == NULL) {
+        loc = ures_getLocale(result->rb, status);
+    }
+    result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
+    /* test for NULL */
+    if (result->requestedLocale == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        goto clean;
+    }
+    uprv_strcpy(result->requestedLocale, loc);
+
+    ures_close(binary);
+    ures_close(collations); //??? we have to decide on that. Probably affects something :)
+    result->resCleaner = ucol_prv_closeResources;
+    return result;
+
 clean:
     ures_close(b);
     ures_close(collElem);
     ures_close(collations);
     ures_close(binary);
     return NULL;
-  }
-
-  result->validLocale = NULL; // default is to use rb info
-
-  if(loc == NULL) {
-    loc = ures_getLocale(result->rb, status);
-  }
-  result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
-  /* test for NULL */
-  if (result->requestedLocale == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    ures_close(b); // ??? appears needed
-    ures_close(collElem);
-    ures_close(collations);
-    ures_close(binary); // ??? appears needed
-    return NULL;
-  }
-  uprv_strcpy(result->requestedLocale, loc);
-
-  ures_close(binary);
-  ures_close(collations); //??? we have to decide on that. Probably affects something :)
-  result->resCleaner = ucol_prv_closeResources;
-  return result;
 }
 
 U_CAPI UCollator*
@@ -322,7 +320,7 @@ ucol_openRules( const UChar        *rules,
 
   if(U_SUCCESS(*status)) {
     UChar *newRules;
-    result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
+    result->dataVersion[0] = UCOL_BUILDER_VERSION;
     if(rulesLength > 0) {
       newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
       /* test for NULL */
