@@ -118,5 +118,15 @@ else
   pax -C 819 -rvf $tar_file $binary_files1
   pax -C 819 -rvf $tar_file $binary_files2
 fi
+
+echo ""
+echo "Generating qsh compatible configure ..."
+echo ""
+
+sed -f convertConfigure.sed icu/source/configure > icu/source/configureTemp
+del -f icu/source/configure
+mv icu/source/configureTemp icu/source/configure
+chmod 755 icu/source/configure
+
 echo ""
 echo "$0 has completed extracting ICU from $tar_file."
