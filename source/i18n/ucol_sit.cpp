@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_sit.cpp
@@ -1062,11 +1062,6 @@ _processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE)
     }
 }
 
-static int32_t U_CALLCONV
-_getTrieFoldingOffset(uint32_t data) 
-{
-    return (int32_t)(data&0xFFFFFF);
-}
 U_CDECL_END
 
 
@@ -1128,17 +1123,14 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
 
     contContext c = { NULL, contractions, expansions, src.removeSet, addPrefixes, status };
 
-    coll->mapping->getFoldingOffset = _getTrieFoldingOffset;
-
-
     // Add the UCA contractions
     c.coll = coll->UCA;
-    utrie_enum(coll->UCA->mapping, NULL, _processSpecials, &c);
+    utrie_enum(&coll->UCA->mapping, NULL, _processSpecials, &c);
     
     // This is collator specific. Add contractions from a collator
     c.coll = coll;
     c.removedContractions =  NULL;
-    utrie_enum(coll->mapping, NULL, _processSpecials, &c);
+    utrie_enum(&coll->mapping, NULL, _processSpecials, &c);
     ucol_tok_closeTokenList(&src);
 }
 
