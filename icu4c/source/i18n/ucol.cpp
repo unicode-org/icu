@@ -351,7 +351,7 @@ ucol_initFromBinary(const uint8_t *bin, int32_t length,
                 UErrorCode *status)
 {
     UCollator *result = fillIn;
-    if(U_FAILURE(*status)){
+    if(U_FAILURE(*status)) {
         return NULL;
     }
     /*
@@ -371,14 +371,16 @@ ucol_initFromBinary(const uint8_t *bin, int32_t length,
     {
         *status = U_COLLATOR_VERSION_MISMATCH;
         return NULL;
-    } else {
+    }
+    else {
         if((uint32_t)length > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
             result = ucol_initCollator((const UCATableHeader *)bin, result, base, status);
             if(U_FAILURE(*status)){
                 return NULL;
             }
             result->hasRealData = TRUE;
-        } else {
+        }
+        else {
             if(base) {
                 result = ucol_initCollator(base->image, result, base, status);
                 ucol_setOptionsFromHeader(result, (UColOptionSet *)(bin+((const UCATableHeader *)bin)->options), status);
@@ -386,7 +388,8 @@ ucol_initFromBinary(const uint8_t *bin, int32_t length,
                     return NULL;
                 }
                 result->hasRealData = FALSE;
-            } else {
+            }
+            else {
                 *status = U_USELESS_COLLATOR_ERROR;
                 return NULL;
             }
@@ -409,6 +412,90 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
                 UErrorCode *status)
 {
     return ucol_initFromBinary(bin, length, base, NULL, status);
+}
+
+U_CAPI UCollator* U_EXPORT2
+ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status)
+{
+    UCollator * localCollator;
+    int32_t bufferSizeNeeded = (int32_t)sizeof(UCollator);
+    char *stackBufferChars = (char *)stackBuffer;
+    int32_t imageSize = 0;
+    int32_t rulesSize = 0;
+    int32_t rulesPadding = 0;
+    uint8_t *image;
+    UChar *rules;
+
+    if (status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+    if ((stackBuffer && !pBufferSize) || !coll){
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundry in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        *pBufferSize -= offsetUp;
+        stackBufferChars += offsetUp;
+    }
+    stackBuffer = (void *)stackBufferChars;
+
+    if (!coll->freeImageOnClose) {
+        UErrorCode tempStatus = U_ZERO_ERROR;
+        imageSize = ucol_cloneBinary(coll, NULL, 0, &tempStatus);
+    }
+    if (coll->rules && coll->freeRulesOnClose) {
+        rulesSize = (int32_t)(coll->rulesLength + 1)*sizeof(UChar);
+        rulesPadding = (int32_t)(bufferSizeNeeded % sizeof(UChar));
+        bufferSizeNeeded += rulesSize + rulesPadding;
+    }
+    if (stackBuffer && *pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+        *pBufferSize =  bufferSizeNeeded;
+        return 0;
+    }
+
+    if (!stackBuffer || *pBufferSize < bufferSizeNeeded) {
+        /* allocate one here...*/
+        stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
+        if (U_SUCCESS(*status)) {
+            *status = U_SAFECLONE_ALLOCATED_WARNING;
+        }
+    }
+    localCollator = (UCollator *)stackBufferChars;
+    rules = (UChar *)(stackBufferChars + sizeof(UCollator) + rulesPadding);
+    if (imageSize > 0) {
+        image = (uint8_t *)uprv_malloc(imageSize);
+        ucol_cloneBinary(coll, image, imageSize, status);
+    }
+    else {
+        image = (uint8_t *)coll->image;
+    }
+    localCollator = ucol_initFromBinary(image, imageSize, coll->UCA, localCollator, status);
+
+    if (coll->rules) {
+        if (coll->freeRulesOnClose) {
+            localCollator->rules = u_strcpy(rules, coll->rules);
+            //bufferEnd += rulesSize;
+        }
+        else {
+            localCollator->rules = coll->rules;
+        }
+        localCollator->freeRulesOnClose = FALSE;
+        localCollator->rulesLength = coll->rulesLength;
+    }
+
+    int32_t i;
+    for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
+        ucol_setAttribute(localCollator, (UColAttribute)i, ucol_getAttribute(coll, (UColAttribute)i, status), status);
+    }
+    localCollator->requestedLocale = NULL; // zero copies of pointers
+    localCollator->validLocale = NULL;
+    localCollator->rb = NULL;
+    localCollator->elements = NULL;
+    return localCollator;
 }
 
 U_CAPI void U_EXPORT2
