@@ -344,12 +344,13 @@ inline void freeHeapWritableBuffer(collIterate *data)
 /*                                                                          */
 /****************************************************************************/
 
-U_CAPI UCollator* U_EXPORT2
-ucol_openBinary(const uint8_t *bin, int32_t length,
+static UCollator*
+ucol_initFromBinary(const uint8_t *bin, int32_t length,
                 const UCollator *base,
+                UCollator *fillIn,
                 UErrorCode *status)
 {
-    UCollator *result = NULL;
+    UCollator *result = fillIn;
     if(U_FAILURE(*status)){
         return NULL;
     }
@@ -402,61 +403,55 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
     return result;
 }
 
+U_CAPI UCollator* U_EXPORT2
+ucol_openBinary(const uint8_t *bin, int32_t length,
+                const UCollator *base,
+                UErrorCode *status)
+{
+    return ucol_initFromBinary(bin, length, base, NULL, status);
+}
+
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
-  UTRACE_ENTRY_OC(UTRACE_UCOL_CLOSE);
-  UTRACE_DATA1(UTRACE_INFO, "coll = %p", coll);
-  if(coll != NULL) {
-      // these are always owned by each UCollator struct,
-      // so we always free them
-      if(coll->validLocale != NULL) {
-          uprv_free(coll->validLocale);
-      }
-      if(coll->requestedLocale != NULL) {
-          uprv_free(coll->requestedLocale);
-      }
+    UTRACE_ENTRY_OC(UTRACE_UCOL_CLOSE);
+    UTRACE_DATA1(UTRACE_INFO, "coll = %p", coll);
+    if(coll != NULL) {
+        // these are always owned by each UCollator struct,
+        // so we always free them
+        if(coll->validLocale != NULL) {
+            uprv_free(coll->validLocale);
+        }
+        if(coll->requestedLocale != NULL) {
+            uprv_free(coll->requestedLocale);
+        }
 
-      /* Here, it would be advisable to close: */
-      /* - UData for UCA (unless we stuff it in the root resb */
-      /* Again, do we need additional housekeeping... HMMM! */
-      UTRACE_DATA1(UTRACE_INFO, "coll->freeOnClose: %d", coll->freeOnClose);
-      if(coll->freeOnClose){
-      /* for safeClone, if freeOnClose is FALSE,
-          don't free the other instance data */
-          if(coll->freeOptionsOnClose != FALSE) {
-              if(coll->options != NULL) {
-                  uprv_free(coll->options);
-              }
-          }
-          if(coll->mapping != NULL) {
-              /*ucmpe32_close(coll->mapping);*/
-              uprv_free(coll->mapping);
-          }
-          if(coll->rules != NULL && coll->freeRulesOnClose) {
-              uprv_free((UChar *)coll->rules);
-          }
-          if(coll->freeImageOnClose == TRUE) {
-              uprv_free((UCATableHeader *)coll->image);
-          }
-          if(coll->resCleaner != NULL) {
-            coll->resCleaner(coll);
-          }
-#if 0
-          if(coll->rb != NULL) { /* pointing to read-only memory */
-              ures_close(coll->rb);
-          }
-          if(coll->elements != NULL) {
-              ures_close(coll->elements);
-          }
-#endif
-          if(coll->latinOneCEs != NULL) {
-              uprv_free(coll->latinOneCEs);
-          }
-          uprv_free(coll);
-      }
-  }
-  UTRACE_EXIT();
+        /* Here, it would be advisable to close: */
+        /* - UData for UCA (unless we stuff it in the root resb */
+        /* Again, do we need additional housekeeping... HMMM! */
+        UTRACE_DATA1(UTRACE_INFO, "coll->freeOnClose: %d", coll->freeOnClose);
+        if(coll->freeOnClose){
+            /* for safeClone, if freeOnClose is FALSE,
+            don't free the other instance data */
+            if(coll->options != NULL && coll->freeOptionsOnClose) {
+                uprv_free(coll->options);
+            }
+            if(coll->rules != NULL && coll->freeRulesOnClose) {
+                uprv_free((UChar *)coll->rules);
+            }
+            if(coll->image != NULL && coll->freeImageOnClose) {
+                uprv_free((UCATableHeader *)coll->image);
+            }
+            if(coll->resCleaner != NULL) {
+                coll->resCleaner(coll);
+            }
+            if(coll->latinOneCEs != NULL) {
+                uprv_free(coll->latinOneCEs);
+            }
+            uprv_free(coll);
+        }
+    }
+    UTRACE_EXIT();
 }
 
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
@@ -593,7 +588,6 @@ inline uint8_t i_getCombiningClass(UChar32 c, const UCollator *coll) {
     return sCC;
 }
 
-
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, const UCollator *UCA, UErrorCode *status) {
     UChar c;
     UCollator *result = fillIn;
@@ -613,32 +607,19 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     }
 
     result->image = image;
+    result->mapping.getFoldingOffset = _getFoldingOffset;
     const uint8_t *mapping = (uint8_t*)result->image+result->image->mappingPosition;
-    /*CompactEIntArray *newUCAmapping = ucmpe32_openFromData(&mapping, status);*/
-    UTrie *newUCAmapping = (UTrie *)uprv_malloc(sizeof(UTrie));
-    if(newUCAmapping != NULL) {
-      utrie_unserialize(newUCAmapping, mapping, result->image->endExpansionCE - result->image->mappingPosition, status);
-    } else {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      if(result->freeOnClose == TRUE) {
-          uprv_free(result);
-          result = NULL;
-      }
-      return result;
-    }
-    if(U_SUCCESS(*status)) {
-        result->mapping = newUCAmapping;
-    } else {
+    utrie_unserialize(&result->mapping, mapping, result->image->endExpansionCE - result->image->mappingPosition, status);
+    if(U_FAILURE(*status)) {
         if(result->freeOnClose == TRUE) {
             uprv_free(result);
             result = NULL;
         }
-        uprv_free(newUCAmapping);
         return result;
     }
 
     /*result->latinOneMapping = (uint32_t*)((uint8_t*)result->image+result->image->latinOneMapping);*/
-    result->latinOneMapping = UTRIE_GET32_LATIN1(result->mapping);
+    result->latinOneMapping = UTRIE_GET32_LATIN1(&result->mapping);
     result->contractionCEs = (uint32_t*)((uint8_t*)result->image+result->image->contractionCEs);
     result->contractionIndex = (UChar*)((uint8_t*)result->image+result->image->contractionIndex);
     result->expansion = (uint32_t*)((uint8_t*)result->image+result->image->expansion);
@@ -675,6 +656,8 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     /* get the version info from UCATableHeader and populate the Collator struct*/
     result->dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
     result->dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
+    result->dataVersion[2] = 0;
+    result->dataVersion[3] = 0;
 
     result->unsafeCP = (uint8_t *)result->image + result->image->unsafeCP;
     result->minUnsafeCP = 0;
@@ -1125,7 +1108,7 @@ ucol_initUCA(UErrorCode *status) {
                 // Initalize variables for implicit generation
                 const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
                 uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN, UCAconsts->UCA_PRIMARY_IMPLICIT_MAX, status);
-                _staticUCA->mapping->getFoldingOffset = _getFoldingOffset;
+                //_staticUCA->mapping.getFoldingOffset = _getFoldingOffset;
             }else{
                 udata_close(result);
                 uprv_free(newUCA);
@@ -1470,13 +1453,13 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
       }
       else
       {
-          order = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
+          order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
               order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
           if(order == UCOL_NOT_FOUND && coll->UCA) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-            order = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
+            order = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
 
             if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
               order = ucol_prv_getSpecialCE(coll->UCA, ch, order, collationSource, status);
@@ -1835,7 +1818,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             result = coll->latinOneMapping[ch];
           }
           else {
-            result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
+            result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
           }
           if (result > UCOL_NOT_FOUND) {
             result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
@@ -1846,7 +1829,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 result = UCOL_CONTRACTION;
             } else {
               if(coll->UCA) {
-                result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
+                result = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
               }
             }
             
@@ -2596,7 +2579,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           return 0;
         } else {
           /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
-          CE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, CE&0xFFFFFF, trail);
+          CE = UTRIE_GET32_FROM_OFFSET_TRAIL(&coll->mapping, CE&0xFFFFFF, trail);
           if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
             // We need to backup
             loadState(source, &state, TRUE);
@@ -3114,18 +3097,12 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         // return the first CE, but first put the rest into the expansion buffer
         if (!source->coll->image->jamoSpecial) { // FAST PATH
 
-          /**(source->CEpos++) = ucmpe32_get(UCA->mapping, V);*/
-          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(&coll->mapping, V);
           if (T != TBase) {
-              /**(source->CEpos++) = ucmpe32_get(UCA->mapping, T);*/
-              /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
-              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
+              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(&coll->mapping, T);
           }
 
-          /*return ucmpe32_get(UCA->mapping, L);*/ // return first one
-          /*return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
-          return UTRIE_GET32_FROM_LEAD(coll->mapping, L);
+          return UTRIE_GET32_FROM_LEAD(&coll->mapping, L);
 
         } else { // Jamo is Special
           // Since Hanguls pass the FCD check, it is
@@ -3261,7 +3238,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
               // a prefix, we need to act as if it's not there
               // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
               // lone surrogates cannot be set to zero as it would break other processing
-              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(&coll->mapping, schar);
               // it's easy for BMP code points
               if(isZeroCE == 0) {
                 continue;
@@ -3275,9 +3252,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 if (!collIter_bos(source)) {
                   UChar lead;
                   if(U16_IS_LEAD(lead = getPrevNormalizedChar(source, status))) {
-                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
+                    isZeroCE = UTRIE_GET32_FROM_LEAD(&coll->mapping, lead);
                     if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
+                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(&coll->mapping, isZeroCE&0xFFFFFF, schar);
                       if(finalCE == 0) {
                         // this is a real, assigned completely ignorable code point
                         goBackOne(source);
@@ -3694,16 +3671,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         */
         if (!source->coll->image->jamoSpecial)
         {
-          /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, L);*/
-          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, L);
-          /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, V);*/
-          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(&coll->mapping, L);
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(&coll->mapping, V);
           if (T != TBase)
-            /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, T);*/
-            /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
-            *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
+            *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(&coll->mapping, T);
 
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
@@ -6413,9 +6384,9 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     if(ch < 0x100) {
       CE = coll->latinOneMapping[ch];
     } else {
-      CE = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
+      CE = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
       if(CE == UCOL_NOT_FOUND && coll->UCA) {
-        CE = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
+        CE = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
       }
     }
     if(CE < UCOL_NOT_FOUND) {
@@ -6873,9 +6844,7 @@ ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
         return FALSE;
       }
     } else { /* regular */
-      /*CE = ucmpe32_get(coll->mapping, u);*/
-      CE = UTRIE_GET32_FROM_LEAD(coll->mapping, u);
-
+      CE = UTRIE_GET32_FROM_LEAD(&coll->mapping, u);
     }
 
     if(isContraction(CE)) {
@@ -7695,7 +7664,7 @@ ucol_getLatinOneContraction(const UCollator *coll, int32_t strength,
         return UCOL_BAIL_OUT_CE;
       }
       // skip completely ignorables
-      uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+      uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(&coll->mapping, schar);
       if(isZeroCE == 0) { // we have to ignore completely ignorables
         (*index)++;
         continue;

@@ -868,7 +868,7 @@ struct UCollator {
     UResourceBundle *rb;
     UResourceBundle *elements;
     const UCATableHeader *image;
-    UTrie *mapping;
+    UTrie mapping;
     const uint32_t *latinOneMapping;
     const uint32_t *expansion;
     const UChar    *contractionIndex;
