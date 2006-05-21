@@ -425,7 +425,8 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     int32_t rulesPadding = 0;
     uint8_t *image;
     UChar *rules;
-    UBool allocated = FALSE;
+    UBool colAllocated = FALSE;
+    UBool imageAllocated = FALSE;
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
@@ -461,7 +462,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (!stackBuffer || *pBufferSize < bufferSizeNeeded) {
         /* allocate one here...*/
         stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
-        allocated = TRUE;
+        colAllocated = TRUE;
         if (U_SUCCESS(*status)) {
             *status = U_SAFECLONE_ALLOCATED_WARNING;
         }
@@ -471,6 +472,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (imageSize > 0) {
         image = (uint8_t *)uprv_malloc(imageSize);
         ucol_cloneBinary(coll, image, imageSize, status);
+        imageAllocated = TRUE;
     }
     else {
         image = (uint8_t *)coll->image;
@@ -497,7 +499,8 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     localCollator->validLocale = NULL;
     localCollator->rb = NULL;
     localCollator->elements = NULL;
-    localCollator->freeOnClose = allocated;
+    localCollator->freeOnClose = colAllocated;
+    localCollator->freeImageOnClose = imageAllocated;
     return localCollator;
 }
 
@@ -3066,7 +3069,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                     loadState(source, &digitState, TRUE);
                     //goBackOne(source);
                   }
-              goBackOne(source);
+                  goBackOne(source);
                   break;
                 }
             } else {
