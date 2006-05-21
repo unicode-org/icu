@@ -80,13 +80,13 @@ static uint64_t randomInt64(void)
 static double randomDouble(void)
 {
     double ran = 0;
-    int32_t i;
 
     if (!initialized) {
         srand((unsigned)time(NULL));
         initialized = TRUE;
     }
 #if 0
+    int32_t i;
     do {
         /* Assume rand has at least 12 bits of precision */
         for (i = 0; i < sizeof(ran); i += 1) {
@@ -95,7 +95,11 @@ static double randomDouble(void)
     } while (_isnan(ran));
 #else
 	int64_t numerator = randomInt64();
-	int64_t denomenator = randomInt64();
+	int64_t denomenator;
+    do {
+        denomenator = randomInt64();
+    }
+    while (denomenator != 0);
 
 	ran = (double)numerator / (double)denomenator;
 #endif
