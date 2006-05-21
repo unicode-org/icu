@@ -445,7 +445,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     }
     stackBuffer = (void *)stackBufferChars;
 
-    if (!coll->freeImageOnClose) {
+    if (coll->freeImageOnClose) {
         UErrorCode tempStatus = U_ZERO_ERROR;
         imageSize = ucol_cloneBinary(coll, NULL, 0, &tempStatus);
     }
