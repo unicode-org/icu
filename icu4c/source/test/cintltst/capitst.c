@@ -744,9 +744,16 @@ void TestSafeClone() {
 
     for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
     {
+        ucol_setStrength(someCollators[index], UCOL_IDENTICAL);
+        bufferSize = 1;
+        err = U_ZERO_ERROR;
+        ucol_close(ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err));
+        if (err != U_SAFECLONE_ALLOCATED_WARNING) {
+            log_err("FAIL: collator number %d was not allocated.\n", index);
+        }
+
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
-        ucol_setStrength(someCollators[index], UCOL_IDENTICAL);
         someClonedCollators[index] = ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err);
         if (someClonedCollators[index] != (UCollator *)buffer[index]) {
             log_err("FAIL: Cloned collator didn't use provided buffer.\n");

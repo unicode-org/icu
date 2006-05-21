@@ -425,6 +425,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     int32_t rulesPadding = 0;
     uint8_t *image;
     UChar *rules;
+    UBool allocated = FALSE;
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
@@ -460,6 +461,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (!stackBuffer || *pBufferSize < bufferSizeNeeded) {
         /* allocate one here...*/
         stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
+        allocated = TRUE;
         if (U_SUCCESS(*status)) {
             *status = U_SAFECLONE_ALLOCATED_WARNING;
         }
@@ -495,6 +497,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     localCollator->validLocale = NULL;
     localCollator->rb = NULL;
     localCollator->elements = NULL;
+    localCollator->freeOnClose = allocated;
     return localCollator;
 }
 
@@ -512,6 +515,21 @@ ucol_close(UCollator *coll)
         if(coll->requestedLocale != NULL) {
             uprv_free(coll->requestedLocale);
         }
+        if(coll->resCleaner != NULL) {
+            coll->resCleaner(coll);
+        }
+        if(coll->latinOneCEs != NULL) {
+            uprv_free(coll->latinOneCEs);
+        }
+        if(coll->options != NULL && coll->freeOptionsOnClose) {
+            uprv_free(coll->options);
+        }
+        if(coll->rules != NULL && coll->freeRulesOnClose) {
+            uprv_free((UChar *)coll->rules);
+        }
+        if(coll->image != NULL && coll->freeImageOnClose) {
+            uprv_free((UCATableHeader *)coll->image);
+        }
 
         /* Here, it would be advisable to close: */
         /* - UData for UCA (unless we stuff it in the root resb */
@@ -520,21 +538,6 @@ ucol_close(UCollator *coll)
         if(coll->freeOnClose){
             /* for safeClone, if freeOnClose is FALSE,
             don't free the other instance data */
-            if(coll->options != NULL && coll->freeOptionsOnClose) {
-                uprv_free(coll->options);
-            }
-            if(coll->rules != NULL && coll->freeRulesOnClose) {
-                uprv_free((UChar *)coll->rules);
-            }
-            if(coll->image != NULL && coll->freeImageOnClose) {
-                uprv_free((UCATableHeader *)coll->image);
-            }
-            if(coll->resCleaner != NULL) {
-                coll->resCleaner(coll);
-            }
-            if(coll->latinOneCEs != NULL) {
-                uprv_free(coll->latinOneCEs);
-            }
             uprv_free(coll);
         }
     }
