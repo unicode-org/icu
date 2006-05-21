@@ -1202,7 +1202,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   }
 
   // Add completely ignorable elements
-  utrie_enum(t->UCA->mapping, NULL, _processUCACompleteIgnorables, t);
+  utrie_enum(&t->UCA->mapping, NULL, _processUCACompleteIgnorables, t);
 
 
   // canonical closure
