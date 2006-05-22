@@ -3,14 +3,14 @@
  * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CCONVTST.C
 *
 * Modification History:
 *        Name                     Description
 *   Madhu Katragadda              7/7/2000        Converter Tests for extended code coverage
-*********************************************************************************
+********************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -971,13 +971,13 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
 {
 
     int32_t i=0;
-    uint8_t *p=0;
+    char *p=0;
     const UChar *src;
-    uint8_t buffer[MAX_LENGTH];
+    char buffer[MAX_LENGTH];
     int32_t offsetBuffer[MAX_LENGTH];
     int32_t *offs=0;
-    uint8_t *targ;
-    uint8_t *targetLimit;
+    char *targ;
+    char *targetLimit;
     UChar *sourceLimit=0;
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -990,7 +990,7 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
     log_verbose("Converter %s opened..\n", ucnv_getName(conv, &status));
 
     for(i=0; i<MAX_LENGTH; i++){
-        buffer[i]=0xF0;
+        buffer[i]=(char)0xF0;
         offsetBuffer[i]=0xFF;
     }
 
@@ -1062,7 +1062,7 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
     UConverter *conv = 0;
     int32_t i=0;
     UChar *p=0;
-    const uint8_t* src;
+    const char* src;
     UChar buffer[MAX_LENGTH];
     int32_t offsetBuffer[MAX_LENGTH];
     int32_t *offs=0;
@@ -1087,7 +1087,7 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
         offsetBuffer[i]=-1;
     }
 
-    src=source;
+    src=(const char *)source;
     sourceLimit=(uint8_t*)(src+(sourceLen));
     targ=buffer;
     targetLimit=targ+MAX_LENGTH;
@@ -1131,7 +1131,7 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
             for(i=0; i<(targ-buffer); i++)
                 log_info("0x%04X,", buffer[i]);
             log_info("\nFrom Input:");
-            for(i=0; i<(src-source); i++)
+            for(i=0; i<(src-(const char *)source); i++)
                 log_info("0x%02X,", (unsigned char)source[i]);
             log_info("\n");
         }
@@ -1157,16 +1157,16 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
-    uint8_t    junkout[MAX_LENGTH]; /* FIX */
+    char    junkout[MAX_LENGTH]; /* FIX */
     int32_t    junokout[MAX_LENGTH]; /* FIX */
-    uint8_t *p;
+    char *p;
     const UChar *src;
-    uint8_t *end;
-    uint8_t *targ;
+    char *end;
+    char *targ;
     int32_t *offs;
     int i;
     int32_t   realBufferSize;
-    uint8_t *realBufferEnd;
+    char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
     UBool checkOffsets = TRUE;
@@ -1176,7 +1176,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     const void* oldContext = NULL;
 
     for(i=0;i<MAX_LENGTH;i++)
-        junkout[i] = 0xF0;
+        junkout[i] = (char)0xF0;
     for(i=0;i<MAX_LENGTH;i++)
         junokout[i] = 0xFF;
 
@@ -1214,7 +1214,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
       checkOffsets = FALSE;
 
     do
-      {
+    {
         end = nct_min(targ + gOutBufferSize, realBufferEnd);
         sourceLimit = nct_min(src + gInBufferSize, realSourceEnd);
 
@@ -1257,7 +1257,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         char junk[999];
         char offset_str[999];
-        uint8_t *ptr;
+        char *ptr;
 
         junk[0] = 0;
         offset_str[0] = 0;
@@ -1331,9 +1331,9 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     UConverter *conv = 0;
     UChar    junkout[MAX_LENGTH]; /* FIX */
     int32_t    junokout[MAX_LENGTH]; /* FIX */
-    const uint8_t *src;
-    const uint8_t *realSourceEnd;
-    const uint8_t *srcLimit;
+    const char *src;
+    const char *realSourceEnd;
+    const char *srcLimit;
     UChar *p;
     UChar *targ;
     UChar *end;
@@ -1373,7 +1373,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     }
     /*-------------------------------------*/
 
-    src = source;
+    src = (const char *)source;
     targ = junkout;
     offs = junokout;
     
@@ -1471,7 +1471,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
             for(i=0; i<(targ-junkout); i++)
                 log_err("%X,", junkout[i]);
             log_err("");
-            for(i=0; i<(src-source); i++)
+            for(i=0; i<(src-(const char *)source); i++)
                 log_err("%X,", (unsigned char)source[i]);
         }
     }

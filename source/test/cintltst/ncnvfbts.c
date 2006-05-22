@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ***************************************************************************/
 /*******************************************************************************
@@ -130,25 +130,25 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
 
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
-    uint8_t junkout[NEW_MAX_BUFFER]; /* FIX */
+    char junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
     const UChar *src;
-    uint8_t *end;
-    uint8_t *targ;
+    char *end;
+    char *targ;
     int32_t *offs;
     int i;
     int32_t   realBufferSize;
-    uint8_t *realBufferEnd;
+    char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
     UBool checkOffsets = TRUE;
     UBool doFlush;
     UBool action=FALSE;
-    uint8_t *p;
+    char *p;
 
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
-        junkout[i] = 0xF0;
+        junkout[i] = (char)0xF0;
     for(i=0;i<NEW_MAX_BUFFER;i++)
         junokout[i] = 0xFF;
     setNuConvTestName(codepage, "FROM");
@@ -293,9 +293,9 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     UConverter *conv = 0;
     UChar   junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
-    const uint8_t *src;
-    const uint8_t *realSourceEnd;
-    const uint8_t *srcLimit;
+    const char *src;
+    const char *realSourceEnd;
+    const char *srcLimit;
     UChar *targ;
     UChar *end;
     int32_t *offs;
@@ -329,7 +329,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
 
     log_verbose("Converter opened..\n");
 
-    src = source;
+    src = (const char *)source;
     targ = junkout;
     offs = junokout;
 
@@ -424,7 +424,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
             for(i=0; i<(targ-junkout); i++)
                 log_err("0x%04X,", junkout[i]);
             log_err("");
-            for(i=0; i<(src-source); i++)
+            for(i=0; i<(src-(const char *)source); i++)
                 log_err("0x%04X,", (unsigned char)source[i]);
         }
     }
