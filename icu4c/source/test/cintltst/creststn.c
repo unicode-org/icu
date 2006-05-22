@@ -2079,8 +2079,8 @@ static void TestResourceLevelAliasing(void) {
     UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;  
     const char* testdatapath = NULL;
     const UChar *string = NULL, *sequence = NULL;
-    const uint8_t *binary = NULL, *binSequence = NULL;
-    int32_t strLen = 0, seqLen = 0, binLen = 0, binSeqLen = 0;
+    /*const uint8_t *binary = NULL, *binSequence = NULL;*/
+    int32_t strLen = 0, seqLen = 0;/*, binLen = 0, binSeqLen = 0;*/
     char buffer[100];
     char *s;
 
@@ -2303,11 +2303,11 @@ static void TestDirectAccess(void) {
     
     char buffer[100];
     char *s;
-    const char* testdatapath=loadTestData(&status);
+    /*const char* testdatapath=loadTestData(&status);
     if(U_FAILURE(status)){
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
-    }
+    }*/
     
     t = ures_findResource("/testdata/te/zoneStrings/3/2", t, &status);
     if(U_FAILURE(status)) {
