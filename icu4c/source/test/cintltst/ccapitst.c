@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CU_CAPITST.C
 *
 * Modification History:
 *        Name                      Description            
 *     Madhu Katragadda              Ported for C API
-*********************************************************************************
+********************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -1399,6 +1399,7 @@ static void TSCC_fromU(const void *context,
         UErrorCode subErr = U_ZERO_ERROR;
         TSCCContext *newCtx;
         TSCCContext *junkCtx;
+        TSCCContext **pjunkCtx = &junkCtx;
 
         /* "recreate" it */
         log_verbose("TSCC_fromU: cloning..\n");
@@ -1409,7 +1410,7 @@ static void TSCC_fromU(const void *context,
         }
 
         /* now, SET it */
-        ucnv_getFromUCallBack(fromUArgs->converter, &junkFrom, (const void**)&junkCtx);
+        ucnv_getFromUCallBack(fromUArgs->converter, &junkFrom, (const void**)pjunkCtx);
         ucnv_setFromUCallBack(fromUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
         
         if(U_FAILURE(subErr)) {
@@ -1445,6 +1446,7 @@ static void TSCC_toU(const void *context,
         UErrorCode subErr = U_ZERO_ERROR;
         TSCCContext *newCtx;
         TSCCContext *junkCtx;
+        TSCCContext **pjunkCtx = &junkCtx;
 
         /* "recreate" it */
         log_verbose("TSCC_toU: cloning..\n");
@@ -1455,7 +1457,7 @@ static void TSCC_toU(const void *context,
         }
 
         /* now, SET it */
-        ucnv_getToUCallBack(toUArgs->converter, &junkFrom, (const void**)&junkCtx);
+        ucnv_getToUCallBack(toUArgs->converter, &junkFrom, (const void**)pjunkCtx);
         ucnv_setToUCallBack(toUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
         
         if(U_FAILURE(subErr)) {
@@ -1495,6 +1497,7 @@ static void TestConvertSafeCloneCallback()
     UErrorCode err = U_ZERO_ERROR;
     TSCCContext from1, to1;
     TSCCContext *from2, *from3, *to2, *to3;
+    TSCCContext **pfrom2 = &from2, **pfrom3 = &from3, **pto2 = &to2, **pto3 = &to3;
     char hunk[8192];
     int32_t hunkSize = 8192;
     UConverterFromUCallback junkFrom;
@@ -1532,8 +1535,8 @@ static void TestConvertSafeCloneCallback()
     log_verbose("Cloned to conv2=%p.\n", conv2);
 
 /**********   from *********************/
-    ucnv_getFromUCallBack(conv2, &junkFrom, (const void**)&from2);
-    ucnv_getFromUCallBack(conv1, &junkFrom, (const void**)&from3);
+    ucnv_getFromUCallBack(conv2, &junkFrom, (const void**)pfrom2);
+    ucnv_getFromUCallBack(conv1, &junkFrom, (const void**)pfrom3);
 
     TSCC_print_log(from2, "from2");
     TSCC_print_log(from3, "from3(==from1)");
@@ -1565,8 +1568,8 @@ static void TestConvertSafeCloneCallback()
     }
 
 /**********   to *********************/
-    ucnv_getToUCallBack(conv2, &junkTo, (const void**)&to2);
-    ucnv_getToUCallBack(conv1, &junkTo, (const void**)&to3);
+    ucnv_getToUCallBack(conv2, &junkTo, (const void**)pto2);
+    ucnv_getToUCallBack(conv1, &junkTo, (const void**)pto3);
 
     TSCC_print_log(to2, "to2");
     TSCC_print_log(to3, "to3(==to1)");
