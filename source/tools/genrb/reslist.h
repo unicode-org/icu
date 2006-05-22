@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -85,7 +85,7 @@ struct SResArray {
     struct SResource *fLast;
 };
 
-struct SResource* array_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status);
+struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 void array_close(struct SResource *array, UErrorCode *status);
 void array_add(struct SResource *array, struct SResource *res, UErrorCode *status);
 

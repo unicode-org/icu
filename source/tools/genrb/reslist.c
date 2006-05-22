@@ -489,7 +489,7 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct US
     return res;
 }
 
-struct SResource* array_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status) {
+struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status) {
 
     struct SResource *res = res_open(comment, status);
 
