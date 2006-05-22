@@ -232,7 +232,7 @@ public:
 };
 
 
-
+/*
 // Document of class Escaper
 //
 // ATTENTION: 
@@ -302,6 +302,7 @@ public:
 //
 // It's a hard work to re-adjust generation opportunity for various escaping form.
 // We just simply ignore it.
+*/
 class Escaper{
 public:
     enum CHOICE {YES, NO, RAND};
@@ -515,7 +516,7 @@ class Variable : public Pick {
 public:
     Variable(SymbolTable * symbols, const char * varName, Pick * varRef = NULL){
         this->var_name.append_array(varName, strlen(varName) + 1);
-        if (symbol_table = symbols){
+        if ((symbol_table = symbols)){
             symbol_table->put(varName, varRef);
         }
     }
@@ -1363,7 +1364,7 @@ const char *LanguageGenerator::next(){ // Return a null-terminated c-string. The
 
 static UBool TestQuote(){
     const char *const str = "This ' A !,z| qq [] .new\tline";
-    const char *const str_r = "This \\' A '!,'z'|' qq '[]' '.'new\tline";
+    //const char *const str_r = "This \\' A '!,'z'|' qq '[]' '.'new\tline";
     ////
     //// :(  we must quote our string to following C syntax
     ////     cannot type the literal here, it makes our code rather human unreadable
