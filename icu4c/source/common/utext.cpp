@@ -180,6 +180,9 @@ utext_current32(UText *ut) {
         UBool r = ut->access(ut, nativePosition, FALSE);  // reverse iteration flag loads preceding chunk
         U_ASSERT(r==TRUE);
         ut->chunkOffset = originalOffset;
+        if(!r) {
+            return U_SENTINEL;
+        }
     }
 
     if (U16_IS_TRAIL(trail)) {
