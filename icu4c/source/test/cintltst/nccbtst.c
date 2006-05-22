@@ -1,15 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
+********************************************************************************
 * File NCCBTST.C
 *
 * Modification History:
 *        Name                            Description
 *    Madhu Katragadda     7/21/1999      Testing error callback routines
-**************************************************************************************
+********************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -2533,28 +2534,28 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
 
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
-    uint8_t junkout[NEW_MAX_BUFFER]; /* FIX */
+    char junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
     const UChar *src;
-    uint8_t *end;
-    uint8_t *targ;
+    char *end;
+    char *targ;
     int32_t *offs;
     int i;
     int32_t  realBufferSize;
-    uint8_t *realBufferEnd;
+    char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
     UBool checkOffsets = TRUE;
     UBool doFlush;
     char junk[9999];
     char offset_str[9999];
-    uint8_t *p;
+    char *p;
     UConverterFromUCallback oldAction = NULL;
     const void* oldContext = NULL;
 
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
-        junkout[i] = 0xF0;
+        junkout[i] = (char)0xF0;
     for(i=0;i<NEW_MAX_BUFFER;i++)
         junokout[i] = 0xFF;
     setNuConvTestName(codepage, "FROM");
@@ -2684,7 +2685,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr(junkout, (int32_t)(targ-junkout));
+        printSeqErr((const uint8_t *)junkout, (int32_t)(targ-junkout));
         printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -2695,7 +2696,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got Output : ");
-            printSeqErr(junkout, (int32_t)(targ-junkout));
+            printSeqErr((const uint8_t *)junkout, (int32_t)(targ-junkout));
             log_err("Got Offsets:      ");
             for(p=junkout;p<targ;p++)
                 log_err("%d,", junokout[p-junkout]); 
@@ -2719,7 +2720,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         log_err("source: ");
         printUSeqErr(source, sourceLen);
         log_err("Got:      ");
-        printSeqErr(junkout, expectLen);
+        printSeqErr((const uint8_t *)junkout, expectLen);
         log_err("Expected: ");
         printSeqErr(expect, expectLen);
         return FALSE;
@@ -2734,9 +2735,9 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     UConverter *conv = 0;
     UChar   junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
-    const uint8_t *src;
-    const uint8_t *realSourceEnd;
-    const uint8_t *srcLimit;
+    const char *src;
+    const char *realSourceEnd;
+    const char *srcLimit;
     UChar *targ;
     UChar *end;
     int32_t *offs;
@@ -2771,7 +2772,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
 
     log_verbose("Converter opened..\n");
 
-    src = source;
+    src = (const char *)source;
     targ = junkout;
     offs = junokout;
 
@@ -2831,8 +2832,8 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
         char errChars[50]; /* should be sufficient */
         int8_t errLen = 50;
         UErrorCode err = U_ZERO_ERROR;
-        const uint8_t* limit= NULL;
-        const uint8_t* start= NULL;
+        const char* limit= NULL;
+        const char* start= NULL;
         ucnv_getInvalidChars(conv,errChars, &errLen, &err);
         if(U_FAILURE(err)){
             log_err("ucnv_getInvalidChars failed with error : %s\n",u_errorName(err));
@@ -2841,7 +2842,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
         limit = src;
         /* length of in invalid chars should be equal to returned length*/
         start = src - errLen;
-        if(uprv_strncmp(errChars,(char*)start,errLen)!=0){
+        if(uprv_strncmp(errChars,start,errLen)!=0){
             log_err("ucnv_getInvalidChars did not return the correct invalid chars for encoding %s \n", ucnv_getName(conv,&err));
         }
     }
@@ -2898,7 +2899,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 log_err("0x%04x,", junkout[i]);
             log_err("\n");
             log_err("From source:      ");
-            for(i=0; i<(src-source); i++)
+            for(i=0; i<(src-(const char *)source); i++)
                 log_err("  0x%02x,", (unsigned char)source[i]);
             log_err("\n");
         }
@@ -2930,28 +2931,28 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
 
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
-    uint8_t junkout[NEW_MAX_BUFFER]; /* FIX */
+    char junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
     const UChar *src;
-    uint8_t *end;
-    uint8_t *targ;
+    char *end;
+    char *targ;
     int32_t *offs;
     int i;
     int32_t  realBufferSize;
-    uint8_t *realBufferEnd;
+    char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
     UBool checkOffsets = TRUE;
     UBool doFlush;
     char junk[9999];
     char offset_str[9999];
-    uint8_t *p;
+    char *p;
     UConverterFromUCallback oldAction = NULL;
     const void* oldContext = NULL;
 
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
-        junkout[i] = 0xF0;
+        junkout[i] = (char)0xF0;
     for(i=0;i<NEW_MAX_BUFFER;i++)
         junokout[i] = 0xFF;
     setNuConvTestName(codepage, "FROM");
@@ -3061,7 +3062,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr(junkout, (int32_t)(targ-junkout));
+        printSeqErr((const uint8_t *)junkout, (int32_t)(targ-junkout));
         printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -3072,7 +3073,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got Output : ");
-            printSeqErr(junkout, (int32_t)(targ-junkout));
+            printSeqErr((const uint8_t *)junkout, (int32_t)(targ-junkout));
             log_err("Got Offsets:      ");
             for(p=junkout;p<targ;p++)
                 log_err("%d,", junokout[p-junkout]); 
@@ -3096,7 +3097,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
         log_err("source: ");
         printUSeqErr(source, sourceLen);
         log_err("Got:      ");
-        printSeqErr(junkout, expectLen);
+        printSeqErr((const uint8_t *)junkout, expectLen);
         log_err("Expected: ");
         printSeqErr(expect, expectLen);
         return FALSE;
@@ -3110,9 +3111,9 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
     UConverter *conv = 0;
     UChar   junkout[NEW_MAX_BUFFER]; /* FIX */
     int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
-    const uint8_t *src;
-    const uint8_t *realSourceEnd;
-    const uint8_t *srcLimit;
+    const char *src;
+    const char *realSourceEnd;
+    const char *srcLimit;
     UChar *targ;
     UChar *end;
     int32_t *offs;
@@ -3147,7 +3148,7 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
 
     log_verbose("Converter opened..\n");
 
-    src = source;
+    src = (const char *)source;
     targ = junkout;
     offs = junokout;
 
@@ -3255,7 +3256,7 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
                 log_err("0x%04x,", junkout[i]);
             log_err("\n");
             log_err("From source:      ");
-            for(i=0; i<(src-source); i++)
+            for(i=0; i<(src-(const char *)source); i++)
                 log_err("  0x%02x,", (unsigned char)source[i]);
             log_err("\n");
         }
