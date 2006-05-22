@@ -823,10 +823,10 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
                     }
                     if(existsInScript == FALSE){
                         for( j = 0; j < scriptsLen; j++){
-                            UChar pattern[500]={'\0'};
+                            UChar toPattern[500]={'\0'};
                             char pat[500]={'\0'};
-                            int32_t len = uset_toPattern(scripts[i], pattern, 500, TRUE, &status);
-                            len = myUCharsToChars(pattern, pat, len);
+                            int32_t len = uset_toPattern(scripts[i], toPattern, 500, TRUE, &status);
+                            len = myUCharsToChars(toPattern, pat, len);
                             log_err("uset_indexOf(\\u%04X)=%i uset_indexOf(\\u%04X)=%i\n", start, uset_indexOf(scripts[0], start), end, uset_indexOf(scripts[0], end));
                             if(len!=-1){
                                 log_err("Pattern: %s\n",pat);
