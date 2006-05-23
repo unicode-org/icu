@@ -1620,10 +1620,18 @@ public class DecimalFormat extends NumberFormat {
             int exponent = 0; // Set to the exponent value, if any
             int digit = 0;
 
+            // strict parsing
+            boolean strictParse = isParseStrict();
+            boolean strictFail = false; // did we exit with a strict parse failure?
+            boolean leadingZero = false; // did we see a leading zero?
+            int lastGroup = -1; // where did we last see a grouping separator?
+            int prevGroup = -1; // where did we see the grouping separator before that?
+            int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
+
             // We have to track digitCount ourselves, because digits.count will
             // pin when the maximum allowable digits is reached.
             int digitCount = 0;
-
+            
             int backup = -1;
             for (; position < text.length(); ++position)
             {
@@ -1646,14 +1654,38 @@ public class DecimalFormat extends NumberFormat {
                 if (digit == 0)
                 {
                     // Cancel out backup setting (see grouping handler below)
+                    if (strictParse && backup != -1) {
+                        // comma followed by digit, so group before comma is a 
+                        // secondary group.  If there was a group separator
+                        // before that, the group must == the secondary group
+                        // length, else it can be <= the the secondary group
+                        // length.
+                        if ((lastGroup != -1 && backup - lastGroup - 1 != gs2) ||
+                            (lastGroup == -1 && position - oldStart - 1 > gs2)) {
+                            strictFail = true;
+                            break;
+                        }
+                        prevGroup = lastGroup;
+                        lastGroup = backup;
+                    }
                     backup = -1; // Do this BEFORE continue statement below!!!
                     sawDigit = true;
 
                     // Handle leading zeros
                     if (digits.count == 0)
                     {
-                        // Ignore leading zeros in integer part of number.
-                        if (!sawDecimal) continue;
+                        if (!sawDecimal) {
+                            if (strictParse && !isExponent) {
+                                // Allow leading zeros in exponents
+                                if (leadingZero) {
+                                    strictFail = true;
+                                    break;
+                                }
+                                leadingZero = true;
+                            }
+                            // Ignore leading zeros in integer part of number.
+                            continue;
+                        }
 
                         // If we have seen the decimal, but no significant digits yet,
                         // then we account for leading zeros by decrementing the
@@ -1668,6 +1700,23 @@ public class DecimalFormat extends NumberFormat {
                 }
                 else if (digit > 0 && digit <= 9) // [sic] digit==0 handled above
                 {
+                    if (strictParse) {
+                        if (leadingZero) {
+                            // a leading zero before a digit is an error with strict parsing
+                            strictFail = true;
+                            break;
+                        }
+                        if (backup != -1) {
+                            if ((lastGroup != -1 && backup - lastGroup - 1 != gs2) ||
+                                (lastGroup == -1 && position - oldStart - 1 > gs2)) {
+                                strictFail = true;
+                                break;
+                            }
+                            prevGroup = lastGroup;
+                            lastGroup = backup;
+                        }
+                    }
+
                     sawDigit = true;
                     ++digitCount;
                     digits.append((char)(digit + '0'));
@@ -1677,16 +1726,31 @@ public class DecimalFormat extends NumberFormat {
                 }
                 else if (!isExponent && ch == decimal)
                 {
+                    if (strictParse) {
+                        if (backup != -1 ||
+                            (lastGroup != -1 && position - lastGroup != groupingSize - 1)) {
+                            strictFail = true;
+                            break;
+                        }
+                    }
                     // If we're only parsing integers, or if we ALREADY saw the
                     // decimal, then don't parse this one.
                     if (isParseIntegerOnly() || sawDecimal) break;
                     digits.decimalAt = digitCount; // Not digits.count!
                     sawDecimal = true;
+                    leadingZero = false; // a single leading zero before a decimal is ok
                 }
                 else if (!isExponent && ch == grouping && isGroupingUsed())
                 {
                     if (sawDecimal) {
                         break;
+                    }
+                    if (strictParse) {
+                        if ((!sawDigit || backup != -1)) {
+                            // leading group, or two group separators in a row
+                            strictFail = true;
+                            break;
+                        }
                     }
                     // Ignore grouping characters, if we are using them, but require
                     // that they be followed by a digit.  Otherwise we backup and
@@ -1732,6 +1796,14 @@ public class DecimalFormat extends NumberFormat {
                     }
                     
                     if (exponentDigits.count > 0) {
+                        // defer strict parse until we know we have a bona-fide exponent
+                        if (strictParse) {
+                            if (backup != -1 || lastGroup != -1) {
+                                strictFail = true;
+                                break;
+                            }
+                        }
+
                         exponentDigits.decimalAt = exponentDigits.count;
                         exponent = (int) exponentDigits.getLong();
                         if (negExp) {
@@ -1747,6 +1819,22 @@ public class DecimalFormat extends NumberFormat {
             }
 
             if (backup != -1) position = backup;
+
+            if (strictParse && !sawDecimal) {
+                if (lastGroup != -1 && position - lastGroup != groupingSize + 1) {
+                    strictFail = true;
+                }
+            }
+            if (strictFail) {
+                // only set with strictParse and a leading zero error
+                // leading zeros are an error with strict parsing except
+                // immediately before nondigit (except group separator 
+                // followed by digit), or end of text.
+                
+                parsePosition.setIndex(oldStart);
+                parsePosition.setErrorIndex(position);
+                return false;
+            }
 
             // If there was no decimal point we have an integer
             if (!sawDecimal) digits.decimalAt = digitCount; // Not digits.count!
