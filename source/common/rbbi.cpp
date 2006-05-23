@@ -749,7 +749,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     if (fData->fSafeFwdTable != NULL) {
         // new rule syntax
         utext_setNativeIndex(fText, offset);
-        int32_t newOffset = (int32_t)utext_getNativeIndex(fText);
+        int32_t newOffset = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         if (newOffset != offset) {
             // Will come here if specified offset was not a code point boundary AND
             //   the underlying implmentation is using UText, which snaps any non-code-point-boundary
@@ -757,7 +757,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
             // For breakitereator::preceding only, these non-code-point indices need to be moved
             //   up to refer to the following codepoint.
             utext_next32(fText);
-            offset = (int32_t)utext_getNativeIndex(fText);
+            offset = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         }
 
         // TODO:  (synwee) would it be better to just check for being in the middle of a surrogate pair,
@@ -767,7 +767,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         //        affects only preceding(), seems cleaner, but is slightly different.
         utext_previous32(fText);
         handleNext(fData->fSafeFwdTable);
-        int32_t result = (int32_t)utext_getNativeIndex(fText);
+        int32_t result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         while (result >= offset) {
             result = previous();
         }
@@ -837,7 +837,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // one and return true if the position we get back is the one the user
     // specified
     utext_previous32From(fText, offset);
-    int32_t backOne = (int32_t)utext_getNativeIndex(fText);
+    int32_t backOne = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     UBool    result  = following(backOne) == offset;
     return result;
 }
@@ -847,7 +847,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
  * @return The current iteration position.
  */
 int32_t RuleBasedBreakIterator::current(void) const {
-    int32_t  pos = (int32_t)utext_getNativeIndex(fText);
+    int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     return pos;
 }
  
@@ -907,7 +907,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     }
 
     //  Set up the starting char.
-    initialPosition = (int32_t)utext_getNativeIndex(fText); 
+    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText); 
     result          = initialPosition;
 
     //  Set the initial state for the state machine
@@ -1010,7 +1010,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
 
         if (row->fAccepting == -1) {
             // Match found, common case.
-            result = (int32_t)utext_getNativeIndex(fText);
+            result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
             fLastRuleStatusIndex = row->fTagIdx;   // Remember the break status (tag) values.
         }
 
@@ -1031,7 +1031,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
                 goto continueOn;
             }
 
-            int32_t  r = (int32_t)utext_getNativeIndex(fText);
+            int32_t  r = (int32_t)UTEXT_GETNATIVEINDEX(fText);
             lookaheadResult = r;
             lookaheadStatus = row->fLookAhead;
             lookaheadTagIdx = row->fTagIdx;
@@ -1063,7 +1063,7 @@ continueOn:
     if (result == initialPosition) {
         utext_setNativeIndex(fText, initialPosition);
         utext_next32(fText);
-        result = (int32_t)utext_getNativeIndex(fText);
+        result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     }
 
     // Leave the iterator at our result position.
@@ -1112,12 +1112,12 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     fLastRuleStatusIndex = 0;
 
     // if we're already at the start of the text, return DONE.
-    if (fText == NULL || fData == NULL || utext_getNativeIndex(fText)==0) {
+    if (fText == NULL || fData == NULL || UTEXT_GETNATIVEINDEX(fText)==0) {
         return BreakIterator::DONE;
     }
 
     //  Set up the starting char.
-    initialPosition = (int32_t)utext_getNativeIndex(fText);
+    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     result          = initialPosition;
     c               = utext_previous32(fText);
 
@@ -1208,7 +1208,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
 
         if (row->fAccepting == -1) {
             // Match found, common case.
-            result = (int32_t)utext_getNativeIndex(fText);
+            result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         }
 
         if (row->fLookAhead != 0) {
@@ -1227,7 +1227,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 goto continueOn;
             }
 
-            int32_t  r = (int32_t)utext_getNativeIndex(fText);
+            int32_t  r = (int32_t)UTEXT_GETNATIVEINDEX(fText);
             lookaheadResult = r;
             lookaheadStatus = row->fLookAhead;
             goto continueOn;
@@ -1269,7 +1269,7 @@ continueOn:
     if (result == initialPosition) {
         utext_setNativeIndex(fText, initialPosition);
         utext_previous32(fText);
-        result = (int32_t)utext_getNativeIndex(fText);
+        result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     }
 
     // Leave the iterator at our result position.
@@ -1544,7 +1544,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
                 UTRIE_GET16(&fData->fTrie, c, category);
             } while (c != U_SENTINEL && (category & 0x4000));
             // Back up to the last dictionary character
-            rangeEnd = (int32_t)utext_getNativeIndex(fText);
+            rangeEnd = (int32_t)UTEXT_GETNATIVEINDEX(fText);
             if (c == U_SENTINEL) {
                 // c = fText->last32();
                 //   TODO:  why was this if needed?
@@ -1569,7 +1569,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
                 utext_next32(fText);
                 c = utext_current32(fText);
             }
-            rangeStart = (int32_t)utext_getNativeIndex(fText);;
+            rangeStart = (int32_t)UTEXT_GETNATIVEINDEX(fText);;
         }
         UTRIE_GET16(&fData->fTrie, c, category);
     }
@@ -1579,7 +1579,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     // any breaks within the span.
     while(U_SUCCESS(status)) {
         if (reverse) {
-            while((current = (int32_t)utext_getNativeIndex(fText)) > rangeStart && (category & 0x4000) == 0) {
+            while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) > rangeStart && (category & 0x4000) == 0) {
                 c = utext_previous32(fText);
                 UTRIE_GET16(&fData->fTrie, c, category);
             }
@@ -1588,7 +1588,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
             }
         }
         else {
-            while((current = (int32_t)utext_getNativeIndex(fText)) < rangeEnd && (category & 0x4000) == 0) {
+            while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) < rangeEnd && (category & 0x4000) == 0) {
                 utext_next32(fText);           // TODO:  tweak for post-increment operation
                 c = utext_current32(fText);
                 UTRIE_GET16(&fData->fTrie, c, category);
