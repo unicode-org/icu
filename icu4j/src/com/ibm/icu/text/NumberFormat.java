@@ -434,6 +434,39 @@ public abstract class NumberFormat extends UFormat {
         parseIntegerOnly = value;
     }
 
+    /**
+     * Sets whether strict parsing is in effect.  When this is true, the
+     * following conditions cause a parse failure (examples use the pattern "#,##0.#"):<ul>
+     * <li>Leading zeros<br>
+     * '00', '0123' fail the parse, but '0' and '0.001' pass</li>
+     * <li>Leading or doubled grouping separators<br>
+     * ',123' and '1,,234" fail</li>
+     * <li>Groups of incorrect length when grouping is used<br>
+     * '1,23' and '1234,567' fail, but '1234' passes</li>
+     * <li>Grouping separators used in numbers followed by exponents<br>
+     * '1,234E5' fails, but '1234E5' and '1,234E' pass ('E' is not an exponent when
+     * not followed by a number)</li>
+     * </ul>
+     * When strict parsing is off, leading zeros and all grouping separators are ignored.
+     * This is the default behavior.
+     * @param value True to enable strict parsing.  Default is false.
+     * @see #getParseStrict
+     * @draft ICU 3.6
+     */
+    public void setParseStrict(boolean value) {
+        parseStrict = value;
+    }
+
+    /**
+     * Return whether strict parsing is in effect.
+     * @return true if strict parsing is in effect
+     * @see #setParseStrict
+     * @draft ICU 3.6
+     */
+    public boolean isParseStrict() {
+        return parseStrict;
+    }
+
     //============== Locale Stuff =====================
 
     /**
@@ -919,7 +952,8 @@ public abstract class NumberFormat extends UFormat {
             && maximumFractionDigits == other.maximumFractionDigits
             && minimumFractionDigits == other.minimumFractionDigits
             && groupingUsed == other.groupingUsed
-            && parseIntegerOnly == other.parseIntegerOnly;
+            && parseIntegerOnly == other.parseIntegerOnly
+            && parseStrict == other.parseStrict;
     }
 
     /**
@@ -1500,4 +1534,7 @@ public abstract class NumberFormat extends UFormat {
      */
     public NumberFormat() {
     }
+
+    // new in ICU4J 3.6
+    private boolean parseStrict;
 }
