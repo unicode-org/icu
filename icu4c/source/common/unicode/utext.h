@@ -587,6 +587,30 @@ utext_setNativeIndex(UText *ut, int64_t nativeIndex);
 U_DRAFT UBool U_EXPORT2
 utext_moveIndex32(UText *ut, int32_t delta);
 
+/**
+ * Get the native index of the character preceeding the current position.
+ * If the iteretion position is already at the start of the text, zero
+ * is returned.
+ * The value returned is the same as that obtained from the following sequence,
+ * but without the side effect of changing the iteration position.
+ *   
+ * \code
+ *    UText  *ut = whatever;
+ *      ...
+ *    utext_previous(ut)
+ *    utext_getNativeIndex(ut);
+ * \endcode
+ *
+ * This function is most useful during forwards iteration, where it will get the
+ *   native index of the character most recently returned from utext_next().
+ *
+ * @param ut the text to be accessed
+ * @return the native index of the character preceeding the current index position,
+ *         or zero if the current position is at the start of the text.
+ */
+U_DRAFT int64_t U_EXPORT2
+utext_getPreviousNativeIndex(UText *ut); 
+
 
 /**
  *
@@ -674,6 +698,23 @@ utext_extract(UText *ut,
     ((ut)->chunkOffset > 0 && \
      (ut)->chunkContents[(ut)->chunkOffset-1] < 0xd800 ? \
           (ut)->chunkContents[--((ut)->chunkOffset)]  :  utext_previous32(ut))
+
+/**
+  *  inline version of utext_getNativeIndex(), for performance-critical situations.
+  *
+  * Get the current iterator position, which can range from 0 to 
+  * the length of the text.
+  * The position is a native index into the input text, in whatever format it
+  * may have (possibly UTF-8 for example), and may not always be the same as
+  * the corresponding UChar (UTF-16) index.
+  * The returned position will always be aligned to a code point boundary. 
+  */
+#define UTEXT_GETNATIVEINDEX(ut)                       \
+    ((ut)->chunkOffset <= (ut)->nativeIndexingLimit?   \
+        (ut)->chunkNativeStart+(ut)->chunkOffset :     \
+        (ut)->mapOffsetToNative(ut))    
+
+
 
 
 #endif
@@ -1039,27 +1080,25 @@ UTextCopy(UText *ut,
 
 /**
  * Function type declaration for UText.mapOffsetToNative().
- * Map from a UChar offset within the current text chunk within the UText to
+ * Map from the current UChar offset within the current text chunk to
  *  the corresponding native index in the original source text.
  *
  * This is required only for text providers that do not use native UTF-16 indexes.
  *
- * TODO:  specify behavior with out-of-bounds offset?  Shouldn't ever occur.
- *
  * @param ut     the UText.
- * @param offset UTF-16 offset within text chunk 
- *               0<=offset<=chunk->length.
- * @return Absolute (native) index corresponding to the specified chunk offset.
+ * @return Absolute (native) index corresponding to chunkOffset in the current chunk.
  *         The returned native index should always be to a code point boundary.
  *
  * @draft ICU 3.4
  */
 typedef int64_t U_CALLCONV
-UTextMapOffsetToNative(UText *ut, int32_t offset);
+UTextMapOffsetToNative(UText *ut);
 
 /**
  * Function type declaration for UText.mapIndexToUTF16().
- * Map from a native index to a UChar offset within a text chunk
+ * Map from a native index to a UChar offset within a text chunk.
+ * Behavior is undefined if the native index does not fall within the
+ *   current chunk.
  *
  * This function is required only for text providers that do not use native UTF-16 indexes.
  *
@@ -1068,7 +1107,6 @@ UTextMapOffsetToNative(UText *ut, int32_t offset);
  * @return            Chunk-relative UTF-16 offset corresponding to the specified native
  *                    index.
  *
- * TODO:  specify behavior with out-of-bounds index?  Shouldn't ever occur.
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
@@ -1227,12 +1265,13 @@ struct UText {
     int64_t         chunkNativeLimit;
 
     /**
-      *    (protected) If TRUE, then non-UTF-16 indexes are used in the current chunk. 
+      *    (protected) The highest chunk offset where native indexing and
+      *    chunk (UTF-16) indexing correspond.  For UTF-16 sources, value
+      *    will be equal to chunkLength.
+      *
       *    @draft ICU 3.6
       */
-    UBool           nonUTF16Indexes;
-
-    UBool           bPadding1, bPadding2, bPadding3;   /* pad UBools to 32 bit boudary */
+    int32_t         nativeIndexingLimit;
 
     /**
       *  Private fields, reserved for future use by the UText framework
@@ -1372,8 +1411,7 @@ enum {
                   0,                    /* chunkLength   */ \
                   0,                    /* chunkStart    */ \
                   0,                    /* chunkLimit    */ \
-                  FALSE,                /* nonUTF16idx   */ \
-                  FALSE, FALSE, FALSE,  /* padding 8     */ \
+                  0,                    /* nativeIndexingLimit   */ \
                   0, 0, 0, 0,           /* privA,B,C,D   */ \
                   NULL,                 /* privP         */ \
                   NULL,                 /* clone ()      */ \
