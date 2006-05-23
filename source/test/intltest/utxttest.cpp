@@ -560,6 +560,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         expectedC     = cpMap[i].cp;
         foundC        = utext_next32(ut);    
         TEST_ASSERT(expectedC == foundC);
+        foundIndex    = utext_getPreviousNativeIndex(ut);
+        TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
             return;
         }
@@ -571,7 +573,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     utext_setNativeIndex(ut, 0);
     for (i=0; i<cpCount; i++) {
         expectedIndex = cpMap[i].nativeIdx;
-        foundIndex    = utext_getNativeIndex(ut);
+        foundIndex    = UTEXT_GETNATIVEINDEX(ut);
         TEST_ASSERT(expectedIndex == foundIndex);
         expectedC     = cpMap[i].cp;
         foundC        = UTEXT_NEXT32(ut);    
@@ -599,10 +601,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     for (i=cpCount-1; i>=0; i--) {
         expectedC     = cpMap[i].cp;
         expectedIndex = cpMap[i].nativeIdx;
+        int64_t prevIndex = utext_getPreviousNativeIndex(ut);
         foundC        = utext_previous32(ut);
         foundIndex    = utext_getNativeIndex(ut);
         TEST_ASSERT(expectedIndex == foundIndex);
         TEST_ASSERT(expectedC == foundC);
+        TEST_ASSERT(prevIndex == foundIndex);
         if (gFailed) {
             return;
         }
@@ -614,10 +618,15 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //
     foundIndex = utext_getNativeIndex(ut);
     TEST_ASSERT(foundIndex == 0);
+    foundIndex = utext_getPreviousNativeIndex(ut);
+    TEST_ASSERT(foundIndex == 0);
+
 
     foundC = utext_previous32(ut);
     TEST_ASSERT(foundC == U_SENTINEL);
     foundIndex = utext_getNativeIndex(ut);
+    TEST_ASSERT(foundIndex == 0);
+    foundIndex = utext_getPreviousNativeIndex(ut);
     TEST_ASSERT(foundIndex == 0);
 
 
@@ -627,7 +636,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         expectedC     = cpMap[i].cp;
         expectedIndex = cpMap[i].nativeIdx;
         foundC        = UTEXT_PREVIOUS32(ut);
-        foundIndex    = utext_getNativeIndex(ut);
+        foundIndex    = UTEXT_GETNATIVEINDEX(ut);
         TEST_ASSERT(expectedIndex == foundIndex);
         TEST_ASSERT(expectedC == foundC);
         if (gFailed) {
@@ -639,12 +648,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //  Backwards iteration, above, should have left our iterator
     //   position at zero, and continued backwards iterationshould fail.
     //
-    foundIndex = utext_getNativeIndex(ut);
+    foundIndex = UTEXT_GETNATIVEINDEX(ut);
     TEST_ASSERT(foundIndex == 0);
 
-    foundC = utext_previous32(ut);
+    foundC = UTEXT_PREVIOUS32(ut);
     TEST_ASSERT(foundC == U_SENTINEL);
-    foundIndex = utext_getNativeIndex(ut);
+    foundIndex = UTEXT_GETNATIVEINDEX(ut);
     TEST_ASSERT(foundIndex == 0);
     if (gFailed) {
         return;
@@ -660,7 +669,6 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         expectedC     = cpMap[cpIndex].cp;
         foundC        = utext_next32From(ut, index);
         TEST_ASSERT(expectedC == foundC);
-        TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
             return;
         }
@@ -673,7 +681,6 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         expectedC     = cpMap[cpIndex].cp;
         foundC        = utext_previous32From(ut, index);
         TEST_ASSERT(expectedC == foundC);
-        TEST_ASSERT(expectedIndex == foundIndex);
         if (gFailed) {
             return;
         }
@@ -691,6 +698,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         index = utext_getNativeIndex(ut);
         expectedIndex = cpMap[i].nativeIdx;
         TEST_ASSERT(expectedIndex == index);
+        index = UTEXT_GETNATIVEINDEX(ut);
+        TEST_ASSERT(expectedIndex == index);
     }
 
     // Walk through frontwards, incrementing by two
@@ -700,6 +709,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         index = utext_getNativeIndex(ut);
         expectedIndex = cpMap[i].nativeIdx;
         TEST_ASSERT(expectedIndex == index);
+        index = UTEXT_GETNATIVEINDEX(ut);
+        TEST_ASSERT(expectedIndex == index);
     }
 
     // walk through the string backwards, decrementing by one.
@@ -708,6 +719,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     for (i=cpCount; i>=0; i--) {
         expectedIndex = cpMap[i].nativeIdx;
         index = utext_getNativeIndex(ut);
+        TEST_ASSERT(expectedIndex == index);
+        index = UTEXT_GETNATIVEINDEX(ut);
         TEST_ASSERT(expectedIndex == index);
         utext_moveIndex32(ut, -1);
     }
@@ -719,6 +732,8 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     for (i=cpCount; i>=0; i-=3) {
         expectedIndex = cpMap[i].nativeIdx;
         index = utext_getNativeIndex(ut);
+        TEST_ASSERT(expectedIndex == index);
+        index = UTEXT_GETNATIVEINDEX(ut);
         TEST_ASSERT(expectedIndex == index);
         utext_moveIndex32(ut, -3);
     }
@@ -922,6 +937,8 @@ void UTextTest::ErrorTest()
         for (i=0; i<startMapLimit; i++) {
             utext_setNativeIndex(ut, i);
             int64_t cpIndex = utext_getNativeIndex(ut);
+            TEST_ASSERT(cpIndex == startMap[i]);
+            cpIndex = UTEXT_GETNATIVEINDEX(ut);
             TEST_ASSERT(cpIndex == startMap[i]);
         }
 
