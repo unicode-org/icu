@@ -99,7 +99,7 @@ static double randomDouble(void)
     do {
         denomenator = randomInt64();
     }
-    while (denomenator != 0);
+    while (denomenator == 0);
 
 	ran = (double)numerator / (double)denomenator;
 #endif
