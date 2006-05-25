@@ -2491,11 +2491,27 @@ TestAdditionalProperties() {
     if(u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_LINE_BREAK) wrong\n");
     }
-/*    n=0xdeadbeef;
-    if( (n=u_getIntPropertyMaxValue(UCHAR_SCRIPT))!=(int32_t)USCRIPT_UNICODE_LIMIT-1) {
+    if(u_getIntPropertyMaxValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_CODE_LIMIT-1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_SCRIPT) wrong\n");
     }
-*/
+    if(u_getIntPropertyMaxValue(UCHAR_NUMERIC_TYPE)!=(int32_t)U_NT_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_NUMERIC_TYPE) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY)!=(int32_t)U_CHAR_CATEGORY_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_HANGUL_SYLLABLE_TYPE)!=(int32_t)U_HST_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_HANGUL_SYLLABLE_TYPE) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_GRAPHEME_CLUSTER_BREAK)!=(int32_t)U_GCB_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_GRAPHEME_CLUSTER_BREAK) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_SENTENCE_BREAK)!=(int32_t)U_SB_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_SENTENCE_BREAK) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_WORD_BREAK)!=(int32_t)U_WB_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_WORD_BREAK) wrong\n");
+    }
     /*JB#2410*/
     if( u_getIntPropertyMaxValue(0x2345)!=-1) {
         log_err("error: u_getIntPropertyMaxValue(0x2345) wrong\n");
