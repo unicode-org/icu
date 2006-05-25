@@ -1,7 +1,7 @@
 Makefile
 *.d
-*.pdb
+*.o
 Debug
 Release
-tmp
-.#*
+letest
+letest.exe
