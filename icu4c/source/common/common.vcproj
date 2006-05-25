@@ -461,9 +461,6 @@
 				RelativePath=".\utrie.h">
 			</File>
 			<File
-				RelativePath=".\utrie_swap.c">
-			</File>
-			<File
 				RelativePath=".\uvector.cpp">
 			</File>
 			<File
