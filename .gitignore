@@ -208,12 +208,12 @@ icu4c/source/test/iotest/Release
 icu4c/source/test/iotest/iotest
 icu4c/source/test/iotest/iotest.exe
 icu4c/source/test/letest/*.d
-icu4c/source/test/letest/*.pdb
-icu4c/source/test/letest/.#*
+icu4c/source/test/letest/*.o
 icu4c/source/test/letest/Debug
 icu4c/source/test/letest/Makefile
 icu4c/source/test/letest/Release
-icu4c/source/test/letest/tmp
+icu4c/source/test/letest/letest
+icu4c/source/test/letest/letest.exe
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
