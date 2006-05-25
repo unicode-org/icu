@@ -24,6 +24,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "nccbtst.h"
+#include "unicode/ucnv_cb.h"
 #define NEW_MAX_BUFFER 999
 
 #define nct_min(x,y)  ((x<y) ? x : y)
@@ -79,6 +80,8 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 }
 
 
+static void TestCallBackFailure(void);
+
 void addTestConvertErrorCallBack(TestNode** root);
 
 void addTestConvertErrorCallBack(TestNode** root)
@@ -89,6 +92,7 @@ void addTestConvertErrorCallBack(TestNode** root)
     addTest(root, &TestSubWithValueCallBack, "tsconv/nccbtst/TestSubWithValueCallBack");
     addTest(root, &TestLegalAndOtherCallBack,  "tsconv/nccbtst/TestLegalAndOtherCallBack");
     addTest(root, &TestSingleByteCallBack,  "tsconv/nccbtst/TestSingleByteCallBack");
+    addTest(root, &TestCallBackFailure,  "tsconv/nccbtst/TestCallBackFailure");
 }
 
 static void TestSkipCallBack()
@@ -3279,3 +3283,24 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
         return FALSE;
     }
 }
+
+static void TestCallBackFailure(void) {
+    UErrorCode status = U_USELESS_COLLATOR_ERROR;
+    ucnv_cbFromUWriteBytes(NULL, NULL, -1, -1, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Error: ucnv_cbFromUWriteBytes did not react correctly to a bad UErrorCode\n");
+    }
+    ucnv_cbFromUWriteUChars(NULL, NULL, NULL, -1, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Error: ucnv_cbFromUWriteUChars did not react correctly to a bad UErrorCode\n");
+    }
+    ucnv_cbFromUWriteSub(NULL, -1, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Error: ucnv_cbFromUWriteSub did not react correctly to a bad UErrorCode\n");
+    }
+    ucnv_cbToUWriteUChars(NULL, NULL, -1, -1, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("Error: ucnv_cbToUWriteUChars did not react correctly to a bad UErrorCode\n");
+    }
+}
+
