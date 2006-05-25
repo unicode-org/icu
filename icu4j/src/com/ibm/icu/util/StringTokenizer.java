@@ -500,8 +500,17 @@ public final class StringTokenizer implements Enumeration
                         ? m_delimiters_.contains(c) 
                         : c < delims.length && delims[c];
                     if (contains) {
-                        m_tokenLimit_[result] = getNextNonDelimiter(
+                        if (m_coalesceDelimiters_) {
+                            m_tokenLimit_[result] = getNextNonDelimiter(
                                                                 m_nextOffset_);
+                        } else {
+                            int p = m_nextOffset_ + 1;
+                            if (p == m_length_) {
+                                p = -1;
+                            }
+                            m_tokenLimit_[result] = p;
+
+                        }
                     }
                     else {
                         m_tokenLimit_[result] = getNextDelimiter(m_nextOffset_);

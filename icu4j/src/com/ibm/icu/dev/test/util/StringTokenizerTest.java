@@ -500,7 +500,31 @@ public final class StringTokenizerTest extends TestFmwk
         }
         
     }
-    
+
+    public void TestCountTokensNoCoalesce() {
+        // jitterbug 5207
+        String str = "\"\"";
+        String del = "\"";
+        StringTokenizer st = new StringTokenizer(str, del, true);
+        int count = 0;
+        while (st.hasMoreTokens()) {
+            String t = st.nextToken();
+            logln("[" + count + "] '" + t + "'");
+            ++count;
+	}
+        st = new StringTokenizer(str, del, true);
+        int ncount = st.countTokens();
+        int xcount = 0;
+        while (st.hasMoreTokens()) {
+            String t = st.nextToken();
+            logln("[" + xcount + "] '" + t + "'");
+            ++xcount;
+        }
+        if (count != ncount || count != xcount) {
+            errln("inconsistent counts " + count + ", " + ncount + ", " + xcount);
+        }
+    }
+
     public static void main(String[] arg)
     {
         try
