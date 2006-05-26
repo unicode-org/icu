@@ -334,19 +334,17 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
 
         /* If the primary lookup fails, try to remap the Windows zone
            ID, according to the remapping table. */
-        for (i=0; ZONE_REMAP[i].winid; i += 1) {
+        for (i=0; ZONE_REMAP[i].winid; i++) {
             if (uprv_strcmp(winid, ZONE_REMAP[i].winid) == 0) {
                 uprv_strcpy(name, ZONE_REMAP[i].altwinid + 1);
-                if (*(ZONE_REMAP[i].altwinid) == '+' &&
-                    fWinType != WIN_9X_ME_TYPE) {
+                if (*(ZONE_REMAP[i].altwinid) == '+' && fWinType != WIN_9X_ME_TYPE) {
                     uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
                 }
-                result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                return RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                       subKeyName,
                                       0,
                                       KEY_QUERY_VALUE,
                                       hkey);
-                break;
             }
         }
     }
@@ -386,13 +384,10 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
     
     winid = findWindowsZoneID(icuid, length);
 
-    if (winid == NULL) {
-        return FALSE;
-    }
+    if (winid != NULL) {
+        result = getTZI(winid, &tzi);
 
-    result = getTZI(winid, &tzi);
-
-    if (result == ERROR_SUCCESS) {
+        if (result == ERROR_SUCCESS) {
             zoneInfo->Bias         = tzi.bias;
             zoneInfo->DaylightBias = tzi.daylightBias;
             zoneInfo->StandardBias = tzi.standardBias;
@@ -400,6 +395,7 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
             zoneInfo->StandardDate = tzi.standardDate;
 
             return TRUE;
+        }
     }
 
     return FALSE;
@@ -463,12 +459,7 @@ uprv_detectWindowsTimeZone() {
     HKEY hkey;
     TZI tziKey;
     TZI tziReg;
-    DWORD cbData = sizeof(TZI);
     TIME_ZONE_INFORMATION apiTZI;
-    char stdName[32];
-    DWORD stdNameSize;
-    char stdRegName[64];
-    DWORD stdRegNameSize;
     int firstMatch, lastMatch;
     int j;
 
@@ -476,6 +467,8 @@ uprv_detectWindowsTimeZone() {
        to TZI.  We could also interrogate the registry directly; we do
        this below if needed. */
     uprv_memset(&apiTZI, 0, sizeof(apiTZI));
+    uprv_memset(&tziKey, 0, sizeof(tziKey));
+    uprv_memset(&tziReg, 0, sizeof(tziReg));
     GetTimeZoneInformation(&apiTZI);
     tziKey.bias = apiTZI.Bias;
     uprv_memcpy((char *)&tziKey.standardDate, (char*)&apiTZI.StandardDate,
@@ -488,7 +481,8 @@ uprv_detectWindowsTimeZone() {
        recording the index of the first and the last match.  We have
        to do this because some zones are not unique under
        Offset+Rules. */
-    firstMatch = lastMatch = -1;
+    firstMatch = -1;
+    lastMatch = -1;
     for (j=0; ZONE_MAP[j].icuid; j++) {
         result = getTZI(ZONE_MAP[j].winid, &tziReg);
 
@@ -506,8 +500,7 @@ uprv_detectWindowsTimeZone() {
             tziKey.standardBias = tziReg.standardBias;
             tziKey.daylightBias = tziReg.daylightBias;
 
-            if (uprv_memcmp((char *)&tziKey, (char*)&tziReg,
-                       sizeof(tziKey)) == 0) {
+            if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
                 if (firstMatch < 0) {
                     firstMatch = j;
                 }
@@ -524,18 +517,22 @@ uprv_detectWindowsTimeZone() {
     }
     
     if (firstMatch != lastMatch) {
+        char stdName[32];
+        DWORD stdNameSize;
+        char stdRegName[64];
+        DWORD stdRegNameSize;
+
         /* Offset+Rules lookup yielded >= 2 matches.  Try to match the
            localized display name.  Get the name from the registry
            (not the API). This avoids conversion issues.  Use the
            standard name, since Windows modifies the daylight name to
            match the standard name if there is no DST. */
-        result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                               CURRENT_ZONE_REGKEY,
                               0,
                               KEY_QUERY_VALUE,
-                              &hkey);
-
-        if (result == ERROR_SUCCESS) {
+                              &hkey) == ERROR_SUCCESS)
+        {
             stdNameSize = sizeof(stdName);
             result = RegQueryValueEx(hkey,
                                      (LPTSTR)STANDARD_NAME_REGKEY,
@@ -551,10 +548,10 @@ uprv_detectWindowsTimeZone() {
              * look for a standard display name match.
              */
             for (j = firstMatch; j <= lastMatch; j += 1) {
+                stdRegNameSize = sizeof(stdRegName);
                 result = openTZRegKey(&hkey, ZONE_MAP[j].winid);
 
                 if (result == ERROR_SUCCESS) {
-                    stdRegNameSize = sizeof(stdRegName);
                     result = RegQueryValueEx(hkey,
                                              (LPTSTR)STD_REGKEY,
                                              NULL,
@@ -567,7 +564,8 @@ uprv_detectWindowsTimeZone() {
 
                 if (result == ERROR_SUCCESS &&
                     stdRegNameSize == stdNameSize &&
-                    uprv_memcmp(stdName, stdRegName, stdNameSize) == 0) {
+                    uprv_memcmp(stdName, stdRegName, stdNameSize) == 0)
+                {
                     firstMatch = j; /* record the match */
                     break;
                 }
