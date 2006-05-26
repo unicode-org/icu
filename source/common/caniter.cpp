@@ -111,14 +111,16 @@ void CanonicalIterator::cleanPieces() {
         }
         uprv_free(pieces);
         pieces = NULL;
-        if(pieces_lengths != NULL) {
-            uprv_free(pieces_lengths);
-        }
+        pieces_length = 0;
+    }
+    if(pieces_lengths != NULL) {
+        uprv_free(pieces_lengths);
         pieces_lengths = NULL;
-        if(current != NULL) {
-            uprv_free(current);
-        }
+    }
+    if(current != NULL) {
+        uprv_free(current);
         current = NULL;
+        current_length = 0;
     }
 }
 
@@ -269,20 +271,7 @@ CleanPartialInitialization:
     if (list != NULL) {
         delete[] list;
     }
-    if (pieces != NULL) {
-        uprv_free(pieces);
-    }
-    pieces = NULL;
-    pieces_length = 0;
-    if(pieces_lengths != NULL) {
-        uprv_free(pieces_lengths);
-    }
-    pieces_lengths = NULL;
-    if(current != NULL) {
-        uprv_free(current);
-    }
-    current = NULL;
-    current_length = 0;
+    cleanPieces();
 }
 
 /**
