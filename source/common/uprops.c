@@ -180,19 +180,19 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
             } else if(column==UPROPS_SRC_BIDI) {
                 /* bidi/shaping properties */
                 const UBiDiProps *bdp=GET_BIDI_PROPS();
-                if(bdp==NULL) {
-                    return FALSE;
+                if(bdp!=NULL) {
+                    switch(which) {
+                    case UCHAR_BIDI_MIRRORED:
+                        return ubidi_isMirrored(bdp, c);
+                    case UCHAR_BIDI_CONTROL:
+                        return ubidi_isBidiControl(bdp, c);
+                    case UCHAR_JOIN_CONTROL:
+                        return ubidi_isJoinControl(bdp, c);
+                    default:
+                        break;
+                    }
                 }
-                switch(which) {
-                case UCHAR_BIDI_MIRRORED:
-                    return ubidi_isMirrored(bdp, c);
-                case UCHAR_BIDI_CONTROL:
-                    return ubidi_isBidiControl(bdp, c);
-                case UCHAR_JOIN_CONTROL:
-                    return ubidi_isJoinControl(bdp, c);
-                default:
-                    break;
-                }
+                /* else return FALSE below */
             } else if(column==UPROPS_SRC_CHAR) {
                 switch(which) {
                 case UCHAR_POSIX_BLANK:
