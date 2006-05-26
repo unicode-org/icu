@@ -282,7 +282,7 @@ CleanPartialInitialization:
  */
 void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status) {
     if(U_FAILURE(status)) {
-      return;
+        return;
     }
     //if (PROGRESS) printf("Permute: %s\n", UToS(Tr(source)));
     int32_t i = 0;
@@ -291,27 +291,23 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
     // if zero or one character, just return a set with it
     // we check for length < 2 to keep from counting code points all the time
     if (source.length() <= 2 && source.countChar32() <= 1) {
-      UnicodeString *toPut = new UnicodeString(source);
-      /* test for NULL */
-      if (toPut == 0) {
-          status = U_MEMORY_ALLOCATION_ERROR;
-          return;
-      }
-      result->put(source, toPut, status);
-      return;
+        UnicodeString *toPut = new UnicodeString(source);
+        /* test for NULL */
+        if (toPut == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        result->put(source, toPut, status);
+        return;
     }
 
     // otherwise iterate through the string, and recursively permute all the other characters
     UChar32 cp;
-    Hashtable *subpermute = new Hashtable(status);
-    /* test for NULL */
-    if (subpermute == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    Hashtable subpermute(status);
+    if(U_FAILURE(status)) {
         return;
     }
-    if (U_SUCCESS(status)) {
-        subpermute->setValueDeleter(uhash_deleteUnicodeString);
-    }
+    subpermute.setValueDeleter(uhash_deleteUnicodeString);
 
     for (i = 0; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
@@ -327,37 +323,34 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
             continue;
         }
 
-        subpermute->removeAll();
+        subpermute.removeAll();
 
         // see what the permutations of the characters before and after this one are
         //Hashtable *subpermute = permute(source.substring(0,i) + source.substring(i + UTF16.getCharCount(cp)));
-        permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0), skipZeros, subpermute, status);
+        permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0), skipZeros, &subpermute, status);
         /* Test for buffer overflows */
         if(U_FAILURE(status)) {
-            delete subpermute;
             return;
         }
         // The upper replace is destructive. The question is do we have to make a copy, or we don't care about the contents 
         // of source at this point.
 
         // prefix this character to all of them
-        ne = subpermute->nextElement(el);
+        ne = subpermute.nextElement(el);
         while (ne != NULL) {
-          UnicodeString *permRes = (UnicodeString *)(ne->value.pointer);
-          UnicodeString *chStr = new UnicodeString(cp);
-          //test for  NULL
-          if (chStr == NULL) {
-              status = U_MEMORY_ALLOCATION_ERROR;
-              delete subpermute;
-              return;
-          }
+            UnicodeString *permRes = (UnicodeString *)(ne->value.pointer);
+            UnicodeString *chStr = new UnicodeString(cp);
+            //test for  NULL
+            if (chStr == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             chStr->append(*permRes); //*((UnicodeString *)(ne->value.pointer));
             //if (PROGRESS) printf("  Piece: %s\n", UToS(*chStr));
             result->put(*chStr, chStr, status);
-            ne = subpermute->nextElement(el);
+            ne = subpermute.nextElement(el);
         }
     }
-    delete subpermute;
     //return result;
 }
 
