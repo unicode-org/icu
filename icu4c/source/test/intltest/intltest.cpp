@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -95,7 +95,7 @@ Int64ToUnicodeString(int64_t num)
 #ifdef U_WINDOWS
     sprintf(buffer, "%I64d", num);
 #else
-    sprintf(buffer, "%lld", num);
+    sprintf(buffer, "%lld", (long long)num);
 #endif
     assert(danger == 'p');
 
