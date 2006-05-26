@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2004, International Business Machines Corporation and
+ * Copyright (c) 2003-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -290,8 +290,11 @@ static void TestTraceAPI() {
             test_format("a 64 bit ptr %p", 50, 0, "a 64 bit ptr 1000200030004000", __LINE__, ptr);
         } else if (sizeof(void *) == 16) {
             /* iSeries */
-            int32_t massiveBigEndianPtr[] = { 0x10002000, 0x30004000, 0x50006000, 0x70008000 };
-            ptr = *((void **)massiveBigEndianPtr);
+            union {
+                int32_t arr[4];
+                void *ptr;
+            } massiveBigEndianPtr = {{ 0x10002000, 0x30004000, 0x50006000, 0x70008000 }};
+            ptr = massiveBigEndianPtr.ptr;
             test_format("a 128 bit ptr %p", 50, 0, "a 128 bit ptr 10002000300040005000600070008000", __LINE__, ptr);
         } else {
             TEST_ASSERT(FALSE);
