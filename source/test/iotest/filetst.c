@@ -53,8 +53,11 @@ static void TestFileFromICU(UFILE *myFile) {
         origPtr = (void *) INT64_C(0x1000200030004000);
     } else if (sizeof(void *) == 16) {
         /* iSeries */
-        int32_t massiveBigEndianPtr[] = { 0x10002000, 0x30004000, 0x50006000, 0x70008000 };
-        origPtr = *((void **)massiveBigEndianPtr);
+        union {
+            int32_t arr[4];
+            void *ptr;
+        } massiveBigEndianPtr = {{ 0x10002000, 0x30004000, 0x50006000, 0x70008000 }};
+        origPtr = massiveBigEndianPtr.ptr;
     } else {
         log_err("sizeof(void*)=%d hasn't been tested before", (int)sizeof(void*));
     }
