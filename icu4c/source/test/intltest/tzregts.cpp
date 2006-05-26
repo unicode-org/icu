@@ -1113,7 +1113,7 @@ TimeZoneRegressionTest::TestJDK12API()
 
     // verify error checking
     pst->getOffset(1,
-        1997, (UCalendarDateFields)-1, 26, UCAL_SUNDAY, (2*60*60*1000), status);
+        1997, UCAL_FIELD_COUNT+1, 26, UCAL_SUNDAY, (2*60*60*1000), status);
     if(U_SUCCESS(status))
         errln("FAILURE: getOffset() succeeded with -1 for month");
 
