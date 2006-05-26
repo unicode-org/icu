@@ -435,16 +435,6 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundry in memory.
-     */
-    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        *pBufferSize -= offsetUp;
-        stackBufferChars += offsetUp;
-    }
-    stackBuffer = (void *)stackBufferChars;
-
     if (coll->freeImageOnClose) {
         UErrorCode tempStatus = U_ZERO_ERROR;
         imageSize = ucol_cloneBinary(coll, NULL, 0, &tempStatus);
@@ -454,12 +444,29 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
         rulesPadding = (int32_t)(bufferSizeNeeded % sizeof(UChar));
         bufferSizeNeeded += rulesSize + rulesPadding;
     }
+
     if (stackBuffer && *pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
         *pBufferSize =  bufferSizeNeeded;
         return 0;
     }
 
-    if (!stackBuffer || *pBufferSize < bufferSizeNeeded) {
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundry in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        if (*pBufferSize > offsetUp) {
+            *pBufferSize -= offsetUp;
+            stackBufferChars += offsetUp;
+        }
+        else {
+            /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
+            *pBufferSize = 1;
+        }
+    }
+    stackBuffer = (void *)stackBufferChars;
+
+    if (stackBuffer == NULL || *pBufferSize < bufferSizeNeeded) {
         /* allocate one here...*/
         stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
         colAllocated = TRUE;
