@@ -755,8 +755,12 @@ void TestSafeClone() {
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
         someClonedCollators[index] = ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err);
-        if (someClonedCollators[index] != (UCollator *)buffer[index]) {
+        if (someClonedCollators[index] == NULL
+            || someClonedCollators[index] < (UCollator *)buffer[index]
+            || someClonedCollators[index] > (UCollator *)(buffer[index]+(U_COL_SAFECLONE_BUFFERSIZE-1)))
+        {
             log_err("FAIL: Cloned collator didn't use provided buffer.\n");
+            return;
         }
         if (!ucol_equals(someClonedCollators[index], someCollators[index])) {
             log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", index);
