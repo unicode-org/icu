@@ -23,9 +23,9 @@ U_NAMESPACE_BEGIN
  ******************************************************************
  */
 
-DictionaryBreakEngine::DictionaryBreakEngine() {
+/*DictionaryBreakEngine::DictionaryBreakEngine() {
     fTypes = 0;
-}
+}*/
 
 DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes) {
     fTypes = breakTypes;
@@ -85,10 +85,10 @@ DictionaryBreakEngine::setCharacters( UnicodeSet &set ) {
     fSet = set;
 }
 
-void
+/*void
 DictionaryBreakEngine::setBreakTypes( uint32_t breakTypes ) {
     fTypes = breakTypes;
-}
+}*/
 
 /*
  ******************************************************************

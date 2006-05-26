@@ -1482,14 +1482,14 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
 //                        break iterators.
 //
 //-------------------------------------------------------------------------------
-UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
+/*UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
     if (fData == NULL) {
         return FALSE;
     }
     uint16_t category;
     UTRIE_GET16(&fData->fTrie, c, category);
     return (category & 0x4000) != 0;
-}
+}*/
 
 
 //-------------------------------------------------------------------------------
@@ -1797,9 +1797,9 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
 
 
 
-int32_t RuleBasedBreakIterator::getBreakType() const {
+/*int32_t RuleBasedBreakIterator::getBreakType() const {
     return fBreakType;
-}
+}*/
 
 void RuleBasedBreakIterator::setBreakType(int32_t type) {
     fBreakType = type;
