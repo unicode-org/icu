@@ -596,6 +596,7 @@ protected:
      */
     virtual void reset(void);
 
+#if 0
     /**
       * Return true if the category lookup for this char
       * indicates that it is in the set of dictionary lookup chars.
@@ -611,14 +612,13 @@ protected:
       * @internal
       */
     virtual int32_t getBreakType() const;
-    /** @internal */
+#endif
 
     /**
       * Set the type of the break iterator.
       * @internal
       */
     virtual void setBreakType(int32_t type);
-    /** @internal */
 
     /**
       * Common initialization function, used by constructors and bufferClone.

@@ -45,13 +45,13 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
 
   uint32_t      fTypes;
 
- public:
-
   /**
    * <p>Default constructor.</p>
    *
    */
   DictionaryBreakEngine();
+
+ public:
 
   /**
    * <p>Constructor setting the break types handled.</p>
@@ -111,7 +111,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
   *
   * @param breakTypes A bitmap of types handled by the engine.
   */
-  virtual void setBreakTypes( uint32_t breakTypes );
+//  virtual void setBreakTypes( uint32_t breakTypes );
 
  /**
   * <p>Divide up a range of known dictionary characters.</p>
