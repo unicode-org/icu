@@ -2785,4 +2785,18 @@ public final class UTF16
         result.append(getTrailSurrogate(ch));
         return result.toString();
     }
+    /**
+     * Constructs the supplementary code point and return it
+     * @param lead the lead surrogate
+     * @param trail the trail surrogate
+     * @return code point
+     */     
+    public static int getCodePoint(char lead, char trail){
+        if(isLeadSurrogate(lead)&& isTrailSurrogate(trail)){
+            return UCharacterProperty.getRawSupplementary(lead, trail);
+        }
+        throw new IllegalArgumentException("The lead: \\u"+Integer.toHexString(lead)+
+                                           " trail: "+Integer.toHexString(trail) + 
+                                           "failed");
+    }
 }

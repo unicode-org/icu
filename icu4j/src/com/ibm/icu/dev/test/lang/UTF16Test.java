@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -874,6 +874,9 @@ public final class UTF16Test extends TestFmwk
      */
     public void TestValueOf()
     {
+        if(UTF16.getCodePoint('\ud800','\udc00')!=0x10000){
+            errln("FAIL: getCodePoint('\ud800','\udc00')");
+        }
         if (!UTF16.valueOf(0x61).equals("a") ||
         !UTF16.valueOf(0x10000).equals("\ud800\udc00")) {
         errln("FAIL: valueof(char32)");
