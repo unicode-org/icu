@@ -38,6 +38,7 @@ static void Test_nfs4_cs_prep(void);
 static void Test_nfs4_cis_prep(void);
 static void Test_nfs4_mixed_prep(void);
 static void TestBEAMWarning(void);
+static void TestCoverage(void);
 
 void 
 addUStringPrepTest(TestNode** root)
@@ -49,6 +50,7 @@ addUStringPrepTest(TestNode** root)
    addTest(root, &Test_nfs4_cis_prep,        "spreptst/Test_nfs4_cis_prep");
    addTest(root, &Test_nfs4_mixed_prep,      "spreptst/Test_nfs4_mixed_prep");
    addTest(root, &TestBEAMWarning,           "spreptst/TestBEAMWarning");
+   addTest(root, &TestCoverage,              "spreptst/TestCoverage");
 }
 
 static void 
@@ -581,6 +583,29 @@ static void TestBEAMWarning(){
 
     usprep_close(profile);
 }
+
+static void TestCoverage(void) {
+    UErrorCode status = U_USELESS_COLLATOR_ERROR;
+    UParseError parseError;
+    
+    usprep_open(NULL, NULL, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("usprep_open didn't react correctly to a bad UErrorCode\n");
+    }
+    usprep_prepare(NULL, NULL, 0, NULL, 0, USPREP_DEFAULT, &parseError, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_err("usprep_prepare didn't react correctly to a bad UErrorCode\n");
+    }
+    status = U_ZERO_ERROR;
+    usprep_prepare(NULL, NULL, 0, NULL, 0, USPREP_DEFAULT, &parseError, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("usprep_prepare didn't check its arguments\n");
+    }
+
+    /* Don't crash */
+    usprep_close(NULL);
+}
+
 #endif
 
 /*
