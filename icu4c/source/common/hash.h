@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -26,6 +26,7 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API Hashtable : public UMemory {
     UHashtable* hash;
+    UHashtable hashObj;
 
     inline void init(UHashFunction *keyHash, UKeyComparator *keyComp, UValueComparator *valueComp, UErrorCode& status);
 
@@ -104,14 +105,15 @@ inline void Hashtable::init(UHashFunction *keyHash, UKeyComparator *keyComp,
     if (U_FAILURE(status)) {
         return;
     }
-    hash = uhash_open(keyHash, keyComp, valueComp, &status);
+    uhash_init(&hashObj, keyHash, keyComp, valueComp, &status);
     if (U_SUCCESS(status)) {
+        hash = &hashObj;
         uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
     }
 }
 
 inline Hashtable::Hashtable(UKeyComparator *keyComp, UValueComparator *valueComp, 
-                 UErrorCode& status): hash(0){
+                 UErrorCode& status) : hash(0) {
     init( uhash_hashUnicodeString, keyComp, valueComp, status);
 }
 inline Hashtable::Hashtable(UBool ignoreKeyCase, UErrorCode& status)
@@ -139,9 +141,8 @@ inline Hashtable::Hashtable()
 }
 
 inline Hashtable::~Hashtable() {
-    if (hash != 0) {
+    if (hash != NULL) {
         uhash_close(hash);
-        hash = 0;
     }
 }
 
@@ -186,7 +187,7 @@ inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {
 }
 
 inline void Hashtable::removeAll(void) {
-  uhash_removeAll(hash);
+    uhash_removeAll(hash);
 }
 
 inline UKeyComparator* Hashtable::setKeyCompartor(UKeyComparator*keyComp){
@@ -203,3 +204,4 @@ inline UBool Hashtable::equals(const Hashtable& that)const{
 U_NAMESPACE_END
 
 #endif
+
