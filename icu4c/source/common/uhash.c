@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -83,6 +83,7 @@ static const int32_t PRIMES[] = {
 };
 
 #define PRIMES_LENGTH (sizeof(PRIMES) / sizeof(PRIMES[0]))
+#define DEFAULT_PRIME_INDEX 3
 
 /* These ratios are tuned to the PRIMES array such that a resize
  * places the table back into the zone of non-resizing.  That is,
@@ -140,6 +141,12 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
  * PRIVATE Prototypes
  ********************************************************************/
 
+static UHashtable* _uhash_init(UHashtable *fillinResult,
+                                 UHashFunction *keyHash, 
+                                 UKeyComparator *keyComp,
+                                 UValueComparator *valueComp,
+                                 int32_t primeIndex, UErrorCode *status);
+
 static UHashtable* _uhash_create(UHashFunction *keyHash, 
                                  UKeyComparator *keyComp,
                                  UValueComparator *valueComp,
@@ -181,7 +188,7 @@ uhash_open(UHashFunction *keyHash,
            UValueComparator *valueComp,
            UErrorCode *status) {
 
-    return _uhash_create(keyHash, keyComp, valueComp, 3, status);
+    return _uhash_create(keyHash, keyComp, valueComp, DEFAULT_PRIME_INDEX, status);
 }
 
 U_CAPI UHashtable* U_EXPORT2
@@ -200,6 +207,16 @@ uhash_openSize(UHashFunction *keyHash,
     return _uhash_create(keyHash, keyComp, valueComp, i, status);
 }
 
+U_CAPI UHashtable* U_EXPORT2
+uhash_init(UHashtable *fillinResult,
+           UHashFunction *keyHash, 
+           UKeyComparator *keyComp,
+           UValueComparator *valueComp,
+           UErrorCode *status) {
+
+    return _uhash_init(fillinResult, keyHash, keyComp, valueComp, DEFAULT_PRIME_INDEX, status);
+}
+
 U_CAPI void U_EXPORT2
 uhash_close(UHashtable *hash) {
     U_ASSERT(hash != NULL);
@@ -214,7 +231,9 @@ uhash_close(UHashtable *hash) {
         uprv_free(hash->elements);
         hash->elements = NULL;
     }
-    uprv_free(hash);
+    if (hash->allocated) {
+        uprv_free(hash);
+    }
 }
 
 U_CAPI UHashFunction *U_EXPORT2
@@ -628,6 +647,35 @@ uhash_freeBlock(void *obj) {
  ********************************************************************/
 
 static UHashtable*
+_uhash_init(UHashtable *result,
+              UHashFunction *keyHash, 
+              UKeyComparator *keyComp,
+              UValueComparator *valueComp,
+              int32_t primeIndex,
+              UErrorCode *status)
+{
+    if (U_FAILURE(*status)) return NULL;
+    U_ASSERT(keyHash != NULL);
+    U_ASSERT(keyComp != NULL);
+
+    result->keyHasher       = keyHash;
+    result->keyComparator   = keyComp;
+    result->valueComparator = valueComp;
+    result->keyDeleter      = NULL;
+    result->valueDeleter    = NULL;
+    result->allocated       = FALSE;
+    _uhash_internalSetResizePolicy(result, U_GROW);
+
+    _uhash_allocate(result, primeIndex, status);
+
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    return result;
+}
+
+static UHashtable*
 _uhash_create(UHashFunction *keyHash, 
               UKeyComparator *keyComp,
               UValueComparator *valueComp,
@@ -636,8 +684,6 @@ _uhash_create(UHashFunction *keyHash,
     UHashtable *result;
 
     if (U_FAILURE(*status)) return NULL;
-    U_ASSERT(keyHash != NULL);
-    U_ASSERT(keyComp != NULL);
 
     result = (UHashtable*) uprv_malloc(sizeof(UHashtable));
     if (result == NULL) {
@@ -645,14 +691,8 @@ _uhash_create(UHashFunction *keyHash,
         return NULL;
     }
 
-    result->keyHasher       = keyHash;
-    result->keyComparator   = keyComp;
-    result->valueComparator = valueComp;
-    result->keyDeleter      = NULL;
-    result->valueDeleter    = NULL;
-    _uhash_internalSetResizePolicy(result, U_GROW);
-
-    _uhash_allocate(result, primeIndex, status);
+    _uhash_init(result, keyHash, keyComp, valueComp, primeIndex, status);
+    result->allocated       = TRUE;
 
     if (U_FAILURE(*status)) {
         uprv_free(result);
