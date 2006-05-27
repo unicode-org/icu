@@ -198,18 +198,17 @@ initCache(UErrorCode *status) {
     umtx_unlock(&usprepMutex);
     if(makeCache) {
         UHashtable *newCache = uhash_open(hashEntry, compareEntries, NULL, status);
-        if (U_FAILURE(*status)) {
-            return;
-        }
-        umtx_lock(&usprepMutex);
-        if(SHARED_DATA_HASHTABLE == NULL) {
-            SHARED_DATA_HASHTABLE = newCache;
-            ucln_common_registerCleanup(UCLN_COMMON_USPREP, usprep_cleanup);
-            newCache = NULL;
-        }
-        umtx_unlock(&usprepMutex);
-        if(newCache != NULL) {
-            uhash_close(newCache);
+        if (U_SUCCESS(*status)) {
+            umtx_lock(&usprepMutex);
+            if(SHARED_DATA_HASHTABLE == NULL) {
+                SHARED_DATA_HASHTABLE = newCache;
+                ucln_common_registerCleanup(UCLN_COMMON_USPREP, usprep_cleanup);
+                newCache = NULL;
+            }
+            umtx_unlock(&usprepMutex);
+            if(newCache != NULL) {
+                uhash_close(newCache);
+            }
         }
     }
 }
@@ -418,7 +417,7 @@ usprep_open(const char* path,
     usprep_init();
        
     /* initialize the profile struct members */
-    return usprep_getProfile(path,name,status);;
+    return usprep_getProfile(path,name,status);
 }
 
 U_CAPI void U_EXPORT2
