@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -153,6 +153,19 @@ struct UHashtable {
 
     UHashElement *elements;
 
+    /* Function pointers */
+
+    UHashFunction *keyHasher;      /* Computes hash from key.
+                                   * Never null. */
+    UKeyComparator *keyComparator; /* Compares keys for equality.
+                                   * Never null. */
+    UValueComparator *valueComparator; /* Compares the values for equality */
+
+    UObjectDeleter *keyDeleter;    /* Deletes keys when required.
+                                   * If NULL won't do anything */
+    UObjectDeleter *valueDeleter;  /* Deletes values when required.
+                                   * If NULL won't do anything */
+
     /* Size parameters */
   
     int32_t     count;      /* The number of key-value pairs in this table.
@@ -170,18 +183,7 @@ struct UHashtable {
     float       highWaterRatio; /* 0..1; high water as a fraction of length */
     float       lowWaterRatio;  /* 0..1; low water as a fraction of length */
     
-    /* Function pointers */
-
-    UHashFunction *keyHasher;      /* Computes hash from key.
-                                   * Never null. */
-    UKeyComparator *keyComparator; /* Compares keys for equality.
-                                   * Never null. */
-    UValueComparator *valueComparator; /* Compares the values for equality */
-
-    UObjectDeleter *keyDeleter;    /* Deletes keys when required.
-                                   * If NULL won't do anything */
-    UObjectDeleter *valueDeleter;  /* Deletes values when required.
-                                   * If NULL won't do anything */
+    UBool       allocated; /* Was this UHashtable allocated? */
 };
 typedef struct UHashtable UHashtable;
 
@@ -224,6 +226,23 @@ uhash_openSize(UHashFunction *keyHash,
                UValueComparator *valueComp,
                int32_t size,
                UErrorCode *status);
+
+/**
+ * Initialize an existing UHashtable.
+ * @param keyHash A pointer to the key hashing function.  Must not be
+ * NULL.
+ * @param keyComp A pointer to the function that compares keys.  Must
+ * not be NULL.
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return A pointer to a UHashtable, or 0 if an error occurred.
+ * @see uhash_openSize
+ */
+U_CAPI UHashtable* U_EXPORT2 
+uhash_init(UHashtable *hash,
+           UHashFunction *keyHash,
+           UKeyComparator *keyComp,
+           UValueComparator *valueComp,
+           UErrorCode *status);
 
 /**
  * Close a UHashtable, releasing the memory used.
