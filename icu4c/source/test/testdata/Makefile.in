@@ -89,7 +89,11 @@ ifeq ($(PKGDATA_MODE),common)
 ICU_DATA_OPT = -i $(OUTDIR)
 else
 ifeq ($(PKGDATA_MODE),dll)
+ifneq ($(ENABLE_SHARED),YES)
+ICU_DATA_OPT = -i $(BUILDDIR)
+else
 ICU_DATA_OPT =
+endif
 else
 ICU_DATA_OPT = -i $(BUILDDIR)
 endif
