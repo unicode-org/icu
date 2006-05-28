@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2005, International Business Machines Corporation and
+ * Copyright (c) 1999-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -551,6 +551,7 @@ void MultithreadTest::TestThreads()
 {
     char threadTestChars[THREADTEST_NRTHREADS + 1];
     SimpleThread *threads[THREADTEST_NRTHREADS];
+    int32_t numThreadsStarted = 0;
 
     int32_t i;
     for(i=0;i<THREADTEST_NRTHREADS;i++)
@@ -566,11 +567,18 @@ void MultithreadTest::TestThreads()
         if (threads[i]->start() != 0) {
             errln("Error starting thread %d", i);
         }
+        else {
+            numThreadsStarted++;
+        }
         SimpleThread::sleep(100);
         logln(" Subthread started.");
     }
 
     logln("Waiting for threads to be set..");
+    if (numThreadsStarted == 0) {
+        errln("No threads could be started for testing!");
+        return;
+    }
 
     int32_t patience = 40; // seconds to wait
 
@@ -665,9 +673,19 @@ void MultithreadTest::TestMutex()
     umtx_lock(&gTestMutexA);
     TestMutexThread  *threads[TESTMUTEX_THREAD_COUNT];
     int i;
+    int32_t numThreadsStarted = 0;
     for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
         threads[i] = new TestMutexThread;
-        threads[i]->start();
+        if (threads[i]->start() != 0) {
+            errln("Error starting thread %d", i);
+        }
+        else {
+            numThreadsStarted++;
+        }
+    }
+    if (numThreadsStarted == 0) {
+        errln("No threads could be started for testing!");
+        return;
     }
 
     int patience = 0;
@@ -1153,7 +1171,7 @@ cleanupAndReturn:
 #if !UCONFIG_NO_COLLATION
 
 #define kCollatorThreadThreads   10  // # of threads to spawn
-#define kCollatorThreadPatience kCollatorThreadThreads*100
+#define kCollatorThreadPatience kCollatorThreadThreads*30
 
 struct Line {
     UChar buff[25];
@@ -1350,9 +1368,12 @@ void MultithreadTest::TestCollators()
         noSpawned++;
     }
     logln("Spawned all");
+    if (noSpawned == 0) {
+        errln("No threads could be spawned.");
+        return;
+    }
 
-    //for(int32_t patience = kCollatorThreadPatience;patience > 0; patience --)
-    for(;;)
+    for(int32_t patience = kCollatorThreadPatience;patience > 0; patience --)
     {
         logln("Waiting...");
 
