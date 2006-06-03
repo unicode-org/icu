@@ -8,6 +8,7 @@
 package com.ibm.icu.util;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,19 +18,15 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-
 //#ifndef FOUNDATION
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 //#endif
-
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -62,9 +59,9 @@ import com.ibm.icu.text.SimpleDateFormat;
  * English, then the display name for a language will be returned in Breton if
  * available, otherwise in French if available, otherwise in English.
  * <p>
- * The codes used to reference territory, currency, etc. are as defined elsewhere in ICU,
- * and are taken from CLDR (which reflects RFC 3066bis usage, ISO 4217, and the 
- * TZ Timezone database identifiers).
+ * The codes used to reference territory, currency, etc. are as defined elsewhere
+ * in ICU, and are taken from CLDR (which reflects RFC 3066bis usage, ISO 4217,
+ * and the TZ Timezone database identifiers).
  * <p>
  * <b>This is at a prototype stage, and has not incorporated all the design
  * changes that we would like yet; further feedback is welcome.</b></p>
@@ -137,9 +134,9 @@ public class GlobalizationPreferences implements Freezable {
         ID_CURRENCY = 7,
         ID_CURRENCY_SYMBOL = 8,
         ID_TIMEZONE = 9;
-    
+
     private static final int ID_LIMIT = ID_TIMEZONE + 1;
-    
+
     /**
      * Break iterator types
      * @internal
@@ -153,45 +150,42 @@ public class GlobalizationPreferences implements Freezable {
         BI_TITLE = BreakIterator.KIND_TITLE;            // 4
 
     private static final int BI_LIMIT = BI_TITLE + 1;
-    
+
     /**
      * Sets the language/locale priority list. If other information is
      * not (yet) available, this is used to to produce a default value
      * for the appropriate territory, currency, timezone, etc.  The
      * user should be given the opportunity to correct those defaults
      * in case they are incorrect.
+     * 
      * @param locales list of locales in priority order, eg {"be", "fr"} 
      *     for Breton first, then French if that fails.
      * @return this, for chaining
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public GlobalizationPreferences setLocales(List locales) {
+    public GlobalizationPreferences setLocales(List inputLocales) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        if (locales.size() == 1) {
-            this.locales = locales.get(0);
-        } else if (locales.size() > 1) {
-            this.locales = new ArrayList(locales); // clone for safety
-        }
+        locales = processLocales(inputLocales);
         return this;
     }
 
     /**
      * Get a copy of the language/locale priority list
+     * 
      * @return a copy of the language/locale priority list.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public List getLocales() {
-        List result = new ArrayList(); // clone for safety
+        List result;
         if (locales == null) {
             result = guessLocales();
-        } else if (locales instanceof ULocale) {
-            result.add(locales);
         } else {
-            result.addAll((List)locales);
+            result = new ArrayList(); 
+            result.addAll(locales);
         }
         return result;
     }
@@ -199,26 +193,25 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Convenience function for getting the locales in priority order
      * @param index The index (0..n) of the desired item.
-     * @return desired item.
+     * @return desired item. null if index is out of range
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public ULocale getLocale(int index) {
-        if (locales == null) {
-            return (ULocale)guessLocales().get(index);
-        } else if (locales instanceof ULocale) {
-            if (index != 0) {
-                throw new IllegalArgumentException("Out of bounds: " + index);
-            }
-            return (ULocale)locales;
-        } else {
-            return (ULocale)((List)locales).get(index);
+        List lcls = locales;
+        if (lcls == null) {
+            lcls = guessLocales();
         }
+        if (index >= 0 && index < lcls.size()) {
+            return (ULocale)lcls.get(index);
+        }
+        return null;
     }
 
     /**
      * Convenience routine for setting the language/locale priority
      * list from an array.
+     * 
      * @see #setLocales(List locales)
      * @param uLocales list of locales in an array
      * @return this, for chaining
@@ -235,6 +228,7 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Convenience routine for setting the language/locale priority
      * list from a single locale/language.
+     * 
      * @see #setLocales(List locales)
      * @param uLocale single locale
      * @return this, for chaining
@@ -307,134 +301,6 @@ public class GlobalizationPreferences implements Freezable {
 //#endif
 
     /**
-     * Convenience routine for populating locale fallback order.
-     * @return a copy of fallback locale priority list
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public List getFallbackLocales() {
-        ArrayList fallbacks = new ArrayList();
-        List localeList = getLocales();
-
-        /*
-         * Step 1: Relocate later occurence of more specific locale
-         * before earlier occurence of less specific locale.
-         *
-         * Example:
-         *   Before - en_US, fr_FR, zh, en_US_Boston, zh_TW, zh_Hant, fr_CA
-         *   After  - en_US_Boston, en_US, fr_FR, zh_TW, zh_Hant, zh, fr_CA
-         */
-        for (int i = 0; i < localeList.size(); i++) {
-            ULocale uloc = (ULocale)localeList.get(i);
-
-            String language = uloc.getLanguage();
-            String script = uloc.getScript();
-            String country = uloc.getCountry();
-            String variant = uloc.getVariant();
-
-            boolean bInserted = false;
-            for (int j = 0; j < fallbacks.size(); j++) {
-                // Check if this locale is more specific
-                // than existing locale entries already inserted
-                // in the destination list
-                ULocale u = (ULocale)fallbacks.get(j);
-                if (!u.getLanguage().equals(language)) {
-                    continue;
-                }
-                String s = u.getScript();
-                String c = u.getCountry();
-                String v = u.getVariant();
-                if (!s.equals(script)) {
-                    if (s.length() == 0 && c.length() == 0 && v.length() == 0) {
-                        fallbacks.add(j, uloc);
-                        bInserted = true;
-                        break;
-                    } else if (s.length() == 0 && c.equals(country)) {
-                        // We want to see zh_Hant_HK before zh_HK
-                        fallbacks.add(j, uloc);
-                        bInserted = true;
-                        break;                      
-                    } else if (script.length() == 0 && country.length() > 0 && c.length() == 0) {
-                        // We want to see zh_HK before zh_Hant
-                        fallbacks.add(j, uloc);
-                        bInserted = true;
-                        break;
-                    }
-                    continue;
-                }
-                if (!c.equals(country)) {
-                    if (c.length() == 0 && v.length() == 0) {
-                        fallbacks.add(j, uloc);
-                        bInserted = true;
-                        break;
-                    }
-                }
-                if (!v.equals(variant) && v.length() == 0) {
-                    fallbacks.add(j, uloc);
-                    bInserted = true;
-                    break;
-                }
-            }
-            if (!bInserted) {
-                // Add this locale at the end of the list
-                fallbacks.add(uloc);
-            }
-        }
-
-        // TODO: Locale aliases should be resolved here
-        // For example, zh_Hant_TW = zh_TW
-
-        /*
-         * Step 2: Append fallback locales for each entry
-         *
-         * Example:
-         *   Before - en_US_Boston, en_US, fr_FR, zh_TW, zh_Hant, zh, fr_CA
-         *   After  - en_US_Boston, en_US, en, en_US, en, fr_FR, fr,
-         *            zh_TW, zn, zh_Hant, zh, zh, fr_CA, fr
-         */
-        int index = 0;
-        while (index < fallbacks.size()) {
-            ULocale uloc = (ULocale)fallbacks.get(index);
-            while (true) {
-                uloc = uloc.getFallback();
-                if (uloc.getLanguage().length() == 0) {
-                    break;
-                }
-                index++;
-                fallbacks.add(index, uloc);
-            }
-            index++;
-        }
-
-        /*
-         * Step 3: Remove earlier occurence of duplicated locales
-         * 
-         * Example:
-         *   Before - en_US_Boston, en_US, en, en_US, en, fr_FR, fr,
-         *            zh_TW, zn, zh_Hant, zh, zh, fr_CA, fr
-         *   After  - en_US_Boston, en_US, en, fr_FR, zh_TW, zh_Hant,
-         *            zh, fr_CA, fr
-         */
-        index = 0;
-        while (index < fallbacks.size() - 1) {
-            ULocale uloc = (ULocale)fallbacks.get(index);
-            boolean bRemoved = false;
-            for (int i = index + 1; i < fallbacks.size(); i++) {
-                if (uloc.equals((ULocale)fallbacks.get(i))) {
-                    // Remove ealier one
-                    fallbacks.remove(index);
-                    bRemoved = true;
-                    break;
-                }
-            }
-            if (!bRemoved) {
-                index++;
-            }
-        }
-        return fallbacks;
-    }
-
-    /**
      * Convenience function to get a ResourceBundle instance using
      * the specified base name based on the language/locale priority list
      * stored in this object.
@@ -449,7 +315,7 @@ public class GlobalizationPreferences implements Freezable {
     public ResourceBundle getResourceBundle(String baseName) {
         return getResourceBundle(baseName, null);
     }
-    
+
     /**
      * Convenience function to get a ResourceBundle instance using
      * the specified base name and class loader based on the language/locale
@@ -467,7 +333,7 @@ public class GlobalizationPreferences implements Freezable {
         UResourceBundle urb = null;
         UResourceBundle candidate = null;
         String actualLocaleName = null;
-        List fallbacks = getFallbackLocales();
+        List fallbacks = getLocales();
         for (int i = 0; i < fallbacks.size(); i++) {
             String localeName = ((ULocale)fallbacks.get(i)).toString();
             if (actualLocaleName != null && localeName.equals(actualLocaleName)) {
@@ -512,6 +378,7 @@ public class GlobalizationPreferences implements Freezable {
      * currency and timezone values will be set from this.  The user
      * should be given the opportunity to correct those defaults in
      * case they are incorrect.
+     * 
      * @param territory code
      * @return this, for chaining
      * @internal
@@ -521,13 +388,14 @@ public class GlobalizationPreferences implements Freezable {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        this.territory = territory;
+        this.territory = territory; // immutable, so don't need to clone
         return this;
     }
 
     /**
      * Gets the territory setting. If it wasn't explicitly set, it is
      * computed from the general locale setting.
+     * 
      * @return territory code, explicit or implicit.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -541,6 +409,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Sets the currency code. If this has not been set, uses default for territory.
+     * 
      * @param currency Valid ISO 4217 currency code.
      * @return this, for chaining
      * @internal
@@ -550,12 +419,13 @@ public class GlobalizationPreferences implements Freezable {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        this.currency = currency;
+        this.currency = currency; // immutable, so don't need to clone
         return this;
     }
 
     /**
-     * Get a copy of the currency computed according to the settings. 
+     * Get a copy of the currency computed according to the settings.
+     * 
      * @return currency code, explicit or implicit.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -569,6 +439,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Sets the calendar. If this has not been set, uses default for territory.
+     * 
      * @param calendar arbitrary calendar
      * @return this, for chaining
      * @internal
@@ -584,6 +455,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Get a copy of the calendar according to the settings. 
+     * 
      * @return calendar explicit or implicit.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -599,6 +471,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Sets the timezone ID.  If this has not been set, uses default for territory.
+     * 
      * @param timezone a valid TZID (see UTS#35).
      * @return this, for chaining
      * @internal
@@ -615,6 +488,7 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Get the timezone. It was either explicitly set, or is
      * heuristically computed from other settings.
+     * 
      * @return timezone, either implicitly or explicitly set
      * @internal
      * @deprecated This API is ICU internal only.
@@ -628,6 +502,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Get a copy of the collator according to the settings. 
+     * 
      * @return collator explicit or implicit.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -639,7 +514,7 @@ public class GlobalizationPreferences implements Freezable {
         try {
             return (Collator) collator.clone();  // clone for safety
         } catch (CloneNotSupportedException e) {
-        	throw new IllegalStateException("Error in cloning collator");
+            throw new IllegalStateException("Error in cloning collator");
         }
     }
 
@@ -655,7 +530,7 @@ public class GlobalizationPreferences implements Freezable {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
         try {
-            this.collator = (Collator) collator.clone();            
+            this.collator = (Collator) collator.clone(); // clone for safety         
         } catch (CloneNotSupportedException e) {
                 throw new IllegalStateException("Error in cloning collator");
         }
@@ -667,10 +542,13 @@ public class GlobalizationPreferences implements Freezable {
      * settings.
      * 
      * @param type
-     *          break type - CHARACTER or TITLE, WORD, LINE, SENTENC
+     *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @return break iterator explicit or implicit
      */
     public BreakIterator getBreakIterator(int type) {
+        if (type < BI_CHARACTER || type >= BI_LIMIT) {
+            throw new IllegalArgumentException("Illegal break iterator type");
+        }
         if (breakIterators == null || breakIterators[type] == null) {
             return guessBreakIterator(type);
         }
@@ -681,11 +559,14 @@ public class GlobalizationPreferences implements Freezable {
      * Explicitly set the break iterator for this object.
      * 
      * @param type
-     *          break type - CHARACTER or TITLE, WORD, LINE, SENTENC
+     *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @param iterator a break iterator
      * @return
      */
     public GlobalizationPreferences setBreakIterator(int type, BreakIterator iterator) {
+        if (type < BI_CHARACTER || type >= BI_LIMIT) {
+            throw new IllegalArgumentException("Illegal break iterator type");
+        }
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
@@ -695,60 +576,12 @@ public class GlobalizationPreferences implements Freezable {
         return this;
     }
 
-    
-    /**
-     * Set the date locale. 
-     * @param dateLocale If not null, overrides the locale priority list for all the date formats.
-     * @return this, for chaining
-     */
-    public GlobalizationPreferences setDateLocale(ULocale dateLocale) {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify immutable object");
-        }
-        this.dateLocale = dateLocale;
-        return this;
-    }
-
-    /**
-     * Gets the date locale, to be used in computing date formats. Overrides the general locale setting.
-     * @return date locale. Null if none was set explicitly.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public ULocale getDateLocale() {
-        return dateLocale != null ? dateLocale : getLocale(0);
-    }
-    
-    /**
-     * Set the number locale. 
-     * @param numberLocale If not null, overrides the locale priority list for all the date formats.
-     * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public GlobalizationPreferences setNumberLocale(ULocale numberLocale) {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify immutable object");
-        }
-        this.numberLocale = numberLocale;
-        return this;
-    }
-
-    /**
-     * Get the current number locale setting used for getNumberFormat.
-     * @return number locale. Null if none was set explicitly.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public ULocale getNumberLocale() {
-        return numberLocale != null ? numberLocale : getLocale(0);
-    }
-    
     /**
      * Get the display name for an ID: language, script, territory, currency, timezone...
      * Uses the language priority list to do so.
+     * 
      * @param id language code, script code, ...
-     * @param type specifies the type of the ID: LANGUAGE, etc.
+     * @param type specifies the type of the ID: ID_LANGUAGE, etc.
      * @return the display name
      * @internal
      * @deprecated This API is ICU internal only.
@@ -757,6 +590,9 @@ public class GlobalizationPreferences implements Freezable {
         String result = id;
         for (Iterator it = getLocales().iterator(); it.hasNext();) {
             ULocale locale = (ULocale) it.next();
+            if (!isAvailableLocale(locale, TYPE_GENERIC)) {
+                continue;
+            }
             switch (type) {
             case ID_LOCALE:
                 result = ULocale.getDisplayName(id, locale); 
@@ -782,7 +618,9 @@ public class GlobalizationPreferences implements Freezable {
                 Utility.split(id,'=',parts);
                 result = ULocale.getDisplayKeywordValue("und@"+id, parts[0], locale);
                 // TODO fix to tell when successful
-                if (result.equals(parts[1])) continue;
+                if (result.equals(parts[1])) {
+                    continue;
+                }
                 break;
             case ID_CURRENCY_SYMBOL:
             case ID_CURRENCY:
@@ -811,9 +649,12 @@ public class GlobalizationPreferences implements Freezable {
             default:
                 throw new IllegalArgumentException("Unknown type: " + type);
             }
-            if (!id.equals(result)) return result;
+
             // TODO need better way of seeing if we fell back to root!!
             // This will not work at all for lots of stuff
+            if (!id.equals(result)) {
+                return result;
+            }
         }
         return result;
     }
@@ -824,13 +665,14 @@ public class GlobalizationPreferences implements Freezable {
 
 
     /**
-     * Set an explicit date format. Overrides both the date locale,
-     * and the locale priority list for a particular combination of
-     * dateStyle and timeStyle. NONE should be used if for the style,
-     * where only the date or time format individually is being set.
-     * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
-     * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
-     * @param format
+     * Set an explicit date format. Overrides the locale priority list for
+     * a particular combination of dateStyle and timeStyle. DF_NONE should
+     * be used if for the style, where only the date or time format individually
+     * is being set.
+     * 
+     * @param dateStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
+     * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
+     * @param format The date format
      * @return this, for chaining
      * @internal
      * @deprecated This API is ICU internal only.
@@ -840,171 +682,94 @@ public class GlobalizationPreferences implements Freezable {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
         if (dateFormats == null) {
-            dateFormats = new Object[DF_LIMIT][DF_LIMIT];
+            dateFormats = new DateFormat[DF_LIMIT][DF_LIMIT];
         }
         dateFormats[dateStyle][timeStyle] = (DateFormat) format.clone(); // for safety
         return this;
     }
 
     /**
-     * Set an explicit date format. Overrides both the date locale,
-     * and the locale priority list for a particular combination of
-     * dateStyle and timeStyle. NONE should be used if for the style,
-     * where only the date or time format individually is being set.
-     * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
-     * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
-     * @param formatPattern date pattern, eg "yyyy-MMM-dd"
-     * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, String formatPattern) {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify immutable object");
-        }
-        if (dateFormats == null) {
-            dateFormats = new Object[DF_LIMIT][DF_LIMIT];
-        }
-        // test the format to make sure it won't throw an error later
-        new SimpleDateFormat(formatPattern, getDateLocale());
-        dateFormats[dateStyle][timeStyle] = formatPattern; // for safety
-        return this;
-    }
-
-    /**
      * Gets a date format according to the current settings. If there
      * is an explicit (non-null) date/time format set, a copy of that
-     * is returned. Otherwise, if there is a non-null date locale,
-     * that is used.  Otherwise, the language priority list is
-     * used. NONE should be used for the style, where only the date or
+     * is returned. Otherwise, the language priority list is used.
+     * DF_NONE should be used for the style, where only the date or
      * time format individually is being gotten.
-     * @param dateStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
-     * @param timeStyle NONE, or DateFormat.FULL, LONG, MEDIUM, SHORT
+     * 
+     * @param dateStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
+     * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @return a DateFormat, according to the above description
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public DateFormat getDateFormat(int dateStyle, int timeStyle) {
-        try {
-            DateFormat result = null;
-            if (dateFormats != null) { // and override can either be a string or a pattern
-                Object temp = dateFormats[dateStyle][timeStyle];
-                if (temp instanceof DateFormat) {
-                    result = (DateFormat) temp;
-                } else {
-                    result = new SimpleDateFormat((String)temp, getDateLocale());
-                }   
-            }
-            if (result != null) {
-                result = (DateFormat) result.clone(); // clone for safety
-                result.setCalendar(getCalendar());
-            } else {
-                // In the case of date formats, we don't have to look at more than one
-                // locale. May be different for other cases
-                // TODO Make this one function.
-                if (timeStyle == DF_NONE) {
-                    result = DateFormat.getDateInstance(getCalendar(), dateStyle, getDateLocale());
-                } else if (dateStyle == DF_NONE) {
-                    result = DateFormat.getTimeInstance(getCalendar(), timeStyle, getDateLocale());
-                } else {
-                    result = DateFormat.getDateTimeInstance(getCalendar(), dateStyle, timeStyle, getDateLocale());
-                }
-            }
-            return result;
-        } catch (RuntimeException e) {
-            IllegalArgumentException ex = new IllegalArgumentException("Cannot create DateFormat");
-//#ifndef FOUNDATION
-            ex.initCause(e);
-//#endif
-            throw ex;
+        if (dateStyle == DF_NONE && timeStyle == DF_NONE
+                || dateStyle < 0 || dateStyle >= DF_LIMIT
+                || timeStyle < 0 || timeStyle >= DF_LIMIT) {
+            throw new IllegalArgumentException("Illegal date format style arguments");
         }
+        DateFormat result = null;
+        if (dateFormats != null) {
+            result = dateFormats[dateStyle][timeStyle];
+        }
+        if (result != null) {
+            result = (DateFormat) result.clone(); // clone for safety
+            // Not sure overriding configuration is what we really want...
+            result.setTimeZone(getTimeZone());
+        } else {
+            result = guessDateFormat(dateStyle, timeStyle);
+        }
+        return result;
     }
-    
+
     /**
      * Gets a number format according to the current settings.  If
      * there is an explicit (non-null) number format set, a copy of
-     * that is returned. Otherwise, if there is a non-null number
-     * locale, that is used.  Otherwise, the language priority list is
-     * used. NONE should be used for the style, where only the date or
-     * time format individually is being gotten.
-     * @param style CURRENCY, NUMBER, INTEGER, SCIENTIFIC, PERCENT
+     * that is returned.  Otherwise, the language priority list is
+     * used.
+     * 
+     * @param style NF_NUMBER, NF_CURRENCY, NF_PERCENT, NF_SCIENTIFIC, NF_INTEGER
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public NumberFormat getNumberFormat(int style) {
-        try {
-            NumberFormat result = null;
-            if (numberFormats != null) {
-                Object temp = numberFormats[style];
-                if (temp instanceof NumberFormat) {
-                    result = (NumberFormat) temp;
-                } else {
-                    result = new DecimalFormat((String)temp, new DecimalFormatSymbols(getDateLocale()));
-                }   
-            }
-            if (result != null) {
-                result = (NumberFormat) result.clone(); // clone for safety (later optimize)
-                if (style == NF_CURRENCY) {
-                    result.setCurrency(getCurrency());
-                }
-                return result; 
-            }
-            // In the case of date formats, we don't have to look at more than one
-            // locale. May be different for other cases
-            switch (style) {
-            case NF_NUMBER: return NumberFormat.getInstance(getNumberLocale());
-            case NF_SCIENTIFIC: return NumberFormat.getScientificInstance(getNumberLocale());
-            case NF_INTEGER: return NumberFormat.getIntegerInstance(getNumberLocale());
-            case NF_PERCENT: return NumberFormat.getPercentInstance(getNumberLocale());
-            case NF_CURRENCY: result = NumberFormat.getCurrencyInstance(getNumberLocale());
-                result.setCurrency(getCurrency());
-                return result;
-            }
-        } catch (RuntimeException e) {}
-        throw new IllegalArgumentException(); // fix later
+        if (style < 0 || style >= NF_LIMIT) {
+            throw new IllegalArgumentException("Illegal number format type");
+        }
+        NumberFormat result = null;
+        if (numberFormats != null) {
+            result = numberFormats[style];
+        }
+        if (result != null) {
+            result = (NumberFormat) result.clone(); // clone for safety (later optimize)
+        } else {
+            result = guessNumberFormat(style);
+        }
+        return result;
     }
-    
+
     /**
-     * Sets a number format explicitly. Overrides the number locale
-     * and the general locale settings.
-     * @param style CURRENCY, NUMBER, INTEGER, SCIENTIFIC, PERCENT
+     * Sets a number format explicitly. Overrides the general locale settings.
+     * 
+     * @param style NF_NUMBER, NF_CURRENCY, NF_PERCENT, NF_SCIENTIFIC, NF_INTEGER
+     * @param format The number format
      * @return this, for chaining
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public GlobalizationPreferences setNumberFormat(int style, DateFormat format) {
+    public GlobalizationPreferences setNumberFormat(int style, NumberFormat format) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
         if (numberFormats == null) {
-            numberFormats = new Object[NF_LIMIT];
+            numberFormats = new NumberFormat[NF_LIMIT];
         }
         numberFormats[style] = (NumberFormat) format.clone(); // for safety
-        return this;
-    }
-    
-    /**
-     * Sets a number format explicitly. Overrides the number locale
-     * and the general locale settings.
-     * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public GlobalizationPreferences setNumberFormat(int style, String formatPattern) {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify immutable object");
-        }
-        if (numberFormats == null) {
-            numberFormats = new Object[NF_LIMIT];
-        }
-        // check to make sure it compiles
-        new DecimalFormat((String)formatPattern, new DecimalFormatSymbols(getDateLocale()));
-        numberFormats[style] = formatPattern; // for safety
         return this;
     }
 
     /**
      * Restore the object to the initial state.
+     * 
      * @return this, for chaining
      * @internal
      * @deprecated This API is ICU internal only.
@@ -1013,6 +778,7 @@ public class GlobalizationPreferences implements Freezable {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
+        locales = null;
         territory = null;
         calendar = null;
         collator = null;
@@ -1021,14 +787,236 @@ public class GlobalizationPreferences implements Freezable {
         currency = null;
         dateFormats = null;
         numberFormats = null;
-        dateLocale = null;
-        numberLocale = null;
-        locales = null;
+        implicitLocales = null;
         return this;
     }
+
+    /**
+     * Process a language/locale priority list specified via <code>setLocales</code>.
+     * The input locale list may be expanded or re-ordered to represent the prioritized
+     * language/locale order actually used by this object by the algorithm exaplained
+     * below.
+     * <br>
+     * <br>
+     * <b>Step 1</b>: Move later occurence of more specific locale before ealier occurence of less
+     * specific locale.
+     * <br>
+     * Before: en, fr_FR, en_US, en_GB
+     * <br>
+     * After: en_US, en_GB, en, fr_FR
+     * <br>
+     * <br>
+     * <b>Step 2</b>: Append a fallback locale to each locale.
+     * <br>
+     * Before: en_US, en_GB, en, fr_FR
+     * <br>
+     * After: en_US, en, en_GB, en, en, fr_FR, fr
+     * <br>
+     * <br>
+     * <b>Step 3</b>: Remove ealier occurence of duplicated locale entries.
+     * <br>
+     * Before: en_US, en, en_GB, en, en, fr_FR, fr
+     * <br>
+     * After: en_US, en_GB, en, fr_FR, fr
+     * <br> 
+     * <br>
+     * The final locale list is used to produce a default value for the appropriate territory,
+     * currency, timezone, etc.  The list also represents the lookup order used in
+     * <code>getResourceBundle</code> for this object.  A subclass may override this method
+     * to customize the algorithm used for populating the locale list.
+     * 
+     * @param localeList The list of input locales
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected List processLocales(List inputLocales) {
+        List result = new ArrayList();
+        /*
+         * Step 1: Relocate later occurence of more specific locale
+         * before earlier occurence of less specific locale.
+         *
+         * Example:
+         *   Before - en_US, fr_FR, zh, en_US_Boston, zh_TW, zh_Hant, fr_CA
+         *   After  - en_US_Boston, en_US, fr_FR, zh_TW, zh_Hant, zh, fr_CA
+         */
+        for (int i = 0; i < inputLocales.size(); i++) {
+            ULocale uloc = (ULocale)inputLocales.get(i);
+
+            String language = uloc.getLanguage();
+            String script = uloc.getScript();
+            String country = uloc.getCountry();
+            String variant = uloc.getVariant();
+
+            boolean bInserted = false;
+            for (int j = 0; j < result.size(); j++) {
+                // Check if this locale is more specific
+                // than existing locale entries already inserted
+                // in the destination list
+                ULocale u = (ULocale)result.get(j);
+                if (!u.getLanguage().equals(language)) {
+                    continue;
+                }
+                String s = u.getScript();
+                String c = u.getCountry();
+                String v = u.getVariant();
+                if (!s.equals(script)) {
+                    if (s.length() == 0 && c.length() == 0 && v.length() == 0) {
+                        result.add(j, uloc);
+                        bInserted = true;
+                        break;
+                    } else if (s.length() == 0 && c.equals(country)) {
+                        // We want to see zh_Hant_HK before zh_HK
+                        result.add(j, uloc);
+                        bInserted = true;
+                        break;                      
+                    } else if (script.length() == 0 && country.length() > 0 && c.length() == 0) {
+                        // We want to see zh_HK before zh_Hant
+                        result.add(j, uloc);
+                        bInserted = true;
+                        break;
+                    }
+                    continue;
+                }
+                if (!c.equals(country)) {
+                    if (c.length() == 0 && v.length() == 0) {
+                        result.add(j, uloc);
+                        bInserted = true;
+                        break;
+                    }
+                }
+                if (!v.equals(variant) && v.length() == 0) {
+                    result.add(j, uloc);
+                    bInserted = true;
+                    break;
+                }
+            }
+            if (!bInserted) {
+                // Add this locale at the end of the list
+                result.add(uloc);
+            }
+        }
+
+        // TODO: Locale aliases might be resolved here
+        // For example, zh_Hant_TW = zh_TW
+
+        /*
+         * Step 2: Append fallback locales for each entry
+         *
+         * Example:
+         *   Before - en_US_Boston, en_US, fr_FR, zh_TW, zh_Hant, zh, fr_CA
+         *   After  - en_US_Boston, en_US, en, en_US, en, fr_FR, fr,
+         *            zh_TW, zn, zh_Hant, zh, zh, fr_CA, fr
+         */
+        int index = 0;
+        while (index < result.size()) {
+            ULocale uloc = (ULocale)result.get(index);
+            while (true) {
+                uloc = uloc.getFallback();
+                if (uloc.getLanguage().length() == 0) {
+                    break;
+                }
+                index++;
+                result.add(index, uloc);
+            }
+            index++;
+        }
+
+        /*
+         * Step 3: Remove earlier occurence of duplicated locales
+         * 
+         * Example:
+         *   Before - en_US_Boston, en_US, en, en_US, en, fr_FR, fr,
+         *            zh_TW, zn, zh_Hant, zh, zh, fr_CA, fr
+         *   After  - en_US_Boston, en_US, en, fr_FR, zh_TW, zh_Hant,
+         *            zh, fr_CA, fr
+         */
+        index = 0;
+        while (index < result.size() - 1) {
+            ULocale uloc = (ULocale)result.get(index);
+            boolean bRemoved = false;
+            for (int i = index + 1; i < result.size(); i++) {
+                if (uloc.equals((ULocale)result.get(i))) {
+                    // Remove ealier one
+                    result.remove(index);
+                    bRemoved = true;
+                    break;
+                }
+            }
+            if (!bRemoved) {
+                index++;
+            }
+        }
+        return result;
+    }
+
     
     /**
      * This function can be overridden by subclasses to use different heuristics.
+     * <b>It MUST return a 'safe' value,
+     * one whose modification will not affect this object.</b>
+     * 
+     * @param dateStyle
+     * @param timeStyle
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected DateFormat guessDateFormat(int dateStyle, int timeStyle) {
+        DateFormat result;
+        ULocale dfLocale = getAvailableLocale(TYPE_DATEFORMAT);
+        if (dfLocale == null) {
+        	dfLocale = ULocale.ROOT;
+        }
+        if (timeStyle == DF_NONE) {
+            result = DateFormat.getDateInstance(getCalendar(), dateStyle, dfLocale);
+        } else if (dateStyle == DF_NONE) {
+            result = DateFormat.getTimeInstance(getCalendar(), timeStyle, dfLocale);
+        } else {
+            result = DateFormat.getDateTimeInstance(getCalendar(), dateStyle, timeStyle, dfLocale);
+        }
+        return result;
+    }
+
+    /**
+     * This function can be overridden by subclasses to use different heuristics.
+     * <b>It MUST return a 'safe' value,
+     * one whose modification will not affect this object.</b>
+     * 
+     * @param style
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected NumberFormat guessNumberFormat(int style) {
+        NumberFormat result;
+        ULocale nfLocale = getAvailableLocale(TYPE_NUMBERFORMAT);
+        if (nfLocale == null) {
+        	nfLocale = ULocale.ROOT;
+        }
+        switch (style) {
+        case NF_NUMBER:
+            result = NumberFormat.getInstance(nfLocale);
+            break;
+        case NF_SCIENTIFIC:
+            result = NumberFormat.getScientificInstance(nfLocale);
+            break;
+        case NF_INTEGER:
+            result = NumberFormat.getIntegerInstance(nfLocale);
+            break;
+        case NF_PERCENT:
+            result = NumberFormat.getPercentInstance(nfLocale);
+            break;
+        case NF_CURRENCY:
+            result = NumberFormat.getCurrencyInstance(nfLocale);
+            result.setCurrency(getCurrency());
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown number format style");
+        }
+        return result;
+    }
+
+    /**
+     * This function can be overridden by subclasses to use different heuristics.
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1064,6 +1052,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * This function can be overridden by subclasses to use different heuristics
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1075,43 +1064,65 @@ public class GlobalizationPreferences implements Freezable {
      * This function can be overridden by subclasses to use different heuristics
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
     protected List guessLocales() {
-        List result = new ArrayList(0);
-        result.add(ULocale.getDefault());
-        return result;
+        if (implicitLocales == null) {
+            List result = new ArrayList(1);
+            result.add(ULocale.getDefault());
+            implicitLocales = processLocales(result);
+        }
+        return implicitLocales;
     }
 
     /**
      * This function can be overridden by subclasses to use different heuristics.
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
     protected Collator guessCollator() {
-        return Collator.getInstance(getLocale(0));
+    	ULocale collLocale = getAvailableLocale(TYPE_COLLATOR);
+    	if (collLocale == null) {
+    		collLocale = ULocale.ROOT;
+    	}
+    	return Collator.getInstance(collLocale);
     }
 
+    /**
+     * This function can be overridden by subclasses to use different heuristics.
+     * <b>It MUST return a 'safe' value,
+     * one whose modification will not affect this object.</b>
+     * 
+     * @param type
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected BreakIterator guessBreakIterator(int type) {
         BreakIterator bitr = null;
+        ULocale brkLocale = getAvailableLocale(TYPE_BREAKITERATOR);
+        if (brkLocale == null) {
+        	brkLocale = ULocale.ROOT;
+        }
         switch (type) {
         case BI_CHARACTER:
-            bitr = BreakIterator.getCharacterInstance(getLocale(0));
+            bitr = BreakIterator.getCharacterInstance(brkLocale);
             break;
         case BI_TITLE:
-            bitr = BreakIterator.getTitleInstance(getLocale(0));
+            bitr = BreakIterator.getTitleInstance(brkLocale);
             break;
         case BI_WORD:
-            bitr = BreakIterator.getWordInstance(getLocale(0));
+            bitr = BreakIterator.getWordInstance(brkLocale);
             break;
         case BI_LINE:
-            bitr = BreakIterator.getLineInstance(getLocale(0));
+            bitr = BreakIterator.getLineInstance(brkLocale);
             break;
         case BI_SENTENCE:
-            bitr = BreakIterator.getSentenceInstance(getLocale(0));
+            bitr = BreakIterator.getSentenceInstance(brkLocale);
             break;
         default:
             throw new IllegalArgumentException("Unknown break iterator type");
@@ -1123,6 +1134,7 @@ public class GlobalizationPreferences implements Freezable {
      * This function can be overridden by subclasses to use different heuristics.
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1156,33 +1168,126 @@ public class GlobalizationPreferences implements Freezable {
      * This function can be overridden by subclasses to use different heuristics.
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
     protected Calendar guessCalendar() {
-        // TODO add better API
-        return Calendar.getInstance(new ULocale("und-" + getTerritory()));
+    	ULocale calLocale = getAvailableLocale(TYPE_CALENDAR);
+    	if (calLocale == null) {
+    		calLocale = ULocale.US;
+    	}
+    	return Calendar.getInstance(getTimeZone(), calLocale);
     }
     
     // PRIVATES
     
-    private Object locales;
+    private List locales;
     private String territory;
     private Currency currency;
     private TimeZone timezone;
     private Calendar calendar;
     private Collator collator;
     private BreakIterator[] breakIterators;
-    
-    private ULocale dateLocale;
-    private Object[][] dateFormats;
-    private ULocale numberLocale;
-    private Object[] numberFormats;
+    private DateFormat[][] dateFormats;
+    private NumberFormat[] numberFormats;
+    private List implicitLocales;
     
     {
         reset();
     }
+
+
+    private ULocale getAvailableLocale(int type) {
+    	List locs = getLocales();
+    	ULocale result = null;
+    	for (int i = 0; i < locs.size(); i++) {
+    		ULocale l = (ULocale)locs.get(i);
+            if (isAvailableLocale(l, type)) {
+                result = l;
+                break;
+            }
+    	}
+    	return result;
+    }
+
+    private boolean isAvailableLocale(ULocale loc, int type) {
+        BitSet bits = (BitSet)available_locales.get(loc);
+        if (bits != null && bits.get(type)) {
+            return true;
+        }
+        return false;        
+    }
     
+    /*
+     * Available locales for service types
+     */
+    private static final HashMap available_locales = new HashMap();
+    private static final int
+        TYPE_GENERIC = 0,
+    	TYPE_CALENDAR = 1,
+    	TYPE_DATEFORMAT= 2,
+    	TYPE_NUMBERFORMAT = 3,
+    	TYPE_COLLATOR = 4,
+    	TYPE_BREAKITERATOR = 5,
+    	TYPE_LIMIT = TYPE_BREAKITERATOR + 1;
+    	
+    static {
+        BitSet bits;
+    	ULocale[] allLocales = ULocale.getAvailableLocales();
+    	for (int i = 0; i < allLocales.length; i++) {
+    		bits = new BitSet(TYPE_LIMIT);
+    		available_locales.put(allLocales[i], bits);
+            bits.set(TYPE_GENERIC);
+    	}
+
+    	ULocale[] calLocales = Calendar.getAvailableULocales();
+    	for (int i = 0; i < calLocales.length; i++) {
+    		bits = (BitSet)available_locales.get(calLocales[i]);
+    		if (bits == null) {
+        		bits = new BitSet(TYPE_LIMIT);
+        		available_locales.put(allLocales[i], bits);
+    		}
+    		bits.set(TYPE_CALENDAR);
+    	}
+
+    	ULocale[] dateLocales = DateFormat.getAvailableULocales();
+    	for (int i = 0; i < dateLocales.length; i++) {
+    		bits = (BitSet)available_locales.get(dateLocales[i]);
+    		if (bits == null) {
+        		bits = new BitSet(TYPE_LIMIT);
+        		available_locales.put(allLocales[i], bits);
+    		}
+    		bits.set(TYPE_DATEFORMAT);
+    	}
+
+    	ULocale[] numLocales = NumberFormat.getAvailableULocales();
+    	for (int i = 0; i < numLocales.length; i++) {
+    		bits = (BitSet)available_locales.get(numLocales[i]);
+    		if (bits == null) {
+        		bits = new BitSet(TYPE_LIMIT);
+        		available_locales.put(allLocales[i], bits);
+    		}
+    		bits.set(TYPE_NUMBERFORMAT);
+    	}
+
+    	ULocale[] collLocales = Collator.getAvailableULocales();
+    	for (int i = 0; i < collLocales.length; i++) {
+    		bits = (BitSet)available_locales.get(collLocales[i]);
+    		if (bits == null) {
+        		bits = new BitSet(TYPE_LIMIT);
+        		available_locales.put(allLocales[i], bits);
+    		}
+    		bits.set(TYPE_COLLATOR);
+    	}
+
+    	ULocale[] brkLocales = BreakIterator.getAvailableULocales();
+    	for (int i = 0; i < brkLocales.length; i++) {
+    		bits = (BitSet)available_locales.get(brkLocales[i]);
+    		bits.set(TYPE_BREAKITERATOR);
+    	}
+    }
+
     /** WARNING: All of this data is temporary, until we start importing from CLDR!!!
      * 
      */
@@ -1347,7 +1452,7 @@ public class GlobalizationPreferences implements Freezable {
             language_territory_hack_map.put(language_territory_hack[i][0],language_territory_hack[i][1]);
         }
     }
-    
+
     static final Map territory_tzid_hack_map = new HashMap();
     static final String[][] territory_tzid_hack = {
         {"AQ", "Antarctica/McMurdo"},
@@ -1387,6 +1492,8 @@ public class GlobalizationPreferences implements Freezable {
         }
     }
 
+    // Freezable implmentation
+    
     private boolean frozen;
 
     /**
