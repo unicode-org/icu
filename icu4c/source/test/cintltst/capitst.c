@@ -642,6 +642,8 @@ void TestDecomposition() {
 void TestSafeClone() {
     UChar* test1;
     UChar* test2;
+    static const UChar umlautUStr[] = {0x00DC, 0};
+    static const UChar oeStr[] = {0x0055, 0x0045, 0};
     UCollator * someCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * col;
@@ -737,6 +739,17 @@ void TestSafeClone() {
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with null Collator pointer\n");
     }
+
+    err = U_ZERO_ERROR;
+
+    /* Test that a cloned collator doesn't accidentally use UCA. */
+    col=ucol_open("de@collation=phonebook", &err);
+    bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
+    someClonedCollators[0] = ucol_safeClone(col, buffer[0], &bufferSize, &err);
+    doAssert( (ucol_greater(col, umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Original German phonebook collation sorts differently than expected");
+    doAssert( (ucol_greater(someClonedCollators[0], umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Cloned German phonebook collation sorts differently than expected");
+    ucol_close(col);
+    ucol_close(someClonedCollators[0]);
 
     err = U_ZERO_ERROR;
 
