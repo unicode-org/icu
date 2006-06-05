@@ -484,7 +484,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     else {
         image = (uint8_t *)coll->image;
     }
-    localCollator = ucol_initFromBinary(image, imageSize, coll->UCA, localCollator, status);
+    localCollator = ucol_initFromBinary(image, imageSize, coll, localCollator, status);
 
     if (coll->rules) {
         if (coll->freeRulesOnClose) {
