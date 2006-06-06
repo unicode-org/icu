@@ -1072,7 +1072,7 @@ The leftmost codepage (.xxx) wins.
 
     if ((p = uprv_strchr(posixID, '.')) != NULL) {
         /* assume new locale can't be larger than old one? */
-        correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+        correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
 
@@ -1085,7 +1085,7 @@ The leftmost codepage (.xxx) wins.
     /* Note that we scan the *uncorrected* ID. */
     if ((p = uprv_strrchr(posixID, '@')) != NULL) {
         if (correctedPOSIXLocale == NULL) {
-            correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+            correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
             uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
             correctedPOSIXLocale[p-posixID] = 0;
         }
@@ -1094,12 +1094,7 @@ The leftmost codepage (.xxx) wins.
         /* Take care of any special cases here.. */
         if (!uprv_strcmp(p, "nynorsk")) {
             p = "NY";
-
-            /*      Should we assume no_NO_NY instead of possible no__NY?
-            * if (!uprv_strcmp(correctedPOSIXLocale, "no")) {
-            *     uprv_strcpy(correctedPOSIXLocale, "no_NO");
-            * }
-            */
+            /* Don't worry about no__NY. In practice, it won't appear. */
         }
 
         if (uprv_strchr(correctedPOSIXLocale,'_') == NULL) {
@@ -1122,6 +1117,8 @@ The leftmost codepage (.xxx) wins.
 
         /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
          * How about 'russian' -> 'ru'?
+         * Many of the other locales using ISO codes will be handled by the
+         * canonicalization functions in uloc_getDefault.
          */
     }
 
