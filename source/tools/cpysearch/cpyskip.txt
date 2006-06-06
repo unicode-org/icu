@@ -99,7 +99,10 @@ icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/.project
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu/build.properties
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/.classpath
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/.project
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/about.html
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/about_files/license.html
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/build.properties
+icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base/META-INF/MANIFEST.MF
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/.classpath
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/.project
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.tests/build.properties
