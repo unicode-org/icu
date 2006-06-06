@@ -183,6 +183,7 @@ class U_COMMON_API MutableTrieDictionary : public TrieWordDictionary {
                         int32_t length,
                         UErrorCode &status);
 
+#if 0
  /**
   * <p>Add all strings from a UEnumeration to the dictionary.</p>
   *
@@ -190,6 +191,7 @@ class U_COMMON_API MutableTrieDictionary : public TrieWordDictionary {
   * @param status The resultant status
   */
   virtual void addWords( UEnumeration *words, UErrorCode &status );
+#endif
 
 protected:
  /**
