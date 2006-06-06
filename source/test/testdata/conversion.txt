@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2005, International Business Machines
+//   Copyright (C) 2003-2006, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -909,6 +909,14 @@ conversion:table(nofallback) {
           :int{1}, :int{0}, "", "?", ""
         }
         { "UTF-16BE", "\ud800", :bin{""}, :intvector{}, :int{1}, :int{0}, "truncated", ".", "\ud800" }
+
+        {
+          "SCSU",
+          "1\U00010001\u00852\ud8003\udc014\ue001",
+          :bin{ 310be000810205320efffd330efffd34186881 },
+          :intvector{ 0, 1, 1, 1, 1, 3, 3, 4, 5, 5, 5, 6, 7, 7, 7, 8, 9, 9, 9 },
+          :int{1}, :int{0}, "", "?", ""
+        }
 
         // escape callback
         {
