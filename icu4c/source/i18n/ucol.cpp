@@ -435,10 +435,6 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    if (coll->freeImageOnClose) {
-        UErrorCode tempStatus = U_ZERO_ERROR;
-        imageSize = ucol_cloneBinary(coll, NULL, 0, &tempStatus);
-    }
     if (coll->rules && coll->freeRulesOnClose) {
         rulesSize = (int32_t)(coll->rulesLength + 1)*sizeof(UChar);
         rulesPadding = (int32_t)(bufferSizeNeeded % sizeof(UChar));
@@ -476,7 +472,11 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     }
     localCollator = (UCollator *)stackBufferChars;
     rules = (UChar *)(stackBufferChars + sizeof(UCollator) + rulesPadding);
-    if (imageSize > 0) {
+    {
+        UErrorCode tempStatus = U_ZERO_ERROR;
+        imageSize = ucol_cloneBinary(coll, NULL, 0, &tempStatus);
+    }
+    if (coll->freeImageOnClose) {
         image = (uint8_t *)uprv_malloc(imageSize);
         ucol_cloneBinary(coll, image, imageSize, status);
         imageAllocated = TRUE;
@@ -484,7 +484,10 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     else {
         image = (uint8_t *)coll->image;
     }
-    localCollator = ucol_initFromBinary(image, imageSize, coll, localCollator, status);
+    localCollator = ucol_initFromBinary(image, imageSize, coll->UCA, localCollator, status);
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
 
     if (coll->rules) {
         if (coll->freeRulesOnClose) {
