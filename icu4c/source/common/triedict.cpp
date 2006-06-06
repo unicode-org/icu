@@ -202,6 +202,7 @@ MutableTrieDictionary::addWord( const UChar *word,
     parent->flags |= kEndsWord;
 }
 
+#if 0
 void
 MutableTrieDictionary::addWords( UEnumeration *words,
                                   UErrorCode &status ) {
@@ -211,6 +212,7 @@ MutableTrieDictionary::addWords( UEnumeration *words,
         addWord(word, length, status);
     }
 }
+#endif
 
 int32_t
 MutableTrieDictionary::matches( UText *text,
