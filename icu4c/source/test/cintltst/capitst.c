@@ -748,6 +748,9 @@ void TestSafeClone() {
     someClonedCollators[0] = ucol_safeClone(col, buffer[0], &bufferSize, &err);
     doAssert( (ucol_greater(col, umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Original German phonebook collation sorts differently than expected");
     doAssert( (ucol_greater(someClonedCollators[0], umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Cloned German phonebook collation sorts differently than expected");
+    if (!ucol_equals(someClonedCollators[0], col)) {
+        log_err("FAIL: Cloned German phonebook collator is not equal to original.\n");
+    }
     ucol_close(col);
     ucol_close(someClonedCollators[0]);
 
