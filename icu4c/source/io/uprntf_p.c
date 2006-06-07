@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -615,7 +615,13 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
     /* set the appropriate flags and number of decimal digits on the formatter */
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
+        if (info->fOrigSpec == (UChar)0x65 /* e */ || info->fOrigSpec == (UChar)0x45 /* E */) {
+            unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
+        }
+        else {
+            unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, 1);
+            unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, info->fPrecision);
+        }
     }
     else if(info->fAlt) {
         /* '#' means always show decimal point */
@@ -1076,19 +1082,10 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
         spec.fPrecisionPos = -1;
         spec.fArgPos       = -1;
 
+        uprv_memset(info, 0, sizeof(*info));
         info->fPrecision    = -1;
         info->fWidth        = -1;
-        info->fSpec         = 0x0000;
         info->fPadChar      = 0x0020;
-        info->fAlt          = FALSE;
-        info->fSpace        = FALSE;
-        info->fLeft         = FALSE;
-        info->fShowSign     = FALSE;
-        info->fZero         = FALSE;
-        info->fIsLongDouble = FALSE;
-        info->fIsShort      = FALSE;
-        info->fIsLong       = FALSE;
-        info->fIsLongLong   = FALSE;
 
         /* skip over the initial '%' */
         alias++;
@@ -1287,6 +1284,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
 
         /* finally, get the specifier letter */
         info->fSpec = *alias++;
+        info->fOrigSpec = info->fSpec;
 
         /* fill in the precision and width, if specified out of line */
 
