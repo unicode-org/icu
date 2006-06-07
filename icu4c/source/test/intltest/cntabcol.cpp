@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved. 
  ********************************************************************/
 
@@ -175,6 +175,58 @@ void ContractionTableTest::TestChangeLastCE(){
   uprv_cnttab_close(testTable);
 }
 
+void ContractionTableTest::TestErrorCodeChecking(){
+    UErrorCode status = U_REGEX_SET_CONTAINS_STRING;
+
+    uprv_cnttab_open(NULL, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_clone(NULL, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_changeLastCE(NULL, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_insertContraction(NULL, 0, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_addContraction(NULL, 0, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_setContraction(NULL, 0, 0, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_findCP(NULL, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    if (uprv_cnttab_getCE(NULL, 0, 0, &status) != UCOL_NOT_FOUND) {
+        errln("uprv_cnttab_getCE didn't return UCOL_NOT_FOUND\n");
+    }
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    if (uprv_cnttab_findCE(NULL, 0, 0, &status) != UCOL_NOT_FOUND) {
+        errln("uprv_cnttab_findCE didn't return UCOL_NOT_FOUND\n");
+    }
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_isTailored(NULL, 0, NULL, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+    uprv_cnttab_changeContraction(NULL, 0, 0, 0, &status);
+    if (status != U_REGEX_SET_CONTAINS_STRING) {
+        errln("Status was incorrectly modified to %s\n", u_errorName(status));
+    }
+}
 
 void ContractionTableTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -186,6 +238,7 @@ void ContractionTableTest::runIndexedTest( int32_t index, UBool exec, const char
         case 3: name = "TestClone";             if (exec)   TestClone(/* par */); break;
         case 4: name = "TestChangeContraction"; if (exec)   TestChangeContraction(/* par */); break;
         case 5: name = "TestChangeLastCE";      if (exec)   TestChangeLastCE(/* par */); break;
+        case 6: name = "TestErrorCodeChecking"; if (exec)   TestErrorCodeChecking(/* par */); break;
         default: name = ""; break;
     }
 }
