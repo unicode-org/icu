@@ -53,15 +53,15 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
     }
     CntTable *tbl = (CntTable *)uprv_malloc(sizeof(CntTable));
     if(tbl == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
     tbl->mapping = mapping;
     tbl->elements = (ContractionTable **)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
     if(tbl->elements == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free(tbl);
-      return NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(tbl);
+        return NULL;
     }
     tbl->capacity = INIT_EXP_TABLE_SIZE;
     uprv_memset(tbl->elements, 0, INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
@@ -77,22 +77,22 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
 static ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
     ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
     if(el == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
     el->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
     if(el->CEs == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free(el);
-      return NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(el);
+        return NULL;
     }
 
     el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     if(el->codePoints == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free(el->CEs);
-      uprv_free(el);
-      return NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(el->CEs);
+        uprv_free(el);
+        return NULL;
     }
 
     el->position = 0;
@@ -109,20 +109,20 @@ static ContractionTable *addATableElement(CntTable *table, uint32_t *key, UError
     if(table->size == table->capacity) {
         ContractionTable **newElements = (ContractionTable **)uprv_malloc(table->capacity*2*sizeof(ContractionTable *));
         // do realloc
-/*        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));*/
+        /*        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));*/
         if(newElements == NULL) {
-          *status = U_MEMORY_ALLOCATION_ERROR;
-          uprv_free(el->codePoints);
-          uprv_free(el->CEs);
-          uprv_free(el);
-          return NULL;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(el->codePoints);
+            uprv_free(el->CEs);
+            uprv_free(el);
+            return NULL;
         } else {
-          ContractionTable **oldElements = table->elements;
-          uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
-          uprv_memset(newElements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
-          table->capacity *= 2;
-          table->elements = newElements;
-          uprv_free(oldElements);
+            ContractionTable **oldElements = table->elements;
+            uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
+            uprv_memset(newElements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
+            table->capacity *= 2;
+            table->elements = newElements;
+            uprv_free(oldElements);
         }
     }
 
@@ -143,8 +143,8 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     }
     table->offsets = (int32_t *)uprv_malloc(table->size*sizeof(int32_t));
     if(table->offsets == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return 0;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
     }
 
 
@@ -160,10 +160,10 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     }
     table->CEs = (uint32_t *)uprv_malloc(table->position*sizeof(uint32_t));
     if(table->CEs == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free(table->offsets);
-      table->offsets = NULL;
-      return 0;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(table->offsets);
+        table->offsets = NULL;
+        return 0;
     }
     uprv_memset(table->CEs, '?', table->position*sizeof(uint32_t));
 
@@ -172,12 +172,12 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     }
     table->codePoints = (UChar *)uprv_malloc(table->position*sizeof(UChar));
     if(table->codePoints == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free(table->offsets);
-      table->offsets = NULL;
-      uprv_free(table->CEs);
-      table->CEs = NULL;
-      return 0;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(table->offsets);
+        table->offsets = NULL;
+        uprv_free(table->CEs);
+        table->CEs = NULL;
+        return 0;
     }
     uprv_memset(table->codePoints, '?', table->position*sizeof(UChar));
 
@@ -189,14 +189,14 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
         int32_t size = table->elements[i]->position;
         uint8_t ccMax = 0, ccMin = 255, cc = 0;
         for(j = 1; j<size; j++) {
-          cc = u_getCombiningClass(table->elements[i]->codePoints[j]);
-          if(cc>ccMax) {
-            ccMax = cc;
-          }
-          if(cc<ccMin) {
-            ccMin = cc;
-          }
-          *(cpPointer+j) = table->elements[i]->codePoints[j];
+            cc = u_getCombiningClass(table->elements[i]->codePoints[j]);
+            if(cc>ccMax) {
+                ccMax = cc;
+            }
+            if(cc<ccMin) {
+                ccMin = cc;
+            }
+            *(cpPointer+j) = table->elements[i]->codePoints[j];
         }
         *cpPointer = ((ccMin==ccMax)?1:0 << 8) | ccMax;
 
@@ -231,112 +231,112 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
 }
 
 static ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
-  ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
-  if(r == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
-  }
+    ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+    if(r == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
-  r->position = t->position;
-  r->size = t->size;
+    r->position = t->position;
+    r->size = t->size;
 
-  r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
-  if(r->codePoints == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(r);
-    return NULL;
-  }
-  r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
-  if(r->CEs == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(r->codePoints);
-    uprv_free(r);
-    return NULL;
-  }
-  uprv_memcpy(r->codePoints, t->codePoints, sizeof(UChar)*t->size);
-  uprv_memcpy(r->CEs, t->CEs, sizeof(uint32_t)*t->size);
+    r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
+    if(r->codePoints == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(r);
+        return NULL;
+    }
+    r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
+    if(r->CEs == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(r->codePoints);
+        uprv_free(r);
+        return NULL;
+    }
+    uprv_memcpy(r->codePoints, t->codePoints, sizeof(UChar)*t->size);
+    uprv_memcpy(r->CEs, t->CEs, sizeof(uint32_t)*t->size);
 
-  return r;
+    return r;
 
 }
 
 U_CAPI CntTable* U_EXPORT2
 uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-  int32_t i = 0;
-  CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
-  /* test for NULL */
-  if (r == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
-  }
-  r->position = t->position;
-  r->size = t->size;
-  r->capacity = t->capacity;
-
-  r->mapping = t->mapping;
-
-  r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
-  /* test for NULL */
-  if (r->elements == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(r);
-    return NULL;
-  }
-  //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
-
-  for(i = 0; i<t->size; i++) {
-    r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i], status);
-  }
-
-  if(t->CEs != NULL) {
-    r->CEs = (uint32_t *)uprv_malloc(t->position*sizeof(uint32_t));
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    int32_t i = 0;
+    CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
     /* test for NULL */
-    if (r->CEs == NULL) {
+    if (r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(r->elements);
+        return NULL;
+    }
+    r->position = t->position;
+    r->size = t->size;
+    r->capacity = t->capacity;
+
+    r->mapping = t->mapping;
+
+    r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
+    /* test for NULL */
+    if (r->elements == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(r);
         return NULL;
     }
-    uprv_memcpy(r->CEs, t->CEs, t->position*sizeof(uint32_t));
-  } else {
-    r->CEs = NULL;
-  }
+    //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
 
-  if(t->codePoints != NULL) {
-    r->codePoints = (UChar *)uprv_malloc(t->position*sizeof(UChar));
-    /* test for NULL */
-    if (r->codePoints == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(r->CEs);
-        uprv_free(r->elements);
-        uprv_free(r);
-        return NULL;
+    for(i = 0; i<t->size; i++) {
+        r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i], status);
     }
-    uprv_memcpy(r->codePoints, t->codePoints, t->position*sizeof(UChar));
-  } else {
-    r->codePoints = NULL;
-  }
 
-  if(t->offsets != NULL) {
-    r->offsets = (int32_t *)uprv_malloc(t->size*sizeof(int32_t));
-    /* test for NULL */
-    if (r->offsets == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(r->codePoints);
-        uprv_free(r->CEs);
-        uprv_free(r->elements);
-        uprv_free(r);
-        return NULL;
+    if(t->CEs != NULL) {
+        r->CEs = (uint32_t *)uprv_malloc(t->position*sizeof(uint32_t));
+        /* test for NULL */
+        if (r->CEs == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(r->elements);
+            uprv_free(r);
+            return NULL;
+        }
+        uprv_memcpy(r->CEs, t->CEs, t->position*sizeof(uint32_t));
+    } else {
+        r->CEs = NULL;
     }
-    uprv_memcpy(r->offsets, t->offsets, t->size*sizeof(int32_t));
-  } else {
-    r->offsets = NULL;
-  }
 
-  return r;
+    if(t->codePoints != NULL) {
+        r->codePoints = (UChar *)uprv_malloc(t->position*sizeof(UChar));
+        /* test for NULL */
+        if (r->codePoints == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(r->CEs);
+            uprv_free(r->elements);
+            uprv_free(r);
+            return NULL;
+        }
+        uprv_memcpy(r->codePoints, t->codePoints, t->position*sizeof(UChar));
+    } else {
+        r->codePoints = NULL;
+    }
+
+    if(t->offsets != NULL) {
+        r->offsets = (int32_t *)uprv_malloc(t->size*sizeof(int32_t));
+        /* test for NULL */
+        if (r->offsets == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(r->codePoints);
+            uprv_free(r->CEs);
+            uprv_free(r->elements);
+            uprv_free(r);
+            return NULL;
+        }
+        uprv_memcpy(r->offsets, t->offsets, t->size*sizeof(int32_t));
+    } else {
+        r->offsets = NULL;
+    }
+
+    return r;
 }
 
 U_CAPI void  U_EXPORT2
@@ -365,7 +365,7 @@ uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErr
     }
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-      return 0;
+        return 0;
     }
 
     tbl->CEs[tbl->position-1] = value;
@@ -378,12 +378,12 @@ uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErr
 U_CAPI uint32_t  U_EXPORT2
 uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
 
-    element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
 
     if(U_FAILURE(*status)) {
         return 0;
     }
+    element &= 0xFFFFFF;
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
@@ -470,40 +470,40 @@ static ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t e
     ContractionTable *tbl = NULL;
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-      return NULL;
+        return NULL;
     } else {
-      return tbl;
+        return tbl;
     }
 }
 
 static int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
     uint32_t position = 0;
     if(tbl == NULL) {
-      return -1;
+        return -1;
     }
 
     while(codePoint > tbl->codePoints[position]) {
-      position++;
-      if(position > tbl->position) {
-        return -1;
-      }
+        position++;
+        if(position > tbl->position) {
+            return -1;
+        }
     }
     if (codePoint == tbl->codePoints[position]) {
-      return position;
+        return position;
     } else {
-      return -1;
+        return -1;
     }
 }
 
 static uint32_t _cnttab_getCE(ContractionTable *tbl, int32_t position) {
-  if(tbl == NULL) {
-    return UCOL_NOT_FOUND;
-  }
-  if((uint32_t)position > tbl->position || position == -1) {
-    return UCOL_NOT_FOUND;
-  } else {
-    return tbl->CEs[position];
-  }
+    if(tbl == NULL) {
+        return UCOL_NOT_FOUND;
+    }
+    if((uint32_t)position > tbl->position || position == -1) {
+        return UCOL_NOT_FOUND;
+    } else {
+        return tbl->CEs[position];
+    }
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -541,20 +541,16 @@ uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErro
     }
 
     while(*(ztString)!=0) {
-      element = uprv_cnttab_findCE(table, element, *(ztString), status);
-      if(element == UCOL_NOT_FOUND) {
-        return FALSE;
-      }
-      if(!isCntTableElement(element)) {
-        return TRUE;
-      }
-      ztString++;
+        element = uprv_cnttab_findCE(table, element, *(ztString), status);
+        if(element == UCOL_NOT_FOUND) {
+            return FALSE;
+        }
+        if(!isCntTableElement(element)) {
+            return TRUE;
+        }
+        ztString++;
     }
-    if(uprv_cnttab_getCE(table, element, 0, status) != UCOL_NOT_FOUND) {
-      return TRUE;
-    } else {
-      return FALSE; 
-    }
+    return (UBool)(uprv_cnttab_getCE(table, element, 0, status) != UCOL_NOT_FOUND);
 }
 
 U_CAPI uint32_t  U_EXPORT2
@@ -568,22 +564,22 @@ uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint
     }
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-      return 0;
+        return 0;
     }
 
     uint32_t position = 0;
 
     while(codePoint > tbl->codePoints[position]) {
-      position++;
-      if(position > tbl->position) {
-        return UCOL_NOT_FOUND;
-      }
+        position++;
+        if(position > tbl->position) {
+            return UCOL_NOT_FOUND;
+        }
     }
     if (codePoint == tbl->codePoints[position]) {
-      tbl->CEs[position] = newCE;
-      return element;
+        tbl->CEs[position] = newCE;
+        return element;
     } else {
-      return UCOL_NOT_FOUND;
+        return UCOL_NOT_FOUND;
     }
 }
 
