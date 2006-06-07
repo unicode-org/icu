@@ -1110,6 +1110,7 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
     TestFPrintFormat("%10g", 123.456789, "%10g", 123.456789);
     TestFPrintFormat("%-10g", 123.456789, "%-10g", 123.456789);
+    TestFPrintFormat("%.14G", 1.7e64, "%.14G", 1.7e64);
 
     TestFPrintFormat("%8x", 123456, "%8x", 123456);
     TestFPrintFormat("%-8x", 123456, "%-8x", 123456);

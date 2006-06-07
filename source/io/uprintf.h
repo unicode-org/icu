@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -34,6 +34,7 @@ typedef struct u_printf_spec_info {
   int32_t    fPrecision;    /* Precision  */
   int32_t    fWidth;        /* Width  */
 
+  UChar     fOrigSpec;      /* Conversion specification */
   UChar     fSpec;          /* Conversion specification */
   UChar     fPadChar;       /* Padding character  */
 
