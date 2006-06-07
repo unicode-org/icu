@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,6 +29,7 @@ public:
     void TestClone();
     void TestChangeContraction();
     void TestChangeLastCE();
+    void TestErrorCodeChecking();
 private:
     CntTable *testTable, *testClone;
     /*CompactEIntArray *testMapping;*/
