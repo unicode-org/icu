@@ -1794,6 +1794,7 @@ DateFormatSymbols::getZoneType(const UnicodeString& zid, const UnicodeString& te
     if(U_FAILURE(status)){
         return;
     }
+    type = TIMEZONE_COUNT;
     UnicodeString* strings = (UnicodeString*)fZoneStringsHash->get(zid);
     if(strings != NULL){
         for(int32_t j=0; j<UTZ_MAX_DISPLAY_STRINGS_LENGTH; j++){
