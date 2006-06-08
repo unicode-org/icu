@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2006/04/05 22:12:46 $ 
-* $Revision: 1.43 $
+* $Date: 2006/06/08 18:16:40 $ 
+* $Revision: 1.44 $
 *
 *******************************************************************************
 */
@@ -2301,7 +2301,7 @@ F900..FAFF; CJK Compatibility Ideographs
         // NOTE: we add the back map based on the string value; the smallest (UTF-16 order) string wins
         Object key = new ArrayWrapper((int[])(ces.clone()),0, len);
         if (false) {
-            Object value = backMap.get(key);
+            String value = (String)backMap.get(key);
             if (value == null) return;
             if (s.compareTo(value) >= 0) return;
         }
@@ -4099,23 +4099,23 @@ F900..FAFF; CJK Compatibility Ideographs
         writeDuplicates();
         writeOverlap();
         
-        log.println("<h2>Coverage</h2>");
+        log.println("<h2>11. Coverage</h2>");
         BagFormatter bf = new BagFormatter();
         bf.setLineSeparator("<br>\r\n");
-        ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
+        ToolUnicodePropertySource ups = ToolUnicodePropertySource.make(Default.ucdVersion());
         bf.setUnicodePropertyFactory(ups);
         bf.setShowLiteral(TransliteratorUtilities.toHTML);
         bf.setFixName(TransliteratorUtilities.toHTML);
         UCD ucd = Default.ucd();
         UnicodeProperty cat = ups.getProperty("gc");
-        UnicodeSet ucd410 = cat.getSet("Cn")
+        UnicodeSet ucdCharacters = cat.getSet("Cn")
 		.addAll(cat.getSet("Co"))
 		.addAll(cat.getSet("Cs"))
 		.complement()
 		//.addAll(ups.getSet("Noncharactercodepoint=true"))
 		//.addAll(ups.getSet("Default_Ignorable_Code_Point=true"))
 		;
-        bf.showSetDifferences(log, "UCD4.1.0", ucd410, "UCA4.1.0", coverage, 3);
+        bf.showSetDifferences(log, "UCD" + Default.ucdVersion(), ucdCharacters, collator.getFileVersion(), coverage, 3);
 
         log.println("</body></html>");
         log.close();

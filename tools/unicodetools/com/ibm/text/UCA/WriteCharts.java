@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2005/04/06 08:48:17 $
-* $Revision: 1.21 $
+* $Date: 2006/06/08 18:16:40 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -266,10 +266,12 @@ public class WriteCharts implements UCD_Types {
 
         String[] replacement = new String[] {"%%%", "Normalization Charts"};
         String folder = "charts\\normalization\\";
+        
+        //System.out.println("File: " + new File(".").getCanonicalPath());
 
-        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
-        Utility.copyTextFile("norm_help.html", Utility.UTF8, folder + "help.html");
+        Utility.copyTextFile("com/ibm/text/UCA/index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("com/ibm/text/UCA/charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("com/ibm/text/UCA/norm_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
         Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
@@ -375,9 +377,9 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Case Charts"};
         String folder = "charts\\case\\";
 
-        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
-        Utility.copyTextFile("case_help.html", Utility.UTF8, folder + "help.html");
+        Utility.copyTextFile("com/ibm/text/UCA/index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("com/ibm/text/UCA/charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("com/ibm/text/UCA/case_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
         Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
@@ -487,9 +489,9 @@ public class WriteCharts implements UCD_Types {
 			String[] replacement = new String[] {"%%%", "Script Charts"};
 			String folder = "charts\\script\\";
 
-			Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
-			Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
-			Utility.copyTextFile("script_help.html", Utility.UTF8, folder + "help.html");
+			Utility.copyTextFile("com/ibm/text/UCA/index.html", Utility.UTF8, folder + "index.html", replacement);
+			Utility.copyTextFile("com/ibm/text/UCA/charts.css", Utility.LATIN1, folder + "charts.css");
+			Utility.copyTextFile("com/ibm/text/UCA/script_help.html", Utility.UTF8, folder + "help.html");
 
 			indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
 			Utility.appendFile(WORKING_DIR + "script_index_header.html", Utility.UTF8, indexFile, replacement);
@@ -609,9 +611,9 @@ public class WriteCharts implements UCD_Types {
         String[] replacement = new String[] {"%%%", "Name Charts"};
         String folder = "charts\\name\\";
 
-        Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
-        Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
-        Utility.copyTextFile("name_help.html", Utility.UTF8, folder + "help.html");
+        Utility.copyTextFile("com/ibm/text/UCA/index.html", Utility.UTF8, folder + "index.html", replacement);
+        Utility.copyTextFile("com/ibm/text/UCA/charts.css", Utility.LATIN1, folder + "charts.css");
+        Utility.copyTextFile("com/ibm/text/UCA/name_help.html", Utility.UTF8, folder + "help.html");
 
         indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
         Utility.appendFile(WORKING_DIR + "index_header.html", Utility.UTF8, indexFile, replacement);
