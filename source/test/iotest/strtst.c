@@ -418,7 +418,6 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
     TestSPrintFormat("%10g", 123.456789, "%10g", 123.456789);
     TestSPrintFormat("%-10g", 123.456789, "%-10g", 123.456789);
-    TestSPrintFormat("%.14G", 1.7e64, "%.14G", 1.7e64);
 
     TestSPrintFormat("%8x", 123456, "%8x", 123456);
     TestSPrintFormat("%-8x", 123456, "%-8x", 123456);
