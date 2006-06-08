@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Data.java,v $ 
-* $Date: 2005/05/02 15:39:54 $ 
-* $Revision: 1.3 $
+* $Date: 2006/06/08 18:16:40 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -294,9 +294,9 @@ public class UCA_Data implements UCA_Types {
             if (collationElements[i] == CONTRACTING) ceSet.add(i);
         }
         UnicodeSet ceSet2 = new UnicodeSet();
-        Iterator enum = contractingTable.keySet().iterator();
-        while (enum.hasNext()) {
-            String sequence = (String)enum.next();
+        Iterator enum1 = contractingTable.keySet().iterator();
+        while (enum1.hasNext()) {
+            String sequence = (String)enum1.next();
             ceSet2.add(sequence.charAt(0));
         }
         

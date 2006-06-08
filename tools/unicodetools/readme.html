@@ -4,6 +4,11 @@
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <title>New Page 18</title>
+<style>
+<!--
+li           { margin-top: 0.5em; margin-bottom: 0.5em }
+-->
+</style>
 </head>
 
 <body>
@@ -170,14 +175,14 @@ CopyrightYear: <b>2006</b> <i> // Pick the current year</i></pre>
 		</li>
 		<li>Run&gt;Run As...<ol>
 			<li>Choose Java Application<ul>
-				<li>it will fail, don't worry; you need to set some parameters</li>
+				<li>it will fail, don't worry; you need to set some parameters.</li>
 			</ul>
 			</li>
 		</ol>
 		</li>
 		<li>Run&gt;Run...<ul>
 			<li>Select the Arguments tab, and fill in the following<ul>
-				<li>Program arguments:<pre>build 5.0 MakeUnicodeFiles</pre>
+				<li>Program arguments:<pre>build 5.0<span style="background-color: #FFFF00">.0</span> MakeUnicodeFiles</pre>
 				</li>
 				<li>VM arguments: 
 				<pre>-Xms512m -Xmx512m</pre>
@@ -229,6 +234,14 @@ UNCHANGED-Diff_PropertyValueAliases-5.0.0d10.txt.bat</pre>
 		<li>On Windows you can run these BATs to compare files:</li>
 	</ol>
 	</li>
+	<li><span style="background-color: #FFFF00">NFSkippable</span><ol>
+	<li><span style="background-color: #FFFF00">A file is needed by ICU that is 
+	generated with the same tool. Just use the input parameter &quot;NFSkippable&quot; to 
+	generate the file NFSafeSets.txt, also in </span>
+	<a href="file:///C:/DATA/GEN"><span style="background-color: #FFFF00">
+	file:///C:/DATA/GEN</span></a></li>
+</ol>
+	</li>
 </ol>
 <h3>5. Invariant Checking</h3>
 <ol>
@@ -242,9 +255,63 @@ UNCHANGED-Diff_PropertyValueAliases-5.0.0d10.txt.bat</pre>
 		</li>
 		<li>Run&gt;Run As... Java Application<br>
 		Will create the following file of results:<pre><a href="file:///C:/DATA/GEN/UnicodeInvariantResults.txt/">C:\DATA\GEN\UnicodeInvariantResults.txt\</a></pre>
+		<p>And on the console will list whether any problems are found. Thus in 
+		the following case there was one failure:</p>
+		<pre>ParseErrorCount=0
+TestFailureCount=1</pre>
 		</li>
-		<li>Open that file and search for &quot;**** START Error Info ****&quot; Each such 
-		point provides a dump of comparison information.</li>
+		<li>The header of the result file explains the syntax of the tests.</li>
+		<li>Open that file and search for &quot;**** START Error Info ****&quot;. Each such 
+		point provides a dump of comparison information.<ol>
+		<li>Failures print a list of differences between two sets being 
+		compared. So if A and B are being compared, it prints all the items in 
+		A-B, then in B-A, then in A&amp;B.</li>
+		<li>For example, here is a listing of a problem that must be corrected. 
+		Note that usually there is a comment that explains what the following 
+		line or lines are supposed to test. Then will come FALSE (indicating 
+		that the test failed), then the detailed error report.<pre><span style="font-size: 9pt"># Canonical decompositions (minus exclusions) must be identical across releases
+[$Decomposition_Type:Canonical - $Full_Composition_Exclusion] = [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion]
+
+FALSE
+**** START Error Info ****
+
+In [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], but not in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+
+# Total code points: 0
+
+Not in [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], but in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+1B06           # Lo       BALINESE LETTER AKARA TEDUNG
+1B08           # Lo       BALINESE LETTER IKARA TEDUNG
+1B0A           # Lo       BALINESE LETTER UKARA TEDUNG
+1B0C           # Lo       BALINESE LETTER RA REPA TEDUNG
+1B0E           # Lo       BALINESE LETTER LA LENGA TEDUNG
+1B12           # Lo       BALINESE LETTER OKARA TEDUNG
+1B3B           # Mc       BALINESE VOWEL SIGN RA REPA TEDUNG
+1B3D           # Mc       BALINESE VOWEL SIGN LA LENGA TEDUNG
+1B40..1B41     # Mc   [2] BALINESE VOWEL SIGN TALING TEDUNG..BALINESE VOWEL SIGN TALING REPA TEDUNG
+1B43           # Mc       BALINESE VOWEL SIGN PEPET TEDUNG
+
+# Total code points: 11
+
+In both [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], and in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+00C0..00C5     # L&amp;   [6] LATIN CAPITAL LETTER A WITH GRAVE..LATIN CAPITAL LETTER A WITH RING ABOVE
+00C7..00CF     # L&amp;   [9] LATIN CAPITAL LETTER C WITH CEDILLA..LATIN CAPITAL LETTER I WITH DIAERESIS
+00D1..00D6     # L&amp;   [6] LATIN CAPITAL LETTER N WITH TILDE..LATIN CAPITAL LETTER O WITH DIAERESIS
+...
+30F7..30FA     # Lo   [4] KATAKANA LETTER VA..KATAKANA LETTER VO
+30FE           # Lm       KATAKANA VOICED ITERATION MARK
+AC00..D7A3     # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
+
+# Total code points: 12089
+**** END Error Info ****</span></pre>
+		</li>
+	</ol>
+		</li>
+		<li>Options:<ol>
+		<li>-r&nbsp;&nbsp;&nbsp; Print the failures as a range list.</li>
+		<li>-fxxx&nbsp;&nbsp;&nbsp; Use a different input file, such as -fInvariantTest.txt</li>
+	</ol>
+		</li>
 	</ol>
 	</li>
 </ol>
@@ -265,15 +332,45 @@ UNCHANGED-Diff_PropertyValueAliases-5.0.0d10.txt.bat</pre>
 <h3>5. UCA</h3>
 <ol>
 	<li>
-	<h3>You will use com.ibm.text.UCA.Main as your main class, creating along 
-	the same lines as above.</h3></li>
+	You will use com.ibm.text.UCA.Main as your main class, creating along 
+	the same lines as above.</li>
+	<li>To test whether the UCA files are valid, use the
+	<span style="font-weight: 400">options (<i>note: you should also build the ICU 
+	files below, since they test other aspects</i>).</span><pre>writeCollationValidityLog</pre>
+	<p>It will create a file:</p>
+	<pre><a href="file:///C:/DATA/GEN/collation/5.0.0/CheckCollationValidity.html">C:\DATA\GEN\collation\5.0.0\CheckCollationValidity.html</a></pre>
+	<ol>
+		<li>Review this file. It will list errors. Some of those are actually 
+	warnings, and indicate possible problems (this is indicated in the text, 
+	such as by: &quot;These are not necessarily errors, but should be examined for 
+		<i>possible</i> errors&quot;). In those cases, the items should be reviewed to make 
+	sure that there are no inadvertent problems.</li>
+		<li>If it is not so marked, it is a true error, and must be fixed.</li>
+		<li>At the end, there is section <b>11. Coverage</b>. There are two sections:<ol>
+			<li>In UCDxxx, but not in allkeys. Check this over to make sure that these 
+	are all the characters that should get <b><i>implicit</i></b> weights.</li>
+			<li>In allkeys, but not in UCD. These should be <b><i>only</i></b> 
+	contractions. Check them over to make sure they look right also.</li>
+		</ol></li>
+	</ol></li>
 	<li>
-	<h4>To build all the UCA files used by ICU, use the Program arguments:</h4>
-	<pre>Main ICU</pre>
+	<h4><span style="font-weight: 400">To build all the charts, use the options:
+	</span> </h4>
+	<pre>normalizationChart caseChart scriptChart indexChart</pre>
 	</li>
 	<li>
-	<h4>To build all the charts, use the UCA project, with options: </h4>
-	<pre>normalizationChart caseChart scriptChart indexChart</pre>
+	<h4><span style="font-weight: 400">To build all the UCA files used by ICU, use the 
+	option:</span></h4>
+	<pre>ICU</pre>
+	</li>
+	<li>You should then build a set of the ICU files for the previous version, 
+	if you don't have them. The key file is UCA_Rules_NoCE.txt. It contains the 
+	rules expressed in ICU format, which allows for comparison across versions 
+	of UCA.<ol>
+	<li>Do a Diff, and verify that all the differences are either new 
+	characters, or were authorized to be changed by the UTC.</li>
+</ol>
+
 	</li>
 </ol>
 

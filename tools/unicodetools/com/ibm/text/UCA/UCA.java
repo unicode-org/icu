@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2005/05/02 15:39:54 $ 
-* $Revision: 1.25 $
+* $Date: 2006/06/08 18:16:40 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -1128,7 +1128,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         Normalizer skipDecomps;
         Normalizer nfd;
         Normalizer nfkd;
-        Iterator enum = null;
+        Iterator enum1 = null;
         byte ceLimit;
         int currentRange = SAMPLE_RANGES.length; // set to ZERO to enable
         int startOfRange = SAMPLE_RANGES[0][0];
@@ -1197,9 +1197,9 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             }
             
             // contractions
-            if (enum == null) enum = ucaData.getContractions();
-            while (enum.hasNext()) {
-                result = (String)enum.next();
+            if (enum1 == null) enum1 = ucaData.getContractions();
+            while (enum1.hasNext()) {
+                result = (String)enum1.next();
                 if (result.length() == 1 && UTF16.isLeadSurrogate(result.charAt(0))) {
                     //System.out.println("Skipping " + ucd.getCodeAndName(result));
                     continue; // try again
@@ -1500,9 +1500,9 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         Map missingStrings = new HashMap();
         Map tempMap = new HashMap();
         
-        Iterator enum = ucaData.getContractions();
-        while (enum.hasNext()) {
-            String sequence = (String)enum.next();
+        Iterator enum1 = ucaData.getContractions();
+        while (enum1.hasNext()) {
+            String sequence = (String)enum1.next();
             //System.out.println("Contraction: " + Utility.hex(sequence));
             for (int i = sequence.length()-1; i > 0; --i) {
                 String shorter = sequence.substring(0,i);
@@ -1520,26 +1520,26 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         
         // now add them. We couldn't before because we were iterating over it.
         
-        enum = tempMap.keySet().iterator();
-        while (enum.hasNext()) {
-            String shorter = (String) enum.next();
+        enum1 = tempMap.keySet().iterator();
+        while (enum1.hasNext()) {
+            String shorter = (String) enum1.next();
             IntStack tempStack = (IntStack) tempMap.get(shorter);
             ucaData.add(shorter, tempStack);
         }
         
         
-        enum = missingStrings.keySet().iterator();
+        enum1 = missingStrings.keySet().iterator();
         if (missingStrings.size() != 0) {
             /**
-            while (enum.hasMoreElements()) {
-                String sequence = (String)enum.nextElement();
+            while (enum1.hasMoreElements()) {
+                String sequence = (String)enum1.nextElement();
                 getCE(sequence);
                 FIX LATER;
             }
             */
             String errorMessage = "";
-            while (enum.hasNext()) {
-                String missing = (String)enum.next();
+            while (enum1.hasNext()) {
+                String missing = (String)enum1.next();
                 if (errorMessage.length() != 0) errorMessage += ", ";
                 errorMessage += "\"" + missing + "\"";
             }
