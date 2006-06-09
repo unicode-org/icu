@@ -256,7 +256,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
         		UnicodeProperty lineBreak = getProperty("Line_Break");
         		unicodeMap.putAll(getProperty("Alphabetic").getSet("true")
-        				.add(0xA0).add(0x05F3)
+        				.add(0x05F3)
 						.removeAll(getProperty("Ideographic").getSet("true"))
 						.removeAll(unicodeMap.getSet("Katakana"))
 						//.removeAll(script.getSet("Thai"))
