@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2006/04/05 22:12:43 $
-* $Revision: 1.11 $
+* $Date: 2006/06/09 21:21:20 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -31,8 +32,11 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.unicode.cldr.util.Counter;
+
 import com.ibm.icu.dev.demo.translit.CaseIterator;
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.Tabber;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.impl.PrettyPrinter;
 import com.ibm.icu.impl.Utility;
@@ -41,6 +45,8 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Collator;
 //import com.ibm.icu.text.Normalizer;
+
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
@@ -51,9 +57,19 @@ import com.ibm.icu.util.ULocale;
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
 		try {
-
-			checkCase();
+			
+			checkNormalization("NFC", Default.nfc());
+			//checkNormalization("NFKC", Default.nfkc());
+			
 			if (true) return;
+			
+			checkCaseChanges();
+			if (true) return;
+			
+			checkBufferStatus();
+			
+			
+			checkCase();
 
 			getCaseFoldingUnstable();
 
@@ -86,6 +102,102 @@ public class QuickTest implements UCD_Types {
 		}
 	}
 	
+	static void checkNormalization(String title, Normalizer nfx) {
+		UnicodeSet trailing = new UnicodeSet();
+		UnicodeSet leading = new UnicodeSet();
+		UnicodeSet starter = new UnicodeSet();
+		UnicodeSet nonStarter = new UnicodeSet();
+		UnicodeSet disallowed = new UnicodeSet();
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			if (!nfx.isNormalized(i)) {
+				disallowed.add(i);
+				continue;
+			}
+			if (nfx.isLeading(i)) leading.add(i);
+			if (nfx.isTrailing(i)) trailing.add(i);
+			if (Default.ucd().getCombiningClass(i) == 0) starter.add(i);
+			else nonStarter.add(i);
+		}
+		UnicodeSet allowed = new UnicodeSet(disallowed).complement();		
+		UnicodeSet leadingOnly = new UnicodeSet(leading).removeAll(trailing);
+		UnicodeSet trailingOnly = new UnicodeSet(trailing).removeAll(leading);
+		UnicodeSet both = new UnicodeSet(trailing).retainAll(leading);
+		UnicodeSet stable = new UnicodeSet(allowed).removeAll(leading).removeAll(trailing);
+		
+		UnicodeSet starterLeadingOnly = new UnicodeSet(starter).retainAll(leadingOnly);
+		UnicodeSet starterTrailingOnly = new UnicodeSet(starter).retainAll(trailingOnly);
+		UnicodeSet starterStable = new UnicodeSet(starter).retainAll(stable);
+		UnicodeSet starterBoth = new UnicodeSet(starter).retainAll(both);
+
+		UnicodeSet nonStarterTrailing = new UnicodeSet(nonStarter).retainAll(trailing);
+		UnicodeSet nonStarterNonTrailing = new UnicodeSet(nonStarter).removeAll(trailing);
+		
+		System.out.println();
+		System.out.println(title);
+		System.out.println("Starter, CWF-Only: " + starterLeadingOnly.size());
+		System.out.println("Starter, CWP-Only: " + starterTrailingOnly.size());
+		System.out.println("Starter, Stable: " + starterStable.size());
+		System.out.println("Starter, Both: " + starterBoth.size());
+		System.out.println("Non-Starter, CWP: " + nonStarterTrailing.size());
+		System.out.println("Non-Starter, Non-CWP: " + nonStarterNonTrailing.size());
+		System.out.println("Disallowed: " + disallowed.size());
+		
+		BagFormatter bf = new BagFormatter();
+
+		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("5.0.0");
+		bf.setUnicodePropertyFactory(ups);
+
+		System.out.println("Starter, CWF-Only: " + "\r\n" + bf.showSetNames(starterLeadingOnly));
+		System.out.println("Starter, CWP-Only: " + "\r\n" + bf.showSetNames(starterTrailingOnly));
+		System.out.println("Starter, Stable: " + "\r\n" + bf.showSetNames(starterStable));
+		System.out.println("Starter, Both: " + "\r\n" + bf.showSetNames(starterBoth));
+		System.out.println("Non-Starter, CWP: " + "\r\n" + bf.showSetNames(nonStarterTrailing));
+		System.out.println("Non-Starter, Non-CWP: " + "\r\n" + bf.showSetNames(nonStarterNonTrailing));
+		System.out.println("Disallowed: " + "\r\n" + bf.showSetNames(disallowed));
+		
+//		System.out.println(bf.showSetDifferences("NFC CWP", leadingC, "NFC Trailing", trailingC));
+	}
+	
+	private static void checkCaseChanges() {
+		String first = "3.0.0";
+		String last = "4.1.0";
+		UCD ucd30 = UCD.make(first);
+		UCD ucd50 = UCD.make(last);
+		
+		UnicodeSet sameBehavior = new UnicodeSet();
+		UnicodeSet newIn50 = new UnicodeSet();
+		UnicodeSet differentBehavior = new UnicodeSet();
+		for (int i = 0; i < 0x10FFFF; ++i) {
+			int type = ucd50.getCategory(i);
+			if (type == UCD.UNASSIGNED || type == UCD.PRIVATE_USE || type == UCD.SURROGATE) continue;
+			String c1 = UTF16.valueOf(i);
+			String c3 = ucd30.getCase(i,UCD.FULL,UCD.FOLD);
+			String c5 = ucd50.getCase(i,UCD.FULL,UCD.FOLD);
+			if (c1.equals(c3) && c1.equals(c5)) continue;
+			if (!ucd30.isAssigned(i)) {
+				newIn50.add(i);
+			} else if (c3.equals(c5)) {
+				sameBehavior.add(i);
+			} else {
+				differentBehavior.add(i);
+				System.out.println(ucd50.getCodeAndName(i));
+				System.out.println("3.0=>" + ucd50.getCodeAndName(c3));
+				System.out.println("5.0=>" + ucd50.getCodeAndName(c5));
+			}
+		}
+		BagFormatter bf = new BagFormatter();
+		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make(last);
+		bf.setUnicodePropertyFactory(ups);
+		System.out.println("In 5.0 but not 3.0: " + newIn50);
+		System.out.println(bf.showSetNames(newIn50));
+		System.out.println();
+		System.out.println("Same Behavior in 3.0 and 5.0: " + sameBehavior);
+		System.out.println(bf.showSetNames(sameBehavior));
+		System.out.println();
+		System.out.println("Different Behavior in 3.0 and 5.0: " + differentBehavior);
+		System.out.println(bf.showSetNames(differentBehavior));
+	}
+
 	private static void checkUnicodeSet() {
 		UnicodeSet uset = new UnicodeSet("[a{bc}{cd}pqr\u0000]");
 		System.out.println(uset + " ~ " + uset.getRegexEquivalent());
@@ -832,6 +944,81 @@ public class QuickTest implements UCD_Types {
 		
 	}
 	
+	static Counter bufferTypes = new Counter();
+	
+	static class BufferData {
+		int initials;
+		int medials;
+		int finals;
+		int sample;
+		public boolean equals(Object other) {
+			BufferData that = (BufferData)other;
+			return initials == that.initials && medials == that.medials && finals == that.finals;
+		}
+		public int hashCode() {
+			return (initials*37 + medials)*37 + finals;
+		}
+		public BufferData set(int codepoint) {
+			String s = Default.nfkd().normalize(codepoint);
+			int cp;
+			boolean isInitial = true;
+			for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+				cp = UTF16.charAt(s, i);
+				int ccc = UCharacter.getCombiningClass(cp);
+				if (ccc != 0) {
+					if (isInitial) {
+						++initials;
+					} else {
+						++finals;
+					}
+				} else {
+					isInitial = false;
+					medials += finals + 1;
+					finals = 0;
+				}
+			}
+			sample = codepoint;
+			return this;
+		}
+		public String toString() {
+			if (sample == 0) {
+				return initials + "\t" + medials + "\t" + finals + "\t" + "-" + "\t" + "all others";
+			}
+			return initials + "\t" + medials + "\t" + finals + "\t" + Utility.hex(sample) + "\t" + UCharacter.getName(sample);
+		}
+	}
+	static class BufferDataComparator implements Comparator {
+		public int compare(Object arg0, Object arg1) {
+			BufferData a0 = (BufferData)arg0;
+			BufferData a1 = (BufferData)arg1;
+			int result;
+			if (0 != (result = a0.initials - a1.initials)) return result;
+			if (0 != (result = a0.finals - a1.finals)) return result;
+			if (0 != (result = a0.medials - a1.medials)) return result;
+			return 0;
+		}
+	}
+	private static void checkBufferStatus() {
+		BufferData non = new BufferData().set(0);
+		Tabber tabber = new Tabber.HTMLTabber();
+		for (int i = 0; i <= 0x10ffff; ++i) {
+			int type = Default.ucd().getCategory(i);
+			if (type == UCD.UNASSIGNED || type == UCD.PRIVATE_USE || type == UCD.SURROGATE) {
+				bufferTypes.add(non,1);
+				continue;
+			}
+			bufferTypes.add(new BufferData().set(i),1);
+		}
+		Map m = bufferTypes.getMap();
+		TreeSet sorted = new TreeSet(new BufferDataComparator());
+		NumberFormat nf = NumberFormat.getInstance();
+		sorted.addAll(m.keySet());
+		for (Iterator it = sorted.iterator(); it.hasNext();) {
+			Object key = it.next();
+			Object value = bufferTypes.getCount(key);
+			System.out.println(tabber.process(nf.format(value) + "\t" + key));
+		}
+	}
 
 
 }

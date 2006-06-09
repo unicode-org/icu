@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2004/02/06 18:30:22 $
-* $Revision: 1.12 $
+* $Date: 2006/06/09 21:21:20 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -20,7 +20,7 @@ import com.ibm.text.utility.*;
 final class DerivedPropertyLister extends PropertyLister {
     static final boolean BRIDGE = false;
 
-    static int enum = 0;
+    //static int enum = 0;
 
     //private int propMask;
     //private DerivedProperty dprop;
