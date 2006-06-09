@@ -275,6 +275,19 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             ENABLE_64BIT_LIBS=no
             ;;
         esac
+    else
+        if test "$GCC" = yes; then
+            OLD_CFLAGS="${CFLAGS}"
+            OLD_CXXFLAGS="${CXXFLAGS}"
+            CFLAGS="${CFLAGS} -m32"
+            CXXFLAGS="${CXXFLAGS} -m32"
+            AC_TRY_RUN(int main(void) {return 0;},
+               ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=yes)
+            if test "$ENABLE_64BIT_LIBS" = yes; then
+                CFLAGS="${OLD_CFLAGS}"
+                CXXFLAGS="${OLD_CXXFLAGS}"
+            fi
+        fi
     fi
     dnl Individual tests that fail should reset their own flags.
     AC_MSG_RESULT($ENABLE_64BIT_LIBS)
