@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -84,7 +84,7 @@ static const UDataInfo dataInfo={
     0,
 
     {0x43, 0x76, 0x41, 0x6c},     /* dataFormat="CvAl" */
-    {3, 0, 0, 0},                 /* formatVersion */
+    {3, 0, 1, 0},                 /* formatVersion */
     {1, 4, 2, 0}                  /* dataVersion */
 };
 
@@ -136,6 +136,10 @@ static uint16_t aliasListsSize = 0;
 static UBool standardTagsUsed = FALSE;
 static UBool verbose = FALSE;
 static int lineNum = 1;
+
+static UConverterAliasOptions tableOptions = {
+    UCNV_IO_UNNORMALIZED
+};
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -192,7 +196,8 @@ enum
     VERBOSE,
     COPYRIGHT,
     DESTDIR,
-    SOURCEDIR
+    SOURCEDIR,
+    OPTIMIZE
 };
 
 static UOption options[]={
@@ -201,7 +206,8 @@ static UOption options[]={
     UOPTION_VERBOSE,
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
-    UOPTION_SOURCEDIR
+    UOPTION_SOURCEDIR,
+    UOPTION_DEF( "optimize", 'O', UOPT_REQUIRES_ARG),
 };
 
 extern int
@@ -234,12 +240,26 @@ main(int argc, char* argv[]) {
             "\t-c or --copyright   include a copyright notice\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n",
+            "\t-O or --optimize    optimize the table for \"size\" or \"speed\"\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     if(options[VERBOSE].doesOccur) {
         verbose = TRUE;
+    }
+
+    if(options[OPTIMIZE].doesOccur) {
+        if (strcmp(options[OPTIMIZE].value, "size") == 0) {
+            tableOptions.stringNormalizationType = UCNV_IO_UNNORMALIZED;
+        }
+        else if (strcmp(options[OPTIMIZE].value, "speed") == 0) {
+            tableOptions.stringNormalizationType = UCNV_IO_STD_NORMALIZED;
+        }
+        else {
+            fprintf(stderr, "Invalid value for optimization\n");
+            return -1;
+        }
     }
 
     if(argc>=2) {
@@ -906,6 +926,26 @@ createOneAliasList(uint16_t *aliasArrLists, uint32_t tag, uint32_t converter, ui
 }
 
 static void
+createNormalizedAliasStrings(char *normalizedStrings, const char *origStringBlock, int32_t stringBlockLength) {
+    int32_t currStrLen;
+    uprv_memcpy(normalizedStrings, origStringBlock, stringBlockLength);
+    while ((currStrLen = (int32_t)uprv_strlen(origStringBlock)) < stringBlockLength) {
+        int32_t currStrSize = currStrLen + 1;
+        if (currStrLen > 0) {
+            int32_t normStrLen;
+            ucnv_io_stripForCompare(normalizedStrings, origStringBlock);
+            normStrLen = uprv_strlen(normalizedStrings);
+            if (normStrLen > 0) {
+                uprv_memset(normalizedStrings + normStrLen, 0, currStrSize - normStrLen);
+            }
+        }
+        stringBlockLength -= currStrSize;
+        normalizedStrings += currStrSize;
+        origStringBlock += currStrSize;
+    }
+}
+
+static void
 writeAliasTable(UNewDataMemory *out) {
     uint32_t i, j;
     uint32_t uniqueAliasesSize;
@@ -928,7 +968,12 @@ writeAliasTable(UNewDataMemory *out) {
     }
 
     /* Write the size of the TOC */
-    udata_write32(out, 8);
+    if (tableOptions.stringNormalizationType == UCNV_IO_UNNORMALIZED) {
+        udata_write32(out, 8);
+    }
+    else {
+        udata_write32(out, 9);
+    }
 
     /* Write the sizes of each section */
     /* All sizes are the number of uint16_t units, not bytes */
@@ -938,8 +983,16 @@ writeAliasTable(UNewDataMemory *out) {
     udata_write32(out, uniqueAliasesSize);  /* The preresolved form of mapping an untagged the alias to a converter */
     udata_write32(out, tagCount * converterCount);
     udata_write32(out, aliasListsSize + 1);
-    udata_write32(out, 0);  /* Reserved space. */
+    if (tableOptions.stringNormalizationType == UCNV_IO_UNNORMALIZED) {
+        udata_write32(out, 0);
+    }
+    else {
+        udata_write32(out, sizeof(tableOptions) / sizeof(uint16_t));
+    }
     udata_write32(out, (tagBlock.top + stringBlock.top) / sizeof(uint16_t));
+    if (tableOptions.stringNormalizationType != UCNV_IO_UNNORMALIZED) {
+        udata_write32(out, (tagBlock.top + stringBlock.top) / sizeof(uint16_t));
+    }
 
     /* write the table of converters */
     /* Think of this as the column headers */
@@ -973,11 +1026,27 @@ writeAliasTable(UNewDataMemory *out) {
     /* Write the lists */
     udata_writeBlock(out, (const void *)aliasLists, aliasListsSize * sizeof(uint16_t));
 
+    /* Write any options for the alias table. */
+    if (tableOptions.stringNormalizationType != UCNV_IO_UNNORMALIZED) {
+        udata_writeBlock(out, (const void *)&tableOptions, sizeof(tableOptions));
+    }
+
     /* write the tags strings */
     udata_writeString(out, tagBlock.store, tagBlock.top);
 
     /* write the aliases strings */
     udata_writeString(out, stringBlock.store, stringBlock.top);
+
+    /* write the normalized aliases strings */
+    if (tableOptions.stringNormalizationType != UCNV_IO_UNNORMALIZED) {
+        char *normalizedStrings = (char *)uprv_malloc(tagBlock.top + stringBlock.top);
+        createNormalizedAliasStrings(normalizedStrings, tagBlock.store, tagBlock.top);
+        createNormalizedAliasStrings(normalizedStrings + tagBlock.top, stringBlock.store, stringBlock.top);
+
+        /* Write out the complete normalized array. */
+        udata_writeString(out, normalizedStrings, tagBlock.top + stringBlock.top);
+        uprv_free(normalizedStrings);
+    }
 
     uprv_free(aliasArrLists);
     uprv_free(uniqueAliases);
