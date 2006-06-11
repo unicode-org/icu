@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -24,6 +24,16 @@
 #define UCNV_NUM_RESERVED_TAGS 2
 #define UCNV_NUM_HIDDEN_TAGS 1
 
+typedef enum {
+    UCNV_IO_UNNORMALIZED,
+    UCNV_IO_STD_NORMALIZED,
+    UCNV_IO_NORM_TYPE_COUNT
+};
+
+typedef struct {
+    uint16_t stringNormalizationType;
+} UConverterAliasOptions;
+
 typedef struct UConverterAlias {
     const uint16_t *converterList;
     const uint16_t *tagList;
@@ -31,7 +41,9 @@ typedef struct UConverterAlias {
     const uint16_t *untaggedConvArray;
     const uint16_t *taggedAliasArray;
     const uint16_t *taggedAliasLists;
+    const UConverterAliasOptions *optionTable;
     const uint16_t *stringTable;
+    const uint16_t *normalizedStringTable;
 
     uint32_t converterListSize;
     uint32_t tagListSize;
@@ -39,7 +51,9 @@ typedef struct UConverterAlias {
     uint32_t untaggedConvArraySize;
     uint32_t taggedAliasArraySize;
     uint32_t taggedAliasListsSize;
-    /*uint32_t stringTableSize;*/
+    uint32_t optionTableSize;
+    uint32_t stringTableSize;
+    uint32_t normalizedStringTableSize;
 } UConverterAlias;
 
 /**
@@ -59,10 +73,10 @@ typedef struct UConverterAlias {
 #   error U_CHARSET_FAMILY is not valid
 #endif
 
-U_CFUNC char * U_EXPORT2
+U_CAPI char * U_EXPORT2
 ucnv_io_stripASCIIForCompare(char *dst, const char *name);
 
-U_CFUNC char * U_EXPORT2
+U_CAPI char * U_EXPORT2
 ucnv_io_stripEBCDICForCompare(char *dst, const char *name);
 
 /**

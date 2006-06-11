@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -94,8 +94,10 @@
  * the third dimension to the section 5. No other section should be referencing
  * this section.
  *
- * 7) Reserved at this time (There is no information). This _usually_ has a
- * size of 0. Future versions may add more information here.
+ * 7) Starting in ICU 3.6, this can be a UConverterAliasOptions struct. Its
+ * presence indicates that a section 9 exists. UConverterAliasOptions specifies
+ * what type of string normalization is used among other potential things in the
+ * future.
  *
  * 8) This is the string table. All strings are indexed on an even address.
  * There are two reasons for this. First many chip architectures locate strings
@@ -103,6 +105,10 @@
  * numbers, this string table can be 128KB in size instead of 64KB when we
  * only have strings starting on an even address.
  *
+ * 9) When present this is a set of prenormalized strings from section 8. This
+ * table contains normalized strings with the dashes and spaces stripped out,
+ * and all strings lowercased. In the future, the options in section 7 may state
+ * other types of normalization.
  *
  * Here is the concept of section 5 and 6. It's a 3D cube. Each tag
  * has a unique alias among all converters. That same alias can
@@ -173,15 +179,20 @@ enum {
     untaggedConvArrayIndex=4,
     taggedAliasArrayIndex=5,
     taggedAliasListsIndex=6,
-    reservedIndex1=7,
+    tableOptions=7,
     stringTableIndex=8,
-    minTocLength=8, /* min. tocLength in the file, does not count the tocLengthIndex! */
-    offsetsCount    /* length of the swapper's temporary offsets[] */
+    normalizedStringTableIndex=9,
+    offsetsCount,    /* length of the swapper's temporary offsets[] */
+    minTocLength=8 /* min. tocLength in the file, does not count the tocLengthIndex! */
 };
 
+static const UConverterAliasOptions defaultTableOptions = {
+    UCNV_IO_UNNORMALIZED
+};
 static UConverterAlias gMainTable;
 
 #define GET_STRING(idx) (const char *)(gMainTable.stringTable + (idx))
+#define GET_NORMALIZED_STRING(idx) (const char *)(gMainTable.normalizedStringTable + (idx))
 
 static UBool U_CALLCONV
 isAcceptable(void *context,
@@ -226,7 +237,6 @@ haveAliasData(UErrorCode *pErrorCode) {
         const uint16_t *table = NULL;
         uint32_t tableStart;
         uint32_t currOffset;
-        uint32_t reservedSize1;
 
         data = udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
@@ -253,8 +263,12 @@ haveAliasData(UErrorCode *pErrorCode) {
             gMainTable.untaggedConvArraySize  = ((const uint32_t *)(table))[4];
             gMainTable.taggedAliasArraySize   = ((const uint32_t *)(table))[5];
             gMainTable.taggedAliasListsSize   = ((const uint32_t *)(table))[6];
-            reservedSize1           = ((const uint32_t *)(table))[7];   /* reserved */
-            /*gStringTableSize        = ((const uint32_t *)(table))[8];*/
+            gMainTable.optionTableSize        = ((const uint32_t *)(table))[7];
+            gMainTable.stringTableSize        = ((const uint32_t *)(table))[8];
+
+            if (((const uint32_t *)(table))[0] > 8) {
+                gMainTable.normalizedStringTableSize = ((const uint32_t *)(table))[9];
+            }
 
             currOffset = tableStart * (sizeof(uint32_t)/sizeof(uint16_t)) + (sizeof(uint32_t)/sizeof(uint16_t));
             gMainTable.converterList = table + currOffset;
@@ -276,10 +290,24 @@ haveAliasData(UErrorCode *pErrorCode) {
             gMainTable.taggedAliasLists = table + currOffset;
 
             currOffset += gMainTable.taggedAliasListsSize;
-            /* reserved */
+            if (gMainTable.optionTableSize > 0
+                && ((const UConverterAliasOptions *)(table + currOffset))->stringNormalizationType < UCNV_IO_NORM_TYPE_COUNT)
+            {
+                /* Faster table */
+                gMainTable.optionTable = (const UConverterAliasOptions *)(table + currOffset);
+            }
+            else {
+                /* Smaller table, or I can't handle this normalization mode!
+                Use the original slower table lookup. */
+                gMainTable.optionTable = &defaultTableOptions;
+            }
 
-            currOffset += reservedSize1;
+            currOffset += gMainTable.optionTableSize;
             gMainTable.stringTable = table + currOffset;
+
+            currOffset += gMainTable.stringTableSize;
+            gMainTable.normalizedStringTable = ((gMainTable.optionTable->stringNormalizationType == UCNV_IO_UNNORMALIZED)
+                ? gMainTable.stringTable : (table + currOffset));
 
             ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
         }
@@ -411,6 +439,15 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
     uint32_t lastMid;
     int result;
+    char strippedName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+
+    if (uprv_strlen(alias) >= UCNV_MAX_CONVERTER_NAME_LENGTH) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        return UINT32_MAX;
+    }
+
+    /* Lower case and remove ignoreable characters. */
+    ucnv_io_stripForCompare(strippedName, alias);
 
     /* do a binary search for the alias */
     start = 0;
@@ -424,7 +461,12 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
             break;  /* We haven't moved, and it wasn't found. */
         }
         lastMid = mid;
-        result = ucnv_compareNames(alias, GET_STRING(gMainTable.aliasList[mid]));
+        if (gMainTable.optionTable->stringNormalizationType == UCNV_IO_UNNORMALIZED) {
+            result = ucnv_compareNames(strippedName, GET_STRING(gMainTable.aliasList[mid]));
+        }
+        else {
+            result = uprv_strcmp(strippedName, GET_NORMALIZED_STRING(gMainTable.aliasList[mid]));
+        }
 
         if (result < 0) {
             limit = mid;
@@ -981,22 +1023,23 @@ ucnv_swapAliases(const UDataSwapper *ds,
     }
 
     inTable=(const uint16_t *)((const char *)inData+headerSize);
+    uprv_memset(toc, 0, sizeof(toc));
     toc[tocLengthIndex]=tocLength=ds->readUInt32(((const uint32_t *)inTable)[tocLengthIndex]);
-    if(tocLength<minTocLength) {
-        udata_printError(ds, "ucnv_swapAliases(): table of contents too short (%u sections)\n", tocLength);
+    if(tocLength<minTocLength || offsetsCount<=tocLength) {
+        udata_printError(ds, "ucnv_swapAliases(): table of contents contains unsupported number of sections (%u sections)\n", tocLength);
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return 0;
     }
 
     /* read the known part of the table of contents */
-    for(i=converterListIndex; i<=minTocLength; ++i) {
+    for(i=converterListIndex; i<=tocLength; ++i) {
         toc[i]=ds->readUInt32(((const uint32_t *)inTable)[i]);
     }
 
     /* compute offsets */
-    offsets[tocLengthIndex]=0;
+    uprv_memset(offsets, 0, sizeof(offsets));
     offsets[converterListIndex]=2*(1+tocLength); /* count two 16-bit units per toc entry */
-    for(i=tagListIndex; i<=stringTableIndex; ++i) {
+    for(i=tagListIndex; i<=tocLength; ++i) {
         offsets[i]=offsets[i-1]+toc[i-1];
     }
 
@@ -1024,6 +1067,11 @@ ucnv_swapAliases(const UDataSwapper *ds,
         /* swap strings */
         ds->swapInvChars(ds, inTable+offsets[stringTableIndex], 2*(int32_t)toc[stringTableIndex],
                              outTable+offsets[stringTableIndex], pErrorCode);
+        /* swap normalized strings */
+        if (toc[normalizedStringTableIndex] > 0) {
+            ds->swapInvChars(ds, inTable+offsets[normalizedStringTableIndex], 2*(int32_t)toc[normalizedStringTableIndex],
+                                outTable+offsets[normalizedStringTableIndex], pErrorCode);
+        }
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ucnv_swapAliases().swapInvChars(charset names) failed\n");
             return 0;
