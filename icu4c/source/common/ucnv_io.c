@@ -439,15 +439,19 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
     uint32_t lastMid;
     int result;
+    int isUnnormalized = (gMainTable.optionTable->stringNormalizationType == UCNV_IO_UNNORMALIZED);
     char strippedName[UCNV_MAX_CONVERTER_NAME_LENGTH];
 
-    if (uprv_strlen(alias) >= UCNV_MAX_CONVERTER_NAME_LENGTH) {
-        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-        return UINT32_MAX;
-    }
+    if (!isUnnormalized) {
+        if (uprv_strlen(alias) >= UCNV_MAX_CONVERTER_NAME_LENGTH) {
+            *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+            return UINT32_MAX;
+        }
 
-    /* Lower case and remove ignoreable characters. */
-    ucnv_io_stripForCompare(strippedName, alias);
+        /* Lower case and remove ignoreable characters. */
+        ucnv_io_stripForCompare(strippedName, alias);
+        alias = strippedName;
+    }
 
     /* do a binary search for the alias */
     start = 0;
@@ -461,11 +465,11 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
             break;  /* We haven't moved, and it wasn't found. */
         }
         lastMid = mid;
-        if (gMainTable.optionTable->stringNormalizationType == UCNV_IO_UNNORMALIZED) {
-            result = ucnv_compareNames(strippedName, GET_STRING(gMainTable.aliasList[mid]));
+        if (isUnnormalized) {
+            result = ucnv_compareNames(alias, GET_STRING(gMainTable.aliasList[mid]));
         }
         else {
-            result = uprv_strcmp(strippedName, GET_NORMALIZED_STRING(gMainTable.aliasList[mid]));
+            result = uprv_strcmp(alias, GET_NORMALIZED_STRING(gMainTable.aliasList[mid]));
         }
 
         if (result < 0) {
