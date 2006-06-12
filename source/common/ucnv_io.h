@@ -20,6 +20,7 @@
 #include "udataswp.h"
 
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
+#define UCNV_CONTAINS_OPTION_BIT 0x4000
 #define UCNV_CONVERTER_INDEX_MASK 0xFFF
 #define UCNV_NUM_RESERVED_TAGS 2
 #define UCNV_NUM_HIDDEN_TAGS 1
@@ -32,6 +33,7 @@ typedef enum {
 
 typedef struct {
     uint16_t stringNormalizationType;
+    uint16_t containsCnvOptionInfo;
 } UConverterAliasOptions;
 
 typedef struct UConverterAlias {
@@ -85,11 +87,12 @@ ucnv_io_stripEBCDICForCompare(char *dst, const char *name);
  * is returned in mixed-case.
  * Returns NULL if the alias is not found.
  * @param alias The alias name to be searched.
+ * @param containsOption A return value stating whether the returned converter name contains an option (a comma)
  * @param pErrorCode The error code
  * @return the converter name in mixed-case, return NULL if the alias is not found.
  */
 U_CFUNC const char *
-ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
+ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode);
 
 /**
  * Return the number of all aliases and converter names.

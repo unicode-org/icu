@@ -73,6 +73,8 @@
  * index of this list is also used by other sections, like the 4th section.
  * The index for the 3rd and 4th section is used to get the
  * alias -> converter name mapping. Section 3 and 4 form a two column table.
+ * Some of the most significant bits of each index may contain other
+ * information (see findConverter for details).
  *
  * 4) This section contains a list of mapped converter names. Consider this
  * as a table that maps the 3rd section to the 1st section. This list contains
@@ -187,7 +189,8 @@ enum {
 };
 
 static const UConverterAliasOptions defaultTableOptions = {
-    UCNV_IO_UNNORMALIZED
+    UCNV_IO_UNNORMALIZED,
+    0 /* containsCnvOptionInfo */
 };
 static UConverterAlias gMainTable;
 
@@ -435,7 +438,7 @@ ucnv_compareNames(const char *name1, const char *name2) {
  * return the converter number index for gConverterList
  */
 static U_INLINE uint32_t
-findConverter(const char *alias, UErrorCode *pErrorCode) {
+findConverter(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
     uint32_t lastMid;
     int result;
@@ -484,6 +487,14 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
             if (gMainTable.untaggedConvArray[mid] & UCNV_AMBIGUOUS_ALIAS_MAP_BIT) {
                 *pErrorCode = U_AMBIGUOUS_ALIAS_WARNING;
             }
+            /* State whether the canonical converter name contains an option.
+            This information is contained in this list in order to maintain backward & forward compatibility. */
+            if (containsOption) {
+                UBool containsCnvOptionInfo = (UBool)gMainTable.optionTable->containsCnvOptionInfo;
+                *containsOption = (UBool)((containsCnvOptionInfo
+                    && ((gMainTable.untaggedConvArray[mid] & UCNV_CONTAINS_OPTION_BIT) != 0))
+                    || !containsCnvOptionInfo);
+            }
             return gMainTable.untaggedConvArray[mid] & UCNV_CONVERTER_INDEX_MASK;
         }
     }
@@ -528,7 +539,7 @@ findTaggedAliasListsOffset(const char *alias, const char *standard, UErrorCode *
     uint32_t tagNum = getTagNumber(standard);
 
     /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
-    convNum = findConverter(alias, &myErr);
+    convNum = findConverter(alias, NULL, &myErr);
     if (myErr != U_ZERO_ERROR) {
         *pErrorCode = myErr;
     }
@@ -579,7 +590,7 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
     uint32_t tagNum = getTagNumber(standard);
 
     /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
-    convNum = findConverter(alias, &myErr);
+    convNum = findConverter(alias, NULL, &myErr);
     if (myErr != U_ZERO_ERROR) {
         *pErrorCode = myErr;
     }
@@ -615,9 +626,9 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
 
 
 U_CFUNC const char *
-ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
+ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        uint32_t convNum = findConverter(alias, pErrorCode);
+        uint32_t convNum = findConverter(alias, containsOption, pErrorCode);
         if (convNum < gMainTable.converterListSize) {
             return GET_STRING(gMainTable.converterList[convNum]);
         }
@@ -724,7 +735,7 @@ ucnv_openStandardNames(const char *convName,
 static uint16_t
 ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        uint32_t convNum = findConverter(alias, pErrorCode);
+        uint32_t convNum = findConverter(alias, NULL, pErrorCode);
         if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
             int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
@@ -743,7 +754,7 @@ static uint16_t
 ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t currAlias;
-        uint32_t convNum = findConverter(alias, pErrorCode);
+        uint32_t convNum = findConverter(alias, NULL, pErrorCode);
         if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
             int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
@@ -767,7 +778,7 @@ ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErr
 static const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        uint32_t convNum = findConverter(alias, pErrorCode);
+        uint32_t convNum = findConverter(alias, NULL, pErrorCode);
         if (convNum < gMainTable.converterListSize) {
             /* tagListNum - 1 is the ALL tag */
             int32_t listOffset = gMainTable.taggedAliasArray[(gMainTable.tagListSize - 1)*gMainTable.converterListSize + convNum];
