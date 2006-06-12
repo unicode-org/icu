@@ -519,11 +519,16 @@ static void TestConvert()
         log_verbose("getDefaultName returned %s\n", defaultName);
 
         /*change the default name by setting it */
-        ucnv_setDefaultName("changed");
-        if(strcmp(ucnv_getDefaultName(), "changed")==0)
+        ucnv_setDefaultName("UTF-8");
+        if(strcmp(ucnv_getDefaultName(), "UTF-8")==0)
             log_verbose("setDefaultName o.k");
         else
-            log_err("setDefaultName failed");  
+            log_err("setDefaultName failed\n");  
+        ucnv_setDefaultName("ISO-8859-1");
+        if(strcmp(ucnv_getDefaultName(), "ISO-8859-1")==0)
+            log_verbose("setDefaultName o.k");
+        else
+            log_err("setDefaultName failed\n");  
         /*set the default name back*/
         ucnv_setDefaultName(defaultName);
     }
