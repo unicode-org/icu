@@ -680,13 +680,13 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     if (converterName == NULL) {
         /* Call ucnv_getDefaultName first to query the name from the OS. */
         lookup->realName = ucnv_getDefaultName();
-        mySharedConverterData = (UConverterSharedData *)gDefaultAlgorithmicSharedData;
-        checkForAlgorithmic = FALSE;
-        mayContainOption = gDefaultConverterContainsOption;
         if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
             return NULL;
         }
+        mySharedConverterData = (UConverterSharedData *)gDefaultAlgorithmicSharedData;
+        checkForAlgorithmic = FALSE;
+        mayContainOption = gDefaultConverterContainsOption;
         /* the default converter name is already canonical */
     } else {
         /* separate the converter name from the options */
