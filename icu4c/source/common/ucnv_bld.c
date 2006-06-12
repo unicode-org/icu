@@ -160,6 +160,7 @@ static uint16_t gAvailableConverterCount = 0;
 
 static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
 static const char *gDefaultConverterName = NULL;
+static UBool gDefaultConverterContainsOption;
 
 
 static const char DATA_TYPE[] = "cnv";
@@ -182,6 +183,7 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
 
     gDefaultConverterName = NULL;
     gDefaultConverterNameBuffer[0] = 0;
+    gDefaultConverterContainsOption = FALSE;
 
     umtx_destroy(&cnvCacheMutex);           /* Don't worry about destroying the mutex even  */
                                             /*  if the hash table still exists.  The mutex  */
@@ -658,6 +660,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     UConverterLookupData stackLookup;
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
+    UBool mayContainOption = TRUE;
 
     if (U_FAILURE (*err)) {
         return NULL;
@@ -673,6 +676,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
         lookup->realName = ucnv_getDefaultName();
+        mayContainOption = gDefaultConverterContainsOption;
         if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
             return NULL;
@@ -687,7 +691,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         }
 
         /* get the canonical converter name */
-        lookup->realName = ucnv_io_getConverterName(lookup->cnvName, &internalErrorCode);
+        lookup->realName = ucnv_io_getConverterName(lookup->cnvName, &mayContainOption, &internalErrorCode);
         if (U_FAILURE(internalErrorCode) || lookup->realName == NULL) {
             /*
             * set the input name in case the converter was added
@@ -698,7 +702,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     }
 
     /* separate the converter name from the options */
-    if(lookup->realName != lookup->cnvName) {
+    if(mayContainOption && lookup->realName != lookup->cnvName) {
         parseConverterOptions(lookup->realName, lookup->cnvName, lookup->locale, &lookup->options, err);
         lookup->realName = lookup->cnvName;
     }
@@ -1113,6 +1117,7 @@ ucnv_getDefaultName() {
         uprv_memcpy(gDefaultConverterNameBuffer, name, length);
         gDefaultConverterNameBuffer[length]=0;
         gDefaultConverterName = gDefaultConverterNameBuffer;
+        gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
         name = gDefaultConverterName;
         ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
         umtx_unlock(&cnvCacheMutex);
@@ -1133,7 +1138,7 @@ ucnv_setDefaultName(const char *converterName) {
         umtx_unlock(&cnvCacheMutex);
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
-        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
+        const char *name=ucnv_io_getConverterName(converterName, NULL, &errorCode);
 
         umtx_lock(&cnvCacheMutex);
 
@@ -1147,6 +1152,7 @@ ucnv_setDefaultName(const char *converterName) {
                 uprv_memcpy(gDefaultConverterNameBuffer, converterName, length);
                 gDefaultConverterNameBuffer[length]=0;
                 gDefaultConverterName=gDefaultConverterNameBuffer;
+                gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
             }
         }
         umtx_unlock(&cnvCacheMutex);
