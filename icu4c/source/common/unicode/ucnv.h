@@ -1730,10 +1730,10 @@ ucnv_getDefaultName(void);
  * ucnv_getDefaultName() is sufficient for your application.
  * @param name the converter name to be the default (must exist).
  * @see ucnv_getDefaultName
- * @system SYSTEM API
+ * @system
  * @stable ICU 2.0
  */
-U_SYSTEM void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucnv_setDefaultName(const char *name);
 
 /**
