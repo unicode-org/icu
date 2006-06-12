@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -295,27 +295,6 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
 U_CAPI void  U_EXPORT2
 ucnv_close (UConverter * converter)
 {
-    /* first, notify the callback functions that the converter is closed */
-    UConverterToUnicodeArgs toUArgs = {
-        sizeof(UConverterToUnicodeArgs),
-            TRUE,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL
-    };
-    UConverterFromUnicodeArgs fromUArgs = {
-        sizeof(UConverterFromUnicodeArgs),
-            TRUE,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL
-    };
     UErrorCode errorCode = U_ZERO_ERROR;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_CLOSE);
@@ -329,11 +308,41 @@ ucnv_close (UConverter * converter)
     UTRACE_DATA3(UTRACE_OPEN_CLOSE, "close converter %s at %p, isCopyLocal=%b",
         ucnv_getName(converter, &errorCode), converter, converter->isCopyLocal);
 
-    toUArgs.converter = fromUArgs.converter = converter;
+    /* In order to speed up the close, only call the callbacks when they have been changed.
+    This performance check will only work when the callbacks are set within a shared library
+    or from user code that statically links this code. */
+    /* first, notify the callback functions that the converter is closed */
+    if (converter->fromCharErrorBehaviour != UCNV_TO_U_DEFAULT_CALLBACK) {
+        UConverterToUnicodeArgs toUArgs = {
+            sizeof(UConverterToUnicodeArgs),
+                TRUE,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL
+        };
 
-    converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
-    errorCode = U_ZERO_ERROR;
-    converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
+        toUArgs.converter = converter;
+        errorCode = U_ZERO_ERROR;
+        converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
+    }
+    if (converter->fromUCharErrorBehaviour != UCNV_FROM_U_DEFAULT_CALLBACK) {
+        UConverterFromUnicodeArgs fromUArgs = {
+            sizeof(UConverterFromUnicodeArgs),
+                TRUE,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL
+        };
+        fromUArgs.converter = converter;
+        errorCode = U_ZERO_ERROR;
+        converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
+    }
 
     if (converter->sharedData->impl->close != NULL) {
         converter->sharedData->impl->close(converter);
@@ -349,7 +358,7 @@ ucnv_close (UConverter * converter)
     }
 
     if(!converter->isCopyLocal){
-        uprv_free (converter);
+        uprv_free(converter);
     }
 
     UTRACE_EXIT();

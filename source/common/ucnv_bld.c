@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2005, International Business Machines Corporation and
+ * Copyright (c) 1996-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -878,20 +878,20 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     /* initialize the converter */
     uprv_memset(myUConverter, 0, sizeof(UConverter));
     myUConverter->isCopyLocal = isCopyLocal;
-    myUConverter->isExtraLocal = FALSE;
+    /*myUConverter->isExtraLocal = FALSE;*/ /* Set by the memset call */
     myUConverter->sharedData = mySharedConverterData;
     myUConverter->options = options;
-    myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
-    myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-    myUConverter->toUnicodeStatus = myUConverter->sharedData->toUnicodeStatus;
-    myUConverter->maxBytesPerUChar = myUConverter->sharedData->staticData->maxBytesPerChar;
-    myUConverter->subChar1 = myUConverter->sharedData->staticData->subChar1;
-    myUConverter->subCharLen = myUConverter->sharedData->staticData->subCharLen;
-    uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
     myUConverter->preFromUFirstCP = U_SENTINEL;
+    myUConverter->fromCharErrorBehaviour = UCNV_TO_U_DEFAULT_CALLBACK;
+    myUConverter->fromUCharErrorBehaviour = UCNV_FROM_U_DEFAULT_CALLBACK;
+    myUConverter->toUnicodeStatus = mySharedConverterData->toUnicodeStatus;
+    myUConverter->maxBytesPerUChar = mySharedConverterData->staticData->maxBytesPerChar;
+    myUConverter->subChar1 = mySharedConverterData->staticData->subChar1;
+    myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
+    uprv_memcpy(myUConverter->subChar, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
 
-    if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
-        myUConverter->sharedData->impl->open(myUConverter, realName, locale,options, err);
+    if(myUConverter != NULL && mySharedConverterData->impl->open != NULL) {
+        mySharedConverterData->impl->open(myUConverter, realName, locale,options, err);
         if(U_FAILURE(*err)) {
             ucnv_close(myUConverter);
             return NULL;
