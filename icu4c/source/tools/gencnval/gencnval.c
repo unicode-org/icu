@@ -138,7 +138,8 @@ static UBool verbose = FALSE;
 static int lineNum = 1;
 
 static UConverterAliasOptions tableOptions = {
-    UCNV_IO_UNNORMALIZED
+    UCNV_IO_UNNORMALIZED,
+    1 /* containsCnvOptionInfo */
 };
 
 /* prototypes --------------------------------------------------------------- */
@@ -879,6 +880,9 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
             lastName = GET_ALIAS_STR(knownAliases[idx]);
             oldTagNum = currTagNum;
             /*printf("%s -> %s\n", GET_ALIAS_STR(knownAliases[idx]), GET_ALIAS_STR(converters[currConvNum].converter));*/
+        }
+        if (uprv_strchr(GET_ALIAS_STR(converters[currConvNum].converter), UCNV_OPTION_SEP_CHAR) != NULL) {
+            uniqueAliasToConverterArr[uniqueAliasIdx-1] |= UCNV_CONTAINS_OPTION_BIT;
         }
     }
     return uniqueAliasIdx;
