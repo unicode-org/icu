@@ -160,6 +160,7 @@ static uint16_t gAvailableConverterCount = 0;
 
 static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
 static const char *gDefaultConverterName = NULL;
+static const UConverterSharedData *gDefaultAlgorithmicSharedData = NULL;
 static UBool gDefaultConverterContainsOption;
 
 
@@ -184,6 +185,7 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
     gDefaultConverterName = NULL;
     gDefaultConverterNameBuffer[0] = 0;
     gDefaultConverterContainsOption = FALSE;
+    gDefaultAlgorithmicSharedData = NULL;
 
     umtx_destroy(&cnvCacheMutex);           /* Don't worry about destroying the mutex even  */
                                             /*  if the hash table still exists.  The mutex  */
@@ -661,6 +663,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     UBool mayContainOption = TRUE;
+    UBool mayBeAlgorithmic = TRUE;
 
     if (U_FAILURE (*err)) {
         return NULL;
@@ -675,7 +678,12 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
 
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
+        /* Call ucnv_getDefaultName first to query the name from the OS. */
         lookup->realName = ucnv_getDefaultName();
+        if (gDefaultAlgorithmicSharedData != NULL) {
+            return (UConverterSharedData *)gDefaultAlgorithmicSharedData;
+        }
+        mayBeAlgorithmic = FALSE;
         mayContainOption = gDefaultConverterContainsOption;
         if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
@@ -708,7 +716,9 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     }
 
     /* get the shared data for an algorithmic converter, if it is one */
-    mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
+    if (mayBeAlgorithmic) {
+        mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
+    }
     if (mySharedConverterData == NULL)
     {
         /* it is a data-based converter, get its shared data.               */
@@ -1066,6 +1076,20 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 
 /* default converter name --------------------------------------------------- */
 
+/* Copy the canonical converter name. Caller must ensure thread safety. */
+static U_INLINE void
+internalSetName(const char *name) {
+    int32_t length=(int32_t)(uprv_strlen(name));
+
+    uprv_memcpy(gDefaultConverterNameBuffer, name, length);
+    gDefaultConverterNameBuffer[length]=0;
+    gDefaultConverterName = gDefaultConverterNameBuffer;
+    gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
+    gDefaultAlgorithmicSharedData = getAlgorithmicTypeFromName(name);
+
+    ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+}
+
 /*
  * In order to be really thread-safe, the get function would have to take
  * a buffer parameter and copy the current string inside a mutex block.
@@ -1083,7 +1107,6 @@ ucnv_getDefaultName() {
     if(name==NULL) {
         UErrorCode errorCode = U_ZERO_ERROR;
         UConverter *cnv = NULL;
-        int32_t length = 0;
 
         name = uprv_getDefaultCodepage();
 
@@ -1097,7 +1120,7 @@ ucnv_getDefaultName() {
 
         if(name == NULL || name[0] == 0
             || U_FAILURE(errorCode) || cnv == NULL
-            || length>=sizeof(gDefaultConverterNameBuffer))
+            || uprv_strlen(name)>=sizeof(gDefaultConverterNameBuffer))
         {
             /* Panic time, let's use a fallback. */
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
@@ -1110,16 +1133,8 @@ ucnv_getDefaultName() {
 #endif
         }
 
-        length=(int32_t)(uprv_strlen(name));
-
-        /* Copy the name before we close the converter. */
         umtx_lock(&cnvCacheMutex);
-        uprv_memcpy(gDefaultConverterNameBuffer, name, length);
-        gDefaultConverterNameBuffer[length]=0;
-        gDefaultConverterName = gDefaultConverterNameBuffer;
-        gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
-        name = gDefaultConverterName;
-        ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+        internalSetName(name);
         umtx_unlock(&cnvCacheMutex);
 
         /* The close may make the current name go away. */
@@ -1137,25 +1152,27 @@ ucnv_setDefaultName(const char *converterName) {
         gDefaultConverterName=NULL;
         umtx_unlock(&cnvCacheMutex);
     } else {
-        UErrorCode errorCode=U_ZERO_ERROR;
-        const char *name=ucnv_io_getConverterName(converterName, NULL, &errorCode);
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = NULL;
+        const char *name = NULL;
 
-        umtx_lock(&cnvCacheMutex);
+        /* if the name is there, test it out and get the canonical name with options */
+        cnv = ucnv_open(converterName, &errorCode);
+        if(U_SUCCESS(errorCode) && cnv != NULL) {
+            name = ucnv_getName(cnv, &errorCode);
+        }
 
         if(U_SUCCESS(errorCode) && name!=NULL) {
-            gDefaultConverterName=name;
-        } else {
-            /* do not set the name if the alias lookup failed and it is too long */
-            int32_t length=(int32_t)(uprv_strlen(converterName));
-            if(length<sizeof(gDefaultConverterNameBuffer)) {
-                /* it was not found as an alias, so copy it - accept an empty name */
-                uprv_memcpy(gDefaultConverterNameBuffer, converterName, length);
-                gDefaultConverterNameBuffer[length]=0;
-                gDefaultConverterName=gDefaultConverterNameBuffer;
-                gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
-            }
+            umtx_lock(&cnvCacheMutex);
+
+            internalSetName(name);
+
+            umtx_unlock(&cnvCacheMutex);
         }
-        umtx_unlock(&cnvCacheMutex);
+        /* else this converter is bad to use. Don't change it to a bad value. */
+
+        /* The close may make the current name go away. */
+        ucnv_close(cnv);
     }
 }
 

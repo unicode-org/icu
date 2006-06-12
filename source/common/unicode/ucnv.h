@@ -1723,14 +1723,17 @@ U_STABLE const char * U_EXPORT2
 ucnv_getDefaultName(void);
 
 /**
- * sets the current default converter name. Caller must own the storage for 'name'
- * and preserve it indefinitely. 
+ * This function sets the current default converter name.
+ * DO NOT call this function from multiple threads! This function is not
+ * thread safe. If this function needs to be called, it should be called
+ * during application initialization. Most of the time, the results from
+ * ucnv_getDefaultName() is sufficient for your application.
  * @param name the converter name to be the default (must exist).
  * @see ucnv_getDefaultName
  * @system SYSTEM API
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2
+U_SYSTEM void U_EXPORT2
 ucnv_setDefaultName(const char *name);
 
 /**
