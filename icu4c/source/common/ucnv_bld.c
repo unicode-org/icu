@@ -663,7 +663,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     UBool mayContainOption = TRUE;
-    UBool mayBeAlgorithmic = TRUE;
+    UBool checkForAlgorithmic = TRUE;
 
     if (U_FAILURE (*err)) {
         return NULL;
@@ -680,10 +680,8 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     if (converterName == NULL) {
         /* Call ucnv_getDefaultName first to query the name from the OS. */
         lookup->realName = ucnv_getDefaultName();
-        if (gDefaultAlgorithmicSharedData != NULL) {
-            return (UConverterSharedData *)gDefaultAlgorithmicSharedData;
-        }
-        mayBeAlgorithmic = FALSE;
+        mySharedConverterData = (UConverterSharedData *)gDefaultAlgorithmicSharedData;
+        checkForAlgorithmic = FALSE;
         mayContainOption = gDefaultConverterContainsOption;
         if (lookup->realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
@@ -716,7 +714,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     }
 
     /* get the shared data for an algorithmic converter, if it is one */
-    if (mayBeAlgorithmic) {
+    if (checkForAlgorithmic) {
         mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
     }
     if (mySharedConverterData == NULL)
