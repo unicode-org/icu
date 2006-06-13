@@ -3002,6 +3002,7 @@ static void TestOneDefaultNameChange(const char *name) {
     cnv=ucnv_open(NULL, &status);
     if (U_FAILURE(status) || cnv == NULL) {
         log_err("opening the default converter of %s failed\n", name);
+        return;
     }
     if(strcmp(ucnv_getName(cnv, &status), name)==0)
         log_verbose("ucnv_getName of %s works.\n", name);
