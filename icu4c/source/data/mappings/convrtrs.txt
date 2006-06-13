@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2005, International Business Machines
+# *   Copyright (C) 1995-2006, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -812,17 +812,19 @@ ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-
 
 # Lotus specific
 LMBCS-1                 lmbcs ibm-65025 { IBM* }
-LMBCS-2
-LMBCS-3
-LMBCS-4
-LMBCS-5
-LMBCS-6
-LMBCS-8
-LMBCS-11
-LMBCS-16
-LMBCS-17
-LMBCS-18
-LMBCS-19
+
+# These Lotus specific converters still work, but they aren't advertised in this alias table.
+#LMBCS-2
+#LMBCS-3
+#LMBCS-4
+#LMBCS-5
+#LMBCS-6
+#LMBCS-8
+#LMBCS-11
+#LMBCS-16
+#LMBCS-17
+#LMBCS-18
+#LMBCS-19
 
 # EBCDIC codepages according to the CDRA
 
