@@ -106,7 +106,8 @@ static void TestConvertEx(void);
 static void TestConvertAlgorithmic(void);
        void TestDefaultConverterError(void);    /* defined in cctest.c */
 static void TestToUCountPending(void);
-static void TestFromUCountPending(void);       
+static void TestFromUCountPending(void);
+static void TestDefaultName(void);
 void addTestConvert(TestNode** root);
 
 void addTestConvert(TestNode** root)
@@ -128,6 +129,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestDefaultConverterError,   "tsconv/ccapitst/TestDefaultConverterError");
     addTest(root, &TestToUCountPending,         "tsconv/ccapitst/TestToUCountPending");
     addTest(root, &TestFromUCountPending,       "tsconv/ccapitst/TestFromUCountPending");
+    addTest(root, &TestDefaultName,             "tsconv/ccapitst/TestDefaultName");
 }
 
 static void ListNames(void) {
@@ -509,28 +511,6 @@ static void TestConvert()
         log_data_err("getName[1] failed\n");
     } else {
         log_verbose("getName(someConverters[1]) returned %s\n", ucnv_getName(someConverters[1], &err));
-    }
-
-    /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
-    {
-        static char defaultName[UCNV_MAX_CONVERTER_NAME_LENGTH + 1];
-        strcpy(defaultName, ucnv_getDefaultName());
-
-        log_verbose("getDefaultName returned %s\n", defaultName);
-
-        /*change the default name by setting it */
-        ucnv_setDefaultName("UTF-8");
-        if(strcmp(ucnv_getDefaultName(), "UTF-8")==0)
-            log_verbose("setDefaultName o.k");
-        else
-            log_err("setDefaultName failed\n");  
-        ucnv_setDefaultName("ISO-8859-1");
-        if(strcmp(ucnv_getDefaultName(), "ISO-8859-1")==0)
-            log_verbose("setDefaultName o.k");
-        else
-            log_err("setDefaultName failed\n");  
-        /*set the default name back*/
-        ucnv_setDefaultName(defaultName);
     }
 
     ucnv_close(someConverters[0]);
@@ -3010,3 +2990,40 @@ TestToUCountPending(){
     }
 
 }
+
+static void TestOneDefaultNameChange(const char *name) {
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *cnv;
+    ucnv_setDefaultName(name);
+    if(strcmp(ucnv_getDefaultName(), name)==0)
+        log_verbose("setDefaultName of %s works.\n", name);
+    else
+        log_err("setDefaultName of %s failed\n", name);
+    cnv=ucnv_open(NULL, &status);
+    if (U_FAILURE(status) || cnv == NULL) {
+        log_err("opening the default converter of %s failed\n", name);
+    }
+    if(strcmp(ucnv_getName(cnv, &status), name)==0)
+        log_verbose("ucnv_getName of %s works.\n", name);
+    else
+        log_err("ucnv_getName of %s failed\n", name);
+    ucnv_close(cnv);
+}
+
+static void TestDefaultName(void) {
+    /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
+    static char defaultName[UCNV_MAX_CONVERTER_NAME_LENGTH + 1];
+    strcpy(defaultName, ucnv_getDefaultName());
+
+    log_verbose("getDefaultName returned %s\n", defaultName);
+
+    /*change the default name by setting it */
+    TestOneDefaultNameChange("UTF-8");
+    TestOneDefaultNameChange("ISCII,version=1");
+    TestOneDefaultNameChange("ISCII,version=2");
+    TestOneDefaultNameChange("ISO-8859-1");
+
+    /*set the default name back*/
+    ucnv_setDefaultName(defaultName);
+}
+

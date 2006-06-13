@@ -1076,14 +1076,22 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 
 /* Copy the canonical converter name. Caller must ensure thread safety. */
 static U_INLINE void
-internalSetName(const char *name) {
+internalSetName(const char *name, UErrorCode *status) {
+    UConverterLookupData lookup;
     int32_t length=(int32_t)(uprv_strlen(name));
 
     uprv_memcpy(gDefaultConverterNameBuffer, name, length);
     gDefaultConverterNameBuffer[length]=0;
     gDefaultConverterName = gDefaultConverterNameBuffer;
     gDefaultConverterContainsOption = (UBool)(uprv_strchr(gDefaultConverterName, UCNV_OPTION_SEP_CHAR) != NULL);
-    gDefaultAlgorithmicSharedData = getAlgorithmicTypeFromName(name);
+    lookup.locale[0] = 0;
+    lookup.options = 0;
+    lookup.realName = name;
+    if(gDefaultConverterContainsOption) {
+        parseConverterOptions(lookup.realName, lookup.cnvName, lookup.locale, &lookup.options, status);
+        lookup.realName = lookup.cnvName;
+    }
+    gDefaultAlgorithmicSharedData = getAlgorithmicTypeFromName(lookup.realName);
 
     ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 }
@@ -1132,7 +1140,7 @@ ucnv_getDefaultName() {
         }
 
         umtx_lock(&cnvCacheMutex);
-        internalSetName(name);
+        internalSetName(name, &errorCode);
         umtx_unlock(&cnvCacheMutex);
 
         /* The close may make the current name go away. */
@@ -1163,7 +1171,7 @@ ucnv_setDefaultName(const char *converterName) {
         if(U_SUCCESS(errorCode) && name!=NULL) {
             umtx_lock(&cnvCacheMutex);
 
-            internalSetName(name);
+            internalSetName(name, &errorCode);
 
             umtx_unlock(&cnvCacheMutex);
         }
