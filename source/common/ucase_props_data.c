@@ -4,7 +4,7 @@
  *
  * file name: ucase_props_data.c
  *
- * machine-generated on: 2006-03-03
+ * machine-generated on: 2006-06-13
  */
 
 static const UVersionInfo ucase_props_dataVersion={5,0,0,0};
