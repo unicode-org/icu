@@ -11,7 +11,7 @@
  *   PropertyAliases.txt
  *   PropertyValueAliases.txt
  *
- * Date: Fri Mar  3 11:04:05 2006
+ * Date: Tue Jun 13 12:03:23 2006
  * Unicode version: 5.0.0
  * Script: preparse.pl
  */

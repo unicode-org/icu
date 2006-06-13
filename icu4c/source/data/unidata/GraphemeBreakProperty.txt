@@ -1,5 +1,5 @@
 # GraphemeBreakProperty-5.0.0.txt
-# Date: 2006-03-03, 08:23:12 GMT [MD]
+# Date: 2006-03-09, 23:14:04 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2006 Unicode, Inc.
@@ -13,7 +13,7 @@
 #  All code points not explicitly listed for Grapheme_Cluster_Break
 #  have the value Other (XX).
 
-#@ missing: 0000..10FFFF; Other
+# @missing: 0000..10FFFF; Other
 
 # ================================================
 

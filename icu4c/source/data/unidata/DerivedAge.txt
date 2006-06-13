@@ -1,5 +1,5 @@
 # DerivedAge-5.0.0.txt
-# Date: 2006-03-03, 08:22:43 GMT [MD]
+# Date: 2006-03-09, 23:13:30 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2006 Unicode, Inc.
@@ -42,7 +42,7 @@
 #  All code points not explicitly listed for Age
 #  have the value unassigned.
 
-#@ missing: 0000..10FFFF; unassigned
+# @missing: 0000..10FFFF; unassigned
 
 # ================================================
 

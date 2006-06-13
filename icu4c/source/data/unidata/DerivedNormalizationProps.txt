@@ -1,5 +1,5 @@
 # DerivedNormalizationProps-5.0.0.txt
-# Date: 2006-03-03, 08:46:54 GMT [MD]
+# Date: 2006-06-07, 17:42:44 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2006 Unicode, Inc.
@@ -672,7 +672,7 @@ FB46..FB4E    ; Full_Composition_Exclusion
 #  All code points not explicitly listed for NFD_Quick_Check
 #  have the value Yes (Y).
 
-#@ missing: 0000..10FFFF; NFD_QC; Yes
+# @missing: 0000..10FFFF; NFD_QC; Yes
 
 # ================================================
 
@@ -779,6 +779,16 @@ FB46..FB4E    ; Full_Composition_Exclusion
 0FAC          ; NFD_QC; N
 0FB9          ; NFD_QC; N
 1026          ; NFD_QC; N
+1B06          ; NFD_QC; N
+1B08          ; NFD_QC; N
+1B0A          ; NFD_QC; N
+1B0C          ; NFD_QC; N
+1B0E          ; NFD_QC; N
+1B12          ; NFD_QC; N
+1B3B          ; NFD_QC; N
+1B3D          ; NFD_QC; N
+1B40..1B41    ; NFD_QC; N
+1B43          ; NFD_QC; N
 1E00..1E99    ; NFD_QC; N
 1E9B          ; NFD_QC; N
 1EA0..1EF9    ; NFD_QC; N
@@ -904,7 +914,7 @@ FB46..FB4E    ; NFD_QC; N
 1D1BB..1D1C0  ; NFD_QC; N
 2F800..2FA1D  ; NFD_QC; N
 
-# Total code points: 13204
+# Total code points: 13215
 
 # ================================================
 
@@ -913,7 +923,7 @@ FB46..FB4E    ; NFD_QC; N
 #  All code points not explicitly listed for NFC_Quick_Check
 #  have the value Yes (Y).
 
-#@ missing: 0000..10FFFF; NFC_QC; Yes
+# @missing: 0000..10FFFF; NFC_QC; Yes
 
 # ================================================
 
@@ -1033,9 +1043,10 @@ FB46..FB4E    ; NFC_QC; N
 102E          ; NFC_QC; M
 1161..1175    ; NFC_QC; M
 11A8..11C2    ; NFC_QC; M
+1B35          ; NFC_QC; M
 3099..309A    ; NFC_QC; M
 
-# Total code points: 101
+# Total code points: 102
 
 # ================================================
 
@@ -1044,7 +1055,7 @@ FB46..FB4E    ; NFC_QC; N
 #  All code points not explicitly listed for NFKD_Quick_Check
 #  have the value Yes (Y).
 
-#@ missing: 0000..10FFFF; NFKD_QC; Yes
+# @missing: 0000..10FFFF; NFKD_QC; Yes
 
 # ================================================
 
@@ -1174,6 +1185,16 @@ FB46..FB4E    ; NFC_QC; N
 0FB9          ; NFKD_QC; N
 1026          ; NFKD_QC; N
 10FC          ; NFKD_QC; N
+1B06          ; NFKD_QC; N
+1B08          ; NFKD_QC; N
+1B0A          ; NFKD_QC; N
+1B0C          ; NFKD_QC; N
+1B0E          ; NFKD_QC; N
+1B12          ; NFKD_QC; N
+1B3B          ; NFKD_QC; N
+1B3D          ; NFKD_QC; N
+1B40..1B41    ; NFKD_QC; N
+1B43          ; NFKD_QC; N
 1D2C..1D2E    ; NFKD_QC; N
 1D30..1D3A    ; NFKD_QC; N
 1D3C..1D4D    ; NFKD_QC; N
@@ -1528,7 +1549,7 @@ FFED..FFEE    ; NFKD_QC; N
 1D7CE..1D7FF  ; NFKD_QC; N
 2F800..2FA1D  ; NFKD_QC; N
 
-# Total code points: 16563
+# Total code points: 16574
 
 # ================================================
 
@@ -1537,7 +1558,7 @@ FFED..FFEE    ; NFKD_QC; N
 #  All code points not explicitly listed for NFKC_Quick_Check
 #  have the value Yes (Y).
 
-#@ missing: 0000..10FFFF; NFKC_QC; Yes
+# @missing: 0000..10FFFF; NFKC_QC; Yes
 
 # ================================================
 
@@ -1923,9 +1944,10 @@ FFED..FFEE    ; NFKC_QC; N
 102E          ; NFKC_QC; M
 1161..1175    ; NFKC_QC; M
 11A8..11C2    ; NFKC_QC; M
+1B35          ; NFKC_QC; M
 3099..309A    ; NFKC_QC; M
 
-# Total code points: 101
+# Total code points: 102
 
 # ================================================
 
@@ -2032,6 +2054,16 @@ FFED..FFEE    ; NFKC_QC; N
 0FAC          ; Expands_On_NFD
 0FB9          ; Expands_On_NFD
 1026          ; Expands_On_NFD
+1B06          ; Expands_On_NFD
+1B08          ; Expands_On_NFD
+1B0A          ; Expands_On_NFD
+1B0C          ; Expands_On_NFD
+1B0E          ; Expands_On_NFD
+1B12          ; Expands_On_NFD
+1B3B          ; Expands_On_NFD
+1B3D          ; Expands_On_NFD
+1B40..1B41    ; Expands_On_NFD
+1B43          ; Expands_On_NFD
 1E00..1E99    ; Expands_On_NFD
 1E9B          ; Expands_On_NFD
 1EA0..1EF9    ; Expands_On_NFD
@@ -2140,7 +2172,7 @@ FB46..FB4E    ; Expands_On_NFD
 1D15E..1D164  ; Expands_On_NFD
 1D1BB..1D1C0  ; Expands_On_NFD
 
-# Total code points: 12192
+# Total code points: 12203
 
 # ================================================
 
@@ -2304,6 +2336,16 @@ FB46..FB4E    ; Expands_On_NFC
 0FAC          ; Expands_On_NFKD
 0FB9          ; Expands_On_NFKD
 1026          ; Expands_On_NFKD
+1B06          ; Expands_On_NFKD
+1B08          ; Expands_On_NFKD
+1B0A          ; Expands_On_NFKD
+1B0C          ; Expands_On_NFKD
+1B0E          ; Expands_On_NFKD
+1B12          ; Expands_On_NFKD
+1B3B          ; Expands_On_NFKD
+1B3D          ; Expands_On_NFKD
+1B40..1B41    ; Expands_On_NFKD
+1B43          ; Expands_On_NFKD
 1E00..1E9B    ; Expands_On_NFKD
 1EA0..1EF9    ; Expands_On_NFKD
 1F00..1F15    ; Expands_On_NFKD
@@ -2474,7 +2516,7 @@ FFE3          ; Expands_On_NFKD
 1D15E..1D164  ; Expands_On_NFKD
 1D1BB..1D1C0  ; Expands_On_NFKD
 
-# Total code points: 13299
+# Total code points: 13310
 
 # ================================================
 
