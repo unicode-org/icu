@@ -1074,7 +1074,7 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 
 /* default converter name --------------------------------------------------- */
 
-/* Copy the canonical converter name. Caller must ensure thread safety. */
+/* Copy the canonical converter name. */
 static U_INLINE void
 internalSetName(const char *name, UErrorCode *status) {
     UConverterLookupData lookup;
@@ -1100,6 +1100,7 @@ internalSetName(const char *name, UErrorCode *status) {
     gDefaultAlgorithmicSharedData = algorithmicSharedData;
 
     ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+
     umtx_unlock(&cnvCacheMutex);
 }
 
