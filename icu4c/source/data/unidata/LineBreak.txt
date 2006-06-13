@@ -1,5 +1,5 @@
 # LineBreak-5.0.0.txt
-# Date: 2006-02-15, 14:40:00 PST [KW]
+# Date: 2006-05-23, 11:43:00 PST [KW]
 #
 # Line Break Properties
 #
@@ -128,7 +128,7 @@
 0589;IS
 058A;BA
 0591..05BD;CM
-05BE;AL
+05BE;BA
 05BF;CM
 05C0;AL
 05C1..05C2;CM

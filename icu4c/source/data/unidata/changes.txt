@@ -26,6 +26,8 @@ Unicode 5.0 update
     DerivedCoreProperties.txt
     DerivedNormalizationProps.txt
     NormalizationTest.txt
+    PropList.txt
+    Scripts.txt
     GraphemeBreakProperty.txt
     SentenceBreakProperty.txt
     WordBreakProperty.txt
@@ -37,6 +39,7 @@ Unicode 5.0 update
 
 * genpname
 - run preparse.pl
+  + make sure that data.h is writable
   + perl preparse.pl \cvs\oss\icu > out.txt
 
 * uchar.h & uscript.h & uprops.h & uprops.c & genprops

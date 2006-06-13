@@ -1,5 +1,5 @@
 # PropList-5.0.0.txt
-# Date: 2006-03-03, 08:23:25 GMT [MD]
+# Date: 2006-06-07, 23:22:52 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2006 Unicode, Inc.
@@ -40,6 +40,7 @@
 
 002D          ; Dash
 058A          ; Dash
+05BE          ; Dash
 1806          ; Dash
 2010..2015    ; Dash
 2053          ; Dash
@@ -55,7 +56,7 @@ FE58          ; Dash
 FE63          ; Dash
 FF0D          ; Dash
 
-# Total code points: 22
+# Total code points: 23
 
 # ================================================
 
