@@ -814,6 +814,7 @@ ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-
 LMBCS-1                 lmbcs ibm-65025 { IBM* }
 
 # These Lotus specific converters still work, but they aren't advertised in this alias table.
+# These are almost never used outside of Lotus software, and they take a lot of time when creating the available converter list.
 #LMBCS-2
 #LMBCS-3
 #LMBCS-4
