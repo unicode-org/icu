@@ -138,7 +138,7 @@ static UBool verbose = FALSE;
 static int lineNum = 1;
 
 static UConverterAliasOptions tableOptions = {
-    UCNV_IO_UNNORMALIZED,
+    UCNV_IO_STD_NORMALIZED,
     1 /* containsCnvOptionInfo */
 };
 
@@ -197,8 +197,7 @@ enum
     VERBOSE,
     COPYRIGHT,
     DESTDIR,
-    SOURCEDIR,
-    OPTIMIZE
+    SOURCEDIR
 };
 
 static UOption options[]={
@@ -207,8 +206,7 @@ static UOption options[]={
     UOPTION_VERBOSE,
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
-    UOPTION_SOURCEDIR,
-    UOPTION_DEF( "optimize", 'O', UOPT_REQUIRES_ARG),
+    UOPTION_SOURCEDIR
 };
 
 extern int
@@ -248,19 +246,6 @@ main(int argc, char* argv[]) {
 
     if(options[VERBOSE].doesOccur) {
         verbose = TRUE;
-    }
-
-    if(options[OPTIMIZE].doesOccur) {
-        if (strcmp(options[OPTIMIZE].value, "size") == 0) {
-            tableOptions.stringNormalizationType = UCNV_IO_UNNORMALIZED;
-        }
-        else if (strcmp(options[OPTIMIZE].value, "speed") == 0) {
-            tableOptions.stringNormalizationType = UCNV_IO_STD_NORMALIZED;
-        }
-        else {
-            fprintf(stderr, "Invalid value for optimization\n");
-            return -1;
-        }
     }
 
     if(argc>=2) {
@@ -987,12 +972,7 @@ writeAliasTable(UNewDataMemory *out) {
     udata_write32(out, uniqueAliasesSize);  /* The preresolved form of mapping an untagged the alias to a converter */
     udata_write32(out, tagCount * converterCount);
     udata_write32(out, aliasListsSize + 1);
-    if (tableOptions.stringNormalizationType == UCNV_IO_UNNORMALIZED) {
-        udata_write32(out, 0);
-    }
-    else {
-        udata_write32(out, sizeof(tableOptions) / sizeof(uint16_t));
-    }
+    udata_write32(out, sizeof(tableOptions) / sizeof(uint16_t));
     udata_write32(out, (tagBlock.top + stringBlock.top) / sizeof(uint16_t));
     if (tableOptions.stringNormalizationType != UCNV_IO_UNNORMALIZED) {
         udata_write32(out, (tagBlock.top + stringBlock.top) / sizeof(uint16_t));
@@ -1031,9 +1011,7 @@ writeAliasTable(UNewDataMemory *out) {
     udata_writeBlock(out, (const void *)aliasLists, aliasListsSize * sizeof(uint16_t));
 
     /* Write any options for the alias table. */
-    if (tableOptions.stringNormalizationType != UCNV_IO_UNNORMALIZED) {
-        udata_writeBlock(out, (const void *)&tableOptions, sizeof(tableOptions));
-    }
+    udata_writeBlock(out, (const void *)&tableOptions, sizeof(tableOptions));
 
     /* write the tags strings */
     udata_writeString(out, tagBlock.store, tagBlock.top);
