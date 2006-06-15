@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2005, International Business Machines Corporation and
+ * Copyright (c) 2001-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -22,6 +22,8 @@
 #include "unicode/ures.h"
 #include "ustr_imp.h"
 #include "cintltst.h"
+#include "cmemory.h"
+#include "cstring.h"
 #include "cwchar.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -30,6 +32,7 @@ void addUCharTransformTest(TestNode** root);
 
 static void Test_UChar_UTF32_API(void);
 static void Test_UChar_UTF8_API(void);
+static void Test_FromUTF8Lenient(void);
 static void Test_UChar_WCHART_API(void);
 static void Test_widestrs(void);
 static void Test_WCHART_LongString(void);
@@ -39,6 +42,7 @@ addUCharTransformTest(TestNode** root)
 {
    addTest(root, &Test_UChar_UTF32_API, "custrtrn/Test_UChar_UTF32_API");
    addTest(root, &Test_UChar_UTF8_API, "custrtrn/Test_UChar_UTF8_API");
+   addTest(root, &Test_FromUTF8Lenient, "custrtrn/Test_FromUTF8Lenient");
    addTest(root, &Test_UChar_WCHART_API,  "custrtrn/Test_UChar_WCHART_API");
    addTest(root, &Test_widestrs,  "custrtrn/Test_widestrs");
    addTest(root, &Test_WCHART_LongString, "custrtrn/Test_WCHART_LongString");
@@ -270,16 +274,21 @@ static void Test_UChar_UTF8_API(void){
     int32_t u8DestLen =0;
     UBool failed = FALSE;
     int i= 0;
+    int32_t numSubstitutions;
+
     {
         /* preflight */
+        u8Temp[0] = 0x12;
         u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
-        if(err == U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR && u8Temp[0] == 0x12){
             err = U_ZERO_ERROR;       
             u8Target = (char*) malloc (sizeof(uint8_t) * (u8DestLen+1));
             u8TargetLength = u8DestLen;
-        
+
+            u8Target[u8TargetLength] = 0xfe;
+            u8DestLen = -1;
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
-            if(U_FAILURE(err)){
+            if(U_FAILURE(err) || u8DestLen != u8TargetLength || u8Target[u8TargetLength] != (char)0xfe){
                 log_err("u_strToUTF8 failed after preflight. Error: %s\n", u_errorName(err));
                 return;
             }
@@ -308,16 +317,19 @@ static void Test_UChar_UTF8_API(void){
         u8SrcLen = u8DestLen;
 
         /* preflight */
+        uTemp[0] = 0x1234;
         u_strFromUTF8(uTarget,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
-        if(err == U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR && uTemp[0] == 0x1234){
             err = U_ZERO_ERROR;
             uTarget = (UChar*) malloc( sizeof(UChar) * (uDestLen+1));
             uTargetLength =  uDestLen;
 
+            uTarget[uTargetLength] = 0xfff0;
+            uDestLen = -1;
             u_strFromUTF8(uTarget,uTargetLength,&uDestLen,u8Src,u8SrcLen,&err);
         }
         else {
-            log_err("Should have gotten U_BUFFER_OVERFLOW_ERROR");
+            log_err("error: u_strFromUTF8(preflight) should have gotten U_BUFFER_OVERFLOW_ERROR\n");
         }
         /*for(i=0; i< uDestLen; i++){
             printf("0x%04X, ",uTarget[i]);
@@ -325,7 +337,10 @@ static void Test_UChar_UTF8_API(void){
                 printf("\n");
             }
         }*/
-        
+
+        if(U_FAILURE(err) || uDestLen != uTargetLength || uTarget[uTargetLength] != 0xfff0) {
+            failed = TRUE;
+        }
         for(i=0; i< uSrcLen; i++){
             if(uTarget[i] != src16[i]){
                 log_verbose("u_strFromUTF8() failed expected: \\u%04X got: \\u%04X at index: %i \n", src16[i] ,uTarget[i],i);
@@ -333,7 +348,7 @@ static void Test_UChar_UTF8_API(void){
             }
         }
         if(failed){
-            log_err("u_strToUTF8() failed \n");
+            log_err("error: u_strFromUTF8(after preflighting) failed\n");
         }
 
         free(u8Target);
@@ -414,10 +429,14 @@ static void Test_UChar_UTF8_API(void){
     {
         static const UChar
             withLead16[]={ 0x1800, 0xd89a, 0x0061 },
-            withTrail16[]={ 0x1800, 0xdcba, 0x0061, 0 };
+            withTrail16[]={ 0x1800, 0xdcba, 0x0061, 0 },
+            withTrail16SubFFFD[]={ 0x1800, 0xfffd, 0x0061, 0 }, /* sub==U+FFFD */
+            withTrail16Sub50005[]={ 0x1800, 0xd900, 0xdc05, 0x0061, 0 }; /* sub==U+50005 */
         static const uint8_t
             withLead8[]={ 0xe1, 0xa0, 0x80, 0xed, 0xa2, 0x9a, 0x61 },
-            withTrail8[]={ 0xe1, 0xa0, 0x80, 0xed, 0xb2, 0xba, 0x61 };
+            withTrail8[]={ 0xe1, 0xa0, 0x80, 0xed, 0xb2, 0xba, 0x61, 0 },
+            withTrail8Sub1A[]={ 0xe1, 0xa0, 0x80, 0x1a, 0x61, 0 }, /* sub==U+001A */
+            withTrail8SubFFFD[]={ 0xe1, 0xa0, 0x80, 0xef, 0xbf, 0xbd, 0x61, 0 }; /* sub==U+FFFD */
         UChar out16[10];
         char out8[10];
 
@@ -429,8 +448,384 @@ static void Test_UChar_UTF8_API(void){
         ) {
             log_err("error: u_strTo/FromUTF8(string with single surrogate) fails to report error\n");
         }
+
+        /* test error handling with substitution characters */
+
+        /* from UTF-8 with length */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out16[0]=0x55aa;
+        uDestLen=0;
+        u_strFromUTF8WithSub(out16, LENGTHOF(out16), &uDestLen,
+                             (const char *)withTrail8, uprv_strlen((const char *)withTrail8),
+                             0x50005, &numSubstitutions,
+                             &err);
+        if(U_FAILURE(err) || uDestLen!=u_strlen(withTrail16Sub50005) ||
+                             0!=u_memcmp(withTrail16Sub50005, out16, uDestLen+1) ||
+                             numSubstitutions!=1) {
+            log_err("error: u_strFromUTF8WithSub(length) failed\n");
+        }
+
+        /* from UTF-8 with NUL termination */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out16[0]=0x55aa;
+        uDestLen=0;
+        u_strFromUTF8WithSub(out16, LENGTHOF(out16), &uDestLen,
+                             (const char *)withTrail8, -1,
+                             0xfffd, &numSubstitutions,
+                             &err);
+        if(U_FAILURE(err) || uDestLen!=u_strlen(withTrail16SubFFFD) ||
+                             0!=u_memcmp(withTrail16SubFFFD, out16, uDestLen+1) ||
+                             numSubstitutions!=1) {
+            log_err("error: u_strFromUTF8WithSub(NUL termination) failed\n");
+        }
+
+        /* preflight from UTF-8 with NUL termination */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out16[0]=0x55aa;
+        uDestLen=0;
+        u_strFromUTF8WithSub(out16, 1, &uDestLen,
+                             (const char *)withTrail8, -1,
+                             0x50005, &numSubstitutions,
+                             &err);
+        if(err!=U_BUFFER_OVERFLOW_ERROR || uDestLen!=u_strlen(withTrail16Sub50005) || numSubstitutions!=1) {
+            log_err("error: u_strFromUTF8WithSub(preflight/NUL termination) failed\n");
+        }
+
+        /* to UTF-8 with length */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out8[0]=0xf5;
+        u8DestLen=0;
+        u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
+                           withTrail16, u_strlen(withTrail16),
+                           0xfffd, &numSubstitutions,
+                           &err);
+        if(U_FAILURE(err) || u8DestLen!=uprv_strlen((const char *)withTrail8SubFFFD) ||
+                             0!=uprv_memcmp((const char *)withTrail8SubFFFD, out8, u8DestLen+1) ||
+                             numSubstitutions!=1) {
+            log_err("error: u_strToUTF8WithSub(length) failed\n");
+        }
+
+        /* to UTF-8 with NUL termination */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out8[0]=0xf5;
+        u8DestLen=0;
+        u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
+                           withTrail16, -1,
+                           0x1a, &numSubstitutions,
+                           &err);
+        if(U_FAILURE(err) || u8DestLen!=uprv_strlen((const char *)withTrail8Sub1A) ||
+                             0!=uprv_memcmp((const char *)withTrail8Sub1A, out8, u8DestLen+1) ||
+                             numSubstitutions!=1) {
+            log_err("error: u_strToUTF8WithSub(NUL termination) failed\n");
+        }
+
+        /* preflight to UTF-8 with NUL termination */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out8[0]=0xf5;
+        u8DestLen=0;
+        u_strToUTF8WithSub(out8, 1, &u8DestLen,
+                           withTrail16, -1,
+                           0xfffd, &numSubstitutions,
+                           &err);
+        if(err!=U_BUFFER_OVERFLOW_ERROR || u8DestLen!=uprv_strlen((const char *)withTrail8SubFFFD) ||
+                                           numSubstitutions!=1) {
+            log_err("error: u_strToUTF8WithSub(preflight/NUL termination) failed\n");
+        }
+
+        /* test that numSubstitutions==0 if there are no substitutions */
+
+        /* from UTF-8 with length (just first 3 bytes which are valid) */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out16[0]=0x55aa;
+        uDestLen=0;
+        u_strFromUTF8WithSub(out16, LENGTHOF(out16), &uDestLen,
+                             (const char *)withTrail8, 3,
+                             0x50005, &numSubstitutions,
+                             &err);
+        if(U_FAILURE(err) || uDestLen!=1 ||
+                             0!=u_memcmp(withTrail16Sub50005, out16, uDestLen) ||
+                             numSubstitutions!=0) {
+            log_err("error: u_strFromUTF8WithSub(no subs) failed\n");
+        }
+
+        /* to UTF-8 with length (just first UChar which is valid) */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out8[0]=0xf5;
+        u8DestLen=0;
+        u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
+                           withTrail16, 1,
+                           0xfffd, &numSubstitutions,
+                           &err);
+        if(U_FAILURE(err) || u8DestLen!=3 ||
+                             0!=uprv_memcmp((const char *)withTrail8SubFFFD, out8, u8DestLen) ||
+                             numSubstitutions!=0) {
+            log_err("error: u_strToUTF8WithSub(no subs) failed\n");
+        }
+
+        /* test that numSubstitutions==0 if subchar==U_SENTINEL (no subchar) */
+
+        /* from UTF-8 with length (just first 3 bytes which are valid) */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out16[0]=0x55aa;
+        uDestLen=0;
+        u_strFromUTF8WithSub(out16, LENGTHOF(out16), &uDestLen,
+                             (const char *)withTrail8, 3,
+                             U_SENTINEL, &numSubstitutions,
+                             &err);
+        if(U_FAILURE(err) || uDestLen!=1 ||
+                             0!=u_memcmp(withTrail16Sub50005, out16, uDestLen) ||
+                             numSubstitutions!=0) {
+            log_err("error: u_strFromUTF8WithSub(no subchar) failed\n");
+        }
+
+        /* to UTF-8 with length (just first UChar which is valid) */
+        err=U_ZERO_ERROR;
+        numSubstitutions=-1;
+        out8[0]=0xf5;
+        u8DestLen=0;
+        u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
+                           withTrail16, 1,
+                           U_SENTINEL, &numSubstitutions,
+                           &err);
+        if(U_FAILURE(err) || u8DestLen!=3 ||
+                             0!=uprv_memcmp((const char *)withTrail8SubFFFD, out8, u8DestLen) ||
+                             numSubstitutions!=0) {
+            log_err("error: u_strToUTF8WithSub(no subchar) failed\n");
+        }
     }
 }
+
+/* compare if two strings are equal, but match 0xfffd in the second string with anything in the first */
+static UBool
+equalAnyFFFD(const UChar *s, const UChar *t, int32_t length) {
+    UChar c1, c2;
+
+    while(length>0) {
+        c1=*s++;
+        c2=*t++;
+        if(c1!=c2 && c2!=0xfffd) {
+            return FALSE;
+        }
+        --length;
+    }
+    return TRUE;
+}
+
+/* test u_strFromUTF8Lenient() */
+static void
+Test_FromUTF8Lenient(void) {
+    /*
+     * Multiple input strings, each NUL-terminated.
+     * Terminate with a string starting with 0xff.
+     */
+    static const uint8_t bytes[]={
+        /* well-formed UTF-8 */
+        0x61,  0xc3, 0x9f,  0xe0, 0xa0, 0x80,  0xf0, 0xa0, 0x80, 0x80,
+        0x62,  0xc3, 0xa0,  0xe0, 0xa0, 0x81,  0xf0, 0xa0, 0x80, 0x81, 0,
+
+        /* various malformed sequences */
+        0xc3, 0xc3, 0x9f,  0xc3, 0xa0,  0xe0, 0x80, 0x8a,  0xf0, 0x41, 0x42, 0x43, 0,
+
+        /* truncated input */
+        0xc3, 0,
+        0xe0, 0,
+        0xe0, 0xa0, 0,
+        0xf0, 0,
+        0xf0, 0x90, 0,
+        0xf0, 0x90, 0x80, 0,
+
+        /* empty string */
+        0,
+
+        /* finish */
+        0xff, 0
+    };
+
+    /* Multiple output strings, each NUL-terminated. 0xfffd matches anything. */
+    static const UChar uchars[]={
+        0x61, 0xdf, 0x800,  0xd840, 0xdc00,
+        0x62, 0xe0, 0x801,  0xd840, 0xdc01,  0,
+
+        0xfffd, 0x9f, 0xe0, 0xa,  0xfffd, 0xfffd,  0,
+
+        0xfffd, 0,
+        0xfffd, 0,
+        0xfffd, 0,
+        0xfffd, 0,
+        0xfffd, 0,
+        0xfffd, 0,
+
+        0,
+
+        0
+    };
+
+    UChar dest[64];
+    const char *pb;
+    const UChar *pu, *pDest;
+    int32_t srcLength, destLength0, destLength;
+    int number;
+    UErrorCode errorCode;
+
+    /* verify checking for some illegal arguments */
+    dest[0]=0x1234;
+    destLength=-1;
+    errorCode=U_ZERO_ERROR;
+    pDest=u_strFromUTF8Lenient(dest, 1, &destLength, NULL, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || dest[0]!=0x1234) {
+        log_err("u_strFromUTF8Lenient(src=NULL) failed\n");
+    }
+
+    dest[0]=0x1234;
+    destLength=-1;
+    errorCode=U_ZERO_ERROR;
+    pDest=u_strFromUTF8Lenient(NULL, 1, &destLength, (const char *)bytes, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("u_strFromUTF8Lenient(dest=NULL[1]) failed\n");
+    }
+
+    dest[0]=0x1234;
+    destLength=-1;
+    errorCode=U_MEMORY_ALLOCATION_ERROR;
+    pDest=u_strFromUTF8Lenient(dest, 1, &destLength, (const char *)bytes, -1, &errorCode);
+    if(errorCode!=U_MEMORY_ALLOCATION_ERROR || dest[0]!=0x1234) {
+        log_err("u_strFromUTF8Lenient(U_MEMORY_ALLOCATION_ERROR) failed\n");
+    }
+
+    dest[0]=0x1234;
+    destLength=-1;
+    errorCode=U_MEMORY_ALLOCATION_ERROR;
+    pDest=u_strFromUTF8Lenient(dest, 1, &destLength, (const char *)bytes, -1, NULL);
+    if(dest[0]!=0x1234) {
+        log_err("u_strFromUTF8Lenient(pErrorCode=NULL) failed\n");
+    }
+
+    /* test normal behavior */
+    number=0; /* string number for log_err() */
+
+    for(pb=(const char *)bytes, pu=uchars;
+        *pb!=(char)0xff;
+        pb+=srcLength+1, pu+=destLength0+1, ++number
+    ) {
+        srcLength=uprv_strlen(pb);
+        destLength0=u_strlen(pu);
+
+        /* preflighting with NUL-termination */
+        dest[0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(NULL, 0, &destLength, pb, -1, &errorCode);
+        if (errorCode!= (destLength0==0 ? U_STRING_NOT_TERMINATED_WARNING : U_BUFFER_OVERFLOW_ERROR) ||
+            pDest!=NULL || dest[0]!=0x1234 || destLength!=destLength0
+        ) {
+            log_err("u_strFromUTF8Lenient(%d preflighting with NUL-termination) failed\n", number);
+        }
+
+        /* preflighting/some capacity with NUL-termination */
+        if(srcLength>0) {
+            dest[destLength0-1]=0x1234;
+            destLength=-1;
+            errorCode=U_ZERO_ERROR;
+            pDest=u_strFromUTF8Lenient(dest, destLength0-1, &destLength, pb, -1, &errorCode);
+            if (errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+                dest[destLength0-1]!=0x1234 || destLength!=destLength0
+            ) {
+                log_err("u_strFromUTF8Lenient(%d preflighting/some capacity with NUL-termination) failed\n", number);
+            }
+        }
+
+        /* conversion with NUL-termination, much capacity */
+        dest[0]=dest[destLength0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(dest, LENGTHOF(dest), &destLength, pb, -1, &errorCode);
+        if (errorCode!=U_ZERO_ERROR ||
+            pDest!=dest || dest[destLength0]!=0 ||
+            destLength!=destLength0 || !equalAnyFFFD(dest, pu, destLength)
+        ) {
+            log_err("u_strFromUTF8Lenient(%d conversion with NUL-termination, much capacity) failed\n", number);
+        }
+
+        /* conversion with NUL-termination, exact capacity */
+        dest[0]=dest[destLength0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(dest, destLength0, &destLength, pb, -1, &errorCode);
+        if (errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+            pDest!=dest || dest[destLength0]!=0x1234 ||
+            destLength!=destLength0 || !equalAnyFFFD(dest, pu, destLength)
+        ) {
+            log_err("u_strFromUTF8Lenient(%d conversion with NUL-termination, exact capacity) failed\n", number);
+        }
+
+        /* preflighting with length */
+        dest[0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(NULL, 0, &destLength, pb, srcLength, &errorCode);
+        if (errorCode!= (destLength0==0 ? U_STRING_NOT_TERMINATED_WARNING : U_BUFFER_OVERFLOW_ERROR) ||
+            pDest!=NULL || dest[0]!=0x1234 || destLength!=srcLength
+        ) {
+            log_err("u_strFromUTF8Lenient(%d preflighting with length) failed\n", number);
+        }
+
+        /* preflighting/some capacity with length */
+        if(srcLength>0) {
+            dest[srcLength-1]=0x1234;
+            destLength=-1;
+            errorCode=U_ZERO_ERROR;
+            pDest=u_strFromUTF8Lenient(dest, srcLength-1, &destLength, pb, srcLength, &errorCode);
+            if (errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+                dest[srcLength-1]!=0x1234 || destLength!=srcLength
+            ) {
+                log_err("u_strFromUTF8Lenient(%d preflighting/some capacity with length) failed\n", number);
+            }
+        }
+
+        /* conversion with length, much capacity */
+        dest[0]=dest[destLength0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(dest, LENGTHOF(dest), &destLength, pb, srcLength, &errorCode);
+        if (errorCode!=U_ZERO_ERROR ||
+            pDest!=dest || dest[destLength0]!=0 ||
+            destLength!=destLength0 || !equalAnyFFFD(dest, pu, destLength)
+        ) {
+            log_err("u_strFromUTF8Lenient(%d conversion with length, much capacity) failed\n", number);
+        }
+
+        /* conversion with length, srcLength capacity */
+        dest[0]=dest[srcLength]=dest[destLength0]=0x1234;
+        destLength=-1;
+        errorCode=U_ZERO_ERROR;
+        pDest=u_strFromUTF8Lenient(dest, srcLength, &destLength, pb, srcLength, &errorCode);
+        if(srcLength==destLength0) {
+            if (errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+                pDest!=dest || dest[destLength0]!=0x1234 ||
+                destLength!=destLength0 || !equalAnyFFFD(dest, pu, destLength)
+            ) {
+                log_err("u_strFromUTF8Lenient(%d conversion with length, srcLength capacity/not terminated) failed\n", number);
+            }
+        } else {
+            if (errorCode!=U_ZERO_ERROR ||
+                pDest!=dest || dest[destLength0]!=0 ||
+                destLength!=destLength0 || !equalAnyFFFD(dest, pu, destLength)
+            ) {
+                log_err("u_strFromUTF8Lenient(%d conversion with length, srcLength capacity/terminated) failed\n", number);
+            }
+        }
+    }
+}
+
 static const uint16_t src16j[] = {
     0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A,
     0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
