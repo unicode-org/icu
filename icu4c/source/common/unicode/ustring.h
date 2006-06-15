@@ -1230,6 +1230,8 @@ u_strFromWCS(UChar   *dest,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
  * @stable ICU 2.0
+ * @see u_strToUTF8WithSub
+ * @see u_strFromUTF8
  */
 U_STABLE char* U_EXPORT2 
 u_strToUTF8(char *dest,           
@@ -1257,6 +1259,8 @@ u_strToUTF8(char *dest,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
  * @stable ICU 2.0
+ * @see u_strFromUTF8WithSub
+ * @see u_strFromUTF8Lenient
  */
 U_STABLE UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
@@ -1265,6 +1269,148 @@ u_strFromUTF8(UChar *dest,
               const char *src, 
               int32_t srcLength,
               UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UChars (UTF-16) to UTF-8 bytes.
+ * Same as u_strToUTF8() except for the additional subchar which is output for
+ * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
+ * With subchar==U_SENTINEL, this function behaves exactly like u_strToUTF8().
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of chars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param subchar       The substitution character to use in place of an illegal input sequence,
+ *                      or U_SENTINEL if the function is to return with U_INVALID_CHAR_FOUND instead.
+ *                      A substitution character can be any valid Unicode code point (up to U+10FFFF)
+ *                      except for surrogate code points (U+D800..U+DFFF).
+ *                      The recommended value is U+FFFD "REPLACEMENT CHARACTER".
+ * @param pNumSubstitutions Output parameter receiving the number of substitutions if subchar>=0.
+ *                      Set to 0 if no substitutions occur or subchar<0.
+ *                      pNumSubstitutions can be NULL.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strToUTF8
+ * @see u_strFromUTF8WithSub
+ * @draft ICU 3.6
+ */
+U_DRAFT char* U_EXPORT2
+u_strToUTF8WithSub(char *dest,
+            int32_t destCapacity,
+            int32_t *pDestLength,
+            const UChar *src,
+            int32_t srcLength,
+            UChar32 subchar, int32_t *pNumSubstitutions,
+            UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ * Same as u_strFromUTF8() except for the additional subchar which is output for
+ * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
+ * With subchar==U_SENTINEL, this function behaves exactly like u_strFromUTF8().
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param subchar       The substitution character to use in place of an illegal input sequence,
+ *                      or U_SENTINEL if the function is to return with U_INVALID_CHAR_FOUND instead.
+ *                      A substitution character can be any valid Unicode code point (up to U+10FFFF)
+ *                      except for surrogate code points (U+D800..U+DFFF).
+ *                      The recommended value is U+FFFD "REPLACEMENT CHARACTER".
+ * @param pNumSubstitutions Output parameter receiving the number of substitutions if subchar>=0.
+ *                      Set to 0 if no substitutions occur or subchar<0.
+ *                      pNumSubstitutions can be NULL.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strFromUTF8
+ * @see u_strFromUTF8Lenient
+ * @see u_strToUTF8WithSub
+ * @draft ICU 3.6
+ */
+U_DRAFT UChar* U_EXPORT2
+u_strFromUTF8WithSub(UChar *dest,
+              int32_t destCapacity,
+              int32_t *pDestLength,
+              const char *src,
+              int32_t srcLength,
+              UChar32 subchar, int32_t *pNumSubstitutions,
+              UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ * Same as u_strFromUTF8() except that this function is designed to be very fast,
+ * which it achieves by being lenient about malformed UTF-8 sequences.
+ * This function is intended for use in environments where UTF-8 text is
+ * expected to be well-formed.
+ *
+ * Its semantics are:
+ * - Well-formed UTF-8 text is correctly converted to well-formed UTF-16 text.
+ * - The function will not read beyond the input string, nor write beyond
+ *   the destCapacity.
+ * - Malformed UTF-8 results in "garbage" 16-bit Unicode strings which may not
+ *   be well-formed UTF-16.
+ *   The function will resynchronize to valid code point boundaries
+ *   within a small number of code points after an illegal sequence.
+ * - Non-shortest forms are not detected and will result in "spoofing" output.
+ *
+ * For further performance improvement, if srcLength is given (>=0),
+ * then it must be destCapacity>=srcLength.
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ *                      Unlike for other ICU functions, if srcLength>=0 then it
+ *                      must be destCapacity>=srcLength.
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ *                      Unlike for other ICU functions, if srcLength>=0 but
+ *                      destCapacity<srcLength, then *pDestLength will be set to srcLength
+ *                      (and U_BUFFER_OVERFLOW_ERROR will be set)
+ *                      regardless of the actual result length.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strFromUTF8
+ * @see u_strFromUTF8WithSub
+ * @see u_strToUTF8WithSub
+ * @draft ICU 3.6
+ */
+U_CAPI UChar * U_EXPORT2
+u_strFromUTF8Lenient(UChar *dest,
+                     int32_t destCapacity,
+                     int32_t *pDestLength,
+                     const char *src,
+                     int32_t srcLength,
+                     UErrorCode *pErrorCode);
 
 /**
  * Converts a sequence of UChars (UTF-16) to UTF32 units.
