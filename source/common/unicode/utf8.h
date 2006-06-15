@@ -252,7 +252,25 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 #define U8_NEXT(s, i, length, c) { \
     (c)=(uint8_t)(s)[(i)++]; \
     if((c)>=0x80) { \
-        if(U8_IS_LEAD(c)) { \
+        uint8_t __t1, __t2; \
+        if( /* handle U+1000..U+CFFF inline */ \
+            (0xe0<(c) && (c)<=0xec) && \
+            (((i)+1)<(length)) && \
+            (__t1=(uint8_t)((s)[i]-0x80))<=0x3f && \
+            (__t2=(uint8_t)((s)[(i)+1]-0x80))<= 0x3f \
+        ) { \
+            /* no need for (c&0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */ \
+            (c)=(UChar)(((c)<<12)|(__t1<<6)|__t2); \
+            (i)+=2; \
+        } else if( /* handle U+0080..U+07FF inline */ \
+            ((c)<0xe0 && (c)>=0xc2) && \
+            ((i)<(length)) && \
+            (__t1=(uint8_t)((s)[i]-0x80))<=0x3f \
+        ) { \
+            (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
+            ++(i); \
+        } else if(U8_IS_LEAD(c)) { \
+            /* function call for "complicated" and error cases */ \
             (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (int32_t)(length), c, -1); \
         } else { \
             (c)=U_SENTINEL; \
@@ -312,6 +330,13 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 #define U8_APPEND(s, i, length, c, isError) { \
     if((uint32_t)(c)<=0x7f) { \
         (s)[(i)++]=(uint8_t)(c); \
+    } else if((uint32_t)(c)<=0x7ff && (i)+1<(length)) { \
+        (s)[(i)++]=(uint8_t)(((c)>>6)|0xc0); \
+        (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80); \
+    } else if((uint32_t)(c)<=0xd7ff && (i)+2<(length)) { \
+        (s)[(i)++]=(uint8_t)(((c)>>12)|0xe0); \
+        (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80); \
+        (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80); \
     } else { \
         (i)=utf8_appendCharSafeBody(s, (int32_t)(i), (int32_t)(length), c, &(isError)); \
     } \
