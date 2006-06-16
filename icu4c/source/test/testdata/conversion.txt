@@ -445,6 +445,14 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // ISO 2022-CN: test a single-byte subchar, j5171
+        {
+          "iso-2022-cn",
+          "a\x1bc", // Unicode ESC must not occur as a character
+          :bin{       612163 },
+          :intvector{ 0,1,2 },
+          :int{1}, :int{0}, "", "?\x00\x21", ""
+        }
         // UTF-16/32: do not output a BOM if there is no data at all
         {
           "UTF-16",
