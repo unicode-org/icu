@@ -1321,7 +1321,7 @@ void MultithreadTest::TestCollators()
 
     while (fgets(buffer, 1024, testFile) != NULL) {
         offset = 0;
-        if(*buffer == 0 || buffer[0] == '#') {
+        if(*buffer == 0 || strlen(buffer) < 3 || buffer[0] == '#') {
             continue;
         }
         offset = u_parseString(buffer, bufferU, 1024, &first, &status);
@@ -1333,8 +1333,10 @@ void MultithreadTest::TestCollators()
         lineNum++;
     }
     fclose(testFile);
-
-
+    if(U_FAILURE(status)) {
+      errln("Couldn't read the test file!");
+      return;
+    }
 
     UCollator *coll = ucol_open("root", &status);
     if(U_FAILURE(status)) {
