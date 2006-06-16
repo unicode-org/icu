@@ -1227,6 +1227,12 @@ ucnv_getNextUChar(UConverter * converter,
  * Internally, two conversions - ucnv_toUnicode() and ucnv_fromUnicode() -
  * are used, "pivoting" through 16-bit Unicode.
  *
+ * Important: For streaming conversion (multiple function calls for successive
+ * parts of a text stream), the caller must provide a pivot buffer explicitly,
+ * and must preserve the pivot buffer and associated pointers from one
+ * call to another. (The buffer may be moved if its contents and the relative
+ * pointer positions are preserved.)
+ *
  * There is a similar function, ucnv_convert(),
  * which has the following limitations:
  * - it takes charset names, not converter objects, so that
@@ -1238,7 +1244,7 @@ ucnv_getNextUChar(UConverter * converter,
  *
  * By contrast, ucnv_convertEx()
  * - takes UConverter parameters instead of charset names
- * - fully exposes the pivot buffer for complete error handling
+ * - fully exposes the pivot buffer for streaming conversion and complete error handling
  *
  * ucnv_convertEx() also provides further convenience:
  * - an option to reset the converters at the beginning
@@ -1252,6 +1258,7 @@ ucnv_getNextUChar(UConverter * converter,
  *   or set U_STRING_NOT_TERMINATED_WARNING if the output exactly fills
  *   the target buffer
  * - the pivot buffer can be provided internally;
+ *   possible only for whole-string conversion, not streaming conversion;
  *   in this case, the caller will not be able to get details about where an
  *   error occurred
  *   (if pivotStart==NULL, see below)

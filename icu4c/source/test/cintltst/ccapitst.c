@@ -2337,6 +2337,16 @@ static void TestConvertEx() {
         log_err("ucnv_convertEx(*source==NULL) sets %s\n", u_errorName(errorCode));
     }
 
+    /* streaming conversion without a pivot buffer */
+    errorCode=U_ZERO_ERROR;
+    src=srcBuffer;
+    pivotSource=pivotBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   NULL, &pivotSource, &pivotTarget, pivotBuffer+1, TRUE, FALSE, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_convertEx(pivotStart==NULL) sets %s\n", u_errorName(errorCode));
+    }
+
     ucnv_close(cnv1);
     ucnv_close(cnv2);
 }
