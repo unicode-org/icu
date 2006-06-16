@@ -3560,7 +3560,7 @@ static void TestRuleOptions(void) {
     },
 
     { "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
-        {  "c", "b", "\\uD802\\uDE47", "a", "\\u02d0" }, 5
+        {  "c", "b", "\\uD834\\uDF71", "a", "\\u02d0" }, 5
     },
 
     { "&[first regular]<a"
@@ -3570,7 +3570,7 @@ static void TestRuleOptions(void) {
 
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
-        { "b", "\\uD800\\uDFCF", "a", "\\u4e00" }, 4
+        { "b", "\\uD808\\uDF6E", "a", "\\u4e00" }, 4
     },
 
     { "&[before 1][first implicit]<b"
@@ -4637,9 +4637,12 @@ TestThaiSortKey(void)
   UErrorCode status = U_ZERO_ERROR;
   uint8_t key[256];
   int32_t keyLen = 0;
+  /* NOTE: there is a Thai tailoring that moves Yammakan. It should not move it, */
+  /* since it stays in the same relative position. This should be addressed in CLDR */
   /* UCA 4.0 uint8_t expectedKey[256] = { 0x01, 0xd9, 0xb2, 0x01, 0x05, 0x00 }; */
-  /* UCA 4.1 moves Yammakan */
-  uint8_t expectedKey[256] = { 0x01, 0xdb, 0x3a, 0x01, 0x05, 0x00 };
+  /* UCA 4.1 uint8_t expectedKey[256] = { 0x01, 0xdb, 0x3a, 0x01, 0x05, 0x00 }; */
+  /* UCA 5.0 moves Yammakan */
+  uint8_t expectedKey[256] = { 0x01, 0xdc, 0xce, 0x01, 0x05, 0x00 }; 
   UCollator *coll = ucol_open("th", &status);
   if(U_FAILURE(status)) {
     log_err("Could not open a collator, exiting (%s)\n", u_errorName(status));
