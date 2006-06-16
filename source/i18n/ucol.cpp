@@ -145,7 +145,6 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
     }
     (s)->iterator = NULL;
     //(s)->iteratorIndex = 0;
-    (s)->consumedChars = 0;
 }
 
 U_CAPI void  U_EXPORT2
@@ -184,7 +183,6 @@ inline void backupState(const collIterate *data, collIterateState *backup)
             data->iterator->move(data->iterator, backup->iteratorMove, UITER_CURRENT);
         }
     }
-    backup->consumedChars = data->consumedChars;
 }
 
 /**
@@ -242,7 +240,6 @@ inline void loadState(collIterate *data, const collIterateState *backup,
         */
         data->fcdPosition = backup->fcdPosition;
     }
-    data->consumedChars = backup->consumedChars;
 }
 
 
@@ -1424,7 +1421,6 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     }
 
     UChar ch = 0;
-    collationSource->consumedChars = 0;
 
     for (;;)                           /* Loop handles case when incremental normalize switches   */
     {                                  /*   to or from the side buffer / original string, and we  */
@@ -2803,7 +2799,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             //  Pick up the corresponding CE from the table.
             CE = *(coll->contractionCEs +
                 (UCharOffset - coll->contractionIndex));
-            source->consumedChars++;
         }
         else
         {
@@ -5456,11 +5451,14 @@ enum {
     /** When we do French we need to reverse secondary values. However, continuations
      *  need to stay the same. So if you had abc1c2c3de, you need to have edc1c2c3ba
      */
-    UCOL_PSK_USED_ELEMENTS_SHIFT = 7,
-    UCOL_PSK_USED_ELEMENTS_MASK = 0x3FF,
-    UCOL_PSK_ITER_SKIP_SHIFT = 17,
-    UCOL_PSK_ITER_SKIP_MASK = 0x7FFF
+    UCOL_PSK_BOCSU_BYTES_SHIFT = 7,
+    UCOL_PSK_BOCSU_BYTES_MASK = 3,
+    UCOL_PSK_CONSUMED_CES_SHIFT = 9,
+    UCOL_PSK_CONSUMED_CES_MASK = 0x7FFFF
 };
+
+// macro calculating the number of expansion CEs available
+#define uprv_numAvailableExpCEs(s) (s).CEpos - (s).toReturn
 
 
 /** main sortkey part procedure. On the first call,
@@ -5499,14 +5497,10 @@ enum {
  *   4       - was shifted. Whether the previous iteration finished in the
  *             shifted state.
  *   5, 6    - French continuation bytes written. See the comment in the enum
- *   7..16   - Used elements. Number of CEs that were already used from the
- *             expansion buffer or number of bytes from a bocu sequence on
+ *   7,8     - Bocsu bytes used. Number of bytes from a bocu sequence on
  *             the identical level.
- *  17..31   - iterator skip. Number of move operations iterator needs to
- *             skip from the current state in order to continue. This is used
- *             only if normalization is turned on, since the normalizing iterator
- *             can return undefined state, which means that it's in the middle
- *             of normalizing sequence.
+ *   9..31   - CEs consumed. Number of getCE or next32 operations performed 
+ *             since thes last successful update of the iterator state.
  */
 U_CAPI int32_t U_EXPORT2
 ucol_nextSortKeyPart(const UCollator *coll,
@@ -5534,7 +5528,6 @@ ucol_nextSortKeyPart(const UCollator *coll,
         UTRACE_EXIT_VALUE(0);
         return 0;
     }
-
     /** Setting up situation according to the state we got from the previous iteration */
     // The state of the iterator from the previous invocation
     uint32_t iterState = state[0];
@@ -5547,13 +5540,13 @@ ucol_nextSortKeyPart(const UCollator *coll,
     int32_t byteCountOrFrenchDone = (state[1] >> UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_SHIFT) & UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_MASK;
     // number of bytes in the continuation buffer for French
     int32_t usedFrench = (state[1] >> UCOL_PSK_USED_FRENCH_SHIFT) & UCOL_PSK_USED_FRENCH_MASK;
-    // Skip the CEs that we got from an extraction
-    // and delivered in the previous call
-    int32_t usedElements = (state[1] >> UCOL_PSK_USED_ELEMENTS_SHIFT) & UCOL_PSK_USED_ELEMENTS_MASK;
-    // Number of times to skip because the iterator returned
-    // UITER_NO_STATE when it was stopped in the last iteration, so we had to save the
-    // last valid state.
-    int32_t iterSkips = (state[1] >> UCOL_PSK_ITER_SKIP_SHIFT) & UCOL_PSK_ITER_SKIP_MASK;
+    // Number of bytes already written from a bocsu sequence. Since
+    // the longes bocsu sequence is 4 long, this can be up to 3. 
+    int32_t bocsuBytesUsed = (state[1] >> UCOL_PSK_BOCSU_BYTES_SHIFT) & UCOL_PSK_BOCSU_BYTES_MASK;
+    // Number of elements that need to be consumed in this iteration because
+    // the iterator returned UITER_NO_STATE at the end of the last iteration, 
+    // so we had to save the last valid state.
+    int32_t cces = (state[1] >> UCOL_PSK_CONSUMED_CES_SHIFT) & UCOL_PSK_CONSUMED_CES_MASK;
 
     /** values that depend on the collator attributes */
     // strength of the collator.
@@ -5648,36 +5641,21 @@ ucol_nextSortKeyPart(const UCollator *coll,
       }
     }
 
-    // Then, we may have to move more, if the normalizing iterator
-    // was going through a normalizing sequence.
-    if(iterSkips) {
-      // if we are on secondary level AND we do French, we need to go backward instead of forward
-      if(level == UCOL_PSK_SECONDARY && doingFrench) {
-        s.iterator->move(s.iterator, -iterSkips, UITER_CURRENT);
-      } else {
-        s.iterator->move(s.iterator, iterSkips, UITER_CURRENT);
-      }
-    }
 
 
-    // Number of expansion CEs that were already consumed in the
-    // previous iteration for the last code point processed. We
-    // want to clean out the expansion buffer, so that we can
-    // get correct CEs. This value is persistent over iterations,
-    // since we can have several iterations on the one expansion
-    // buffer.
-    int32_t consumedExpansionCEs = usedElements;
-    // Number of bytes already writted from a bocsu sequence. Since
-    // the longes bocsu sequence is 4 long, this can be up to 3. It
-    // shares the state field with consumedExpansionCEs value, since
-    // they cannot simultanously appear on the same level
-    int32_t bocsuBytesUsed = 0;
-    // Clean out the expansion buffer unless we are on
-    // identical level. In that case we use this field
-    // to store the number of bytes already written
-    // from the previous bocsu sequence.
-    if(level < UCOL_PSK_IDENTICAL && usedElements != 0) {
-      while(usedElements-->0) {
+    // This variable tells us whether we can attempt to update the state
+    // of iterator. Situations where we don't want to update iterator state
+    // are the existence of expansion CEs that are not yet processed, and
+    // finishing the case level without enough space in the buffer to insert
+    // a level terminator.
+    UBool canUpdateState = TRUE;
+
+    // Consume all the CEs that were consumed at the end of the previous
+    // iteration without updating the iterator state. On identical level,
+    // consume the code points. 
+    int32_t counter = cces;
+    if(level < UCOL_PSK_IDENTICAL) {
+      while(counter-->0) {
         // If we're doing French and we are on the secondary level,
         // we go backwards.
         if(level == UCOL_PSK_SECONDARY && doingFrench) {
@@ -5691,22 +5669,19 @@ ucol_nextSortKeyPart(const UCollator *coll,
           UTRACE_EXIT_STATUS(*status);
           return 0;
         }
+        if(uprv_numAvailableExpCEs(s)) {
+          canUpdateState = FALSE;
+        }
       }
     } else {
-      bocsuBytesUsed = usedElements;
+      while(counter-->0) {
+        uiter_next32(s.iterator);
+      }
     }
 
-    // This variable prevents the adjusting of iterator
-    // skip variable when we are the first time on a
-    // level. I hope there is a better way to do it, but
-    // I could not think of it.
-    UBool firstTimeOnLevel = TRUE;
     // French secondary needs to know whether the iterator state of zero came from previous level OR
     // from a new invocation...
     UBool wasDoingPrimary = FALSE;
-    // Case level is kind of goofy. This variable tells us that
-    // we are still not done with the case level.
-    UBool dontAdvanceIteratorBecauseWeNeedALevelTerminator = FALSE;
     // destination buffer byte counter. When this guy
     // gets to count, we're done with the iteration
     int32_t i = 0;
@@ -5731,19 +5706,15 @@ ucol_nextSortKeyPart(const UCollator *coll,
           // We should save the state only if we
           // are sure that we are done with the
           // previous iterator state
-          if(consumedExpansionCEs == 0 && byteCountOrFrenchDone == 0) {
+          if(canUpdateState && byteCountOrFrenchDone == 0) {
             newState = s.iterator->getState(s.iterator);
-            if(newState != UITER_NO_STATE) {
+            if(newState != UITER_NO_STATE) {         
               iterState = newState;
-              iterSkips = 0;
-            } else {
-              if(!firstTimeOnLevel && !byteCountOrFrenchDone) {
-                iterSkips++;
-              }
+              cces = 0;
             }
           }
-          firstTimeOnLevel = FALSE;
           CE = ucol_IGetNextCE(coll, &s, status);
+          cces++;
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
@@ -5751,6 +5722,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
               // Restart the iteration an move to the
               // second level
               s.iterator->move(s.iterator, 0, UITER_START);
+              cces = 0;
               level = UCOL_PSK_SECONDARY;
               break;
           }
@@ -5766,24 +5738,18 @@ ucol_nextSortKeyPart(const UCollator *coll,
               if((CE &=0xff)!=0) {
                   if(i==count) {
                       /* overflow */
-                      byteCountOrFrenchDone=1;
+                      byteCountOrFrenchDone = 1;
+                      cces--;
                       goto saveState;
                   }
                   dest[i++]=(uint8_t)CE;
               }
             }
           }
-          if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-            // s.pos != NULL means there is a normalization buffer in effect
-            // in iterative case, this means that we are doing Thai (maybe discontiguos)
-            consumedExpansionCEs++;
+          if(uprv_numAvailableExpCEs(s)) {
+            canUpdateState = FALSE;
           } else {
-            consumedExpansionCEs = 0;
-          }
-          if(s.pos && *s.pos == 0) {
-            // maybe it is the end of Thai - we have to have
-            // an extra skip
-            iterSkips++;
+            canUpdateState = TRUE;
           }
       }
       /* fall through to next level */
@@ -5797,26 +5763,23 @@ ucol_nextSortKeyPart(const UCollator *coll,
             // We should save the state only if we
             // are sure that we are done with the
             // previous iterator state
-            if(consumedExpansionCEs == 0) {
+            if(canUpdateState) {
               newState = s.iterator->getState(s.iterator);
               if(newState != UITER_NO_STATE) {
                 iterState = newState;
-                iterSkips = 0;
-              } else {
-                if(!firstTimeOnLevel) {
-                  iterSkips++;
-                }
+                cces = 0;
               }
             }
-            firstTimeOnLevel = FALSE;
             CE = ucol_IGetNextCE(coll, &s, status);
+            cces++;
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
                 terminatePSKLevel(level, maxLevel, i, dest);
-                byteCountOrFrenchDone=0;
+                byteCountOrFrenchDone = 0;
                 // Restart the iteration an move to the
                 // second level
                 s.iterator->move(s.iterator, 0, UITER_START);
+                cces = 0;
                 level = UCOL_PSK_CASE;
                 break;
             }
@@ -5826,13 +5789,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
                 dest[i++]=(uint8_t)CE;
               }
             }
-            if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-              consumedExpansionCEs++;
+            if(uprv_numAvailableExpCEs(s)) {
+              canUpdateState = FALSE;
             } else {
-              consumedExpansionCEs = 0;
-            }
-            if(s.pos && *s.pos == 0) {
-              iterSkips++;
+              canUpdateState = TRUE;
             }
           }
         } else { // French secondary processing
@@ -5843,28 +5803,25 @@ ucol_nextSortKeyPart(const UCollator *coll,
           // moved to end.
           if(wasDoingPrimary) {
             s.iterator->move(s.iterator, 0, UITER_LIMIT);
+            cces = 0;
           }
           for(;;) {
             if(i == count) {
               goto saveState;
             }
-            if(consumedExpansionCEs == 0) {
+            if(canUpdateState) {
               newState = s.iterator->getState(s.iterator);
               if(newState != UITER_NO_STATE) {
                 iterState = newState;
-                iterSkips = 0;
-              } else {
-                if(!firstTimeOnLevel) {
-                  iterSkips++;
-                }
-              }
+                cces = 0;
+              } 
             }
-            firstTimeOnLevel = FALSE;
             CE = ucol_IGetPrevCE(coll, &s, status);
+            cces++;
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
                 terminatePSKLevel(level, maxLevel, i, dest);
-                byteCountOrFrenchDone=0;
+                byteCountOrFrenchDone = 0;
                 // Restart the iteration an move to the next level
                 s.iterator->move(s.iterator, 0, UITER_START);
                 level = UCOL_PSK_CASE;
@@ -5890,13 +5847,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
                 }
               }
             }
-            if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-              consumedExpansionCEs++;
+            if(uprv_numAvailableExpCEs(s)) {
+              canUpdateState = FALSE;
             } else {
-              consumedExpansionCEs = 0;
-            }
-            if(s.pos && *s.pos == 0) {
-              iterSkips++;
+              canUpdateState = TRUE;
             }
           }
         }
@@ -5917,29 +5871,25 @@ ucol_nextSortKeyPart(const UCollator *coll,
           // We should save the state only if we
           // are sure that we are done with the
           // previous iterator state
-          if(consumedExpansionCEs == 0) {
+          if(canUpdateState) {
             newState = s.iterator->getState(s.iterator);
             if(newState != UITER_NO_STATE) {
               iterState = newState;
-              iterSkips = 0;
-            } else {
-              if(!firstTimeOnLevel) {
-                iterSkips++;
-              }
+              cces = 0;
             }
           }
-          firstTimeOnLevel = FALSE;
           CE = ucol_IGetNextCE(coll, &s, status);
+          cces++;
           if(CE==UCOL_NO_MORE_CES) {
             // On the case level we might have an unfinished
             // case byte. Add one if it's started.
             if(caseShift != UCOL_CASE_SHIFT_START) {
               dest[i++] = caseByte;
             }
-            // This is kind of tricky - situation where
-            // we need to keep the iterator in the old
-            // state, but don't need to bring anything
-            // to the next invocation
+            cces = 0;
+            // We have finished processing CEs on this level.
+            // However, we don't know if we have enough space
+            // to add a case level terminator.
             if(i < count) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
@@ -5948,7 +5898,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
               s.iterator->move(s.iterator, 0, UITER_START);
               level = UCOL_PSK_TERTIARY;
             } else {
-              dontAdvanceIteratorBecauseWeNeedALevelTerminator = TRUE;
+              canUpdateState = FALSE;
             }
             break;
           }
@@ -5995,13 +5945,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
             }
           }
           // Not sure this is correct for the case level - revisit
-          if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-            consumedExpansionCEs++;
+          if(uprv_numAvailableExpCEs(s)) {
+            canUpdateState = FALSE;
           } else {
-            consumedExpansionCEs = 0;
-          }
-          if(s.pos && *s.pos == 0) {
-            iterSkips++;
+            canUpdateState = TRUE;
           }
         }
       } else {
@@ -6017,26 +5964,23 @@ ucol_nextSortKeyPart(const UCollator *coll,
           // We should save the state only if we
           // are sure that we are done with the
           // previous iterator state
-          if(consumedExpansionCEs == 0) {
+          if(canUpdateState) {
             newState = s.iterator->getState(s.iterator);
             if(newState != UITER_NO_STATE) {
               iterState = newState;
-              iterSkips = 0;
-            } else {
-              if(!firstTimeOnLevel) {
-                iterSkips++;
-              }
+              cces = 0;
             }
           }
-          firstTimeOnLevel = FALSE;
           CE = ucol_IGetNextCE(coll, &s, status);
+          cces++;
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
-              byteCountOrFrenchDone=0;
+              byteCountOrFrenchDone = 0;
               // Restart the iteration an move to the
               // second level
               s.iterator->move(s.iterator, 0, UITER_START);
+              cces = 0;
               level = UCOL_PSK_QUATERNARY;
               break;
           }
@@ -6055,13 +5999,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
               dest[i++]=(uint8_t)CE;
             }
           }
-          if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-            consumedExpansionCEs++;
+          if(uprv_numAvailableExpCEs(s)) {
+            canUpdateState = FALSE;
           } else {
-            consumedExpansionCEs = 0;
-          }
-          if(s.pos && *s.pos == 0) {
-            iterSkips++;
+            canUpdateState = TRUE;
           }
         }
       } else {
@@ -6079,27 +6020,24 @@ ucol_nextSortKeyPart(const UCollator *coll,
           // We should save the state only if we
           // are sure that we are done with the
           // previous iterator state
-          if(consumedExpansionCEs == 0) {
+          if(canUpdateState) {
             newState = s.iterator->getState(s.iterator);
             if(newState != UITER_NO_STATE) {
               iterState = newState;
-              iterSkips = 0;
-            } else {
-              if(!firstTimeOnLevel) {
-                iterSkips++;
-              }
+              cces = 0;
             }
           }
-          firstTimeOnLevel = FALSE;
           CE = ucol_IGetNextCE(coll, &s, status);
+          cces++;
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
               terminatePSKLevel(level, maxLevel, i, dest);
               //dest[i++] = UCOL_LEVELTERMINATOR;
-              byteCountOrFrenchDone=0;
+              byteCountOrFrenchDone = 0;
               // Restart the iteration an move to the
               // second level
               s.iterator->move(s.iterator, 0, UITER_START);
+              cces = 0;
               level = UCOL_PSK_QUIN;
               break;
           }
@@ -6114,7 +6052,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
               if((CE &=0xff)!=0) {
                   if(i==count) {
                       /* overflow */
-                      byteCountOrFrenchDone=1;
+                      byteCountOrFrenchDone = 1;
                       goto saveState;
                   }
                   dest[i++]=(uint8_t)CE;
@@ -6130,13 +6068,10 @@ ucol_nextSortKeyPart(const UCollator *coll,
               }
             }
           }
-          if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
-            consumedExpansionCEs++;
+          if(uprv_numAvailableExpCEs(s)) {
+            canUpdateState = FALSE;
           } else {
-            consumedExpansionCEs = 0;
-          }
-          if(s.pos && *s.pos == 0) {
-            iterSkips++;
+            canUpdateState = TRUE;
           }
         }
       } else {
@@ -6201,13 +6136,12 @@ ucol_nextSortKeyPart(const UCollator *coll,
           newState = s.iterator->getState(s.iterator);
           if(newState != UITER_NO_STATE) {
             iterState = newState;
-            iterSkips = 0;
-          } else {
-            iterSkips++;
-          }
+            cces = 0;
+          } 
 
           uint8_t buff[4];
           second = uiter_next32(s.iterator);
+          cces++;
 
           // end condition for identical level
           if(second == U_SENTINEL) {
@@ -6249,38 +6183,23 @@ ucol_nextSortKeyPart(const UCollator *coll,
 saveState:
     // Now we need to return stuff. First we want to see whether we have
     // done everything for the current state of iterator.
-    if(consumedExpansionCEs || byteCountOrFrenchDone
-      || dontAdvanceIteratorBecauseWeNeedALevelTerminator) {
+    if(byteCountOrFrenchDone
+    || canUpdateState == FALSE
+    || (newState = s.iterator->getState(s.iterator)) == UITER_NO_STATE) {
       // Any of above mean that the previous transaction
       // wasn't finished and that we should store the
       // previous iterator state.
       state[0] = iterState;
     } else {
-      // The transaction is complete. We will continue in
-      // next iteration.
-      if((newState = s.iterator->getState(s.iterator))!= UITER_NO_STATE) {
+      // The transaction is complete. We will continue in the next iteration.
         state[0] = s.iterator->getState(s.iterator);
-        iterSkips = 0;
-      } else {
-        state[0] = iterState;
-        iterSkips++;
-        iterSkips += s.consumedChars;
-      }
+        cces = 0;
     }
-    // Store the number of elements processed. On CE levels, this is
-    // the number of expansion CEs processed. On identical level, this
-    // is the number of bocsu bytes written.
-    if(level < UCOL_PSK_IDENTICAL) {
-      if((consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) != consumedExpansionCEs) {
-        *status = U_INDEX_OUTOFBOUNDS_ERROR;
-      }
-      state[1] = (consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
-    } else {
-      if((bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) != bocsuBytesUsed) {
-        *status = U_INDEX_OUTOFBOUNDS_ERROR;
-      }
-      state[1] = (bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
+    // Store the number of bocsu bytes written.
+    if((bocsuBytesUsed & UCOL_PSK_BOCSU_BYTES_MASK) != bocsuBytesUsed) {
+      *status = U_INDEX_OUTOFBOUNDS_ERROR;
     }
+    state[1] = (bocsuBytesUsed & UCOL_PSK_BOCSU_BYTES_MASK) << UCOL_PSK_BOCSU_BYTES_SHIFT;
 
     // Next we put in the level of comparison
     state[1] |= ((level & UCOL_PSK_LEVEL_MASK) << UCOL_PSK_LEVEL_SHIFT);
@@ -6296,12 +6215,12 @@ saveState:
     if(wasShifted) {
       state[1] |= 1 << UCOL_PSK_WAS_SHIFTED_SHIFT;
     }
-    // Check for iterSkips overflow
-    if((iterSkips & UCOL_PSK_ITER_SKIP_MASK) != iterSkips) {
+    // Check for cces overflow
+    if((cces & UCOL_PSK_CONSUMED_CES_MASK) != cces) {
       *status = U_INDEX_OUTOFBOUNDS_ERROR;
     }
-    // Store iterSkips
-    state[1] |= ((iterSkips & UCOL_PSK_ITER_SKIP_MASK) << UCOL_PSK_ITER_SKIP_SHIFT);
+    // Store cces
+    state[1] |= ((cces & UCOL_PSK_CONSUMED_CES_MASK) << UCOL_PSK_CONSUMED_CES_SHIFT);
 
     // Check for French overflow
     if((usedFrench & UCOL_PSK_USED_FRENCH_MASK) != usedFrench) {
