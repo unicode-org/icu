@@ -1848,6 +1848,12 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
     }
 
     if(pivotStart==NULL) {
+        if(!flush) {
+            /* streaming conversion requires an explicit pivot buffer */
+            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+
         /* use the stack pivot buffer */
         pivotStart=myPivotSource=myPivotTarget=pivotBuffer;
         pivotSource=&myPivotSource;
