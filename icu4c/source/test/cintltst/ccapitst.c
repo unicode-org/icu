@@ -22,6 +22,7 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "ucnv_bld.h" /* for sizeof(UConverter) */
+#include "cmemory.h"  /* for UAlignedMemory */
 #include "cintltst.h"
 #include "ccapitst.h"
 
@@ -1673,14 +1674,17 @@ static void TestConvertSafeClone()
         "ibm-1047-s390"
     };
 
+    /* store the actual sizes of each converter */
+    int32_t actualSizes[LENGTHOF(names)];
+
     static const int32_t bufferSizes[] = {
         U_CNV_SAFECLONE_BUFFERSIZE,
         (int32_t)(3*sizeof(UConverter))/2,  /* 1.5*sizeof(UConverter) */
         (int32_t)sizeof(UConverter)/2       /* 0.5*sizeof(UConverter) */
     };
 
-    char charBuffer [21];   /* Leave at an odd number for alignment testing */
-    uint8_t buffer [3] [U_CNV_SAFECLONE_BUFFERSIZE];
+    char charBuffer[21];   /* Leave at an odd number for alignment testing */
+    uint8_t buffer[3] [U_CNV_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize, maxBufferSize;
     const char *maxName;
     UConverter * cnv, *cnv2;
@@ -1689,9 +1693,9 @@ static void TestConvertSafeClone()
     char *pCharBuffer;
     const char *pConstCharBuffer;
     const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
-    UChar uniBuffer [] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
-    UChar uniCharBuffer [20];
-    char  charSourceBuffer [] = { 0x1b, 0x24, 0x42 };
+    UChar uniBuffer[] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
+    UChar uniCharBuffer[20];
+    char  charSourceBuffer[] = { 0x1b, 0x24, 0x42 };
     const char *pCharSource = charSourceBuffer;
     const char *pCharSourceLimit = charSourceBuffer + sizeof(charSourceBuffer);
     UChar *pUCharTarget = uniCharBuffer;
@@ -1796,10 +1800,10 @@ static void TestConvertSafeClone()
 
             if(j == 0) {
                 /* preflight to get maxBufferSize */
-                bufferSize = 0;
-                ucnv_safeClone(cnv, NULL, &bufferSize, &err);
-                if(bufferSize > maxBufferSize) {
-                    maxBufferSize = bufferSize;
+                actualSizes[index] = 0;
+                ucnv_safeClone(cnv, NULL, &actualSizes[index], &err);
+                if(actualSizes[index] > maxBufferSize) {
+                    maxBufferSize = actualSizes[index];
                     maxName = names[index];
                 }
             }
@@ -1811,6 +1815,12 @@ static void TestConvertSafeClone()
 
             /* close the original immediately to make sure that the clone works by itself */
             ucnv_close(cnv);
+
+            if( actualSizes[index] <= (bufferSizes[j] - (int32_t)sizeof(UAlignedMemory)) &&
+                err == U_SAFECLONE_ALLOCATED_WARNING
+            ) {
+                log_err("ucnv_safeClone(%s) did a heap clone although the buffer was large enough\n", names[index]);
+            }
 
             /* check if the clone function overwrote any bytes that it is not supposed to touch */
             if(bufferSize <= bufferSizes[j]) {
@@ -1868,6 +1878,10 @@ static void TestConvertSafeClone()
 
     log_verbose("ucnv_safeClone(): sizeof(UConverter)=%lu  max preflighted clone size=%d (%s)  U_CNV_SAFECLONE_BUFFERSIZE=%d\n",
         sizeof(UConverter), maxBufferSize, maxName, (int)U_CNV_SAFECLONE_BUFFERSIZE);
+    if(maxBufferSize > U_CNV_SAFECLONE_BUFFERSIZE) {
+        log_err("ucnv_safeClone(): max preflighted clone size=%d (%s) is larger than U_CNV_SAFECLONE_BUFFERSIZE=%d\n",
+            maxBufferSize, maxName, (int)U_CNV_SAFECLONE_BUFFERSIZE);
+    }
 }
 
 static void TestCCSID() {

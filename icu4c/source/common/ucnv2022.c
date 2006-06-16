@@ -2965,6 +2965,12 @@ struct cloneStruct
     UConverter cnv;
     UConverterDataISO2022 mydata;
     UConverter currentConverter;
+    /*
+     * currentConverter may be aligned to a higher address.
+     * Ensure that there is enough space for that, and do not use
+     * the currentConverter address itself after cloning.
+     */
+    UAlignedMemory padding;
 };
 
 
@@ -2994,14 +3000,28 @@ _ISO_2022_SafeClone(
     /* share the subconverters */
 
     if(cnvData->currentConverter != NULL) {
-        size = (int32_t)sizeof(UConverter);
-        localClone->mydata.currentConverter =
+        UConverter *currentConverter;
+        /* distinguish local U_SAFECLONE_ALLOCATED_WARNING from one that is already set */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        size = (int32_t)(sizeof(UConverter) + sizeof(UAlignedMemory)); /* include size of padding */
+        currentConverter =
             ucnv_safeClone(cnvData->currentConverter,
                             &localClone->currentConverter,
-                            &size, status);
-        if(U_FAILURE(*status)) {
+                            &size, &localStatus);
+        if(U_FAILURE(localStatus)) {
+            *status = localStatus;
             return NULL;
         }
+        if(localStatus == U_SAFECLONE_ALLOCATED_WARNING) {
+            /*
+             * We think we know that localClone->currentConverter is large enough.
+             * Check for alignment problems (see j5172).
+             */
+            *status = U_INTERNAL_PROGRAM_ERROR;
+            ucnv_close(currentConverter);
+            return NULL;
+        }
+        localClone->mydata.currentConverter = currentConverter;
     }
 
     for(i=0; i<UCNV_2022_MAX_CONVERTERS; ++i) {
