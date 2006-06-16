@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -43,7 +43,7 @@
 
 /* this is space for the extra strings that need to be unquoted */
 /* during the parsing of the rules */
-#define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 2048
+#define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 4096
 typedef struct UColToken UColToken;
 
 typedef struct  {
