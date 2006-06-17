@@ -688,6 +688,17 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         checkForAlgorithmic = FALSE;
         mayContainOption = gDefaultConverterContainsOption;
         /* the default converter name is already canonical */
+    } else if(
+        (converterName[0] == 'U' ?
+            (                           converterName[1] == 'T' && converterName[2] == 'F') :
+            (converterName[0] == 'u' && converterName[1] == 't' && converterName[2] == 'f'))
+        &&
+        (converterName[3] == '-' ?
+            (converterName[4] == '8' && converterName[5] == 0) :
+            (converterName[3] == '8' && converterName[4] == 0))
+    ) {
+        /* fastpath for UTF-8 */
+        return (UConverterSharedData *)converterData[UCNV_UTF8];
     } else {
         /* separate the converter name from the options */
         parseConverterOptions(converterName, lookup->cnvName, lookup->locale, &lookup->options, err);
