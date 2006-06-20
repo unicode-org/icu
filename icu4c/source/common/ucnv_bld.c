@@ -688,18 +688,19 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         checkForAlgorithmic = FALSE;
         mayContainOption = gDefaultConverterContainsOption;
         /* the default converter name is already canonical */
-    } else if(
-        (converterName[0] == 'U' ?
+    }
+    else if((converterName[0] == 'U' ?
             (                           converterName[1] == 'T' && converterName[2] == 'F') :
             (converterName[0] == 'u' && converterName[1] == 't' && converterName[2] == 'f'))
         &&
         (converterName[3] == '-' ?
             (converterName[4] == '8' && converterName[5] == 0) :
-            (converterName[3] == '8' && converterName[4] == 0))
-    ) {
+            (converterName[3] == '8' && converterName[4] == 0)))
+    {
         /* fastpath for UTF-8 */
         return (UConverterSharedData *)converterData[UCNV_UTF8];
-    } else {
+    }
+    else {
         /* separate the converter name from the options */
         parseConverterOptions(converterName, lookup->cnvName, lookup->locale, &lookup->options, err);
         if (U_FAILURE(*err)) {
@@ -913,8 +914,8 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
     uprv_memcpy(myUConverter->subChar, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
 
-    if(myUConverter != NULL && mySharedConverterData->impl->open != NULL) {
-        mySharedConverterData->impl->open(myUConverter, realName, locale,options, err);
+    if(mySharedConverterData->impl->open != NULL) {
+        mySharedConverterData->impl->open(myUConverter, realName, locale, options, err);
         if(U_FAILURE(*err)) {
             ucnv_close(myUConverter);
             return NULL;
