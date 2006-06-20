@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -53,10 +53,10 @@
 
 
 typedef struct{
+    UConverter* gbConverter;
     int32_t targetIndex;
     int32_t sourceIndex;
     UBool isEscapeAppended;
-    UConverter* gbConverter;
     UBool isStateDBCS;
     UBool isTargetUCharDBCS;
 }UConverterDataHZ;
@@ -69,16 +69,11 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
     cnv->fromUChar32=0x0000;
-    cnv->extraInfo = uprv_malloc (sizeof (UConverterDataHZ));
+    cnv->extraInfo = uprv_malloc(sizeof(UConverterDataHZ));
     if(cnv->extraInfo != NULL){
+        uprv_memset(cnv->extraInfo, 0, sizeof(UConverterDataHZ));
         ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = ucnv_open("ibm-1386",errorCode);
-        ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = FALSE;
-        ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
-        ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
-        ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
-        ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
     }
-    /* test for NULL */
     else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
