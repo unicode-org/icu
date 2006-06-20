@@ -475,6 +475,11 @@ struct cloneHZStruct
     UConverter subCnv;
     UAlignedMemory deadSpace2;
     UConverterDataHZ mydata;
+    /*
+     * Last item may be aligned to a higher address.
+     * Ensure that there is enough space for that.
+     */
+    UAlignedMemory deadSpace3;
 };
 
 
@@ -504,7 +509,7 @@ _HZ_SafeClone(const UConverter *cnv,
     localClone->cnv.isExtraLocal = TRUE;
 
     /* deep-clone the sub-converter */
-    size = (int32_t)sizeof(UConverter);
+    size = (int32_t)(sizeof(UConverter) + sizeof(UAlignedMemory)); /* include size of padding */
     ((UConverterDataHZ*)localClone->cnv.extraInfo)->gbConverter =
         ucnv_safeClone(((UConverterDataHZ*)cnv->extraInfo)->gbConverter, &localClone->subCnv, &size, status);
 

@@ -172,17 +172,17 @@ typedef struct ISO2022State {
 #define UCNV_2022_MAX_CONVERTERS 10
 
 typedef struct{
+    UConverterSharedData *myConverterArray[UCNV_2022_MAX_CONVERTERS];
     UConverter *currentConverter;
+    Cnv2022Type currentType;
+    ISO2022State toU2022State, fromU2022State;
+    uint32_t key;
+    uint32_t version;
 #ifdef U_ENABLE_GENERIC_ISO_2022
     UBool isFirstBuffer;
 #endif
-    Cnv2022Type currentType;
-    ISO2022State toU2022State, fromU2022State;
-    UConverterSharedData *myConverterArray[UCNV_2022_MAX_CONVERTERS];
-    uint32_t key;
-    uint32_t version;
-    char locale[3];
     char name[30];
+    char locale[3];
 }UConverterDataISO2022;
 
 /* Protos */
@@ -378,7 +378,7 @@ static const UConverterSharedData _ISO2022CNData;
 
 /*************** Converter implementations ******************/
 
-static void 
+static U_INLINE void 
 setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
     if(myConverterData->version == 1) {
         UConverter *cnv = myConverterData->currentConverter;
@@ -389,7 +389,7 @@ setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConve
     }
 }
 
-static void 
+static U_INLINE void 
 setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData){
    /* in ISO-2022-KR the designator sequence appears only once
     * in a file so we append it only once
@@ -421,20 +421,16 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         uint32_t version;
 
         uprv_memset(myConverterData, 0, sizeof(UConverterDataISO2022));
-        myConverterData->currentConverter = NULL;
         myConverterData->currentType = ASCII1;
-        myConverterData->key =0;
-#ifdef U_ENABLE_GENERIC_ISO_2022
-        myConverterData->isFirstBuffer = TRUE;
-#endif
         cnv->fromUnicodeStatus =FALSE;
         if(locale){
             uprv_strncpy(myLocale, locale, sizeof(myLocale));
         }
-        myConverterData->version= 0;
         version = options & UCNV_OPTIONS_VERSION_MASK;
+        myConverterData->version = version;
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
-            (myLocale[2]=='_' || myLocale[2]=='\0')){
+            (myLocale[2]=='_' || myLocale[2]=='\0'))
+        {
             size_t len=0;
             /* open the required converters and cache them */
             if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
@@ -456,50 +452,49 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
 
-            myConverterData->version = version;
             uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
             len = uprv_strlen(myConverterData->name);
             myConverterData->name[len]=(char)(myConverterData->version+(int)'0');
             myConverterData->name[len+1]='\0';
         }
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') && 
-            (myLocale[2]=='_' || myLocale[2]=='\0')){
+            (myLocale[2]=='_' || myLocale[2]=='\0'))
+        {
+            if (version==1){
+                myConverterData->currentConverter=
+                    ucnv_open("icu-internal-25546",errorCode);
 
-            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
-                    myConverterData->version = 1;
-                    myConverterData->currentConverter=
-                        ucnv_open("icu-internal-25546",errorCode);
+                if (U_FAILURE(*errorCode)) {
+                    _ISO2022Close(cnv);
+                    return;
+                }
 
-                    if (U_FAILURE(*errorCode)) {
-                        _ISO2022Close(cnv);
-                        return;
-                    }
-
-                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
-                    uprv_memcpy(cnv->subChar, myConverterData->currentConverter->subChar, 4);
-                    cnv->subCharLen = myConverterData->currentConverter->subCharLen;
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
+                uprv_memcpy(cnv->subChar, myConverterData->currentConverter->subChar, 4);
+                cnv->subCharLen = myConverterData->currentConverter->subCharLen;
             }else{
-                    myConverterData->currentConverter=ucnv_open("ibm-949",errorCode);
+                myConverterData->currentConverter=ucnv_open("ibm-949",errorCode);
 
-                    if (U_FAILURE(*errorCode)) {
-                        _ISO2022Close(cnv);
-                        return;
-                    }
+                if (U_FAILURE(*errorCode)) {
+                    _ISO2022Close(cnv);
+                    return;
+                }
 
-                    myConverterData->version = 0;
-                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
+                myConverterData->version = 0;
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
             }
 
             /* initialize the state variables */
             setInitialStateToUnicodeKR(cnv, myConverterData);
-            setInitialStateFromUnicodeKR(cnv,myConverterData);
+            setInitialStateFromUnicodeKR(cnv, myConverterData);
 
             /* set the function pointers to appropriate funtions */
             cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
             uprv_strcpy(myConverterData->locale,"ko");
         }
         else if(((myLocale[0]=='z' && myLocale[1]=='h') || (myLocale[0]=='c'&& myLocale[1]=='n'))&& 
-            (myLocale[2]=='_' || myLocale[2]=='\0')){
+            (myLocale[2]=='_' || myLocale[2]=='\0'))
+        {
 
             /* open the required converters and cache them */
             myConverterData->myConverterArray[GB2312_1]         = ucnv_loadSharedData("ibm-5478", NULL, errorCode);
@@ -513,16 +508,17 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
             uprv_strcpy(myConverterData->locale,"cn");
 
-            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
-                myConverterData->version = 1;
+            if (version==1){
                 uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
             }else{
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
                 myConverterData->version = 0;
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
             }
         }
         else{
 #ifdef U_ENABLE_GENERIC_ISO_2022
+            myConverterData->isFirstBuffer = TRUE;
+
             /* append the UTF-8 escape sequence */
             cnv->charErrorBufferLength = 3;
             cnv->charErrorBuffer[0] = 0x1b;
@@ -2963,14 +2959,15 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
 struct cloneStruct
 {
     UConverter cnv;
-    UConverterDataISO2022 mydata;
+    UAlignedMemory deadSpace1;
     UConverter currentConverter;
+    UAlignedMemory deadSpace2;
+    UConverterDataISO2022 mydata;
     /*
-     * currentConverter may be aligned to a higher address.
-     * Ensure that there is enough space for that, and do not use
-     * the currentConverter address itself after cloning.
+     * Last item may be aligned to a higher address.
+     * Ensure that there is enough space for that.
      */
-    UAlignedMemory padding;
+    UAlignedMemory deadSpace3;
 };
 
 
@@ -3001,27 +2998,14 @@ _ISO_2022_SafeClone(
 
     if(cnvData->currentConverter != NULL) {
         UConverter *currentConverter;
-        /* distinguish local U_SAFECLONE_ALLOCATED_WARNING from one that is already set */
-        UErrorCode localStatus = U_ZERO_ERROR;
         size = (int32_t)(sizeof(UConverter) + sizeof(UAlignedMemory)); /* include size of padding */
-        currentConverter =
+        localClone->mydata.currentConverter =
             ucnv_safeClone(cnvData->currentConverter,
                             &localClone->currentConverter,
-                            &size, &localStatus);
-        if(U_FAILURE(localStatus)) {
-            *status = localStatus;
+                            &size, status);
+        if(U_FAILURE(*status)) {
             return NULL;
         }
-        if(localStatus == U_SAFECLONE_ALLOCATED_WARNING) {
-            /*
-             * We think we know that localClone->currentConverter is large enough.
-             * Check for alignment problems (see j5172).
-             */
-            *status = U_INTERNAL_PROGRAM_ERROR;
-            ucnv_close(currentConverter);
-            return NULL;
-        }
-        localClone->mydata.currentConverter = currentConverter;
     }
 
     for(i=0; i<UCNV_2022_MAX_CONVERTERS; ++i) {
