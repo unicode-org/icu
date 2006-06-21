@@ -186,6 +186,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String eraNames[] = null;
+    
+    /**
+     * Narrow era names. For example: "A" and "B". An array of 2 strings,
+     * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
+     * @serial
+     */
+    String narrowEras[] = null;
 
     /**
      * Month strings. For example: "January", "February", etc.  An array
@@ -300,6 +307,34 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String ampms[] = null;
+    
+    /**
+     * Abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
+     * of 4 strings indexed by the month divided by 3.
+     * @serial
+     */
+    String shortQuarters[] = null;
+    
+    /**
+     * Full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
+     * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
+     * @serial
+     */
+    String quarters[] = null;
+    
+    /**
+     * Standalone abbreviated quarter names. For example: "Q1", "Q2", "Q3", "Q4". An array
+     * of 4 strings indexed by the month divided by 3.
+     * @serial
+     */
+    String standaloneShortQuarters[] = null;
+    
+    /**
+     * Standalone full quarter names. For example: "1st Quarter", "2nd Quarter", "3rd Quarter",
+     * "4th Quarter". An array of 4 strings, indexed by the month divided by 3.
+     * @serial
+     */
+    String standaloneQuarters[] = null;
 
     /**
      * Localized names of time zones in this locale.  This is a
@@ -337,7 +372,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same unlocalized pattern characters.
      */
-    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcL";
+    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
@@ -810,6 +845,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         catch (MissingResourceException e) {
            eraNames = calData.getEras("abbreviated");
         }
+        
+        // NOTE: since the above code assumes that abbreviated
+        // era names exist, we make the same assumption here too.
+        try {
+            narrowEras = calData.getEras("narrow");
+        } catch (MissingResourceException e) {
+            narrowEras = calData.getEras("abbreviated");
+        }
 
         months = calData.getStringArray("monthNames", "wide");
         shortMonths = calData.getStringArray("monthNames", "abbreviated");
@@ -818,7 +861,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
            narrowMonths = calData.getStringArray("monthNames", "narrow");
         } 
         catch (MissingResourceException e) {
-           narrowMonths = calData.getStringArray("monthNames", "abbreviated");
+            try {
+                narrowMonths = calData.getStringArray("monthNames", "stand-alone", "narrow");
+            }
+            catch (MissingResourceException e1) {
+               narrowMonths = calData.getStringArray("monthNames", "abbreviated");
+            }
         }
 
         try {
@@ -862,7 +910,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
            nWeekdays = calData.getStringArray("dayNames", "narrow");
         }
         catch (MissingResourceException e) {
-           nWeekdays = calData.getStringArray("dayNames", "abbreviated");
+            try {
+                nWeekdays = calData.getStringArray("dayNames", "stand-alone", "narrow");
+            }
+            catch (MissingResourceException e1) {
+                nWeekdays = calData.getStringArray("dayNames", "abbreviated");
+            }
         }
         narrowWeekdays = new String[8];
         narrowWeekdays[0] = "";  // 1-based
@@ -907,7 +960,24 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = calData.getStringArray("AmPmMarkers");
+/*
+        quarters = calData.getStringArray("quarters", "wide");
+        shortMonths = calData.getStringArray("quarters", "abbreviated");
 
+        try {
+           standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
+        } 
+        catch (MissingResourceException e) {
+           standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
+        }
+
+        try {
+           standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
+        } 
+        catch (MissingResourceException e) {
+            standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
+        }
+*/
 /*  THE FOLLOWING DOESN'T WORK; A COUNTRY LOCALE WITH ONE ZONE BLOCKS THE LANGUAGE LOCALE
         // These really do use rb and not calData
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);

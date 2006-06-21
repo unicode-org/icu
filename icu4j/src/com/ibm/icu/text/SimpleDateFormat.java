@@ -666,7 +666,8 @@ public class SimpleDateFormat extends DateFormat {
         /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET,
         /*v*/   Calendar.ZONE_OFFSET,
         /*c*/   Calendar.DAY_OF_WEEK,
-        /*L*/   Calendar.MONTH
+        /*L*/   Calendar.MONTH,
+        /*Qq*/  Calendar.MONTH, Calendar.MONTH,
     };
 
     // Map index into pattern character string to DateFormat field number
@@ -682,6 +683,8 @@ public class SimpleDateFormat extends DateFormat {
         /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD, 
         /*c*/   DateFormat.STANDALONE_DAY_FIELD,
         /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
+        /*Q*/   DateFormat.MONTH_FIELD,
+        /*q*/   DateFormat.STANDALONE_MONTH_FIELD,
     };
 
     /**
@@ -739,7 +742,9 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
-            if (count >= 4)
+            if (count == 5) {
+                buf.append(formatData.narrowEras[value]);
+            } else if (count == 4)
                buf.append(formatData.eraNames[value]);
             else
                buf.append(formatData.eras[value]);
@@ -793,9 +798,11 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 9: // 'E' - DAY_OF_WEEK
-            if (count >= 4)
+            if (count == 5) {
+                buf.append(formatData.narrowWeekdays[value]);
+            } else if (count == 4)
                 buf.append(formatData.weekdays[value]);
-            else // count < 4, use abbreviated form if exists
+            else // count <= 3, use abbreviated form if exists
                 buf.append(formatData.shortWeekdays[value]);
             break;
         case 14: // 'a' - AM_PM
@@ -900,6 +907,22 @@ public class SimpleDateFormat extends DateFormat {
                 buf.append(formatData.standaloneShortMonths[value]);
             else
                 zeroPaddingNumber(buf, value+1, count, maxIntCount);
+            break;
+        case 27: // 'Q' - QUARTER
+            if (count >= 4)
+                buf.append(formatData.quarters[value/4]);
+            else if (count == 3)
+                buf.append(formatData.shortQuarters[value/4]);
+            else
+                zeroPaddingNumber(buf, (value/4)+1, count, maxIntCount);
+            break;
+        case 28: // 'q' - STANDALONE QUARTER
+            if (count == 4)
+                buf.append(formatData.standaloneQuarters[value/4]);
+            else if (count == 3)
+                buf.append(formatData.standaloneShortQuarters[value/4]);
+            else
+                zeroPaddingNumber(buf, (value/4)+1, count, maxIntCount);
             break;
         default:
             // case 3: // 'd' - DATE
@@ -1289,6 +1312,53 @@ public class SimpleDateFormat extends DateFormat {
             }
         return -start;
     }
+
+    /**
+     * Attempt to match the text at a given position against an array of quarter
+     * strings.  Since multiple strings in the array may match (for
+     * example, if the array contains "a", "ab", and "abc", all will match
+     * the input string "abcd") the longest match is returned.  As a side
+     * effect, the given field of <code>cal</code> is set to the index
+     * of the best match, if there is one.
+     * @param text the time text being parsed.
+     * @param start where to start parsing.
+     * @param field the date field being parsed.
+     * @param data the string array to parsed.
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * sets the <code>cal</code> field <code>field</code> to the index
+     * of the best match, if matching succeeded.
+     * @stable ICU 2.0
+     */
+    protected int matchQuarterString(String text, int start, int field, String[] data, Calendar cal)
+    {
+        int i = 0;
+        int count = data.length;
+
+        // There may be multiple strings in the data[] array which begin with
+        // the same prefix (e.g., Cerven and Cervenec (June and July) in Czech).
+        // We keep track of the longest match, and return that.  Note that this
+        // unfortunately requires us to test all array elements.
+        int bestMatchLength = 0, bestMatch = -1;
+        for (; i<count; ++i) {
+            int length = data[i].length();
+            // Always compare if we have no match yet; otherwise only compare
+            // against potentially better matches (longer strings).
+            if (length > bestMatchLength &&
+                text.regionMatches(true, start, data[i], 0, length)) {
+                bestMatch = i;
+                bestMatchLength = length;
+            }
+        }
+        
+        if (bestMatch >= 0) {
+            cal.set(field, bestMatch * 3);
+            return start + bestMatchLength;
+        }
+        
+        return -start;
+    }
+    
     /**
      * find time zone 'text' matched zoneStrings and set cal
      */
@@ -1445,7 +1515,11 @@ public class SimpleDateFormat extends DateFormat {
         switch (patternCharIndex)
             {
             case 0: // 'G' - ERA
-                return matchString(text, start, Calendar.ERA, formatData.eras, cal);
+                if (count == 4) {
+                    return matchString(text, start, Calendar.ERA, formatData.eraNames, cal);
+                } else {
+                    return matchString(text, start, Calendar.ERA, formatData.eras, cal);
+                }
             case 1: // 'y' - YEAR
                 // If there are 3 or more YEAR pattern characters, this indicates
                 // that the year value is to be treated literally, without any
@@ -1496,6 +1570,29 @@ public class SimpleDateFormat extends DateFormat {
                                                formatData.shortMonths, cal);
                         }
                     }
+            case 26: // 'L' - STAND_ALONE_MONTH
+                if (count <= 2) // i.e., M or MM.
+                    {
+                        // Don't want to parse the month if it is a string
+                        // while pattern uses numeric style: M or MM.
+                        // [We computed 'value' above.]
+                        cal.set(Calendar.MONTH, value - 1);
+                        return pos.getIndex();
+                    }
+                else
+                    {
+                        // count >= 3 // i.e., MMM or MMMM
+                        // Want to be able to parse both short and long forms.
+                        // Try count == 4 first:
+                        int newStart = matchString(text, start, Calendar.MONTH,
+                                                   formatData.standaloneMonths, cal);
+                        if (newStart > 0) {
+                            return newStart;
+                        } else { // count == 4 failed, now try count == 3
+                            return matchString(text, start, Calendar.MONTH,
+                                               formatData.standaloneShortMonths, cal);
+                        }
+                    }
             case 4: // 'k' - HOUR_OF_DAY (1..24)
                 // [We computed 'value' above.]
                 if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
@@ -1521,14 +1618,26 @@ public class SimpleDateFormat extends DateFormat {
                 return pos.getIndex();
             case 9: { // 'E' - DAY_OF_WEEK
                 // Want to be able to parse both short and long forms.
-                // Try count == 4 (DDDD) first:
+                // Try count == 4 (EEEE) first:
                 int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
                                            formatData.weekdays, cal);
                 if (newStart > 0) {
                     return newStart;
-                } else { // DDDD failed, now try DDD
+                } else { // EEEE failed, now try EEE
                     return matchString(text, start, Calendar.DAY_OF_WEEK,
                                        formatData.shortWeekdays, cal);
+                }
+            }
+            case 25: { // 'c' - STAND_ALONE_DAY_OF_WEEK
+                // Want to be able to parse both short and long forms.
+                // Try count == 4 (cccc) first:
+                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
+                                           formatData.standaloneWeekdays, cal);
+                if (newStart > 0) {
+                    return newStart;
+                } else { // cccc failed, now try ccc
+                    return matchString(text, start, Calendar.DAY_OF_WEEK,
+                                       formatData.standaloneShortWeekdays, cal);
                 }
             }
             case 14: // 'a' - AM_PM
@@ -1656,6 +1765,54 @@ public class SimpleDateFormat extends DateFormat {
                     cal.set(Calendar.ZONE_OFFSET, offset);
 
                     return pos.getIndex();
+                }
+                
+            case 27: // 'Q' - QUARTER
+                if (count <= 2) // i.e., Q or QQ.
+                {
+                    // Don't want to parse the quarter if it is a string
+                    // while pattern uses numeric style: Q or QQ.
+                    // [We computed 'value' above.]
+                    cal.set(Calendar.MONTH, (value - 1) * 3);
+                    return pos.getIndex();
+                }
+            else
+                {
+                    // count >= 3 // i.e., QQQ or QQQQ
+                    // Want to be able to parse both short and long forms.
+                    // Try count == 4 first:
+                    int newStart = matchQuarterString(text, start, Calendar.MONTH,
+                                               formatData.quarters, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    } else { // count == 4 failed, now try count == 3
+                        return matchQuarterString(text, start, Calendar.MONTH,
+                                           formatData.shortQuarters, cal);
+                    }
+                }
+                
+            case 28: // 'q' - STANDALONE QUARTER
+                if (count <= 2) // i.e., q or qq.
+                {
+                    // Don't want to parse the quarter if it is a string
+                    // while pattern uses numeric style: q or qq.
+                    // [We computed 'value' above.]
+                    cal.set(Calendar.MONTH, (value - 1) * 3);
+                    return pos.getIndex();
+                }
+            else
+                {
+                    // count >= 3 // i.e., qqq or qqqq
+                    // Want to be able to parse both short and long forms.
+                    // Try count == 4 first:
+                    int newStart = matchQuarterString(text, start, Calendar.MONTH,
+                                               formatData.standaloneQuarters, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    } else { // count == 4 failed, now try count == 3
+                        return matchQuarterString(text, start, Calendar.MONTH,
+                                           formatData.standaloneShortQuarters, cal);
+                    }
                 }
 
             default:
