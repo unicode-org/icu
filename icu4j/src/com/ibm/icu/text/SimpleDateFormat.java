@@ -917,7 +917,7 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(buf, (value/4)+1, count, maxIntCount);
             break;
         case 28: // 'q' - STANDALONE QUARTER
-            if (count == 4)
+            if (count >= 4)
                 buf.append(formatData.standaloneQuarters[value/4]);
             else if (count == 3)
                 buf.append(formatData.standaloneShortQuarters[value/4]);

@@ -960,24 +960,24 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);
 
         ampms = calData.getStringArray("AmPmMarkers");
-/*
-        quarters = calData.getStringArray("quarters", "wide");
-        shortMonths = calData.getStringArray("quarters", "abbreviated");
-
-        try {
-           standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
-        } 
-        catch (MissingResourceException e) {
-           standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
-        }
-
-        try {
-           standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
-        } 
-        catch (MissingResourceException e) {
-            standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
-        }
-*/
+        
+//        quarters = calData.getStringArray("quarters", "wide");
+//        shortMonths = calData.getStringArray("quarters", "abbreviated");
+//
+//        try {
+//           standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
+//        } 
+//        catch (MissingResourceException e) {
+//           standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
+//        }
+//
+//        try {
+//           standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
+//        } 
+//        catch (MissingResourceException e) {
+//            standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
+//        }
+        
 /*  THE FOLLOWING DOESN'T WORK; A COUNTRY LOCALE WITH ONE ZONE BLOCKS THE LANGUAGE LOCALE
         // These really do use rb and not calData
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
