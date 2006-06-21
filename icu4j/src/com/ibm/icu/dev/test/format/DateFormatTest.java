@@ -2215,6 +2215,273 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestStandAloneMonths()
+    {
+        String EN_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "yyyy LLLL dd H:mm:ss", "fp", "2004 03 10 16:36:31", "2004 March 10 16:36:31", "2004 03 10 16:36:31",
+            "yyyy LLL dd H:mm:ss",  "fp", "2004 03 10 16:36:31", "2004 Mar 10 16:36:31",   "2004 03 10 16:36:31",
+            "yyyy LLLL dd H:mm:ss", "F",  "2004 03 10 16:36:31", "2004 March 10 16:36:31",
+            "yyyy LLL dd H:mm:ss",  "pf", "2004 Mar 10 16:36:31", "2004 03 10 16:36:31", "2004 Mar 10 16:36:31",
+            
+            "LLLL", "fp", "1970 01 01 0:00:00", "January",   "1970 01 01 0:00:00",
+            "LLLL", "fp", "1970 02 01 0:00:00", "February",  "1970 02 01 0:00:00",
+            "LLLL", "fp", "1970 03 01 0:00:00", "March",     "1970 03 01 0:00:00",
+            "LLLL", "fp", "1970 04 01 0:00:00", "April",     "1970 04 01 0:00:00",
+            "LLLL", "fp", "1970 05 01 0:00:00", "May",       "1970 05 01 0:00:00",
+            "LLLL", "fp", "1970 06 01 0:00:00", "June",      "1970 06 01 0:00:00",
+            "LLLL", "fp", "1970 07 01 0:00:00", "July",      "1970 07 01 0:00:00",
+            "LLLL", "fp", "1970 08 01 0:00:00", "August",    "1970 08 01 0:00:00",
+            "LLLL", "fp", "1970 09 01 0:00:00", "September", "1970 09 01 0:00:00",
+            "LLLL", "fp", "1970 10 01 0:00:00", "October",   "1970 10 01 0:00:00",
+            "LLLL", "fp", "1970 11 01 0:00:00", "November",  "1970 11 01 0:00:00",
+            "LLLL", "fp", "1970 12 01 0:00:00", "December",  "1970 12 01 0:00:00",
+            
+            "LLL", "fp", "1970 01 01 0:00:00", "Jan", "1970 01 01 0:00:00",
+            "LLL", "fp", "1970 02 01 0:00:00", "Feb", "1970 02 01 0:00:00",
+            "LLL", "fp", "1970 03 01 0:00:00", "Mar", "1970 03 01 0:00:00",
+            "LLL", "fp", "1970 04 01 0:00:00", "Apr", "1970 04 01 0:00:00",
+            "LLL", "fp", "1970 05 01 0:00:00", "May", "1970 05 01 0:00:00",
+            "LLL", "fp", "1970 06 01 0:00:00", "Jun", "1970 06 01 0:00:00",
+            "LLL", "fp", "1970 07 01 0:00:00", "Jul", "1970 07 01 0:00:00",
+            "LLL", "fp", "1970 08 01 0:00:00", "Aug", "1970 08 01 0:00:00",
+            "LLL", "fp", "1970 09 01 0:00:00", "Sep", "1970 09 01 0:00:00",
+            "LLL", "fp", "1970 10 01 0:00:00", "Oct", "1970 10 01 0:00:00",
+            "LLL", "fp", "1970 11 01 0:00:00", "Nov", "1970 11 01 0:00:00",
+            "LLL", "fp", "1970 12 01 0:00:00", "Dec", "1970 12 01 0:00:00",
+        };
+        
+        String CS_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "yyyy LLLL dd H:mm:ss", "fp", "2004 04 10 16:36:31", "2004 duben 10 16:36:31", "2004 04 10 16:36:31",
+            "yyyy MMMM dd H:mm:ss", "fp", "2004 04 10 16:36:31", "2004 dubna 10 16:36:31", "2004 04 10 16:36:31",
+            "yyyy LLL dd H:mm:ss",  "fp", "2004 04 10 16:36:31", "2004 4. 10 16:36:31",   "2004 04 10 16:36:31",
+            "yyyy LLLL dd H:mm:ss", "F",  "2004 04 10 16:36:31", "2004 duben 10 16:36:31",
+            "yyyy MMMM dd H:mm:ss", "F",  "2004 04 10 16:36:31", "2004 dubna 10 16:36:31",
+            "yyyy LLLL dd H:mm:ss", "pf", "2004 duben 10 16:36:31", "2004 04 10 16:36:31", "2004 duben 10 16:36:31",
+            "yyyy MMMM dd H:mm:ss", "pf", "2004 dubna 10 16:36:31", "2004 04 10 16:36:31", "2004 dubna 10 16:36:31",
+            
+            "LLLL", "fp", "1970 01 01 0:00:00", "leden",               "1970 01 01 0:00:00",
+            "LLLL", "fp", "1970 02 01 0:00:00", "\u00FAnor",           "1970 02 01 0:00:00",
+            "LLLL", "fp", "1970 03 01 0:00:00", "b\u0159ezen",         "1970 03 01 0:00:00",
+            "LLLL", "fp", "1970 04 01 0:00:00", "duben",               "1970 04 01 0:00:00",
+            "LLLL", "fp", "1970 05 01 0:00:00", "kv\u011Bten",         "1970 05 01 0:00:00",
+            "LLLL", "fp", "1970 06 01 0:00:00", "\u010Derven",         "1970 06 01 0:00:00",
+            "LLLL", "fp", "1970 07 01 0:00:00", "\u010Dervenec",       "1970 07 01 0:00:00",
+            "LLLL", "fp", "1970 08 01 0:00:00", "srpen",               "1970 08 01 0:00:00",
+            "LLLL", "fp", "1970 09 01 0:00:00", "z\u00E1\u0159\u00ED", "1970 09 01 0:00:00",
+            "LLLL", "fp", "1970 10 01 0:00:00", "\u0159\u00EDjen",     "1970 10 01 0:00:00",
+            "LLLL", "fp", "1970 11 01 0:00:00", "listopad",            "1970 11 01 0:00:00",
+            "LLLL", "fp", "1970 12 01 0:00:00", "prosinec",            "1970 12 01 0:00:00",
+
+            "LLL", "fp", "1970 01 01 0:00:00", "1.",  "1970 01 01 0:00:00",
+            "LLL", "fp", "1970 02 01 0:00:00", "2.",  "1970 02 01 0:00:00",
+            "LLL", "fp", "1970 03 01 0:00:00", "3.",  "1970 03 01 0:00:00",
+            "LLL", "fp", "1970 04 01 0:00:00", "4.",  "1970 04 01 0:00:00",
+            "LLL", "fp", "1970 05 01 0:00:00", "5.",  "1970 05 01 0:00:00",
+            "LLL", "fp", "1970 06 01 0:00:00", "6.",  "1970 06 01 0:00:00",
+            "LLL", "fp", "1970 07 01 0:00:00", "7.",  "1970 07 01 0:00:00",
+            "LLL", "fp", "1970 08 01 0:00:00", "8.",  "1970 08 01 0:00:00",
+            "LLL", "fp", "1970 09 01 0:00:00", "9.",  "1970 09 01 0:00:00",
+            "LLL", "fp", "1970 10 01 0:00:00", "10.", "1970 10 01 0:00:00",
+            "LLL", "fp", "1970 11 01 0:00:00", "11.", "1970 11 01 0:00:00",
+            "LLL", "fp", "1970 12 01 0:00:00", "12.", "1970 12 01 0:00:00",
+        };
+        
+        expect(EN_DATA, new Locale("en", "", ""));
+        expect(CS_DATA, new Locale("cs", "", ""));
+    }
+    
+    public void TestStandAloneDays()
+    {
+        String EN_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "cccc", "fp", "1970 01 04 0:00:00", "Sunday",    "1970 01 04 0:00:00",
+            "cccc", "fp", "1970 01 05 0:00:00", "Monday",    "1970 01 05 0:00:00",
+            "cccc", "fp", "1970 01 06 0:00:00", "Tuesday",   "1970 01 06 0:00:00",
+            "cccc", "fp", "1970 01 07 0:00:00", "Wednesday", "1970 01 07 0:00:00",
+            "cccc", "fp", "1970 01 01 0:00:00", "Thursday",  "1970 01 01 0:00:00",
+            "cccc", "fp", "1970 01 02 0:00:00", "Friday",    "1970 01 02 0:00:00",
+            "cccc", "fp", "1970 01 03 0:00:00", "Saturday",  "1970 01 03 0:00:00",
+            
+            "ccc", "fp", "1970 01 04 0:00:00", "Sun", "1970 01 04 0:00:00",
+            "ccc", "fp", "1970 01 05 0:00:00", "Mon", "1970 01 05 0:00:00",
+            "ccc", "fp", "1970 01 06 0:00:00", "Tue", "1970 01 06 0:00:00",
+            "ccc", "fp", "1970 01 07 0:00:00", "Wed", "1970 01 07 0:00:00",
+            "ccc", "fp", "1970 01 01 0:00:00", "Thu", "1970 01 01 0:00:00",
+            "ccc", "fp", "1970 01 02 0:00:00", "Fri", "1970 01 02 0:00:00",
+            "ccc", "fp", "1970 01 03 0:00:00", "Sat", "1970 01 03 0:00:00",
+        };
+            
+        String CS_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "cccc", "fp", "1970 01 04 0:00:00", "ned\u011Ble",       "1970 01 04 0:00:00",
+            "cccc", "fp", "1970 01 05 0:00:00", "pond\u011Bl\u00ED", "1970 01 05 0:00:00",
+            "cccc", "fp", "1970 01 06 0:00:00", "\u00FAter\u00FD",   "1970 01 06 0:00:00",
+            "cccc", "fp", "1970 01 07 0:00:00", "st\u0159eda",       "1970 01 07 0:00:00",
+            "cccc", "fp", "1970 01 01 0:00:00", "\u010Dtvrtek",      "1970 01 01 0:00:00",
+            "cccc", "fp", "1970 01 02 0:00:00", "p\u00E1tek",        "1970 01 02 0:00:00",
+            "cccc", "fp", "1970 01 03 0:00:00", "sobota",            "1970 01 03 0:00:00",
+            
+            "ccc", "fp", "1970 01 04 0:00:00", "ne",      "1970 01 04 0:00:00",
+            "ccc", "fp", "1970 01 05 0:00:00", "po",      "1970 01 05 0:00:00",
+            "ccc", "fp", "1970 01 06 0:00:00", "\u00FAt", "1970 01 06 0:00:00",
+            "ccc", "fp", "1970 01 07 0:00:00", "st",      "1970 01 07 0:00:00",
+            "ccc", "fp", "1970 01 01 0:00:00", "\u010Dt", "1970 01 01 0:00:00",
+            "ccc", "fp", "1970 01 02 0:00:00", "p\u00E1", "1970 01 02 0:00:00",
+            "ccc", "fp", "1970 01 03 0:00:00", "so",      "1970 01 03 0:00:00",
+        };
+        
+        expect(EN_DATA, new Locale("en", "", ""));
+        expect(CS_DATA, new Locale("cs", "", ""));
+    }
+    
+    public void TestNarrowNames()
+    {
+        String EN_DATA[] = {
+                "yyyy MM dd HH:mm:ss",
+
+                "yyyy MMMMM dd H:mm:ss", "2004 03 10 16:36:31", "2004 M 10 16:36:31",
+                "yyyy LLLLL dd H:mm:ss",  "2004 03 10 16:36:31", "2004 M 10 16:36:31",
+                
+                "MMMMM", "1970 01 01 0:00:00", "J",
+                "MMMMM", "1970 02 01 0:00:00", "F",
+                "MMMMM", "1970 03 01 0:00:00", "M",
+                "MMMMM", "1970 04 01 0:00:00", "A",
+                "MMMMM", "1970 05 01 0:00:00", "M",
+                "MMMMM", "1970 06 01 0:00:00", "J",
+                "MMMMM", "1970 07 01 0:00:00", "J",
+                "MMMMM", "1970 08 01 0:00:00", "A",
+                "MMMMM", "1970 09 01 0:00:00", "S",
+                "MMMMM", "1970 10 01 0:00:00", "O",
+                "MMMMM", "1970 11 01 0:00:00", "N",
+                "MMMMM", "1970 12 01 0:00:00", "D",
+                
+                "LLLLL", "1970 01 01 0:00:00", "J",
+                "LLLLL", "1970 02 01 0:00:00", "F",
+                "LLLLL", "1970 03 01 0:00:00", "M",
+                "LLLLL", "1970 04 01 0:00:00", "A",
+                "LLLLL", "1970 05 01 0:00:00", "M",
+                "LLLLL", "1970 06 01 0:00:00", "J",
+                "LLLLL", "1970 07 01 0:00:00", "J",
+                "LLLLL", "1970 08 01 0:00:00", "A",
+                "LLLLL", "1970 09 01 0:00:00", "S",
+                "LLLLL", "1970 10 01 0:00:00", "O",
+                "LLLLL", "1970 11 01 0:00:00", "N",
+                "LLLLL", "1970 12 01 0:00:00", "D",
+
+                "EEEEE", "1970 01 04 0:00:00", "S",
+                "EEEEE", "1970 01 05 0:00:00", "M",
+                "EEEEE", "1970 01 06 0:00:00", "T",
+                "EEEEE", "1970 01 07 0:00:00", "W",
+                "EEEEE", "1970 01 01 0:00:00", "T",
+                "EEEEE", "1970 01 02 0:00:00", "F",
+                "EEEEE", "1970 01 03 0:00:00", "S",
+                
+                "ccccc", "1970 01 04 0:00:00", "S",
+                "ccccc", "1970 01 05 0:00:00", "M",
+                "ccccc", "1970 01 06 0:00:00", "T",
+                "ccccc", "1970 01 07 0:00:00", "W",
+                "ccccc", "1970 01 01 0:00:00", "T",
+                "ccccc", "1970 01 02 0:00:00", "F",
+                "ccccc", "1970 01 03 0:00:00", "S",
+            };
+            
+            String CS_DATA[] = {
+                "yyyy MM dd HH:mm:ss",
+
+                "yyyy LLLLL dd H:mm:ss", "2004 04 10 16:36:31", "2004 d 10 16:36:31",
+                "yyyy MMMMM dd H:mm:ss", "2004 04 10 16:36:31", "2004 d 10 16:36:31",
+                
+                "MMMMM", "1970 01 01 0:00:00", "l",
+                "MMMMM", "1970 02 01 0:00:00", "\u00FA",
+                "MMMMM", "1970 03 01 0:00:00", "b",
+                "MMMMM", "1970 04 01 0:00:00", "d",
+                "MMMMM", "1970 05 01 0:00:00", "k",
+                "MMMMM", "1970 06 01 0:00:00", "\u010D",
+                "MMMMM", "1970 07 01 0:00:00", "\u010D",
+                "MMMMM", "1970 08 01 0:00:00", "s",
+                "MMMMM", "1970 09 01 0:00:00", "z",
+                "MMMMM", "1970 10 01 0:00:00", "\u0159",
+                "MMMMM", "1970 11 01 0:00:00", "l",
+                "MMMMM", "1970 12 01 0:00:00", "p",
+                
+                "LLLLL", "1970 01 01 0:00:00", "l",
+                "LLLLL", "1970 02 01 0:00:00", "\u00FA",
+                "LLLLL", "1970 03 01 0:00:00", "b",
+                "LLLLL", "1970 04 01 0:00:00", "d",
+                "LLLLL", "1970 05 01 0:00:00", "k",
+                "LLLLL", "1970 06 01 0:00:00", "\u010D",
+                "LLLLL", "1970 07 01 0:00:00", "\u010D",
+                "LLLLL", "1970 08 01 0:00:00", "s",
+                "LLLLL", "1970 09 01 0:00:00", "z",
+                "LLLLL", "1970 10 01 0:00:00", "\u0159",
+                "LLLLL", "1970 11 01 0:00:00", "l",
+                "LLLLL", "1970 12 01 0:00:00", "p",
+
+                "EEEEE", "1970 01 04 0:00:00", "N",
+                "EEEEE", "1970 01 05 0:00:00", "P",
+                "EEEEE", "1970 01 06 0:00:00", "\u00DA",
+                "EEEEE", "1970 01 07 0:00:00", "S",
+                "EEEEE", "1970 01 01 0:00:00", "\u010C",
+                "EEEEE", "1970 01 02 0:00:00", "P",
+                "EEEEE", "1970 01 03 0:00:00", "S",
+
+                "ccccc", "1970 01 04 0:00:00", "N",
+                "ccccc", "1970 01 05 0:00:00", "P",
+                "ccccc", "1970 01 06 0:00:00", "\u00DA",
+                "ccccc", "1970 01 07 0:00:00", "S",
+                "ccccc", "1970 01 01 0:00:00", "\u010C",
+                "ccccc", "1970 01 02 0:00:00", "P",
+                "ccccc", "1970 01 03 0:00:00", "S",
+            };
+            
+            expectFormat(EN_DATA, new Locale("en", "", ""));
+            expectFormat(CS_DATA, new Locale("cs", "", ""));
+    }
+    
+    public void TestEras()
+    {
+        String EN_DATA[] = {
+            "yyyy MM dd",
+
+            "MMMM dd yyyy G",    "fp", "1951 07 17", "July 17 1951 AD",          "1951 07 17",
+            "MMMM dd yyyy GG",   "fp", "1951 07 17", "July 17 1951 AD",          "1951 07 17",
+            "MMMM dd yyyy GGG",  "fp", "1951 07 17", "July 17 1951 AD",          "1951 07 17",
+            "MMMM dd yyyy GGGG", "fp", "1951 07 17", "July 17 1951 Anno Domini", "1951 07 17",
+
+            "MMMM dd yyyy G",    "fp", "-438 07 17", "July 17 0439 BC",            "-438 07 17",
+            "MMMM dd yyyy GG",   "fp", "-438 07 17", "July 17 0439 BC",            "-438 07 17",
+            "MMMM dd yyyy GGG",  "fp", "-438 07 17", "July 17 0439 BC",            "-438 07 17",
+            "MMMM dd yyyy GGGG", "fp", "-438 07 17", "July 17 0439 Before Christ", "-438 07 17",
+       };
+        
+        expect(EN_DATA, new Locale("en", "", ""));
+    }
+/*    
+    public void TestQuarters()
+    {
+        String EN_DATA[] = {
+            "yyyy MM dd",
+
+            "Q",    "fp", "1970 01 01", "1",           "1970 01 01",
+            "QQ",   "fp", "1970 04 01", "02",          "1970 04 01",
+            "QQQ",  "fp", "1970 07 01", "Q3",          "1970 07 01",
+            "QQQQ", "fp", "1970 10 01", "4th quarter", "1970 10 01",
+
+            "q",    "fp", "1970 01 01", "1",           "1970 01 01",
+            "qq",   "fp", "1970 04 01", "02",          "1970 04 01",
+            "qqq",  "fp", "1970 07 01", "Q3",          "1970 07 01",
+            "qqqq", "fp", "1970 10 01", "4th quarter", "1970 10 01",
+       };
+        
+        expect(EN_DATA, new Locale("en", "", ""));
+    }
+*/    
     /**
      * Test parsing.  Input is an array that starts with the following
      * header:
@@ -2277,6 +2544,58 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                       expstr);
             }
         }    
+    }
+    
+    /**
+     * Test formatting.  Input is an array of String that starts
+     * with a single 'header' element
+     *
+     * [0]   = reference dateformat pattern string (ref)
+     *
+     * followed by test cases, each of which is 4 or 5 elements:
+     *
+     * [i]   = test dateformat pattern string (test), or null to reuse prior test pattern
+     * [i+1] = data string A
+     * [i+2] = data string B
+     *
+     * Formats a date, checks the result.
+     *
+     * Examples:
+     * "y/M/d H:mm:ss.SSS", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567"
+     * -- ref.parse A, get t0
+     * -- test.format t0, get r0
+     * -- compare r0 to B, fail if not equal
+     */
+    void expectFormat(String[] data, Locale loc)
+    {
+        int i = 1;
+        SimpleDateFormat univ = new SimpleDateFormat("EE G yyyy MM dd HH:mm:ss.SSS zzz", loc);
+        String currentPat = null;
+        SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
+
+        while (i<data.length) {
+            SimpleDateFormat fmt = new SimpleDateFormat("", loc);
+            String pattern  = data[i++];
+            if (pattern != null) {
+                fmt.applyPattern(pattern);
+                currentPat = pattern;
+            }
+
+            String datestr = data[i++];
+            String string = data[i++];
+            Date date = null;
+            
+            try {
+                date = ref.parse(datestr);
+            } catch (ParseException e) {
+                errln("FAIL: Internal test error; can't parse " + datestr);
+                continue;
+            }
+            
+            assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
+                         string,
+                         fmt.format(date));
+        }
     }
 
     /**
