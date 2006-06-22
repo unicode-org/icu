@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -142,6 +142,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
         return;
     } else if(ubidi_getParagraph(pParaBiDi, start, NULL, NULL, NULL, pErrorCode) !=
               ubidi_getParagraph(pParaBiDi, limit-1, NULL, NULL, NULL, pErrorCode)) {
+        /* the line crosses a paragraph boundary */
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -150,6 +151,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     pLineBiDi->pParaBiDi=NULL;          /* mark unfinished setLine */
     pLineBiDi->text=pParaBiDi->text+start;
     length=pLineBiDi->length=limit-start;
+    pLineBiDi->resultLength=pLineBiDi->originalLength=length;
     pLineBiDi->paraLevel=GET_PARALEVEL(pParaBiDi, start);
     pLineBiDi->paraCount=pParaBiDi->paraCount;
     pLineBiDi->runs=NULL;
@@ -469,7 +471,6 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
                 tempRun = runs[firstRun];
                 runs[firstRun]=runs[endRun];
                 runs[endRun]=tempRun;
-
                 ++firstRun;
                 --endRun;
             }
@@ -496,7 +497,6 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
             tempRun=runs[firstRun];
             runs[firstRun]=runs[runCount];
             runs[runCount]=tempRun;
-
             ++firstRun;
             --runCount;
         }
@@ -622,11 +622,9 @@ ubidi_getRuns(UBiDi *pBiDi) {
                 reorderLine(pBiDi, minLevel, maxLevel);
 
                 /* now add the direction flags and adjust the visualLimit's to be just that */
-                ADD_ODD_BIT_FROM_LEVEL(runs[0].logicalStart, levels[runs[0].logicalStart]);
-                limit=runs[0].visualLimit;
-
                 /* this loop will also handle the trailing WS run */
-                for(i=1; i<runCount; ++i) {
+                limit=0;
+                for(i=0; i<runCount; ++i) {
                     ADD_ODD_BIT_FROM_LEVEL(runs[i].logicalStart, levels[runs[i].logicalStart]);
                     limit=runs[i].visualLimit+=limit;
                 }

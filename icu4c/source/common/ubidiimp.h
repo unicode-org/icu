@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -119,7 +119,7 @@ enum {
             (UBiDiLevel)((ubidi)->defaultParaLevel ? (ubidi)->dirProps[index]>>7 \
                                                    : (ubidi)->paraLevel)
 
-/* Paragraph type for multiple paragraph support ---   -------------------- */
+/* Paragraph type for multiple paragraph support ---------------------------- */
 typedef int32_t Para;
 
 #define CR  0x000D
@@ -147,6 +147,24 @@ typedef struct Run {
 U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi);
 
+/* InsertPoints structure for noting where to put BiDi marks ---------------- */
+
+typedef struct Point {
+    int32_t pos;            /* position in text */
+    UChar c;                /* UChar to insert */
+    char  where;            /* BEFORE or AFTER */
+    char  filler;           /* pack to 8 bytes */
+} Point;
+
+typedef struct InsertPoints {
+    int32_t capacity;       /* number of points allocated */
+    int32_t size;           /* number of points used */
+    int32_t confirmed;      /* number of points confirmed */
+    UErrorCode errorCode;   /* for eventual memory shortage */
+    Point *points;          /* pointer to array of points */
+} InsertPoints;
+
+
 /* UBiDi structure ----------------------------------------------------------- */
 
 struct UBiDi {
@@ -162,7 +180,20 @@ struct UBiDi {
     const UChar *text;
 
     /* length of the current text */
+    int32_t originalLength;
+
+    /* if the UBIDI_OPTION_STREAMING option is set, this is the length
+     * of text actually processed by ubidi_setPara, which may be shorter than
+     * the original length.
+     * Otherwise, it is identical to the original length.
+     */
     int32_t length;
+
+    /* if the UBIDI_OPTION_REMOVE_CONTROLS option is set, and/or
+     * marks are allowed to be inserted in one of the reordering mode, the
+     * length of the result string may be different from the processed length.
+     */
+    int32_t resultLength;
 
     /* memory sizes in bytes */
     int32_t dirPropsSize, levelsSize, parasSize, runsSize;
@@ -182,7 +213,18 @@ struct UBiDi {
 
     /* are we performing an approximation of the "inverse BiDi" algorithm? */
     UBool isInverse;
-    UBool isInverse2;
+
+    /* are we using the basic algorithm or its variation? */
+    UBiDiReorderingMode reorderingMode;
+
+    /* UBIDI_REORDER_xxx values must be ordered so that all the regular
+     * logical to visual modes come first, and all inverse BiDi modes
+     * come last.
+     */
+    #define UBIDI_REORDER_LAST_LOGICAL_TO_VISUAL    UBIDI_REORDER_NUMBERS_SPECIAL
+
+    /* bitmask for reordering options */
+    uint16_t reorderingOptions;
 
     /* must block separators receive level 0? */
     UBool orderParagraphsLTR;
@@ -220,6 +262,16 @@ struct UBiDi {
 
     /* for non-mixed text, we only need a tiny array of runs (no malloc()) */
     Run simpleRuns[1];
+
+    /* for inverse Bidi with insertion of directional marks */
+    InsertPoints insertPoints;
+
+    /* for option UBIDI_OPTION_REMOVE_CONTROLS */
+    int32_t countBiDiControls;
+
+    /* for Bidi class callback */
+    UBiDiClassCallback *fnClassCallback;    /* action pointer */
+    const void *coClassCallback;            /* context pointer */
 };
 
 #define IS_VALID_PARA(x) ((x) && ((x)->pParaBiDi==(x)))
