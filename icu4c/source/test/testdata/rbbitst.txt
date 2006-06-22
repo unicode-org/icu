@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2006 International Business Machines
+# Copyright (c) 2001-2006 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -218,19 +218,19 @@ doing? •This\n<100> costs $20,00,000. •</data>
 "This isn't it." •Hi! \
 •This is a simple sample sentence. •(This is it.) •This is a simple sample sentence. •\
 "This isn't it." •\
-Hi! •This is a simple sample sentence. •It does not have to make any sense as you can see. •Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. •Che la dritta via aveo smarrita. •He said, that I said, that you said!•! •Don't rock the boat.\u2029•Because I am the daddy, that is why. 
-•Not on my time (el timo.)•! •</data>
+Hi! •This is a simple sample sentence. •It does not have to make any sense as you can see. •Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. •Che la dritta via aveo smarrita. •He said, that I said, that you said!! •Don't rock the boat.\u2029•Because I am the daddy, that is why. 
+•Not on my time (el timo.)! •</data>
 
-<data>•Hello.  •So what!•!\u2029•"But now," he said, \
+<data>•Hello.  •So what!!\u2029•"But now," he said, \
 "I know!" •\
-Harris thumbed down several, including "Away We Go" (which became the huge success Oklahoma!)•. •One species, B. anthracis, is highly virulent.
+Harris thumbed down several, including "Away We Go" (which became the huge success Oklahoma!). •One species, B. anthracis, is highly virulent.
 •Wolf said about Sounder:\
 "Beautifully thought-out and directed." •\
 Have you ever said, "This is where\tI shall live"? •He answered, \
-"You may not!" •Another popular saying is: "How do you do?"•. \n•\
+"You may not!" •Another popular saying is: "How do you do?". \n•\
 Yet another popular saying is: \
 'I'm fine thanks.' •\
-What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" tall!•!\
+What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tall!!\
 •Now\r<100>is\n<100>the\r\n<100>time\n<100>\r<100>for\r<100>\r<100></data>
 
 <data>•No breaks when . is surrounded by UPPER.Case letters.  •</data>
