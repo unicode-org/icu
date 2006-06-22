@@ -692,7 +692,8 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // old rule syntax
 
     utext_setNativeIndex(fText, offset);
-    if (offset == 0) {
+    if (offset==0 || 
+        offset==1  && utext_getNativeIndex(fText)==0) {
         return next();
     }
     result = previous();
