@@ -7,13 +7,19 @@
 // *
 // ***************************************************************************
 es_UY{
+    Currencies{
+        UYU{
+            "$U",
+            "peso uruguayo",
+        }
+    }
     NumberPatterns{
         "#,##0.###",
         "¤ #,##0.00;(¤#,##0.00)",
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimePatterns{

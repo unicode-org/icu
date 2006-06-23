@@ -19,7 +19,7 @@ ga_IE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.31"}
+    Version{"1.32"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

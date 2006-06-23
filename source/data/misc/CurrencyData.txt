@@ -68,7 +68,7 @@ CurrencyData:table(nofallback){
         AU { "AUD" } // AUSTRALIA: Australian Dollar
         AW { "AWG" } // ARUBA: Aruban Guilder
         AX { "EUR" } // Aland Islands: Euro
-        AZ { "AZM" } // AZERBAIJAN: Azerbaijanian Manat
+        AZ { "AZN" } // AZERBAIJAN: Azerbaijanian Manat
         BA { "BAM" } // BOSNIA AND HERZEGOVINA: Convertible Marks
         BB { "BBD" } // BARBADOS: Barbados Dollar
         BD { "BDT" } // BANGLADESH: Taka
@@ -136,6 +136,7 @@ CurrencyData:table(nofallback){
         GD { "XCD" } // GRENADA: East Caribbean Dollar
         GE { "GEL" } // GEORGIA: Lari
         GF { "EUR" } // FRENCH GUIANA: Euro
+        GG { "GBP" } // GUERNSEY: Pound Sterling
         GH { "GHC" } // GHANA: Cedi
         GI { "GIP" } // GIBRALTAR: Gibraltar Pound
         GL { "DKK" } // GREENLAND: Danish Krone
@@ -160,6 +161,7 @@ CurrencyData:table(nofallback){
         IE { "EUR" } // IRELAND: Euro
         IE_PREEURO { "IEP" }
         IL { "ILS" } // ISRAEL: New Israeli Sheqel
+        IM { "GBP" } // ISLE OF MAN: Pound Sterling
         IN { "INR" } // INDIA: Indian Rupee
         IO { "USD" } // BRITISH INDIAN OCEAN TERRITORY: US Dollar
         IQ { "IQD" } // IRAQ: Iraqi Dinar
@@ -167,6 +169,7 @@ CurrencyData:table(nofallback){
         IS { "ISK" } // ICELAND: Iceland Krona
         IT { "EUR" } // ITALY: Euro
         IT_PREEURO { "ITL" }
+        JE { "GBP" } // JERSEY: Pound Sterling
         JM { "JMD" } // JAMAICA: Jamaican Dollar
         JO { "JOD" } // JORDAN: Jordanian Dinar
         JP { "JPY" } // JAPAN: Yen
@@ -213,7 +216,7 @@ CurrencyData:table(nofallback){
         MW { "MWK" } // MALAWI: Kwacha
         MX { "MXN" } // MEXICO: Mexican Peso
         MY { "MYR" } // MALAYSIA: Malaysian Ringgit
-        MZ { "MZM" } // MOZAMBIQUE: Metical
+        MZ { "MZN" } // MOZAMBIQUE: Metical
         NA { "ZAR" } // NAMIBIA: Rand
         NC { "XPF" } // NEW CALEDONIA: CFP Franc
         NE { "XOF" } // NIGER: CFA Franc BCEAO
@@ -254,7 +257,8 @@ CurrencyData:table(nofallback){
         SE { "SEK" } // SWEDEN: Swedish Krona
         SG { "SGD" } // SINGAPORE: Singapore Dollar
         SH { "SHP" } // SAINT HELENA: Saint Helena Pound
-        SI { "SIT" } // SLOVENIA: Tolar
+        SI { "EUR" } // SLOVENIA: Euro
+        SI_PREEURO { "SIT" } // SLOVENIA: Tolar
         SJ { "NOK" } // SVALBARD AND JAN MAYEN: Norwegian Krone
         SK { "SKK" } // SLOVAKIA: Slovak Koruna
         SL { "SLL" } // SIERRA LEONE: Leone

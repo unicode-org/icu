@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/eo.xml
  */
 eo{
+    AuxExemplarCharacters{"[q w-y]"}
     Countries{
         AD{"Andoro"}
         AE{"Unuiĝintaj Arabaj Emirlandos"}
@@ -236,7 +237,7 @@ eo{
         ZM{"Zambio"}
         ZW{"Zimbabvo"}
     }
-    ExemplarCharacters{"[a-c ĉ d-g ĝ h ĥ i j ĵ k-s ŝ t u ŭ v-z]"}
+    ExemplarCharacters{"[a-c ĉ d-g ĝ h ĥ i j ĵ k-p r s ŝ t u ŭ v z]"}
     Languages{
         aa{"afara"}
         ab{"abĥaza"}
@@ -394,7 +395,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.43"}
+    Version{"1.46"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -27,7 +27,7 @@ it_CH{
         "#,##0%",
         "#E0",
     }
-    Version{"1.32"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -44,6 +44,66 @@ it_CH{
                 "d-MMM-yy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{"MMMM"}
+                MMMdd{"dd.MMM"}
+                MMdd{"MM-dd"}
+                mmssSS{"mm:ss.SS"}
+                ww{"ww"}
+                yyMM{"MM.yy"}
+                yyMMMEEEd{"EEE, d. MMM yy"}
+                yyMMMEEEdd{"EEE dd.MMM yy"}
+                yyMMMd{"d. MMM yy"}
+                yyMMd{"d.MM.yy"}
+                yyMMdd{"dd.MM.yy"}
+                yyMMddHHmm{"dd.MM.yy HH:mm"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMMEEEEd{"EEEE,d. MMMM yyyy"}
+                yyyyMMMMEEEEdd{"EEEE,dd. MMMM yyyy"}
+                yyyyMMMMEEEd{"EEE, d. MMMM yyyy"}
+                yyyyMMMd{"d. MMM yyyy"}
+                yyyyMMdd{"dd.MM.yyyy"}
+                yyyyMMddHHmmss{"dd.MM.yyyy HH:mm:ss"}
+            }
+            fields{
+                day{
+                    dn{"giorno"}
+                }
+                dayperiod{
+                    dn{"periodo del giorno"}
+                }
+                era{
+                    dn{"era"}
+                }
+                hour{
+                    dn{"ora"}
+                }
+                minute{
+                    dn{"minuto"}
+                }
+                month{
+                    dn{"mese"}
+                }
+                second{
+                    dn{"secondo"}
+                }
+                week{
+                    dn{"settimana"}
+                }
+                weekday{
+                    dn{"giorno della settimana"}
+                }
+                year{
+                    dn{"anno"}
+                }
+                zone{
+                    dn{"zona"}
+                }
             }
         }
     }

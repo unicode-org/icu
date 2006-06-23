@@ -11,14 +11,6 @@
  */
 zh_TW{
     Version{"1.7"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
     collations{
         default{"stroke"}
     }

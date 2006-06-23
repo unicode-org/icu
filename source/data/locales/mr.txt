@@ -10,7 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/mr.xml
  */
 mr{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
     Countries{
+        BR{"ब्राजील"}
+        DE{"जमिन"}
         IN{"भारत"}
     }
     Currencies{
@@ -19,7 +22,7 @@ mr{
             "INR",
         }
     }
-    ExemplarCharacters{"[‌ ‍ ़ ँ-ः ॑-॔ ०-९ ॐ ऄ-ऋ ॠ ऌ ॡ ऍ-ह ऽ ॽ ा-ॄ ॢ ॣ ॅ-्]"}
+    ExemplarCharacters{"[़ ँ-ः ०-९ ॐ अ-ऍ ए-ऑ ओ-न प-र ल ळ व-ह ऽ-ॅ े-ॉ ो-्]"}
     Languages{
         aa{"अफार"}
         ab{"अबखेजियन"}
@@ -166,23 +169,12 @@ mr{
     LocaleScript{
         "Deva",
     }
-    Version{"1.40"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "म.पू.",
                 "म.नं.",
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
             }
             dayNames{
                 format{

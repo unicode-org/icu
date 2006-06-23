@@ -31,7 +31,7 @@ es_MX{
         "NaN",
         "+",
     }
-    Version{"1.34"}
+    Version{"1.35"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -44,6 +44,9 @@ es_MX{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                yyyyMMdd{"dd/MM/yyyy"}
             }
         }
     }

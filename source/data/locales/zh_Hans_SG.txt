@@ -26,7 +26,7 @@ zh_Hans_SG{
         "#,##0%",
         "#E0",
     }
-    Version{"1.24"}
+    Version{"1.25"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -27,9 +27,9 @@ ur{
     LocaleScript{
         "Arab",
     }
-    Version{"1.25"}
+    Version{"1.26"}
     layout{
-        characters{"right-to-left"}
+        characters{"left-to-right"}
         lines{"top-to-bottom"}
     }
 }

@@ -281,30 +281,21 @@
         <!-- 
             possible values of level are "none", "basic", "moderate", "modern", "comprehensive"
         -->
-        <coverageLevel group="G0" level="comprehensive" org="IBM" draft="false" />
-        <coverageLevel group="G1" level="modern" org="IBM" draft="false" />
-        <coverageLevel group="G2" level="moderate" org="IBM" draft="false" />
-        <coverageLevel group="G3" level="basic" org="IBM" draft="false" />
-        <coverageLevel group="G4" level="basic" org="IBM" draft="false" />
-        <include xpath="//ldml/.*" draft="false"/>
-        <!-- the data for below items are included irrespective of draft status. Should not be required --> 
-        <include xpath="//ldml/.*/week/.*" draft=".*"/>
-        <!-- for DateTimePatterns -->
-        <include xpath=".*Formats/.*FormatLength\[@type='.*'\]/.*Format\[@type='.*'\]/pattern.*" locales="en_PK fa.* he nb root sl_SI sv th vi" draft=".*"/>
-        <!-- for NumberPatterns -->
-        <include xpath=".*Formats/.*FormatLength/.*Format\[@type='.*'\]/pattern.*" locales="en_PK fa.* he nb root sl_SI sv th vi" draft=".*"/>
-        <!-- for NumberElements -->
-        <include xpath="//ldml/.*/symbols/.*" locales="az es_DO es_EC es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_SV fa.* nb root sv vi" draft=".*"/>
-        <!-- for these locales include the draft data too -->
-        <include xpath="//ldml/.*" locales="as as_IN az_Cyrl az_Cyrl_AZ ml ml_IN or or_IN ur ur_PK uz uz_Cyrl uz_Cyrl_UZ uz_Latn uz_Latn_UZ" draft=".*"/>
-        <!-- backwards compatibility for @currency=preeuro -->
-        <include xpath="//ldml/numbers/currencies/currency\[@type='ESP'\]/.*" locales="ca_ES" draft=".*"/>
-        <include xpath="//ldml/numbers/currencies/currency\[@type='PTE'\]/.*" locales="pt_PT" draft=".*"/>
-        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/quarters/quarterContext\[@type='.*'\]/quarterWidth\[@type='.*']/quarter\[@type='.*']" locales="root" draft=".*"/>
+        <coverageLevel group="G0" level="comprehensive" org="IBM"/>
+        <coverageLevel group="G1" level="modern" org="IBM"/>
+        <coverageLevel group="G2" level="moderate" org="IBM"/>
+        <coverageLevel group="G3" level="basic" org="IBM"/>
+        <coverageLevel group="G4" level="basic" org="IBM"/>
+        <include xpath="//ldml/.*"/>
+        <include xpath="//ldml/characters/exemplarCharacters.*" locales="gl" draft="unconfirmed" />
+        <include xpath="//ldml/.*/special/.*"/>
+        <include xpath="//ldml/localeDisplayNames/territories/territory\[@type='DO'].*" locales="fr" draft="unconfirmed" />
+        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/eras.*" locales="bg sl" draft="unconfirmed" />
+        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/quarters/quarterWidth\[@type='wide']/.*" locales="is" draft="unconfirmed" />
         <!-- Exclude unusable data -->
         <exclude xpath="//ldml/posix/messages/.*"/>
-        <include xpath="//supplementalData/.*" draft="false"/>
-        <include xpath="//supplementalMetaData/.*" draft="false"/>
+        <include xpath="//supplementalData/.*"/>
+        <include xpath="//supplementalMetaData/.*"/>
     </paths>
     <overrideFallback>
         <paths fallback="se_NO no_NO" locales="sms_FI sm_FI" draft="false">

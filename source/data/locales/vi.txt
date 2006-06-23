@@ -47,6 +47,7 @@ vi{
         CN{"Trung Quốc"}
         CO{"Cô-lôm-bi-a"}
         CR{"Cốt-xta Ri-ca"}
+        CS{"Séc-bia"}
         CU{"Cu Ba"}
         CV{"Cáp-ve"}
         CY{"Síp"}
@@ -293,7 +294,7 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"1.43"}
+    Version{"1.44"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -75,6 +75,7 @@ af{
         IT{"Italië"}
         JM{"Jamaika"}
         JO{"Jordanië"}
+        JP{"Japan"}
         KE{"Kenia"}
         KG{"Kirgisië"}
         KH{"Kambodja"}
@@ -150,6 +151,16 @@ af{
     ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-o ô ö p-u û v-z ŉ]"}
     Languages{
         af{"Afrikaans"}
+        de{"Duits"}
+        en{"Engels"}
+        es{"Spaans"}
+        fr{"Frans"}
+        he{"Hebreeus"}
+        it{"Italiaans"}
+        ja{"Japannees"}
+        pt{"Portugees"}
+        ru{"Russies"}
+        zh{"Sjinees"}
     }
     LocaleScript{
         "Latn",
@@ -168,23 +179,12 @@ af{
         "NaN",
         "+",
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "vm.",
                 "nm.",
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
             }
             dayNames{
                 format{
@@ -212,6 +212,38 @@ af{
                 abbreviated{
                     "v.C.",
                     "n.C.",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dag"}
+                }
+                era{
+                    dn{"Tydperk"}
+                }
+                hour{
+                    dn{"Uur"}
+                }
+                minute{
+                    dn{"Minuut"}
+                }
+                month{
+                    dn{"Maand"}
+                }
+                second{
+                    dn{"Sekonde"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Dag van die week"}
+                }
+                year{
+                    dn{"Jaar"}
+                }
+                zone{
+                    dn{"Tydsone"}
                 }
             }
             monthNames{

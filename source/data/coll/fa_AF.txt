@@ -11,19 +11,5 @@
  */
 fa_AF{
     Version{"1.15"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                7,
-                1,
-            }
-            weekend:intvector{
-                7,
-                0,
-                6,
-                86400000,
-            }
-        }
-    }
     collations:alias{"ps/collations"}
 }

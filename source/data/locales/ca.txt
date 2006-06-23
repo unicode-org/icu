@@ -20,7 +20,7 @@ ca{
         AN{"Antilles Holandeses"}
         AO{"Angola"}
         AR{"Argentina"}
-        AT{"Âustria"}
+        AT{"Àustria"}
         AU{"Austràlia"}
         AW{"Aruba"}
         AZ{"Azerbaidjan"}
@@ -235,7 +235,7 @@ ca{
             "Lliura esterlina britànica",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Rupia índia",
         }
         JPY{
@@ -251,13 +251,13 @@ ca{
             "Dòlar EUA",
         }
     }
-    ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-l m n ñ o ó ò p-u ú ü v-z]"}
+    ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-n ñ o ó ò p-u ú ü v-z]"}
     Languages{
         aa{"àfar"}
         ab{"abkhaz"}
         af{"afrikaans"}
         am{"amhàric"}
-        ar{"ârab"}
+        ar{"àrab"}
         as{"assamès"}
         ay{"aimara"}
         az{"àzeri"}
@@ -413,7 +413,7 @@ ca{
     Scripts{
         Latn{"Llatí"}
     }
-    Version{"1.58"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -484,6 +484,22 @@ ca{
                         "octubre",
                         "novembre",
                         "desembre",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1T",
+                        "2T",
+                        "3T",
+                        "4T",
+                    }
+                    wide{
+                        "1r trimestre",
+                        "2n trimestre",
+                        "3r trimestre",
+                        "4t trimestre",
                     }
                 }
             }

@@ -68,6 +68,14 @@ pt_PT{
         YE{"Iémen"}
     }
     Currencies{
+        AFA{
+            "AFA",
+            "Afeghani (1927-2002)",
+        }
+        BRB{
+            "BRB",
+            "Cruzeiro novo brasileiro (1967-1986)",
+        }
         PTE{
             "Esc.",
             "Escudo português",
@@ -84,13 +92,7 @@ pt_PT{
         pl{"polaco"}
         sl{"esloveno"}
     }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.43"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -103,6 +105,38 @@ pt_PT{
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                yyyyMMMMEEEEd{"EEEE, d 'de' MMMM 'de' yyyy"}
+            }
+            fields{
+                day{
+                    dn{"Dia"}
+                }
+                dayperiod{
+                    dn{"Período do dia"}
+                }
+                hour{
+                    dn{"Hora"}
+                }
+                minute{
+                    dn{"Minuto"}
+                }
+                month{
+                    dn{"Mês"}
+                }
+                week{
+                    dn{"Semana"}
+                }
+                weekday{
+                    dn{"Dia da semana"}
+                }
+                year{
+                    dn{"Ano"}
+                }
+                zone{
+                    dn{"Zona"}
+                }
             }
         }
     }

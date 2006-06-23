@@ -126,6 +126,7 @@ structLocale:table(nofallback){
         GD{""}
         GE{""}
         GF{""}
+        GG{""}
         GH{""}
         GI{""}
         GL{""}
@@ -148,12 +149,14 @@ structLocale:table(nofallback){
         ID{""}
         IE{""}
         IL{""}
+        IM{""}
         IN{""}
         IO{""}
         IQ{""}
         IR{""}
         IS{""}
         IT{""}
+        JE{""}
         JM{""}
         JO{""}
         JP{""}
@@ -291,6 +294,7 @@ structLocale:table(nofallback){
         ZA{""}
         ZM{""}
         ZW{""}
+        ZZ{""}
     }
     Currencies{
         ADP{
@@ -362,6 +366,10 @@ structLocale:table(nofallback){
             "",
         }
         AZM{
+            "",
+            "",
+        }
+        AZN{
             "",
             "",
         }
@@ -945,6 +953,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        MZN{
+            "",
+            "",
+        }
         NAD{
             "",
             "",
@@ -1437,6 +1449,7 @@ structLocale:table(nofallback){
         cai{""}
         car{""}
         cau{""}
+        cch{""}
         ce{""}
         ceb{""}
         cel{""}
@@ -1577,10 +1590,13 @@ structLocale:table(nofallback){
         kaa{""}
         kab{""}
         kac{""}
+        kaj{""}
         kam{""}
         kar{""}
         kaw{""}
         kbd{""}
+        kcg{""}
+        kfo{""}
         kg{""}
         kha{""}
         khi{""}
@@ -1992,6 +2008,7 @@ structLocale:table(nofallback){
             chinese{""}
             gregorian{""}
             hebrew{""}
+            persian{""}
             islamic{""}
             islamic-civil{""}
             japanese{""}
@@ -2087,6 +2104,26 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
+            }
+            appendItems{
+                E{"{1} {0}"}
+                c{"{1} {0}"}
+                e{"{1} {0}"}
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
             }
             dayNames{
                 default{""}
@@ -2427,8 +2464,80 @@ structLocale:table(nofallback){
             monthNames{
                 default{""}
                 format{
-                    abbreviated:alias{"structLocale/calendar/islamic/monthNames/format/wide"}
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
                     default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
                     wide{
                         "",
                         "",
@@ -2473,8 +2582,80 @@ structLocale:table(nofallback){
             monthNames{
                 default{""}
                 format{
-                    abbreviated:alias{"structLocale/calendar/persian/monthNames/format/wide"}
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
                     default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
                     wide{
                         "",
                         "",
@@ -2757,6 +2938,10 @@ structLocale:table(nofallback){
         lines{""}
     }
     localPatternChars{""}
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metric"}
+    }
     messages{
         nostr{""}
         yesstr{""}
@@ -3609,6 +3794,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+         "America:Coral_Harbour"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "America:Cordoba"{
             ld{""}
             lg{""}
@@ -3888,7 +4082,25 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "America:Indiana:Petersburg"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "America:Indiana:Vevay"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
+        "America:Indiana:Vincennes"{
             ld{""}
             lg{""}
             ls{""}
@@ -4096,6 +4308,15 @@ structLocale:table(nofallback){
             ec{""}
         }
         "America:Miquelon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
+        "America:Moncton"{
             ld{""}
             lg{""}
             ls{""}
@@ -5554,6 +5775,15 @@ structLocale:table(nofallback){
             ec{""}
         }
         "Australia:Canberra"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
+        "Australia:Currie"{
             ld{""}
             lg{""}
             ls{""}

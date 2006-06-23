@@ -50,14 +50,14 @@ const char* rawData[33][8] = {
         // display langage (French)
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx", "chinois" },
         // display script (French)
-        {   "",     "",     "",     "",     "",     "",     "",   "han simplifi\\u00E9" },
+        {   "",     "",     "",     "",     "",     "",     "",   "idéogrammes han (variante simplifiée)" },
         // display country (French)
         {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "", "YY", "Chine" },
         // display variant (French)
         {   "",     "",     "",     "",     "NY",     "",     "",   "" },
         // display name (French)
         //{   "anglais (Etats-Unis)", "francais (France)", "catalan (Espagne)", "grec (Grece)", "norvegien (Norvege,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (han simplifi\\u00E9, Chine)" }, // STILL not right
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (id\u00e9ogrammes han (variante simplifi\u00e9e), Chine)" }, // STILL not right
 
 
         /* display language (Catalan) */
@@ -877,7 +877,7 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 481)
+    if (testCount != 485)
         errln("Expected getISOLanguages() to return 481 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
@@ -908,9 +908,9 @@ LocaleTest::TestGetLangsAndCountries()
     for(testCount=0;test[testCount];testCount++)
       ;
 
-    if (testCount != 240)
-        errln("Expected getISOLanguages to return 240 languages; it returned" + testCount);
-    else {
+    if (testCount != 244){
+        errln("Expected getISOCountries to return 240 countries; it returned %d", testCount);
+    }else {
         for (i = 0; i < spot2Len; i++) {
             int32_t j;
             for (j = 0; j < testCount; j++)
@@ -925,7 +925,7 @@ LocaleTest::TestGetLangsAndCountries()
                 errln("Couldn't find " + spotCheck2[i] + " in country list.");
         }
     }
-    for (i = 0; i < testCount; i++) {
+        for (i = 0; i < testCount; i++) {
       UnicodeString testee(test[i],"");
         UnicodeString uc(test[i],"");
         if (testee != uc.toUpper())
@@ -1037,7 +1037,7 @@ LocaleTest::TestAtypicalLocales()
                                      "espagnol (Allemagne)",
                                     "Croatie",
                                     CharsToUnicodeString("Su\\u00E8de"),
-                                    CharsToUnicodeString("R\\u00E9publique dominicaine"),
+                                    CharsToUnicodeString("Dominicaine, r\\u00E9publique"),
                                     "Belgique" };
     UnicodeString spanishDisplayNames [] = {
                                      CharsToUnicodeString("alem\\u00E1n (Canad\\u00E1)"),

@@ -537,7 +537,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.57"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -635,6 +635,16 @@ sr{
                         "о",
                         "н",
                         "д",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "К1",
+                        "К2",
+                        "К3",
+                        "К4",
                     }
                 }
             }

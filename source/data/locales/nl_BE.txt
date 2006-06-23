@@ -7,13 +7,59 @@
 // *
 // ***************************************************************************
 nl_BE{
+    Countries{
+        172{"Gemenebest van Onafhankelijke Staten"}
+        833{"Het Eiland Man"}
+    }
+    Currencies{
+        EEK{
+            "Estlandse kroon",
+            "Estlandse kroon",
+        }
+        LTL{
+            "Litouwse litas",
+            "Litouwse litas",
+        }
+        LVL{
+            "Letse lats",
+            "Letse lats",
+        }
+        RUB{
+            "Russische roebel",
+            "Russische roebel",
+        }
+        SIT{
+            "Sloveense tolar",
+            "Sloveense tolar",
+        }
+        THB{
+            "Thaise baht",
+            "Thaise baht",
+        }
+        TRY{
+            "Nieuwe Turkse lire",
+            "Nieuwe Turkse lire",
+        }
+    }
+    Languages{
+        lv{"Lets"}
+        oc{"Occitaans (na 1500); Provençaals"}
+        sa{"Sanskriet"}
+        sh{"Servo-Kroatisch"}
+    }
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.38"}
+    Types{
+        collation{
+            gb2312han{"Vereenvoudigd Chinees"}
+            traditional{"Traditioneel"}
+        }
+    }
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -21,7 +67,7 @@ nl_BE{
                 4,
             }
             DateTimePatterns{
-                "HH.mm' u. 'z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -30,6 +76,24 @@ nl_BE{
                 "d-MMM-yy",
                 "d/MM/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMM{"MMMM"}
+                mmssSS{"mm:ss,SS"}
+                ww{"ww"}
+                yyMM{"MM/yy"}
+                yyMMMEEEd{"EEE d MMM yy"}
+                yyMMMd{"d MMM yy"}
+                yyMMd{"d/MM/yy"}
+                yyMMdd{"dd/MM/yy"}
+                yyMMddHHmm{"dd/MM/yy HH:mm"}
+                yyyyMMMMEEEd{"EEE d MMMM yyyy"}
+                yyyyMMMMd{"d MMMM yyyy"}
+                yyyyMMMd{"d MMM yyyy"}
+                yyyyMMdd{"dd/MM/yyyy"}
+                yyyyMMddHHmmss{"dd/MM/yyyy HH:mm:ss"}
             }
         }
     }

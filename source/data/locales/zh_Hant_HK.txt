@@ -16,7 +16,7 @@ zh_Hant_HK{
         "#,##0%",
         "#E0",
     }
-    Version{"1.26"}
+    Version{"1.27"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -52,6 +52,78 @@ zh_Hant_HK{
                     }
                 }
             }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"』"}
+        alternateQuotationStart{"『"}
+        quotationEnd{"」"}
+        quotationStart{"「"}
+    }
+    zoneStrings{
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"格林威治夏令時間"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"阿拉斯加夏令時間"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"中部夏令時間"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"山區夏令時間"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"大西洋夏令時間"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+            ld{"東部夏令時間"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"太平洋夏令時間"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+            ld{"東部夏令時間"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+            ld{"山區夏令時間"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+            ld{"紐芬蘭夏令時間"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"以色列夏令時間"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"中國夏令時間"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"日本夏令時間"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bucharest"}
+            ld{"東歐夏令時間"}
+        }
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"中歐夏令時間"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"夏威夷夏令時間"}
         }
     }
 }

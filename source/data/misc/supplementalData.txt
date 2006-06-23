@@ -3,10 +3,10 @@
 // * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/supplemental/supplementalData.xml
+// * Source File:<path>/supplementalData.xml
 // *
 // ***************************************************************************
-supplementalData:table(no fallback){
+supplementalData:table(nofallback){
     /**
      * Map from ISO 3166 country codes to ISO 4217 currency codes 
      * NOTE: This is not true locale data; it exists only in ROOT
@@ -3763,6 +3763,10 @@ supplementalData:table(no fallback){
         }
         KWD:intvector{
             3,
+            0,
+        }
+        LUF:intvector{
+            0,
             0,
         }
         LYD:intvector{

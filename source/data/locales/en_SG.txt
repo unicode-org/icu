@@ -17,23 +17,12 @@ en_SG{
             "USD",
         }
     }
-    Version{"1.36"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 1,
-            }
-            DateTimePatterns{
-                "a hh:mm:ss",
-                "a hh:mm:ss",
-                "a hh:mm",
-                "a hh:mm",
-                "dd MMMM yyyy",
-                "dd MMM yyyy",
-                "dd-MMM-yy",
-                "dd/MM/yy",
-                "{1} {0}",
             }
         }
     }

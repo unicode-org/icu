@@ -251,7 +251,7 @@ id{
             "IDR",
         }
     }
-    ExemplarCharacters{"[a-z]"}
+    ExemplarCharacters{"[ a-p r-u w y {ng} {ny} ]"}
     Languages{
         aa{"Afar"}
         ab{"Abkhaz"}
@@ -504,20 +504,9 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.44"}
+    Version{"1.46"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{

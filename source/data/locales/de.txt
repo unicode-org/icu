@@ -25,6 +25,7 @@ de{
         021{"Nordamerika"}
         029{"Karibik"}
         030{"Ostasien"}
+        034{"Südasien"}
         035{"Südostasien"}
         039{"Südeuropa"}
         053{"Australien und Neuseeland"}
@@ -33,11 +34,13 @@ de{
         061{"Polynesien"}
         062{"Süd-Zentralasien"}
         142{"Asien"}
+        143{"Zentralasien"}
         145{"Westasien"}
         150{"Europa"}
         151{"Osteuropa"}
         154{"Nordeuropa"}
         155{"Westeuropa"}
+        419{"Lateinamerika und Karibik"}
         830{"Kanalinseln"}
         833{"Insel Man"}
         AD{"Andorra"}
@@ -676,7 +679,7 @@ de{
             "Schekel",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Indische Rupie",
         }
         IQD{
@@ -1360,6 +1363,7 @@ de{
         fat{"Fanti-Sprache"}
         ff{"Ful"}
         fi{"Finnisch"}
+        fil{"Filipino"}
         fiu{"Finnougrische Sprachen (Andere)"}
         fj{"Fidschianisch"}
         fo{"Färöisch"}
@@ -1787,7 +1791,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.61"}
+    Version{"1.62"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1848,6 +1852,35 @@ de{
                     "n. Chr.",
                 }
             }
+            fields{
+                day{
+                    dn{"Tag"}
+                }
+                dayperiod{
+                    dn{"Tageshälfte"}
+                }
+                era{
+                    dn{"Epoche"}
+                }
+                hour{
+                    dn{"Stunde"}
+                }
+                month{
+                    dn{"Monat"}
+                }
+                second{
+                    dn{"Sekunde"}
+                }
+                week{
+                    dn{"Woche"}
+                }
+                weekday{
+                    dn{"Wochentag"}
+                }
+                year{
+                    dn{"Jahr"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1893,6 +1926,16 @@ de{
                         "O",
                         "N",
                         "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "1. Quartal",
+                        "2. Quartal",
+                        "3. Quartal",
+                        "4. Quartal",
                     }
                 }
             }

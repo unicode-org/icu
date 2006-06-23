@@ -122,7 +122,7 @@ static const char * const LANGUAGES[] = {
     "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
     "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
     "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
-    "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
+    "cch", "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
     "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",
     "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",
     "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",
@@ -132,14 +132,14 @@ static const char * const LANGUAGES[] = {
     "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
     "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  
     "ga",  "gaa", "gay", "gba", "gd",  "gem", "gez", "gil", 
-    "gl",  "gmh", "gn", "goh", "gon", "gor", "got", "grb", 
+    "gl",  "gmh", "gn",  "goh", "gon", "gor", "got", "grb", 
     "grc", "gsw", "gu",  "gv", "gwi", 
     "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
     "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
     "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
     "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
     "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
-    "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",
+    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",
     "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",
     "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",
     "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",
@@ -216,8 +216,8 @@ static const char * const LANGUAGES_3[] = {
     "bla", "bam", "ben", "bnt", "bod", "bre", "bra", "bos",
 /*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
     "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
-/*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
-    "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
+/*  "cch", "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
+    "cch", "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
 /*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
     "chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
 /*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
@@ -248,8 +248,8 @@ static const char * const LANGUAGES_3[] = {
     "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
 /*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
     "iku", "jpn", "jbo", "jpr", "jrb", "jav", "kat", "kaa", "kab",
-/*  "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
-    "kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
+/*  "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",*/
+    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",
 /*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
     "kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
 /*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",     */
@@ -354,11 +354,11 @@ static const char * const COUNTRIES[] = {
     "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
     "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
     "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
-    "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
+    "GA",  "GB",  "GD",  "GE",  "GF",  "GG",  "GH",  "GI",  "GL",
     "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
     "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
-    "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
-    "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
+    "ID",  "IE",  "IL",  "IM",  "IN",  "IO",  "IQ",  "IR",  "IS",
+    "IT",  "JE",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
     "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
     "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
     "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
@@ -374,7 +374,7 @@ static const char * const COUNTRIES[] = {
     "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
     "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
     "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
-    "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
+    "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  "ZZ",
 NULL,
     "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */
 NULL
@@ -420,16 +420,16 @@ static const char * const COUNTRIES_3[] = {
     "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
 /*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
     "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-/*  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
-    "GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
+/*  "GA",   "GB",   "GD",   "GE",    "GF",   "GG",   "GH",  "GI",  "GL",     */
+    "GAB", "GBR", "GRD", "GEO", "GUF", "GGY", "GHA", "GIB", "GRL",
 /*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
     "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
 /*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
     "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-/*  "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
-    "IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
-/*  "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
-    "ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
+/*  ID",    "IE",   "IL",    "IM",   "IN",   "IO",   "IQ",   "IR",   "IS" */
+    "IDN", "IRL", "ISR", "IMN", "IND", "IOT", "IRQ", "IRN", "ISL",	   
+/*  "IT",   "JE",   "JM",   "JO",    "JP",   "KE",   "KG",  "KH",  "KI",     */
+    "ITA", "JEY", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
 /*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
     "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
 /*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
@@ -460,8 +460,8 @@ static const char * const COUNTRIES_3[] = {
     "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
 /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
     "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-/*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
-    "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
+/*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW", "ZZZ"          */
+    "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",  "ZZZ",
 NULL,
 /*  "FX",  "RO",  "TP",  "ZR",   */
     "FXX", "ROM", "TMP", "ZAR",
