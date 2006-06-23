@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2005, International Business Machines Corporation and
+#  * Copyright (c) 2002-2006, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
@@ -250,7 +250,11 @@ sub convertData{
     $i=0;
     # now convert
     foreach $item (@list){
-        next if($item eq "." || $item eq "..");
+        next if($item eq "." || $item eq "..");	 
+       # next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/ ||
+       #         $item=~/$\.crs/ || $item=~ /$\.txt/ ||
+       #         $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ ||
+       #         $item=~/$\.obj/ || $item=~/$\.lst/);
         next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/   || $item =~ /$\.cnv/ ||
                $item=~/$\.crs/ || $item=~ /$\.txt/ ||
                $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
@@ -296,18 +300,16 @@ sub convertTestData{
         next if($item =~ /$\.cnv/ || item=~/$\.crs/ || $item=~ /$\.txt/ ||
                 $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
                 $item=~/$\.mak/ || $item=~/test\.icu/ || $item=~/$\.lst/);
-        
-        if($item =~ /^testdata_/){
-            $file = $item;
-            $file =~ s/testdata_//g;
-            if($endian eq "l"){ 
-                $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
-                cmd($command, $verbose);
-            }else{
-                #print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
-                copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$file");
-            }
+        $file = $item;
+        $file =~ s/testdata_//g;
+        if($endian eq "l"){ 
+            $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
+            cmd($command, $verbose);
+        }else{
+            #print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
+            copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$file");
         }
+        
 
     }
     chdir("..");

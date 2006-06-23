@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 2002-2005, International Business Machines
+//*   Copyright (C) 2002-2006, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -9,7 +9,7 @@
 // This is a test resource to check whether the aliasing mechanism works
 // as advertised
 
-testaliases
+testaliases:table(nofallback) 
 {
     // This should produce an error - circular alias
     aaa:alias { "testaliases/aab" } // Test circular dependency protection
@@ -28,7 +28,7 @@ testaliases
     LocaleScript:alias { "/ICUDATA/ja/LocaleScript" }
 
     // aliasing using position
-    BreakDictionaryData:alias { "/ICUDATA/th" } // Referencing corresponding resource in another bundle
+    boundaries:alias { "/ICUDATA-brkitr/ja" } // Referencing corresponding resource in another bundle
 
     // aliasing arrays
     zoneTests {
