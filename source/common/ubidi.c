@@ -1185,8 +1185,8 @@ static void
 processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
                    int32_t start, int32_t limit) {
     uint8_t cell, oldStateSeq, actionSeq;
-    const ImpTab * pImpTab=pLevState->pImpTab;
-    const ImpAct * pImpAct=pLevState->pImpAct;
+    ImpTab * pImpTab=pLevState->pImpTab;
+    ImpAct * pImpAct=pLevState->pImpAct;
     UBiDiLevel * levels=pBiDi->levels;
     UBiDiLevel level, addLevel;
     InsertPoints * pInsertPoints;
