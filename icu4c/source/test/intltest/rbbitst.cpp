@@ -2550,7 +2550,7 @@ int RBBISentMonkey::moveBack(int i) {
         j = fText->moveIndex32(j, -1);
         c = fText->char32At(j);
     }
-    while (fFormatSet->contains(c) || fExtendSet->contains(c));
+    while (j>0 &&(fFormatSet->contains(c) || fExtendSet->contains(c)));
     return j;
 
  }
@@ -2607,16 +2607,6 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
         p3 = moveForward(p3);
         c3 = cAt(p3);
 
-        if (p2 >= fText->length()) {
-            // Reached end of string.  Always a break position.
-            break;
-        }
-
-        if (p2 == prevPos) {
-            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
-            continue;
-        }
-        
         // Rule (3)  CR x LF
         if (c1==0x0d && c2==0x0a && p2==(p1+1)) {
             continue;
@@ -2628,6 +2618,16 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             break;
         }
 
+        if (p2 >= fText->length()) {
+            // Reached end of string.  Always a break position.
+            break;
+        }
+
+        if (p2 == prevPos) {
+            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
+            continue;
+        }
+        
         // Rule (6).   ATerm x Numeric
         if (fATermSet->contains(c1) &&  fNumericSet->contains(c2))  {
             continue;
