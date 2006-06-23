@@ -339,7 +339,7 @@ u_strFromUTF8WithSub(UChar *dest,
     UChar *pDestLimit = dest+destCapacity;
     UChar32 ch;
     int32_t reqLength = 0;
-    uint8_t* pSrc = (uint8_t*) src;
+    const uint8_t* pSrc = (const uint8_t*) src;
     uint8_t t1, t2; /* trail bytes */
     int32_t numSubstitutions;
 
