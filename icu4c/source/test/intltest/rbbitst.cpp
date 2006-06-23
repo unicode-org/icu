@@ -3739,7 +3739,6 @@ void RBBITest::TestSentBreaks(void)
              "\\u10b7\\u013e\\u000a\\\\u002e\\\\U00013ea4"
     };
     int loop;
-    int forward[100];
     if (U_FAILURE(status)) {
         errln("Creation of break iterator failed %s", u_errorName(status));
         return;
