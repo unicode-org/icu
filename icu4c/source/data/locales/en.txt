@@ -31,7 +31,7 @@ en{
         029{"Caribbean"}
         030{"Eastern Asia"}
         034{"Southern Asia"}
-        035{"South-eastern Asia"}
+        035{"South-Eastern Asia"}
         039{"Southern Europe"}
         053{"Australia and New Zealand"}
         054{"Melanesia"}
@@ -48,7 +48,6 @@ en{
         200{"Czechoslovakia"}
         419{"Latin America and the Caribbean"}
         830{"Channel Islands"}
-        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"United Arab Emirates"}
         AF{"Afghanistan"}
@@ -128,6 +127,7 @@ en{
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"French Guiana"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Greenland"}
@@ -141,7 +141,7 @@ en{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong S.A.R., China"}
+        HK{"Hong Kong SAR China"}
         HM{"Heard Island and McDonald Islands"}
         HN{"Honduras"}
         HR{"Croatia"}
@@ -150,12 +150,14 @@ en{
         ID{"Indonesia"}
         IE{"Ireland"}
         IL{"Israel"}
+        IM{"Isle of Man"}
         IN{"India"}
         IO{"British Indian Ocean Territory"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
         IT{"Italy"}
+        JE{"Jersey"}
         JM{"Jamaica"}
         JO{"Jordan"}
         JP{"Japan"}
@@ -190,7 +192,7 @@ en{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Macao S.A.R., China"}
+        MO{"Macao SAR China"}
         MP{"Northern Mariana Islands"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -291,6 +293,7 @@ en{
         ZA{"South Africa"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
+        ZZ{"Unknown or Invalid Region"}
     }
     Currencies{
         ADP{
@@ -363,6 +366,10 @@ en{
         }
         AZM{
             "AZM",
+            "Azerbaijanian Manat (1993-2006)",
+        }
+        AZN{
+            "AZN",
             "Azerbaijanian Manat",
         }
         BAD{
@@ -998,7 +1005,7 @@ en{
             "Papua New Guinea Kina",
         }
         PHP{
-            "PHP",
+            "Php",
             "Philippine Peso",
         }
         PKR{
@@ -1032,6 +1039,10 @@ en{
         ROL{
             "=0#Old lei|1#Old leu|1<Old lei",
             "Old Romanian Leu",
+        }
+        RON{
+            "=0#lei|1#leu|1<lei",
+            "Romanian Leu",
         }
         RUB{
             "RUB",
@@ -1422,6 +1433,7 @@ en{
         cai{"Central American Indian (Other)"}
         car{"Carib"}
         cau{"Caucasian (Other)"}
+        cch{"Atsam"}
         ce{"Chechen"}
         ceb{"Cebuano"}
         cel{"Celtic (Other)"}
@@ -1548,7 +1560,7 @@ en{
         ine{"Indo-European (Other)"}
         inh{"Ingush"}
         io{"Ido"}
-        ira{"Iranian"}
+        ira{"Iranian (Other)"}
         iro{"Iroquoian languages"}
         is{"Icelandic"}
         it{"Italian"}
@@ -1562,10 +1574,13 @@ en{
         kaa{"Kara-Kalpak"}
         kab{"Kabyle"}
         kac{"Kachin"}
+        kaj{"Jju"}
         kam{"Kamba"}
         kar{"Karen"}
         kaw{"Kawi"}
         kbd{"Kabardian"}
+        kcg{"Tyap"}
+        kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi"}
         khi{"Khoisan (Other)"}
@@ -1702,7 +1717,7 @@ en{
         pon{"Pohnpeian"}
         pra{"Prakrit Languages"}
         pro{"Old Provençal"}
-        ps{"Pashto (Pushto)"}
+        ps{"Pashto"}
         pt{"Portuguese"}
         qu{"Quechua"}
         raj{"Rajasthani"}
@@ -1989,7 +2004,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.92"}
+    Version{"1.100"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2002,6 +2017,19 @@ en{
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMM{"MMMM"}
+                MMMdd{"MMM dd"}
+                mmssSS{"mm:ss"}
+                ww{"ww"}
+                yyMM{"MM/yy"}
+                yyMMMEEEd{"EEE, MMM d, yy"}
+                yyMMMd{"MMM d, yy"}
+                yyMd{"M/d/yy"}
+                yyQQQQ{"QQQQ yy"}
             }
             dayNames{
                 format{
@@ -2124,19 +2152,12 @@ en{
             }
         }
     }
-    delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
-    }
     zoneStrings{
         "America:Anchorage"{
             ec{"Anchorage"}
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
-            sd{"AKDT"}
             sg{"AKT"}
             ss{"AKST"}
         }

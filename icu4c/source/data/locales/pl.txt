@@ -10,7 +10,35 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
+    AuxExemplarCharacters{"[q v x]"}
     Countries{
+        001{"Świat"}
+        002{"Afryka"}
+        005{"Ameryka Południowa"}
+        009{"Oceania"}
+        011{"Afryka Zachodnia"}
+        013{"Ameryka Środkowa"}
+        014{"Afryka Wschodnia"}
+        015{"Afryka Północna"}
+        017{"Afryka Środkowa"}
+        018{"Afryka Południowa"}
+        019{"Ameryka"}
+        021{"Ameryka Północna"}
+        030{"Azja Wschodnia"}
+        035{"Azja Południowo-Wschodnia"}
+        039{"Europa Południowa"}
+        053{"Australia i Nowa Zelandia"}
+        054{"Melanezja"}
+        057{"Mikronezja"}
+        061{"Polinezja"}
+        142{"Azja"}
+        145{"Azja Zachodnia"}
+        150{"Europa"}
+        151{"Europa Wschodnia"}
+        154{"Europa Północna"}
+        155{"Europa Zachodnia"}
+        830{"Wyspy Normandzkie"}
+        833{"Wyspa Man"}
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
         AF{"Afganistan"}
@@ -26,6 +54,7 @@ pl{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
+        AX{"Wyspy Alandzkie"}
         AZ{"Azerbejdżan"}
         BA{"Bośnia i Hercegowina"}
         BB{"Barbados"}
@@ -59,6 +88,7 @@ pl{
         CN{"Chiny"}
         CO{"Kolumbia"}
         CR{"Kostaryka"}
+        CS{"Serbia i Czarnogóra"}
         CU{"Kuba"}
         CV{"Wyspy Zielonego Przylądka"}
         CX{"Wyspa Bożego Narodzenia"}
@@ -190,6 +220,7 @@ pl{
         PW{"Palau"}
         PY{"Paragwaj"}
         QA{"Katar"}
+        QO{"Oceania inne"}
         RE{"Reunion"}
         RO{"Rumunia"}
         RU{"Federacja Rosyjska"}
@@ -350,6 +381,14 @@ pl{
         BEL{
             "BEL",
             "frank belgijski (finansowy)",
+        }
+        BGL{
+            "lev",
+            "lew bułgarski",
+        }
+        BGN{
+            "BGN",
+            "nowy lew bułgarski",
         }
         BHD{
             "BD",
@@ -1043,6 +1082,10 @@ pl{
             "TL",
             "lir turecki",
         }
+        TRY{
+            "TRY",
+            "nowa lira turecka",
+        }
         TTD{
             "TT$",
             "dolar Trynidadu i Tobago",
@@ -1180,7 +1223,7 @@ pl{
             "dolar Zimbabwe",
         }
     }
-    ExemplarCharacters{"[a ą b c ć d e ę f-l ł m n ń o ó p-s ś t-z ź ż]"}
+    ExemplarCharacters{"[a ą b c ć d e ę f-l ł m n ń o ó p r s ś t u w-z ź ż]"}
     Keys{
         calendar{"Kalendarz"}
         collation{"Sortowanie"}
@@ -1189,16 +1232,21 @@ pl{
     Languages{
         ar{"arabski"}
         bg{"bułgarski"}
+        bn{"bengalski"}
+        ca{"kataloński"}
         cs{"czeski"}
+        cy{"walijski"}
         da{"duński"}
         de{"niemiecki"}
         el{"grecki"}
         en{"angielski"}
         es{"hiszpański"}
         et{"estoński"}
+        eu{"baskijski"}
         fi{"fiński"}
         fr{"francuski"}
         he{"hebrajski"}
+        hi{"hindi"}
         hr{"chorwacki"}
         hu{"węgierski"}
         it{"włoski"}
@@ -1206,7 +1254,8 @@ pl{
         ko{"koreański"}
         lt{"litewski"}
         lv{"łotewski"}
-        nl{"holenderski"}
+        mt{"maltański"}
+        nl{"niderlandzki"}
         no{"norweski"}
         pl{"polski"}
         pt{"portugalski"}
@@ -1215,6 +1264,7 @@ pl{
         sk{"słowacki"}
         sl{"słoweński"}
         sv{"szwedzki"}
+        th{"tajski"}
         tr{"turecki"}
         zh{"chiński"}
     }
@@ -1284,6 +1334,8 @@ pl{
             chinese{"Kalendarz chiński"}
             gregorian{"Kalendarz gregoriański"}
             hebrew{"Kalendarz żydowski"}
+            islamic{"Kalendarz muzułmański"}
+            islamic-civil{"Kalendarz muzułmański cywilny"}
             japanese{"Kalendarz japoński"}
         }
         collation{
@@ -1294,7 +1346,7 @@ pl{
             traditional{"tradycyjny"}
         }
     }
-    Version{"1.62"}
+    Version{"1.64"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1308,16 +1360,29 @@ pl{
                 "yy-MM-dd",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMdd{"dd MMM"}
+                MMdd{"dd.MM"}
+                mmssSS{"mm:ss,SS"}
+                ww{"ww"}
+                yyMM{"MM.yy"}
+                yyMMdd{"dd.MM.yy"}
+                yyMd{"d.M.yy"}
+            }
             dayNames{
                 format{
                     abbreviated{
-                        "N",
-                        "Pn",
-                        "Wt",
-                        "Śr",
-                        "Cz",
-                        "Pt",
-                        "So",
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
                     }
                     wide{
                         "niedziela",
@@ -1437,6 +1502,177 @@ pl{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "I kwartał",
+                        "II kwartał",
+                        "III kwartał",
+                        "IV kwartał",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "Africa:Kinshasa"{
+            ec{"Kinszasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaszi"}
+        }
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comodoro Rivadavia"}
+        }
+        "America:Mexico_City"{
+            ec{"Meksyk"}
+        }
+        "America:New_York"{
+            ec{"Nowy Jork"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Wybrzeże Mawsona"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"Mc Murdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Archipelag Palmera"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Stacja Naukowa Rothera"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Biegun południowy"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Stacja Syowa"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Wostok"}
+        }
+        "Asia:Almaty"{
+            ec{"Ałma Ata"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aktiubińsk"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Czojbalsan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Czunking"}
+        }
+        "Asia:Hovd"{
+            ec{"Howd"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkuck"}
+        }
+        "Asia:Jakarta"{
+            ec{"Dżakarta"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamczatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kaszgar"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuczing"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Nowosybirsk"}
+        }
+        "Asia:Oral"{
+            ec{"Uralsk"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kyzył Orda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarkanda"}
+        }
+        "Asia:Shanghai"{
+            ec{"Szanghaj"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taszkient"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ułan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumczi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Władywostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakuck"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterynburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azory"}
+        }
+        "Atlantic:Canary"{
+            ec{"Wyspy Kanaryjskie"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madera"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Wyspa Lord Howe"}
+        }
+        "Europe:Kiev"{
+            ec{"Kijów"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lizbona"}
+        }
+        "Europe:London"{
+            ec{"Londyn"}
+        }
+        "Europe:Madrid"{
+            ec{"Madryt"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskwa"}
+        }
+        "Europe:Simferopol"{
+            ec{"Symferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Użgorod"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporoże"}
+        }
+        "Pacific:Easter"{
+            ec{"Wyspy Wielkanocne"}
         }
     }
 }

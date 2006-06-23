@@ -279,7 +279,7 @@ cs{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
-        ZA{"Jižní Afrika"}
+        ZA{"Jihoafrická republika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
     }
@@ -517,7 +517,7 @@ cs{
             "Escudo kapverdské",
         }
         CYP{
-            "£",
+            "CYP",
             "Libra kyperská",
         }
         CZK{
@@ -866,7 +866,7 @@ cs{
         }
         MWK{
             "MK",
-            "Kwacha",
+            "Kwacha malawská",
         }
         MXN{
             "MEX$",
@@ -1222,11 +1222,11 @@ cs{
         }
         YUM{
             "YUM",
-            "Dinár jugoslávský",
+            "Dinár jugoslávský nový",
         }
         YUN{
             "YUN",
-            "Dinár jugoslávský",
+            "Dinár jugoslávský konvertibilní",
         }
         ZAL{
             "ZAL",
@@ -1238,7 +1238,7 @@ cs{
         }
         ZMK{
             "ZMK",
-            "Kwacha",
+            "Kwacha zambijská",
         }
         ZRN{
             "ZRN",
@@ -1253,7 +1253,7 @@ cs{
             "Dolar zimbabwský",
         }
     }
-    ExemplarCharacters{"[a á b c č d ď e é ě f-i í j-n ň o ó p-r ř s š t ť u ú ů v-y ý z ž]"}
+    ExemplarCharacters{"[a á b c č d ď e é ě f-h {ch} i í j-n ň o ó p-r ř s š t ť u ú ů v-y ý z ž]"}
     Keys{
         calendar{"Kalendář"}
         collation{"Třídění"}
@@ -1300,6 +1300,7 @@ cs{
         gl{"Haličština"}
         gn{"Guaranština"}
         gu{"Gujaratština"}
+        gv{"Manština"}
         ha{"Hausa"}
         he{"Hebrejština"}
         hi{"Hindština"}
@@ -1341,7 +1342,6 @@ cs{
         my{"Barmština"}
         na{"Nauru"}
         ne{"Nepálština"}
-        nl{"Holandština"}
         no{"Norština"}
         oc{"Occitan"}
         om{"Oromo (Afan)"}
@@ -1422,7 +1422,7 @@ cs{
     }
     Types{
         calendar{
-            buddhist{"Budhistický kalendář"}
+            buddhist{"Buddhistický kalendář"}
             chinese{"Čínský kalendář"}
             gregorian{"Gregoriánský kalendář"}
             hebrew{"Hebrejský kalendář"}
@@ -1431,23 +1431,16 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.72"}
+    Version{"1.73"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "dop.",
                 "odp.",
             }
-            DateTimePatterns{
-                "H:mm:ss z",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d. MMMM yyyy",
-                "d. MMMM yyyy",
-                "d.M.yyyy",
-                "d.M.yy",
-                "{1} {0}",
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1490,20 +1483,6 @@ cs{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                        "5.",
-                        "6.",
-                        "7.",
-                        "8.",
-                        "9.",
-                        "10.",
-                        "11.",
-                        "12.",
-                    }
                     narrow{
                         "l",
                         "ú",
@@ -1578,11 +1557,23 @@ cs{
                     }
                 }
             }
+            quarters{
+                format{
+                    wide{
+                        "1. čtvrtletí",
+                        "2. čtvrtletí",
+                        "3. čtvrtletí",
+                        "4. čtvrtletí",
+                    }
+                }
+            }
         }
     }
     delimiters{
         alternateQuotationEnd{"‘"}
         alternateQuotationStart{"‚"}
+        quotationEnd{"“"}
+        quotationStart{"„"}
     }
     layout{
         /**
@@ -1688,7 +1679,7 @@ cs{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
-            ld{"Japonský standardní čas"}
+            ld{"Japonský letní čas"}
             ls{"Japonský standardní čas"}
             sd{"JST"}
             ss{"JST"}
@@ -1745,7 +1736,7 @@ cs{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-            ld{"Havajský standardní čas"}
+            ld{"Havajský letní čas"}
             ls{"Havajský standardní čas"}
             sd{"HST"}
             ss{"HST"}

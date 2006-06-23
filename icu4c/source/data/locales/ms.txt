@@ -256,27 +256,16 @@ ms{
             "Ringgit Malaysia",
         }
     }
-    ExemplarCharacters{"[a-z]"}
+    ExemplarCharacters{"[ a-z {ai} {au} {dz} {ua} {kh} {ny} {ng} {ngg} {sy} {ts} ]"}
     Languages{
         ms{"Bahasa Melayu"}
     }
     LocaleScript{
         "Latn",
     }
-    Version{"1.38"}
+    Version{"1.39"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{

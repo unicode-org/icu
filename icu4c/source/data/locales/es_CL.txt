@@ -7,6 +7,11 @@
 // *
 // ***************************************************************************
 es_CL{
+    Countries{
+        005{"Sudamérica"}
+        EH{"Sahara Occidental"}
+        TT{"Trinidad y Tobago"}
+    }
     Currencies{
         CLP{
             "$",
@@ -23,7 +28,18 @@ es_CL{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Scripts{
+        Bali{"balinés"}
+    }
+    Types{
+        collation{
+            phonebook{"orden de directorio telefónico"}
+        }
+    }
+    Variants{
+        1996{"Ortografía alemana de 1996"}
+    }
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimePatterns{

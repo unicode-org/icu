@@ -13,7 +13,7 @@ hi_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.38"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -34,5 +34,11 @@ hi_IN{
                 86400000,
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"'"}
+        quotationStart{"'"}
     }
 }

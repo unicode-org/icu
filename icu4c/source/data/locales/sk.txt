@@ -14,6 +14,7 @@ sk{
         001{"Svet"}
         002{"Afrika"}
         005{"Južná Amerika"}
+        011{"Západná Afrika"}
         013{"Stredná Amerika"}
         014{"Východná Afrika"}
         015{"Severná Afrika"}
@@ -1227,7 +1228,10 @@ sk{
             "Zimbabský dolár",
         }
     }
-    ExemplarCharacters{"[a á ä b c č d ď e é f-i í j-l ĺ ľ m n ň o ó ô p-r ŕ s š t ť u ú v-y ý z ž]"}
+    ExemplarCharacters{
+        "[a á ä b c č d ď e é f-h {ch} i í j-l ĺ ľ m n ň o ó ô p-r ŕ s š t ť u ú v-y "
+        "ý z ž]"
+    }
     Keys{
         calendar{"Kalendár"}
         collation{"Triedenie"}
@@ -1307,7 +1311,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.57"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1405,6 +1409,16 @@ sk{
                         "o",
                         "n",
                         "d",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "1. štvrťrok",
+                        "2. štvrťrok",
+                        "3. štvrťrok",
+                        "4. štvrťrok",
                     }
                 }
             }

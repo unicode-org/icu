@@ -16,7 +16,45 @@
 #include "locmap.h"
 #include "uresimp.h"
 
-static UBool isCurrencyPreEuro(const char* currencyKey){
+/*
+returns a new UnicodeSet that is a flattened form of the original
+UnicodeSet.
+*/
+static USet*
+createFlattenSet(USet *origSet, UErrorCode *status) {
+
+
+    USet *newSet = NULL;
+    int32_t origItemCount = 0;
+    int32_t idx, graphmeSize;
+    UChar32 start, end;
+    UChar graphme[64];
+    if (U_FAILURE(*status)) {
+        log_err("createFlattenSet called with %s\n", u_errorName(*status));
+        return NULL;
+    }
+    newSet = uset_open(1, 0);
+    origItemCount = uset_getItemCount(origSet);
+    for (idx = 0; idx < origItemCount; idx++) {
+        graphmeSize = uset_getItem(origSet, idx,
+            &start, &end, 
+            graphme, (int32_t)(sizeof(graphme)/sizeof(graphme[0])),
+            status);
+        if (U_FAILURE(*status)) {
+            log_err("ERROR: uset_getItem returned %s\n", u_errorName(*status));
+            *status = U_ZERO_ERROR;
+        }
+        if (graphmeSize) {
+            uset_addAllCodePoints(newSet, graphme, graphmeSize);
+        }
+        else {
+            uset_addRange(newSet, start, end);
+        }
+    }
+    return newSet;
+}
+static UBool 
+isCurrencyPreEuro(const char* currencyKey){
     if( strcmp(currencyKey, "PTE") == 0 ||
         strcmp(currencyKey, "ESP") == 0 ||
         strcmp(currencyKey, "LUF") == 0 ||
@@ -117,26 +155,8 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
             if (U_SUCCESS(errorCode)
                 && (ures_getType(subSubBundle) == URES_ARRAY || ures_getType(subSubRootBundle) == URES_ARRAY))
             {
-                /* TODO: Properly check for 2D arrays and zoneStrings */
-                if (subBundleKey != NULL && strcmp(subBundleKey, "zoneStrings") == 0) {
-/*                    int32_t minSize = ures_getSize(subBundle);
-                    int32_t idx;
-
-                    for (idx = 0; idx < minSize; idx++) {
-                        UResourceBundle *subSubBundleAtIndex = ures_getByIndex(subBundle, idx, NULL, &errorCode);
-                        if (ures_getSize(subSubBundleAtIndex) != 6) {
-                            log_err("zoneStrings at index %d has wrong size for locale \"%s\". array size=%d\n",
-                                    idx,
-                                    locale,
-                                    ures_getSize(subSubBundleAtIndex));
-                        }
-                        ures_close(subSubBundleAtIndex);
-                    }*/
-                }
-                else {
-                    /* Here is one of the recursive parts */
-                    TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
-                }
+                /* Here is one of the recursive parts */
+                TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
             }
             else {
                 int32_t minSize = ures_getSize(subRootBundle);
@@ -348,8 +368,13 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
 #endif
         }
         else if (ures_getType(subBundle) == URES_TABLE) {
-            /* Here is one of the recursive parts */
-            TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
+            if (strcmp(subBundleKey, "availableFormats")!=0) {
+                /* Here is one of the recursive parts */
+                TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
+            }
+            else {
+                log_verbose("Skipping key %s in %s\n", subBundleKey, locale);
+            }
         }
         else if (ures_getType(subBundle) == URES_BINARY || ures_getType(subBundle) == URES_INT) {
             /* Can't do anything to check it */
@@ -737,8 +762,10 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
                       const UChar *exemplarCharacters, int32_t exemplarLen,
                       UBool ignoreNumbers) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    USet *exemplarSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
+    USet *origSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
+    USet *exemplarSet = createFlattenSet(origSet, &errorCode);
     int32_t strIdx;
+    uset_close(origSet);
     if (U_FAILURE(errorCode)) {
         log_err("%s: error uset_openPattern returned %s\n", currLoc, u_errorName(errorCode));
         return -1;

@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sq.xml
  */
 sq{
+    AuxExemplarCharacters{"[w]"}
     Countries{
         AD{"Andorrë"}
         AE{"Emiratet Arabe te Bashkuara"}
@@ -65,6 +66,7 @@ sq{
         FM{"Mikronezi"}
         FR{"Francë"}
         GA{"Gjabon"}
+        GB{"Mbretëria e Bashkuar"}
         GE{"Gjeorgji"}
         GH{"Ganë"}
         GM{"Gambi"}
@@ -187,7 +189,7 @@ sq{
             "Paund Sterlina Britanike",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Rupee indiane",
         }
         JPY{
@@ -204,8 +206,8 @@ sq{
         }
     }
     ExemplarCharacters{
-        "[a-c ç d {dh} e ë f g {gj} h-l {ll} m n {nj} o-r {rr} s {sh} t {th} u-x {xh}"
-        " y z {zh}]"
+        "[a-c ç d {dh} e ë f g {gj} h-l {ll} m n {nj} o-r {rr} s {sh} t {th} u v x {x"
+        "h} y z {zh}]"
     }
     Languages{
         ar{"Arabisht"}
@@ -241,7 +243,7 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.47"}
+    Version{"1.49"}
     calendar{
         gregorian{
             AmPmMarkers{

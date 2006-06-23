@@ -105,6 +105,9 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
     switch (type) {
     case SIMPLE:
         t = Transliterator::createInstance(aliasesOrRules, UTRANS_FORWARD, pe, ec);
+        if(U_FAILURE(ec)){
+            return 0;
+        }
         if (compoundFilter != 0)
             t->adoptFilter((UnicodeSet*)compoundFilter->clone());
         break;

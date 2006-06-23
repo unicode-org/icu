@@ -27,5 +27,5 @@ sr_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.18"}
+    Version{"1.19"}
 }

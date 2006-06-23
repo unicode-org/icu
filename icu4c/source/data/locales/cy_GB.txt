@@ -13,7 +13,7 @@ cy_GB{
         "#,##0%",
         "#E0",
     }
-    Version{"1.25"}
+    Version{"1.26"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
+    AuxExemplarCharacters{"[q w-y]"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -312,11 +313,11 @@ sr_Latn{
             "Švajcarski franak",
         }
         CNY{
-            "CNY",
+            "U",
             "Kineski Juan Renminbi",
         }
         CSD{
-            "YUN",
+            "CSD",
             "Srpski Dinar",
         }
         DEM{
@@ -448,6 +449,7 @@ sr_Latn{
         fr{"Francuski"}
         ga{"Irski"}
         he{"Hebrejski"}
+        hi{"Hindi"}
         hr{"Hrvatski"}
         hu{"Mađarski"}
         hy{"Armenski"}
@@ -499,17 +501,22 @@ sr_Latn{
         Cher{"Čeroki"}
         Copt{"koptičko pismo"}
         Cyrl{"Ćirilica"}
+        Cyrs{"ćirilica (crkveno slovenska varijanta)"}
         Deva{"Devanagari"}
         Dsrt{"Dezeret"}
         Ethi{"etiopsko pismo"}
         Geor{"gruzijsko pismo"}
+        Glag{"glagoljica"}
         Goth{"Gotika"}
         Grek{"grčko pismo"}
         Hebr{"hebrejsko pismo"}
         Hira{"Hiragana"}
         Hrkt{"Katakana ili Hiragana"}
         Kana{"Katakana"}
+        Khmr{"kmersko pismo"}
+        Latf{"Latinica (Fraktur varijanta)"}
         Latn{"Latinica"}
+        Runr{"runsko pismo"}
     }
     Types{
         calendar{
@@ -522,14 +529,16 @@ sr_Latn{
             japanese{"Japanski kalendar"}
         }
         collation{
+            big5han{"Tradicionalni kineski"}
             direct{"Direktno sortiranje"}
+            gb2312han{"Pojednostavljeni kineski"}
             phonebook{"Sortiranje po azbuci"}
             pinyin{"Pinjin sortiranje"}
             stroke{"Sortiranje po broju crta"}
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.40"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -542,6 +551,24 @@ sr_Latn{
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{"MMMM"}
+                MMMdd{"dd.MMM"}
+                MMdd{"MM-dd"}
+                ww{"ww"}
+                yyMM{"MM.yy"}
+                yyMMMEEEd{"EEE, d. MMM yy"}
+                yyMMMEEEdd{"EEE dd.MMM yy"}
+                yyMMMd{"d. MMM yy"}
+                yyMMddHHmm{"dd.MM.yy HH:mm"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMMEEEd{"EEE, d. MMMM yyyy"}
+                yyyyMMMMd{"d. MMMM yyyy"}
+                yyyyMMddHHmmss{"dd.MM.yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -630,11 +657,24 @@ sr_Latn{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                }
+            }
         }
     }
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lumumbaši"}
         }
         "Antarctica:South_Pole"{
             ec{"Južni pol"}

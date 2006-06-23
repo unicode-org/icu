@@ -59,6 +59,7 @@ pt{
         CN{"China"}
         CO{"Colômbia"}
         CR{"Costa Rica"}
+        CS{"Sérvia e Montenegro"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
         CX{"Ilhas Natal"}
@@ -264,7 +265,7 @@ pt{
             "Afegane (1927-2002)",
         }
         AFN{
-            "AFA",
+            "AFN",
             "Afegane",
         }
         ALL{
@@ -660,7 +661,7 @@ pt{
             "Sheqel Novo israelita",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Rupia indiana",
         }
         IQD{
@@ -1783,7 +1784,7 @@ pt{
     Variants{
         REVISED{"Revisado"}
     }
-    Version{"1.52"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1884,6 +1885,22 @@ pt{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "1º trimestre",
+                        "2º trimestre",
+                        "3º trimestre",
+                        "4º trimestre",
+                    }
+                }
+            }
         }
     }
     zoneStrings{
@@ -1901,6 +1918,18 @@ pt{
             sd{"ADT"}
             ss{"AST"}
         }
+        "America:Araguaina"{
+            ec{"Araguaína"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
         "America:Chicago"{
             ec{"Chicago"}
             ld{"Horário de Verão Central"}
@@ -1908,12 +1937,21 @@ pt{
             sd{"CDT"}
             ss{"CST"}
         }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
+        }
         "America:Denver"{
             ec{"Denver"}
             ld{"Horário de Verão Montanha"}
             ls{"Horário Padrão Montanha"}
             sd{"MDT"}
             ss{"MST"}
+        }
+        "America:Guayaquil"{
+            ec{"Guaiaquil"}
         }
         "America:Halifax"{
             ec{"Halifax"}
@@ -1936,12 +1974,24 @@ pt{
             sd{"PDT"}
             ss{"PST"}
         }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Cidade do México"}
+        }
         "America:New_York"{
             ec{"Nova Iorque"}
             ld{"Horário de Verão Oriental"}
             ls{"Horário Padrão Oriental"}
             sd{"EDT"}
             ss{"EST"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Central"}
         }
         "America:Phoenix"{
             ec{"Phoenix"}
@@ -1950,12 +2000,21 @@ pt{
             sd{"MST"}
             ss{"MST"}
         }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
             ld{"Horário de Verão de Terra Nova"}
             ls{"Horário Padrão de Terra Nova"}
             sd{"CDT"}
             ss{"CNT"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Pólo Sul"}
+        }
+        "Asia:Jakarta"{
+            ec{"Jacarta"}
         }
         "Asia:Jerusalem"{
             ec{"Jerusalém"}
@@ -1978,12 +2037,24 @@ pt{
             sd{"JST"}
             ss{"JST"}
         }
+        "Atlantic:Azores"{
+            ec{"Açores"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canárias"}
+        }
         "Europe:Bucharest"{
             ec{"Bucareste"}
             ld{"Horário de Verão da Europa Oriental"}
             ls{"Horário Padrão da Europa Oriental"}
             sd{"EEST"}
             ss{"EET"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisboa"}
+        }
+        "Europe:London"{
+            ec{"Londres"}
         }
         "Europe:Paris"{
             ec{"Paris"}
@@ -1992,12 +2063,18 @@ pt{
             sd{"CEST"}
             ss{"CET"}
         }
+        "Pacific:Galapagos"{
+            ec{"Galápagos"}
+        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
             ld{"Horário Padrão do Havaí"}
             ls{"Horário Padrão do Havaí"}
             sd{"HST"}
             ss{"HST"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Taiti"}
         }
     }
 }

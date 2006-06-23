@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
+    AuxExemplarCharacters{"[q w y]"}
     Countries{
         001{"Lume"}
         005{"America de Sud"}
@@ -29,7 +30,7 @@ ro{
         054{"Melanezia"}
         057{"Micronezia"}
         061{"Polinezia"}
-        062{"Asia centrala şi de Sud"}
+        062{"Asia centrala și de Sud"}
         145{"Asia occidentală"}
         150{"Europa"}
         151{"Europa de Est"}
@@ -39,7 +40,7 @@ ro{
         AD{"Andora"}
         AE{"Emiratele Arabe Unite"}
         AF{"Afganistan"}
-        AG{"Antigua şi Barbuda"}
+        AG{"Antigua și Barbuda"}
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
@@ -53,7 +54,7 @@ ro{
         AW{"Aruba"}
         AX{"Insulele Aland"}
         AZ{"Azerbaidjan"}
-        BA{"Bosnia şi Herzegovina"}
+        BA{"Bosnia și Herzegovina"}
         BB{"Barbados"}
         BD{"Bangladesh"}
         BE{"Belgia"}
@@ -77,15 +78,15 @@ ro{
         CD{"Congo, Republica Democratică"}
         CF{"Republica Central Africană"}
         CG{"Congo"}
-        CH{"Eleveţia"}
-        CI{"Coasta de Fildeş"}
+        CH{"Eleveția"}
+        CI{"Coasta de Fildeș"}
         CK{"Insulele Cook"}
         CL{"Chile"}
         CM{"Camerun"}
         CN{"China"}
         CO{"Columbia"}
         CR{"Costa Rica"}
-        CS{"Serbia şi Muntenegru"}
+        CS{"Serbia și Muntenegru"}
         CU{"Cuba"}
         CV{"Capul Verde"}
         CX{"Insula Christmas"}
@@ -109,9 +110,8 @@ ro{
         FK{"Insulele Falkland"}
         FM{"Micronezia, Statele Federate"}
         FO{"Insulele Feroe"}
-        FR{"Franţa"}
+        FR{"Franța"}
         GA{"Gabon"}
-        GB{"Regatul Unit"}
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guyana Franceză"}
@@ -123,15 +123,15 @@ ro{
         GP{"Guadeloupe"}
         GQ{"Guineea Ecuatorială"}
         GR{"Grecia"}
-        GS{"Insulele South Georgia şi South Sandwich"}
+        GS{"Insulele South Georgia și South Sandwich"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guineea-Bissau"}
         GY{"Guyana"}
         HK{"R.A.S. Hong Kong a Chinei"}
-        HM{"Insula Heard şi Insulele McDonald"}
+        HM{"Insula Heard și Insulele McDonald"}
         HN{"Honduras"}
-        HR{"Croaţia"}
+        HR{"Croația"}
         HT{"Haiti"}
         HU{"Ungaria"}
         ID{"Indonezia"}
@@ -151,7 +151,7 @@ ro{
         KH{"Cambodgia"}
         KI{"Kiribati"}
         KM{"Comoros"}
-        KN{"Saint Kitts şi Nevis"}
+        KN{"Saint Kitts și Nevis"}
         KP{"Coreea de Nord"}
         KR{"Coreea de Sud"}
         KW{"Kuweit"}
@@ -209,7 +209,7 @@ ro{
         PH{"Filipine"}
         PK{"Pakistan"}
         PL{"Polonia"}
-        PM{"Saint Pierre şi Miquelon"}
+        PM{"Saint Pierre și Miquelon"}
         PN{"Pitcairn"}
         PR{"Porto Rico"}
         PS{"Teritoriul Palestinian"}
@@ -220,7 +220,7 @@ ro{
         QO{"Altă Oceania"}
         RE{"Reunion"}
         RO{"România"}
-        RU{"Federaţia Rusă"}
+        RU{"Federația Rusă"}
         RW{"Rwanda"}
         SA{"Arabia Saudită"}
         SB{"Insulele Solomon"}
@@ -230,18 +230,18 @@ ro{
         SG{"Singapore"}
         SH{"Saint Helena"}
         SI{"Slovenia"}
-        SJ{"Svalbard şi Jan Mayen"}
+        SJ{"Svalbard și Jan Mayen"}
         SK{"Slovacia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
-        ST{"Sao Tome şi Principe"}
+        ST{"Sao Tome și Principe"}
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swaziland"}
-        TC{"Insulele Turks şi Caicos"}
+        TC{"Insulele Turks și Caicos"}
         TD{"Ciad"}
         TF{"Teritoriile Franceze de Sud"}
         TG{"Togo"}
@@ -278,13 +278,7 @@ ro{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Currencies{
-        ROL{
-            "lei",
-            "ROL",
-        }
-    }
-    ExemplarCharacters{"[a ă â b-i î j-s ş t ţ u-z]"}
+    ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u-x z]"}
     Languages{
         ar{"Arabă"}
         bg{"Bulgară"}
@@ -334,7 +328,7 @@ ro{
         "NaN",
         "+",
     }
-    Version{"1.58"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -362,7 +356,7 @@ ro{
                     wide{
                         "duminică",
                         "luni",
-                        "marţi",
+                        "marți",
                         "miercuri",
                         "joi",
                         "vineri",

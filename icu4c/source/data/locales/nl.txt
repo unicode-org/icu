@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
+    AuxExemplarCharacters{"[å ã ç ñ ô]"}
     Countries{
         001{"Wereld"}
         002{"Afrika"}
@@ -25,6 +26,7 @@ nl{
         021{"Noord-Amerika"}
         029{"Caribisch gebied"}
         030{"Oost-Azië"}
+        034{"Zuid-Azië"}
         035{"Zuidoost-Azië"}
         039{"Zuid-Europa"}
         053{"Australië en Nieuw-Zeeland"}
@@ -33,11 +35,13 @@ nl{
         061{"Polynesië"}
         062{"Zuidelijk Centraal-Azië"}
         142{"Azië"}
+        143{"Centraal-Azië"}
         145{"West-Azië"}
         150{"Europa"}
         151{"Oost-Europa"}
         154{"Noord-Europa"}
         155{"West-Europa"}
+        419{"Latijns-Amerika en het Caribisch gebied"}
         830{"Kanaaleilanden"}
         833{"Isle of Man"}
         AD{"Andorra"}
@@ -111,7 +115,7 @@ nl{
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandeilanden"}
-        FM{"Micronesia, Federale Staten van"}
+        FM{"Micronesia"}
         FO{"Faeröer"}
         FR{"Frankrijk"}
         GA{"Gabon"}
@@ -133,7 +137,7 @@ nl{
         GW{"Guinee-Bissau"}
         GY{"Guyana"}
         HK{"Hongkong S.A.R. van China"}
-        HM{"Heardeiland en McDonaldeiland"}
+        HM{"Heard- en McDonaldeilanden"}
         HN{"Honduras"}
         HR{"Kroatië"}
         HT{"Haïti"}
@@ -142,7 +146,7 @@ nl{
         IE{"Ierland"}
         IL{"Israël"}
         IN{"India"}
-        IO{"Brits Territorium in de Indische Oceaan"}
+        IO{"Britse Gebieden in de Indische Oceaan"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"IJsland"}
@@ -174,10 +178,10 @@ nl{
         LY{"Libië"}
         MA{"Marokko"}
         MC{"Monaco"}
-        MD{"Republiek Moldavië"}
+        MD{"Moldavië"}
         MG{"Madagaskar"}
         MH{"Marshalleilanden"}
-        MK{"Macedonië, Republiek"}
+        MK{"Macedonië"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolië"}
@@ -224,7 +228,7 @@ nl{
         QO{"Oceanië (overige)"}
         RE{"Réunion"}
         RO{"Roemenië"}
-        RU{"Russische Federatie"}
+        RU{"Rusland"}
         RW{"Rwanda"}
         SA{"Saoedi-Arabië"}
         SB{"Salomonseilanden"}
@@ -477,11 +481,19 @@ nl{
         }
         CDF{
             "CDF",
-            "Congolese franc congolais",
+            "Congolese franc",
+        }
+        CHE{
+            "CHE",
+            "WIR euro",
         }
         CHF{
             "SwF",
             "Zwitserse franc",
+        }
+        CHW{
+            "CHW",
+            "WIR franc",
         }
         CLF{
             "CLF",
@@ -499,9 +511,17 @@ nl{
             "Col$",
             "Colombiaanse peso",
         }
+        COU{
+            "COU",
+            "Unidad de Valor Real",
+        }
         CRC{
             "C",
             "Costaricaanse colón",
+        }
+        CSD{
+            "CSD",
+            "Servische dinar",
         }
         CSK{
             "CSK",
@@ -567,6 +587,14 @@ nl{
             "ERN",
             "Eritrese nakfa",
         }
+        ESA{
+            "ESA",
+            "Spaanse peseta (account A)",
+        }
+        ESB{
+            "ESB",
+            "Spaanse peseta (convertibele account)",
+        }
         ESP{
             "ESP",
             "Spaanse peseta",
@@ -577,7 +605,7 @@ nl{
         }
         EUR{
             "€",
-            "Euro",
+            "euro",
         }
         FIM{
             "FIM",
@@ -641,7 +669,7 @@ nl{
         }
         GWE{
             "GWE",
-            "Portuguees-Guinese escudo",
+            "Portugees-Guinese escudo",
         }
         GWP{
             "GWP",
@@ -657,7 +685,7 @@ nl{
         }
         HNL{
             "L",
-            "Hodurese lempira",
+            "Hondurese lempira",
         }
         HRD{
             "HRD",
@@ -692,7 +720,7 @@ nl{
             "Israëlische nieuwe shekel",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Indiase rupee",
         }
         IQD{
@@ -787,9 +815,17 @@ nl{
             "LTT",
             "Litouwse talonas",
         }
+        LUC{
+            "LUC",
+            "Luxemburgse convertibele franc",
+        }
         LUF{
             "LUF",
             "Luxemburgse frank",
+        }
+        LUL{
+            "LUL",
+            "Luxemburgse financiële franc",
         }
         LVL{
             "LVL",
@@ -1175,6 +1211,10 @@ nl{
             "XAF",
             "CFA-franc BEAC",
         }
+        XAG{
+            "XAG",
+            "Zilver",
+        }
         XAU{
             "XAU",
             "Goud",
@@ -1223,6 +1263,22 @@ nl{
             "CFPF",
             "CFP-franc",
         }
+        XPT{
+            "XPT",
+            "Platina",
+        }
+        XRE{
+            "XRE",
+            "RINET-fondsen",
+        }
+        XTS{
+            "XTS",
+            "Valutacode voor testdoeleinden",
+        }
+        XXX{
+            "XXX",
+            "Geen valuta",
+        }
         YDD{
             "YDD",
             "Jemenitische dinar",
@@ -1268,7 +1324,7 @@ nl{
             "Zimbabwaanse dollar",
         }
     }
-    ExemplarCharacters{"[a á ä b-e é ë f-i í ï ĳ j-o ó ö p-u ú ü v-z]"}
+    ExemplarCharacters{"[a á ä b-e é ë f-i í ï {ij} j-o ó ö p-u ú ü v-y z]"}
     Keys{
         calendar{"Kalender"}
         collation{"Volgorde"}
@@ -1285,6 +1341,7 @@ nl{
         af{"Afrikaans"}
         afa{"Afro-Aziatisch (overige)"}
         afh{"Afrihili"}
+        ain{"Ainu"}
         ak{"Akan"}
         akk{"Akkadisch"}
         ale{"Aleut"}
@@ -1404,6 +1461,7 @@ nl{
         fat{"Fanti"}
         ff{"Fulah"}
         fi{"Fins"}
+        fil{"Filipijns"}
         fiu{"Finoegrische talen (overige)"}
         fj{"Fijisch"}
         fo{"Faeröers"}
@@ -1560,6 +1618,7 @@ nl{
         mul{"Meerdere talen"}
         mun{"Munda-talen"}
         mus{"Creek"}
+        mwl{"Mirandees"}
         mwr{"Marwari"}
         my{"Birmees"}
         myn{"Mayan-talen"}
@@ -1586,6 +1645,7 @@ nl{
         nso{"Noord-Sotho"}
         nub{"Nubische talen"}
         nv{"Navajo"}
+        nwc{"Klassiek Newari"}
         ny{"Nyanja"}
         nym{"Nyamwezi"}
         nyn{"Nyankole"}
@@ -1625,7 +1685,9 @@ nl{
         ro{"Roemeens"}
         roa{"Romaans (overige)"}
         rom{"Romani"}
+        root{"Root"}
         ru{"Russisch"}
+        rup{"Aromaniaans"}
         rw{"Kinyarwanda"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
@@ -1636,6 +1698,7 @@ nl{
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardinisch"}
+        scn{"Siciliaans"}
         sco{"Schots"}
         sd{"Sindhi"}
         se{"Noord-Samisch"}
@@ -1666,6 +1729,7 @@ nl{
         son{"Songhai"}
         sq{"Albanees"}
         sr{"Servisch"}
+        srn{"Sranantongo"}
         srr{"Serer"}
         ss{"Swati"}
         st{"Sotho, zuid"}
@@ -1690,6 +1754,7 @@ nl{
         tk{"Turkmeens"}
         tkl{"Tokelau"}
         tl{"Tagalog"}
+        tlh{"Klingon"}
         tli{"Tlingit"}
         tmh{"Tamashek"}
         tn{"Tswana"}
@@ -1762,19 +1827,30 @@ nl{
     Scripts{
         Arab{"Arabisch"}
         Armn{"Armeens"}
+        Bali{"Balinees"}
+        Batk{"Batak"}
         Beng{"Bengalees"}
+        Blis{"Blissymbolen"}
         Bopo{"Bopomofo"}
+        Brah{"Brahmi"}
         Brai{"Braille"}
+        Bugi{"Buginees"}
         Buhd{"Buhid"}
         Cans{"Verenigde Canadese Aboriginal-symbolen"}
         Cher{"Cherokee"}
+        Cirt{"Cirth"}
         Copt{"Koptisch"}
         Cprt{"Cyprisch"}
         Cyrl{"Cyrillisch"}
+        Cyrs{"Cyrillisch (Oudkerkslavische variant)"}
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
+        Egyd{"Egyptisch (demotisch)"}
+        Egyh{"Egyptisch (hiëratisch)"}
         Ethi{"Ethiopisch"}
+        Geok{"Khutsuri (Asomtavruli en Nuskhuri)"}
         Geor{"Georgisch"}
+        Glag{"Glagolitisch"}
         Goth{"Gothisch"}
         Grek{"Grieks"}
         Gujr{"Gujarati"}
@@ -1786,34 +1862,67 @@ nl{
         Hant{"Traditioneel Han"}
         Hebr{"Hebreeuws"}
         Hira{"Hiragana"}
+        Hmng{"Pahawh Hmong"}
+        Hrkt{"Katakana of Hiragana"}
+        Hung{"Oudhongaars"}
+        Inds{"Indus (Harappan)"}
         Ital{"Oud-italisch"}
+        Java{"Javaans"}
+        Kali{"Kayah Li"}
         Kana{"Katakana"}
+        Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
         Laoo{"Lao"}
+        Latf{"Latijn (Fraktur-variant)"}
+        Latg{"Latijn (Gaelic variant)"}
         Latn{"Latijn"}
+        Lepc{"Lepcha (Róng)"}
         Limb{"Limbu"}
+        Lina{"Lineair A"}
         Linb{"Lineair B"}
+        Mand{"Mandaeans"}
+        Maya{"Mayahiërogliefen"}
+        Mero{"Meroïtisch"}
         Mlym{"Malayalam"}
         Mong{"Mongools"}
         Mymr{"Myanmar"}
+        Nkoo{"N’Ko"}
         Ogam{"Ogham"}
+        Orkh{"Orkhon"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
+        Perm{"Oudpermisch"}
+        Phag{"Phags-pa"}
+        Phnx{"Foenicisch"}
+        Plrd{"Pollard-fonetisch"}
+        Qaai{"Overgeërfd"}
+        Roro{"Rongorongo"}
         Runr{"Runic"}
+        Sara{"Sarati"}
         Shaw{"Shavian"}
         Sinh{"Sinhala"}
+        Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
+        Talu{"Tai Lue (nieuw)"}
         Taml{"Tamil"}
         Telu{"Telugu"}
+        Teng{"Tengwar"}
+        Tfng{"Tifinagh (Berber)"}
         Tglg{"Tagalog"}
         Thaa{"Thaana"}
         Tibt{"Tibetaans"}
         Ugar{"Ugaritisch"}
+        Vaii{"Vai"}
+        Visp{"Zichtbare spraak"}
+        Xpeo{"Oudperzisch"}
+        Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zxxx{"Code voor ongeschreven talen"}
         Zyyy{"Algemeen"}
+        Zzzz{"Code voor ongecodeerde schriftsystemen"}
     }
     Types{
         calendar{
@@ -1826,29 +1935,58 @@ nl{
             japanese{"Japanse kalender"}
         }
         collation{
+            big5han{"Traditioneel Chinees"}
             direct{"Directe volgorde"}
+            gb2312han{"Vereenvoudigd Chinees"}
             phonebook{"Telefoonboekvolgorde"}
             pinyin{"Pinyinvolgorde"}
             stroke{"Streekvolgorde"}
-            traditional{"Traditioneelvolgorde"}
+            traditional{"Traditionele volgorde"}
         }
     }
     Variants{
-        REVISED{"Gewijzigd"}
+        1901{"Traditionele Duitse ortografie"}
+        1996{"Duitse ortografie van 1996"}
+        NEDIS{"Natisone (dialect)"}
+        POLYTONI{"Polytonaal"}
+        REVISED{"Gewijzigde ortografie"}
+        ROZAJ{"Resiaans"}
+        SAAHO{"Saho"}
     }
-    Version{"1.61"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H:mm:ss' uur' z",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "d-MMM-yyyy",
-                "d-M-yy",
+                "d MMM yyyy",
+                "dd-MM-yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMM{"MMMM"}
+                MMMdd{"dd MMM"}
+                MMdd{"dd-MM"}
+                mmssSS{"mm:ss,SS"}
+                ww{"ww"}
+                yyMM{"MM-yy"}
+                yyMMMEEEd{"EEE d MMM yy"}
+                yyMMMd{"d MMM yy"}
+                yyMMd{"d-MM-yy"}
+                yyMMdd{"dd-MM-yy"}
+                yyMMddHHmm{"dd-MM-yy HH:mm"}
+                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
+                yyyyMMMMEEEd{"EEE d MMMM yyyy"}
+                yyyyMMMMd{"d MMMM yyyy"}
+                yyyyMMMd{"d MMM yyyy"}
+                yyyyMMdd{"dd-MM-yyyy"}
+                yyyyMMddHHmmss{"dd-MM-yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1887,6 +2025,35 @@ nl{
                 abbreviated{
                     "v. Chr.",
                     "n. Chr.",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dag"}
+                }
+                dayperiod{
+                    dn{"Dagdeel"}
+                }
+                era{
+                    dn{"Tijdperk"}
+                }
+                hour{
+                    dn{"Uur"}
+                }
+                minute{
+                    dn{"Minuut"}
+                }
+                month{
+                    dn{"Maand"}
+                }
+                second{
+                    dn{"Seconde"}
+                }
+                weekday{
+                    dn{"Dag van de week"}
+                }
+                year{
+                    dn{"Jaar"}
                 }
             }
             monthNames{
@@ -1937,6 +2104,16 @@ nl{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                }
+            }
         }
         hebrew{
             monthNames{
@@ -1984,6 +2161,15 @@ nl{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    measurementSystemNames{
+        metric{"Metriek"}
     }
     zoneStrings{
         "Africa:Casablanca"{
@@ -2112,7 +2298,6 @@ nl{
             ss{"IST"}
         }
         "Asia:Shanghai"{
-            ec{"Shanghai"}
             ld{"Chinese standaardtijd"}
             ls{"Chinese standaardtijd"}
             sd{"CDT"}

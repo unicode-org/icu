@@ -59,6 +59,7 @@ et{
         CN{"Hiina"}
         CO{"Colombia"}
         CR{"Costa Rica"}
+        CS{"Serbia ja Montenegro"}
         CU{"Kuuba"}
         CV{"Cabo Verde"}
         CX{"Jõulusaar"}
@@ -317,7 +318,7 @@ et{
         "NaN",
         "+",
     }
-    Version{"1.49"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{

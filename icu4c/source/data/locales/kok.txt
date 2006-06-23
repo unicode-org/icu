@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kok.xml
  */
 kok{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
     Countries{
         IN{"भारत"}
     }
@@ -20,8 +21,8 @@ kok{
         }
     }
     ExemplarCharacters{
-        "[‌ ‍ ़ ँ-ः ॑-॔ ०-९ ॐ ऄ-ऋ ॠ ऌ ॡ ऍ-क क़ ख ख़ ग ग़ घ-ज ज़ झ-ड ड़ ढ ढ़ ण-फ फ़ ब-य य़ र-ह"
-        " ऽ ॽ ा-ॄ ॢ ॣ ॅ-्]"
+        "[़ ँ-ः ०-९ ॐ अ-ऍ ए-ऑ ओ-क {क़} ख {ख़} ग {ग़} घ-ज {ज़} झ-ड {ड़} ढ {ढ़} ण-न प फ"
+        " {फ़} ब-य {य़} र ल ळ व-ह ऽ-ॅ े-ॉ ो-्]"
     }
     Languages{
         aa{"अफार"}
@@ -168,7 +169,7 @@ kok{
     LocaleScript{
         "Deva",
     }
-    Version{"1.36"}
+    Version{"1.38"}
     calendar{
         gregorian{
             AmPmMarkers{

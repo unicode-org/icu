@@ -203,7 +203,7 @@ hy{
         ZM{"Զամբիա"}
         ZW{"Զիմբաբվե"}
     }
-    ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-մ ﬔ ﬕ ﬗ ﬓ յ-վ ﬖ տ-ֆ ՙ]"}
+    ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-մ յ-վ տ-ֆ]"}
     Languages{
         hy{"Հայերէն"}
     }
@@ -230,7 +230,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{

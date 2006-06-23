@@ -31,7 +31,7 @@ hr{
         054{"Melanezija"}
         057{"Micronezija"}
         061{"Polinezija"}
-        062{"Južno-centralna Azija"}
+        062{"Južna Azija"}
         142{"Azija"}
         145{"Zapadna Azija"}
         150{"Europa"}
@@ -67,7 +67,7 @@ hr{
         BI{"Burundi"}
         BJ{"Benin"}
         BM{"Bermuda"}
-        BN{"Brunei Darussalam"}
+        BN{"Brunei"}
         BO{"Bolivija"}
         BR{"Brazil"}
         BS{"Bahami"}
@@ -532,7 +532,7 @@ hr{
             "Hrvatski dinar",
         }
         HRK{
-            "HRK",
+            "Kn",
             "Kuna",
         }
         HTG{
@@ -1105,7 +1105,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1118,6 +1118,30 @@ hr{
                 "yyyy.MM.dd",
                 "yyyy.MM.dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{"MMMM"}
+                MMMdd{"MMM dd"}
+                MMdd{"MM-dd"}
+                mmssSS{"mm:ss,SS"}
+                ww{"ww"}
+                yyMM{"yy.MM"}
+                yyMMMEEEd{"EEE yy.MMM d"}
+                yyMMMEEEdd{"EEE dd.MMM yy"}
+                yyMMMd{"yy.MMM d"}
+                yyMMdd{"yy.MM.dd"}
+                yyMMddHHmm{"yy.MM.dd HH:mm"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMMEEEEd{"EEEE,yyyy.MMMM d"}
+                yyyyMMMMEEEd{"EEE yyyy.MMMM d"}
+                yyyyMMMMd{"yyyy.MMMM d"}
+                yyyyMMMd{"yyyy.MMM d"}
+                yyyyMMdd{"yyyy.MM.dd"}
+                yyyyMMddHHmmss{"yyyy.MM.dd HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1150,6 +1174,16 @@ hr{
                         "p",
                         "s",
                     }
+                }
+            }
+            eras{
+                abbreviated{
+                    "pr.n.e.",
+                    "AD",
+                }
+                wide{
+                    "Prije Krista",
+                    "Poslije Krista",
                 }
             }
             monthNames{
@@ -1239,6 +1273,22 @@ hr{
                         "listopad",
                         "studeni",
                         "prosinac",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1kv",
+                        "2kv",
+                        "3kv",
+                        "4kv",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
                     }
                 }
             }

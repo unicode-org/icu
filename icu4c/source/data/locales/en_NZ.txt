@@ -13,7 +13,7 @@ en_NZ{
             "New Zealand Dollar",
         }
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

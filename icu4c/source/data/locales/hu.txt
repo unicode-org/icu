@@ -10,7 +10,33 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
+    AuxExemplarCharacters{"[q w-y]"}
     Countries{
+        001{"Világ"}
+        002{"Afrika"}
+        005{"Dél-Amerika"}
+        009{"Óceánia"}
+        011{"Nyugat-Afrika"}
+        013{"Közép-Amerika"}
+        014{"Kelet-Afrika"}
+        015{"Észak-Afrika"}
+        017{"Közép-Afrika"}
+        019{"Amerika"}
+        021{"Észak-Amerika"}
+        030{"Kelet-Ázsia"}
+        035{"Délkelet-Ázsia"}
+        039{"Dél-Európa"}
+        053{"Ausztrália és Új-Zéland"}
+        054{"Melanézia"}
+        061{"Polinézia"}
+        142{"Ázsia"}
+        145{"Nyugat-Ázsia"}
+        150{"Európa"}
+        151{"Kelet-Európa"}
+        154{"Észak-Európa"}
+        155{"Nyugat-Európa"}
+        830{"Csatorna-szigetek"}
+        833{"Man-sziget"}
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
         AF{"Afganisztán"}
@@ -26,6 +52,7 @@ hu{
         AT{"Ausztria"}
         AU{"Ausztrália"}
         AW{"Aruba"}
+        AX{"Aland-szigetek"}
         AZ{"Azerbajdzsán"}
         BA{"Bosznia-Hercegovina"}
         BB{"Barbados"}
@@ -190,6 +217,7 @@ hu{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
+        QO{"Külső-Óceánia"}
         RE{"Reunion (francia)"}
         RO{"Románia"}
         RU{"Orosz Köztársaság"}
@@ -544,7 +572,7 @@ hu{
             "Etiópiai birr",
         }
         EUR{
-            "€",
+            "EUR",
             "Euro",
         }
         FIM{
@@ -564,7 +592,7 @@ hu{
             "Francia frank",
         }
         GBP{
-            "£",
+            "GBP",
             "Brit font sterling",
         }
         GEK{
@@ -672,7 +700,7 @@ hu{
             "Izlandi korona",
         }
         ITL{
-            "₤",
+            "ITL",
             "Olasz líra",
         }
         JMD{
@@ -684,7 +712,7 @@ hu{
             "Jordániai dínár",
         }
         JPY{
-            "¥",
+            "JPY",
             "Japán jen",
         }
         KES{
@@ -1221,9 +1249,9 @@ hu{
         }
     }
     ExemplarCharacters{
-        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j-l {"
-        "ly} {lly} m n {ny} {nny} o ó ö ő p-s {sz} {ssz} t {ty} {tty} u ú ü ű v-z {zs"
-        "} {zzs}]"
+        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j k l"
+        " {ly} {lly} m n {ny} {nny} o ó ö ő p r s {sz} {ssz} t {ty} {tty} u ú ü ű v z"
+        " {zs} {zzs}]"
     }
     Keys{
         calendar{"Naptár"}
@@ -1440,7 +1468,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.59"}
+    Version{"1.61"}
     calendar{
         buddhist{
             eras{
@@ -1500,8 +1528,43 @@ hu{
             }
             eras{
                 abbreviated{
-                    "i.e.",
-                    "i.u.",
+                    "i. e.",
+                    "i. sz.",
+                }
+            }
+            fields{
+                day{
+                    dn{"nap"}
+                }
+                dayperiod{
+                    dn{"napszak"}
+                }
+                era{
+                    dn{"éra"}
+                }
+                hour{
+                    dn{"óra"}
+                }
+                minute{
+                    dn{"perc"}
+                }
+                month{
+                    dn{"hónap"}
+                }
+                second{
+                    dn{"másodperc"}
+                }
+                week{
+                    dn{"hét"}
+                }
+                weekday{
+                    dn{"hét napja"}
+                }
+                year{
+                    dn{"év"}
+                }
+                zone{
+                    dn{"zóna"}
                 }
             }
             monthNames{
@@ -1549,6 +1612,22 @@ hu{
                         "O",
                         "N",
                         "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "N1",
+                        "N2",
+                        "N3",
+                        "N4",
+                    }
+                    wide{
+                        "I. negyedév",
+                        "II. negyedév",
+                        "III. negyedév",
+                        "IV. negyedév",
                     }
                 }
             }
@@ -1607,10 +1686,223 @@ hu{
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
+        "America:Araguaina"{
+            ec{"Araguaína"}
+        }
+        "America:Argentina:ComodRivadavia"{
+            ec{"Comodoro Rivadavia"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Río Gallegos"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarks Havn"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirunepé"}
+        }
+        "America:Godthab"{
+            ec{"Godthåb"}
+        }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlán"}
+        }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexikóváros"}
+        }
+        "America:Montreal"{
+            ec{"Montréal"}
+        }
+        "America:Porto_Velho"{
+            ec{"Pôrto Velho"}
+        }
+        "America:Rio_Branco"{
+            ec{"Río Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresby Sound"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Déli-sark"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vosztok"}
+        }
+        "Asia:Almaty"{
+            ec{"Alma-Ata"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadir"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aktöbe"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Csojbalszan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Csungking"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutszk"}
+        }
+        "Asia:Jakarta"{
+            ec{"Dzsakarta"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamcsatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kasgár"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasznojarszk"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadán"}
+        }
+        "Asia:Makassar"{
+            ec{"Makasar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novoszibirszk"}
+        }
+        "Asia:Omsk"{
+            ec{"Omszk"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kizilorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Szahalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Szamarkand"}
+        }
+        "Asia:Shanghai"{
+            ec{"Sanghaj"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taskent"}
+        }
+        "Asia:Urumqi"{
+            ec{"Ürümqi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vlagyivosztok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutszk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekatyerinburg"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanári-szigetek"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kalinyingrád"}
+        }
+        "Europe:Kiev"{
+            ec{"Kijev"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisszabon"}
+        }
+        "Europe:Moscow"{
+            ec{"Moszkva"}
+        }
         "Europe:Paris"{
             ec{"Paris"}
             ld{"közép-európai nyári idő"}
             ls{"közép-európai idő"}
+        }
+        "Europe:Samara"{
+            ec{"Szamara"}
+        }
+        "Europe:Simferopol"{
+            ec{"Szimferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Ungvár"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporozsje"}
+        }
+        "Pacific:Chatham"{
+            ec{"Chatham-szigetek"}
+        }
+        "Pacific:Easter"{
+            ec{"Húsvét-szigetek"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagos-szigetek"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier-szigetek"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati-sziget"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae-szigetek"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein-zátony"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro-zátony"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas-szigetek"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway-szigetek"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape-szigetek"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk-szigetek"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake-sziget"}
+        }
+        "Pacific:Yap"{
+            ec{"Yap-szigetek"}
         }
     }
 }

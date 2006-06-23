@@ -49,7 +49,7 @@ be{
             "англійскі фунт",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "індыйская рупія",
         }
         JPY{
@@ -101,7 +101,7 @@ be{
         Cyrl{"кірылічны"}
         Latn{"лацінскі"}
     }
-    Version{"1.45"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimePatterns{

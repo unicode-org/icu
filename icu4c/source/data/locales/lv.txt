@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
+    AuxExemplarCharacters{"[y q w x]"}
     Countries{
         AD{"Andora"}
         AE{"Apvienotie Arābu Emirāti"}
@@ -59,6 +60,7 @@ lv{
         CN{"Ķīna"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
+        CS{"Serbija un Melnkalne"}
         CU{"Kuba"}
         CV{"Kaboverde"}
         CX{"Ziemsvētku sala"}
@@ -227,6 +229,7 @@ lv{
         TR{"Turcija"}
         TT{"Trinidāda un Tobāgo"}
         TV{"Tuvalu"}
+        TW{"Taivāna"}
         TZ{"Tanzānija"}
         UA{"Ukraina"}
         UG{"Uganda"}
@@ -255,7 +258,7 @@ lv{
             "LVL",
         }
     }
-    ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī y j k ķ l ļ m n ņ o ō p-r ŗ s š t u ū v-x z ž]"}
+    ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
     Languages{
         ar{"arābu"}
         bg{"bulgāru"}
@@ -305,7 +308,7 @@ lv{
         "NaN",
         "+",
     }
-    Version{"1.49"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -376,6 +379,16 @@ lv{
                         "oktobris",
                         "novembris",
                         "decembris",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "C1",
+                        "C2",
+                        "C3",
+                        "C4",
                     }
                 }
             }

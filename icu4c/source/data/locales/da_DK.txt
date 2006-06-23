@@ -10,10 +10,10 @@ da_DK{
     NumberPatterns{
         "#,##0.###",
         "¤ #,##0.00;¤ -#,##0.00",
-        "#,##0%",
+        "#,##0 %",
         "#E0",
     }
-    Version{"1.32"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -13,7 +13,7 @@ es_PY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
+    AuxExemplarCharacters{"[c q w z]"}
     Countries{
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
@@ -885,7 +886,7 @@ is{
             "Simbabveskur dalur",
         }
     }
-    ExemplarCharacters{"[a á b-d ð e é f-i í j-o ó p-u ú v-y ý z þ æ ö]"}
+    ExemplarCharacters{"[a á b d ð e é f-i í j-o ó p r-u ú v y ý þ æ ö]"}
     Keys{
         calendar{"Dagatal"}
         collation{"Röðun"}
@@ -1394,7 +1395,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.53"}
+    Version{"1.55"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1444,18 +1445,18 @@ is{
             monthNames{
                 format{
                     abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
+                        "janúar",
+                        "febrúar",
+                        "mars",
+                        "apríl",
                         "maí",
-                        "jún",
-                        "júl",
-                        "ágú",
-                        "sep",
-                        "okt",
-                        "nóv",
-                        "des",
+                        "júní",
+                        "júlí",
+                        "ágúst",
+                        "september",
+                        "október",
+                        "nóvember",
+                        "desember",
                     }
                     wide{
                         "janúar",
@@ -1486,6 +1487,22 @@ is{
                         "o",
                         "n",
                         "d",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "F1",
+                        "F2",
+                        "F3",
+                        "F4",
+                    }
+                    wide{
+                        "1st fjórðungur",
+                        "2nd fjórðungur",
+                        "3rd fjórðungur",
+                        "4th fjórðungur",
                     }
                 }
             }

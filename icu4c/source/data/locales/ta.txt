@@ -183,7 +183,7 @@ ta{
             "INR",
         }
     }
-    ExemplarCharacters{"[‌ ‍ ஂ ௳-௸ ௺ ௰-௲ ௹ ௦-௯ ஃ அ-ஊ எ-ஐ ஒ-க ங ச ஜ ஞ ட ண த ந-ப ம-ஹ ா-ூ ெ-ை ொ-் ௗ]"}
+    ExemplarCharacters{"[ஃ அ-ஊ எ-ஐ ஒ-க ங ச ஜ ஞ ட ண த ந-ப ம-வ ஷ-ஹ ா-ூ ெ-ை ொ-்]"}
     Languages{
         aa{"அபார்"}
         ab{"அப்காஸின்"}
@@ -280,7 +280,6 @@ ta{
         rm{"ரைட்டோ-ரோமென்ஸ்"}
         rn{"கிருந்தி"}
         ro{"ரோமேனியன்"}
-        root{"தமிழ்"}
         ru{"ரஷியன்"}
         rw{"கின்யர்வென்டா"}
         sa{"சமஸ்கிருதம்"}
@@ -336,23 +335,12 @@ ta{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.44"}
+    Version{"1.46"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "காலை",
                 "மாலை",
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
             }
             dayNames{
                 format{

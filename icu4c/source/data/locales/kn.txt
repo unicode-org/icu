@@ -20,12 +20,6 @@ kn{
         SG{"ಸಿಂಗಪುರ"}
         TR{"ತುರ್ಕಿ"}
     }
-    Currencies{
-        INR{
-            "रु",
-            "INR",
-        }
-    }
     ExemplarCharacters{"[಼ ಂ ಃ ೦-೯ ಅ-ಋ ೠ ಌ ೡ ಎ-ಐ ಒ-ನ ಪ-ಲ ವ-ಹ ಳ ೞ ಽ-ೄ ೆ-ೈ ೊ-್ ೕ ೖ]"}
     Languages{
         kn{"ಕನ್ನಡ"}
@@ -33,23 +27,12 @@ kn{
     LocaleScript{
         "Knda",
     }
-    Version{"1.40"}
+    Version{"1.41"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "ಪೂರ್ವಾಹ್ನ",
                 "ಅಪರಾಹ್ನ",
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
             }
             dayNames{
                 format{

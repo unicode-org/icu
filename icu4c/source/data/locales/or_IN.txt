@@ -13,7 +13,7 @@ or_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.22"}
+    Version{"1.23"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -7,7 +7,52 @@
 // *
 // ***************************************************************************
 pt_BR{
-    Version{"1.33"}
+    Countries{
+        172{"Comunidade dos Estados Independentes"}
+        AX{"Ilhas Aland"}
+        BA{"Bósnia-Herzegovina"}
+        BH{"Bahrain"}
+        KP{"Coréia do Norte"}
+        MK{"Macedônia"}
+        ZW{"Zimbábue"}
+    }
+    Languages{
+        ang{"inglês arcaico (aprox. 450-1100)"}
+        awa{"awadhi"}
+        bai{"idiomas bamileke"}
+        bug{"buguinês"}
+        ce{"checheno"}
+        crh{"turco da criméia; tártaro da criméia"}
+        dsb{"sérvio baixo"}
+        dum{"holandês medieval"}
+        enm{"inglês medieval"}
+        frm{"francês medieval"}
+        fro{"francês arcaico"}
+        gmh{"alemão medieval alto"}
+        goh{"alemão arcaico alto"}
+        grc{"grego arcaico"}
+        iba{"ibã"}
+        ik{"inupiaque"}
+        jv{"javanês"}
+        kbd{"kabardiano"}
+        khi{"khoisan (outros)"}
+        mga{"irlandês medieval"}
+        mkh{"mon-khmer (outros)"}
+        nd{"ndebele do norte"}
+        nic{"Cordofano-nigeriano (outros)"}
+        non{"nórdico arcaico"}
+        nr{"ndebele do sul"}
+        nso{"soto setentrional"}
+        ota{"turco otomano"}
+        peo{"persa arcaico"}
+        pro{"provençal arcaico"}
+        sal{"idiomas salisanos"}
+        sgn{"linguagem de sinais"}
+        st{"soto do sul"}
+        wak{"idiomas wakashan"}
+        wen{"idiomas sórbios"}
+    }
+    Version{"1.34"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -21,6 +66,73 @@ pt_BR{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"dd-MM"}
+            }
+            fields{
+                day{
+                    dn{"Dia"}
+                }
+                dayperiod{
+                    dn{"Período do dia"}
+                }
+                hour{
+                    dn{"Hora"}
+                }
+                minute{
+                    dn{"Minuto"}
+                }
+                month{
+                    dn{"Mês"}
+                }
+                second{
+                    dn{"Segundo"}
+                }
+                week{
+                    dn{"Semana"}
+                }
+                weekday{
+                    dn{"Dia da Semana"}
+                }
+                year{
+                    dn{"Ano"}
+                }
+                zone{
+                    dn{"Fuso"}
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"Horário de Verão da Montanha"}
+            ls{"Horário Padrão da Montanha"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"Horário de Verão do Atlântico"}
+            ls{"Horário Padrão do Atlântico"}
+        }
+        "America:Phoenix"{
+            ls{"Horário Padrão da Montanha"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"Horário de Verão da China"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"Horário de Verão do Japão"}
+        }
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"Horário de Verão da Europa Central"}
+            ls{"Horário Padrão da Europa Central"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"Horário de Verão do Havaí"}
         }
     }
 }
