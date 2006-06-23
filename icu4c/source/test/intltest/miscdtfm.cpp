@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -308,12 +308,17 @@ DateFormatMiscTests::test4117335()
         0x6e96,
         0x6642
     };
+    UChar jdtLongC [] = {0x65E5, 0x672C, 0x590F, 0x6642, 0x9593};
+
     UnicodeString jstLong(jstLongC, 5, 5);
 
     UnicodeString jstShort = "JST";
     
     UnicodeString tzID = "Asia/Tokyo";
-    
+
+    UnicodeString jdtLong(jdtLongC, 5, 5);
+ 
+    UnicodeString jdtShort = "JDT";
     UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::getJapan(), status);
     if(U_FAILURE(status)) {
@@ -358,12 +363,12 @@ DateFormatMiscTests::test4117335()
         //throw new Exception("Error in short TZ name");
     }
     logln(UnicodeString("Long zone name = ") + zones[index][3]);
-    if (zones[index][3] != jstLong) {
+    if (zones[index][3] != jdtLong) {
         errln("*** Should have been " + prettify(jstLong) + " but it is: " + prettify(zones[index][3]));
         //throw new Exception("Error in long TZ name");
     }
     logln(UnicodeString("SHORT zone name = ") + zones[index][4]);
-    if (zones[index][4] != jstShort) {
+    if (zones[index][4] != jdtShort) {
         errln("*** Should have been " + prettify(jstShort)+ " but it is: " + prettify(zones[index][4]));
         //throw new Exception("Error in short TZ name");
     }
