@@ -910,19 +910,19 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 27: // 'Q' - QUARTER
             if (count >= 4)
-                buf.append(formatData.quarters[value/4]);
+                buf.append(formatData.quarters[value/3]);
             else if (count == 3)
-                buf.append(formatData.shortQuarters[value/4]);
+                buf.append(formatData.shortQuarters[value/3]);
             else
-                zeroPaddingNumber(buf, (value/4)+1, count, maxIntCount);
+                zeroPaddingNumber(buf, (value/3)+1, count, maxIntCount);
             break;
         case 28: // 'q' - STANDALONE QUARTER
             if (count >= 4)
-                buf.append(formatData.standaloneQuarters[value/4]);
+                buf.append(formatData.standaloneQuarters[value/3]);
             else if (count == 3)
-                buf.append(formatData.standaloneShortQuarters[value/4]);
+                buf.append(formatData.standaloneShortQuarters[value/3]);
             else
-                zeroPaddingNumber(buf, (value/4)+1, count, maxIntCount);
+                zeroPaddingNumber(buf, (value/3)+1, count, maxIntCount);
             break;
         default:
             // case 3: // 'd' - DATE
