@@ -2997,7 +2997,6 @@ _ISO_2022_SafeClone(
     /* share the subconverters */
 
     if(cnvData->currentConverter != NULL) {
-        UConverter *currentConverter;
         size = (int32_t)(sizeof(UConverter) + sizeof(UAlignedMemory)); /* include size of padding */
         localClone->mydata.currentConverter =
             ucnv_safeClone(cnvData->currentConverter,
