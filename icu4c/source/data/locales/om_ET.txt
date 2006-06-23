@@ -23,7 +23,7 @@ om_ET{
         "#,##0%",
         "#E0",
     }
-    Version{"1.33"}
+    Version{"1.34"}
     calendar{
         gregorian{
             AmPmMarkers{

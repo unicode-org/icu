@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
     Countries{
         CN{"ચીન"}
         DE{"જમિની"}
@@ -28,7 +29,7 @@ gu{
             "INR",
         }
     }
-    ExemplarCharacters{"[‌ ‍ ૱ ૦-૯ ૐ અ-ઋ ૠ ઌ ૡ ઍ એ-ઑ ઓ-ન પ-ર લ ળ વ-હ ઼ ઁ-ઃ ઽ ્ ા-ૄ ૢ ૣ ૅ ે-ૉ ો ૌ]"}
+    ExemplarCharacters{"[૦-૯ ૐ અ-ઋ ૠ ઍ એ-ઑ ઓ-ન પ-ર લ ળ વ-હ ઼ ઁ-ઃ ઽ ્ ા-ૅ ે-ૉ ો ૌ]"}
     Languages{
         gu{"ગુજરાતી"}
     }
@@ -49,23 +50,12 @@ gu{
         "NaN",
         "+",
     }
-    Version{"1.36"}
+    Version{"1.38"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "પૂર્વ મધ્યાહ્ન",
                 "ઉત્તર મધ્યાહ્ન",
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
             }
             dayNames{
                 format{

@@ -10,6 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
+    AuxExemplarCharacters{
+        "[á à ă â å ä ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ß ú ù ŭ û ū w x ÿ"
+        "]"
+    }
     Countries{
         001{"Dünya"}
         002{"Afrika"}
@@ -1264,7 +1268,7 @@ tr{
             "Zimbabwe Doları",
         }
     }
-    ExemplarCharacters{"[a â b c ç d-g ğ h ı i İ j-o ö p-s ş t u û ü v-z]"}
+    ExemplarCharacters{"[a b c ç d-g ğ h ı i İ j-o ö p r s ş t u ü v y z]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1587,7 +1591,7 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.60"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1640,6 +1644,41 @@ tr{
                     "MS",
                 }
             }
+            fields{
+                day{
+                    dn{"Gün"}
+                }
+                dayperiod{
+                    dn{"Günün Bölümü"}
+                }
+                era{
+                    dn{"Miladi Dönem"}
+                }
+                hour{
+                    dn{"Saat"}
+                }
+                minute{
+                    dn{"Dakika"}
+                }
+                month{
+                    dn{"Ay"}
+                }
+                second{
+                    dn{"Saniye"}
+                }
+                week{
+                    dn{"Hafta"}
+                }
+                weekday{
+                    dn{"Haftanın Günü"}
+                }
+                year{
+                    dn{"Yıl"}
+                }
+                zone{
+                    dn{"Saat Dilimi"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1685,6 +1724,16 @@ tr{
                         "E",
                         "K",
                         "A",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "1. çeyrek",
+                        "2. çeyrek",
+                        "3. çeyrek",
+                        "4. çeyrek",
                     }
                 }
             }

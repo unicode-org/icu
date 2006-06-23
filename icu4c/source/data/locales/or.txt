@@ -10,12 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/or.xml
  */
 or{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
     Countries{
         IN{"ଭାରତ"}
     }
-    ExemplarCharacters{"[୰ ଅ-ଋ ୠ ଌ ୡ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ଡ଼ ଢ଼ ୟ ୱ ଵ ଂ ଃ ଁ ୍ ଼-ୃ େ ୈ ୋ ୌ ୖ ୗ]"}
+    ExemplarCharacters{"[ଅ-ଋ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ଁ ୍ ା-ୃ େ ୈ ୋ ୌ ୟ ଵ ୱ ଼ ଂ ଃ]"}
     Languages{
-        or{"ଓଡ଼ିଆ"}
+        or{"ଓଡ଼ିଆ"}
     }
     LocaleScript{
         "Orya",
@@ -34,7 +35,7 @@ or{
         "NaN",
         "+",
     }
-    Version{"1.18"}
+    Version{"1.21"}
     calendar{
         gregorian{
             dayNames{

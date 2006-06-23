@@ -176,7 +176,7 @@
         </cldr-build>
     </target>
     <target name="supplementalData" depends="init,setup" description="builds supplementalData.txt from supplementalData.xml">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="supplementalData.txt" srcFile="supplementalData.xml" noArgs="true">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="supplementalData.txt" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
             <run>
                 <args>
@@ -214,6 +214,48 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.ICU4C_DIR}/source/data/xml/brkitr" />
                 </args>
+            </run>
+        </cldr-build>
+    </target>
+        <target name="translit" depends="init,setup" description="builds collation files in ICU text format">
+        <cldr-build toolName="org.unicode.cldr.icu.ConvertTransforms" srcFile=".*xml" destFile=".*txt">
+            <run>
+                <args>
+                    <arg name="--sourcedir" value="${env.CLDR_DIR}/common/transforms" />
+                    <arg name="--destdir"   value="${env.ICU4C_DIR}/source/data/translit"/>
+                    <arg name="--commentSkip"/>
+                </args>
+                <!-- http://ant.apache.org/faq.html#xml-entity-include -->
+                
+            </run>
+        </cldr-build>
+    </target>
+    <target name="trnsfiles" depends="init, setup" description="builds colfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="colfiles.mk" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/collation" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/coll"/>
+                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/collation"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-w" value="${env.CLDR_DIR}/common/collation" />
+                </args>
+                 <deprecates> 
+                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 
+                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/> 
+                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/> 
+                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
+                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
+                    <alias from="in" to="id" /> 
+                    <alias from="in_ID" to="id_ID" /> 
+                    <alias from="iw" to="he" /> 
+                    <alias from="iw_IL" to="he_IL" />
+                    <emptyLocale locale="de_" />
+                    <emptyLocale locale="es_" />
+                    <emptyLocale locale="hi_" />
+                    <emptyLocale locale="zh_" />
+                </deprecates> 
             </run>
         </cldr-build>
     </target>

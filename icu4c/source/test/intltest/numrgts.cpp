@@ -879,11 +879,11 @@ void NumberFormatRegressionTest::Test4070798 (void)
         0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x46
     };
     UChar chars3 [] = {
-        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x25
+        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
     UnicodeString expectedCurrency(chars2, 10, 10);
-    UnicodeString expectedPercent(chars3, 9, 9);
+    UnicodeString expectedPercent(chars3, 10, 10);
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
@@ -955,11 +955,11 @@ void NumberFormatRegressionTest::Test4071005 (void)
         0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x24
     };
     UChar chars3 [] = {
-        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x25
+        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
     UnicodeString expectedCurrency(chars2, 10, 10);
-    UnicodeString expectedPercent(chars3, 9, 9);
+    UnicodeString expectedPercent(chars3, 10, 10);
 
     UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::getCanadaFrench(), status);

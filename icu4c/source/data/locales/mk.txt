@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mk.xml
  */
 mk{
+    AuxExemplarCharacters{"[ѐ ѝ]"}
     Countries{
         AD{"Андора"}
         AE{"Обединети Арапски Емирати"}
@@ -972,14 +973,23 @@ mk{
             "Зимбабвиски долар",
         }
     }
-    ExemplarCharacters{"[а-г ѓ д е ѐ ж з ѕ и ѝ ј к ќ л љ м н њ о-ч џ ш]"}
+    ExemplarCharacters{"[а-г ѓ д-з ѕ и ј к ќ л љ м н њ о-ч џ ш]"}
     Keys{
         calendar{"Календар"}
         collation{"Сортирање"}
         currency{"Валута"}
     }
     Languages{
+        de{"германски"}
+        en{"англиски"}
+        es{"шпански"}
+        fr{"француски"}
+        it{"италијански"}
+        ja{"јапонски"}
         mk{"македонски"}
+        pt{"португалски"}
+        ru{"руски"}
+        zh{"кинески"}
     }
     LocaleScript{
         "Cyrl",
@@ -1016,7 +1026,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.49"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimePatterns{

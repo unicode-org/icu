@@ -25,6 +25,7 @@
 #include "cstring.h"
 #include "unicode/uchar.h"
 #include "ucol_imp.h"  /* for U_ICUDATA_COLL */
+#include "ubrkimpl.h" /* for U_ICUDATA_BRKITR */
 #define RESTEST_HEAP_CHECK 0
 
 #include "unicode/uloc.h"
@@ -2044,7 +2045,7 @@ static void TestFallback()
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
         const UChar* version = NULL;
-        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0032, 0x0000};
+        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0033, 0x0000};
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
@@ -2079,6 +2080,7 @@ static void TestResourceLevelAliasing(void) {
     UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;  
     const char* testdatapath = NULL;
     const UChar *string = NULL, *sequence = NULL;
+
     /*const uint8_t *binary = NULL, *binSequence = NULL;*/
     int32_t strLen = 0, seqLen = 0;/*, binLen = 0, binSeqLen = 0;*/
     char buffer[100];
@@ -2157,22 +2159,25 @@ static void TestResourceLevelAliasing(void) {
         log_err("Referencing alias didn't get the right string\n");
       }
       
-#if 0
-      /* TODO: Needs to be replaced as this data is no longer present! */
-      /* check whether the binary collation data is properly referenced by an alias */
-      uk = ures_findResource("th/BreakDictionaryData", uk, &status);
-      binSequence = ures_getBinary(uk, &binSeqLen, &status);
-      
-      tb = ures_getByKey(aliasB, "BreakDictionaryData", tb, &status);
-      binary = ures_getBinary(tb, &binLen, &status);
-      
-      if(U_FAILURE(status)) {
-        log_err("%s trying to read binary BreakDictionaryData\n");
-      } else if(binSeqLen != binLen || memcmp(binSequence, binary, binSeqLen) != 0) {
-        log_err("Referencing alias didn't get the right data\n");
+
+      {
+            UResourceBundle* ja = ures_open(U_ICUDATA_BRKITR,"ja", &status);
+            const UChar *got = NULL, *exp=NULL;
+            int32_t gotLen = 0, expLen=0;
+            ja = ures_getByKey(ja, "boundaries", ja, &status);
+            exp = ures_getStringByKey(ja, "word", &expLen, &status);
+              
+            tb = ures_getByKey(aliasB, "boundaries", tb, &status);
+            got = ures_getStringByKey(tb, "word", &gotLen, &status);
+                
+            if(U_FAILURE(status)) {
+                log_err("%s trying to read str boundaries\n");
+            } else if(gotLen != expLen || u_strncmp(exp, got, gotLen) != 0) {
+                log_err("Referencing alias didn't get the right data\n");
+            }
+            ures_close(ja);
+            status = U_ZERO_ERROR;
       }
-#endif
-      
       /* simple alias */
       testtypes = ures_open(testdatapath, "testtypes", &status);
       strcpy(buffer, "menu/file/open");

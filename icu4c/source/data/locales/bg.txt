@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
+    AuxExemplarCharacters{"[{а̀} ѐ ѝ {о̀} {у̀} {ъ̀} ѣ {ю̀} {я̀} ѫ i v x]"}
     Countries{
         001{"Земята"}
         002{"Африка"}
@@ -20,11 +21,12 @@ bg{
         014{"Източна Африка"}
         015{"Северна Африка"}
         017{"Централна Африка"}
-        018{"Южна Африка"}
+        018{"Южноафрикански регион"}
         019{"Америка"}
         021{"Северна Америка"}
         029{"Карибски о-ви"}
         030{"Източна Азия"}
+        034{"Южна Азия"}
         035{"Югоизточна Азия"}
         039{"Южна Европа"}
         053{"Австралия и Нова Зеландия"}
@@ -33,6 +35,7 @@ bg{
         061{"Полинезия"}
         062{"Южна Азия"}
         142{"Азия"}
+        143{"Централна Азия"}
         145{"Западна Азия"}
         150{"Европа"}
         151{"Източна Европа"}
@@ -82,13 +85,14 @@ bg{
         CF{"Централноафриканска Република"}
         CG{"Конго"}
         CH{"Швейцария"}
-        CI{"Кот д’Ивоар"}
+        CI{"Бряг на Слоновата кост"}
         CK{"Острови Кук"}
         CL{"Чили"}
         CM{"Камерун"}
         CN{"Китай"}
         CO{"Колумбия"}
         CR{"Коста Рика"}
+        CS{"Сърбия и Черна Гора"}
         CU{"Куба"}
         CV{"Кабо Верде"}
         CX{"Остров Кристмас"}
@@ -1139,14 +1143,15 @@ bg{
             "Зимбабвийски долар",
         }
     }
-    ExemplarCharacters{"[а-ь ю я]"}
+    ExemplarCharacters{"[а-ъ ь ю я]"}
     Keys{
         calendar{"Календар"}
         collation{"Сортиране"}
-        currency{"Валути"}
+        currency{"Валута"}
     }
     Languages{
-        ab{"Абкхазски"}
+        ab{"Абхазски"}
+        ady{"Адиге"}
         af{"Африканс"}
         afa{"Афро-азиатски (други)"}
         afh{"Африхили"}
@@ -1159,12 +1164,15 @@ bg{
         aus{"Австралийски езици"}
         av{"Аварски"}
         ay{"Аймара"}
-        az{"Азербайджански"}
+        az{"Азърбайджански"}
         ba{"Башкирски"}
+        bal{"Балучи"}
         bat{"Прибалтийски (други)"}
         be{"Беларуски"}
         ber{"берберски"}
         bg{"Български"}
+        bho{"Божпури"}
+        bi{"Бислама"}
         bn{"Бенгалски"}
         bnt{"Банту"}
         bo{"Тибетски"}
@@ -1252,7 +1260,7 @@ bg{
         mi{"Маорски"}
         mis{"Други езици"}
         mk{"Македонски"}
-        ml{"Малайски"}
+        ml{"Малаялам"}
         mn{"Монголски"}
         mo{"Молдовски"}
         ms{"Малайски"}
@@ -1345,6 +1353,7 @@ bg{
     Scripts{
         Arab{"Арабска"}
         Armn{"Арменска"}
+        Bali{"Балийски"}
         Beng{"Бенгалска"}
         Brai{"Брайлова"}
         Cher{"Чероки"}
@@ -1386,14 +1395,16 @@ bg{
             japanese{"Японски календар"}
         }
         collation{
+            big5han{"Традиционен китайски (Big5)"}
             direct{"Директно"}
+            gb2312han{"Опростен китайски (GB2312)"}
             phonebook{"Азбучен ред"}
-            pinyin{"Сортиране Pinyin"}
+            pinyin{"Сортиране Пинин"}
             stroke{"Сортиране по щрих"}
             traditional{"Традиционно"}
         }
     }
-    Version{"1.61"}
+    Version{"1.62"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1410,6 +1421,21 @@ bg{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                Hmmss{"H:mm:ss"}
+                MMMM{"MMMM"}
+                MMMd{"d MMM"}
+                MMd{"d.MM."}
+                mmssSS{"mm:ss,SS"}
+                yyMMd{"d.MM.yy"}
+                yyMd{"d.M.yy"}
+                yyyyMM{"MM.yyyy 'г'."}
+                yyyyMMMMEEEd{"d MMMM yyyy (EEE)"}
+                yyyyMMMMd{"d MMMM yyyy 'г'."}
+                yyyyMMd{"d.MM.yyyy 'г'."}
+                yyyyMMdHmm{"d.MM.yyyy 'г'., H:mm 'ч'."}
+                yyyyMMdHmmss{"d.MM.yyyy 'г'., H:mm:ss"}
             }
             dayNames{
                 format{
@@ -1446,25 +1472,61 @@ bg{
             }
             eras{
                 abbreviated{
-                    "пр.Хр.",
-                    "сл.Хр.",
+                    "пр. н. е.",
+                    "от н. е.",
+                }
+                wide{
+                    "пр.н.е.",
+                    "сл.н.е.",
+                }
+            }
+            fields{
+                day{
+                    dn{"Ден"}
+                }
+                era{
+                    dn{"ера"}
+                }
+                hour{
+                    dn{"час"}
+                }
+                minute{
+                    dn{"минута"}
+                }
+                month{
+                    dn{"месец"}
+                }
+                second{
+                    dn{"секунда"}
+                }
+                week{
+                    dn{"седмица"}
+                }
+                weekday{
+                    dn{"Ден от седмицата"}
+                }
+                year{
+                    dn{"година"}
+                }
+                zone{
+                    dn{"зона"}
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "яну",
-                        "фев",
-                        "мар",
-                        "апр",
+                        "януари",
+                        "февруари",
+                        "март",
+                        "април",
                         "май",
                         "юни",
                         "юли",
-                        "авг",
-                        "сеп",
-                        "окт",
-                        "ное",
-                        "дек",
+                        "август",
+                        "септември",
+                        "октомври",
+                        "ноември",
+                        "декември",
                     }
                     wide{
                         "януари",
@@ -1498,22 +1560,113 @@ bg{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "I трим.",
+                        "II трим.",
+                        "III трим.",
+                        "IV трим.",
+                    }
+                    wide{
+                        "1-во тримесечие",
+                        "2-ро тримесечие",
+                        "3-то тримесечие",
+                        "4-то тримесечие",
+                    }
+                }
+            }
         }
     }
+    delimiters{
+        quotationEnd{"“"}
+        quotationStart{"„"}
+    }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    measurementSystemNames{
+        US{"Американска"}
+        metric{"Метрична"}
+    }
     zoneStrings{
+        "Africa:Bamako"{
+            ec{"Бамако"}
+        }
         "Africa:Casablanca"{
             ec{"Казабланка"}
             ld{"Часова зона Гринуич"}
             ls{"Часова зона Гринуич"}
-            sd{"GMT"}
-            ss{"GMT"}
+            sd{"Гринуич часова зона"}
+            ss{"Гринуич часова зона"}
+        }
+        "Africa:Ceuta"{
+            ec{"Сеута"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Киншаса"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Лубумбаши"}
+        }
+        "Africa:Timbuktu"{
+            ec{"Тимбукту"}
+        }
+        "America:Adak"{
+            ec{"Адак"}
         }
         "America:Anchorage"{
+            ec{"Анкоридж"}
             ld{"Лятна часова зона Аляска"}
             ls{"Часова зона Аляска"}
             sd{"ADT"}
             ss{"AST"}
+        }
+        "America:Araguaina"{
+            ec{"Арагуайна"}
+        }
+        "America:Argentina:ComodRivadavia"{
+            ec{"Комодоро Ривадавия"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"Ла Риоха"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Рио Галегос"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"Сан Хуан"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Тукуман"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ушуая"}
+        }
+        "America:Bahia"{
+            ec{"Бахиа"}
+        }
+        "America:Belem"{
+            ec{"Белем"}
+        }
+        "America:Boa_Vista"{
+            ec{"Буа Виста"}
+        }
+        "America:Boise"{
+            ec{"Буаз"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Буенос Айрес"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Кеймбридж Бей"}
+        }
+        "America:Campo_Grande"{
+            ec{"Кампо Гранде"}
+        }
+        "America:Cancun"{
+            ec{"Канкун"}
+        }
+        "America:Catamarca"{
+            ec{"Катамарка"}
         }
         "America:Chicago"{
             ec{"Чикаго"}
@@ -1522,12 +1675,54 @@ bg{
             sd{"CDT"}
             ss{"CST"}
         }
+        "America:Chihuahua"{
+            ec{"Чиуауа"}
+        }
+        "America:Cordoba"{
+            ec{"Кордоба"}
+        }
+        "America:Cuiaba"{
+            ec{"Чуяба"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Данмаркшавн"}
+        }
+        "America:Dawson"{
+            ec{"Доусън"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Доусън Крийк"}
+        }
         "America:Denver"{
             ec{"Денвър"}
             ld{"Американска планинска лятна часова зона"}
             ls{"Американска планинска часова зона"}
             sd{"MDT"}
             ss{"MST"}
+        }
+        "America:Detroit"{
+            ec{"Детройт"}
+        }
+        "America:Edmonton"{
+            ec{"Едмънтън"}
+        }
+        "America:Eirunepe"{
+            ec{"Ейрунепе"}
+        }
+        "America:Fortaleza"{
+            ec{"Фортацела"}
+        }
+        "America:Glace_Bay"{
+            ec{"Глейс Бей"}
+        }
+        "America:Godthab"{
+            ec{"Готхоб"}
+        }
+        "America:Goose_Bay"{
+            ec{"Гус Бей"}
+        }
+        "America:Guayaquil"{
+            ec{"Гуаякил"}
         }
         "America:Halifax"{
             ec{"Халифакс"}
@@ -1536,12 +1731,39 @@ bg{
             sd{"ADT"}
             ss{"AST"}
         }
+        "America:Hermosillo"{
+            ec{"Хермосило"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Нокс"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Маренго"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Веве"}
+        }
         "America:Indianapolis"{
             ec{"Индианополис"}
             ld{"Американска източна часова зона"}
             ls{"Американска източна часова зона"}
             sd{"EST"}
             ss{"EST"}
+        }
+        "America:Inuvik"{
+            ec{"Инувик"}
+        }
+        "America:Iqaluit"{
+            ec{"Иквалуит"}
+        }
+        "America:Jujuy"{
+            ec{"Джуджую"}
+        }
+        "America:Juneau"{
+            ec{"Джуно"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Монтичело"}
         }
         "America:Los_Angeles"{
             ec{"Лос Анжелис"}
@@ -1550,12 +1772,57 @@ bg{
             sd{"PDT"}
             ss{"PST"}
         }
+        "America:Louisville"{
+            ec{"Луизвил"}
+        }
+        "America:Maceio"{
+            ec{"Масейо"}
+        }
+        "America:Manaus"{
+            ec{"Мануас"}
+        }
+        "America:Mazatlan"{
+            ec{"Мацатлан"}
+        }
+        "America:Mendoza"{
+            ec{"Мендоса"}
+        }
+        "America:Menominee"{
+            ec{"Меномнии"}
+        }
+        "America:Merida"{
+            ec{"Мерида"}
+        }
+        "America:Mexico_City"{
+            ec{"Мексико"}
+        }
+        "America:Monterrey"{
+            ec{"Монтерей"}
+        }
+        "America:Montreal"{
+            ec{"Монреал"}
+        }
         "America:New_York"{
             ec{"Ню Йорк"}
             ld{"Американска източна лятна часова зона"}
             ls{"Американска източна часова зона"}
             sd{"EDT"}
             ss{"EST"}
+        }
+        "America:Nipigon"{
+            ec{"Нипигон"}
+        }
+        "America:Nome"{
+            ec{"Ноум"}
+        }
+        "America:Noronha"{
+            ec{"Норонха"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Сентър"}
+        }
+        "America:Pangnirtung"{
+            ec{"Пангниртунг"}
         }
         "America:Phoenix"{
             ec{"Финикс"}
@@ -1564,12 +1831,132 @@ bg{
             sd{"MST"}
             ss{"MST"}
         }
+        "America:Porto_Velho"{
+            ec{"Порту Вельо"}
+        }
+        "America:Rainy_River"{
+            ec{"Рейни Ривър"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Ранкин Инлет"}
+        }
+        "America:Recife"{
+            ec{"Ресифе"}
+        }
+        "America:Regina"{
+            ec{"Регина"}
+        }
+        "America:Rio_Branco"{
+            ec{"Рио Бранко"}
+        }
+        "America:Santiago"{
+            ec{"Сантиаго"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Сао Пауло"}
+        }
+        "America:Scoresbysund"{
+            ec{"Сгорсбисон"}
+        }
+        "America:Shiprock"{
+            ec{"Шипрок"}
+        }
         "America:St_Johns"{
             ec{"Сейнт Джоунс"}
             ld{"Лятна часова зона Нюфаундленд"}
             ls{"Часова зона Нюфаундленд"}
             sd{"CDT"}
             ss{"CNT"}
+        }
+        "America:Swift_Current"{
+            ec{"Суифт Кърент"}
+        }
+        "America:Thule"{
+            ec{"Туле"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Тъндър Бей"}
+        }
+        "America:Tijuana"{
+            ec{"Тихуана"}
+        }
+        "America:Toronto"{
+            ec{"Торонто"}
+        }
+        "America:Winnipeg"{
+            ec{"Уинипег"}
+        }
+        "America:Yakutat"{
+            ec{"Якутат"}
+        }
+        "America:Yellowknife"{
+            ec{"Йелоунайф"}
+        }
+        "Antarctica:Casey"{
+            ec{"Кейси"}
+        }
+        "Antarctica:Davis"{
+            ec{"База Дейвис"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Дюмон Дюрвил"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Моусън"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"Мак Мърдоу"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Палмър"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Ротера"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Южен полюс"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Суова"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Восток"}
+        }
+        "Arctic:Longyearbyen"{
+            ec{"Лонгирбюен"}
+        }
+        "Asia:Almaty"{
+            ec{"Алма Ата"}
+        }
+        "Asia:Anadyr"{
+            ec{"Анадир"}
+        }
+        "Asia:Aqtau"{
+            ec{"Аятау"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Аятобе"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Чойбалсан"}
+        }
+        "Asia:Chongqing"{
+            ec{"Чунцин"}
+        }
+        "Asia:Harbin"{
+            ec{"Харбин"}
+        }
+        "Asia:Hovd"{
+            ec{"Кобдо"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Иркутск"}
+        }
+        "Asia:Jakarta"{
+            ec{"Джакарта"}
+        }
+        "Asia:Jayapura"{
+            ec{"Джаяпура"}
         }
         "Asia:Jerusalem"{
             ec{"Йерусалим"}
@@ -1578,12 +1965,57 @@ bg{
             sd{"IDT"}
             ss{"IST"}
         }
+        "Asia:Kamchatka"{
+            ec{"п-в Камчатка"}
+        }
+        "Asia:Kashgar"{
+            ec{"Кашгар"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Красноярск"}
+        }
+        "Asia:Kuala_Lumpur"{
+            ec{"Куала Лумпур"}
+        }
+        "Asia:Kuching"{
+            ec{"Кучин"}
+        }
+        "Asia:Magadan"{
+            ec{"Магадан"}
+        }
+        "Asia:Makassar"{
+            ec{"Макасарски проток"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Новосибирск"}
+        }
+        "Asia:Omsk"{
+            ec{"Омск"}
+        }
+        "Asia:Oral"{
+            ec{"Арал"}
+        }
+        "Asia:Pontianak"{
+            ec{"Понтианак"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Язилорда"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Сахалин"}
+        }
+        "Asia:Samarkand"{
+            ec{"Самарканд"}
+        }
         "Asia:Shanghai"{
             ec{"Шанхай"}
             ld{"Китайска часова зона"}
             ls{"Китайска часова зона"}
             sd{"CDT"}
             ss{"CTT"}
+        }
+        "Asia:Tashkent"{
+            ec{"Ташкент"}
         }
         "Asia:Tokyo"{
             ec{"Токио"}
@@ -1592,6 +2024,66 @@ bg{
             sd{"JST"}
             ss{"JST"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Уланбатор"}
+        }
+        "Asia:Urumqi"{
+            ec{"Урумчи"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Владивосток"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Якутск"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Екатерининбург"}
+        }
+        "Atlantic:Azores"{
+            ec{"Азорски о-ви"}
+        }
+        "Atlantic:Canary"{
+            ec{"Канарски о-ви"}
+        }
+        "Atlantic:Jan_Mayen"{
+            ec{"Ян Майен"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Мадейра"}
+        }
+        "Australia:Adelaide"{
+            ec{"Адълид"}
+        }
+        "Australia:Brisbane"{
+            ec{"Бризбейн"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Броукън Хил"}
+        }
+        "Australia:Darwin"{
+            ec{"Даруин"}
+        }
+        "Australia:Hobart"{
+            ec{"Хоубарт"}
+        }
+        "Australia:Lindeman"{
+            ec{"Линдеман"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Лорд Хов"}
+        }
+        "Australia:Melbourne"{
+            ec{"Мелбърн"}
+        }
+        "Australia:Perth"{
+            ec{"Пърт"}
+        }
+        "Australia:Sydney"{
+            ec{"Сидни"}
+        }
+        "Europe:Belfast"{
+            ec{"Белфастt"}
+        }
         "Europe:Bucharest"{
             ec{"Букурещ"}
             ld{"Източноевропейска лятна часова зона"}
@@ -1599,12 +2091,60 @@ bg{
             sd{"EEST"}
             ss{"EET"}
         }
+        "Europe:Kaliningrad"{
+            ec{"Калининград"}
+        }
+        "Europe:Kiev"{
+            ec{"Киев"}
+        }
+        "Europe:Lisbon"{
+            ec{"Лисабон"}
+        }
+        "Europe:London"{
+            ec{"Лондон"}
+        }
+        "Europe:Madrid"{
+            ec{"Мадрид"}
+        }
+        "Europe:Moscow"{
+            ec{"Москва"}
+        }
         "Europe:Paris"{
             ec{"Париж"}
-            ld{"Централноевропеска лятна часова зона"}
+            ld{"Централноевропейска лятна часова зона"}
             ls{"Централноевропейска часова зона"}
             sd{"CEST"}
             ss{"CET"}
+        }
+        "Europe:Samara"{
+            ec{"Самара"}
+        }
+        "Europe:Simferopol"{
+            ec{"Севастопол"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Ужгород"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Запорожие"}
+        }
+        "Pacific:Auckland"{
+            ec{"Окланд"}
+        }
+        "Pacific:Chatham"{
+            ec{"о-ви Чатам"}
+        }
+        "Pacific:Easter"{
+            ec{"Великденски о-ви"}
+        }
+        "Pacific:Enderbury"{
+            ec{"о. Ендърбъри"}
+        }
+        "Pacific:Galapagos"{
+            ec{"о-ви Галапагос"}
+        }
+        "Pacific:Gambier"{
+            ec{"Гамбиер"}
         }
         "Pacific:Honolulu"{
             ec{"Хонолулу"}
@@ -1613,7 +2153,44 @@ bg{
             sd{"HST"}
             ss{"HST"}
         }
-        gmtFormat{"Гриинуич{0}"}
-        hourFormat{"+HHmm;-HHmm"}
+        "Pacific:Johnston"{
+            ec{"о. Джонсън"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"о. Рождество"}
+        }
+        "Pacific:Kosrae"{
+            ec{"о. Косрае"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Квайджален"}
+        }
+        "Pacific:Majuro"{
+            ec{"Мажуро"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Маркизки о-ви"}
+        }
+        "Pacific:Midway"{
+            ec{"о. Мидуей"}
+        }
+        "Pacific:Ponape"{
+            ec{"о. Понапе"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Таити"}
+        }
+        "Pacific:Tarawa"{
+            ec{"о. Тарава"}
+        }
+        "Pacific:Truk"{
+            ec{"о-ви Трук"}
+        }
+        "Pacific:Wake"{
+            ec{"о. Уейк"}
+        }
+        "Pacific:Yap"{
+            ec{"о. Яп"}
+        }
     }
 }

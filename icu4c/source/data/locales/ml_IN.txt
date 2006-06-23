@@ -13,7 +13,7 @@ ml_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.19"}
+    Version{"1.20"}
     calendar{
         gregorian{
             DateTimePatterns{

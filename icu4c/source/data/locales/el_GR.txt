@@ -10,7 +10,7 @@ el_GR{
     Currencies{
         GRD{
             "Δρχ",
-            "Δρχ",
+            "Δραχμή Ελλάδας",
             {
                 "#,##0.00 ¤;-#,##0.00 ¤",
                 ",",
@@ -24,5 +24,11 @@ el_GR{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.36"}
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
 }

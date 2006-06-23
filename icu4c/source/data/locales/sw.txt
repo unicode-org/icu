@@ -101,27 +101,25 @@ sw{
             "TZS",
         }
     }
-    ExemplarCharacters{"[a-z]"}
+    ExemplarCharacters{"[ a-p r-u w y z {dh} {ng} {ng'} {ny} {sh} {th} ]"}
     Languages{
+        de{"kijerumani"}
+        en{"kiingereza"}
+        es{"kihispania"}
+        fr{"kifaransa"}
+        it{"kiitaliano"}
+        ja{"kijapani"}
+        pt{"kireno"}
+        ru{"kirusi"}
         sw{"Kiswahili"}
+        zh{"kichina"}
     }
     LocaleScript{
         "Latn",
     }
-    Version{"1.40"}
+    Version{"1.41"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{
@@ -153,18 +151,18 @@ sw{
             monthNames{
                 format{
                     abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
+                        "Januari",
+                        "Februari",
+                        "Machi",
+                        "Aprili",
                         "Mei",
-                        "Jun",
-                        "Jul",
-                        "Ago",
-                        "Sep",
-                        "Okt",
-                        "Nov",
-                        "Des",
+                        "Juni",
+                        "Julai",
+                        "Agosti",
+                        "Septemba",
+                        "Oktoba",
+                        "Novemba",
+                        "Desemba",
                     }
                     wide{
                         "Januari",

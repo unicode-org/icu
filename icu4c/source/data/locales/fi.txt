@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    AuxExemplarCharacters{"[á à ã č ç é è ë ï ñ ô ř ü æ ø õ œ]"}
+    AuxExemplarCharacters{"[á à ã č ç é è ë í ï ñ ô ř ú ü æ ø õ œ]"}
     Countries{
         001{"maailma"}
         002{"Afrikka"}
@@ -26,19 +26,22 @@ fi{
         021{"Pohjois-Amerikka"}
         029{"Karibia"}
         030{"Itä-Aasia"}
+        034{"Etelä-Aasia"}
         035{"Kaakkois-Aasia"}
         039{"Etelä-Eurooppa"}
         053{"Australia ja Uusi-Seelanti"}
         054{"Melanesia"}
         057{"Mikronesia"}
         061{"Polynesia"}
-        062{"eteläinen Keski-Aasia"}
         142{"Aasia"}
+        143{"Keski-Aasia"}
         145{"Länsi-Aasia"}
         150{"Eurooppa"}
         151{"Itä-Eurooppa"}
         154{"Pohjois-Eurooppa"}
         155{"Länsi-Eurooppa"}
+        172{"Itsenäisten valtioiden yhteisö"}
+        419{"Latinalainen Amerikka ja Karibia"}
         830{"Kanaalisaaret"}
         833{"Mansaari"}
         AD{"Andorra"}
@@ -112,11 +115,11 @@ fi{
         FI{"Suomi"}
         FJ{"Fidži"}
         FK{"Falklandinsaaret"}
-        FM{"Mikronesia"}
+        FM{"Mikronesian liittovaltio"}
         FO{"Färsaaret"}
         FR{"Ranska"}
         GA{"Gabon"}
-        GB{"Iso-Britannia"}
+        GB{"Britannia"}
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Ranskan Guayana"}
@@ -158,7 +161,7 @@ fi{
         KM{"Komorit"}
         KN{"Saint Kitts ja Nevis"}
         KP{"Pohjois-Korea"}
-        KR{"Korean tasavalta"}
+        KR{"Etelä-Korea"}
         KW{"Kuwait"}
         KY{"Caymansaaret"}
         KZ{"Kazakstan"}
@@ -222,7 +225,7 @@ fi{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
-        QO{"tuntematon"}
+        QO{"ulkomeri"}
         RE{"Réunion"}
         RO{"Romania"}
         RU{"Venäjä"}
@@ -268,7 +271,7 @@ fi{
         US{"Yhdysvallat"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
-        VA{"Vatikaanivaltio"}
+        VA{"Vatikaani"}
         VC{"Saint Vincent ja Grenadiinit"}
         VE{"Venezuela"}
         VG{"Brittiläiset Neitsytsaaret"}
@@ -294,22 +297,22 @@ fi{
         }
         AFA{
             "AFA",
-            "Afgaani (1927-2002)",
+            "Afganistanin afgaani (1927-2002)",
         }
         AFN{
-            "Af",
-            "Afgaani",
+            "AFN",
+            "Afganistanin afgaani",
         }
         ALL{
-            "lek",
+            "ALL",
             "Albanian lek",
         }
         AMD{
-            "dram",
+            "AMD",
             "Armenian dram",
         }
         ANG{
-            "NA f.",
+            "ANG",
             "Alankomaiden Antillien guldeni",
         }
         AOA{
@@ -337,15 +340,15 @@ fi{
             "Argentiinan peso (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "ARS",
             "Argentiinan peso",
         }
         ATS{
             "ATS",
-            "Itävallan shillinki",
+            "Itävallan šillinki",
         }
         AUD{
-            "$A",
+            "AUD",
             "Australian dollari",
         }
         AWG{
@@ -361,15 +364,15 @@ fi{
             "Bosnia-Hertsegovinan dinaari",
         }
         BAM{
-            "KM",
+            "BAM",
             "Bosnia-Hertsegovinan vaihdettava markka",
         }
         BBD{
-            "BDS$",
+            "BBD",
             "Barbadosin dollari",
         }
         BDT{
-            "Tk",
+            "BDT",
             "Bangladeshin taka",
         }
         BEC{
@@ -377,7 +380,7 @@ fi{
             "Belgian frangi (vaihdettava)",
         }
         BEF{
-            "BF",
+            "BEF",
             "Belgian frangi",
         }
         BEL{
@@ -385,23 +388,23 @@ fi{
             "Belgian frangi (rahoitus)",
         }
         BGL{
-            "lev",
-            "Bulgarian kova leva",
+            "BGL",
+            "Bulgarian kova lev",
         }
         BGN{
             "BGN",
             "Bulgarian uusi lev",
         }
         BHD{
-            "BD",
+            "BHD",
             "Bahrainin dinaari",
         }
         BIF{
-            "Fbu",
+            "BIF",
             "Burundin frangi",
         }
         BMD{
-            "Ber$",
+            "BMD",
             "Bermudan dollari",
         }
         BND{
@@ -409,8 +412,8 @@ fi{
             "Brunein dollari",
         }
         BOB{
-            "Bs",
-            "boliviano",
+            "BOB",
+            "Bolivian boliviano",
         }
         BOP{
             "BOP",
@@ -418,7 +421,7 @@ fi{
         }
         BOV{
             "BOV",
-            "Bolivian mvdol",
+            "Bolivian MVDOL",
         }
         BRB{
             "BRB",
@@ -433,7 +436,7 @@ fi{
             "Brasilian cruzeiro (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "Brasilian real",
         }
         BRN{
@@ -449,7 +452,7 @@ fi{
             "Bahaman dollari",
         }
         BTN{
-            "Nu",
+            "BTN",
             "Bhutanin ngultrum",
         }
         BUK{
@@ -465,44 +468,60 @@ fi{
             "Valko-Venäjän uusi rupla (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Valko-Venäjän rupla",
         }
         BZD{
-            "BZ$",
+            "BZD",
             "Belizen dollari",
         }
         CAD{
-            "Can$",
+            "CAD",
             "Kanadan dollari",
         }
         CDF{
             "CDF",
-            "Kongon kongolainen frangi",
+            "Kongon frangi",
+        }
+        CHE{
+            "CHE",
+            "Sveitsin WIR-euro",
         }
         CHF{
-            "SwF",
+            "CHF",
             "Sveitsin frangi",
+        }
+        CHW{
+            "CHW",
+            "Sveitsin WIR-frangi",
         }
         CLF{
             "CLF",
             "Chilen unidades de fomento",
         }
         CLP{
-            "Ch$",
+            "CLP",
             "Chilen peso",
         }
         CNY{
-            "Y",
-            "Kiinan yuan renminbi",
+            "CNY",
+            "Kiinan yuan",
         }
         COP{
-            "Col$",
+            "COP",
             "Kolumbian peso",
         }
+        COU{
+            "COU",
+            "Kolumbian unidad de valor real",
+        }
         CRC{
-            "C",
+            "CRC",
             "Costa Rican colon",
+        }
+        CSD{
+            "CSD",
+            "Serbian dinaari",
         }
         CSK{
             "CSK",
@@ -513,11 +532,11 @@ fi{
             "Kuuban peso",
         }
         CVE{
-            "CVEsc",
+            "CVE",
             "Kap Verden escudo",
         }
         CYP{
-            "£C",
+            "CYP",
             "Kyproksen punta",
         }
         CZK{
@@ -526,26 +545,26 @@ fi{
         }
         DDM{
             "DDM",
-            "Itä-Saksan ostmark",
+            "Itä-Saksan markka",
         }
         DEM{
             "DEM",
             "Saksan markka",
         }
         DJF{
-            "DF",
+            "DJF",
             "Djiboutin frangi",
         }
         DKK{
-            "DKr",
+            "Tkr",
             "Tanskan kruunu",
         }
         DOP{
-            "RD$",
+            "DOP",
             "Dominikaanisen tasavallan peso",
         }
         DZD{
-            "DA",
+            "DZD",
             "Algerian dinaari",
         }
         ECS{
@@ -564,16 +583,28 @@ fi{
             "EGP",
             "Egyptin punta",
         }
+        EQE{
+            "EQE",
+            "Päiväntasaajan Guinean ekwele (1986-1989)",
+        }
         ERN{
             "ERN",
             "Eritrean nakfa",
+        }
+        ESA{
+            "ESA",
+            "Espanjan peseta (A-tili)",
+        }
+        ESB{
+            "ESB",
+            "Espanjan peseta (vaihdettava tili)",
         }
         ESP{
             "ESP",
             "Espanjan peseta",
         }
         ETB{
-            "Br",
+            "ETB",
             "Etiopian birr",
         }
         EUR{
@@ -585,7 +616,7 @@ fi{
             "Suomen markka",
         }
         FJD{
-            "F$",
+            "FJD",
             "Fidžin dollari",
         }
         FKP{
@@ -598,14 +629,14 @@ fi{
         }
         GBP{
             "£",
-            "Iso-Britannian sterling-punta",
+            "Englannin punta",
         }
         GEK{
             "GEK",
             "Georgian kuponkilari",
         }
         GEL{
-            "lari",
+            "GEL",
             "Georgian lari",
         }
         GHC{
@@ -621,7 +652,7 @@ fi{
             "Gambian dalasi",
         }
         GNF{
-            "GF",
+            "GNF",
             "Guinean frangi",
         }
         GNS{
@@ -630,14 +661,14 @@ fi{
         }
         GQE{
             "GQE",
-            "Päiväntasaajan Guinean ekwele guineana",
+            "Päiväntasaajan Guinean ekwele (-1986)",
         }
         GRD{
             "GRD",
-            "Kreikan drakhma",
+            "Kreikan drakma",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Guatemalan quetzal",
         }
         GWE{
@@ -649,15 +680,15 @@ fi{
             "Guinea-Bissaun peso",
         }
         GYD{
-            "G$",
+            "GYD",
             "Guyanan dollari",
         }
         HKD{
-            "HK$",
+            "HKD",
             "Hongkongin dollari",
         }
         HNL{
-            "L",
+            "HNL",
             "Hondurasin lempira",
         }
         HRD{
@@ -673,15 +704,15 @@ fi{
             "Haitin gourde",
         }
         HUF{
-            "Ft",
+            "HUF",
             "Unkarin forintti",
         }
         IDR{
-            "Rp",
+            "IDR",
             "Indonesian rupia",
         }
         IEP{
-            "IR£",
+            "IEP",
             "Irlannin punta",
         }
         ILP{
@@ -693,15 +724,15 @@ fi{
             "Israelin uusi sekeli",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
             "Intian rupia",
         }
         IQD{
-            "ID",
+            "IQD",
             "Irakin dinaari",
         }
         IRR{
-            "RI",
+            "IRR",
             "Iranin rial",
         }
         ISK{
@@ -709,15 +740,15 @@ fi{
             "Islannin kruunu",
         }
         ITL{
-            "₤",
+            "ITL",
             "Italian liira",
         }
         JMD{
-            "J$",
+            "JMD",
             "Jamaikan dollari",
         }
         JOD{
-            "JD",
+            "JOD",
             "Jordanian dinaari",
         }
         JPY{
@@ -725,19 +756,19 @@ fi{
             "Japanin jeni",
         }
         KES{
-            "K Sh",
-            "Kenian shillinki",
+            "KES",
+            "Kenian šillinki",
         }
         KGS{
-            "som",
-            "Kirgistanin som",
+            "KGS",
+            "Kirgisian som",
         }
         KHR{
-            "CR",
+            "KHR",
             "Kambodžan riel",
         }
         KMF{
-            "CF",
+            "KMF",
             "Komorien frangi",
         }
         KPW{
@@ -749,7 +780,7 @@ fi{
             "Etelä-Korean won",
         }
         KWD{
-            "KD",
+            "KWD",
             "Kuwaitin dinaari",
         }
         KYD{
@@ -757,7 +788,7 @@ fi{
             "Caymansaarten dollari",
         }
         KZT{
-            "T",
+            "KZT",
             "Kazakstanin tenge",
         }
         LAK{
@@ -765,11 +796,11 @@ fi{
             "Laosin kip",
         }
         LBP{
-            "LL",
+            "LBP",
             "Libanonin punta",
         }
         LKR{
-            "SL Re",
+            "LKR",
             "Sri Lankan rupia",
         }
         LRD{
@@ -777,8 +808,12 @@ fi{
             "Liberian dollari",
         }
         LSL{
-            "M",
+            "LSL",
             "Lesothon loti",
+        }
+        LSM{
+            "LSM",
+            "Lesothon maloti",
         }
         LTL{
             "LTL",
@@ -788,9 +823,17 @@ fi{
             "LTT",
             "Liettuan talonas",
         }
+        LUC{
+            "LUC",
+            "Luxemburgin vaihdettava frangi",
+        }
         LUF{
             "LUF",
             "Luxemburgin frangi",
+        }
+        LUL{
+            "LUL",
+            "Luxemburgin rahoitusfrangi",
         }
         LVL{
             "LVL",
@@ -801,7 +844,7 @@ fi{
             "Latvian rupla",
         }
         LYD{
-            "LD",
+            "LYD",
             "Libyan dinaari",
         }
         MAD{
@@ -825,7 +868,7 @@ fi{
             "Madagaskarin frangi",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Makedonian dinaari",
         }
         MLF{
@@ -837,7 +880,7 @@ fi{
             "Myanmarin kyat",
         }
         MNT{
-            "Tug",
+            "MNT",
             "Mongolian tugrik",
         }
         MOP{
@@ -845,11 +888,11 @@ fi{
             "Macaon pataca",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mauritanian ouguiya",
         }
         MTL{
-            "Lm",
+            "MTL",
             "Maltan liira",
         }
         MTP{
@@ -865,11 +908,11 @@ fi{
             "Malediivien rufiyaa",
         }
         MWK{
-            "MK",
+            "MWK",
             "Malawin kwacha",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Meksikon peso",
         }
         MXP{
@@ -881,7 +924,7 @@ fi{
             "Meksikon UDI",
         }
         MYR{
-            "RM",
+            "MYR",
             "Malesian ringgit",
         }
         MZE{
@@ -889,11 +932,11 @@ fi{
             "Mosambikin escudo",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Mosambikin metical",
         }
         NAD{
-            "N$",
+            "NAD",
             "Namibian dollari",
         }
         NGN{
@@ -906,26 +949,26 @@ fi{
         }
         NIO{
             "NIO",
-            "Nicaraguan cordoba oro",
+            "Nicaraguan kultacordoba",
         }
         NLG{
             "NLG",
             "Alankomaiden guldeni",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Norjan kruunu",
         }
         NPR{
-            "Nrs",
+            "NPR",
             "Nepalin rupia",
         }
         NZD{
-            "$NZ",
+            "NZD",
             "Uuden-Seelannin dollari",
         }
         OMR{
-            "RO",
+            "OMR",
             "Omanin rial",
         }
         PAB{
@@ -953,11 +996,11 @@ fi{
             "Filippiinien peso",
         }
         PKR{
-            "Pra",
+            "PKR",
             "Pakistanin rupia",
         }
         PLN{
-            "Zl",
+            "PLN",
             "Puolan zloty",
         }
         PLZ{
@@ -973,12 +1016,20 @@ fi{
             "Paraguayn guarani",
         }
         QAR{
-            "QR",
+            "QAR",
             "Qatarin rial",
         }
+        RHD{
+            "RHD",
+            "Rhodesian dollari",
+        }
         ROL{
-            "leu",
-            "Romanian lei",
+            "ROL",
+            "Romanian vanha leu",
+        }
+        RON{
+            "RON",
+            "Romanian uusi leu",
         }
         RUB{
             "RUB",
@@ -993,15 +1044,15 @@ fi{
             "Ruandan frangi",
         }
         SAR{
-            "SRl",
+            "SAR",
             "Saudi-Arabian rial",
         }
         SBD{
-            "SI$",
+            "SBD",
             "Salomonsaarten dollari",
         }
         SCR{
-            "SR",
+            "SCR",
             "Seychellien rupia",
         }
         SDD{
@@ -1013,11 +1064,11 @@ fi{
             "Sudanin punta",
         }
         SEK{
-            "SKr",
+            "Rkr",
             "Ruotsin kruunu",
         }
         SGD{
-            "S$",
+            "SGD",
             "Singaporen dollari",
         }
         SHP{
@@ -1029,24 +1080,28 @@ fi{
             "Slovenian tolar",
         }
         SKK{
-            "Sk",
-            "Slovakin koruna",
+            "SKK",
+            "Slovakian koruna",
         }
         SLL{
             "SLL",
             "Sierra Leonen leone",
         }
         SOS{
-            "So. Sh.",
-            "Somalian shillinki",
+            "SOS",
+            "Somalian šillinki",
+        }
+        SRD{
+            "SRD",
+            "Surinamin dollari",
         }
         SRG{
-            "Sf",
+            "SRG",
             "Surinamin guldeni",
         }
         STD{
-            "Db",
-            "São Tomén ja Principén dobra",
+            "STD",
+            "São Tomén ja Príncipen dobra",
         }
         SUR{
             "SUR",
@@ -1057,11 +1112,11 @@ fi{
             "El Salvadorin colon",
         }
         SYP{
-            "LS",
+            "SYP",
             "Syyrian punta",
         }
         SZL{
-            "E",
+            "SZL",
             "Swazimaan lilangeni",
         }
         THB{
@@ -1085,15 +1140,15 @@ fi{
             "Tunisian dinaari",
         }
         TOP{
-            "T$",
-            "Tongan paʻanga",
+            "TOP",
+            "Tongan pa’anga",
         }
         TPE{
             "TPE",
             "Timorin escudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Turkin liira",
         }
         TRY{
@@ -1101,16 +1156,16 @@ fi{
             "Turkin uusi liira",
         }
         TTD{
-            "TT$",
+            "TTD",
             "Trinidadin ja Tobagon dollari",
         }
         TWD{
-            "NT$",
+            "TWD",
             "Taiwanin uusi dollari",
         }
         TZS{
-            "T Sh",
-            "Tansanian shillinki",
+            "TZS",
+            "Tansanian šillinki",
         }
         UAH{
             "UAH",
@@ -1122,14 +1177,14 @@ fi{
         }
         UGS{
             "UGS",
-            "Ugandan shillinki (1966-1987)",
+            "Ugandan šillinki (1966-1987)",
         }
         UGX{
-            "U Sh",
-            "Ugandan shillinki",
+            "UGX",
+            "Ugandan šillinki",
         }
         USD{
-            "US$",
+            "$",
             "Yhdysvaltain dollari",
         }
         USN{
@@ -1145,15 +1200,15 @@ fi{
             "Uruguayn peso (1975-1993)",
         }
         UYU{
-            "Ur$",
-            "Uruguayn peso uruguayo",
+            "UYU",
+            "Uruguayn peso",
         }
         UZS{
             "UZS",
             "Uzbekistanin som",
         }
         VEB{
-            "Be",
+            "VEB",
             "Venezuelan bolivar",
         }
         VND{
@@ -1161,16 +1216,20 @@ fi{
             "Vietnamin dong",
         }
         VUV{
-            "VT",
+            "VUV",
             "Vanuatun vatu",
         }
         WST{
             "WST",
-            "Länsi-Samoan tala",
+            "Samoan tala",
         }
         XAF{
             "XAF",
             "CFA-frangi BEAC",
+        }
+        XAG{
+            "XAG",
+            "hopea",
         }
         XAU{
             "XAU",
@@ -1193,20 +1252,20 @@ fi{
             "EUA (XBD)",
         }
         XCD{
-            "EC$",
+            "XCD",
             "Itä-Karibian dollari",
         }
         XDR{
             "XDR",
-            "erityisnosto-oikeus",
+            "erityisnosto-oikeus (SDR)",
         }
         XEU{
             "XEU",
-            "Euroopan valuuttayksikkö",
+            "Euroopan valuuttayksikkö (ECU)",
         }
         XFO{
             "XFO",
-            "Ranskan kulta frangi",
+            "Ranskan kultafrangi",
         }
         XFU{
             "XFU",
@@ -1216,16 +1275,36 @@ fi{
             "XOF",
             "CFA-frangi BCEAO",
         }
+        XPD{
+            "XPD",
+            "palladium",
+        }
         XPF{
-            "CFPF",
+            "XPF",
             "CFP-frangi",
+        }
+        XPT{
+            "XPT",
+            "platina",
+        }
+        XRE{
+            "XRE",
+            "RINET-rahastot",
+        }
+        XTS{
+            "XTS",
+            "testaustarkoitukseen varattu valuuttakoodi",
+        }
+        XXX{
+            "XXX",
+            "ei rahayksikköä",
         }
         YDD{
             "YDD",
             "Jemenin dinaari",
         }
         YER{
-            "YRl",
+            "YER",
             "Jemenin rial",
         }
         YUD{
@@ -1245,7 +1324,7 @@ fi{
             "Etelä-Afrikan randi (rahoitus)",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Etelä-Afrikan randi",
         }
         ZMK{
@@ -1261,7 +1340,7 @@ fi{
             "Zairen zaire",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwen dollari",
         }
     }
@@ -1275,20 +1354,23 @@ fi{
         aa{"afar"}
         ab{"abhaasi"}
         ace{"aceh"}
-        ach{"acholi"}
+        ach{"atšoli"}
         ada{"adangme"}
         ady{"adyge"}
         ae{"avesta"}
         af{"afrikaans"}
         afa{"muut afroaasialaiset kielet"}
         afh{"afrihili"}
+        ain{"ainu"}
         ak{"akan"}
         akk{"akkadi"}
         ale{"aleutti"}
         alg{"algonkin-kielet"}
+        alt{"altai"}
         am{"amhara"}
         an{"aragonia"}
         ang{"muinaisenglanti"}
+        anp{"angika"}
         apa{"apaššikielet"}
         ar{"arabia"}
         arc{"aramea"}
@@ -1302,7 +1384,7 @@ fi{
         aus{"australialaiset kielet"}
         av{"avaari"}
         awa{"awadhi"}
-        ay{"aymara"}
+        ay{"aimara"}
         az{"azeri"}
         ba{"baškiiri"}
         bad{"banda"}
@@ -1312,12 +1394,12 @@ fi{
         bas{"basa"}
         bat{"muut balttilaiset kielet"}
         be{"valkovenäjä"}
-        bej{"beja"}
+        bej{"bedža"}
         bem{"bemba"}
         ber{"muut berberikielet"}
         bg{"bulgaria"}
         bh{"bihari"}
-        bho{"bhojpuri"}
+        bho{"bhodžpuri"}
         bi{"bislama"}
         bik{"bikol"}
         bin{"bini"}
@@ -1327,12 +1409,12 @@ fi{
         bnt{"muut bantukielet"}
         bo{"tiibet"}
         br{"bretoni"}
-        bra{"braj"}
+        bra{"bradž"}
         bs{"bosnia"}
         btk{"batak"}
         bua{"burjaatti"}
         bug{"bugi"}
-        byn{"blin"}
+        byn{"bilin"}
         ca{"katalaani"}
         cad{"caddo"}
         cai{"muut Keski-Amerikan intiaanikielet"}
@@ -1341,8 +1423,8 @@ fi{
         ce{"tšetšeeni"}
         ceb{"cebuano"}
         cel{"muut kelttiläiset kielet"}
-        ch{"chamorro"}
-        chb{"chibcha"}
+        ch{"tšamorro"}
+        chb{"tšibtša"}
         chg{"tšagatai"}
         chk{"chuuk"}
         chm{"mari"}
@@ -1351,7 +1433,7 @@ fi{
         chp{"chipewyan"}
         chr{"cherokee"}
         chy{"cheyenne"}
-        cmc{"cham-kielet"}
+        cmc{"tšam-kielet"}
         co{"korsika"}
         cop{"kopti"}
         cpe{"muut englantiin perustuvat kreolit ja pidginit"}
@@ -1368,11 +1450,11 @@ fi{
         cy{"kymri"}
         da{"tanska"}
         dak{"dakota"}
-        dar{"dargva"}
-        day{"dayak"}
+        dar{"dargi"}
+        day{"dajakki"}
         de{"saksa"}
         del{"delaware"}
-        den{"slave"}
+        den{"slevi"}
         dgr{"dogrib"}
         din{"dinka"}
         doi{"dogri"}
@@ -1381,7 +1463,7 @@ fi{
         dua{"duala"}
         dum{"keskihollanti"}
         dv{"divehi"}
-        dyu{"dyula"}
+        dyu{"djula"}
         dz{"dzongkha"}
         ee{"ewe"}
         efi{"efik"}
@@ -1401,18 +1483,22 @@ fi{
         fat{"fanti"}
         ff{"fulani"}
         fi{"suomi"}
+        fil{"filipino"}
         fiu{"muut suomalais-ugrilaiset kielet"}
         fj{"fidži"}
         fo{"fääri"}
+        fon{"fon"}
         fr{"ranska"}
         frm{"keskiranska"}
         fro{"muinaisranska"}
+        frr{"pohjoisfriisi"}
+        frs{"itäfriisi"}
         fur{"friuli"}
-        fy{"friisi"}
+        fy{"länsifriisi"}
         ga{"iiri"}
-        gaa{"gã"}
-        gay{"gayo"}
-        gba{"gbaya"}
+        gaa{"ga"}
+        gay{"gajo"}
+        gba{"gbaja"}
         gd{"gaeli"}
         gem{"muut germaaniset kielet"}
         gez{"ge’ez"}
@@ -1426,16 +1512,17 @@ fi{
         got{"gootti"}
         grb{"grebo"}
         grc{"muinaiskreikka"}
-        gu{"gujarati"}
+        gsw{"sveitsinsaksa"}
+        gu{"gudžarati"}
         gv{"manx"}
-        gwi{"gwich’in"}
+        gwi{"gwitšin"}
         ha{"hausa"}
         hai{"haida"}
         haw{"havaiji"}
         he{"heprea"}
         hi{"hindi"}
-        hil{"hiligaynon"}
-        him{"himachali"}
+        hil{"hiligaino"}
+        him{"himatšali"}
         hit{"heetti"}
         hmn{"hmong"}
         ho{"hiri-motu"}
@@ -1452,7 +1539,8 @@ fi{
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuanin-yi"}
-        ik{"iñupiak"}
+        ijo{"idžo"}
+        ik{"inupiatun"}
         ilo{"iloko"}
         inc{"muut indoarjalaiset kielet"}
         ine{"muut indoeurooppalaiset kielet"}
@@ -1481,7 +1569,7 @@ fi{
         khi{"muut khoisan-kielet"}
         kho{"khotani"}
         ki{"kikuju"}
-        kj{"kwanyama"}
+        kj{"kuanjama"}
         kk{"kazakki"}
         kl{"kalaallisut; grönlanti"}
         km{"khmer"}
@@ -1493,9 +1581,10 @@ fi{
         kpe{"kpelle"}
         kr{"kanuri"}
         krc{"karatšai-balkaari"}
+        krl{"karjala"}
         kro{"kru-kielet"}
         kru{"kurukh"}
-        ks{"kashmiri"}
+        ks{"kašmiri"}
         ku{"kurdi"}
         kum{"kumykki"}
         kut{"kutenai"}
@@ -1519,7 +1608,8 @@ fi{
         lua{"luba (Lulua)"}
         lui{"luiseño"}
         lun{"lunda"}
-        lus{"lushai"}
+        luo{"luo"}
+        lus{"lusai"}
         lv{"latvia"}
         mad{"madura"}
         mag{"magahi"}
@@ -1540,7 +1630,7 @@ fi{
         mis{"luokittelemattomat kielet"}
         mk{"makedonia"}
         mkh{"muut mon-khmer-kielet"}
-        ml{"malayalam"}
+        ml{"malajalam"}
         mn{"mongoli"}
         mnc{"mantšu"}
         mni{"manipuri"}
@@ -1554,13 +1644,14 @@ fi{
         mul{"monia kieliä"}
         mun{"mundakielet"}
         mus{"creek"}
+        mwl{"mirandeesi"}
         mwr{"marwari"}
         my{"burma"}
         myn{"maya-kielet"}
         myv{"ersä"}
         na{"nauru"}
         nah{"nahuatl"}
-        nai{"Pohjois-Amerikan intiaanikielet"}
+        nai{"muut Pohjois-Amerikan intiaanikielet"}
         nap{"napoli"}
         nb{"norja (bokmål)"}
         nd{"ndebele, pohjois-"}
@@ -1581,20 +1672,20 @@ fi{
         nub{"nubialaiset kielet"}
         nv{"navajo"}
         nwc{"klassinen newari"}
-        ny{"nyanja"}
+        ny{"njandža"}
         nym{"nyamwezi"}
         nyn{"nyankole"}
         nyo{"nyoro"}
         nzi{"nzima"}
         oc{"oksitaani"}
-        oj{"ojibwa"}
+        oj{"odžibwa"}
         om{"oromo"}
-        or{"oriya"}
+        or{"orija"}
         os{"osseetti"}
         osa{"osage"}
         ota{"osmani"}
         oto{"otomi-kielet"}
-        pa{"panjabi"}
+        pa{"pandžabi"}
         paa{"muut papualaiskielet"}
         pag{"pangasinan"}
         pal{"pahlavi"}
@@ -1609,10 +1700,10 @@ fi{
         pon{"pohnpei"}
         pra{"prakrit-kielet"}
         pro{"muinaisprovensaali"}
-        ps{"pašto"}
+        ps{"paštu"}
         pt{"portugali"}
-        qu{"quechua"}
-        raj{"rajasthani"}
+        qu{"ketšua"}
+        raj{"radžastani"}
         rap{"rapanui"}
         rar{"rarotonga"}
         rm{"retoromaani"}
@@ -1620,7 +1711,9 @@ fi{
         ro{"romania"}
         roa{"muut romaaniset kielet"}
         rom{"romani"}
+        root{"juuri"}
         ru{"venäjä"}
+        rup{"aromania"}
         rw{"ruanda"}
         sa{"sanskrit"}
         sad{"sandawe"}
@@ -1631,6 +1724,7 @@ fi{
         sas{"sasak"}
         sat{"santali"}
         sc{"sardi"}
+        scn{"sisilia"}
         sco{"skotti"}
         sd{"sindhi"}
         se{"saame, pohjois-"}
@@ -1639,7 +1733,6 @@ fi{
         sg{"sango"}
         sga{"muinaisiiri"}
         sgn{"viittomakielet"}
-        sh{"serbokroatia"}
         shn{"shan"}
         si{"sinhali"}
         sid{"sidamo"}
@@ -1650,17 +1743,18 @@ fi{
         sla{"muut slaavilaiset kielet"}
         sm{"samoa"}
         sma{"saame, etelä-"}
-        smi{"muut saamen kielet"}
+        smi{"muut saamelaiskielet"}
         smj{"saame, luulajan-"}
         smn{"saame, inarin-"}
         sms{"saame, koltan-"}
-        sn{"shona"}
+        sn{"šona"}
         snk{"soninke"}
         so{"somali"}
         sog{"sogdi"}
         son{"songhai"}
         sq{"albania"}
         sr{"serbia"}
+        srn{"sranan"}
         srr{"serer"}
         ss{"swazi"}
         ssa{"muut niililäis-saharalaiset kielet"}
@@ -1680,21 +1774,22 @@ fi{
         tet{"tetum"}
         tg{"tadžikki"}
         th{"thai"}
-        ti{"tigrinya"}
+        ti{"tigrinja"}
         tig{"tigre"}
+        tiv{"tiv"}
         tk{"turkmeeni"}
         tkl{"tokelau"}
         tl{"tagalog"}
         tlh{"klingon"}
         tli{"tlingit"}
-        tmh{"tamashek"}
+        tmh{"tamašek"}
         tn{"tswana"}
         to{"tonga (Tonga)"}
         tog{"tonga (Malawi)"}
         tpi{"tok-pisin"}
         tr{"turkki"}
         ts{"tsonga"}
-        tsi{"tsimshian"}
+        tsi{"tsimši"}
         tt{"tataari"}
         tum{"tumbuka"}
         tup{"tupi-kielet"}
@@ -1711,6 +1806,7 @@ fi{
         und{"määrittämätön"}
         ur{"urdu"}
         uz{"uzbekki"}
+        vai{"vai"}
         ve{"venda"}
         vi{"vietnam"}
         vo{"volapük"}
@@ -1724,6 +1820,8 @@ fi{
         wo{"wolof"}
         xal{"kalmukki"}
         xh{"xhosa"}
+        yao{"jao"}
+        yap{"japi"}
         yi{"jiddiš"}
         yo{"joruba"}
         ypk{"jupikkikielet"}
@@ -1734,6 +1832,7 @@ fi{
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
+        zxx{"ei kielellistä sisältöä"}
     }
     LocaleScript{
         "Latn",
@@ -1752,6 +1851,12 @@ fi{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0 %",
+        "#E0",
+    }
     Scripts{
         Arab{"arabialainen"}
         Armn{"armenialainen"}
@@ -1761,36 +1866,38 @@ fi{
         Blis{"Bliss-symbolit"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
-        Brai{"Braille-symbolit"}
+        Brai{"pistekirjoitus (Braille)"}
         Bugi{"bugilainen"}
         Buhd{"buhidilainen"}
-        Cans{"yhtenäistetty Kanadan alkuperäiskansojen tavukirjoitus"}
-        Cham{"chamilainen"}
+        Cans{"Kanadan alkuperäiskansojen yhtenäistetty tavukirjoitus"}
+        Cham{"tšamilainen"}
         Cher{"cherokeelainen"}
+        Cirt{"cirth"}
         Copt{"koptilainen"}
-        Cprt{"kyproslainen"}
+        Cprt{"muinaiskyproslainen"}
         Cyrl{"kyrillinen"}
-        Cyrs{"kyrillinen (vanha kirkkoslaavi -muunnelma)"}
+        Cyrs{"kyrillinen (muinaiskirkkoslaavimuunnelma)"}
         Deva{"devanagari"}
-        Dsrt{"mormoonien deseret"}
-        Egyd{"demoottinen"}
-        Egyh{"hieraattinen"}
+        Dsrt{"deseret"}
+        Egyd{"egyptiläinen demoottinen"}
+        Egyh{"egyptiläinen hieraattinen"}
         Egyp{"egyptiläiset hieroglyfit"}
         Ethi{"etiopialainen (ge’ez)"}
-        Geok{"khutsuri"}
-        Geor{"georgialainen"}
+        Geok{"muinaisgeorgialainen (khutsuri)"}
+        Geor{"georgialainen (mkhedruli)"}
         Glag{"glagoliittinen"}
         Goth{"goottilainen"}
         Grek{"kreikkalainen"}
-        Gujr{"gujarati"}
+        Gujr{"gudžaratilainen"}
         Guru{"gurmukhi"}
         Hang{"hangul"}
-        Hani{"han"}
+        Hani{"kiinalainen (han)"}
         Hano{"hanunoolainen"}
-        Hans{"han, yksinkertaistettu"}
-        Hant{"han, perinteinen"}
+        Hans{"kiinalainen (han), yksinkertaistettu"}
+        Hant{"kiinalainen (han), perinteinen"}
         Hebr{"heprealainen"}
         Hira{"hiragana"}
+        Hmng{"pahawh hmong"}
         Hrkt{"hiragana+katakana"}
         Hung{"muinaisunkarilainen"}
         Inds{"induslainen"}
@@ -1798,33 +1905,37 @@ fi{
         Java{"jaavalainen"}
         Kali{"kayah li"}
         Kana{"katakana"}
-        Khar{"kharotshi"}
+        Khar{"kharoshthi"}
         Khmr{"khmeriläinen"}
         Knda{"kannadalainen"}
         Laoo{"laolainen"}
-        Latf{"latinalainen (fraktuura-muunnelma)"}
-        Latg{"latinalainen (gaeli-muunnelma)"}
+        Latf{"latinalainen (fraktuuramuunnelma)"}
+        Latg{"latinalainen (gaelimuunnelma)"}
         Latn{"latinalainen"}
-        Lepc{"lepcha"}
+        Lepc{"lepchalainen"}
         Limb{"limbulainen"}
         Lina{"lineaari-A"}
         Linb{"lineaari-B"}
         Mand{"mandealainen"}
         Maya{"maya-hieroglyfit"}
         Mero{"meroiittinen"}
-        Mlym{"malayalamilainen"}
+        Mlym{"malajalamilainen"}
         Mong{"mongolilainen"}
         Mymr{"burmalainen"}
         Nkoo{"n'ko"}
         Ogam{"ogam"}
         Orkh{"orkhon"}
-        Orya{"oriyalainen"}
-        Osma{"osmanya"}
+        Orya{"orijalainen"}
+        Osma{"osmanjalainen"}
         Perm{"muinaispermiläinen"}
         Phag{"phags-pa"}
         Phnx{"foinikialainen"}
+        Plrd{"Pollardin foneettinen"}
+        Qaai{"peritty"}
         Roro{"rongorongo"}
         Runr{"riimukirjoitus"}
+        Sara{"sarati"}
+        Shaw{"shaw’lainen"}
         Sinh{"sinhalilainen"}
         Sylo{"syloti nagri"}
         Syrc{"syyrialainen"}
@@ -1832,19 +1943,21 @@ fi{
         Syrj{"syyrialainen (läntinen muunnelma)"}
         Syrn{"syyrialainen (itäinen muunnelma)"}
         Tagb{"tagbanwalainen"}
-        Talu{"uusi tai-lue"}
+        Tale{"tailelainen"}
+        Talu{"uusi tailuelainen"}
         Taml{"tamililainen"}
         Telu{"telugulainen"}
+        Teng{"tengwar"}
         Tfng{"tifinagh"}
         Tglg{"tagalogilainen"}
         Thaa{"thaana"}
-        Thai{"thai"}
+        Thai{"thailainen"}
         Tibt{"tiibetiläinen"}
         Ugar{"ugaritilainen"}
         Vaii{"vailainen"}
-        Visp{"näkyvä puhe"}
+        Visp{"näkyvä puhe (Visible Speech)"}
         Xpeo{"muinaispersialainen"}
-        Xsux{"sumerilais-akkadilainen nuolenpääkirjoitus"}
+        Xsux{"nuolenpääkirjoitus, sumerilais-akkadilainen"}
         Yiii{"yiläinen"}
         Zxxx{"kirjoittamaton"}
         Zyyy{"määrittämätön"}
@@ -1861,14 +1974,25 @@ fi{
             japanese{"japanilainen kalenteri"}
         }
         collation{
+            big5han{"perinteinen kiinalainen (Big5)"}
             direct{"suora järjestys"}
+            gb2312han{"yksinkertaistettu kiinalainen (GB2312)"}
             phonebook{"puhelinluettelojärjestys"}
             pinyin{"pinyin-järjestys"}
             stroke{"piirtojärjestys"}
             traditional{"perinteinen järjestys"}
         }
     }
-    Version{"1.63"}
+    Variants{
+        1901{"saksan perinteinen oikeinkirjoitus"}
+        1996{"saksan uusi oikeinkirjoitus"}
+        NEDIS{"sloveenin natisone-murre"}
+        POLYTONI{"polytoninen kreikka"}
+        REVISED{"uudistettu oikeinkirjoitus"}
+        ROZAJ{"sloveenin resia-murre"}
+        SAAHO{"afarin saho-murre"}
+    }
+    Version{"1.64"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1876,7 +2000,7 @@ fi{
                 "ip.",
             }
             DateTimePatterns{
-                "H.mm.ss z",
+                "H.mm.ss v",
                 "'klo 'H.mm.ss",
                 "H.mm.ss",
                 "H.mm",
@@ -1885,6 +2009,31 @@ fi{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"H.mm"}
+                HHmmss{"H.mm.ss"}
+                KKmm{"H.mm"}
+                KKmmss{"H.mm.ss"}
+                MMMM{"MMMM"}
+                MMMdd{"d.M."}
+                MMdd{"d.M."}
+                mmssSS{"m.ss,SS"}
+                ww{"w"}
+                yyMM{"MMMM yyyy"}
+                yyMMMEEEd{"EEE d.M.yyyy"}
+                yyMMMEEEdd{"EEE d.M.yyyy"}
+                yyMMMd{"d.M.yyyy"}
+                yyMMdd{"d.M.yyyy"}
+                yyMMddHHmm{"d.M.yyyy H.mm"}
+                yyQQQQ{"QQQQ yyyy"}
+                yyyyMMMMEEEEd{"EEEE, d. MMMM'ta' yyyy"}
+                yyyyMMMMEEEd{"EEEE d. MMMM'ta' yyyy"}
+                yyyyMMMMd{"d. MMMM'ta' yyyy"}
+                yyyyMMMd{"d.M.yyyy"}
+                yyyyMMdd{"yyyy-MM-dd"}
+                yyyyMMddHHmmss{"yyyy-MM-dd HH:MM:SS"}
+                yyyyMd{"d.M.yyyy"}
             }
             dayNames{
                 format{
@@ -1925,25 +2074,60 @@ fi{
                     "jKr.",
                 }
                 wide{
-                    "ennen Kristusta",
-                    "jälkeen Kristuksen",
+                    "ennen Kristuksen syntymää",
+                    "jälkeen Kristuksen syntymän",
+                }
+            }
+            fields{
+                day{
+                    dn{"päivä"}
+                }
+                dayperiod{
+                    dn{"ap/ip-valinta"}
+                }
+                era{
+                    dn{"aikakausi"}
+                }
+                hour{
+                    dn{"tunti"}
+                }
+                minute{
+                    dn{"minuutti"}
+                }
+                month{
+                    dn{"kuukausi"}
+                }
+                second{
+                    dn{"sekunti"}
+                }
+                week{
+                    dn{"viikko"}
+                }
+                weekday{
+                    dn{"viikonpäivä"}
+                }
+                year{
+                    dn{"vuosi"}
+                }
+                zone{
+                    dn{"aikavyöhyke"}
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "tammi",
-                        "helmi",
-                        "maalis",
-                        "huhti",
-                        "touko",
-                        "kesä",
-                        "heinä",
-                        "elo",
-                        "syys",
-                        "loka",
-                        "marras",
-                        "joulu",
+                        "tammikuu",
+                        "helmikuu",
+                        "maaliskuu",
+                        "huhtikuu",
+                        "toukokuu",
+                        "kesäkuu",
+                        "heinäkuu",
+                        "elokuu",
+                        "syyskuu",
+                        "lokakuu",
+                        "marraskuu",
+                        "joulukuu",
                     }
                     wide{
                         "tammikuu",
@@ -1977,27 +2161,43 @@ fi{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "1. nelj.",
+                        "2. nelj.",
+                        "3. nelj.",
+                        "4.nelj.",
+                    }
+                    wide{
+                        "1. neljännes",
+                        "2. neljännes",
+                        "3. neljännes",
+                        "4. neljännes",
+                    }
+                }
+            }
         }
         hebrew{
             monthNames{
                 format{
                     abbreviated{
-                        "tišrì",
-                        "hešván",
-                        "kislév",
-                        "tevét",
-                        "ševát",
-                        "adár",
-                        "adár II",
-                        "nisán",
-                        "ijjár",
-                        "siván",
-                        "tammúz",
-                        "ab",
-                        "elúl",
+                        "tišríkuu",
+                        "hešvánkuu",
+                        "kislévkuu",
+                        "tevétkuu",
+                        "ševátkuu",
+                        "adárkuu",
+                        "adárkuu II",
+                        "nisánkuu",
+                        "ijjárkuu",
+                        "sivánkuu",
+                        "tammúzkuu",
+                        "abkuu",
+                        "elúlkuu",
                     }
                     wide{
-                        "tišrìkuu",
+                        "tišríkuu",
                         "hešvánkuu",
                         "kislévkuu",
                         "tevétkuu",
@@ -2018,18 +2218,18 @@ fi{
             monthNames{
                 format{
                     wide{
-                        "muhárram",
-                        "sáfar",
-                        "rabíʻ al-áwwal",
-                        "rabíʻ al-ákhir",
-                        "džumada-l-úla",
-                        "džumada-l-ákhira",
-                        "radžab",
-                        "šaʻbán",
-                        "ramadán",
-                        "šawwál",
-                        "dhu-l-qáʻda",
-                        "dhu-l-hiddža",
+                        "muharramkuu",
+                        "safarkuu",
+                        "rabi’ al-awwal -kuu",
+                        "rabi’ al-akhir -kuu",
+                        "džumada-l-ula-kuu",
+                        "džumada-l-akhira-kuu",
+                        "radžabkuu",
+                        "ša’bankuu",
+                        "ramadankuu",
+                        "šawwalkuu",
+                        "dhu-l-qa’da-kuu",
+                        "dhu-l-hiddža-kuu",
                     }
                 }
             }
@@ -2038,12 +2238,19 @@ fi{
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
     }
+    delimiters{
+        alternateQuotationStart{"’"}
+        quotationStart{"”"}
+    }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    measurementSystemNames{
+        metric{"metrinen"}
+    }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Greenwichin aika"}
-            ls{"Greenwichin aika"}
+            ld{"Greenwichin kesäaika"}
+            ls{"Greenwichin normaaliaika"}
             sd{"GMT"}
             ss{"GMT"}
         }
@@ -2051,8 +2258,8 @@ fi{
             ec{"Anchorage"}
             ld{"Alaskan kesäaika"}
             ls{"Alaskan normaaliaika"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodoro Rivadavia"}
@@ -2063,7 +2270,7 @@ fi{
         "America:Chicago"{
             ec{"Chicago"}
             ld{"Yhdysvaltain keskinen kesäaika"}
-            ls{"Yhdysvaltain keskinen normaaliaika>"}
+            ls{"Yhdysvaltain keskinen normaaliaika"}
             sd{"CDT"}
             ss{"CST"}
         }
@@ -2083,9 +2290,9 @@ fi{
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"Yhdysvaltain itäinen normaaliaika"}
+            ld{"Yhdysvaltain itäinen kesäaika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
-            sd{"EST"}
+            sd{"EDT"}
             ss{"EST"}
         }
         "America:Los_Angeles"{
@@ -2107,9 +2314,8 @@ fi{
         }
         "America:Phoenix"{
             ec{"Phoenix"}
-            ld{"Kalliovuorten normaaliaika"}
+            ld{"Kalliovuorten kesäaika"}
             ls{"Kalliovuorten normaaliaika"}
-            sd{"MST"}
             ss{"MST"}
         }
         "America:Sao_Paulo"{
@@ -2146,7 +2352,7 @@ fi{
         }
         "Asia:Shanghai"{
             ec{"Shanghai"}
-            ld{"Kiinan normaaliaika"}
+            ld{"Kiinan kesäaika"}
             ls{"Kiinan normaaliaika"}
             sd{"CTT"}
             ss{"CTT"}
@@ -2156,7 +2362,7 @@ fi{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
-            ld{"Japanin normaaliaika"}
+            ld{"Japanin kesäaika"}
             ls{"Japanin normaaliaika"}
             sd{"JST"}
             ss{"JST"}
@@ -2199,8 +2405,8 @@ fi{
             ec{"Pariisi"}
             ld{"Keski-Euroopan kesäaika"}
             ls{"Keski-Euroopan normaaliaika"}
-            sd{"CEST"}
-            ss{"CET"}
+            sd{"CEDT"}
+            ss{"CEST"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
@@ -2210,9 +2416,9 @@ fi{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-            ld{"Havaijin normaaliaika"}
+            ld{"Havaijin kesäaika"}
             ls{"Havaijin normaaliaika"}
-            sd{"HST"}
+            sd{"HDT"}
             ss{"HST"}
         }
     }

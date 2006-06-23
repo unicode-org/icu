@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fo.xml
  */
 fo{
+    AuxExemplarCharacters{"[c q w z]"}
     Countries{
         AE{"Sameindu Emirríkini"}
         AF{"Afganistan"}
@@ -61,10 +62,12 @@ fo{
         HU{"Ungarn"}
         IE{"Írland"}
         IL{"Ísrael"}
+        IN{"India"}
         IQ{"Irak"}
         IS{"Ísland"}
         IT{"Italia"}
         JM{"Jameika"}
+        JP{"Japan"}
         KE{"Kenja"}
         KG{"Kirgisia"}
         KH{"Kambodja"}
@@ -140,7 +143,7 @@ fo{
             "DKK",
         }
     }
-    ExemplarCharacters{"[a á b-d ð e-i í j-o ó p-u ú v-y ý z æ ø]"}
+    ExemplarCharacters{"[a á b d ð e-i í j-o ó p r-u ú v x y ý æ ø]"}
     Languages{
         fo{"føroyskt"}
     }
@@ -161,7 +164,7 @@ fo{
         "NaN",
         "+",
     }
-    Version{"1.35"}
+    Version{"1.38"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -226,6 +229,22 @@ fo{
                         "oktober",
                         "november",
                         "desember",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
                     }
                 }
             }

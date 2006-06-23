@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
+    AuxExemplarCharacters{"[һ]"}
     Countries{
         KZ{"Қазақстан"}
     }
@@ -40,7 +41,7 @@ kk{
         "NaN",
         "+",
     }
-    Version{"1.31"}
+    Version{"1.32"}
     calendar{
         gregorian{
             DateTimePatterns{

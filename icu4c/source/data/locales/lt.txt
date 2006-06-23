@@ -10,8 +10,36 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
+    AuxExemplarCharacters{"[q w x]"}
     Countries{
+        001{"Pasaulis"}
+        002{"Afrika"}
+        005{"Pietų Amerika"}
+        011{"Vakarų Afrika"}
+        013{"Centrinė Amerika"}
+        014{"Rytų Afrika"}
+        015{"Šiaurės Afrika"}
+        017{"Vidurio Afrika"}
+        018{"Pietų Afrika"}
+        019{"Amerika"}
+        029{"Karibai"}
+        030{"Rytų Azija"}
+        034{"Pietų Azija"}
+        035{"Pietryčių Azija"}
+        039{"Pietų Europa"}
+        053{"Australija ir Naujoji Zelandija"}
+        054{"Melanezija"}
+        057{"Mikronezija"}
+        061{"Polinezija"}
+        142{"Azija"}
+        143{"Centrinė Azija"}
+        145{"Vakarų Azija"}
+        150{"Europa"}
+        151{"Rytų Europa"}
+        154{"Šiaurės Europa"}
+        155{"Vakarų Europa"}
         200{"Čekoslovakija"}
+        419{"Lotynų Amerika ir Karibai"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
         AF{"Afganistanas"}
@@ -60,6 +88,7 @@ lt{
         CN{"Kinija"}
         CO{"Kolumbija"}
         CR{"Kosta Rika"}
+        CS{"Serbija ir Juodkalnija"}
         CU{"Kuba"}
         CV{"Žaliasis Kyšulys"}
         CX{"Kalėdų sala"}
@@ -103,7 +132,7 @@ lt{
         GW{"Bisau Gvinėja"}
         GY{"Gajana"}
         HK{"Kinijos S.A.R.Honkongas"}
-        HM{"Heardo salos"}
+        HM{"Heardo ir McDonaldo Salų Sritis"}
         HN{"Hondūras"}
         HR{"Kroatija"}
         HT{"Haitis"}
@@ -191,7 +220,6 @@ lt{
         PW{"Palau"}
         PY{"Paragvajus"}
         QA{"Kataras"}
-        RE{"Rejunjonas"}
         RO{"Rumunija"}
         RU{"Rusijos Federacija"}
         RW{"Ruanda"}
@@ -269,7 +297,7 @@ lt{
             "Svaras sterlingų",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Indijos rupija",
         }
         JPY{
@@ -289,10 +317,15 @@ lt{
             "JAV doleris",
         }
     }
-    ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-s š t u ų ū v-x z ž]"}
+    ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]"}
+    Keys{
+        calendar{"kalendorius"}
+        currency{"valiuta"}
+    }
     Languages{
         ar{"Arabų"}
         bg{"Bulgarų"}
+        bn{"Bengalų"}
         cs{"Čekų"}
         da{"Danų"}
         de{"Vokiečių"}
@@ -320,6 +353,7 @@ lt{
         sk{"Slovakų"}
         sl{"Slovėnų"}
         sv{"Švedų"}
+        th{"Tajų"}
         tr{"Turkų"}
         zh{"Kinų"}
     }
@@ -343,7 +377,7 @@ lt{
     Scripts{
         Latn{"Latin"}
     }
-    Version{"1.60"}
+    Version{"1.62"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -360,6 +394,30 @@ lt{
                 "yyyy.MM.dd",
                 "yyyy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"H 'val.' m 'min.'"}
+                Hmm{"H'.'mm 'val.'"}
+                Hmmss{"H 'val.' mm 'min.' ss 'sek.'"}
+                Hms{"H 'h' m 'min' s 's'"}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{"MMMM"}
+                MMMdd{"MMM-dd"}
+                MMdd{"MM-dd"}
+                mmssSS{"mm:ss,SS"}
+                yyMMMEEEdd{"yy MMM dd EEE"}
+                yyMMdd{"yy-MM-dd"}
+                yyMMddHHmm{"yy-MM-dd HH:mm"}
+                yyyyMMMEEEd{"yyyy 'm.' MMM d 'd.' EEE"}
+                yyyyMMMMEEEEd{"yyyy 'm.' MMMM d 'd.' EEEE"}
+                yyyyMMMMEEEdd{"yyyy MMMM dd EEE"}
+                yyyyMMMMd{"yyyy 'metų' MMMM d 'diena'"}
+                yyyyMMMMdd{"yyyy 'm.' MMMM dd 'd.'"}
+                yyyyMMdd{"yyyy-MM-dd"}
+                yyyyMMddHHmmss{"yyyy-MM-dd HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -398,6 +456,41 @@ lt{
                 abbreviated{
                     "pr. Kr.",
                     "po Kr.",
+                }
+            }
+            fields{
+                day{
+                    dn{"diena"}
+                }
+                dayperiod{
+                    dn{"dienos metas"}
+                }
+                era{
+                    dn{"era"}
+                }
+                hour{
+                    dn{"valanda"}
+                }
+                minute{
+                    dn{"minutė"}
+                }
+                month{
+                    dn{"mėnuo"}
+                }
+                second{
+                    dn{"Sekundė"}
+                }
+                week{
+                    dn{"savaitė"}
+                }
+                weekday{
+                    dn{"savaitės diena"}
+                }
+                year{
+                    dn{"metai"}
+                }
+                zone{
+                    dn{"juosta"}
                 }
             }
             monthNames{
@@ -462,7 +555,53 @@ lt{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "pirmas ketvirtis",
+                        "antras ketvirtis",
+                        "trečias ketvirtis",
+                        "ketvirtas ketvirtis",
+                    }
+                }
+            }
         }
     }
+    delimiters{
+        quotationEnd{"“"}
+        quotationStart{"„"}
+    }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    zoneStrings{
+        "America:Chicago"{
+            ec{"Čikaga"}
+        }
+        "America:Denver"{
+            ec{"Denveris"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Peterburgas"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Andželas"}
+        }
+        "America:Moncton"{
+            ec{"Monktonas"}
+        }
+        "America:New_York"{
+            ec{"Niujorkas"}
+        }
+        "America:Phoenix"{
+            ec{"Fyniksas"}
+        }
+        "America:Sao_Paulo"{
+            ec{"San Paulas"}
+        }
+    }
 }

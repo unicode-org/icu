@@ -10,8 +10,18 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
+    AuxExemplarCharacters{"[w]"}
     Countries{
         AZ{"Azərbaycan"}
+        BR{"Braziliya"}
+        CN{"Çin"}
+        DE{"Almaniya"}
+        FR{"Fransa"}
+        IN{"Hindistan"}
+        IT{"İtaliya"}
+        JP{"Yaponiya"}
+        RU{"Rusiya"}
+        US{"Amerika Birləşmiş Ştatları"}
     }
     Currencies{
         AZM{
@@ -40,20 +50,5 @@ az{
         "NaN",
         "+",
     }
-    Version{"1.33"}
-    calendar{
-        gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
-        }
-    }
+    Version{"1.34"}
 }

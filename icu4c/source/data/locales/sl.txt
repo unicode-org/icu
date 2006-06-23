@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
+    AuxExemplarCharacters{"[q w-y]"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -300,7 +301,7 @@ sl{
             "Britanski Funt Sterling",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Indijski Rupi",
         }
         JPY{
@@ -396,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.58"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -448,22 +449,26 @@ sl{
                     "pr.n.š.",
                     "po Kr.",
                 }
+                wide{
+                    "pred našim štetjem",
+                    "naše štetje",
+                }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
+                        "januar",
+                        "februar",
+                        "marec",
+                        "april",
                         "maj",
-                        "jun",
-                        "jul",
-                        "avg",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
+                        "junij",
+                        "julij",
+                        "avgust",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
                     }
                     wide{
                         "januar",
@@ -494,6 +499,22 @@ sl{
                         "o",
                         "n",
                         "d",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "Prvo četrtletje",
+                        "Drugo četrtletje",
+                        "Tretje četrtletje",
+                        "Četrto četrtletje",
                     }
                 }
             }
@@ -537,6 +558,5 @@ sl{
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
         }
-        hourFormat{"+HHmm;-HHmm"}
     }
 }

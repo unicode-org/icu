@@ -11,14 +11,6 @@
  */
 en_BE{
     Version{"1.19"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
-        }
-    }
     collations{
         standard{
             Sequence{" [backwards 2]"}
