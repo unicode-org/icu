@@ -284,12 +284,13 @@ void IdnaConfTest::Test(void){
     UnicodeString value;
 
     // skip everything before the first "=====" and "=====" itself
-    for (;;){
-        ReadOneLine(s);
-        if (s.compare(C_TAG, -1) == 0){   //"====="
+    do {
+        if (!ReadOneLine(s)) {
+            errln("End of file prematurely found");
             break;
         }
     }
+    while (s.compare(C_TAG, -1) != 0);   //"====="
 
     while(ReadOneLine(s)){
         s.trim();
