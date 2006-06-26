@@ -562,6 +562,30 @@ private:
     int32_t         fAmPmsCount;
 
     /**
+     * Quarter strings. For example: "1st quarter", "2nd quarter", etc.
+     */
+    UnicodeString  *fQuarters;
+    int32_t         fQuartersCount;
+
+    /**
+     * Short quarters. For example: "Q1", "Q2", etc.
+     */
+    UnicodeString  *fShortQuarters;
+    int32_t         fShortQuartersCount;
+
+    /**
+     * Standalone quarter strings. For example: "1st quarter", "2nd quarter", etc.
+     */
+    UnicodeString  *fStandaloneQuarters;
+    int32_t         fStandaloneQuartersCount;
+
+    /**
+     * Standalone short quarter strings. For example: "Q1", "Q2", etc.
+     */
+    UnicodeString  *fStandaloneShortQuarters;
+    int32_t         fStandaloneShortQuartersCount;
+
+    /**
      * The format data of all the timezones in this locale.
      */
     UnicodeString** fZoneStrings;
