@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2005, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2006, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.H
@@ -722,6 +722,21 @@ private:
      */
     int32_t matchString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
                         const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
+
+    /**
+     * Private code-size reduction function used by subParse.
+     * @param text the time text being parsed.
+     * @param start where to start parsing.
+     * @param field the date field being parsed.
+     * @param stringArray the string array to parsed.
+     * @param stringArrayCount the size of the array.
+     * @param cal a Calendar set to the date and time to be formatted
+     *            into a date/time string.
+     * @return the new start position if matching succeeded; a negative number
+     * indicating matching failure, otherwise.
+     */
+    int32_t matchQuarterString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
+                               const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
 
     /**
      * Private member function that converts the parsed date strings into

@@ -165,9 +165,23 @@ public: // package
 
 public:
     /**
-        * Test host-specific formatting.
-        */
+     * Test host-specific formatting.
+     */
     void TestHost(void);
+
+public:
+    /**
+     * Test patterns added in CLDR 1.4
+     */
+    void TestEras(void);
+
+    void TestNarrowNames(void);
+
+    void TestStandAloneDays(void);
+
+    void TestStandAloneMonths(void);
+
+    void TestQuarters(void);
 
  private:
     void expectParse(const char** data, int32_t data_length,
@@ -175,6 +189,9 @@ public:
 
     void expect(const char** data, int32_t data_length,
                 const Locale& loc);
+
+    void expectFormat(const char **data, int32_t data_length,
+                      const Locale &locale);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
