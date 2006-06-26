@@ -5,7 +5,6 @@
  ********************************************************************/
 
 #include "loctest.h"
-#include <stdio.h>
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
@@ -14,6 +13,7 @@
 #include "unicode/coll.h"
 #include "cstring.h"
 #include "uassert.h"
+#include <stdio.h>
 
 const char* rawData[33][8] = {
 
