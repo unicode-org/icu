@@ -44,17 +44,17 @@
  * resource data.
  */
 
-#define PATTERN_CHARS_LEN 24
+#define PATTERN_CHARS_LEN 26
 
 /**
  * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
  * locales use the same these unlocalized pattern characters.
  */
 static const UChar gPatternChars[] = {
-    // GyMdkHmsSEDFwWahKzYeugAZvcL
+    // GyMdkHmsSEDFwWahKzYeugAZvcLQq
     0x47, 0x79, 0x4D, 0x64, 0x6B, 0x48, 0x6D, 0x73, 0x53, 0x45,
     0x44, 0x46, 0x77, 0x57, 0x61, 0x68, 0x4B, 0x7A, 0x59, 0x65,
-    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0
+    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0x51, 0x71, 0
 };
 
 /* length of an array */
@@ -154,6 +154,7 @@ static const char gNamesAbbrTag[]="abbreviated";
 static const char gNamesNarrowTag[]="narrow";
 static const char gNamesStandaloneTag[]="stand-alone";
 static const char gAmPmMarkersTag[]="AmPmMarkers";
+static const char gQuartersTag[]="quarters";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
@@ -1039,15 +1040,23 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // are stored in a separate file
     locBased.setLocaleIDs(ures_getLocaleByType(eras, ULOC_VALID_LOCALE, &status),
                           ures_getLocaleByType(eras, ULOC_ACTUAL_LOCALE, &status));
+
     initField(&fEras, fErasCount, eras, status);
     initField(&fEraNames, fEraNamesCount, eraNames, status);
+
     initField(&fMonths, fMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesWideTag, status), status);
     initField(&fShortMonths, fShortMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesAbbrTag, status), status);
+
     initField(&fNarrowMonths, fNarrowMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesNarrowTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        initField(&fNarrowMonths, fNarrowMonthsCount, calData.getByKey3(gMonthNamesTag, gNamesStandaloneTag, gNamesNarrowTag, status), status);
+    }
     if ( status == U_MISSING_RESOURCE_ERROR ) { /* If format/narrow not available, use format/abbreviated */
        status = U_ZERO_ERROR;
        initField(&fNarrowMonths, fNarrowMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesAbbrTag, status), status);
     }
+
     initField(&fStandaloneMonths, fStandaloneMonthsCount, calData.getByKey3(gMonthNamesTag, gNamesStandaloneTag, gNamesWideTag, status), status);
     if ( status == U_MISSING_RESOURCE_ERROR ) { /* If standalone/wide not available, use format/wide */
        status = U_ZERO_ERROR;
@@ -1068,6 +1077,21 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
        }
     }
     initField(&fAmPms, fAmPmsCount, calData.getByKey(gAmPmMarkersTag, status), status);
+
+    initField(&fQuarters, fQuartersCount, calData.getByKey2(gQuartersTag, gNamesWideTag, status), status);
+    initField(&fShortQuarters, fShortQuartersCount, calData.getByKey2(gQuartersTag, gNamesAbbrTag, status), status);
+
+    initField(&fStandaloneQuarters, fStandaloneQuartersCount, calData.getByKey3(gQuartersTag, gNamesStandaloneTag, gNamesWideTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        initField(&fStandaloneQuarters, fStandaloneQuartersCount, calData.getByKey2(gQuartersTag, gNamesWideTag, status), status);
+    }
+
+    initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, calData.getByKey3(gQuartersTag, gNamesStandaloneTag, gNamesAbbrTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, calData.getByKey2(gQuartersTag, gNamesAbbrTag, status), status);
+    }
 
     // fastCopyFrom()/setTo() - see assignArray comments
     resStr = ures_getStringByKey(fResourceBundle, gLocalPatternCharsTag, &len, &status);
@@ -1112,6 +1136,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fShortWeekdaysCount++;
 
     narrowWeekdaysData = calData.getByKey2(gDayNamesTag, gNamesNarrowTag, status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        narrowWeekdaysData = calData.getByKey3(gDayNamesTag, gNamesStandaloneTag, gNamesNarrowTag, status);
+    }
     if ( status == U_MISSING_RESOURCE_ERROR ) {
        status = U_ZERO_ERROR;
        narrowWeekdaysData = calData.getByKey2(gDayNamesTag, gNamesAbbrTag, status);

@@ -366,6 +366,24 @@ typedef enum UDateFormatField {
      */
     UDAT_STANDALONE_MONTH_FIELD = 26,
 
+    /**
+     * FieldPosition selector for "Q" field alignment,
+     * corresponding to quarters. This is implemented
+     * using the {@link Calendar#MONTH} field. This
+     * displays the quarter.
+     * @draft ICU 3.6
+     */
+    UDAT_QUARTER_FIELD = 27,
+
+    /**
+     * FieldPosition selector for the "q" field alignment,
+     * corresponding to stand-alone quarters. This is
+     * implemented using the {@link Calendar#MONTH} field.
+     * This displays the stand-alone quarter.
+     * @draft ICU 3.6
+     */
+    UDAT_STANDALONE_QUARTER_FIELD = 28,
+
 #endif /*U_HIDE_DRAFT_API*/
    
    /**
@@ -376,7 +394,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT = 27
+    UDAT_FIELD_COUNT = 29
 
 } UDateFormatField;
 
