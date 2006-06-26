@@ -19,8 +19,6 @@
 *   in various IDNA conversion processes.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
@@ -40,6 +38,7 @@
 #include "sprpimpl.h"
 #include "testidna.h"
 #include "punyref.h"
+#include <stdlib.h>
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
