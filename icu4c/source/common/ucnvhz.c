@@ -467,19 +467,22 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
                            offsetIndex, err);
 }
 
-/* structure for SafeClone calculations */
+/*
+ * Structure for cloning an HZ converter into a single memory block.
+ * ucnv_safeClone() of the HZ converter will align the entire cloneHZStruct,
+ * and then ucnv_safeClone() of the sub-converter may additionally align
+ * subCnv inside the cloneHZStruct, for which we need the deadSpace after
+ * subCnv. This is because UAlignedMemory may be larger than the actually
+ * necessary alignment size for the platform.
+ * The other cloneHZStruct fields will not be moved around,
+ * and are aligned properly with cloneHZStruct's alignment.
+ */
 struct cloneHZStruct
 {
     UConverter cnv;
-    UAlignedMemory deadSpace1;
     UConverter subCnv;
-    UAlignedMemory deadSpace2;
+    UAlignedMemory deadSpace;
     UConverterDataHZ mydata;
-    /*
-     * Last item may be aligned to a higher address.
-     * Ensure that there is enough space for that.
-     */
-    UAlignedMemory deadSpace3;
 };
 
 
@@ -502,7 +505,7 @@ _HZ_SafeClone(const UConverter *cnv,
     }
 
     localClone = (struct cloneHZStruct *)stackBuffer;
-    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+    /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
     localClone->cnv.extraInfo = &localClone->mydata;
