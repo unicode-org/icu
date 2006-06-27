@@ -9,182 +9,44 @@
 package com.ibm.icu.util;
 
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.MessageFormat;
 import java.lang.IllegalArgumentException;
 
 /** 
  * There are quite a few different conventions for binary datetime, depending on different
  * platforms and protocols. Some of these have severe drawbacks. For example, people using
- * Unix time (seconds since Jan 1, 1970) think that they are safe until near the year 2038.
+ * Unix time (seconds since Jan 1, 1970, usually in a 32-bit integer)
+ * think that they are safe until near the year 2038.
  * But cases can and do arise where arithmetic manipulations causes serious problems. Consider
  * the computation of the average of two datetimes, for example: if one calculates them with
  * <code>averageTime = (time1 + time2)/2</code>, there will be overflow even with dates
- * around the present. Moreover, even if these problems don't occur, there is the issue of
+ * beginning in 2004. Moreover, even if these problems don't occur, there is the issue of
  * conversion back and forth between different systems.
  *
- * <p>
- * Binary datetimes differ in a number of ways: the datatype, the unit,
- * and the epoch (origin). We'll refer to these as time scales. For example:
+ * <p>Binary datetimes differ in a number of ways: the datatype, the unit,
+ * and the epoch (origin). We refer to these as time scales.</p>
  *
- * <table border="1" cellspacing="0" cellpadding="4">
- *  <caption>
- *    <h3>Table 1: Binary Time Scales</h3>
+ * <p>ICU implements a universal time scale that is similar to the
+ * .NET framework's System.DateTime. The universal time scale is a
+ * 64-bit integer that holds ticks since midnight, January 1st, 0001.
+ * (One tick is 100 nanoseconds.)
+ * Negative values are supported. This has enough range to guarantee that
+ * calculations involving dates around the present are safe.</p>
  *
- *  </caption>
- *  <tr>
- *    <th align="left">Source</th>
- *    <th align="left">Datatype</th>
- *    <th align="left">Unit</th>
- *    <th align="left">Epoch</th>
- *  </tr>
+ * <p>The universal time scale always measures time according to the
+ * proleptic Gregorian calendar. That is, the Gregorian calendar's
+ * leap year rules are used for all times, even before 1582 when it was
+ * introduced. (This is different from the default ICU calendar which
+ * switches from the Julian to the Gregorian calendar in 1582.
+ * See GregorianCalendar.setGregorianChange() and ucal_setGregorianChange().)</p>
  *
- *  <tr>
- *    <td>JAVA_TIME</td>
- *    <td>long</td>
- *    <td>milliseconds</td>
- *    <td>Jan 1, 1970</td>
- *  </tr>
- *  <tr>
+ * ICU provides conversion functions to and from all other major time
+ * scales, allowing datetimes in any time scale to be converted to the
+ * universal time scale, safely manipulated, and converted back to any other
+ * datetime time scale.</p>
  *
- *    <td>UNIX_TIME</td>
- *    <td>int or long</td>
- *    <td>seconds</td>
- *    <td>Jan 1, 1970</td>
- *  </tr>
- *  <tr>
- *    <td>ICU4C</td>
- *
- *    <td>double</td>
- *    <td>milliseconds</td>
- *    <td>Jan 1, 1970</td>
- *  </tr>
- *  <tr>
- *    <td>WINDOWS_FILE_TIME</td>
- *    <td>long</td>
- *
- *    <td>ticks (100 nanoseconds)</td>
- *    <td>Jan 1, 1601</td>
- *  </tr>
- *  <tr>
- *    <td>DOTNET_DATE_TIME</td>
- *    <td>long</td>
- *    <td>ticks (100 nanoseconds)</td>
- *
- *    <td>Jan 1, 0001</td>
- *  </tr>
- *  <tr>
- *    <td>MAC_OLD_TIME</td>
- *    <td>int</td>
- *    <td>seconds</td>
- *    <td>Jan 1, 1904</td>
- *
- *  </tr>
- *  <tr>
- *    <td>MAC_TIME</td>
- *    <td>double</td>
- *    <td>seconds</td>
- *    <td>Jan 1, 2001</td>
- *  </tr>
- *
- *  <tr>
- *    <td>EXCEL_TIME</td>
- *    <td>?</td>
- *    <td>days</td>
- *    <td>Dec 31, 1899</td>
- *  </tr>
- *  <tr>
- *
- *    <td>DB2_TIME</td>
- *    <td>?</td>
- *    <td>days</td>
- *    <td>Dec 31, 1899</td>
- *  </tr>
- * </table>
- *
- * <p>
- * All of the epochs start at 00:00 am (the earliest possible time on the day in question),
- * and are assumed to be UTC.
- *
- * <p>
- * The ranges for different datatypes are given in the following table (all values in years).
- * The range of years includes the entire range expressible with positive and negative
- * values of the datatype. The range of years for double is the range that would be allowed
- * without losing precision to the corresponding unit.
- *
- * <table border="1" cellspacing="0" cellpadding="4">
- *  <tr>
- *    <th align="left">Units</th>
- *    <th align="left">long</th>
- *    <th align="left">double</th>
- *    <th align="left">int</th>
- *  </tr>
- *
- *  <tr>
- *    <td>1 sec</td>
- *    <td align="right">5.84542&#xD7;10&#xB9;&#xB9;</td>
- *    <td align="right">285,420,920.94</td>
- *    <td align="right">136.10</td>
- *  </tr>
- *  <tr>
- *
- *    <td>1 millisecond</td>
- *    <td align="right">584,542,046.09</td>
- *    <td align="right">285,420.92</td>
- *    <td align="right">0.14</td>
- *  </tr>
- *  <tr>
- *    <td>1 microsecond</td>
- *
- *    <td align="right">584,542.05</td>
- *    <td align="right">285.42</td>
- *    <td align="right">0.00</td>
- *  </tr>
- *  <tr>
- *    <td>100 nanoseconds (tick)</td>
- *    <td align="right">58,454.20</td>
- *    <td align="right">28.54</td>
- *    <td align="right">0.00</td>
- *  </tr>
- *  <tr>
- *    <td>1 nanosecond</td>
- *    <td align="right">584.5420461</td>
- *    <td align="right">0.2854</td>
- *    <td align="right">0.00</td>
- *  </tr>
- * </table>
- *
- * <p>
- * This class implements a universal time scale which can be used as a 'pivot',
- * and provide conversion functions to and from all other major time scales.
- * This datetimes to be converted to the pivot time, safely manipulated,
- * and converted back to any other datetime time scale.
- *
- *<p>
- * So what to use for this pivot? Java time has plenty of range, but cannot represent
- * .NET framework <code>System.DateTime</code> vaules without severe loss of precision. ICU4C time addresses this by using a
- * <code>double</code> that is otherwise equivalent to the Java time. However, there are disadvantages
- * with <code>doubles</code>. They provide for much more graceful degradation in arithmetic operations.
- * But they only have 53 bits of accuracy, which means that they will lose precision when
- * converting back and forth to ticks. What would really be nice would be a
- * <code>long double</code> (80 bits -- 64 bit mantissa), but that is not supported on most systems.
- *
- *<p>
- * The Unix extended time uses a structure with two components: time in seconds and a
- * fractional field (microseconds). However, this is clumsy, slow, and
- * prone to error (you always have to keep track of overflow and underflow in the
- * fractional field). <code>BigDecimal</code> would allow for arbitrary precision and arbitrary range,
- * but we would not want to use this as the normal type, because it is slow and does not
- * have a fixed size.
- *
- *<p>
- * Because of these issues, we ended up concluding that the .NET framework's <code>System.DateTime</code> would be the
- * best pivot. However, we use the full range allowed by the datatype, allowing for
- * datetimes back to 29,000 BC and up to 29,000 AD. This time scale is very fine grained,
- * does not lose precision, and covers a range that will meet almost all requirements.
- * It will not handle the range that Java times would, but frankly, being able to handle dates
- * before 29,000 BC or after 29,000 AD is of very limited interest. However, for those cases,
- * we also allow conversion to an optional <code>BigDecimal</code> format that would have arbitrary
- * precision and range.
+ * <p>For more details and background, see the
+ * <a href="http://icu.sourceforge.net/userguide/universalTimeScale.html">Universal Time Scale</a>
+ * chapter in the ICU User Guide.</p>
  *
  * @draft ICU 3.2
  * @provisional This API might change or be removed in a future release.
@@ -477,15 +339,15 @@ public final class UniversalTimeScale
     }
     
     private static final TimeScaleData[] timeScaleTable = {
-            new TimeScaleData(milliseconds, 621357696000000000L, -9223372036854774999L, 9223372036854774999L, -984472973285477L,         860201434085477L), // JAVA_TIME
-            new TimeScaleData(seconds,      621357696000000000L, -9223372036854775808L, 9223372036854775807L, -984472973285L,               860201434085L), // UNIX_TIME
-            new TimeScaleData(milliseconds, 621357696000000000L, -9223372036854774999L, 9223372036854774999L, -984472973285477L,         860201434085477L), // ICU4C_TIME
-            new TimeScaleData(ticks,        504912960000000000L, -8718459076854775808L, 9223372036854775807L, -9223372036854775808L, 8718459076854775807L), // WINDOWS_FILE_TIME
-            new TimeScaleData(ticks,        000000000000000000L, -9223372036854775808L, 9223372036854775807L, -9223372036854775808L, 9223372036854775807L), // DOTNET_DATE_TIME
-            new TimeScaleData(seconds,      600529248000000000L, -9223372036854775808L, 9223372036854775807L, -982390128485L,               862284278885L), // MAC_OLD_TIME
-            new TimeScaleData(seconds,      631140768000000000L, -9223372036854775808L, 9223372036854775807L, -985451280485L,               859223126885L), // MAC_TIME
-            new TimeScaleData(days,         599266944000000000L, -9223372036854775808L, 9223372036854775807L, -11368795L,                        9981603L), // EXCEL_TIME
-            new TimeScaleData(days,         599266944000000000L, -9223372036854775808L, 9223372036854775807L, -11368795L,                        9981603L)  // DB2_TIME
+        new TimeScaleData(milliseconds, 621355968000000000L, -9223372036854774999L, 9223372036854774999L, -984472800485477L,         860201606885477L), // JAVA_TIME
+        new TimeScaleData(seconds,      621355968000000000L, -9223372036854775808L, 9223372036854775807L, -984472800485L,               860201606885L), // UNIX_TIME
+        new TimeScaleData(milliseconds, 621355968000000000L, -9223372036854774999L, 9223372036854774999L, -984472800485477L,         860201606885477L), // ICU4C_TIME
+        new TimeScaleData(ticks,        504911232000000000L, -8718460804854775808L, 9223372036854775807L, -9223372036854775808L, 8718460804854775807L), // WINDOWS_FILE_TIME
+        new TimeScaleData(ticks,        000000000000000000L, -9223372036854775808L, 9223372036854775807L, -9223372036854775808L, 9223372036854775807L), // DOTNET_DATE_TIME
+        new TimeScaleData(seconds,      600527520000000000L, -9223372036854775808L, 9223372036854775807L, -982389955685L,               862284451685L), // MAC_OLD_TIME
+        new TimeScaleData(seconds,      631139040000000000L, -9223372036854775808L, 9223372036854775807L, -985451107685L,               859223299685L), // MAC_TIME
+        new TimeScaleData(days,         599265216000000000L, -9223372036854775808L, 9223372036854775807L, -11368793L,                        9981605L), // EXCEL_TIME
+        new TimeScaleData(days,         599265216000000000L, -9223372036854775808L, 9223372036854775807L, -11368793L,                        9981605L)  // DB2_TIME
     };
     
     

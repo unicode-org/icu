@@ -1,22 +1,24 @@
 /*
- *************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and   *
- * others. All Rights Reserved.                                          *
- *************************************************************************
+ *******************************************************************************
+ * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
  */
 
 package com.ibm.icu.dev.tool.timescale;
 
+import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 
 /**
- * This tool caluclates the numeric values of the epoch offsets
+ * This tool calculates the numeric values of the epoch offsets
  * used in UniversalTimeScale.
  * 
  * @see com.ibm.icu.util.UniversalTimeScale
@@ -42,6 +44,8 @@ public class EpochOffsets
     private static final long minutes      = seconds * 60;
     private static final long hours        = minutes * 60;
     private static final long days         = hours * 24;
+    // Java measures time in milliseconds, not in 100ns ticks.
+    private static final long javaDays     = days / milliseconds;
 
     private static int[][] epochDates = {
             {   1, Calendar.JANUARY,   1},
@@ -69,7 +73,18 @@ public class EpochOffsets
     public static void main(String[] args)
     {
         TimeZone utc = new SimpleTimeZone(0, "UTC");
-        Calendar cal = Calendar.getInstance(utc, Locale.ENGLISH);
+
+        // Jitterbug 5211: .Net System.DateTime uses the proleptic calendar,
+        // while ICU by default uses the Julian calendar before 1582.
+        // Original code: Calendar cal = Calendar.getInstance(utc, Locale.ENGLISH);
+        // Use a proleptic Gregorian calendar for 0001AD and later by setting
+        // the Gregorian change date before 0001AD with a value
+        // that is safely before that date by any measure, i.e.,
+        // more than 719164 days before 1970.
+        long before0001AD = -1000000 * javaDays;
+        GregorianCalendar cal = new GregorianCalendar(utc, Locale.ENGLISH);
+        cal.setGregorianChange(new Date(before0001AD));
+
         MessageFormat fmt = new MessageFormat("{0, date, full} {0, time, full} = {1}");
         Object arguments[] = {cal, null};
         
@@ -77,7 +92,7 @@ public class EpochOffsets
         
         // January 1, 0001 00:00:00 is the universal epoch date...
         cal.set(1, Calendar.JANUARY, 1, 0, 0, 0);
-        
+
         long universalEpoch = cal.getTimeInMillis();
         
         for (int i = 0; i < epochDates.length; i += 1) {
