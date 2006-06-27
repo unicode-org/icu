@@ -73,6 +73,7 @@ icu/source/test/testdata/re_tests.txt
 icu/source/test/testdata/riwords.txt
 icu/source/test/testdata/SentenceBreakTest.txt
 icu/source/test/testdata/WordBreakTest.txt
+icu/source/test/testdata/idna_conf.txt
 icu/source/test/thaitest/space.txt
 icu/source/tools/tzcode/patch-icu-tzcode
 #ICU4JNI files that don't need an IBM copyright
