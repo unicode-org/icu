@@ -2955,19 +2955,23 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
                            offsetIndex, err);
 }
 
-/* structure for SafeClone calculations */
+/*
+ * Structure for cloning an ISO 2022 converter into a single memory block.
+ * ucnv_safeClone() of the converter will align the entire cloneStruct,
+ * and then ucnv_safeClone() of the sub-converter may additionally align
+ * currentConverter inside the cloneStruct, for which we need the deadSpace
+ * after currentConverter.
+ * This is because UAlignedMemory may be larger than the actually
+ * necessary alignment size for the platform.
+ * The other cloneStruct fields will not be moved around,
+ * and are aligned properly with cloneStruct's alignment.
+ */
 struct cloneStruct
 {
     UConverter cnv;
-    UAlignedMemory deadSpace1;
     UConverter currentConverter;
-    UAlignedMemory deadSpace2;
+    UAlignedMemory deadSpace;
     UConverterDataISO2022 mydata;
-    /*
-     * Last item may be aligned to a higher address.
-     * Ensure that there is enough space for that.
-     */
-    UAlignedMemory deadSpace3;
 };
 
 
@@ -2993,6 +2997,8 @@ _ISO_2022_SafeClone(
     /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
 
     uprv_memcpy(&localClone->mydata, cnvData, sizeof(UConverterDataISO2022));
+    localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
+    localClone->cnv.isExtraLocal = TRUE;
 
     /* share the subconverters */
 
@@ -3013,8 +3019,6 @@ _ISO_2022_SafeClone(
         }
     }
 
-    localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
-    localClone->cnv.isExtraLocal = TRUE;
     return &localClone->cnv;
 }
 
