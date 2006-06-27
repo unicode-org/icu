@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -13,6 +13,7 @@
 #include "unicode/uloc.h"
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
+#include "unicode/gregocal.h"
 #include "unicode/simpletz.h"
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
@@ -251,6 +252,32 @@ ucal_inDaylightTime(    const    UCalendar*      cal,
 
   if(U_FAILURE(*status)) return (UBool) -1;
   return ((Calendar*)cal)->inDaylightTime(*status);
+}
+
+U_DRAFT void U_EXPORT2
+ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode) {
+  if(U_FAILURE(*pErrorCode)) {
+    return;
+  }
+  Calendar *cpp_cal = (Calendar *)cal;
+  if(cpp_cal->getDynamicClassID() != GregorianCalendar::getStaticClassID()) {
+    *pErrorCode = U_UNSUPPORTED_ERROR;
+    return;
+  }
+  ((GregorianCalendar *)cpp_cal)->setGregorianChange(date, *pErrorCode);
+}
+
+U_DRAFT UDate U_EXPORT2
+ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode) {
+  if(U_FAILURE(*pErrorCode)) {
+    return (UDate)0;
+  }
+  Calendar *cpp_cal = (Calendar *)cal;
+  if(cpp_cal->getDynamicClassID() != GregorianCalendar::getStaticClassID()) {
+    *pErrorCode = U_UNSUPPORTED_ERROR;
+    return (UDate)0;
+  }
+  return ((GregorianCalendar *)cpp_cal)->getGregorianChange();
 }
 
 U_CAPI int32_t U_EXPORT2
