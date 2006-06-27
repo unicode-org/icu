@@ -681,6 +681,52 @@ ucal_inDaylightTime(const UCalendar*  cal,
                     UErrorCode*       status );
 
 /**
+ * Sets the GregorianCalendar change date. This is the point when the switch from
+ * Julian dates to Gregorian dates occurred. Default is 00:00:00 local time, October
+ * 15, 1582. Previous to this time and date will be Julian dates.
+ *
+ * This function works only for Gregorian calendars. If the UCalendar is not
+ * an instance of a Gregorian calendar, then a U_UNSUPPORTED_ERROR
+ * error code is set.
+ *
+ * @param cal        The calendar object.
+ * @param date       The given Gregorian cutover date.
+ * @param pErrorCode Pointer to a standard ICU error code. Its input value must
+ *                   pass the U_SUCCESS() test, or else the function returns
+ *                   immediately. Check for U_FAILURE() on output or use with
+ *                   function chaining. (See User Guide for details.)
+ *
+ * @see GregorianCalendar::setGregorianChange
+ * @see ucal_getGregorianChange
+ * @draft ICU 3.6
+ */
+U_DRAFT void U_EXPORT2
+ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode);
+
+/**
+ * Gets the Gregorian Calendar change date. This is the point when the switch from
+ * Julian dates to Gregorian dates occurred. Default is 00:00:00 local time, October
+ * 15, 1582. Previous to this time and date will be Julian dates.
+ *
+ * This function works only for Gregorian calendars. If the UCalendar is not
+ * an instance of a Gregorian calendar, then a U_UNSUPPORTED_ERROR
+ * error code is set.
+ *
+ * @param cal        The calendar object.
+ * @param pErrorCode Pointer to a standard ICU error code. Its input value must
+ *                   pass the U_SUCCESS() test, or else the function returns
+ *                   immediately. Check for U_FAILURE() on output or use with
+ *                   function chaining. (See User Guide for details.)
+ * @return   The Gregorian cutover time for this calendar.
+ *
+ * @see GregorianCalendar::getGregorianChange
+ * @see ucal_setGregorianChange
+ * @draft ICU 3.6
+ */
+U_DRAFT UDate U_EXPORT2
+ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode);
+
+/**
  * Types of UCalendar attributes 
  * @stable ICU 2.0
  */
