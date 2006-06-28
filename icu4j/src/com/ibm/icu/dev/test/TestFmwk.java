@@ -380,7 +380,7 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
 
-        private String getStackTrace(InvocationTargetException e) {
+        protected String getStackTrace(InvocationTargetException e) {
             ByteArrayOutputStream bs = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(bs);
             e.getTargetException().printStackTrace(ps);
@@ -825,7 +825,22 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" If multiple targets are provided, each is executed in order.");
         pw.flush();
     }
-
+    public static String hex(char[] s){
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length; ++i) {
+            if (i != 0) result.append(',');
+            result.append(hex(s[i]));
+        }
+        return result.toString();
+    }
+    public static String hex(byte[] s){
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length; ++i) {
+            if (i != 0) result.append(',');
+            result.append(hex(s[i]));
+        }
+        return result.toString();
+    }
     public static String hex(char ch) {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch, 16).toUpperCase();

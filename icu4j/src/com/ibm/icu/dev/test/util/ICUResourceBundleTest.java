@@ -488,14 +488,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         {
             rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
-            sub = rb.get("BreakDictionaryData");
-            if(sub.getType()!=ICUResourceBundle.BINARY){
-                errln("Did not get the expected type for BreakDictionaryData");
-            }
-            if(sub.getBinary().remaining()>0){
-                logln("Got the expected output for BreakDictionaryData");
+            sub = rb.get("boundaries");
+            String word = sub.getString("word");
+
+            if(word.equals("word_ja.brk")){
+                logln("Got the expected output for boundaries/word");
             }else{
-                errln("Did not get the expected type for BreakDictionaryData");
+                errln("Did not get the expected type for boundaries/word");
             }
 
         }
@@ -564,10 +563,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }
         {
-            sub = rb.get("BreakDictionaryData" );
-            ByteBuffer buf = sub.getBinary();
+            sub = rb.get("testAliasToTree" );
+            
+            ByteBuffer buf = sub.get("standard").get("%%CollationBin").getBinary();
             if(buf==null){
-                errln("Did not get the expected output for BreakDictionaryData");
+                errln("Did not get the expected output for %%CollationBin");
             }
         }
         // should not get an exception
@@ -851,7 +851,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             ICUResourceBundle root =(ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
             ICUResourceBundle t = null;    
             try{
-                t = root.getWithFallback("calendar/islamic-civil/DateTimePatterns");
+                t = root.getWithFallback("calendar/islamic-civil/AmPmMarkers");
                 errln("Second resource does not exist. How did it get here?\n");
             }catch(MissingResourceException ex){
                 logln("Got the expected exception");
@@ -861,6 +861,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Second resource does not exist. How did it get here?\n");
             }catch(MissingResourceException ex){
                 logln("Got the expected exception");
+            }
+            if(t!=null){
+                errln("t is not null!");
             }
         } catch (MissingResourceException e) {
            warnln("Could not load the locale data: " + e.getMessage());
@@ -923,14 +926,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_FALLBACK) 
                     + " Got: " + getLSString(status));
         }
-        
+        /*
         ICUResourceBundle auxExemplar = bundle.get("AuxExemplarCharacters");
         status = auxExemplar.getLoadingStatus();
         if(status != ICUResourceBundle.FROM_ROOT){
             errln("Did not get the expected value for loading status. Expected "+ getLSString(ICUResourceBundle.FROM_ROOT) 
                     + " Got: " + getLSString(status));
         } 
-        
+        */
         logln("Test to verify loading status of get(int)");
         ICUResourceBundle ms = bundle.get("MeasurementSystem");
         status = ms.getLoadingStatus();

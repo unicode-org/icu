@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -44,7 +44,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.1.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.0.0.0");
 
     // constructor ===================================================
 
@@ -1643,7 +1643,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x0590, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x05cf, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
-            { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
+            { 0x07fe, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT }, /* unassigned R */
             { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb37, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb42, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
@@ -1835,25 +1836,61 @@ public final class UCharacterTest extends TestFmwk
             errln("error: UCharacter.getIntPropertyMinValue() wrong");
         }
 
-        if (UCharacter.getIntPropertyMaxValue(UProperty.DASH) != 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.ID_CONTINUE) != 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.BINARY_LIMIT-1) != 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)
-                                != UCharacterDirection.CHAR_DIRECTION_COUNT - 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.BLOCK)
-                                        != UCharacter.UnicodeBlock.COUNT - 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK)
-                                        != UCharacter.LineBreak.COUNT - 1
-            || UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT)
-                                        != UScript.CODE_LIMIT - 1
-            || UCharacter.getIntPropertyMaxValue(0x2345) != -1 //JB#2410
-            || UCharacter.getIntPropertyMaxValue(UProperty.DECOMPOSITION_TYPE) != (UCharacter.DecompositionType.COUNT - 1)
-            || UCharacter.getIntPropertyMaxValue(UProperty.JOINING_GROUP) !=  (UCharacter.JoiningGroup.COUNT -1)
-            || UCharacter.getIntPropertyMaxValue(UProperty.JOINING_TYPE) !=  (UCharacter.JoiningType.COUNT -1)
-            || UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) !=  (UCharacter.EastAsianWidth.COUNT -1)
+        if( UCharacter.getIntPropertyMaxValue(UProperty.DASH)!=1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.DASH) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.ID_CONTINUE)!=1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.ID_CONTINUE) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.BINARY_LIMIT-1)!=1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.BINARY_LIMIT-1) wrong\n");
+        }
 
-           ) {
-            errln("error: UCharacter.getIntPropertyMaxValue() wrong");
+        if( UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)!=UCharacterDirection.CHAR_DIRECTION_COUNT-1 ) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.BLOCK)!=UCharacter.UnicodeBlock.COUNT-1 ) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.BLOCK) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK)!=UCharacter.LineBreak.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT)!=UScript.CODE_LIMIT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.NUMERIC_TYPE)!=UCharacter.NumericType.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.NUMERIC_TYPE) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.GENERAL_CATEGORY)!=UCharacterCategory.CHAR_CATEGORY_COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.GENERAL_CATEGORY) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.HANGUL_SYLLABLE_TYPE)!=UCharacter.HangulSyllableType.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.HANGUL_SYLLABLE_TYPE) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.GRAPHEME_CLUSTER_BREAK)!=UCharacter.GraphemeClusterBreak.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.GRAPHEME_CLUSTER_BREAK) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.SENTENCE_BREAK)!=UCharacter.SentenceBreak.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.SENTENCE_BREAK) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK)!=UCharacter.WordBreak.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK) wrong\n");
+        }
+        /*JB#2410*/
+        if( UCharacter.getIntPropertyMaxValue(0x2345)!=-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(0x2345) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.DECOMPOSITION_TYPE) !=  (UCharacter.DecompositionType.COUNT - 1)) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.DECOMPOSITION_TYPE) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.JOINING_GROUP) !=   (UCharacter.JoiningGroup.COUNT -1)) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.JOINING_GROUP) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.JOINING_TYPE) !=  (UCharacter.JoiningType.COUNT -1)) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.JOINING_TYPE) wrong\n");
+        }
+        if( UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) !=  (UCharacter.EastAsianWidth.COUNT -1)) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) wrong\n");
         }
 
         VersionInfo version = UCharacter.getUnicodeVersion();
@@ -2051,7 +2088,7 @@ public final class UCharacterTest extends TestFmwk
         int i, p, min, max;
 
         /* Min should be 0 for everything. */
-        /* Until JB#2478 is fixed, the one exception is UCHAR_BLOCK. */
+        /* Until JB#2478 is fixed, the one exception is UProperty.BLOCK. */
         for (p=UProperty.INT_START; p<UProperty.INT_LIMIT; ++p) {
             min = UCharacter.getIntPropertyMinValue(p);
             if (min != 0) {

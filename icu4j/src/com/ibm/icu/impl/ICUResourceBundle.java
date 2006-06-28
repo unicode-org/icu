@@ -61,7 +61,19 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * @draft ICU 3.0
      */
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
-
+    
+    /**
+     * The base name of rbbi data to be used with getData API
+     * @draft ICU 3.6
+     */
+    public static final String ICU_BRKITR_NAME = "/brkitr";
+    
+    /**
+     * The base name of rbbi data to be used with getBundleInstance API
+     * @draft ICU 3.6
+     */
+    public static final String ICU_BRKITR_BASE_NAME = ICU_BASE_NAME + ICU_BRKITR_NAME;
+    
     /**
      * The base name of rbnf data to be used with getBundleInstance API
      * @draft ICU 3.0

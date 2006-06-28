@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -111,7 +111,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
         
         BreakIterator    iter       = null;
-        UResourceBundle  rb         = UResourceBundle.getBundleInstance(locale);
+        UResourceBundle  rb         = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
         
         //
         //  Get the binary rules.  These are needed for both normal RulesBasedBreakIterators
@@ -122,7 +122,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             ResourceBundle boundaries    = (ResourceBundle)rb.getObject("boundaries"); 
             String         typeKey       = KIND_NAMES[kind];
             String         brkfname      = boundaries.getString(typeKey);
-            String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +"/"+ brkfname + ".brk";
+            String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + brkfname;
                            ruleStream    = ICUData.getStream(rulesFileName);
         }
         catch (Exception e) {
@@ -137,11 +137,15 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             // This type of break iterator could potentially use a dictionary.
             //
             try {
-                ICUResourceBundle dictRes = (ICUResourceBundle)rb.getObject("BreakDictionaryData");
-                byte[] dictBytes = null;
-                dictBytes = dictRes.getBinary(dictBytes);
-                InputStream dictStream = new ByteArrayInputStream(dictBytes);
-                iter = new DictionaryBasedBreakIterator(ruleStream, dictStream);
+                //ICUResourceBundle dictRes = (ICUResourceBundle)rb.getObject("BreakDictionaryData");
+                //byte[] dictBytes = null;
+                //dictBytes = dictRes.getBinary(dictBytes);
+                //TODO: Hard code this for now! fix it once CompactTrieDictionary is ported
+                if(locale.equals("th")){
+                    String  fileName = "data/th.brk";
+                    InputStream is    = ICUData.getStream(fileName);
+                    iter = new DictionaryBasedBreakIterator(ruleStream, is);
+                }
             } catch (MissingResourceException e) {
                 //  Couldn't find a dictionary.
                 //  This is normal, and will occur whenever creating a word or line
