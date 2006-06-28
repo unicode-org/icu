@@ -30,7 +30,7 @@
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-static const UVersionInfo ICU_36 = {3,6,0,0};
+static const UVersionInfo ICU_37 = {3,7,0,0};
 
 // *****************************************************************************
 // class DateFormatTest
@@ -323,7 +323,7 @@ void DateFormatTest::TestFieldPosition() {
 
     // local pattern chars not accurate when CLDR 1.4 data
     // first introduced...
-    if(isICUVersionAtLeast(ICU_36)) {
+    if(isICUVersionAtLeast(ICU_37)) {
         assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
     }
 
