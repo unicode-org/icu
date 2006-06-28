@@ -253,11 +253,13 @@ U_CDECL_END
 #define UCNV_SWAP_LFNL_OPTION_STRING ",swaplfnl"
 
 /**
- * Do a fuzzy compare of a two converter/alias names.  The comparison
- * is case-insensitive.  It also ignores the characters '-', '_', and
- * ' ' (dash, underscore, and space).  Thus the strings "UTF-8",
- * "utf_8", and "Utf 8" are exactly equivalent.
- * 
+ * Do a fuzzy compare of two converter/alias names.
+ * The comparison is case-insensitive, ignores leading zeroes if they are not
+ * followed by further digits, and ignores all but letters and digits.
+ * Thus the strings "UTF-8", "utf_8", "u*T@f08" and "Utf 8" are exactly equivalent.
+ * See section 1.4, Charset Alias Matching in Unicode Technical Standard #22
+ * at http://www.unicode.org/reports/tr22/
+ *
  * @param name1 a converter name or alias, zero-terminated
  * @param name2 a converter name or alias, zero-terminated
  * @return 0 if the names match, or a negative value if the name1
@@ -273,8 +275,9 @@ ucnv_compareNames(const char *name1, const char *name2);
  * Creates a UConverter object with the name of a coded character set specified as a C string.
  * The actual name will be resolved with the alias file
  * using a case-insensitive string comparison that ignores
- * the delimiters '-', '_', and ' ' (dash, underscore, and space).
- * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
+ * leading zeroes and all non-alphanumeric characters.
+ * E.g., the names "UTF8", "utf-8", "u*T@f08" and "Utf 8" are all equivalent.
+ * (See also ucnv_compareNames().)
  * If <code>NULL</code> is passed for the converter name, it will create one with the
  * getDefaultName return value.
  *
@@ -313,6 +316,7 @@ ucnv_compareNames(const char *name1, const char *name2);
  * @see ucnv_getAlias
  * @see ucnv_getDefaultName
  * @see ucnv_close
+ * @ee ucnv_compareNames
  * @stable ICU 2.0
  */
 U_STABLE UConverter* U_EXPORT2 
@@ -324,8 +328,9 @@ ucnv_open(const char *converterName, UErrorCode *err);
  * The name should be limited to the ASCII-7 alphanumerics range.
  * The actual name will be resolved with the alias file
  * using a case-insensitive string comparison that ignores
- * the delimiters '-', '_', and ' ' (dash, underscore, and space).
- * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
+ * leading zeroes and all non-alphanumeric characters.
+ * E.g., the names "UTF8", "utf-8", "u*T@f08" and "Utf 8" are all equivalent.
+ * (See also ucnv_compareNames().)
  * If <TT>NULL</TT> is passed for the converter name, it will create 
  * one with the ucnv_getDefaultName() return value.
  * If the alias is ambiguous, then the preferred converter is used
@@ -341,6 +346,7 @@ ucnv_open(const char *converterName, UErrorCode *err);
  * @see ucnv_open
  * @see ucnv_openCCSID
  * @see ucnv_close
+ * @ee ucnv_compareNames
  * @stable ICU 2.0
  */
 U_STABLE UConverter* U_EXPORT2 

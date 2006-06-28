@@ -109,6 +109,8 @@ static void TestConvertAlgorithmic(void);
 static void TestToUCountPending(void);
 static void TestFromUCountPending(void);
 static void TestDefaultName(void);
+static void TestCompareNames(void);
+
 void addTestConvert(TestNode** root);
 
 void addTestConvert(TestNode** root)
@@ -131,6 +133,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestToUCountPending,         "tsconv/ccapitst/TestToUCountPending");
     addTest(root, &TestFromUCountPending,       "tsconv/ccapitst/TestFromUCountPending");
     addTest(root, &TestDefaultName,             "tsconv/ccapitst/TestDefaultName");
+    addTest(root, &TestCompareNames,            "tsconv/ccapitst/TestCompareNames");
 }
 
 static void ListNames(void) {
@@ -3052,3 +3055,53 @@ static void TestDefaultName(void) {
     ucnv_setDefaultName(defaultName);
 }
 
+/* Test that ucnv_compareNames() matches names according to spec. ----------- */
+
+static U_INLINE int
+sign(int n) {
+    if(n==0) {
+        return 0;
+    } else if(n<0) {
+        return -1;
+    } else /* n>0 */ {
+        return 1;
+    }
+}
+
+static void
+compareNames(const char **names) {
+    const char *relation, *name1, *name2;
+    int rel, result;
+
+    relation=*names++;
+    if(*relation=='=') {
+        rel=0;
+    } else if(*relation=='<') {
+        rel=-1;
+    }
+
+    name1=*names++;
+    if(name1==NULL) {
+        return;
+    }
+    while((name2=*names++)!=NULL) {
+        result=ucnv_compareNames(name1, name2);
+        if(sign(result)!=rel) {
+            log_err("ucnv_compareNames(\"%s\", \"%s\")=%d, sign!=%d\n", name1, name2, result, rel);
+        }
+        name1=name2;
+    }
+}
+
+static void
+TestCompareNames() {
+    static const char *equalUTF8[]={ "=", "UTF-8", "utf_8", "u*T@f08", "Utf 8", NULL };
+    static const char *equalIBM[]={ "=", "ibm-37", "IBM037", "i-B-m  00037", "ibm-0037", "IBM00037", NULL };
+    static const char *lessMac[]={ "<", "macos-0_1-10.2", "macos-1-10.0.2", "macos-1-10.2", NULL };
+    static const char *lessUTF080[]={ "<", "UTF-0008", "utf$080", "u*T@f0800", "Utf 0000000009", NULL };
+
+    compareNames(equalUTF8);
+    compareNames(equalIBM);
+    compareNames(lessMac);
+    compareNames(lessUTF080);
+}
