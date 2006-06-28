@@ -16,6 +16,12 @@
 #include "locmap.h"
 #include "uresimp.h"
 
+/*--------------------------------------------------------------------
+  Time bomb - allows temporary behavior that expires at a given
+              release
+ ---------------------------------------------------------------------*/
+static const UVersionInfo ICU_36 = {3,6,0,0};
+
 /*
 returns a new UnicodeSet that is a flattened form of the original
 UnicodeSet.
@@ -303,7 +309,8 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            } else if (strcmp(subBundleKey, "localPatternChars") == 0) {
+            } else if (strcmp(subBundleKey, "localPatternChars") == 0 &&
+                       isICUVersionAtLeast(ICU_36)) {
                 /* Check well-formedness of localPatternChars.  First, the
                  * length must match the number of fields defined by
                  * DateFormat.  Second, each character in the string must
