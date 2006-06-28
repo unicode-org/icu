@@ -347,48 +347,128 @@ static uint32_t getTagNumber(const char *tagname) {
     return UINT32_MAX;
 }
 
+/* character types relevant for ucnv_compareNames() */
+enum {
+    IGNORE,
+    ZERO,
+    NONZERO,
+    MINLETTER /* any values from here on are lowercase letter mappings */
+};
+
+/* character types for ASCII 00..7F */
+static const uint8_t asciiTypes[128] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0,
+    0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
+    0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0,
+    0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
+    0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0
+};
+
+#define GET_ASCII_TYPE(c) ((int8_t)(c) >= 0 ? asciiTypes[c] : (uint8_t)IGNORE)
+
+/* character types for EBCDIC 80..FF */
+static const uint8_t ebcdicTypes[128] = {
+    0,    0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0, 0, 0, 0, 0, 0,
+    0,    0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0, 0, 0, 0, 0, 0,
+    0,    0,    0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,    0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0, 0, 0, 0, 0, 0,
+    0,    0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0, 0, 0, 0, 0, 0,
+    0,    0,    0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0, 0, 0, 0, 0, 0,
+    ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0
+};
+
+#define GET_EBCDIC_TYPE(c) ((int8_t)(c) < 0 ? ebcdicTypes[(c)&0x7f] : (uint8_t)IGNORE)
+
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define GET_CHAR_TYPE(c) GET_ASCII_TYPE(c)
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define GET_CHAR_TYPE(c) GET_EBCDIC_TYPE(c)
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
+
 /* @see ucnv_compareNames */
 U_CFUNC char * U_EXPORT2
 ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
-    char c1 = *name;
     char *dstItr = dst;
+    uint8_t type, nextType;
+    char c1;
+    UBool afterDigit = FALSE;
 
-    while (c1) {
-        /* Ignore delimiters '-', '_', and ' ' */
-        while ((c1 = *name) == 0x2d || c1 == 0x5f || c1 == 0x20) {
-            ++name;
+    while ((c1 = *name++) != 0) {
+        type = GET_ASCII_TYPE(c1);
+        switch (type) {
+        case IGNORE:
+            afterDigit = FALSE;
+            continue; /* ignore all but letters and digits */
+        case ZERO:
+            if (!afterDigit) {
+                nextType = GET_ASCII_TYPE(*name);
+                if (nextType == ZERO || nextType == NONZERO) {
+                    continue; /* ignore leading zero before another digit */
+                }
+            }
+            break;
+        case NONZERO:
+            afterDigit = TRUE;
+            break;
+        default:
+            c1 = (char)type; /* lowercased letter */
+            afterDigit = FALSE;
+            break;
         }
-
-        /* lowercase for case-insensitive comparison */
-        *(dstItr++) = uprv_asciitolower(c1);
-        ++name;
+        *dstItr++ = c1;
     }
+    *dstItr = 0;
     return dst;
 }
 
 U_CFUNC char * U_EXPORT2
 ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
-    char c1 = *name;
     char *dstItr = dst;
+    uint8_t type, nextType;
+    char c1;
+    UBool afterDigit = FALSE;
 
-    while (c1) {
-        /* Ignore delimiters '-', '_', and ' ' */
-        while ((c1 = *name) == 0x60 || c1 == 0x6d || c1 == 0x40) {
-            ++name;
+    while ((c1 = *name++) != 0) {
+        type = GET_EBCDIC_TYPE(c1);
+        switch (type) {
+        case IGNORE:
+            afterDigit = FALSE;
+            continue; /* ignore all but letters and digits */
+        case ZERO:
+            if (!afterDigit) {
+                nextType = GET_EBCDIC_TYPE(*name);
+                if (nextType == ZERO || nextType == NONZERO) {
+                    continue; /* ignore leading zero before another digit */
+                }
+            }
+            break;
+        case NONZERO:
+            afterDigit = TRUE;
+            break;
+        default:
+            c1 = (char)type; /* lowercased letter */
+            afterDigit = FALSE;
+            break;
         }
-
-        /* lowercase for case-insensitive comparison */
-        *(dstItr++) = uprv_ebcdictolower(c1);
-        ++name;
+        *dstItr++ = c1;
     }
+    *dstItr = 0;
     return dst;
 }
 
 /**
- * Do a fuzzy compare of a two converter/alias names.  The comparison
- * is case-insensitive.  It also ignores the characters '-', '_', and
- * ' ' (dash, underscore, and space).  Thus the strings "UTF-8",
- * "utf_8", and "Utf 8" are exactly equivalent.
+ * Do a fuzzy compare of two converter/alias names.
+ * The comparison is case-insensitive, ignores leading zeroes if they are not
+ * followed by further digits, and ignores all but letters and digits.
+ * Thus the strings "UTF-8", "utf_8", "u*T@f08" and "Utf 8" are exactly equivalent.
+ * See section 1.4, Charset Alias Matching in Unicode Technical Standard #22
+ * at http://www.unicode.org/reports/tr22/
  *
  * This is a symmetrical (commutative) operation; order of arguments
  * is insignificant.  This is an important property for sorting the
@@ -406,15 +486,58 @@ ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
 U_CAPI int U_EXPORT2
 ucnv_compareNames(const char *name1, const char *name2) {
     int rc;
+    uint8_t type, nextType;
     char c1, c2;
+    UBool afterDigit1 = FALSE, afterDigit2 = FALSE;
 
     for (;;) {
-        /* Ignore delimiters '-', '_', and ' ' */
-        while ((c1 = *name1) == '-' || c1 == '_' || c1 == ' ') {
-            ++name1;
+        while ((c1 = *name1++) != 0) {
+            type = GET_CHAR_TYPE(c1);
+            switch (type) {
+            case IGNORE:
+                afterDigit1 = FALSE;
+                continue; /* ignore all but letters and digits */
+            case ZERO:
+                if (!afterDigit1) {
+                    nextType = GET_CHAR_TYPE(*name1);
+                    if (nextType == ZERO || nextType == NONZERO) {
+                        continue; /* ignore leading zero before another digit */
+                    }
+                }
+                break;
+            case NONZERO:
+                afterDigit1 = TRUE;
+                break;
+            default:
+                c1 = (char)type; /* lowercased letter */
+                afterDigit1 = FALSE;
+                break;
+            }
+            break; /* deliver c1 */
         }
-        while ((c2 = *name2) == '-' || c2 == '_' || c2 == ' ') {
-            ++name2;
+        while ((c2 = *name2++) != 0) {
+            type = GET_CHAR_TYPE(c2);
+            switch (type) {
+            case IGNORE:
+                afterDigit2 = FALSE;
+                continue; /* ignore all but letters and digits */
+            case ZERO:
+                if (!afterDigit2) {
+                    nextType = GET_CHAR_TYPE(*name2);
+                    if (nextType == ZERO || nextType == NONZERO) {
+                        continue; /* ignore leading zero before another digit */
+                    }
+                }
+                break;
+            case NONZERO:
+                afterDigit2 = TRUE;
+                break;
+            default:
+                c2 = (char)type; /* lowercased letter */
+                afterDigit2 = FALSE;
+                break;
+            }
+            break; /* deliver c2 */
         }
 
         /* If we reach the ends of both strings then they match */
@@ -423,13 +546,10 @@ ucnv_compareNames(const char *name1, const char *name2) {
         }
 
         /* Case-insensitive comparison */
-        rc = (int)(unsigned char)uprv_tolower(c1) -
-             (int)(unsigned char)uprv_tolower(c2);
+        rc = (int)(unsigned char)c1 - (int)(unsigned char)c2;
         if (rc != 0) {
             return rc;
         }
-        ++name1;
-        ++name2;
     }
 }
 
