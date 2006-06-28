@@ -669,19 +669,7 @@ addAlias(const char *alias, uint16_t standard, uint16_t converter, UBool default
         }
     }
 
-    /* Check for duplicates in a tag/converter combination */
-    for (idx = 0; idx < aliasList->aliasCount; idx++) {
-        uint16_t aliasNum = tags[standard].aliasList[converter].aliases[idx];
-        if (aliasNum && ucnv_compareNames(alias, GET_ALIAS_STR(aliasNum)) == 0 && standard != ALL_TAG_NUM)
-        {
-            fprintf(stderr, "warning(line %d): duplicate alias %s and %s found for standard %s\n",
-                lineNum, alias, GET_ALIAS_STR(aliasNum), GET_TAG_STR(tags[standard].tag));
-            dupFound = TRUE;
-            break;
-        }
-    }
-
-    if (!dupFound && standard != ALL_TAG_NUM) {
+    if (standard != ALL_TAG_NUM) {
         /* Check for duplicate aliases for this tag on all converters */
         for (idx = 0; idx < converterCount; idx++) {
             for (idx2 = 0; idx2 < tags[standard].aliasList[idx].aliasCount; idx2++) {
@@ -689,8 +677,25 @@ addAlias(const char *alias, uint16_t standard, uint16_t converter, UBool default
                 if (aliasNum
                     && ucnv_compareNames(alias, GET_ALIAS_STR(aliasNum)) == 0)
                 {
-                    fprintf(stderr, "warning(line %d): duplicate alias %s found for standard tag %s between converter %s and converter %s\n",
-                        lineNum, alias, GET_TAG_STR(tags[standard].tag), GET_ALIAS_STR(converters[converter].converter), GET_ALIAS_STR(converters[idx].converter));
+                    if (idx == converter) {
+                        /*
+                         * (alias, standard) duplicates are harmless if they map to the same converter.
+                         * Only print a warning in verbose mode, or if the alias is a precise duplicate,
+                         * not just a lenient-match duplicate.
+                         */
+                        if (verbose || 0 == uprv_strcmp(alias, GET_ALIAS_STR(aliasNum))) {
+                            fprintf(stderr, "warning(line %d): duplicate aliases %s and %s found for standard %s and converter %s\n",
+                                lineNum, alias, GET_ALIAS_STR(aliasNum),
+                                GET_TAG_STR(tags[standard].tag),
+                                GET_ALIAS_STR(converters[converter].converter));
+                        }
+                    } else {
+                        fprintf(stderr, "warning(line %d): duplicate aliases %s and %s found for standard tag %s between converter %s and converter %s\n",
+                            lineNum, alias, GET_ALIAS_STR(aliasNum),
+                            GET_TAG_STR(tags[standard].tag),
+                            GET_ALIAS_STR(converters[converter].converter),
+                            GET_ALIAS_STR(converters[idx].converter));
+                    }
                     dupFound = TRUE;
                     break;
                 }
