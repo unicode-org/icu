@@ -9,14 +9,14 @@ package com.ibm.icu.dev.test.charsetdet;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UTF32;
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
+
 //#ifdef FOUNDATION
 //##import com.ibm.icu.impl.Utility;
 //#endif
@@ -186,7 +186,9 @@ public class TestCharsetDetector extends TestFmwk
     public void TestConstruction() {
         int i;
         CharsetDetector  det = new CharsetDetector();
-        
+        if(det==null){
+            errln("Could not construct a charset detector");
+        }
         String [] charsetNames = CharsetDetector.getAllDetectableCharsets();
         CheckAssert(charsetNames.length != 0);
         for (i=0; i<charsetNames.length; i++) {
@@ -313,7 +315,7 @@ public class TestCharsetDetector extends TestFmwk
         //
         //  Open and read the test data file.
         //
-        InputStreamReader isr = null;
+        //InputStreamReader isr = null;
         
         try {
             InputStream is = TestCharsetDetector.class.getResourceAsStream("CharsetDetectionTests.xml");
@@ -322,7 +324,7 @@ public class TestCharsetDetector extends TestFmwk
                 return;
             }
             
-            isr = new InputStreamReader(is, "UTF-8"); 
+            //isr = new InputStreamReader(is, "UTF-8"); 
 
             // Set up an xml parser.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -567,7 +567,8 @@ public final class UCharacterCaseTest extends TestFmwk
         // Checks LetterLike Symbols which were previously a source of
         // confusion [Bertrand A. D. 02/04/98]
         for (int i = 0x2100; i < 0x2138; i ++) {
-            if (i != 0x2126 && i != 0x212a && i != 0x212b) {
+            /* Unicode 5.0 adds lowercase U+214E (TURNED SMALL F) to U+2132 (TURNED CAPITAL F) */
+            if (i != 0x2126 && i != 0x212a && i != 0x212b && i!=0x2132) {
                 if (i != UCharacter.toLowerCase(i)) { // itself
                     errln("Failed case conversion with itself: \\u"
                             + Utility.hex(i, 4));

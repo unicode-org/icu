@@ -8,7 +8,6 @@
 package com.ibm.icu.lang;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -378,15 +377,230 @@ public final class UScript {
      */
     public static final int OLD_PERSIAN = 61;        /* Xpeo */
 
+
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int BALINESE                      = 62; /* Bali */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int BATAK                         = 63; /* Batk */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int BLISSYMBOLS                   = 64; /* Blis */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int BRAHMI                        = 65; /* Brah */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int CHAM                          = 66; /* Cham */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int CIRTH                         = 67; /* Cirt */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int OLD_CHURCH_SLAVONIC_CYRILLIC  = 68; /* Cyrs */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int DEMOTIC_EGYPTIAN              = 69; /* Egyd */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int HIERATIC_EGYPTIAN             = 70; /* Egyh */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int EGYPTIAN_HIEROGLYPHS          = 71; /* Egyp */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int KHUTSURI                      = 72; /* Geok */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int SIMPLIFIED_HAN                = 73; /* Hans */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int TRADITIONAL_HAN               = 74; /* Hant */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int PAHAWH_HMONG                  = 75; /* Hmng */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int OLD_HUNGARIAN                 = 76; /* Hung */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int HARAPPAN_INDUS                = 77; /* Inds */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int JAVANESE                      = 78; /* Java */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int KAYAH_LI                      = 79; /* Kali */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int LATIN_FRAKTUR                 = 80; /* Latf */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int LATIN_GAELIC                  = 81; /* Latg */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int LEPCHA                        = 82; /* Lepc */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int LINEAR_A                      = 83; /* Lina */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int MANDAEAN                      = 84; /* Mand */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int MAYAN_HIEROGLYPHS             = 85; /* Maya */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int MEROITIC                      = 86; /* Mero */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int NKO                           = 87; /* Nkoo */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int ORKHON                        = 88; /* Orkh */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int OLD_PERMIC                    = 89; /* Perm */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int PHAGS_PA                      = 90; /* Phag */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int PHOENICIAN                    = 91; /* Phnx */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int PHONETIC_POLLARD              = 92; /* Plrd */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int RONGORONGO                    = 93; /* Roro */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int SARATI                        = 94; /* Sara */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int ESTRANGELO_SYRIAC             = 95; /* Syre */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int WESTERN_SYRIAC                = 96; /* Syrj */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int EASTERN_SYRIAC                = 97; /* Syrn */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int TENGWAR                       = 98; /* Teng */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int VAI                           = 99; /* Vaii */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int VISIBLE_SPEECH                = 100;/* Visp */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int CUNEIFORM                     = 101;/* Xsux */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int UNWRITTEN_LANGUAGES           = 102;/* Zxxx */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.6 
+     */
+    public static final int UNKNOWN                       = 103;/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
+    
+    /* Private use codes from Qaaa - Qabx are not supported*/
+
     /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 62;
+    public static final int CODE_LIMIT   = 104;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
-
+    private static final String kLocaleScript = "LocaleScript";
+    
     //private static final String INVALID_NAME = "Invalid";
     /**
      * Helper function to find the code from locale.
@@ -409,7 +623,7 @@ public final class UScript {
         if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT && ! locale.equals(ULocale.getDefault())){
             return null;
         }
-        ICUResourceBundle sub = rb.get("LocaleScript");
+        ICUResourceBundle sub = rb.get(kLocaleScript);
         
         int[] result = new int[sub.getSize()];
         int w = 0;

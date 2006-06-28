@@ -6,6 +6,8 @@
 */
 package com.ibm.icu.util;
 
+import java.util.MissingResourceException;
+
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -125,12 +127,19 @@ public final class LocaleData {
      */
     public UnicodeSet getExemplarSet(int options, int extype) {
         String [] exemplarSetTypes = { "ExemplarCharacters", "AuxExemplarCharacters" };
-        ICUResourceBundle stringBundle = bundle.get(exemplarSetTypes[extype]);
-
-        if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
-           return null;
-
-        return new UnicodeSet(stringBundle.getString(), UnicodeSet.IGNORE_SPACE | options);
+        try{
+            ICUResourceBundle stringBundle = bundle.get(exemplarSetTypes[extype]);
+    
+            if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
+               return null;
+    
+            return new UnicodeSet(stringBundle.getString(), UnicodeSet.IGNORE_SPACE | options);
+        }catch(MissingResourceException ex){
+            if(extype==LocaleData.ES_AUXILIARY){
+                return new UnicodeSet();
+            }
+            throw ex;
+        }
     }
 
     /**

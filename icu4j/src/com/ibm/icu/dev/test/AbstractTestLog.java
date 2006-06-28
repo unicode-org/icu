@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,6 +17,9 @@ public abstract class AbstractTestLog implements TestLog {
         } 
         logln("Test skipped before ICU release " + major + "." + minor);
         return true;
+    }
+    public boolean isICUVersionAtLeast(int major, int minor){
+       return (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor)) >= 0);
     }
     
     /**

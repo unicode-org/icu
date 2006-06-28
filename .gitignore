@@ -475,6 +475,7 @@ icu4c/source/tools/toolutil/Makefile
 icu4c/source/tools/toolutil/Release
 icu4c/source/tools/toolutil/libicu*
 icu4j/.classpath
+icu4j/.clover
 icu4j/.externalToolBuilders
 icu4j/.project
 icu4j/classes

@@ -24,7 +24,6 @@ import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.*;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.RangeValueIterator;
@@ -961,6 +960,52 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", 145); /*[FE10]*/
 
         /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock NKO = new UnicodeBlock( "NKO", 146); /*[07C0]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock BALINESE = new UnicodeBlock( "BALINESE", 147); /*[1B00]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_C = new UnicodeBlock( "LATIN_EXTENDED_C", 148); /*[2C60]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release. 
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_D = new UnicodeBlock( "LATIN_EXTENDED_D", 149); /*[A720]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHAGS_PA = new UnicodeBlock( "PHAGS_PA", 150); /*[A840]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHOENICIAN = new UnicodeBlock( "PHOENICIAN", 151); /*[10900]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CUNEIFORM = new UnicodeBlock( "CUNEIFORM", 152); /*[12000]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CUNEIFORM_NUMBERS_AND_PUNCTUATION = new UnicodeBlock( "CUNEIFORM_NUMBERS_AND_PUNCTUATION", 153); /*[12400]*/
+        /**
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock( "COUNTING_ROD_NUMERALS", 154); /*[1D360]*/
+        
+        /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock INVALID_CODE 
@@ -1625,10 +1670,58 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int VERTICAL_FORMS_ID = 145; /*[FE10]*/
 
+        /* New blocks in Unicode 5.0 */
+
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int NKO_ID = 146; /*[07C0]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int BALINESE_ID = 147; /*[1B00]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int LATIN_EXTENDED_C_ID = 148; /*[2C60]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release. 
+         */
+        public static final int LATIN_EXTENDED_D_ID = 149; /*[A720]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int PHAGS_PA_ID = 150; /*[A840]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int PHOENICIAN_ID = 151; /*[10900]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CUNEIFORM_ID = 152; /*[12000]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CUNEIFORM_NUMBERS_AND_PUNCTUATION_ID = 153; /*[12400]*/
+        /**
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int COUNTING_ROD_NUMERALS_ID = 154; /*[1D360]*/
+        
         /** 
          * @stable ICU 2.4 
          */
-        public static final int COUNT = 146;
+        public static final int COUNT = 155;
         
         // public methods --------------------------------------------------
         
@@ -1816,7 +1909,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             SUPPLEMENTAL_PUNCTUATION,
             SYLOTI_NAGRI,
             TIFINAGH,
-            VERTICAL_FORMS
+            VERTICAL_FORMS,
+            NKO,
+            BALINESE,
+            LATIN_EXTENDED_C,
+            LATIN_EXTENDED_D,
+            PHAGS_PA,
+            PHOENICIAN,
+            CUNEIFORM,
+            CUNEIFORM_NUMBERS_AND_PUNCTUATION,
+            COUNTING_ROD_NUMERALS
         };
 
         static {

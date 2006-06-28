@@ -207,7 +207,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
              "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "", "","","",
+            "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT","","",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
             "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "","","",
@@ -1612,7 +1612,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         dfUS.setTimeZone(tz);
         String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HAP (\u00C9UA)";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
+        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);

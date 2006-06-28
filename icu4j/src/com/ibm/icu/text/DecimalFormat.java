@@ -3315,7 +3315,7 @@ public class DecimalFormat extends NumberFormat {
             }
             if (part == 0) {
                 if (negativeSuffix.equals(positiveSuffix) &&
-                    negativePrefix.equals(symbols.getMinusSign() + positivePrefix)) {
+                    negativePrefix.equals( PATTERN_MINUS + positivePrefix)) {
                     break;
                 } else {
                     result.append(localized ? symbols.getPatternSeparator() :

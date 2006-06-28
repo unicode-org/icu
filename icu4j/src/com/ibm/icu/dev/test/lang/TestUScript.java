@@ -274,66 +274,41 @@ public class TestUScript extends TestFmwk {
         }
     }
     public void TestGetScript(){
-        int codepoints[] = {
-                0x0000FF9D,
-                0x0000FFBE,
-                0x0000FFC7,
-                0x0000FFCF,
-                0x0000FFD7,
-                0x0000FFDC,
-                0x00010300,
-                0x00010330,
-                0x0001034A,
-                0x00010400,
-                0x00010428,
-                0x0001D167,
-                0x0001D17B,
-                0x0001D185,
-                0x0001D1AA,
-                0x00020000,
-                0x00000D02,
-                0x00000D00,
-                0x00000000,
-                0x0001D169,
-                0x0001D182,
-                0x0001D18B,
-                0x0001D1AD,
+        int codepoints[][] = new int[][] {
+                {0x0000FF9D, UScript.KATAKANA },
+                {0x0000FFBE, UScript.HANGUL },
+                {0x0000FFC7, UScript.HANGUL },
+                {0x0000FFCF, UScript.HANGUL },
+                {0x0000FFD7, UScript.HANGUL}, 
+                {0x0000FFDC, UScript.HANGUL},
+                {0x00010300, UScript.OLD_ITALIC},
+                {0x00010330, UScript.GOTHIC},
+                {0x0001034A, UScript.GOTHIC},
+                {0x00010400, UScript.DESERET},
+                {0x00010428, UScript.DESERET},
+                {0x0001D167, UScript.INHERITED},
+                {0x0001D17B, UScript.INHERITED},
+                {0x0001D185, UScript.INHERITED},
+                {0x0001D1AA, UScript.INHERITED},
+                {0x00020000, UScript.HAN},
+                {0x00000D02, UScript.MALAYALAM},
+                {0x00000D00, UScript.UNKNOWN},
+                {0x00000000, UScript.COMMON},
+                {0x0001D169, UScript.INHERITED },
+                {0x0001D182, UScript.INHERITED },
+                {0x0001D18B, UScript.INHERITED },
+                {0x0001D1AD, UScript.INHERITED },
         };
 
-        int expected[] = {
-                UScript.KATAKANA ,
-                UScript.HANGUL ,
-                UScript.HANGUL ,
-                UScript.HANGUL ,
-                UScript.HANGUL ,
-                UScript.HANGUL ,
-                UScript.OLD_ITALIC,
-                UScript.GOTHIC ,
-                UScript.GOTHIC ,
-                UScript.DESERET ,
-                UScript.DESERET ,
-                UScript.INHERITED,
-                UScript.INHERITED,
-                UScript.INHERITED,
-                UScript.INHERITED,
-                UScript.HAN ,
-                UScript.MALAYALAM,
-                UScript.COMMON,
-                UScript.COMMON,
-                UScript.INHERITED ,
-                UScript.INHERITED ,
-                UScript.INHERITED ,
-                UScript.INHERITED ,
-        };
         int i =0;
         int code = UScript.INVALID_CODE;
         boolean passed = true;
 
         while(i< codepoints.length){
-            code = UScript.getScript(codepoints[i]);
+            code = UScript.getScript(codepoints[i][0]);
 
-            if(code != expected[i]){
-                logln("UScript.getScript for codepoint 0x"+ hex(codepoints[i])+" failed");
+            if(code != codepoints[i][1]){
+                logln("UScript.getScript for codepoint 0x"+ hex(codepoints[i][0])+" failed");
                 passed = false;
             }
 
@@ -373,6 +348,51 @@ public class TestUScript extends TestFmwk {
           if(abbr.indexOf("INV")>=0){
                  errln("UScript.getScript for codepoint 0x"+ hex(i)+" failed");
           }
+        }
+    }
+    public void TestNewCode(){
+        /*
+         * These script codes were originally added to ICU pre-3.6, so that ICU would
+         * have all ISO 15924 script codes. ICU was then based on Unicode 4.1.
+         * These script codes were added with only short names because we don't
+         * want to invent long names ourselves.
+         * Unicode 5 and later encode some of these scripts and give them long names.
+         * Whenever this happens, the long script names here need to be updated.
+         */
+        String[] expectedLong = new String[]{
+            "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
+            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
+            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Cuneiform", 
+            "Zxxx", "Unknown",
+        };
+        String[] expectedShort = new String[]{
+            "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
+            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nkoo", "Orkh", "Perm", "Phag", "Phnx", 
+            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Xsux", 
+            "Zxxx", "Zzzz",
+        };
+        int j = 0;
+        int i = 0;
+        for(i=UScript.BALINESE; i<UScript.CODE_LIMIT; i++, j++){
+            String name = UScript.getName(i);
+            if(name==null || !name.equals(expectedLong[j])){
+                errln("UScript.getName failed for code"+ i + name +"!=" +expectedLong[j]);
+            }
+            name = UScript.getShortName(i);
+            if(name==null || !name.equals(expectedShort[j])){
+                errln("UScript.getShortName failed for code"+ i + name +"!=" +expectedShort[j]);
+            }
+        }
+        for(i=0; i<expectedLong.length; i++){
+            int[] ret = UScript.getCode(expectedShort[i]);
+            if(ret.length>1){
+                errln("UScript.getCode did not return expected number of codes for script"+ expectedShort[i]+". EXPECTED: 1 GOT: "+ ret.length);
+            }
+            if(ret[0]!= (UScript.BALINESE+i)){
+                errln("UScript.getCode did not return expected code for script"+ expectedShort[i]+". EXPECTED: "+ (UScript.BALINESE+i)+" GOT: %i\n"+ ret[0] );
+            }
         }
     }
  }

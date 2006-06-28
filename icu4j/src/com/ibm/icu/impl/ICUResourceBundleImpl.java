@@ -610,7 +610,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         return new String(dst);
     }
     private static final char RES_PATH_SEP_CHAR = '/';
+    private static final String RES_PATH_SEP_STR = "/";
     private static final String ICUDATA = "ICUDATA";
+    private static final char HYPHEN = '-';
     private static final String LOCALE = "LOCALE";
     
     private static final int getIndex(String s) {
@@ -647,6 +649,12 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             if (bundleName.equals(ICUDATA)) {
                 bundleName = ICU_BASE_NAME;
                 loaderToUse = ICU_DATA_CLASS_LOADER;
+            }else if(bundleName.indexOf(ICUDATA)>-1){
+                int idx = bundleName.indexOf(HYPHEN); 
+                if(idx>-1){
+                    bundleName = ICU_BASE_NAME+RES_PATH_SEP_STR+bundleName.substring(idx+1,bundleName.length());
+                    loaderToUse = ICU_DATA_CLASS_LOADER;
+                }
             }
         } else {
             //no path start with locale

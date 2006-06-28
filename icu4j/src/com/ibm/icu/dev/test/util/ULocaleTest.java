@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2005, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -90,7 +90,7 @@ public class ULocaleTest extends TestFmwk {
     */
 
     public void TestBreakIterator() {
-        checkService("hi_IN_BHOPAL", new ServiceFacade() {
+        checkService("ja_JP_OSAKA", new ServiceFacade() {
                 public Object create(ULocale req) {
                     return BreakIterator.getWordInstance(req);
                 }
