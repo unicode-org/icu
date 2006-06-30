@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -126,7 +126,9 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         final String bc = "\u7D00\u5143\u524D";
         final String ad = "\u897f\u66a6";
         final String jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
+        final String jdtLong = "\u65e5\u672c\u590f\u6642\u9593";
         final String jstShort = "JST";
+        final String jdtShort = "JDT";
         final String tzID = "Asia/Tokyo";
 
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);
@@ -150,8 +152,8 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             assertEquals("Long zone name = ", jstLong, zones[index][1]);
             assertEquals("Short zone name = ", jstShort, zones[index][2]);
-            assertEquals("Long zone name (3) = ", jstLong, zones[index][3]);
-            assertEquals("Short zone name (4) = ", jstShort, zones[index][4]);
+            assertEquals("Long zone name (3) = ", jdtLong, zones[index][3]);
+            assertEquals("Short zone name (4) = ", jdtShort, zones[index][4]);
         }
     }
 }

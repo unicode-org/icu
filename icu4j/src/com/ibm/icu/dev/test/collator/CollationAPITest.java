@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -96,25 +96,39 @@ public class CollationAPITest extends TestFmwk {
         // Need to use identical strength
         col.setStrength(Collator.IDENTICAL);
 
-        byte key2compat[] = { // 3.4 key UCA 4.1
+        byte key2compat[] = {
+            // 3.6 key, UCA 5.0
+            (byte) 0x29, (byte) 0x2b, (byte) 0x2d,
+            (byte) 0x2f, (byte) 0x29, (byte) 0x01,
+            (byte) 0x09, (byte) 0x01, (byte) 0x09,
+            (byte) 0x01, (byte) 0x28, (byte) 0x01,
+            (byte) 0x92, (byte) 0x93, (byte) 0x94,
+            (byte) 0x95, (byte) 0x92, (byte) 0x00
+            
+            // 3.4 key UCA 4.1
+            /*
             (byte) 0x28, (byte) 0x2a, (byte) 0x2c, 
             (byte) 0x2e, (byte) 0x28, (byte) 0x01, 
             (byte) 0x09, (byte) 0x01, (byte) 0x09, 
             (byte) 0x01, (byte) 0x27, (byte) 0x01, 
             (byte) 0x92, (byte) 0x93, (byte) 0x94, 
             (byte) 0x95, (byte) 0x92, (byte) 0x00        
+            */ 
+            
             //          2.6.1 key
             /*
             0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
             0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
             0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
             */
+            
             // 2.2 key
             /*
             0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
             0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
             0x92, 0x93, 0x94, 0x95, 0x92, 0x00
             */
+            
             // 2.0 key
             /*
             0x19, 0x1B, 0x1D, 0x1F, 0x19,
@@ -123,6 +137,7 @@ public class CollationAPITest extends TestFmwk {
             0x92, 0x93, 0x94, 0x95, 0x92,
             0x00
             */
+            
             // 1.8.1 key.
             /*
             0x19, 0x1B, 0x1D, 0x1F, 0x19,
@@ -482,11 +497,11 @@ public class CollationAPITest extends TestFmwk {
 
     
         logln("Test getVersion");
-        VersionInfo expectedVersion = VersionInfo.getInstance(0x31, 0xC0, 0x00, 0x04);
+        VersionInfo expectedVersion = VersionInfo.getInstance(0x31, 0xC0, 0x00, 0x05);
         doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
         
         logln("Test getUCAVersion");
-        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x04, 0x01, 0, 0);
+        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x05, 0, 0, 0);
         doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
         
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
