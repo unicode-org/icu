@@ -30,6 +30,11 @@
 #include "uassert.h"
 #include "uvector.h"
 
+// if U_LOCAL_SERVICE_HOOK is defined, then localsvc.cpp is expected to be included.
+#if U_LOCAL_SERVICE_HOOK
+#include "localsvc.h"
+#endif
+
 U_NAMESPACE_BEGIN
 
 
