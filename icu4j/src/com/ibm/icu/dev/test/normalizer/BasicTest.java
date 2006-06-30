@@ -2782,7 +2782,7 @@ public class BasicTest extends TestFmwk {
            if(!skipSets[i].equals(expectSets[i])) {
                errln("error: TestSkippable skipSets["+i+"]!=expectedSets["+i+"]\n"+
                      "May need to update hardcoded UnicodeSet patterns in com.ibm.icu.dev.test.normalizer.BasicTest.java\n"+
-                     "See ICU4J - unicodetools.com.ibm.text.UCD.NFSkippable\n"
+                     "See ICU4J - unicodetools.com.ibm.text.UCD.NFSkippable\n" +
                      "Run com.ibm.text.UCD.Main with the option NFSkippable.");
    
                s=new StringBuffer();
