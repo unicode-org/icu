@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2005, International Business Machines Corporation        *
+* Copyright (C) 1999-2006, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -262,8 +262,16 @@ res_unload(ResourceData *pResData) {
 
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
+    /*
+     * The data structure is documented as supporting res==0 for empty strings.
+     * Return a fixed pointer in such a case.
+     * This was dropped in uresdata.c 1.17 as part of Jitterbug 1005 work
+     * on code coverage for ICU 2.0.
+     * Re-added for consistency with the design and with other code.
+     */
+    static const int32_t emptyString[2]={ 0, 0 };
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_STRING) {
-        const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+        const int32_t *p= res==0 ? emptyString : (const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
         if (pLength) {
             *pLength=*p;
         }
