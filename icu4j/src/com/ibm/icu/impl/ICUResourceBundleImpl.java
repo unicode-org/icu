@@ -599,6 +599,16 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         }
     }
     private String getStringValue(long resource) {
+        if (resource == 0) { 
+            /*
+             * The data structure is documented as supporting resource==0 for empty strings.
+             * Return a fixed pointer in such a case.
+             * This was dropped in uresdata.c 1.17 as part of Jitterbug 1005 work
+             * on code coverage for ICU 2.0.
+             * Re-added for consistency with the design and with other code.
+             */
+            return "";
+        }
         int offset = RES_GET_OFFSET(resource);
         int length = getInt(rawData,offset);
         int stringOffset = offset + getIntOffset(1);
