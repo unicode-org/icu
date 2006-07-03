@@ -239,7 +239,6 @@ main(int argc, char* argv[]) {
             "\t-c or --copyright   include a copyright notice\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n",
-            "\t-O or --optimize    optimize the table for \"size\" or \"speed\"\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
