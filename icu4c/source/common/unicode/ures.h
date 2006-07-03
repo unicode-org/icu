@@ -356,6 +356,59 @@ ures_getString(const UResourceBundle* resourceBundle,
                UErrorCode* status);
 
 /**
+ * Returns a UTF-8 string from a string resource.
+ * The UTF-8 string may be returnable directly as a pointer, or
+ * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
+ * or equivalent.
+ *
+ * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * and dest is returned.
+ *
+ * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * without needing a dest buffer (it can be NULL). If the string needs to be
+ * copied or transformed, then it may be placed into dest at an arbitrary offset.
+ *
+ * If the string is to be written to dest, then U_BUFFER_OVERFLOW_ERROR and
+ * U_STRING_NOT_TERMINATED_WARNING are set if appropriate, as usual.
+ *
+ * If the string is transformed from UTF-16, then a conversion error may occur
+ * if an unpaired surrogate is encountered. If the function is successful, then
+ * the output UTF-8 string is always well-formed.
+ *
+ * @param resB Resource bundle.
+ * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
+ * @param length Input: Capacity of destination buffer.
+ *               Output: Actual length of the UTF-8 string, not counting the
+ *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
+ *               Can be NULL, meaning capacity=0 and the string length is not
+ *               returned to the caller.
+ * @param forceCopy If TRUE, then the output string will always be written to
+ *                  dest, with U_BUFFER_OVERFLOW_ERROR and
+ *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
+ *                  If FALSE, then the dest buffer may or may not contain a
+ *                  copy of the string. dest may or may not be modified.
+ *                  If a copy needs to be written, then the UErrorCode parameter
+ *                  indicates overflow etc. as usual.
+ * @param status Pointer to a standard ICU error code. Its input value must
+ *               pass the U_SUCCESS() test, or else the function returns
+ *               immediately. Check for U_FAILURE() on output or use with
+ *               function chaining. (See User Guide for details.)
+ * @return The pointer to the UTF-8 string. It may be dest, or at some offset
+ *         from dest (only if !forceCopy), or in unrelated memory.
+ *         Always NUL-terminated unless the string was written to dest and
+ *         length==capacity (in which case U_STRING_NOT_TERMINATED_WARNING is set).
+ *
+ * @see ures_getString
+ * @see u_strToUTF8
+ * @draft ICU 3.6
+ */
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8String(const UResourceBundle *resB,
+                   char *dest, int32_t *length,
+                   UBool forceCopy,
+                   UErrorCode *status);
+
+/**
  * Returns a binary data from a binary resource. 
  *
  * @param resourceBundle a string resource
@@ -568,6 +621,60 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
                       UErrorCode *status);
 
 /**
+ * Returns a UTF-8 string from a resource at the specified index.
+ * The UTF-8 string may be returnable directly as a pointer, or
+ * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
+ * or equivalent.
+ *
+ * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * and dest is returned.
+ *
+ * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * without needing a dest buffer (it can be NULL). If the string needs to be
+ * copied or transformed, then it may be placed into dest at an arbitrary offset.
+ *
+ * If the string is to be written to dest, then U_BUFFER_OVERFLOW_ERROR and
+ * U_STRING_NOT_TERMINATED_WARNING are set if appropriate, as usual.
+ *
+ * If the string is transformed from UTF-16, then a conversion error may occur
+ * if an unpaired surrogate is encountered. If the function is successful, then
+ * the output UTF-8 string is always well-formed.
+ *
+ * @param resB Resource bundle.
+ * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
+ * @param length Input: Capacity of destination buffer.
+ *               Output: Actual length of the UTF-8 string, not counting the
+ *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
+ *               Can be NULL, meaning capacity=0 and the string length is not
+ *               returned to the caller.
+ * @param forceCopy If TRUE, then the output string will always be written to
+ *                  dest, with U_BUFFER_OVERFLOW_ERROR and
+ *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
+ *                  If FALSE, then the dest buffer may or may not contain a
+ *                  copy of the string. dest may or may not be modified.
+ *                  If a copy needs to be written, then the UErrorCode parameter
+ *                  indicates overflow etc. as usual.
+ * @param status Pointer to a standard ICU error code. Its input value must
+ *               pass the U_SUCCESS() test, or else the function returns
+ *               immediately. Check for U_FAILURE() on output or use with
+ *               function chaining. (See User Guide for details.)
+ * @return The pointer to the UTF-8 string. It may be dest, or at some offset
+ *         from dest (only if !forceCopy), or in unrelated memory.
+ *         Always NUL-terminated unless the string was written to dest and
+ *         length==capacity (in which case U_STRING_NOT_TERMINATED_WARNING is set).
+ *
+ * @see ures_getStringByIndex
+ * @see u_strToUTF8
+ * @draft ICU 3.6
+ */
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8StringByIndex(const UResourceBundle *resB,
+                          int32_t index,
+                          char *dest, int32_t *pLength,
+                          UBool forceCopy,
+                          UErrorCode *status);
+
+/**
  * Returns a resource in a given resource that has a given key. This procedure works only with table
  * resources. Features a fill-in parameter. 
  *
@@ -603,6 +710,62 @@ ures_getStringByKey(const UResourceBundle *resB,
                     int32_t* len, 
                     UErrorCode *status);
 
+/**
+ * Returns a UTF-8 string from a resource and a key.
+ * This function works only with table resources.
+ *
+ * The UTF-8 string may be returnable directly as a pointer, or
+ * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
+ * or equivalent.
+ *
+ * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * and dest is returned.
+ *
+ * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * without needing a dest buffer (it can be NULL). If the string needs to be
+ * copied or transformed, then it may be placed into dest at an arbitrary offset.
+ *
+ * If the string is to be written to dest, then U_BUFFER_OVERFLOW_ERROR and
+ * U_STRING_NOT_TERMINATED_WARNING are set if appropriate, as usual.
+ *
+ * If the string is transformed from UTF-16, then a conversion error may occur
+ * if an unpaired surrogate is encountered. If the function is successful, then
+ * the output UTF-8 string is always well-formed.
+ *
+ * @param resB Resource bundle.
+ * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
+ * @param length Input: Capacity of destination buffer.
+ *               Output: Actual length of the UTF-8 string, not counting the
+ *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
+ *               Can be NULL, meaning capacity=0 and the string length is not
+ *               returned to the caller.
+ * @param forceCopy If TRUE, then the output string will always be written to
+ *                  dest, with U_BUFFER_OVERFLOW_ERROR and
+ *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
+ *                  If FALSE, then the dest buffer may or may not contain a
+ *                  copy of the string. dest may or may not be modified.
+ *                  If a copy needs to be written, then the UErrorCode parameter
+ *                  indicates overflow etc. as usual.
+ * @param status Pointer to a standard ICU error code. Its input value must
+ *               pass the U_SUCCESS() test, or else the function returns
+ *               immediately. Check for U_FAILURE() on output or use with
+ *               function chaining. (See User Guide for details.)
+ * @return The pointer to the UTF-8 string. It may be dest, or at some offset
+ *         from dest (only if !forceCopy), or in unrelated memory.
+ *         Always NUL-terminated unless the string was written to dest and
+ *         length==capacity (in which case U_STRING_NOT_TERMINATED_WARNING is set).
+ *
+ * @see ures_getStringByKey
+ * @see u_strToUTF8
+ * @draft ICU 3.6
+ */
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8StringByKey(const UResourceBundle *resB,
+                        const char *key,
+                        char *dest, int32_t *pLength,
+                        UBool forceCopy,
+                        UErrorCode *status);
+
 #ifdef XP_CPLUSPLUS
 #include "unicode/unistr.h"
 
@@ -610,12 +773,12 @@ U_NAMESPACE_BEGIN
 /**
  * returns a string from a string resource type
  *
- * @param resB              a resource
+ * @param resB    a resource
  * @param status: fills in the outgoing error code
  *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
- * @return        an UnicodeString object. If there is an error, string is bogus
+ * @return        a UnicodeString object. If there is an error, string is bogus
  * @stable ICU 2.0
  */
 inline UnicodeString 

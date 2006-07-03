@@ -1008,6 +1008,78 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
     return NULL;
 }
 
+static const char *
+ures_toUTF8String(const UChar *s16, int32_t length16,
+                  char *dest, int32_t *pLength,
+                  UBool forceCopy,
+                  UErrorCode *status) {
+    int32_t capacity;
+
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    if (pLength != NULL) {
+        capacity = *pLength;
+    } else {
+        capacity = 0;
+    }
+    if (capacity < 0 || (capacity > 0 && dest == NULL)) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    if (length16 == 0) {
+        /* empty string, return as read-only pointer */
+        if (pLength != NULL) {
+            *pLength = 0;
+        }
+        if (forceCopy) {
+            u_terminateChars(dest, capacity, 0, status);
+            return dest;
+        } else {
+            return "";
+        }
+    } else {
+        /* We need to transform the string to the destination buffer. */
+        if (capacity < length16) {
+            /* No chance for the string to fit. Pure preflighting. */
+            return u_strToUTF8(NULL, 0, pLength, s16, length16, status);
+        }
+        if (!forceCopy && (length16 <= 0x2aaaaaaa)) {
+            /*
+             * We know the string will fit into dest because each UChar turns
+             * into at most three UTF-8 bytes. Fill the latter part of dest
+             * so that callers do not expect to use dest as a string pointer,
+             * hopefully leading to more robust code for when resource bundles
+             * may store UTF-8 natively.
+             * (In which case dest would not be used at all.)
+             *
+             * We do not do this if forceCopy=TRUE because then the caller
+             * expects the string to start exactly at dest.
+             *
+             * The test above for <= 0x2aaaaaaa prevents overflows.
+             * The +1 is for the NUL terminator.
+             */
+            int32_t maxLength = 3 * length16 + 1;
+            if (capacity > maxLength) {
+                dest += capacity - maxLength;
+                capacity = maxLength;
+            }
+        }
+        return u_strToUTF8(dest, capacity, pLength, s16, length16, status);
+    }
+}
+
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8String(const UResourceBundle *resB,
+                   char *dest, int32_t *pLength,
+                   UBool forceCopy,
+                   UErrorCode *status) {
+    int32_t length16;
+    const UChar *s16 = ures_getString(resB, &length16, status);
+    return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
+}
+
 U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
                                                UErrorCode*               status) {
   if (status==NULL || U_FAILURE(*status)) {
@@ -1321,6 +1393,17 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
         *status = U_MISSING_RESOURCE_ERROR;
     }
     return NULL;
+}
+
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8StringByIndex(const UResourceBundle *resB,
+                          int32_t index,
+                          char *dest, int32_t *pLength,
+                          UBool forceCopy,
+                          UErrorCode *status) {
+    int32_t length16;
+    const UChar *s16 = ures_getStringByIndex(resB, index, &length16, status);
+    return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
 }
 
 /*U_CAPI const char *ures_getResPath(UResourceBundle *resB) {
@@ -1641,6 +1724,16 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     return NULL;
 }
 
+U_DRAFT const char * U_EXPORT2
+ures_getUTF8StringByKey(const UResourceBundle *resB,
+                        const char *key,
+                        char *dest, int32_t *pLength,
+                        UBool forceCopy,
+                        UErrorCode *status) {
+    int32_t length16;
+    const UChar *s16 = ures_getStringByKey(resB, key, &length16, status);
+    return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
+}
 
 /* TODO: clean from here down */
 
