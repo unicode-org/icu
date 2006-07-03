@@ -34,7 +34,6 @@ private:
     CntTable *testTable, *testClone;
     /*CompactEIntArray *testMapping;*/
     UNewTrie *testMapping;
-    UErrorCode status;
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
