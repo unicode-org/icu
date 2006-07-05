@@ -523,6 +523,8 @@ ucnv_close(UConverter * converter);
 /**
  * Fills in the output parameter, subChars, with the substitution characters
  * as multiple bytes.
+ * If ucnv_setSubstString() set a Unicode string because the converter is
+ * stateful, then subChars will be an empty string.
  *
  * @param converter the Unicode converter
  * @param subChars the subsitution characters
@@ -531,6 +533,7 @@ ucnv_close(UConverter * converter);
  * @param  err the outgoing error status code.
  * If the substitution character array is too small, an
  * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
+ * @see ucnv_setSubstString
  * @see ucnv_setSubstChars
  * @stable ICU 2.0
  */
@@ -543,12 +546,19 @@ ucnv_getSubstChars(const UConverter *converter,
 /**
  * Sets the substitution chars when converting from unicode to a codepage. The
  * substitution is specified as a string of 1-4 bytes, and may contain
- *  <TT>NULL</TT> byte.
+ * <TT>NULL</TT> bytes.
+ * The subChars must represent a single character. The caller needs to know the
+ * byte sequence of a valid character in the converter's charset.
+ * For some converters, for example some ISO 2022 variants, only single-byte
+ * substitution characters may be supported.
+ * The newer ucnv_setSubstString() function relaxes these limitations.
+ *
  * @param converter the Unicode converter
  * @param subChars the substitution character byte sequence we want set
  * @param len the number of bytes in subChars
  * @param err the error status code.  <TT>U_INDEX_OUTOFBOUNDS_ERROR </TT> if
  * len is bigger than the maximum number of bytes allowed in subchars
+ * @see ucnv_setSubstString
  * @see ucnv_getSubstChars
  * @stable ICU 2.0
  */
@@ -557,6 +567,39 @@ ucnv_setSubstChars(UConverter *converter,
                    const char *subChars,
                    int8_t len,
                    UErrorCode *err);
+
+/**
+ * Set a substitution string for converting from Unicode to a charset.
+ * The caller need not know the charset byte sequence for each charset.
+ *
+ * Unlike ucnv_setSubstChars() which is designed to set a charset byte sequence
+ * for a single character, this function takes a Unicode string with
+ * zero, one or more characters, and immediately verifies that the string can be
+ * converted to the charset.
+ * If not, or if the result is too long (more than 32 bytes as of ICU 3.6),
+ * then the function returns with an error accordingly.
+ *
+ * Also unlike ucnv_setSubstChars(), this function works for stateful charsets
+ * by converting on the fly at the point of substitution rather than setting
+ * a fixed byte sequence.
+ *
+ * @param cnv The UConverter object.
+ * @param s The Unicode string.
+ * @param length The number of UChars in s, or -1 for a NUL-terminated string.
+ * @param err Pointer to a standard ICU error code. Its input value must
+ *            pass the U_SUCCESS() test, or else the function returns
+ *            immediately. Check for U_FAILURE() on output or use with
+ *            function chaining. (See User Guide for details.)
+ *
+ * @see ucnv_setSubstChars
+ * @see ucnv_getSubstChars
+ * @draft ICU 3.6
+ */
+U_DRAFT void U_EXPORT2
+ucnv_setSubstString(UConverter *cnv,
+                    const UChar *s,
+                    int32_t length,
+                    UErrorCode *err);
 
 /**
  * Fills in the output parameter, errBytes, with the error characters from the
@@ -1820,7 +1863,7 @@ ucnv_usesFallback(const UConverter *cnv);
  *      UErrorCode err = U_ZERO_ERROR;
  *      char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
  *      int32_t signatureLength = 0;
- *      char *encoding = ucnv_detectUnicodeSignatures(input,sizeof(input),&signatureLength,&err);
+ *      char *encoding = ucnv_detectUnicodeSignature(input,sizeof(input),&signatureLength,&err);
  *      UConverter *conv = NULL;
  *      UChar output[100];
  *      UChar *target = output, *out;
