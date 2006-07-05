@@ -29,10 +29,15 @@ conversion:table(nofallback) {
       "Callback option - a letter is passed in directly as const char * see ucnv_err.h\n"
       "Empty string: Sub callback with NULL option\n"
 
-      "In order to specify a charset substitution character,\n"
+      "In order to specify a charset substitution character (for ucnv_setSubstChars()),\n"
       "add a NUL (U+0000) to the callback string followed by the subchar bytes as Latin-1\n"
       "characters. For example, for a Sub callback with no option and a subchar of FC FC,\n"
       "use the string \"?\x00\xFC\xFC\"\n"
+
+      "In order to specify a substitution string (for ucnv_setSubstString()),\n"
+      "add an '=' to the callback string followed by the substitution string.\n"
+      "For example, for a Sub callback with no option and a substitution string\n"
+      "of \"ab\", use the string \"?=ab\"\n"
 
       "fallbacks: per-direction boolean, currently only for fromUnicode; see Jitterbug 2401\n"
 
@@ -445,6 +450,49 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Test substitution strings.
+        {
+          "windows-1252", // stateless MBCS with WriteSub(), should internally set char *
+          "a\ufdd0c",
+          :bin{       61402421402463 },
+          :intvector{ 0,1,1,1,1,1,2 },
+          :int{1}, :int{0}, "", "?=@$!@$", ""
+        }
+        {
+          "ibm-930", // stateful MBCS
+          "a\ufdd0\u4e00\ufdd0e",
+          :bin{       620e4bce0f400e45414bce0f4066 },
+          :intvector{ 0,1,1,1,1,1,2,2,2,3,3,3,3,4 },
+          :int{1}, :int{0}, "", "?=\u4e01 ", ""
+        }
+        {
+          "iso-2022-jp",
+          "a\x1bc", // Unicode ESC must not occur as a character
+          :bin{       6163 },
+          :intvector{ 0,2 },
+          :int{1}, :int{0}, "", "?=", "" // empty substitution string
+        }
+        {
+          "iso-2022-cn",
+          "a\x1bc", // Unicode ESC must not occur as a character
+          :bin{       61202063 },
+          :intvector{ 0,1,1,2 },
+          :int{1}, :int{0}, "", "?=  ", ""
+        }
+        {
+          "iso-2022-cn",
+          "a\x1bc", // Unicode ESC must not occur as a character
+          :bin{       611b2429410e523b0f2063 },
+          :intvector{ 0,1,1,1,1,1,1,1,1,1,2 },
+          :int{1}, :int{0}, "", "?=\u4e00 ", ""
+        }
+        {
+          "us-ascii",
+          "a\x85c",
+          :bin{       61402421402463 },
+          :intvector{ 0,1,1,1,1,1,2 },
+          :int{1}, :int{0}, "", "?=@$!@$", ""
+        }
         // ISO 2022-CN: test a single-byte subchar, j5171
         {
           "iso-2022-cn",

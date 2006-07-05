@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -157,6 +157,17 @@ struct UConverter {
     const void *fromUContext;
     const void *toUContext;
 
+    /*
+     * Pointer to charset bytes for substitution string if subCharLen>0,
+     * or pointer to Unicode string (UChar *) if subCharLen<0.
+     * subCharLen==0 is equivalent to using a skip callback.
+     * If the pointer is !=subUChars then it is allocated with
+     * UCNV_ERROR_BUFFER_LENGTH * U_SIZEOF_UCHAR bytes.
+     * The subUChars field is declared as UChar[] not uint8_t[] to
+     * guarantee alignment for UChars.
+     */
+    uint8_t *subChars;
+
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
 
     uint32_t options; /* options flags from UConverterOpen, may contain additional bits */
@@ -200,9 +211,9 @@ struct UConverter {
 
     uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
     UBool useSubChar1;
-    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
     char invalidCharBuffer[UCNV_MAX_CHAR_LEN];          /* bytes from last error/callback situation */
     uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
+    UChar subUChars[UCNV_MAX_SUBCHAR_LEN/U_SIZEOF_UCHAR]; /* see subChars documentation */
 
     UChar invalidUCharBuffer[U16_MAX_LENGTH];           /* UChars from last error/callback situation */
     UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */

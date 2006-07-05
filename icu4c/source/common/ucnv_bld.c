@@ -912,7 +912,8 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->maxBytesPerUChar = mySharedConverterData->staticData->maxBytesPerChar;
     myUConverter->subChar1 = mySharedConverterData->staticData->subChar1;
     myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
-    uprv_memcpy(myUConverter->subChar, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
+    myUConverter->subChars = (uint8_t *)myUConverter->subUChars;
+    uprv_memcpy(myUConverter->subChars, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
 
     if(mySharedConverterData->impl->open != NULL) {
         mySharedConverterData->impl->open(myUConverter, realName, locale, options, err);

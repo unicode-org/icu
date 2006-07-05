@@ -110,6 +110,7 @@ static void TestToUCountPending(void);
 static void TestFromUCountPending(void);
 static void TestDefaultName(void);
 static void TestCompareNames(void);
+static void TestSubstString(void);
 
 void addTestConvert(TestNode** root);
 
@@ -134,6 +135,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestFromUCountPending,       "tsconv/ccapitst/TestFromUCountPending");
     addTest(root, &TestDefaultName,             "tsconv/ccapitst/TestDefaultName");
     addTest(root, &TestCompareNames,            "tsconv/ccapitst/TestCompareNames");
+    addTest(root, &TestSubstString,             "tsconv/ccapitst/TestSubstString");
 }
 
 static void ListNames(void) {
@@ -3104,4 +3106,94 @@ TestCompareNames() {
     compareNames(equalIBM);
     compareNames(lessMac);
     compareNames(lessUTF080);
+}
+
+static void
+TestSubstString() {
+    static const UChar surrogate[1]={ 0xd900 };
+    char buffer[16];
+
+    static const UChar sub[5]={ 0x61, 0x62, 0x63, 0x64, 0x65 };
+    static const char subChars[5]={ 0x61, 0x62, 0x63, 0x64, 0x65 };
+    UConverter *cnv;
+    UErrorCode errorCode;
+    int32_t length;
+    int8_t len8;
+
+    /* UTF-16/32: test that the BOM is output before the sub character */
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("UTF-16", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_open(UTF-16) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=ucnv_fromUChars(cnv, buffer, (int32_t)sizeof(buffer), surrogate, 1, &errorCode);
+    ucnv_close(cnv);
+    if(U_FAILURE(errorCode) ||
+        length!=4 ||
+        NULL == ucnv_detectUnicodeSignature(buffer, length, NULL, &errorCode)
+    ) {
+        log_err("ucnv_fromUChars(UTF-16, U+D900) did not write a BOM\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("UTF-32", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_open(UTF-32) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=ucnv_fromUChars(cnv, buffer, (int32_t)sizeof(buffer), surrogate, 1, &errorCode);
+    ucnv_close(cnv);
+    if(U_FAILURE(errorCode) ||
+        length!=8 ||
+        NULL == ucnv_detectUnicodeSignature(buffer, length, NULL, &errorCode)
+    ) {
+        log_err("ucnv_fromUChars(UTF-32, U+D900) did not write a BOM\n");
+    }
+
+    /* Simple API test of ucnv_setSubstString() + ucnv_getSubstChars(). */
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("ISO-8859-1", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_open(ISO-8859-1) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    ucnv_setSubstString(cnv, sub, LENGTHOF(sub), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_setSubstString(ISO-8859-1, sub[5]) failed - %s\n", u_errorName(errorCode));
+    } else {
+        len8 = sizeof(buffer);
+        ucnv_getSubstChars(cnv, buffer, &len8, &errorCode);
+        /* Stateless converter, we expect the string converted to charset bytes. */
+        if(U_FAILURE(errorCode) || len8!=sizeof(subChars) || 0!=uprv_memcmp(buffer, subChars, len8)) {
+            log_err("ucnv_getSubstChars(ucnv_setSubstString(ISO-8859-1, sub[5])) failed - %s\n", u_errorName(errorCode));
+        }
+    }
+    ucnv_close(cnv);
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("HZ", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_open(HZ) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    ucnv_setSubstString(cnv, sub, LENGTHOF(sub), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_setSubstString(HZ, sub[5]) failed - %s\n", u_errorName(errorCode));
+    } else {
+        len8 = sizeof(buffer);
+        ucnv_getSubstChars(cnv, buffer, &len8, &errorCode);
+        /* Stateful converter, we expect that the Unicode string was set and that we get an empty char * string now. */
+        if(U_FAILURE(errorCode) || len8!=0) {
+            log_err("ucnv_getSubstChars(ucnv_setSubstString(HZ, sub[5])) failed - %s\n", u_errorName(errorCode));
+        }
+    }
+    ucnv_close(cnv);
+
+    /*
+     * Further testing of ucnv_setSubstString() is done via intltest convert.
+     * We do not test edge cases of illegal arguments and similar because the
+     * function implementation uses all of its parameters in calls to other
+     * functions with UErrorCode parameters.
+     */
 }
