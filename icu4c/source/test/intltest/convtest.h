@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,7 +29,9 @@
 struct ConversionCase {
     int32_t caseNr;
     const char *charset, *cbopt, *name;
+    UChar subString[16];
     char subchar[8];
+    int8_t setSub;
 
     const uint8_t *bytes;
     int32_t bytesLength;

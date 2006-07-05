@@ -177,10 +177,31 @@ ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
                            UErrorCode * err)
 {
     UConverter *converter;
+    int32_t length;
+
     if(U_FAILURE(*err)) {
         return;
     }
     converter = args->converter;
+    length = converter->subCharLen;
+
+    if(length == 0) {
+        return;
+    }
+
+    if(length < 0) {
+        /*
+         * Write/convert the substitution string. Its real length is -length.
+         * Unlike the escape callback, we need not change the converter's
+         * callback function because ucnv_setSubstString() verified that
+         * the string can be converted, so we will not get a conversion error
+         * and will not recurse.
+         * At worst we should get a U_BUFFER_OVERFLOW_ERROR.
+         */
+        const UChar *source = (const UChar *)converter->subChars;
+        ucnv_cbFromUWriteUChars(args, &source, source - length, offsetIndex, err);
+        return;
+    }
 
     if(converter->sharedData->impl->writeSub!=NULL) {
         converter->sharedData->impl->writeSub(args, offsetIndex, err);
@@ -196,7 +217,7 @@ ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
     }
     else {
         ucnv_cbFromUWriteBytes(args,
-                               (const char *)converter->subChar, converter->subCharLen,
+                               (const char *)converter->subChars, length,
                                offsetIndex, err);
     }
 }

@@ -460,7 +460,7 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
         *p++= UCNV_CLOSE_BRACE;
         convData->isTargetUCharDBCS=FALSE;
     }
-    *p++= cnv->subChar[0];
+    *p++= (char)cnv->subChars[0];
 
     ucnv_cbFromUWriteBytes(args,
                            buffer, (int32_t)(p - buffer),

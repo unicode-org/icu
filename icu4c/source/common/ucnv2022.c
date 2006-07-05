@@ -470,7 +470,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
                 }
 
                 uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
-                uprv_memcpy(cnv->subChar, myConverterData->currentConverter->subChar, 4);
+                uprv_memcpy(cnv->subChars, myConverterData->currentConverter->subChars, 4);
                 cnv->subCharLen = myConverterData->currentConverter->subCharLen;
             }else{
                 myConverterData->currentConverter=ucnv_open("ibm-949",errorCode);
@@ -2869,7 +2869,7 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
     char buffer[8];
     int32_t length;
 
-    subchar=(char *)cnv->subChar;
+    subchar=(char *)cnv->subChars;
     length=cnv->subCharLen; /* assume length==1 for most variants */
 
     p = buffer;
@@ -2924,14 +2924,24 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
             }
             break;
         } else {
-            /* let the subconverter write the subchar */
-            args->converter = myConverterData->currentConverter;
-            uprv_memcpy(myConverterData->currentConverter->subChar, subchar, 4);
+            /* save the subconverter's substitution string */
+            uint8_t *currentSubChars = myConverterData->currentConverter->subChars;
+            int8_t currentSubCharLen = myConverterData->currentConverter->subCharLen;
+
+            /* set our substitution string into the subconverter */
+            myConverterData->currentConverter->subChars = (uint8_t *)subchar;
             myConverterData->currentConverter->subCharLen = (int8_t)length;
 
+            /* let the subconverter write the subchar, set/retrieve fromUChar32 state */
+            args->converter = myConverterData->currentConverter;
             myConverterData->currentConverter->fromUChar32 = cnv->fromUChar32;
             ucnv_cbFromUWriteSub(args, 0, err);
             cnv->fromUChar32 = myConverterData->currentConverter->fromUChar32;
+            args->converter = cnv;
+
+            /* restore the subconverter's substitution string */
+            myConverterData->currentConverter->subChars = currentSubChars;
+            myConverterData->currentConverter->subCharLen = currentSubCharLen;
 
             if(*err == U_BUFFER_OVERFLOW_ERROR) {
                 if(myConverterData->currentConverter->charErrorBufferLength > 0) {
@@ -2943,7 +2953,6 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
                 cnv->charErrorBufferLength = myConverterData->currentConverter->charErrorBufferLength;
                 myConverterData->currentConverter->charErrorBufferLength = 0;
             }
-            args->converter = cnv;
             return;
         }
     default:

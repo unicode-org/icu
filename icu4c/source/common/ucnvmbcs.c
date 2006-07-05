@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -3877,7 +3877,7 @@ ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
         length=1;
     } else {
         /* select subChar in all other cases */
-        subchar=(char *)cnv->subChar;
+        subchar=(char *)cnv->subChars;
         length=cnv->subCharLen;
     }
 

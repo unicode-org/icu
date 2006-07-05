@@ -183,7 +183,7 @@ ConversionTest::TestFromUnicode() {
     char charset[100], cbopt[4];
     const char *option;
     UnicodeString s, unicode, invalidUChars;
-    int32_t offsetsLength;
+    int32_t offsetsLength, index;
     UConverterFromUCallback callback;
 
     TestDataModule *dataModule;
@@ -242,15 +242,17 @@ ConversionTest::TestFromUnicode() {
                 }
 
                 s=testCase->getString("callback", errorCode);
+                cc.setSub=0; // default: no subchar
 
-                // read NUL-separated subchar first, if any
-                length=u_strlen(p=s.getTerminatedBuffer());
-                if(++length<s.length()) {
+                if((index=s.indexOf((UChar)0))>0) {
+                    // read NUL-separated subchar first, if any
                     // copy the subchar from Latin-1 characters
                     // start after the NUL
+                    p=s.getTerminatedBuffer();
+                    length=index+1;
                     p+=length;
                     length=s.length()-length;
-                    if(length>=(int32_t)sizeof(cc.subchar)) {
+                    if(length<=0 || length>=(int32_t)sizeof(cc.subchar)) {
                         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
                         int32_t j;
@@ -260,13 +262,26 @@ ConversionTest::TestFromUnicode() {
                         }
                         // NUL-terminate the subchar
                         cc.subchar[j]=0;
+                        cc.setSub=1;
                     }
 
                     // remove the NUL and subchar from s
-                    s.truncate(u_strlen(s.getBuffer()));
-                } else {
-                    // no subchar
-                    cc.subchar[0]=0;
+                    s.truncate(index);
+                } else if((index=s.indexOf((UChar)0x3d))>0) /* '=' */ {
+                    // read a substitution string, separated by an equal sign
+                    p=s.getBuffer()+index+1;
+                    length=s.length()-(index+1);
+                    if(length<=0 || length>=LENGTHOF(cc.subString)) {
+                        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                    } else {
+                        u_memcpy(cc.subString, p, length);
+                        // NUL-terminate the subString
+                        cc.subString[length]=0;
+                        cc.setSub=-1;
+                    }
+
+                    // remove the equal sign and subString from s
+                    s.truncate(index);
                 }
 
                 s.extract(0, 0x7fffffff, cbopt, sizeof(cbopt), "");
@@ -1052,10 +1067,19 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     // set the subchar
     int32_t length;
 
-    if((length=(int32_t)strlen(cc.subchar))!=0) {
+    if(cc.setSub>0) {
+        length=(int32_t)strlen(cc.subchar);
         ucnv_setSubstChars(cnv, cc.subchar, (int8_t)length, &errorCode);
         if(U_FAILURE(errorCode)) {
-            errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_setSubChars() failed - %s",
+            errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_setSubstChars() failed - %s",
+                    cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, u_errorName(errorCode));
+            ucnv_close(cnv);
+            return FALSE;
+        }
+    } else if(cc.setSub<0) {
+        ucnv_setSubstString(cnv, cc.subString, -1, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_setSubstString() failed - %s",
                     cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, u_errorName(errorCode));
             ucnv_close(cnv);
             return FALSE;
