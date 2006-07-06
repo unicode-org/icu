@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -116,7 +116,6 @@ const UnicodeString RBDataMap::getString(const char* key, UErrorCode &status) co
   if(U_SUCCESS(status)) {
     return r->getString(status);
   } else {
-    status = U_MISSING_RESOURCE_ERROR;
     return UnicodeString();
   }
 }
@@ -190,7 +189,6 @@ const UnicodeString* RBDataMap::getStringArray(int32_t& count, const char* key, 
     }
     return result;
   } else {
-    status = U_MISSING_RESOURCE_ERROR;
     return NULL;
   }
 }
@@ -214,7 +212,6 @@ const int32_t* RBDataMap::getIntArray(int32_t& count, const char* key, UErrorCod
     }
     return result;
   } else {
-    status = U_MISSING_RESOURCE_ERROR;
     return NULL;
   }
 }
