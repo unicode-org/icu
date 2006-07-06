@@ -12,7 +12,6 @@
 #include "unicode/brkiter.h"
 #include "unicode/coll.h"
 #include "cstring.h"
-#include "uassert.h"
 #include <stdio.h>
 
 const char* rawData[33][8] = {
@@ -119,37 +118,24 @@ const char* rawData[33][8] = {
         {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)", "" }
 };
 
-// * test macros
+
 /*
  Usage:
-    test_compare(    Function to be performed,
-                       Test of the function,
-                       expected result of the test,
-                       printable result
-                  )
+    test_assert(    Test (should be TRUE)  )
 
    Example:
-       test_compare(i=3,i,3, someNumberFormatter(i));
-       test_compare(0,1+1,2,someNumberFormatter(1+1));
+       test_assert(i==3);
 
-   Note that in the second example the expression is 0, because the fcn produces it's own result.
-
-   Macro is ugly but makes the tests pretty.
+   the macro is ugly but makes the tests pretty.
 */
 
-#define test_compare(expression,test,expected,printableResult) \
+#define test_assert(test) \
     { \
-        expression; \
-        \
-        if((test) != (expected)) \
-            errln("FAIL: " + UnicodeString(#expression) + "; -> " + printableResult + "\n" + \
-                    "   (" + UnicodeString(#test) + " != " + UnicodeString(#expected) + ")" ); \
+        if(!(test)) \
+            errln("FAIL: " #test " was not true. In " __FILE__ " on line %d", __LINE__ ); \
         else \
-            logln(UnicodeString(#expression) + " -> " + printableResult + " (" + UnicodeString(#test) + ")"); \
+            logln("PASS: asserted " #test); \
     }
-
-
-
 
 /*
  Usage:
@@ -164,13 +150,13 @@ const char* rawData[33][8] = {
 #define test_assert_print(test,print) \
     { \
         if(!(test)) \
-            errln("FAIL: " + UnicodeString(#test) + " was not true." + "-> " + UnicodeString(print) ); \
+            errln("FAIL: " #test " was not true. " + UnicodeString(print) ); \
         else \
-            logln("PASS: asserted " + UnicodeString(#test) + "-> " + UnicodeString(print)); \
+            logln("PASS: asserted " #test "-> " + UnicodeString(print)); \
     }
 
 
-#define test_dumpLocale(l) { UnicodeString s(l.getName(),""); logln(#l + UnicodeString(" = ") + s); }
+#define test_dumpLocale(l) { logln(#l " = " + UnicodeString(l.getName(), "")); }
 
 LocaleTest::LocaleTest()
 : dataTable(NULL)
@@ -510,24 +496,6 @@ LocaleTest::TestDisplayNames()
         errln("unable to get any default-locale display string for the country of zh_Hant\n");
     }
 }
-
-/*
- Usage:
-    test_assert(    Test (should be TRUE)  )
-
-   Example:
-       test_assert(i==3);
-
-   the macro is ugly but makes the tests pretty.
-*/
-
-#define test_assert(test) \
-    { \
-        if(!(test)) \
-            errln("FAIL: " + UnicodeString(#test) + " was not true. " + UnicodeString(__FILE__ " line ") + __LINE__ ); \
-        else \
-            logln("PASS: asserted " + UnicodeString(#test) ); \
-    }
 
 void LocaleTest::TestSimpleObjectStuff() {
     Locale  test1("aa", "AA");
@@ -1819,7 +1787,10 @@ void LocaleTest::TestGetLocale(void) {
     if (U_FAILURE(ec)) {
         errln("FAIL: NumberFormat::createInstance failed");
     } else {
-        U_ASSERT(dec->getDynamicClassID() == DecimalFormat::getStaticClassID());
+        if (dec->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+            errln("FAIL: NumberFormat::createInstance does not return a DecimalFormat");
+            return;
+        }
         valid = dec->getLocale(ULOC_VALID_LOCALE, ec);
         actual = dec->getLocale(ULOC_ACTUAL_LOCALE, ec);
         if (U_FAILURE(ec)) {
@@ -1829,7 +1800,10 @@ void LocaleTest::TestGetLocale(void) {
         }
 
         const DecimalFormatSymbols* sym = dec->getDecimalFormatSymbols();
-        U_ASSERT(sym != 0);
+        if (sym == NULL) {
+            errln("FAIL: getDecimalFormatSymbols returned NULL");
+            return;
+        }
         valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
         actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
         if (U_FAILURE(ec)) {
@@ -1850,7 +1824,10 @@ void LocaleTest::TestGetLocale(void) {
     if (dat == 0){
         dataerrln("Error calling DateFormat::createDateInstance()");
     } else {
-        U_ASSERT(dat->getDynamicClassID() == SimpleDateFormat::getStaticClassID());
+        if (dat->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
+            errln("FAIL: NumberFormat::createInstance does not return a DecimalFormat");
+            return;
+        }
         valid = dat->getLocale(ULOC_VALID_LOCALE, ec);
         actual = dat->getLocale(ULOC_ACTUAL_LOCALE, ec);
         if (U_FAILURE(ec)) {
@@ -1860,7 +1837,10 @@ void LocaleTest::TestGetLocale(void) {
         }
     
         const DateFormatSymbols* sym = dat->getDateFormatSymbols();
-        U_ASSERT(sym != 0);
+        if (sym == NULL) {
+            errln("FAIL: getDateFormatSymbols returned NULL");
+            return;
+        }
         valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
         actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
         if (U_FAILURE(ec)) {
