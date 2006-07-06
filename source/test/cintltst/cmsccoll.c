@@ -4686,6 +4686,58 @@ TestJ4960(void)
   genericRulesStarterWithOptionsAndResult(rule, tests2, sizeof(tests2)/sizeof(tests2[0]), att2, attVals2, sizeof(att2)/sizeof(att2[0]), UCOL_EQUAL);
 }
 
+static void
+TestJ5223(void)
+{
+  char *test = "this is a test string";
+  UChar ustr[256];
+  int32_t ustr_length = u_unescape(test, ustr, 256);
+  unsigned char sortkey[256];
+  int32_t sortkey_length;
+  UErrorCode status = U_ZERO_ERROR;
+  static UCollator *coll = NULL;
+  coll = ucol_open("root", &status);
+  if(U_FAILURE(status)) {
+    log_err("Couldn't open UCA\n");
+    return;
+  }
+  ucol_setStrength(coll, UCOL_PRIMARY);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+  if (U_FAILURE(status)) {
+    log_err("Failed setting atributes\n");
+    return;
+  } 
+  sortkey_length = ucol_getSortKey(coll, ustr, ustr_length, NULL, 0);
+  if (sortkey_length > 256) return;
+
+  /* we mark the position where the null byte should be written in advance */
+  sortkey[sortkey_length-1] = 0xAA;
+
+  /* we set the buffer size one byte higher than needed */
+  sortkey_length = ucol_getSortKey(coll, ustr, ustr_length, sortkey,
+    sortkey_length+1);
+
+  /* no error occurs (for me) */
+  if (sortkey[sortkey_length-1] == 0xAA) {
+    log_err("Hit bug at first try\n");
+  }
+
+  /* we mark the position where the null byte should be written again */
+  sortkey[sortkey_length-1] = 0xAA;
+
+  /* this time we set the buffer size to the exact amount needed */
+  sortkey_length = ucol_getSortKey(coll, ustr, ustr_length, sortkey,
+    sortkey_length);
+
+  /* now the trailing null byte is not written */
+  if (sortkey[sortkey_length-1] == 0xAA) {
+    log_err("Hit bug at second try\n");
+  }
+
+  ucol_close(coll);
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4752,6 +4804,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestThaiSortKey);
     TEST(TestUpperFirstQuaternary);
     TEST(TestJ4960);
+    TEST(TestJ5223);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
