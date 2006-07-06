@@ -4533,7 +4533,10 @@ ucol_calcSortKey(const    UCollator    *coll,
       }
       return keyLen;
     }
-    uint8_t *primarySafeEnd = primaries + resultLength - 2;
+    uint8_t *primarySafeEnd = primaries + resultLength - 1;
+    if(strength > UCOL_PRIMARY) {
+        primarySafeEnd--;
+    }
 
     uint32_t minBufferSize = UCOL_MAX_BUFFER;
 
@@ -4804,7 +4807,10 @@ ucol_calcSortKey(const    UCollator    *coll,
                 primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sks, status);
                 if(U_SUCCESS(*status)) {
                   *result = primStart;
-                  primarySafeEnd = primStart + resultLength - 2;
+                  primarySafeEnd = primStart + resultLength - 1;
+                  if(strength > UCOL_PRIMARY) {
+                      primarySafeEnd--;
+                  }
                 } else {
                   IInit_collIterate(coll, (UChar *)source, len, &s);
                   if(source == normSource) {
