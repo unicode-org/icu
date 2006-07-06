@@ -2047,7 +2047,7 @@ static void TestFallback()
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
         const UChar* version = NULL;
-        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0032, 0x0000};
+        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0033, 0x0033, 0x0000};
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
@@ -2082,7 +2082,6 @@ static void TestResourceLevelAliasing(void) {
     UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;  
     const char* testdatapath = NULL;
     const UChar *string = NULL, *sequence = NULL;
-
     /*const uint8_t *binary = NULL, *binSequence = NULL;*/
     int32_t strLen = 0, seqLen = 0;/*, binLen = 0, binSeqLen = 0;*/
     char buffer[100];
