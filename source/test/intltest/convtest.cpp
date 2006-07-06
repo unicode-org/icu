@@ -271,7 +271,7 @@ ConversionTest::TestFromUnicode() {
                     // read a substitution string, separated by an equal sign
                     p=s.getBuffer()+index+1;
                     length=s.length()-(index+1);
-                    if(length<=0 || length>=LENGTHOF(cc.subString)) {
+                    if(length<0 || length>=LENGTHOF(cc.subString)) {
                         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
                         u_memcpy(cc.subString, p, length);
