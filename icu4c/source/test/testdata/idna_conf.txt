@@ -1,4 +1,4 @@
-=====
+﻿=====
 desc: Copyright 2003-2005 http://idnconnect.jdna.jp/testbed.html 
 namebase: <00ED>dn
 nameutf8: ídn
