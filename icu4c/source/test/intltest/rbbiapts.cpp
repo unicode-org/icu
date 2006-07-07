@@ -1044,8 +1044,8 @@ void RBBIAPITest::TestRoundtripRules() {
     RoundtripRule("line");
     RoundtripRule("char");
     if (!quick) {
-        RoundtripRule("word_th");
-        RoundtripRule("line_th");
+        RoundtripRule("word_ja");
+        RoundtripRule("word_POSIX");
     }
 }
 
