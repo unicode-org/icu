@@ -829,7 +829,13 @@ typedef enum UBiDiReorderingOption {
      * <code>ubidi_setPara</code>.</p>
      *
      * <p>This option is significant only with reordering modes which generate
-     * a result with Logical order.</p>
+     * a result with Logical order, specifically:</p>
+     * <ul>
+     *   <li><code>UBIDI_REORDER_RUNS_ONLY</code></li>
+     *   <li><code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code></li>
+     *   <li><code>UBIDI_REORDER_INVERSE_LIKE_DIRECT</code></li>
+     *   <li><code>UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code></li>
+     * </ul>
      *
      * <p>If this option is set in conjunction with reordering mode
      * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> or with calling
@@ -839,7 +845,7 @@ typedef enum UBiDiReorderingOption {
      *
      * <p>For other reordering modes, a minimum number of LRM or RLM characters
      * will be added to the source text after reordering it so as to ensure
-     * round trip, i.e. applying the inverse reordering mode on the
+     * round trip, i.e. when applying the inverse reordering mode on the
      * resulting logical text with removal of BiDi marks
      * (option <code>UBIDI_OPTION_REMOVE_CONTROLS</code> set before calling
      * <code>ubidi_setPara</code> or option <code>UBIDI_REMOVE_BIDI_CONTROLS</code>
@@ -1438,6 +1444,9 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  *
  * @param indexMap is a pointer to an array of <code>ubidi_getProcessedLength()</code>
  *        indexes which will reflect the reordering of the characters.
+ *        If option <code>UBIDI_OPTION_INSERT_MARKS</code> is set, the number
+ *        of elements in <code>indexMap</code> must be no less than
+ *        <code>ubidi_getResultLength()</code>.
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.<p>
  *
@@ -1446,6 +1455,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
  * @see ubidi_getProcessedLength
+ * @see ubidi_getResultLength
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
@@ -1463,6 +1473,9 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  *
  * @param indexMap is a pointer to an array of <code>ubidi_getResultLength()</code>
  *        indexes which will reflect the reordering of the characters.
+ *        If option <code>UBIDI_OPTION_REMOVE_CONTROLS_MARKS</code> is set, the number
+ *        of elements in <code>indexMap</code> must be no less than
+ *        <code>ubidi_getProcessedLength()</code>.
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.<p>
  *
@@ -1470,6 +1483,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  *
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
+ * @see ubidi_getProcessedLength
  * @see ubidi_getResultLength
  * @stable ICU 2.0
  */
@@ -1524,16 +1538,29 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
 
 /**
  * Invert an index map.
- * The one-to-one index mapping of the first map is inverted and written to
+ * The index mapping of the first map is inverted and written to
  * the second one.
  *
  * @param srcMap is an array with <code>length</code> indexes
- *        which define the original mapping.
+ *        which defines the original mapping from a source array containing
+ *        <code>length</code> elements to a destination array.
+ *        All indexes must be >=0 or equal to <code>UBIDI_MAP_NOWHERE</code>.
+ *        This special value means that the corresponding elements in the source
+ *        array have no matching element in the destination array.
+ *        Some indexes may have a value >= <code>length</code>, if the
+ *        destination array has more elements than the source array.
+ *        There must be no duplicate indexes (two or more indexes with the
+ *        same value except <code>UBIDI_MAP_NOWHERE</code>).
  *
- * @param destMap is an array with <code>length</code> indexes
- *        which will be filled with the inverse mapping.
+ * @param destMap is an array with a number of indexes equal to 1 + the highest
+ *        value in <code>srcMap</code>.
+ *        <code>destMap</code> will be filled with the inverse mapping.
+ *        Elements of <destMap> which have no matching elements in
+ *        <code>srcMap</code> will receive an index equal to
+ *        <code>UBIDI_MAP_NOWHERE</code>
  *
  * @param length is the length of each array.
+ * @See UBIDI_MAP_NOWHERE
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
@@ -1628,7 +1655,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * <code>ubidi_getLogicalRun</code></li>
  * <li>maximum value of the <code>logicalIndex</code> argument of
  * <code>ubidi_getVisualIndex</code></li>
- * <li>number of elements of the <code>*indexMap</code> argument of
+ * <li>number of elements filled in the <code>*indexMap</code> argument of
  * <code>ubidi_getLogicalMap</code></li>
  * <li>length of text processed by <code>ubidi_writeReordered</code></li>
  * </ul>
