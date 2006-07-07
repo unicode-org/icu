@@ -1863,7 +1863,7 @@ printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels) {
     log_verbose(" }");
 }
 
-/* new BIDI API
+/* new BIDI API */
 
 /* Reordering Mode BiDi --------------------------------------------------------- */
 
