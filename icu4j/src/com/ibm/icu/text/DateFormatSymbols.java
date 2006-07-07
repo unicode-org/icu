@@ -1225,9 +1225,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String[] strings = (String[])zoneStringsHash.get(zid);
         if(strings != null){
             for(int j=0; j<TIMEZONE_COUNT; j++){
-                if(strings[j] != null && text.regionMatches(true, start, strings[j],0, strings[j].length())){
-                    item.type = j;
-                    item.value = strings[j];
+                String zoneName = strings[j];
+                
+                if (j == TIMEZONE_EXEMPLAR_CITY) {
+                    zoneName = ZoneMeta.displayFallback(zid, zoneName, requestedLocale);
+                }
+                
+                if(zoneName != null && text.regionMatches(true, start, zoneName, 0, zoneName.length())){
+                    item.type = j; 
+                    item.value = zoneName;
                     item.zid = zid;
                     return item;
                 }
@@ -1245,9 +1251,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             String[] strings = (String[])zoneStringsHash.get(key);
             if(strings != null){
                 for(int j=0; j<TIMEZONE_COUNT; j++){
-                    if(strings[j]!=null && text.regionMatches(true, start, strings[j],0, strings[j].length())){
+                    String zoneName = strings[j];
+                    
+                    if (j == TIMEZONE_EXEMPLAR_CITY) {
+                        zoneName = ZoneMeta.displayFallback(key, zoneName, requestedLocale);
+                    }
+                    
+                    if(zoneName != null && text.regionMatches(true, start, zoneName, 0, zoneName.length())){
                         item.type = j;
-                        item.value = strings[j];
+                        item.value = zoneName;
                         item.zid = key;
                         return item;
                     }
