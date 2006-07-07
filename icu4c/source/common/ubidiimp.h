@@ -126,10 +126,18 @@ typedef int32_t Para;
 #define LF  0x000A
 
 /* Run structure for reordering --------------------------------------------- */
+enum {
+    LRM_BEFORE=1,
+    LRM_AFTER=2,
+    RLM_BEFORE=4,
+    RLM_AFTER=8
+};
 
 typedef struct Run {
     int32_t logicalStart,   /* first character of the run; b31 indicates even/odd level */
-            visualLimit;    /* last visual position of the run +1 */
+            visualLimit,    /* last visual position of the run +1 */
+            insertRemove;   /* if >0, flags for inserting LRM/RLM before/after run,
+                               if <0, count of bidi controls within run            */
 } Run;
 
 /* in a Run, logicalStart will get this bit set if the run level is odd */
@@ -147,13 +155,24 @@ typedef struct Run {
 U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi);
 
+/** BiDi control code points */
+enum {
+    LRM_CHAR=0x200e,
+    RLM_CHAR,
+    LRE_CHAR=0x202a,
+    RLE_CHAR,
+    PDF_CHAR,
+    LRO_CHAR,
+    RLO_CHAR
+};
+
+#define IS_BIDI_CONTROL_CHAR(c) (((uint32_t)(c)&0xfffffffe)==LRM_CHAR || (uint32_t)((c)-LRE_CHAR)<5)
+
 /* InsertPoints structure for noting where to put BiDi marks ---------------- */
 
 typedef struct Point {
     int32_t pos;            /* position in text */
-    UChar c;                /* UChar to insert */
-    char  where;            /* BEFORE or AFTER */
-    char  filler;           /* pack to 8 bytes */
+    int32_t flag;           /* flag for LRM/RLM, before/after */
 } Point;
 
 typedef struct InsertPoints {
@@ -267,7 +286,7 @@ struct UBiDi {
     InsertPoints insertPoints;
 
     /* for option UBIDI_OPTION_REMOVE_CONTROLS */
-    int32_t countBiDiControls;
+    int32_t controlCount;
 
     /* for Bidi class callback */
     UBiDiClassCallback *fnClassCallback;    /* action pointer */
