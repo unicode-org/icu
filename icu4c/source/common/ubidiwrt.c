@@ -46,18 +46,6 @@
 # error reimplement ubidi_writeReordered() for UTF-8, see comment above
 #endif
 
-/** BiDi control code points */
-enum {
-    LRM_CHAR=0x200e,
-    RLM_CHAR,
-    LRE_CHAR=0x202a,
-    RLE_CHAR,
-    PDF_CHAR,
-    LRO_CHAR,
-    RLO_CHAR
-};
-
-#define IS_BIDI_CONTROL_CHAR(c) (((uint32_t)(c)&0xfffffffe)==LRM_CHAR || (uint32_t)((c)-LRE_CHAR)<5)
 #define IS_COMBINING(type) ((1UL<<(type))&(1UL<<U_NON_SPACING_MARK|1UL<<U_COMBINING_SPACING_MARK|1UL<<U_ENCLOSING_MARK))
 
 /*
@@ -371,7 +359,6 @@ ubidi_writeReordered(UBiDi *pBiDi,
     UChar *saveDest;
     int32_t length, destCapacity;
     int32_t run, runCount, logicalStart, runLength;
-    InsertPoints * pInsertPoints=&(pBiDi->insertPoints);
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -470,51 +457,26 @@ ubidi_writeReordered(UBiDi *pBiDi,
             const UChar *src;
             UChar uc;
             UBiDiDirection dir;
-            char markerFlags;
-            enum {
-                LRM_BEFORE=1,
-                LRM_AFTER=2,
-                RLM_BEFORE=4,
-                RLM_AFTER=8
-            };
-            enum {
-                BEFORE=0,
-                AFTER=1
-            };
+            uint32_t markFlag;
 
             for(run=0; run<runCount; ++run) {
                 dir=ubidi_getVisualRun(pBiDi, run, &logicalStart, &runLength);
                 src=text+logicalStart;
-                markerFlags=0;
                 /* check if something relevant in insertPoints */
-                if (pInsertPoints->size > 0) {
-                    Point *points=pInsertPoints->points,
-                          *pointsLimit=points+pInsertPoints->size;
-                    for ( ; points < pointsLimit; points++) {
-                        if (points->pos < logicalStart)
-                            continue;
-                        if (points->pos >= logicalStart+runLength)
-                            continue;
-                        if (points->where == BEFORE)
-                            if (points->c == LRM_CHAR)
-                                markerFlags|=LRM_BEFORE;
-                            else  markerFlags|=RLM_BEFORE;
-                        else
-                            if (points->c == LRM_CHAR)
-                                markerFlags|=LRM_AFTER;
-                            else  markerFlags|=RLM_AFTER;
-                    }
+                markFlag=pBiDi->runs[run].insertRemove;
+                if(markFlag<0) {        /* insert count */
+                    markFlag=0;
                 }
 
                 if(UBIDI_LTR==dir) {
                     if((pBiDi->isInverse) &&
                        (/*run>0 &&*/ dirProps[logicalStart]!=L)) {
-                        markerFlags |= LRM_BEFORE;
+                        markFlag |= LRM_BEFORE;
                     }
-                    if (markerFlags & LRM_BEFORE) {
+                    if (markFlag & LRM_BEFORE) {
                         uc=LRM_CHAR;
                     }
-                    else if (markerFlags & RLM_BEFORE) {
+                    else if (markFlag & RLM_BEFORE) {
                         uc=RLM_CHAR;
                     }
                     else  uc=0;
@@ -533,12 +495,12 @@ ubidi_writeReordered(UBiDi *pBiDi,
 
                     if((pBiDi->isInverse) &&
                        (/*run<runCount-1 &&*/ dirProps[logicalStart+runLength-1]!=L)) {
-                        markerFlags |= LRM_AFTER;
+                        markFlag |= LRM_AFTER;
                     }
-                    if (markerFlags & LRM_AFTER) {
+                    if (markFlag & LRM_AFTER) {
                         uc=LRM_CHAR;
                     }
-                    else if (markerFlags & RLM_AFTER) {
+                    else if (markFlag & RLM_AFTER) {
                         uc=RLM_CHAR;
                     }
                     else  uc=0;
@@ -551,12 +513,12 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 } else {                /* RTL run */
                     if((pBiDi->isInverse) &&
                        (/*run>0 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart+runLength-1])))) {
-                        markerFlags |= RLM_BEFORE;
+                        markFlag |= RLM_BEFORE;
                     }
-                    if (markerFlags & LRM_BEFORE) {
+                    if (markFlag & LRM_BEFORE) {
                         uc=LRM_CHAR;
                     }
-                    else if (markerFlags & RLM_BEFORE) {
+                    else if (markFlag & RLM_BEFORE) {
                         uc=RLM_CHAR;
                     }
                     else  uc=0;
@@ -575,12 +537,12 @@ ubidi_writeReordered(UBiDi *pBiDi,
 
                     if((pBiDi->isInverse) &&
                        (/*run<runCount-1 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart])))) {
-                        markerFlags |= RLM_AFTER;
+                        markFlag |= RLM_AFTER;
                     }
-                    if (markerFlags & LRM_AFTER) {
+                    if (markFlag & LRM_AFTER) {
                         uc=LRM_CHAR;
                     }
-                    else if (markerFlags & RLM_AFTER) {
+                    else if (markFlag & RLM_AFTER) {
                         uc=RLM_CHAR;
                     }
                     else  uc=0;
