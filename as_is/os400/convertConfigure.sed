@@ -1,9 +1,13 @@
 # Copyright (C) 2006-2006, International Business Machines Corporation
 # and others.  All Rights Reserved.
 #
-# Use "test -x" instead of "test -f"
+# Use "test -x" instead of "test -f" most of the time.
 # due to how executables are created in a different file system.
-s/test[ ]*-f/test -x/g
+s/as_executable_p="test -f"/as_executable_p="test -x"/g
+s/test -f "$ac_file"/test -x "$ac_file"/g
+s/test -f $ac_dir\/install-sh/test -x $ac_dir\/install-sh/g
+s/test -f $ac_dir\/install.sh/test -x $ac_dir\/install.sh/g
+s/test -f $ac_dir\/shtool/test -x $ac_dir\/shtool/g
 # Use the more efficient del instead of rm command.
 s/rm[ ]*-rf/del -f/g
 s/rm[ ]*-fr/del -f/g
