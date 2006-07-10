@@ -540,7 +540,7 @@ utext_previous32From(UText *ut, int64_t nativeIndex);
   * @draft ICU 3.4
   */
 U_DRAFT int64_t U_EXPORT2
-utext_getNativeIndex(UText *ut);
+utext_getNativeIndex(const UText *ut);
 
 /**
  * Set the current iteration position to the nearest code point
@@ -892,7 +892,14 @@ enum {
      * @see Replaceable::hasMetaData()
      * @draft ICU 3.4
      */ 
-    UTEXT_PROVIDER_HAS_META_DATA = 4
+    UTEXT_PROVIDER_HAS_META_DATA = 4,
+    /**
+     * Text provider owns the text storage.
+     *  Generally occurs as the result of a deep clone of the UText.
+     *  When closing the UText, the associated text must
+     *  also be closed/deleted/freed/ whatever is appropriate.
+     */
+     UTEXT_PROVIDER_OWNS_TEXT = 5
 };
 
 /**
@@ -1092,7 +1099,7 @@ UTextCopy(UText *ut,
  * @draft ICU 3.4
  */
 typedef int64_t U_CALLCONV
-UTextMapOffsetToNative(UText *ut);
+UTextMapOffsetToNative(const UText *ut);
 
 /**
  * Function type declaration for UText.mapIndexToUTF16().
@@ -1110,7 +1117,7 @@ UTextMapOffsetToNative(UText *ut);
  * @draft ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextMapNativeIndexToUTF16(UText *ut, int64_t nativeIndex);
+UTextMapNativeIndexToUTF16(const UText *ut, int64_t nativeIndex);
 
 
 /**

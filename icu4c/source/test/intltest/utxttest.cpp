@@ -25,13 +25,13 @@ static int    gTestNum = 0;
 UText *openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
 
 #define TEST_ASSERT(x) \
-{if ((x)==FALSE) {errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__);\
+{ if ((x)==FALSE) {errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__);\
                      gFailed = TRUE;\
    }}
 
 
 #define TEST_SUCCESS(status) \
-{if (U_FAILURE(status)) {errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
+{ if (U_FAILURE(status)) {errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
        gTestNum, __FILE__, __LINE__, u_errorName(status)); \
        gFailed = TRUE;\
    }}
@@ -582,7 +582,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
             return;
         }
     }
-    foundC = utext_next32(ut);
+    foundC = UTEXT_NEXT32(ut);
     TEST_ASSERT(foundC == U_SENTINEL);
 
     //

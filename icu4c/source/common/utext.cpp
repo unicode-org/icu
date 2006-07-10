@@ -89,14 +89,13 @@ utext_isLengthExpensive(const UText *ut) {
 
 
 U_DRAFT int64_t U_EXPORT2
-utext_getNativeIndex(UText *ut) {
+utext_getNativeIndex(const UText *ut) {
     if(ut->chunkOffset <= ut->nativeIndexingLimit) {
         return ut->chunkNativeStart+ut->chunkOffset;
     } else {
         return ut->mapOffsetToNative(ut);
     }
 }
-
 
 
 U_DRAFT void U_EXPORT2
@@ -439,15 +438,14 @@ utext_equals(const UText *a, const UText *b) {
     }
 
     if (a->context != b->context) {
+        // Different sources (different strings)
         return FALSE;
     }
-    if (a->chunkNativeStart != b->chunkNativeStart ||
-        a->chunkOffset != b->chunkOffset) {
-            // The iteration position is different.
-            //  TODO:  this test could fail to work correctly if the provider
-            //         makes non-deterministic chunks.
-            return FALSE;
+    if (utext_getNativeIndex(a) != utext_getNativeIndex(b)) {
+        // Different current position in the string.
+        return FALSE;
     }
+
     return TRUE;
 }
 
@@ -817,11 +815,6 @@ shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
     adjustPointer(dest, &dest->p, src);
     adjustPointer(dest, &dest->q, src);
     adjustPointer(dest, &dest->r, src);
-    adjustPointer(dest, &dest->r, src);
-    adjustPointer(dest, &dest->r, src);
-    adjustPointer(dest, &dest->r, src);
-    adjustPointer(dest, &dest->r, src);
-
 
     return dest;
 }
@@ -833,175 +826,576 @@ U_CDECL_END
 
 //------------------------------------------------------------------------------
 //
-//     UText implementation for UTF-8 strings (read-only) 
+//     UText implementation for UTF-8 char * strings (read-only) 
+//     Limitation:  string length must be <= 0x7fffffff in length.
+//                  (length must for in an int32_t variable)
 //
 //         Use of UText data members:
 //              context    pointer to UTF-8 string
-//              utext.b  is the input string length (bytes).
-//              utext.p  pointer to allocated utf-8 string if owned by this utext (after a clone)
-//              utext.q  pointer to the filled part of the Map array.
-//
-//      TODO:  make creation of the index mapping array lazy.
-//             Create it for a chunk the first time the user asks for an index.
+//              utext.b    is the input string length (bytes).
+//              utext.c    Length scanned so far in string
+//                           (for optimizing finding length of zero terminated strings.)
+//              utext.p    pointer to the current buffer
+//              utext.q    pointer to the other buffer.
 //
 //------------------------------------------------------------------------------
 
-enum { UTF8_TEXT_CHUNK_SIZE=10 };
+// Chunk size.
+//     Must be less than 85, because of byte mapping from UChar indexes to native indexes.
+//     Worst case is three native bytes to one UChar.  (Supplemenaries are 4 native bytes
+//     to two UChars.)
+//
+enum { UTF8_TEXT_CHUNK_SIZE=32 };
 
-struct UTF8Extra {
-    /*
-     * Chunk UChars.
-     * +1 to simplify filling with surrogate pair at the end.
-     */
-    UChar s[UTF8_TEXT_CHUNK_SIZE+1];
-    /*
-     * Index map, from UTF-16 indexes into s back to native indexes.
-     * +2: length of s[] + one more for chunk limit index.
-     *
-     * When accessing preceding text, chunk.contents may point into the middle
-     * of s[].
-     */
-    int32_t map[UTF8_TEXT_CHUNK_SIZE+2];
-};
-
+//
+// UTF8Buf  Two of these structs will be set up in the UText's extra allocated space.
+//          Each contains the UChar chunk buffer, the to and from native maps, and
+//          header info.
+//
 //     because backwards iteration fills the buffers starting at the end and
 //     working towards the front, the filled part of the buffers may not begin
 //     at the start of the available storage for the buffers.
+//
+//     Buffer size is one bigger than the specified UTF8_TEXT_CHUNK_SIZE to allow for
+//     the last character added being a supplementary, and thus requiring a surrogate
+//     pair.  Doing this is simpler than checking for the edge case.
+//
+
+struct UTF8Buf {
+    int32_t   bufNativeStart;                        // Native index of first char in UChar buf
+    int32_t   bufNativeLimit;                        // Native index following last char in buf.
+    int32_t   bufStartIdx;                           // First filled position in buf.
+    int32_t   bufLimitIdx;                           // Limit of filled range in buf.
+    int32_t   bufNILimit;                            // Limit of native indexing part of buf
+    int32_t   toUCharsMapStart;                      // Native index corresponding to 
+                                                     //   mapToUChars[0].
+                                                     //   Set to bufNativeStart when filling forwards.
+                                                     //   Set to computed value when filling backwards.
+
+    UChar     buf[UTF8_TEXT_CHUNK_SIZE+4];           // The UChar buffer.  Requires one extra position beyond the
+                                                     //   the chunk size, to allow for surrogate at the end.
+                                                     //   Length must be identical to mapToNative array, below,
+                                                     //   because of the way indexing works when the array is
+                                                     //   filled backwards during a reverse iteration.  Thus,
+                                                     //   the additional extra size.
+    uint8_t   mapToNative[UTF8_TEXT_CHUNK_SIZE+4];   // map UChar index in buf to 
+                                                     //  native offset from bufNativeStart.
+                                                     //  Requires two extra slots,
+                                                     //    one for a supplementary starting in the last normal position,
+                                                     //    and one for an entry for the buffer limit position.
+    uint8_t   mapToUChars[UTF8_TEXT_CHUNK_SIZE*3+6]; // Map native offset from bufNativeStart to
+                                                     //   correspoding offset in filled part of buf.
+    int32_t   align;
+};
 
 U_CDECL_BEGIN
 
-
+//
+//   utf8TextLength
+//
+//        Get the length of the string.  If we don't already know it,
+//              we'll need to scan for the trailing  nul.
+//
 static int64_t U_CALLCONV
 utf8TextLength(UText *ut) {
+    if (ut->b < 0) {
+        // Zero terminated string, and we haven't scanned to the end yet.
+        // Scan it now.
+        const char *r = (const char *)ut->context + ut->c;
+        while (*r != 0) {
+            r++;
+        }
+        if ((r - (const char *)ut->context) < 0x7fffffff) {
+            ut->b = (int32_t)(r - (const char *)ut->context);
+        } else {
+            // Actual string was bigger (more than 2 gig) than we
+            //   can handle.  Clip it to 2 GB.
+            ut->b = 0x7fffffff;
+        }
+        ut->providerProperties &= ~I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE);
+    }
     return ut->b;
 }
 
-        
-   
+
+
+
+
 
 static UBool U_CALLCONV
 utf8TextAccess(UText *ut, int64_t index, UBool forward) {
+    //
+    //  Apologies to those who are allergic to goto statements.
+    //    Consider each goto to a labelled block to be the equivalent of
+    //         call the named block as if it were a function();
+    //         return;
+    //
     const uint8_t *s8=(const uint8_t *)ut->context;
-    UChar32  c;
-    int32_t  i;
-    int32_t  length = ut->b;              // Length of original utf-8
+    UTF8Buf *u8b = NULL;
+    int32_t  length = ut->b;         // Length of original utf-8
+    int32_t  ix= (int32_t)index;     // Requested index, trimmed to 32 bits.
+    int32_t  mapIndex = 0;
+    if (index<0) {
+        ix=0;
+    } else if (index > 0x7fffffff) {
+        // Strings with 64 bit lengths not supported by this UTF-8 provider.
+        ix = 0x7fffffff;
+    }
 
-    UTF8Extra  *ut8e   = (UTF8Extra *)ut->pExtra;
-    UChar      *u16buf = ut8e->s;
-    int32_t    *map    = ut8e->map;
-
-    int32_t  index32 = pinIndex(index, length);
-
-    if(forward) {
-        if(index32 >= length) {
-            resetChunk(ut, length);
-            return FALSE;
-        }
-
-        c=s8[index32];
-        if(c<=0x7f) {
-            // get a run of ASCII characters.
-            // Even if we don't fill the buffer, we will stop with the first
-            //   non-ascii char, so that the buffer can use utf-16 indexing.
-            ut->chunkNativeStart=index32;
-            u16buf[0]=(UChar)c;
-            for(i=1, ++index32;
-                i<UTF8_TEXT_CHUNK_SIZE && index32<length && (c=s8[index32])<=0x7f;
-                ++i, ++index32
-            ) {
-                u16buf[i]=(UChar)c;
+    // Pin requested index to the string length.
+    if (ix>length) {
+        if (length>=0) {
+            ix=length;
+        } else if (ix>ut->c) {
+            // Zero terminated string, and requested index is beyond
+            //   the region that has already been scanned.
+            //   Scan up to either the end of the string or to the
+            //   requested position, whichever comes first.
+            while (ut->c<ix && s8[ut->c]!=0) {
+                ut->c++;
             }
-            ut->nativeIndexingLimit = i;   // Native indexing in this chunk.
-        } else {
-            // get a chunk of characters starting with a non-ASCII one
-            U8_SET_CP_START(s8, 0, index32);  // put utf-8 index at first byte of char, if not there already.
-            ut->chunkNativeStart=index32;
-            for(i=0;  i<UTF8_TEXT_CHUNK_SIZE && index32<length;  ) {
-                //  i     is utf-16 index into chunk buffer.
-                //  index is utf-8 index into original string
-                map[i]=(int32_t)index32;
-                map[i+1]=index32; // in case there is a trail surrogate
-                U8_NEXT(s8, index32, length, c);
-                if(c<0) {
-                    c=0xfffd; // use SUB for illegal sequences
+            //  TODO:  check for null terminated string length > 32 bits.
+            if (s8[ut->c] == 0) {
+                // We just found the actual length of the string.
+                //  Trim the requested index back to that.
+                ix     = ut->c;
+                ut->b  = ut->c;
+                length = ut->c;
+                ut->providerProperties &= ~I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE);
+            }
+        }
+    }
+
+    //
+    // Dispatch to the appropriate action for a forward iteration request.
+    //
+    if (forward) {
+        if (ix==ut->chunkNativeLimit) {
+            // Check for normal sequential iteration cases first.
+            if (ix==length) {
+                // Just reached end of string
+                // Don't swap buffers, but do set the 
+                //   current buffer position.
+                ut->chunkOffset = ut->chunkLength;
+                return FALSE;
+            } else {
+                // End of current buffer.
+                //   check whether other buffer already has what we need.
+                UTF8Buf *altB = (UTF8Buf *)ut->q;
+                if (ix>=altB->bufNativeStart && ix<altB->bufNativeLimit) {
+                    goto swapBuffers;
                 }
-                U16_APPEND_UNSAFE(u16buf, i, c);    // post-increments i.
             }
-            map[i]=index32;
-            ut->nativeIndexingLimit = 0;   // non-native indexing in chunk
         }
-        ut->chunkContents    = u16buf;
-        ut->chunkLength      = i;
-        ut->chunkNativeLimit = index32;
-        ut->q                = map;  
-        ut->chunkOffset      = 0;      // chunkOffset corresponding to index
-        return TRUE; 
+
+        // A random access.  Desired index could be in either or niether buf.
+        // For optimizing the order of testing, first check for the index
+        //    being in the other buffer.  This will be the case for uses that 
+        //    move back and forth over a fairly limited range
+        {
+            u8b = (UTF8Buf *)ut->q;   // the alternate buffer
+            if (ix>=u8b->bufNativeStart && ix<u8b->bufNativeLimit) {
+                // Requested index is in the other buffer.
+                goto swapBuffers;
+            }
+            if (ix == length) {
+                // Requested index is end-of-string.
+                //   (this is the case of randomly seeking to the end.
+                //    The case of iterating off the end is handled earlier.)
+                if (ix == ut->chunkNativeLimit) {
+                    // Current buffer extends up to the end of the string.
+                    //   Leave it as the current buffer.
+                    ut->chunkOffset = ut->chunkLength;
+                    return FALSE;
+                }
+                if (ix == u8b->bufNativeLimit) {
+                    // Alternate buffer extends to the end of string.
+                    //   Swap it in as the current buffer.
+                    goto swapBuffersAndFail;
+                } 
+
+                // Neither existing buffer extends to the end of the string.
+                goto makeStubBuffer;
+            }
+
+            if (ix<ut->chunkNativeStart || ix>=ut->chunkNativeLimit) {
+                // Requested index is in neither buffer.
+                goto fillForward;
+            }
+
+            // Requested index is in this buffer.
+            u8b = (UTF8Buf *)ut->p;   // the current buffer
+            mapIndex = ix - u8b->toUCharsMapStart;
+            ut->chunkOffset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
+            return TRUE;
+
+        }
+    }
+
+
+    //
+    // Dispatch to the appropriate action for a 
+    //   Backwards Diretion iteration request.
+    //
+    if (ix==ut->chunkNativeStart) {
+        // Check for normal sequential iteration cases first.
+        if (ix==0) {
+            // Just reached the start of string
+            // Don't swap buffers, but do set the 
+            //   current buffer position.
+            ut->chunkOffset = 0;
+            return FALSE;
+        } else {
+            // Start of current buffer.
+            //   check whether other buffer already has what we need.
+            UTF8Buf *altB = (UTF8Buf *)ut->q;
+            if (ix>altB->bufNativeStart && ix<=altB->bufNativeLimit) {
+                goto swapBuffers;
+            }
+        }
+    }
+
+    // A random access.  Desired index could be in either or niether buf.
+    // For optimizing the order of testing,
+    //    Most likely case:  in the other buffer.
+    //    Second most likely: in neither buffer.
+    //    Unlikely, but must work:  in the current buffer.
+    u8b = (UTF8Buf *)ut->q;   // the alternate buffer
+    if (ix>u8b->bufNativeStart && ix<=u8b->bufNativeLimit) {
+        // Requested index is in the other buffer.
+        goto swapBuffers;
+    }
+    // Requested index is start-of-string.
+    //   (this is the case of randomly seeking to the start.
+    //    The case of iterating off the start is handled earlier.)
+    if (ix==0) {
+        if (u8b->bufNativeStart==0) {
+            // Alternate buffer contains the data for the start string.
+            // Make it be the current buffer.
+            goto swapBuffersAndFail;
+        } else {
+            // Request for data before the start of string,
+            //   neither buffer is usable.
+            //   set up a zero-length buffer.
+            goto makeStubBuffer;
+        }
+    }
+
+    if (ix<=ut->chunkNativeStart || ix>ut->chunkNativeLimit) {
+        // Requested index is in neither buffer.
+        goto fillReverse;
+    }
+
+    // Requested index is in this buffer.
+    //   Set the utf16 buffer index.
+    u8b = (UTF8Buf *)ut->p;
+    mapIndex = ix - u8b->toUCharsMapStart;
+    ut->chunkOffset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
+    if (ut->chunkOffset==0) {
+        // This occurs when the first character in the text is
+        //   a multi-byte UTF-8 char, and the requested index is to
+        //   one of the trailing bytes.  Because there is no preceding ,
+        //   character, this access fails.  We can't pick up on the
+        //   situation sooner because the requested index is not zero.
+        return FALSE;
     } else {
-        // Reverse Access.  The chunk buffer must be filled so as to contain the
-        //                  character preceding the specified index.
-        U8_SET_CP_START(s8, 0, index32);
-        if(index32<=0) {
-            resetChunk(ut, 0);
-            return FALSE;
-        }
-
-        c=s8[index32-1];
-        if(c<=0x7f) {
-            // get a chunk of ASCII characters.  Don't build the index map
-            ut->chunkNativeLimit=index32;
-            i=UTF8_TEXT_CHUNK_SIZE;
-            do {
-                u16buf[--i]=(UChar)c;
-                --index32;
-            } while(i>0 && index32>0 && (c=s8[index32-1])<=0x7f);
-            ut->nativeIndexingLimit = (UTF8_TEXT_CHUNK_SIZE)-i;  // = chunkLength
-        } else {
-            // get a chunk of characters starting with a non-ASCII one
-            if(index32<length) {
-                U8_SET_CP_START(s8, 0, index32);
-            }
-            ut->chunkNativeLimit=index32;
-            i=UTF8_TEXT_CHUNK_SIZE;
-            map[i]=index32;    // map position for char following the last one in the buffer.
-            do {
-                //  i     is utf-16 index into chunk buffer.
-                //  index is utf-8 index into original string
-                U8_PREV(s8, 0, index32, c);
-                if(c<0) {
-                    c=0xfffd; // use SUB for illegal sequences
-                }
-                if(c<=0xffff) {
-                    u16buf[--i]=(UChar)c;
-                    map[i]=index32;
-                } else {
-                    // We've got a supplementary char
-                    if (i<2) {
-                        // Both halves of the surrogate pair wont fit in the chunk buffer.
-                        // Stop without putting either half in.
-                        U8_NEXT(s8, index32, length, c);  // restore index.
-                        break;
-                    }
-                    u16buf[--i]=U16_TRAIL(c);
-                    map[i]=index32;
-                    u16buf[--i]=U16_LEAD(c);
-                    map[i]=index32;
-                }
-            } while(i>0 && index32>0);
-
-            // Because we have filled the map & chunk buffers from back to front,
-            //   the start position for accesses may not be at the start of the
-            //   available storage.
-            ut->q = map+i;
-            ut->nativeIndexingLimit = 0;
-        }
-        // Common reverse iteration, for both UTF16 and non-UTIF16 indexes.
-        ut->chunkContents    = u16buf+i;
-        ut->chunkLength      = (UTF8_TEXT_CHUNK_SIZE)-i;
-        ut->chunkNativeStart = index32;
-        ut->chunkOffset      = ut->chunkLength; // chunkOffset corresponding to index
         return TRUE;
     }
+
+
+
+swapBuffers:
+    //  The alternate buffer (ut->q) has the string data that was requested.
+    //  Swap the primary and alternate buffers, and set the
+    //   chunk index into the new primary buffer.
+    {
+        u8b   = (UTF8Buf *)ut->q;
+        ut->q = ut->p;
+        ut->p = u8b;
+        ut->chunkContents       = &u8b->buf[u8b->bufStartIdx];
+        ut->chunkLength         = u8b->bufLimitIdx - u8b->bufStartIdx;
+        ut->chunkNativeStart    = u8b->bufNativeStart;
+        ut->chunkNativeLimit    = u8b->bufNativeLimit;
+        ut->nativeIndexingLimit = u8b->bufNILimit;
+
+        // Index into the (now current) chunk
+        // Use the map to set the chunk index.  It's more trouble than it's worth
+        //    to check whether native indexing can be used.
+        U_ASSERT(ix>=u8b->bufNativeStart);
+        U_ASSERT(ix<=u8b->bufNativeLimit);
+        mapIndex = ix - u8b->toUCharsMapStart;
+        U_ASSERT(mapIndex>=0);
+        U_ASSERT(mapIndex<sizeof(u8b->mapToUChars));
+        ut->chunkOffset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
+
+        return TRUE;
+    }
+
+
+ swapBuffersAndFail:
+    // We got a request for either the start or end of the string,
+    //  with iteration continuing in the out-of-bounds direction.
+    // The alternate buffer already contains the data up to the
+    //  start/end.
+    // Swap the buffers, then return failure, indicating that we couldn't
+    //  make things correct for continuing the iteration in the requested
+    //  direction.  The position & buffer are correct should the
+    //  user decide to iterate in the opposite direction.
+    u8b   = (UTF8Buf *)ut->q;
+    ut->q = ut->p;
+    ut->p = u8b;
+    ut->chunkContents       = &u8b->buf[u8b->bufStartIdx];
+    ut->chunkLength         = u8b->bufLimitIdx - u8b->bufStartIdx;
+    ut->chunkNativeStart    = u8b->bufNativeStart;
+    ut->chunkNativeLimit    = u8b->bufNativeLimit;
+    ut->nativeIndexingLimit = u8b->bufNILimit;
+
+    // Index into the (now current) chunk
+    //  For this function  (swapBuffersAndFail), the requested index
+    //    will always be at either the start or end of the chunk.
+    if (ix==u8b->bufNativeLimit) {
+        ut->chunkOffset = ut->chunkLength;
+    } else  {
+        ut->chunkOffset = 0;
+        U_ASSERT(ix == u8b->bufNativeStart);
+    }
+    return FALSE;
+
+makeStubBuffer:
+    //   The user has done a seek/access past the start or end
+    //   of the string.  Rather than loading data that is likely
+    //   to never be used, just set up a zero-length buffer at
+    //   the position.
+    u8b = (UTF8Buf *)ut->q;
+    u8b->bufNativeStart   = ix;
+    u8b->bufNativeLimit   = ix;
+    u8b->bufStartIdx      = 0;
+    u8b->bufLimitIdx      = 0;
+    u8b->bufNILimit       = 0;
+    u8b->toUCharsMapStart = ix;
+    u8b->mapToNative[0]   = 0;
+    u8b->mapToUChars[0]   = 0;
+    goto swapBuffersAndFail;
+
+
+
+fillForward:
+    {
+        // Move the incoming index to a code point boundary.
+        U8_SET_CP_START(s8, 0, ix);
+
+        // Swap the UText buffers.
+        //  We want to fill what was previously the alternate buffer,
+        //  and make what was the current buffer be the new alternate.
+        UTF8Buf *u8b = (UTF8Buf *)ut->q;
+        ut->q = ut->p;
+        ut->p = u8b;
+
+        int32_t strLen = ut->b;
+        UBool   nulTerminated = FALSE;
+        if (strLen < 0) {
+            strLen = 0x7fffffff;
+            nulTerminated = TRUE;
+        }
+
+        UChar   *buf = u8b->buf;
+        uint8_t *mapToNative  = u8b->mapToNative;
+        uint8_t *mapToUChars  = u8b->mapToUChars;
+        int32_t  destIx       = 0;
+        int32_t  srcIx        = ix;
+        UBool    seenNonAscii = FALSE;
+        UChar32   c;
+
+        // Fill the chunk buffer and mapping arrays.
+        while (destIx<UTF8_TEXT_CHUNK_SIZE) {
+            c = s8[srcIx];
+            if (c>0 && c<0x80) {
+                // Special case ASCII range for speed.
+                //   zero is excluded to simplify bounds checking.
+                buf[destIx] = c;
+                mapToNative[destIx]    = srcIx - ix;
+                mapToUChars[srcIx-ix]  = destIx;
+                srcIx++;
+                destIx++;
+            } else {
+                // General case, handle everything.
+                if (seenNonAscii == FALSE) {
+                    seenNonAscii = TRUE;
+                    u8b->bufNILimit = destIx;
+                }
+
+                int32_t  cIx      = srcIx;
+                int32_t  dIx      = destIx;
+                int32_t  dIxSaved = destIx;
+                U8_NEXT(s8, srcIx, strLen, c);
+                if (c==0 && nulTerminated) {
+                    srcIx--;
+                    break;
+                }
+                if (c<0) {
+                    // Illegal UTF-8.  Replace with sub character.
+                    c = 0x0fffd;
+                }
+
+                U16_APPEND_UNSAFE(buf, destIx, c);
+                do {
+                    mapToNative[dIx++] = cIx - ix;
+                } while (dIx < destIx);
+
+                do {
+                    mapToUChars[cIx++ - ix] = dIxSaved;
+                } while (cIx < srcIx);
+            }
+            if (srcIx>=strLen) {
+                break;
+            }
+
+        }
+
+        //  store Native <--> Chunk Map entries for the end of the buffer.
+        //    There is no actual character here, but the index position is valid.
+        mapToNative[destIx]     = srcIx - ix;
+        mapToUChars[srcIx - ix] = destIx;
+
+        //  fill in Buffer descriptor
+        u8b->bufNativeStart     = ix;
+        u8b->bufNativeLimit     = srcIx;
+        u8b->bufStartIdx        = 0;
+        u8b->bufLimitIdx        = destIx;
+        if (seenNonAscii == FALSE) {
+            u8b->bufNILimit     = destIx;
+        }
+        u8b->toUCharsMapStart   = u8b->bufNativeStart;
+
+        // Set UText chunk to refer to this buffer.
+        ut->chunkContents       = buf;
+        ut->chunkOffset         = 0;
+        ut->chunkLength         = u8b->bufLimitIdx;
+        ut->chunkNativeStart    = u8b->bufNativeStart;
+        ut->chunkNativeLimit    = u8b->bufNativeLimit;
+        ut->nativeIndexingLimit = u8b->bufNILimit;
+
+        // For zero terminated strings, keep track of the maximum point
+        //   scanned so far.
+        if (nulTerminated && srcIx>ut->c) {
+            ut->c = srcIx;
+            if (c==0) {
+                // We scanned to the end.
+                //   Remember the actual length.
+                ut->b = srcIx;
+                ut->providerProperties &= ~I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE);
+            }
+        }
+        return TRUE;
+    }
+
+
+fillReverse:
+    {
+        // Move the incoming index to a code point boundary.
+        // Can only do this if the incoming index is somewhere in the interior of the string.
+        //   If index is at the end, there is no character there to look at.
+        if (ix != ut->b) {
+            U8_SET_CP_START(s8, 0, ix);
+        }
+
+        // Swap the UText buffers.
+        //  We want to fill what was previously the alternate buffer,
+        //  and make what was the current buffer be the new alternate.
+        UTF8Buf *u8b = (UTF8Buf *)ut->q;
+        ut->q = ut->p;
+        ut->p = u8b;
+
+        UChar   *buf = u8b->buf;
+        uint8_t *mapToNative = u8b->mapToNative;
+        uint8_t *mapToUChars = u8b->mapToUChars;
+        int32_t  toUCharsMapStart = ix - (UTF8_TEXT_CHUNK_SIZE*3 + 1);
+        int32_t  destIx = UTF8_TEXT_CHUNK_SIZE+2;   // Start in the overflow region
+                                                    //   at end of buffer to leave room
+                                                    //   for a surrogate pair at the
+                                                    //   buffer start.
+        int32_t  srcIx  = ix;
+        int32_t  bufNILimit = destIx;
+        UChar32   c;
+
+        // Map to/from Native Indexes, fill in for the position at the end of
+        //   the buffer.
+        //
+        mapToNative[destIx] = srcIx - toUCharsMapStart;
+        mapToUChars[srcIx - toUCharsMapStart] = destIx;
+
+        // Fill the chunk buffer
+        // Work backwards, filling from the end of the buffer towards the front.
+        //
+        while (destIx>2 && (srcIx - toUCharsMapStart > 5) && (srcIx > 0)) {
+            srcIx--;
+            destIx--;
+
+            // Get last byte of the UTF-8 character
+            c = s8[srcIx];
+            if (c<0x80) {
+                // Special case ASCII range for speed.
+                buf[destIx] = c;
+                mapToUChars[srcIx - toUCharsMapStart] = destIx;
+                mapToNative[destIx] = srcIx - toUCharsMapStart;
+            } else {
+                // General case, handle everything non-ASCII.
+
+                int32_t  sIx      = srcIx;  // ix of last byte of multi-byte u8 char
+                int32_t  dIx      = destIx;
+
+                // Get the full character from the UTF8 string.
+                //   use code derived from tbe macros in utf.8
+                //   Leaves srcIx pointing at the first byte of the UTF-8 char.
+                //   
+                if (c<=0xbf) { 
+                    c=utf8_prevCharSafeBody(s8, 0, &srcIx, c, -1); 
+                    // leaves srcIx at first byte of the multi-byte char.
+                } else { 
+                    c=0x0fffd;  
+                }
+
+                // Store the character in UTF-16 buffer.
+                if (c<0x10000) {
+                    buf[destIx] = c;
+                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                } else {
+                    buf[destIx]         = U16_TRAIL(c);
+                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                    buf[--destIx]       = U16_LEAD(c);
+                    mapToNative[destIx] = srcIx - toUCharsMapStart;
+                }
+
+                // Fill in the map from native indexes to UChars buf index.
+                do {
+                    mapToUChars[sIx-- - toUCharsMapStart] = destIx;
+                } while (sIx >= srcIx);
+
+                // Set native indexing limit to be the current position.
+                //   We are processing a non-ascii, non-native-indexing char now;
+                //     the limit will be here if the rest of the chars to be
+                //     added to this buffer are ascii.
+                bufNILimit = destIx;
+            }
+        }
+        u8b->bufNativeStart     = srcIx;
+        u8b->bufNativeLimit     = ix;
+        u8b->bufStartIdx        = destIx;
+        u8b->bufLimitIdx        = UTF8_TEXT_CHUNK_SIZE+2;
+        u8b->bufNILimit         = bufNILimit - u8b->bufStartIdx;
+        u8b->toUCharsMapStart   = toUCharsMapStart;
+
+        ut->chunkContents       = &buf[u8b->bufStartIdx];
+        ut->chunkLength         = u8b->bufLimitIdx - u8b->bufStartIdx;
+        ut->chunkOffset         = ut->chunkLength;
+        ut->chunkNativeStart    = u8b->bufNativeStart;
+        ut->chunkNativeLimit    = u8b->bufNativeLimit;
+        ut->nativeIndexingLimit = u8b->bufNILimit;
+        return TRUE;
+    }
+
 }
+
 
 
 //
@@ -1130,40 +1524,33 @@ utf8TextExtract(UText *ut,
     return destLength;
 }
 
-// Assume nonUTF16Indexes and 0<=offset<=ut->chunkLength
+//
+// utf8TextMapOffsetToNative
+//
+// Map a chunk (UTF-16) offset to a native index.
 static int64_t U_CALLCONV
-utf8TextMapOffsetToNative(UText *ut) {
-    // UText.q points to the index mapping array that is allocated in the extra storage area.
-    U_ASSERT(ut->chunkOffset>=0 && ut->chunkOffset<=ut->chunkLength);
-    int32_t *map=(int32_t *)(ut->q);
-    return map[ut->chunkOffset];
+utf8TextMapOffsetToNative(const UText *ut) {
+    // 
+    UTF8Buf *u8b = (UTF8Buf *)ut->p;
+    U_ASSERT(ut->chunkOffset>ut->nativeIndexingLimit && ut->chunkOffset<=ut->chunkLength);
+    int32_t nativeOffset = u8b->mapToNative[ut->chunkOffset + u8b->bufStartIdx] + u8b->toUCharsMapStart;
+    U_ASSERT(nativeOffset >= ut->chunkNativeStart && nativeOffset <= ut->chunkNativeLimit);
+    return nativeOffset;
 }
 
-// Assume nonUTF16Indexes and ut->chunkstart<=index<=ut->chunklimit
+//
+// Map a native index to the corrsponding chunk offset
+//
 static int32_t U_CALLCONV
-utf8TextMapIndexToUTF16(UText *ut, int64_t index) {
-    int32_t *map=(int32_t *)(ut->q);
-    int32_t offset=0;
-
-    U_ASSERT(index>=ut->chunkNativeStart && index<=ut->chunkNativeLimit);
-    U_ASSERT(index <= UINT32_MAX);
-    int32_t index32 = (int32_t) index;
-    while(index32>map[offset]) {
-        ++offset;
-    }
-    if (index32<map[offset]) {
-        // index was to a trail byte of a multi-byte utf-8 char.
-        // The loop above advanced offset to the start of the following char, now
-        //  offset must be backed up to the start of the utf-16 char into which
-        //  the utf-8 index pointed.
-        offset--;
-        if (offset>0 && map[offset] == map[offset-1]) {
-            // index was to a utf-8 trail byte of a supplemenary char.
-            //   Offset now points to the trail surrogate (one in back of the following char)
-            //   Back offset up one more time to get to the utf-16 lead surrogate.
-            offset--;
-        }
-    }
+utf8TextMapIndexToUTF16(const UText *ut, int64_t index64) {
+    U_ASSERT(index64 <= 0x7fffffff);
+    int32_t index = (int32_t)index64;
+    UTF8Buf *u8b = (UTF8Buf *)ut->p;
+    U_ASSERT(index>=ut->chunkNativeStart+ut->nativeIndexingLimit);
+    U_ASSERT(index<=ut->chunkNativeLimit);
+    int32_t mapIndex = index - u8b->toUCharsMapStart;
+    int32_t offset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
+    U_ASSERT(offset>=0 && offset<=ut->chunkLength);
     return offset;
 }
 
@@ -1173,20 +1560,23 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
     // First do a generic shallow clone.  Does everything needed for the UText struct itself.
     dest = shallowTextClone(dest, src, status);
 
+    // TODO:  fix up pointers in the structs in extra.
+
     // For deep clones, make a copy of the string.
     //  The copied storage is owned by the newly created clone.
     //  A non-NULL pointer in UText.p is the signal to the close() function to delete
     //    it.
     //
+    // TODO:  what to do about that non-const native length?
     if (deep && U_SUCCESS(*status)) {
-        int32_t  len = src->b;
+        int32_t  len = (int32_t)utext_nativeLength((UText *)src);
         char *copyStr = (char *)uprv_malloc(len+1);
         if (copyStr == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
             uprv_memcpy(copyStr, src->context, len+1);
             dest->context = copyStr;
-            dest->p       = copyStr;
+            dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
         }
     }
     return dest;
@@ -1198,12 +1588,14 @@ utf8TextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
     // All that needs to be done here is to delete the UTF8 string if the UText
     //  owns it.  This occurs if the UText was created by cloning.
-    char *s = (char *)ut->p;
-    uprv_free(s);
-    ut->p = NULL;
+    if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
+        char *s = (char *)ut->context;
+        uprv_free(s);
+        ut->context = NULL;
+    }
 }
 
-
+U_CDECL_END
 
 
 U_DRAFT UText * U_EXPORT2
@@ -1216,11 +1608,10 @@ utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status) {
         return NULL;
     }
 
-    ut = utext_setup(ut, sizeof(UTF8Extra), status);
+    ut = utext_setup(ut, sizeof(UTF8Buf) * 2, status);
     if (U_FAILURE(*status)) {
         return ut;
     }
-    ut->providerProperties = I32_FLAG(UTEXT_PROVIDER_NON_UTF16_INDEXES);
 
     ut->clone         = utf8TextClone;
     ut->nativeLength  = utf8TextLength;
@@ -1231,17 +1622,19 @@ utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status) {
     ut->close         = utf8TextClose;
 
     ut->context=s;
-    if(length>=0) {
-        ut->b=(int32_t)length;
-    } else {
-        // TODO:  really undesirable to do this scan upfront.
-        ut->b=(int32_t)uprv_strlen(s);
+    ut->b = (int32_t)length;
+    ut->c = (int32_t)length;
+    if (ut->c < 0) {
+        ut->c = 0;
+        ut->providerProperties |= I32_FLAG(UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE);
     }
-
+    ut->p = ut->pExtra;
+    ut->q = (char *)ut->pExtra + sizeof(UTF8Buf);
     return ut;
+    
 }
 
-U_CDECL_END
+
 
 
 
@@ -1288,7 +1681,8 @@ repTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
     if (deep && U_SUCCESS(*status)) {
         const Replaceable *replSrc = (const Replaceable *)src->context;
         dest->context = replSrc->clone();
-        dest->p       = dest->context;
+        dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
+
         // with deep clone, the copy is writable, even when the source is not.
         dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     }
@@ -1301,9 +1695,11 @@ repTextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
     // All that needs to be done here is delete the Replaceable if the UText
     //  owns it.  This occurs if the UText was created by cloning.
-    Replaceable *rep = (Replaceable *)ut->p;
-    delete rep;
-    ut->p = NULL;
+    if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
+        Replaceable *rep = (Replaceable *)ut->context;
+        delete rep;
+        ut->context = NULL;
+    }
 }
 
 
@@ -1665,7 +2061,7 @@ unistrTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
     if (deep && U_SUCCESS(*status)) {
         const UnicodeString *srcString = (const UnicodeString *)src->context;
         dest->context = new UnicodeString(*srcString);
-        dest->p       = dest->context;
+        dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
 
         // with deep clone, the copy is writable, even when the source is not.
         dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
@@ -1678,9 +2074,11 @@ unistrTextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
     // All that needs to be done here is delete the UnicodeString if the UText
     //  owns it.  This occurs if the UText was created by cloning.
-    UnicodeString *str = (UnicodeString *)ut->p;
-    delete str;
-    ut->p = NULL;
+    if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
+        UnicodeString *str = (UnicodeString *)ut->context;
+        delete str;
+        ut->context = NULL;
+    }
 }
 
 
@@ -1925,7 +2323,7 @@ ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) 
             }
             copyStr[len] = 0;
             dest->context = copyStr;
-            dest->p       = copyStr;
+            dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
         }
     }
     return dest;
@@ -1937,9 +2335,11 @@ ucstrTextClose(UText *ut) {
     // Most of the work of close is done by the generic UText framework close.
     // All that needs to be done here is delete the string if the UText
     //  owns it.  This occurs if the UText was created by cloning.
-    UChar *s = (UChar *)ut->p;
-    uprv_free(s);
-    ut->p = NULL;
+    if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
+        UChar *s = (UChar *)ut->context;
+        uprv_free(s);
+        ut->context = NULL;
+    }
 }
 
 
