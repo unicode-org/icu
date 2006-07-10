@@ -1775,7 +1775,9 @@ int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
 int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                                            const UnicodeString& text,
                                            int32_t pos,
-                                           UChar* currency) const {
+                                           UChar* currency) const
+{
+    int32_t start = pos;
     U_ASSERT(currency != NULL ||
              (fCurrencyChoice != NULL && *getCurrency() != 0));
 
@@ -1861,7 +1863,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
             i = skipRuleWhiteSpace(affixPat, i);
         }
     }
-    return pos;
+    return pos - start;
 }
 
 /**

@@ -1288,7 +1288,6 @@ static void TestRBNFFormat() {
 }
 
 static void TestCurrencyRegression(void) {
-#if U_ICU_VERSION_MAJOR_NUM > 3 || U_ICU_VERSION_MINOR_NUM > 5
 /* 
  I've found a case where unum_parseDoubleCurrency is not doing what I
 expect.  The value I pass in is $1234567890q123460000.00 and this
@@ -1335,7 +1334,7 @@ their data!
 
     u_austrcpy(acurrency, currency);
 
-    if(U_SUCCESS(status) || (pos != expected)) {
+    if(U_FAILURE(status) || (pos != expected)) {
         log_err("unum_parseDoubleCurrency should have failed with pos %d, but gave: value %.9f, err %s, pos=%d, currency [%s]\n",
             expected, d, u_errorName(status), pos, acurrency);
     } else {
@@ -1343,7 +1342,6 @@ their data!
     }
     
     unum_close(cur);
-#endif
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
