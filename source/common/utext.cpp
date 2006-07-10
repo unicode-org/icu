@@ -681,29 +681,6 @@ utext_close(UText *ut) {
 
 
 
-//
-// resetChunk   When an access fails for attempting to get text that is out-of-range
-//              this function puts the chunk into a benign state with the index at the
-//              at the requested position.
-//
-//              If there is a pre-existing chunk that is adjacent to the index
-//              preserve the chunk, otherwise set up a dummy zero length chunk.
-//
-static void
-resetChunk(UText *ut, int64_t index) {
-    if (index==ut->chunkNativeLimit) {
-        ut->chunkOffset = ut->chunkLength;
-    } else if (index==ut->chunkNativeStart) {
-        ut->chunkOffset = 0;
-    } else {
-        ut->chunkLength         = 0;
-        ut->chunkNativeStart    = index;
-        ut->chunkNativeLimit    = index;
-        ut->chunkOffset         = 0;
-        ut->nativeIndexingLimit = 0;
-    } 
-}
-
 
 //
 // invalidateChunk   Reset a chunk to have no contents, so that the next call
@@ -1342,7 +1319,6 @@ fillReverse:
                 // General case, handle everything non-ASCII.
 
                 int32_t  sIx      = srcIx;  // ix of last byte of multi-byte u8 char
-                int32_t  dIx      = destIx;
 
                 // Get the full character from the UTF8 string.
                 //   use code derived from tbe macros in utf.8
