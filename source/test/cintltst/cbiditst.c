@@ -211,80 +211,12 @@ doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
     }
 }
 
-static const UChar pseudoToUChar[] = {
-/*     0/8     1/9     2/A     3/B     4/C     5/D     6/E     7/F  */
-      0x00,   0x01,   0x02,   0x03,   0x04,   0x05,   0x06,   0x07, /*00-07  */
-      0x08,   0x09,   0x0A,   0x0B,   0x0C,   0x0D,   0x0E,   0x0F, /*08-0F  */
-      0x10,   0x11,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17, /*10-17  */
-      0x18,   0x19,   0x1A,   0x1B,   0x1C,   0x1D,   0x1E, 0xE01F, /*18-1F  */
-      0x20,   0x21,   0x22,   0x23,   0x24,   0x25, 0x200F,   0x27, /*20-27  */
-      0x28,   0x29,   0x2A,   0x2B,   0x2C,   0x2D,   0x2E,   0x2F, /*28-2F  */
-      0x30,   0x31,   0x32,   0x33,   0x34,   0x35, 0x0666, 0x0667, /*30-37  */
-    0x0668, 0x0669,   0x3A,   0x3B,   0x3C,   0x3D,   0x3E,   0x3F, /*38-3F  */
-    0x200E, 0x0631, 0x0632, 0x0633, 0x0634, 0x0635, 0x0636, 0x05D7, /*40-47  */
-    0x05D8, 0x05D9, 0x05DA, 0x05DB, 0x05DC, 0x05DD, 0x05DE, 0x05DF, /*48-4F  */
-    0x05E0, 0x05E1, 0x05E2, 0x05E3, 0x05E4, 0x05E5, 0x05E6, 0x05E7, /*50-57  */
-    0x05E8, 0x05E9, 0x05EA, 0x202A,   0x5C, 0x202B, 0x202C, 0x001F, /*58-5F  */
-    0x0300,   0x61,   0x62,   0x63,   0x64,   0x65,   0x66,   0x67, /*60-67  */
-      0x68,   0x69,   0x6A,   0x6B,   0x6C,   0x6D,   0x6E,   0x6F, /*68-6F  */
-      0x70,   0x71,   0x72,   0x73,   0x74,   0x75,   0x76,   0x77, /*70-77  */
-      0x78,   0x79,   0x7A, 0x202D, 0x2029, 0x202E, 0x007F, 0xE07F, /*78-7F  */
-      0x80,   0x81,   0x82,   0x83,   0x84,   0x85,   0x86,   0x87, /*80-87  */
-      0x88,   0x89,   0x8A,   0x8B,   0x8C,   0x8D,   0x8E,   0x8F, /*88-8F  */
-      0x90,   0x91,   0x92,   0x93,   0x94,   0x95,   0x96,   0x97, /*90-97  */
-      0x98,   0x99,   0x9A,   0x9B,   0x9C,   0x9D,   0x9E,   0x9F, /*98-9F  */
-      0xA0,   0xA1,   0xA2,   0xA3,   0xA4,   0xA5,   0xA6,   0xA7, /*A0-A7  */
-      0xA8,   0xA9,   0xAA,   0xAB,   0xAC,   0xAD,   0xAE,   0xAF, /*A8-AF  */
-      0xB0,   0xB1,   0xB2,   0xB3,   0xB4,   0xB5,   0xB6,   0xB7, /*B0-B7  */
-      0xB8,   0xB9,   0xBA,   0xBB,   0xBC,   0xBD,   0xBE,   0xBF, /*B8-BF  */
-      0xC0,   0xC1,   0xC2,   0xC3,   0xC4,   0xC5,   0xC6,   0xC7, /*C0-C7  */
-      0xC8,   0xC9,   0xCA,   0xCB,   0xCC,   0xCD,   0xCE,   0xCF, /*C8-CF  */
-      0xD0,   0xD1,   0xD2,   0xD3,   0xD4,   0xD5,   0xD6,   0xD7, /*D0-D7  */
-      0xD8,   0xD9,   0xDA,   0xDB,   0xDC,   0xDD,   0xDE,   0xDF, /*D8-DF  */
-      0xE0,   0xE1,   0xE2,   0xE3,   0xE4,   0xE5,   0xE6,   0xE7, /*E0-E7  */
-      0xE8,   0xE9,   0xEA,   0xEB,   0xEC,   0xED,   0xEE,   0xEF, /*E8-EF  */
-      0xF0,   0xF1,   0xF2,   0xF3,   0xF4,   0xF5,   0xF6,   0xF7, /*F0-F7  */
-      0xF8,   0xF9,   0xFA,   0xFB,   0xFC,   0xFD,   0xFE,   0xFF};/*F8-FF  */
+#define TABLE_SIZE  256
+static UChar         *pseudoToUChar;
+static unsigned char *UCharToPseudo;
 
-static const unsigned char UCharToPseudo[] = {
-/*     0/8     1/9     2/A     3/B     4/C     5/D     6/E     7/F  */
-       '`',   0x01,   0x02,   0x03,   0x04,   0x05,   0x06,   0x07, /*00-07  */
-      0x08,   0x09,   0x0A,   0x0B,   0x0C,   0x0D,    '@',    '&', /*08-0F  */
-      0x10,   0x11,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17, /*10-17  */
-      0x18,   0x19,   0x1A,   0x1B,   0x1C,   0x1D,   0x1E,    '_', /*18-1F  */
-      0x20,   0x21,   0x22,   0x23,   0x24,   0x25,   0x26,   0x27, /*20-27  */
-      0x28,    '|',    '[',    ']',    '^',    '{',    '}',   0x2F, /*28-2F  */
-      0x30,    'A',    'B',    'C',    'D',    'E',    'F',   0x37, /*30-37  */
-      0x38,   0x39,   0x3A,   0x3B,   0x3C,   0x3D,   0x3E,   0x3F, /*38-3F  */
-      0x40,   0x41,   0x42,   0x43,   0x44,   0x45,   0x46,   0x47, /*40-47  */
-      0x48,   0x49,   0x4A,   0x4B,   0x4C,   0x4D,   0x4E,   0x4F, /*48-4F  */
-      0x50,   0x51,   0x52,   0x53,   0x54,   0x55,   0x56,   0x57, /*50-57  */
-      0x58,   0x59,   0x5A,   0x5B,   0x5C,   0x5D,   0x5E,   0x5F, /*58-5F  */
-      0x60,   0x61,   0x62,   0x63,   0x64,   0x65,    '6',    '7', /*60-67  */
-       '8',    '9',   0x6A,   0x6B,   0x6C,   0x6D,   0x6E,   0x6F, /*68-6F  */
-      0x70,   0x71,   0x72,   0x73,   0x74,   0x75,   0x76,   0x77, /*70-77  */
-      0x78,   0x79,   0x7A,   0x7B,   0x7C,   0x7D,   0x7E,    '~', /*78-7F  */
-      0x80,   0x81,   0x82,   0x83,   0x84,   0x85,   0x86,   0x87, /*80-87  */
-      0x88,   0x89,   0x8A,   0x8B,   0x8C,   0x8D,   0x8E,   0x8F, /*88-8F  */
-      0x90,   0x91,   0x92,   0x93,   0x94,   0x95,   0x96,   0x97, /*90-97  */
-      0x98,   0x99,   0x9A,   0x9B,   0x9C,   0x9D,   0x9E,   0x9F, /*98-9F  */
-      0xA0,   0xA1,   0xA2,   0xA3,   0xA4,   0xA5,   0xA6,   0xA7, /*A0-A7  */
-      0xA8,   0xA9,   0xAA,   0xAB,   0xAC,   0xAD,   0xAE,   0xAF, /*A8-AF  */
-      0xB0,   0xB1,   0xB2,   0xB3,   0xB4,   0xB5,   0xB6,   0xB7, /*B0-B7  */
-      0xB8,   0xB9,   0xBA,   0xBB,   0xBC,   0xBD,   0xBE,   0xBF, /*B8-BF  */
-      0xC0,   0xC1,   0xC2,   0xC3,   0xC4,   0xC5,   0xC6,   0xC7, /*C0-C7  */
-      0xC8,   0xC9,   0xCA,   0xCB,   0xCC,   0xCD,   0xCE,   0xCF, /*C8-CF  */
-      0xD0,   0xD1,   0xD2,   0xD3,   0xD4,   0xD5,   0xD6,    'G', /*D0-D7  */
-       'H',    'I',    'J',    'K',    'L',    'M',    'N',    'O', /*D8-DF  */
-       'P',    'Q',    'R',    'S',    'T',    'U',    'V',    'W', /*E0-E7  */
-       'X',    'Y',    'Z',   0xEB,   0xEC,   0xED,   0xEE,   0xEF, /*E8-EF  */
-      0xF0,   0xF1,   0xF2,   0xF3,   0xF4,   0xF5,   0xF6,   0xF7, /*F0-F7  */
-      0xF8,   0xF9,   0xFA,   0xFB,   0xFC,   0xFD,   0xFE,   0xFF};/*F8-FF  */
-
-static int pseudoToU16( const int length, const char * input, UChar * output )
-/*  This function converts a pseudo-Bidi string into a UChar string.
-    It returns the length of the UChar string.
-
+static void buildPseudoTables()
+/*
     The rules for pseudo-Bidi are as follows:
     - [ == LRE
     - ] == RLE
@@ -303,11 +235,103 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
     - _ == Info Separator 1 001f (S)
     All other characters represent themselves as Latin-1, with the corresponding
     Bidi properties.
-
 */
 {
     int             i;
+    UChar           uchar;
+    pseudoToUChar = uprv_malloc(TABLE_SIZE * sizeof(UChar));
+    UCharToPseudo = uprv_malloc(TABLE_SIZE * sizeof(char));
+    if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL)) {
+        log_err("Unable to allocate pseudo BiDi tables.\n");
+        exit(1);
+    }
+    /* initialize both tables to identity */
+    for (i=0; i < TABLE_SIZE; i++) {
+        pseudoToUChar[i] = i;
+        UCharToPseudo[i] = i;
+    }
+    /* initialize non letters or digits */
+    pseudoToUChar[' '] = 0x0020;    UCharToPseudo[0x20] = ' ';
+    pseudoToUChar['!'] = 0x0021;    UCharToPseudo[0x21] = '!';
+    pseudoToUChar['"'] = 0x0022;    UCharToPseudo[0x22] = '"';
+    pseudoToUChar['#'] = 0x0023;    UCharToPseudo[0x23] = '#';
+    pseudoToUChar['$'] = 0x0024;    UCharToPseudo[0x24] = '$';
+    pseudoToUChar['%'] = 0x0025;    UCharToPseudo[0x25] = '%';
+    pseudoToUChar['\'']= 0x0027;    UCharToPseudo[0x27] = '\'';
+    pseudoToUChar['('] = 0x0028;    UCharToPseudo[0x28] = '(';
+    pseudoToUChar[')'] = 0x0029;    UCharToPseudo[0x29] = ')';
+    pseudoToUChar['*'] = 0x002A;    UCharToPseudo[0x2A] = '*';
+    pseudoToUChar['+'] = 0x002B;    UCharToPseudo[0x2B] = '+';
+    pseudoToUChar[','] = 0x002C;    UCharToPseudo[0x2C] = ',';
+    pseudoToUChar['-'] = 0x002D;    UCharToPseudo[0x2D] = '-';
+    pseudoToUChar['.'] = 0x002E;    UCharToPseudo[0x2E] = '.';
+    pseudoToUChar['/'] = 0x002F;    UCharToPseudo[0x2F] = '/';
+    pseudoToUChar[':'] = 0x003A;    UCharToPseudo[0x3A] = ':';
+    pseudoToUChar[';'] = 0x003B;    UCharToPseudo[0x3B] = ';';
+    pseudoToUChar['<'] = 0x003C;    UCharToPseudo[0x3C] = '<';
+    pseudoToUChar['='] = 0x003D;    UCharToPseudo[0x3D] = '=';
+    pseudoToUChar['>'] = 0x003E;    UCharToPseudo[0x3E] = '>';
+    pseudoToUChar['?'] = 0x003F;    UCharToPseudo[0x3F] = '?';
+    pseudoToUChar['\\']= 0x005C;    UCharToPseudo[0x5C] = '\\';
+    pseudoToUChar[0x1F]= 0xE01F;    /* avoid clash with '_' */
+    pseudoToUChar[0x7F]= 0xE07F;    /* avoid clash with '~' */
+    /* initialize specially used characters */
+    pseudoToUChar['`'] = 0x0300;    UCharToPseudo[0x00] = '`';  /* NSM */
+    pseudoToUChar['@'] = 0x200E;    UCharToPseudo[0x0E] = '@';  /* LRM */
+    pseudoToUChar['&'] = 0x200F;    UCharToPseudo[0x0F] = '&';  /* RLM */
+    pseudoToUChar['_'] = 0x001F;    UCharToPseudo[0x1F] = '_';  /* S   */
+    pseudoToUChar['|'] = 0x2029;    UCharToPseudo[0x29] = '|';  /* B   */
+    pseudoToUChar['['] = 0x202A;    UCharToPseudo[0x2A] = '[';  /* LRE */
+    pseudoToUChar[']'] = 0x202B;    UCharToPseudo[0x2B] = ']';  /* RLE */
+    pseudoToUChar['^'] = 0x202C;    UCharToPseudo[0x2C] = '^';  /* PDF */
+    pseudoToUChar['{'] = 0x202D;    UCharToPseudo[0x2D] = '{';  /* LRO */
+    pseudoToUChar['}'] = 0x202E;    UCharToPseudo[0x2E] = '}';  /* RLO */
+    pseudoToUChar['~'] = 0x007F;    UCharToPseudo[0x7F] = '~';  /* BN  */
+    /* initialize western digits */
+    for (i = '0', uchar = 0x0030; i <= '5'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    /* initialize Hindi digits */
+    for (i = '6', uchar = 0x0666; i <= '9'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    /* initialize Arabic letters */
+    for (i = 'A', uchar = 0x0631; i <= 'F'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    /* initialize Hebrew letters */
+    for (i = 'G', uchar = 0x05D7; i <= 'I'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    for (i = 'J', uchar = 0x05DA; i <= 'R'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    for (i = 'S', uchar = 0x05E3; i <= 'Z'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    /* initialize Latin lower case letters */
+    for (i = 'a', uchar = 0x0061; i <= 'i'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    for (i = 'j', uchar = 0x006A; i <= 'r'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+    for (i = 's', uchar = 0x0073; i <= 'z'; i++, uchar++) {
+        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+    }
+}
 
+/*----------------------------------------------------------------------*/
+
+static int pseudoToU16( const int length, const char * input, UChar * output )
+/*  This function converts a pseudo-Bidi string into a UChar string.
+    It returns the length of the UChar string.
+*/
+{
+    int             i;
+    if (!pseudoToUChar) {
+        buildPseudoTables();
+    }
     for (i = 0; i < length; i++)
         output[i] = pseudoToUChar[(unsigned char)input[i]];
     return length;
@@ -320,21 +344,38 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
     It returns the length of the pseudo-Bidi string.
 */
 {
-    int             i;
+    int             i, j;
     UChar           u;
     unsigned char   v;
-
+    if (!pseudoToUChar) {
+        buildPseudoTables();
+    }
     for (i = 0; i < length; i++)
     {
         u = input[i];
         v = UCharToPseudo[u & 0x00ff];
-        if (pseudoToUChar[v] == u)
+        if (pseudoToUChar[v] == u) {
             output[i] = v;
-        else  output[i] = (char)(u & 0x00ff);   /* keep 8 right bits */
+            continue;
+        }
+        if (v == '\0') {
+            output[i] = '\0';
+            continue;
+        }
+        v = (char)(u & 0x00ff);         /* keep 8 right bits */
+        for (j = 1; j < TABLE_SIZE; j++) {
+            if (pseudoToUChar[j] == u) {
+                v = j;
+                break;
+            }
+        }
+        output[i] = v;
     }
     output[length] = '\0';
     return length;
 }
+
+static const char columns[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 static char * formatLevels(UBiDi *bidi, char *buffer) {
     UErrorCode ec = U_ZERO_ERROR;
@@ -349,13 +390,9 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
     }
     for (i=0; i<len; i++) {
         k = gotLevels[i];
-        if (k<=9)
-            c = '0' + k;
-        else if (k <= 35)
-            c = ('A' - 10) + k;
-        else if (k <= 61)
-            c = ('a' - 36) + k;
-        else c = '?';
+        if (k >= sizeof columns)
+            c = '+';
+        else c = columns[k];
         buffer[i] = c;
     }
     buffer[len] = '\0';
@@ -1932,263 +1969,263 @@ options[] = {
 #define LEVELS_COUNT            LENGTHOF(paraLevels)
 
 static const char* const textIn[] = {
-/* (0) 123  */
+/* (0) 123 */
     "123",
-/* (1) .123->4.5  */
+/* (1) .123->4.5 */
     ".123->4.5",
-/* (2) 678  */
+/* (2) 678 */
     "678",
-/* (3) .678->8.9  */
+/* (3) .678->8.9 */
     ".678->8.9",
-/* (4) JIH1.2,3MLK  */
+/* (4) JIH1.2,3MLK */
     "JIH1.2,3MLK",
-/* (5) FE.>12->  */
+/* (5) FE.>12-> */
     "FE.>12->",
-/* (6) JIH.>12->a  */
+/* (6) JIH.>12->a */
     "JIH.>12->a",
-/* (7) CBA.>67->89=a  */
+/* (7) CBA.>67->89=a */
     "CBA.>67->89=a",
-/* (8) CBA.123->xyz  */
+/* (8) CBA.123->xyz */
     "CBA.123->xyz",
-/* (9) .>12->xyz  */
+/* (9) .>12->xyz */
     ".>12->xyz",
-/* (10) a.>67->xyz  */
+/* (10) a.>67->xyz */
     "a.>67->xyz",
-/* (11) 123JIH  */
+/* (11) 123JIH */
     "123JIH",
-/* (12) 123 JIH  */
+/* (12) 123 JIH */
     "123 JIH"
 };
 
 static const char* const textOut[] = {
-/* TC 0: 123  */
-    "123",                                                              /* (0)  */
-/* TC 1: .123->4.5  */
-    ".123->4.5",                                                        /* (1)  */
-    "4.5<-123.",                                                        /* (2)  */
-/* TC 2: 678  */
-    "678",                                                              /* (3)  */
-/* TC 3: .678->8.9  */
-    ".8.9<-678",                                                        /* (4)  */
-    "8.9<-678.",                                                        /* (5)  */
-    ".678->8.9",                                                        /* (6)  */
-/* TC 4: MLK1.2,3JIH  */
-    "KLM1.2,3HIJ",                                                      /* (7)  */
-/* TC 5: FE.>12->  */
-    "12<.EF->",                                                         /* (8)  */
-    "<-12<.EF",                                                         /* (9)  */
-    "EF.>@12->",                                                        /* (10)  */
-/* TC 6: JIH.>12->a  */
-    "12<.HIJ->a",                                                       /* (11)  */
-    "a<-12<.HIJ",                                                       /* (12)  */
-    "HIJ.>@12->a",                                                      /* (13)  */
-    "a&<-12<.HIJ",                                                      /* (14)  */
-/* TC 7: CBA.>67->89=a  */
-    "ABC.>@67->89=a",                                                   /* (15)  */
-    "a=89<-67<.ABC",                                                    /* (16)  */
-    "a&=89<-67<.ABC",                                                   /* (17)  */
-    "89<-67<.ABC=a",                                                    /* (18)  */
-/* TC 8: CBA.123->xyz  */
-    "123.ABC->xyz",                                                     /* (19)  */
-    "xyz<-123.ABC",                                                     /* (20)  */
-    "ABC.@123->xyz",                                                    /* (21)  */
-    "xyz&<-123.ABC",                                                    /* (22)  */
-/* TC 9: .>12->xyz  */
-    ".>12->xyz",                                                        /* (23)  */
-    "xyz<-12<.",                                                        /* (24)  */
-    "xyz&<-12<.",                                                       /* (25)  */
-/* TC 10: a.>67->xyz  */
-    "a.>67->xyz",                                                       /* (26)  */
-    "a.>@67@->xyz",                                                     /* (27)  */
-    "xyz<-67<.a",                                                       /* (28)  */
-/* TC 11: 123JIH  */
-    "123HIJ",                                                           /* (29)  */
-    "HIJ123",                                                           /* (30)  */
-/* TC 12: 123 JIH  */
-    "123 HIJ",                                                          /* (31)  */
-    "HIJ 123",                                                          /* (32)  */
+/* TC 0: 123 */
+    "123",                                                              /* (0) */
+/* TC 1: .123->4.5 */
+    ".123->4.5",                                                        /* (1) */
+    "4.5<-123.",                                                        /* (2) */
+/* TC 2: 678 */
+    "678",                                                              /* (3) */
+/* TC 3: .678->8.9 */
+    ".8.9<-678",                                                        /* (4) */
+    "8.9<-678.",                                                        /* (5) */
+    ".678->8.9",                                                        /* (6) */
+/* TC 4: MLK1.2,3JIH */
+    "KLM1.2,3HIJ",                                                      /* (7) */
+/* TC 5: FE.>12-> */
+    "12<.EF->",                                                         /* (8) */
+    "<-12<.EF",                                                         /* (9) */
+    "EF.>@12->",                                                        /* (10) */
+/* TC 6: JIH.>12->a */
+    "12<.HIJ->a",                                                       /* (11) */
+    "a<-12<.HIJ",                                                       /* (12) */
+    "HIJ.>@12->a",                                                      /* (13) */
+    "a&<-12<.HIJ",                                                      /* (14) */
+/* TC 7: CBA.>67->89=a */
+    "ABC.>@67->89=a",                                                   /* (15) */
+    "a=89<-67<.ABC",                                                    /* (16) */
+    "a&=89<-67<.ABC",                                                   /* (17) */
+    "89<-67<.ABC=a",                                                    /* (18) */
+/* TC 8: CBA.123->xyz */
+    "123.ABC->xyz",                                                     /* (19) */
+    "xyz<-123.ABC",                                                     /* (20) */
+    "ABC.@123->xyz",                                                    /* (21) */
+    "xyz&<-123.ABC",                                                    /* (22) */
+/* TC 9: .>12->xyz */
+    ".>12->xyz",                                                        /* (23) */
+    "xyz<-12<.",                                                        /* (24) */
+    "xyz&<-12<.",                                                       /* (25) */
+/* TC 10: a.>67->xyz */
+    "a.>67->xyz",                                                       /* (26) */
+    "a.>@67@->xyz",                                                     /* (27) */
+    "xyz<-67<.a",                                                       /* (28) */
+/* TC 11: 123JIH */
+    "123HIJ",                                                           /* (29) */
+    "HIJ123",                                                           /* (30) */
+/* TC 12: 123 JIH */
+    "123 HIJ",                                                          /* (31) */
+    "HIJ 123",                                                          /* (32) */
 };
 
 #define NO                  UBIDI_MAP_NOWHERE
 #define MAX_MAP_LENGTH      20
 
 static const int forwardMap[][MAX_MAP_LENGTH] = {
-/* TC 0: 123  */
-    { 0, 1, 2 },                                                        /* (0)  */
-/* TC 1: .123->4.5  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (1)  */
-    { 8, 5, 6, 7, 4, 3, 0, 1, 2 },                                      /* (2)  */
-/* TC 2: 678  */
-    { 0, 1, 2 },                                                        /* (3)  */
-/* TC 3: .678->8.9  */
-    { 0, 6, 7, 8, 5, 4, 1, 2, 3 },                                      /* (4)  */
-    { 8, 5, 6, 7, 4, 3, 0, 1, 2 },                                      /* (5)  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (6)  */
-/* TC 4: MLK1.2,3JIH  */
-    { 10, 9, 8, 3, 4, 5, 6, 7, 2, 1, 0 },                               /* (7)  */
-/* TC 5: FE.>12->  */
-    { 5, 4, 3, 2, 0, 1, 6, 7 },                                         /* (8)  */
-    { 7, 6, 5, 4, 2, 3, 1, 0 },                                         /* (9)  */
-    { 1, 0, 2, 3, 5, 6, 7, 8 },                                         /* (10)  */
-/* TC 6: JIH.>12->a  */
-    { 6, 5, 4, 3, 2, 0, 1, 7, 8, 9 },                                   /* (11)  */
-    { 9, 8, 7, 6, 5, 3, 4, 2, 1, 0 },                                   /* (12)  */
-    { 2, 1, 0, 3, 4, 6, 7, 8, 9, 10 },                                  /* (13)  */
-    { 10, 9, 8, 7, 6, 4, 5, 3, 2, 0 },                                  /* (14)  */
-/* TC 7: CBA.>67->89=a  */
-    { 2, 1, 0, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13 },                      /* (15)  */
-    { 12, 11, 10, 9, 8, 6, 7, 5, 4, 2, 3, 1, 0 },                       /* (16)  */
-    { 13, 12, 11, 10, 9, 7, 8, 6, 5, 3, 4, 2, 0 },                      /* (17)  */
-    { 10, 9, 8, 7, 6, 4, 5, 3, 2, 0, 1, 11, 12 },                       /* (18)  */
-/* TC 8: CBA.123->xyz  */
-    { 6, 5, 4, 3, 0, 1, 2, 7, 8, 9, 10, 11 },                           /* (19)  */
-    { 11, 10, 9, 8, 5, 6, 7, 4, 3, 0, 1, 2 },                           /* (20)  */
-    { 2, 1, 0, 3, 5, 6, 7, 8, 9, 10, 11, 12 },                          /* (21)  */
-    { 12, 11, 10, 9, 6, 7, 8, 5, 4, 0, 1, 2 },                          /* (22)  */
-/* TC 9: .>12->xyz  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (23)  */
-    { 8, 7, 5, 6, 4, 3, 0, 1, 2 },                                      /* (24)  */
-    { 9, 8, 6, 7, 5, 4, 0, 1, 2 },                                      /* (25)  */
-/* TC 10: a.>67->xyz  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },                                   /* (26)  */
-    { 0, 1, 2, 4, 5, 7, 8, 9, 10, 11 },                                 /* (27)  */
-    { 9, 8, 7, 5, 6, 4, 3, 0, 1, 2 },                                   /* (28)  */
-/* TC 11: 123JIH  */
-    { 0, 1, 2, 5, 4, 3 },                                               /* (29)  */
-    { 3, 4, 5, 2, 1, 0 },                                               /* (30)  */
-/* TC 12: 123 JIH  */
-    { 0, 1, 2, 3, 6, 5, 4 },                                            /* (31)  */
-    { 4, 5, 6, 3, 2, 1, 0 },                                            /* (32)  */
+/* TC 0: 123 */
+    { 0, 1, 2 },                                                        /* (0) */
+/* TC 1: .123->4.5 */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (1) */
+    { 8, 5, 6, 7, 4, 3, 0, 1, 2 },                                      /* (2) */
+/* TC 2: 678 */
+    { 0, 1, 2 },                                                        /* (3) */
+/* TC 3: .678->8.9 */
+    { 0, 6, 7, 8, 5, 4, 1, 2, 3 },                                      /* (4) */
+    { 8, 5, 6, 7, 4, 3, 0, 1, 2 },                                      /* (5) */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (6) */
+/* TC 4: MLK1.2,3JIH */
+    { 10, 9, 8, 3, 4, 5, 6, 7, 2, 1, 0 },                               /* (7) */
+/* TC 5: FE.>12-> */
+    { 5, 4, 3, 2, 0, 1, 6, 7 },                                         /* (8) */
+    { 7, 6, 5, 4, 2, 3, 1, 0 },                                         /* (9) */
+    { 1, 0, 2, 3, 5, 6, 7, 8 },                                         /* (10) */
+/* TC 6: JIH.>12->a */
+    { 6, 5, 4, 3, 2, 0, 1, 7, 8, 9 },                                   /* (11) */
+    { 9, 8, 7, 6, 5, 3, 4, 2, 1, 0 },                                   /* (12) */
+    { 2, 1, 0, 3, 4, 6, 7, 8, 9, 10 },                                  /* (13) */
+    { 10, 9, 8, 7, 6, 4, 5, 3, 2, 0 },                                  /* (14) */
+/* TC 7: CBA.>67->89=a */
+    { 2, 1, 0, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13 },                      /* (15) */
+    { 12, 11, 10, 9, 8, 6, 7, 5, 4, 2, 3, 1, 0 },                       /* (16) */
+    { 13, 12, 11, 10, 9, 7, 8, 6, 5, 3, 4, 2, 0 },                      /* (17) */
+    { 10, 9, 8, 7, 6, 4, 5, 3, 2, 0, 1, 11, 12 },                       /* (18) */
+/* TC 8: CBA.123->xyz */
+    { 6, 5, 4, 3, 0, 1, 2, 7, 8, 9, 10, 11 },                           /* (19) */
+    { 11, 10, 9, 8, 5, 6, 7, 4, 3, 0, 1, 2 },                           /* (20) */
+    { 2, 1, 0, 3, 5, 6, 7, 8, 9, 10, 11, 12 },                          /* (21) */
+    { 12, 11, 10, 9, 6, 7, 8, 5, 4, 0, 1, 2 },                          /* (22) */
+/* TC 9: .>12->xyz */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (23) */
+    { 8, 7, 5, 6, 4, 3, 0, 1, 2 },                                      /* (24) */
+    { 9, 8, 6, 7, 5, 4, 0, 1, 2 },                                      /* (25) */
+/* TC 10: a.>67->xyz */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },                                   /* (26) */
+    { 0, 1, 2, 4, 5, 7, 8, 9, 10, 11 },                                 /* (27) */
+    { 9, 8, 7, 5, 6, 4, 3, 0, 1, 2 },                                   /* (28) */
+/* TC 11: 123JIH */
+    { 0, 1, 2, 5, 4, 3 },                                               /* (29) */
+    { 3, 4, 5, 2, 1, 0 },                                               /* (30) */
+/* TC 12: 123 JIH */
+    { 0, 1, 2, 3, 6, 5, 4 },                                            /* (31) */
+    { 4, 5, 6, 3, 2, 1, 0 },                                            /* (32) */
 };
 
 static const int inverseMap[][MAX_MAP_LENGTH] = {
-/* TC 0: 123  */
-    { 0, 1, 2 },                                                        /* (0)  */
-/* TC 1: .123->4.5  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (1)  */
-    { 6, 7, 8, 5, 4, 1, 2, 3, 0 },                                      /* (2)  */
-/* TC 2: 678  */
-    { 0, 1, 2 },                                                        /* (3)  */
-/* TC 3: .678->8.9  */
-    { 0, 6, 7, 8, 5, 4, 1, 2, 3 },                                      /* (4)  */
-    { 6, 7, 8, 5, 4, 1, 2, 3, 0 },                                      /* (5)  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (6)  */
-/* TC 4: MLK1.2,3JIH  */
-    { 10, 9, 8, 3, 4, 5, 6, 7, 2, 1, 0 },                               /* (7)  */
-/* TC 5: FE.>12->  */
-    { 4, 5, 3, 2, 1, 0, 6, 7 },                                         /* (8)  */
-    { 7, 6, 4, 5, 3, 2, 1, 0 },                                         /* (9)  */
-    { 1, 0, 2, 3, NO, 4, 5, 6, 7 },                                     /* (10)  */
-/* TC 6: JIH.>12->a  */
-    { 5, 6, 4, 3, 2, 1, 0, 7, 8, 9 },                                   /* (11)  */
-    { 9, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                                   /* (12)  */
-    { 2, 1, 0, 3, 4, NO, 5, 6, 7, 8, 9 },                               /* (13)  */
-    { 9, NO, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                               /* (14)  */
-/* TC 7: CBA.>67->89=a  */
-    { 2, 1, 0, 3, 4, NO, 5, 6, 7, 8, 9, 10, 11, 12 },                   /* (15)  */
-    { 12, 11, 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                       /* (16)  */
-    { 12, NO, 11, 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                   /* (17)  */
-    { 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0, 11, 12 },                       /* (18)  */
-/* TC 8: CBA.123->xyz  */
-    { 4, 5, 6, 3, 2, 1, 0, 7, 8, 9, 10, 11 },                           /* (19)  */
-    { 9, 10, 11, 8, 7, 4, 5, 6, 3, 2, 1, 0 },                           /* (20)  */
-    { 2, 1, 0, 3, NO, 4, 5, 6, 7, 8, 9, 10, 11 },                       /* (21)  */
-    { 9, 10, 11, NO, 8, 7, 4, 5, 6, 3, 2, 1, 0 },                       /* (22)  */
-/* TC 9: .>12->xyz  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (23)  */
-    { 6, 7, 8, 5, 4, 2, 3, 1, 0 },                                      /* (24)  */
-    { 6, 7, 8, NO, 5, 4, 2, 3, 1, 0 },                                  /* (25)  */
-/* TC 10: a.>67->xyz  */
-    { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },                                   /* (26)  */
-    { 0, 1, 2, NO, 3, 4, NO, 5, 6, 7, 8, 9 },                           /* (27)  */
-    { 7, 8, 9, 6, 5, 3, 4, 2, 1, 0 },                                   /* (28)  */
-/* TC 11: 123JIH  */
-    { 0, 1, 2, 5, 4, 3 },                                               /* (29)  */
-    { 5, 4, 3, 0, 1, 2 },                                               /* (30)  */
-/* TC 12: 123 JIH  */
-    { 0, 1, 2, 3, 6, 5, 4 },                                            /* (31)  */
-    { 6, 5, 4, 3, 0, 1, 2 },                                            /* (32)  */
+/* TC 0: 123 */
+    { 0, 1, 2 },                                                        /* (0) */
+/* TC 1: .123->4.5 */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (1) */
+    { 6, 7, 8, 5, 4, 1, 2, 3, 0 },                                      /* (2) */
+/* TC 2: 678 */
+    { 0, 1, 2 },                                                        /* (3) */
+/* TC 3: .678->8.9 */
+    { 0, 6, 7, 8, 5, 4, 1, 2, 3 },                                      /* (4) */
+    { 6, 7, 8, 5, 4, 1, 2, 3, 0 },                                      /* (5) */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (6) */
+/* TC 4: MLK1.2,3JIH */
+    { 10, 9, 8, 3, 4, 5, 6, 7, 2, 1, 0 },                               /* (7) */
+/* TC 5: FE.>12-> */
+    { 4, 5, 3, 2, 1, 0, 6, 7 },                                         /* (8) */
+    { 7, 6, 4, 5, 3, 2, 1, 0 },                                         /* (9) */
+    { 1, 0, 2, 3, NO, 4, 5, 6, 7 },                                     /* (10) */
+/* TC 6: JIH.>12->a */
+    { 5, 6, 4, 3, 2, 1, 0, 7, 8, 9 },                                   /* (11) */
+    { 9, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                                   /* (12) */
+    { 2, 1, 0, 3, 4, NO, 5, 6, 7, 8, 9 },                               /* (13) */
+    { 9, NO, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                               /* (14) */
+/* TC 7: CBA.>67->89=a */
+    { 2, 1, 0, 3, 4, NO, 5, 6, 7, 8, 9, 10, 11, 12 },                   /* (15) */
+    { 12, 11, 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                       /* (16) */
+    { 12, NO, 11, 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0 },                   /* (17) */
+    { 9, 10, 8, 7, 5, 6, 4, 3, 2, 1, 0, 11, 12 },                       /* (18) */
+/* TC 8: CBA.123->xyz */
+    { 4, 5, 6, 3, 2, 1, 0, 7, 8, 9, 10, 11 },                           /* (19) */
+    { 9, 10, 11, 8, 7, 4, 5, 6, 3, 2, 1, 0 },                           /* (20) */
+    { 2, 1, 0, 3, NO, 4, 5, 6, 7, 8, 9, 10, 11 },                       /* (21) */
+    { 9, 10, 11, NO, 8, 7, 4, 5, 6, 3, 2, 1, 0 },                       /* (22) */
+/* TC 9: .>12->xyz */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8 },                                      /* (23) */
+    { 6, 7, 8, 5, 4, 2, 3, 1, 0 },                                      /* (24) */
+    { 6, 7, 8, NO, 5, 4, 2, 3, 1, 0 },                                  /* (25) */
+/* TC 10: a.>67->xyz */
+    { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },                                   /* (26) */
+    { 0, 1, 2, NO, 3, 4, NO, 5, 6, 7, 8, 9 },                           /* (27) */
+    { 7, 8, 9, 6, 5, 3, 4, 2, 1, 0 },                                   /* (28) */
+/* TC 11: 123JIH */
+    { 0, 1, 2, 5, 4, 3 },                                               /* (29) */
+    { 5, 4, 3, 0, 1, 2 },                                               /* (30) */
+/* TC 12: 123 JIH */
+    { 0, 1, 2, 3, 6, 5, 4 },                                            /* (31) */
+    { 6, 5, 4, 3, 0, 1, 2 },                                            /* (32) */
 };
 
 static const char outIndices[TC_COUNT][MODES_COUNT - 1][OPTIONS_COUNT]
             [LEVELS_COUNT] = {
-    { /* TC 0: 123  */
-        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{ 0,  0}, { 0,  0}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 0: 123 */
+        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 0,  0}, { 0,  0}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{ 0,  0}, { 0,  0}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 1: .123->4.5  */
-        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{ 1,  2}, { 1,  2}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 1: .123->4.5 */
+        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 1,  2}, { 1,  2}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{ 1,  2}, { 1,  2}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 2: 678  */
-        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{ 3,  3}, { 3,  3}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 2: 678 */
+        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 3,  3}, { 3,  3}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{ 3,  3}, { 3,  3}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 3: .678->8.9  */
-        {{ 6,  5}, { 6,  5}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{ 4,  5}, { 4,  5}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 6,  5}, { 6,  5}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{ 6,  5}, { 6,  5}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 3: .678->8.9 */
+        {{ 6,  5}, { 6,  5}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{ 4,  5}, { 4,  5}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 6,  5}, { 6,  5}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{ 6,  5}, { 6,  5}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 4: MLK1.2,3JIH  */
-        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{ 7,  7}, { 7,  7}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 4: MLK1.2,3JIH */
+        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 7,  7}, { 7,  7}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{ 7,  7}, { 7,  7}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 5: FE.>12->  */
-        {{ 8,  9}, { 8,  9}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{10,  9}, { 8,  9}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{ 8,  9}, { 8,  9}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{10,  9}, { 8,  9}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 5: FE.>12-> */
+        {{ 8,  9}, { 8,  9}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{10,  9}, { 8,  9}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{ 8,  9}, { 8,  9}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{10,  9}, { 8,  9}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 6: JIH.>12->a  */
-        {{11, 12}, {11, 12}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{13, 14}, {11, 12}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{11, 12}, {11, 12}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{13, 14}, {11, 12}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 6: JIH.>12->a */
+        {{11, 12}, {11, 12}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{13, 14}, {11, 12}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{11, 12}, {11, 12}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{13, 14}, {11, 12}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 7: CBA.>67->89=a  */
-        {{18, 16}, {18, 16}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{18, 17}, {18, 16}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{18, 16}, {18, 16}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{15, 17}, {18, 16}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 7: CBA.>67->89=a */
+        {{18, 16}, {18, 16}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{18, 17}, {18, 16}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{18, 16}, {18, 16}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{15, 17}, {18, 16}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 8: CBA.>124->xyz  */
-        {{19, 20}, {19, 20}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{21, 22}, {19, 20}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{19, 20}, {19, 20}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{21, 22}, {19, 20}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 8: CBA.>124->xyz */
+        {{19, 20}, {19, 20}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{21, 22}, {19, 20}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{19, 20}, {19, 20}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{21, 22}, {19, 20}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 9: .>12->xyz  */
-        {{23, 24}, {23, 24}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{23, 25}, {23, 24}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{23, 24}, {23, 24}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{23, 25}, {23, 24}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 9: .>12->xyz */
+        {{23, 24}, {23, 24}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{23, 25}, {23, 24}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{23, 24}, {23, 24}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{23, 25}, {23, 24}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 10: a.>67->xyz  */
-        {{26, 26}, {26, 26}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{26, 27}, {26, 28}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{26, 28}, {26, 28}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{26, 27}, {26, 28}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 10: a.>67->xyz */
+        {{26, 26}, {26, 26}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{26, 27}, {26, 28}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{26, 28}, {26, 28}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{26, 27}, {26, 28}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 11: 124JIH  */
-        {{30, 30}, {30, 30}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{29, 30}, {29, 30}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{30, 30}, {30, 30}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{30, 30}, {30, 30}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 11: 124JIH */
+        {{30, 30}, {30, 30}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{29, 30}, {29, 30}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{30, 30}, {30, 30}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{30, 30}, {30, 30}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     },
-    { /* TC 12: 124 JIH  */
-        {{32, 32}, {32, 32}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-        {{31, 32}, {31, 32}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-        {{31, 32}, {31, 32}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-        {{31, 32}, {31, 32}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
+    { /* TC 12: 124 JIH */
+        {{32, 32}, {32, 32}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+        {{31, 32}, {31, 32}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+        {{31, 32}, {31, 32}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+        {{31, 32}, {31, 32}}  /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
     }
 };
 
@@ -2199,96 +2236,96 @@ assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex, const char *srcChars
 
     static const char roundtrip[TC_COUNT][MODES_COUNT][OPTIONS_COUNT]
                 [LEVELS_COUNT] = {
-        { /* TC 0: 123  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 0: 123 */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 1: .123->4.5  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 1: .123->4.5 */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 2: 678  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 2: 678 */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 3: .678->8.9  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 0,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 3: .678->8.9 */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 0,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 4: MLK1.2,3JIH  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 4: MLK1.2,3JIH */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 5: FE.>12->  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 0,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 5: FE.>12-> */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 0,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 6: JIH.>12->a  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 0,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 6: JIH.>12->a */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 0,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 7: CBA.>67->89=a  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 0,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 0,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 7: CBA.>67->89=a */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 0,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 0,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 8: CBA.>123->xyz  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 0,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 8: CBA.>123->xyz */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 0,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 9: .>12->xyz  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 9: .>12->xyz */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  0}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 10: a.>67->xyz  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 10: a.>67->xyz */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  0}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 11: 123JIH  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 11: 123JIH */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         },
-        { /* TC 12: 123 JIH  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL  */
-            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L  */
+        { /* TC 12: 123 JIH */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_GROUP_NUMBERS_WITH_R */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_LIKE_DIRECT */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}, /* UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL */
+            {{ 1,  1}, { 1,  1}}  /* UBIDI_REORDER_INVERSE_NUMBERS_AS_L */
         }
     };
 
@@ -2638,7 +2675,7 @@ doBidiStreamingTest() {
 
     pBiDi = getBiDiObject();
 
-    /*ubidi_orderParagraphsLTR(pBiDi, TRUE);  */
+    ubidi_orderParagraphsLTR(pBiDi, TRUE);
 
     for (levelIndex = 0; levelIndex < nLevels; levelIndex++) {
         for (i = 0; i < nTests; i++) {
@@ -2699,22 +2736,22 @@ overrideBidiClass(const void *context, UChar32 c) {
 
     static const UCharDirection customClasses[] = {
        /* 0/8    1/9    2/A    3/B    4/C    5/D    6/E    7/F  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*00-07  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*08-0F  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*10-17  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*18-1F  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,     R,   DEF, /*20-27  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*28-2F  */
-           EN,    EN,    EN,    EN,    EN,    EN,    AN,    AN, /*30-37  */
-           AN,    AN,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*38-3F  */
-            L,    AL,    AL,    AL,    AL,    AL,    AL,     R, /*40-47  */
-            R,     R,     R,     R,     R,     R,     R,     R, /*48-4F  */
-            R,     R,     R,     R,     R,     R,     R,     R, /*50-57  */
-            R,     R,     R,   LRE,   DEF,   RLE,   PDF,     S, /*58-5F  */
-          NSM,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*60-67  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*68-6F  */
-          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /*70-77  */
-          DEF,   DEF,   DEF,   LRO,     B,   RLO,    BN,   DEF  /*78-7F  */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 00-07 */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 08-0F */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 10-17 */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 18-1F */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,     R,   DEF, /* 20-27 */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 28-2F */
+           EN,    EN,    EN,    EN,    EN,    EN,    AN,    AN, /* 30-37 */
+           AN,    AN,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 38-3F */
+            L,    AL,    AL,    AL,    AL,    AL,    AL,     R, /* 40-47 */
+            R,     R,     R,     R,     R,     R,     R,     R, /* 48-4F */
+            R,     R,     R,     R,     R,     R,     R,     R, /* 50-57 */
+            R,     R,     R,   LRE,   DEF,   RLE,   PDF,     S, /* 58-5F */
+          NSM,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 60-67 */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 68-6F */
+          DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, /* 70-77 */
+          DEF,   DEF,   DEF,   LRO,     B,   RLO,    BN,   DEF  /* 78-7F */
     };
     static const int nEntries = LENGTHOF(customClasses);
 
@@ -2796,8 +2833,6 @@ static void doBidiClassOverrideTest(void) {
     }
     ubidi_close(pBiDi);
 }
-
-static const char columns[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 static char * formatMap(const int * map, int len, char * buffer)
 {
