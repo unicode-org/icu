@@ -289,35 +289,44 @@ static void buildPseudoTables()
     pseudoToUChar['~'] = 0x007F;    UCharToPseudo[0x7F] = '~';  /* BN  */
     /* initialize western digits */
     for (i = '0', uchar = 0x0030; i <= '5'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     /* initialize Hindi digits */
     for (i = '6', uchar = 0x0666; i <= '9'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     /* initialize Arabic letters */
     for (i = 'A', uchar = 0x0631; i <= 'F'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     /* initialize Hebrew letters */
     for (i = 'G', uchar = 0x05D7; i <= 'I'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     for (i = 'J', uchar = 0x05DA; i <= 'R'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     for (i = 'S', uchar = 0x05E3; i <= 'Z'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     /* initialize Latin lower case letters */
     for (i = 'a', uchar = 0x0061; i <= 'i'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     for (i = 'j', uchar = 0x006A; i <= 'r'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
     for (i = 's', uchar = 0x0073; i <= 'z'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;   UCharToPseudo[uchar] = i;
+        pseudoToUChar[i] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = i;
     }
 }
 
