@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2005, International Business Machines Corporation and        *
+* Copyright (C) 2004-2006, International Business Machines Corporation and        *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -188,7 +188,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
                 // the default locale not the root locale!
                 if (b==null) {
                     String defaultName = defaultLocale.toString();
-                    if (localeID.length()>0 && defaultName.indexOf(localeID) == -1) {
+                    if (localeID.length()>0 && localeID.indexOf('_')< 0 && defaultName.indexOf(localeID) == -1) {
                         b = (ResourceBundleWrapper)loadFromCache(cl,baseName+"_"+defaultName, defaultLocale);
                         if(b==null){
                             b = (ResourceBundleWrapper)instantiateBundle(baseName , defaultName, cl, disableFallback);
