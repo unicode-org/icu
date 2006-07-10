@@ -1020,6 +1020,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle1!=bundle){
             errln("Did not load the bundle from cache");
         }
+        
+        UResourceBundle bundle2 = UResourceBundle.getBundleInstance(baseName, "en_IN", testLoader);
+        if(!bundle2.getLocale().toString().equals("en")){
+            errln("Did not get the expected fallback locale. Expected: en Got: "+bundle2.getLocale().toString());    
+        }
+        UResourceBundle bundle3 = UResourceBundle.getBundleInstance(baseName, "te_IN", testLoader);
+        if(!bundle3.getLocale().toString().equals("te")){
+            errln("Did not get the expected fallback locale. Expected: te Got: "+bundle2.getLocale().toString());    
+        }
         // non-existent bundle .. should return default
         UResourceBundle defaultBundle = UResourceBundle.getBundleInstance(baseName, "hi_IN", testLoader);
         ULocale defaultLocale = ULocale.getDefault();
