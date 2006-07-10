@@ -85,7 +85,7 @@ static const UChar gLastResortMonthNames[13][3] =
 // These are the weekday names and abbreviations of last resort.
 static const UChar gLastResortDayNames[8][2] =
 {
-    {0x0000, 0x0000}, /* "" */
+    {0x0030, 0x0000}, /* "0" */
     {0x0031, 0x0000}, /* "1" */
     {0x0032, 0x0000}, /* "2" */
     {0x0033, 0x0000}, /* "3" */
@@ -93,6 +93,15 @@ static const UChar gLastResortDayNames[8][2] =
     {0x0035, 0x0000}, /* "5" */
     {0x0036, 0x0000}, /* "6" */
     {0x0037, 0x0000}  /* "7" */
+};
+
+// These are the quarter names and abbreviations of last resort.
+static const UChar gLastResortQuarters[4][2] =
+{
+    {0x0031, 0x0000}, /* "1" */
+    {0x0032, 0x0000}, /* "2" */
+    {0x0033, 0x0000}, /* "3" */
+    {0x0034, 0x0000}, /* "4" */
 };
 
 // These are the am/pm and BC/AD markers of last resort.
@@ -110,8 +119,10 @@ static const UChar gLastResortEras[2][3] =
 
 
 // These are the zone strings of last resort.
-static const UChar gLastResortZoneStrings[5][4] =
+static const UChar gLastResortZoneStrings[7][4] =
 {
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
@@ -129,6 +140,9 @@ typedef enum LastResortSize {
 
     kAmPmNum = 2,
     kAmPmLen = 3,
+
+    kQuarterNum = 4,
+    kQuarterLen = 2,
 
     kEraNum = 2,
     kEraLen = 3,
@@ -296,6 +310,10 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fStandaloneShortWeekdays, fStandaloneShortWeekdaysCount, other.fStandaloneShortWeekdays, other.fStandaloneShortWeekdaysCount);
     assignArray(fStandaloneNarrowWeekdays, fStandaloneNarrowWeekdaysCount, other.fStandaloneNarrowWeekdays, other.fStandaloneNarrowWeekdaysCount);
     assignArray(fAmPms, fAmPmsCount, other.fAmPms, other.fAmPmsCount);
+    assignArray(fQuarters, fQuartersCount, other.fQuarters, other.fQuartersCount);
+    assignArray(fShortQuarters, fShortQuartersCount, other.fShortQuarters, other.fShortQuartersCount);
+    assignArray(fStandaloneQuarters, fStandaloneQuartersCount, other.fStandaloneQuarters, other.fStandaloneQuartersCount);
+    assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, other.fStandaloneShortQuarters, other.fStandaloneShortQuartersCount);
     // the zoneStrings data is initialized on demand
     //fZoneStringsRowCount = other.fZoneStringsRowCount;
     //fZoneStringsColCount = other.fZoneStringsColCount;
@@ -353,6 +371,10 @@ void DateFormatSymbols::dispose()
     if (fStandaloneShortWeekdays)  delete[] fStandaloneShortWeekdays;
     if (fStandaloneNarrowWeekdays) delete[] fStandaloneNarrowWeekdays;
     if (fAmPms)                    delete[] fAmPms;
+    if (fQuarters)                 delete[] fQuarters;
+    if (fShortQuarters)            delete[] fShortQuarters;
+    if (fStandaloneQuarters)       delete[] fStandaloneQuarters;
+    if (fStandaloneShortQuarters)  delete[] fStandaloneShortQuarters;
 
     disposeZoneStrings();
 }
@@ -411,7 +433,11 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fStandaloneWeekdaysCount == other.fStandaloneWeekdaysCount &&
         fStandaloneShortWeekdaysCount == other.fStandaloneShortWeekdaysCount &&
         fStandaloneNarrowWeekdaysCount == other.fStandaloneNarrowWeekdaysCount &&
-        fAmPmsCount == other.fAmPmsCount)
+        fAmPmsCount == other.fAmPmsCount &&
+        fQuartersCount == other.fQuartersCount &&
+        fShortQuartersCount == other.fShortQuartersCount &&
+        fStandaloneQuartersCount == other.fStandaloneQuartersCount &&
+        fStandaloneShortQuartersCount == other.fStandaloneShortQuartersCount)
     {
         // Now compare the arrays themselves
         if (arrayCompare(fEras, other.fEras, fErasCount) &&
@@ -428,7 +454,11 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             arrayCompare(fStandaloneWeekdays, other.fStandaloneWeekdays, fStandaloneWeekdaysCount) &&
             arrayCompare(fStandaloneShortWeekdays, other.fStandaloneShortWeekdays, fStandaloneShortWeekdaysCount) &&
             arrayCompare(fStandaloneNarrowWeekdays, other.fStandaloneNarrowWeekdays, fStandaloneNarrowWeekdaysCount) &&
-            arrayCompare(fAmPms, other.fAmPms, fAmPmsCount))
+            arrayCompare(fAmPms, other.fAmPms, fAmPmsCount) &&
+            arrayCompare(fQuarters, other.fQuarters, fQuartersCount) &&
+            arrayCompare(fShortQuarters, other.fShortQuarters, fShortQuartersCount) &&
+            arrayCompare(fStandaloneQuarters, other.fStandaloneQuarters, fStandaloneQuartersCount) &&
+            arrayCompare(fStandaloneShortQuarters, other.fStandaloneShortQuarters, fStandaloneShortQuartersCount))
         {
             
             if(fZoneStringsHash == NULL || other.fZoneStringsHash == NULL){
@@ -968,6 +998,14 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneNarrowWeekdaysCount=0;
     fAmPms = NULL;
     fAmPmsCount=0;
+    fQuarters = NULL;
+    fQuartersCount = 0;
+    fShortQuarters = NULL;
+    fShortQuartersCount = 0;
+    fStandaloneQuarters = NULL;
+    fStandaloneQuartersCount = 0;
+    fStandaloneShortQuarters = NULL;
+    fStandaloneShortQuartersCount = 0;
     fZoneStringsRowCount = 0;
     fZoneStringsColCount = 0;
     fZoneStrings = NULL;
@@ -1030,6 +1068,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initField(&fStandaloneShortWeekdays, fStandaloneShortWeekdaysCount, (const UChar *)gLastResortDayNames, kDayNum, kDayLen, status);
             initField(&fStandaloneNarrowWeekdays, fStandaloneNarrowWeekdaysCount, (const UChar *)gLastResortDayNames, kDayNum, kDayLen, status);
             initField(&fAmPms, fAmPmsCount, (const UChar *)gLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
+            initField(&fQuarters, fQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
+            initField(&fShortQuarters, fShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
+            initField(&fStandaloneQuarters, fStandaloneQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
+            initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             fLocalPatternChars = gPatternChars;
         }
         goto cleanup;
