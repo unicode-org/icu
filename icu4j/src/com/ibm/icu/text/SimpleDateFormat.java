@@ -855,8 +855,11 @@ public class SimpleDateFormat extends DateFormat {
                             cal.get(Calendar.DST_OFFSET);
                         res = ZoneMeta.displayGMT(offset, locale);
                     } else { 
+                        /*
                         String city = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
                         res = ZoneMeta.displayFallback(zid, city, locale);
+                        */
+                        res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
                     }
                 }
                 if(res.length()==0){
