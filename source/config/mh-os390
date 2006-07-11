@@ -46,6 +46,9 @@ endif
 # variables, with its caller, the DLL module must define these _SHR_* macros.
 SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE
 
+## Additional flags when building libraries and with threads
+THREADSCPPFLAGS = -D_OPEN_THREADS
+
 # -Wc,expo is used to export all functions
 SHAREDLIBCFLAGS	= -Wc,expo
 SHAREDLIBCXXFLAGS	= -Wc,expo
@@ -55,7 +58,7 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
 CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
 CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE) -+
-DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS
+DEFS            += -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS
 ARFLAGS         = -cr
 
 ifeq (${OS390_XPLINK}, 1)
