@@ -1100,7 +1100,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                     // throw away the exception   
                 }
                 try{
-                    strings[TIMEZONE_EXEMPLAR_CITY] = zoneTable.getStringWithFallback(EXEMPLAR_CITY);
+                    String city = zoneTable.getStringWithFallback(EXEMPLAR_CITY);
+                    
+                    strings[TIMEZONE_EXEMPLAR_CITY] = ZoneMeta.displayFallback(key, city, tempLocale);
                 }catch( MissingResourceException ex){
                     // throw away the exception   
                 }
@@ -1225,15 +1227,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String[] strings = (String[])zoneStringsHash.get(zid);
         if(strings != null){
             for(int j=0; j<TIMEZONE_COUNT; j++){
-                String zoneName = strings[j];
-                
-                if (j == TIMEZONE_EXEMPLAR_CITY) {
-                    zoneName = ZoneMeta.displayFallback(zid, zoneName, requestedLocale);
-                }
-                
-                if(zoneName != null && text.regionMatches(true, start, zoneName, 0, zoneName.length())){
+                if(strings[j] != null && text.regionMatches(true, start, strings[j], 0, strings[j].length())){
                     item.type = j; 
-                    item.value = zoneName;
+                    item.value = strings[j];
                     item.zid = zid;
                     return item;
                 }
@@ -1251,15 +1247,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             String[] strings = (String[])zoneStringsHash.get(key);
             if(strings != null){
                 for(int j=0; j<TIMEZONE_COUNT; j++){
-                    String zoneName = strings[j];
-                    
-                    if (j == TIMEZONE_EXEMPLAR_CITY) {
-                        zoneName = ZoneMeta.displayFallback(key, zoneName, requestedLocale);
-                    }
-                    
-                    if(zoneName != null && text.regionMatches(true, start, zoneName, 0, zoneName.length())){
+                    if(strings[j] != null && text.regionMatches(true, start, strings[j], 0, strings[j].length())){
                         item.type = j;
-                        item.value = zoneName;
+                        item.value = strings[j];
                         item.zid = key;
                         return item;
                     }
