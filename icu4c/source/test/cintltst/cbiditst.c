@@ -18,7 +18,6 @@
 #include "unicode/ustring.h"
 #include "unicode/ubidi.h"
 #include "unicode/ushape.h"
-#include "cmemory.h"
 #include "cbiditst.h"
 #include "cstring.h"
 /* the following include is needed for sprintf */
@@ -239,11 +238,11 @@ static void buildPseudoTables()
 {
     int             i;
     UChar           uchar;
-    pseudoToUChar = uprv_malloc(TABLE_SIZE * sizeof(UChar));
-    UCharToPseudo = uprv_malloc(TABLE_SIZE * sizeof(char));
+    pseudoToUChar = malloc(TABLE_SIZE * sizeof(UChar));
+    UCharToPseudo = malloc(TABLE_SIZE * sizeof(char));
     if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL)) {
         log_err("Unable to allocate pseudo BiDi tables.\n");
-        exit(1);
+        return;
     }
     /* initialize both tables to identity */
     for (i=0; i < TABLE_SIZE; i++) {
@@ -1342,7 +1341,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
     if(U_FAILURE(*pErrorCode)) {
         log_err("inverse BiDi: *** error %s\n"
                 "                 turn on verbose mode to see details\n", u_errorName(*pErrorCode));
-    } else if(srcLength==visualLength && uprv_memcmp(src, visualDest, srcLength*U_SIZEOF_UCHAR)==0) {
+    } else if(srcLength==visualLength && memcmp(src, visualDest, srcLength*U_SIZEOF_UCHAR)==0) {
         ++countRoundtrips;
         log_verbose(" + roundtripped\n");
     } else {
@@ -1373,18 +1372,18 @@ testWriteReverse() {
                               reverse, LENGTHOF(reverse),
                               UBIDI_KEEP_BASE_COMBINING,
                               &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseKeepCombining) || uprv_memcmp(reverse, reverseKeepCombining, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseKeepCombining) || memcmp(reverse, reverseKeepCombining, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in ubidi_writeReverse(UBIDI_KEEP_BASE_COMBINING): length=%d (should be %d), error code %s\n",
                 length, LENGTHOF(reverseKeepCombining), u_errorName(errorCode));
     }
 
-    uprv_memset(reverse, 0xa5, LENGTHOF(reverse)*U_SIZEOF_UCHAR);
+    memset(reverse, 0xa5, LENGTHOF(reverse)*U_SIZEOF_UCHAR);
     errorCode=U_ZERO_ERROR;
     length=ubidi_writeReverse(forward, LENGTHOF(forward),
                               reverse, LENGTHOF(reverse),
                               UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING|UBIDI_KEEP_BASE_COMBINING,
                               &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseRemoveControlsKeepCombiningDoMirror) || uprv_memcmp(reverse, reverseRemoveControlsKeepCombiningDoMirror, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseRemoveControlsKeepCombiningDoMirror) || memcmp(reverse, reverseRemoveControlsKeepCombiningDoMirror, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in ubidi_writeReverse(UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING|UBIDI_KEEP_BASE_COMBINING):\n"
                 "    length=%d (should be %d), error code %s\n",
                 length, LENGTHOF(reverseRemoveControlsKeepCombiningDoMirror), u_errorName(errorCode));
@@ -1429,7 +1428,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, en2an, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, en2an, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(en2an)\n");
     }
 
@@ -1439,7 +1438,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_AN2EN|U_SHAPE_DIGIT_TYPE_AN_EXTENDED,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=u_strlen(source) || uprv_memcmp(dest, an2en, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=u_strlen(source) || memcmp(dest, an2en, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(an2en)\n");
     }
 
@@ -1449,7 +1448,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_ALEN2AN_INIT_LR|U_SHAPE_DIGIT_TYPE_AN,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, logical_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, logical_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(logical_alen2an_init_lr)\n");
     }
 
@@ -1459,7 +1458,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_ALEN2AN_INIT_AL|U_SHAPE_DIGIT_TYPE_AN_EXTENDED,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, logical_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, logical_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(logical_alen2an_init_al)\n");
     }
 
@@ -1469,7 +1468,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_ALEN2AN_INIT_LR|U_SHAPE_DIGIT_TYPE_AN|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, reverse_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, reverse_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(reverse_alen2an_init_lr)\n");
     }
 
@@ -1479,7 +1478,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_ALEN2AN_INIT_AL|U_SHAPE_DIGIT_TYPE_AN_EXTENDED|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, reverse_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, reverse_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(reverse_alen2an_init_al)\n");
     }
 
@@ -1489,7 +1488,7 @@ doArabicShapingTest() {
                          dest, LENGTHOF(dest),
                          0,
                          &errorCode);
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, source, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || memcmp(dest, source, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(noop)\n");
     }
 
@@ -1638,7 +1637,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || uprv_memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_near)\n");
     }
 
@@ -1650,7 +1649,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_end) || uprv_memcmp(dest, shape_at_end, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_end) || memcmp(dest, shape_at_end, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_at_end)\n");
     }
 
@@ -1662,7 +1661,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_begin) || uprv_memcmp(dest, shape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_begin) || memcmp(dest, shape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_at_begin)\n");
     }
 
@@ -1674,7 +1673,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || uprv_memcmp(dest, shape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || memcmp(dest, shape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_grow_shrink)\n");
     }
 
@@ -1688,7 +1687,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || uprv_memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_near)\n");
     }
 
@@ -1700,7 +1699,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_end) || uprv_memcmp(dest,shape_excepttashkeel_at_end , length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_end) || memcmp(dest,shape_excepttashkeel_at_end , length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_at_end)\n");
     }
 
@@ -1712,7 +1711,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_begin) || uprv_memcmp(dest, shape_excepttashkeel_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_begin) || memcmp(dest, shape_excepttashkeel_at_begin, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_at_begin)\n");
     }
 
@@ -1724,7 +1723,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || uprv_memcmp(dest, shape_excepttashkeel_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || memcmp(dest, shape_excepttashkeel_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_grow_shrink)\n");
     }
 }
@@ -1764,7 +1763,7 @@ doTashkeelSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || uprv_memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(TASHKEEL shape_near)\n");
     }
 
@@ -1776,7 +1775,7 @@ doTashkeelSpecialVLTRArabicShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || uprv_memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(TASHKEEL shape_excepttashkeel_near)\n");
     }
 }
@@ -1818,7 +1817,7 @@ doLOGICALArabicDeShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_LOGICAL,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_near) || uprv_memcmp(dest, unshape_near, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_near) || memcmp(dest, unshape_near, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(unshape_near)\n");
     }
 
@@ -1830,7 +1829,7 @@ doLOGICALArabicDeShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_LOGICAL,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_end) || uprv_memcmp(dest, unshape_at_end, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_end) || memcmp(dest, unshape_at_end, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(unshape_at_end)\n");
     }
 
@@ -1842,7 +1841,7 @@ doLOGICALArabicDeShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_LOGICAL,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_begin) || uprv_memcmp(dest, unshape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_begin) || memcmp(dest, unshape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(unshape_at_begin)\n");
     }
 
@@ -1854,7 +1853,7 @@ doLOGICALArabicDeShapingTest() {
                          U_SHAPE_TEXT_DIRECTION_LOGICAL,
                          &errorCode);
 
-    if(U_FAILURE(errorCode) || uprv_memcmp(dest, unshape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+    if(U_FAILURE(errorCode) || memcmp(dest, unshape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(unshape_grow_shrink)\n");
     }
 
@@ -1873,7 +1872,7 @@ initCharFromDirProps() {
     }
 
     u_getUnicodeVersion(ucdVersion);
-    if(uprv_memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>=0) {
+    if(memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>=0) {
         /* Unicode 4.0.1 changes bidi classes for +-/ */
         charFromDirProp[U_EUROPEAN_NUMBER_SEPARATOR]=0x2b; /* change ES character from / to + */
     }
@@ -1945,11 +1944,11 @@ assertStringsEqual(const char* expected, const char* actual, const char* src,
 }
 
 static UBiDi*
-getBiDiObject() {
+getBiDiObject(void) {
     UBiDi* pBiDi = ubidi_open();
     if (pBiDi == NULL) {
         log_err("Unable to allocate a UBiDi object.\n");
-        exit(1);
+        return NULL;
     }
     return pBiDi;
 }
@@ -2058,7 +2057,7 @@ static const char* const textOut[] = {
 #define NO                  UBIDI_MAP_NOWHERE
 #define MAX_MAP_LENGTH      20
 
-static const int forwardMap[][MAX_MAP_LENGTH] = {
+static const int32_t forwardMap[][MAX_MAP_LENGTH] = {
 /* TC 0: 123 */
     { 0, 1, 2 },                                                        /* (0) */
 /* TC 1: .123->4.5 */
@@ -2780,7 +2779,7 @@ static void verifyCallbackParams(UBiDiClassCallback* fn, const void* context,
         log_err("Class callback context is not set properly.\n");
     }
     else if (context != NULL &&
-            uprv_memcmp(context, expectedContext, sizeOfContext)) {
+            memcmp(context, expectedContext, sizeOfContext)) {
         log_err("Callback context content doesn't match the expected one.\n");
     }
 }
@@ -2885,7 +2884,7 @@ testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
         testOK = FALSE;
     }
     srcLen = ubidi_getProcessedLength(pBiDi);
-    if (uprv_memcmp(expectedLogicalMap, actualLogicalMap, srcLen * sizeof(int32_t))) {
+    if (memcmp(expectedLogicalMap, actualLogicalMap, srcLen * sizeof(int32_t))) {
         char expChars[MAX_MAP_LENGTH];
         char actChars[MAX_MAP_LENGTH];
         log_err("\nubidi_getLogicalMap() returns unexpected map for output string "
@@ -2912,7 +2911,7 @@ testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
     resLen = ubidi_getResultLength(pBiDi);
     ubidi_getVisualMap(pBiDi, actualVisualMap, &rc);
     assertSuccessful("ubidi_getVisualMap", &rc);
-    if (uprv_memcmp(expectedVisualMap, actualVisualMap, resLen * sizeof(int32_t))) {
+    if (memcmp(expectedVisualMap, actualVisualMap, resLen * sizeof(int32_t))) {
         char expChars[MAX_MAP_LENGTH];
         char actChars[MAX_MAP_LENGTH];
         log_err("\nubidi_getVisualMap() returns unexpected map for output string "
@@ -2941,7 +2940,7 @@ testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
         assertSuccessful("ubidi_getVisualIndex", &rc);
         getIndexMap[i] = index;
     }
-    if (uprv_memcmp(actualLogicalMap, getIndexMap, srcLen * sizeof(int32_t))) {
+    if (memcmp(actualLogicalMap, getIndexMap, srcLen * sizeof(int32_t))) {
         char actChars[MAX_MAP_LENGTH];
         char gotChars[MAX_MAP_LENGTH];
         log_err("\nMismatch between ubidi_getLogicalMap and ubidi_getVisualIndex for output string "
@@ -2970,7 +2969,7 @@ testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
         assertSuccessful("ubidi_getLogicalIndex", &rc);
         getIndexMap[i] = index;
     }
-    if (uprv_memcmp(actualVisualMap, getIndexMap, resLen * sizeof(int32_t))) {
+    if (memcmp(actualVisualMap, getIndexMap, resLen * sizeof(int32_t))) {
         char actChars[MAX_MAP_LENGTH];
         char gotChars[MAX_MAP_LENGTH];
         log_err("\nMismatch between ubidi_getVisualMap and ubidi_getLogicalIndex for output string "
