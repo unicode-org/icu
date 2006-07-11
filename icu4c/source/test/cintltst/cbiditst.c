@@ -117,15 +117,15 @@ addComplexTest(TestNode** root) {
     addTest(root, TestReorder,"complex/bidi/TestReorder");
     addTest(root, TestFailureRecovery,"complex/bidi/TestFailureRecovery");
     addTest(root, TestMultipleParagraphs,"complex/bidi/multipleParagraphs");
+    addTest(root, doReorderingModeBidiTest, "complex/bidi/TestReorderingMode");
+    addTest(root, doReorderRunsTest, "complex/bidi/TestReorderRunsOnly");
+    addTest(root, doBidiStreamingTest, "complex/bidi/TestStreamingMode");
+    addTest(root, doBidiClassOverrideTest, "complex/bidi/TestClassOverride");
+
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
-/* new BIDI API */
-    addTest(root, doReorderingModeBidiTest, "complex/new-bidi-api/TestReorderingMode");
-    addTest(root, doReorderRunsTest, "complex/new-bidi-api/TestReorderRunsOnly");
-    addTest(root, doBidiStreamingTest, "complex/new-bidi-api/TestStreamingMode");
-    addTest(root, doBidiClassOverrideTest, "complex/new-bidi-api/TestClassOverride");
 }
 
 /* verify that the exemplar characters have the expected bidi classes */
