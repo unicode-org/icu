@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -255,7 +255,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
     // patterns we have, but it may be a problem later.
 
     UBool hasEra = (pat.indexOf(UnicodeString("G")) != -1);
-    UBool hasZone = (pat.indexOf(UnicodeString("Z")) != -1) || (pat.indexOf(UnicodeString("z")) != -1);
+    UBool hasZone = (pat.indexOf(UnicodeString("Z")) != -1) || (pat.indexOf(UnicodeString("z")) != -1) || (pat.indexOf(UnicodeString("v")) != -1);
 
     // Because patterns contain incomplete data representing the Date,
     // we must be careful of how we do the roundtrip.  We start with
