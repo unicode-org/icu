@@ -214,7 +214,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
 static UChar         *pseudoToUChar;
 static unsigned char *UCharToPseudo;
 
-static void buildPseudoTables()
+static void buildPseudoTables(void)
 /*
     The rules for pseudo-Bidi are as follows:
     - [ == LRE
@@ -2106,7 +2106,7 @@ static const int32_t forwardMap[][MAX_MAP_LENGTH] = {
     { 4, 5, 6, 3, 2, 1, 0 },                                            /* (32) */
 };
 
-static const int inverseMap[][MAX_MAP_LENGTH] = {
+static const int32_t inverseMap[][MAX_MAP_LENGTH] = {
 /* TC 0: 123 */
     { 0, 1, 2 },                                                        /* (0) */
 /* TC 1: .123->4.5 */
@@ -2842,9 +2842,9 @@ static void doBidiClassOverrideTest(void) {
     ubidi_close(pBiDi);
 }
 
-static char * formatMap(const int * map, int len, char * buffer)
+static char * formatMap(const int32_t * map, int len, char * buffer)
 {
-    int i, k;
+    int32_t i, k;
     char c;
     for (i = 0; i < len; i++) {
         k = map[i];
@@ -2852,7 +2852,8 @@ static char * formatMap(const int * map, int len, char * buffer)
             c = '-';
         else if (k >= sizeof columns)
             c = '+';
-        else c = columns[k];
+        else
+            c = columns[k];
         buffer[i] = c;
     }
     buffer[len] = '\0';
