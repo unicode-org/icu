@@ -83,7 +83,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-static const UVersionInfo ICU_36 = {3,6,0,0};
+static const UVersionInfo ICU_37 = {3,7,0,0};
 
 
 //--------------------------------------------------------------------
@@ -1141,7 +1141,7 @@ void TransliteratorRoundTripTest::TestHan() {
 
 void TransliteratorRoundTripTest::TestGreek() {
 
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -1173,7 +1173,7 @@ void TransliteratorRoundTripTest::TestGreek() {
 
 void TransliteratorRoundTripTest::TestGreekUNGEGN() {
 
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -1202,7 +1202,7 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
 
 void TransliteratorRoundTripTest::Testel() {
     
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -1270,7 +1270,7 @@ UBool LegalHebrew::is(const UnicodeString& sourceString)const{
     return TRUE;
 }
 void TransliteratorRoundTripTest::TestHebrew() {
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -1393,7 +1393,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     }
     RTTest test("Latin-Devanagari");
     Legal *legal = new LegalIndic();
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestDevanagariLatin needs to be updated to remove delete the [:Age=4.1:] filter ");
@@ -1669,7 +1669,7 @@ void TransliteratorRoundTripTest::TestInterIndic() {
         logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);
         num = 5;
     }
-    if (isICUVersionAtLeast(ICU_36)) {
+    if (isICUVersionAtLeast(ICU_37)) {
         // We temporarily filter against Unicode 4.1, but we only do this
         // before version 3.4.
         errln("FAIL: TestInterIndic needs to be updated to remove delete the [:Age=4.1:] filter ");

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -190,7 +190,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
-static const UVersionInfo ICU_36 = {3,6,0,0};
+static const UVersionInfo ICU_37 = {3,7,0,0};
 /**
  * Make sure every system transliterator can be instantiated.
  * 
@@ -225,7 +225,7 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") != getAvailableIDs().snext()");
             continue;
         }
-        if(id2.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_36)){
+        if(id2.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_37)){
             /* The Thai-Latin transliterator doesn't exist in ICU4C yet */
             continue;
         }
@@ -3497,7 +3497,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 Transliterator::getAvailableVariant(k, source, target, variant);
                 UnicodeString id = source + "-" + target + "/" + variant;
                 
-                if(id.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_36)){
+                if(id.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_37)){
                     /* The Thai-Latin transliterator doesn't exist in ICU4C yet */
                     continue;
                 }    
