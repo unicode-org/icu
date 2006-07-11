@@ -31,12 +31,12 @@
 #        define uloc_getDefault uloc_getDefault_SYSTEM_API_DO_NOT_USE
 #        define uloc_setDefault uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    else
-#        define u_cleanup_3_5 u_cleanup_SYSTEM_API_DO_NOT_USE
-#        define u_setAtomicIncDecFunctions_3_5 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
-#        define u_setMemoryFunctions_3_5 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
-#        define u_setMutexFunctions_3_5 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
-#        define uloc_getDefault_3_5 uloc_getDefault_SYSTEM_API_DO_NOT_USE
-#        define uloc_setDefault_3_5 uloc_setDefault_SYSTEM_API_DO_NOT_USE
+#        define u_cleanup_3_6 u_cleanup_SYSTEM_API_DO_NOT_USE
+#        define u_setAtomicIncDecFunctions_3_6 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMemoryFunctions_3_6 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMutexFunctions_3_6 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define uloc_getDefault_3_6 uloc_getDefault_SYSTEM_API_DO_NOT_USE
+#        define uloc_setDefault_3_6 uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_SYSTEM_API */
