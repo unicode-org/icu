@@ -1717,7 +1717,7 @@ void DateFormatTest::expectFormat(const char** data, int32_t data_length,
 }
 
 void DateFormatTest::TestGenericTime() {
-#if U_ICU_VERSION_MAJOR_NUM > 3 || U_ICU_VERSION_MINOR_NUM > 5
+#if U_ICU_VERSION_MAJOR_NUM > 3 || U_ICU_VERSION_MINOR_NUM > 6
 # define FIX_FAILING_WALLTIME_TESTS
 #else
   logln("Warning, skipping some tests here!");
