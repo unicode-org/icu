@@ -51,24 +51,24 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Win32NumberFormat)
 
 /*
  * Turns a string of the form "3;2;0" into the grouping UINT
- * needed for NUMBERFMT and CURRENCYFMT. If there's only one
- * group in the string, that means that there's only one group,
- * and the return value should be multiplied by 10. (e.g. "3" => 30)
+ * needed for NUMBERFMT and CURRENCYFMT. If the string does not
+ * end in ";0" then the return value should be multiplied by 10.
+ * (e.g. "3" => 30, "3;2" => 320)
  */
 static UINT getGrouping(const char *grouping)
 {
     UINT g = 0;
-    UINT c = 0;
+	const char *s;
 
-    for (const char *s = grouping; *s != '\0'; s += 1) {
+    for (s = grouping; *s != '\0'; s += 1) {
         if (*s > '0' && *s < '9') {
             g = g * 10 + (*s - '0');
-        } else if (*s == ';') {
-            c += 1;
+        } else if (*s != ';') {
+            break;
         }
     }
 
-    if (c == 0) {
+    if (*s != '0') {
         g *= 10;
     }
 
