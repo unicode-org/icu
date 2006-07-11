@@ -54,6 +54,9 @@
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
 #endif
+#ifndef __USE_XOPEN_EXTENDED
+#define __USE_XOPEN_EXTENDED
+#endif
 
 /* include ICU headers */
 #include "unicode/utypes.h"
@@ -104,13 +107,7 @@
 #   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif defined(OS390)
 #include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
-#elif defined(U_AIX)
-#elif defined(U_SOLARIS)
-#elif defined(U_HPUX)
 #elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
-#ifndef __USE_XOPEN_EXTENDED
-#define __USE_XOPEN_EXTENDED
-#endif
 #include <limits.h>
 #include <unistd.h>
 #elif defined(U_QNX)
