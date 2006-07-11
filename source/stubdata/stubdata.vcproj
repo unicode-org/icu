@@ -39,10 +39,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt35.dll"
+				OutputFile="..\..\bin\icudt36.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/icudt35.pdb"
+				ProgramDatabaseFile=".\Release/icudt36.pdb"
 				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
@@ -104,9 +104,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt35.dll"
+				OutputFile="..\..\bin\icudt36.dll"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Debug/icudt35.pdb"
+				ProgramDatabaseFile=".\Debug/icudt36.pdb"
 				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
