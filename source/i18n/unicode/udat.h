@@ -710,7 +710,15 @@ typedef enum UDateFormatSymbolType {
     /** Standalone context versions of weekdays */
     UDAT_STANDALONE_WEEKDAYS,
     UDAT_STANDALONE_SHORT_WEEKDAYS,
-    UDAT_STANDALONE_NARROW_WEEKDAYS
+    UDAT_STANDALONE_NARROW_WEEKDAYS,
+    /** The quarters, for example 1st Quarter */
+    UDAT_QUARTERS,
+    /** The short quarter names, for example Q1 */
+    UDAT_SHORT_QUARTERS,
+    /** Standalone context versions of quarters */
+    UDAT_STANDALONE_QUARTERS,
+    UDAT_STANDALONE_SHORT_QUARTERS
+
 } UDateFormatSymbolType;
 
 struct UDateFormatSymbols;

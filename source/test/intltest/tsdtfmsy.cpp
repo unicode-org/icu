@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -270,6 +270,34 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     if( *en.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW) != 
         *fr.getWeekdays(count,DateFormatSymbols::STANDALONE,DateFormatSymbols::NARROW )) {
         errln("ERROR: setWeekdays(STANDALONE,NARROW) failed");
+    }
+
+    const UnicodeString *wideQuarters = en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+    fr2.setQuarters(wideQuarters, count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE) != 
+        *fr2.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE )) {
+        errln("ERROR: setQuarters(FORMAT, WIDE) failed");
+    }
+
+    const UnicodeString *abbrQuarters = en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+    fr2.setQuarters(abbrQuarters, count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+    if( *en.getQuarters(count,DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED) != 
+        *fr2.getQuarters(count,DateFormatSymbols::FORMAT ,DateFormatSymbols::ABBREVIATED )) {
+        errln("ERROR: setQuarters(FORMAT, ABBREVIATED) failed");
+    }
+
+    const UnicodeString *standaloneWideQuarters = en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
+    fr.setQuarters(standaloneWideQuarters, count, DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
+    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE) != 
+        *fr.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE )) {
+        errln("ERROR: setQuarters(STANDALONE, WIDE) failed");
+    }
+
+    const UnicodeString *standaloneShortQuarters = en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
+    fr.setQuarters(standaloneShortQuarters, count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
+    if( *en.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED) != 
+        *fr.getQuarters(count,DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED )) {
+        errln("ERROR: setQuarters(STANDALONE, ABBREVIATED) failed");
     }
 
     const UnicodeString *ampms = en.getAmPmStrings(count);

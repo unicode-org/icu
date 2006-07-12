@@ -622,6 +622,54 @@ DateFormatSymbols::getWeekdays(int32_t &count, DtContextType context, DtWidthTyp
 }
 
 const UnicodeString*
+DateFormatSymbols::getQuarters(int32_t &count, DtContextType context, DtWidthType width ) const
+{
+    UnicodeString *returnValue = NULL;
+
+    switch (context) {
+    case FORMAT :
+        switch(width) {
+        case WIDE :
+            count = fQuartersCount;
+            returnValue = fQuarters;
+            break;
+        case ABBREVIATED :
+            count = fShortQuartersCount;
+            returnValue = fShortQuarters;
+            break;
+        case NARROW :
+            count = 0;
+            returnValue = NULL;
+            break;
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case STANDALONE :
+        switch(width) {
+        case WIDE :
+            count = fStandaloneQuartersCount;
+            returnValue = fStandaloneQuarters;
+            break;
+        case ABBREVIATED :
+            count = fStandaloneShortQuartersCount;
+            returnValue = fStandaloneShortQuarters;
+            break;
+        case NARROW :
+            count = 0;
+            returnValue = NULL;
+            break;
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
+    }
+    return returnValue;
+}
+
+const UnicodeString*
 DateFormatSymbols::getAmPmStrings(int32_t &count) const
 {
     count = fAmPmsCount;
@@ -837,6 +885,77 @@ DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count
             fStandaloneNarrowWeekdays = newUnicodeStringArray(count);
             uprv_arrayCopy(weekdaysArray, fStandaloneNarrowWeekdays, count);
             fStandaloneNarrowWeekdaysCount = count;
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case DT_CONTEXT_COUNT :
+        break;
+    }
+}
+
+void
+DateFormatSymbols::setQuarters(const UnicodeString* quartersArray, int32_t count, DtContextType context, DtWidthType width)
+{
+    // delete the old list if we own it
+    // we always own the new list, which we create here (we duplicate rather
+    // than adopting the list passed in)
+
+    switch (context) {
+    case FORMAT :
+        switch (width) {
+        case WIDE :
+            if (fQuarters)
+                delete[] fQuarters;
+            fQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fQuarters,count);
+            fQuartersCount = count;
+            break;
+        case ABBREVIATED :
+            if (fShortQuarters)
+                delete[] fShortQuarters;
+            fShortQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fShortQuarters,count);
+            fShortQuartersCount = count;
+            break;
+        case NARROW :
+        /*
+            if (fNarrowQuarters)
+                delete[] fNarrowQuarters;
+            fNarrowQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fNarrowQuarters,count);
+            fNarrowQuartersCount = count;
+        */
+            break; 
+        case DT_WIDTH_COUNT :
+            break;
+        }
+        break;
+    case STANDALONE :
+        switch (width) {
+        case WIDE :
+            if (fStandaloneQuarters)
+                delete[] fStandaloneQuarters;
+            fStandaloneQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fStandaloneQuarters,count);
+            fStandaloneQuartersCount = count;
+            break;
+        case ABBREVIATED :
+            if (fStandaloneShortQuarters)
+                delete[] fStandaloneShortQuarters;
+            fStandaloneShortQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fStandaloneShortQuarters,count);
+            fStandaloneShortQuartersCount = count;
+            break;
+        case NARROW :
+        /*
+           if (fStandaloneNarrowQuarters)
+                delete[] fStandaloneNarrowQuarters;
+            fStandaloneNarrowQuarters = newUnicodeStringArray(count);
+            uprv_arrayCopy( quartersArray,fStandaloneNarrowQuarters,count);
+            fStandaloneNarrowQuartersCount = count;
+        */
             break; 
         case DT_WIDTH_COUNT :
             break;
