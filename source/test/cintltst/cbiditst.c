@@ -210,9 +210,11 @@ doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
     }
 }
 
+static const char columns[62] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
 #define TABLE_SIZE  256
 static UChar         *pseudoToUChar;
-static unsigned char *UCharToPseudo;
+static uint8_t       *UCharToPseudo;
 
 static void buildPseudoTables(void)
 /*
@@ -238,6 +240,7 @@ static void buildPseudoTables(void)
 {
     int             i;
     UChar           uchar;
+    uint8_t         c;
     pseudoToUChar = malloc(TABLE_SIZE * sizeof(UChar));
     UCharToPseudo = malloc(TABLE_SIZE * sizeof(char));
     if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL)) {
@@ -250,82 +253,71 @@ static void buildPseudoTables(void)
         UCharToPseudo[i] = i;
     }
     /* initialize non letters or digits */
-    pseudoToUChar[' '] = 0x0020;    UCharToPseudo[0x20] = ' ';
-    pseudoToUChar['!'] = 0x0021;    UCharToPseudo[0x21] = '!';
-    pseudoToUChar['"'] = 0x0022;    UCharToPseudo[0x22] = '"';
-    pseudoToUChar['#'] = 0x0023;    UCharToPseudo[0x23] = '#';
-    pseudoToUChar['$'] = 0x0024;    UCharToPseudo[0x24] = '$';
-    pseudoToUChar['%'] = 0x0025;    UCharToPseudo[0x25] = '%';
-    pseudoToUChar['\'']= 0x0027;    UCharToPseudo[0x27] = '\'';
-    pseudoToUChar['('] = 0x0028;    UCharToPseudo[0x28] = '(';
-    pseudoToUChar[')'] = 0x0029;    UCharToPseudo[0x29] = ')';
-    pseudoToUChar['*'] = 0x002A;    UCharToPseudo[0x2A] = '*';
-    pseudoToUChar['+'] = 0x002B;    UCharToPseudo[0x2B] = '+';
-    pseudoToUChar[','] = 0x002C;    UCharToPseudo[0x2C] = ',';
-    pseudoToUChar['-'] = 0x002D;    UCharToPseudo[0x2D] = '-';
-    pseudoToUChar['.'] = 0x002E;    UCharToPseudo[0x2E] = '.';
-    pseudoToUChar['/'] = 0x002F;    UCharToPseudo[0x2F] = '/';
-    pseudoToUChar[':'] = 0x003A;    UCharToPseudo[0x3A] = ':';
-    pseudoToUChar[';'] = 0x003B;    UCharToPseudo[0x3B] = ';';
-    pseudoToUChar['<'] = 0x003C;    UCharToPseudo[0x3C] = '<';
-    pseudoToUChar['='] = 0x003D;    UCharToPseudo[0x3D] = '=';
-    pseudoToUChar['>'] = 0x003E;    UCharToPseudo[0x3E] = '>';
-    pseudoToUChar['?'] = 0x003F;    UCharToPseudo[0x3F] = '?';
-    pseudoToUChar['\\']= 0x005C;    UCharToPseudo[0x5C] = '\\';
-    pseudoToUChar[0x1F]= 0xE01F;    /* avoid clash with '_' */
-    pseudoToUChar[0x7F]= 0xE07F;    /* avoid clash with '~' */
+    pseudoToUChar[(uint8_t)' '] = 0x0020;    UCharToPseudo[0x20] = (uint8_t)' ';
+    pseudoToUChar[(uint8_t)'!'] = 0x0021;    UCharToPseudo[0x21] = (uint8_t)'!';
+    pseudoToUChar[(uint8_t)'"'] = 0x0022;    UCharToPseudo[0x22] = (uint8_t)'"';
+    pseudoToUChar[(uint8_t)'#'] = 0x0023;    UCharToPseudo[0x23] = (uint8_t)'#';
+    pseudoToUChar[(uint8_t)'$'] = 0x0024;    UCharToPseudo[0x24] = (uint8_t)'$';
+    pseudoToUChar[(uint8_t)'%'] = 0x0025;    UCharToPseudo[0x25] = (uint8_t)'%';
+    pseudoToUChar[(uint8_t)'\'']= 0x0027;    UCharToPseudo[0x27] = (uint8_t)'\'';
+    pseudoToUChar[(uint8_t)'('] = 0x0028;    UCharToPseudo[0x28] = (uint8_t)'(';
+    pseudoToUChar[(uint8_t)')'] = 0x0029;    UCharToPseudo[0x29] = (uint8_t)')';
+    pseudoToUChar[(uint8_t)'*'] = 0x002A;    UCharToPseudo[0x2A] = (uint8_t)'*';
+    pseudoToUChar[(uint8_t)'+'] = 0x002B;    UCharToPseudo[0x2B] = (uint8_t)'+';
+    pseudoToUChar[(uint8_t)','] = 0x002C;    UCharToPseudo[0x2C] = (uint8_t)',';
+    pseudoToUChar[(uint8_t)'-'] = 0x002D;    UCharToPseudo[0x2D] = (uint8_t)'-';
+    pseudoToUChar[(uint8_t)'.'] = 0x002E;    UCharToPseudo[0x2E] = (uint8_t)'.';
+    pseudoToUChar[(uint8_t)'/'] = 0x002F;    UCharToPseudo[0x2F] = (uint8_t)'/';
+    pseudoToUChar[(uint8_t)':'] = 0x003A;    UCharToPseudo[0x3A] = (uint8_t)':';
+    pseudoToUChar[(uint8_t)';'] = 0x003B;    UCharToPseudo[0x3B] = (uint8_t)';';
+    pseudoToUChar[(uint8_t)'<'] = 0x003C;    UCharToPseudo[0x3C] = (uint8_t)'<';
+    pseudoToUChar[(uint8_t)'='] = 0x003D;    UCharToPseudo[0x3D] = (uint8_t)'=';
+    pseudoToUChar[(uint8_t)'>'] = 0x003E;    UCharToPseudo[0x3E] = (uint8_t)'>';
+    pseudoToUChar[(uint8_t)'?'] = 0x003F;    UCharToPseudo[0x3F] = (uint8_t)'?';
+    pseudoToUChar[(uint8_t)'\\']= 0x005C;    UCharToPseudo[0x5C] = (uint8_t)'\\';
+    pseudoToUChar[(uint8_t)0x1F]= 0xE01F;    /* avoid clash with '_' */
+    pseudoToUChar[(uint8_t)0x7F]= 0xE07F;    /* avoid clash with '~' */
     /* initialize specially used characters */
-    pseudoToUChar['`'] = 0x0300;    UCharToPseudo[0x00] = '`';  /* NSM */
-    pseudoToUChar['@'] = 0x200E;    UCharToPseudo[0x0E] = '@';  /* LRM */
-    pseudoToUChar['&'] = 0x200F;    UCharToPseudo[0x0F] = '&';  /* RLM */
-    pseudoToUChar['_'] = 0x001F;    UCharToPseudo[0x1F] = '_';  /* S   */
-    pseudoToUChar['|'] = 0x2029;    UCharToPseudo[0x29] = '|';  /* B   */
-    pseudoToUChar['['] = 0x202A;    UCharToPseudo[0x2A] = '[';  /* LRE */
-    pseudoToUChar[']'] = 0x202B;    UCharToPseudo[0x2B] = ']';  /* RLE */
-    pseudoToUChar['^'] = 0x202C;    UCharToPseudo[0x2C] = '^';  /* PDF */
-    pseudoToUChar['{'] = 0x202D;    UCharToPseudo[0x2D] = '{';  /* LRO */
-    pseudoToUChar['}'] = 0x202E;    UCharToPseudo[0x2E] = '}';  /* RLO */
-    pseudoToUChar['~'] = 0x007F;    UCharToPseudo[0x7F] = '~';  /* BN  */
+    pseudoToUChar[(uint8_t)'`'] = 0x0300;    UCharToPseudo[0x00] = (uint8_t)'`';  /* NSM */
+    pseudoToUChar[(uint8_t)'@'] = 0x200E;    UCharToPseudo[0x0E] = (uint8_t)'@';  /* LRM */
+    pseudoToUChar[(uint8_t)'&'] = 0x200F;    UCharToPseudo[0x0F] = (uint8_t)'&';  /* RLM */
+    pseudoToUChar[(uint8_t)'_'] = 0x001F;    UCharToPseudo[0x1F] = (uint8_t)'_';  /* S   */
+    pseudoToUChar[(uint8_t)'|'] = 0x2029;    UCharToPseudo[0x29] = (uint8_t)'|';  /* B   */
+    pseudoToUChar[(uint8_t)'['] = 0x202A;    UCharToPseudo[0x2A] = (uint8_t)'[';  /* LRE */
+    pseudoToUChar[(uint8_t)']'] = 0x202B;    UCharToPseudo[0x2B] = (uint8_t)']';  /* RLE */
+    pseudoToUChar[(uint8_t)'^'] = 0x202C;    UCharToPseudo[0x2C] = (uint8_t)'^';  /* PDF */
+    pseudoToUChar[(uint8_t)'{'] = 0x202D;    UCharToPseudo[0x2D] = (uint8_t)'{';  /* LRO */
+    pseudoToUChar[(uint8_t)'}'] = 0x202E;    UCharToPseudo[0x2E] = (uint8_t)'}';  /* RLO */
+    pseudoToUChar[(uint8_t)'~'] = 0x007F;    UCharToPseudo[0x7F] = (uint8_t)'~';  /* BN  */
     /* initialize western digits */
-    for (i = '0', uchar = 0x0030; i <= '5'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
+    for (i = 0, uchar = 0x0030; i < 6; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = c;
     }
     /* initialize Hindi digits */
-    for (i = '6', uchar = 0x0666; i <= '9'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
+    for (i = 6, uchar = 0x0666; i < 10; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = c;
     }
     /* initialize Arabic letters */
-    for (i = 'A', uchar = 0x0631; i <= 'F'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
+    for (i = 10, uchar = 0x0631; i < 16; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = c;
     }
     /* initialize Hebrew letters */
-    for (i = 'G', uchar = 0x05D7; i <= 'I'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
-    }
-    for (i = 'J', uchar = 0x05DA; i <= 'R'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
-    }
-    for (i = 'S', uchar = 0x05E3; i <= 'Z'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
+    for (i = 16, uchar = 0x05D7; i < 36; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = c;
     }
     /* initialize Latin lower case letters */
-    for (i = 'a', uchar = 0x0061; i <= 'i'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
-    }
-    for (i = 'j', uchar = 0x006A; i <= 'r'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
-    }
-    for (i = 's', uchar = 0x0073; i <= 'z'; i++, uchar++) {
-        pseudoToUChar[i] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = i;
+    for (i = 36, uchar = 0x0061; i < 62; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseudo[uchar & 0x00ff] = c;
     }
 }
 
@@ -341,7 +333,7 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
         buildPseudoTables();
     }
     for (i = 0; i < length; i++)
-        output[i] = pseudoToUChar[(unsigned char)input[i]];
+        output[i] = pseudoToUChar[(uint8_t)input[i]];
     return length;
 }
 
@@ -354,7 +346,7 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
 {
     int             i, j;
     UChar           u;
-    unsigned char   v;
+    uint8_t         v;
     if (!pseudoToUChar) {
         buildPseudoTables();
     }
@@ -371,7 +363,7 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
             continue;
         }
         v = (char)(u & 0x00ff);         /* keep 8 right bits */
-        for (j = 1; j < TABLE_SIZE; j++) {
+        for (j = TABLE_SIZE-1; j > 0; j--) {
             if (pseudoToUChar[j] == u) {
                 v = j;
                 break;
@@ -382,8 +374,6 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
     output[length] = '\0';
     return length;
 }
-
-static const char columns[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 static char * formatLevels(UBiDi *bidi, char *buffer) {
     UErrorCode ec = U_ZERO_ERROR;
@@ -400,7 +390,8 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
         k = gotLevels[i];
         if (k >= sizeof columns)
             c = '+';
-        else c = columns[k];
+        else
+            c = columns[k];
         buffer[i] = c;
     }
     buffer[len] = '\0';
@@ -2420,7 +2411,8 @@ checkResultLength(UBiDi *pBiDi, const char *srcChars, const char *destChars,
     int32_t actualLen;
     if (strcmp(mode, "UBIDI_REORDER_INVERSE_NUMBERS_AS_L") == 0)
         actualLen = strlen(destChars);
-    else  actualLen = ubidi_getResultLength(pBiDi);
+    else
+        actualLen = ubidi_getResultLength(pBiDi);
     if (actualLen != destLen) {
         log_err("\nubidi_getResultLength failed.\n%20s %7d\n%20s %7d\n"
                 "%20s %s\n%20s %s\n%20s %s\n%20s %s\n%20s %u\n",
