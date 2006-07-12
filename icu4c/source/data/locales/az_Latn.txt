@@ -23,5 +23,5 @@ az_Latn{
     LocaleScript{
         "Latn",
     }
-    Version{"1.13"}
+    Version{"1.18"}
 }

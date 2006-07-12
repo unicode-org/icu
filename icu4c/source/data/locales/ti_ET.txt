@@ -10,7 +10,7 @@ ti_ET{
     Currencies{
         USD{
             "US$",
-            "የአሜሪካን ዶላር",
+            "USD",
         }
     }
     NumberPatterns{
@@ -19,7 +19,7 @@ ti_ET{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

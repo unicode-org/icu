@@ -169,7 +169,7 @@ kok{
     LocaleScript{
         "Deva",
     }
-    Version{"1.38"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{

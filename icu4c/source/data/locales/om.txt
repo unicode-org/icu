@@ -27,7 +27,7 @@ om{
     LocaleScript{
         "Latn",
     }
-    Version{"1.35"}
+    Version{"1.40"}
     calendar{
         gregorian{
             dayNames{
@@ -49,6 +49,17 @@ om{
                         "Kamiisa",
                         "Jimaata",
                         "Sanbata",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
                     }
                 }
             }
@@ -87,6 +98,22 @@ om{
                         "Onkololeessa",
                         "Sadaasa",
                         "Muddee",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 hr_HR{
-    Version{"1.35"}
+    Version{"1.40"}
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}

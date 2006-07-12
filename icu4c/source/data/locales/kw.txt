@@ -20,7 +20,7 @@ kw{
     LocaleScript{
         "Latn",
     }
-    Version{"1.33"}
+    Version{"1.37"}
     calendar{
         gregorian{
             AmPmMarkers{

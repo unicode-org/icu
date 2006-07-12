@@ -8,33 +8,7 @@
 // ***************************************************************************
 lt_LT{
     Countries{
-        001{"Pasaulis"}
-        002{"Afrika"}
-        005{"Pietų Amerika"}
-        009{"Okeanija"}
-        011{"Vakarų Afrika"}
-        013{"Centrinė Amerika"}
-        014{"Rytų Afrika"}
-        015{"Šiaurės Afrika"}
-        017{"Vidurio Afrika"}
-        018{"Pietų Afrika"}
-        019{"Amerika"}
-        021{"Šiaurės Amerika"}
-        029{"Karibai"}
-        030{"Rytų Azija"}
-        034{"Pietų Azija"}
-        035{"Pietryčių Azija"}
-        039{"Pietų Europa"}
-        054{"Melanezija"}
-        142{"Azija"}
-        143{"Centrinė Azija"}
-        145{"Vakarų Azija"}
-        150{"Europa"}
-        151{"Rytų Europa"}
-        154{"Šiaurės Europa"}
-        155{"Vakarų Europa"}
         172{"Nepriklausomų Valstybių Sandrauga"}
-        419{"Lotynų Amerika ir Karibai"}
     }
     Languages{
         ab{"Abchazų"}
@@ -48,7 +22,6 @@ lt_LT{
         bat{"Baltų (kita)"}
         be{"Baltarusių"}
         ber{"Berberų"}
-        bn{"Bengalų"}
         bnt{"Bantų"}
         bo{"Tibetiečių"}
         br{"Bretonų"}
@@ -150,7 +123,7 @@ lt_LT{
         Mong{"Mongolų"}
         Runr{"Runų"}
     }
-    Version{"1.35"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

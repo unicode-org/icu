@@ -13,7 +13,7 @@ kl_GL{
         "#,##0%",
         "#E0",
     }
-    Version{"1.29"}
+    Version{"1.34"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

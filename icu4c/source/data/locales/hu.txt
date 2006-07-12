@@ -1249,9 +1249,9 @@ hu{
         }
     }
     ExemplarCharacters{
-        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j k l"
-        " {ly} {lly} m n {ny} {nny} o ó ö ő p r s {sz} {ssz} t {ty} {tty} u ú ü ű v z"
-        " {zs} {zzs}]"
+        "[a á b c {cs} {ccs} d {dz} {ddz} {dzs} {ddzs} e é f g {gy} {ggy} h i í j-l {"
+        "ly} {lly} m n {ny} {nny} o ó ö ő p r s {sz} {ssz} t {ty} {tty} u ú ü ű v z {"
+        "zs} {zzs}]"
     }
     Keys{
         calendar{"Naptár"}
@@ -1468,7 +1468,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.61"}
+    Version{"1.69"}
     calendar{
         buddhist{
             eras{

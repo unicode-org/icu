@@ -308,7 +308,7 @@ lv{
         "NaN",
         "+",
     }
-    Version{"1.51"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -389,6 +389,12 @@ lv{
                         "C2",
                         "C3",
                         "C4",
+                    }
+                    wide{
+                        "1. ceturksnis",
+                        "2. ceturksnis",
+                        "3. ceturksnis",
+                        "4. ceturksnis",
                     }
                 }
             }

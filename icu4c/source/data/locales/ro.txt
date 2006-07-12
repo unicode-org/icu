@@ -328,7 +328,7 @@ ro{
         "NaN",
         "+",
     }
-    Version{"1.60"}
+    Version{"1.66"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -426,6 +426,22 @@ ro{
                         "O",
                         "N",
                         "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "trimestrul 1",
+                        "trimestrul 2",
+                        "trimestrul 3",
+                        "trimestrul 4",
                     }
                 }
             }

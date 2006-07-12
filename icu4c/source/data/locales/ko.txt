@@ -646,7 +646,7 @@ ko{
             "이스라엘 신권 세켈",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "인도 루피",
         }
         IQD{
@@ -1422,7 +1422,7 @@ ko{
         ine{"인도유럽어 (기타)"}
         inh{"인귀시어"}
         io{"이도어"}
-        ira{"이란어"}
+        ira{"이란어 [ira]"}
         iro{"이러쿼이어"}
         is{"아이슬란드어"}
         it{"이탈리아어"}
@@ -1783,7 +1783,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.63"}
+    Version{"1.70"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1800,25 +1800,6 @@ ko{
                 "yyyy. MM. dd",
                 "yy. MM. dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                Hm{"H'시' m'분'"}
-                Hms{"H'시' m'분' s'초'"}
-                Km{"a K'시' m'분'"}
-                Kms{"a K'시' m'분' s'초'"}
-                M{"M'월'"}
-                Md{"M'월' d'일'"}
-                msSS{"m:s.SS"}
-                yyM{"yy'년' M'월'"}
-                yyMEEEEd{"yy'년' M'월' d'일' EEEE,"}
-                yyMEEEd{"yy'년' M'월' d'일' (EEE)"}
-                yyMd{"yy'년' M'월' d'일'"}
-                yyMdHm{"yy'년' M'월' d'일' H'시' m'분'"}
-                yyyyM{"yyyy'년' M'월'"}
-                yyyyMEEEEd{"yyyy'년' M'월' d'일' EEEE,"}
-                yyyyMEEEd{"yyyy'년' M'월' d'일' (EEE)"}
-                yyyyMd{"yyyy'년' M'월' d'일'"}
-                yyyyMdHms{"yyyy'년' M'월' d'일' H'시' m'분' s'초'"}
             }
             dayNames{
                 format{
@@ -1911,6 +1892,22 @@ ko{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "일",
+                        "이",
+                        "삼",
+                        "사",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
@@ -1926,8 +1923,8 @@ ko{
             ec{"앵커리지"}
             ld{"알래스카 기준시"}
             ls{"알래스카 표준시"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Chicago"{
             ec{"시카고"}
@@ -1952,10 +1949,10 @@ ko{
         }
         "America:Indianapolis"{
             ec{"인디애나폴리스"}
-            ld{"동부 표준시"}
-            ls{"동부 표준시"}
-            sd{"EST"}
-            ss{"EST"}
+            ld{"동부 기준시 (인디애나폴리스)"}
+            ls{"동부 표준시 (인디애나폴리스)"}
+            sd{"EDT (IN)"}
+            ss{"EST (IN)"}
         }
         "America:Los_Angeles"{
             ec{"로스앤젤레스"}
@@ -1982,8 +1979,8 @@ ko{
             ec{"St. Johns"}
             ld{"뉴펀들랜드 기준시"}
             ls{"뉴펀들랜드 표준시"}
-            sd{"CDT"}
-            ss{"CNT"}
+            sd{"NDT"}
+            ss{"NST"}
         }
         "Asia:Jerusalem"{
             ec{"예루살렘"}
@@ -2003,7 +2000,6 @@ ko{
             ec{"상하이"}
             ld{"중국 표준시"}
             ls{"중국 표준시"}
-            sd{"CDT"}
             ss{"CTT"}
         }
         "Asia:Tokyo"{

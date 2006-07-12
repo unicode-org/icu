@@ -27,7 +27,7 @@ es_ES{
     Scripts{
         Ethi{"etíope"}
     }
-    Version{"1.34"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimePatterns{

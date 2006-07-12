@@ -9,7 +9,6 @@
 pl_PL{
     Countries{
         001{"świat"}
-        029{"Karaiby"}
         034{"Azja Południowa"}
         143{"Azja Środkowa"}
         172{"Wspólnota Niezależnych Państw"}
@@ -18,22 +17,18 @@ pl_PL{
         LY{"Libia"}
         MD{"Mołdawia"}
         MK{"Macedonia"}
-        MP{"Mariany Północne"}
+        MP{"Mariany Północne"}
         PM{"Saint-Pierre i Miquelon"}
         PR{"Portoryko"}
-        SH{"Święta Helena"}
+        SH{"Święta Helena"}
         TF{"Francuskie Terytoria Południowe i Antarktyczne"}
         UM{"Dalekie Wyspy Mniejsze Stanów Zjednoczonych"}
         VA{"Watykan"}
         VC{"Saint Vincent i Grenadyny"}
-        VI{"Wyspy Dziewicze Stanów Zjednoczonych"}
+        VI{"Wyspy Dziewicze Stanów Zjednoczonych"}
         ZA{"Republika Południowej Afryki"}
     }
     Currencies{
-        BGN{
-            "BGN",
-            "nowy lew bułgarski",
-        }
         BRE{
             "BRE",
             "cruzeiro brazylijskie (1990-1993)",
@@ -428,7 +423,7 @@ pl_PL{
         1901{"Tradycyjna ortografia niemiecka"}
         1996{"Ortografia niemiecka z 1996 r."}
     }
-    Version{"1.33"}
+    Version{"1.40"}
     calendar{
         gregorian{
             fields{
@@ -463,18 +458,18 @@ pl_PL{
             monthNames{
                 format{
                     abbreviated{
-                        "stycznia",
-                        "lutego",
-                        "marca",
-                        "kwietnia",
-                        "maja",
-                        "czerwca",
-                        "lipca",
-                        "sierpnia",
-                        "września",
-                        "października",
-                        "listopada",
-                        "grudnia",
+                        "sty",
+                        "lut",
+                        "mar",
+                        "kwi",
+                        "maj",
+                        "cze",
+                        "lip",
+                        "sie",
+                        "wrz",
+                        "paź",
+                        "lis",
+                        "gru",
                     }
                 }
                 stand-alone{

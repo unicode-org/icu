@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ar_BH{
-    Version{"1.32"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -7,13 +7,7 @@
 // *
 // ***************************************************************************
 sv_FI{
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0 %",
-        "#E0",
-    }
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -111,11 +105,5 @@ sv_FI{
                 }
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"’"}
-        quotationEnd{"”"}
-        quotationStart{"”"}
     }
 }

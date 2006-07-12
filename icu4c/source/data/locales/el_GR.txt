@@ -24,7 +24,7 @@ el_GR{
         "#,##0%",
         "#E0",
     }
-    Version{"1.36"}
+    Version{"1.41"}
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}

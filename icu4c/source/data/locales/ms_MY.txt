@@ -13,7 +13,7 @@ ms_MY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.30"}
+    Version{"1.35"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -17,22 +17,13 @@ en_SG{
             "USD",
         }
     }
-    Version{"1.37"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 1,
             }
-        }
-    }
-    zoneStrings{
-        "Asia:Singapore"{
-            ec{"Singapore"}
-            ld{"Singapore Standard Time"}
-            ls{"Singapore Standard Time"}
-            sd{"SST"}
-            ss{"SST"}
         }
     }
 }

@@ -423,7 +423,7 @@ fa{
             "فورینت مجارستان",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "روپیهٔ هند",
         }
         IQD{
@@ -1042,7 +1042,7 @@ fa{
         1996{"رسم‌الخط آلمانی ۱۹۹۶ میلادی"}
         REVISED{"رسم‌الخط تجدیدنظرشده"}
     }
-    Version{"1.50"}
+    Version{"1.63"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1061,40 +1061,7 @@ fa{
                 "{0}، ساعت {1}",
             }
             appendItems{
-                E{"{1} {0}"}
-                c{"{1} {0}"}
-                e{"{1} {0}"}
-            }
-            availableFormats{
-                GGGGyyyyMMMMEEEEd{"EEEE d MMMM yyyy GGGG"}
-                GGGGyyyyMMMMd{"d MMMM yyyy GGGG"}
-                GyyyyMMMMd{"d MMMM yyyy G"}
-                HHmm{"HH:mm"}
-                HHmmZ{"HH:mm (Z)"}
-                HHmmss{"HH:mm:ss"}
-                HHmmssSS{"HH:mm:ss٫SS"}
-                HHmmssSSZ{"HH:mm:ss٫SS (Z)"}
-                HHmmssZ{"HH:mm:ss (Z)"}
-                Hmm{"H:mm"}
-                HmmZ{"H:mm (Z)"}
-                Hmmss{"H:mm:ss"}
-                HmmssSS{"H:mm:ss٫SS"}
-                HmmssSSZ{"H:mm:ss٫SS (Z)"}
-                HmmssZ{"H:mm:ss (Z)"}
-                LLLLd{"d LLLL"}
-                MMMMd{"d LLLL"}
-                vvvv{"vvvv"}
-                yyMMMM{"MMMM yy"}
-                yyMMdd{"yy/MM/dd"}
-                yyMd{"yy/M/d"}
-                yyyyMMMM{"MMMM yyyy"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
-                yyyyMMMMEEEEdHmmss{"EEEE d MMMM yyyy، ساعت H:mm:ss"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMMMdHmmss{"d MMMM yyyy، ساعت H:mm:ss"}
-                yyyyMMdd{"yyyy/MM/dd"}
-                yyyyMd{"yyyy/M/d"}
-                zzzz{"zzzz"}
+                Day-Of-Week{"{1} {0}"}
             }
             dayNames{
                 format{
@@ -1348,6 +1315,20 @@ fa{
                         "ب",
                         "ا",
                     }
+                    wide{
+                        "حمل",
+                        "ثور",
+                        "جوزا",
+                        "سرطان",
+                        "اسد",
+                        "سنبله",
+                        "میزان",
+                        "عقرب",
+                        "قوس",
+                        "جدی",
+                        "دلو",
+                        "حوت",
+                    }
                 }
             }
         }
@@ -1357,7 +1338,7 @@ fa{
         quotationStart{"«"}
     }
     layout{
-        characters{"left-to-right"}
+        characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
     measurementSystemNames{
@@ -1455,9 +1436,6 @@ fa{
         "America:Hermosillo"{
             ec{"ارموسیو"}
         }
-        "America:Indiana:Indianapolis"{
-            ec{"ایندیاناپولیس"}
-        }
         "America:Indiana:Knox"{
             ec{"ناکس"}
         }
@@ -1484,9 +1462,6 @@ fa{
         }
         "America:Juneau"{
             ec{"جونو"}
-        }
-        "America:Kentucky:Louisville"{
-            ec{"لوئیس‌ویل"}
         }
         "America:Kentucky:Monticello"{
             ec{"مانتیسلو"}
@@ -1631,8 +1606,5 @@ fa{
         "Pacific:Tahiti"{
             ec{"تاهیتی"}
         }
-        fallbackFormat{"وقت {0} ({1})"}
-        hourFormat{"+HHmm;‪−HHmm‬"}
-        regionFormat{"وقت {0}"}
     }
 }

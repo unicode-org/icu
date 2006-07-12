@@ -13,7 +13,7 @@ kok_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.37"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimePatterns{

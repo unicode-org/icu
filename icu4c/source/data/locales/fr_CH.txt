@@ -27,7 +27,7 @@ fr_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -44,15 +44,6 @@ fr_CH{
                 "d MMM yy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmm{"KK:mm a"}
-                KKmmss{"KK:mm:ss a"}
-                MMMM{"MMMM"}
-                ww{"ww"}
-                yyQQQQ{"QQQQ yy"}
             }
         }
     }

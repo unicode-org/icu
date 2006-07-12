@@ -45,7 +45,7 @@ zh_Hans{
             "阿富汗尼",
         }
         AOA{
-            "AOK",
+            "AOA",
             "安哥拉宽扎",
         }
         AOK{
@@ -59,10 +59,6 @@ zh_Hans{
         AOR{
             "AOR",
             "安哥拉宽扎 Reajustado (1995-1999)",
-        }
-        ARS{
-            "ARP",
-            "阿根廷比索",
         }
         ATS{
             "ATS",
@@ -331,10 +327,6 @@ zh_Hans{
         MKD{
             "MKD",
             "马其顿戴代纳尔",
-        }
-        MMK{
-            "MMK",
-            "缅元",
         }
         MOP{
             "MOP",
@@ -665,7 +657,7 @@ zh_Hans{
         nia{"尼亚斯文"}
         nic{"其他尼日尔科尔多凡语系"}
         nub{"努比亚语系"}
-        nwc{"尼瓦尔文"}
+        nwc{"尼瓦尔文 Classical Newari"}
         ny{"尼扬贾文；齐切瓦文；切瓦文"}
         nyo{"尼约罗文"}
         nzi{"恩济马文"}
@@ -780,7 +772,7 @@ zh_Hans{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.22"}
+    Version{"1.34"}
     calendar{
         gregorian{
             fields{
@@ -831,16 +823,10 @@ zh_Hans{
         "America:Adak"{
             ec{"艾德克"}
         }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            sd{"阿拉斯加夏令时间"}
-            ss{"阿拉斯加标准时间"}
-        }
         "America:Chicago"{
             ec{"Chicago"}
             ld{"中部夏令时间"}
             ls{"中部标准时间"}
-            ss{"中部标准时间"}
         }
         "America:Coral_Harbour"{
             ec{"珊瑚港"}
@@ -848,24 +834,11 @@ zh_Hans{
         "America:Danmarkshavn"{
             ec{"Danmarkshavn（格陵兰东北城市）"}
         }
-        "America:Denver"{
-            ec{"Denver"}
-            sd{"山区夏令时间"}
-            ss{"山区标准时间"}
-        }
         "America:Eirunepe"{
             ec{"依伦尼贝"}
         }
         "America:Godthab"{
             ec{"戈特霍布"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            sd{"大西洋夏令时间"}
-            ss{"大西洋标准时间"}
-        }
-        "America:Indiana:Indianapolis"{
-            ec{"印地安那州/印第安纳波利斯"}
         }
         "America:Indiana:Petersburg"{
             ec{"彼得斯堡"}
@@ -885,9 +858,6 @@ zh_Hans{
         "America:Iqaluit"{
             ec{"伊魁鲁伊特"}
         }
-        "America:Kentucky:Louisville"{
-            ec{"路易斯维尔"}
-        }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
             sd{"太平洋夏令时间"}
@@ -898,11 +868,6 @@ zh_Hans{
         }
         "America:Moncton"{
             ec{"蒙克顿"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            sd{"东部夏令时间"}
-            ss{"东部标准时间"}
         }
         "America:Nome"{
             ec{"诺姆"}
@@ -916,28 +881,11 @@ zh_Hans{
         "America:Pangnirtung"{
             ec{"潘尼尔东"}
         }
-        "America:Phoenix"{
-            ec{"菲尼克斯"}
-            ld{"山区夏令时间"}
-            sd{"MDT"}
-            ss{"山区标准时间"}
-        }
         "America:Rainy_River"{
             ec{"雨河"}
         }
-        "America:St_Johns"{
-            ec{"St Johns"}
-            sd{"NDT 纽芬兰夏令时间"}
-            ss{"NST 纽芬兰标准时间"}
-        }
-        "America:Yakutat"{
-            ec{"亚库塔特"}
-        }
         "Antarctica:Casey"{
             ec{"卡塞"}
-        }
-        "Asia:Yakutsk"{
-            ec{"亚库塔特"}
         }
         "Australia:Currie"{
             ec{"库利"}

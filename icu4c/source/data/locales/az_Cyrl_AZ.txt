@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 az_Cyrl_AZ{
-    Version{"1.9"}
+    Version{"1.14"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

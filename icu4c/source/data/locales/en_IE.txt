@@ -8,12 +8,16 @@
 // ***************************************************************************
 en_IE{
     Currencies{
+        GBP{
+            "GBP",
+            "British Pound Sterling",
+        }
         IEP{
             "£",
             "Irish Pound",
         }
     }
-    Version{"1.38"}
+    Version{"1.45"}
     calendar{
         gregorian{
             AmPmMarkers{

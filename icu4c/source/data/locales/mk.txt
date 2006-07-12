@@ -1026,7 +1026,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.52"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{

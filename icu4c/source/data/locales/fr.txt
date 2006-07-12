@@ -291,7 +291,7 @@ fr{
         }
         AFA{
             "AFA",
-            "afghani",
+            "afghani [AFA]",
         }
         AFN{
             "Af",
@@ -423,7 +423,7 @@ fr{
         }
         BRC{
             "BRC",
-            "cruzeiro",
+            "cruzado",
         }
         BRE{
             "BRE",
@@ -451,7 +451,7 @@ fr{
         }
         BUK{
             "BUK",
-            "kyat",
+            "kyat [BUK]",
         }
         BWP{
             "BWP",
@@ -515,7 +515,7 @@ fr{
         }
         CSK{
             "CSK",
-            "couronne tchèque",
+            "couronne tchèque [CSK]",
         }
         CUP{
             "CUP",
@@ -879,7 +879,7 @@ fr{
         }
         MWK{
             "MWK",
-            "kwacha",
+            "kwacha [MWK]",
         }
         MXN{
             "MXN",
@@ -1608,7 +1608,6 @@ fr{
         nog{"nogaï, nogay"}
         non{"vieux norrois"}
         nr{"ndébélé du Sud"}
-        nso{"sotho du Sud"}
         nub{"langues nubiennes"}
         nv{"navaho"}
         nwc{"newari classique"}
@@ -1886,7 +1885,7 @@ fr{
         REVISED{"orthographe révisée"}
         ROZAJ{"dialecte de Resia"}
     }
-    Version{"1.73"}
+    Version{"1.84"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1899,11 +1898,6 @@ fr{
                 "d MMM yy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMdd{"dd-MM"}
             }
             dayNames{
                 format{
@@ -2121,15 +2115,6 @@ fr{
             sg{"HA"}
             ss{"HNA"}
         }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Heure avancée de l’Est (ÉUA)"}
-            lg{"Heure de l’Est (ÉUA)"}
-            ls{"Heure normale de l’Est (ÉUA)"}
-            sd{"HAE (ÉUA)"}
-            sg{"HE (ÉUA)"}
-            ss{"HNE (ÉUA)"}
-        }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
             ld{"Heure avancée du Pacifique (ÉUA)"}
@@ -2163,15 +2148,6 @@ fr{
             sg{"HE (ÉUA)"}
             ss{"HNE (ÉUA)"}
         }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Heure avancée des Rocheuses (ÉUA)"}
-            lg{"Heure des Rocheuses (ÉUA)"}
-            ls{"Heure normale des Rocheuses (ÉUA)"}
-            sd{"HAR (ÉUA)"}
-            sg{"HR (ÉUA)"}
-            ss{"HNR (ÉUA)"}
-        }
         "America:St_Johns"{
             ec{"Saint-Jean de Terre-Neuve"}
             ld{"Heure avancée de Terre-Neuve"}
@@ -2195,9 +2171,7 @@ fr{
             ld{"Heure avancée du Centre"}
             lg{"Heure du Centre"}
             ls{"Heure normale du Centre"}
-            sd{"HAC"}
             sg{"HC"}
-            ss{"HNC"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2326,7 +2300,6 @@ fr{
             lg{"Heure d’Hawaï"}
             ls{"Heure normale d’Hawaï"}
             sd{"HDT"}
-            sg{"HT"}
             ss{"HST"}
         }
         "Pacific:Marquesas"{

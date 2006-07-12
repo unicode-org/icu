@@ -189,7 +189,7 @@ sq{
             "Paund Sterlina Britanike",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Rupee indiane",
         }
         JPY{
@@ -243,7 +243,7 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.49"}
+    Version{"1.55"}
     calendar{
         gregorian{
             AmPmMarkers{

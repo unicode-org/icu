@@ -10,10 +10,10 @@ nb_NO{
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
-        "#,##0.0 %",
+        "#,##0 %",
         "#E0",
     }
-    Version{"1.33"}
+    Version{"1.38"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

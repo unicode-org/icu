@@ -14,12 +14,6 @@ ur{
         IN{"بھارت"}
         PK{"پاکستان"}
     }
-    Currencies{
-        PKR{
-            "Rs",
-            "PKR",
-        }
-    }
     ExemplarCharacters{"[ء-ؤ ئ-ب ٻ پ ة-ث ٹ ٺ ټ ٽ ج چ ح-ذ ڈ ر ز ڑ ژ س-غ ف ق ک گ ل-ن ں ه ھ و ی ے]"}
     Languages{
         ur{"اردو"}
@@ -27,9 +21,5 @@ ur{
     LocaleScript{
         "Arab",
     }
-    Version{"1.26"}
-    layout{
-        characters{"left-to-right"}
-        lines{"top-to-bottom"}
-    }
+    Version{"1.31"}
 }

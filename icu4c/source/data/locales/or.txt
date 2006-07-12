@@ -14,28 +14,14 @@ or{
     Countries{
         IN{"ଭାରତ"}
     }
-    ExemplarCharacters{"[ଅ-ଋ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ଁ ୍ ା-ୃ େ ୈ ୋ ୌ ୟ ଵ ୱ ଼ ଂ ଃ]"}
+    ExemplarCharacters{"[ଅ-ଋ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ୟ ୱ ଵ ଂ ଃ ଁ ୍ ଼ ା-ୃ େ ୈ ୋ ୌ]"}
     Languages{
         or{"ଓଡ଼ିଆ"}
     }
     LocaleScript{
         "Orya",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "୦",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    Version{"1.21"}
+    Version{"1.27"}
     calendar{
         gregorian{
             dayNames{

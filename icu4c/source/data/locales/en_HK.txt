@@ -23,7 +23,7 @@ en_HK{
         "#,##0%",
         "#E0",
     }
-    Version{"1.32"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

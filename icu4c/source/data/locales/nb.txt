@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    AuxExemplarCharacters{"[á ǎ ä č ç đ è ê ŋ ń ñ ö š ŧ ü ž]"}
+    AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     Countries{
         001{"verden"}
         002{"Afrika"}
@@ -714,7 +714,7 @@ nb{
             "israelske nye shekler",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "indiske rupier",
         }
         IQD{
@@ -1326,7 +1326,7 @@ nb{
             "zimbabwiske dollar",
         }
     }
-    ExemplarCharacters{"[a à b-e é f-o ó ò ô p-y z æ ø å]"}
+    ExemplarCharacters{"[a à b-e é f-o ó ò ô p-z æ ø å]"}
     Keys{
         calendar{"kalender"}
         collation{"kollasjon"}
@@ -1809,7 +1809,7 @@ nb{
     NumberPatterns{
         "#,##0.###",
         "¤ #,##0.00",
-        "#,##0.0 %",
+        "#,##0 %",
         "#E0",
     }
     Scripts{
@@ -1944,7 +1944,7 @@ nb{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.60"}
+    Version{"1.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1961,13 +1961,6 @@ nb{
                 "d. MMM. yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH.mm"}
-                HHmmss{"HH.mm.ss"}
-                yyMMdd{"dd.MM.yy"}
-                yyyyMMdd{"dd.MM.yyyy"}
-                yyyyMMddHHmmss{"dd.MM.yyyy HH.mm.ss"}
             }
             dayNames{
                 format{
@@ -2013,7 +2006,7 @@ nb{
                     dn{"dag"}
                 }
                 dayperiod{
-                    dn{"AM/PM"}
+                    dn{"f.m./e.m.-valg"}
                 }
                 era{
                     dn{"tidsalder"}

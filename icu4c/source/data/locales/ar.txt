@@ -210,7 +210,7 @@ ar{
         OM{"عمان"}
         PA{"بنما"}
         PE{"بيرو"}
-        PF{"بولينيزيا"}
+        PF{"بولينيزيا [PF]"}
         PG{"بابوا غينيا الجديدة"}
         PH{"الفيلبين"}
         PK{"باكستان"}
@@ -310,7 +310,7 @@ ar{
         }
         ANG{
             "ANG",
-            "جلدر هولندى",
+            "جلدر هولندى [ANG]",
         }
         AOA{
             "AOA",
@@ -1422,7 +1422,7 @@ ar{
         li{"الليمبرجيشية"}
         ln{"اللينجالا"}
         lo{"اللاوية"}
-        lol{"المنغولية"}
+        lol{"المنغولية [lol]"}
         loz{"اللوزى"}
         lt{"اللتوانية"}
         lu{"اللبا-كاتانجا"}
@@ -1525,7 +1525,7 @@ ar{
         rn{"الرندى"}
         ro{"الرومانية"}
         roa{"الرومانسية - أخرى"}
-        rom{"الرومانية"}
+        rom{"الرومانية [rom]"}
         ru{"الروسية"}
         rup{"الأرومانيان"}
         rw{"الكينيارواندا"}
@@ -1746,7 +1746,7 @@ ar{
         Sinh{"السينهالا"}
         Sylo{"السيلوتى ناجرى"}
         Syrc{"السريانية"}
-        Syre{"السريانية"}
+        Syre{"السريانية [Syre]"}
         Syrj{"السريانية - متغير غربى"}
         Syrn{"السريانية - متغير شرقى"}
         Tagb{"التاجبانوا"}
@@ -1791,12 +1791,84 @@ ar{
     Variants{
         NEDIS{"لهجة ناتيسون"}
     }
-    Version{"1.58"}
+    Version{"1.68"}
     calendar{
         buddhist{
             eras{
                 abbreviated{
                     "التقويم البوذي",
+                }
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "توت",
+                        "بابه",
+                        "Hator",
+                        "كياهك",
+                        "طوبة",
+                        "أمشير",
+                        "Baramhat",
+                        "Baramouda",
+                        "بشنس",
+                        "بؤونة",
+                        "أبيب",
+                        "Mesra",
+                        "نسيئ",
+                    }
+                    wide{
+                        "توت",
+                        "بابه",
+                        "هاتور",
+                        "كياهك",
+                        "طوبة",
+                        "أمشير",
+                        "برامهات",
+                        "برمودة",
+                        "بشنس",
+                        "بؤونة",
+                        "أبيب",
+                        "مسرى",
+                        "نسيئ",
+                    }
+                }
+            }
+        }
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "مسكريم",
+                        "تكمت",
+                        "Hedar",
+                        "تهساس",
+                        "تر",
+                        "يكتت",
+                        "Megabit",
+                        "Miazia",
+                        "جنبت",
+                        "سين",
+                        "هامل",
+                        "Nehasse",
+                        "باجمن",
+                    }
+                    wide{
+                        "مسكريم",
+                        "تكمت",
+                        "هدار",
+                        "تهساس",
+                        "تر",
+                        "يكتت",
+                        "مجابيت",
+                        "ميازيا",
+                        "جنبت",
+                        "سين",
+                        "هامل",
+                        "نهاس",
+                        "باجمن",
+                    }
                 }
             }
         }
@@ -1952,6 +2024,42 @@ ar{
                 }
             }
         }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "تشري",
+                        "مرحشوان",
+                        "Kislev",
+                        "طيست",
+                        "Shevat",
+                        "آذار الأول",
+                        "Adar",
+                        "Nisan",
+                        "أيار",
+                        "Sivan",
+                        "تموز",
+                        "آب",
+                        "أيلول",
+                    }
+                    wide{
+                        "تشري",
+                        "مرحشوان",
+                        "كيسلو",
+                        "طيست",
+                        "شباط",
+                        "آذار الأول",
+                        "آذار الثاني",
+                        "نيسان",
+                        "أيار",
+                        "سيوان",
+                        "تموز",
+                        "آب",
+                        "Elul",
+                    }
+                }
+            }
+        }
         islamic{
             eras{
                 abbreviated{
@@ -1981,6 +2089,40 @@ ar{
             eras:alias{"/LOCALE/calendar/islamic/eras"}
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Farvardin",
+                        "أذربيهشت",
+                        "Khordad",
+                        "تیر",
+                        "مرداد",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "بهمن",
+                        "Esfand",
+                    }
+                    wide{
+                        "فروردین",
+                        "أذربيهشت",
+                        "خرداد",
+                        "تیر",
+                        "مرداد",
+                        "شهریار",
+                        "مهر",
+                        "آيان",
+                        "آذر",
+                        "دي",
+                        "بهمن",
+                        "اسفندار",
+                    }
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"‘"}
@@ -1989,7 +2131,7 @@ ar{
         quotationStart{"”"}
     }
     layout{
-        characters{"left-to-right"}
+        characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    AuxExemplarCharacters{"[\u200C \u200D ৸ ৹ ৲ ৳ ০-৪ ৷ ৫-৯ ৰ ৱ]"}
+    AuxExemplarCharacters{"[\u200C \u200D ৸ ৹ ৲ ৳ ০-৪ ৷ ৫-ৱ]"}
     Countries{
         AF{"আফগানিস্তান"}
         AL{"আলব্যানিয়া"}
@@ -140,7 +140,7 @@ bn{
     LocaleScript{
         "Beng",
     }
-    Version{"1.43"}
+    Version{"1.49"}
     calendar{
         gregorian{
             AmPmMarkers{

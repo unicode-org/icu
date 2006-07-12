@@ -14,7 +14,7 @@ om_ET{
         }
         USD{
             "US$",
-            "US Dollar",
+            "USD",
         }
     }
     NumberPatterns{
@@ -23,7 +23,7 @@ om_ET{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.39"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -41,7 +41,7 @@ kk{
         "NaN",
         "+",
     }
-    Version{"1.32"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimePatterns{
