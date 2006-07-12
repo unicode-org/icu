@@ -340,6 +340,29 @@ public:
     void setWeekdays(const UnicodeString* weekdays, int32_t count, DtContextType context, DtWidthType width);
 
     /**
+     * Gets quarter strings by width and context. For example: "1st Quarter", "2nd Quarter", etc.
+     * @param count Filled in with length of the array.
+     * @param context The formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
+     *                are no NARROW quarters.
+     * @return the quarter strings. (DateFormatSymbols retains ownership.)
+     * @draft ICU 3.6
+     */
+    const UnicodeString* getQuarters(int32_t& count, DtContextType context, DtWidthType width) const;
+
+    /**
+     * Sets quarter strings by width and context. For example: "1st Quarter", "2nd Quarter", etc.
+     *
+     * @param quarters  The new quarter strings. (not adopted; caller retains ownership)
+     * @param count   Filled in with length of the array.
+     * @param context The formatting context, either FORMAT or STANDALONE
+     * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
+     *                are no NARROW quarters.
+     * @draft ICU 3.6
+     */
+    void setQuarters(const UnicodeString* quarters, int32_t count, DtContextType context, DtWidthType width);
+
+    /**
      * Gets AM/PM strings. For example: "AM" and "PM".
      * @param count        Filled in with length of the array.
      * @return             the weekday strings. (DateFormatSymbols retains ownership.)

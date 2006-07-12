@@ -395,6 +395,7 @@ static void TestSymbols()
     if(udat_countSymbols(def, UDAT_ERAS)!=2 || udat_countSymbols(def, UDAT_MONTHS)!=12 || 
         udat_countSymbols(def, UDAT_SHORT_MONTHS)!=12 || udat_countSymbols(def, UDAT_WEEKDAYS)!=8 ||
         udat_countSymbols(def, UDAT_SHORT_WEEKDAYS)!=8 || udat_countSymbols(def, UDAT_AM_PMS)!=2 ||
+        udat_countSymbols(def, UDAT_QUARTERS) != 4 || udat_countSymbols(def, UDAT_SHORT_QUARTERS) != 4 ||
         udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1)
     {
         log_err("FAIL: error in udat_countSymbols\n");
@@ -445,6 +446,10 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_AM_PMS, 1, "PM");
     VerifygetSymbols(fr, UDAT_SHORT_MONTHS, 0, "janv.");
     VerifygetSymbols(def, UDAT_SHORT_MONTHS, 11, "Dec");
+    VerifygetSymbols(fr, UDAT_QUARTERS, 0, "1er trimestre");
+    VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
+    VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
+    VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
     VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcL");
 
 
