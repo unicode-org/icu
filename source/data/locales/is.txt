@@ -703,7 +703,7 @@ is{
         }
         RUR{
             "RUR",
-            "Rússnesk rúbla",
+            "Rússnesk rúbla (1991-1998)",
         }
         RWF{
             "RWF",
@@ -1070,7 +1070,7 @@ is{
         ia{"Interlingva"}
         iba{"Íban"}
         id{"Indónesíska"}
-        ie{"Interlingva"}
+        ie{"Interlingve"}
         ig{"Ígbó"}
         ii{"Sísúanjí"}
         ijo{"Íjó"}
@@ -1276,7 +1276,7 @@ is{
         smj{"Lúlesamíska"}
         smn{"Enaresamíska"}
         sms{"Skoltesamíska"}
-        sn{"Sínótíbesk mál (önnur)"}
+        sn{"Shona"}
         snk{"Sóninke"}
         so{"Sómalska"}
         sog{"Sogdíen"}
@@ -1311,8 +1311,8 @@ is{
         tli{"Tlingit"}
         tmh{"Tamasjek"}
         tn{"Tsúana"}
-        to{"Tongverska"}
-        tog{"Tongverska"}
+        to{"Tongverska (Tongaeyjar)"}
+        tog{"Tongverska (Nyasa)"}
         tpi{"Tokpisin"}
         tr{"Tyrkneska"}
         ts{"Tsonga"}
@@ -1395,7 +1395,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.55"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1445,18 +1445,18 @@ is{
             monthNames{
                 format{
                     abbreviated{
-                        "janúar",
-                        "febrúar",
-                        "mars",
-                        "apríl",
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
                         "maí",
-                        "júní",
-                        "júlí",
-                        "ágúst",
-                        "september",
-                        "október",
-                        "nóvember",
-                        "desember",
+                        "jún",
+                        "júl",
+                        "ágú",
+                        "sep",
+                        "okt",
+                        "nóv",
+                        "des",
                     }
                     wide{
                         "janúar",

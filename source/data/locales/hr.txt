@@ -278,7 +278,7 @@ hr{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Majote"}
-        ZA{"Južna Afrika"}
+        ZA{"Južnoafrička Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
     }
@@ -1105,7 +1105,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.59"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1118,30 +1118,6 @@ hr{
                 "yyyy.MM.dd",
                 "yyyy.MM.dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmm{"KK:mm a"}
-                KKmmss{"KK:mm:ss a"}
-                MMMM{"MMMM"}
-                MMMdd{"MMM dd"}
-                MMdd{"MM-dd"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"yy.MM"}
-                yyMMMEEEd{"EEE yy.MMM d"}
-                yyMMMEEEdd{"EEE dd.MMM yy"}
-                yyMMMd{"yy.MMM d"}
-                yyMMdd{"yy.MM.dd"}
-                yyMMddHHmm{"yy.MM.dd HH:mm"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMMMMEEEEd{"EEEE,yyyy.MMMM d"}
-                yyyyMMMMEEEd{"EEE yyyy.MMMM d"}
-                yyyyMMMMd{"yyyy.MMMM d"}
-                yyyyMMMd{"yyyy.MMM d"}
-                yyyyMMdd{"yyyy.MM.dd"}
-                yyyyMMddHHmmss{"yyyy.MM.dd HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1332,6 +1308,5 @@ hr{
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
         }
-        hourFormat{"+HHmm;-HHmm"}
     }
 }

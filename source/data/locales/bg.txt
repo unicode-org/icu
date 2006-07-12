@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    AuxExemplarCharacters{"[{а̀} ѐ ѝ {о̀} {у̀} {ъ̀} ѣ {ю̀} {я̀} ѫ i v x]"}
+    AuxExemplarCharacters{"[i v x {а̀} ѐ ѝ {о̀} {у̀} {ъ̀} ѣ {ю̀} {я̀} ѫ]"}
     Countries{
         001{"Земята"}
         002{"Африка"}
@@ -33,7 +33,7 @@ bg{
         054{"Меланезия"}
         057{"Микронезия"}
         061{"Полинезия"}
-        062{"Южна Азия"}
+        062{"Южна Азия [062]"}
         142{"Азия"}
         143{"Централна Азия"}
         145{"Западна Азия"}
@@ -224,7 +224,7 @@ bg{
         PW{"Палау"}
         PY{"Парагвай"}
         QA{"Катар"}
-        QO{"Океания"}
+        QO{"Океания [QO]"}
         RE{"Реюниън"}
         RO{"Румъния"}
         RU{"Руска Федерация"}
@@ -1404,7 +1404,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.62"}
+    Version{"1.71"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1421,21 +1421,6 @@ bg{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                Hmmss{"H:mm:ss"}
-                MMMM{"MMMM"}
-                MMMd{"d MMM"}
-                MMd{"d.MM."}
-                mmssSS{"mm:ss,SS"}
-                yyMMd{"d.MM.yy"}
-                yyMd{"d.M.yy"}
-                yyyyMM{"MM.yyyy 'г'."}
-                yyyyMMMMEEEd{"d MMMM yyyy (EEE)"}
-                yyyyMMMMd{"d MMMM yyyy 'г'."}
-                yyyyMMd{"d.MM.yyyy 'г'."}
-                yyyyMMdHmm{"d.MM.yyyy 'г'., H:mm 'ч'."}
-                yyyyMMdHmmss{"d.MM.yyyy 'г'., H:mm:ss"}
             }
             dayNames{
                 format{
@@ -1515,18 +1500,18 @@ bg{
             monthNames{
                 format{
                     abbreviated{
-                        "януари",
-                        "февруари",
+                        "ян.",
+                        "февр.",
                         "март",
-                        "април",
+                        "апр.",
                         "май",
                         "юни",
                         "юли",
-                        "август",
-                        "септември",
-                        "октомври",
-                        "ноември",
-                        "декември",
+                        "авг.",
+                        "септ.",
+                        "окт.",
+                        "ноем.",
+                        "дек.",
                     }
                     wide{
                         "януари",
@@ -1617,8 +1602,8 @@ bg{
             ec{"Анкоридж"}
             ld{"Лятна часова зона Аляска"}
             ls{"Часова зона Аляска"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Araguaina"{
             ec{"Арагуайна"}
@@ -1745,10 +1730,7 @@ bg{
         }
         "America:Indianapolis"{
             ec{"Индианополис"}
-            ld{"Американска източна часова зона"}
-            ls{"Американска източна часова зона"}
-            sd{"EST"}
-            ss{"EST"}
+            ld{"Американска източна часова зона (Индианополис)"}
         }
         "America:Inuvik"{
             ec{"Инувик"}
@@ -1865,8 +1847,6 @@ bg{
             ec{"Сейнт Джоунс"}
             ld{"Лятна часова зона Нюфаундленд"}
             ls{"Часова зона Нюфаундленд"}
-            sd{"CDT"}
-            ss{"CNT"}
         }
         "America:Swift_Current"{
             ec{"Суифт Кърент"}
@@ -2011,8 +1991,6 @@ bg{
             ec{"Шанхай"}
             ld{"Китайска часова зона"}
             ls{"Китайска часова зона"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tashkent"{
             ec{"Ташкент"}

@@ -845,7 +845,7 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
             UChar32 end = 0;
             UChar *str = NULL;
             int32_t strCapacity = 0;
-
+            
             strCapacity = uset_getItem(exemplarSet, i, &start, &end, str, strCapacity, &status);
             if(U_SUCCESS(status)){
                 int32_t j;
@@ -860,7 +860,7 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
                         for( j = 0; j < scriptsLen; j++){
                             UChar toPattern[500]={'\0'};
                             char pat[500]={'\0'};
-                            int32_t len = uset_toPattern(scripts[i], toPattern, 500, TRUE, &status);
+                            int32_t len = uset_toPattern(scripts[j], toPattern, 500, TRUE, &status);
                             len = myUCharsToChars(toPattern, pat, len);
                             log_err("uset_indexOf(\\u%04X)=%i uset_indexOf(\\u%04X)=%i\n", start, uset_indexOf(scripts[0], start), end, uset_indexOf(scripts[0], end));
                             if(len!=-1){

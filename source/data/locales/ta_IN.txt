@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ta_IN{
-    Version{"1.41"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -20,7 +20,7 @@ lt{
         014{"Rytų Afrika"}
         015{"Šiaurės Afrika"}
         017{"Vidurio Afrika"}
-        018{"Pietų Afrika"}
+        018{"Pietų Afrika [018]"}
         019{"Amerika"}
         029{"Karibai"}
         030{"Rytų Azija"}
@@ -29,7 +29,7 @@ lt{
         039{"Pietų Europa"}
         053{"Australija ir Naujoji Zelandija"}
         054{"Melanezija"}
-        057{"Mikronezija"}
+        057{"Mikronezija [057]"}
         061{"Polinezija"}
         142{"Azija"}
         143{"Centrinė Azija"}
@@ -297,7 +297,7 @@ lt{
             "Svaras sterlingų",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Indijos rupija",
         }
         JPY{
@@ -377,7 +377,7 @@ lt{
     Scripts{
         Latn{"Latin"}
     }
-    Version{"1.62"}
+    Version{"1.71"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -394,30 +394,6 @@ lt{
                 "yyyy.MM.dd",
                 "yyyy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"H 'val.' m 'min.'"}
-                Hmm{"H'.'mm 'val.'"}
-                Hmmss{"H 'val.' mm 'min.' ss 'sek.'"}
-                Hms{"H 'h' m 'min' s 's'"}
-                KKmm{"KK:mm a"}
-                KKmmss{"KK:mm:ss a"}
-                MMMM{"MMMM"}
-                MMMdd{"MMM-dd"}
-                MMdd{"MM-dd"}
-                mmssSS{"mm:ss,SS"}
-                yyMMMEEEdd{"yy MMM dd EEE"}
-                yyMMdd{"yy-MM-dd"}
-                yyMMddHHmm{"yy-MM-dd HH:mm"}
-                yyyyMMMEEEd{"yyyy 'm.' MMM d 'd.' EEE"}
-                yyyyMMMMEEEEd{"yyyy 'm.' MMMM d 'd.' EEEE"}
-                yyyyMMMMEEEdd{"yyyy MMMM dd EEE"}
-                yyyyMMMMd{"yyyy 'metų' MMMM d 'diena'"}
-                yyyyMMMMdd{"yyyy 'm.' MMMM dd 'd.'"}
-                yyyyMMdd{"yyyy-MM-dd"}
-                yyyyMMddHHmmss{"yyyy-MM-dd HH:mm:ss"}
             }
             dayNames{
                 format{

@@ -124,7 +124,7 @@ so{
     LocaleScript{
         "Latn",
     }
-    Version{"1.36"}
+    Version{"1.42"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -163,6 +163,17 @@ so{
                         "Sabti",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "A",
+                        "I",
+                        "S",
+                        "A",
+                        "K",
+                        "J",
+                        "S",
+                    }
+                }
             }
             eras{
                 abbreviated{
@@ -199,6 +210,22 @@ so{
                         "Bisha Tobnaad",
                         "Bisha Kow iyo Tobnaad",
                         "Bisha Laba iyo Tobnaad",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "K",
+                        "L",
+                        "S",
+                        "A",
+                        "S",
+                        "L",
+                        "T",
+                        "S",
+                        "S",
+                        "T",
+                        "K",
+                        "L",
                     }
                 }
             }

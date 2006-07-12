@@ -55,11 +55,10 @@ nl_BE{
     }
     Types{
         collation{
-            gb2312han{"Vereenvoudigd Chinees"}
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.39"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -76,24 +75,6 @@ nl_BE{
                 "d-MMM-yy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMM{"MMMM"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"MM/yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyMMd{"d/MM/yy"}
-                yyMMdd{"dd/MM/yy"}
-                yyMMddHHmm{"dd/MM/yy HH:mm"}
-                yyyyMMMMEEEd{"EEE d MMMM yyyy"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMMd{"d MMM yyyy"}
-                yyyyMMdd{"dd/MM/yyyy"}
-                yyyyMMddHHmmss{"dd/MM/yyyy HH:mm:ss"}
             }
         }
     }

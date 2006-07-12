@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nn.xml
  */
 nn{
-    AuxExemplarCharacters{"[á ǎ ä č ç đ è ê ŋ ń ñ ö š ŧ ü ž]"}
+    AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     Countries{
         002{"Afrika"}
         005{"Sør-Amerika"}
@@ -292,7 +292,7 @@ nn{
             "NOK",
         }
     }
-    ExemplarCharacters{"[a à b-e é f-o ó ò ô p-y z æ ø å]"}
+    ExemplarCharacters{"[a à b-e é f-o ó ò ô p-z æ ø å]"}
     Keys{
         calendar{"kalender"}
         collation{"kollasjon"}
@@ -802,7 +802,7 @@ nn{
     NumberPatterns{
         "#,##0.###",
         "¤ #,##0.00",
-        "#,##0.0 %",
+        "#,##0 %",
         "#E0",
     }
     Scripts{
@@ -937,7 +937,7 @@ nn{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.51"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -995,7 +995,7 @@ nn{
                     dn{"dag"}
                 }
                 dayperiod{
-                    dn{"døgn"}
+                    dn{"f.m./e.m.-val"}
                 }
                 era{
                     dn{"æra"}
@@ -1054,6 +1054,22 @@ nn{
                         "oktober",
                         "november",
                         "desember",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }

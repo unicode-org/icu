@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 en_GB{
-    Version{"1.40"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{

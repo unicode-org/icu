@@ -30,7 +30,7 @@ as{
     LocaleScript{
         "Beng",
     }
-    Version{"1.26"}
+    Version{"1.31"}
     calendar{
         gregorian{
             AmPmMarkers{

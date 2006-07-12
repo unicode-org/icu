@@ -21,7 +21,6 @@ pl{
         014{"Afryka Wschodnia"}
         015{"Afryka Północna"}
         017{"Afryka Środkowa"}
-        018{"Afryka Południowa"}
         019{"Ameryka"}
         021{"Ameryka Północna"}
         030{"Azja Wschodnia"}
@@ -433,10 +432,6 @@ pl{
         BRL{
             "R$",
             "real brazylijski",
-        }
-        BRN{
-            "BRN",
-            "cruzado brazylijskie",
         }
         BRR{
             "BRR",
@@ -1186,10 +1181,6 @@ pl{
             "YRl",
             "rial jemeński",
         }
-        YUD{
-            "YUD",
-            "dinar jugosławiański wymienny",
-        }
         YUM{
             "YUM",
             "nowy dinar jugosławiański",
@@ -1346,7 +1337,7 @@ pl{
             traditional{"tradycyjny"}
         }
     }
-    Version{"1.64"}
+    Version{"1.71"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1359,19 +1350,6 @@ pl{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmm{"KK:mm a"}
-                KKmmss{"KK:mm:ss a"}
-                MMMdd{"dd MMM"}
-                MMdd{"dd.MM"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"MM.yy"}
-                yyMMdd{"dd.MM.yy"}
-                yyMd{"d.M.yy"}
             }
             dayNames{
                 format{

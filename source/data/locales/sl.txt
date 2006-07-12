@@ -21,7 +21,7 @@ sl{
         014{"Vzhodna Afrika"}
         015{"Severna Afrika"}
         017{"Centralna Afrika"}
-        018{"Južna Afrika"}
+        018{"Južna Afrika [018]"}
         019{"Amerike"}
         021{"Severna Amerika"}
         029{"Karibi"}
@@ -301,7 +301,7 @@ sl{
             "Britanski Funt Sterling",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Indijski Rupi",
         }
         JPY{
@@ -397,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.60"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -457,18 +457,18 @@ sl{
             monthNames{
                 format{
                     abbreviated{
-                        "januar",
-                        "februar",
-                        "marec",
-                        "april",
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
                         "maj",
-                        "junij",
-                        "julij",
-                        "avgust",
-                        "september",
-                        "oktober",
-                        "november",
-                        "december",
+                        "jun",
+                        "jul",
+                        "avg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
                     }
                     wide{
                         "januar",

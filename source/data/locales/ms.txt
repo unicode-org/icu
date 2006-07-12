@@ -256,14 +256,17 @@ ms{
             "Ringgit Malaysia",
         }
     }
-    ExemplarCharacters{"[ a-z {ai} {au} {dz} {ua} {kh} {ny} {ng} {ngg} {sy} {ts} ]"}
+    ExemplarCharacters{
+        "[a {ai} {au} b-d {dz} e-k {kh} l-n {ng} {ngg} {ny} o-s {sy} t {ts} u {ua} v-"
+        "z]"
+    }
     Languages{
         ms{"Bahasa Melayu"}
     }
     LocaleScript{
         "Latn",
     }
-    Version{"1.39"}
+    Version{"1.44"}
     calendar{
         gregorian{
             dayNames{
@@ -317,6 +320,22 @@ ms{
                         "Oktober",
                         "November",
                         "Disember",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "S1",
+                        "S2",
+                        "S3",
+                        "S4",
+                    }
+                    wide{
+                        "suku pertama",
+                        "suku kedua",
+                        "suku ketiga",
+                        "suku keempat",
                     }
                 }
             }

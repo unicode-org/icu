@@ -102,7 +102,6 @@ af{
         MY{"Maleisië"}
         MZ{"Mosambiek"}
         NA{"Namibië"}
-        NE{"Nigerië"}
         NL{"Nederland"}
         NO{"Noorweë"}
         NR{"Naoeroe"}
@@ -179,7 +178,7 @@ af{
         "NaN",
         "+",
     }
-    Version{"1.42"}
+    Version{"1.48"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -275,6 +274,22 @@ af{
                         "Oktober",
                         "November",
                         "Desember",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1ste kwartaal",
+                        "2de kwartaal",
+                        "3de kwartaal",
+                        "4de kwartaal",
                     }
                 }
             }

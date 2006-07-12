@@ -1950,7 +1950,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.77"}
+    Version{"1.89"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1967,22 +1967,6 @@ ja{
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                GGGGyMd{"GGGGy'年'M'月'd'日'"}
-                HHmmss{"HH:mm:ss"}
-                Hmm{"H:mm"}
-                M{"M'月'"}
-                MMdd{"MM.dd"}
-                Md{"M'月'd'日'"}
-                mmssSS{"mm:ss.SS"}
-                yyMM{"yy/MM"}
-                yyMMdd{"yy/MM/dd"}
-                yyMMddHHmm{"yy/MM/dd HH:mm"}
-                yyMd{"yy/M/d"}
-                yyyyMMdd{"yyyy/MM/dd"}
-                yyyyMd{"yyyy'年'M'月'd'日'"}
-                yyyyMdHmm{"yyyy/M/d H:mm"}
             }
             dayNames{
                 format{
@@ -2355,8 +2339,8 @@ ja{
             ec{"アンカレッジ"}
             ld{"アラスカ夏時間"}
             ls{"アラスカ標準時"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Araguaina"{
             ec{"アメリカ/アラグァイナ"}
@@ -2492,10 +2476,6 @@ ja{
         }
         "America:Indianapolis"{
             ec{"インディアナポリス"}
-            ld{"東部標準時"}
-            ls{"東部標準時"}
-            sd{"EST"}
-            ss{"EST"}
         }
         "America:Inuvik"{
             ec{"アメリカ/イヌヴィク"}
@@ -2576,10 +2556,6 @@ ja{
         }
         "America:Phoenix"{
             ec{"フェニックス"}
-            ld{"山地標準時"}
-            ls{"山地標準時"}
-            sd{"MST"}
-            ss{"MST"}
         }
         "America:Porto_Velho"{
             ec{"アメリカ/ポルトベリョ"}
@@ -2764,7 +2740,6 @@ ja{
             ec{"上海"}
             ld{"中国夏時間"}
             ls{"中国標準時"}
-            sd{"CDT"}
             ss{"CTT"}
         }
         "Asia:Tashkent"{

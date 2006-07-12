@@ -279,7 +279,7 @@ sr_Latn{
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Majote"}
-        ZA{"Južna Afrika"}
+        ZA{"Južnoafrička Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
     }
@@ -538,7 +538,7 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.42"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -551,24 +551,6 @@ sr_Latn{
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmmss{"KK:mm:ss a"}
-                MMMM{"MMMM"}
-                MMMdd{"dd.MMM"}
-                MMdd{"MM-dd"}
-                ww{"ww"}
-                yyMM{"MM.yy"}
-                yyMMMEEEd{"EEE, d. MMM yy"}
-                yyMMMEEEdd{"EEE dd.MMM yy"}
-                yyMMMd{"d. MMM yy"}
-                yyMMddHHmm{"dd.MM.yy HH:mm"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMMMMEEEd{"EEE, d. MMMM yyyy"}
-                yyyyMMMMd{"d. MMMM yyyy"}
-                yyyyMMddHHmmss{"dd.MM.yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -665,6 +647,12 @@ sr_Latn{
                         "K3",
                         "K4",
                     }
+                    wide{
+                        "Prvi kvartal",
+                        "Drugi kvartal",
+                        "Treći kvartal",
+                        "Četvrti kvartal",
+                    }
                 }
             }
         }
@@ -696,7 +684,7 @@ sr_Latn{
         }
         "Europe:Belgrade"{
             ec{"Belgrade"}
-            ld{"Centralno Evropsko Vreme"}
+            ld{"Centralno Evropsko Letnje Vreme"}
             ls{"Centralno Evropsko Vreme"}
         }
         "Europe:Kiev"{
@@ -704,6 +692,10 @@ sr_Latn{
         }
         "Europe:Moscow"{
             ec{"Moskva"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Sarajevo"}
+            ls{"Srednje Evropsko Vrijeme"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}

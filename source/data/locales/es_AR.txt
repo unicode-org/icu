@@ -7,9 +7,6 @@
 // *
 // ***************************************************************************
 es_AR{
-    Countries{
-        RE{"Reunión"}
-    }
     Currencies{
         ARS{
             "$",
@@ -20,7 +17,7 @@ es_AR{
             "Dólar Americano",
         }
     }
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -33,27 +30,6 @@ es_AR{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmm{"KK:mm a"}
-                KKmmss{"KK:mm:ss a"}
-                MMMM{"MMMM"}
-                MMMdd{"dd/MMM"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"MM/yy"}
-                yyMMMEEEd{"EEE d 'de' MMM 'de' yy"}
-                yyMMMEEEdd{"EEE dd/MMM yy"}
-                yyMMMd{"d 'de' MMM 'de' yy"}
-                yyMMd{"d/MM/yy"}
-                yyMMdd{"dd/MM/yy"}
-                yyMMddHHmm{"dd/MM/yy HH:mm"}
-                yyyyMMMMd{"d 'de' MMMM 'de' yyyy"}
-                yyyyMMMd{"d 'de' MMM 'de' yyyy"}
-                yyyyMMdd{"dd/MM/yyyy"}
-                yyyyMMddHHmmss{"dd/MM/yyyy HH:mm:ss"}
             }
         }
     }

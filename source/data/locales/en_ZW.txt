@@ -13,7 +13,7 @@ en_ZW{
             "Zimbabwean Dollar",
         }
     }
-    Version{"1.31"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -1992,7 +1992,7 @@ fi{
         ROZAJ{"sloveenin resia-murre"}
         SAAHO{"afarin saho-murre"}
     }
-    Version{"1.64"}
+    Version{"1.75"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2009,31 +2009,6 @@ fi{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"H.mm"}
-                HHmmss{"H.mm.ss"}
-                KKmm{"H.mm"}
-                KKmmss{"H.mm.ss"}
-                MMMM{"MMMM"}
-                MMMdd{"d.M."}
-                MMdd{"d.M."}
-                mmssSS{"m.ss,SS"}
-                ww{"w"}
-                yyMM{"MMMM yyyy"}
-                yyMMMEEEd{"EEE d.M.yyyy"}
-                yyMMMEEEdd{"EEE d.M.yyyy"}
-                yyMMMd{"d.M.yyyy"}
-                yyMMdd{"d.M.yyyy"}
-                yyMMddHHmm{"d.M.yyyy H.mm"}
-                yyQQQQ{"QQQQ yyyy"}
-                yyyyMMMMEEEEd{"EEEE, d. MMMM'ta' yyyy"}
-                yyyyMMMMEEEd{"EEEE d. MMMM'ta' yyyy"}
-                yyyyMMMMd{"d. MMMM'ta' yyyy"}
-                yyyyMMMd{"d.M.yyyy"}
-                yyyyMMdd{"yyyy-MM-dd"}
-                yyyyMMddHHmmss{"yyyy-MM-dd HH:MM:SS"}
-                yyyyMd{"d.M.yyyy"}
             }
             dayNames{
                 format{
@@ -2116,18 +2091,18 @@ fi{
             monthNames{
                 format{
                     abbreviated{
-                        "tammikuu",
-                        "helmikuu",
-                        "maaliskuu",
-                        "huhtikuu",
-                        "toukokuu",
-                        "kesäkuu",
-                        "heinäkuu",
-                        "elokuu",
-                        "syyskuu",
-                        "lokakuu",
-                        "marraskuu",
-                        "joulukuu",
+                        "tammi",
+                        "helmi",
+                        "maalis",
+                        "huhti",
+                        "touko",
+                        "kesä",
+                        "heinä",
+                        "elo",
+                        "syys",
+                        "loka",
+                        "marras",
+                        "joulu",
                     }
                     wide{
                         "tammikuu",
@@ -2182,19 +2157,19 @@ fi{
             monthNames{
                 format{
                     abbreviated{
-                        "tišríkuu",
-                        "hešvánkuu",
-                        "kislévkuu",
-                        "tevétkuu",
-                        "ševátkuu",
-                        "adárkuu",
-                        "adárkuu II",
-                        "nisánkuu",
-                        "ijjárkuu",
-                        "sivánkuu",
-                        "tammúzkuu",
-                        "abkuu",
-                        "elúlkuu",
+                        "tišrí",
+                        "hešván",
+                        "kislév",
+                        "tevét",
+                        "ševát",
+                        "adár",
+                        "adár II",
+                        "nisán",
+                        "ijjár",
+                        "siván",
+                        "tammúz",
+                        "ab",
+                        "elúl",
                     }
                     wide{
                         "tišríkuu",
@@ -2218,18 +2193,18 @@ fi{
             monthNames{
                 format{
                     wide{
-                        "muharramkuu",
-                        "safarkuu",
-                        "rabi’ al-awwal -kuu",
-                        "rabi’ al-akhir -kuu",
-                        "džumada-l-ula-kuu",
-                        "džumada-l-akhira-kuu",
-                        "radžabkuu",
-                        "ša’bankuu",
-                        "ramadankuu",
-                        "šawwalkuu",
-                        "dhu-l-qa’da-kuu",
-                        "dhu-l-hiddža-kuu",
+                        "muharram",
+                        "safar",
+                        "rabi’ al-awwal",
+                        "rabi’ al-akhir",
+                        "džumada-l-ula",
+                        "džumada-l-akhira",
+                        "radžab",
+                        "ša’ban",
+                        "ramadan",
+                        "šawwal",
+                        "dhu-l-qa’da",
+                        "dhu-l-hiddža",
                     }
                 }
             }
@@ -2312,12 +2287,6 @@ fi{
         "America:North_Dakota:Center"{
             ec{"keskinen North Dakota"}
         }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Kalliovuorten kesäaika"}
-            ls{"Kalliovuorten normaaliaika"}
-            ss{"MST"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
@@ -2325,7 +2294,6 @@ fi{
             ec{"St. Johns"}
             ld{"Newfoundlandin kesäaika"}
             ls{"Newfoundlandin normaaliaika"}
-            sd{"CDT"}
             ss{"CNT"}
         }
         "Antarctica:DumontDUrville"{

@@ -31,7 +31,7 @@ it{
         039{"Europa del Sud"}
         053{"Australia e Nuova Zelanda"}
         054{"Melanesia"}
-        057{"Micronesia"}
+        057{"Regione Micronesiana"}
         061{"Polinesia"}
         142{"Asia"}
         143{"Asia centrale"}
@@ -697,7 +697,7 @@ it{
             "Nuovo sheqel israeliano",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Rupia Indiana",
         }
         IQD{
@@ -1050,7 +1050,7 @@ it{
         }
         STD{
             "Db",
-            "Dobra di Sao Tomé e Principe	",
+            "Dobra di Sao Tomé e Principe",
         }
         SUR{
             "SUR",
@@ -1869,7 +1869,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.59"}
+    Version{"1.70"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1886,26 +1886,6 @@ it{
                 "dd/MMM/yy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH.mm"}
-                HHmmss{"HH.mm.ss"}
-                MMMM{"MMMM"}
-                MMMdd{"dd/MMM"}
-                MMdd{"MM-dd"}
-                ww{"ww"}
-                yyMM{"MM/yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
-                yyMMMEEEdd{"EEE dd/MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyMMdd{"dd/MM/yy"}
-                yyMMddHHmm{"dd/MM/yy HH.mm"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMMMMEEEd{"EEE d MMMM yyyy"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMMd{"d MMM yyyy"}
-                yyyyMMdd{"dd/MM/yyyy"}
-                yyyyMMddHHmmss{"dd/MM/yyyy HH.mm.ss"}
             }
             dayNames{
                 format{

@@ -13,7 +13,7 @@ ca_ES{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.39"}
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}

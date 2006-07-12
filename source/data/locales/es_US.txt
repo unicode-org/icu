@@ -26,7 +26,7 @@ es_US{
         279,
         216,
     }
-    Version{"1.42"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

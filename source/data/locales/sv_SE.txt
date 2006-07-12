@@ -19,9 +19,7 @@ sv_SE{
         crp{"kreol- och pidginspråk (annat)"}
         enm{"medelengelska (ca 1100-1500)"}
         gil{"gilbertesiska, kiribati"}
-        gmh{"medelhögtyska (ca 1050-1500)"}
         gn{"guarani"}
-        goh{"fornhögtyska (ca 750-1050)"}
         iro{"irokesiska språk"}
         khi{"khoisanska (annat)"}
         km{"kambodjanska, khmeriska"}
@@ -41,7 +39,7 @@ sv_SE{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "¤ #,##0.00",
         "#,##0 %",
         "#E0",
     }
@@ -50,7 +48,7 @@ sv_SE{
             stroke{"streckordning"}
         }
     }
-    Version{"1.37"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -62,66 +60,15 @@ sv_SE{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "EEEE'en den' d MMMM yyyy",
+                "EEEE, yyyy MMMM dd",
                 "EEE d MMM yyyy",
                 "d MMM yyyy",
                 "yyyy-MM-dd",
                 "{1} {0}",
             }
-            availableFormats{
-                HHmm{"HH.mm"}
-                HHmmss{"HH.mm.ss"}
-                KKmm{"KK.mm a"}
-                KKmmss{"KK.mm.ss a"}
-                MMMdd{"d MMM"}
-                MMdd{"d/MM"}
-                mmssSS{"mm.ss,SS"}
-                yyMM{"MMM '-yy"}
-                yyMMMEEEd{"EEE d MMM yyyy"}
-                yyMMMd{"d MMM '-yy"}
-                yyMMddHHmm{"yy-MM-dd HH.mm"}
-                yyQQQQ{"QQQQ yyyy"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
-                yyyyMMMMEEEd{"EEE d MMMM "}
-                yyyyMMddHHmmss{"yyyy-MM-dd HH.mm.ss"}
-            }
             fields{
                 dayperiod{
                     dn{"tidsvisning"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"timme"}
-                }
-                minute{
-                    dn{"minut"}
-                }
-                month{
-                    dn{"månad"}
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"vecka"}
-                }
-                year{
-                    dn{"år"}
-                }
-                zone{
-                    dn{"tidszon"}
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "1:a kvartalet",
-                        "2:a kvartalet",
-                        "3:e kvartalet",
-                        "4:e kvartalet",
-                    }
                 }
             }
         }

@@ -7,26 +7,9 @@
 // *
 // ***************************************************************************
 ml_IN{
-    NumberPatterns{
-        "#,##,##0.###",
-        "¤ #,##,##0.00",
-        "#,##,##0%",
-        "#E0",
-    }
-    Version{"1.20"}
+    Version{"1.27"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE d MMMM yyyy",
-                "d MMMM yyyy",
-                "dd-MM-yyyy",
-                "dd-MM-yy",
-                "{1} {0}",
-            }
             weekend:intvector{
                 1,
                 0,

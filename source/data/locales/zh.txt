@@ -404,7 +404,7 @@ zh{
         }
         BRC{
             "BRC",
-            "巴西克鲁塞罗",
+            "巴西克鲁塞罗 Brazilian Cruzado",
         }
         BRE{
             "BRE",
@@ -667,7 +667,7 @@ zh{
             "以色列新谢客尔",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "印度卢比",
         }
         IQD{
@@ -1376,9 +1376,9 @@ zh{
         de{"德文"}
         del{"特拉瓦印第安人文"}
         den{"司雷夫文"}
-        dgr{"多格来文"}
+        dgr{"多格来文 Dogrib"}
         din{"丁卡文"}
-        doi{"多格来文"}
+        doi{"多格来文 Dogri"}
         dra{"其他德拉维语系"}
         dsb{"下塞尔维亚文"}
         dua{"都阿拉文"}
@@ -1445,10 +1445,10 @@ zh{
         hup{"胡帕文"}
         hy{"亚美尼亚文"}
         hz{"赫雷罗文"}
-        ia{"拉丁国际文"}
+        ia{"拉丁国际文 Interlingua"}
         iba{"伊班文"}
         id{"印度尼西亚文"}
-        ie{"拉丁国际文"}
+        ie{"拉丁国际文 Interlingue"}
         ig{"伊格博文"}
         ii{"四川话"}
         ijo{"伊乔文"}
@@ -1492,7 +1492,7 @@ zh{
         kos{"柯司瑞恩文"}
         kpe{"克佩列文"}
         kr{"卡努里文"}
-        krc{"卡拉卡尔帕克文"}
+        krc{"卡拉恰伊-巴尔卡尔语"}
         kro{"克鲁文"}
         kru{"库鲁克文"}
         ks{"克什米尔文"}
@@ -1512,7 +1512,7 @@ zh{
         li{"淋布尔吉文"}
         ln{"林加拉文"}
         lo{"老挝文"}
-        lol{"蒙古文"}
+        lol{"芒戈语"}
         loz{"洛兹文"}
         lt{"立陶宛文"}
         lu{"鲁巴加丹加文"}
@@ -1632,7 +1632,7 @@ zh{
         sat{"桑嗒利文"}
         sc{"萨丁文"}
         sco{"苏格兰文"}
-        sd{"苏丹文"}
+        sd{"信德语"}
         se{"北萨迷文"}
         sel{"塞尔库普文"}
         sem{"其他闪族语系"}
@@ -1665,7 +1665,7 @@ zh{
         ss{"辛辛那提文"}
         ssa{"其他尼罗萨哈兰文"}
         st{"塞索托文"}
-        su{"苏丹文"}
+        su{"巽他语"}
         suk{"苏库马文"}
         sus{"苏苏文"}
         sux{"苏马文"}
@@ -1724,7 +1724,7 @@ zh{
         wen{"索布诸语言"}
         wo{"沃尔夫文"}
         xal{"卡啦迷克文"}
-        xh{"班图文"}
+        xh{"科萨语"}
         yao{"瑶族文"}
         yap{"雅浦文"}
         yi{"依地文"}
@@ -1817,12 +1817,23 @@ zh{
     Variants{
         REVISED{"已修订"}
     }
-    Version{"1.64"}
+    Version{"1.77"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "上午",
                 "下午",
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -1911,6 +1922,22 @@ zh{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "1季",
+                        "2季",
+                        "3季",
+                        "4季",
+                    }
+                    wide{
+                        "第1季度",
+                        "第2季度",
+                        "第3季度",
+                        "第4季度",
+                    }
+                }
+            }
         }
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
@@ -1944,8 +1971,8 @@ zh{
             ec{"安克雷奇"}
             ld{"阿拉斯加夏令时间"}
             ls{"阿拉斯加标准时间"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"阿拉斯加夏令时间"}
+            ss{"阿拉斯加标准时间"}
         }
         "America:Araguaina"{
             ec{"阿拉瓜伊纳"}
@@ -1996,8 +2023,7 @@ zh{
             ec{"芝加哥"}
             ld{"中央夏令时间"}
             ls{"中央标准时间"}
-            sd{"CDT"}
-            ss{"CST"}
+            ss{"中部标准时间"}
         }
         "America:Chihuahua"{
             ec{"奇瓦瓦"}
@@ -2046,8 +2072,8 @@ zh{
             ec{"哈利法克斯"}
             ld{"大西洋夏令时间"}
             ls{"大西洋标准时间"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"大西洋夏令时间"}
+            ss{"大西洋标准时间"}
         }
         "America:Hermosillo"{
             ec{"埃莫西约"}
@@ -2063,10 +2089,8 @@ zh{
         }
         "America:Indianapolis"{
             ec{"印地安纳波利斯"}
-            ld{"东部标准时间"}
-            ls{"东部标准时间"}
-            sd{"EST"}
-            ss{"EST"}
+            ld{"东部夏时制 Indianapolis"}
+            ls{"东部标准时间 Indianapolis"}
         }
         "America:Inuvik"{
             ec{"伊努维克"}
@@ -2121,8 +2145,8 @@ zh{
             ec{"纽约"}
             ld{"东部夏令时间"}
             ls{"东部标准时间"}
-            sd{"EDT"}
-            ss{"EST"}
+            sd{"东部夏令时间"}
+            ss{"东部标准时间"}
         }
         "America:Nipigon"{
             ec{"尼皮贡"}
@@ -2135,10 +2159,8 @@ zh{
         }
         "America:Phoenix"{
             ec{"凤凰城"}
-            ld{"山区标准时间"}
-            ls{"山区标准时间"}
-            sd{"MST"}
-            ss{"MST"}
+            ld{"山区夏令时间 Phoenix"}
+            ls{"山区标准时间 Phoenix"}
         }
         "America:Porto_Velho"{
             ec{"波多韦柳"}
@@ -2168,8 +2190,8 @@ zh{
             ec{"圣约翰"}
             ld{"纽芬兰夏令时间"}
             ls{"纽芬兰标准时间"}
-            sd{"CDT"}
-            ss{"CNT"}
+            sd{"NDT 纽芬兰夏令时间"}
+            ss{"NST 纽芬兰标准时间"}
         }
         "America:Swift_Current"{
             ec{"斯威夫特卡伦特"}
@@ -2196,7 +2218,7 @@ zh{
             ec{"温尼伯"}
         }
         "America:Yakutat"{
-            ec{"雅库茨克"}
+            ec{"亚库塔特"}
         }
         "America:Yellowknife"{
             ec{"耶洛奈夫"}
@@ -2311,8 +2333,6 @@ zh{
             ec{"上海"}
             ld{"中国标准时间"}
             ls{"中国标准时间"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tashkent"{
             ec{"塔什干"}
@@ -2477,6 +2497,5 @@ zh{
         "Pacific:Yap"{
             ec{"雅浦岛"}
         }
-        hourFormat{"+HHmm;-HHmm"}
     }
 }

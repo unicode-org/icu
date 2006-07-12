@@ -17,7 +17,7 @@ es_CO{
             "Dólar Americano",
         }
     }
-    Version{"1.36"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -24,7 +24,7 @@ tr{
         014{"Doğu Afrika"}
         015{"Kuzey Afrika"}
         017{"Orta Afrika"}
-        018{"Güney Afrika"}
+        018{"Güney Afrika [018]"}
         019{"Amerika"}
         021{"Kuzey Amerika"}
         029{"Karayipler"}
@@ -855,10 +855,6 @@ tr{
             "Lm",
             "Malta Lirası",
         }
-        MTP{
-            "MTP",
-            "Malta Lirası",
-        }
         MUR{
             "MUR",
             "Mauritius Rupisi",
@@ -1183,10 +1179,6 @@ tr{
             "XBA",
             "Birleşik Avrupa Birimi",
         }
-        XBB{
-            "XBB",
-            "Avrupa Para Birimi",
-        }
         XBC{
             "XBC",
             "Avrupa Hesap Birimi (XBC)",
@@ -1268,7 +1260,7 @@ tr{
             "Zimbabwe Doları",
         }
     }
-    ExemplarCharacters{"[a b c ç d-g ğ h ı i İ j-o ö p r s ş t u ü v y z]"}
+    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ j-o ö p r s ş t u ü v y z]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1591,7 +1583,7 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.62"}
+    Version{"1.70"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1729,11 +1721,141 @@ tr{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Ç1",
+                        "Ç2",
+                        "Ç3",
+                        "Ç4",
+                    }
                     wide{
                         "1. çeyrek",
                         "2. çeyrek",
                         "3. çeyrek",
                         "4. çeyrek",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Ellul",
+                    }
+                    wide{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Ellul",
+                    }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Jumada I",
+                        "Cemaziyelahir",
+                        "Rajab",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames{
+                format{
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ferwerdin",
+                        "Ordibeheşt",
+                        "Hordâd",
+                        "Tir",
+                        "Mordad",
+                        "Şehrivar",
+                        "Mehr",
+                        "Âbân",
+                        "Âzar",
+                        "Daî",
+                        "Behman",
+                        "İsfand",
+                    }
+                    wide{
+                        "Ferwerdin",
+                        "Ordibeheşt",
+                        "Hordâd",
+                        "Tir",
+                        "Mordâd",
+                        "Şehrivar",
+                        "Mehr",
+                        "Âbân",
+                        "Âzar",
+                        "Daî",
+                        "Behman",
+                        "İsfand",
                     }
                 }
             }
@@ -1775,7 +1897,7 @@ tr{
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"Doğu Standart Saati"}
+            ld{"Doğu (Indianapolis) Yaz Saati"}
             ls{"Doğu Standart Saati"}
         }
         "America:Los_Angeles"{

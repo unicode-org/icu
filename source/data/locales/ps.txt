@@ -126,7 +126,7 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"1.33"}
+    Version{"1.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -170,7 +170,7 @@ ps{
                         "فبروري",
                         "مارچ",
                         "اپریل",
-                        "می",
+                        "مـی",
                         "جون",
                         "جولای",
                         "اګست",
@@ -232,13 +232,12 @@ ps{
         }
     }
     layout{
-        characters{"left-to-right"}
+        characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}
         }
-        regionFormat{"د {0} په وخت"}
     }
 }

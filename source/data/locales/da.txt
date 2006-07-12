@@ -1695,7 +1695,7 @@ da{
             traditional{"Traditionel sorteringsrækkefølge"}
         }
     }
-    Version{"1.58"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1708,23 +1708,6 @@ da{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMM{"MMMM"}
-                MMMdd{"dd. MMM"}
-                yyMM{"MM-yy"}
-                yyMMMEEEd{"EEE d. MMM yy"}
-                yyMMMd{"d. MMM yy"}
-                yyMMdd{"dd-MM-yy"}
-                yyMMddHHmm{"dd-MM-yy HH:mm"}
-                yyyyMMMMEEEEd{"EEEE, d. MMMM yyyy"}
-                yyyyMMMMEEEd{"EEE. d. MMMM yyyy"}
-                yyyyMMMMd{"d. MMMM yyyy"}
-                yyyyMMMd{"d. MMM yyyy"}
-                yyyyMMdd{"dd-MM-yyyy"}
-                yyyyMMddHHmmss{"dd-MM-yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1879,8 +1862,8 @@ da{
             ec{"Anchorage"}
             ld{"Alaska-sommertid"}
             ls{"Alaska-normaltid"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Chicago"{
             ec{"Chicago"}
@@ -1908,10 +1891,8 @@ da{
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"Eastern-normaltid"}
-            ls{"Eastern-normaltid"}
-            sd{"EST"}
-            ss{"EST"}
+            ld{"Indianapolis, sommertid"}
+            ls{"Indianapolis, normaltid"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
@@ -1938,8 +1919,8 @@ da{
             ec{"St. Johns"}
             ld{"Newfoundland-sommertid"}
             ls{"Newfoundland-normaltid"}
-            sd{"CDT"}
-            ss{"CNT"}
+            sd{"NDT"}
+            ss{"NST"}
         }
         "Antarctica:South_Pole"{
             ec{"Sydpolen"}
@@ -1955,8 +1936,6 @@ da{
             ec{"Shanghai"}
             ld{"Kinesisk normaltid"}
             ls{"Kinesisk normaltid"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}

@@ -92,7 +92,13 @@ pt_PT{
         pl{"polaco"}
         sl{"esloveno"}
     }
-    Version{"1.44"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -105,9 +111,6 @@ pt_PT{
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                yyyyMMMMEEEEd{"EEEE, d 'de' MMMM 'de' yyyy"}
             }
             fields{
                 day{

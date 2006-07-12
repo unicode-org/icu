@@ -391,7 +391,7 @@ zh_Hant{
         }
         BUK{
             "BUK",
-            "緬甸元",
+            "緬甸元 BUK",
         }
         BWP{
             "BWP",
@@ -618,7 +618,7 @@ zh_Hant{
             "以色列新謝克爾",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "印度盧布",
         }
         IQD{
@@ -1075,7 +1075,7 @@ zh_Hant{
         }
         XBB{
             "XBB",
-            "歐洲貨幣單位",
+            "歐洲貨幣單位 XBB",
         }
         XBC{
             "XBC",
@@ -1095,7 +1095,7 @@ zh_Hant{
         }
         XEU{
             "XEU",
-            "歐洲貨幣單位",
+            "歐洲貨幣單位 XEU",
         }
         XFO{
             "XFO",
@@ -1241,7 +1241,7 @@ zh_Hant{
         ast{"阿斯圖里亞文"}
         ath{"阿薩巴斯卡文"}
         aus{"澳洲英文"}
-        av{"阿法文"}
+        av{"阿法文 Avaric"}
         ay{"艾馬拉文"}
         az{"亞塞拜然文"}
         ba{"巴什客爾文"}
@@ -1259,7 +1259,7 @@ zh_Hant{
         bi{"比斯拉馬文"}
         bik{"比科爾文"}
         bla{"錫克錫卡文"}
-        bnt{"班圖文"}
+        bnt{"班圖諸語言"}
         bo{"藏文"}
         bs{"波士尼亞文"}
         bua{"布里阿特文"}
@@ -1351,9 +1351,9 @@ zh_Hant{
         ht{"海地人"}
         hy{"亞美尼亞文"}
         hz{"赫雷羅文"}
-        ia{"拉丁國際文"}
+        ia{"拉丁國際文 Interlingua"}
         id{"印尼文"}
-        ie{"拉丁國際文"}
+        ie{"拉丁國際文 Interlingue"}
         ig{"伊布文"}
         ii{"四川話"}
         ijo{"伊喬文"}
@@ -1400,11 +1400,12 @@ zh_Hant{
         lah{"拉亨達文"}
         lam{"蘭巴文"}
         lb{"盧森堡文"}
-        lez{"立陶宛文"}
+        lez{"立陶宛文 Lezghian"}
         lg{"干達文"}
         li{"林堡文"}
         lo{"寮國文"}
         loz{"洛齊文"}
+        lt{"立陶宛語"}
         lu{"魯巴加丹加文"}
         lua{"魯巴魯魯亞文"}
         lui{"路易塞諾文"}
@@ -1505,7 +1506,7 @@ zh_Hant{
         sas{"撒撒克文"}
         sat{"散塔利文"}
         sc{"撒丁文"}
-        sd{"蘇丹文"}
+        sd{"印度語"}
         se{"北方薩米文"}
         sel{"瑟爾卡普文"}
         sem{"其他閃族語言"}
@@ -1532,7 +1533,7 @@ zh_Hant{
         sr{"塞爾維亞文"}
         srr{"塞雷爾文"}
         ssa{"非洲撒哈拉沙漠邊緣地帶文"}
-        su{"蘇丹文"}
+        su{"巽他語"}
         suk{"蘇庫馬文"}
         sus{"蘇蘇文"}
         sux{"蘇美文"}
@@ -1571,8 +1572,9 @@ zh_Hant{
         und{"未確定的"}
         ur{"烏爾都文"}
         uz{"烏茲別克文"}
-        vai{"越南文"}
+        vai{"越南文 Vai"}
         ve{"溫達文"}
+        vi{"越南語"}
         wa{"瓦隆文"}
         wak{"夸基武特文"}
         war{"瓦瑞文"}
@@ -1580,7 +1582,7 @@ zh_Hant{
         wen{"文德文"}
         wo{"沃爾夫文"}
         xal{"卡爾梅克文"}
-        xh{"班圖文"}
+        xh{"科薩語"}
         yao{"瑤文"}
         yi{"意第緒文"}
         yo{"約魯巴文"}
@@ -1667,7 +1669,7 @@ zh_Hant{
     Variants{
         REVISED{"已修訂"}
     }
-    Version{"1.49"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1680,6 +1682,16 @@ zh_Hant{
                 "yyyy/M/d",
                 "yyyy/M/d",
                 "{1} {0}",
+            }
+            quarters{
+                format{
+                    wide{
+                        "第1季",
+                        "第2季",
+                        "第3季",
+                        "第4季",
+                    }
+                }
             }
         }
     }
@@ -1828,8 +1840,8 @@ zh_Hant{
         }
         "America:Indianapolis"{
             ec{"印第安那波里斯"}
-            ld{"東部標準時間"}
-            ls{"東部標準時間"}
+            ld{"東部標準時間 Indianapolis daylight"}
+            ls{"東部標準時間 Indianapolis"}
         }
         "America:Inuvik"{
             ec{"伊奴維克"}
@@ -2226,6 +2238,5 @@ zh_Hant{
         "Pacific:Yap"{
             ec{"雅浦島"}
         }
-        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

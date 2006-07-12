@@ -1218,11 +1218,11 @@ cs{
         }
         YUD{
             "YUD",
-            "Dinár jugoslávský nový",
+            "Dinár jugoslávský nový [YUD]",
         }
         YUM{
             "YUM",
-            "Dinár jugoslávský nový",
+            "Dinár jugoslávský nový [YUM]",
         }
         YUN{
             "YUN",
@@ -1431,16 +1431,12 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.73"}
+    Version{"1.83"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "dop.",
                 "odp.",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1483,6 +1479,20 @@ cs{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "ledna",
+                        "úno",
+                        "března",
+                        "dub",
+                        "kvě",
+                        "června",
+                        "července",
+                        "srpna",
+                        "září",
+                        "října",
+                        "lis",
+                        "prosince",
+                    }
                     narrow{
                         "l",
                         "ú",
@@ -1594,8 +1604,8 @@ cs{
             ec{"Anchorage"}
             ld{"Aljašský letní čas"}
             ls{"Aljašský standardní čas"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Chicago"{
             ec{"Chicago"}
@@ -1623,10 +1633,8 @@ cs{
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"Východní standardní čas"}
+            ld{"Východní letní čas (Indianapolis)"}
             ls{"Východní standardní čas"}
-            sd{"EST"}
-            ss{"EST"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
@@ -1637,8 +1645,8 @@ cs{
         }
         "America:New_York"{
             ec{"New York"}
-            ld{"Východní letní čas"}
-            ls{"Východní standardní čas"}
+            ld{"Východní letní čas (New York)"}
+            ls{"Východní standardní čas (New York)"}
             sd{"EDT"}
             ss{"EST"}
         }

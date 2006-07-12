@@ -119,7 +119,7 @@ mr{
         rm{"रहटो-रोमान्स्"}
         rn{"किरुन्दी"}
         ro{"रोमानियन्"}
-        root{"मराठी"}
+        root{"शिखर"}
         ru{"रष्यन्"}
         rw{"किन्यार्वान्डा"}
         sa{"संस्कृत"}
@@ -169,7 +169,7 @@ mr{
     LocaleScript{
         "Deva",
     }
-    Version{"1.42"}
+    Version{"1.50"}
     calendar{
         gregorian{
             AmPmMarkers{

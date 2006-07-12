@@ -101,7 +101,7 @@ sw{
             "TZS",
         }
     }
-    ExemplarCharacters{"[ a-p r-u w y z {dh} {ng} {ng'} {ny} {sh} {th} ]"}
+    ExemplarCharacters{"[a-d {dh} e-n {ng} {ng'} {ny} o p r s {sh} t {th} u-w y z]"}
     Languages{
         de{"kijerumani"}
         en{"kiingereza"}
@@ -117,7 +117,7 @@ sw{
     LocaleScript{
         "Latn",
     }
-    Version{"1.41"}
+    Version{"1.47"}
     calendar{
         gregorian{
             dayNames{
@@ -152,12 +152,12 @@ sw{
                 format{
                     abbreviated{
                         "Januari",
-                        "Februari",
-                        "Machi",
-                        "Aprili",
+                        "Feb",
+                        "Mar",
+                        "Apr",
                         "Mei",
-                        "Juni",
-                        "Julai",
+                        "Jun",
+                        "Jul",
                         "Agosti",
                         "Septemba",
                         "Oktoba",
@@ -177,6 +177,22 @@ sw{
                         "Oktoba",
                         "Novemba",
                         "Desemba",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "R1",
+                        "R2",
+                        "R3",
+                        "R4",
+                    }
+                    wide{
+                        "robo ya kwanza",
+                        "robo ya pili",
+                        "robo ya tatu",
+                        "robo ya nne",
                     }
                 }
             }
