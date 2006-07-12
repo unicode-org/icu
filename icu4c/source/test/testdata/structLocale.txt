@@ -2084,7 +2084,79 @@ structLocale:table(nofallback){
                 "",
             }
         }
+        coptic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+            }
+        }
         default{""}
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "",
@@ -2106,9 +2178,17 @@ structLocale:table(nofallback){
                 "",
             }
             appendItems{
-                E{"{1} {0}"}
-                c{"{1} {0}"}
-                e{"{1} {0}"}
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
             }
             availableFormats{
                 HHmm{""}

@@ -1009,14 +1009,18 @@ TimeZoneTest::TestAliasedNames()
       }
       if(!quick) {
         for(loc = 0; loc < noLoc; loc++) {
+          const char* locale = uloc_getAvailable(loc); 
           for(j = 0; j < (int32_t)(sizeof(styles)/sizeof(styles[0])); j++) {
             for(k = 0; k < (int32_t)(sizeof(useDst)/sizeof(useDst[0])); k++) {
               fromName.remove();
               toName.remove();
-              from->getDisplayName(useDst[k], styles[j], uloc_getAvailable(loc), fromName);
-              to->getDisplayName(useDst[k], styles[j], uloc_getAvailable(loc), toName);
+              from->getDisplayName(useDst[k], styles[j],locale, fromName);
+              to->getDisplayName(useDst[k], styles[j], locale, toName);
               if(fromName.compare(toName) != 0) {
-                  errln("Fail: Expected "+toName+" but got " + fromName);
+                  errln("Fail: Expected "+toName+" but got " + prettify(fromName) 
+                      + " for locale: " + locale + " index: "+ loc 
+                      + " to id "+ kData[i].to
+                      + " from id " + kData[i].from);
               }
             }
           }
