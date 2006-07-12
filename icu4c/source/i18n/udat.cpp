@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -390,6 +390,22 @@ udat_getSymbols(const   UDateFormat     *fmt,
         res = syms->getWeekdays(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW);
         break;
 
+    case UDAT_QUARTERS:
+        res = syms->getQuarters(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_SHORT_QUARTERS:
+        res = syms->getQuarters(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_STANDALONE_QUARTERS:
+        res = syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_STANDALONE_SHORT_QUARTERS:
+        res = syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
+        break;
+
     }
 
     if(index < count) {
@@ -469,6 +485,22 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 
     case UDAT_STANDALONE_NARROW_WEEKDAYS:
         syms->getWeekdays(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::NARROW);
+        break;
+
+    case UDAT_QUARTERS:
+        syms->getQuarters(count, DateFormatSymbols::FORMAT, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_SHORT_QUARTERS:
+        syms->getQuarters(count, DateFormatSymbols::FORMAT, DateFormatSymbols::ABBREVIATED);
+        break;
+
+    case UDAT_STANDALONE_QUARTERS:
+        syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::WIDE);
+        break;
+
+    case UDAT_STANDALONE_SHORT_QUARTERS:
+        syms->getQuarters(count, DateFormatSymbols::STANDALONE, DateFormatSymbols::ABBREVIATED);
         break;
 
     }
