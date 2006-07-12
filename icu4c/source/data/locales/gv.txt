@@ -20,7 +20,7 @@ gv{
     LocaleScript{
         "Latn",
     }
-    Version{"1.33"}
+    Version{"1.38"}
     calendar{
         gregorian{
             AmPmMarkers{

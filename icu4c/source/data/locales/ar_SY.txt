@@ -13,7 +13,7 @@ ar_SY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

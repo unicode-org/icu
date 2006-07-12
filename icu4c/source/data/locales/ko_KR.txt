@@ -21,7 +21,7 @@ ko_KR{
         "#,##0%",
         "#E0",
     }
-    Version{"1.36"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

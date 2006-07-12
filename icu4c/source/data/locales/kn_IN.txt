@@ -13,7 +13,7 @@ kn_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.40"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{

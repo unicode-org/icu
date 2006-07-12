@@ -19,7 +19,7 @@ sk{
         014{"Východná Afrika"}
         015{"Severná Afrika"}
         017{"Stredná Afrika"}
-        018{"Južná Afrika"}
+        018{"Južná Afrika [018]"}
         019{"Americký kontinent"}
         021{"Severná Amerika"}
         029{"Karibik"}
@@ -1193,7 +1193,7 @@ sk{
         }
         YUD{
             "YUD",
-            "Juhoslávsky dinár",
+            "Juhoslávsky dinár [YUD]",
         }
         YUM{
             "YUM",
@@ -1311,7 +1311,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.58"}
+    Version{"1.65"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1483,6 +1483,5 @@ sk{
         "Pacific:Galapagos"{
             ec{"Galapágy"}
         }
-        hourFormat{"+HHmm;-HHmm"}
     }
 }

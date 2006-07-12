@@ -21,7 +21,7 @@ ar_MA{
         "NaN",
         "+",
     }
-    Version{"1.32"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

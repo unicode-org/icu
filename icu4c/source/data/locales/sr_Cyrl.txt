@@ -15,17 +15,15 @@ sr_Cyrl{
             "R$",
             "Бразилски Реал",
         }
-        CNY{
-            "Y",
-            "Кинески Јуан Ренминби",
-        }
-        CSD{
-            "CSD",
-            "Српски Динар",
-        }
     }
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.19"}
+    Version{"1.26"}
+    zoneStrings{
+        "Europe:Sarajevo"{
+            ec{"Sarajevo"}
+            ls{"Средње Европско Вријеме"}
+        }
+    }
 }

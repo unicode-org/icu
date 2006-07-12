@@ -294,7 +294,7 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"1.44"}
+    Version{"1.50"}
     calendar{
         gregorian{
             AmPmMarkers{

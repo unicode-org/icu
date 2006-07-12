@@ -235,7 +235,7 @@ ca{
             "Lliura esterlina britànica",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Rupia índia",
         }
         JPY{
@@ -413,7 +413,7 @@ ca{
     Scripts{
         Latn{"Llatí"}
     }
-    Version{"1.60"}
+    Version{"1.67"}
     calendar{
         gregorian{
             DateTimePatterns{

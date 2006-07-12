@@ -21,7 +21,7 @@ es_PA{
         "NaN",
         "+",
     }
-    Version{"1.35"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimePatterns{

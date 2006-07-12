@@ -13,12 +13,25 @@ zh_Hant_TW{
         "#,##0%",
         "#E0",
     }
-    Version{"1.15"}
+    Version{"1.27"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 1,
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "週日",
+                        "週一",
+                        "周二",
+                        "週三",
+                        "週四",
+                        "週五",
+                        "週六",
+                    }
+                }
             }
             fields{
                 day{
@@ -76,10 +89,6 @@ zh_Hant_TW{
             ec{"Chicago"}
             ld{"中部夏令時間"}
         }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"山區夏令時間"}
-        }
         "America:Halifax"{
             ec{"Halifax"}
             ld{"大西洋夏令時間"}
@@ -95,10 +104,6 @@ zh_Hant_TW{
         "America:New_York"{
             ec{"New York"}
             ld{"東部夏令時間"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"山區夏令時間"}
         }
         "America:St_Johns"{
             ec{"St Johns"}

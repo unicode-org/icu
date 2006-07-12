@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    AuxExemplarCharacters{"[ã à ç é ë í ñ ó ü w ÿ]"}
+    AuxExemplarCharacters{"[à ã ç é ë í ñ ó w ÿ ü]"}
     Countries{
         001{"världen"}
         002{"Afrika"}
@@ -681,7 +681,7 @@ sv{
             "Israelisk ny shekel",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Indisk rupie",
         }
         IQD{
@@ -1832,28 +1832,9 @@ sv{
         ROZAJ{"resisk dialekt"}
         SAAHO{"saho"}
     }
-    Version{"1.72"}
+    Version{"1.84"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "'kl. 'HH.mm.ss z",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE'en den' d MMMM yyyy",
-                "EEEE d MMM yyyy",
-                "d MMM yyyy",
-                "yyyy-MM-dd",
-                "{1} {0}",
-            }
-            availableFormats{
-                MMMdd{"dd MMM"}
-                MMdd{"dd/MM"}
-                yyMMMd{"d MMM yy"}
-                yyMMdd{"yy-MM-dd"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMdd{"yyyy-MM-dd"}
-            }
             dayNames{
                 format{
                     abbreviated{
@@ -1895,10 +1876,10 @@ sv{
             }
             fields{
                 day{
-                    dn{"Dag"}
+                    dn{"dag"}
                 }
                 dayperiod{
-                    dn{"Dagsperiod"}
+                    dn{"dagsperiod"}
                 }
                 era{
                     dn{"era"}
@@ -1916,16 +1897,16 @@ sv{
                     dn{"sekund"}
                 }
                 week{
-                    dn{"Vecka"}
+                    dn{"vecka"}
                 }
                 weekday{
-                    dn{"Veckans dag"}
+                    dn{"veckodag"}
                 }
                 year{
-                    dn{"År"}
+                    dn{"år"}
                 }
                 zone{
-                    dn{"Zon"}
+                    dn{"tidszon"}
                 }
             }
             monthNames{
@@ -2010,8 +1991,6 @@ sv{
             ec{"Alaska/Anchorage"}
             ld{"Alaska, sommartid"}
             ls{"Alaska, normaltid"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comod. Rivadavia"}
@@ -2023,13 +2002,11 @@ sv{
             ec{"Chicago"}
             ld{"Central, sommartid"}
             ls{"Central, normaltid"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "America:Denver"{
             ec{"Denver"}
-            ld{"Mountain, sommartid"}
-            ls{"Mountain, normaltid"}
+            ld{"USA/Denver, sommartid"}
+            ls{"USA/Denver, normaltid"}
             sd{"MDT"}
             ss{"MST"}
         }
@@ -2040,15 +2017,11 @@ sv{
             ec{"Halifax"}
             ld{"Atlantic, sommartid"}
             ls{"Atlantic, normaltid"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"Eastern, normaltid"}
-            ls{"Eastern, normaltid"}
-            sd{"EST"}
-            ss{"EST"}
+            ld{"USA/Indianapolis, normaltid"}
+            ls{"USA/Indanapolis, normaltid"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
@@ -2119,8 +2092,6 @@ sv{
             ec{"Shanghai"}
             ld{"Kina, normaltid"}
             ls{"Kina, normaltid"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tashkent"{
             ec{"Tasjkent"}

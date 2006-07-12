@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 es_BO{
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimePatterns{

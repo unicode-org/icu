@@ -45,7 +45,7 @@ az_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.13"}
+    Version{"1.18"}
     calendar{
         gregorian{
             dayNames{

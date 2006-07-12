@@ -27,7 +27,7 @@ kn{
     LocaleScript{
         "Knda",
     }
-    Version{"1.41"}
+    Version{"1.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -85,6 +85,16 @@ kn{
                         "ಅಕ್ಟೋಬರ್",
                         "ನವೆಂಬರ್",
                         "ಡಿಸೆಂಬರ್",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "ಒಂದು  1",
+                        "ಎರಡು 2",
+                        "ಮೂರು 3",
+                        "ನಾಲೃಕ  4",
                     }
                 }
             }

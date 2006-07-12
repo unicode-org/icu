@@ -398,7 +398,7 @@ he{
             "ש\"ח",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "רופי הודית",
         }
         IQD{
@@ -907,7 +907,7 @@ he{
             traditional{"מסורתי"}
         }
     }
-    Version{"1.62"}
+    Version{"1.70"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1088,7 +1088,7 @@ he{
         }
     }
     layout{
-        characters{"left-to-right"}
+        characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}

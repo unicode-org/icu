@@ -12,7 +12,6 @@ zh_Hans_SG{
         CZ{"捷克"}
         ID{"印尼"}
         KR{"南韩"}
-        MK{"马其顿"}
         NZ{"纽西兰"}
         SA{"沙地阿拉伯"}
     }
@@ -26,7 +25,7 @@ zh_Hans_SG{
         "#,##0%",
         "#E0",
     }
-    Version{"1.25"}
+    Version{"1.31"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

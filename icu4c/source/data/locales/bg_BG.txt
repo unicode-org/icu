@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 bg_BG{
-    Version{"1.34"}
+    Version{"1.42"}
     delimiters{
         alternateQuotationEnd{"„"}
         alternateQuotationStart{"“"}

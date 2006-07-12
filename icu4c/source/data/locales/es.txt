@@ -31,7 +31,7 @@ es{
         039{"Europa meridional"}
         053{"Australia y Nueva Zelanda"}
         054{"Melanesia"}
-        057{"Micronesia"}
+        057{"Micronesia [057]"}
         061{"Polinesia"}
         142{"Asia"}
         143{"Asia central"}
@@ -557,7 +557,7 @@ es{
             "dinar argelino",
         }
         ECS{
-            "S/",
+            "ECS",
             "sucre ecuatoriano",
         }
         ECV{
@@ -709,7 +709,7 @@ es{
             "nuevo sheqel israelí",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "rupia india",
         }
         IQD{
@@ -1923,7 +1923,7 @@ es{
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.68"}
+    Version{"1.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1940,11 +1940,6 @@ es{
                 "dd-MMM-yy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMM{"MMMM"}
             }
             dayNames{
                 format{
@@ -2109,8 +2104,8 @@ es{
             ec{"Anchorage"}
             ld{"Hora de verano de Alaska"}
             ls{"Hora estándar de Alaska"}
-            sd{"ADT"}
-            ss{"AST"}
+            sd{"AKDT"}
+            ss{"AKST"}
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"Río Gallegos"}
@@ -2147,10 +2142,6 @@ es{
         }
         "America:Indianapolis"{
             ec{"Indianápolis"}
-            ld{"Hora estándar oriental"}
-            ls{"Hora estándar oriental"}
-            sd{"EST"}
-            ss{"EST"}
         }
         "America:Los_Angeles"{
             ec{"Los Ángeles"}
@@ -2183,7 +2174,6 @@ es{
             ec{"St. Johns"}
             ld{"Hora de verano de Newfoundland"}
             ls{"Hora estándar de Newfoundland"}
-            sd{"CDT"}
             ss{"CNT"}
         }
         "Antarctica:South_Pole"{
@@ -2200,7 +2190,6 @@ es{
             ec{"Shanghai"}
             ld{"Hora estándar de China"}
             ls{"Hora estándar de China"}
-            sd{"CDT"}
             ss{"CTT"}
         }
         "Asia:Tokyo"{

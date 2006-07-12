@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ga.xml
  */
 ga{
-    AuxExemplarCharacters{"[ḃċḋḟġṁṗṡṫ]"}
+    AuxExemplarCharacters{"[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]"}
     Countries{
         AD{"Andóra"}
         AE{"Aontas na nÉimíríochtaí Arabacha"}
@@ -655,7 +655,7 @@ ga{
             "Sheqel Nua Iosraelach",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Rúipí India",
         }
         IQD{
@@ -1223,7 +1223,7 @@ ga{
             "Dollar Siombábach",
         }
     }
-    ExemplarCharacters{"[a á b-e é f-i í j-o ó p-u ú v-z	]"}
+    ExemplarCharacters{"[a á b-e é f-i í j-o ó p-u ú v-z]"}
     Languages{
         aa{"Afar"}
         ab{"Abcáisis"}
@@ -1349,7 +1349,7 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.46"}
+    Version{"1.51"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1366,10 +1366,6 @@ ga{
                 "yyyy MMM d",
                 "yy/MM/dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
             }
             dayNames{
                 format{

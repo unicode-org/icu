@@ -661,7 +661,7 @@ pt{
             "Sheqel Novo israelita",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Rupia indiana",
         }
         IQD{
@@ -1163,10 +1163,6 @@ pt{
         XDR{
             "XDR",
             "Direitos Especiais de Giro",
-        }
-        XEU{
-            "XEU",
-            "Unidade Monetária Européia",
         }
         XFO{
             "XFO",
@@ -1784,7 +1780,7 @@ pt{
     Variants{
         REVISED{"Revisado"}
     }
-    Version{"1.53"}
+    Version{"1.64"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1915,8 +1911,6 @@ pt{
             ec{"Anchorage"}
             ld{"Horário de Verão do Alasca"}
             ls{"Horário Padrão do Alasca"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -1962,10 +1956,6 @@ pt{
         }
         "America:Indianapolis"{
             ec{"Indianápolis"}
-            ld{"Horário Padrão Oriental"}
-            ls{"Horário Padrão Oriental"}
-            sd{"EST"}
-            ss{"EST"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
@@ -2007,8 +1997,8 @@ pt{
             ec{"St. Johns"}
             ld{"Horário de Verão de Terra Nova"}
             ls{"Horário Padrão de Terra Nova"}
-            sd{"CDT"}
-            ss{"CNT"}
+            sd{"NDT"}
+            ss{"NST"}
         }
         "Antarctica:South_Pole"{
             ec{"Pólo Sul"}
@@ -2027,8 +2017,6 @@ pt{
             ec{"Xangai"}
             ld{"Horário Padrão da China"}
             ls{"Horário Padrão da China"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tokyo"{
             ec{"Tóquio"}

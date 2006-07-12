@@ -20,7 +20,6 @@ de{
         014{"Ostafrika"}
         015{"Nordafrika"}
         017{"Zentralafrika"}
-        018{"Südafrika"}
         019{"Nord-, Mittel- und Südamerika"}
         021{"Nordamerika"}
         029{"Karibik"}
@@ -30,7 +29,6 @@ de{
         039{"Südeuropa"}
         053{"Australien und Neuseeland"}
         054{"Melanesien"}
-        057{"Mikronesien"}
         061{"Polynesien"}
         062{"Süd-Zentralasien"}
         142{"Asien"}
@@ -296,7 +294,7 @@ de{
         }
         AFA{
             "AFA",
-            "Afghani",
+            "Afghani (1927-2002)",
         }
         AFN{
             "Af",
@@ -384,7 +382,7 @@ de{
         }
         BGL{
             "BGL",
-            "Lew",
+            "Lew (1962-1999)",
         }
         BGN{
             "BGN",
@@ -679,7 +677,7 @@ de{
             "Schekel",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Indische Rupie",
         }
         IQD{
@@ -1791,7 +1789,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.62"}
+    Version{"1.76"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fa_IR{
-    Version{"1.39"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -21,7 +21,7 @@ ru{
         014{"Восточная Африка"}
         015{"Северная Африка"}
         017{"Центральная Африка"}
-        018{"Южная Африка"}
+        018{"Южная Африка [018]"}
         019{"Центральная и Южная Америка"}
         021{"Северная Америка"}
         029{"Карибы"}
@@ -1387,7 +1387,6 @@ ru{
         nah{"ацтекский"}
         nai{"Северной Америки индейцев (другие)"}
         nap{"неаполитанский"}
-        nb{"норвежский"}
         nd{"ндебели (северный)"}
         nds{"нижнегерманский; нижнесаксонский"}
         ne{"непальский"}
@@ -1567,7 +1566,7 @@ ru{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,###.00¤",
+        "#,##0.00¤",
         "#,##0%",
         "#E0",
     }
@@ -1638,7 +1637,7 @@ ru{
             japanese{"Японский календарь"}
         }
     }
-    Version{"1.76"}
+    Version{"1.89"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1651,33 +1650,6 @@ ru{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                KKmm{"HH:mm"}
-                KKmmss{"HH:mm:ss"}
-                MMMM{"LLLL"}
-                MMMdd{"d MMM"}
-                MMdd{"dd/MM"}
-                YYYYLLLL{"LLLL yyyy"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"MM.yy"}
-                yyMMMEEEd{"EEE, d MMM yy"}
-                yyMMMEEEdd{"EEE dd MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyMMdd{"dd.MM.yy"}
-                yyMMddHHmm{"dd.MM.yy HH:mm"}
-                yyMd{"d.M.yy"}
-                yyQQQQ{"QQQQ yyyy 'г.'"}
-                yyyyMMMMEEEEd{"EEEE, d MMMM, yyyy"}
-                yyyyMMMMEEEEdd{"EEEE, dd MMMM yyyy"}
-                yyyyMMMMEEEd{"EEE, d MMMM yyyy"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMMd{"d MMM yyyy"}
-                yyyyMMdd{"dd.MM.yyyy"}
-                yyyyMMddHHmmss{"dd.MM.yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -1729,18 +1701,18 @@ ru{
             monthNames{
                 format{
                     abbreviated{
-                        "января",
-                        "февраля",
+                        "янв.",
+                        "февр.",
                         "марта",
-                        "апреля",
+                        "апр.",
                         "мая",
                         "июня",
                         "июля",
-                        "августа",
-                        "сентября",
-                        "октября",
-                        "ноября",
-                        "декабря",
+                        "авг.",
+                        "сент.",
+                        "окт.",
+                        "нояб.",
+                        "дек.",
                     }
                     narrow{
                         "Я",
@@ -1886,26 +1858,6 @@ ru{
                         "Зуль-Каада",
                         "Зуль-Хиджжа",
                     }
-                    wide{
-                        "Мухаррам",
-                        "Сафар",
-                        "Раби-уль-авваль",
-                        "Раби-уль-ахир",
-                        "Джумад-уль-авваль",
-                        "Джумад-уль-ахир",
-                        "Раджаб",
-                        "Шаабан",
-                        "Рамадан",
-                        "Шавваль",
-                        "Зуль-Каада",
-                        "Зуль-Хиджжа",
-                    }
-                }
-            }
-        }
-        islamic-civil{
-            monthNames{
-                format{
                     wide{
                         "Мухаррам",
                         "Сафар",

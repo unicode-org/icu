@@ -395,7 +395,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.46"}
+    Version{"1.52"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -470,6 +470,22 @@ eo{
                         "oktobro",
                         "novembro",
                         "decembro",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1a kvaronjaro",
+                        "2a kvaronjaro",
+                        "3a kvaronjaro",
+                        "4a kvaronjaro",
                     }
                 }
             }

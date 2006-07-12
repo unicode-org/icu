@@ -47,9 +47,8 @@ th_TH{
         Hung{"ฮังการีโบราณ"}
         Ital{"อิตาลีโบราณ"}
         Mlym{"มาลายาลัม"}
-        Taml{"ทมิฬ"}
     }
-    Version{"1.32"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

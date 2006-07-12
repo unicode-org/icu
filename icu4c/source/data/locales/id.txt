@@ -251,7 +251,7 @@ id{
             "IDR",
         }
     }
-    ExemplarCharacters{"[ a-p r-u w y {ng} {ny} ]"}
+    ExemplarCharacters{"[a-n {ng} {ny} o p r-w y]"}
     Languages{
         aa{"Afar"}
         ab{"Abkhaz"}
@@ -504,7 +504,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.46"}
+    Version{"1.52"}
     calendar{
         gregorian{
             dayNames{
@@ -558,6 +558,22 @@ id{
                         "Oktober",
                         "November",
                         "Desember",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "kuartal pertama",
+                        "kuartal kedua",
+                        "kuartal ketiga",
+                        "kuartal keempat",
                     }
                 }
             }

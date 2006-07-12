@@ -14,7 +14,7 @@ ti_ER{
         }
         USD{
             "US$",
-            "የአሜሪካን ዶላር",
+            "USD",
         }
     }
     NumberPatterns{
@@ -23,7 +23,7 @@ ti_ER{
         "#,##0%",
         "#E0",
     }
-    Version{"1.34"}
+    Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

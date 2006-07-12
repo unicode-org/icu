@@ -318,7 +318,7 @@ et{
         "NaN",
         "+",
     }
-    Version{"1.50"}
+    Version{"1.56"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -389,6 +389,22 @@ et{
                         "oktoober",
                         "november",
                         "detsember",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
                     }
                 }
             }

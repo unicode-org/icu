@@ -13,7 +13,7 @@ es_VE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimePatterns{

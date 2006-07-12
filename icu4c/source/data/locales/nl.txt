@@ -720,7 +720,7 @@ nl{
             "Israëlische nieuwe shekel",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs.",
             "Indiase rupee",
         }
         IQD{
@@ -1324,7 +1324,7 @@ nl{
             "Zimbabwaanse dollar",
         }
     }
-    ExemplarCharacters{"[a á ä b-e é ë f-i í ï {ij} j-o ó ö p-u ú ü v-y z]"}
+    ExemplarCharacters{"[a á ä b-e é ë f-i í ï {ij} j-o ó ö p-u ú ü v-z]"}
     Keys{
         calendar{"Kalender"}
         collation{"Volgorde"}
@@ -1953,7 +1953,7 @@ nl{
         ROZAJ{"Resiaans"}
         SAAHO{"Saho"}
     }
-    Version{"1.62"}
+    Version{"1.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1966,27 +1966,6 @@ nl{
                 "d MMM yyyy",
                 "dd-MM-yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMM{"MMMM"}
-                MMMdd{"dd MMM"}
-                MMdd{"dd-MM"}
-                mmssSS{"mm:ss,SS"}
-                ww{"ww"}
-                yyMM{"MM-yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyMMd{"d-MM-yy"}
-                yyMMdd{"dd-MM-yy"}
-                yyMMddHHmm{"dd-MM-yy HH:mm"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
-                yyyyMMMMEEEd{"EEE d MMMM yyyy"}
-                yyyyMMMMd{"d MMMM yyyy"}
-                yyyyMMMd{"d MMM yyyy"}
-                yyyyMMdd{"dd-MM-yyyy"}
-                yyyyMMddHHmmss{"dd-MM-yyyy HH:mm:ss"}
             }
             dayNames{
                 format{
@@ -2112,6 +2091,12 @@ nl{
                         "K3",
                         "K4",
                     }
+                    wide{
+                        "1e kwartaal",
+                        "2e kwartaal",
+                        "3e kwartaal",
+                        "4e kwartaal",
+                    }
                 }
             }
         }
@@ -2186,8 +2171,6 @@ nl{
             ec{"Anchorage"}
             ld{"Alaska-zomertijd"}
             ls{"Alaska-standaardtijd"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodora Rivadavia"}
@@ -2225,15 +2208,6 @@ nl{
             ec{"Halifax"}
             ld{"Atlantic-zomertijd"}
             ls{"Atlantic-standaardtijd"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Eastern-standaardtijd"}
-            ls{"Eastern-standaardtijd"}
-            sd{"EST"}
-            ss{"EST"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
@@ -2281,8 +2255,6 @@ nl{
             ec{"St. Johns"}
             ld{"Newfoundland-zomertijd"}
             ls{"Newfoundland-standaardtijd"}
-            sd{"CDT"}
-            ss{"CNT"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2300,8 +2272,6 @@ nl{
         "Asia:Shanghai"{
             ld{"Chinese standaardtijd"}
             ls{"Chinese standaardtijd"}
-            sd{"CDT"}
-            ss{"CTT"}
         }
         "Asia:Tashkent"{
             ec{"Tasjkent"}

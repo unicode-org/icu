@@ -2004,7 +2004,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.100"}
+    Version{"1.109"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2017,19 +2017,6 @@ en{
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMM{"MMMM"}
-                MMMdd{"MMM dd"}
-                mmssSS{"mm:ss"}
-                ww{"ww"}
-                yyMM{"MM/yy"}
-                yyMMMEEEd{"EEE, MMM d, yy"}
-                yyMMMd{"MMM d, yy"}
-                yyMd{"M/d/yy"}
-                yyQQQQ{"QQQQ yy"}
             }
             dayNames{
                 format{
@@ -2136,12 +2123,6 @@ en{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                     wide{
                         "1st quarter",
                         "2nd quarter",
@@ -2260,6 +2241,13 @@ en{
             ec{"Shanghai"}
             ld{"China Daylight Time"}
             ls{"China Standard Time"}
+        }
+        "Asia:Singapore"{
+            ec{"Singapore"}
+            ld{"Singapore Standard Time"}
+            ls{"Singapore Standard Time"}
+            sd{"SST"}
+            ss{"SST"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}

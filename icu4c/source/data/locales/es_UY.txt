@@ -19,7 +19,7 @@ es_UY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.36"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimePatterns{

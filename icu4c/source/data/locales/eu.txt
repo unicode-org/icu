@@ -163,7 +163,7 @@ eu{
         "NaN",
         "+",
     }
-    Version{"1.46"}
+    Version{"1.51"}
     calendar{
         gregorian{
             dayNames{
@@ -217,6 +217,22 @@ eu{
                         "urria",
                         "azaroa",
                         "abendua",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Hh1",
+                        "Hh2",
+                        "Hh3",
+                        "Hh4",
+                    }
+                    wide{
+                        "1. hiruhilekoa",
+                        "2. hiruhilekoa",
+                        "3. hiruhilekoa",
+                        "4. hiruhilekoa",
                     }
                 }
             }
