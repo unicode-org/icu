@@ -130,9 +130,9 @@ case $platform in
         ;;
     AIX/GCC)
         THE_OS=AIX
-        THE_COMP="gcc"
-        CC=`which gcc`; export CC
-        CXX=`which g++`; export CXX
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
         ;;
     Solaris)
         THE_OS=SOLARIS
@@ -145,10 +145,8 @@ case $platform in
     Solaris/GCC)
         THE_OS=SOLARIS
         THE_COMP="the GNU C++"
-        CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++"; export CXXFLAGS
-        LDFLAGS="$LDFLAGS -R/usr/local/lib"; export LDFLAGS
-        RELEASE_CXXFLAGS=-O
-        RELEASE_CFLAGS=-O3
+        CC=gcc; export CC
+        CXX=g++; export CXX
         ;;
     SolarisX86)
         THE_OS="SOLARIS X86"
