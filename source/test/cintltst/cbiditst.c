@@ -214,7 +214,8 @@ static const char columns[62] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk
 
 #define TABLE_SIZE  256
 static UChar         *pseudoToUChar;
-static uint8_t       *UCharToPseudo;
+static uint8_t       *UCharToPseudo;    /* used for Unicode chars < 0x0100 */
+static uint8_t       *UCharToPseud2;    /* used for Unicode chars >=0x0100 */
 
 static void buildPseudoTables(void)
 /*
@@ -241,18 +242,21 @@ static void buildPseudoTables(void)
     int             i;
     UChar           uchar;
     uint8_t         c;
-    pseudoToUChar = malloc(TABLE_SIZE * sizeof(UChar));
     UCharToPseudo = malloc(TABLE_SIZE * sizeof(char));
-    if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL)) {
-        log_err("Unable to allocate pseudo BiDi tables.\n");
+    UCharToPseud2 = malloc(TABLE_SIZE * sizeof(char));
+    pseudoToUChar = malloc(TABLE_SIZE * sizeof(UChar));
+    if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL) || (UCharToPseud2 == NULL)) {
+        log_err("Unable to allocate pseudo BiDi tables. All characters will be converted to '?'\n");
         return;
     }
-    /* initialize both tables to identity */
+    /* initialize all tables to unknown */
     for (i=0; i < TABLE_SIZE; i++) {
-        pseudoToUChar[i] = i;
-        UCharToPseudo[i] = i;
+        pseudoToUChar[i] = 0xFFFD;
+        UCharToPseudo[i] = '?';
+        UCharToPseud2[i] = '?';
     }
     /* initialize non letters or digits */
+    pseudoToUChar[(uint8_t) 0 ] = 0x0000;    UCharToPseudo[0x00] = (uint8_t) 0 ;
     pseudoToUChar[(uint8_t)' '] = 0x0020;    UCharToPseudo[0x20] = (uint8_t)' ';
     pseudoToUChar[(uint8_t)'!'] = 0x0021;    UCharToPseudo[0x21] = (uint8_t)'!';
     pseudoToUChar[(uint8_t)'"'] = 0x0022;    UCharToPseudo[0x22] = (uint8_t)'"';
@@ -275,19 +279,17 @@ static void buildPseudoTables(void)
     pseudoToUChar[(uint8_t)'>'] = 0x003E;    UCharToPseudo[0x3E] = (uint8_t)'>';
     pseudoToUChar[(uint8_t)'?'] = 0x003F;    UCharToPseudo[0x3F] = (uint8_t)'?';
     pseudoToUChar[(uint8_t)'\\']= 0x005C;    UCharToPseudo[0x5C] = (uint8_t)'\\';
-    pseudoToUChar[(uint8_t)0x1F]= 0xE01F;    /* avoid clash with '_' */
-    pseudoToUChar[(uint8_t)0x7F]= 0xE07F;    /* avoid clash with '~' */
     /* initialize specially used characters */
-    pseudoToUChar[(uint8_t)'`'] = 0x0300;    UCharToPseudo[0x00] = (uint8_t)'`';  /* NSM */
-    pseudoToUChar[(uint8_t)'@'] = 0x200E;    UCharToPseudo[0x0E] = (uint8_t)'@';  /* LRM */
-    pseudoToUChar[(uint8_t)'&'] = 0x200F;    UCharToPseudo[0x0F] = (uint8_t)'&';  /* RLM */
+    pseudoToUChar[(uint8_t)'`'] = 0x0300;    UCharToPseud2[0x00] = (uint8_t)'`';  /* NSM */
+    pseudoToUChar[(uint8_t)'@'] = 0x200E;    UCharToPseud2[0x0E] = (uint8_t)'@';  /* LRM */
+    pseudoToUChar[(uint8_t)'&'] = 0x200F;    UCharToPseud2[0x0F] = (uint8_t)'&';  /* RLM */
     pseudoToUChar[(uint8_t)'_'] = 0x001F;    UCharToPseudo[0x1F] = (uint8_t)'_';  /* S   */
-    pseudoToUChar[(uint8_t)'|'] = 0x2029;    UCharToPseudo[0x29] = (uint8_t)'|';  /* B   */
-    pseudoToUChar[(uint8_t)'['] = 0x202A;    UCharToPseudo[0x2A] = (uint8_t)'[';  /* LRE */
-    pseudoToUChar[(uint8_t)']'] = 0x202B;    UCharToPseudo[0x2B] = (uint8_t)']';  /* RLE */
-    pseudoToUChar[(uint8_t)'^'] = 0x202C;    UCharToPseudo[0x2C] = (uint8_t)'^';  /* PDF */
-    pseudoToUChar[(uint8_t)'{'] = 0x202D;    UCharToPseudo[0x2D] = (uint8_t)'{';  /* LRO */
-    pseudoToUChar[(uint8_t)'}'] = 0x202E;    UCharToPseudo[0x2E] = (uint8_t)'}';  /* RLO */
+    pseudoToUChar[(uint8_t)'|'] = 0x2029;    UCharToPseud2[0x29] = (uint8_t)'|';  /* B   */
+    pseudoToUChar[(uint8_t)'['] = 0x202A;    UCharToPseud2[0x2A] = (uint8_t)'[';  /* LRE */
+    pseudoToUChar[(uint8_t)']'] = 0x202B;    UCharToPseud2[0x2B] = (uint8_t)']';  /* RLE */
+    pseudoToUChar[(uint8_t)'^'] = 0x202C;    UCharToPseud2[0x2C] = (uint8_t)'^';  /* PDF */
+    pseudoToUChar[(uint8_t)'{'] = 0x202D;    UCharToPseud2[0x2D] = (uint8_t)'{';  /* LRO */
+    pseudoToUChar[(uint8_t)'}'] = 0x202E;    UCharToPseud2[0x2E] = (uint8_t)'}';  /* RLO */
     pseudoToUChar[(uint8_t)'~'] = 0x007F;    UCharToPseudo[0x7F] = (uint8_t)'~';  /* BN  */
     /* initialize western digits */
     for (i = 0, uchar = 0x0030; i < 6; i++, uchar++) {
@@ -299,19 +301,19 @@ static void buildPseudoTables(void)
     for (i = 6, uchar = 0x0666; i < 10; i++, uchar++) {
         c = (uint8_t)columns[i];
         pseudoToUChar[c] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = c;
+        UCharToPseud2[uchar & 0x00ff] = c;
     }
     /* initialize Arabic letters */
     for (i = 10, uchar = 0x0631; i < 16; i++, uchar++) {
         c = (uint8_t)columns[i];
         pseudoToUChar[c] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = c;
+        UCharToPseud2[uchar & 0x00ff] = c;
     }
     /* initialize Hebrew letters */
     for (i = 16, uchar = 0x05D7; i < 36; i++, uchar++) {
         c = (uint8_t)columns[i];
         pseudoToUChar[c] = uchar;
-        UCharToPseudo[uchar & 0x00ff] = c;
+        UCharToPseud2[uchar & 0x00ff] = c;
     }
     /* initialize Latin lower case letters */
     for (i = 36, uchar = 0x0061; i < 62; i++, uchar++) {
@@ -332,8 +334,13 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
     if (!pseudoToUChar) {
         buildPseudoTables();
     }
-    for (i = 0; i < length; i++)
-        output[i] = pseudoToUChar[(uint8_t)input[i]];
+    if (pseudoToUChar) {                /* tables are built */
+        for (i = 0; i < length; i++)
+            output[i] = pseudoToUChar[(uint8_t)input[i]];
+    } else {                            /* short on memory */
+        for (i = 0; i < length; i++)
+            output[i] = '?';
+    }
     return length;
 }
 
@@ -344,32 +351,21 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
     It returns the length of the pseudo-Bidi string.
 */
 {
-    int             i, j;
-    UChar           u;
-    uint8_t         v;
+    int             i;
+    UChar           uchar;
     if (!pseudoToUChar) {
         buildPseudoTables();
     }
-    for (i = 0; i < length; i++)
-    {
-        u = input[i];
-        v = UCharToPseudo[u & 0x00ff];
-        if (pseudoToUChar[v] == u) {
-            output[i] = v;
-            continue;
+    if (pseudoToUChar) {
+        for (i = 0; i < length; i++)
+        {
+            uchar = input[i];
+            output[i] = uchar < 0x0100 ? UCharToPseudo[uchar] :
+                                         UCharToPseud2[uchar & 0x00ff];
         }
-        if (v == '\0') {
-            output[i] = '\0';
-            continue;
-        }
-        v = (char)(u & 0x00ff);         /* keep 8 right bits */
-        for (j = TABLE_SIZE-1; j > 0; j--) {
-            if (pseudoToUChar[j] == u) {
-                v = j;
-                break;
-            }
-        }
-        output[i] = v;
+    } else {                            /* short on memory */
+        for (i = 0; i < length; i++)
+            output[i] = '?';
     }
     output[length] = '\0';
     return length;
@@ -1938,8 +1934,7 @@ static UBiDi*
 getBiDiObject(void) {
     UBiDi* pBiDi = ubidi_open();
     if (pBiDi == NULL) {
-        log_err("Unable to allocate a UBiDi object.\n");
-        return NULL;
+        log_err("Unable to allocate a UBiDi object. Tests are skipped.\n");
     }
     return pBiDi;
 }
@@ -2465,7 +2460,10 @@ doReorderRunsTest(void) {
     int32_t srcLen, destLen, vis1Len, vis2Len, option, i, j, nCases;
     UErrorCode rc = U_ZERO_ERROR;
     UBiDiLevel level;
-
+    if(!pL2VBiDi) {
+        ubidi_close(pBiDi);             /* in case this one was allocated */
+        return;
+    }
     ubidi_setReorderingMode(pBiDi, UBIDI_REORDER_RUNS_ONLY);
     ubidi_setReorderingOptions(pL2VBiDi, UBIDI_OPTION_REMOVE_CONTROLS);
 
@@ -2532,6 +2530,11 @@ doReorderingModeBidiTest() {
     pBiDi = getBiDiObject();
     pBiDi2 = getBiDiObject();
     pBiDi3 = getBiDiObject();
+    if(!pBiDi3) {
+        ubidi_close(pBiDi);             /* in case this one was allocated */
+        ubidi_close(pBiDi2);            /* in case this one was allocated */
+        return;
+    }
 
     ubidi_setInverse(pBiDi2, TRUE);
 
@@ -2792,6 +2795,9 @@ static void doBidiClassOverrideTest(void) {
     log_verbose("\n*** Bidi class override test ***\n");
 
     pBiDi = getBiDiObject();
+    if(!pBiDi) {
+        return;
+    }
 
     ubidi_getClassCallback(pBiDi, &oldFn, &oldContext);
     verifyCallbackParams(oldFn, oldContext, NULL, NULL, 0);
