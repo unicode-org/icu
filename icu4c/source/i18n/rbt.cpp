@@ -44,7 +44,8 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
     }
 
     if (parser.idBlockVector.size() != 0 ||
-        parser.compoundFilter != NULL) {
+        parser.compoundFilter != NULL ||
+        parser.dataVector.size() == 0) {
         status = U_INVALID_RBT_SYNTAX; // ::ID blocks disallowed in RBT
         return;
     }
