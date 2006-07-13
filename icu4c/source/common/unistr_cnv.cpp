@@ -233,8 +233,7 @@ UnicodeString::doExtract(int32_t start, int32_t length,
     } else {
         if(destCapacity==-1) {
             // Pin the limit to the max bytes per UChar if the "magic" destCapacity is used.
-            // +2 for the NULL and ending shifts.
-            destCapacity=ucnv_getMaxCharSize(cnv)*(length+2);
+            destCapacity=UCNV_GET_MAX_BYTES_FOR_STRING(length, ucnv_getMaxCharSize(cnv));
         }
         destLimit=dest+destCapacity;
     }
