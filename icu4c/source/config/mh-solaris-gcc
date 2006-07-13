@@ -12,6 +12,9 @@ SHAREDLIBCPPFLAGS = -DPIC
 GEN_DEPS.c= 	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
+## These are the library specific LDFLAGS
+LDFLAGSICUDT=-nodefaultlibs -nostdlib
+
 ## Additional flags when building libraries and with threads
 THREADSCPPFLAGS = -D_REENTRANT
 
