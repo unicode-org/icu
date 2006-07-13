@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using gcc
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -11,6 +11,9 @@ SHAREDLIBCPPFLAGS = -DPIC
 ## Commands to generate dependency files
 GEN_DEPS.c= 	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+## Additional flags when building libraries and with threads
+THREADSCPPFLAGS = -D_REENTRANT
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-R
