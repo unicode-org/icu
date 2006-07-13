@@ -179,7 +179,10 @@ void Test4056591()
         gotdate=myFormatit(def, got);
         expdate=myFormatit(def, exp);
 
-        if(u_strcmp(gotdate, expdate) !=0){
+        if (gotdate == NULL || expdate == NULL) {
+            log_err("myFormatit failed!\n");
+        }
+        else if(u_strcmp(gotdate, expdate) !=0){
             log_err("set2DigitYearStart broken for %s \n  got: %s, expected: %s\n", austrdup(s),
                 austrdup(gotdate), austrdup(expdate) );
         }
@@ -390,47 +393,45 @@ void Test4073003()
     }
     u_uastrcpy(temp, "m/D/yy");
     udat_applyPattern(fmt, FALSE, temp, u_strlen(temp));
-    
-        for(i= 0; i < 4; i+=2) {
-            status=U_ZERO_ERROR;
-            datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i])+1));
-            u_uastrcpy(datestr, tests[i]);
-            
-            pos=0;
-            d = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
-            if(U_FAILURE(status)){
-                log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
-            }
-            
-            free(datestr);
-            datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i+1])+1));
-            u_uastrcpy(datestr, tests[i+1]);
+
+    for(i= 0; i < 4; i+=2) {
+        status=U_ZERO_ERROR;
+        datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i])+1));
+        u_uastrcpy(datestr, tests[i]);
         
-            pos=0;
-            status=U_ZERO_ERROR;
-            dd = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
-            if(U_FAILURE(status)){
-                log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
-            }
-            free(datestr);
-            
-            result =myFormatit(fmt, d);
-            result2 =myFormatit(fmt, dd);
-            if(!result || !result2) {
-              log_data_err("Fail: could not format - exitting test");
-              return;
-            }
-            if (u_strcmp(result, result2)!=0){
-                log_err("Fail: %s != %s\n", austrdup(result), austrdup(result2) );
-                 }
-            else{
-            log_verbose("Ok: %s == %s\n", austrdup(result), austrdup(result2) );
-            }
-            
-            
-       
+        pos=0;
+        d = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
+        if(U_FAILURE(status)){
+            log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
         }
-        udat_close(fmt);
+        
+        free(datestr);
+        datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i+1])+1));
+        u_uastrcpy(datestr, tests[i+1]);
+    
+        pos=0;
+        status=U_ZERO_ERROR;
+        dd = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
+        if(U_FAILURE(status)){
+            log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
+        }
+        free(datestr);
+        
+        result =myFormatit(fmt, d);
+        result2 =myFormatit(fmt, dd);
+        if(!result || !result2) {
+            log_data_err("Fail: could not format - exitting test\n");
+            return;
+        }
+        if (u_strcmp(result, result2)!=0){
+            log_err("Fail: %s != %s\n", austrdup(result), austrdup(result2) );
+        }
+        else{
+            log_verbose("Ok: %s == %s\n", austrdup(result), austrdup(result2) );
+        }
+   
+    }
+    udat_close(fmt);
 }
 
 /**
@@ -456,12 +457,12 @@ void Test4162071()
     pos=0;
     x = udat_parse(df, datestr, u_strlen(datestr), &pos, &status);
     if(U_FAILURE(status)){
-                log_data_err("ERROR : parse format  %s fails : %s\n", austrdup(format), myErrorName(status));
-            }
+        log_data_err("ERROR : parse format  %s fails : %s\n", austrdup(format), myErrorName(status));
+    }
     else{
         log_verbose("Parse format \"%s \" ok.\n", austrdup(format) );
     }
-    log_verbose("date= %s\n", austrdup(myFormatit(df, x)) );    
+    /*log_verbose("date= %s\n", austrdup(myFormatit(df, x)) );*/
     udat_close(df);
 }
 

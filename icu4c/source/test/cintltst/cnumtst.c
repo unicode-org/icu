@@ -248,7 +248,7 @@ free(result);
     {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, temp1)==0)
+    if(result && u_strcmp(result, temp1)==0)
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
     else
         log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
@@ -262,9 +262,13 @@ free(result);
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
 /*    for (i = 0; i < 100000; i++)*/
+    if (result != NULL)
     {
         parsepos=0;
         d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    }
+    else {
+        log_err("result is NULL\n");
     }
     if(U_FAILURE(status))
     {
@@ -305,26 +309,31 @@ free(result);
     if (pos2.beginIndex == 1 && pos2.endIndex == 6) {
         log_verbose("Pass: Complete number formatting using unum_format() successful\n");
     } else {
-        log_err("Fail: Error in complete number Formatting using unum_formatDouble()\nGot: b=%d end=%d\nExpected: b=1 end=6",
+        log_err("Fail: Error in complete number Formatting using unum_formatDouble()\nGot: b=%d end=%d\nExpected: b=1 end=6\n",
                 pos1.beginIndex, pos1.endIndex);
     }
 
     log_verbose("\nTesting unum_parseDoubleCurrency\n");
     parsepos=0;
-    d1=unum_parseDoubleCurrency(cur_def, result, u_strlen(result), &parsepos, temp2, &status);
-    if (U_FAILURE(status)) {
-        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+    if (result == NULL) {
+        log_err("result is NULL\n");
     }
-    /* Note: a==1234.56, but on parse expect a1=1235.0 */
-    if (d1!=a1) {
-        log_err("Fail: Error in parsing currency, got %f, expected %f\n", d1, a1);
-    } else {
-        log_verbose("Pass: parsed currency ammount successfully\n");
-    }
-    if (u_strcmp(temp2, temp)==0) {
-        log_verbose("Pass: parsed correct currency\n");
-    } else {
-        log_err("Fail: parsed incorrect currency\n");
+    else {
+        d1=unum_parseDoubleCurrency(cur_def, result, u_strlen(result), &parsepos, temp2, &status);
+        if (U_FAILURE(status)) {
+            log_err("parse failed. The error is  : %s\n", myErrorName(status));
+        }
+        /* Note: a==1234.56, but on parse expect a1=1235.0 */
+        if (d1!=a1) {
+            log_err("Fail: Error in parsing currency, got %f, expected %f\n", d1, a1);
+        } else {
+            log_verbose("Pass: parsed currency ammount successfully\n");
+        }
+        if (u_strcmp(temp2, temp)==0) {
+            log_verbose("Pass: parsed correct currency\n");
+        } else {
+            log_err("Fail: parsed incorrect currency\n");
+        }
     }
 
 free(result);
