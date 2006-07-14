@@ -52,7 +52,7 @@ public class RandomCollator extends TestFmwk {
 //            System.out.println("\nTestRandom skipped for 2003");
 //            return;
 //        }
-        if(skipIfBeforeICU(3,5)) return;
+        if(skipIfBeforeICU(3,6)) return;
         //String fileName;
         PrintWriter pw = BagFormatter.openUTF8Writer(System.getProperty("user.dir")+File.separator, "RandomCollationTestLog.txt");
         TestCollator tc = new TestCollator(chars);

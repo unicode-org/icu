@@ -157,7 +157,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
                 }
                 catch (ParseException e) {
                     describeTest();
-                    errln("********** FAIL: Parse of " + string[i-1] + " failed.");
+                    errln("********** FAIL: Parse of " + string[i-1] + " failed for locale: "+fFormat.getLocale(ULocale.ACTUAL_LOCALE));
                     dump = true;
                     break;
                 }
@@ -243,6 +243,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     public void TestMonster() {
         if (isQuick()) {
             logln("Skipping test (use -e for exhaustive)");
+            return;
         }
         final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;

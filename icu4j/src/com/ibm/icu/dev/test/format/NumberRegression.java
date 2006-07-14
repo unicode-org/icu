@@ -1,7 +1,7 @@
 //##header
 /*****************************************************************************************
  *
- * Copyright (C) 1996-2005, International Business Machines
+ * Copyright (C) 1996-2006, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **/
 
@@ -37,6 +37,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+
+import sun.security.krb5.internal.crypto.f;
 
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -470,7 +472,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         */
         String expectedDefault = "-5\u00a0789,988";
         String expectedCurrency = "5\u00a0789,99 " + EURO; // euro
-        String expectedPercent = "-578\u00a0999%";
+        String expectedPercent = "-578\u00a0999\u00a0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.FRANCE);
         tempString = formatter.format (-5789.9876);
@@ -521,7 +523,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     */
         String expectedDefault = "-5\u00a0789,988";
         String expectedCurrency = "5\u00a0789,99 $";
-        String expectedPercent = "-578\u00a0999%";
+        String expectedPercent = "-578\u00a0999\u00A0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);
         tempString = formatter.format (-5789.9876);
@@ -1561,11 +1563,26 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
                 // Test toLocalizedPattern/applyLocalizedPattern round trip
                 pat = df.toLocalizedPattern();
-                f2.applyLocalizedPattern(pat);
-                if (!df.equals(f2)) {
-                    errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + pat +
-                          "\" -> \"" + f2.toLocalizedPattern() + '"');
+                try{
+                    f2.applyLocalizedPattern(pat);
+                    
+                    String s1 = f2.format(123456);
+                    String s2 = df.format(123456);
+                    if(!s1.equals(s2)){
+                        errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + s2 +
+                                "\" -> \"" + s2 + '"'+ " in locale "+df.getLocale(ULocale.ACTUAL_LOCALE));
+  
+                    }
+                    if (!df.equals(f2)) {
+                        errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + pat +
+                              "\" -> \"" + f2.toLocalizedPattern() + '"'+ " in locale "+df.getLocale(ULocale.ACTUAL_LOCALE));
+                        errln("s1: "+s1+" s2: "+s2);
+                    }
+                   
+                }catch(IllegalArgumentException ex){
+                    errln(ex.getMessage()+" for locale "+ df.getLocale(ULocale.ACTUAL_LOCALE));
                 }
+                
 
                 // Test writeObject/readObject round trip
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
