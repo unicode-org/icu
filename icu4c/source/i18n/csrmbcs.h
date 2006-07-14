@@ -18,7 +18,7 @@ U_NAMESPACE_BEGIN
 
 // "Character"  iterated character class.
 //    Recognizers for specific mbcs encodings make their "characters" available
-//    by providing a nextChar() function that fills in an instance of iteratedChar
+//    by providing a nextChar() function that fills in an instance of IteratedChar
 //    with the next char from the input.
 //    The returned characters are not converted to Unicode, but remain as the raw
 //    bytes (concatenated into an int) from the codepage data.
@@ -27,7 +27,7 @@ U_NAMESPACE_BEGIN
 //   stripped of markup.  Detection only considers multi-byte chars, effectively
 //   stripping markup anyway, and double byte chars do occur in markup too.
 //
-class iteratedChar
+class IteratedChar
 {
 public:
     int32_t charValue;             // 1-4 bytes from the raw input data
@@ -37,7 +37,7 @@ public:
     UBool   done;
 
 public:
-    iteratedChar();
+    IteratedChar();
     void reset();         
     int32_t nextByte(InputText* det); 
 };
@@ -78,14 +78,14 @@ public:
      *    Subclasses for specific charset encodings must implement this function
      *    to get characters according to the rules of their encoding scheme.
      * 
-     *  This function is not a method of class iteratedChar only because
+     *  This function is not a method of class IteratedChar only because
      *   that would require a lot of extra derived classes, which is awkward.
-     * @param it  The iteratedChar "struct" into which the returned char is placed.
+     * @param it  The IteratedChar "struct" into which the returned char is placed.
      * @param det The charset detector, which is needed to get at the input byte data
      *            being iterated over.
      * @return    True if a character was returned, false at end of input.
      */
-    virtual UBool nextChar(iteratedChar *it, InputText *textIn) = 0;
+    virtual UBool nextChar(IteratedChar *it, InputText *textIn) = 0;
 
 };     
 
@@ -98,7 +98,7 @@ class CharsetRecog_sjis : public CharsetRecog_mbcs {
 public:
     virtual ~CharsetRecog_sjis();
 
-    UBool nextChar(iteratedChar *it, InputText *det);
+    UBool nextChar(IteratedChar *it, InputText *det);
 
     int32_t match(InputText *det);
 
@@ -129,7 +129,7 @@ public:
      *  Character "value" is simply the raw bytes that make up the character
      *     packed into an int.
      */
-    UBool nextChar(iteratedChar *it, InputText *det);
+    UBool nextChar(IteratedChar *it, InputText *det);
 };         
 
 /**
@@ -172,7 +172,7 @@ class CharsetRecog_big5 : public CharsetRecog_mbcs
 public:
     virtual ~CharsetRecog_big5();
 
-    UBool nextChar(iteratedChar* it, InputText* det);
+    UBool nextChar(IteratedChar* it, InputText* det);
 
     const char *getName() const;
     const char *getLanguage() const;
@@ -191,7 +191,7 @@ class CharsetRecog_gb_18030 : public CharsetRecog_mbcs
 public:
     virtual ~CharsetRecog_gb_18030();
 
-    UBool nextChar(iteratedChar* it, InputText* det);
+    UBool nextChar(IteratedChar* it, InputText* det);
 
     const char *getName() const;
     const char *getLanguage() const;
