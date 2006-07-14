@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2003 International Business Machines Corporation   *
+*   Copyright (C) 2002-2006 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -33,8 +33,9 @@
 
 U_NAMESPACE_BEGIN
 
-int  RBBINode::gLastSerial = 0;
-
+#ifdef RBBI_DEBUG
+static int  gLastSerial = 0;
+#endif
 
 
 //-------------------------------------------------------------------------
@@ -43,7 +44,9 @@ int  RBBINode::gLastSerial = 0;
 //
 //-------------------------------------------------------------------------
 RBBINode::RBBINode(NodeType t) : UMemory() {
+#ifdef RBBI_DEBUG
     fSerialNum    = ++gLastSerial;
+#endif
     fType         = t;
     fParent       = NULL;
     fLeftChild    = NULL;
@@ -69,7 +72,9 @@ RBBINode::RBBINode(NodeType t) : UMemory() {
 
 
 RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
+#ifdef RBBI_DEBUG
     fSerialNum   = ++gLastSerial;
+#endif
     fType        = other.fType;
     fParent      = NULL;
     fLeftChild   = NULL;
