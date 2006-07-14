@@ -561,7 +561,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
 
     int32_t start = current();
 
-    utext_previous32(fText);
+    UTEXT_PREVIOUS32(fText);
     int32_t lastResult    = handlePrevious(fData->fReverseTable);
     if (lastResult == UBRK_DONE) {
         lastResult = 0;
@@ -657,7 +657,7 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
         // move forward one codepoint to prepare for moving back to a
         // safe point.
         // this handles offset being between a supplementary character
-        utext_next32(fText);
+        UTEXT_NEXT32(fText);
         // handlePrevious will move most of the time to < 1 boundary away
         handlePrevious(fData->fSafeRevTable);
         int32_t result = next();
@@ -669,7 +669,7 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     if (fData->fSafeFwdTable != NULL) {
         // backup plan if forward safe table is not available
         utext_setNativeIndex(fText, offset);
-        utext_previous32(fText);
+        UTEXT_PREVIOUS32(fText);
         // handle next will give result >= offset
         handleNext(fData->fSafeFwdTable);
         // previous will give result 0 or 1 boundary away from offset,
@@ -764,7 +764,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
             //   indices to the containing code point.
             // For breakitereator::preceding only, these non-code-point indices need to be moved
             //   up to refer to the following codepoint.
-            utext_next32(fText);
+            UTEXT_NEXT32(fText);
             offset = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         }
 
@@ -773,7 +773,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         //        (Change would interact with safe rules.)
         // TODO:  change RBBI behavior for off-boundary indices to match that of UText?
         //        affects only preceding(), seems cleaner, but is slightly different.
-        utext_previous32(fText);
+        UTEXT_PREVIOUS32(fText);
         handleNext(fData->fSafeFwdTable);
         int32_t result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
         while (result >= offset) {
@@ -783,8 +783,13 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     }
     if (fData->fSafeRevTable != NULL) {
         // backup plan if forward safe table is not available
+        //  TODO:  check whether this path can be discarded
+        //         It's probably OK to say that rules must supply both safe tables
+        //            if they use safe tables at all.  We have certainly never described
+        //            to anyone how to work with just one safe table.
         utext_setNativeIndex(fText, offset);
-        utext_next32(fText);
+        UTEXT_NEXT32(fText);
+        
         // handle previous will give result <= offset
         handlePrevious(fData->fSafeRevTable);
 
@@ -879,7 +884,6 @@ enum RBBIRunMode {
 //
 //  handleNext(stateTable)
 //     This method is the actual implementation of the rbbi next() method. 
-//     It is not overridden by dictionary based break iterators.
 //     This method initializes the state machine to state 1
 //     and advances through the text character by character until we reach the end
 //     of the text or the state machine transitions to state 0.  We update our return
@@ -911,20 +915,18 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     fLastRuleStatusIndex = 0;
 
     // if we're already at the end of the text, return DONE.
-    c = utext_current32(fText);
+    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText); 
+    result          = initialPosition;
+    c               = utext_next32(fText);
     if (fData == NULL || c==U_SENTINEL) {
         return BreakIterator::DONE;
     }
-
-    //  Set up the starting char.
-    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText); 
-    result          = initialPosition;
 
     //  Set the initial state for the state machine
     state = START_STATE;
     row = (RBBIStateTableRow *)
             (statetable->fTableData + (statetable->fRowLen * state));
-    category = 3;
+    
     mode     = RBBI_RUN;
     if (statetable->fFlags & RBBI_BOF_REQUIRED) {
         category = 2;
@@ -935,7 +937,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     // loop until we reach the end of the text or transition to state 0
     //
     for (;;) {
-        if (utext_current32(fText)==U_SENTINEL) {
+        if (c == U_SENTINEL) {
             // Reached end of input string.
             if (mode == RBBI_END) {
                 // We have already run the loop one last time with the 
@@ -948,12 +950,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
                     result               = lookaheadResult;
                     fLastRuleStatusIndex = lookaheadTagIdx;
                     lookaheadStatus = 0;
-                } else if (result == initialPosition) {
-                    // Ran off end, no match found.
-                    // move forward one
-                    utext_setNativeIndex(fText, initialPosition);
-                    utext_next32(fText);
-                }
+                } 
                 break;
             }
             // Run the loop one last time with the fake end-of-input character category.
@@ -1004,23 +1001,12 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         row = (RBBIStateTableRow *)
             (statetable->fTableData + (statetable->fRowLen * state));
 
-        // Advance to the next character.  
-        // If this is a beginning-of-input loop iteration, don't advance
-        //    the input position.  The next iteration will be processing the
-        //    first real input character.
-        if (mode == RBBI_RUN) {
-            //  TODO:  rework loop to use UText's prefered posincrement style of operation.
-            utext_next32(fText);
-            c = utext_current32(fText);
-        } else {
-            if (mode == RBBI_START) {
-                mode = RBBI_RUN;
-            }
-        }
 
         if (row->fAccepting == -1) {
             // Match found, common case.
-            result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+            if (mode != RBBI_START) {
+                result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+            }
             fLastRuleStatusIndex = row->fTagIdx;   // Remember the break status (tag) values.
         }
 
@@ -1062,6 +1048,19 @@ continueOn:
             //   longer match is possible, no matter what characters follow.
             break;
         }
+        
+        // Advance to the next character.  
+        // If this is a beginning-of-input loop iteration, don't advance
+        //    the input position.  The next iteration will be processing the
+        //    first real input character.
+        if (mode == RBBI_RUN) {
+            c = UTEXT_NEXT32(fText);
+        } else {
+            if (mode == RBBI_START) {
+                mode = RBBI_RUN;
+            }
+        }
+
 
     }
 
@@ -1072,7 +1071,7 @@ continueOn:
     //    at least one character.)
     if (result == initialPosition) {
         utext_setNativeIndex(fText, initialPosition);
-        utext_next32(fText);
+        UTEXT_NEXT32(fText);
         result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     }
 
