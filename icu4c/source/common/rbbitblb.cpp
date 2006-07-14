@@ -1,13 +1,13 @@
+/*
+**********************************************************************
+*   Copyright (c) 2002-2006, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
 //
 //  rbbitblb.cpp
 //
 
-/*
-**********************************************************************
-*   Copyright (c) 2002-2005, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*/
 
 #include "unicode/utypes.h"
 
@@ -75,10 +75,12 @@ void  RBBITableBuilder::build() {
     //   parse tree for the substition expression.
     //
     fTree = fTree->flattenVariables();
+#ifdef RBBI_DEBUG
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ftree")) {
         RBBIDebugPuts("Parse tree after flattening variable references.");
         fTree->printTree(TRUE);
     }
+#endif
 
     //
     // If the rules contained any references to {bof} 
@@ -113,10 +115,12 @@ void  RBBITableBuilder::build() {
     //      expression.
     //
     fTree->flattenSets();
+#ifdef RBBI_DEBUG
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "stree")) {
         RBBIDebugPuts("Parse tree after flattening Unicode Set references.");
         fTree->printTree(TRUE);
     }
+#endif
 
 
     //

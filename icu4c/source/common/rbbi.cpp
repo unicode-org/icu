@@ -35,6 +35,10 @@
 #include "localsvc.h"
 #endif
 
+#ifdef RBBI_DEBUG
+static UBool fTrace = FALSE;
+#endif
+
 U_NAMESPACE_BEGIN
 
 
@@ -205,7 +209,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     if (that.fData != NULL) {
         fData = that.fData->addReference();
     }
-    fTrace = that.fTrace;
 
     return *this;
 }
@@ -218,7 +221,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //                Initializes all fields, leaving the object in a consistent state.
 //
 //-----------------------------------------------------------------------------
-UBool RuleBasedBreakIterator::fTrace = FALSE;
 void RuleBasedBreakIterator::init() {
     UErrorCode  status    = U_ZERO_ERROR;
     fText                 = utext_openUChars(NULL, NULL, 0, &status);
@@ -898,9 +900,11 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     int32_t             lookaheadResult = 0;
     UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
-    if (fTrace) {
-        RBBIDebugPuts("Handle Next   pos   char  state category");
-    }
+    #ifdef RBBI_DEBUG
+        if (fTrace) {
+            RBBIDebugPuts("Handle Next   pos   char  state category");
+        }
+    #endif
 
     // No matter what, handleNext alway correctly sets the break tag value.
     fLastStatusIndexValid = TRUE;
@@ -1106,9 +1110,11 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     int32_t             lookaheadResult = 0;
     UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
-    if (fTrace) {
-        RBBIDebugPuts("Handle Previous   pos   char  state category");
-    }
+    #ifdef RBBI_DEBUG
+        if (fTrace) {
+            RBBIDebugPuts("Handle Previous   pos   char  state category");
+        }
+    #endif
 
     // handlePrevious() never gets the rule status.
     // Flag the status as invalid; if the user ever asks for status, we will need

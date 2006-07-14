@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2003, International Business Machines Corporation and
+ * Copyright (c) 2001-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -96,20 +96,15 @@ class RBBINode : public UMemory {
 #ifdef RBBI_DEBUG
         void        printNode();
         void        printTree(UBool withHeading);
-#else
-        // Do-nothing inline functions for non-debug builds.  Can't make empty defines for member
-        //   functions - they won't compile at the call sites.
-        int         fakeField;
-        #define printNode() fakeField=0;
-        #define printTree(withHeading) fakeField=0;
 #endif
 
     private:
         RBBINode &operator = (const RBBINode &other); // No defs.
         UBool operator == (const RBBINode &other);    // Private, so these functions won't accidently be used.
 
+#ifdef RBBI_DEBUG
         int           fSerialNum;           //  Debugging aids.
-        static int    gLastSerial;
+#endif
 };
 
 #ifdef RBBI_DEBUG
