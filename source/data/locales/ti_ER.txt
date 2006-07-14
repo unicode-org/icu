@@ -1,0 +1,100 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ti_ER.xml
+// *
+// ***************************************************************************
+ti_ER{
+    Currencies{
+        ERN{
+            "$",
+            "ERN",
+        }
+        USD{
+            "US$",
+            "USD",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.39"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                7,
+                1,
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE፡ dd MMMM መዓልቲ yyyy G",
+                "dd MMMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ሰንበ",
+                        "ሰኑይ",
+                        "ሰሉስ",
+                        "ረቡዕ",
+                        "ሓሙስ",
+                        "ዓርቢ",
+                        "ቀዳም",
+                    }
+                    wide{
+                        "ሰንበት",
+                        "ሰኑይ",
+                        "ሰሉስ",
+                        "ረቡዕ",
+                        "ሓሙስ",
+                        "ዓርቢ",
+                        "ቀዳም",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ጥሪ",
+                        "ለካቲ",
+                        "መጋቢ",
+                        "ሚያዝ",
+                        "ግንቦ",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "መስከ",
+                        "ጥቅም",
+                        "ሕዳር",
+                        "ታሕሳ",
+                    }
+                    wide{
+                        "ጥሪ",
+                        "ለካቲት",
+                        "መጋቢት",
+                        "ሚያዝያ",
+                        "ግንቦት",
+                        "ሰነ",
+                        "ሓምለ",
+                        "ነሓሰ",
+                        "መስከረም",
+                        "ጥቅምቲ",
+                        "ሕዳር",
+                        "ታሕሳስ",
+                    }
+                }
+            }
+        }
+    }
+}

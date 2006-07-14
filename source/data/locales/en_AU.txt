@@ -1,0 +1,36 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_AU.xml
+// *
+// ***************************************************************************
+en_AU{
+    Currencies{
+        AUD{
+            "$",
+            "Australian Dollar",
+        }
+    }
+    Version{"1.38"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

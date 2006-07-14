@@ -1,0 +1,6 @@
+Makefile
+*.html
+*.css
+*.d
+*.o
+dumpce

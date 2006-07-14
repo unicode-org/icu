@@ -1,0 +1,46 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/am_ET.xml
+// *
+// ***************************************************************************
+am_ET{
+    Currencies{
+        USD{
+            "US$",
+            "USD",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.41"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "ከሳዓት",
+            }
+            DateTimeElements:intvector{
+                7,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE፣ dd MMMM ቀን yyyy G",
+                "dd MMMM yyyy",
+                "dd-MMM-yy",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+        }
+    }
+}

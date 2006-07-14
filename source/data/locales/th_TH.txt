@@ -1,0 +1,66 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/th_TH.xml
+// *
+// ***************************************************************************
+th_TH{
+    Countries{
+        AN{"เนเธอร์แลนด์แอนทิลลิส"}
+    }
+    Keys{
+        collation{"ตรวจเทียบ"}
+    }
+    Languages{
+        ae{"อาเวสทาน"}
+        ch{"ชามอร์โร"}
+        dsb{"ซอร์เบียนต่ำ"}
+        eka{"อีกาจุก"}
+        ewo{"อีวันโด"}
+        fat{"ฟันติ"}
+        grb{"เกรโบ"}
+        hz{"เฮเรโร"}
+        ii{"ชิชวนยี่"}
+        inh{"อิงกุช"}
+        mk{"มาซิโดเนีย"}
+        mwl{"มิรันดีส"}
+        nap{"เนียโพลิแทน"}
+        nr{"เอ็นเดเบเลใต้"}
+        ro{"โรมาเนีย"}
+        ss{"สวาติ"}
+        ter{"เทเรโน"}
+        tk{"เติร์ก"}
+        tn{"สวานา"}
+        ty{"ตาฮิเตียน"}
+        ur{"อูรดู"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;¤-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Geor{"จอร์เจียน"}
+        Hung{"ฮังการีโบราณ"}
+        Ital{"อิตาลีโบราณ"}
+        Mlym{"มาลายาลัม"}
+    }
+    Version{"1.39"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"'"}
+        quotationStart{"'"}
+    }
+}

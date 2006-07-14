@@ -1,0 +1,10 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+libicu*
+*.plg
+*.ncb
+*.opt

@@ -1,0 +1,45 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ps_AF.xml
+// *
+// ***************************************************************************
+ps_AF{
+    NumberElements{
+        "٫",
+        "٬",
+        ";",
+        "٪",
+        "۰",
+        "#",
+        "−",
+        "×۱۰^",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.38"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                7,
+                1,
+            }
+            weekend:intvector{
+                7,
+                0,
+                6,
+                86400000,
+            }
+        }
+    }
+}

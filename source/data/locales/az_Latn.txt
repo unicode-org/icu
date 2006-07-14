@@ -1,0 +1,27 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/az_Latn.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/az_Latn.xml
+ */
+az_Latn{
+    Languages{
+        de{"almanca"}
+        en{"ingiliscə"}
+        es{"ispanca"}
+        fr{"fransızca"}
+        ja{"yaponca"}
+        pt{"portuqalca"}
+        ru{"rusca"}
+        zh{"çincə"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    Version{"1.18"}
+}

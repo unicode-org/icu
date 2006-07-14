@@ -1,0 +1,81 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/nl_BE.xml
+// *
+// ***************************************************************************
+nl_BE{
+    Countries{
+        172{"Gemenebest van Onafhankelijke Staten"}
+        833{"Het Eiland Man"}
+    }
+    Currencies{
+        EEK{
+            "Estlandse kroon",
+            "Estlandse kroon",
+        }
+        LTL{
+            "Litouwse litas",
+            "Litouwse litas",
+        }
+        LVL{
+            "Letse lats",
+            "Letse lats",
+        }
+        RUB{
+            "Russische roebel",
+            "Russische roebel",
+        }
+        SIT{
+            "Sloveense tolar",
+            "Sloveense tolar",
+        }
+        THB{
+            "Thaise baht",
+            "Thaise baht",
+        }
+        TRY{
+            "Nieuwe Turkse lire",
+            "Nieuwe Turkse lire",
+        }
+    }
+    Languages{
+        lv{"Lets"}
+        oc{"Occitaans (na 1500); Provençaals"}
+        sa{"Sanskriet"}
+        sh{"Servo-Kroatisch"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Types{
+        collation{
+            traditional{"Traditioneel"}
+        }
+    }
+    Version{"1.48"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "d-MMM-yy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}
