@@ -112,12 +112,12 @@ static int32_t binarySearch(const int32_t *array, int32_t len, int32_t value)
     return -1;
 }
 
-iteratedChar::iteratedChar():charValue(0), index(0), nextIndex(0), error(FALSE), done(FALSE)
+IteratedChar::IteratedChar():charValue(0), index(0), nextIndex(0), error(FALSE), done(FALSE)
 {
     // nothing else to do.
 }
 
-void iteratedChar::reset()
+void IteratedChar::reset()
 {
     charValue = 0;
     index     = -1;
@@ -126,7 +126,7 @@ void iteratedChar::reset()
     done      = FALSE;
 }
 
-int32_t iteratedChar::nextByte(InputText *det) 
+int32_t IteratedChar::nextByte(InputText *det) 
 {
     if (nextIndex >= det->fRawLength) {
         done = TRUE;
@@ -149,7 +149,7 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const int32_t commonChars[
     int   badCharCount        = 0;
     int   totalCharCount      = 0;
     int   confidence          = 0;
-    iteratedChar *iter        = new iteratedChar();
+    IteratedChar *iter        = new IteratedChar();
 
     // {
     for (iter->reset(); nextChar(iter, det);) {
@@ -234,7 +234,7 @@ CharsetRecog_sjis::~CharsetRecog_sjis()
     // nothing to do
 }
 
-UBool CharsetRecog_sjis::nextChar(iteratedChar* it, InputText* det) {
+UBool CharsetRecog_sjis::nextChar(IteratedChar* it, InputText* det) {
     it->index = it->nextIndex;
     it->error = FALSE;
 
@@ -282,7 +282,7 @@ CharsetRecog_euc::~CharsetRecog_euc()
     // nothing to do
 }
 
-UBool CharsetRecog_euc::nextChar(iteratedChar* it, InputText* det) {
+UBool CharsetRecog_euc::nextChar(IteratedChar* it, InputText* det) {
     int32_t firstByte  = 0;
     int32_t secondByte = 0;
     int32_t thirdByte  = 0;
@@ -390,7 +390,7 @@ CharsetRecog_big5::~CharsetRecog_big5()
     // nothing to do
 }
 
-UBool CharsetRecog_big5::nextChar(iteratedChar* it, InputText* det)
+UBool CharsetRecog_big5::nextChar(IteratedChar* it, InputText* det)
 {
     int32_t firstByte;
 
@@ -444,7 +444,7 @@ CharsetRecog_gb_18030::~CharsetRecog_gb_18030()
     // nothing to do
 }
 
-UBool CharsetRecog_gb_18030::nextChar(iteratedChar* it, InputText* det) {
+UBool CharsetRecog_gb_18030::nextChar(IteratedChar* it, InputText* det) {
     int32_t firstByte  = 0;
     int32_t secondByte = 0;
     int32_t thirdByte  = 0;
