@@ -860,6 +860,9 @@ public class SimpleDateFormat extends DateFormat {
                         res = ZoneMeta.displayFallback(zid, city, locale);
                         */
                         res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
+                        if(res==null){
+                            res = ZoneMeta.displayFallback(zid, null, locale);
+                        }
                     }
                 }
                 if(res.length()==0){

@@ -2839,13 +2839,13 @@ public class DecimalFormat extends NumberFormat {
          * [Richard/GCL]
          */
         return (posPrefixPattern != null &&
-                    posPrefixPattern.equals(other.posPrefixPattern))
+                    equals(posPrefixPattern, other.posPrefixPattern))
             && (posSuffixPattern != null &&
-                    posSuffixPattern.equals(other.posSuffixPattern))
+                    equals(posSuffixPattern, other.posSuffixPattern))
             && (negPrefixPattern != null &&
-                    negPrefixPattern.equals(other.negPrefixPattern))
+                    equals(negPrefixPattern, other.negPrefixPattern))
             && (negSuffixPattern != null &&
-                    negSuffixPattern.equals(other.negSuffixPattern))
+                    equals(negSuffixPattern, other.negSuffixPattern))
             && multiplier == other.multiplier
             && groupingSize == other.groupingSize
             && groupingSize2 == other.groupingSize2
@@ -2859,7 +2859,25 @@ public class DecimalFormat extends NumberFormat {
                 maxSignificantDigits == other.maxSignificantDigits)
             && symbols.equals(other.symbols);
     }
-
+    //method to unquote the strings and compare
+    private boolean equals(String pat1, String pat2){
+        //fast path
+        if(pat1.equals(pat2)){
+            return true;
+        }
+        return unquote(pat1).equals(unquote(pat2));
+    }
+    private String unquote(String pat){
+        StringBuffer buf = new StringBuffer(pat.length());
+        int i=0;
+        while(i<pat.length()){
+            char ch = pat.charAt(i++);
+            if(ch!=QUOTE){
+                buf.append(ch);
+            }
+        }
+        return buf.toString();
+    }
 //      protected void handleToString(StringBuffer buf) {
 //          buf.append("\nposPrefixPattern: '" + posPrefixPattern + "'\n");
 //          buf.append("positivePrefix: '" + positivePrefix + "'\n");
@@ -3166,7 +3184,15 @@ public class DecimalFormat extends NumberFormat {
                     ch = symbols.getMinusSign();
                     break;
                 }
-                buffer.append(ch);
+                //check if char is same as any other symbol
+                if(ch==symbols.getDecimalSeparator() ||
+                   ch==symbols.getGroupingSeparator() ){
+                    buffer.append(QUOTE);
+                    buffer.append(ch);
+                    buffer.append(QUOTE);
+                }else{
+                    buffer.append(ch);
+                }
             }
         }
     }
@@ -3275,8 +3301,11 @@ public class DecimalFormat extends NumberFormat {
                 }
             }
             if (useExponentialNotation) {
-                result.append(localized ? symbols.getExponentSeparator() :
-                              PATTERN_EXPONENT);
+                if(localized ){
+                    result.append(symbols.getExponentSeparator() );
+                }else{
+                    result.append(PATTERN_EXPONENT);
+                }
                 if (exponentSignAlwaysShown) {
                     result.append(localized ? symbols.getPlusSign() :
                                   PATTERN_PLUS_SIGN);
@@ -3384,7 +3413,7 @@ public class DecimalFormat extends NumberFormat {
         char perMill           = PATTERN_PER_MILLE;
         char digit             = PATTERN_DIGIT; // '#'
         char separator         = PATTERN_SEPARATOR;
-        String exponent        = PATTERN_EXPONENT;
+        String exponent        = String.valueOf(PATTERN_EXPONENT);
         char plus              = PATTERN_PLUS_SIGN;
         char padEscape         = PATTERN_PAD_ESCAPE;
         char minus             = PATTERN_MINUS; //Bug 4212072 [Richard/GCL]
@@ -3633,11 +3662,11 @@ public class DecimalFormat extends NumberFormat {
                         // A quote outside quotes indicates either the opening
                         // quote or two quotes, which is a quote literal.  That is,
                         // we have the first quote in 'do' or o''clock.
-                        if ((pos+1) < pattern.length() &&
-                            pattern.charAt(pos+1) == QUOTE) {
+                        if((pos+1) < pattern.length()&&
+                            pattern.charAt(pos+1)==QUOTE){
                             ++pos;
                             affix.append(ch); // append two: one here, one below
-                        } else {
+                        }else{
                             subpart += 2; // open quote
                         }
                         // Fall through to append(ch)
@@ -4543,7 +4572,7 @@ public class DecimalFormat extends NumberFormat {
     private static final char       PATTERN_DECIMAL_SEPARATOR  = '.';
     private static final char       PATTERN_DIGIT              = '#';
             static final char       PATTERN_SIGNIFICANT_DIGIT  = '@';
-            static final String     PATTERN_EXPONENT           = "E"; // [NEW]
+            static final char       PATTERN_EXPONENT           = 'E'; // [NEW]
             static final char       PATTERN_PLUS_SIGN          = '+'; // [NEW]
 
     // Affix
