@@ -165,13 +165,6 @@ protected:
      */
     int32_t             fBreakType;
     
-    /**
-     * Debugging flag.  Trace operation of state machine when true.
-     * @internal
-     */
-    static UBool        fTrace;
-
-
 protected:
     //=======================================================================
     // constructors
