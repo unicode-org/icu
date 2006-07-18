@@ -108,6 +108,11 @@ HOWTO
    {path_to}/icu/source/data/misc/zoneinfo.txt) into CVS.
 
 ----------------------------------------------------------------------
+HOWTO platform issues
+00.  On macosx, I had to do "sudo ln -s /usr/bin/sed /bin/" first
+00.  On macosx, I had to build with "make CPPFLAGS=-DSTD_INSPIRED icu_data" 
+
+----------------------------------------------------------------------
 HOWTO regenerate patch-icu-tzcode
 
 If you need to edit any of the tzcode* files, you will need to
