@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -30,6 +30,7 @@ public:
     virtual ~DateFormatRoundTripTest();
     
     void TestDateFormatRoundTrip(void);
+    void TestCentury(void);
     void test(const Locale& loc);
     void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = FALSE );
     int32_t getField(UDate d, int32_t f);

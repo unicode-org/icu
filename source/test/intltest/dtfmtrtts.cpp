@@ -54,6 +54,7 @@ DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* 
     optionv = (par && *par=='v');
     switch (index) {
         CASE(0,TestDateFormatRoundTrip)
+        CASE(1, TestCentury)
         default: name = ""; break;
     }
 }
@@ -80,6 +81,25 @@ DateFormatRoundTripTest::failure(UErrorCode status, const char* msg, const Unico
     }
 
     return FALSE;
+}
+
+void DateFormatRoundTripTest::TestCentury()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    Locale locale("es_PA");
+    UnicodeString pattern = "MM/dd/yy hh:mm:ss a z";
+    SimpleDateFormat fmt(pattern, locale, status);
+    UDate date[] = {-55018555891590.05, 0, 0};
+    UnicodeString *result = new UnicodeString[2];
+
+    fmt.format(date[0], result[0]);
+    date[1] = fmt.parse(result[0], status);
+    fmt.format(date[1], result[1]);
+    date[2] = fmt.parse(result[1], status);
+
+    if (date[1] != date[2] || result[0] != result[1]) {
+        errln("Round trip failure: \"%S\" (%f), \"%S\" (%f)", result[0].getBuffer(), date[1], result[1].getBuffer(), date[2]);
+    }
 }
 
 // ==
