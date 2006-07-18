@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -203,11 +203,14 @@ PUtilTest::maxMinTest(double a, double b, double exp, UBool max)
             errln(UnicodeString("FAIL: max(") + a + ", " + b + ") is " + result + ", expected " + exp);
         else
             errln(UnicodeString("FAIL: min(") + a + ", " + b + ") is " + result + ", expected " + exp);
-    else
-        if(max)
-            logln(UnicodeString("OK: max(") + a + ", " + b + ") is " + result);
-        else
-            logln(UnicodeString("OK: min(") + a + ", " + b + ") is " + result);
+    else {
+        if (verbose) {
+            if(max)
+                logln(UnicodeString("OK: max(") + a + ", " + b + ") is " + result);
+            else
+                logln(UnicodeString("OK: min(") + a + ", " + b + ") is " + result);
+        }
+    }
 }
 //==============================
 
