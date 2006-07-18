@@ -1,6 +1,6 @@
-diff -ur ../tzcode.orig/Makefile ./Makefile
---- ../tzcode.orig/Makefile	2005-06-13 11:33:54.000000000 -0700
-+++ ./Makefile	2005-06-30 16:14:15.000000000 -0700
+diff -ur tzcode.orig/Makefile tzcode/Makefile
+--- tzcode.orig/Makefile	2006-03-14 06:42:05.000000000 -0800
++++ tzcode/Makefile	2006-04-03 10:24:01.000000000 -0700
 @@ -40,7 +40,7 @@
  # (and subdirectories).
  # Use an absolute path name for TZDIR unless you're just testing the software.
@@ -10,7 +10,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  
  # The "tzselect", "zic", and "zdump" commands get installed in. . .
  
-@@ -240,9 +240,11 @@
+@@ -241,9 +241,11 @@
  
  ###############################################################################
  
@@ -23,19 +23,19 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  TZCSRCS=	zic.c localtime.c asctime.c scheck.c ialloc.c
  TZCOBJS=	zic.o localtime.o asctime.o scheck.o ialloc.o
  TZDSRCS=	zdump.c localtime.c ialloc.c
-@@ -276,7 +278,10 @@
+@@ -277,7 +279,10 @@
  
  SHELL=		/bin/sh
  
 -all:		tzselect zic zdump $(LIBOBJS)
 +LS=		/bin/ls
-+SED=		sed
++SED=		/bin/sed
 +
 +all:		tzselect zic zdump $(LIBOBJS) tz2icu
  
  ALL:		all date
  
-@@ -309,9 +314,12 @@
+@@ -310,9 +315,12 @@
  zdump:		$(TZDOBJS)
  		$(CC) $(CFLAGS) $(LFLAGS) $(TZDOBJS) $(LDLIBS) -o $@
  
@@ -49,7 +49,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  yearistype:	yearistype.sh
  		cp yearistype.sh yearistype
  		chmod +x yearistype
-@@ -322,6 +330,9 @@
+@@ -323,6 +331,9 @@
  right_only:	zic leapseconds $(TDATA)
  		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L leapseconds $(TDATA)
  
@@ -59,9 +59,10 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  # In earlier versions of this makefile, the other two directories were
  # subdirectories of $(TZDIR).  However, this led to configuration errors.
  # For example, with posix_right under the earlier scheme,
---- zic.c.orig	2005-12-22 06:31:15.000000000 -0800
-+++ zic.c	2006-01-19 19:34:06.000000000 -0800
-@@ -23,6 +23,20 @@
+diff -ur tzcode.orig/zic.c tzcode/zic.c
+--- tzcode.orig/zic.c	2006-04-03 07:09:14.000000000 -0700
++++ tzcode/zic.c	2006-04-03 11:31:13.000000000 -0700
+@@ -21,6 +21,20 @@
  #define MKDIR_UMASK 0755
  #endif
  
@@ -82,7 +83,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  /*
  ** On some ancient hosts, predicates like `isspace(C)' are defined
  ** only if isascii(C) || C == EOF. Modern hosts obey the C Standard,
-@@ -96,8 +110,14 @@
+@@ -101,8 +115,14 @@
  extern int	optind;
  
  static void	addtt P((zic_t starttime, int type));
@@ -97,7 +98,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  static void	leapadd P((zic_t t, int positive, int rolling, int count));
  static void	adjleap P((void));
  static void	associate P((void));
-@@ -266,6 +286,18 @@
+@@ -282,6 +302,18 @@
  	const int	l_value;
  };
  
@@ -116,7 +117,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  static struct lookup const *	byword P((const char * string,
  					const struct lookup * lp));
  
-@@ -348,6 +380,11 @@
+@@ -364,6 +396,11 @@
  	unsigned char	type;
  }			attypes[TZ_MAX_TIMES];
  static long		gmtoffs[TZ_MAX_TYPES];
@@ -128,7 +129,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  static char		isdsts[TZ_MAX_TYPES];
  static unsigned char	abbrinds[TZ_MAX_TYPES];
  static char		ttisstds[TZ_MAX_TYPES];
-@@ -459,6 +496,62 @@
+@@ -475,6 +512,62 @@
  	exit(EXIT_FAILURE);
  }
  
@@ -191,7 +192,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  static const char *	psxrules;
  static const char *	lcltime;
  static const char *	directory;
-@@ -566,6 +659,14 @@
+@@ -586,6 +679,14 @@
  		adjleap();
  	}
  
@@ -206,7 +207,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  	for (i = optind; i < argc; ++i)
  		infile(argv[i]);
  	if (errors)
-@@ -585,6 +686,9 @@
+@@ -605,6 +706,9 @@
  	for (i = 0; i < nlinks; ++i) {
  		eat(links[i].l_filename, links[i].l_linenum);
  		dolink(links[i].l_from, links[i].l_to);
@@ -216,7 +217,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  		if (noise)
  			for (j = 0; j < nlinks; ++j)
  				if (strcmp(links[i].l_to,
-@@ -599,6 +703,11 @@
+@@ -619,6 +723,11 @@
  		eat("command line", 1);
  		dolink(psxrules, TZDEFRULES);
  	}
@@ -228,7 +229,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  	return (errors == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
  }
  
-@@ -664,7 +773,9 @@
+@@ -684,7 +793,9 @@
  			(void) fprintf(stderr,
  				_("%s: Can't link from %s to %s: %s\n"),
  				progname, fromname, toname, e);
@@ -238,33 +239,34 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  		}
  	}
  	ifree(fromname);
-@@ -1539,7 +1650,12 @@
- 	convert(eitol(timecnt), tzh.tzh_timecnt);
- 	convert(eitol(typecnt), tzh.tzh_typecnt);
- 	convert(eitol(charcnt), tzh.tzh_charcnt);
-+#ifdef ICU
-+        * (ICUZoneinfoVersion*) &tzh.tzh_reserved = TZ_ICU_VERSION;
-+        (void) strncpy(tzh.tzh_magic, TZ_ICU_MAGIC, sizeof tzh.tzh_magic);
-+#else
- 	(void) strncpy(tzh.tzh_magic, TZ_MAGIC, sizeof tzh.tzh_magic);
-+#endif
+@@ -1650,7 +1761,12 @@
  #define DO(field)	(void) fwrite((void *) tzh.field, \
  				(size_t) sizeof tzh.field, (size_t) 1, fp)
- 	DO(tzh_magic);
-@@ -1564,7 +1680,12 @@
- 		(void) fwrite((void *) types, (size_t) sizeof types[0],
- 			(size_t) timecnt, fp);
- 	for (i = 0; i < typecnt; ++i) {
+ 		tzh = tzh0;
 +#ifdef ICU
-+		puttzcode((long) rawoffs[i], fp);
-+		puttzcode((long) dstoffs[i], fp);
++                * (ICUZoneinfoVersion*) &tzh.tzh_reserved = TZ_ICU_VERSION;
++                (void) strncpy(tzh.tzh_magic, TZ_ICU_MAGIC, sizeof tzh.tzh_magic);
 +#else
- 		puttzcode((long) gmtoffs[i], fp);
+ 		(void) strncpy(tzh.tzh_magic, TZ_MAGIC, sizeof tzh.tzh_magic);
 +#endif
- 		(void) putc(isdsts[i], fp);
- 		(void) putc(abbrinds[i], fp);
- 	}
-@@ -1620,6 +1741,24 @@
+ 		tzh.tzh_version[0] = ZIC_VERSION;
+ 		convert(eitol(thistypecnt), tzh.tzh_ttisgmtcnt);
+ 		convert(eitol(thistypecnt), tzh.tzh_ttisstdcnt);
+@@ -1683,7 +1799,12 @@
+ 		}
+ 		for (i = 0; i < typecnt; ++i)
+ 			if (writetype[i]) {
+-				puttzcode(gmtoffs[i], fp);
++#ifdef ICU
++                                puttzcode((long) rawoffs[i], fp);
++                                puttzcode((long) dstoffs[i], fp);
++#else
++                                puttzcode((long) gmtoffs[i], fp);
++#endif
+ 				(void) putc(isdsts[i], fp);
+ 				(void) putc((unsigned char) indmap[abbrinds[i]], fp);
+ 			}
+@@ -1952,6 +2073,24 @@
  	}
  }
  
@@ -289,19 +291,19 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  static void
  outzone(zpfirst, zonecount)
  const struct zone * const	zpfirst;
-@@ -1638,6 +1777,11 @@
- 	register int			startttisgmt;
- 	register int			type;
- 	char				startbuf[BUFSIZ];
+@@ -1974,6 +2113,11 @@
+ 	register char *			envvar;
+ 	register int			max_abbr_len;
+ 	register int			max_envvar_len;
 +#ifdef ICU
 +        int                  finalRuleYear, finalRuleIndex;
 +        const struct rule*   finalRule1;
 +        const struct rule*   finalRule2;
 +#endif
  
- 	INITIALIZE(untiltime);
- 	INITIALIZE(starttime);
-@@ -1667,11 +1811,55 @@
+ 	max_abbr_len = 2 + max_format_len + max_abbrvar_len;
+ 	max_envvar_len = 2 * max_abbr_len + 5 * 9;
+@@ -2050,11 +2194,56 @@
  		eat(zp->z_filename, zp->z_linenum);
  		*startbuf = '\0';
  		startoff = zp->z_gmtoff;
@@ -346,10 +348,11 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
 +                    }
 +                }
 +#endif
++
  		if (zp->z_nrules == 0) {
  			stdoff = zp->z_stdoff;
  			doabbr(startbuf, zp->z_format,
- 				(char *) NULL, stdoff != 0);
+ 				(char *) NULL, stdoff != 0, FALSE);
  			type = addtype(oadd(zp->z_gmtoff, stdoff),
 +#ifdef ICU
 +                                zp->z_gmtoff, stdoff,
@@ -357,7 +360,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  				startbuf, stdoff != 0, startttisstd,
  				startttisgmt);
  			if (usestart) {
-@@ -1745,6 +1933,15 @@
+@@ -2127,6 +2316,15 @@
  					break;	/* go on to next year */
  				rp = &zp->z_rules[k];
  				rp->r_todo = FALSE;
@@ -373,22 +376,22 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  				if (useuntil && ktime >= untiltime)
  					break;
  				stdoff = rp->r_stdoff;
-@@ -1773,8 +1970,14 @@
- 				doabbr(buf, zp->z_format, rp->r_abbrvar,
- 					rp->r_stdoff != 0);
+@@ -2158,8 +2356,14 @@
+ 				doabbr(ab, zp->z_format, rp->r_abbrvar,
+ 					rp->r_stdoff != 0, FALSE);
  				offset = oadd(zp->z_gmtoff, rp->r_stdoff);
 +#ifdef ICU
 +				type = addtype(offset, zp->z_gmtoff, rp->r_stdoff,
-+                                        buf, rp->r_stdoff != 0,
++                                        ab, rp->r_stdoff != 0,
 +					rp->r_todisstd, rp->r_todisgmt);
 +#else
- 				type = addtype(offset, buf, rp->r_stdoff != 0,
+ 				type = addtype(offset, ab, rp->r_stdoff != 0,
  					rp->r_todisstd, rp->r_todisgmt);
 +#endif
  				addtt(ktime, type);
  			}
  		}
-@@ -1788,10 +1991,19 @@
+@@ -2173,10 +2377,19 @@
  			if (*startbuf == '\0')
  error(_("can't determine time zone abbreviation to use just after until time"));
  			else	addtt(starttime,
@@ -408,7 +411,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  		}
  		/*
  		** Now we may get to set starttime for the next zone line.
-@@ -1817,6 +2029,10 @@
+@@ -2205,6 +2418,10 @@
  	if (starttime <= min_time ||
  		(timecnt == 1 && attypes[0].at < min_time)) {
  		gmtoffs[0] = gmtoffs[type];
@@ -419,7 +422,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  		isdsts[0] = isdsts[type];
  		ttisstds[0] = ttisstds[type];
  		ttisgmts[0] = ttisgmts[type];
-@@ -1838,8 +2054,15 @@
+@@ -2226,8 +2443,15 @@
  }
  
  static int
@@ -435,7 +438,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  const char * const	abbr;
  const int		isdst;
  const int		ttisstd;
-@@ -1859,12 +2082,25 @@
+@@ -2247,12 +2471,25 @@
  		error(_("internal error - addtype called with bad ttisgmt"));
  		exit(EXIT_FAILURE);
  	}
@@ -461,7 +464,7 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  			strcmp(abbr, &chars[abbrinds[i]]) == 0 &&
  			ttisstd == ttisstds[i] &&
  			ttisgmt == ttisgmts[i])
-@@ -1879,6 +2115,10 @@
+@@ -2267,6 +2504,10 @@
  		exit(EXIT_FAILURE);
  	}
  	gmtoffs[i] = gmtoff;
@@ -472,3 +475,4 @@ diff -ur ../tzcode.orig/Makefile ./Makefile
  	isdsts[i] = isdst;
  	ttisstds[i] = ttisstd;
  	ttisgmts[i] = ttisgmt;
+

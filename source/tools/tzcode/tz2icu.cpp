@@ -1,6 +1,7 @@
+
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -277,9 +278,16 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
     if (strncmp(buf, TZ_ICU_MAGIC, 4) != 0) {
         throw invalid_argument("TZ_ICU_MAGIC signature missing");
     }
+    // skip additional Olson byte version
+    file.read(buf, 1);
+    // if '\0', we have just one copy of data, if '2', there is additional
+    // 64 bit version at the end.
+    if(buf[0]!=0 && buf[0]!='2') {
+      throw invalid_argument("Bad Olson version info");
+    }
 
     // Read reserved bytes.  The first of these will be a version byte.
-    file.read(buf, 16);
+    file.read(buf, 15);
     if (*(ICUZoneinfoVersion*)&buf != TZ_ICU_VERSION) {
         throw invalid_argument("File version mismatch");
     }
@@ -457,12 +465,20 @@ void handleFile(string path, string id) {
 
     // Check eof-relative pos (there may be a cleaner way to do this)
     long eofPos = (long) file.tellg();
+    char buf[32];
+    file.read(buf, 4);
     file.seekg(0, ios::end);
     eofPos =  eofPos - (long) file.tellg();
     if (eofPos) {
+      // 2006c merged 32 and 64 bit versions in a fat binary
+      // 64 version starts at the end of 32 bit version.
+      // Therefore, if the file is *not* consumed, check
+      // if it is maybe being restarted.
+      if (strncmp(buf, TZ_ICU_MAGIC, 4) != 0) {
         ostringstream os;
         os << (-eofPos) << " unprocessed bytes at end";
         throw invalid_argument(os.str());
+      }
     }
 
     ZONEINFO[id] = info;
@@ -1405,7 +1421,8 @@ int main(int argc, char *argv[]) {
              << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl
              << "//---------------------------------------------------------" << endl
              << endl
-             << ICU_TZ_RESOURCE " {" << endl
+             << ICU_TZ_RESOURCE ":table(nofallback) {" << endl
+             << " TZVersion { \"" << version << "\" }" << endl
              << " Zones:array { " << endl
              << ZONEINFO // Zones (the actual data)
              << " }" << endl;
@@ -1499,6 +1516,7 @@ int main(int argc, char *argv[]) {
 
         // Emit equivalency lists
         bool first1 = true;
+	java << "  public static final String VERSION = \"" + version + "\";" << endl;
         java << "  public static final String[][] EQUIV = {" << endl;
         for (ZoneMap::const_iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
             if (i->second.isAlias() || i->second.getAliases().size() == 0) {
