@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -93,7 +93,7 @@ void CollationTurkishTest::runIndexedTest( int32_t index, UBool exec, const char
 
     if((!myCollation) && exec) {
       errln(__FILE__ " cannot test - failed to create collator.");
-      name = "";
+      name = "some test";
       return;
     }
     switch (index) {

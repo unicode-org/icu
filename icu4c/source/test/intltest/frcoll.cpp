@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -202,7 +202,7 @@ void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char*
 
     if((!myCollation) && exec) {
         errln(__FILE__ " cannot test - failed to create collator.");
-        name = "";
+        name = "some test";
         return;
     }
 
