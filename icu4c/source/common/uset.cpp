@@ -382,19 +382,50 @@ uset_serializedContains(const USerializedSet* set, UChar32 c) {
     array=set->array;
     if(c<=0xffff) {
         /* find c in the BMP part */
-        int32_t i, bmpLength=set->bmpLength;
-        for(i=0; i<bmpLength && (uint16_t)c>=array[i]; ++i) {}
-        return (UBool)(i&1);
+        int32_t lo = 0;
+        int32_t hi = set->bmpLength-1;
+        if (c < array[0]) {
+            hi = 0;
+        } else if (c < array[hi]) {
+            for(;;) {
+                int32_t i = (lo + hi) >> 1;
+                if (i == lo) {
+                    break;  // Done!
+                } else if (c < array[i]) {
+                    hi = i;
+                } else {
+                    lo = i;
+                }
+            }
+        } else {
+            hi += 1;
+        }
+        return (UBool)(hi&1);
     } else {
         /* find c in the supplementary part */
-        int32_t i, length=set->length;
         uint16_t high=(uint16_t)(c>>16), low=(uint16_t)c;
-        for(i=set->bmpLength;
-            i<length && (high>array[i] || (high==array[i] && low>=array[i+1]));
-            i+=2) {}
-
+        int32_t base = set->bmpLength;
+        int32_t lo = 0;
+        int32_t hi = set->length - 2 - base;
+        if (high < array[base] || (high==array[base] && low<array[base+1])) {
+            hi = 0;
+        } else if (high < array[base+hi] || (high==array[base+hi] && low<array[base+hi+1])) {
+            for (;;) {
+                int32_t i = ((lo + hi) >> 1) & ~1;  // Guarantee even result
+                int32_t iabs = i + base;
+                if (i == lo) {
+                    break;  // Done!
+                } else if (high < array[iabs] || (high==array[iabs] && low<array[iabs+1])) {
+                    hi = i;
+                } else {
+                    lo = i;
+                }
+            }
+        } else {
+            hi += 2;
+        }
         /* count pairs of 16-bit units even per BMP and check if the number of pairs is odd */
-        return (UBool)(((i+set->bmpLength)&2)!=0);
+        return (UBool)(((hi+(base<<1))&2)!=0);
     }
 }
 
