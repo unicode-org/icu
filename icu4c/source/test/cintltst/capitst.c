@@ -2091,7 +2091,14 @@ TestOpenBinary(void)
   uint8_t *image = imageBuffer;
   int32_t imageBufferCapacity = 32768;
 
-  int32_t imageSize = ucol_cloneBinary(coll, image, imageBufferCapacity, &status);
+  int32_t imageSize;
+
+  if((coll==NULL)||(UCA==NULL)||(U_FAILURE(status))) {
+       log_data_err("could not load collators or error occured: %s\n",
+       u_errorName(status));
+       return;
+  }		
+  imageSize = ucol_cloneBinary(coll, image, imageBufferCapacity, &status);
   if(U_FAILURE(status)) {
     image = (uint8_t *)malloc(imageSize*sizeof(uint8_t));
     status = U_ZERO_ERROR;
