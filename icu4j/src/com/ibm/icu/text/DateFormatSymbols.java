@@ -667,6 +667,88 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     public void setShortWeekdays(String[] newShortWeekdays) {
         shortWeekdays = duplicate(newShortWeekdays);
     }
+    /**
+     * Gets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+     * @param context    The quarter context, FORMAT or STANDALONE.
+     * @param width      The width or the returned quarter string,
+     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
+     * @return the quarter strings.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String[] getQuarters(int context, int width) {
+        String [] returnValue = null;
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    returnValue = quarters;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = shortQuarters;
+                    break;
+                 case NARROW :
+                     returnValue = null;
+                     break;
+              }
+              break;
+              
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    returnValue = standaloneQuarters;
+                    break;
+                 case ABBREVIATED :
+                    returnValue = standaloneShortQuarters;
+                    break;
+                 case NARROW: 
+                     returnValue = null;
+                     break;
+              }
+              break;
+        }
+        return duplicate(returnValue);
+    }
+
+    /**
+     * Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+     * @param newQuarters the new quarter strings.
+     * @param context    The formatting context, FORMAT or STANDALONE.
+     * @param width      The width of the quarter string,
+     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
+     * @internal revisit for ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setQuarters(String[] newQuarters, int context, int width) {
+        switch (context) {
+           case FORMAT :
+              switch(width) {
+                 case WIDE :
+                    quarters = duplicate(newQuarters);
+                    break;
+                 case ABBREVIATED :
+                    shortQuarters = duplicate(newQuarters);
+                    break;
+                 case NARROW :
+                    //narrowQuarters = duplicate(newQuarters);
+                    break;
+              }
+              break;
+           case STANDALONE :
+              switch(width) {
+                 case WIDE :
+                    standaloneQuarters = duplicate(newQuarters);
+                    break;
+                 case ABBREVIATED :
+                    standaloneShortQuarters = duplicate(newQuarters);
+                    break;
+                 case NARROW :
+                    //standaloneNarrowQuarters = duplicate(newQuarters);
+                    break;
+              }
+              break;
+        }
+    }
 
     /**
      * Gets ampm strings. For example: "AM" and "PM".
@@ -961,22 +1043,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         ampms = calData.getStringArray("AmPmMarkers");
         
-//        quarters = calData.getStringArray("quarters", "wide");
-//        shortMonths = calData.getStringArray("quarters", "abbreviated");
-//
-//        try {
-//           standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
-//        } 
-//        catch (MissingResourceException e) {
-//           standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
-//        }
-//
-//        try {
-//           standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
-//        } 
-//        catch (MissingResourceException e) {
-//            standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
-//        }
+        quarters = calData.getStringArray("quarters", "wide");
+        shortQuarters = calData.getStringArray("quarters", "abbreviated");
+
+        try {
+           standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
+        } 
+        catch (MissingResourceException e) {
+           standaloneQuarters = calData.getStringArray("quarters", "format", "wide");
+        }
+
+        try {
+           standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
+        } 
+        catch (MissingResourceException e) {
+            standaloneShortQuarters = calData.getStringArray("quarters", "format", "abbreviated");
+        }
         
 /*  THE FOLLOWING DOESN'T WORK; A COUNTRY LOCALE WITH ONE ZONE BLOCKS THE LANGUAGE LOCALE
         // These really do use rb and not calData

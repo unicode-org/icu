@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2005, International Business Machines
+ *   Copyright (C) 1996-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -368,6 +368,67 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
                 }
             }
         }
+
+        final String[] wideQuarters = en.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        fr2.setQuarters(wideQuarters,DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        final String[] wideQuarters1 = fr2.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.WIDE);
+        count = wideQuarters.length;
+        if( count != wideQuarters1.length) {
+            errln("ERROR: setQuarters(FORMAT, WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! wideQuarters[i].equals(wideQuarters1[i])) {
+                    errln("ERROR: setQuarters(FORMAT, WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] abbrQuarters = en.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        fr2.setQuarters(abbrQuarters,DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        final String[] abbrQuarters1 = fr2.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        count = abbrQuarters.length;
+        if( count != abbrQuarters1.length) {
+            errln("ERROR: setQuarters(FORMAT, ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! abbrQuarters[i].equals(abbrQuarters1[i])) {
+                    errln("ERROR: setQuarters(FORMAT, ABBREVIATED) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneQuarters = en.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        fr.setQuarters(standaloneQuarters,DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        final String[] standaloneQuarters1 = fr.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
+        count = standaloneQuarters.length;
+        if( count != standaloneQuarters1.length) {
+            errln("ERROR: setQuarters(STANDALONE, WIDE) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneQuarters[i].equals(standaloneQuarters1[i])) {
+                    errln("ERROR: setQuarters(STANDALONE, WIDE) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneShortQuarters = en.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        fr.setQuarters(standaloneShortQuarters,DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        final String[] standaloneShortQuarters1 = fr.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        count = standaloneShortQuarters.length;
+        if( count != standaloneShortQuarters1.length) {
+            errln("ERROR: setQuarters(STANDALONE, ABBREVIATED) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneShortQuarters[i].equals(standaloneShortQuarters1[i])) {
+                    errln("ERROR: setQuarters(STANDALONE, ABBREVIATED) failed (different string values)");
+                }
+            }
+        }
+
         final String[] ampms = en.getAmPmStrings();
         fr.setAmPmStrings(ampms);
         final String[] ampms1 = fr.getAmPmStrings();
