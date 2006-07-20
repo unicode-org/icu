@@ -24,7 +24,11 @@
         if (exec) {                   \
             logln(#test "---");       \
             logln((UnicodeString)""); \
-            test();                   \
+            if(areBroken) {           \
+                  errln(__FILE__ " cannot test - failed to create collator.");  \
+            } else {                  \
+                test();               \
+            }                         \
         }                             \
         break;
 
@@ -94,12 +98,11 @@ StringSearchTest::~StringSearchTest()
 void StringSearchTest::runIndexedTest(int32_t index, UBool exec, 
                                       const char* &name, char* ) 
 {
+    UBool areBroken = FALSE;
     if (m_en_us_ == NULL && m_fr_fr_ == NULL && m_de_ == NULL &&
         m_es_ == NULL && m_en_wordbreaker_ == NULL &&
         m_en_characterbreaker_ == NULL && exec) {
-      errln(__FILE__ " cannot test - failed to create collator.");
-      name = "";
-      return;
+        areBroken = TRUE;
     }
 
     switch (index) {
