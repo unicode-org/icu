@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -53,7 +53,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
 
     if((!coll) && exec) {
       errln(__FILE__ " cannot test - failed to create collator.");
-      name = "";
+      name = "some test";
       return;
     }
 
