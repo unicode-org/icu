@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -249,7 +249,16 @@ typedef unsigned int uint32_t;
 /* Symbol import-export control                                              */
 /*===========================================================================*/
 
+#if defined(U_DARWIN) && defined(__GNUC__) && (__GNUC__ >= 4)
+#define USE_GCC_VISIBILITY_ATTRIBUTE 1
+#endif
+
+#ifdef USE_GCC_VISIBILITY_ATTRIBUTE
+#define U_EXPORT __attribute__((visibility("default")))
+#else
 #define U_EXPORT
+#endif
+
 /* U_CALLCONV is releated to U_EXPORT2 */
 #define U_EXPORT2
 
