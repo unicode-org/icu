@@ -26,6 +26,8 @@
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
+#define ASSERT_OK(status)  if(U_FAILURE(status)) {errln(#status " = %s", u_errorName(status)); return; }
+
 //--------------------------------------------------------------------
 // Time bomb - allows temporary behavior that expires at a given
 //             release
@@ -221,6 +223,12 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     hour = ((hour < 0) ? hour + 24 : hour) * 60*60;
     
     UnicodeString str;
+
+    if(U_FAILURE(status)) {
+        errln("Could not set up test. exitting");
+        return;
+    }
+
     UDate d = fmt->parse(*s, status);
     logln(*s + " P> " + ((DateFormat*)fullFmt)->format(d, str));
     int32_t y, m, day, hr, min, sec;
@@ -433,6 +441,7 @@ DateFormatTest::TestPartialParse994()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* f = new SimpleDateFormat(status);
+    ASSERT_OK(status); 
     UDate null = 0;
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:11:42", date(97, 1 - 1, 17, 10, 11, 42));
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:", null);
@@ -494,6 +503,7 @@ DateFormatTest::TestRunTogetherPattern985()
     UnicodeString now, then;
     //UBool flag;
     SimpleDateFormat *formatter = new SimpleDateFormat(format, status);
+    ASSERT_OK(status); 
     UDate date1 = Calendar::getNow();
     ((DateFormat*)formatter)->format(date1, now);
     logln(now);
@@ -520,6 +530,7 @@ DateFormatTest::TestRunTogetherPattern917()
     SimpleDateFormat* fmt;
     UnicodeString myDate;
     fmt = new SimpleDateFormat((UnicodeString)"yyyy/MM/dd", status);
+    ASSERT_OK(status); 
     myDate = "1997/02/03";
     testIt917(fmt, myDate, date(97, 2 - 1, 3));
     delete fmt;
@@ -615,12 +626,14 @@ DateFormatTest::TestLetterDPattern212()
     expLittleD = expBigD; // Expect the same, with default lenient parsing
     logln((UnicodeString)"dateString= " + dateString);
     SimpleDateFormat *formatter = new SimpleDateFormat(bigD, status);
+    ASSERT_OK(status); 
     ParsePosition pos(0);
     UDate myDate = formatter->parse(dateString, pos);
     logln((UnicodeString)"Using " + bigD + " -> " + myDate);
     if (myDate != expBigD) errln((UnicodeString)"FAIL: Expected " + dateToString(expBigD));
     delete formatter;
     formatter = new SimpleDateFormat(littleD, status);
+    ASSERT_OK(status); 
     pos = ParsePosition(0);
     myDate = formatter->parse(dateString, pos);
     logln((UnicodeString)"Using " + littleD + " -> " + dateToString(myDate));
@@ -688,6 +701,7 @@ DateFormatTest::TestQuotePattern161()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* formatter = new SimpleDateFormat((UnicodeString)"MM/dd/yyyy 'at' hh:mm:ss a zzz", status);
+    ASSERT_OK(status); 
     UDate currentTime_1 = date(97, UCAL_AUGUST, 13, 10, 42, 28);
     UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
     UnicodeString exp("08/13/1997 at 10:42:28 AM ");
@@ -715,6 +729,10 @@ DateFormatTest::TestBadInput135()
     };
     int32_t strings_length = (int32_t)(sizeof(strings) / sizeof(strings[0]));
     DateFormat *full = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG);
+    if(full==NULL) {
+      errln("could not create date time instance");
+      return;
+    }
     UnicodeString expected("March 1, 2000 1:23:45 AM ");
     for (int32_t i = 0; i < strings_length;++i) {
         const char* text = strings[i];
@@ -1197,6 +1215,7 @@ void DateFormatTest::TestWhiteSpaceParsing() {
 void DateFormatTest::TestInvalidPattern() {
     UErrorCode ec = U_ZERO_ERROR;
     SimpleDateFormat f(UnicodeString("Yesterday"), ec);
+    ASSERT_OK(ec);
     UnicodeString out;
     FieldPosition pos;
     f.format((UDate)0, out, pos);
@@ -1767,10 +1786,12 @@ void DateFormatTest::TestGenericTime() {
     SimpleDateFormat(basepat + "zzz", en, status),
     SimpleDateFormat(basepat + "zzzz", en, status)
   };
+  ASSERT_OK(status);
   const int32_t formats_length = sizeof(formats)/sizeof(formats[0]);
 
   UnicodeString test;
   SimpleDateFormat univ("yyyy MM dd HH:mm zzz", en, status);
+  ASSERT_OK(status);
   const UnicodeString times[] = { 
     "2004 01 02 03:04 PST", 
     "2004 07 08 09:10 PDT" 
@@ -1846,6 +1867,7 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
     }
     
     StringEnumeration* keys2 = symbols.createZoneStringIDs(status);
+    ASSERT_OK(status);
      if(*keys2!=*keys){
         errln("operator!= failed for TimeZoneStringsEnum");
     }

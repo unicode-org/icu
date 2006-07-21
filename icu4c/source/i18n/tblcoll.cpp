@@ -164,6 +164,13 @@ RuleBasedCollator::construct(const UnicodeString& rules,
     dataIsOwned = TRUE; // since we own a collator now, we need to get rid of it
     isWriteThroughAlias = FALSE;
 
+    if(ucollator == NULL) {
+        if(U_SUCCESS(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return; // Failure
+    }
+
     setRuleStringFromCollator();
 }
 

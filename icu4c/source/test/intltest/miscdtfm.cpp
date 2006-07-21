@@ -122,7 +122,7 @@ DateFormatMiscTests::test4097450()
     {
         log(dformat[i] + "\t" + dstring[i] + "\t");
         formatter = new SimpleDateFormat(dformat[i], status);
-        failure(status, "new SimpleDateFormat");
+        if(failure(status, "new SimpleDateFormat")) return;
         //try {
         UnicodeString str;
         FieldPosition pos(FieldPosition::DONT_CARE);
@@ -157,9 +157,9 @@ DateFormatMiscTests::test4099975()
     {
         UErrorCode status = U_ZERO_ERROR;
         DateFormatSymbols* symbols = new DateFormatSymbols(Locale::getUS(), status);
-        failure(status, "new DateFormatSymbols");
+        if(failure(status, "new DateFormatSymbols")) return;
         SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), *symbols, status);
-        failure(status, "new SimpleDateFormat");
+        if(failure(status, "new SimpleDateFormat")) return;
         UnicodeString format0;
         format0 = df->format(d, format0);
         UnicodeString localizedPattern0;
@@ -189,9 +189,9 @@ DateFormatMiscTests::test4099975()
     {
         UErrorCode status = U_ZERO_ERROR;
         DateFormatSymbols* symbols = new DateFormatSymbols(Locale::getUS(), status);
-        failure(status, "new DateFormatSymbols");
+        if(failure(status, "new DateFormatSymbols")) return;
         SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), status);
-        failure(status, "new SimpleDateFormat");
+        if(failure(status, "new SimpleDateFormat")) return;
         df->setDateFormatSymbols(*symbols);
         UnicodeString format0;
         format0 = df->format(d, format0);
@@ -220,9 +220,9 @@ DateFormatMiscTests::test4099975()
     {
         UErrorCode status = U_ZERO_ERROR;
         DateFormatSymbols* symbols = new DateFormatSymbols(Locale::getUS(), status);
-        failure(status, "new DateFormatSymbols");
+        if(failure(status, "new DateFormatSymbols")) return;
         SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), symbols, status);
-        failure(status, "new SimpleDateFormat");
+        if(failure(status, "new SimpleDateFormat")) return;
         UnicodeString format0;
         format0 = df->format(d, format0);
         UnicodeString localizedPattern0;
@@ -251,7 +251,7 @@ DateFormatMiscTests::test4099975()
         DateFormatSymbols* symbols = new DateFormatSymbols(Locale::getUS(), status);
         failure(status, "new DateFormatSymbols");
         SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), status);
-        failure(status, "new SimpleDateFormat");
+        if(failure(status, "new SimpleDateFormat")) return;
         df-> adoptDateFormatSymbols(symbols);
         UnicodeString format0;
         format0 = df->format(d, format0);
