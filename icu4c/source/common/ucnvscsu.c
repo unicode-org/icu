@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -205,6 +205,10 @@ _SCSUOpen(UConverter *cnv,
     } else {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
     }
+
+    /* Set the substitution character U+fffd as a Unicode string. */
+    cnv->subUChars[0]=0xfffd;
+    cnv->subCharLen=-1;
 }
 
 static void
@@ -1433,11 +1437,14 @@ outputBytes:
          * first to the overflow buffer what does not fit into the
          * regular target.
          */
-        /* we know that 1<=targetCapacity<length<=4 */
+        /* we know that 0<=targetCapacity<length<=4 */
+        /* targetCapacity==0 when SCU+supplementary where SCU used up targetCapacity==1 */
         length-=targetCapacity;
         p=(uint8_t *)cnv->charErrorBuffer;
         switch(length) {
             /* each branch falls through to the next one */
+        case 4:
+            *p++=(uint8_t)(c>>24);
         case 3:
             *p++=(uint8_t)(c>>16);
         case 2:
@@ -1470,7 +1477,6 @@ outputBytes:
                 *offsets++=sourceIndex;
             }
         default:
-            /* will never occur */
             break;
         }
 
@@ -1868,11 +1874,14 @@ outputBytes:
          * first to the overflow buffer what does not fit into the
          * regular target.
          */
-        /* we know that 1<=targetCapacity<length<=4 */
+        /* we know that 0<=targetCapacity<length<=4 */
+        /* targetCapacity==0 when SCU+supplementary where SCU used up targetCapacity==1 */
         length-=targetCapacity;
         p=(uint8_t *)cnv->charErrorBuffer;
         switch(length) {
             /* each branch falls through to the next one */
+        case 4:
+            *p++=(uint8_t)(c>>24);
         case 3:
             *p++=(uint8_t)(c>>16);
         case 2:
@@ -1896,7 +1905,6 @@ outputBytes:
         case 1:
             *target++=(uint8_t)c;
         default:
-            /* will never occur */
             break;
         }
 
@@ -1919,30 +1927,6 @@ _SCSUGetName(const UConverter *cnv) {
         return "SCSU,locale=ja";
     default:
         return "SCSU";
-    }
-}
-
-static void
-_SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
-               int32_t offsetIndex,
-               UErrorCode *pErrorCode) {
-    static const char squ_fffd[]={ (char)SQU, (char)0xffu, (char)0xfdu };
-
-    /*
-     * The substitution character is U+fffd={ ff, fd }.
-     * If the SCSU converter is in Unicode mode, then these two bytes just need to
-     * be written. Otherwise, this character is quoted.
-     */
-    if(((SCSUData *)pArgs->converter->extraInfo)->fromUIsSingleByteMode) {
-        /* single-byte mode: quote Unicode */
-        ucnv_cbFromUWriteBytes(pArgs,
-                               squ_fffd, 3,
-                               offsetIndex, pErrorCode);
-    } else {
-        /* Unicode mode: just write U+fffd */
-        ucnv_cbFromUWriteBytes(pArgs,
-                               squ_fffd+1, 2,
-                               offsetIndex, pErrorCode);
     }
 }
 
@@ -2000,7 +1984,7 @@ static const UConverterImpl _SCSUImpl={
 
     NULL,
     _SCSUGetName,
-    _SCSUWriteSub,
+    NULL,
     _SCSUSafeClone,
     ucnv_getCompleteUnicodeSet
 };
@@ -2012,10 +1996,8 @@ static const UConverterStaticData _SCSUStaticData={
     UCNV_IBM, UCNV_SCSU,
     1, 3, /* one UChar generates at least 1 byte and at most 3 bytes */
     /*
-     * ### TODO the subchar really must be written by an SCSU function
-     * however, currently SCSU's fromUnicode() never causes errors, therefore
-     * no callbacks will be called and no subchars written
-     * See Jitterbug 2837 - RFE: forbid converting surrogate code points in all charsets
+     * The subchar here is ignored because _SCSUOpen() sets U+fffd as a Unicode
+     * substitution string.
      */
     { 0x0e, 0xff, 0xfd, 0 }, 3,
     FALSE, FALSE,
