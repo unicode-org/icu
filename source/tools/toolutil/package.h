@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -99,9 +99,13 @@ public:
     void removeItems(const char *pattern);
     void removeItems(const Package &listPkg);
 
+    /* The extractItem() functions accept outputType=0 to mean "don't swap the item". */
     void extractItem(const char *filesPath, int32_t index, char outType);
     void extractItems(const char *filesPath, const char *pattern, char outType);
     void extractItems(const char *filesPath, const Package &listPkg, char outType);
+
+    /* This variant extracts an item to a specific filename. */
+    void extractItem(const char *filesPath, const char *outName, int32_t index, char outType);
 
     void listItems(FILE *file);
 

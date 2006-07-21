@@ -286,11 +286,13 @@ makeFullFilenameAndDirs(const char *path, const char *name,
     errorCode=U_ZERO_ERROR;
     sep=strchr(filename, 0)-strlen(name);
     while((sep=strchr(sep, U_FILE_SEP_CHAR))!=NULL) {
-        *sep=0;                 // truncate temporarily
-        uprv_mkdir(filename, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "icupkg: unable to create tree directory \"%s\"\n", filename);
-            exit(U_FILE_ACCESS_ERROR);
+        if(sep!=filename) {
+            *sep=0;                 // truncate temporarily
+            uprv_mkdir(filename, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(stderr, "icupkg: unable to create tree directory \"%s\"\n", filename);
+                exit(U_FILE_ACCESS_ERROR);
+            }
         }
         *sep++=U_FILE_SEP_CHAR; // restore file separator character
     }
@@ -1052,7 +1054,7 @@ Package::removeItems(const Package &listPkg) {
 }
 
 void
-Package::extractItem(const char *filesPath, int32_t index, char outType) {
+Package::extractItem(const char *filesPath, const char *outName, int32_t index, char outType) {
     char filename[1024];
     UDataSwapper *ds;
     FILE *file;
@@ -1067,7 +1069,8 @@ Package::extractItem(const char *filesPath, int32_t index, char outType) {
     pItem=items+index;
 
     // swap the data to the outType
-    if(pItem->type!=outType) {
+    // outType==0: don't swap
+    if(outType!=0 && pItem->type!=outType) {
         // open the swapper
         UErrorCode errorCode=U_ZERO_ERROR;
         makeTypeProps(pItem->type, itemCharset, itemIsBigEndian);
@@ -1092,7 +1095,7 @@ Package::extractItem(const char *filesPath, int32_t index, char outType) {
     }
 
     // create the file and write its contents
-    makeFullFilenameAndDirs(filesPath, pItem->name, filename, (int32_t)sizeof(filename));
+    makeFullFilenameAndDirs(filesPath, outName, filename, (int32_t)sizeof(filename));
     file=fopen(filename, "wb");
     if(file==NULL) {
         fprintf(stderr, "icupkg: unable to create file \"%s\"\n", filename);
@@ -1105,6 +1108,11 @@ Package::extractItem(const char *filesPath, int32_t index, char outType) {
         fprintf(stderr, "icupkg: unable to write complete file \"%s\"\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
+}
+
+void
+Package::extractItem(const char *filesPath, int32_t index, char outType) {
+    extractItem(filesPath, items[index].name, index, outType);
 }
 
 void
