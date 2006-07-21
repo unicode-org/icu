@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -91,6 +91,10 @@ CalendarLimitTest::TestCalendarLimit()
     if (failure(status, "Calendar::createInstance")) return;
     cal->adoptTimeZone(TimeZone::createTimeZone("GMT"));
     DateFormat *fmt = DateFormat::createDateTimeInstance();
+    if(!fmt || !cal) {
+       dataerrln("can't open cal and/or fmt");
+       return;
+    }
     fmt->adoptCalendar(cal);
     ((SimpleDateFormat*) fmt)->applyPattern("HH:mm:ss.SSS zzz, EEEE, MMMM d, yyyy G");
 

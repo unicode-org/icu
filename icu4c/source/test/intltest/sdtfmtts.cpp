@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -53,7 +53,8 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 
     SimpleDateFormat def(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create SimpleDateFormat (default)");
+        dataerrln("ERROR: Could not create SimpleDateFormat (default) - exitting");
+        return;
     }
 
     status = U_ZERO_ERROR;
@@ -78,7 +79,8 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     SimpleDateFormat cust1(pattern, symbols, status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create SimpleDateFormat (pattern, symbols*)");
+        dataerrln("ERROR: Could not create SimpleDateFormat (pattern, symbols*) - exitting");
+        return;
     }
 
     status = U_ZERO_ERROR;

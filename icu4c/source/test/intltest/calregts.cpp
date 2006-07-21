@@ -1365,6 +1365,7 @@ void CalendarRegressionTest::test4125881()
       return;
     }
     DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
+    if(!assertSuccess("trying to construct", status))return;
     cal->clear();
     for (int32_t y=-20; y<=10; ++y) {
         cal->set(UCAL_ERA, y < 1 ? GregorianCalendar::BC : GregorianCalendar::AD);
@@ -1394,6 +1395,7 @@ void CalendarRegressionTest::test4125892() {
       return;
     }
     DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
+    if(!assertSuccess("trying to construct", status))return;
     cal->clear();
     cal->set(UCAL_ERA, GregorianCalendar::BC);
     cal->set(UCAL_YEAR, 81); // 81 BC is a leap year (proleptically)
