@@ -203,6 +203,14 @@ printUsage(const char *pname, UBool isHelp) {
             "contain the letter from the -t (--type) option.\n");
         fprintf(where,
             "\n"
+            "This tool can also be used to just swap a single ICU data file, replacing the\n"
+            "former icuswap tool. For this mode, provide the infilename (and optional\n"
+            "outfilename) for a non-package ICU data file.\n"
+            "Allowed options include -t, -w, -s and -d.\n"
+            "The filenames can be absolute, or relative to the source/dest dir paths.\n"
+            "Other options are not allowed in this mode.\n");
+        fprintf(where,
+            "\n"
             "Options:\n"
             "\t(Only the last occurrence of an option is used.)\n"
             "\n"
@@ -316,13 +324,21 @@ enum {
     OPT_COUNT
 };
 
+static UBool
+isPackageName(const char *filename) {
+    int32_t len;
+
+    len=(int32_t)strlen(filename)-4; /* -4: subtract the length of ".dat" */
+    return (UBool)(len>0 && 0==strcmp(filename+len, ".dat"));
+}
+
 extern int
 main(int argc, char *argv[]) {
     const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
     char outType;
-    UBool isHelp, isModified;
+    UBool isHelp, isModified, isPackage;
 
-    Package *pkg, *listPkg, *addListPkg;
+    Package *pkg, *listPkg;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -362,9 +378,17 @@ main(int argc, char *argv[]) {
 
     if(0==strcmp(argv[1], "new")) {
         inFilename=NULL;
+        isPackage=TRUE;
     } else {
         inFilename=argv[1];
-        pkg->readPackage(inFilename);
+        if(isPackageName(inFilename)) {
+            pkg->readPackage(inFilename);
+            isPackage=TRUE;
+        } else {
+            /* swap a single file (icuswap replacement) rather than work on a package */
+            pkg->addFile(sourcePath, inFilename);
+            isPackage=FALSE;
+        }
     }
 
     if(argc>=3) {
@@ -372,8 +396,11 @@ main(int argc, char *argv[]) {
         if(0!=strcmp(argv[1], argv[2])) {
             isModified=TRUE;
         }
-    } else {
+    } else if(isPackage) {
         outFilename=NULL;
+    } else /* !isPackage */ {
+        outFilename=inFilename;
+        isModified=(UBool)(sourcePath!=destPath);
     }
 
     /* parse the output type option */
@@ -394,13 +421,49 @@ main(int argc, char *argv[]) {
             printUsage(pname, FALSE);
             return U_ILLEGAL_ARGUMENT_ERROR;
         }
-    } else {
+
+        /*
+         * Set the isModified flag if the output type differs from the
+         * input package type.
+         * If we swap a single file, just assume that we are modifying it.
+         * The Package class does not give us access to the item and its type.
+         */
+        isModified=(UBool)(!isPackage || outType!=pkg->getInType());
+    } else if(isPackage) {
         outType=pkg->getInType(); // default to input type
+    } else /* !isPackage: swap single file */ {
+        outType=0; /* tells extractItem() to not swap */
     }
 
     if(options[OPT_WRITEPKG].doesOccur) {
         isModified=TRUE;
     }
+
+    if(!isPackage) {
+        /*
+         * icuswap tool replacement: Only swap a single file.
+         * Check that irrelevant options are not set.
+         */
+        if( options[OPT_COMMENT].doesOccur ||
+            options[OPT_COPYRIGHT].doesOccur ||
+            options[OPT_MATCHMODE].doesOccur ||
+            options[OPT_REMOVE_LIST].doesOccur ||
+            options[OPT_ADD_LIST].doesOccur ||
+            options[OPT_EXTRACT_LIST].doesOccur ||
+            options[OPT_LIST_ITEMS].doesOccur
+        ) {
+            printUsage(pname, FALSE);
+            return U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        if(isModified) {
+            pkg->extractItem(destPath, outFilename, 0, outType);
+        }
+
+        delete pkg;
+        return 0;
+    }
+
+    /* Work with a package. */
 
     if(options[OPT_COMMENT].doesOccur) {
         outComment=options[OPT_COMMENT].value;
@@ -438,17 +501,15 @@ main(int argc, char *argv[]) {
      * as long as the main Package
      */
     if(options[OPT_ADD_LIST].doesOccur) {
-        addListPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
-        if(addListPkg!=NULL) {
-            pkg->addItems(*addListPkg);
-            // do not delete addListPkg;
+        listPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
+        if(listPkg!=NULL) {
+            pkg->addItems(*listPkg);
+            delete listPkg;
             isModified=TRUE;
         } else {
             printUsage(pname, FALSE);
             return U_ILLEGAL_ARGUMENT_ERROR;
         }
-    } else {
-        addListPkg=NULL;
     }
 
     /* extract items */
@@ -505,7 +566,6 @@ main(int argc, char *argv[]) {
     }
 
     delete pkg;
-    delete addListPkg;
     return 0;
 }
 
