@@ -1,14 +1,13 @@
-﻿#--------------------------------------------------------------------
-# Copyright (c) 1999-2004, International Business Machines
-# Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-
-# Warning: does not do round-trip mapping!!
-
-# Convert CJK characters
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2006, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: Han_Latin.txt
+# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+#
 ::Han-Spacedhan();
-
-# Start RAW data for converting CJK characters
 [吖呵錒锕阿]>ā;
 嗄>á;
 啊>a;
@@ -754,7 +753,7 @@
 [㜛㯎㶧嫩嫰]>nèn;
 [㴰䏻嬣能薴]>néng;
 㲌>nèng;
-㕶>ng̀;
+㕶>ng\u0300;
 妮>nī;
 [㞾㪒㹸䘦䘽䛏䝚倪坭埿婗尼屔怩泥淣狋猊秜籾臡蚭蜺觬貎跜輗郳霓鯓鯢鲵麑齯]>ní;
 [㣇㵫䕥䦵䧇䭲䰯伱伲你儗儞孴抳拟擬旎柅狔禰苨薿鈮鉨铌隬馜]>nǐ;
@@ -1408,33 +1407,3 @@
 [㸲䎰䝫䞰昨椊琢秨稓筰葃鈼]>zuó;
 [㝾佐咗唨左毑繓]>zuǒ;
 [㑅㘀㘴㛗㭮䋏䔘作侳做唑坐夎岝岞座怍柞祚糳胙葄袏酢阼]>zuò;
-# End RAW data for converting CJK characters
-
-# fallbacks
-
-## | yi < i;
-## | wu < u;
-## | bi < b;
-## | ci < c;
-## | di < d;
-## | fu < f;
-## | gu < g;
-## | he < h;
-## | ji < j;
-## | ku < k;
-## | li < l;
-## | mi < m;
-## | pi < p;
-## | qi < q;
-## | l < r;
-## | si < s;
-## | ti < t;
-## | f < v;
-## | wa < w;
-## | xi < x;
-## | yi < y;
-## | zi < z;
-
-# filter out the half-width hangul
-# :: [^\uFFBE-\uFFEE] fullwidth-halfwidth ();
-## :: (lower) ;
