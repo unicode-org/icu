@@ -177,8 +177,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         StringBuffer buf = new StringBuffer();
 
         // Verify data
-        DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
-        assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
+        if (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(3, 7)) >= 0) {
+            DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
+            assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
+        }
+        
         assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
         if(DateFormat.FIELD_COUNT != PATTERN_CHARS.length()){
             errln("Did not get the correct value for DateFormat.FIELD_COUNT. Expected:  "+ PATTERN_CHARS.length());
@@ -207,16 +210,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
              "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT","","",
+            "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT","","","","",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
-            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "","","",
+            "mercredi", "", "", "", "", "", "", "", "HAP (\u00C9UA)", "", "", "", "", "", "", "","","","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
-            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August"
+            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997",
+            "0004", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -248,7 +252,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcL";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
         
     /**
      * A list of the names of all the fields in DateFormat.
@@ -282,6 +286,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "GENERIC_TIMEZONE_FIELD",
         "STAND_ALONE_DAY_FIELD",
         "STAND_ALONE_MONTH_FIELD",
+        "QUARTER_FIELD",
+        "STAND_ALONE_QUARTER_FIELD",
     };
     
     /**
@@ -350,6 +356,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
              "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PST", "2004/10/31 1:30",
+             
+             "y/M/d H:mm vvvv", "pf", "2004/10/31 1:30 Buenos Aires (Argentina)", "2004 10 30 21:30 PDT", "2004/10/31 1:30 Buenos Aires (Argentina)",
         };
         expect(ZDATA, en);
 
