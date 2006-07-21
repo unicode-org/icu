@@ -111,7 +111,7 @@ static const char* fldName(UCalendarDateFields f) {
 }
 
 
-
+#if UCAL_DEBUG_DUMP
 // from CalendarTest::calToStr - but doesn't modify contents.
 void ucal_dump(const Calendar &cal) {
     cal.dump();
@@ -147,7 +147,7 @@ void Calendar::dump() const {
 U_CFUNC void ucal_dump(UCalendar* cal) {
     ucal_dump( *((Calendar*)cal)  );
 }
-
+#endif
 
 #endif
 
