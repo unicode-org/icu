@@ -38,8 +38,6 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
-import sun.security.krb5.internal.crypto.f;
-
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception {
