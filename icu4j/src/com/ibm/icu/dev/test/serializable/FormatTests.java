@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.serializable;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.HashMap;
 
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
@@ -23,6 +24,8 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 
 /**
  * @author emader
@@ -95,6 +98,197 @@ public class FormatTests
     
     public static class DecimalFormatSymbolsHandler implements SerializableTest.Handler
     {
+        /*
+         * The serialized form of a normally created DecimalFormatSymbols object
+         * will have locale-specific data in it that might change from one version
+         * of ICU4J to another. To guard against this, we store the following canned
+         * data into the test objects we create.
+         */
+        static HashMap cannedData = new HashMap();
+        
+        static String en_CA_StringSymbols[] = {
+            "$", 
+            "E", 
+            "\u221E", 
+            "CAD", 
+            "\uFFFD", 
+        };
+
+        static String fr_CA_StringSymbols[] = {
+            "$", 
+            "E", 
+            "\u221E", 
+            "CAD", 
+            "\uFFFD", 
+        };
+
+        static String zh_CN_StringSymbols[] = {
+            "\uFFE5", 
+            "E", 
+            "\u221E", 
+            "CNY", 
+            "\uFFFD", 
+        };
+
+        static String zh_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String en_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String fr_FR_StringSymbols[] = {
+            "\u20AC", 
+            "E", 
+            "\u221E", 
+            "EUR", 
+            "\uFFFD", 
+        };
+
+        static String fr_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String de_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String de_DE_StringSymbols[] = {
+            "\u20AC", 
+            "E", 
+            "\u221E", 
+            "EUR", 
+            "\uFFFD", 
+        };
+
+        static String it_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String it_IT_StringSymbols[] = {
+            "\u20AC", 
+            "E", 
+            "\u221E", 
+            "EUR", 
+            "\uFFFD", 
+        };
+
+        static String ja_JP_StringSymbols[] = {
+            "\uFFE5", 
+            "E", 
+            "\u221E", 
+            "JPY", 
+            "\uFFFD", 
+        };
+
+        static String ja_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String ko_KR_StringSymbols[] = {
+            "\uFFE6", 
+            "E", 
+            "\u221E", 
+            "KRW", 
+            "\uFFFD", 
+        };
+
+        static String ko_StringSymbols[] = {
+            "\u00A4", 
+            "E", 
+            "\u221E", 
+            "XXX", 
+            "\uFFFD", 
+        };
+
+        static String zh_Hans_CN_StringSymbols[] = {
+            "\uFFE5", 
+            "E", 
+            "\u221E", 
+            "CNY", 
+            "\uFFFD", 
+        };
+
+        static String zh_Hant_TW_StringSymbols[] = {
+            "NT$", 
+            "E", 
+            "\u221E", 
+            "TWD", 
+            "\uFFFD", 
+        };
+
+        static String zh_TW_StringSymbols[] = {
+            "NT$", 
+            "E", 
+            "\u221E", 
+            "TWD", 
+            "\uFFFD", 
+        };
+
+        static String en_GB_StringSymbols[] = {
+            "\u00A3", 
+            "E", 
+            "\u221E", 
+            "GBP", 
+            "\uFFFD", 
+        };
+
+        static String en_US_StringSymbols[] = {
+            "$", 
+            "E", 
+            "\u221E", 
+            "USD", 
+            "\uFFFD", 
+        };
+        
+        {
+            cannedData.put("en_CA",      en_CA_StringSymbols);
+            cannedData.put("fr_CA",      fr_CA_StringSymbols);
+            cannedData.put("zh_CN",      zh_CN_StringSymbols);
+            cannedData.put("zh",         zh_StringSymbols);
+            cannedData.put("en",         en_StringSymbols);
+            cannedData.put("fr_FR",      fr_FR_StringSymbols);
+            cannedData.put("fr",         fr_StringSymbols);
+            cannedData.put("de",         de_StringSymbols);
+            cannedData.put("de_DE",      de_DE_StringSymbols);
+            cannedData.put("it",         it_StringSymbols);
+            cannedData.put("it_IT",      it_IT_StringSymbols);
+            cannedData.put("ja_JP",      ja_JP_StringSymbols);
+            cannedData.put("ja",         ja_StringSymbols);
+            cannedData.put("ko_KR",      ko_KR_StringSymbols);
+            cannedData.put("ko",         ko_StringSymbols);
+            cannedData.put("zh_Hans_CN", zh_Hans_CN_StringSymbols);
+            cannedData.put("zh_Hant_TW", zh_Hant_TW_StringSymbols);
+            cannedData.put("zh_TW",      zh_TW_StringSymbols);
+            cannedData.put("en_GB",      en_GB_StringSymbols);
+            cannedData.put("en_US",      en_US_StringSymbols);
+        }
+        
         private char[] getCharSymbols(DecimalFormatSymbols dfs)
         {
             char symbols[] = {
@@ -128,13 +322,25 @@ public class FormatTests
             return symbols;
         }
         
+        private void setStringSymbols(DecimalFormatSymbols dfs, String symbols[])
+        {
+            dfs.setCurrencySymbol(symbols[0]);
+            dfs.setExponentSeparator(symbols[1]);
+            dfs.setInfinity(symbols[2]);
+            dfs.setInternationalCurrencySymbol(symbols[3]);
+            dfs.setNaN(symbols[4]);
+        }
+        
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTest.getLocales();
             DecimalFormatSymbols dfs[] = new DecimalFormatSymbols[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
-                dfs[i] = new DecimalFormatSymbols(locales[i]);
+                ULocale uloc = ULocale.forLocale(locales[i]);
+
+                dfs[i] = new DecimalFormatSymbols(uloc);
+                setStringSymbols(dfs[i], (String[]) cannedData.get(uloc.toString()));
             }
             
             return dfs;
@@ -149,7 +355,7 @@ public class FormatTests
             char chars_a[] = getCharSymbols(dfs_a);
             char chars_b[] = getCharSymbols(dfs_b);
 
-        return SerializableTest.compareStrings(strings_a, strings_b) && SerializableTest.compareChars(chars_a, chars_b);
+            return SerializableTest.compareStrings(strings_a, strings_b) && SerializableTest.compareChars(chars_a, chars_b);
         }
     }
     
@@ -191,21 +397,357 @@ public class FormatTests
             DateFormat dfa = (DateFormat) a;
             DateFormat dfb = (DateFormat) b;
             Date date = new Date(System.currentTimeMillis());
+            String sfa = dfa.format(date);
+            String sfb = dfa.format(date);
             
-           return dfa.format(date).equals(dfb.format(date));
+           return sfa.equals(sfb);
         }
         
     }
     
     public static class DateFormatSymbolsHandler implements SerializableTest.Handler
     {
+        /*
+         * The serialized form of a normally created DateFormatSymbols object
+         * will have locale-specific data in it that might change from one version
+         * of ICU4J to another. To guard against this, we store the following canned
+         * data into the test objects we create.
+         */
+        static HashMap cannedData = new HashMap();
+
+        static String en_CA_MonthNames[] = {
+            "January", 
+            "February", 
+            "March", 
+            "April", 
+            "May", 
+            "June", 
+            "July", 
+            "August", 
+            "September", 
+            "October", 
+            "November", 
+            "December", 
+        };
+
+        static String fr_CA_MonthNames[] = {
+            "janvier", 
+            "f\u00E9vrier", 
+            "mars", 
+            "avril", 
+            "mai", 
+            "juin", 
+            "juillet", 
+            "ao\u00FBt", 
+            "septembre", 
+            "octobre", 
+            "novembre", 
+            "d\u00E9cembre", 
+        };
+
+        static String zh_Hans_CN_MonthNames[] = {
+            "\u4E00\u6708", 
+            "\u4E8C\u6708", 
+            "\u4E09\u6708", 
+            "\u56DB\u6708", 
+            "\u4E94\u6708", 
+            "\u516D\u6708", 
+            "\u4E03\u6708", 
+            "\u516B\u6708", 
+            "\u4E5D\u6708", 
+            "\u5341\u6708", 
+            "\u5341\u4E00\u6708", 
+            "\u5341\u4E8C\u6708", 
+        };
+
+        static String zh_CN_MonthNames[] = {
+            "\u4E00\u6708", 
+            "\u4E8C\u6708", 
+            "\u4E09\u6708", 
+            "\u56DB\u6708", 
+            "\u4E94\u6708", 
+            "\u516D\u6708", 
+            "\u4E03\u6708", 
+            "\u516B\u6708", 
+            "\u4E5D\u6708", 
+            "\u5341\u6708", 
+            "\u5341\u4E00\u6708", 
+            "\u5341\u4E8C\u6708", 
+        };
+
+        static String zh_MonthNames[] = {
+            "\u4E00\u6708", 
+            "\u4E8C\u6708", 
+            "\u4E09\u6708", 
+            "\u56DB\u6708", 
+            "\u4E94\u6708", 
+            "\u516D\u6708", 
+            "\u4E03\u6708", 
+            "\u516B\u6708", 
+            "\u4E5D\u6708", 
+            "\u5341\u6708", 
+            "\u5341\u4E00\u6708", 
+            "\u5341\u4E8C\u6708", 
+        };
+
+        static String en_MonthNames[] = {
+            "January", 
+            "February", 
+            "March", 
+            "April", 
+            "May", 
+            "June", 
+            "July", 
+            "August", 
+            "September", 
+            "October", 
+            "November", 
+            "December", 
+        };
+
+        static String fr_FR_MonthNames[] = {
+            "janvier", 
+            "f\u00E9vrier", 
+            "mars", 
+            "avril", 
+            "mai", 
+            "juin", 
+            "juillet", 
+            "ao\u00FBt", 
+            "septembre", 
+            "octobre", 
+            "novembre", 
+            "d\u00E9cembre", 
+        };
+
+        static String fr_MonthNames[] = {
+            "janvier", 
+            "f\u00E9vrier", 
+            "mars", 
+            "avril", 
+            "mai", 
+            "juin", 
+            "juillet", 
+            "ao\u00FBt", 
+            "septembre", 
+            "octobre", 
+            "novembre", 
+            "d\u00E9cembre", 
+        };
+
+        static String de_MonthNames[] = {
+            "Januar", 
+            "Februar", 
+            "M\u00E4rz", 
+            "April", 
+            "Mai", 
+            "Juni", 
+            "Juli", 
+            "August", 
+            "September", 
+            "Oktober", 
+            "November", 
+            "Dezember", 
+        };
+
+        static String de_DE_MonthNames[] = {
+            "Januar", 
+            "Februar", 
+            "M\u00E4rz", 
+            "April", 
+            "Mai", 
+            "Juni", 
+            "Juli", 
+            "August", 
+            "September", 
+            "Oktober", 
+            "November", 
+            "Dezember", 
+        };
+
+        static String it_MonthNames[] = {
+            "gennaio", 
+            "febbraio", 
+            "marzo", 
+            "aprile", 
+            "maggio", 
+            "giugno", 
+            "luglio", 
+            "agosto", 
+            "settembre", 
+            "ottobre", 
+            "novembre", 
+            "dicembre", 
+        };
+
+        static String it_IT_MonthNames[] = {
+            "gennaio", 
+            "febbraio", 
+            "marzo", 
+            "aprile", 
+            "maggio", 
+            "giugno", 
+            "luglio", 
+            "agosto", 
+            "settembre", 
+            "ottobre", 
+            "novembre", 
+            "dicembre", 
+        };
+
+        static String ja_JP_MonthNames[] = {
+            "1\u6708", 
+            "2\u6708", 
+            "3\u6708", 
+            "4\u6708", 
+            "5\u6708", 
+            "6\u6708", 
+            "7\u6708", 
+            "8\u6708", 
+            "9\u6708", 
+            "10\u6708", 
+            "11\u6708", 
+            "12\u6708", 
+        };
+
+        static String ja_MonthNames[] = {
+            "1\u6708", 
+            "2\u6708", 
+            "3\u6708", 
+            "4\u6708", 
+            "5\u6708", 
+            "6\u6708", 
+            "7\u6708", 
+            "8\u6708", 
+            "9\u6708", 
+            "10\u6708", 
+            "11\u6708", 
+            "12\u6708", 
+        };
+
+        static String ko_KR_MonthNames[] = {
+            "1\uC6D4", 
+            "2\uC6D4", 
+            "3\uC6D4", 
+            "4\uC6D4", 
+            "5\uC6D4", 
+            "6\uC6D4", 
+            "7\uC6D4", 
+            "8\uC6D4", 
+            "9\uC6D4", 
+            "10\uC6D4", 
+            "11\uC6D4", 
+            "12\uC6D4", 
+        };
+
+        static String ko_MonthNames[] = {
+            "1\uC6D4", 
+            "2\uC6D4", 
+            "3\uC6D4", 
+            "4\uC6D4", 
+            "5\uC6D4", 
+            "6\uC6D4", 
+            "7\uC6D4", 
+            "8\uC6D4", 
+            "9\uC6D4", 
+            "10\uC6D4", 
+            "11\uC6D4", 
+            "12\uC6D4", 
+        };
+
+        static String zh_Hant_TW_MonthNames[] = {
+            "\u4E00\u6708", 
+            "\u4E8C\u6708", 
+            "\u4E09\u6708", 
+            "\u56DB\u6708", 
+            "\u4E94\u6708", 
+            "\u516D\u6708", 
+            "\u4E03\u6708", 
+            "\u516B\u6708", 
+            "\u4E5D\u6708", 
+            "\u5341\u6708", 
+            "\u5341\u4E00\u6708", 
+            "\u5341\u4E8C\u6708", 
+        };
+
+        static String zh_TW_MonthNames[] = {
+            "\u4E00\u6708", 
+            "\u4E8C\u6708", 
+            "\u4E09\u6708", 
+            "\u56DB\u6708", 
+            "\u4E94\u6708", 
+            "\u516D\u6708", 
+            "\u4E03\u6708", 
+            "\u516B\u6708", 
+            "\u4E5D\u6708", 
+            "\u5341\u6708", 
+            "\u5341\u4E00\u6708", 
+            "\u5341\u4E8C\u6708", 
+            };
+
+        static String en_GB_MonthNames[] = {
+            "January", 
+            "February", 
+            "March", 
+            "April", 
+            "May", 
+            "June", 
+            "July", 
+            "August", 
+            "September", 
+            "October", 
+            "November", 
+            "December", 
+        };
+
+        static String en_US_MonthNames[] = {
+            "January", 
+            "February", 
+            "March", 
+            "April", 
+            "May", 
+            "June", 
+            "July", 
+            "August", 
+            "September", 
+            "October", 
+            "November", 
+            "December", 
+        };
+
+        {
+            cannedData.put("en_CA",      en_CA_MonthNames);
+            cannedData.put("fr_CA",      fr_CA_MonthNames);
+            cannedData.put("zh_Hans_CN", zh_Hans_CN_MonthNames);
+            cannedData.put("zh_CN",      zh_CN_MonthNames);
+            cannedData.put("zh",         zh_MonthNames);
+            cannedData.put("en",         en_MonthNames);
+            cannedData.put("fr_FR",      fr_FR_MonthNames);
+            cannedData.put("fr",         fr_MonthNames);
+            cannedData.put("de",         de_MonthNames);
+            cannedData.put("de_DE",      de_DE_MonthNames);
+            cannedData.put("it",         it_MonthNames);
+            cannedData.put("it_IT",      it_IT_MonthNames);
+            cannedData.put("ja_JP",      ja_JP_MonthNames);
+            cannedData.put("ja",         ja_MonthNames);
+            cannedData.put("ko_KR",      ko_KR_MonthNames);
+            cannedData.put("ko",         ko_MonthNames);
+            cannedData.put("zh_Hant_TW", zh_Hant_TW_MonthNames);
+            cannedData.put("zh_TW",      zh_TW_MonthNames);
+            cannedData.put("en_GB",      en_GB_MonthNames);
+            cannedData.put("en_US",      en_US_MonthNames);
+        }
+        
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTest.getLocales();
             DateFormatSymbols dfs[] = new DateFormatSymbols[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
-                dfs[i] = new DateFormatSymbols(GregorianCalendar.class, ULocale.forLocale(locales[i]));
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                
+                dfs[i] = new DateFormatSymbols(GregorianCalendar.class, uloc);
+                dfs[i].setMonths((String[]) cannedData.get(uloc.toString()));
             }
             
             return dfs;
@@ -282,7 +824,10 @@ public class FormatTests
             ChineseDateFormatSymbols cdfs[] = new ChineseDateFormatSymbols[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
-                cdfs[i] = new ChineseDateFormatSymbols(locales[i]);
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                
+                cdfs[i] = new ChineseDateFormatSymbols(uloc);
+                cdfs[i].setMonths((String[]) cannedData.get(uloc.toString()));
             }
             
             return cdfs;
