@@ -937,6 +937,7 @@ Locale::getAvailableLocales(int32_t& count)
            newLocaleList = new Locale[locCount];
         }
         if (newLocaleList == NULL) {
+            count = 0;
             return NULL;
         }
 
