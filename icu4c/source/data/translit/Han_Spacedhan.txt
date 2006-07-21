@@ -1,24 +1,17 @@
-﻿#--------------------------------------------------------------------
-# Copyright (c) 1999-2004, International Business Machines
-# Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-
-# Only intended for internal use
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2006, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: Han_Spacedhan.txt
+# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+#
 :: fullwidth-halfwidth;
-
 ｡ > '.';
-
 $terminalPunct = [\.\,\:\;\?\!．，：？！｡、；[:Pe:][:Pf:]];
 $initialPunct = [:Ps:][:Pi:];
-
-# add space between any Han or terminal punctuation and letters, and
-# between letters and Han or initial punct
-
 [[:Ideographic:] $terminalPunct] {} [:Letter:] > ' ' ;
 [:Letter:] [:Mark:]* {} [[:Ideographic:] $initialPunct] > ' ' ;
-
-# remove spacing between ideographs and other letters
-
- < [:Ideographic:] { ' ' } [:Letter:] ;
- < [:Letter:] [:Mark:]* { ' ' } [:Ideographic:] ;
-
+< [:Ideographic:] { ' ' } [:Letter:] ;
+< [:Letter:] [:Mark:]* { ' ' } [:Ideographic:] ;
