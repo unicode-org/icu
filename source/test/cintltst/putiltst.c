@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2004, International Business Machines Corporation and
+ * Copyright (c) 1998-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -90,13 +90,6 @@ static void TestPUtilAPI(void){
     log_verbose("Testing the API uprv_pow10()\n");
     doAssert(uprv_pow10(4), 10000, "uprv_pow10(4) failed.");
 
-    log_verbose("Testing the API uprv_log10()\n");
-    doAssert(uprv_log10(3456), 3, "uprv_log10(3456) failed.");
-#ifdef OS390
-    doAssert(uprv_log10(1.0e55), 55, "uprv_log10(1.0e55) failed.");
-#else
-    doAssert(uprv_log10(1.0e300), 300, "uprv_log10(1.0e300) failed.");
-#endif          
     log_verbose("Testing the API uprv_isNegativeInfinity()\n");
     isTrue=uprv_isNegativeInfinity(uprv_getInfinity() * -1);
     if(isTrue != TRUE){
