@@ -483,40 +483,6 @@ uprv_maxMantissa(void)
     return pow(2.0, DBL_MANT_DIG + 1.0) - 1.0;
 }
 
-/**
- * Return the floor of the log base 10 of a given double.
- * This method compensates for inaccuracies which arise naturally when
- * computing logs, and always give the correct value.  The parameter
- * must be positive and finite.
- * (Thanks to Alan Liu for supplying this function.)
- */
-U_CAPI int16_t U_EXPORT2
-uprv_log10(double d)
-{
-#ifdef OS400
-    /* We don't use the normal implementation because you can't underflow */
-    /* a double otherwise an underflow exception occurs */
-    return log10(d);
-#else
-    /* The reason this routine is needed is that simply taking the*/
-    /* log and dividing by log10 yields a result which may be off*/
-    /* by 1 due to rounding errors.  For example, the naive log10*/
-    /* of 1.0e300 taken this way is 299, rather than 300.*/
-    double alog10 = log(d) / log(10.0);
-    int16_t ailog10 = (int16_t) floor(alog10);
-
-    /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
-    if (alog10 > 0 && d >= pow(10.0, (double)(ailog10 + 1)))
-        ++ailog10;
-
-    /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
-    else if (alog10 < 0 && d < pow(10.0, (double)(ailog10)))
-        --ailog10;
-
-    return ailog10;
-#endif
-}
-
 U_CAPI double U_EXPORT2
 uprv_log(double d)
 {

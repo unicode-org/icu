@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -133,19 +133,6 @@ U_INTERNAL int32_t U_EXPORT2 uprv_min(int32_t d, int32_t y);
  * @internal
  */
 U_INTERNAL double  U_EXPORT2 uprv_maxMantissa(void);
-
-/**
- * Return the floor of the log base 10 of a given double.
- * This method compensates for inaccuracies which arise naturally when
- * computing logs, and always gives the correct value.  The parameter
- * must be positive and finite.
- * (Thanks to Alan Liu for supplying this function.)
- *
- * @param d the double value to apply the common log function for.
- * @return the log of value d.
- * @internal
- */
-U_INTERNAL int16_t  U_EXPORT2 uprv_log10(double d);
 
 /**
  * Floating point utility to calculate the logarithm of a double.
