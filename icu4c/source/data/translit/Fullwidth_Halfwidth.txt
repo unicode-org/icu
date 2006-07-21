@@ -1,16 +1,12 @@
-﻿#--------------------------------------------------------------------
-# Copyright (c) 1999-2004, International Business Machines
-# Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-
-# Fullwidth-Halfwidth
-
-# Mechanically generated from Unicode Character Database
-# IDEOGRAPHIC SPACE then added, and
-# FULLWIDTH MACRON changed to map to MACRON, not SPACE + COMBINING MACRON
-
-# multicharacter
-
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2006, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: Fullwidth_Halfwidth.txt
+# Generated from CLDR: Thu Jul 20 16:27:13 PDT 2006
+#
 ガ<>ｶﾞ; # to KATAKANA LETTER GA
 ギ<>ｷﾞ; # to KATAKANA LETTER GI
 グ<>ｸﾞ; # to KATAKANA LETTER GU
@@ -39,9 +35,6 @@
 ヴ<>ｳﾞ; # to KATAKANA LETTER VU
 ヷ<>ﾜﾞ; # to KATAKANA LETTER VA
 ヺ<>ｦﾞ; # to KATAKANA LETTER VO
-
-# single character
-
 ！<>'!'; # from FULLWIDTH EXCLAMATION MARK
 ＂<>'\"'; # from FULLWIDTH QUOTATION MARK
 ＃<>'#'; # from FULLWIDTH NUMBER SIGN
@@ -197,9 +190,9 @@
 ロ<>ﾛ; # to HALFWIDTH KATAKANA LETTER RO
 ワ<>ﾜ; # to HALFWIDTH KATAKANA LETTER WA
 ン<>ﾝ; # to HALFWIDTH KATAKANA LETTER N
-゙<>ﾞ; # to HALFWIDTH KATAKANA VOICED SOUND MARK
-゚<>ﾟ; # to HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-ᅠ<>ﾠ; # to HALFWIDTH HANGUL FILLER
+\u3099<>ﾞ; # to HALFWIDTH KATAKANA VOICED SOUND MARK
+\u309A<>ﾟ; # to HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+\u1160<>\uFFA0; # to HALFWIDTH HANGUL FILLER
 ᄀ<>ﾡ; # to HALFWIDTH HANGUL LETTER KIYEOK
 ᄁ<>ﾢ; # to HALFWIDTH HANGUL LETTER SSANGKIYEOK
 ᆪ<>ﾣ; # to HALFWIDTH HANGUL LETTER KIYEOK-SIOS
@@ -255,17 +248,14 @@
 ￡<>'£'; # from FULLWIDTH POUND SIGN
 ￢<>'¬'; # from FULLWIDTH NOT SIGN
 ￣<>'¯'; # from FULLWIDTH MACRON
-'　'<>' '; # ideographic space (place this after MACRON)
+'\u3000'<>' '; # ideographic space (place this after MACRON)
 ￤<>'¦'; # from FULLWIDTH BROKEN BAR
 ￥<>'¥'; # from FULLWIDTH YEN SIGN
 ￦<>₩; # from FULLWIDTH WON SIGN
 │<>￨; # to HALFWIDTH FORMS LIGHT VERTICAL
-'←'<>'￩'; # to HALFWIDTH LEFTWARDS ARROW
+'<'<>'￩'; # to HALFWIDTH LEFTWARDS ARROW
 ↑<>￪; # to HALFWIDTH UPWARDS ARROW
-'→'<>'￫'; # to HALFWIDTH RIGHTWARDS ARROW
+'>'<>'￫'; # to HALFWIDTH RIGHTWARDS ARROW
 ↓<>￬; # to HALFWIDTH DOWNWARDS ARROW
 ■<>￭; # to HALFWIDTH BLACK SQUARE
 ○<>￮; # to HALFWIDTH WHITE CIRCLE
-
-# eof
-
