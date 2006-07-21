@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2004, International Business Machines Corporation and
+ * Copyright (c) 1996-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -277,6 +277,10 @@ void AstroTest::TestSunriseTimes(void) {
   DateFormat *df_t  = DateFormat::createTimeInstance(DateFormat::MEDIUM,Locale::getUS());
   DateFormat *df_d  = DateFormat::createDateInstance(DateFormat::MEDIUM,Locale::getUS());
   DateFormat *df_dt = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::MEDIUM, Locale::getUS());
+  if(!df_t || !df_d || !df_dt) {
+    errln("couldn't create dateformats.");
+    return;
+  }
   df_t->adoptTimeZone(tz->clone());
   df_d->adoptTimeZone(tz->clone());
   df_dt->adoptTimeZone(tz->clone());
