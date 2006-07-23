@@ -157,7 +157,9 @@ ubidi_getRuns(UBiDi *pBiDi);
 
 /** BiDi control code points */
 enum {
-    LRM_CHAR=0x200e,
+    ZWNJ_CHAR=0x200c,
+    ZWJ_CHAR,
+    LRM_CHAR,
     RLM_CHAR,
     LRE_CHAR=0x202a,
     RLE_CHAR,
@@ -166,7 +168,7 @@ enum {
     RLO_CHAR
 };
 
-#define IS_BIDI_CONTROL_CHAR(c) (((uint32_t)(c)&0xfffffffe)==LRM_CHAR || (uint32_t)((c)-LRE_CHAR)<5)
+#define IS_BIDI_CONTROL_CHAR(c) (((uint32_t)(c)&0xfffffffc)==ZWNJ_CHAR || (uint32_t)((c)-LRE_CHAR)<5)
 
 /* InsertPoints structure for noting where to put BiDi marks ---------------- */
 
