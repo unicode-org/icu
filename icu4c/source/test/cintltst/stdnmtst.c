@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2000-2005, International Business Machines Corporation and
+ * Copyright (c) 2000-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -100,7 +100,7 @@ static void TestStandardName()
         /*dotestname("cp1252", "MIME", "windows-1252") &&*/
         dotestname("ascii", "MIME", "US-ASCII") &&
         dotestname("csiso2022jp2", "MIME", "ISO-2022-JP-2") &&
-        dotestname("Iso20-22__cN", "MIME", "ISO-2022-CN") &&
+        dotestname("Iso20-22__cN", "IANA", "ISO-2022-CN") &&
         dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
         dotestname("cp850", "IANA", "IBM850") &&
         dotestname("crazy", "MIME", NULL) &&
@@ -152,7 +152,7 @@ static void TestCanonicalName()
         dotestconv("ibm-5305", "IANA", NULL) &&     /* mapping does not exist */
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
         dotestconv("UTF16_BigEndian", "", "UTF-16BE") &&        /* non-default name due to ordering */
-        dotestconv("ISO-2022-CN", "MIME", "ISO_2022,locale=zh,version=0") &&/* default name */
+        dotestconv("ISO-2022-CN", "IANA", "ISO_2022,locale=zh,version=0") &&/* default name */
         dotestconv("Shift_JIS", "MIME", "ibm-943_P15A-2003") &&/* ambiguous alias */
         dotestconv("Shift_JIS", "", "ibm-943_P130-1999") &&/* ambiguous alias */
         dotestconv("ibm-943", "", "ibm-943_P15A-2003") &&/* ambiguous alias */
