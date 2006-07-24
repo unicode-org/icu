@@ -23,4 +23,4 @@
 #
 #
 
-TRANSLIT_SOURCE=root.txt
+TRANSLIT_SOURCE=root.txt en.txt el.txt
