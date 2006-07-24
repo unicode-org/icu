@@ -214,56 +214,6 @@ void IntlTestDateFormat::tryDate(UDate theDate)
         }
     }
 }
-    
-    
-/**
- * Return the floor of the log base 10 of a given double.
- * This method compensates for inaccuracies which arise naturally when
- * computing logs, and always gives the correct value.  The parameter
- * must be positive and finite.
- * (Thanks to Alan Liu for supplying this function.)
- *
- * @param d the double value to apply the common log function for.
- * @return the log of value d.
- * @internal
- */
-static int16_t  tsdate_log10(double d);
-
-/**
- * Return the floor of the log base 10 of a given double.
- * This method compensates for inaccuracies which arise naturally when
- * computing logs, and always give the correct value.  The parameter
- * must be positive and finite.
- * (Thanks to Alan Liu for supplying this function.)
- * 
- * moved here from putil
- */
-static int16_t
-tsdate_log10(double d)
-{
-#ifdef OS400
-    /* We don't use the normal implementation because you can't underflow */
-    /* a double otherwise an underflow exception occurs */
-    return log10(d);
-#else
-    /* The reason this routine is needed is that simply taking the*/
-    /* log and dividing by log10 yields a result which may be off*/
-    /* by 1 due to rounding errors.  For example, the naive log10*/
-    /* of 1.0e300 taken this way is 299, rather than 300.*/
-    double alog10 = log(d) / log(10.0);
-    int16_t ailog10 = (int16_t) floor(alog10);
-
-    /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
-    if (alog10 > 0 && d >= pow(10.0, (double)(ailog10 + 1)))
-        ++ailog10;
-
-    /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
-    else if (alog10 < 0 && d < pow(10.0, (double)(ailog10)))
-        --ailog10;
-
-    return ailog10;
-#endif
-}
 
 // Return a random double from 0.01 to 1, inclusive
 double IntlTestDateFormat::randDouble()
@@ -285,7 +235,7 @@ double IntlTestDateFormat::randDouble()
             d = -d;
         if (d > 0.0)
         {
-            double e = uprv_floor(tsdate_log10(d));
+            double e = uprv_floor(log10(d));
             if (e < -2.0)
                 d *= uprv_pow10((int32_t)(-e-2));
             else if (e > -1.0)
