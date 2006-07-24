@@ -9,12 +9,6 @@
 //
 root {
     RuleBasedTransliteratorIDs {
-        Latin-el {
-            alias {"Latin-Greek/UNGEGN"}
-        }
-        el-Latin {
-            alias {"Greek-Latin/UNGEGN"}
-        }
         Tone-Digit {
             alias {"Pinyin-NumericPinyin"}
         }
