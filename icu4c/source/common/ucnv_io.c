@@ -367,7 +367,7 @@ static const uint8_t asciiTypes[128] = {
     0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0
 };
 
-#define GET_ASCII_TYPE(c) ((int8_t)(c) >= 0 ? asciiTypes[c] : (uint8_t)IGNORE)
+#define GET_ASCII_TYPE(c) ((int8_t)(c) >= 0 ? asciiTypes[(uint8_t)c] : (uint8_t)IGNORE)
 
 /* character types for EBCDIC 80..FF */
 static const uint8_t ebcdicTypes[128] = {
