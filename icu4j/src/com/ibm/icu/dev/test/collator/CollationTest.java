@@ -1,26 +1,28 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.ModuleTest;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.RuleBasedCollator;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.CollationKey;
-import com.ibm.icu.text.RawCollationKey;
-import com.ibm.icu.text.CollationElementIterator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.LocaleUtility;
-
-import java.util.Vector;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Vector;
+
+import com.ibm.icu.dev.test.ModuleTest;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RawCollationKey;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UTF16;
 
 public class CollationTest extends ModuleTest
 {
@@ -35,13 +37,23 @@ public class CollationTest extends ModuleTest
         }*/
     }
 
-    public CollationTest() {
-        super("processModules");
+//    public CollationTest() {
+//        super("processModules");
+//    }
+
+    // Want to be static, why super class not?
+    private class DataDrivenTarget extends TestFmwk.Target{
+        public DataDrivenTarget(String name) {
+            super(name);
+        }
+        
     }
 
+    
     public void processModules() {
-        while (nextSettings()) {
-            processTest();
+        for (Iterator iter = t.getSettingsIterator(); iter.hasNext();) {
+            DataMap setting = (DataMap) iter.next();
+            processSetting(setting);
         }
     }
     
@@ -161,7 +173,7 @@ public class CollationTest extends ModuleTest
 
     // private methods -------------------------------------------------------
 
-    private void processTest() {
+    private void processSetting(DataMap settings) {
         RuleBasedCollator col = null;
         // ok i have to be careful here since it seems like we can have
         // multiple locales for each test
@@ -177,7 +189,7 @@ public class CollationTest extends ModuleTest
                 errln("Error creating collator for locale " + locale);
             }
             logln("Testing collator for locale %s\n" + locale);
-            processCollatorTests(col);
+            processSetting2(settings, col);
         }
         String rules = settings.getString("Rules");
         // ok i have to be careful here since it seems like we can have
@@ -191,26 +203,26 @@ public class CollationTest extends ModuleTest
             } catch (Exception e) {
                 errln("Error creating collator for rules " + rules);
             }
-            processCollatorTests(col);
+            processSetting2(settings, col);
         }
     }
 
-    private void processCollatorTests(RuleBasedCollator col)
+    private void processSetting2(DataMap settings,RuleBasedCollator col)
     {
 
         // ok i have to be careful here since it seems like we can have
         // multiple rules for each test
         String arguments = settings.getString("Arguments");
         if (arguments != null) {
-            processArguments(col, arguments);
+            handleArguments(col, arguments);
         }
-        processReadyCollator(col);
+        processTestCases(col);
     }
 
     /**
      * Reads the options string and sets appropriate attributes in collator
      */
-    private void processArguments(RuleBasedCollator col, String argument) {
+    private void handleArguments(RuleBasedCollator col, String argument) {
         int i = 0;
         boolean printInfo = false;
         while (i < argument.length()) {
@@ -277,17 +289,11 @@ public class CollationTest extends ModuleTest
         */
     }
 
-    private void processReadyCollator(RuleBasedCollator col) {
-       while (nextCase()) {
-            // this is very sad, it is alittle awkward to write the c rb
-            // to have an object array of an object array of a 1 element
-            // string array. so now we have an object array of a 1 element
-            // object array of string arrays.
-            String sequence[] = testcase.getStringArray("sequence");
-            for (int i = 0; i < sequence.length; i ++) {
-                processSequence(col, sequence[i]);
-            }
-       }
+    private void processTestCases(RuleBasedCollator col) {
+        for (Iterator iter = t.getDataIterator(); iter.hasNext();) {
+            DataMap e1 =  (DataMap) iter.next();
+            processSequence(col, e1.getString("sequence"));
+     }
     }
 
     private void processSequence(RuleBasedCollator col, String sequence) {
