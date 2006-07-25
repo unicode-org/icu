@@ -71,7 +71,15 @@ static const char collationBNF[] =
     "$root = $command{0,5} $reset $mostRules{1,20};";
 
 
+static const UVersionInfo ICU_37 = {3,7,0,0};
+
 void RandomCollatorTest::Test2(){
+    if(!isICUVersionAtLeast(ICU_37)){
+        return;
+    }
+    else {
+        errln("TestWbnf is incorrectly implemented.\nThis test should be modeled to use the existing test frame work for naming tests.\n");
+    }
     TestWbnf();
 }
 
@@ -80,6 +88,7 @@ void RandomCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* 
     if (exec) logln("TestSuite RandomCollatorTest: ");
     switch (index) {
         TESTCASE(0, Test);
+        TESTCASE(1, Test2);
         default: name = ""; break;
     }
 }
@@ -130,11 +139,12 @@ private:
     LanguageGenerator test_string;
 };*/
 
-static const UVersionInfo ICU_35 = {3,5,0,0};
-
 void RandomCollatorTest::Test(){
-    if(isICUVersionAtLeast(ICU_35)){
+    if(!isICUVersionAtLeast(ICU_37)){
         return;
+    }
+    else {
+        errln("This test needs to be fixed.\n");
     }
     LanguageGenerator test_rule;
     if (test_rule.parseBNF(collationBNF, "$root", TRUE) != LanguageGenerator::OK){
