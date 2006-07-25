@@ -2281,8 +2281,6 @@ void RBBIWordMonkey::setText(const UnicodeString &s) {
 
 
 int32_t RBBIWordMonkey::next(int32_t prevPos) {
-    UErrorCode status = U_ZERO_ERROR;
-
     int    p0, p1, p2, p3;    // Indices of the significant code points around the
                               //   break position being tested.  The candidate break
                               //   location is before p2.
