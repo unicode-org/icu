@@ -1,5 +1,5 @@
 /************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation *
+ * Copyright (C) 1996-2006, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
  ************************************************************************
  *  2003-nov-07   srl       Port from Java
@@ -643,18 +643,20 @@ public:
   //-------------------------------------------------------------------------
 
   // private
-  class U_I18N_API AngleFunc : public UMemory {
+  class AngleFunc : public UMemory {
   public:
     virtual double eval(CalendarAstronomer&) = 0;
+    virtual ~AngleFunc();
   };
   friend class AngleFunc;
 
   UDate timeOfAngle(AngleFunc& func, double desired,
                     double periodDays, double epsilon, UBool next);
 
-  class U_I18N_API CoordFunc : public UMemory {
+  class CoordFunc : public UMemory {
   public:
     virtual void eval(Equatorial& result, CalendarAstronomer&) = 0;
+    virtual ~CoordFunc();
   };
   friend class CoordFunc;
 

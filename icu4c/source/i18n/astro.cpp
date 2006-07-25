@@ -1,5 +1,5 @@
 /************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation *
+ * Copyright (C) 1996-2006, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
  ************************************************************************
  *  2003-nov-07   srl       Port from Java
@@ -654,6 +654,8 @@ double CalendarAstronomer::WINTER_SOLSTICE() {
   return  ((CalendarAstronomer::PI*3)/2);
 }
 
+CalendarAstronomer::AngleFunc::~AngleFunc() {}
+
 /**
  * Find the next time at which the sun's ecliptic longitude will have
  * the desired value.
@@ -674,6 +676,8 @@ UDate CalendarAstronomer::getSunTime(double desired, UBool next)
                       MINUTE_MS,
                       next);
 }
+
+CalendarAstronomer::CoordFunc::~CoordFunc() {}
 
 class RiseSetCoordFunc : public CalendarAstronomer::CoordFunc {
 public:
