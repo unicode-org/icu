@@ -1045,7 +1045,7 @@ static void writeStringInU8(FILE *out, const UnicodeString &s) {
         uint8_t  bufForOneChar[10];
         UBool    isError = FALSE;
         int32_t  destIdx = 0;
-        U8_APPEND(bufForOneChar, destIdx, sizeof(bufForOneChar), c, isError);
+        U8_APPEND(bufForOneChar, destIdx, (int32_t)sizeof(bufForOneChar), c, isError);
         fwrite(bufForOneChar, 1, destIdx, out);
     }
 }
