@@ -1,605 +1,388 @@
-/**
- *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+/*
+ **********************************************************************
+ * Copyright (c) 2006, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Created on 2006-4-21
  */
 package com.ibm.icu.dev.test;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.NoSuchElementException;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundleIterator;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceTypeMismatchException;
 
 /**
- * Resource-based module.
+ * Represents a collection of test data described in a UResourceBoundle file. 
+ * 
+ * The root of the UResourceBoundle file is a table resource, and it has one 
+ * Info and one TestData sub-resources. The Info describes the data module
+ * itself. The TestData, which is a table resource, has a collection of test 
+ * data.
+ * 
+ * The test data is a named table resource which has Info, Settings, Headers,
+ * and Cases sub-resources. 
+ * 
+ * <pre>
+ * DataModule:table(nofallback){ 
+ *   Info:table {} 
+ *   TestData:table {
+ *     entry_name:table{
+ *       Info:table{}
+ *       Settings:array{}
+ *       Headers:array{}
+ *       Cases:array{}
+ *     }
+ *   } 
+ * }
+ * </pre>
+ * 
+ * The test data is expected to be fed to test code by following sequence 
+ *
+ *   for each setting in Setting{
+ *       prepare the setting
+ *     for each test data in Cases{
+ *       perform the test
+ *     }
+ *   }
+ * 
+ * For detail of the specification, please refer to the code. The code is 
+ * initially ported from "icu4c/source/tools/ctestfw/unicode/tstdtmod.h"
+ * and should be maintained parallelly.
+ * 
+ * @author Raymond Yang
  */
-public class ResourceModule extends TestDataModule {
-    private NamedArray tests;
-    private RBDataMap info;
-    private String[] defaultHeaders;
+class ResourceModule implements TestDataModule {
+    private static final String INFO = "Info";
+//    private static final String DESCRIPTION = "Description";
+//    private static final String LONG_DESCRIPTION = "LongDescription";
+    private static final String TEST_DATA = "TestData";
+    private static final String SETTINGS = "Settings";
+    private static final String HEADER = "Headers";
+    private static final String DATA = "Cases";
 
-    /**
-     * For internal use.
-     */
-    static final String TESTS = "TestData";
-
-    /**
-     * For internal use.
-     */
-    static final String INFO = "Info";
-
-    /**
-     * For internal use.
-     */
-    static final String SETTINGS = "Settings";
-
-    /**
-     * For internal use.
-     */
-    static final String CASES = "Cases";
-
-    public ResourceModule(String name, TestLog log, ResourceBundle b) {
-    super(name, log);
-
-    if (b == null) {
-        log.errln("ResourceModule must have non-null bundle");
-        return;
-    }
-
-    Object[][] data = (Object[][])b.getObject(TESTS);
-    if (data == null) {
-        log.errln("ResourceModule does not contain tests!");
-        return;
-    }
-    this.tests = NamedArray.create(data);
-
-    Object[][] temp = (Object[][])b.getObject(INFO);
-    if (temp != null) {
-        NamedArray na = NamedArray.create(temp);
-        if (na.count() < 0) {
-        log.errln("Bad data for " + INFO);
-        } else {
-        this.info = new RBDataMap(log, na, false);    
-        this.defaultHeaders = info.getStringArray(HEADERS);    
+    
+    ICUResourceBundle res;
+    ICUResourceBundle info;
+    ICUResourceBundle defaultHeader;
+    ICUResourceBundle testData;
+    
+    ResourceModule(String baseName, String localeName) throws DataModuleFormatError{
+        try{
+            res = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
+            info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
+            testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
+        } catch (MissingResourceException e){
+            throw new DataModuleFormatError("Unable to find resource", e);
+        }
+        try {
+            // unfortunately, actually, data can be either ARRAY or STRING
+            defaultHeader = getFromTable(info, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+        } catch (MissingResourceException e){
+            defaultHeader = null;
         }
     }
+
+    public String getName() {
+        return res.getKey();
     }
 
-    /**
-     * Get additional data related to the module.
-     * Returns true if successfully got info.
-     */
     public DataMap getInfo() {
-    return info;
+        return new UTableResource(info);
+    }
+
+    public TestData getTestData(String testName) throws DataModuleFormatError {
+        return new UResourceTestData(defaultHeader, testData.get(testName));
+    }
+
+    public Iterator getTestDataIterator() {
+        return new IteratorAdapter(testData){
+            protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+                return new UResourceTestData(defaultHeader, nextRes);
+            }
+        };
     }
 
     /**
-     * Returns the Test object corresponding to name, 
-     * or null if name not found in this module.
+     * To make ICUResourceBundleIterator works like Iterator
+     * and return various data-driven test object for next() call
+     * 
+     * @author Raymond Yang
      */
-    public TestData createTestData(String name) {
-    if (tests != null) {
-        Object[] td = tests.getEntry(name);
-        if (td != null) {
-        return createTestData(td);
+    private abstract static class IteratorAdapter implements Iterator{
+        private ICUResourceBundle res;
+        private ICUResourceBundleIterator itr;
+        private Object preparedNextElement = null;
+        // fix a strange behavior for ICUResourceBundleIterator for 
+        // ICUResourceBundle.STRING. It support hasNext(), but does 
+        // not support next() now. 
+        // 
+        // Use the iterated resource itself as the result from next() call
+        private boolean isStrRes = false;
+        private boolean isStrResPrepared = false; // for STRING resouce, we only prepare once
+
+        IteratorAdapter(ICUResourceBundle theRes) {
+            assert_not (theRes == null);
+            res = theRes;
+            itr = res.getIterator();
+            isStrRes = res.getType() == ICUResourceBundle.STRING;
         }
-    }
-
-    return null;
-    }
-
-    /**
-     * Returns the Test object corresponding to index,
-     * or null if index is out of range for this module.
-     * No error logged if index is out of bounds, the assumption is that
-     * iteration is being used and proceeds until a null return.
-     */
-    public TestData createTestData(int index) {
-    if (tests != null) {
-        Object[] td = tests.getEntry(index);
-        if (td != null) {
-        return createTestData(td);
+        
+        public void remove() {
+            // do nothing
         }
-    }
-    return null;
-    }
 
-    /**
-     * Return an unmodifiable list of the test data names, in index order.
-     */
-    public List getTestDataNames() {
-        if (tests != null) {
-            return Collections.unmodifiableList(Arrays.asList(tests.names()));
+        private boolean hasNextForStrRes(){
+            assert_is (isStrRes);
+            assert_not (!isStrResPrepared && preparedNextElement != null);
+            if (isStrResPrepared && preparedNextElement != null) return true;
+            if (isStrResPrepared && preparedNextElement == null) return false; // only prepare once
+            assert_is (!isStrResPrepared && preparedNextElement == null);
+            
+            try {
+                preparedNextElement = prepareNext(res);
+                assert_not (preparedNextElement == null, "prepareNext() should not return null");
+                isStrResPrepared = true; // toggle the tag
+                return true;
+            } catch (DataModuleFormatError e) {
+                throw new RuntimeException(e.getMessage(),e);
+            }            
         }
-        return null;
-    }
+        public boolean hasNext() {
+            if (isStrRes) return hasNextForStrRes();
+            
+            if (preparedNextElement != null) return true;
+            ICUResourceBundle t = null;
+            if (itr.hasNext()) {
+                // Notice, other RuntimeException may be throwed
+                t = itr.next();
+            } else {
+                return false;
+            }
 
-    private TestData createTestData(Object[] d) {
-    return new RBTestData(this, (String)d[0], (Object[][])d[1], defaultHeaders);
-    }
-
-    /**
-     * Provides access to values either by index or by case-insensitive search on 
-     * the name.  Poor man's Map with index.
-     */
-    static abstract class NamedArray {
-    int txcache;
-    int count;
-
-    static NamedArray create(Object[][] pairs) {
-        return new NamedArrayOfPairs(pairs);
-    }
-
-    static NamedArray create(String[] names, Object[] values) {
-        return new NamedArrayTwoLists(names, values);
-    }
-
-    protected NamedArray(int count) {
-        this.count = count;
-    }
-
-    public final int count() {
-        return count;
-    }
-
-    public final boolean isDefined(String name) {
-        int ix = nameToIndex(name);
-        if (ix != -1) {
-        txcache = (ix == 0 ? count : ix) - 1;
-        return true;
+            try {
+                preparedNextElement = prepareNext(t);
+                assert_not (preparedNextElement == null, "prepareNext() should not return null");
+                return true;
+            } catch (DataModuleFormatError e) {
+                // Sadly, we throw RuntimeException also
+                throw new RuntimeException(e.getMessage(),e);
+            }
         }
-        return false;
-    }
 
-    public final Object[] getEntry(String name) {
-        return getEntry(nameToIndex(name));
-    }
-
-    public final Object getValue(String name) {
-        return getValue(nameToIndex(name));
+        public Object next(){
+            if (hasNext()) {
+                Object t = preparedNextElement;
+                preparedNextElement = null;
+                return t;
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
+        /**
+         * To prepare data-driven test object for next() call, should not return null
+         */
+        abstract protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError;
     }
     
-    public final Object[] getEntry(int index) {
-        if (index >= 0 && index < count) {
-        return entryAtIndex(index);
-        }
-        return null;
-    }
-
-    public final Object getValue(int index) {
-        if (index >= 0 && index < count) {
-        return valueAtIndex(index);
-        }
-        return null;
-    }
-
-    public String[] names() {
-        if (count > 0) {
-        String[] result = new String[count];
-        for (int i = 0; i < count; ++i) {
-            result[i] = nameAtIndex(i);
-        }
-        return result;
-        }
-        return null;
-    }
-
-    public Object[] values() {
-        if (count > 0) {
-        Object[] result = new Object[count];
-        for (int i = 0; i < count; ++i) {
-            result[i] = valueAtIndex(i);
-        }
-        return result;
-        }
-        return null;
-    }
-
-    public String toString() {
-        StringBuffer buf = new StringBuffer(super.toString());
-        buf.append("count: " + count + "{");
-        for (int i = 0; i < count; ++i) {
-        buf.append("\n  { " + nameAtIndex(i) + ", " + valueAtIndex(i) + " }");
-        }
-        buf.append("}");
-        return buf.toString();
-    }
-
-    protected int nameToIndex(String name) {
-        if (name != null && count > 0) {
-        int i = txcache;
-        do {
-            if (++i == count) {
-            i = 0;
-            }
-            if (name.equalsIgnoreCase(nameAtIndex(i))) {
-            txcache = i;
-            return i;
-            }
-        } while (i != txcache);
-        }
-        return -1;
-    }
-
-    protected Object[] entryAtIndex(int index) {
-        return new Object[] { nameAtIndex(index), valueAtIndex(index) };
-    }
-
-    protected abstract String nameAtIndex(int index);
-    protected abstract Object valueAtIndex(int index);
-    }
-
+    
     /**
-     * NamedArray implemented using an array of name/value
-     * pairs, represented by an Object[][].
+     * Avoid use Java 1.4 language new assert keyword 
      */
-    static final class NamedArrayOfPairs extends NamedArray {
-    private Object[][] data;
-
-    public NamedArrayOfPairs(Object[][] data) {
-        super(data == null ? -1 : data.length);
-        this.data = data;
+    static void assert_is(boolean eq, String msg){
+        if (!eq) throw new Error("test code itself has error: " + msg);
     }
-
-    protected Object[] entryAtIndex(int index) {
-        return data[index];
+    static void assert_is(boolean eq){
+        if (!eq) throw new Error("test code itself has error.");
     }
-
-    protected String nameAtIndex(int index) {
-        return (String)data[index][0];
+    static void assert_not(boolean eq, String msg){
+        assert_is(!eq, msg);
     }
-
-    protected Object valueAtIndex(int index) {
-        return data[index][1];
+    static void assert_not(boolean eq){
+        assert_is(!eq);
     }
-    }
-
+            
     /**
-     * NamedArray implemented using two arrays, one of String and one of Object.
+     * Internal helper function to get resource with following add-on 
+     * 
+     * 1. Assert the returned resource is never null.
+     * 2. Check the type of resource. 
+     * 
+     * The UResourceTypeMismatchException for various get() method is a 
+     * RuntimeException which can be silently bypassed. This behavior is a 
+     * trouble. One purpose of the class is to enforce format checking for 
+     * resource file. We don't want to the exceptions are silently bypassed 
+     * and spreaded to our customer's code. 
+     * 
+     * Notice, the MissingResourceException for get() method is also a
+     * RuntimeException. The caller functions should avoid sepread the execption
+     * silently also. The behavior is modified because some resource are 
+     * optional and can be missed.
      */
-    static final class NamedArrayTwoLists extends NamedArray {
-    String[] names;
-    Object[] values;
+    static ICUResourceBundle getFromTable(ICUResourceBundle res, String key, int expResType) throws DataModuleFormatError{
+        return getFromTable(res, key, new int[]{expResType});
+    }
+    
+    static ICUResourceBundle getFromTable(ICUResourceBundle res, String key, int[] expResTypes) throws DataModuleFormatError{
+        assert_is (res != null && key != null && res.getType() == ICUResourceBundle.TABLE);
+        ICUResourceBundle t = res.get(key);
+        assert_not (t ==null);
+        int type = t.getType();
+        Arrays.sort(expResTypes);
+        if (Arrays.binarySearch(expResTypes, type) >= 0) {
+            return t;
+        } else {
+            throw new DataModuleFormatError(new UResourceTypeMismatchException("Actual type " + t.getType() + " != expected types " + expResTypes + "."));
+        }
+    }
+    
+    /**
+     * Unfortunately, ICUResourceBundle is unable to treat one string as string array.
+     * This function return a String[] from ICUResourceBundle, regardless it is an array or a string 
+     */
+    static String[] getStringArrayHelper(ICUResourceBundle res, String key) throws DataModuleFormatError{
+        ICUResourceBundle t = getFromTable(res, key, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+        return getStringArrayHelper(t);
+    }
 
-    public NamedArrayTwoLists(String[] names, Object[] values) {
-        super (values != null && names != null && names.length == values.length ?
-           names.length :
-           -1);
-        this.names = names;
-        this.values = values;
+    static String[] getStringArrayHelper(ICUResourceBundle res) throws DataModuleFormatError{
+        try{
+            int type = res.getType();
+            switch (type) {
+            case ICUResourceBundle.ARRAY:
+                return res.getStringArray();
+            case ICUResourceBundle.STRING:
+                return new String[]{res.getString()};
+            default:
+                throw new UResourceTypeMismatchException("Only accept ARRAY and STRING types.");
+            }
+        } catch (UResourceTypeMismatchException e){
+            throw new DataModuleFormatError(e);
+        }
+    }
+    
+    public static void main(String[] args){
+        try {
+            TestDataModule m = new ResourceModule("com/ibm/icu/dev/data/testdata/","DataDrivenCollationTest");
+        System.out.println("hello: " + m.getName());
+        m.getInfo();
+        m.getTestDataIterator();
+        } catch (DataModuleFormatError e) {
+            // TODO Auto-generated catch block
+            System.out.println("???");
+            e.printStackTrace();
+        }
+    }
+
+    private static class UResourceTestData implements TestData{
+        private ICUResourceBundle res;
+        private ICUResourceBundle info;
+        private ICUResourceBundle settings; 
+        private ICUResourceBundle header;
+        private ICUResourceBundle data;
+
+        UResourceTestData(ICUResourceBundle defaultHeader, ICUResourceBundle theRes) throws DataModuleFormatError{
+            try{
+                assert_is (theRes != null && theRes.getType() == ICUResourceBundle.TABLE);
+                res = theRes;
+                // unfortunately, actually, data can be either ARRAY or STRING
+                data = getFromTable(res, DATA, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+            } catch (MissingResourceException e){
+                throw new DataModuleFormatError("Unable to find resource", e);
+            }
+            
+            try{
+                settings = getFromTable(res, SETTINGS, ICUResourceBundle.ARRAY);
+                info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
+            } catch (MissingResourceException e){
+                // do nothing, left them null;
+            }
+            
+            try {
+                // unfortunately, actually, data can be either ARRAY or STRING
+                header = getFromTable(res, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+            } catch (MissingResourceException e){
+                if (defaultHeader == null) {
+                    throw new DataModuleFormatError("Unable to find a header for test data '" + res.getKey() + "' and no default header exist.");
+                } else {
+                    header = defaultHeader;
+                }
+            }
+        }
+        
+        public String getName() {
+            return res.getKey();
+        }
+
+        public DataMap getInfo() {
+            return info == null ? null : new UTableResource(info);
+        }
+
+        public Iterator getSettingsIterator() {
+            assert_is (settings.getType() == ICUResourceBundle.ARRAY);
+            return new IteratorAdapter(settings){
+                protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+                    return new UTableResource(nextRes);
+                }
+            };
+        }
+
+        public Iterator getDataIterator() {
+            // unfortunately,
+            assert_is (data.getType() == ICUResourceBundle.ARRAY 
+                 || data.getType() == ICUResourceBundle.STRING);
+            return new IteratorAdapter(data){
+                protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+                    return new UArrayResource(header, nextRes);
+                }
+            };
+        }
     }
         
-    public String[] names() {
-        return names;
-    }
+    private static class UTableResource implements DataMap{
+        private ICUResourceBundle res;
 
-    public Object[] values() {
-        return values;
-    }
-
-    protected String nameAtIndex(int index) {
-        return names[index];
-    }
-
-    protected Object valueAtIndex(int index) {
-        return values[index];
-    }
-    }
-
-    static class RBTestData extends TestData {
-    ResourceModule m;
-    RBDataMap info;
-    Object[] settings;
-    /** 
-     * changed to fit the c genrb format. this is actually Object[] {Object[]}
-     */
-    Object[] cases; 
-    String[] headers;
-    int sx;
-    int cx;
-
-    RBTestData(ResourceModule m, String name, Object[][] data, String[] defaultHeaders) {
-        super(name);
-        this.m = m;
-
-        NamedArray namedData = NamedArray.create(data);
-
-        try {
-        Object[][] temp = (Object[][])namedData.getValue(INFO);
-        if (temp != null) {
-            NamedArray na = NamedArray.create(temp);
-            if (na.count() < 1) {
-            m.log.errln("Bad data for " + INFO);
-            } else {
-            this.info = new RBDataMap(m.log, na, false);
+        UTableResource(ICUResourceBundle theRes){
+            res = theRes;
+        }
+        public String getString(String key) {
+            String t;
+            try{
+                t = res.getString(key);
+            } catch (MissingResourceException e){
+                t = null;
             }
+            return t;
         }
-        } 
-        catch (ClassCastException e) {
-        m.log.errln("Test " + name + " in module " + m.getName() + " has bad type for " + INFO);
-        }
-
-        try {
-        this.settings = (Object[])namedData.getValue(SETTINGS);
-        }
-        catch (ClassCastException e) {
-        m.log.errln("Test " + name + " in module " + m.getName() + " has bad type for " + SETTINGS);
-        }
-
-        try {
-        this.cases = (Object[])namedData.getValue(CASES);
-        }
-        catch (ClassCastException e) {
-        m.log.errln("Test " + name + " in module " + m.getName() + " has bad type for " + CASES);
-        }
-
-        if (info != null) {
-        this.headers = info.getStringArray(HEADERS);
-        }
-        if (this.headers == null) {
-        this.headers = defaultHeaders;
-        }
-    }
-
-    /**
-     * Get additional data related to the test.
-     */
-    public DataMap getInfo() {
-        return info;
-    }
-
-    /**
-     * Returns DataMap with next settings and resets case iteration.
-     * If no more settings, terminates iteration and returns null.
-     */
-    public DataMap nextSettings() {
-        if (settings != null && sx < settings.length) {
-        cx = 0;
-        NamedArray na = NamedArray.create((Object[][])settings[sx++]);
-        if (na.count() < 0) {
-            m.log.errln("Bad settings data for settings " + (sx-1));
-            return null;
-        } else {
-            return new RBDataMap(m.log, na, false);
-        }
-        }
-        stopIteration();
-
-        return null;
-    }
-
-    /**
-     * Returns DataMap with next case.  If no next case, returns null.
-     */
-    public DataMap nextCase() {
-        if (cases != null && cx < cases.length) {
-        NamedArray na = NamedArray.create(headers, (Object[])cases[cx++]);
-        if (na.count() < 0) {
-            m.log.errln("Bad cases data for case " + (cx-1));
-        } else {
-            return new RBDataMap(m.log, na, true);
-        }
-        }
-        return null;
-    }
-
-    /**
-     * Stops iteration.
-     */
-    public void stopIteration() {
-        sx = cx = Integer.MAX_VALUE;
-    }
     }
     
-    static final class RBDataMap extends DataMap {
-    TestLog log;
-    NamedArray na;
-    boolean required;
-
-    RBDataMap(TestLog log, NamedArray na, boolean required) {
-        this.log = log;
-        this.na = na;
-        this.required = required;
-    }
-
-    public boolean isDefined(String key) {
-        return na.isDefined(key);
-    }
-
-    public Object getObject(String key) { 
-        Object result = na.getValue(key);
-        if (required && result == null) {
-        reportNullError(key);
-        }
-        return result;
-    }
-
-    public String getString(String key) { 
-        String result = null;
-        try {
-        result = (String)getObject(key);
-        }
-        catch (ClassCastException e) {
-        reportTypeError("String", key);
-        }
-        return result;
-    }
-
-    public char getChar(String key) { 
-        try {
-        String s = getString(key);
-        if (s != null) {
-            return s.charAt(0);
-        }
-        }
-        catch (IndexOutOfBoundsException e) {
-        reportTypeError("char", key);
-        }
-        return 0xffff;
-    }
-
-    public int getInt(String key) { 
-        try {
-        String s = getString(key);
-        if (s != null) {
-            return Integer.parseInt(s);
-        }
-        }
-        catch (NumberFormatException e) {
-        reportTypeError("int", key);
-        }
-        return -1;
-    }
-
-    public byte getByte(String key) { 
-        try {
-        String s = getString(key);
-        if (s != null) {
-            return Byte.parseByte(s);
-        }
-        }
-        catch (NumberFormatException e) {
-        reportTypeError("byte", key);
-        }
-        return (byte)-1;
-    }
-
-    public boolean getBoolean(String key) { 
-        String s = getString(key);
-        if (s != null) {
-        if (s.equalsIgnoreCase("true")) {
-            return true;
-        } else if (!s.equalsIgnoreCase("false")) {
-            reportTypeError("boolean", key);
-        }
-        }
-        return false;
-    }
-
-    public Object[] getObjectArray(String key) {
-        try {
-        Object[] result = (Object[])na.getValue(key);
-        if (result == null && required) {
-            reportNullError(key);
-        }
-        } catch (ClassCastException e) {
-        reportTypeError("Object[]", key);
-        }
-        return null;
-    }
-
-    public String[] getStringArray(String key) { 
-        try {
-        String[] result = (String[])na.getValue(key);
-        if (result == null && required) {
-            reportNullError(key);
-        }
-        return result;
-        }
-        catch (ClassCastException e) {
-        reportTypeError("String[]", key);
-        }
-        return null;
-    }
-
-    public char[] getCharArray(String key) { 
-        try {
-                return (char[])na.getValue(key);
+    private static class UArrayResource implements DataMap{
+        private Map theMap; 
+        UArrayResource(ICUResourceBundle theHeader, ICUResourceBundle theData) throws DataModuleFormatError{
+            assert_is (theHeader != null && theData != null);
+            String[] header; 
+            String[] data;
+            
+            header = getStringArrayHelper(theHeader);
+            data = getStringArrayHelper(theData);
+            if (data.length != header.length) 
+                throw new DataModuleFormatError("The count of Header and Data is mismatch.");
+            theMap = new HashMap();
+            for (int i = 0; i < header.length; i++) {
+                theMap.put(header[i], data[i]);
             }
-            catch (ClassCastException e) {
-            }
-            try{ 
-        String temp = (String)na.getValue(key);
-        if (temp == null) {
-            if (required) {
-            reportNullError(key);
-            }
-        } else {
-            return temp.toCharArray();
+            
         }
+        
+        public String getString(String key) {
+            return (String)theMap.get(key);
         }
-        catch (ClassCastException e) {
-        reportTypeError("char[]", key);
-        }
-        return null;
-    }
-
-    public int[] getIntArray(String key) {
-        try {
-                return (int[])na.getValue(key);
-            }
-            catch (ClassCastException e) {
-            }
-        String[] data = getStringArray(key);
-        if (data != null) {
-        try {
-            int[] result = new int[data.length];
-            for (int i = 0; i < data.length; ++i) {
-            result[i] = Integer.parseInt(data[i]);
-            }
-            return result;
-        }
-        catch (NumberFormatException e) {
-            reportTypeError("int[]", key);
-        }
-        }
-        return null;
-    }
-
-    public byte[] getByteArray(String key) { 
-        try {
-                return (byte[])na.getValue(key);
-            }
-            catch (ClassCastException e) {
-            }
-        String[] data = getStringArray(key);
-        if (data != null) {
-        try {
-            byte[] result = new byte[data.length];
-            for (int i = 0; i < result.length; ++i) {
-            result[i] = Byte.parseByte(data[i]);
-            }
-            return result;
-        }
-        catch (NumberFormatException e) {
-            reportTypeError("byte[]", key);
-        }
-        }
-        return null;
-    }
-
-    public boolean[] getBooleanArray(String key) {
-        try {
-                return (boolean[])na.getValue(key);
-            }
-            catch (ClassCastException e) {
-            }
-        String[] data = getStringArray(key);
-        if (data != null) {
-        boolean[] result = new boolean[data.length];
-        for (int i = 0; i < result.length; ++i) {
-            String s = data[i];
-            if (s.equalsIgnoreCase("true")) {
-            result[i] = true;
-            } else if (s.equalsIgnoreCase("false")) {
-            result[i] = false;
-            } else {
-            reportTypeError("boolean[]", key);
-            return null;
-            }
-        }
-        return result;
-        }
-        return null;
-    }
-
-    private void reportNullError(String key) {
-        log.errln("Missing required value for '" + key + "'");
-    }
-
-    private void reportTypeError(String typeName, String key) {
-        log.errln("Could not return value of '" + key + "' (" + getObject(key) + ") as type '" + typeName + "'");
-    }
     }
 }
