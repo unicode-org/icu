@@ -1007,10 +1007,10 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
     }
     /* we can do the trivial cases without the runs array */
     if(pBiDi->insertPoints.size==0 && pBiDi->controlCount==0) {
-        switch(pBiDi->direction) {
-        case UBIDI_LTR:
+        if (pBiDi->direction == UBIDI_LTR) {
             return visualIndex;
-        case UBIDI_RTL:
+        }
+        else if (pBiDi->direction == UBIDI_RTL) {
             return pBiDi->length-visualIndex-1;
         }
         if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
