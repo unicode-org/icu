@@ -76,6 +76,7 @@ sub main(){
             or die  "could not open the file $exclude for reading: $! \n";
   my %exclude;
   while (defined ($line = <$excludeFH>)){
+    next if( $line =~ /^#/);
     $line =~ s/^\s+//;
     $line =~ s/\s+\n$//;
     $exclude{$line}="EXCLUDE";
@@ -138,7 +139,7 @@ print $outFH <<END_HEADER_COMMENT;
 *   Created by: genheaders.pl, a perl script written by Ram Viswanadha
 *
 *  Contains data for commenting out APIs.
-*  Gets included by utypes.h
+*  Gets included by umachine.h
 *
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
 *  YOU ARE DOING, OTHERWISE VERY BAD THINGS WILL HAPPEN!
