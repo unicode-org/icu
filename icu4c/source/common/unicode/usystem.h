@@ -28,6 +28,7 @@
 #        define u_setAtomicIncDecFunctions u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
 #        define u_setMemoryFunctions u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
 #        define u_setMutexFunctions u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define ucnv_setDefaultName ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
 #        define uloc_getDefault uloc_getDefault_SYSTEM_API_DO_NOT_USE
 #        define uloc_setDefault uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    else
@@ -35,6 +36,7 @@
 #        define u_setAtomicIncDecFunctions_3_6 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
 #        define u_setMemoryFunctions_3_6 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
 #        define u_setMutexFunctions_3_6 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define ucnv_setDefaultName_3_6 ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
 #        define uloc_getDefault_3_6 uloc_getDefault_SYSTEM_API_DO_NOT_USE
 #        define uloc_setDefault_3_6 uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
