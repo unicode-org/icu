@@ -20,20 +20,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
-/*
- * javadoc-style comments are intended to be transformed into HTML
- * using DOC++ - see
- * http://www.zib.de/Visual/software/doc++/index.html .
- *
- * The HTML documentation is created with
- *  doc++ -H ubidi.h
- *
- * The following #define trick allows us to do it all in one file
- * and still be able to compile it.
- */
-/*#define DOCXX_TAG*/
-/*#define BIDI_SAMPLE_CODE*/
-
 /**
  *\file
  * \brief C API: BIDI algorithm
