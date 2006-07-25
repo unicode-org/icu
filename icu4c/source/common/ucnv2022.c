@@ -378,6 +378,22 @@ static const UConverterSharedData _ISO2022CNData;
 
 /*************** Converter implementations ******************/
 
+/* The purpose of this function is to get around gcc compiler warnings. */
+static U_INLINE void
+fromUWriteUInt8(UConverter *cnv,
+                 const char *bytes, int32_t length,
+                 uint8_t **target, const char *targetLimit,
+                 int32_t **offsets,
+                 int32_t sourceIndex,
+                 UErrorCode *pErrorCode)
+{
+    char *targetChars = (char *)*target;
+    ucnv_fromUWriteBytes(cnv, bytes, length, &targetChars, targetLimit,
+                         offsets, sourceIndex, pErrorCode);
+    *target = (uint8_t*)targetChars;
+
+}
+
 static U_INLINE void 
 setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
     if(myConverterData->version == 1) {
@@ -1564,10 +1580,10 @@ getTrail:
                     *offsets++ = sourceIndex;
                 }
             } else {
-                ucnv_fromUWriteBytes(
+                fromUWriteUInt8(
                     args->converter,
                     buffer, outLen,
-                    (char **)&target, (const char *)targetLimit,
+                    &target, (const char *)targetLimit,
                     &offsets, (int32_t)(source - args->source - U16_LENGTH(sourceChar)),
                     err);
                 if(U_FAILURE(*err)) {
@@ -1632,10 +1648,10 @@ getTrail:
             sourceIndex=-1;
         }
 
-        ucnv_fromUWriteBytes(
+        fromUWriteUInt8(
             args->converter,
             buffer, outLen,
-            (char **)&target, (const char *)targetLimit,
+            &target, (const char *)targetLimit,
             &offsets, sourceIndex,
             err);
     }
@@ -2069,10 +2085,10 @@ getTrail:
             sourceIndex=-1;
         }
 
-        ucnv_fromUWriteBytes(
+        fromUWriteUInt8(
             args->converter,
             SHIFT_IN_STR, 1,
-            (char **)&target, (const char *)targetLimit,
+            &target, (const char *)targetLimit,
             &offsets, sourceIndex,
             err);
     }
@@ -2636,10 +2652,10 @@ getTrail:
                     *offsets++ = sourceIndex;
                 }
             } else {
-                ucnv_fromUWriteBytes(
+                fromUWriteUInt8(
                     args->converter,
                     buffer, len,
-                    (char **)&target, (const char *)targetLimit,
+                    &target, (const char *)targetLimit,
                     &offsets, (int32_t)(source - args->source - U16_LENGTH(sourceChar)),
                     err);
                 if(U_FAILURE(*err)) {
@@ -2693,10 +2709,10 @@ getTrail:
             sourceIndex=-1;
         }
 
-        ucnv_fromUWriteBytes(
+        fromUWriteUInt8(
             args->converter,
             SHIFT_IN_STR, 1,
-            (char **)&target, (const char *)targetLimit,
+            &target, (const char *)targetLimit,
             &offsets, sourceIndex,
             err);
     }
