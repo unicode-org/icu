@@ -3077,9 +3077,11 @@ compareNames(const char **names) {
 
     relation=*names++;
     if(*relation=='=') {
-        rel=0;
+        rel = 0;
     } else if(*relation=='<') {
-        rel=-1;
+        rel = -1;
+    } else {
+        rel = 1;
     }
 
     name1=*names++;

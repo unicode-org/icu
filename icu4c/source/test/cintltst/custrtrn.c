@@ -285,7 +285,7 @@ static void Test_UChar_UTF8_API(void){
             u8Target = (char*) malloc (sizeof(uint8_t) * (u8DestLen+1));
             u8TargetLength = u8DestLen;
 
-            u8Target[u8TargetLength] = 0xfe;
+            u8Target[u8TargetLength] = (char)0xfe;
             u8DestLen = -1;
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
             if(U_FAILURE(err) || u8DestLen != u8TargetLength || u8Target[u8TargetLength] != (char)0xfe){
@@ -497,7 +497,7 @@ static void Test_UChar_UTF8_API(void){
         /* to UTF-8 with length */
         err=U_ZERO_ERROR;
         numSubstitutions=-1;
-        out8[0]=0xf5;
+        out8[0]=(char)0xf5;
         u8DestLen=0;
         u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
                            withTrail16, u_strlen(withTrail16),
@@ -512,7 +512,7 @@ static void Test_UChar_UTF8_API(void){
         /* to UTF-8 with NUL termination */
         err=U_ZERO_ERROR;
         numSubstitutions=-1;
-        out8[0]=0xf5;
+        out8[0]=(char)0xf5;
         u8DestLen=0;
         u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
                            withTrail16, -1,
@@ -527,7 +527,7 @@ static void Test_UChar_UTF8_API(void){
         /* preflight to UTF-8 with NUL termination */
         err=U_ZERO_ERROR;
         numSubstitutions=-1;
-        out8[0]=0xf5;
+        out8[0]=(char)0xf5;
         u8DestLen=0;
         u_strToUTF8WithSub(out8, 1, &u8DestLen,
                            withTrail16, -1,
@@ -558,7 +558,7 @@ static void Test_UChar_UTF8_API(void){
         /* to UTF-8 with length (just first UChar which is valid) */
         err=U_ZERO_ERROR;
         numSubstitutions=-1;
-        out8[0]=0xf5;
+        out8[0]=(char)0xf5;
         u8DestLen=0;
         u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
                            withTrail16, 1,
@@ -590,7 +590,7 @@ static void Test_UChar_UTF8_API(void){
         /* to UTF-8 with length (just first UChar which is valid) */
         err=U_ZERO_ERROR;
         numSubstitutions=-1;
-        out8[0]=0xf5;
+        out8[0]=(char)0xf5;
         u8DestLen=0;
         u_strToUTF8WithSub(out8, LENGTHOF(out8), &u8DestLen,
                            withTrail16, 1,
