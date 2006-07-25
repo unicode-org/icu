@@ -97,7 +97,7 @@ static void TestNumberFormat()
     int32_t resultlength;
     int32_t resultlengthneeded;
     int32_t parsepos;
-    double d1;
+    double d1 = -1.0;
     int32_t l1;
     double d = -10456.37;
     double a = 1234.56, a1 = 1235.0;

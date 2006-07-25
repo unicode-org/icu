@@ -4689,7 +4689,7 @@ TestJ4960(void)
 static void
 TestJ5223(void)
 {
-  char *test = "this is a test string";
+  static const char *test = "this is a test string";
   UChar ustr[256];
   int32_t ustr_length = u_unescape(test, ustr, 256);
   unsigned char sortkey[256];
