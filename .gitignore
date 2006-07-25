@@ -54,6 +54,7 @@ icu4c/source/common/Makefile
 icu4c/source/common/Release
 icu4c/source/common/icucfg.h
 icu4c/source/common/libicu*.*
+icu4c/source/common/svchook.mk
 icu4c/source/common/unicode/platform.h
 icu4c/source/config.cache
 icu4c/source/config.log
