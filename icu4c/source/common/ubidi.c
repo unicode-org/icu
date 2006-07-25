@@ -349,8 +349,8 @@ getDirProps(UBiDi *pBiDi) {
     int32_t paraStart=0;                /* index of first char in paragraph */
     DirProp paraDir;                    /* == CONTEXT_RTL within paragraphs
                                            starting with strong R char      */
-    DirProp lastStrongDir;              /* for default level & inverse BiDi */
-    int32_t lastStrongLTR;              /* for STREAMING option             */
+    DirProp lastStrongDir = 0;          /* for default level & inverse BiDi */
+    int32_t lastStrongLTR = 0;          /* for STREAMING option             */
 
     if(pBiDi->reorderingOptions & UBIDI_OPTION_STREAMING) {
         pBiDi->length=0;
@@ -1487,6 +1487,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
         stateImp=0;
     }
     start1=start;
+    start2=start;
 
     for(i=start; i<=limit; i++) {
         if(i<limit) {

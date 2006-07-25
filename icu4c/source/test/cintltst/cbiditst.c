@@ -1179,29 +1179,30 @@ static void TestMultipleParagraphs(void) {
 
 /* inverse BiDi ------------------------------------------------------------- */
 
-static const UChar
-    string0[]={ 0x6c, 0x61, 0x28, 0x74, 0x69, 0x6e, 0x20, 0x5d0, 0x5d1, 0x29, 0x5d2, 0x5d3 },
-    string1[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x31, 0x32, 0x33 },
-    string2[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x28, 0x5d1, 0x5d2, 0x20, 0x31, 0x29, 0x32, 0x33 },
-    string3[]={ 0x31, 0x32, 0x33, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x34, 0x35, 0x36 },
-    string4[]={ 0x61, 0x62, 0x20, 0x61, 0x62, 0x20, 0x661, 0x662 };
+int countRoundtrips=0, countNonRoundtrips=0;
 
 #define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
 
-static const struct {
-    const UChar *s;
-    int32_t length;
-} testCases[]={
-    STRING_TEST_CASE(string0),
-    STRING_TEST_CASE(string1),
-    STRING_TEST_CASE(string2),
-    STRING_TEST_CASE(string3)
-};
-
-static int countRoundtrips=0, countNonRoundtrips=0;
-
 static void
 doInverseBiDiTest() {
+    static const UChar
+        string0[]={ 0x6c, 0x61, 0x28, 0x74, 0x69, 0x6e, 0x20, 0x5d0, 0x5d1, 0x29, 0x5d2, 0x5d3 },
+        string1[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x31, 0x32, 0x33 },
+        string2[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x28, 0x5d1, 0x5d2, 0x20, 0x31, 0x29, 0x32, 0x33 },
+        string3[]={ 0x31, 0x32, 0x33, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x34, 0x35, 0x36 },
+        string4[]={ 0x61, 0x62, 0x20, 0x61, 0x62, 0x20, 0x661, 0x662 };
+
+    static const struct {
+        const UChar *s;
+        int32_t length;
+    } testCases[]={
+        STRING_TEST_CASE(string0),
+        STRING_TEST_CASE(string1),
+        STRING_TEST_CASE(string2),
+        STRING_TEST_CASE(string3),
+        STRING_TEST_CASE(string4)
+    };
+
     UBiDi *pBiDi;
     UErrorCode errorCode;
     int i;
@@ -2780,8 +2781,8 @@ static void verifyCallbackParams(UBiDiClassCallback* fn, const void* context,
 }
 
 static void doBidiClassOverrideTest(void) {
-    static const char* const textIn  = "JIH.>12->a \\u05D0\\u05D1 6 ABC78";
-    static const char* const textOut = "12<.HIJ->a 78CBA 6 \\u05D1\\u05D0";
+    static const char* const textSrc  = "JIH.>12->a \\u05D0\\u05D1 6 ABC78";
+    static const char* const textResult = "12<.HIJ->a 78CBA 6 \\u05D1\\u05D0";
 
     UChar src[MAXLEN], dest[MAXLEN];
     UErrorCode rc = U_ZERO_ERROR;
@@ -2789,7 +2790,7 @@ static void doBidiClassOverrideTest(void) {
     UBiDiClassCallback* oldFn = NULL;
     UBiDiClassCallback* newFn = overrideBidiClass;
     const void* oldContext = NULL;
-    int32_t srcLen, destLen, textInSize = (int32_t)uprv_strlen(textIn);
+    int32_t srcLen, destLen, textInSize = (int32_t)uprv_strlen(textSrc);
     char* destChars = NULL;
 
     log_verbose("\n*** Bidi class override test ***\n");
@@ -2802,7 +2803,7 @@ static void doBidiClassOverrideTest(void) {
     ubidi_getClassCallback(pBiDi, &oldFn, &oldContext);
     verifyCallbackParams(oldFn, oldContext, NULL, NULL, 0);
 
-    ubidi_setClassCallback(pBiDi, newFn, textIn, &oldFn, &oldContext, &rc);
+    ubidi_setClassCallback(pBiDi, newFn, textSrc, &oldFn, &oldContext, &rc);
     if (!assertSuccessful("ubidi_setClassCallback", &rc)) {
         ubidi_close(pBiDi);
         return;
@@ -2810,16 +2811,16 @@ static void doBidiClassOverrideTest(void) {
     verifyCallbackParams(oldFn, oldContext, NULL, NULL, 0);
 
     ubidi_getClassCallback(pBiDi, &oldFn, &oldContext);
-    verifyCallbackParams(oldFn, oldContext, newFn, textIn, textInSize);
+    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textInSize);
 
-    ubidi_setClassCallback(pBiDi, newFn, textIn, &oldFn, &oldContext, &rc);
+    ubidi_setClassCallback(pBiDi, newFn, textSrc, &oldFn, &oldContext, &rc);
     if (!assertSuccessful("ubidi_setClassCallback", &rc)) {
         ubidi_close(pBiDi);
         return;
     }
-    verifyCallbackParams(oldFn, oldContext, newFn, textIn, textInSize);
+    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textInSize);
 
-    srcLen = u_unescape(textIn, src, MAXLEN);
+    srcLen = u_unescape(textSrc, src, MAXLEN);
     ubidi_setPara(pBiDi, src, srcLen, UBIDI_LTR, NULL, &rc);
     assertSuccessful("ubidi_setPara", &rc);
 
@@ -2828,11 +2829,11 @@ static void doBidiClassOverrideTest(void) {
     assertSuccessful("ubidi_writeReordered", &rc);
 
     destChars = aescstrdup(dest, destLen);
-    if (uprv_strcmp(textOut, destChars)) {
+    if (uprv_strcmp(textResult, destChars)) {
         log_err("\nActual and expected output mismatch.\n"
             "%20s %s\n%20s %s\n%20s %s\n",
-            "Input:", textIn, "Actual output:", destChars,
-            "Expected output:", textOut);
+            "Input:", textSrc, "Actual output:", destChars,
+            "Expected output:", textResult);
     }
     else {
         log_verbose("\nClass override test OK\n");
