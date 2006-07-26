@@ -605,7 +605,12 @@ typedef enum UBiDiReorderingMode {
       * @draft ICU 3.6 */
     UBIDI_REORDER_GROUP_NUMBERS_WITH_R,
     /** Reorder runs only to transform a Logical LTR string to the Logical RTL
-      * string with the same display, or vice-versa.
+      * string with the same display, or vice-versa.<br>
+      * If this mode is set together with option
+      * <code>UBIDI_OPTION_INSERT_MARKS</code>, some BiDi controls in the source
+      * text may be removed and other controls may be added to produce the
+      * minimum combination which has the required display.
+      * @see UBIDI_OPTION_INSERT_MARKS
       * @draft ICU 3.6 */
     UBIDI_REORDER_RUNS_ONLY,
     /** Visual to Logical algorithm which handles numbers like L
