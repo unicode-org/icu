@@ -349,8 +349,8 @@ getDirProps(UBiDi *pBiDi) {
     int32_t paraStart=0;                /* index of first char in paragraph */
     DirProp paraDir;                    /* == CONTEXT_RTL within paragraphs
                                            starting with strong R char      */
-    DirProp lastStrongDir = 0;          /* for default level & inverse BiDi */
-    int32_t lastStrongLTR = 0;          /* for STREAMING option             */
+    DirProp lastStrongDir=0;            /* for default level & inverse BiDi */
+    int32_t lastStrongLTR=0;            /* for STREAMING option             */
 
     if(pBiDi->reorderingOptions & UBIDI_OPTION_STREAMING) {
         pBiDi->length=0;
@@ -473,11 +473,8 @@ getDirProps(UBiDi *pBiDi) {
 static UBiDiDirection
 directionFromFlags(UBiDi *pBiDi) {
     Flags flags=pBiDi->flags;
-    /* if mode is RUNS_ONLY, neutrals at ends of string form a distinct segment */
-    if((pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) && (flags&MASK_POSSIBLE_N)) {
-        return UBIDI_MIXED;
     /* if the text contains AN and neutrals, then some neutrals may become RTL */
-    } else if(!(flags&MASK_RTL || ((flags&DIRPROP_FLAG(AN)) && (flags&MASK_POSSIBLE_N)))) {
+    if(!(flags&MASK_RTL || ((flags&DIRPROP_FLAG(AN)) && (flags&MASK_POSSIBLE_N)))) {
         return UBIDI_LTR;
     } else if(!(flags&MASK_LTR)) {
         return UBIDI_RTL;
@@ -768,7 +765,7 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 /* to perform and y represents the next state.                       */
 /*                                                                   */
 /*********************************************************************/
-/* Definitions and type for properties state tables                  */
+/* Definitions and type for properties state table                   */
 /*********************************************************************/
 #define IMPTABPROPS_COLUMNS 14
 #define IMPTABPROPS_RES (IMPTABPROPS_COLUMNS - 1)
@@ -990,82 +987,6 @@ static const ImpTabPair impTab_GROUP_NUMBERS_WITH_R = {
                          (ImpTab*)&impTabR_GROUP_NUMBERS_WITH_R},
                         {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
 
-static const ImpTab impTabL_RUNS_ONLY =     /* Even paragraph level */
-/*  In this table, conditional sequences receive the higher possible level
-    until proven otherwise.
-*/
-{
-/*                         L ,     R ,    EN ,    AN ,    ON ,     S ,     B , Res */
-/* 0 : init       */ {     5 ,     2 ,     3 ,     4 ,     5 ,     5 ,     0 ,  0 },
-/* 1 : L          */ {     1 ,     2 ,     1 ,     2 , _(1,6), _(1,6),     0 ,  0 },
-/* 2 : R          */ {     1 ,     2 ,     2 ,     2 , _(1,7), _(1,7),     0 ,  2 },
-/* 3 : EN         */ {     1 ,     2 ,     3 ,     4 ,     8 ,     5 ,     0 ,  0 },
-/* 4 : AN         */ {     1 ,     2 ,     3 ,     4 , _(1,9), _(1,9),     0 ,  2 },
-/* 5 : ON         */ {     1 ,     2 ,     3 ,     4 ,     5 ,     5 ,     0 ,  3 },
-/* 6 : L+ON       */ { _(2,1),     2 , _(2,1),     4 ,     6 ,     6 ,     0 ,  3 },
-/* 7 : R+ON       */ {     1 , _(2,2), _(2,2), _(2,2),     7 ,     7 ,     0 ,  3 },
-/* 8 : EN+ON      */ {     1 ,     2 ,     3 ,     4 ,     8 ,     8 ,     0 ,  3 },
-/* 9 : AN+ON      */ {     1 , _(2,2),     3 , _(2,4),     9 ,     9 ,     0 ,  3 }
-};
-static const ImpTab impTabR_RUNS_ONLY =     /* Odd  paragraph level */
-/*  In this table, conditional sequences receive the higher possible level
-    until proven otherwise.
-*/
-{
-/*                         L ,     R ,    EN ,    AN ,    ON ,     S ,     B , Res */
-/* 0 : init       */ {     1 ,     5 ,     3 ,     4 ,     5 ,     5 ,     0 ,  0 },
-/* 1 : L          */ {     1 ,     2 ,     1 ,     2 , _(1,6), _(1,6),     0 ,  3 },
-/* 2 : R          */ {     1 ,     2 ,     2 ,     2 , _(1,7), _(1,7),     0 ,  1 },
-/* 3 : EN         */ {     1 ,     2 ,     3 ,     4 ,     8 ,     5 ,     0 ,  3 },
-/* 4 : AN         */ {     1 ,     2 ,     3 ,     4 , _(1,9), _(1,9),     0 ,  1 },
-/* 5 : ON         */ {     1 ,     2 ,     3 ,     4 ,     5 ,     5 ,     0 ,  2 },
-/* 6 : L+ON       */ { _(2,1),     2 , _(2,1),     4 ,     6 ,     6 ,     0 ,  2 },
-/* 7 : R+ON       */ {     1 , _(2,2), _(2,2), _(2,2),     7 ,     7 ,     0 ,  2 },
-/* 8 : EN+ON      */ {     1 ,     2 ,     3 ,     4 ,     8 ,     8 ,     0 ,  2 },
-/* 9 : AN+ON      */ {     1 , _(2,2),     3 , _(2,4),     9 ,     9 ,     0 ,  2 }
-};
-static const ImpTabPair impTab_RUNS_ONLY = {{(ImpTab*)&impTabL_RUNS_ONLY,
-                                             (ImpTab*)&impTabR_RUNS_ONLY},
-                                            {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
-
-static const ImpTab impTabL_RUNS_ONLY_WITH_MARKS =     /* Even paragraph level */
-/*  In this table, conditional sequences receive the higher possible level
-    until proven otherwise.
-*/
-{
-/*                         L ,     R ,    EN ,    AN ,    ON ,     S ,     B , Res */
-/* 0 : init       */ {     5 ,     2 ,     3 ,     4 , _(4,5),     5 ,     0 ,  0 },
-/* 1 : L          */ { _(8,1), _(9,2), _(6,1),     2 , _(3,6), _(1,6),     0 ,  0 },
-/* 2 : R          */ { _(9,1), _(8,2), _(6,2),     2 , _(3,7), _(1,7),     0 ,  2 },
-/* 3 : EN         */ {     1 ,     2 ,     3 ,     4 , _(4,8),     8 ,     0 ,  0 },
-/* 4 : AN         */ {     1 ,     2 ,     3 ,     4 , _(3,9), _(1,9),     0 ,  2 },
-/* 5 : ON         */ {     1 ,     2 ,     3 ,     4 , _(4,5), _(8,5),     0 ,  3 },
-/* 6 : L+ON       */ { _(7,1), _(9,2), _(5,1),     4 , _(4,6), _(8,6),     0 ,  3 },
-/* 7 : R+ON       */ { _(9,1), _(7,2), _(5,2), _(7,2), _(4,7), _(8,7),     0 ,  3 },
-/* 8 : EN+ON      */ { _(2,1),     2 ,     3 ,     4 , _(4,5), _(8,5),     0 ,  3 },
-/* 9 : AN+ON      */ {     1 , _(7,2),     3 , _(7,4),     9 ,     9 ,     0 ,  3 }
-};
-static const ImpTab impTabR_RUNS_ONLY_WITH_MARKS =     /* Odd  paragraph level */
-/*  In this table, conditional sequences receive the higher possible level
-    until proven otherwise.
-*/
-{
-/*                         L ,     R ,    EN ,    AN ,    ON ,     S ,     B , Res */
-/* 0 : init       */ {     1 ,     5 ,     3 ,     4 , _(4,5),     5 ,     0 ,  0 },
-/* 1 : L          */ { _(8,1), _(9,2),     1 ,     2 , _(3,6), _(1,6),     0 ,  3 },
-/* 2 : R          */ { _(9,1), _(8,2), _(6,2),     2 , _(3,7), _(1,7),     0 ,  1 },
-/* 3 : EN         */ {     1 , _(2,2),     3 ,     4 , _(4,8),     8 ,     0 ,  3 },
-/* 4 : AN         */ {     1 ,     2 ,     3 ,     4 , _(3,7), _(1,7),     0 ,  1 },
-/* 5 : ON         */ {     1 ,     2 ,     3 ,     4 , _(4,5), _(8,5),     0 ,  2 },
-/* 6 : L+ON       */ { _(7,1), _(9,2), _(7,1),     2 , _(4,6), _(8,6),     0 ,  2 },
-/* 7 : R+ON       */ { _(9,1), _(7,2), _(5,2), _(7,2), _(4,7), _(8,7),     0 ,  2 },
-/* 8 : EN+ON      */ {     1 , _(2,2),     3 ,     4 , _(4,5), _(8,5),     0 ,  2 }
-};
-static const ImpAct impAct1 = {0,1,11,12,13,14,15,16,17,18};
-static const ImpTabPair impTab_RUNS_ONLY_WITH_MARKS = {
-                        {(ImpTab*)&impTabL_RUNS_ONLY_WITH_MARKS,
-                         (ImpTab*)&impTabR_RUNS_ONLY_WITH_MARKS},
-                        {(ImpAct*)&impAct1, (ImpAct*)&impAct1}};
 
 static const ImpTab impTabL_INVERSE_NUMBERS_AS_L =
 /*  This table is identical to the Default LTR table except that EN and AN are
@@ -1185,7 +1106,8 @@ typedef struct {
 
 /*------------------------------------------------------------------------*/
 
-static void addPoint(UBiDi *pBiDi, int32_t pos, int32_t flag)
+static void
+addPoint(UBiDi *pBiDi, int32_t pos, int32_t flag)
   /* param pos:     position where to insert
      param flag:    one of LRM_BEFORE, LRM_AFTER, RLM_BEFORE, RLM_AFTER
   */
@@ -1391,59 +1313,6 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             pLevState->startON=start0;
             break;
 
-        case 11:                        /* L after EN+ON for RUNS_ONLY */
-            k= (pLevState->runLevel&1) ? LRM_AFTER : RLM_AFTER;
-            addPoint(pBiDi, start0, k);             /* add LRM/RLM after */
-            pInsertPoints=&(pBiDi->insertPoints);
-            pInsertPoints->confirmed=pInsertPoints->size;   /* confirm inserts */
-            break;
-
-        case 12:                        /* init ON seq */
-            pLevState->startON=start0;
-            /* intentionally flow to next case */
-
-        case 13:                        /* check if possible ON ending with ET */
-            if((limit>start0) && (pLevState->startL2EN<0) &&
-               (NO_CONTEXT_RTL(pBiDi->dirProps[limit-1])==ET)) {
-                 /* we use startL2EN to note position of ET */
-                 pLevState->startL2EN=limit-1;
-            }
-            break;
-
-        case 14:                        /* prepend ON seq to current seq */
-            start=pLevState->startON;
-            if(start<=pLevState->startL2EN) {
-                pLevState->startL2EN=-1;                    /* remove insert */
-                pBiDi->insertPoints.size=pBiDi->insertPoints.confirmed;
-            }
-            /* intentionally flow to next case */
-
-        case 15:
-            if(pLevState->startL2EN>=0) {
-                k= (pLevState->runLevel&1) ? LRM_BEFORE : RLM_BEFORE;
-                addPoint(pBiDi, pLevState->startL2EN, k);
-            }
-            break;
-
-        case 16:                        /* prepend ON seq to current seq */
-            start=pLevState->startON;
-            if(start<=pLevState->startL2EN) {
-                pLevState->startL2EN=-1;
-            }
-            /* intentionally flow to next case */
-
-        case 17:                                            /* remove insert */
-            pBiDi->insertPoints.size=pBiDi->insertPoints.confirmed;
-            break;
-
-        case 18:                                            /* confirm inserts */
-            pInsertPoints=&(pBiDi->insertPoints);
-            if(pInsertPoints->confirmed<pInsertPoints->size) {
-                pInsertPoints->confirmed=pInsertPoints->size;
-                pLevState->startL2EN=-1;
-            }
-            break;
-
         default:                        /* we should never get here */
             start=start0+25;
             start/=(start-start0-25);   /* force program crash */
@@ -1469,9 +1338,6 @@ resolveImplicitLevels(UBiDi *pBiDi,
     uint8_t oldStateImp, stateImp, actionImp;
     uint8_t gprop, resProp, cell;
 
-    if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
-        eor=_ON;
-    }
     /* initialize for levels state table */
     levState.startL2EN=-1;              /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
     levState.lastStrongRTL=-1;          /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
@@ -1581,6 +1447,152 @@ adjustWSLevels(UBiDi *pBiDi) {
     }
 }
 
+#define MIN(x, y)   ((x)<(y) ? (x) : (y))
+#define ABS(x)      ((x)>=0  ? (x) : (-(x)))
+static void
+setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
+                UBiDiLevel paraLevel, UErrorCode *pErrorCode) {
+    void *runsOnlyMemory;
+    int32_t *visualMap;
+    UChar *visualText;
+    const UBiDiLevel *levels;
+    UBiDiLevel *saveLevels;
+    Run *runs;
+    int32_t visualLength, i, j, visualStart, logicalStart,
+            runCount, runLength, addedRuns, insertRemove,
+            start, limit, step, indexOddBit, logicalPos;
+    uint32_t saveOptions;
+
+    pBiDi->reorderingMode=UBIDI_REORDER_DEFAULT;
+    if(length==0) {
+        ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
+        goto cleanup3;
+    }
+    /* obtain memory for mapping table and visual text */
+    runsOnlyMemory=uprv_malloc(length*(sizeof(int32_t)+sizeof(UChar)+sizeof(UBiDiLevel)));
+    if(runsOnlyMemory==NULL) {
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+        goto cleanup3;
+    }
+    visualMap=runsOnlyMemory;
+    visualText=(UChar *)&visualMap[length];
+    saveLevels=(UBiDiLevel *)&visualText[length];
+    saveOptions=pBiDi->reorderingOptions;
+    if(saveOptions & UBIDI_OPTION_INSERT_MARKS) {
+        pBiDi->reorderingOptions&=~UBIDI_OPTION_INSERT_MARKS;
+        pBiDi->reorderingOptions|=UBIDI_OPTION_REMOVE_CONTROLS;
+    }
+    ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
+    levels=ubidi_getLevels(pBiDi, pErrorCode);
+
+    /* instead of writing the visual text, we could use the visual map and the
+       dirProps array to drive the second call to ubidi_setPara               */
+    visualLength=ubidi_writeReordered(pBiDi, visualText, length,
+                                      UBIDI_DO_MIRRORING, pErrorCode);
+    pBiDi->reorderingOptions=saveOptions;
+    ubidi_getVisualMap(pBiDi, visualMap, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        goto cleanup2;
+    }
+    uprv_memcpy(saveLevels, levels, length*sizeof(UBiDiLevel));
+
+    pBiDi->reorderingMode=UBIDI_REORDER_INVERSE_LIKE_DIRECT;
+    paraLevel=pBiDi->paraLevel^1;
+    ubidi_setPara(pBiDi, visualText, visualLength, paraLevel, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        goto cleanup1;
+    }
+    ubidi_getRuns(pBiDi);
+    /* check if some runs must be split, count how many splits */
+    addedRuns=0;
+    runCount=pBiDi->runCount;
+    runs=pBiDi->runs;
+    visualStart=0;
+    for(i=0; i<runCount; i++, visualStart+=runLength) {
+        runLength=runs[i].visualLimit-visualStart;
+        if(runLength<2) {
+            continue;
+        }
+        logicalStart=GET_INDEX(runs[i].logicalStart);
+        for(j=logicalStart+1; j<logicalStart+runLength; j++) {
+            if(ABS(visualMap[j]-visualMap[j-1])!=1) {
+                addedRuns++;
+            }
+        }
+    }
+    if(addedRuns) {
+        if(getRunsMemory(pBiDi, runCount+addedRuns)) {
+            if(runCount==1) {
+                /* because we switch from UBiDi.simpleRuns to UBiDi.runs */
+                pBiDi->runsMemory[0]=runs[0];
+            }
+            runs=pBiDi->runs=pBiDi->runsMemory;
+            pBiDi->runCount+=addedRuns;
+        } else {
+            goto cleanup1;
+        }
+    }
+    /* split runs which are not consecutive in source text */
+    for(i=runCount-1; i>=0; i--) {
+        runLength= i==0 ? runs[0].visualLimit :
+                          runs[i].visualLimit-runs[i-1].visualLimit;
+        logicalStart=runs[i].logicalStart;
+        indexOddBit=GET_ODD_BIT(logicalStart);
+        logicalStart=GET_INDEX(logicalStart);
+        if(runLength<2) {
+            if(addedRuns) {
+                runs[i+addedRuns]=runs[i];
+            }
+            logicalPos=visualMap[logicalStart];
+            runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
+                                            saveLevels[logicalPos]^indexOddBit);
+            continue;
+        }
+        if(indexOddBit) {
+            start=logicalStart;
+            limit=logicalStart+runLength-1;
+            step=1;
+        } else {
+            start=logicalStart+runLength-1;
+            limit=logicalStart;
+            step=-1;
+        }
+        for(j=start; j!=limit; j+=step) {
+            if(ABS(visualMap[j]-visualMap[j+step])!=1) {
+                logicalPos=MIN(visualMap[start], visualMap[j]);
+                runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
+                                            saveLevels[logicalPos]^indexOddBit);
+                runs[i+addedRuns].visualLimit=runs[i].visualLimit;
+                runs[i].visualLimit-=ABS(j-start)+1;
+                insertRemove=runs[i].insertRemove&(LRM_AFTER|RLM_AFTER);
+                runs[i+addedRuns].insertRemove=insertRemove;
+                runs[i].insertRemove&=~insertRemove;
+                start=j+step;
+                addedRuns--;
+            }
+        }
+        if(addedRuns) {
+            runs[i+addedRuns]=runs[i];
+        }
+        logicalPos=MIN(visualMap[start], visualMap[limit]);
+        runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
+                                            saveLevels[logicalPos]^indexOddBit);
+    }
+
+  cleanup1:
+    /* restore initial paraLevel */
+    pBiDi->paraLevel^=1;
+  cleanup2:
+    /* restore real text */
+    pBiDi->text=text;
+    /* free memory for mapping table and visual text */
+    uprv_free(runsOnlyMemory);
+  cleanup3:
+    pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
+}
+#undef MIN
+#undef ABS
+
 /* ubidi_setPara ------------------------------------------------------------ */
 
 U_CAPI void U_EXPORT2
@@ -1602,6 +1614,12 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 
     if(length==-1) {
         length=u_strlen(text);
+    }
+
+    /* special treatment for RUNS_ONLY mode */
+    if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
+        setParaRunsOnly(pBiDi, text, length, paraLevel, pErrorCode);
+        return;
     }
 
     /* initialize the UBiDi structure */
@@ -1736,11 +1754,9 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             pBiDi->pImpTabPair=&impTab_GROUP_NUMBERS_WITH_R;
             break;
         case UBIDI_REORDER_RUNS_ONLY:
-            if (pBiDi->reorderingOptions & UBIDI_OPTION_INSERT_MARKS) {
-                pBiDi->pImpTabPair=&impTab_RUNS_ONLY_WITH_MARKS;
-            } else {
-                pBiDi->pImpTabPair=&impTab_RUNS_ONLY;
-            }
+            /* we should never get here */
+            pBiDi=NULL;
+            pBiDi->text=NULL;           /* make the program crash! */
             break;
         case UBIDI_REORDER_INVERSE_NUMBERS_AS_L:
             pBiDi->pImpTabPair=&impTab_INVERSE_NUMBERS_AS_L;
