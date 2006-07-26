@@ -143,14 +143,14 @@ typedef struct Run {
 /* in a Run, logicalStart will get this bit set if the run level is odd */
 #define INDEX_ODD_BIT (1UL<<31)
 
-#define MAKE_INDEX_ODD_PAIR(index, level) (index|((int32_t)level<<31))
-#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)level<<31))
+#define MAKE_INDEX_ODD_PAIR(index, level) ((index)|((int32_t)(level)<<31))
+#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)(level)<<31))
 #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
 
-#define GET_INDEX(x)   (x&~INDEX_ODD_BIT)
-#define GET_ODD_BIT(x) ((uint32_t)x>>31)
-#define IS_ODD_RUN(x)  ((x&INDEX_ODD_BIT)!=0)
-#define IS_EVEN_RUN(x) ((x&INDEX_ODD_BIT)==0)
+#define GET_INDEX(x)   ((x)&~INDEX_ODD_BIT)
+#define GET_ODD_BIT(x) ((uint32_t)(x)>>31)
+#define IS_ODD_RUN(x)  (((x)&INDEX_ODD_BIT)!=0)
+#define IS_EVEN_RUN(x) (((x)&INDEX_ODD_BIT)==0)
 
 U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi);
@@ -245,7 +245,7 @@ struct UBiDi {
     #define UBIDI_REORDER_LAST_LOGICAL_TO_VISUAL    UBIDI_REORDER_NUMBERS_SPECIAL
 
     /* bitmask for reordering options */
-    uint16_t reorderingOptions;
+    uint32_t reorderingOptions;
 
     /* must block separators receive level 0? */
     UBool orderParagraphsLTR;
