@@ -654,18 +654,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
                 pBiDi->runs=runs;
                 pBiDi->runCount=runCount;
 
-                if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
-                    /* we only need to invert the order of the runs */
-                    Run tempRun;
-                    int32_t j, k;
-                    for(j=0, k=runCount-1; j<k; ++j, --k) {
-                        tempRun=runs[j];
-                        runs[j]=runs[k];
-                        runs[k]=tempRun;
-                    }
-                } else {
-                    reorderLine(pBiDi, minLevel, maxLevel);
-                }
+                reorderLine(pBiDi, minLevel, maxLevel);
 
                 /* now add the direction flags and adjust the visualLimit's to be just that */
                 /* this loop will also handle the trailing WS run */
@@ -1007,10 +996,10 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
     }
     /* we can do the trivial cases without the runs array */
     if(pBiDi->insertPoints.size==0 && pBiDi->controlCount==0) {
-        if (pBiDi->direction == UBIDI_LTR) {
+        if(pBiDi->direction==UBIDI_LTR) {
             return visualIndex;
         }
-        else if (pBiDi->direction == UBIDI_RTL) {
+        else if(pBiDi->direction==UBIDI_RTL) {
             return pBiDi->length-visualIndex-1;
         }
         if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
