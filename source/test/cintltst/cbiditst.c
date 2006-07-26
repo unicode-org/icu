@@ -1179,7 +1179,7 @@ static void TestMultipleParagraphs(void) {
 
 /* inverse BiDi ------------------------------------------------------------- */
 
-int countRoundtrips=0, countNonRoundtrips=0;
+static int countRoundtrips=0, countNonRoundtrips=0;
 
 #define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
 
@@ -1282,7 +1282,13 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
 
         /* convert visual to logical */
         ubidi_setInverse(pBiDi, TRUE);
+        if (!ubidi_isInverse(pBiDi)) {
+            log_err("Error while doing ubidi_setInverse(TRUE)\n");
+        }
         ubidi_setPara(pBiDi, src, srcLength, 0, NULL, pErrorCode);
+        if (src != ubidi_getText(pBiDi)) {
+            log_err("Wrong value returned by ubidi_getText\n");
+        }
         logicalLength=ubidi_writeReordered(pBiDi, logicalDest, LENGTHOF(logicalDest),
                                            UBIDI_DO_MIRRORING|UBIDI_INSERT_LRM_FOR_NUMERIC, pErrorCode);
         log_verbose("  v ");
@@ -1291,6 +1297,9 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
 
         /* convert back to visual LTR */
         ubidi_setInverse(pBiDi, FALSE);
+        if (ubidi_isInverse(pBiDi)) {
+            log_err("Error while doing ubidi_setInverse(FALSE)\n");
+        }
         ubidi_setPara(pBiDi, logicalDest, logicalLength, 0, NULL, pErrorCode);
         visualLength=ubidi_writeReordered(pBiDi, visualDest, LENGTHOF(visualDest),
                                           UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS, pErrorCode);
@@ -1906,7 +1915,6 @@ static UBool
 assertSuccessful(const char* message, UErrorCode* rc) {
     if (rc != NULL && U_FAILURE(*rc)) {
         log_err("%s() failed with error %s.\n", message, myErrorName(*rc));
-        *rc = U_ZERO_ERROR;
         return FALSE;
     }
     return TRUE;
@@ -2431,28 +2439,30 @@ doReorderRunsTest(void) {
         {"abcGHI", {{"GHIabc", "GHIabc"}, {"GHIabc", "GHIabc"}}, {0, 0}},
         {"-=%$123/ *", {{"* /%$123=-", "* /%$123=-"},
                         {"* /%$123=-", "* /%$123=-"}}, {0, 0}},
-        {"abc->12..>JKL", {{"JKL<..abc->12", "JKL<..abc->12"},
-                           {"JKL<..abc->12", "JKL<..abc->12"}}, {0, 0}},
-        {"JKL->12..>abc", {{"abc<..JKL->12", "abc<..JKL->12"},
-                           {"abc<..JKL->12", "abc<..JKL->12"}}, {0, 0}},
+        {"abc->12..>JKL", {{"JKL<..12<-abc", "JKL<..abc->12"},
+                           {"JKL<..12<-abc", "JKL<..abc->12"}}, {0, 0}},
+        {"JKL->12..>abc", {{"abc<..JKL->12", "abc<..12<-JKL"},
+                           {"abc<..JKL->12", "abc<..12<-JKL"}}, {0, 0}},
         {"123->abc", {{"abc<-123", "abc<-123"},
                       {"abc&<-123", "abc<-123"}}, {1, 0}},
-        {"123->JKL", {{"JKL<-123", "JKL<-123"},
-                      {"JKL<-123", "JKL@<-123"}}, {0, 1}},
-        {"*>12.>34->JKL", {{"JKL<-34<.12<*", "JKL<-34<.12<*"},
-                           {"JKL<-34<.12<*", "JKL@<-34<.12<*"}}, {0, 1}},
+        {"123->JKL", {{"JKL<-123", "123->JKL"},
+                      {"JKL<-123", "JKL<-@123"}}, {0, 1}},
+        {"*>12.>34->JKL", {{"JKL<-34<.12<*", "12.>34->JKL<*"},
+                           {"JKL<-34<.12<*", "JKL<-@34<.12<*"}}, {0, 1}},
         {"*>67.>89->JKL", {{"67.>89->JKL<*", "67.>89->JKL<*"},
                            {"67.>89->JKL<*", "67.>89->JKL<*"}}, {0, 0}},
-        {"* /abc-=$%123", {{"abc-=$%123/ *", "abc-=$%123/ *"},
-                           {"abc-=$%123/ *", "abc-=$%123/ *"}}, {0, 0}},
-        {"* /$%def-=123", {{"def-=123%$/ *", "def-=123%$/ *"},
-                           {"def-=123&%$/ *", "def-=123%$/ *"}}, {1, 0}},
-        {"-=GHI* /123%$", {{"GHI* /123%$=-", "GHI* /123%$=-"},
-                           {"GHI* /123%$=-", "GHI* /123%$=-"}}, {0, 0}},
-        {"-=%$JKL* /123", {{"JKL* /123$%=-", "JKL* /123$%=-"},
-                           {"JKL* /123&$%=-", "JKL* /123@$%=-"}}, {1, 1}},
-        {"abc-=%$LMN* /123", {{"LMN* /123$%=-abc", "LMN* /123$%=-abc"},
-                              {"LMN* /123&$%=-abc", "LMN* /123@$%=-abc"}}, {1, 1}}
+        {"* /abc-=$%123", {{"$%123=-abc/ *", "abc-=$%123/ *"},
+                           {"$%123=-abc/ *", "abc-=$%123/ *"}}, {0, 0}},
+        {"* /$%def-=123", {{"123=-def%$/ *", "def-=123%$/ *"},
+                           {"123=-def%$/ *", "def-=123%$/ *"}}, {0, 0}},
+        {"-=GHI* /123%$", {{"GHI* /123%$=-", "123%$/ *GHI=-"},
+                           {"GHI* /123%$=-", "123%$/ *GHI=-"}}, {0, 0}},
+        {"-=%$JKL* /123", {{"JKL* /%$123=-", "123/ *JKL$%=-"},
+                           {"JKL* /%$123=-", "123/ *JKL$%=-"}}, {0, 0}},
+        {"abc-=%$LMN* /123", {{"LMN* /%$123=-abc", "123/ *LMN$%=-abc"},
+                              {"LMN* /%$123=-abc", "123/ *LMN$%=-abc"}}, {0, 0}},
+        {"123->JKL&MN&P", {{"JKLMNP<-123", "123->JKLMNP"},
+                           {"JKLMNP<-123", "JKLMNP<-@123"}}, {0, 1}}
     };
     UBiDi *pBiDi = getBiDiObject();
     UBiDi *pL2VBiDi = getBiDiObject();
@@ -2469,14 +2479,13 @@ doReorderRunsTest(void) {
     ubidi_setReorderingOptions(pL2VBiDi, UBIDI_OPTION_REMOVE_CONTROLS);
 
     for (option = 0; option < 2; option++) {
-        ubidi_setReorderingOptions(pBiDi, option==0 ? UBIDI_OPTION_DEFAULT
+        ubidi_setReorderingOptions(pBiDi, option==0 ? UBIDI_OPTION_REMOVE_CONTROLS
                                                     : UBIDI_OPTION_INSERT_MARKS);
         for (i = 0, nCases = LENGTHOF(testCases); i < nCases; i++) {
+            srcLen = strlen(testCases[i].textIn);
+            pseudoToU16(srcLen, testCases[i].textIn, src);
             for(j = 0; j < 2; j++) {
-                srcLen = strlen(testCases[i].textIn);
-                pseudoToU16(srcLen, testCases[i].textIn, src);
                 level = paraLevels[j];
-
                 ubidi_setPara(pBiDi, src, srcLen, level, NULL, &rc);
                 assertSuccessful("ubidi_setPara", &rc);
                 *dest = 0;
@@ -2522,6 +2531,7 @@ doReorderingModeBidiTest() {
     UBiDi *pBiDi = NULL, *pBiDi2 = NULL, *pBiDi3 = NULL;
     UErrorCode rc;
     int tc, mode, option, level;
+    uint32_t modeValue, modeBack, optionValue, optionBack;
     int32_t srcLen, destLen, index;
     const char *expectedChars;
     UBool testOK = TRUE;
@@ -2545,10 +2555,22 @@ doReorderingModeBidiTest() {
         pseudoToU16(srcLen, srcChars, src);
 
         for (mode = 0; mode < MODES_COUNT; mode++) {
-            ubidi_setReorderingMode(pBiDi, modes[mode].value);
+            modeValue = modes[mode].value;
+            ubidi_setReorderingMode(pBiDi, modeValue);
+            modeBack = ubidi_getReorderingMode(pBiDi);
+            if (modeValue != modeBack) {
+                log_err("Error while setting reordering mode to %d, returned %d\n",
+                        modeValue, modeBack);
+            }
 
             for (option = 0; option < OPTIONS_COUNT; option++) {
-                ubidi_setReorderingOptions(pBiDi, options[option].value);
+                optionValue = options[option].value;
+                ubidi_setReorderingOptions(pBiDi, optionValue);
+                optionBack = ubidi_getReorderingOptions(pBiDi);
+                if (optionValue != optionBack) {
+                    log_err("Error while setting reordering option to %d, returned %d\n",
+                            optionValue, optionBack);
+                }
 
                 for (level = 0; level < LEVELS_COUNT; level++) {
                     log_verbose("starting test %d mode=%d option=%d level=%d\n",
@@ -2790,7 +2812,7 @@ static void doBidiClassOverrideTest(void) {
     UBiDiClassCallback* oldFn = NULL;
     UBiDiClassCallback* newFn = overrideBidiClass;
     const void* oldContext = NULL;
-    int32_t srcLen, destLen, textInSize = (int32_t)uprv_strlen(textSrc);
+    int32_t srcLen, destLen, textSrcSize = (int32_t)uprv_strlen(textSrc);
     char* destChars = NULL;
 
     log_verbose("\n*** Bidi class override test ***\n");
@@ -2811,14 +2833,14 @@ static void doBidiClassOverrideTest(void) {
     verifyCallbackParams(oldFn, oldContext, NULL, NULL, 0);
 
     ubidi_getClassCallback(pBiDi, &oldFn, &oldContext);
-    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textInSize);
+    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textSrcSize);
 
     ubidi_setClassCallback(pBiDi, newFn, textSrc, &oldFn, &oldContext, &rc);
     if (!assertSuccessful("ubidi_setClassCallback", &rc)) {
         ubidi_close(pBiDi);
         return;
     }
-    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textInSize);
+    verifyCallbackParams(oldFn, oldContext, newFn, textSrc, textSrcSize);
 
     srcLen = u_unescape(textSrc, src, MAXLEN);
     ubidi_setPara(pBiDi, src, srcLen, UBIDI_LTR, NULL, &rc);
