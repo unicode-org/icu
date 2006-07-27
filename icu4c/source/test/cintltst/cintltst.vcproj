@@ -426,6 +426,13 @@
 			<File
 				RelativePath=".\creststn.h">
 			</File>
+			<Filter
+				Name="transforms"
+				Filter="">
+				<File
+					RelativePath=".\utransts.c">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="misc"
@@ -504,13 +511,6 @@
 			</File>
 			<File
 				RelativePath=".\utf8tst.c">
-			</File>
-		</Filter>
-		<Filter
-			Name="transforms"
-			Filter="">
-			<File
-				RelativePath=".\utransts.c">
 			</File>
 		</Filter>
 		<Filter
