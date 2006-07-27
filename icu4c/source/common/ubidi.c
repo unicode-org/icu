@@ -1460,7 +1460,8 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     Run *runs;
     int32_t visualLength, i, j, visualStart, logicalStart,
             runCount, runLength, addedRuns, insertRemove,
-            start, limit, step, indexOddBit, logicalPos;
+            start, limit, step, indexOddBit, logicalPos,
+            index, index1;
     uint32_t saveOptions;
 
     pBiDi->reorderingMode=UBIDI_REORDER_DEFAULT;
@@ -1515,7 +1516,9 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         }
         logicalStart=GET_INDEX(runs[i].logicalStart);
         for(j=logicalStart+1; j<logicalStart+runLength; j++) {
-            if(ABS(visualMap[j]-visualMap[j-1])!=1) {
+            index=visualMap[j];
+            index1=visualMap[j-1];
+            if((ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
                 addedRuns++;
             }
         }
@@ -1558,8 +1561,10 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
             step=-1;
         }
         for(j=start; j!=limit; j+=step) {
-            if(ABS(visualMap[j]-visualMap[j+step])!=1) {
-                logicalPos=MIN(visualMap[start], visualMap[j]);
+            index=visualMap[j];
+            index1=visualMap[j+step];
+            if((ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
+                logicalPos=MIN(visualMap[start], index);
                 runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
                                             saveLevels[logicalPos]^indexOddBit);
                 runs[i+addedRuns].visualLimit=runs[i].visualLimit;
