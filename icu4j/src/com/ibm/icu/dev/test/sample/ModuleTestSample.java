@@ -7,8 +7,6 @@
 package com.ibm.icu.dev.test.sample;
 
 import com.ibm.icu.dev.test.ModuleTest;
-import com.ibm.icu.dev.test.TestDataModule;
-import com.ibm.icu.dev.test.TestDataModule.DataMap;
 
 public class ModuleTestSample extends ModuleTest {
     public static void main(String[] args) throws Exception {

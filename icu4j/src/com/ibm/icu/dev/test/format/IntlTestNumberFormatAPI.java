@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2005, International Business Machines
+ *   Copyright (C) 1996-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -20,7 +20,6 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.util.ULocale;
 
 import java.util.Locale;
-import java.util.Set;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.FieldPosition;

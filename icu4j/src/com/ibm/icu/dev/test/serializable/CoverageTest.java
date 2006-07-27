@@ -13,16 +13,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.security.Policy;
 
-import com.ibm.icu.dev.test.TestFmwk.Target;
-import com.ibm.icu.dev.test.serializable.CompatibilityTest.HandlerTarget;
 import com.ibm.icu.impl.URLHandler;
 
 /**

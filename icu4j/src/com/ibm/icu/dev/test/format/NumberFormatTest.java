@@ -21,7 +21,6 @@ import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.math.MathContext;
 
 import java.math.BigInteger;
 import java.text.FieldPosition;

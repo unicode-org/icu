@@ -13,16 +13,11 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.impl.ICUResourceBundle;
 
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.Date;
-import java.util.MissingResourceException;
 
 /** 
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
