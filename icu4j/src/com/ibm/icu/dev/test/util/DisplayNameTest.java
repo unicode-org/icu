@@ -1,13 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,7 +18,7 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.SimpleDateFormat;
+//import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;

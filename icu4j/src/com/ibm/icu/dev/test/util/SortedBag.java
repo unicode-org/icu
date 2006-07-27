@@ -1,20 +1,17 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
 **********************************************************************
 */package com.ibm.icu.dev.test.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeMap;
 

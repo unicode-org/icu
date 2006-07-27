@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import com.ibm.icu.impl.ICUResourceBundle;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -13,7 +13,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author ram
