@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -157,8 +157,8 @@ public class DumbTextComponent extends Canvas
           + hex((char)code) + ", " + hex((char)e.getModifiers()));
         int start = selection.getStart();
         int end = selection.getEnd();
-        boolean shift = (e.getModifiers() & KeyEvent.SHIFT_MASK) != 0;
-        boolean ctrl = (e.getModifiers() & KeyEvent.CTRL_MASK) != 0;
+        boolean shift = (e.getModifiers() & InputEvent.SHIFT_MASK) != 0;
+        boolean ctrl = (e.getModifiers() & InputEvent.CTRL_MASK) != 0;
                 
         switch (code) {
         case KeyEvent.VK_Q:
@@ -296,7 +296,7 @@ public class DumbTextComponent extends Canvas
         char ch = e.getKeyChar();
         if (DEBUG) System.out.println("keyTyped "
           + hex((char)ch) + ", " + hex((char)e.getModifiers()));
-        if ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0) return;
+        if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) return;
         int start, end;
         switch (ch) {
         case KeyEvent.CHAR_UNDEFINED:
@@ -741,7 +741,7 @@ public class DumbTextComponent extends Canvas
         for (i = s.length()-1; i >= 0; --i) {
             char ch = s.charAt(i);
             if (!(ch == ' ' || ch >= 0x000A && ch <= 0x000D || ch == 0x2028 || ch == 0x2029))
-              return fm.stringWidth(s.substring(0,i+1));;
+            	return fm.stringWidth(s.substring(0,i+1));
         }
         return 0;
     }
