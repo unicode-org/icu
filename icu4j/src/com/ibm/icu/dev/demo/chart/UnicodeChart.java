@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,9 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.util.*;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.*;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.VersionInfo;
 
 public class UnicodeChart {

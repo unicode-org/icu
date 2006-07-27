@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -547,9 +547,8 @@ class CalendarCalcFrame extends Frame implements ActionListener
 //hey {al} - 
 //            } else if (format instanceof java.text.SimpleDateFormat) {
 //                return ((java.text.SimpleDateFormat)format).toPattern();
-            } else {
-                return "";
             }
+            return "";
         }
 
         Calendar  calendar;
