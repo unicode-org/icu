@@ -13,8 +13,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 
-import java.util.MissingResourceException;
-
 /**
  * Regression test for Arabic shaping.
  */

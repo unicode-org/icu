@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and   *
+* Copyright (C) 1996-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -34,10 +34,10 @@ public class IntTrie extends Trie
     * @throws IOException thrown when data reading fails
     * @draft 2.1
     */
-    public IntTrie(InputStream inputStream, DataManipulate datamanipulate)
+    public IntTrie(InputStream inputStream, DataManipulate dataManipulate)
                                                     throws IOException
     {
-        super(inputStream, datamanipulate);
+        super(inputStream, dataManipulate);
         if (!isIntTrie()) {
             throw new IllegalArgumentException(
                                "Data given does not belong to a int trie.");

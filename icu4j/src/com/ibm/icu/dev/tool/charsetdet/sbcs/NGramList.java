@@ -1,7 +1,7 @@
 /*
  ***********************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and *
- * others. All Rights Reserved.                                        *
+ * Copyright (C) 2005-2006, International Business Machines            *
+ * Corporation and others. All Rights Reserved.                        *
  ***********************************************************************
  *
  */
@@ -10,8 +10,6 @@ package com.ibm.icu.dev.tool.charsetdet.sbcs;
 
 import java.util.Collection;
 import java.util.TreeMap;
-
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author emader

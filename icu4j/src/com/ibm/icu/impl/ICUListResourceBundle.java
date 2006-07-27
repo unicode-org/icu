@@ -281,7 +281,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
     public static class Alias{
         public Alias(String path){
             pathToResource = path;
-        };
+        }
         
         private String pathToResource;
 
