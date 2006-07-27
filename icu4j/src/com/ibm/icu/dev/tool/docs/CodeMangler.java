@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2006, International Business Machines Corporation and         *
+* Copyright (C) 2004-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -448,7 +448,7 @@ public class CodeMangler {
             State pop() {
                 return next;
             }
-        };
+        }
           
         HashMap oldMap = null;
         

@@ -1,12 +1,10 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
-
-import java.util.Date;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.VersionInfo;

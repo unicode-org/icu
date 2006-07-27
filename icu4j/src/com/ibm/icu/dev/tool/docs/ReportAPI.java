@@ -25,7 +25,6 @@ package com.ibm.icu.dev.tool.docs;
 import java.io.*;
 import java.util.*;
 import java.text.*;
-import java.util.zip.*;
 
 public class ReportAPI {
     APIData oldData;
