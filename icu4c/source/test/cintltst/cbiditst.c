@@ -2437,6 +2437,7 @@ doReorderRunsTest(void) {
         const char noroundtrip[2];
     } testCases[] = {
         {"abcGHI", {{"GHIabc", "GHIabc"}, {"GHIabc", "GHIabc"}}, {0, 0}},
+        {"a.>67->", {{"<-67<.a", "<-67<.a"}, {"<-67<.a", "<-67<.a"}}, {0, 0}},
         {"-=%$123/ *", {{"* /%$123=-", "* /%$123=-"},
                         {"* /%$123=-", "* /%$123=-"}}, {0, 0}},
         {"abc->12..>JKL", {{"JKL<..12<-abc", "JKL<..abc->12"},
