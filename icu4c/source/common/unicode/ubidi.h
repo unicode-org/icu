@@ -533,7 +533,7 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
  * Is this BiDi object set to perform the inverse BiDi algorithm?
  * <p>Note: calling this function after setting the reordering mode with
  * <code>ubidi_setReorderingMode</code> will return <code>TRUE</code> if the
- * reordering mode was set to <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L<code>,
+ * reordering mode was set to <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>,
  * <code>FALSE</code> for all other values.</p>
  *
  * @param pBiDi is a <code>UBiDi</code> object.
@@ -600,7 +600,7 @@ typedef enum UBiDiReorderingMode {
       * mimicks the behavior of Windows XP.
       * @draft ICU 3.6 */
     UBIDI_REORDER_NUMBERS_SPECIAL,
-    /** Logical to Visual grouping numbers with adjacent R characters
+    /** Logical to Visual algorithm grouping numbers with adjacent R characters
       * (reversible algorithm).
       * @draft ICU 3.6 */
     UBIDI_REORDER_GROUP_NUMBERS_WITH_R,
@@ -712,7 +712,7 @@ typedef enum UBiDiReorderingMode {
  * basically English, with possible included phrases in Arabic or Hebrew, has to
  * be displayed as if it had an odd embedding level.
  * <br>
- * Both cases could be handled by adding <LRE> or <RLE> at the head of the text,
+ * Both cases could be handled by adding LRE or RLE at the head of the text,
  * if the display subsystem supports these formatting controls. If it does not,
  * the problem may be handled by transforming the source text in this mode
  * before displaying it, so that it will be displayed properly.<br>
@@ -796,8 +796,8 @@ U_DRAFT UBiDiReorderingMode U_EXPORT2
 ubidi_getReorderingMode(UBiDi *pBiDi);
 
 /**
- * <code>UBiDiReorderingOption> values indicate which options are specified
- * to affect the BiDi algorithm.
+ * <code>UBiDiReorderingOption</code> values indicate which options are
+ * specified to affect the BiDi algorithm.
  *
  * @see ubidi_setReorderingOptions
  * @draft ICU 3.6
@@ -1546,7 +1546,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
  * @param destMap is an array with a number of indexes equal to 1 + the highest
  *        value in <code>srcMap</code>.
  *        <code>destMap</code> will be filled with the inverse mapping.
- *        Elements of <destMap> which have no matching elements in
+ *        Elements of <code>destMap</code> which have no matching elements in
  *        <code>srcMap</code> will receive an index equal to
  *        <code>UBIDI_MAP_NOWHERE</code>
  *
@@ -1677,8 +1677,8 @@ ubidi_getProcessedLength(const UBiDi *pBiDi);
  * </ul>
  * Note that this length stays identical to the source text length if
  * BiDi marks are inserted or removed using option bits of
- * <code>ubidi_writeReordered<code>, or if option
- * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L<code> has been set.
+ * <code>ubidi_writeReordered</code>, or if option
+ * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> has been set.
  *
  * @param pBiDi is the paragraph <code>UBiDi</code> object.
  *
