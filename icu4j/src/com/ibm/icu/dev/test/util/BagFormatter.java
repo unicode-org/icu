@@ -112,7 +112,6 @@ public class BagFormatter {
      * @param set1 first set
      * @param name2 name of second set to be compared
      * @param set2 second set
-     * @return formatted string
      */
     public void showSetDifferences(
         PrintWriter pw,
@@ -318,7 +317,7 @@ public class BagFormatter {
     }
 
     public String getName(String separator, int start, int end) {
-        if (getNameSource() == null || getNameSource() == UnicodeProperty.NULL) return "";
+        if (getNameSource() == null || getNameSource() == UnicodeLabel.NULL) return "";
         String result = getName(start, false);
         if (start == end) return separator + result;
         String endString = getName(end, false);
@@ -496,8 +495,8 @@ public class BagFormatter {
             //myTabber.add(7,Tabber.LEFT);
 
             commentSeparator = (showCount || showLiteral != null
-              || getLabelSource(true) != UnicodeProperty.NULL
-              || getNameSource() != UnicodeProperty.NULL)
+              || getLabelSource(true) != UnicodeLabel.NULL
+              || getNameSource() != UnicodeLabel.NULL)
             ? "\t #" : "";
 
             if (DEBUG) System.out.println("Tabber: " + myTabber.toString());

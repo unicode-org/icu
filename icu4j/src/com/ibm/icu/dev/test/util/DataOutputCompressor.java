@@ -14,12 +14,12 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+//import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeSet;
+//import java.util.TreeSet;
 
-import com.ibm.icu.impl.Utility;
+//import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
 /**

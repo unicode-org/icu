@@ -745,7 +745,7 @@ Name: Unicode_1_Name
                 if (DEBUG) System.out.println("\tGotID <" + text.substring(start,i) + ">");
                 return i;
             }
-        };
+        }
     }
 
 

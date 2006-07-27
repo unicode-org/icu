@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class FileUtilities {
     public static void appendFile(String filename, String encoding, PrintWriter output) throws IOException {

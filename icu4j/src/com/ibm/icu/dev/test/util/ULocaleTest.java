@@ -146,7 +146,7 @@ public class ULocaleTest extends TestFmwk {
                 return (NumberFormat) (locale.equals(loc) ?
                                        proto.clone() : null);
             }
-        };
+        }
 
         checkService("fr_FR_NICE", new ServiceFacade() {
                 public Object create(ULocale req) {

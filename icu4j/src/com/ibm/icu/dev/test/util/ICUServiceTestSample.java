@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,13 +8,11 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
 
 import java.util.EventListener;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;

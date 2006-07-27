@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,7 +11,6 @@ import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;

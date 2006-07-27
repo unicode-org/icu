@@ -6,12 +6,9 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUListResourceBundle;
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.Utility;
 
 
