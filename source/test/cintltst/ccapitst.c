@@ -101,7 +101,11 @@ static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
 static void TestLMBCSMaxChar(void);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestConvertSafeCloneCallback(void);
+#endif
+
 static void TestEBCDICSwapLFNL(void);
 static void TestConvertEx(void);
 static void TestConvertAlgorithmic(void);
@@ -121,8 +125,12 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestFlushCache,              "tsconv/ccapitst/TestFlushCache"); 
     addTest(root, &TestAlias,                   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestDuplicateAlias,          "tsconv/ccapitst/TestDuplicateAlias"); 
-    addTest(root, &TestConvertSafeClone,        "tsconv/ccapitst/TestConvertSafeClone"); 
-    addTest(root, &TestConvertSafeCloneCallback,"tsconv/ccapitst/TestConvertSafeCloneCallback"); 
+    addTest(root, &TestConvertSafeClone,        "tsconv/ccapitst/TestConvertSafeClone");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+    addTest(root, &TestConvertSafeCloneCallback,"tsconv/ccapitst/TestConvertSafeCloneCallback");
+#endif
+ 
     addTest(root, &TestCCSID,                   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,                    "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,                   "tsconv/ccapitst/TestJ1968");
@@ -249,6 +257,7 @@ static void ListNames(void) {
 
 static void TestConvert() 
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     char                myptr[4];
     char                save[4];
     int32_t             testLong1           =   0;
@@ -1058,6 +1067,7 @@ static void TestConvert()
     free((void*)output_cp_buffer);
     free((void*)ucs_file_buffer);
     free((void*)my_ucs_file_buffer);
+#endif
 }
 
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
@@ -1072,6 +1082,7 @@ static UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 }
 
 static void TestFlushCache(void) {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode          err                 =   U_ZERO_ERROR;
     UConverter*            someConverters[5];
     int flushCount = 0;
@@ -1141,7 +1152,7 @@ static void TestFlushCache(void) {
         log_verbose("Flush cache ok\n");
     else 
         log_data_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
-
+#endif
 }
 
 /**
@@ -1483,6 +1494,7 @@ static void TSCC_print_log(TSCCContext *q, const char *name)
     }
 }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestConvertSafeCloneCallback()
 {
     UErrorCode err = U_ZERO_ERROR;
@@ -1648,6 +1660,7 @@ static void TestConvertSafeCloneCallback()
         free(from2); /* from1 is stack based */
     }
 }
+#endif
 
 static UBool
 containsAnyOtherByte(uint8_t *p, int32_t length, uint8_t b) {
@@ -1665,18 +1678,26 @@ static void TestConvertSafeClone()
 {
     /* one 'regular' & all the 'private stateful' converters */
     static const char *const names[] = {
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "ibm-1047",
         "ISO_2022,locale=zh,version=1",
+#endif
         "SCSU",
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "HZ",
         "lmbcs",
         "ISCII,version=0",
         "ISO_2022,locale=kr,version=1",
         "ISO_2022,locale=jp,version=2",
+#endif
         "BOCU-1",
         "UTF-7",
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "IMAP-mailbox-name",
         "ibm-1047-s390"
+#else
+        "IMAP=mailbox-name"
+#endif
     };
 
     /* store the actual sizes of each converter */
@@ -1890,6 +1911,7 @@ static void TestConvertSafeClone()
 }
 
 static void TestCCSID() {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UConverter *cnv;
     UErrorCode errorCode;
     int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 1392, 33722 };
@@ -1916,6 +1938,7 @@ static void TestCCSID() {
 
         ucnv_close(cnv);
     }
+#endif
 }
 
 /* jitterbug 932: ucnv_convert() bugs --------------------------------------- */
@@ -1953,6 +1976,7 @@ TestJ932(void)
  */
 static void bug1()
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
    static char char_in[CHUNK_SIZE+32];
    static char char_out[CHUNK_SIZE*2];
 
@@ -1992,6 +2016,7 @@ static void bug1()
          log_err("error j932 bug 1: expected success, got U_TRUNCATED_CHAR_FOUND\n");
       }
    }
+#endif
 }
 
 /* bug2: pre-flighting loop bug: simple overflow causes bug */
@@ -2066,6 +2091,7 @@ static void bug2()
  */
 static void bug3()
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     static char char_in[CHUNK_SIZE*4];
     static char target[5];
     UErrorCode err = U_ZERO_ERROR;
@@ -2120,6 +2146,7 @@ static void bug3()
          */
         log_data_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
     }
+#endif
 }
 
 static void
@@ -2228,6 +2255,7 @@ convertExMultiStreaming(UConverter *srcCnv, UConverter *targetCnv,
 }
 
 static void TestConvertEx() {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     static const uint8_t
     utf8[]={
         /* 4e00           30a1              ff61              0410 */
@@ -2368,10 +2396,12 @@ static void TestConvertEx() {
 
     ucnv_close(cnv1);
     ucnv_close(cnv2);
+#endif
 }
 
 static void
 TestConvertAlgorithmic() {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     static const uint8_t
     utf8[]={
         /* 4e00           30a1              ff61              0410 */
@@ -2492,6 +2522,7 @@ TestConvertAlgorithmic() {
         log_err("ucnv_fromAlgorithmic(illegal alg. type) sets %s\n", u_errorName(errorCode));
     }
 ucnv_close(cnv);
+#endif
 }
 
 static void TestLMBCSMaxChar(void) {
@@ -2651,6 +2682,7 @@ static void TestJ1968(void) {
 
 }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void
 testSwap(const char *name, UBool swap) {
     /*
@@ -2804,10 +2836,17 @@ TestEBCDICSwapLFNL() {
         testSwap(tests[i].name, tests[i].swap);
     }
 }
+#else
+static void
+TestEBCDICSwapLFNL() {
+  /* test nothing... */
+}
+#endif
+
 static const UVersionInfo ICU_34 = {3,4,0,0};
 
 static void TestFromUCountPending(){
-
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
 /*       const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd}; */
     static const struct {
@@ -2906,10 +2945,12 @@ static void TestFromUCountPending(){
         }
     }
     ucnv_close(cnv);
+#endif
 }
 
 static void
 TestToUCountPending(){
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
     static const struct {
         char input[6];
@@ -3017,7 +3058,7 @@ TestToUCountPending(){
         }
         ucnv_close(cnv);
     }
-
+#endif
 }
 
 static void TestOneDefaultNameChange(const char *name) {
@@ -3049,8 +3090,10 @@ static void TestDefaultName(void) {
 
     /*change the default name by setting it */
     TestOneDefaultNameChange("UTF-8");
+#if !UCONFIG_NO_LEGACY_CONVERSION
     TestOneDefaultNameChange("ISCII,version=1");
     TestOneDefaultNameChange("ISCII,version=2");
+#endif
     TestOneDefaultNameChange("ISO-8859-1");
 
     /*set the default name back*/
@@ -3173,6 +3216,7 @@ TestSubstString() {
     }
     ucnv_close(cnv);
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
     errorCode=U_ZERO_ERROR;
     cnv=ucnv_open("HZ", &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -3191,7 +3235,7 @@ TestSubstString() {
         }
     }
     ucnv_close(cnv);
-
+#endif
     /*
      * Further testing of ucnv_setSubstString() is done via intltest convert.
      * We do not test edge cases of illegal arguments and similar because the

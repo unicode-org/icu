@@ -213,6 +213,7 @@ bail:
 
 static void TestC1Bytes(void)
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
     const char *ssISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
     const char *ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
@@ -259,6 +260,7 @@ bail:
     freeBytes(bISO);
 
     ucsdet_close(csd);
+#endif
 }
 
 static void TestInputFilter(void)
