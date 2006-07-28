@@ -2370,6 +2370,7 @@ static UBool isLocaleAvailable(UResourceBundle* resIndex, const char* loc){
 }
 
 static void TestCalendar() {
+#if !UCONFIG_NO_FORMATTING
     int i;
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
@@ -2401,9 +2402,11 @@ static void TestCalendar() {
         ucal_close(c2);
     }
     ures_close(resIndex);
+#endif
 }
 
 static void TestDateFormat() {
+#if !UCONFIG_NO_FORMATTING
     int i;
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
@@ -2442,9 +2445,11 @@ static void TestDateFormat() {
         udat_close(df2);
     }
     ures_close(resIndex);
+#endif
 }
 
 static void TestCollation() {
+#if !UCONFIG_NO_COLLATION
     int i;
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *resIndex = ures_open(NULL,"res_index", &status);
@@ -2483,6 +2488,7 @@ static void TestCollation() {
         ucol_close(c2);
     }
     ures_close(resIndex);
+#endif
 }
 
 static void  TestULocale() {

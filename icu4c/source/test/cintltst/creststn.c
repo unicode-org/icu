@@ -639,6 +639,7 @@ static void TestNewTypes() {
         }
     }
     /* test for jitterbug#2626 */
+#if !UCONFIG_NO_COLLATION
     {
         UResourceBundle* resB = NULL;
         const UChar* str  = NULL;
@@ -655,6 +656,7 @@ static void TestNewTypes() {
         }
         ures_close(resB);
     }
+#endif
     {
         const char *sourcePath = ctest_dataSrcDir();
         int32_t srcPathLen = (int32_t)strlen(sourcePath);

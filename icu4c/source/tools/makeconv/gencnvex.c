@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,6 +28,8 @@
 #include "genmbcs.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
+#if !UCONFIG_NO_CONVERSION
 
 static void
 CnvExtClose(NewConverter *cnvData);
@@ -1057,3 +1059,5 @@ CnvExtAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *sta
         makeToUTable(extData, table) &&
         makeFromUTable(extData, table);
 }
+
+#endif /* UCONFIG_NO_CONVERSION */

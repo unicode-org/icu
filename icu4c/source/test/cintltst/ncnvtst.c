@@ -61,8 +61,12 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 
 static void TestSurrogateBehaviour(void);
 static void TestErrorBehaviour(void);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestToUnicodeErrorBehaviour(void);
 static void TestGetNextErrorBehaviour(void);
+#endif
+
 static void TestRegressionUTF8(void);
 static void TestRegressionUTF32(void);
 static void TestAvailableConverters(void);
@@ -115,8 +119,12 @@ void addExtraTests(TestNode** root)
 {
      addTest(root, &TestSurrogateBehaviour,         "tsconv/ncnvtst/TestSurrogateBehaviour");
      addTest(root, &TestErrorBehaviour,             "tsconv/ncnvtst/TestErrorBehaviour");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
      addTest(root, &TestToUnicodeErrorBehaviour,    "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
      addTest(root, &TestGetNextErrorBehaviour,      "tsconv/ncnvtst/TestGetNextErrorBehaviour");
+#endif
+
      addTest(root, &TestAvailableConverters,        "tsconv/ncnvtst/TestAvailableConverters");
      addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
      addTest(root, &TestResetBehaviour,             "tsconv/ncnvtst/TestResetBehaviour");
@@ -132,10 +140,13 @@ static void TestSurrogateBehaviour(){
     {
         UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
         const uint8_t expected[] = {0x31, 0x1a, 0x32};
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
         /*SBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-920", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-920 [UCNV_SBCS] not match.\n");
+#endif
 
         /*LATIN_1*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -143,6 +154,8 @@ static void TestSurrogateBehaviour(){
             log_err("u-> LATIN_1 not match.\n");
 
     }
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
     log_verbose("Testing for DBCS and MBCS\n");
     {
         UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
@@ -164,6 +177,7 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "ibm-1363", offsets, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
     }
+
     log_verbose("Testing for ISO-2022-jp\n");
     {
         UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -182,6 +196,7 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "iso-2022-jp", offsets , TRUE, U_ZERO_ERROR))
             log_err("u->  not match.\n");
     }
+
     log_verbose("Testing for ISO-2022-cn\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -211,6 +226,7 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "iso-2022-cn", offsets , TRUE, U_ZERO_ERROR))
             log_err("u-> not match.\n");
     }
+
         log_verbose("Testing for ISO-2022-kr\n");
     {
         static const UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -240,6 +256,7 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "iso-2022-kr", offsets , TRUE, U_ZERO_ERROR))
             log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
     }
+
         log_verbose("Testing for HZ\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -262,11 +279,13 @@ static void TestSurrogateBehaviour(){
         /*hz*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "HZ", 0 , TRUE, U_ZERO_ERROR))
-            log_err("u->  not match.\n");
+            log_err("u-> HZ not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "HZ", offsets , TRUE, U_ZERO_ERROR))
-            log_err("u->  not match.\n");
+            log_err("u-> HZ not match.\n");
     }
+#endif
+
     /*UTF-8*/
      log_verbose("Testing for UTF8\n");
     {
@@ -295,21 +314,18 @@ static void TestSurrogateBehaviour(){
 
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", 0, TRUE, U_ZERO_ERROR ))
-            log_err("UTF8 -> did not match.\n");
+            log_err("UTF8 -> u did not match.\n");
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", 0, FALSE, U_ZERO_ERROR ))
-            log_err("UTF8 -> did not match.\n");
+            log_err("UTF8 -> u did not match.\n");
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", fromOffsets, TRUE, U_ZERO_ERROR ))
-            log_err("UTF8 -> did not match.\n");
+            log_err("UTF8 ->u  did not match.\n");
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", fromOffsets, FALSE, U_ZERO_ERROR ))
-            log_err("UTF8 -> did not match.\n");
+            log_err("UTF8 -> u did not match.\n");
 
     }
-
-
-
 }
 
 /*test various error behaviours*/
@@ -322,6 +338,7 @@ static void TestErrorBehaviour(){
         static const uint8_t expected[] =          { 0x31, 0x1a};
         static const uint8_t expected2[] =         { 0x31, 0x1a, 0x32};
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
         /*SBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-920", 0, TRUE, U_ZERO_ERROR))
@@ -332,7 +349,7 @@ static void TestErrorBehaviour(){
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "ibm-920", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-920 [UCNV_SBCS] did not match\n");
-
+#endif
 
         /*LATIN_1*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -347,7 +364,7 @@ static void TestErrorBehaviour(){
             log_err("u-> LATIN_1 did not match\n");
     }
 
-
+#if !UCONFIG_NO_LEGACY_CONVERSION
     log_verbose("Testing for DBCS and MBCS\n");
     {
         static const UChar    sampleText[]    = { 0x00a1, 0xd801};
@@ -367,10 +384,6 @@ static void TestErrorBehaviour(){
         static const UChar       sampleText4MBCS[] = { 0x0061, 0x00a6, 0xdc01};
         static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
         static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
-
-
-
-
 
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -427,6 +440,7 @@ static void TestErrorBehaviour(){
                 expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
     }
+
     /*iso-2022-jp*/
     log_verbose("Testing for iso-2022-jp\n");
     {
@@ -466,6 +480,7 @@ static void TestErrorBehaviour(){
                 expected4MBCS, sizeof(expected4MBCS), "iso-2022-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
     }
+
     /*iso-2022-cn*/
     log_verbose("Testing for iso-2022-cn\n");
     {
@@ -516,6 +531,7 @@ static void TestErrorBehaviour(){
                 expected4MBCS, sizeof(expected4MBCS), "iso-2022-cn", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
     }
+
     /*iso-2022-kr*/
     log_verbose("Testing for iso-2022-kr\n");
     {
@@ -607,10 +623,10 @@ static void TestErrorBehaviour(){
                 expected4MBCS, sizeof(expected4MBCS), "HZ", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> HZ [UCNV_MBCS] \n");
     }
-
-
+#endif
 }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 /*test different convertToUnicode error behaviours*/
 static void TestToUnicodeErrorBehaviour()
 {
@@ -662,6 +678,7 @@ static void TestGetNextErrorBehaviour(){
     }
     ucnv_close(cnv);
 }
+#endif
 
 #define MAX_UTF16_LEN 2
 #define MAX_UTF8_LEN 4
@@ -697,6 +714,7 @@ static void TestRegressionUTF8(){
             log_err("UTF8->Unicode did not match.\n");
         }
     }
+
     free(standardForm);
     free(utf8);
 
@@ -917,6 +935,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
              log_err("u-> UTF8 did not match.\n");
     }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
      log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_ESCAPE  \n");
     {
         UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
@@ -932,6 +951,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset,FALSE))
             log_err("u-> ibm-943 with subst with value did not match.\n");
     }
+#endif
 
      log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
     {
@@ -945,7 +965,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
             log_err("utf8->u with substitute did not match.\n");;
     }
 
-
+#if !UCONFIG_NO_LEGACY_CONVERSION
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_ESCAPE \n");
     /*to Unicode*/
     {
@@ -963,7 +983,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
             log_err("ibm-943->u with substitute with value did not match.\n");
 
     }
-
+#endif
 }
 
 static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
@@ -1495,6 +1515,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 
 
 static void TestResetBehaviour(void){
+#if !UCONFIG_NO_LEGACY_CONVERSION
     log_verbose("Testing Reset for DBCS and MBCS\n");
     {
         static const UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
@@ -1532,6 +1553,7 @@ static void TestResetBehaviour(void){
            log_err("ibm-1363 -> did not match.\n");
 
     }
+
     log_verbose("Testing Reset for ISO-2022-jp\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1562,6 +1584,7 @@ static void TestResetBehaviour(void){
            log_err("iso-2022-jp -> did not match.\n");
 
     }
+
     log_verbose("Testing Reset for ISO-2022-cn\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1605,6 +1628,7 @@ static void TestResetBehaviour(void){
                 offsets1, TRUE))
            log_err("iso-2022-cn -> did not match.\n");
     }
+
         log_verbose("Testing Reset for ISO-2022-kr\n");
     {
         UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1652,6 +1676,7 @@ static void TestResetBehaviour(void){
                 offsets1, TRUE))
            log_err("iso-2022-kr -> did not match.\n");
     }
+
         log_verbose("Testing Reset for HZ\n");
     {
         static const UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
@@ -1695,6 +1720,8 @@ static void TestResetBehaviour(void){
                 offsets1, TRUE))
            log_err("hz -> did not match.\n");
     }
+#endif
+
     /*UTF-8*/
      log_verbose("Testing for UTF8\n");
     {
@@ -1825,13 +1852,17 @@ TestTruncated() {
         { "UTF-32",     { 0, 0, 0x4e }, 3 },
         { "UTF-32",     { 0xff }, 1 },
         { "UTF-32",     { 0, 0, 0xfe, 0xff, 0 }, 5 },
-
         { "SCSU",       { 0x0e, 0x4e }, 2 }, /* SQU 0x4e */
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
         { "BOCU-1",     { 0xd5 }, 1 },
 
         { "Shift-JIS",  { 0xe0 }, 1 },
 
         { "ibm-939",    { 0x0e, 0x41 }, 2 } /* SO 0x41 */
+#else
+        { "BOCU-1",     { 0xd5 }, 1 ,}
+#endif
     };
     int32_t i;
 
@@ -1865,11 +1896,14 @@ TestUnicodeSet() {
         "SCSU",
         "BOCU-1",
         "CESU-8",
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "gb18030",
+#endif
         "IMAP-mailbox-name"
     };
 
     static const char *const lmbcsNames[]={
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "LMBCS-1",
         "LMBCS-2",
         "LMBCS-3",
@@ -1882,16 +1916,23 @@ TestUnicodeSet() {
         "LMBCS-17",
         "LMBCS-18",
         "LMBCS-19"
+#endif
     };
 
     static const NameRange nameRanges[]={
         { "US-ASCII", 0, 0x7f, -1, -1, 0x80, 0x10ffff },
+#if !UCONFIG_NO_LEGACY_CONVERSION
         { "ibm-367", 0, 0x7f, -1, -1, 0x80, 0x10ffff },
+#endif
         { "ISO-8859-1", 0, 0x7f, -1, -1, 0x100, 0x10ffff },
+#if !UCONFIG_NO_LEGACY_CONVERSION
         { "UTF-8", 0, 0xd7ff, 0xe000, 0x10ffff, 0xd800, 0xdfff },
         { "windows-1251", 0, 0x7f, 0x410, 0x44f, 0x3000, 0xd7ff },
         { "HZ", 0x410, 0x44f, 0x4e00, 0x4eff, 0xac00, 0xd7ff },
         { "shift-jis", 0x3041, 0x3093, 0x30a1, 0x30f3, 0x900, 0x1cff }
+#else
+        { "UTF-8", 0, 0xd7ff, 0xe000, 0x10ffff, 0xd800, 0xdfff }
+#endif
     };
 
     /* open an empty set */

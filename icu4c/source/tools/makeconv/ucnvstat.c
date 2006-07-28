@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1998-2001, International Business Machines
+ *   Copyright (C) 1998-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -15,6 +15,7 @@
 #include "unicode/ucnv.h"
 #include "ucnv_bld.h"
 
+#if !UCONFIG_NO_CONVERSION
 
 static const UConverterStaticData _SBCSStaticData={
     sizeof(UConverterStaticData),
@@ -64,3 +65,5 @@ const UConverterStaticData *ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CO
     NULL/*ISO2022*/,
     /* LMBCS */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
+
+#endif /* UCONFIG_NO_CONVERSION */

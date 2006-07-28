@@ -52,7 +52,7 @@ IdnaConfTest::~IdnaConfTest(){
     delete [] base;
 }
 
-
+#if !UCONFIG_NO_IDNA
 /* this function is modified from RBBITest::ReadAndConvertFile() 
  *
  */
@@ -335,8 +335,12 @@ void IdnaConfTest::Test(void){
 
     Call(); // for last record
 }
-
-
+#else
+void IdnaConfTest::Test(void)
+{
+  // test nothing...
+}
+#endif
 
 void IdnaConfTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/){
     switch (index) {

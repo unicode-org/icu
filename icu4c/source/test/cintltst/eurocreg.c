@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2005, International Business Machines Corporation and
+ * Copyright (c) 1999-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -11,6 +11,7 @@
 void TestEuroRegression(void);
 void addTestEuroRegression(TestNode** root);
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 void addTestEuroRegression(TestNode** root)
 {
     addTest(root, &TestEuroRegression, "tsconv/eurocreg/TestEuroRegression");
@@ -179,3 +180,9 @@ UBool isEuroAware(UConverter* myConv)
     }
 
 }
+#else
+void addTestEuroRegression(TestNode** root)
+{
+    /* test nothing... */
+}
+#endif

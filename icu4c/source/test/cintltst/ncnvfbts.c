@@ -23,6 +23,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 #define NEW_MAX_BUFFER 999
 
 
@@ -745,3 +746,10 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     }
 
 }
+#else
+void addTestConverterFallBack(TestNode** root)
+{
+  /* test nothing... */
+ 
+}
+#endif

@@ -109,12 +109,15 @@ static UnicodeString *split(const UnicodeString &src, UChar ch, int32_t &splits)
 static char *extractBytes(const UnicodeString &source, const char *codepage, int32_t &length)
 {
     int32_t sLength = source.length();
-    char *bytes;
+    char *bytes = NULL;
 
     length = source.extract(0, sLength, NULL, codepage);
-    bytes = NEW_ARRAY(char, length + 1);
-    source.extract(0, sLength, bytes, codepage);
 
+    if (length > 0) {
+        bytes = NEW_ARRAY(char, length + 1);
+        source.extract(0, sLength, bytes, codepage);
+    }
+    
     return bytes;
 }
 
@@ -139,6 +142,13 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     int32_t byteLength = 0;
     char *bytes = extractBytes(testString, codepage, byteLength);
+
+    if (bytes == NULL) {
+#if !UCONFIG_NO_LEGACY_CONVERSION
+        errln("Can't open a " + encoding + " converter for " + id);
+#endif
+        return;
+    }
 
     ucsdet_setText(csd, bytes, byteLength, &status);
 
@@ -411,6 +421,7 @@ bail:
 
 void CharsetDetectionTest::C1BytesTest()
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
     UnicodeString ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
@@ -455,10 +466,12 @@ bail:
     freeBytes(bISO);
 
     ucsdet_close(csd);
+#endif
 }
 
 void CharsetDetectionTest::DetectionTest()
 {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
     char path[2048];
     const char *testFilePath = getPath(path, "csdetest.xml");
@@ -497,6 +510,7 @@ void CharsetDetectionTest::DetectionTest()
 
     delete root;
     delete parser;
+#endif
 }
 
 

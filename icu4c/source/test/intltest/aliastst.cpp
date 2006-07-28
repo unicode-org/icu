@@ -53,6 +53,7 @@ void LocaleAliasTest::runIndexedTest( int32_t index, UBool exec, const char* &na
 }
 
 void LocaleAliasTest::TestCalendar() {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     for (int i=0; i<_LOCALE_NUMBER; i++) {
         Locale oldLoc(_LOCALE_ALIAS[i][0]);
@@ -81,8 +82,10 @@ void LocaleAliasTest::TestCalendar() {
         delete c1;
         delete c2;
     }
+#endif
 }
 void LocaleAliasTest::TestDateFormat() {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     for (int i=0; i<_LOCALE_NUMBER; i++) {
         Locale oldLoc(_LOCALE_ALIAS[i][0]);
@@ -113,8 +116,10 @@ void LocaleAliasTest::TestDateFormat() {
         delete df1;
         delete df2;
     }
+#endif
 }
 void LocaleAliasTest::TestCollation() {
+#if !UCONFIG_NO_COLLATION
     UErrorCode status = U_ZERO_ERROR;
     for (int i=0; i<_LOCALE_NUMBER; i++) {
         Locale oldLoc(_LOCALE_ALIAS[i][0]);
@@ -144,6 +149,7 @@ void LocaleAliasTest::TestCollation() {
         delete c1;
         delete c2;
     }
+#endif
 }
 void LocaleAliasTest::TestULocale() {
     for (int i=0; i<_LOCALE_NUMBER; i++) {
