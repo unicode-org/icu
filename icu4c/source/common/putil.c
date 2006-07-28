@@ -47,15 +47,9 @@
 #endif
 #endif
 
-/* Define __USE_POSIX and __USE_XOPEN for Linux and glibc. */
-#ifndef __USE_POSIX
-#define __USE_POSIX
-#endif
-#ifndef __USE_XOPEN
-#define __USE_XOPEN
-#endif
-#ifndef __USE_XOPEN_EXTENDED
-#define __USE_XOPEN_EXTENDED
+/* Make sure things like readlink and such functions work. */
+#ifndef _XOPEN_SOURCE_EXTENDED
+#define _XOPEN_SOURCE_EXTENDED
 #endif
 
 /* include ICU headers */
