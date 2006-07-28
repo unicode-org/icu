@@ -46,7 +46,7 @@ static class TestParams {
     int[]           srcLine        = new int[1000];
     int[]           srcCol         = new int[1000];
     ULocale         currentLocale  = new ULocale("en_US");
-};
+}
 
 
 public void TestExtended() {

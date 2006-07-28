@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -107,7 +107,7 @@ final class CollationRuleParser
          * attribute for special Hiragana
          */
         boolean m_isHiragana4_;
-    };
+    }
 
     /**
      * List of tokens used by the collation rules
@@ -130,7 +130,7 @@ final class CollationRuleParser
         int m_numStr_[] = new int[3 * (Collator.TERTIARY + 1)];
         Token m_fStrToken_[] = new Token[Collator.TERTIARY + 1];
         Token m_lStrToken_[] = new Token[Collator.TERTIARY + 1];
-    };
+    }
 
     /**
      * Token wrapper for collation rules
@@ -232,7 +232,7 @@ final class CollationRuleParser
            }
            return false;
         }
-    };
+    }
 
     // package private data member -------------------------------------------
 
@@ -317,7 +317,7 @@ final class CollationRuleParser
         int m_prefixLen_;
         char m_flags_;
         char m_indirectIndex_;
-    };
+    }
 
     /**
      * Boundary wrappers
@@ -348,7 +348,7 @@ final class CollationRuleParser
         int m_startContCE_;
         int m_limitCE_;
         int m_limitContCE_;
-    };
+    }
 
     /**
      * Collation option rule tag
@@ -372,7 +372,7 @@ final class CollationRuleParser
         private int m_attribute_;
         private String m_subOptions_[];
         private int m_subOptionAttributeValues_[];
-    };
+    }
 
     // private variables -----------------------------------------------------
 
@@ -658,7 +658,7 @@ final class CollationRuleParser
         RULES_OPTIONS_[18] = new TokenOption("charset",
                                   RuleBasedCollator.Attribute.LIMIT_,
                                   null, null);
-    };
+    }
 
     /**
      * Utility data members
@@ -672,7 +672,6 @@ final class CollationRuleParser
 
     /**
      * Assembles the token list
-     * @param
      * @exception ParseException thrown when rules syntax fails
      */
     int assembleTokenList() throws ParseException
@@ -1865,7 +1864,6 @@ final class CollationRuleParser
     }
     /**
      * Reads and set collation options
-     * @param optionend offset to the end of the option in rules
      * @return TOKEN_SUCCESS if option is set correct, 0 otherwise
      * @exception ParseException thrown when options in rules are wrong
      */

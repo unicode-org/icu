@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -337,7 +337,7 @@ final class NormalizerDataReader implements ICUBinary.Authenticate {
     * @param extraData
     * @param combiningTable
     * @param canonStartSets
-    * @exception thrown when data reading fails
+    * @exception IOException thrown when data reading fails
     * @draft 2.1
     */
     protected void read(byte[] normBytes, byte[] fcdBytes, byte[] auxBytes,

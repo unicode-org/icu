@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -131,8 +131,8 @@ final class RBBIDataWrapper {
         public RBBIDataHeader() {
             fMagic = 0;
             fFormatVersion = new byte[4];
-        };
-    };
+        }
+    }
     
     
     /**
@@ -152,12 +152,12 @@ final class RBBIDataWrapper {
                 return 0;
             }
         }
-    };
+    }
     static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
  
     
     RBBIDataWrapper() {
-     };
+    }
 
     static RBBIDataWrapper get(String name) throws IOException {
         String  fullName = "data/" + name;
@@ -337,7 +337,7 @@ final class RBBIDataWrapper {
         
         if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
             This.dump();
-        };
+        }
         return This;
     }
     

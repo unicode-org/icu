@@ -72,7 +72,7 @@ public class ResourceBundlePerf extends PerfTest {
             String s = javaRes.getString(key);
             if (!s.equals(expected)) throw new Error("not equal");
         }
-    };
+    }
     
     class GetStringIcu extends PerfTest.Function {
         String key;
@@ -85,7 +85,7 @@ public class ResourceBundlePerf extends PerfTest {
             String s = icuRes.getString(key);
             if (!s.equals(expected)) throw new Error("not equal");
         }
-    };
+    }
     
     PerfTest.Function TestZeroTestJava(){
         return new GetStringJava("zerotest", "abc\u0000def");
@@ -122,7 +122,7 @@ public class ResourceBundlePerf extends PerfTest {
             Integer t = (Integer) javaRes.getObject(key);
             if (t.intValue() != expected) throw new Error("not equal");
         }
-    };
+    }
     
     class GetIntIcu extends PerfTest.Function {
         String key;
@@ -136,7 +136,7 @@ public class ResourceBundlePerf extends PerfTest {
             int t = temp.getInt();
             if (t != expected) throw new Error("not equal");
         }
-    };
+    }
 
     PerfTest.Function TestGet123Java(){
         return new GetIntJava("onehundredtwentythree", 123);
@@ -262,7 +262,7 @@ public class ResourceBundlePerf extends PerfTest {
               if (i != b) throw new Error("not equal");
             }
         }
-    };
+    }
     
     PerfTest.Function TestGetBinaryTestICU(){
         return new GetBinaryIcu("binarytest", 15);

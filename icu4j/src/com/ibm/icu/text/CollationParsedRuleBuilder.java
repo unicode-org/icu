@@ -693,7 +693,7 @@ final class CollationParsedRuleBuilder
                 m_ranges_[i] = new WeightRange();
             }
         }
-    };
+    }
 
     private static class WeightRange implements Comparable
     {
@@ -762,7 +762,7 @@ final class CollationParsedRuleBuilder
             m_length2_ = source.m_length2_;
             m_count2_ = source.m_count2_;
         }
-    };
+    }
     
     private static class MaxJamoExpansionTable
     {
@@ -796,7 +796,7 @@ final class CollationParsedRuleBuilder
             m_maxVSize_ = table.m_maxVSize_;
             m_maxTSize_ = table.m_maxTSize_;
         }
-    };
+    }
     
     private static class MaxExpansionTable 
     {
@@ -820,7 +820,7 @@ final class CollationParsedRuleBuilder
         
     Vector m_endExpansionCE_;
     Vector m_expansionCESize_;
-    };
+    }
     
     private static class BasicContractionTable 
     {
@@ -836,7 +836,7 @@ final class CollationParsedRuleBuilder
         
     StringBuffer m_codePoints_;
     Vector m_CEs_;
-    };
+    }
     
     private static class ContractionTable 
     {
@@ -844,7 +844,7 @@ final class CollationParsedRuleBuilder
         
     /**
      * Builds a contraction table
-     * @param buildtable
+     * @param mapping
      */
     ContractionTable(IntTrieBuilder mapping) 
     {
@@ -882,7 +882,7 @@ final class CollationParsedRuleBuilder
     Vector m_CEs_;
     Vector m_offsets_;
     int m_currentTag_;
-    };
+    }
 
     private static final class BuildTable implements TrieBuilder.DataManipulate
     {
@@ -891,7 +891,6 @@ final class CollationParsedRuleBuilder
         /**
      * For construction of the Trie tables.
      * Has to be labeled public
-     * @param table build table
      * @param cp
      * @param offset
      * @return data offset or 0 
@@ -927,7 +926,6 @@ final class CollationParsedRuleBuilder
         
     /**
      * Returns a table
-     * @return build table
      */
     BuildTable(CollationRuleParser parser) 
     {
@@ -1002,7 +1000,7 @@ final class CollationParsedRuleBuilder
     byte m_unsafeCP_[];
     byte m_contrEndCP_[];
     Hashtable m_prefixLookup_;
-    }; 
+    } 
     
     private static class Elements
     {
@@ -1122,7 +1120,7 @@ final class CollationParsedRuleBuilder
             }
             return false;
     }
-    };
+    }
 
     // private data member ---------------------------------------------------
     
@@ -1405,7 +1403,7 @@ final class CollationParsedRuleBuilder
     /**
      * @param g CEGenerator
      * @param token rule token
-     * @param fstrength 
+     * @param strength 
      * @return ce generator
      * @exception Exception thrown when internal error occurs
      */
@@ -1645,7 +1643,6 @@ final class CollationParsedRuleBuilder
      * We are ready to create collation elements
      * @param t build table to insert
      * @param lh rule token list header
-     * @exception Exception thrown when internal program error occurs
      */
     private void createElements(BuildTable t, 
                 CollationRuleParser.TokenListHeader lh)
@@ -2479,7 +2476,7 @@ final class CollationParsedRuleBuilder
     /**
      * Constructs a special ce
      * @param tag special tag
-     * @param ce 
+     * @param CE collation element 
      * @return a contraction ce
      */
     private static final int constructSpecialCE(int tag, int CE) 
@@ -2490,7 +2487,7 @@ final class CollationParsedRuleBuilder
     
     /**
      * Sets and inserts the element that has a contraction
-     * @param contraction table 
+     * @param contractions contraction table 
      * @param element contracting element
      * @param existingCE
      * @return contraction ce
@@ -2994,8 +2991,8 @@ final class CollationParsedRuleBuilder
     /**
      * Call getWeightRanges and then determine heuristically which ranges to 
      * use for a given number of weights between (excluding) two limits
-     * @param lowerlimit
-     * @param upperlimit
+     * @param lowerLimit
+     * @param upperLimit
      * @param n
      * @param maxByte
      * @param ranges
@@ -3173,8 +3170,8 @@ final class CollationParsedRuleBuilder
      * take two CE weights and calculate the
      * possible ranges of weights between the two limits, excluding them
      * for weights with up to 4 bytes there are up to 2*4-1=7 ranges
-     * @param lowerlimit
-     * @param upperlimit
+     * @param lowerLimit
+     * @param upperLimit
      * @param maxByte
      * @param countBytes
      * @param ranges
@@ -3380,7 +3377,7 @@ final class CollationParsedRuleBuilder
     
     /**
      * Gets the codepoint 
-     * @param table contraction table
+     * @param tbl contraction table
      * @param codePoint code point to look for
      * @return the offset to the code point
      */
@@ -3388,10 +3385,10 @@ final class CollationParsedRuleBuilder
     {
         int position = 0;
         while (codePoint > tbl.m_codePoints_.charAt(position)) {
-        position ++;
-        if (position > tbl.m_codePoints_.length()) {
-        return -1;
-        }
+            position ++;
+            if (position > tbl.m_codePoints_.length()) {
+                return -1;
+            }
         }
         if (codePoint == tbl.m_codePoints_.charAt(position)) {
             return position;
@@ -3641,7 +3638,7 @@ final class CollationParsedRuleBuilder
     
     /**
      * Gets the maximum Jamo expansion
-     * @param table trie table
+     * @param mapping trie table
      * @param maxexpansion maximum expansion table
      * @param maxjamoexpansion maximum jamo expansion table
      * @param jamospecial is jamo special?

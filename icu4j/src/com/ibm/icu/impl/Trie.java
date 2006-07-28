@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and   *
+* Copyright (C) 1996-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -456,7 +456,7 @@ public abstract class Trie
     /**
     * Authenticates raw data header.
     * Checking the header information, signature and options.
-    * @param rawdata array of char data to be checked
+    * @param signature This contains the options and type of a Trie
     * @return true if the header is authenticated valid
     * @draft 2.1
     */

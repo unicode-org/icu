@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2005, International Business Machines Corporation and
+ * Copyright (c) 2001-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -113,7 +113,7 @@ class RBBINode {
         else if (t==opStart)  {fPrecedence = precStart;}
         else if (t==opLParen) {fPrecedence = precLParen;}
         else fPrecedence   = precZero;
-    };
+    }
 
 
     RBBINode(RBBINode other)  {
@@ -129,7 +129,7 @@ class RBBINode {
         fFirstPosSet = new HashSet(other.fFirstPosSet);
         fLastPosSet  = new HashSet(other.fLastPosSet);
         fFollowPos   = new HashSet(other.fFollowPos);
-    };
+    }
 
 
 
@@ -164,7 +164,7 @@ class RBBINode {
             }
         }
         return n;
-    };
+    }
 
 
 
@@ -202,7 +202,7 @@ class RBBINode {
             fRightChild.fParent = this;
         }
         return this;
-    };
+    }
 
 
 //-------------------------------------------------------------------------
@@ -226,7 +226,7 @@ class RBBINode {
              } else {
                 fLeftChild.flattenSets();
             }
-        };
+        }
 
         if (fRightChild != null) {
             if (fRightChild.fType==setRef) {
@@ -240,7 +240,7 @@ class RBBINode {
                 fRightChild.flattenSets();
             }
         }
-    };
+    }
 
 
 
