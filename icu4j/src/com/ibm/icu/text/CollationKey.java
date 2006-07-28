@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -125,9 +125,9 @@ public final class CollationKey implements Comparable
          * Private Constructor
          */
         ///CLOVER:OFF
-        private BoundMode(){};
+        private BoundMode(){}
         ///CLOVER:ON
-    };
+    }
     
     // public constructor ---------------------------------------------------
     

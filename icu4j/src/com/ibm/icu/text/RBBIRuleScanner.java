@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005,
+ * Copyright (C) 2003-2006,
  * International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -31,7 +31,7 @@ class RBBIRuleScanner {
     static class RBBIRuleChar {
         int             fChar;
         boolean         fEscaped;
-    };
+    }
 
 
 
@@ -121,7 +121,7 @@ RBBIRuleScanner(RBBIRuleBuilder rb)
     fRuleSets[RBBIRuleParseTable.kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern);
 
     fSymbolTable = new RBBISymbolTable(this, rb.fRules);
- };
+ }
 
 
 
@@ -490,7 +490,7 @@ boolean doParseActions(int action)
         break;
     }
     return returnVal;
-};
+}
 
 
 
@@ -584,7 +584,7 @@ void fixOpStack(int p)  {
 static class RBBISetTableEl {
     String         key;
     RBBINode       val;
-};
+}
 
 
 //----------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 
@@ -12,8 +12,6 @@ package com.ibm.icu.dev.test.stringprep;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;

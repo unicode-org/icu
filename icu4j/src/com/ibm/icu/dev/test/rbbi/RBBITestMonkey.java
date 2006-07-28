@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005 International Business Machines Corporation and     *
+ * Copyright (C) 2003-2006 International Business Machines Corporation and     *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import java.io.FileReader;
-import java.io.Reader;
 
 
 /**
@@ -96,7 +93,7 @@ public class RBBITestMonkey extends TestFmwk {
         fSets.add(fExtendSet);
         fSets.add(fHangulSet);
         fSets.add(fAnySet);
-     };
+     }
 
 
     void setText(StringBuffer s) {
@@ -1057,9 +1054,8 @@ public class RBBITestMonkey extends TestFmwk {
         int cAt(int pos) {
             if (pos<0 || pos>=fText.length()) {
                 return -1;
-            } else {
-                return UTF16.charAt(fText, pos);
             }
+            return UTF16.charAt(fText, pos);
         }
 
         int   next(int prevPos) {  
@@ -1198,8 +1194,8 @@ public class RBBITestMonkey extends TestFmwk {
      *   Similar to UTF16.moveCodePointOffset, but without the exceptions, which were
      *   complicating usage.
      * @param s   a Text string
-     * @param i   The starting code unit index into the text string
-     * @param amt  The amount to adjust the string by.
+     * @param pos The starting code unit index into the text string
+     * @param amt The amount to adjust the string by.
      * @return    The adjusted code unit index, pinned to the string's length, or
      *            unchanged if input index was outside of the string.
      */

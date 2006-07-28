@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
 
@@ -484,7 +483,7 @@ public class CharsetDetector {
         recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_16_BE());
         recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_16_LE());
         recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_32_BE());
-        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_32_LE());;
+        recognizers.add(new CharsetRecog_Unicode.CharsetRecog_UTF_32_LE());
         
         recognizers.add(new CharsetRecog_mbcs.CharsetRecog_sjis());
         recognizers.add(new CharsetRecog_2022.CharsetRecog_2022JP());

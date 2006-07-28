@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,6 @@ package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;

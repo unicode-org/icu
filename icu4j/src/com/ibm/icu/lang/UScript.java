@@ -604,7 +604,7 @@ public final class UScript {
     //private static final String INVALID_NAME = "Invalid";
     /**
      * Helper function to find the code from locale.
-     * @param Locale the locale.
+     * @param locale The locale.
      */
     private static int[] findCodeFromLocale(ULocale locale) {
         ICUResourceBundle rb;

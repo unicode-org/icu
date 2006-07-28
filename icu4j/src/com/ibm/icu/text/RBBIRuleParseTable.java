@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005,
+ * Copyright (C) 2003-2006,
  * International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -75,7 +75,7 @@ class RBBIRuleParseTable
       fNextChar  = nc; 
       fStateName = sn; 
    } 
-   }; 
+   } 
   
     static RBBIRuleTableElement[] gRuleParseStateTable = { 
        new RBBIRuleTableElement(doNOP, 0, 0,0,  true,   null )     //  0 
@@ -175,4 +175,4 @@ class RBBIRuleParseTable
      , new RBBIRuleTableElement(doRuleErrorAssignExpr, 255, 95,0,  false,   null )     //  94 
      , new RBBIRuleTableElement(doExit, 255, 95,0,  true,   "errorDeath")     //  95 
  };
-}; 
+} 

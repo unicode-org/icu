@@ -192,9 +192,8 @@ public class TestFmwk extends AbstractTestLog {
                     if (cls == null) { // hack no warning for missing tests
                         if (params.warnings) {
                             continue;
-                        } else {
-                            newTarget = this.new Target(names[i]);
                         }
+                        newTarget = this.new Target(names[i]);
                     } else {
                         TestFmwk test = getSubtest(i, groupOnly);
                         if (test != null) {
@@ -1047,7 +1046,7 @@ public class TestFmwk extends AbstractTestLog {
          * Arguments and values understood by this method will be removed from the args array
          * and existing args will be shifted down, to be filled by nulls at the end.
          * @param args the list of arguments
-         * @param errlog the error log, or null if no error log is desired
+         * @param log the error log, or null if no error log is desired
          * @return the new TestParams object, or null if error
          */
         public static TestParams create(String[] args, PrintWriter log) {
@@ -1343,10 +1342,7 @@ public class TestFmwk extends AbstractTestLog {
 
         /**
          * Log access.
-         * @param message
-         * @param level
-         * @param incCount
-         * @param newln
+         * @param msg The string message to write
          */
         public void write(String msg) {
             write(msg, false);
