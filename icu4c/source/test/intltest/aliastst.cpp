@@ -31,7 +31,6 @@ const char* _LOCALE_ALIAS[][2] = {
 };
 
 const int _LOCALE_NUMBER = 12;
-const Locale DEFAULT_LOCALE = Locale::getUS();
 
 void LocaleAliasTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ){
     switch (index) {
@@ -176,7 +175,7 @@ LocaleAliasTest::LocaleAliasTest(){
         resIndex=NULL;
     }
     defLocale = Locale::getDefault();
-    Locale::setDefault(DEFAULT_LOCALE, status); 
+    Locale::setDefault(Locale::getUS(), status); 
 }
 LocaleAliasTest::~LocaleAliasTest(){
     /* reset the default locale */
