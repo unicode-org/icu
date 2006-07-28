@@ -181,7 +181,7 @@ enum {
     untaggedConvArrayIndex=4,
     taggedAliasArrayIndex=5,
     taggedAliasListsIndex=6,
-    tableOptions=7,
+    tableOptionsIndex=7,
     stringTableIndex=8,
     normalizedStringTableIndex=9,
     offsetsCount,    /* length of the swapper's temporary offsets[] */
@@ -1199,14 +1199,9 @@ ucnv_swapAliases(const UDataSwapper *ds,
         /* swap the entire table of contents */
         ds->swapArray32(ds, inTable, 4*(1+tocLength), outTable, pErrorCode);
 
-        /* swap strings */
-        ds->swapInvChars(ds, inTable+offsets[stringTableIndex], 2*(int32_t)toc[stringTableIndex],
+        /* swap unormalized strings & normalized strings */
+        ds->swapInvChars(ds, inTable+offsets[stringTableIndex], 2*(int32_t)(toc[stringTableIndex]+toc[normalizedStringTableIndex]),
                              outTable+offsets[stringTableIndex], pErrorCode);
-        /* swap normalized strings */
-        if (toc[normalizedStringTableIndex] > 0) {
-            ds->swapInvChars(ds, inTable+offsets[normalizedStringTableIndex], 2*(int32_t)toc[normalizedStringTableIndex],
-                                outTable+offsets[normalizedStringTableIndex], pErrorCode);
-        }
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ucnv_swapAliases().swapInvChars(charset names) failed\n");
             return 0;
