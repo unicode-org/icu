@@ -358,9 +358,9 @@ typedef uint8_t UBiDiLevel;
  * Special value which can be returned by the mapping functions when a logical
  * index has no corresponding visual index or vice-versa. This may happen
  * for the logical-to-visual mapping of a BiDi control when option
- * <code>UBIDI_OPTION_REMOVE_CONTROLS</code> is specified. This can also happen
+ * <code>#UBIDI_OPTION_REMOVE_CONTROLS</code> is specified. This can also happen
  * for the visual-to-logical mapping of a BiDi mark (LRM or RLM) inserted
- * by option <code>UBIDI_OPTION_INSERT_MARKS</code>.
+ * by option <code>#UBIDI_OPTION_INSERT_MARKS</code>.
  * @see ubidi_getVisualIndex
  * @see ubidi_getVisualMap
  * @see ubidi_getLogicalIndex
@@ -443,9 +443,9 @@ ubidi_open(void);
  *        that internal memory will be preallocated for. An attempt to access
  *        visual runs on an object that was not preallocated for as many runs
  *        as the text was actually resolved to will fail,
- *        unless this value is 0, which leaves the allocation up to the implementation.<p>
+ *        unless this value is 0, which leaves the allocation up to the implementation.<br><br>
  *        The number of runs depends on the actual text and maybe anywhere between
- *        1 and <code>maxLength</code>. It is typically small.<p>
+ *        1 and <code>maxLength</code>. It is typically small.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  *
@@ -462,8 +462,8 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
  * <strong>Important: </strong>
  * A parent <code>UBiDi</code> object must not be destroyed or reused if
  * it still has children.
- * If a <code>UBiDi</code> object is the <i>child</i>
- * of another one (its <i>parent</i>), after calling
+ * If a <code>UBiDi</code> object has become the <i>child</i>
+ * of another one (its <i>parent</i>) by calling
  * <code>ubidi_setLine()</code>, then the child object must
  * be destroyed (closed) or reused (by calling
  * <code>ubidi_setPara()</code> or <code>ubidi_setLine()</code>)
@@ -510,12 +510,12 @@ ubidi_close(UBiDi *pBiDi);
  * <code>TRUE</code> is equivalent to calling
  * <code>ubidi_setReorderingMode</code> with argument
  * <code>reorderingMode</code>
- * set to <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.<br>
+ * set to <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.<br>
  * Calling this function with argument <code>isInverse</code> set to
  * <code>FALSE</code> is equivalent to calling
  * <code>ubidi_setReorderingMode</code> with argument
  * <code>reorderingMode</code>
- * set to <code>UBIDI_REORDER_DEFAULT</code>.
+ * set to <code>#UBIDI_REORDER_DEFAULT</code>.
  *
  * @param pBiDi is a <code>UBiDi</code> object.
  *
@@ -533,7 +533,7 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
  * Is this BiDi object set to perform the inverse BiDi algorithm?
  * <p>Note: calling this function after setting the reordering mode with
  * <code>ubidi_setReorderingMode</code> will return <code>TRUE</code> if the
- * reordering mode was set to <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>,
+ * reordering mode was set to <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>,
  * <code>FALSE</code> for all other values.</p>
  *
  * @param pBiDi is a <code>UBiDi</code> object.
@@ -607,10 +607,9 @@ typedef enum UBiDiReorderingMode {
     /** Reorder runs only to transform a Logical LTR string to the Logical RTL
       * string with the same display, or vice-versa.<br>
       * If this mode is set together with option
-      * <code>UBIDI_OPTION_INSERT_MARKS</code>, some BiDi controls in the source
+      * <code>#UBIDI_OPTION_INSERT_MARKS</code>, some BiDi controls in the source
       * text may be removed and other controls may be added to produce the
       * minimum combination which has the required display.
-      * @see UBIDI_OPTION_INSERT_MARKS
       * @draft ICU 3.6 */
     UBIDI_REORDER_RUNS_ONLY,
     /** Visual to Logical algorithm which handles numbers like L
@@ -643,7 +642,7 @@ typedef enum UBiDiReorderingMode {
  * rendering.</p>
  *
  * <p>With the reordering mode set to a value other than
- * <code>UBIDI_REORDER_DEFAULT</code>, this function changes the behavior of
+ * <code>#UBIDI_REORDER_DEFAULT</code>, this function changes the behavior of
  * some of the subsequent functions in a way such that they implement an
  * inverse BiDi algorithm or some other algorithm variants.</p>
  *
@@ -657,11 +656,12 @@ typedef enum UBiDiReorderingMode {
  * Logical to Visual algorithm (e.g. one used in MS Windows), or perform a
  * Logical to Logical transformation.</p>
  *
- * <p>When the reordering mode is set to <code>UBIDI_REORDER_DEFAULT</code>,
- * the standard BiDi Logical to Visual algorithm is applied.</p>
+ * <ul>
+ * <li>When the reordering mode is set to <code>#UBIDI_REORDER_DEFAULT</code>,
+ * the standard BiDi Logical to Visual algorithm is applied.</li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_NUMBERS_SPECIAL</code>,
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_NUMBERS_SPECIAL</code>,
  * the algorithm used to perform BiDi transformations when calling
  * <code>ubidi_setPara</code> should approximate the algorithm used in
  * Microsoft Windows XP rather than strictly conform to the Unicode BiDi
@@ -675,10 +675,10 @@ typedef enum UBiDiReorderingMode {
  *   Unicode algorithm and to "BA123" by the Windows algorithm.</li>
  *   <li>Arabic-Indic numbers (AN) are handled by the Windows algorithm just
  *   like regular numbers (EN).</li>
- * </ul></p>
+ * </ul></li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_GROUP_NUMBERS_WITH_R</code>,
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_GROUP_NUMBERS_WITH_R</code>,
  * numbers located between LTR text and RTL text are associated with the RTL
  * text. For instance, an LTR paragraph with content "abc 123 DEF" (where
  * upper case letters represent RTL characters) will be transformed to
@@ -689,10 +689,10 @@ typedef enum UBiDiReorderingMode {
  * adding LRM characters. However, this is a variation from the standard
  * Unicode Bidi algorithm.<br>
  * The source text should not contain BiDi control characters other than LRM
- * or RLM.</p>
+ * or RLM.</li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_RUNS_ONLY</code>,
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_RUNS_ONLY</code>,
  * a "Logical to Logical" transformation must be performed:
  * <ul>
  * <li>If the default text level of the source text (argument <code>paraLevel</code>
@@ -704,7 +704,7 @@ typedef enum UBiDiReorderingMode {
  * LTR logical text which has the same LTR visual display.</li>
  * </ul>
  * This mode may be needed when logical text which is basically Arabic or
- * Hebrew, with possible included phrases in English or numbers, has to be
+ * Hebrew, with possible included numbers or phrases in English, has to be
  * displayed as if it had an even embedding level (this can happen if the
  * displaying application treats all text as if it was basically LTR.
  * <br>
@@ -717,22 +717,22 @@ typedef enum UBiDiReorderingMode {
  * the problem may be handled by transforming the source text in this mode
  * before displaying it, so that it will be displayed properly.<br>
  * The source text should not contain BiDi control characters other than LRM
- * or RLM.</p>
+ * or RLM.</li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>, an "inverse BiDi" algorithm
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>, an "inverse BiDi" algorithm
  * is applied.
  * Runs of text with numeric characters will be treated like LTR letters and
  * may need to be surrounded with LRM characters when they are written in
- * reordered sequence (the option <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code> can
+ * reordered sequence (the option <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code> can
  * be used with function <code>ubidi_writeReordered</code> to this end. This
- * mode is equivalent to calling <code>ubidi_setInverse</code> with
- * argument <code>isInverse</code> set to <code>TRUE</code>.</p>
+ * mode is equivalent to calling <code>ubidi_setInverse()</code> with
+ * argument <code>isInverse</code> set to <code>TRUE</code>.</li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_INVERSE_AS_DIRECT</code>, the "direct" Logical to Visual
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_INVERSE_LIKE_DIRECT</code>, the "direct" Logical to Visual
  * BiDi algorithm is used as an approximation of an "inverse BiDi" algorithm.
- * This mode is similar to mode <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>
+ * This mode is similar to mode <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>
  * but is closer to the regular BiDi algorithm.
  * <br>
  * For example, an LTR paragraph with the content "FED 123 456 CBA" (where
@@ -740,20 +740,21 @@ typedef enum UBiDiReorderingMode {
  * "ABC 456 123 DEF", as opposed to "DEF 123 456 ABC"
  * with mode <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.<br>
  * When used in conjunction with option
- * <code>UBIDI_OPTION_INSERT_MARKS</code>, this mode generally
+ * <code>#UBIDI_OPTION_INSERT_MARKS</code>, this mode generally
  * adds BiDi marks to the output significantly more sparingly than mode
- * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.<br> with option
- * <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls to
- * <code>ubidi_writeReordered</code>.</p>
+ * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> with option
+ * <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls to
+ * <code>ubidi_writeReordered</code>.</li>
  *
- * <p>When the reordering mode is set to
- * <code>UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the Logical to Visual
+ * <li>When the reordering mode is set to
+ * <code>#UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the Logical to Visual
  * BiDi algorithm used in Windows XP is used as an approximation of an
  * "inverse BiDi" algorithm.
  * <br>
  * For example, an LTR paragraph with the content "abc FED123" (where
  * upper case represents RTL characters) will be transformed to
- * "abc 123DEF.</p>
+ * "abc 123DEF.</li>
+ * </ul>
  *
  * <p>In all the reordering modes specifying an "inverse BiDi" algorithm
  * (i.e. those with a name starting with <code>UBIDI_REORDER_INVERSE</code>),
@@ -767,7 +768,7 @@ typedef enum UBiDiReorderingMode {
  * For all the "inverse BiDi" modes, the source text should not contain
  * BiDi control characters other than LRM or RLM.</p>
  *
- * <p>Note that option <code>UBIDI_OUTPUT_REVERSE</code> of
+ * <p>Note that option <code>#UBIDI_OUTPUT_REVERSE</code> of
  * <code>ubidi_writeReordered</code> has no useful meaning and should not be
  * used in conjunction with any value of the reordering mode specifying
  * "inverse BiDi" or with value <code>UBIDI_REORDER_RUNS_ONLY</code>.
@@ -822,34 +823,34 @@ typedef enum UBiDiReorderingOption {
      * <p>This option is significant only with reordering modes which generate
      * a result with Logical order, specifically:</p>
      * <ul>
-     *   <li><code>UBIDI_REORDER_RUNS_ONLY</code></li>
-     *   <li><code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code></li>
-     *   <li><code>UBIDI_REORDER_INVERSE_LIKE_DIRECT</code></li>
-     *   <li><code>UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code></li>
+     *   <li><code>#UBIDI_REORDER_RUNS_ONLY</code></li>
+     *   <li><code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code></li>
+     *   <li><code>#UBIDI_REORDER_INVERSE_LIKE_DIRECT</code></li>
+     *   <li><code>#UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code></li>
      * </ul>
      *
      * <p>If this option is set in conjunction with reordering mode
-     * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> or with calling
+     * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> or with calling
      * <code>ubidi_setInverse(TRUE)</code>, it implies
-     * option <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code>
-     * in calls to function <code>ubidi_writeReordered</code>.</p>
+     * option <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code>
+     * in calls to function <code>ubidi_writeReordered()</code>.</p>
      *
      * <p>For other reordering modes, a minimum number of LRM or RLM characters
      * will be added to the source text after reordering it so as to ensure
      * round trip, i.e. when applying the inverse reordering mode on the
      * resulting logical text with removal of BiDi marks
-     * (option <code>UBIDI_OPTION_REMOVE_CONTROLS</code> set before calling
-     * <code>ubidi_setPara</code> or option <code>UBIDI_REMOVE_BIDI_CONTROLS</code>
+     * (option <code>#UBIDI_OPTION_REMOVE_CONTROLS</code> set before calling
+     * <code>ubidi_setPara()</code> or option <code>#UBIDI_REMOVE_BIDI_CONTROLS</code>
      * in <code>ubidi_writeReordered</code>), the result will be identical to the
      * source text in the first transformation.
      *
      * <p>This option will be ignored if specified together with option
-     * <code>UBIDI_OPTION_REMOVE_CONTROLS</code>. It inhibits option
+     * <code>#UBIDI_OPTION_REMOVE_CONTROLS</code>. It inhibits option
      * <code>UBIDI_REMOVE_BIDI_CONTROLS</code> in calls to function
-     * <code>ubidi_writeReordered</code> and it implies option
-     * <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls to function
-     * <code>ubidi_writeReordered</code> if the reordering mode is
-     * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.</p>
+     * <code>ubidi_writeReordered()</code> and it implies option
+     * <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls to function
+     * <code>ubidi_writeReordered()</code> if the reordering mode is
+     * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.</p>
      *
      * @see ubidi_setReorderingMode
      * @see ubidi_setReorderingOptions
@@ -864,13 +865,10 @@ typedef enum UBiDiReorderingOption {
      * <p>This option must be set or reset before calling
      * <code>ubidi_setPara</code>.</p>
      *
-     * <p>This option implies the option <code>UBIDI_REMOVE_BIDI_CONTROLS</code>
-     * in <code>ubidi_writeReordered</code>.</p>
-     *
-     * <p>This option nullifies option <code>UBIDI_OPTION_INSERT_MARKS</code>.
-     * It inhibits option <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls
-     * to function <code>ubidi_writeReordered</code> and it implies option
-     * <code>UBIDI_REMOVE_BIDI_CONTROLS</code> in calls to that function.</p>
+     * <p>This option nullifies option <code>#UBIDI_OPTION_INSERT_MARKS</code>.
+     * It inhibits option <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code> in calls
+     * to function <code>ubidi_writeReordered()</code> and it implies option
+     * <code>#UBIDI_REMOVE_BIDI_CONTROLS</code> in calls to that function.</p>
      *
      * @see ubidi_setReorderingMode
      * @see ubidi_setReorderingOptions
@@ -932,12 +930,12 @@ typedef enum UBiDiReorderingOption {
  * should be applied during BiDi transformations.
  *
  * @param pBiDi is a <code>UBiDi</code> object.
- * @param reorderingOptions is a combination of zero or more reordering options.
+ * @param reorderingOptions is a combination of zero or more of the following
+ * options:
+ * <code>#UBIDI_OPTION_DEFAULT</code>, <code>#UBIDI_OPTION_INSERT_MARKS</code>,
+ * <code>#UBIDI_OPTION_REMOVE_CONTROLS</code>, <code>#UBIDI_OPTION_STREAMING</code>.
+ *
  * @see ubidi_getReorderingOptions
- * @see UBIDI_OPTION_DEFAULT
- * @see UBIDI_OPTION_INSERT_MARKS
- * @see UBIDI_OPTION_REMOVE_CONTROLS
- * @see UBIDI_OPTION_STREAMING
  * @draft ICU 3.6
  */
 U_DRAFT void U_EXPORT2
@@ -985,11 +983,10 @@ ubidi_getReorderingOptions(UBiDi *pBiDi);
  *        which will be set to contain the reordering information,
  *        especially the resolved levels for all the characters in <code>text</code>.
  *
- * @param text is a pointer to the text that the
- *        BiDi algorithm will be performed on
- *        <strong>The text must be (at least) <code>length</code> long.</strong>
+ * @param text is a pointer to the text that the BiDi algorithm will be performed on.
  *        This pointer is stored in the UBiDi object and can be retrieved
- *        with <code>ubidi_getText()</code>.
+ *        with <code>ubidi_getText()</code>.<br>
+ *        <strong>Note:</strong> the text must be (at least) <code>length</code> long.
  *
  * @param length is the length of the text; if <code>length==-1</code> then
  *        the text must be zero-terminated.
@@ -998,24 +995,24 @@ ubidi_getReorderingOptions(UBiDi *pBiDi);
  *        it is typically 0 (LTR) or 1 (RTL).
  *        If the function shall determine the paragraph level from the text,
  *        then <code>paraLevel</code> can be set to
- *        either <code>UBIDI_DEFAULT_LTR</code>
- *        or <code>UBIDI_DEFAULT_RTL</code>; if the text contains multiple
+ *        either <code>#UBIDI_DEFAULT_LTR</code>
+ *        or <code>#UBIDI_DEFAULT_RTL</code>; if the text contains multiple
  *        paragraphs, the paragraph level shall be determined separately for
  *        each paragraph; if a paragraph does not include any strongly typed
  *        character, then the desired default is used (0 for LTR or 1 for RTL).
- *        Any other value between 0 and <code>UBIDI_MAX_EXPLICIT_LEVEL</code> is also valid,
- *        with odd levels indicating RTL.
+ *        Any other value between 0 and <code>#UBIDI_MAX_EXPLICIT_LEVEL</code>
+ *        is also valid, with odd levels indicating RTL.
  *
  * @param embeddingLevels (in) may be used to preset the embedding and override levels,
  *        ignoring characters like LRE and PDF in the text.
  *        A level overrides the directional property of its corresponding
  *        (same index) character if the level has the
- *        <code>UBIDI_LEVEL_OVERRIDE</code> bit set.<p>
+ *        <code>#UBIDI_LEVEL_OVERRIDE</code> bit set.<br><br>
  *        Except for that bit, it must be
  *        <code>paraLevel<=embeddingLevels[]<=UBIDI_MAX_EXPLICIT_LEVEL</code>,
  *        with one exception: a level of zero may be specified for a paragraph
  *        separator even if <code>paraLevel>0</code> when multiple paragraphs
- *        are submitted in the same call to <code>ubidi_setPara()</code>.<p>
+ *        are submitted in the same call to <code>ubidi_setPara()</code>.<br><br>
  *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
  *        will be stored in the <code>UBiDi</code> object;
  *        the <code>embeddingLevels</code> array must not be
@@ -1023,11 +1020,11 @@ ubidi_getReorderingOptions(UBiDi *pBiDi);
  *        and the <code>embeddingLevels</code>
  *        should not be modified to avoid unexpected results on subsequent BiDi operations.
  *        However, the <code>ubidi_setPara()</code> and
- *        <code>ubidi_setLine()</code> functions may modify some or all of the levels.<p>
+ *        <code>ubidi_setLine()</code> functions may modify some or all of the levels.<br><br>
  *        After the <code>UBiDi</code> object is reused or destroyed, the caller
- *        must take care of the deallocation of the <code>embeddingLevels</code> array.<p>
- *        <strong>The <code>embeddingLevels</code> array must be
- *        at least <code>length</code> long.</strong>
+ *        must take care of the deallocation of the <code>embeddingLevels</code> array.<br><br>
+ *        <strong>Note:</strong> the <code>embeddingLevels</code> array must be
+ *        at least <code>length</code> long.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  * @stable ICU 2.0
@@ -1371,9 +1368,9 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
  * <code>UBiDi</code> object, then calling
  * <code>ubidi_getLogicalMap()</code> is more efficient.<p>
  *
- * The value returned may be <code>UBIDI_MAP_NOWHERE</code> if there is no
+ * The value returned may be <code>#UBIDI_MAP_NOWHERE</code> if there is no
  * visual position because the corresponding text character is a BiDi control
- * removed from output by the option <code>UBIDI_OPTION_REMOVE_CONTROLS</code>.
+ * removed from output by the option <code>#UBIDI_OPTION_REMOVE_CONTROLS</code>.
  * <p>
  * Note that in right-to-left runs, this mapping places
  * modifier letters before base characters and second surrogates
@@ -1401,9 +1398,9 @@ ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode)
  * <code>UBiDi</code> object, then calling
  * <code>ubidi_getVisualMap()</code> is more efficient.<p>
  *
- * The value returned may be <code>UBIDI_MAP_NOWHERE</code> if there is no
+ * The value returned may be <code>#UBIDI_MAP_NOWHERE</code> if there is no
  * logical position because the corresponding text character is a BiDi mark
- * inserted in the output by option <code>UBIDI_OPTION_INSERT_MARKS</code>.
+ * inserted in the output by option <code>#UBIDI_OPTION_INSERT_MARKS</code>.
  * <p>
  * This is the inverse function to <code>ubidi_getVisualIndex()</code>.
  *
@@ -1427,19 +1424,19 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  * Get a logical-to-visual index map (array) for the characters in the UBiDi
  * (paragraph or line) object.
  * <p>
- * Some values in the map may be <code>UBIDI_MAP_NOWHERE</code> if the
+ * Some values in the map may be <code>#UBIDI_MAP_NOWHERE</code> if the
  * corresponding text characters are BiDi controls removed from the visual
- * output by the option <code>UBIDI_OPTION_REMOVE_CONTROLS</code>.
+ * output by the option <code>#UBIDI_OPTION_REMOVE_CONTROLS</code>.
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
  * @param indexMap is a pointer to an array of <code>ubidi_getProcessedLength()</code>
  *        indexes which will reflect the reordering of the characters.
- *        If option <code>UBIDI_OPTION_INSERT_MARKS</code> is set, the number
- *        of elements in <code>indexMap</code> must be no less than
+ *        If option <code>#UBIDI_OPTION_INSERT_MARKS</code> is set, the number
+ *        of elements allocated in <code>indexMap</code> must be no less than
  *        <code>ubidi_getResultLength()</code>.
- *        The array does not need to be initialized.<p>
- *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.<p>
+ *        The array does not need to be initialized.<br><br>
+ *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  *
@@ -1456,19 +1453,19 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  * Get a visual-to-logical index map (array) for the characters in the UBiDi
  * (paragraph or line) object.
  * <p>
- * Some values in the map may be <code>UBIDI_MAP_NOWHERE</code> if the
+ * Some values in the map may be <code>#UBIDI_MAP_NOWHERE</code> if the
  * corresponding text characters are BiDi marks inserted in the visual output
- * by the option <code>UBIDI_OPTION_INSERT_MARKS</code>.
+ * by the option <code>#UBIDI_OPTION_INSERT_MARKS</code>.
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
  * @param indexMap is a pointer to an array of <code>ubidi_getResultLength()</code>
  *        indexes which will reflect the reordering of the characters.
- *        If option <code>UBIDI_OPTION_REMOVE_CONTROLS_MARKS</code> is set, the number
- *        of elements in <code>indexMap</code> must be no less than
+ *        If option <code>#UBIDI_OPTION_REMOVE_CONTROLS</code> is set, the number
+ *        of elements allocated in <code>indexMap</code> must be no less than
  *        <code>ubidi_getProcessedLength()</code>.
- *        The array does not need to be initialized.<p>
- *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.<p>
+ *        The array does not need to be initialized.<br><br>
+ *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  *
@@ -1485,7 +1482,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  * This is a convenience function that does not use a UBiDi object.
  * It is intended to be used for when an application has determined the levels
  * of objects (character sequences) and just needs to have them reordered (L2).
- * This is equivalent to using <code>ubidi_getLogicalMap</code> on a
+ * This is equivalent to using <code>ubidi_getLogicalMap()</code> on a
  * <code>UBiDi</code> object.
  *
  * @param levels is an array with <code>length</code> levels that have been determined by
@@ -1508,7 +1505,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap
  * This is a convenience function that does not use a UBiDi object.
  * It is intended to be used for when an application has determined the levels
  * of objects (character sequences) and just needs to have them reordered (L2).
- * This is equivalent to using <code>ubidi_getVisualMap</code> on a
+ * This is equivalent to using <code>ubidi_getVisualMap()</code> on a
  * <code>UBiDi</code> object.
  *
  * @param levels is an array with <code>length</code> levels that have been determined by
@@ -1595,7 +1592,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
 /**
  * option bit for ubidi_writeReordered():
  * remove BiDi control characters
- * (this does not affect UBIDI_INSERT_LRM_FOR_NUMERIC)
+ * (this does not affect #UBIDI_INSERT_LRM_FOR_NUMERIC)
  *
  * <p>This option does not imply corresponding adjustment of the index
  * mappings.</p>
@@ -1624,7 +1621,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
 /**
  * Get the length of the source text processed by the last call to
  * <code>ubidi_setPara()</code>. This length may be different from the length
- * of the source text if option <code>UBIDI_OPTION_STREAMING</code>
+ * of the source text if option <code>#UBIDI_OPTION_STREAMING</code>
  * has been set.
  * <br>
  * Note that whenever the length of the text affects the execution or the
@@ -1665,8 +1662,8 @@ ubidi_getProcessedLength(const UBiDi *pBiDi);
 /**
  * Get the length of the reordered text resulting from the last call to
  * <code>ubidi_setPara()</code>. This length may be different from the length
- * of the source text if option <code>UBIDI_OPTION_INSERT_MARKS</code>
- * or option <code>UBIDI_OPTION_REMOVE_CONTROLS</code> has been set.
+ * of the source text if option <code>#UBIDI_OPTION_INSERT_MARKS</code>
+ * or option <code>#UBIDI_OPTION_REMOVE_CONTROLS</code> has been set.
  * <br>
  * This resulting length is the one to consider in the following cases:
  * <ul>
@@ -1678,7 +1675,7 @@ ubidi_getProcessedLength(const UBiDi *pBiDi);
  * Note that this length stays identical to the source text length if
  * BiDi marks are inserted or removed using option bits of
  * <code>ubidi_writeReordered</code>, or if option
- * <code>UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> has been set.
+ * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> has been set.
  *
  * @param pBiDi is the paragraph <code>UBiDi</code> object.
  *
@@ -1705,7 +1702,7 @@ U_CDECL_BEGIN
  * Callback type declaration for overriding default BiDi class values with
  * custom ones.
  * <p>Usually, the function pointer will be propagated to a <code>UBiDi</code>
- * object by calling the <code>ubidi_setClassCallback</code> function;
+ * object by calling the <code>ubidi_setClassCallback()</code> function;
  * then the callback will be invoked by the UBA implementation any time the
  * class of a character is to be determined.</p>
  *
@@ -1715,7 +1712,7 @@ U_CDECL_BEGIN
  *
  * @return The directional property / BiDi class for the given code point
  *         <code>c</code> if the default class has been overridden, or
- *         <code>U_BIDI_CLASS_DEFAULT</code> if the standard BiDi class value
+ *         <code>#U_BIDI_CLASS_DEFAULT</code> if the standard BiDi class value
  *         for <code>c</code> is to be used.
  * @see ubidi_setClassCallback
  * @see ubidi_getClassCallback
@@ -1728,8 +1725,8 @@ U_CDECL_END
 
 /**
  * Retrieve the BiDi class for a given code point.
- * <p>If a <code>UBiDiClassCallback</code> callback is defined and returns a
- * value other than <code>U_BIDI_CLASS_DEFAULT</code>, that value is used;
+ * <p>If a <code>#UBiDiClassCallback</code> callback is defined and returns a
+ * value other than <code>#U_BIDI_CLASS_DEFAULT</code>, that value is used;
  * otherwise the default class determination mechanism is invoked.</p>
  *
  * @param pBiDi is the paragraph <code>UBiDi</code> object.
@@ -1809,20 +1806,14 @@ ubidi_getClassCallback(UBiDi *pBiDi, UBiDiClassCallback **fn, const void **conte
  * characters; see the description of the <code>destSize</code>
  * and <code>options</code> parameters and of the option bit flags.
  *
- * @see UBIDI_DO_MIRRORING
- * @see UBIDI_INSERT_LRM_FOR_NUMERIC
- * @see UBIDI_KEEP_BASE_COMBINING
- * @see UBIDI_OUTPUT_REVERSE
- * @see UBIDI_REMOVE_BIDI_CONTROLS
- *
  * @param pBiDi A pointer to a <code>UBiDi</code> object that
  *              is set by <code>ubidi_setPara()</code> or
  *              <code>ubidi_setLine()</code> and contains the reordering
  *              information for the text that it was defined for,
- *              as well as a pointer to that text.
- *              <p>The text was aliased (only the pointer was stored
+ *              as well as a pointer to that text.<br><br>
+ *              The text was aliased (only the pointer was stored
  *              without copying the contents) and must not have been modified
- *              since the <code>ubidi_setPara()</code> call.</p>
+ *              since the <code>ubidi_setPara()</code> call.
  *
  * @param dest A pointer to where the reordered text is to be copied.
  *             The source text and <code>dest[destSize]</code>
