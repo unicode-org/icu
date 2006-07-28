@@ -2937,9 +2937,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       */
       uint32_t size;
       uint32_t i;    /* general counter */
-      collIterateState digitState;
 
       if (source->coll->numericCollation == UCOL_ON){
+        collIterateState digitState = {0,0,0,0,0,0,0,0};
         UChar32 char32 = 0;
 
         uint32_t digIndx = 0;
@@ -2992,16 +2992,17 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         */
         digIndx++;
         for(;;){
-        // Make sure we have enough space.
-        if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
-        {
-            numTempBufSize *= 2;
-            if (numTempBuf == stackNumTempBuf){
-                numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
-                uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
-            }else
-                uprv_realloc(numTempBuf, numTempBufSize);
-        }
+            // Make sure we have enough space.
+            if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
+            {
+                numTempBufSize *= 2;
+                if (numTempBuf == stackNumTempBuf){
+                    numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+                    uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+                } else {
+                    uprv_realloc(numTempBuf, numTempBufSize);
+                }
+            }
 
             // Skipping over leading zeroes.
             if (digVal != 0) {
@@ -3532,9 +3533,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       */
       //uint32_t size;
       uint32_t i;    /* general counter */
-      collIterateState state;
 
       if (source->coll->numericCollation == UCOL_ON){
+        collIterateState state = {0,0,0,0,0,0,0,0};
         UChar32 char32 = 0;
 
         uint32_t digIndx = 0;
