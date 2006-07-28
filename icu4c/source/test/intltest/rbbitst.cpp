@@ -1370,6 +1370,7 @@ void RBBITest::executeTest(TestParams *t) {
 
 
 void RBBITest::TestExtended() {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UErrorCode      status  = U_ZERO_ERROR;
     Locale          locale("");
 
@@ -1720,6 +1721,7 @@ end_test:
     delete tp.srcLine;
     delete tp.srcCol;
     delete [] testFile;
+#endif
 }
 
 
@@ -3744,6 +3746,7 @@ void RBBITest::TestLineBreaks(void)
 
 void RBBITest::TestSentBreaks(void)
 {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
@@ -3802,6 +3805,7 @@ void RBBITest::TestSentBreaks(void)
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
     delete bi;
+#endif
 }
 
 void RBBITest::TestMonkey(char *params) {

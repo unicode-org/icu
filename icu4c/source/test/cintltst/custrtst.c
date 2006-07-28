@@ -1522,6 +1522,11 @@ TestUNormIterator() {
     /* test nothing */
 }
 
+static void
+TestBadUNormIterator(void) {
+    /* test nothing, as well */
+}
+
 #else
 
 #include "unicode/unorm.h"

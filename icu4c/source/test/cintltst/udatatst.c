@@ -1594,12 +1594,14 @@ TestSwapData() {
     errorCode=U_ZERO_ERROR;
 
     /* Test argument checking. ucol_swapBinary is normally tested via ures_swap, and isn't normally called directly. */
+#if !UCONFIG_NO_COLLATION
     ucol_swapBinary(NULL, NULL, -1, NULL, NULL);
     ucol_swapBinary(NULL, NULL, -1, NULL, &errorCode);
     if (errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucol_swapBinary did not fail as expected\n", name);
     }
     errorCode=U_ZERO_ERROR;
+#endif
 
     for(i=0; i<LENGTHOF(swapCases); ++i) {
         /* build the name for logging */

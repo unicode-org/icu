@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,8 @@
 #include "ucm.h"
 #include "makeconv.h"
 #include "genmbcs.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 typedef struct MBCSData {
     NewConverter newConverter;
@@ -1098,3 +1100,5 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     /* return the number of bytes that should have been written */
     return header.offsetFromUBytes+header.fromUBytesLength;
 }
+
+#endif /* UCONFIG_NO_CONVERSION */

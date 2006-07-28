@@ -44,12 +44,16 @@ static void TestUTF32(void);
 static void TestUTF32BE(void);
 static void TestUTF32LE(void);
 static void TestLATIN1(void);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestSBCS(void);
 static void TestDBCS(void);
 static void TestMBCS(void);
+
 #ifdef U_ENABLE_GENERIC_ISO_2022
 static void TestISO_2022(void);
 #endif
+
 static void TestISO_2022_JP(void);
 static void TestISO_2022_JP_1(void);
 static void TestISO_2022_JP_2(void);
@@ -59,7 +63,11 @@ static void TestISO_2022_CN(void);
 static void TestISO_2022_CN_EXT(void);
 static void TestJIS(void);
 static void TestHZ(void);
+#endif
+
 static void TestSCSU(void);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestEBCDIC_STATEFUL(void);
 static void TestGB18030(void);
 static void TestLMBCS(void);
@@ -67,16 +75,19 @@ static void TestJitterbug255(void);
 static void TestEBCDICUS4XML(void);
 static void TestJitterbug915(void);
 static void TestISCII(void);
+
+static void TestCoverageMBCS(void);
+static void TestJitterbug2346(void);
+static void TestJitterbug2411(void);
+#endif
+
+static void TestRoundTrippingAllUTF(void);
 static void TestConv(const uint16_t in[],
                      int len,
                      const char* conv,
                      const char* lang,
                      char byteArr[],
                      int byteArrLen);
-static void TestRoundTrippingAllUTF(void);
-static void TestCoverageMBCS(void);
-static void TestJitterbug2346(void);
-static void TestJitterbug2411(void);
 void addTestNewConvert(TestNode** root);
 
 /* open a converter, using test data if it begins with '@' */
@@ -229,15 +240,22 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestUTF32, "tsconv/nucnvtst/TestUTF32");
    addTest(root, &TestUTF32BE, "tsconv/nucnvtst/TestUTF32BE");
    addTest(root, &TestUTF32LE, "tsconv/nucnvtst/TestUTF32LE");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
+#endif
 
    addTest(root, &TestLATIN1, "tsconv/nucnvtst/TestLATIN1");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestSBCS, "tsconv/nucnvtst/TestSBCS");
    addTest(root, &TestDBCS, "tsconv/nucnvtst/TestDBCS");
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
+
 #ifdef U_ENABLE_GENERIC_ISO_2022
    addTest(root, &TestISO_2022, "tsconv/nucnvtst/TestISO_2022");
 #endif
+
    addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
    addTest(root, &TestJIS, "tsconv/nucnvtst/TestJIS");
    addTest(root, &TestISO_2022_JP_1, "tsconv/nucnvtst/TestISO_2022_JP_1");
@@ -248,20 +266,35 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISO_2022_CN_EXT, "tsconv/nucnvtst/TestISO_2022_CN_EXT");
    addTest(root, &TestJitterbug915, "tsconv/nucnvtst/TestJitterbug915");
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
+#endif
+
    addTest(root, &TestSCSU, "tsconv/nucnvtst/TestSCSU");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
    addTest(root, &TestGB18030, "tsconv/nucnvtst/TestGB18030");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
    addTest(root, &TestISCII, "tsconv/nucnvtst/TestISCII");
+
 #if !UCONFIG_NO_COLLATION
    addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
 #endif
+
    addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
+#endif
+
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
+#endif
+
    addTest(root, &TestRoundTrippingAllUTF, "tsconv/nucnvtst/TestRoundTrippingAllUTF");
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
    addTest(root, &TestJitterbug2346, "tsconv/nucnvtst/TestJitterbug2346");
    addTest(root, &TestJitterbug2411, "tsconv/nucnvtst/TestJitterbug2411");
+#endif
 
 }
 
@@ -775,11 +808,13 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 
     }
-#ifdef U_ENABLE_GENERIC_ISO_2022
+
+#if !UCONFIG_NO_LEGACY_CONVERSION && defined(U_ENABLE_GENERIC_ISO_2022)
     /*ISO-2022*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs,FALSE );
 #endif
+
     /*UTF16 LE*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs,FALSE );
@@ -792,9 +827,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*UTF32 BE*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedUTF32BE, sizeof(expectedUTF32BE), "utf-32be", toUTF32BEOffs,FALSE );
+
     /*LATIN_1*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedLATIN1, sizeof(expectedLATIN1), "LATIN_1", toLATIN1Offs,FALSE );
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
     /*EBCDIC_STATEFUL*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs,FALSE );
@@ -815,6 +853,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*SBCS*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,FALSE );
+#endif
 
 
 /****/
@@ -822,11 +861,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*UTF-8*/
     testConvertToU(expectedUTF8, sizeof(expectedUTF8),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs,FALSE);
-#ifdef U_ENABLE_GENERIC_ISO_2022
+#if !UCONFIG_NO_LEGACY_CONVERSION && defined(U_ENABLE_GENERIC_ISO_2022)
     /*ISO-2022*/
     testConvertToU(expectedISO2022, sizeof(expectedISO2022),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs,FALSE);
 #endif
+
     /*UTF16 LE*/
     testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs,FALSE);
@@ -839,17 +879,21 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*UTF32 BE*/
     testConvertToU(expectedUTF32BE, sizeof(expectedUTF32BE),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-32be", fmUTF32BEOffs,FALSE);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
     /*EBCDIC_STATEFUL*/
     testConvertToU(expectedIBM930, sizeof(expectedIBM930),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-930", fmIBM930Offs,FALSE);
     /*MBCS*/
     testConvertToU(expectedIBM943, sizeof(expectedIBM943),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-943", fmIBM943Offs,FALSE);
+#endif
 
     /* Try it again to make sure it still works */
     testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs,FALSE);
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
     testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
         malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL,FALSE);
 
@@ -861,6 +905,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs,FALSE );
     testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
         LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs,FALSE);
+#endif
 
     /* UTF-7 examples are mostly from http://www.imc.org/rfc2152 */
     {
@@ -1274,6 +1319,7 @@ static void TestConverterType(const char *convName, UConverterType convType) {
 
 static void TestConverterTypesAndStarters()
 {
+#if !UCONFIG_NO_LEGACY_CONVERSION
     UConverter* myConverter;
     UErrorCode err = U_ZERO_ERROR;
     UBool mystarters[256];
@@ -1334,19 +1380,33 @@ static void TestConverterTypesAndStarters()
 
     TestConverterType("ibm-930", UCNV_EBCDIC_STATEFUL);
     TestConverterType("ibm-878", UCNV_SBCS);
+#endif
+
     TestConverterType("iso-8859-1", UCNV_LATIN_1);
+
     TestConverterType("ibm-1208", UCNV_UTF8);
+
     TestConverterType("utf-8", UCNV_UTF8);
     TestConverterType("UTF-16BE", UCNV_UTF16_BigEndian);
     TestConverterType("UTF-16LE", UCNV_UTF16_LittleEndian);
     TestConverterType("UTF-32BE", UCNV_UTF32_BigEndian);
     TestConverterType("UTF-32LE", UCNV_UTF32_LittleEndian);
-#ifdef U_ENABLE_GENERIC_ISO_2022
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
+#if defined(U_ENABLE_GENERIC_ISO_2022)
     TestConverterType("iso-2022", UCNV_ISO_2022);
 #endif
+
     TestConverterType("hz", UCNV_HZ);
+#endif
+
     TestConverterType("scsu", UCNV_SCSU);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
     TestConverterType("x-iscii-de", UCNV_ISCII);
+#endif
+
     TestConverterType("ascii", UCNV_US_ASCII);
     TestConverterType("utf-7", UCNV_UTF7);
     TestConverterType("IMAP-mailbox-name", UCNV_IMAP_MAILBOX);
@@ -1428,6 +1488,7 @@ static void TestAmbiguous()
         }
     }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
     sjis_cnv = ucnv_open("ibm-943", &status);
     if (U_FAILURE(status))
     {
@@ -1480,6 +1541,7 @@ static void TestAmbiguous()
     }
     ucnv_close(sjis_cnv);
     ucnv_close(ascii_cnv);
+#endif
 }
 
 static void
@@ -3607,6 +3669,8 @@ TestSCSU() {
     TestConv(russianUTF16,(sizeof(russianUTF16)/2), "SCSU","russian",(char *)russianSCSU,sizeof(russianSCSU));
     TestConv(monkeyIn,(sizeof(monkeyIn)/2),"SCSU","monkey",NULL,0);
 }
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestJitterbug2346(){
     char source[] = { 0x1b,0x24,0x42,0x3d,0x45,0x1b,0x28,0x4a,0x0d,0x0a,
                       0x1b,0x24,0x42,0x3d,0x45,0x1b,0x28,0x4a,0x0d,0x0a};
@@ -3654,6 +3718,7 @@ static void TestJitterbug2346(){
 
 
 }
+
 static void
 TestISO_2022_JP_1() {
     /* test input */
@@ -5133,6 +5198,7 @@ static void TestEBCDICUS4XML()
     }
     ucnv_close(cnv);
 }
+#endif /* #if !UCONFIG_NO_LEGACY_COLLATION */
 
 #if !UCONFIG_NO_COLLATION
 
