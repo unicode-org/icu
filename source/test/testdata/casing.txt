@@ -1,6 +1,6 @@
 ﻿//*******************************************************************************
 //*
-//*   Copyright (C) 2002-2005, International Business Machines
+//*   Copyright (C) 2002-2006, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -36,6 +36,7 @@ casing:table(nofallback) {
       titlecasing {
         Headers { "Input", "Output", "Locale", "Type" }
         Cases {
+            { "ʻaMeLikA huI Pū ʻʻʻiA", "ʻAmelika Hui Pū ʻʻʻIa", "", "-1" }, // titlecase first _cased_ letter, j4933
             { " tHe QUIcK bRoWn", " The Quick Brown", "", "4" },
             { "ǄǅǆǇǈǉǊǋǌ", "ǅǅǅǈǈǈǋǋǋ", "", "0" }, // UBRK_CHARACTER
             { "ǉubav ljubav", "ǈubav Ljubav", "", "-1" }, // Lj vs. L+j

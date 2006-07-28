@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -174,7 +174,7 @@ _toTitle(const UCaseProps *csp,
          UErrorCode *pErrorCode) {
     const UChar *s;
     UChar32 c;
-    int32_t prev, index, destIndex;
+    int32_t prev, titleStart, titleLimit, index, destIndex, length;
     UBool isFirstIndex;
 
     /* set up local variables */
@@ -195,28 +195,64 @@ _toTitle(const UCaseProps *csp,
             index=srcLength;
         }
 
-        /* lowercase [prev..index[ */
+        /*
+         * Unicode 4 & 5 section 3.13 Default Case Operations:
+         *
+         * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+         * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+         * cased character F. If F exists, map F to default_title(F); then map each
+         * subsequent character C to default_lower(C).
+         *
+         * In this implementation, segment [prev..index[ into 3 parts:
+         * a) uncased characters (copy as-is) [prev..titleStart[
+         * b) first case letter (titlecase)         [titleStart..titleLimit[
+         * c) subsequent characters (lowercase)                 [titleLimit..index[
+         */
         if(prev<index) {
-            destIndex+=
-                _caseMap(
-                    csp, ucase_toFullLower,
-                    dest+destIndex, destCapacity-destIndex,
-                    src, csc,
-                    prev, index,
-                    locale, locCache,
-                    pErrorCode);
-        }
+            /* find and copy uncased characters [prev..titleStart[ */
+            titleStart=titleLimit=prev;
+            for(;;) {
+                U16_NEXT(src, titleLimit, srcLength, c);
+                if(UCASE_NONE!=ucase_getType(csp, c)) {
+                    break; /* cased letter at [titleStart..titleLimit[ */
+                }
+                titleStart=titleLimit;
+                if(titleLimit==index) {
+                    /*
+                     * only uncased characters in [prev..index[
+                     * stop with titleStart==titleLimit==index
+                     */
+                    break;
+                }
+            }
+            length=titleStart-prev;
+            if(length>0) {
+                if((destIndex+length)<=destCapacity) {
+                    uprv_memcpy(dest+destIndex, src+prev, length*U_SIZEOF_UCHAR);
+                }
+                destIndex+=length;
+            }
 
-        if(index>=srcLength) {
-            break;
-        }
+            if(titleStart<titleLimit) {
+                /* titlecase c which is from [titleStart..titleLimit[ */
+                csc->cpStart=titleStart;
+                csc->cpLimit=titleLimit;
+                c=ucase_toFullTitle(csp, c, utf16_caseContextIterator, csc, &s, locale, locCache);
+                destIndex=appendResult(dest, destIndex, destCapacity, c, s);
 
-        /* titlecase the character at the found index */
-        csc->cpStart=index;
-        U16_NEXT(src, index, srcLength, c);
-        csc->cpLimit=index;
-        c=ucase_toFullTitle(csp, c, utf16_caseContextIterator, csc, &s, locale, locCache);
-        destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                /* lowercase [titleLimit..index[ */
+                if(titleLimit<index) {
+                    destIndex+=
+                        _caseMap(
+                            csp, ucase_toFullLower,
+                            dest+destIndex, destCapacity-destIndex,
+                            src, csc,
+                            titleLimit, index,
+                            locale, locCache,
+                            pErrorCode);
+                }
+            }
+        }
 
         prev=index;
     }
