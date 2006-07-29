@@ -12,6 +12,9 @@
 
 #include "wbnf.h"
     
+// Most of this code is meant to test the test code. It's a self test.
+// Normally this isn't run.
+#define TEST_WBNF_TEST 0
 
 ///////////////////////////////////////////////////////////
 //
@@ -1272,6 +1275,23 @@ public:
 // 
 //
 
+int DumpScanner(Scanner & s, UBool dump = TRUE){
+    int len = strlen(s.source);
+    int error_start_offset = s.history - s.source;
+    if (dump){
+        printf("\n=================== DumpScanner ================\n");
+        fwrite(s.source, len, 1, stdout);
+        printf("\n-----parsed-------------------------------------\n");
+        fwrite(s.source, s.history - s.source, 1, stdout);
+        printf("\n-----current------------------------------------\n");
+        fwrite(s.history, s.working - s.history, 1, stdout);
+        printf("\n-----unparsed-----------------------------------\n");
+        fwrite(s.working, (s.source + len - s.working), 1, stdout);
+        printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+    }
+    return error_start_offset;
+}
+
 class LanguageGenerator_impl{
 public:
     LanguageGenerator_impl(const char *const bnf_definition, const char *const top_node)
@@ -1338,7 +1358,7 @@ const char *LanguageGenerator::next(){ // Return a null-terminated c-string. The
         return "";
     }
 }
-    
+
 ///////////////////////////////////////////////////////////
 //
 // The test code for WBNF
@@ -1362,6 +1382,7 @@ const char *LanguageGenerator::next(){ // Return a null-terminated c-string. The
 
 
 
+#if TEST_WBNF_TEST    
 static UBool TestQuote(){
     const char *const str = "This ' A !,z| qq [] .new\tline";
     //const char *const str_r = "This \\' A '!,'z'|' qq '[]' '.'new\tline";
@@ -1510,23 +1531,6 @@ static UBool TestSymbolTable(){
     return pass;
 }
 
-
-int DumpScanner(Scanner & s, UBool dump = TRUE){
-    int len = strlen(s.source);
-    int error_start_offset = s.history - s.source;
-    if (dump){
-        printf("\n=================== DumpScanner ================\n");
-        fwrite(s.source, len, 1, stdout);
-        printf("\n-----parsed-------------------------------------\n");
-        fwrite(s.source, s.history - s.source, 1, stdout);
-        printf("\n-----current------------------------------------\n");
-        fwrite(s.history, s.working - s.history, 1, stdout);
-        printf("\n-----unparsed-----------------------------------\n");
-        fwrite(s.working, (s.source + len - s.working), 1, stdout);
-        printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-    }
-    return error_start_offset;
-}
 
 static UBool TestScanner(void){
     //const char str1[] = "$root = $command{0,5} $reset $mostRules{1,20};";
@@ -1681,6 +1685,31 @@ UBool TestParser(){
 
     return pass;
 }
+
+static UBool TestMorph(){
+    srand((unsigned)time( NULL ));
+
+    Alternation * alt = new Alternation();
+
+    (*alt)
+    .append(new Literal("a")).append(new Literal("b")).append(new Literal("c"))
+    .append(new Literal("d")).append(new Literal("e")).append(new Literal("f"))
+    .append(new Literal("g")).append(new Literal("h")).append(new Literal("i"))
+    .append(new Literal("j")).append(new Literal("k")).append(new Literal("l"))
+    .append(new Literal("m")).append(new Literal("n")).append(new Literal("o"))
+    ;
+
+    Repeat * rep = new Repeat( alt ,5,5 );
+    Morph m( *rep);
+
+//    DUMP_R(TestMorph,(*rep),20);
+    DUMP_R(TestMorph,m,100);
+
+    return FALSE;
+}
+
+#endif
+
 static UBool TestLanguageGenerator(){
     //LanguageGenerator g;
     //const char *const s = "$s = p 0% | q 1%;";
@@ -1717,28 +1746,6 @@ static UBool TestLanguageGenerator(){
     //    printf("TestRandomLanguageGenerator FAILED!!!\n");
     //}
     //return pass;
-}
-
-static UBool TestMorph(){
-    srand((unsigned)time( NULL ));
-
-    Alternation * alt = new Alternation();
-
-    (*alt)
-    .append(new Literal("a")).append(new Literal("b")).append(new Literal("c"))
-    .append(new Literal("d")).append(new Literal("e")).append(new Literal("f"))
-    .append(new Literal("g")).append(new Literal("h")).append(new Literal("i"))
-    .append(new Literal("j")).append(new Literal("k")).append(new Literal("l"))
-    .append(new Literal("m")).append(new Literal("n")).append(new Literal("o"))
-    ;
-
-    Repeat * rep = new Repeat( alt ,5,5 );
-    Morph m( *rep);
-
-//    DUMP_R(TestMorph,(*rep),20);
-    DUMP_R(TestMorph,m,100);
-
-    return FALSE;
 }
 
 void TestWbnf(void){
