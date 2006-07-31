@@ -265,6 +265,9 @@ struct UBiDi {
     /* flags is a bit set for which directional properties are in the text */
     Flags flags;
 
+    /* lastArabicPos is index to the last AL in the text, -1 if none */
+    int32_t lastArabicPos;
+
     /* characters after trailingWSStart are WS and are */
     /* implicitly at the paraLevel (rule (L1)) - levels may not reflect that */
     int32_t trailingWSStart;
