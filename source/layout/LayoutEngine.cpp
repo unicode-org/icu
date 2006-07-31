@@ -412,6 +412,10 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     }
 
     le_int32 glyphCount;
+
+    if (fGlyphStorage->getGlyphCount() > 0) {
+        fGlyphStorage->reset();
+    }
     
     glyphCount = computeGlyphs(chars, offset, count, max, rightToLeft, *fGlyphStorage, success);
     positionGlyphs(*fGlyphStorage, x, y, success);
