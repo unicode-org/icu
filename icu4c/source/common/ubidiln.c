@@ -612,8 +612,11 @@ ubidi_getRuns(UBiDi *pBiDi) {
                 }
 
                 /* set the runs */
-                /* this could be optimized, e.g.: 464->444, 484->444, 575->555, 595->555 */
-                /* however, that would take longer and make other functions more complicated */
+                /* FOOD FOR THOUGHT: this could be optimized, e.g.:
+                 * 464->444, 484->444, 575->555, 595->555
+                 * However, that would take longer. Check also how it would
+                 * interact with BiDi control removal and inserting Marks.
+                 */
                 runIndex=0;
 
                 /* search for the run limits and initialize visualLimit values with the run lengths */
