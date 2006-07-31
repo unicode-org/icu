@@ -50,7 +50,7 @@ public:
  * This is a forward reference to the class which holds the per-glyph
  * storage.
  *
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class LEGlyphStorage;
 
@@ -76,7 +76,7 @@ class LEGlyphStorage;
  * methods with some default behavior such as returning constant values, or using the
  * values from the first subfont.
  *
- * @draft ICU 3.0
+ * @stable ICU 3.0
  */
 class U_LAYOUT_API LEFontInstance : public UObject
 {
