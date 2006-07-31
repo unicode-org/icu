@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2005, International Business Machines
+*   Copyright (C) 1996-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -367,7 +367,7 @@ public:
      * the string by calling uloc_canonicalize().
      * @param name the locale ID to create from.  Must not be NULL.
      * @return a new locale object corresponding to the given name
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      * @see uloc_canonicalize
      */
     static Locale U_EXPORT2 createCanonical(const char* name);

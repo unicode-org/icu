@@ -1526,10 +1526,8 @@ typedef enum ULineBreak {
     U_LB_HYPHEN = 13,            /*[HY]*/
     U_LB_IDEOGRAPHIC = 14,       /*[ID]*/
     U_LB_INSEPERABLE = 15,
-#ifndef U_HIDE_DRAFT_API
-    /** Renamed from the misspelled "inseperable" in Unicode 4.0.1/ICU 3.0 @draft ICU 3.0 */
+    /** Renamed from the misspelled "inseperable" in Unicode 4.0.1/ICU 3.0 @stable ICU 3.0 */
     U_LB_INSEPARABLE=U_LB_INSEPERABLE,/*[IN]*/
-#endif /*U_HIDE_DRAFT_API*/
     U_LB_INFIX_NUMERIC = 16,     /*[IS]*/
     U_LB_LINE_FEED = 17,         /*[LF]*/
     U_LB_NONSTARTER = 18,        /*[NS]*/
