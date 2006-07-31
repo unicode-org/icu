@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.h
@@ -36,7 +36,7 @@ U_NAMESPACE_BEGIN
  * the characters in a UnicodeString to an ostream. The UChars in the
  * UnicodeString are converted to the char based ostream with the default
  * converter.
- * @draft 3.0
+ * @stable 3.0
  */
 U_IO_API std::ostream & U_EXPORT2 operator<<(std::ostream& stream, const UnicodeString& s);
 
@@ -44,7 +44,7 @@ U_IO_API std::ostream & U_EXPORT2 operator<<(std::ostream& stream, const Unicode
  * Write the contents from a C++ istream to a UnicodeString. The UChars in the
  * UnicodeString are converted from the char based istream with the default
  * converter.
- * @draft 3.0
+ * @stable 3.0
  */
 U_IO_API std::istream & U_EXPORT2 operator>>(std::istream& stream, UnicodeString& s);
 U_NAMESPACE_END
