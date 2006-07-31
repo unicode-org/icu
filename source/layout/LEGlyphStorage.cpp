@@ -119,6 +119,11 @@ le_int32 LEGlyphStorage::allocatePositions(LEErrorCode &success)
         return -1;
     }
 
+    if (fPositions != NULL) {
+        success = LE_INTERNAL_ERROR;
+        return -1;
+    }
+
     fPositions = LE_NEW_ARRAY(float, 2 * (fGlyphCount + 1));
 
     if (fPositions == NULL) {
@@ -133,6 +138,11 @@ le_int32 LEGlyphStorage::allocatePositions(LEErrorCode &success)
 le_int32 LEGlyphStorage::allocateAuxData(LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
+        return -1;
+    }
+
+    if (fAuxData != NULL) {
+        success = LE_INTERNAL_ERROR;
         return -1;
     }
 
