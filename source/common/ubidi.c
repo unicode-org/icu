@@ -1524,8 +1524,8 @@ adjustWSLevels(UBiDi *pBiDi) {
     }
 }
 
-#define MIN(x, y)   ((x)<(y) ? (x) : (y))
-#define ABS(x)      ((x)>=0  ? (x) : (-(x)))
+#define BIDI_MIN(x, y)   ((x)<(y) ? (x) : (y))
+#define BIDI_ABS(x)      ((x)>=0  ? (x) : (-(x)))
 static void
 setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
                 UBiDiLevel paraLevel, UErrorCode *pErrorCode) {
@@ -1599,7 +1599,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         for(j=logicalStart+1; j<logicalStart+runLength; j++) {
             index=visualMap[j];
             index1=visualMap[j-1];
-            if((ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
+            if((BIDI_ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
                 addedRuns++;
             }
         }
@@ -1644,12 +1644,12 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         for(j=start; j!=limit; j+=step) {
             index=visualMap[j];
             index1=visualMap[j+step];
-            if((ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
-                logicalPos=MIN(visualMap[start], index);
+            if((BIDI_ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
+                logicalPos=BIDI_MIN(visualMap[start], index);
                 runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
                                             saveLevels[logicalPos]^indexOddBit);
                 runs[i+addedRuns].visualLimit=runs[i].visualLimit;
-                runs[i].visualLimit-=ABS(j-start)+1;
+                runs[i].visualLimit-=BIDI_ABS(j-start)+1;
                 insertRemove=runs[i].insertRemove&(LRM_AFTER|RLM_AFTER);
                 runs[i+addedRuns].insertRemove=insertRemove;
                 runs[i].insertRemove&=~insertRemove;
@@ -1660,7 +1660,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         if(addedRuns) {
             runs[i+addedRuns]=runs[i];
         }
-        logicalPos=MIN(visualMap[start], visualMap[limit]);
+        logicalPos=BIDI_MIN(visualMap[start], visualMap[limit]);
         runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
                                             saveLevels[logicalPos]^indexOddBit);
     }
@@ -1676,8 +1676,6 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
   cleanup3:
     pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
 }
-#undef MIN
-#undef ABS
 
 /* ubidi_setPara ------------------------------------------------------------ */
 
