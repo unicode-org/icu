@@ -1587,7 +1587,7 @@ protected:
      * computed.  This occurs only in setTimeInMillis().  A calendar set
      * to this state will compute all fields from the time if it becomes
      * necessary, but otherwise will delay such computation.
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     UBool fAreFieldsVirtuallySet;
 
