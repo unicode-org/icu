@@ -49,7 +49,7 @@
 
 /* Make sure things like readlink and such functions work. */
 #ifndef _XOPEN_SOURCE_EXTENDED
-#define _XOPEN_SOURCE_EXTENDED
+#define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
 /* include ICU headers */
