@@ -215,6 +215,9 @@ ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeN
             /* not enough memory, and we must not allocate */
             return FALSE;
         } else if(sizeNeeded!=*pSize && mayAllocate) {
+            /* FOOD FOR THOUGHT: in hope to improve performance, we should
+             * try never shrinking memory, only growing it when required.
+             */
             /* we may try to grow or shrink */
             void *memory;
 
@@ -336,6 +339,7 @@ getDirProps(UBiDi *pBiDi) {
     UBool isDefaultLevelInverse=isDefaultLevel &&
             (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT ||
              pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL);
+    int32_t lastArabicPos=-1;
     int32_t controlCount=0;
     UBool removeBiDiControls = pBiDi->reorderingOptions &
                                UBIDI_OPTION_REMOVE_CONTROLS;
@@ -410,12 +414,16 @@ getDirProps(UBiDi *pBiDi) {
             lastStrongDir=0;
             lastStrongLTR=i;            /* i is index to next character */
         }
-        else if(dirProp==R || dirProp==AL) {
+        else if(dirProp==R) {
             lastStrongDir=CONTEXT_RTL;
+        }
+        else if(dirProp==AL) {
+            lastStrongDir=CONTEXT_RTL;
+            lastArabicPos=i-1;
         }
         else if(dirProp==B) {
             if(pBiDi->reorderingOptions & UBIDI_OPTION_STREAMING) {
-                pBiDi->length = i;      /* i is index to next character */
+                pBiDi->length=i;        /* i is index to next character */
             }
             if(isDefaultLevelInverse && (lastStrongDir==CONTEXT_RTL) &&(paraDir!=lastStrongDir)) {
                 for( ; paraStart<i; paraStart++) {
@@ -465,6 +473,7 @@ getDirProps(UBiDi *pBiDi) {
 
     pBiDi->controlCount = controlCount;
     pBiDi->flags=flags;
+    pBiDi->lastArabicPos=lastArabicPos;
 }
 
 /* perform (X1)..(X9) ------------------------------------------------------- */
@@ -1026,17 +1035,18 @@ static const ImpTab impTabR_INVERSE_LIKE_DIRECT =   /* Odd  paragraph level */
 {
 /*                         L ,     R ,    EN ,    AN ,    ON ,     S ,     B , Res */
 /* 0 : init       */ {     1 ,     0 ,     2 ,     2 ,     0 ,     0 ,     0 ,  0 },
-/* 1 : L          */ {     1 ,     0 ,     1 ,     3 , _(1,4), _(1,4),     0 ,  1 },
+/* 1 : L          */ {     1 ,     0 ,     1 ,     2 , _(1,3), _(1,3),     0 ,  1 },
 /* 2 : EN/AN      */ {     1 ,     0 ,     2 ,     2 ,     0 ,     0 ,     0 ,  1 },
-/* 3 : L+AN       */ {     1 ,     0 ,     1 ,     3 ,     5 ,     5 ,     0 ,  1 },
-/* 4 : L+ON       */ { _(2,1),     0 ,     6 ,     3 ,     4 ,     4 ,     0 ,  0 },
-/* 5 : L+AN+ON    */ {     1 ,     0 ,     1 ,     3 ,     5 ,     5 ,     0 ,  0 },
-/* 6 : L+ON+EN    */ { _(2,1),     0 ,     6 ,     3 ,     4 ,     4 ,     0 ,  1 }
+/* 3 : L+ON       */ { _(2,1), _(3,0),     6 ,     4 ,     3 ,     3 , _(3,0),  0 },
+/* 4 : L+ON+AN    */ { _(2,1), _(3,0),     6 ,     4 ,     5 ,     5 , _(3,0),  3 },
+/* 5 : L+AN+ON    */ { _(2,1), _(3,0),     6 ,     4 ,     5 ,     5 , _(3,0),  2 },
+/* 6 : L+ON+EN    */ { _(2,1), _(3,0),     6 ,     4 ,     3 ,     3 , _(3,0),  1 }
 };
+static const ImpAct impAct1 = {0,1,11,12};
 static const ImpTabPair impTab_INVERSE_LIKE_DIRECT = {
                         {(ImpTab*)&impTabL_DEFAULT,
                          (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+                        {(ImpAct*)&impAct0, (ImpAct*)&impAct1}};
 
 static const ImpTab impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS =
 /*  The case handled in this table is (visually):  R EN L
@@ -1313,6 +1323,34 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             pLevState->startON=start0;
             break;
 
+        case 11:                        /* L after L+ON+EN/AN/ON */
+            level=pLevState->runLevel;
+            for(k=start0-1; k>=pLevState->startON; k--) {
+                if(levels[k]==level+3) {
+                    while(levels[k]==level+3) {
+                        levels[k--]-=2;
+                    }
+                    while(levels[k]==level) {
+                        k--;
+                    }
+                }
+                if(levels[k]==level+2) {
+                    levels[k]=level;
+                    continue;
+                }
+                levels[k]=level+1;
+            }
+            break;
+
+        case 12:                        /* R after L+ON+EN/AN/ON */
+            level=pLevState->runLevel+1;
+            for(k=start0-1; k>=pLevState->startON; k--) {
+                if(levels[k]>level) {
+                    levels[k]-=2;
+                }
+            }
+            break;
+
         default:                        /* we should never get here */
             start=start0+25;
             start/=(start-start0-25);   /* force program crash */
@@ -1337,7 +1375,20 @@ resolveImplicitLevels(UBiDi *pBiDi,
     int32_t i, start1, start2;
     uint8_t oldStateImp, stateImp, actionImp;
     uint8_t gprop, resProp, cell;
+    UBool inverseRTL;
+    DirProp nextStrongProp=R;
+    int32_t nextStrongPos=-1;
 
+    /* check for RTL inverse BiDi mode */
+    /* FOOD FOR THOUGHT: in case of RTL inverse BiDi, it would make sense to
+     * loop on the text characters from end to start.
+     * This would need a different properties state table (at least different
+     * actions) and different levels state tables (maybe very similar to the
+     * LTR corresponding ones.
+     */
+    inverseRTL=((start<pBiDi->lastArabicPos) && (GET_PARALEVEL(pBiDi, start) & 1) &&
+                (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT  ||
+                 pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL));
     /* initialize for levels state table */
     levState.startL2EN=-1;              /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
     levState.lastStrongRTL=-1;          /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
@@ -1356,10 +1407,36 @@ resolveImplicitLevels(UBiDi *pBiDi,
     start2=start;
 
     for(i=start; i<=limit; i++) {
-        if(i<limit) {
-            gprop=groupProp[NO_CONTEXT_RTL(dirProps[i])];
-        } else {
+        if(i>=limit) {
             gprop=eor;
+        } else {
+            DirProp prop, prop1;
+            prop=NO_CONTEXT_RTL(dirProps[i]);
+            if(inverseRTL) {
+                if(prop==AL) {
+                    /* AL before EN does not make it AN */
+                    prop=R;
+                } else if(prop==EN) {
+                    if(nextStrongPos<=i) {
+                        /* look for next strong char (L/R/AL) */
+                        int32_t j;
+                        nextStrongProp=R;   /* set default */
+                        nextStrongPos=limit;
+                        for(j=i+1; j<limit; j++) {
+                            prop1=NO_CONTEXT_RTL(dirProps[j]);
+                            if(prop1==L || prop1==R || prop1==AL) {
+                                nextStrongProp=prop1;
+                                nextStrongPos=j;
+                                break;
+                            }
+                        }
+                    }
+                    if(nextStrongProp==AL) {
+                        prop=AN;
+                    }
+                }
+            }
+            gprop=groupProp[prop];
         }
         oldStateImp=stateImp;
         cell=impTabProps[oldStateImp][gprop];
@@ -1486,8 +1563,12 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
     levels=ubidi_getLevels(pBiDi, pErrorCode);
 
-    /* instead of writing the visual text, we could use the visual map and the
-       dirProps array to drive the second call to ubidi_setPara               */
+    /* FOOD FOR THOUGHT: instead of writing the visual text, we could use
+     * the visual map and the dirProps array to drive the second call
+     * to ubidi_setPara (but must make provision for possible removal of
+     * BiDi controls.  Alternatively, only use the dirProps array via
+     * customized classifier callback.
+     */
     visualLength=ubidi_writeReordered(pBiDi, visualText, length,
                                       UBIDI_DO_MIRRORING, pErrorCode);
     pBiDi->reorderingOptions=saveOptions;
