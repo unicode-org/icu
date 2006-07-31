@@ -1604,7 +1604,7 @@ public:
      * to use.  It need not be null-terminated.  May be the empty
      * string or NULL to indicate no currency.
      * @param ec input-output error code
-     * @draft ICU 3.0
+     * @stable ICU 3.0
      */
     virtual void setCurrency(const UChar* theCurrency, UErrorCode& ec);
 
