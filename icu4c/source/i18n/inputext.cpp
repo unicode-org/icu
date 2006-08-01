@@ -87,11 +87,12 @@ void InputText::MungeInput(UBool fStripTags) {
     //     discard everything within < brackets >
     //     Count how many total '<' and illegal (nested) '<' occur, so we can make some
     //     guess as to whether the input was actually marked up at all.
+    // TODO: Think about how this interacts with EBCDIC charsets that are detected.
     if (fStripTags) {
         for (srci = 0; srci < fRawLength && dsti < BUFFER_SIZE; srci += 1) {
             b = fRawInput[srci];
 
-            if (b == (uint8_t)'<') {
+            if (b == (uint8_t)0x3C) { /* Check for the ASCII '<' */
                 if (inMarkup) {
                     badTags += 1;
                 }
@@ -104,9 +105,9 @@ void InputText::MungeInput(UBool fStripTags) {
                 fInputBytes[dsti++] = b;
             }
 
-            if (b == (uint8_t)'>') {
+            if (b == (uint8_t)0x3E) { /* Check for the ASCII '>' */
                 inMarkup = FALSE;
-            }        
+            }
         }
 
         fInputLen = dsti;
@@ -118,37 +119,38 @@ void InputText::MungeInput(UBool fStripTags) {
     //    Detection will have to work on the unstripped input.
     //
     if (openTags<5 || openTags/5 < badTags || 
-        (fInputLen < 100 && fRawLength>600)) {
-            int32_t limit = fRawLength;
+        (fInputLen < 100 && fRawLength>600))
+    {
+        int32_t limit = fRawLength;
 
-            if (limit > BUFFER_SIZE) {
-                limit = BUFFER_SIZE;
-            }
-
-            for (srci=0; srci<limit; srci++) {
-                fInputBytes[srci] = fRawInput[srci];
-            }
-
-            fInputLen = srci;
+        if (limit > BUFFER_SIZE) {
+            limit = BUFFER_SIZE;
         }
 
-        //
-        // Tally up the byte occurence statistics.
-        // These are available for use by the various detectors.
-        //
-
-        uprv_memset(fByteStats, 0, (sizeof fByteStats[0]) * 256);
-
-        for (srci = 0; srci < fInputLen; srci += 1) {
-            fByteStats[fInputBytes[srci]] += 1;
+        for (srci=0; srci<limit; srci++) {
+            fInputBytes[srci] = fRawInput[srci];
         }
 
-        for (int32_t i = 0x80; i <= 0x9F; i += 1) {
-            if (fByteStats[i] != 0) {
-                fC1Bytes = TRUE;
-                break;
-            }
+        fInputLen = srci;
+    }
+
+    //
+    // Tally up the byte occurence statistics.
+    // These are available for use by the various detectors.
+    //
+
+    uprv_memset(fByteStats, 0, (sizeof fByteStats[0]) * 256);
+
+    for (srci = 0; srci < fInputLen; srci += 1) {
+        fByteStats[fInputBytes[srci]] += 1;
+    }
+
+    for (int32_t i = 0x80; i <= 0x9F; i += 1) {
+        if (fByteStats[i] != 0) {
+            fC1Bytes = TRUE;
+            break;
         }
+    }
 }
 
 U_NAMESPACE_END
