@@ -1,7 +1,7 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,12 +46,23 @@ public abstract class Tabber {
     private String postfix = "";
     
     public abstract void process_field(int count, String source, int start, int limit, StringBuffer output);
+    
+    public Tabber clear() {
+        return this;
+    }
 
     public static class MonoTabber extends Tabber {
         int minGap = 0;
     
         private List stops = new ArrayList();
         private List types = new ArrayList();
+        
+        public Tabber clear() {
+            stops.clear();
+            types.clear();
+            minGap = 0;
+            return this;
+        }
         
         public String toString() {
             StringBuffer buffer = new StringBuffer();
@@ -79,7 +90,7 @@ public abstract class Tabber {
         /**
          * Adds relative tab stop and how to align the text UP TO that stop
          */
-        public MonoTabber add(int fieldWidth, byte type) {
+        public Tabber add(int fieldWidth, byte type) {
             int last = getStop(stops.size()-1);
             stops.add(new Integer(last + fieldWidth));
             types.add(new Integer(type));
@@ -194,6 +205,11 @@ public abstract class Tabber {
      */
     public Tabber setPrefix(String string) {
         prefix = string;
+        return this;
+    }
+
+    public Tabber add(int i, byte left2) {
+        // does nothing unless overridden
         return this;
     }
 
