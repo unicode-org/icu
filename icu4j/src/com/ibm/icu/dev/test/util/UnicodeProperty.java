@@ -358,6 +358,16 @@ Name: Unicode_1_Name
             if (iValue == null) myIntern.put(value, iValue = value);
             result.put(i, iValue);
         }
+        if (DEBUG) {
+            for (int i = 0; i <= 0x10FFFF; ++i) {
+                //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
+                String value = getValue(i);
+                String resultValue = (String) result.getValue(i);
+                if (!value.equals(resultValue)) {
+                	throw new RuntimeException("Value failure at: " + Utility.hex(i));
+                }
+            }
+        }
         if (DEBUG && CHECK_NAME.equals(getName())) {
             System.out.println(getName() + ":\t" + getClass().getName()
                  + "\t" + getVersion());
@@ -646,7 +656,22 @@ Name: Unicode_1_Name
         public final SymbolTable getSymbolTable(String prefix) {
             return new PropertySymbolTable(prefix);
         }
+        
+        private class MyXSymbolTable extends UnicodeSet.XSymbolTable {
+            public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
+            	if (false) System.out.println(propertyName + "=" + propertyValue);
+            	UnicodeProperty prop = getProperty(propertyName);
+            	if (prop == null) return false;
+            	result.clear();
+            	UnicodeSet x = prop.getSet(propertyValue, result);
+                return x.size() != 0;
+            }
+        }
 
+        public final UnicodeSet.XSymbolTable getXSymbolTable() {
+        	return new MyXSymbolTable();
+        }
+        
         private class PropertySymbolTable implements SymbolTable  {
         	static final boolean DEBUG = false;
             private String prefix;
