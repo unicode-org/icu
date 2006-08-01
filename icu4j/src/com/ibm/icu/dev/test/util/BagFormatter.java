@@ -65,6 +65,7 @@ public class BagFormatter {
     private static final String NULL_VALUE = "_NULL_VALUE_";
     private int fullTotal = -1;
     private String lineSeparator = "\r\n";
+    private Tabber tabber = new Tabber.MonoTabber();
 
     /**
      * Compare two UnicodeSets, and show the differences
@@ -466,7 +467,6 @@ public class BagFormatter {
 
     private class MyVisitor extends Visitor {
         private PrintWriter output;
-        Tabber.MonoTabber myTabber;
         String commentSeparator;
         int counter;
         int valueSize;
@@ -475,23 +475,24 @@ public class BagFormatter {
         public void doAt(Object c, PrintWriter output) {
             this.output = output;
             counter = 0;
-            myTabber = new Tabber.MonoTabber();
-            myTabber.add(mergeRanges ? 14 : 6,Tabber.LEFT);
+            
+            tabber.clear();
+            tabber.add(mergeRanges ? 14 : 6,Tabber.LEFT);
 
-            if (propName.length() > 0) myTabber.add(propName.length() + 2,Tabber.LEFT);
+            if (propName.length() > 0) tabber.add(propName.length() + 2,Tabber.LEFT);
 
             valueSize = getValueSource().getMaxWidth(shortValue);
             if (DEBUG) System.out.println("ValueSize: " + valueSize);
-            if (valueSize > 0) myTabber.add(valueSize + 2,Tabber.LEFT); // value
+            if (valueSize > 0) tabber.add(valueSize + 2,Tabber.LEFT); // value
 
-            myTabber.add(3,Tabber.LEFT); // comment character
+            tabber.add(3,Tabber.LEFT); // comment character
 
             labelSize = getLabelSource(true).getMaxWidth(shortLabel);
-            if (labelSize > 0) myTabber.add(labelSize + 1,Tabber.LEFT); // value
+            if (labelSize > 0) tabber.add(labelSize + 1,Tabber.LEFT); // value
 
-            if (mergeRanges && showCount) myTabber.add(5,Tabber.RIGHT);
+            if (mergeRanges && showCount) tabber.add(5,Tabber.RIGHT);
 
-            if (showLiteral != null) myTabber.add(4,Tabber.LEFT);
+            if (showLiteral != null) tabber.add(4,Tabber.LEFT);
             //myTabber.add(7,Tabber.LEFT);
 
             commentSeparator = (showCount || showLiteral != null
@@ -499,8 +500,8 @@ public class BagFormatter {
               || getNameSource() != UnicodeLabel.NULL)
             ? "\t #" : "";
 
-            if (DEBUG) System.out.println("Tabber: " + myTabber.toString());
-            if (DEBUG) System.out.println("Tabber: " + myTabber.process("a\tb\td\td\tf\tg\th"));
+            if (DEBUG) System.out.println("Tabber: " + tabber.toString());
+            if (DEBUG) System.out.println("Tabber: " + tabber.process("a\tb\td\td\tf\tg\th"));
             doAt(c);
         }
 
@@ -555,7 +556,7 @@ public class BagFormatter {
                 String label = getLabelSource(true).getValue(thing, ",", true);
                 if (label.length() != 0) label = " " + label;
                 output.print(
-                    myTabber.process(
+                    tabber.process(
                         hex(thing)
 							+ value
                             + commentSeparator
@@ -609,7 +610,7 @@ public class BagFormatter {
            }
 
             output.print(
-                myTabber.process(
+                tabber.process(
                     hex(start, end)
                         + pn
                         + value
@@ -1083,5 +1084,13 @@ public class BagFormatter {
 	public void setFixName(Transliterator fixName) {
 		this.fixName = fixName;
 	}
+
+    public Tabber getTabber() {
+        return tabber;
+    }
+
+    public void setTabber(Tabber tabber) {
+        this.tabber = tabber;
+    }
 }
 //#endif
