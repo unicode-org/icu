@@ -6,16 +6,30 @@
 # Builds ICU a whole lotta times and with different options
 # Set the options below and execute this script with the shell.
 
-# This script is checked into icuhtml/emt. It assumes that the
-# icu directory is at the same level as the icuhtml directory.
+# This script is checked into tools/release/c. It assumes that the
+# icu directory is at the same level as the tools  directory. If this
+# is not the case, use the uconfigtest.local file to set the
+# SRC_DIR variable to point at the ICU source directory. You can
+# also use the uconfigtest.local file to override the BUILD_DIR
+# and ICUPLATFORM variables.
 
 
 #------------------- Find full path names  -----------------------
-# Build root - <icuhtml>/emt - the location of this script
-B=$(pwd)
+
+# check for uconfigtest.local
+if [ -f ./uconfig.local ]
+then
+    ./uconfig.local
+fi
+
+# location of this script
+S=$(pwd)
+
+# Build root - tools/release/c/uconfigtest
+BUILD_DIR=${BUILD_DIR:-${S}/uconfigtest}
 
 # the runConfigureICU platform name
-ICUPLATFORM=LinuxRedHat
+ICUPLATFORM=${ICUPLATFORM:-LinuxRedHat}
 
 # Global Config options to use
 export COPTS=" --with-data-packaging=archive"
@@ -25,16 +39,16 @@ export INTLTESTOPTS=-w
 export CINTLTEST_OPTS=-w
 # --- Probably will not need to modify the following variables ---
 
-# ICU directory is $B/../../icu
-ICU=$(dirname $(dirname $B))/icu
+# ICU directory is $S/../../../icu
+ICU=$(dirname $(dirname $(dirname ${S})))/icu
 
 # Source directory
-S=$ICU/source
+SRC_DIR=${SRC_DIR:-${ICU}/source}
 
 # ------------ End of config variables
 
 # Prepare uconfig.h
-UCONFIG_H=$S/common/unicode/uconfig.h
+UCONFIG_H=$SRC_DIR/common/unicode/uconfig.h
 if grep -q myconfig.h  $UCONFIG_H ;
 then
     echo "# $UCONFIG_H already contains our patch, no change"
@@ -55,7 +69,7 @@ fi
 # Start,  set a default name to start with in case something goes wrong
 
 export NAME=foo
-mkdir -p ${B} ${B}/times 2>/dev/null
+mkdir -p ${BUILD_DIR} ${BUILD_DIR}/times 2>/dev/null
 
 # Banner function - print a separator to split the output
 ban()
@@ -67,23 +81,23 @@ ban()
     echo "CPPFLAGS = $CPPFLAGS"
     echo "UCONFIGS = $UCONFIGS"
     echo
-    echo " build to ${B}/${NAME} and install in ${B}/I${NAME} "
+    echo " build to ${BUILD_DIR}/${NAME} and install in ${BUILD_DIR}/I${NAME} "
     echo
 }
 
 # Clean up the old tree before building again
 clean()
 {
-    echo cleaning ${B}/${NAME} and ${B}/I${NAME}
-    rm -rf ${B}/I${NAME} ${B}/${NAME}
-    mkdir -p ${B}/${NAME}
+    echo cleaning ${BUILD_DIR}/${NAME} and ${BUILD_DIR}/I${NAME}
+    rm -rf ${BUILD_DIR}/I${NAME} ${BUILD_DIR}/${NAME}
+    mkdir -p ${BUILD_DIR}/${NAME}
 }
 
 # Run configure with the appropriate options (out of source build)
 config()
 {
-    mkdir -p ${B}/${NAME} 2>/dev/null
-    cd ${B}/${NAME}
+    mkdir -p ${BUILD_DIR}/${NAME} 2>/dev/null
+    cd ${BUILD_DIR}/${NAME}
     mkdir emtinc 2>/dev/null
 
     # myconfig.h
@@ -102,9 +116,9 @@ EOF
     cat >> emtinc/myconfig.h <<EOF
 #endif
 EOF
-    CPPFLAGS="${CPPFLAGS} -DIN_UCONFIGTEST -I${B}/${NAME}/emtinc"
-    echo "CPPFLAGS=\"$CPPFLAGS\" Configure $COPTS --srcdir=$S"
-    $S/runConfigureICU ${ICUPLATFORM} $COPTS --prefix=${B}/I${NAME} --srcdir=$S 2>&1 > ${B}/${NAME}/config.out
+    CPPFLAGS="${CPPFLAGS} -DIN_UCONFIGTEST -I${BUILD_DIR}/${NAME}/emtinc"
+    echo "CPPFLAGS=\"$CPPFLAGS\" Configure $COPTS --srcdir=$SRC_DIR"
+    $SRC_DIR/runConfigureICU ${ICUPLATFORM} $COPTS --prefix=${BUILD_DIR}/I${NAME} --srcdir=$SRC_DIR 2>&1 > ${BUILD_DIR}/${NAME}/config.out
 }
 
 # Do an actual build
@@ -113,12 +127,12 @@ bld()
 ##*##  Stream filter to put 'NAME: ' in front of
 ##*##  every line:
 ##*##      . . .   2>&1 | tee -a ./bld.log | sed -e "s/^/${NAME}: /"
-    cd ${B}/${NAME}
-    /usr/bin/time -o ${B}/times/${NAME}.all     make -k all                      
-    /usr/bin/time -o ${B}/times/${NAME}.install make -k install                  
-    /usr/bin/time -o ${B}/times/${NAME}.il      make -k install-local            
-    /usr/bin/time -o ${B}/times/${NAME}.chk     make -k check INTLTEST_OPTS=-w CINTLTST_OPTS=-w
-    PATH=${B}/I${NAME}/bin:$PATH make -C ${B}/${NAME}/test/hdrtst/  check    
+    cd ${BUILD_DIR}/${NAME}
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.all     make -k all                      
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.install make -k install                  
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.il      make -k install-local            
+    /usr/bin/time -o ${BUILD_DIR}/times/${NAME}.chk     make -k check INTLTEST_OPTS=-w CINTLTST_OPTS=-w
+    PATH=${BUILD_DIR}/I${NAME}/bin:$PATH make -C ${BUILD_DIR}/${NAME}/test/hdrtst/  check    
 }
 
 # Do a complete cycle for a run
@@ -264,8 +278,8 @@ doit
 
 NAME=done
 ban
-echo "All builds finished! Times are in ${B}/times"
+echo "All builds finished! Times are in ${BUILD_DIR}/times"
 echo "There were errors if the following grep finds anything."
-echo "grep status $B/times/*"
-grep status $B/times/*
+echo "grep status ${BUILD_DIR}/times/*"
+grep status ${BUILD_DIR}/times/*
 
