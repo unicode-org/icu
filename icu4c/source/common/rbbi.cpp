@@ -903,6 +903,8 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     int32_t             initialPosition = 0;
     int32_t             lookaheadResult = 0;
     UBool               lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+    const char         *tableData       = statetable->fTableData;
+    uint32_t            tableRowLen     = statetable->fRowLen;
 
     #ifdef RBBI_DEBUG
         if (fTrace) {
@@ -917,7 +919,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     // if we're already at the end of the text, return DONE.
     initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText); 
     result          = initialPosition;
-    c               = utext_next32(fText);
+    c               = UTEXT_NEXT32(fText);
     if (fData == NULL || c==U_SENTINEL) {
         return BreakIterator::DONE;
     }
@@ -925,7 +927,9 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     //  Set the initial state for the state machine
     state = START_STATE;
     row = (RBBIStateTableRow *)
-            (statetable->fTableData + (statetable->fRowLen * state));
+            //(statetable->fTableData + (statetable->fRowLen * state));
+            (tableData + tableRowLen * state);
+            
     
     mode     = RBBI_RUN;
     if (statetable->fFlags & RBBI_BOF_REQUIRED) {
@@ -999,7 +1003,8 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         //
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
-            (statetable->fTableData + (statetable->fRowLen * state));
+            // (statetable->fTableData + (statetable->fRowLen * state));
+            (tableData + tableRowLen * state);
 
 
         if (row->fAccepting == -1) {
