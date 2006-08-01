@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
+*   Copyright (c) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -698,9 +698,13 @@ class TransliteratorParser {
                             qlimit = qstart + 1;
                         }
 
-                        UnicodeMatcher m =
-                            new StringMatcher(buf.toString(), qstart, qlimit,
+                        UnicodeMatcher m;
+						try {
+							m = new StringMatcher(buf.toString(), qstart, qlimit,
                                               0, parser.curData);
+						} catch (RuntimeException e) {
+							throw new IllegalArgumentException("Failure in rule: " + rule.substring(pos, limit));
+						}
                         int min = 0;
                         int max = Quantifier.MAX;
                         switch (c) {
