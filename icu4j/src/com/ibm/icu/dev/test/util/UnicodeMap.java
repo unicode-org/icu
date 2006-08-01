@@ -470,6 +470,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         }
         return result;
     }
+
     public UnicodeSet getSet(Object value) {
         return getSet(value,null);
     }
@@ -519,6 +520,26 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         return values[_findIndex(codepoint)];
     }
     
+    /**
+     * Change a new string from the source string according to the mappings. For each code point cp, if getValue(cp) is null, append the character, otherwise append getValue(cp).toString()
+     * @param source
+     * @return
+     */
+    public String fold(String source) {
+        StringBuffer result = new StringBuffer();
+        int cp;
+        for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
+          cp = UTF16.charAt(source, i);
+          Object mResult = getValue(cp);
+          if (mResult != null) {
+            result.append(mResult);
+          } else {
+            UTF16.append(result, cp);
+          }
+        }
+        return result.toString();
+      }
+    
     public interface Composer {
     	Object compose(int codePoint, Object a, Object b);
     }
@@ -528,6 +549,16 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     		Object v1 = getValue(i);
     		Object v2 = other.getValue(i);
     		Object v3 = composer.compose(i, v1, v2);
+    		if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
+    	}
+    	return this;
+    }
+    
+    public UnicodeMap composeWith(UnicodeSet set, Object value, Composer composer) {
+    	for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
+    		int i = it.codepoint;
+    		Object v1 = getValue(i);
+    		Object v3 = composer.compose(i, v1, value);
     		if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
     	}
     	return this;
