@@ -19,7 +19,7 @@
 # check for uconfigtest.local
 if [ -f ./uconfigtest.local ]
 then
-    ./uconfigtest.local
+    . ./uconfigtest.local
 fi
 
 # location of this script
