@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thesysconfdir thedatadir thelibdir pkgicudatadir thepkgicudatadir DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thedatadir pkgicudatadir thepkgicudatadir DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2816,42 +2816,7 @@ if test "$srcdir" = "."; then
 fi
 
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
-# Extract the first word of "strip", so it can be a program name with args.
-set dummy strip; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_STRIP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$STRIP"; then
-  ac_cv_prog_STRIP="$STRIP" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_STRIP="strip"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_STRIP" && ac_cv_prog_STRIP="true"
-fi
-fi
-STRIP=$ac_cv_prog_STRIP
-if test -n "$STRIP"; then
-  echo "$as_me:$LINENO: result: $STRIP" >&5
-echo "${ECHO_T}$STRIP" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
+#AC_CHECK_PROG(STRIP, strip, strip, true)
 
 for ac_prog in gmake gnumake
 do
@@ -7540,11 +7505,11 @@ else
   datapackaging=
 fi;
 
-thesysconfdir=`eval echo $sysconfdir`
-
+#thesysconfdir=`eval echo $sysconfdir`
+#AC_SUBST(thesysconfdir)
+#thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
+#AC_SUBST(thelibdir)
 thedatadir=`eval echo $datadir`
-
-thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
 
 pkgicudatadir=$datadir
 thepkgicudatadir=$thedatadir
@@ -7812,9 +7777,10 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
@@ -8420,7 +8386,6 @@ s,@ac_ct_CXX@,$ac_ct_CXX,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
-s,@STRIP@,$STRIP,;t t
 s,@U_MAKE@,$U_MAKE,;t t
 s,@DOXYGEN@,$DOXYGEN,;t t
 s,@ARFLAGS@,$ARFLAGS,;t t
@@ -8474,9 +8439,7 @@ s,@U_SIZEOF_WCHAR_T@,$U_SIZEOF_WCHAR_T,;t t
 s,@EXTRAS_TRUE@,$EXTRAS_TRUE,;t t
 s,@ICUIO_TRUE@,$ICUIO_TRUE,;t t
 s,@LAYOUT_TRUE@,$LAYOUT_TRUE,;t t
-s,@thesysconfdir@,$thesysconfdir,;t t
 s,@thedatadir@,$thedatadir,;t t
-s,@thelibdir@,$thelibdir,;t t
 s,@pkgicudatadir@,$pkgicudatadir,;t t
 s,@thepkgicudatadir@,$thepkgicudatadir,;t t
 s,@DATA_PACKAGING_MODE@,$DATA_PACKAGING_MODE,;t t
@@ -8989,6 +8952,12 @@ if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages above to see why we couldn't find pthread_create()" 1>&6
 fi
 
+if test -n "`$U_MAKE -v 2>&1 | grep '^GNU Make'`"; then
 echo "You must use $U_MAKE to build ICU."
+else
+echo "WARNING: $U_MAKE may not be GNU make."
+echo "This may cause ICU to fail to build. Please make sure that GNU make"
+echo "is in your PATH so that this configure script can detect its location."
+fi
 
 $as_unset _CXX_CXXSUFFIX
