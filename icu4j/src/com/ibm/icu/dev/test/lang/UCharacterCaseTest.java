@@ -14,6 +14,7 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.Utility;
 import java.util.Locale;
 import java.io.BufferedReader;
@@ -287,39 +288,40 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    // Unfortunately, BreakIterator.getBreakInstance(ULocale where, int kind)
+    // is private. Re-implement it here.
+    private final BreakIterator getBreakInstance(ULocale where, int kind) {
+        switch(kind) {
+        case BreakIterator.KIND_CHARACTER:
+            return BreakIterator.getCharacterInstance(where);
+        case BreakIterator.KIND_WORD:
+            return BreakIterator.getWordInstance(where);
+        case BreakIterator.KIND_LINE:
+            return BreakIterator.getLineInstance(where);
+        case BreakIterator.KIND_SENTENCE:
+            return BreakIterator.getSentenceInstance(where);
+        case BreakIterator.KIND_TITLE:
+            return BreakIterator.getTitleInstance(where);
+        default:
+            return null;
+        }
+    }
+
     public void TestTitle()
     {
          try{ 
-              BreakIterator TITLE_BREAKITERATORS_[] =
-              {
-                BreakIterator.getCharacterInstance(),
-                BreakIterator.getWordInstance(),
-                BreakIterator.getTitleInstance(),
-                BreakIterator.getCharacterInstance(),
-                null,
-                null
-              };
-            for (int i = 0; i < TITLE_BREAKITERATORS_.length; i ++) {
-                String test = TITLE_DATA_[i << 1];
-                String expected = TITLE_DATA_[(i << 1) + 1];
-                if (!expected.equals(
-                    UCharacter.toTitleCase(test,
-                                           TITLE_BREAKITERATORS_[i]))) {
-                    errln("error: titlecasing for " + prettify(test) + " should be " +
+            for (int i = 0; i < TITLE_DATA_.length;) {
+                String test = TITLE_DATA_[i++];
+                String expected = TITLE_DATA_[i++];
+                String locale = TITLE_DATA_[i++];
+                String breakType = TITLE_DATA_[i++];
+                ULocale loc = new ULocale(locale);
+                BreakIterator iter = getBreakInstance(loc, Integer.parseInt(breakType));
+                String result = UCharacter.toTitleCase(loc, test, iter);
+                if (!expected.equals(result)) {
+                    errln("titlecasing for " + prettify(test) + " should be " +
                           prettify(expected) + " but got " +
-                          prettify(UCharacter.toTitleCase(test,
-                                                     TITLE_BREAKITERATORS_[i])));
-                }
-                //cover toTitleCase(Locale, String, BreakIterator)
-                Locale def = Locale.getDefault();
-                String data = TITLE_DATA_[i << 1];
-                if (!expected.equals(
-                    UCharacter.toTitleCase(def, data,
-                                           TITLE_BREAKITERATORS_[i]))) {
-                    errln("error: titlecasing for " + prettify(data) + " should be " +
-                          prettify(expected) + " but got " +
-                          prettify(UCharacter.toTitleCase(def, data,
-                                                     TITLE_BREAKITERATORS_[i])));
+                          prettify(result));
                 }                
             }
          }catch(Exception ex){
@@ -720,24 +722,42 @@ public final class UCharacterCaseTest extends TestFmwk
                       "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
 
     /**
-     * each item is an array with input string, result string, locale
+     * each item is an array with input string, result string, locale ID, break iterator
+     * the break iterator is specified as an int, same as in BreakIterator.KIND_*:
+     * 0=KIND_CHARACTER  1=KIND_WORD  2=KIND_LINE  3=KIND_SENTENCE  4=KIND_TITLE  -1=default
+     * see ICU4C source/test/testdata/casing.txt
      */
     private static final String TITLE_DATA_[] = {
         "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
         "\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff",
-        
+        "",
+        "0",
+
         "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
         "\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
-        
+        "",
+        "1",
+
+        "\u02bbaMeLikA huI P\u016b \u02bb\u02bb\u02bbiA", "\u02bbAmelika Hui P\u016b \u02bb\u02bb\u02bbIa", // titlecase first _cased_ letter, j4933
+        "",
+        "-1",
+
         " tHe QUIcK bRoWn", " The Quick Brown",
-        
+        "",
+        "4",
+
         "\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
         "\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
-        
-        "\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
-        
-        "'oH dOn'T tItLeCaSe AfTeR lEtTeR+'",  "'Oh Don't Titlecase After Letter+'"
+        "",
+        "0",
 
+        "\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
+        "",
+        "-1",
+
+        "'oH dOn'T tItLeCaSe AfTeR lEtTeR+'",  "'Oh Don't Titlecase After Letter+'",
+        "",
+        "-1"
     };
 
 
