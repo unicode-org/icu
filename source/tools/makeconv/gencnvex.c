@@ -29,7 +29,6 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-#if !UCONFIG_NO_CONVERSION
 
 static void
 CnvExtClose(NewConverter *cnvData);
@@ -1060,4 +1059,3 @@ CnvExtAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *sta
         makeFromUTable(extData, table);
 }
 
-#endif /* UCONFIG_NO_CONVERSION */

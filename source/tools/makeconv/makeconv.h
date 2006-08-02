@@ -22,7 +22,6 @@
 #include "unewdata.h"
 #include "ucm.h"
 
-#if !UCONFIG_NO_CONVERSION
 /* exports from makeconv.c */
 U_CFUNC UBool VERBOSE;
 
@@ -54,6 +53,5 @@ struct NewConverter {
     (*write)(NewConverter *cnvData, const UConverterStaticData *staticData,
              UNewDataMemory *pData, int32_t tableType);
 };
-#endif /* UCONFIG_NO_CONVERSION */
 
 #endif /* __MAKECONV_H__ */

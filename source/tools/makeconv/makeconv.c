@@ -36,7 +36,6 @@
 
 #define DEBUG 0
 
-#if !UCONFIG_NO_CONVERSION
 
 typedef struct ConvData {
     UCMFile *ucm;
@@ -740,13 +739,6 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
         cleanupConvData(&baseData);
     }
 }
-#else
-int main(int argc, char *argv[])
-{
-    printf("Your version of ICU was built without conversion,\n");
-    printf("so this tool has no functionality.\n");
-}
-#endif
 
 /*
  * Hey, Emacs, please set the following:
