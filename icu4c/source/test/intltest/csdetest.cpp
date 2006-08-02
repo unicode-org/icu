@@ -471,7 +471,7 @@ bail:
 
 void CharsetDetectionTest::DetectionTest()
 {
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UErrorCode status = U_ZERO_ERROR;
     char path[2048];
     const char *testFilePath = getPath(path, "csdetest.xml");
