@@ -17,9 +17,9 @@
 #------------------- Find full path names  -----------------------
 
 # check for uconfigtest.local
-if [ -f ./uconfig.local ]
+if [ -f ./uconfigtest.local ]
 then
-    ./uconfig.local
+    ./uconfigtest.local
 fi
 
 # location of this script
