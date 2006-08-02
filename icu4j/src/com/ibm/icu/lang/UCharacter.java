@@ -4140,6 +4140,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * If the limit parameter is negative or past the string, then the
          * string length is restored as the iteration limit.
          *
+         * This limit does not affect the next() function which always
+         * iterates to the very end of the string.
+         *
          * @param lim The iteration limit.
          */
         public void setLimit(int lim) {
@@ -4156,13 +4159,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * Performance optimization, to save on function calls and redundant
          * tests. Combines UTF16.charAt(), UTF16.getCharCount(), and setIndex().
          *
+         * When the iteration limit is reached (and -1 is returned),
+         * getCPStart() will be at the iteration limit.
+         *
+         * Iteration with next() does not affect the position for nextCaseMapCP().
+         *
          * @return The next code point to be case-mapped, or <0 when the iteration is done.
          */
         public int nextCaseMapCP() {
-            int c;
+            cpStart=cpLimit;
             if(cpLimit<limit) {
-                cpStart=cpLimit;
-                c=s.charAt(cpLimit++);
+                int c=s.charAt(cpLimit++);
                 if(UTF16.LEAD_SURROGATE_MIN_VALUE<=c || c<=UTF16.TRAIL_SURROGATE_MAX_VALUE) {
                     char c2;
                     if( c<=UTF16.LEAD_SURROGATE_MAX_VALUE && cpLimit<limit &&
@@ -4179,6 +4186,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             } else {
                 return -1;
             }
+        }
+
+        /**
+         * Get the start of the code point that was last returned
+         * by nextCaseMapCP().
+         */
+        public int getCPStart() {
+            return cpStart;
         }
 
         // implement UCaseProps.ContextIterator
@@ -4201,7 +4216,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public int next() {
             int c;
 
-            if(dir>0 && index<limit) {
+            if(dir>0 && index<s.length()) {
                 c=UTF16.charAt(s, index);
                 index+=UTF16.getCharCount(c);
                 return c;
@@ -4436,14 +4451,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         titleIter.setText(str);
 
-        int index;
+        int prev, titleStart, index;
         boolean isFirstIndex;
 
         /* set up local variables */
+        prev=0;
         isFirstIndex=true;
 
         /* titlecasing loop */
-        for(;;) {
+        while(prev<srcLength) {
             /* find next index where to titlecase */
             if(isFirstIndex) {
                 isFirstIndex=false;
@@ -4455,53 +4471,63 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 index=srcLength;
             }
 
-            /* lowercase up to index */
-            iter.setLimit(index);
-            while((c=iter.nextCaseMapCP())>=0) {
-                c=gCsp.toFullLower(c, iter, result, locale, locCache);
-
-                /* decode the result */
-                if(c<0) {
-                    /* (not) original code point */
-                    c=~c;
-                } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                    /* mapping already appended to result */
-                    continue;
-                /* } else { append single-code point mapping */
+            /*
+             * Unicode 4 & 5 section 3.13 Default Case Operations:
+             *
+             * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+             * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+             * cased character F. If F exists, map F to default_title(F); then map each
+             * subsequent character C to default_lower(C).
+             *
+             * In this implementation, segment [prev..index[ into 3 parts:
+             * a) uncased characters (copy as-is) [prev..titleStart[
+             * b) first case letter (titlecase)         [titleStart..titleLimit[
+             * c) subsequent characters (lowercase)                 [titleLimit..index[
+             */
+            if(prev<index) {
+                /* find and copy uncased characters [prev..titleStart[ */
+                iter.setLimit(index);
+                while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c)) {}
+                titleStart=iter.getCPStart();
+                if(prev<titleStart) {
+                    result.append(str, prev, titleStart);
                 }
-                if(c<=0xffff) {
-                    result.append((char)c);
-                } else {
-                    UTF16.append(result, c);
+
+                if(titleStart<index) {
+                    /* titlecase c which is from titleStart */
+                    c=gCsp.toFullTitle(c, iter, result, locale, locCache);
+
+                    /* decode the result and lowercase up to index */
+                    for(;;) {
+                        if(c<0) {
+                            /* (not) original code point */
+                            c=~c;
+                            if(c<=0xffff) {
+                                result.append((char)c);
+                            } else {
+                                UTF16.append(result, c);
+                            }
+                        } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                            /* mapping already appended to result */
+                        } else {
+                            /* append single-code point mapping */
+                            if(c<=0xffff) {
+                                result.append((char)c);
+                            } else {
+                                UTF16.append(result, c);
+                            }
+                        }
+                        
+                        if((c=iter.nextCaseMapCP())>=0) {
+                            c=gCsp.toFullLower(c, iter, result, locale, locCache);
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
 
-            if(index>=srcLength) {
-                break;
-            }
-
-            /* titlecase the character at the found index */
-            iter.setLimit(srcLength);
-            c=iter.nextCaseMapCP();
-            if(c<0) {
-                break; // reached end of str
-            }
-            c=gCsp.toFullTitle(c, iter, result, locale, locCache);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-            /* } else { append single-code point mapping */
-            }
-            if(c<=0xffff) {
-                result.append((char)c);
-            } else {
-                UTF16.append(result, c);
-            }
+            prev=index;
         }
         return result.toString();
     }
