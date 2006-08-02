@@ -25,7 +25,6 @@
 #include "makeconv.h"
 #include "genmbcs.h"
 
-#if !UCONFIG_NO_CONVERSION
 
 typedef struct MBCSData {
     NewConverter newConverter;
@@ -1101,4 +1100,3 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     return header.offsetFromUBytes+header.fromUBytesLength;
 }
 
-#endif /* UCONFIG_NO_CONVERSION */

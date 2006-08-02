@@ -19,8 +19,6 @@
 
 #include "makeconv.h"
 
-#if !UCONFIG_NO_CONVERSION
-
 enum {
     MBCS_STAGE_2_BLOCK_SIZE=0x40, /* 64; 64=1<<6 for 6 bits in stage 2 */
     MBCS_STAGE_2_BLOCK_SIZE_SHIFT=6, /* log2(MBCS_STAGE_2_BLOCK_SIZE) */
@@ -43,7 +41,5 @@ MBCSOpen(UCMFile *ucm);
 
 U_CFUNC NewConverter *
 CnvExtOpen(UCMFile *ucm);
-
-#endif /* UCONFIG_NO_CONVERSION */
 
 #endif /* __GENMBCS_H__ */

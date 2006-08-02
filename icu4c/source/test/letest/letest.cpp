@@ -537,7 +537,7 @@ LEFontInstance *openFont(const char *fontName, const char *checksum, const char 
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenTest(void)
 {
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UErrorCode status = U_ZERO_ERROR;
     char path[2048];
     const char *testFilePath = getPath(path, "letest.xml");
