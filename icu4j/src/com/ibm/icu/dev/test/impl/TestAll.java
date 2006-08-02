@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,7 +21,9 @@ public class TestAll extends TestGroup {
               new String[] {
                   "ICUServiceTest",
                   "ICUServiceThreadTest",
-                  "ICUBinaryTest"
+                  "ICUBinaryTest",
+                  "LRUMapTest",
+                  "TextTrieMapTest"
               },
               "Test miscellaneous implementation utilities");
     }

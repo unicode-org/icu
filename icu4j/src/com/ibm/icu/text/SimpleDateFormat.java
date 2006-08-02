@@ -288,6 +288,13 @@ public class SimpleDateFormat extends DateFormat {
     private transient boolean useFastFormat;
 
     /**
+     * If true, this object supports fast number format
+     */
+    private transient boolean useFastZeroPaddingNumber;
+    private transient char zeroDigit;
+    private char[] decimalBuf = new char[10]; // 10 digit is good enough to store Interger.MAX_VALUE
+    
+    /**
      * Construct a SimpleDateFormat using the default pattern for the default
      * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
@@ -467,11 +474,17 @@ public class SimpleDateFormat extends DateFormat {
         // TODO: convert to use ULocale APIs when we get to the text package
         numberFormat = NumberFormat.getInstance(loc);
         numberFormat.setGroupingUsed(false);
+        useFastZeroPaddingNumber = false;
         ///CLOVER:OFF
         // difficult to test for case where NumberFormat.getInstance does not
         // return a DecimalFormat
-        if (numberFormat instanceof DecimalFormat)
+        if (numberFormat instanceof DecimalFormat) {
             ((DecimalFormat)numberFormat).setDecimalSeparatorAlwaysShown(false);
+            zeroDigit = ((DecimalFormat)numberFormat).getDecimalFormatSymbols().getZeroDigit();
+            if (numberFormat.getClass().getName().equals("com.ibm.icu.text.DecimalFormat")) {
+                useFastZeroPaddingNumber = true;
+            }
+        }
         ///CLOVER:ON
         numberFormat.setParseIntegerOnly(true); /* So that dd.MM.yy can be parsed */
         numberFormat.setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
@@ -884,7 +897,7 @@ public class SimpleDateFormat extends DateFormat {
                     }
                     val = (val / 3) * 5 + (val % 60); // minutes => KKmm
                     buf.append(sign);
-                    buf.append(new DecimalFormat("0000").format(val));
+                    fastZeroPaddingNubmer(buf, (int)val, 4, 4, '0');
                 } else {
                     // long form, localized GMT pattern
                     // not in 3.4 locale data, need to add, so use same default as for general time zone names
@@ -994,10 +1007,51 @@ public class SimpleDateFormat extends DateFormat {
      */
     protected void zeroPaddingNumber(StringBuffer buf, int value,
                                      int minDigits, int maxDigits) {
+    	if (useFastZeroPaddingNumber) {
+    		fastZeroPaddingNubmer(buf, value, minDigits, maxDigits, zeroDigit);
+    		return;
+    	}
         FieldPosition pos = new FieldPosition(-1);
         numberFormat.setMinimumIntegerDigits(minDigits);
         numberFormat.setMaximumIntegerDigits(maxDigits);
         numberFormat.format(value, buf, pos);
+    }
+
+    /**
+     * Internal faster method.  This method does not use NumberFormat
+     * to format digits.
+     * @internal
+     */
+    private void fastZeroPaddingNubmer(StringBuffer buf, int value,
+            int minDigits, int maxDigits, char zero) {
+    	value = value < 0 ? -value : value; //??
+        minDigits = minDigits < maxDigits ? minDigits : maxDigits;
+        int limit = decimalBuf.length < maxDigits ? decimalBuf.length : maxDigits;
+        int index = limit - 1;
+        while (true) {
+            decimalBuf[index] = (char)((value % 10) + zero);
+            value /= 10;
+            if (index == 0 || value == 0) {
+                break;
+            }
+            index--;
+        }
+        int padding = minDigits - (limit - index);
+        for (; padding > 0; padding--) {
+            decimalBuf[--index] = zero;
+        }
+        buf.append(decimalBuf, index, limit - index);
+    }
+
+    public void setNumberFormat(NumberFormat newNumberFormat) {
+    	super.setNumberFormat(newNumberFormat);
+        if (newNumberFormat instanceof DecimalFormat) {
+            zeroDigit = ((DecimalFormat)newNumberFormat).getDecimalFormatSymbols().getZeroDigit();
+            useFastZeroPaddingNumber = true;
+        }
+        else {
+            useFastZeroPaddingNumber = false;
+        }    	
     }
 
     /**
@@ -1377,43 +1431,15 @@ public class SimpleDateFormat extends DateFormat {
         TimeZone tz = null;
         String zid = null, value = null;
         int type = -1;
-        zid = formatData.getZoneID(getTimeZone().getID());
+
+        DateFormatSymbols.ZoneItem item = formatData.findZoneIDTypeValue(text, start);
+        if (item != null) {
+            zid = item.zid;
+            value = item.value;
+            type = item.type;
+        }
         if (zid != null) {
-            DateFormatSymbols.ZoneItem item = formatData.getZoneItem(zid, text, start);
-            if (item != null) {
-                zid = item.zid;
-                value = item.value;
-                type = item.type;
-                tz = (TimeZone) getTimeZone().clone();
-            }
-        }
-
-        // optimize for default time zone, assume different from caller
-        if (tz == null) {
-            TimeZone defaultZone = TimeZone.getDefault();
-            zid = formatData.getZoneID(defaultZone.getID());
-            if (zid != null) {
-                DateFormatSymbols.ZoneItem item = formatData.getZoneItem(zid, text, start);
-                if (item != null) {
-                    zid = item.zid;
-                    value = item.value;
-                    type = item.type;
-                    tz = defaultZone;
-                }
-            }
-        }
-
-        // still no luck, check all time zone strings
-        if (tz == null) {
-            DateFormatSymbols.ZoneItem item = formatData.findZoneIDTypeValue(text, start);
-            if (item != null) {
-                zid = item.zid;
-                value = item.value;
-                type = item.type;
-            }
-            if (zid != null) {
-                tz = TimeZone.getTimeZone(zid);
-            }
+            tz = TimeZone.getTimeZone(zid);
         }
 
         if (tz != null) { // Matched any ?

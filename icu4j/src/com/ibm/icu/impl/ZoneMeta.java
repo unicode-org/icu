@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -466,6 +466,7 @@ public final class ZoneMeta {
     private static final String kCUSTOM_ID= "Custom";    
     //private static ICUResourceBundle zoneBundle = null;
     private static java.util.Enumeration idEnum  = null;
+    private static SoftCache zoneCache = new SoftCache();
     /**
      * The Olson data is stored the "zoneinfo" resource bundle.
      * Sub-resources are organized into three ranges of data: Zones, final
@@ -505,15 +506,19 @@ public final class ZoneMeta {
      * found, return 0.
      */
     public static TimeZone getSystemTimeZone(String id) {
-        try{
-            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            ICUResourceBundle res = openOlsonResource(id);
-            TimeZone z = new OlsonTimeZone(top, res);
-            z.setID(id);
-            return z;
-        }catch(Exception ex){
-            return null;
+        TimeZone z = (TimeZone)zoneCache.get(id);
+        if (z == null) {
+            try{
+                ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUResourceBundle res = openOlsonResource(id);
+                z = new OlsonTimeZone(top, res);
+                z.setID(id);
+                zoneCache.put(id, z);
+            }catch(Exception ex){
+                return null;
+            }
         }
+        return (TimeZone)z.clone();
     }
     
     public static TimeZone getGMT(){
