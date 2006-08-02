@@ -483,12 +483,10 @@ ucnv_setSubstString(UConverter *cnv,
         return;
     }
 
-#if !UCONFIG_NO_LEGACY_CONVERSION
-    if (cnv->sharedData->impl->writeSub == NULL ||
-        (cnv->sharedData->staticData->conversionType == UCNV_MBCS &&
-         ucnv_MBCSGetType(cnv) != UCNV_EBCDIC_STATEFUL)
-#else
     if (cnv->sharedData->impl->writeSub == NULL
+#if !UCONFIG_NO_LEGACY_CONVERSION
+        || (cnv->sharedData->staticData->conversionType == UCNV_MBCS &&
+         ucnv_MBCSGetType(cnv) != UCNV_EBCDIC_STATEFUL)
 #endif
     ) {
         /* The converter is not stateful. Store the charset bytes as a fixed string. */
