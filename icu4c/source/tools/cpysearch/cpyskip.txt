@@ -76,6 +76,15 @@ icu/source/test/testdata/WordBreakTest.txt
 icu/source/test/testdata/idna_conf.txt
 icu/source/test/thaitest/space.txt
 icu/source/tools/tzcode/patch-icu-tzcode
+# Following are Public Domain
+icu/source/tools/tzcode/asctime.c
+icu/source/tools/tzcode/ialloc.c
+icu/source/tools/tzcode/localtime.c
+icu/source/tools/tzcode/private.h
+icu/source/tools/tzcode/scheck.c
+icu/source/tools/tzcode/tzfile.h
+icu/source/tools/tzcode/tzselect.ksh
+icu/source/tools/tzcode/zic.c
 #ICU4JNI files that don't need an IBM copyright
 icu4jni/src/classes/com/ibm/icu4jni/test/text/NormalizationTest.txt
 icu4jni/src/native/converter/ConverterInterface.h
