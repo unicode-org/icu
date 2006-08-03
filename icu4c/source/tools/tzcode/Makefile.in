@@ -1,0 +1,51 @@
+# Some Portions Copyright (c) 2006 IBM and others. All Rights Reserved.
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include ../../icudefs.mk
+
+ZOBJS= zic.o localtime.o asctime.o scheck.o ialloc.o
+
+CFLAGS+=-D_POSIX_C_SOURCE
+
+PRIMARY_YDATA=	africa antarctica asia australasia \
+		europe northamerica southamerica
+YDATA=		$(PRIMARY_YDATA) pacificnew etcetera factory backward
+NDATA=		systemv
+SDATA=		solar87 solar88 solar89
+TDATA=		$(YDATA) $(NDATA) $(SDATA)
+
+
+all:	tz2icu zic
+	@echo use $(MAKE) icu_data to build icu data
+
+
+zic:		$(TZCOBJS) yearistype tz2icu.h
+		$(CC) $(CFLAGS) $(LFLAGS) $(TZCOBJS) $(LDLIBS) -o $@
+
+tz2icu:		tz2icu.cpp tz2icu.h
+		$(CPP) -W -Wall -pedantic tz2icu.cpp -o $@
+
+yearistype:	yearistype.sh
+		cp yearistype.sh yearistype
+		chmod +x yearistype
+
+posix_only:	zic $(TDATA)
+		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA)
+
+
+icu_data:	tz2icu posix_only
+		./tz2icu zoneinfo zone.tab `ls tzdata*.tar.gz | sed -e "s/^tzdata//;s/\.tar\.gz$$//"`
+
+clean:
+		rm -f core *.o *.out tzselect zdump zic yearistype date
+		@echo ICU specific cleanup:
+		-rm -f ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt 
+		-rm -rf zoneinfo
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+        cd $(top_builddir) \
+         && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
