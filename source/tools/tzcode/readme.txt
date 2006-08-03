@@ -7,6 +7,9 @@
 * Since: ICU 2.8
 **********************************************************************
 
+Note:  this directory currently contains tzcode as of tzcode2006h.tar.gz
+
+
 ----------------------------------------------------------------------
 OVERVIEW
 
@@ -62,16 +65,18 @@ where YYYY is the year and V is the version letter ('a'...'z').
 ----------------------------------------------------------------------
 HOWTO
 
-1. Obtain the current versions of tzcodeYYYYV.tar.gz (aka `tzcode')
-   and tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
+0. Generate Makefile
+
+        ( cd ../.. ; CONFIG_FILES=tools/tzcode/Makefile CONFIG_HEADERS= sh config.status )
+
+1. Obtain the current versions of tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
    above.  Either manually download or use wget:
 
    $ cd {path_to}/icu/source/tools/tzcode
    $ wget "ftp://elsie.nci.nih.gov/pub/tz*.tar.gz"
 
-2. Unpack tzcode and tzdata directly into the directory tzcode:
+2. Unpack tzdata directly into the directory tzcode:
 
-   $ tar xzvf tzcode*.tar.gz
    $ tar xzvf tzdata*.tar.gz
 
    *** Make sure you only have ONE FILE named tzdata*.tar.gz in the
@@ -81,71 +86,20 @@ HOWTO
    The Makefile looks in the current directory to determine the
    version of Olson data it is building by looking for tzdata*.tar.gz.
 
-3. Apply the ICU patch to zic.c:
-
-   $ patch < patch-icu-tzcode
-
-   If patch complains at this point, there is a mismatch that must be
-   manually addressed.  See the CVS log of `patch-icu-tzcode' for
-   version details.
-
-4. Build:
+3. Build:
 
    $ make icu_data
 
-5. Copy the data files to the correct location in the ICU4C/ICU4J
+4. Copy the data files to the correct location in the ICU4C/ICU4J
    source trees:
 
    $ cp zoneinfo.txt ../../data/misc/
    $ cp ZoneMetaData.java {path_to}/icu4j/src/com/ibm/icu/impl
 
-6. Rebuild ICU:
+5. Rebuild ICU:
 
    $ cd ../..
    $ {*make}
 
-7. Don't forget to check in the new zoneinfo.txt (from its location at
+6. Don't forget to check in the new zoneinfo.txt (from its location at
    {path_to}/icu/source/data/misc/zoneinfo.txt) into CVS.
-
-----------------------------------------------------------------------
-HOWTO platform issues
-00.  On macosx, I had to do "sudo ln -s /usr/bin/sed /bin/" first
-00.  On macosx, I had to build with "make CPPFLAGS=-DSTD_INSPIRED icu_data" 
-
-----------------------------------------------------------------------
-HOWTO regenerate patch-icu-tzcode
-
-If you need to edit any of the tzcode* files, you will need to
-regenerate the patch file as follows.
-
-1. Follow the above instructions to extract and patch the tzcode*
-   files in {path_to}/icu/source/tools/tzcode.  Modify any of the
-   tzcode files.
-
-2. Extract a clean set of the tzcode* files into a new directory,
-   ../tzcode.orig/:
-
-   $ mkdir ../tzcode.orig
-   $ cd ../tzcode.orig
-   $ tar xzf ../tzcode/tzcode*.tar.gz
-   $ cd ../tzcode
-
-3. Compute diffs, ignoring files that are in only one directory:
-
-   $ diff -ur ../tzcode.orig . | grep -vE -e "^Only in " > patch-icu-tzcode
-
-4. Test the patch-icu-tzcode file by regenerating and diffing the
-   files again in another directory.  The expected output from the
-   final diff command is *nothing*.
-
-   $ mkdir ../tzcode.new
-   $ cd ../tzcode.new
-   $ tar xzf ../tzcode/tzcode*.tar.gz
-   $ patch < ../tzcode/patch-icu-tzcode
-   $ cd ../tzcode
-   $ diff -ur ../tzcode.new . | grep -vE -e "^Only in "
-
-5. Check in the new patch-icu-tzcode file.
-
-----------------------------------------------------------------------
-eof
