@@ -497,6 +497,23 @@ $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
 $(BUILDDIR)/%.res: $(MISCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT)
 	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -q -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
 
+# if the 'in' directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
+TZDATA = $(firstword $(wildcard $(srcdir)/in/tzdata*.tar.gz))
+ifneq ($(TZDATA),)
+$(MISCSRCDIR)/zoneinfo.txt: $(TZDATA)
+	@echo "******* Updating zoneinfo.txt from $(TZDATA) ..."
+	cd $(top_builddir) \
+	&& CONFIG_FILES=tools/tzcode/Makefile CONFIG_HEADERS= $(SHELL) ./config.status
+	cp $(TZDATA) $(top_builddir)/tools/tzcode
+	gunzip -d < $(TZDATA) | ( cd $(top_builddir)/tools/tzcode ; tar xf - )
+	$(MAKE) -C $(top_builddir)/tools/tzcode  icu_data
+	mv $(top_builddir)/tools/tzcode/zoneinfo.txt $@
+	$(MAKE) -C $(top_builddir)/tools/tzcode  dataclean
+	$(RMV) $(top_builddir)/tools/tzcode/tzdata*.tar.gz
+	@echo "******* Done building $@ from $< **********"
+endif
+
+
 $(OUTTMPDIR)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
 	@echo "generating $@ (list of installed locales)"; \
 	$(RMV) $@; \
