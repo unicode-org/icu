@@ -8,9 +8,10 @@ top_builddir = ../..
 
 include ../../icudefs.mk
 
+
+
 TZCOBJS= zic.o localtime.o asctime.o scheck.o ialloc.o
 
-CFLAGS+=-D_POSIX_C_SOURCE
 
 PRIMARY_YDATA=	africa antarctica asia australasia \
 		europe northamerica southamerica
@@ -18,20 +19,28 @@ YDATA=		$(PRIMARY_YDATA) pacificnew etcetera factory backward
 NDATA=		systemv
 SDATA=		solar87 solar88 solar89
 TDATA=		$(YDATA) $(NDATA) $(SDATA)
+YEARISTYPE=     ./yearistype
+
+ZIC = ./zic
+TZDIR=zoneinfo
+
+CFLAGS+=-D_POSIX_C_SOURCE
+CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
 
 # more data
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
 ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
 
-all:	tz2icu zic
-	@echo use $(MAKE) icu_data to build icu data
+all:
+	@echo This code is intended to be run by the icu/source/data makefile only.
+	false
 
 
 zic:		$(TZCOBJS) yearistype tz2icu.h
 		$(CC) $(CFLAGS) $(LFLAGS) $(TZCOBJS) $(LDLIBS) -o $@
 
 tz2icu:		tz2icu.cpp tz2icu.h
-		$(CPP) -W -Wall -pedantic tz2icu.cpp -o $@
+		$(CXX) -W -Wall -pedantic tz2icu.cpp -o $@
 
 yearistype:	yearistype.sh
 		cp yearistype.sh yearistype
@@ -42,13 +51,13 @@ posix_only:	zic $(TDATA)
 
 
 icu_data:	tz2icu posix_only
-		./tz2icu zoneinfo zone.tab `ls tzdata*.tar.gz | sed -e "s/^tzdata//;s/\.tar\.gz$$//"`
+		./tz2icu $(TZDIR) zone.tab `ls tzdata*.tar.gz | sed -e "s/^tzdata//;s/\.tar\.gz$$//"`
 
 clean:
-		-rm -f core *.o *.out tzselect zdump zic yearistype date
+		-rm -f core *.o *.out zdump zic yearistype date
 		@echo ICU specific cleanup:
 		-rm -f $(ICUDATA) 
-		-rm -rf zoneinfo
+		-rm -rf $(TZDIR)
 
 dataclean: clean
 	-rm -f $(TDATA) $(XDATA)
