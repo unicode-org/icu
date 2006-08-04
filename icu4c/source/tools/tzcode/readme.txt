@@ -9,7 +9,6 @@
 
 Note:  this directory currently contains tzcode as of tzcode2006h.tar.gz
 
-
 ----------------------------------------------------------------------
 OVERVIEW
 
@@ -59,47 +58,29 @@ several parts.  E.g.:
   tzcode2003a.tar.gz      98 KB        3/24/2003     2:32:00 PM
   tzdata2003a.tar.gz      132 KB       3/24/2003     2:32:00 PM
 
-ICU only uses the tzcodeYYYYV.tar.gz and tzdataYYYYV.tar.gz files,
+ICU only uses the tzdataYYYYV.tar.gz files,
 where YYYY is the year and V is the version letter ('a'...'z').
+
+This directory has partial contents of tzcode checked into ICU
 
 ----------------------------------------------------------------------
 HOWTO
 
-0. Generate Makefile
-
-        ( cd ../.. ; CONFIG_FILES=tools/tzcode/Makefile CONFIG_HEADERS= sh config.status )
+0. Note, these instructions will only work on POSIX type systems.
 
 1. Obtain the current versions of tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
    above.  Either manually download or use wget:
 
    $ cd {path_to}/icu/source/tools/tzcode
-   $ wget "ftp://elsie.nci.nih.gov/pub/tz*.tar.gz"
+   $ wget "ftp://elsie.nci.nih.gov/pub/tzdata*.tar.gz"
 
-2. Unpack tzdata directly into the directory tzcode:
-
-   $ tar xzvf tzdata*.tar.gz
+2. copy only one tzdata*.tar.gz file into the icu/source/data/in/ directory (you may have to create this directory)
 
    *** Make sure you only have ONE FILE named tzdata*.tar.gz in the
        directory.
-   *** Do NOT delete the tzdata*.tar.gz file.
 
-   The Makefile looks in the current directory to determine the
-   version of Olson data it is building by looking for tzdata*.tar.gz.
+3. Build ICU normally. You will see a notice "updating zoneinfo.txt..."
 
-3. Build:
-
-   $ make icu_data
-
-4. Copy the data files to the correct location in the ICU4C/ICU4J
-   source trees:
-
-   $ cp zoneinfo.txt ../../data/misc/
-   $ cp ZoneMetaData.java {path_to}/icu4j/src/com/ibm/icu/impl
-
-5. Rebuild ICU:
-
-   $ cd ../..
-   $ {*make}
-
-6. Don't forget to check in the new zoneinfo.txt (from its location at
+4. For ICU maintainers, don't forget to check in the new
+    zoneinfo.txt (from its location at
    {path_to}/icu/source/data/misc/zoneinfo.txt) into CVS.
