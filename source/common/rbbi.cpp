@@ -96,7 +96,6 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
 {
-    u_init(&status);      // Just in case ICU is not yet initialized
     init();
     if (U_FAILURE(status)) {return;}
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
@@ -223,6 +222,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init() {
     UErrorCode  status    = U_ZERO_ERROR;
+    fBufferClone          = FALSE;
     fText                 = utext_openUChars(NULL, NULL, 0, &status);
     fCharIter             = NULL;
     fSCharIter            = NULL;
@@ -1457,16 +1457,20 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
         buf += offsetUp;
     }
     if (s < sizeof(RuleBasedBreakIterator)) {
-        buf = (char *) new RuleBasedBreakIterator;
-        if (buf == 0) {
+        // Not enough room in the caller-supplied buffer.
+        // Do a plain-vanilla heap based clone and return that, along with
+        //   a warning that the clone was allocated.
+        RuleBasedBreakIterator *clonedBI = new RuleBasedBreakIterator(*this);
+        if (clonedBI == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+        } else {
+            status = U_SAFECLONE_ALLOCATED_WARNING;
         }
-        status = U_SAFECLONE_ALLOCATED_WARNING;
+        return clonedBI;
     }
 
     //
-    //  Clone the object.
+    //  Clone the source BI into the caller-supplied buffer.
     //    TODO:  using an overloaded operator new to directly initialize the
     //           copy in the user's buffer would be better, but it doesn't seem
     //           to get along with namespaces.  Investigate why.
@@ -1478,11 +1482,9 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
     RuleBasedBreakIterator localIter;        // Empty break iterator, source for memcpy
     RuleBasedBreakIterator *clone = (RuleBasedBreakIterator *)buf;
     uprv_memcpy(clone, &localIter, sizeof(RuleBasedBreakIterator)); // init C++ gorp, BreakIterator base class part
-    clone->init();              // Init RuleBasedBreakIterator part, (user constructor)
-    *clone = *this;                          // clone = the real one we want.
-    if (status != U_SAFECLONE_ALLOCATED_WARNING) {
-        clone->fBufferClone = TRUE;
-    }
+    clone->init();                // Init RuleBasedBreakIterator part, (user default constructor)
+    *clone = *this;               // clone = the real BI we want.
+    clone->fBufferClone = TRUE;   // Flag to prevent deleting storage on close (From C code)
 
     return clone;
 }
