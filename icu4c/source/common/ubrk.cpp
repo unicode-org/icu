@@ -134,6 +134,12 @@ ubrk_safeClone(
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    // Clear any incoming Safe Clone Allocated warning.
+    //  Propagating this through to our return would really
+    //  confuse our caller.
+    if (*status==U_SAFECLONE_ALLOCATED_WARNING) {
+        *status = U_ZERO_ERROR;
+    }
     return (UBreakIterator *)(((BreakIterator*)bi)->
         createBufferClone(stackBuffer, *pBufferSize, *status));
 }
