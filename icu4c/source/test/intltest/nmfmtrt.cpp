@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -225,7 +225,9 @@ void
 NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 {
     fmt->setMaximumFractionDigits(999);
-    
+    if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+        ((DecimalFormat *)fmt)->setRoundingIncrement(0.0);
+    }
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString s, s2, temp;
     if(isDouble(value))
