@@ -1,0 +1,40 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2006, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+* This is the ant build file for ICU tools. 
+*/
+-->
+<project name="API-Tools" default="main" basedir=".">
+    <target name="init">
+        <tstamp/>
+        <property name="src.dir" value="src"/>
+        <property name="build.dir" value="classes"/>
+        <property name="jar.file" value="cldr.jar"/>
+        <property name="jarSrc.file" value="cldrsrc.jar"/>
+
+        
+        <mkdir dir="${build.dir}"/>
+        <echo message="java home: ${java.home}"/>
+        <echo message="java version: ${java.version}"/>
+        <echo message="ant java version: ${ant.java.version}"/>
+        <echo message="${ant.version}"/>
+        <echo message="${basedir}"/>        
+    </target>
+
+    <target name="doctools"  depends="init" description="build StableAPI classes">
+        <javac includes="com/ibm/icu/dev/tools/docs/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            source="1.4"
+            debug="on" deprecation="off"
+            encoding="ascii"/>
+    </target>    
+    <import file="api-report-config.xml"/>         
+    <target name="clean" depends="init" description="remove all build targets">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>
