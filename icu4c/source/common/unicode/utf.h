@@ -63,6 +63,14 @@
  * malformed sequences can be expressed unambiguously with a distinct subrange
  * of Unicode code points.)
  *
+ * The regular "safe" macros require that the initial, passed-in string index
+ * is within bounds. They only check the index when they read more than one
+ * code unit. This is usually done with code similar to the following loop:
+ * <pre>while(i<length) {
+ *   U16_NEXT(s, i, length, c);
+ *   // use c
+ * }</pre>
+ *
  * When it is safe to assume that text is well-formed UTF-16
  * (does not contain single, unpaired surrogates), then one can use
  * U16_..._UNSAFE macros.
@@ -80,6 +88,8 @@
  * The unsafe UTF-8 macros are entirely implemented inside the macro definitions
  * and are fast, while the safe UTF-8 macros call functions for all but the
  * trivial (ASCII) cases.
+ * (ICU 3.6 optimizes U8_NEXT() and U8_APPEND() to handle most other common
+ * characters inline as well.)
  *
  * Unlike with UTF-16, malformed sequences cannot be expressed with distinct
  * code point values (0..U+10ffff). They are indicated with negative values instead.
