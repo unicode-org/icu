@@ -91,7 +91,7 @@ LEGlyphID LEFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *map
     }
 
     if (filterZeroWidth && (mappedChar == 0x200C || mappedChar == 0x200D)) {
-        return canDisplay(mappedChar)? 1 : mappedChar;
+        return canDisplay(mappedChar)? 0x0001 : 0xFFFF;
     }
 
     return mapCharToGlyph(mappedChar);
