@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -179,7 +179,7 @@
  *
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i<length
+ * @param i string offset, must be start<=i<length
  * @param length string length
  * @param c output UChar32 variable
  * @see U16_GET_UNSAFE
@@ -243,7 +243,7 @@
  * will be returned as the code point.
  *
  * @param s const UChar * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @param c output UChar32 variable
  * @see U16_NEXT_UNSAFE
@@ -292,7 +292,7 @@
  * then isError is set to TRUE.
  *
  * @param s const UChar * string buffer
- * @param i string offset, i<length
+ * @param i string offset, must be i<capacity
  * @param capacity size of the string buffer
  * @param c code point to append
  * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
@@ -332,7 +332,7 @@
  * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
  *
  * @param s const UChar * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @see U16_FWD_1_UNSAFE
  * @stable ICU 2.4
@@ -370,7 +370,7 @@
  * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
  *
  * @param s const UChar * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @param n number of code points to skip
  * @see U16_FWD_N_UNSAFE
@@ -413,7 +413,7 @@
  *
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<=i
  * @see U16_SET_CP_START_UNSAFE
  * @stable ICU 2.4
  */
@@ -468,7 +468,7 @@
  *
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<i
  * @param c output UChar32 variable
  * @see U16_PREV_UNSAFE
  * @stable ICU 2.4
@@ -509,7 +509,7 @@
  *
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<i
  * @see U16_BACK_1_UNSAFE
  * @stable ICU 2.4
  */
@@ -549,7 +549,7 @@
  *
  * @param s const UChar * string
  * @param start start of string
- * @param i string offset, i<length
+ * @param i string offset, must be start<i
  * @param n number of code points to skip
  * @see U16_BACK_N_UNSAFE
  * @stable ICU 2.4
