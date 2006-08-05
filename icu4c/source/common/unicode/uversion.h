@@ -123,7 +123,15 @@ namespace U_ICU_NAMESPACE { }
 namespace U_ICU_NAMESPACE { }
 namespace icu = U_ICU_NAMESPACE;
 #endif
+
+#ifndef U_USING_ICU_NAMESPACE
+#   define U_USING_ICU_NAMESPACE 1
+#endif
+
+#if U_USING_ICU_NAMESPACE
 U_NAMESPACE_USE
+#endif
+
 #endif
 
 
