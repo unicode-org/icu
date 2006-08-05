@@ -181,7 +181,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start starting string offset
- * @param i string offset, start<=i<length
+ * @param i string offset, must be start<=i<length
  * @param length string length
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_GET_UNSAFE
@@ -243,7 +243,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * c is set to a negative value.
  *
  * @param s const uint8_t * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_NEXT_UNSAFE
@@ -320,25 +320,25 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * then isError is set to TRUE.
  *
  * @param s const uint8_t * string buffer
- * @param i string offset, i<length
- * @param length size of the string buffer
+ * @param i string offset, must be i<capacity
+ * @param capacity size of the string buffer
  * @param c code point to append
  * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
  * @see U8_APPEND_UNSAFE
  * @stable ICU 2.4
  */
-#define U8_APPEND(s, i, length, c, isError) { \
+#define U8_APPEND(s, i, capacity, c, isError) { \
     if((uint32_t)(c)<=0x7f) { \
         (s)[(i)++]=(uint8_t)(c); \
-    } else if((uint32_t)(c)<=0x7ff && (i)+1<(length)) { \
+    } else if((uint32_t)(c)<=0x7ff && (i)+1<(capacity)) { \
         (s)[(i)++]=(uint8_t)(((c)>>6)|0xc0); \
         (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80); \
-    } else if((uint32_t)(c)<=0xd7ff && (i)+2<(length)) { \
+    } else if((uint32_t)(c)<=0xd7ff && (i)+2<(capacity)) { \
         (s)[(i)++]=(uint8_t)(((c)>>12)|0xe0); \
         (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80); \
         (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80); \
     } else { \
-        (i)=utf8_appendCharSafeBody(s, (int32_t)(i), (int32_t)(length), c, &(isError)); \
+        (i)=utf8_appendCharSafeBody(s, (int32_t)(i), (int32_t)(capacity), c, &(isError)); \
     } \
 }
 
@@ -362,7 +362,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * "Safe" macro, checks for illegal sequences and for string boundaries.
  *
  * @param s const uint8_t * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @see U8_FWD_1_UNSAFE
  * @stable ICU 2.4
@@ -408,7 +408,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * "Safe" macro, checks for illegal sequences and for string boundaries.
  *
  * @param s const uint8_t * string
- * @param i string offset, i<length
+ * @param i string offset, must be i<length
  * @param length string length
  * @param n number of code points to skip
  * @see U8_FWD_N_UNSAFE
@@ -449,7 +449,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<=i
  * @see U8_SET_CP_START_UNSAFE
  * @stable ICU 2.4
  */
@@ -517,7 +517,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<i
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_PREV_UNSAFE
  * @stable ICU 2.4
@@ -556,7 +556,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i
+ * @param i string offset, must be start<i
  * @see U8_BACK_1_UNSAFE
  * @stable ICU 2.4
  */
@@ -596,7 +596,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start index of the start of the string
- * @param i string offset, i<length
+ * @param i string offset, must be start<i
  * @param n number of code points to skip
  * @see U8_BACK_N_UNSAFE
  * @stable ICU 2.4
@@ -637,7 +637,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start starting string offset (usually 0)
- * @param i string offset, start<=i<=length
+ * @param i string offset, must be start<=i<=length
  * @param length string length
  * @see U8_SET_CP_LIMIT_UNSAFE
  * @stable ICU 2.4
