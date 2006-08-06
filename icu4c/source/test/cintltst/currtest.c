@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2005-2005, International Business Machines Corporation and
+ * Copyright (c) 2005-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -119,7 +119,7 @@ static int32_t checkItemCount(uint32_t currencyType) {
     originalCount = uenum_count(en, &status);
     for (count=0;;count++) {
         const char *str = uenum_next(en, &len, &status);
-        if (U_FAILURE(status) || len != expectedLen || strlen(str) != expectedLen) {
+        if (str == NULL || len != expectedLen || strlen(str) != expectedLen) {
             break;
         }
     }
@@ -127,6 +127,9 @@ static int32_t checkItemCount(uint32_t currencyType) {
     if (originalCount != count) {
         log_err("Error: uenum_count returned the wrong value (type = 0x%X). Got: %d Expected %d\n",
            currencyType, count, originalCount);
+    }
+    if (U_FAILURE(status)) {
+        log_err("Error: uenum_next got an error: %s\n", u_errorName(status));
     }
     uenum_close(en);
     return count;

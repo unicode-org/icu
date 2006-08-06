@@ -303,11 +303,15 @@ enumCount(UEnumeration *, UErrorCode *) {
 static const char* U_CALLCONV
 enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
     if(((Context *)en->context)->currIndex >= fCSRecognizers_size) {
-        *status = U_INDEX_OUTOFBOUNDS_ERROR;
+        if(resultLength != NULL) {
+            *resultLength = 0;
+        }
         return NULL;
     }
     const char *currName = fCSRecognizers[((Context *)en->context)->currIndex]->getName();
-    *resultLength = (int32_t)uprv_strlen(currName);
+    if(resultLength != NULL) {
+        *resultLength = (int32_t)uprv_strlen(currName);
+    }
     ((Context *)en->context)->currIndex++;
 
     return currName;

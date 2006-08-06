@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -58,13 +58,14 @@ UEnumCount(UEnumeration *en, UErrorCode *status);
 /**
  * Function type declaration for uenum_unext().
  *
- * This function should return the next element
- * as a UChar *
+ * This function returns the next element as a UChar *,
+ * or NULL after all elements haven been enumerated.
  *
  * @param en enumeration 
  * @param resultLength pointer to result length
  * @param status pointer to UErrorCode variable
- * @return next element as UChar *
+ * @return next element as UChar *,
+ *         or NULL after all elements haven been enumerated
  */
 typedef const UChar* U_CALLCONV 
 UEnumUNext(UEnumeration* en,
@@ -74,13 +75,14 @@ UEnumUNext(UEnumeration* en,
 /**
  * Function type declaration for uenum_next().
  *
- * This function should return the next element
- * as a char *
+ * This function returns the next element as a char *,
+ * or NULL after all elements haven been enumerated.
  *
  * @param en enumeration 
  * @param resultLength pointer to result length
  * @param status pointer to UErrorCode variable
- * @return next element as char *
+ * @return next element as char *,
+ *         or NULL after all elements haven been enumerated
  */
 typedef const char* U_CALLCONV 
 UEnumNext(UEnumeration* en,

@@ -95,16 +95,21 @@ static void TestConstruction(void)
     UErrorCode status = U_ZERO_ERROR;
     UCharsetDetector *csd = ucsdet_open(&status);
     UEnumeration *e = ucsdet_getAllDetectableCharsets(csd, &status);
+    const char *name;
     int32_t count = uenum_count(e, &status);
-    int32_t i;
+    int32_t i, length;
 
     for(i = 0; i < count; i += 1) {
-        int32_t length;
-        const char *name = uenum_next(e, &length, &status);
+        name = uenum_next(e, &length, &status);
 
         if(name == NULL || length <= 0) {
             log_err("ucsdet_getAllDetectableCharsets() returned a null or empty name!\n");
         }
+    }
+    /* one past the list of all names must return NULL */
+    name = uenum_next(e, &length, &status);
+    if(name != NULL || length != 0 || U_FAILURE(status)) {
+        log_err("ucsdet_getAllDetectableCharsets(past the list) returned a non-null name!\n");
     }
 
     uenum_close(e);

@@ -169,7 +169,10 @@ static void ListNames(void) {
             count1++;
             log_verbose("read \"%s\", length %i\n", string, len);
         }
-        err = U_ZERO_ERROR;
+        if (U_FAILURE(err)) {
+            log_err("FAILURE! uenum_next(allNamesEnum...) set an error: %s\n", u_errorName(err));
+            err = U_ZERO_ERROR;
+        }
         uenum_reset(allNamesEnum, &err);
         while ((string = uenum_next(allNamesEnum, &len, &err))) {
             count2++;
