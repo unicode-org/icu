@@ -790,7 +790,9 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
         }
     }
     /* Either we accessed a zero length list, or we enumerated too far. */
-    *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    if (resultLength) {
+        *resultLength = 0;
+    }
     return NULL;
 }
 
@@ -1021,7 +1023,9 @@ ucnv_io_nextAllConverters(UEnumeration *enumerator,
         return myStr;
     }
     /* Either we accessed a zero length list, or we enumerated too far. */
-    *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    if (resultLength) {
+        *resultLength = 0;
+    }
     return NULL;
 }
 

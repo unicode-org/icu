@@ -1044,7 +1044,9 @@ ucurr_nextCurrencyList(UEnumeration *enumerator,
         }
     }
     /* We enumerated too far. */
-    *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    if (resultLength) {
+        *resultLength = 0;
+    }
     return NULL;
 }
 
