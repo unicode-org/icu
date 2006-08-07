@@ -280,6 +280,21 @@ ubidi_isInverse(UBiDi *pBiDi) {
     }
 }
 
+/* FOOD FOR THOUGHT: currently the reordering modes are a mixture of
+ * algorithm for direct BiDi, algorithm for inverse BiDi and the bizarre
+ * concept of RUNS_ONLY which is a double operation.
+ * It could be advantageous to divide this into 3 concepts:
+ * a) Operation: direct / inverse / RUNS_ONLY
+ * b) Direct algorithm: default / NUMBERS_SPECIAL / GROUP_NUMBERS_WITH_L
+ * c) Inverse algorithm: default / INVERSE_LIKE_DIRECT / NUMBERS_SPECIAL
+ * This would allow combinations not possible today like RUNS_ONLY with
+ * NUMBERS_SPECIAL.
+ * Also allow to set INSERT_MARKS for the direct step of RUNS_ONLY and
+ * REMOVE_CONTROLS for the inverse step.
+ * Not all combinations would be supported, and probably not all do make sense.
+ * This would need to document which ones are supported and what are the
+ * fallbacks for unsupported combinations.
+ */
 U_CAPI void U_EXPORT2
 ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
     if ((pBiDi != NULL) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
@@ -878,6 +893,9 @@ static const uint8_t impTabProps[][IMPTABPROPS_COLUMNS] =
 typedef uint8_t ImpTab[][IMPTABLEVELS_COLUMNS];
 typedef uint8_t ImpAct[];
 
+/* FOOD FOR THOUGHT: each ImpTab should have its associated ImpAct,
+ * instead of having a pair of ImpTab and a pair of ImpAct.
+ */
 typedef struct ImpTabPair {
     ImpTab * pImpTab[2];
     ImpAct * pImpAct[2];
@@ -1043,6 +1061,8 @@ static const ImpTab impTabR_INVERSE_LIKE_DIRECT =   /* Odd  paragraph level */
 /* 6 : L+ON+EN    */ { _(2,1), _(3,0),     6 ,     4 ,     3 ,     3 , _(3,0),  1 }
 };
 static const ImpAct impAct1 = {0,1,11,12};
+/* FOOD FOR THOUGHT: in LTR table below, check case "JKL 123abc"
+ */
 static const ImpTabPair impTab_INVERSE_LIKE_DIRECT = {
                         {(ImpTab*)&impTabL_DEFAULT,
                          (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT},
@@ -1083,8 +1103,8 @@ static const ImpTabPair impTab_INVERSE_LIKE_DIRECT_WITH_MARKS = {
 
 static const ImpTabPair impTab_INVERSE_FOR_NUMBERS_SPECIAL = {
                         {(ImpTab*)&impTabL_NUMBERS_SPECIAL,
-                         (ImpTab*)&impTabR_DEFAULT},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+                         (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT},
+                        {(ImpAct*)&impAct0, (ImpAct*)&impAct1}};
 
 static const ImpTab impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS =
 /*  The case handled in this table is (visually):  R EN L
