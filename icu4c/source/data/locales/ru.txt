@@ -1637,7 +1637,7 @@ ru{
             japanese{"Японский календарь"}
         }
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             DateTimePatterns{

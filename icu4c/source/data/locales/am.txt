@@ -284,25 +284,45 @@ am{
     LocaleScript{
         "Ethi",
     }
-    Version{"1.54"}
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.56"}
     calendar{
         ethiopic{
             monthNames{
                 format{
                     abbreviated{
                         "መስከ",
-                        "ጥቅም",
+                        "ጥቅምት",
                         "ኅዳር",
-                        "ታኅሣ",
+                        "ታኅሣሥ",
                         "ጥር",
                         "የካቲ",
-                        "መጋቢ",
-                        "ሚያዝ",
+                        "መጋቢት",
+                        "ሚያዝያ",
                         "ግንቦ",
                         "ሰኔ",
                         "ሐምሌ",
                         "ነሐሴ",
-                        "ጳጉሜ",
+                        "ጳጉሜን",
                     }
                     wide{
                         "መስከረም",
@@ -323,6 +343,17 @@ am{
             }
         }
         gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -454,5 +485,8 @@ am{
                 }
             }
         }
+    }
+    zoneStrings{
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

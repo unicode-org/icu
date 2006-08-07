@@ -125,16 +125,16 @@ uz_Latn{
                     abbreviated{
                         "Yanv",
                         "Fev",
-                        "Rabiul-avval",
+                        "Mar",
                         "Apr",
-                        "5",
+                        "May",
                         "Iyun",
-                        "Rajab",
+                        "Iyul",
                         "Avg",
-                        "9",
+                        "Sen",
                         "Okt",
-                        "11",
-                        "Zil-hijja",
+                        "Noya",
+                        "Dek",
                     }
                     wide{
                         "Muharram",

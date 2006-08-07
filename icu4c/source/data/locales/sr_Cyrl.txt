@@ -20,6 +20,16 @@ sr_Cyrl{
         "Cyrl",
     }
     Version{"1.26"}
+    calendar{
+        gregorian{
+            eras{
+                wide{
+                    "Прије нове ере",
+                    "Нове ере",
+                }
+            }
+        }
+    }
     zoneStrings{
         "Europe:Sarajevo"{
             ec{"Sarajevo"}

@@ -1718,6 +1718,12 @@ de{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"Arabisch"}
         Armn{"Armenisch"}
@@ -1789,7 +1795,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.76"}
+    Version{"1.77"}
     calendar{
         gregorian{
             AmPmMarkers{

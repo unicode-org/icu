@@ -1483,5 +1483,6 @@ sk{
         "Pacific:Galapagos"{
             ec{"Galapágy"}
         }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

@@ -2923,5 +2923,8 @@ ja{
         "Pacific:Yap"{
             ec{"太平洋/ヤップ"}
         }
+        fallbackFormat{"{0} ({1})時間"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}時間"}
     }
 }

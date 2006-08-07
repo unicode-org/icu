@@ -696,5 +696,6 @@ sr{
         "Europe:Zaporozhye"{
             ec{"Запорожје"}
         }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

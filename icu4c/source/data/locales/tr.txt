@@ -1542,6 +1542,12 @@ tr{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"Arapça"}
         Armn{"Ermenice"}
@@ -1744,11 +1750,11 @@ tr{
                         "Heşvan",
                         "Kislev",
                         "Tevet",
-                        "Shevat",
+                        "Şevat",
                         "Veadar",
                         "Adar",
                         "Nisan",
-                        "İyar",
+                        "Iyar",
                         "Sivan",
                         "Tamuz",
                         "Av",
@@ -1780,14 +1786,14 @@ tr{
                         "Safer",
                         "Rebiülevvel",
                         "Rebiülahir",
-                        "Jumada I",
+                        "Cemaziyelevvel",
                         "Cemaziyelahir",
-                        "Rajab",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
+                        "Recep",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
                         "Zilkade",
-                        "Zilhicce",
+                        "Dhuʻl-Hijjah",
                     }
                     wide{
                         "Muharrem",
@@ -1834,14 +1840,14 @@ tr{
                         "Ordibeheşt",
                         "Hordâd",
                         "Tir",
-                        "Mordad",
+                        "Mordâd",
                         "Şehrivar",
                         "Mehr",
-                        "Âbân",
-                        "Âzar",
-                        "Daî",
+                        "Aban",
+                        "Azar",
+                        "Dey",
                         "Behman",
-                        "İsfand",
+                        "Esfand",
                     }
                     wide{
                         "Ferwerdin",

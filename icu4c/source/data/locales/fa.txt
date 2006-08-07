@@ -1606,5 +1606,8 @@ fa{
         "Pacific:Tahiti"{
             ec{"تاهیتی"}
         }
+        fallbackFormat{"وقت {0} ({1})"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"وقت {0}"}
     }
 }
