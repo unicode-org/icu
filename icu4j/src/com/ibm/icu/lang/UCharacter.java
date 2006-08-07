@@ -4490,7 +4490,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c)) {}
                 titleStart=iter.getCPStart();
                 if(prev<titleStart) {
-                    result.append(str, prev, titleStart);
+                    // TODO: With Java 5, this would want to be result.append(str, prev, titleStart);
+                    result.append(str.substring(prev, titleStart));
                 }
 
                 if(titleStart<index) {
