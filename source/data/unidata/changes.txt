@@ -35,6 +35,32 @@ Unicode 5.0 update
     EastAsianWidth.txt
     LineBreak.txt
 
+* my ucd2unidata.txt (needs to be updated each time with UCD and file version numbers)
+copy 5.0.0\ucd\BidiMirroring.txt ..\unidata\
+copy 5.0.0\ucd\Blocks.txt ..\unidata\
+copy 5.0.0\ucd\CaseFolding.txt ..\unidata\
+copy 5.0.0\ucd\DerivedAge.txt ..\unidata\
+copy 5.0.0\ucd\extracted\DerivedBidiClass.txt ..\unidata\
+copy 5.0.0\ucd\extracted\DerivedJoiningGroup.txt ..\unidata\
+copy 5.0.0\ucd\extracted\DerivedJoiningType.txt ..\unidata\
+copy 5.0.0\ucd\extracted\DerivedNumericValues.txt ..\unidata\
+copy 5.0.0\ucd\NormalizationCorrections.txt ..\unidata\
+copy 5.0.0\ucd\PropertyAliases.txt ..\unidata\
+copy 5.0.0\ucd\PropertyValueAliases.txt ..\unidata\
+copy 5.0.0\ucd\SpecialCasing.txt ..\unidata\
+copy 5.0.0\ucd\UnicodeData.txt ..\unidata\
+
+ucdstrip < 5.0.0\ucd\DerivedCoreProperties.txt > ..\unidata\DerivedCoreProperties.txt
+ucdstrip < 5.0.0\ucd\DerivedNormalizationProps.txt > ..\unidata\DerivedNormalizationProps.txt
+ucdstrip < 5.0.0\ucd\NormalizationTest.txt > ..\unidata\NormalizationTest.txt
+ucdstrip < 5.0.0\ucd\PropList.txt > ..\unidata\PropList.txt
+ucdstrip < 5.0.0\ucd\Scripts.txt > ..\unidata\Scripts.txt
+ucdstrip < 5.0.0\ucd\auxiliary\GraphemeBreakProperty.txt > ..\unidata\GraphemeBreakProperty.txt
+ucdstrip < 5.0.0\ucd\auxiliary\SentenceBreakProperty.txt > ..\unidata\SentenceBreakProperty.txt
+ucdstrip < 5.0.0\ucd\auxiliary\WordBreakProperty.txt > ..\unidata\WordBreakProperty.txt
+ucdstrip < 5.0.0\ucd\EastAsianWidth.txt | ucdmerge > ..\unidata\EastAsianWidth.txt
+ucdstrip < 5.0.0\ucd\LineBreak.txt | ucdmerge > ..\unidata\LineBreak.txt
+
 * update FractionalUCA.txt and UCARules.txt with new canonical closure
 
 * genpname

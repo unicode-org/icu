@@ -1,5 +1,5 @@
 # DerivedAge-5.0.0.txt
-# Date: 2006-03-09, 23:13:30 GMT [MD]
+# Date: 2006-07-14, 17:25:00 PST [MD/KW]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2006 Unicode, Inc.
@@ -824,7 +824,7 @@ FE10..FE19    ; 4.1 #  [10] PRESENTATION FORM FOR VERTICAL COMMA..PRESENTATION F
 
 # ================================================
 
-# Newly assigned in Unicode 5.0.0 (XXX, 2006)
+# Newly assigned in Unicode 5.0.0 (July, 2006)
 
 0242..024F    ; 5.0 #  [14] LATIN SMALL LETTER GLOTTAL STOP..LATIN SMALL LETTER Y WITH STROKE
 037B..037D    ; 5.0 #   [3] GREEK SMALL REVERSED LUNATE SIGMA SYMBOL..GREEK SMALL REVERSED DOTTED LUNATE SIGMA SYMBOL
