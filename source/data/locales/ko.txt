@@ -1783,7 +1783,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.70"}
+    Version{"1.71"}
     calendar{
         gregorian{
             AmPmMarkers{

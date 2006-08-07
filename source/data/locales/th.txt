@@ -2625,5 +2625,6 @@ th{
         "Pacific:Wake"{
             ec{"เวก"}
         }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

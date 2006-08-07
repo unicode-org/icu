@@ -7,12 +7,21 @@
 // *
 // ***************************************************************************
 ar_EG{
+    Scripts{
+        Ital{"الأيطالية القديمة"}
+    }
     Version{"1.39"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 1,
+            }
+            eras{
+                wide{
+                    "قبل الميلاد",
+                    "ميلادي",
+                }
             }
             weekend:intvector{
                 6,
@@ -21,5 +30,11 @@ ar_EG{
                 86400000,
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
 }

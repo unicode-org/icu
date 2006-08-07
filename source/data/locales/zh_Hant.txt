@@ -1669,7 +1669,7 @@ zh_Hant{
     Variants{
         REVISED{"已修訂"}
     }
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2238,5 +2238,6 @@ zh_Hant{
         "Pacific:Yap"{
             ec{"雅浦島"}
         }
+        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

@@ -2497,5 +2497,6 @@ zh{
         "Pacific:Yap"{
             ec{"雅浦岛"}
         }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

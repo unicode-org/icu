@@ -90,6 +90,8 @@
         <include locales="fr_LU"/> 
         <include locales="gu"/>        
         <include locales="gu_IN"/>
+        <include locales="haw"/>     <!-- for Apple -->
+        <include locales="haw_US"/> <!-- for Apple -->
         <include locales="he"/> 
         <include locales="he_IL"/> 
         <include locales="hi"/> 
@@ -257,7 +259,7 @@
         <include locales="sl_SI" draft=".*" />
         <include locales="sr_Cyrl" draft=".*" />
         
-        <!-- only for 3.4 -->
+        <!-- only for 3.6 -->
         <include locales="as" draft=".*" /> 
         <include locales="as_IN" draft=".*" /> 
         <include locales="az" draft=".*"/>
@@ -292,8 +294,10 @@
         <include xpath="//ldml/localeDisplayNames/territories/territory\[@type='DO'].*" locales="fr" draft="unconfirmed" />
         <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/eras.*" locales="bg sl" draft="unconfirmed" />
         <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/quarters/quarterWidth\[@type='wide']/.*" locales="is" draft="unconfirmed" />
+        <include xpath="//ldml/collations/collation\[@type='standard'\]/.*" locales="ml or" draft="confirmed" />
         <!-- Exclude unusable data -->
         <exclude xpath="//ldml/posix/messages/.*"/>
+        <exclude xpath="//ldml/numbers/currencies/.*" locales="bg_BG, nl_BE"/>
         <include xpath="//supplementalData/.*"/>
         <include xpath="//supplementalMetaData/.*"/>
     </paths>

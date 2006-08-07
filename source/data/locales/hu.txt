@@ -1416,6 +1416,12 @@ hu{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Armn{"Örmény"}
         Beng{"Bengáli"}

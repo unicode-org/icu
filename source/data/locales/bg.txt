@@ -2170,5 +2170,7 @@ bg{
         "Pacific:Yap"{
             ec{"о. Яп"}
         }
+        gmtFormat{"Гриинуич{0}"}
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

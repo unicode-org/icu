@@ -740,6 +740,7 @@ zh_Hans{
         Hans{"简体中文"}
         Hant{"繁体中文"}
         Hmng{"杨松录苗文"}
+        Hrkt{"片假名或平假名"}
         Hung{"古匈牙利语"}
         Inds{"古希腊哈拉潘"}
         Java{"爪哇语"}
@@ -772,7 +773,7 @@ zh_Hans{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.34"}
+    Version{"1.35"}
     calendar{
         gregorian{
             fields{

@@ -11,36 +11,6 @@ nl_BE{
         172{"Gemenebest van Onafhankelijke Staten"}
         833{"Het Eiland Man"}
     }
-    Currencies{
-        EEK{
-            "Estlandse kroon",
-            "Estlandse kroon",
-        }
-        LTL{
-            "Litouwse litas",
-            "Litouwse litas",
-        }
-        LVL{
-            "Letse lats",
-            "Letse lats",
-        }
-        RUB{
-            "Russische roebel",
-            "Russische roebel",
-        }
-        SIT{
-            "Sloveense tolar",
-            "Sloveense tolar",
-        }
-        THB{
-            "Thaise baht",
-            "Thaise baht",
-        }
-        TRY{
-            "Nieuwe Turkse lire",
-            "Nieuwe Turkse lire",
-        }
-    }
     Languages{
         lv{"Lets"}
         oc{"Occitaans (na 1500); Provençaals"}
@@ -58,7 +28,7 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.48"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

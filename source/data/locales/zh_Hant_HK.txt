@@ -16,7 +16,7 @@ zh_Hant_HK{
         "#,##0%",
         "#E0",
     }
-    Version{"1.39"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
