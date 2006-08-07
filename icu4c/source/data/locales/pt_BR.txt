@@ -54,6 +54,19 @@ pt_BR{
     }
     Version{"1.42"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH'h'mm'min'ss's' z",
+                "H'h'm'min's's' z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH'h'mm'min'ss's' z",
@@ -97,6 +110,19 @@ pt_BR{
                 zone{
                     dn{"Fuso"}
                 }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH'h'mm'min'ss's' z",
+                "H'h'm'min's's' z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
             }
         }
     }

@@ -722,9 +722,14 @@ root{
             sd{""}
             ss{""}
         }
+        fallbackFormat{"{0} ({1})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        hoursFormat{"{0}/{1}"}
         preferenceOrdering{
             "",
         }
+        regionFormat{"{0}"}
         singleCountries{
             "Africa/Bamako",
             "America/Godthab",

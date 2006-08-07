@@ -1780,7 +1780,7 @@ pt{
     Variants{
         REVISED{"Revisado"}
     }
-    Version{"1.64"}
+    Version{"1.65"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -1652,6 +1652,26 @@ da{
     LocaleScript{
         "Latn",
     }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0 %",
+        "#E0",
+    }
     Scripts{
         Arab{"Arabisk"}
         Armn{"Armensk"}
@@ -1695,7 +1715,7 @@ da{
             traditional{"Traditionel sorteringsrækkefølge"}
         }
     }
-    Version{"1.67"}
+    Version{"1.68"}
     calendar{
         gregorian{
             DateTimePatterns{

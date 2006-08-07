@@ -36,6 +36,20 @@ az{
     LocaleScript{
         "Latn",
     }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Version{"1.39"}
     calendar{
         gregorian{
@@ -61,21 +75,31 @@ az{
                     }
                 }
             }
+            eras{
+                abbreviated{
+                    "e.ə.",
+                    "b.e.",
+                }
+                wide{
+                    "eramızdan əvvəl",
+                    "bizim eramızın",
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
-                        "1",
+                        "yan",
                         "fev",
                         "mar",
                         "apr",
                         "may",
                         "iyn",
                         "iyl",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "avq",
+                        "sen",
+                        "okt",
+                        "noy",
+                        "dek",
                     }
                     wide{
                         "Yanvar",
@@ -110,5 +134,11 @@ az{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
 }

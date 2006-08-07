@@ -458,18 +458,18 @@ pl_PL{
             monthNames{
                 format{
                     abbreviated{
-                        "sty",
+                        "stycznia",
                         "lut",
                         "mar",
-                        "kwi",
-                        "maj",
-                        "cze",
+                        "kwietnia",
+                        "maja",
+                        "czerwca",
                         "lip",
                         "sie",
-                        "wrz",
-                        "paź",
-                        "lis",
-                        "gru",
+                        "września",
+                        "października",
+                        "listopada",
+                        "grudnia",
                     }
                 }
                 stand-alone{

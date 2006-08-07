@@ -69,6 +69,12 @@ cy{
     LocaleScript{
         "Latn",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Latn{"Lladin"}
     }
@@ -168,5 +174,8 @@ cy{
                 }
             }
         }
+    }
+    zoneStrings{
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

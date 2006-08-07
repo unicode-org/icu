@@ -48,7 +48,7 @@ sv_SE{
             stroke{"streckordning"}
         }
     }
-    Version{"1.43"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

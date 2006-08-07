@@ -16,6 +16,23 @@ as_IN{
     Version{"1.29"}
     calendar{
         gregorian{
+            DateTimePatterns{
+                "h.mm.ss a z",
+                "h.mm.ss a z",
+                "h.mm.ss a",
+                "h.mm. a",
+                "EEEE, d MMMM, yyyy",
+                "d MMMM, yyyy",
+                "dd-MM-yyyy",
+                "d-M-yyyy",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd-MM"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM, yyyy"}
+            }
             weekend:intvector{
                 1,
                 0,

@@ -1485,22 +1485,22 @@ uk{
             traditional{"Традиційний"}
         }
     }
-    Version{"1.73"}
+    Version{"1.74"}
     calendar{
         coptic{
             monthNames{
                 format{
                     abbreviated{
                         "Тот",
-                        "Бабе",
-                        "Hator",
+                        "Baba",
+                        "Хатур",
                         "Кіхак",
-                        "Тобе",
+                        "Toba",
                         "Амшир",
-                        "Baramhat",
-                        "Бармуда",
+                        "Барамхат",
+                        "Baramouda",
                         "Башнас",
-                        "Бауна",
+                        "Paona",
                         "Абіб",
                         "Mesra",
                         "Насі",
@@ -1710,16 +1710,16 @@ uk{
                     abbreviated{
                         "Тішри",
                         "Марчешван",
-                        "Kislev",
+                        "Числьов",
                         "Тебет",
-                        "Shevat",
+                        "Шеват",
                         "Адар Ⅰ",
-                        "Adar",
+                        "Адар",
                         "Nisan",
-                        "Іар",
-                        "Сиван",
+                        "Iyar",
+                        "Sivan",
                         "Таммуз",
-                        "Аб",
+                        "Av",
                         "Елул",
                     }
                     wide{
@@ -2305,5 +2305,6 @@ uk{
         "Pacific:Yap"{
             ec{"Яп"}
         }
+        hourFormat{"+HHmm;-HHmm"}
     }
 }

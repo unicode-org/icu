@@ -21,6 +21,20 @@ or{
     LocaleScript{
         "Orya",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "୦",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Version{"1.27"}
     calendar{
         gregorian{

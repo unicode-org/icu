@@ -8,4 +8,10 @@
 // ***************************************************************************
 sr_Cyrl_CS{
     Version{"1.23"}
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
 }

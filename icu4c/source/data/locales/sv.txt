@@ -1699,6 +1699,26 @@ sv{
     LocaleScript{
         "Latn",
     }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0 %",
+        "#E0",
+    }
     Scripts{
         Arab{"arabiska"}
         Armn{"armeniska"}
@@ -1835,6 +1855,17 @@ sv{
     Version{"1.84"}
     calendar{
         gregorian{
+            DateTimePatterns{
+                "'kl. 'HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, yyyy MMMM dd",
+                "EEEE d MMM yyyy",
+                "d MMM yyyy",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -2154,5 +2185,6 @@ sv{
             sd{"HST"}
             ss{"HST"}
         }
+        hourFormat{"+HH.mm;-HH.mm"}
     }
 }

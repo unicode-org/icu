@@ -7,5 +7,17 @@
 // *
 // ***************************************************************************
 sl_SI{
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
     Version{"1.41"}
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
 }
