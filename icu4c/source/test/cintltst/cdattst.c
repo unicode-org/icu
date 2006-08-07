@@ -546,11 +546,20 @@ free(pattern);
     
     /*run series of tests to test setSymbols regressively*/
     log_verbose("\nTesting setSymbols regressively\n");
-    VerifysetSymbols(def, UDAT_WEEKDAYS, 1, "Sundayweek");
     VerifysetSymbols(def, UDAT_ERAS, 0, "BeforeChrist");
+    VerifysetSymbols(def, UDAT_ERA_NAMES, 1, "AnnoDomini");
+    VerifysetSymbols(def, UDAT_WEEKDAYS, 1, "Sundayweek");
     VerifysetSymbols(def, UDAT_SHORT_WEEKDAYS, 7, "Satweek");
+    VerifysetSymbols(def, UDAT_NARROW_WEEKDAYS, 4, "M");
+    VerifysetSymbols(def, UDAT_STANDALONE_WEEKDAYS, 1, "Sonntagweek");
+    VerifysetSymbols(def, UDAT_STANDALONE_SHORT_WEEKDAYS, 7, "Sams");
+    VerifysetSymbols(def, UDAT_STANDALONE_NARROW_WEEKDAYS, 4, "V");
     VerifysetSymbols(fr, UDAT_MONTHS, 11, "december");
     VerifysetSymbols(fr, UDAT_SHORT_MONTHS, 0, "Jan");
+    VerifysetSymbols(fr, UDAT_NARROW_MONTHS, 1, "R");
+    VerifysetSymbols(fr, UDAT_STANDALONE_MONTHS, 11, "dezember");
+    VerifysetSymbols(fr, UDAT_STANDALONE_SHORT_MONTHS, 7, "Aug");
+    VerifysetSymbols(fr, UDAT_STANDALONE_NARROW_MONTHS, 2, "M");
 
     
     /*run series of tests to test get and setSymbols regressively*/
