@@ -88,7 +88,7 @@ MultithreadTest::~MultithreadTest()
 
 #if (ICU_USE_THREADS==0)
 void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
-                const char* &name, char* par ) {
+                const char* &name, char* /*par*/ ) {
   if (exec) logln("TestSuite MultithreadTest: ");
 
   if(index == 0)
