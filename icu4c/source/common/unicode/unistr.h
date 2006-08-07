@@ -4077,12 +4077,14 @@ inline UnicodeString&
 UnicodeString::remove(int32_t start,
              int32_t _length)
 {
-  if(start <= 0 && _length == INT32_MAX) {
-    // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
-    return remove();
-  } else {
-    return doReplace(start, _length, NULL, 0, 0);
-  }
+    UnicodeString& result;
+    if(start <= 0 && _length == INT32_MAX) {
+        // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
+        result = remove();
+    } else {
+        result = doReplace(start, _length, NULL, 0, 0);
+    }
+    return result;
 }
 
 inline UnicodeString&
