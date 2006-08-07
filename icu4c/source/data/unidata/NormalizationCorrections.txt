@@ -1,5 +1,5 @@
 # NormalizationCorrections-5.0.0.txt
-# Date: 2005-08-23, 17:13:00 PDT [KW]
+# Date: 2006-07-14, 11:23:00 PDT [KW]
 #
 # This file is a normative contributory data file in the
 # Unicode Character Database.
