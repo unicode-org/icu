@@ -195,10 +195,12 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
             log_verbose("%s\n", enumName);
             err = U_ZERO_ERROR;
         }
-        /* one past the list of all names must return NULL */
-        enumName = uenum_next(myEnum, &len, &err);
-        if (enumName != NULL || len != 0 || U_FAILURE(err)) {
-            log_err("FAIL: uenum_next(past the list) did not return NULL[0] with U_SUCCESS()\n");
+        if (enumCount >= 0) {
+            /* one past the list of all names must return NULL */
+            enumName = uenum_next(myEnum, &len, &err);
+            if (enumName != NULL || len != 0 || U_FAILURE(err)) {
+                log_err("FAIL: uenum_next(past the list) did not return NULL[0] with U_SUCCESS(). name=%s standard=%s len=%d err=%s\n", name, standard, len, u_errorName(err));
+            }
         }
         log_verbose("\n    reset\n");
         uenum_reset(myEnum, &err);
