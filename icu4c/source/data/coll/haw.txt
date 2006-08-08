@@ -1,0 +1,31 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/collation/haw.xml
+// *
+// ***************************************************************************
+haw{
+    Version{"1.4"}
+    collations{
+        standard{
+            Sequence{
+                "&a<e<i<o<u<h<k<l<m<n<p<w<ʻ"
+                "&a<<<A"
+                "&e<<<E"
+                "&i<<<I"
+                "&o<<<O"
+                "&u<<<U"
+                "&h<<<H"
+                "&k<<<K"
+                "&l<<<L"
+                "&m<<<M"
+                "&n<<<N"
+                "&p<<<P"
+                "&w<<<W"
+            }
+            Version{"1.4"}
+        }
+    }
+}
