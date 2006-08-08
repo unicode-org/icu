@@ -560,6 +560,10 @@ free(pattern);
     VerifysetSymbols(fr, UDAT_STANDALONE_MONTHS, 11, "dezember");
     VerifysetSymbols(fr, UDAT_STANDALONE_SHORT_MONTHS, 7, "Aug");
     VerifysetSymbols(fr, UDAT_STANDALONE_NARROW_MONTHS, 2, "M");
+    VerifysetSymbols(fr, UDAT_QUARTERS, 0, "1. Quart");
+    VerifysetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "QQ2");
+    VerifysetSymbols(fr, UDAT_STANDALONE_QUARTERS, 2, "3rd Quar.");
+    VerifysetSymbols(fr, UDAT_STANDALONE_SHORT_QUARTERS, 3, "4QQ");
 
     
     /*run series of tests to test get and setSymbols regressively*/
