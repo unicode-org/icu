@@ -325,11 +325,7 @@ DecimalFormat::construct(UErrorCode&             status,
     if (pattern->indexOf((UChar)kCurrencySign) >= 0) {
         // If it looks like we are going to use a currency pattern
         // then do the time consuming lookup.
-        if (symbolsToAdopt == NULL) {
-            setCurrencyForLocale(uloc_getDefault(), status);
-        } else {
-            setCurrencyForSymbols();
-        }
+        setCurrencyForSymbols();
     } else {
         setCurrency(NULL, status);
     }
@@ -341,21 +337,6 @@ DecimalFormat::construct(UErrorCode&             status,
     if (fIsCurrencyFormat) {
         setCurrency(getCurrency(), status);
     }
-}
-
-/**
- * Sets our currency to be the default currency for the given locale.
- */
-void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
-    const UChar* c = NULL;
-    if (U_SUCCESS(ec)) {
-        // Trap an error in mapping locale to currency.  If we can't
-        // map, then don't fail and set the currency to "".
-        UErrorCode ec2 = U_ZERO_ERROR;
-        UChar c[4];
-        ucurr_forLocale(locale, c, 4, &ec2);
-    }
-    setCurrency(c, ec);
 }
 
 //------------------------------------------------------------------------------

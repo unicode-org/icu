@@ -1782,8 +1782,6 @@ private:
 
     void setCurrencyForSymbols();
 
-    void setCurrencyForLocale(const char* locale, UErrorCode& ec);
-
     /**
      * Constants.
      */
