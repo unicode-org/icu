@@ -650,6 +650,34 @@ public:
     }
 
     static void
+        setQuarter(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fQuarters, syms->fQuartersCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setShortQuarter(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fShortQuarters, syms->fShortQuartersCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneQuarter(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneQuarters, syms->fStandaloneQuartersCount, index, value, valueLength, errorCode);
+    }
+
+    static void
+        setStandaloneShortQuarter(DateFormatSymbols *syms, int32_t index,
+        const UChar *value, int32_t valueLength, UErrorCode &errorCode)
+    {
+        setSymbol(syms->fStandaloneShortQuarters, syms->fStandaloneShortQuartersCount, index, value, valueLength, errorCode);
+    }
+
+    static void
         setAmPm(DateFormatSymbols *syms, int32_t index,
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
@@ -734,6 +762,22 @@ udat_setSymbols(    UDateFormat             *format,
 
     case UDAT_STANDALONE_NARROW_WEEKDAYS:
         DateFormatSymbolsSingleSetter::setStandaloneNarrowWeekday(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_QUARTERS:
+        DateFormatSymbolsSingleSetter::setQuarter(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_SHORT_QUARTERS:
+        DateFormatSymbolsSingleSetter::setShortQuarter(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_QUARTERS:
+        DateFormatSymbolsSingleSetter::setStandaloneQuarter(syms, index, value, valueLength, *status);
+        break;
+
+    case UDAT_STANDALONE_SHORT_QUARTERS:
+        DateFormatSymbolsSingleSetter::setStandaloneShortQuarter(syms, index, value, valueLength, *status);
         break;
 
     case UDAT_AM_PMS:
