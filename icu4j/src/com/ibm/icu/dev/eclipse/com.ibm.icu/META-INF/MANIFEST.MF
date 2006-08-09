@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.ibm.icu; singleton:=true
-Bundle-Version: 3.4.4.1
+Bundle-Version: 3.4.5
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-Copyright: Licensed Materials - Property of IBM 
