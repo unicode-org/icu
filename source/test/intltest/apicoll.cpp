@@ -39,6 +39,7 @@
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 #include "unicode/ustring.h"
+#include "unicode/ucol.h"
 
 #include "sfwdchit.h"
 #include "cmemory.h"
@@ -2182,6 +2183,53 @@ void CollationAPITest::TestNULLCharTailoring()
     delete coll;
 }
 
+void CollationAPITest::TestClone() {
+    logln("\ninit c0");
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedCollator* c0 = (RuleBasedCollator*)Collator::createInstance(status);
+    c0->setStrength(Collator::TERTIARY);
+    dump("c0", c0, status);
+
+    logln("\ninit c1");
+    RuleBasedCollator* c1 = (RuleBasedCollator*)Collator::createInstance(status);
+    c1->setStrength(Collator::TERTIARY);
+    UColAttributeValue val = c1->getAttribute(UCOL_CASE_FIRST, status);
+    if(val == UCOL_LOWER_FIRST){
+        c1->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, status);
+    }else{
+        c1->setAttribute(UCOL_CASE_FIRST, UCOL_LOWER_FIRST, status);
+    }
+    dump("c0", c0, status);
+    dump("c1", c1, status);
+    
+    logln("\ninit c2");
+    RuleBasedCollator* c2 = (RuleBasedCollator*)c1->clone();
+    val = c2->getAttribute(UCOL_CASE_FIRST, status);
+    if(val == UCOL_LOWER_FIRST){
+        c2->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, status);
+    }else{
+        c2->setAttribute(UCOL_CASE_FIRST, UCOL_LOWER_FIRST, status);
+    }
+    if(U_FAILURE(status)){
+        errln("set and get attributes of collator failed. %s\n", u_errorName(status));
+        return;
+    }
+    dump("c0", c0, status);
+    dump("c1", c1, status);
+    dump("c2", c2, status);
+    if(*c1 == *c2){
+        errln("The cloned objects refer to same data");
+    }
+}
+
+ void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
+    const char* bigone = "One";
+    const char* littleone = "one";
+  
+    logln(msg + " " + c->compare(bigone, littleone) +
+                        " s: " + c->getStrength() +
+                        " u: " + c->getAttribute(UCOL_CASE_FIRST, status));
+}
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -2209,6 +2257,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 20: name = "TestUClassID"; if (exec) TestUClassID(); break;
         case 21: name = "TestSubclass"; if (exec) TestSubclass(); break;
         case 22: name = "TestNULLCharTailoring"; if (exec) TestNULLCharTailoring(); break;
+        case 23: name = "TestClone"; if (exec) TestClone(); break;
         default: name = ""; break;
     }
 }
