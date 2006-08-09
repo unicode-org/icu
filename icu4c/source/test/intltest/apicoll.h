@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
+ * Copyright (c) 1997-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -164,10 +164,13 @@ public:
     */
     void TestNULLCharTailoring();
 
+    void TestClone();
 private:
     // If this is too small for the test data, just increase it.
     // Just don't make it too large, otherwise the executable will get too big
     enum EToken_Len { MAX_TOKEN_LEN = 16 };
+
+    void dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status);
 
 };
 
