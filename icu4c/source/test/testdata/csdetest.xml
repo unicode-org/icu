@@ -118,7 +118,7 @@
 
     </test-case>
 
-    <test-case id="IUC10-he" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-8/he">
+    <test-case id="IUC10-he" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-8-I/he">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     אירופה, תוכנה והאינטרנט:

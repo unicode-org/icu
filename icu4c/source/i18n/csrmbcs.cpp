@@ -274,7 +274,7 @@ const char *CharsetRecog_sjis::getName() const
 
 const char *CharsetRecog_sjis::getLanguage() const
 {
-    return "jp";
+    return "ja";
 }
 
 CharsetRecog_euc::~CharsetRecog_euc()
@@ -357,7 +357,7 @@ const char *CharsetRecog_euc_jp::getName() const
 
 const char *CharsetRecog_euc_jp::getLanguage() const
 {
-    return "jp";
+    return "ja";
 }
 
 int32_t CharsetRecog_euc_jp::match(InputText *det)
@@ -377,7 +377,7 @@ const char *CharsetRecog_euc_kr::getName() const
 
 const char *CharsetRecog_euc_kr::getLanguage() const
 {
-    return "kr";
+    return "ko";
 }
 
 int32_t CharsetRecog_euc_kr::match(InputText *det)
