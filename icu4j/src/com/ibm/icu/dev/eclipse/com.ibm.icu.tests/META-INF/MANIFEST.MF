@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ICU4J Tests - Eclipse
+Bundle-Name: ICU Test Fragment
 Bundle-SymbolicName: com.ibm.icu.tests
-Bundle-Version: 3.4.3
+Bundle-Version: 1.0.0
 Bundle-Vendor: IBM
-Bundle-Copyright: Licensed Materials - Property of IBM 
- (C) Copyright IBM Corp. 2000, 2006. All Rights Reserved. 
- IBM is a registered trademark of IBM Corp.
+Fragment-Host: com.ibm.icu;bundle-version="[3.4.2,3.5.0)"
 Bundle-Localization: plugin
-Require-Bundle: org.junit,
- com.ibm.icu
+Bundle-Copyright: Licensed Materials - Property of IBM 
+ (C) Copyright IBM Corp. 2000-2006. All Rights Reserved. 
+ IBM is a registered trademark of IBM Corp.
+Require-Bundle: org.junit
 Bundle-ClassPath: icu4jtests.jar
