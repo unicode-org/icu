@@ -1157,4 +1157,39 @@ public class CollationAPITest extends TestFmwk {
             //log_verbose("Unsafes "+conts.size()+":\n"+conts.toPattern(true)+"\n");
         }
     }
+    private static final String bigone = "One";
+    private static final String littleone = "one";
+    
+    public void TestClone() {
+        logln("\ninit c0");
+        RuleBasedCollator c0 = (RuleBasedCollator)Collator.getInstance();
+        c0.setStrength(Collator.TERTIARY);
+        dump("c0", c0);
+
+        logln("\ninit c1");
+        RuleBasedCollator c1 = (RuleBasedCollator)Collator.getInstance();
+        c1.setStrength(Collator.TERTIARY);
+        c1.setUpperCaseFirst(!c1.isUpperCaseFirst());
+        dump("c0", c0);
+        dump("c1", c1);
+        try{
+            logln("\ninit c2");
+            RuleBasedCollator c2 = (RuleBasedCollator)c1.clone();
+            c2.setUpperCaseFirst(!c2.isUpperCaseFirst());
+            dump("c0", c0);
+            dump("c1", c1);
+            dump("c2", c2);
+            if(c1.equals(c2)){
+                errln("The cloned objects refer to same data");
+            }
+        }catch(CloneNotSupportedException ex){
+            errln("Could not clone the collator");
+        }
+    }
+
+    private void dump(String msg, RuleBasedCollator c) {
+        logln(msg + " " + c.compare(bigone, littleone) +
+                           " s: " + c.getStrength() +
+                           " u: " + c.isUpperCaseFirst());
+    }
 }
