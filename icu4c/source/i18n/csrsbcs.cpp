@@ -979,6 +979,11 @@ CharsetRecog_8859_8_I_he::~CharsetRecog_8859_8_I_he ()
     // nothing to do
 }
 
+const char *CharsetRecog_8859_8_I_he::getName() const
+{
+    return haveC1Bytes? "windows-1255" : "ISO-8859-8-I";
+}
+
 const char *CharsetRecog_8859_8_I_he::getLanguage() const
 {
 	return "he";
@@ -996,7 +1001,7 @@ CharsetRecog_8859_8_he::~CharsetRecog_8859_8_he()
 
 const char *CharsetRecog_8859_8_he::getLanguage() const
 {
-	return "he_VISUAL";
+	return "he";
 }
     
 int32_t CharsetRecog_8859_8_he::match(InputText *textIn)
