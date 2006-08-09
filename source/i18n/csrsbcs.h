@@ -108,7 +108,7 @@ class CharsetRecog_8859_8 : public CharsetRecog_sbcs
  public:
     virtual ~CharsetRecog_8859_8();
 	
-    const char *getName() const;
+    virtual const char *getName() const;
 };
 
 class CharsetRecog_8859_9 : public CharsetRecog_sbcs
@@ -294,6 +294,8 @@ class CharsetRecog_8859_8_I_he : public CharsetRecog_8859_8
  public:
     virtual ~CharsetRecog_8859_8_I_he();
 	
+    const char *getName() const;
+
     const char *getLanguage() const;
         
     int32_t match(InputText *textIn);
