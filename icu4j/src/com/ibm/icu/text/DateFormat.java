@@ -468,7 +468,7 @@ public abstract class DateFormat extends UFormat {
      * @return the formatted date/time string.
      * @stable ICU 2.0
      */
-    public final StringBuffer format(Date date, StringBuffer toAppendTo,
+    public StringBuffer format(Date date, StringBuffer toAppendTo,
                                      FieldPosition fieldPosition) {
         // Use our Calendar object
         calendar.setTime(date);
@@ -557,7 +557,7 @@ public abstract class DateFormat extends UFormat {
      * @return      A Date, or null if the input could not be parsed
      * @stable ICU 2.0
      */
-    public final Date parse(String text, ParsePosition pos) {
+    public Date parse(String text, ParsePosition pos) {
         int start = pos.getIndex();
         calendar.clear();
         parse(text, calendar, pos);
