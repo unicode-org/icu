@@ -16,6 +16,7 @@
 #include <unicode/utext.h>
 #include <unicode/utf8.h>
 #include <unicode/ustring.h>
+#include <unicode/uchriter.h>
 #include "utxttest.h"
 
 static UBool  gFailed = FALSE;
@@ -224,6 +225,18 @@ void UTextTest::TestString(const UnicodeString &s) {
     TestAccess(sa, ut, cpCount, cpMap);
     TestCMR(sa, ut, cpCount, cpMap, cpMap);
     utext_close(ut);
+
+    // Character Iterator Tests
+    status = U_ZERO_ERROR;
+    const UChar *cbuf = sa.getBuffer();
+    CharacterIterator *ci = new UCharCharacterIterator(cbuf, saLen, status);
+    TEST_SUCCESS(status);
+    ut = utext_openCharacterIterator(NULL, ci, &status);
+    TEST_SUCCESS(status);
+    TestAccess(sa, ut, cpCount, cpMap);
+    utext_close(ut);
+    delete ci;
+    
 
     // Fragmented UnicodeString  (Chunk size of one)
     //
@@ -768,7 +781,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
         TEST_SUCCESS(status);
         TEST_ASSERT(buf[0] == 0);
     } else {
-        TEST_ASSERT(buf[0] == us.charAt(0));
+        // Buf len == 1, extracting a single 16 bit value.
+        // If the data char is supplementary, it doesn't matter whether the buffer remains unchanged,
+        //   or whether the lead surrogate of the pair is extracted.
+        //   It's a buffer overflow error in either case.
+        TEST_ASSERT(buf[0] == us.charAt(0) ||
+                    buf[0] == 0x5555 && U_IS_SUPPLEMENTARY(us.char32At(0)));
         TEST_ASSERT(buf[1] == 0x5555);
         if (us.length() == 1) {
             TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
