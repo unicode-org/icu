@@ -785,7 +785,7 @@ shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
     }
 
     //
-    // Relocate any pointers in the target that refer to the UText itself.
+    // Relocate any pointers in the target that refer to the UText itself
     //   to point to the cloned copy rather than the original source.
     //
     adjustPointer(dest, &dest->context, src);
@@ -931,7 +931,7 @@ utf8TextAccess(UText *ut, int64_t index, UBool forward) {
             while (ut->c<ix && s8[ut->c]!=0) {
                 ut->c++;
             }
-            //  TODO:  check for null terminated string length > 32 bits.
+            //  TODO:  support for null terminated string length > 32 bits.
             if (s8[ut->c] == 0) {
                 // We just found the actual length of the string.
                 //  Trim the requested index back to that.
@@ -1536,14 +1536,15 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
     // First do a generic shallow clone.  Does everything needed for the UText struct itself.
     dest = shallowTextClone(dest, src, status);
 
-    // TODO:  fix up pointers in the structs in extra.
-
     // For deep clones, make a copy of the string.
     //  The copied storage is owned by the newly created clone.
-    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
-    //    it.
     //
-    // TODO:  what to do about that non-const native length?
+    // TODO:  There is an isssue with using utext_nativeLength().
+    //        That function is non-const in cases where the input was NUL terminated
+    //          and the length has not yet been determined.
+    //        This function (clone()) is const.
+    //        There potentially a thread safety issue lurking here.
+    //        
     if (deep && U_SUCCESS(*status)) {
         int32_t  len = (int32_t)utext_nativeLength((UText *)src);
         char *copyStr = (char *)uprv_malloc(len+1);
@@ -1695,8 +1696,6 @@ repTextAccess(UText *ut, int64_t index, UBool forward) {
     // clip the requested index to the limits of the text.
     int32_t index32 = pinIndex(index, length);
     U_ASSERT(index<=INT32_MAX);
-
-    // TODO:  check if requested location is in chunk already.
 
 
     /*
@@ -1927,7 +1926,7 @@ repTextCopy(UText *ut,
     int32_t limit32     = pinIndex(limit, length);
     int32_t destIndex32 = pinIndex(destIndex, length);
 
-    // TODO:  snap everything to code point boundaries.
+    // TODO:  snap input parameters to code point boundaries.
 
     if(move) {
         // move: copy to destIndex, then replace original with nothing
@@ -2199,8 +2198,8 @@ unistrTextCopy(UText *ut,
     }
 
     // Iteration position to end of the newly inserted text.
-    ut->chunkOffset = destIndex32+limit32-start32;
-    if (move && destIndex32>start32) {  //TODO:  backwards? check.
+    ut->chunkOffset = destIndex32+limit32-start32; 
+    if (move && destIndex32>start32) {  
         ut->chunkOffset = destIndex32;
     }
 
@@ -2393,7 +2392,7 @@ ucstrTextAccess(UText *ut, int64_t index, UBool  forward) {
         if (chunkLimit == INT32_MAX) {
             // Scanned to the limit of a 32 bit length.
             // Forceably trim the overlength string back so length fits in int32
-            //  TODO:  add support for longer strings.
+            //  TODO:  add support for 64 bit strings.
             ut->a = chunkLimit;
             ut->chunkLength = chunkLimit;
             ut->nativeIndexingLimit = chunkLimit;
@@ -2642,9 +2641,9 @@ charIterTextAccess(UText *ut, int64_t index, UBool  forward) {
             ut->chunkLength  = (int32_t)(ut->chunkNativeLimit)-(int32_t)(ut->chunkNativeStart);
         }
         ut->nativeIndexingLimit = ut->chunkLength;
-        ut->chunkOffset = clippedIndex - (int32_t)ut->chunkNativeStart;
         U_ASSERT(ut->chunkOffset>=0 && ut->chunkOffset<=CIBufSize);
     }
+    ut->chunkOffset = clippedIndex - (int32_t)ut->chunkNativeStart;
     UBool success = (forward? ut->chunkOffset<ut->chunkLength : ut->chunkOffset>0);
     return success;
 }
@@ -2655,15 +2654,9 @@ charIterTextClone(UText *dest, const UText *src, UBool deep, UErrorCode * status
         return NULL;
     }
 
-
-    // For deep clones, make a copy of the string.
-    //  The copied storage is owned by the newly created clone.
-    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
-    //    it.
-    //
     if (deep) {
-        // TODO
-        U_ASSERT(FALSE);
+        // There is no CharacterIterator API for cloning the underlying text storage.
+        *status = U_UNSUPPORTED_ERROR;
         return NULL;
     } else {
         CharacterIterator *srcCI =(CharacterIterator *)src->context;
@@ -2711,9 +2704,8 @@ charIterTextExtract(UText *ut,
         }
         srci += len;
     }
-    if (desti<destCapacity) {
-        dest[desti] = 0;
-    }
+
+    u_terminateUChars(dest, destCapacity, desti, status);
     return desti;
 }
 U_CDECL_END
