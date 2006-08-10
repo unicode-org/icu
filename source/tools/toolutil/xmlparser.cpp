@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -61,27 +61,27 @@ UXMLParser::UXMLParser(UErrorCode &status) :
       //      example:  "<?xml version=1.0 encoding="utf-16" ?>
       //      This is a sloppy implementation - just look for the leading <?xml and the closing ?>
       //            allow for a possible leading BOM.
-      mXMLDecl(UnicodeString("(?s)\\uFEFF?<\\?xml.+?\\?>", -1, US_INV), 0, status),
+      mXMLDecl(UnicodeString("(?s)\\uFEFF?<\\?xml.+?\\?>"), 0, status),
       
       //  XML Comment   production #15
       //     example:  "<!-- whatever -->
       //       note, does not detect an illegal "--" within comments
-      mXMLComment(UnicodeString("(?s)<!--.+?-->", -1, US_INV), 0, status),
+      mXMLComment(UnicodeString("(?s)<!--.+?-->"), 0, status),
       
       //  XML Spaces
       //      production [3]
-      mXMLSP(UnicodeString(XML_SPACES "+", -1, US_INV), 0, status),
+      mXMLSP(UnicodeString(XML_SPACES "+"), 0, status),
       
       //  XML Doctype decl  production #28
       //     example   "<!DOCTYPE foo SYSTEM "somewhere" >
       //    TODO:  we don't actually parse the DOCTYPE or internal subsets.
       //           Some internal dtd subsets could confuse this simple-minded
       //           attempt at skipping over them.
-      mXMLDoctype(UnicodeString("(?s)<!DOCTYPE.+?>", -1, US_INV), 0, status),
+      mXMLDoctype(UnicodeString("(?s)<!DOCTYPE.+?>"), 0, status),
       
       //  XML PI     production #16
       //     example   "<?target stuff?>
-      mXMLPI(UnicodeString("(?s)<\\?.+?\\?>", -1, US_INV), 0, status),
+      mXMLPI(UnicodeString("(?s)<\\?.+?\\?>"), 0, status),
       
       //  XML Element Start   Productions #40, #41
       //          example   <foo att1='abc'  att2="d e f" >
@@ -92,11 +92,11 @@ UXMLParser::UXMLParser(UErrorCode &status) :
                 XML_SPACES "+" XML_NAME XML_SPACES "*=" XML_SPACES "*"     // match  "ATTR_NAME = "
                 "(?:(?:\\\'[^<\\\']*?\\\')|(?:\\\"[^<\\\"]*?\\\"))"        // match  '"attribute value"'
           ")*"                                                             //   * for zero or more attributes.
-          XML_SPACES "*?>", -1, US_INV), 0, status),                               // match " >"
+          XML_SPACES "*?>"), 0, status),                               // match " >"
       
       //  XML Element End     production #42
       //     example   </foo>
-      mXMLElemEnd (UnicodeString("</(" XML_NAME ")" XML_SPACES "*>", -1, US_INV), 0, status),
+      mXMLElemEnd (UnicodeString("</(" XML_NAME ")" XML_SPACES "*>"), 0, status),
       
       // XML Element Empty    production #44
       //     example   <foo att1="abc"   att2="d e f" />
@@ -105,11 +105,11 @@ UXMLParser::UXMLParser(UErrorCode &status) :
                 XML_SPACES "+" XML_NAME XML_SPACES "*=" XML_SPACES "*"     // match  "ATTR_NAME = "
                 "(?:(?:\\\'[^<\\\']*?\\\')|(?:\\\"[^<\\\"]*?\\\"))"        // match  '"attribute value"'
           ")*"                                                             //   * for zero or more attributes.
-          XML_SPACES "*?/>", -1, US_INV), 0, status),                              // match " />"
+          XML_SPACES "*?/>"), 0, status),                              // match " />"
       
 
       // XMLCharData.  Everything but '<'.  Note that & will be dealt with later.
-      mXMLCharData(UnicodeString("(?s)[^<]*", -1, US_INV), 0, status),
+      mXMLCharData(UnicodeString("(?s)[^<]*"), 0, status),
 
       // Attribute name = "value".  XML Productions 10, 40/41
       //  Capture group 1 is name, 
@@ -121,20 +121,20 @@ UXMLParser::UXMLParser(UErrorCode &status) :
       //        Here, we match a single attribute, and make its name and
       //        attribute value available to the parser code.
       mAttrValue(UnicodeString(XML_SPACES "+("  XML_NAME ")"  XML_SPACES "*=" XML_SPACES "*"
-         "((?:\\\'[^<\\\']*?\\\')|(?:\\\"[^<\\\"]*?\\\"))", -1, US_INV), 0, status),
+         "((?:\\\'[^<\\\']*?\\\')|(?:\\\"[^<\\\"]*?\\\"))"), 0, status),
 
 
-      mAttrNormalizer(UnicodeString(XML_SPACES, -1, US_INV), 0, status),
+      mAttrNormalizer(UnicodeString(XML_SPACES), 0, status),
 
       // Match any of the new-line sequences in content.
       //   All are changed to \u000a.
-      mNewLineNormalizer(UnicodeString("\\u000d\\u000a|\\u000d\\u0085|\\u000a|\\u000d|\\u0085|\\u2028", -1, US_INV), 0, status),
+      mNewLineNormalizer(UnicodeString("\\u000d\\u000a|\\u000d\\u0085|\\u000a|\\u000d|\\u0085|\\u2028"), 0, status),
 
       // & char references
       //   We will figure out what we've got based on which capture group has content.
       //   The last one is a catchall for unrecognized entity references..
       //             1     2     3      4      5           6                    7          8
-      mAmps(UnicodeString("&(?:(amp;)|(lt;)|(gt;)|(apos;)|(quot;)|#x([0-9A-Fa-f]{1,8});|#([0-9]{1,8});|(.))", -1, US_INV),
+      mAmps(UnicodeString("&(?:(amp;)|(lt;)|(gt;)|(apos;)|(quot;)|#x([0-9A-Fa-f]{1,8});|#([0-9]{1,8});|(.))"),
                 0, status),
 
       fNames(status),
@@ -241,7 +241,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
                 attValue.truncate(attValue.length()-1);  // and one from the end.
 
                 if(attName==UNICODE_STRING("encoding", 8)) {
-                    length=attValue.extract(0, 0x7fffffff, charsetBuffer, (int32_t)sizeof(charsetBuffer), US_INV);
+                    length=attValue.extract(0, 0x7fffffff, charsetBuffer, (int32_t)sizeof(charsetBuffer));
                     charset=charsetBuffer;
                     break;
                 }
