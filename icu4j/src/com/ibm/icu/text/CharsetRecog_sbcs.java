@@ -1,8 +1,8 @@
 /*
- **************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                           *
- **************************************************************************
+ ****************************************************************************
+ * Copyright (C) 2005-2006, International Business Machines Corporation and *
+ * others. All Rights Reserved.                                             *
+ ************************************************************************** *
  *
  */
 
@@ -772,6 +772,11 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0xED20F9, 0xEEE420, 0xEF20E4, 0xF0E420, 0xF0E920, 0xF0E9ED, 0xF2EC20, 0xF820E4, 0xF8E9ED, 0xF9EC20, 0xFA20E0, 0xFA20E1, 0xFA20E4, 0xFA20EC, 0xFA20EE, 0xFA20F9, 
         };
 
+        public String getName()
+        {
+            return haveC1Bytes? "windows-1255" : /*"ISO-8859-8-I"*/ "ISO-8859-8";
+        }
+
         public String getLanguage()
         {
             return "he";
@@ -794,7 +799,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getLanguage()
         {
-            return "he_VISUAL";
+            return "he";
         }
         
         public int match(CharsetDetector det)
