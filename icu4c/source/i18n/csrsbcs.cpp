@@ -105,7 +105,7 @@ int32_t NGramParser::parse(InputText *det)
         // TODO: 0x20 might not be a space in all character sets...
         if (mb != 0) {
             if (!(mb == 0x20 && ignoreSpace)) {
-                addByte(mb);                    
+                addByte(mb);
             }
 
             ignoreSpace = (mb == 0x20);
@@ -672,12 +672,12 @@ CharsetRecog_8859_1::~CharsetRecog_8859_1()
 
 const char *CharsetRecog_8859_1::getName() const
 {
-	return haveC1Bytes? "windows-1252" : "ISO-8859-1";
+    return haveC1Bytes? "windows-1252" : "ISO-8859-1";
 }
 
 const char *CharsetRecog_8859_1_en::getLanguage() const
 {
-	return "en";
+    return "en";
 }
 
 CharsetRecog_8859_1_en::~CharsetRecog_8859_1_en()
@@ -690,7 +690,7 @@ int32_t CharsetRecog_8859_1_en::match(InputText *textIn)
     int32_t result = match_sbcs(textIn, ngrams_8859_1_en, charMap_8859_1);
 
    // printf("8859_1_en: result = %d\n", result);
-	return result; //match_sbcs(textIn, ngrams, charMap);
+    return result; //match_sbcs(textIn, ngrams, charMap);
 }
 
 CharsetRecog_8859_1_da::~CharsetRecog_8859_1_da()
@@ -700,24 +700,24 @@ CharsetRecog_8859_1_da::~CharsetRecog_8859_1_da()
 
 const char *CharsetRecog_8859_1_da::getLanguage() const
 {
-	return "da";
+    return "da";
 }
-    
+
 int32_t CharsetRecog_8859_1_da::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_da, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_da, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_de::~CharsetRecog_8859_1_de() {}
 
 const char *CharsetRecog_8859_1_de::getLanguage() const
 {
-	return "de";
+    return "de";
 }
-    
+
 int32_t CharsetRecog_8859_1_de::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_de, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_de, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_es::~CharsetRecog_8859_1_es()
@@ -727,12 +727,12 @@ CharsetRecog_8859_1_es::~CharsetRecog_8859_1_es()
 
 const char *CharsetRecog_8859_1_es::getLanguage() const
 {
-	return "es";
+    return "es";
 }
     
 int32_t CharsetRecog_8859_1_es::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_es, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_es, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_fr::~CharsetRecog_8859_1_fr()
@@ -742,12 +742,12 @@ CharsetRecog_8859_1_fr::~CharsetRecog_8859_1_fr()
 
 const char *CharsetRecog_8859_1_fr::getLanguage() const
 {
-	return "fr";
+    return "fr";
 }
-    
+
 int32_t CharsetRecog_8859_1_fr::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_fr, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_fr, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_it::~CharsetRecog_8859_1_it()
@@ -757,12 +757,12 @@ CharsetRecog_8859_1_it::~CharsetRecog_8859_1_it()
 
 const char *CharsetRecog_8859_1_it::getLanguage() const
 {
-	return "it";
+    return "it";
 }
-    
+
 int32_t CharsetRecog_8859_1_it::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_it, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_it, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_nl::~CharsetRecog_8859_1_nl()
@@ -772,24 +772,24 @@ CharsetRecog_8859_1_nl::~CharsetRecog_8859_1_nl()
 
 const char *CharsetRecog_8859_1_nl::getLanguage() const
 {
-	return "nl";
+    return "nl";
 }
-    
+
 int32_t CharsetRecog_8859_1_nl::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_nl, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_nl, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_no::~CharsetRecog_8859_1_no() {}
 
 const char *CharsetRecog_8859_1_no::getLanguage() const
 {
-	return "no";
+    return "no";
 }
-    
+
 int32_t CharsetRecog_8859_1_no::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_no, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_no, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_pt::~CharsetRecog_8859_1_pt()
@@ -799,24 +799,24 @@ CharsetRecog_8859_1_pt::~CharsetRecog_8859_1_pt()
 
 const char *CharsetRecog_8859_1_pt::getLanguage() const
 {
-	return "pt";
+    return "pt";
 }
-    
+
 int32_t CharsetRecog_8859_1_pt::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_pt, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_pt, charMap_8859_1);
 }
 
 CharsetRecog_8859_1_sv::~CharsetRecog_8859_1_sv() {}
 
 const char *CharsetRecog_8859_1_sv::getLanguage() const
 {
-	return "sv";
+    return "sv";
 }
-    
+
 int32_t CharsetRecog_8859_1_sv::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_1_sv, charMap_8859_1);
+    return match_sbcs(textIn, ngrams_8859_1_sv, charMap_8859_1);
 }
 
 CharsetRecog_8859_2::~CharsetRecog_8859_2()
@@ -826,7 +826,7 @@ CharsetRecog_8859_2::~CharsetRecog_8859_2()
 
 const char *CharsetRecog_8859_2::getName() const
 {
-	return haveC1Bytes? "windows-1250" : "ISO-8859-2";
+    return haveC1Bytes? "windows-1250" : "ISO-8859-2";
 }
 
 CharsetRecog_8859_2_cs::~CharsetRecog_8859_2_cs()
@@ -836,12 +836,12 @@ CharsetRecog_8859_2_cs::~CharsetRecog_8859_2_cs()
 
 const char *CharsetRecog_8859_2_cs::getLanguage() const
 {
-	return "cs";
+    return "cs";
 }
-    
+
 int32_t CharsetRecog_8859_2_cs::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_2_cs, charMap_8859_2);
+    return match_sbcs(textIn, ngrams_8859_2_cs, charMap_8859_2);
 }
 
 CharsetRecog_8859_2_hu::~CharsetRecog_8859_2_hu()
@@ -851,12 +851,12 @@ CharsetRecog_8859_2_hu::~CharsetRecog_8859_2_hu()
 
 const char *CharsetRecog_8859_2_hu::getLanguage() const
 {
-	return "hu";
+    return "hu";
 }
-    
+
 int32_t CharsetRecog_8859_2_hu::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_2_hu, charMap_8859_2);
+    return match_sbcs(textIn, ngrams_8859_2_hu, charMap_8859_2);
 }
 
 CharsetRecog_8859_2_pl::~CharsetRecog_8859_2_pl()
@@ -866,12 +866,12 @@ CharsetRecog_8859_2_pl::~CharsetRecog_8859_2_pl()
 
 const char *CharsetRecog_8859_2_pl::getLanguage() const
 {
-	return "pl";
+    return "pl";
 }
-    
+
 int32_t CharsetRecog_8859_2_pl::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_2_pl, charMap_8859_2);
+    return match_sbcs(textIn, ngrams_8859_2_pl, charMap_8859_2);
 }
 
 CharsetRecog_8859_2_ro::~CharsetRecog_8859_2_ro()
@@ -881,12 +881,12 @@ CharsetRecog_8859_2_ro::~CharsetRecog_8859_2_ro()
 
 const char *CharsetRecog_8859_2_ro::getLanguage() const
 {
-	return "ro";
+    return "ro";
 }
-    
+
 int32_t CharsetRecog_8859_2_ro::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_2_ro, charMap_8859_2);
+    return match_sbcs(textIn, ngrams_8859_2_ro, charMap_8859_2);
 }
 
 CharsetRecog_8859_5::~CharsetRecog_8859_5()
@@ -896,7 +896,7 @@ CharsetRecog_8859_5::~CharsetRecog_8859_5()
 
 const char *CharsetRecog_8859_5::getName() const
 {
-	return "ISO-8859-5";
+    return "ISO-8859-5";
 }
 
 CharsetRecog_8859_5_ru::~CharsetRecog_8859_5_ru()
@@ -906,12 +906,12 @@ CharsetRecog_8859_5_ru::~CharsetRecog_8859_5_ru()
 
 const char *CharsetRecog_8859_5_ru::getLanguage() const
 {
-	return "ru";
+    return "ru";
 }
-    
+
 int32_t CharsetRecog_8859_5_ru::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_5_ru, charMap_8859_5);
+    return match_sbcs(textIn, ngrams_8859_5_ru, charMap_8859_5);
 }
 
 CharsetRecog_8859_6::~CharsetRecog_8859_6()
@@ -921,7 +921,7 @@ CharsetRecog_8859_6::~CharsetRecog_8859_6()
 
 const char *CharsetRecog_8859_6::getName() const
 {
-	return "ISO-8859-6";
+    return "ISO-8859-6";
 }
 
 CharsetRecog_8859_6_ar::~CharsetRecog_8859_6_ar()
@@ -931,12 +931,12 @@ CharsetRecog_8859_6_ar::~CharsetRecog_8859_6_ar()
 
 const char *CharsetRecog_8859_6_ar::getLanguage() const
 {
-	return "ar";
+    return "ar";
 }
-    
+
 int32_t CharsetRecog_8859_6_ar::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_6_ar, charMap_8859_6);
+    return match_sbcs(textIn, ngrams_8859_6_ar, charMap_8859_6);
 }
 
 CharsetRecog_8859_7::~CharsetRecog_8859_7()
@@ -946,7 +946,7 @@ CharsetRecog_8859_7::~CharsetRecog_8859_7()
 
 const char *CharsetRecog_8859_7::getName() const
 {
-	return haveC1Bytes? "windows-1253" : "ISO-8859-7";
+    return haveC1Bytes? "windows-1253" : "ISO-8859-7";
 }
 
 CharsetRecog_8859_7_el::~CharsetRecog_8859_7_el()
@@ -956,12 +956,12 @@ CharsetRecog_8859_7_el::~CharsetRecog_8859_7_el()
 
 const char *CharsetRecog_8859_7_el::getLanguage() const
 {
-	return "el";
+    return "el";
 }
-    
+
 int32_t CharsetRecog_8859_7_el::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_7_el, charMap_8859_7);
+    return match_sbcs(textIn, ngrams_8859_7_el, charMap_8859_7);
 }
 
 CharsetRecog_8859_8::~CharsetRecog_8859_8()
@@ -971,7 +971,7 @@ CharsetRecog_8859_8::~CharsetRecog_8859_8()
 
 const char *CharsetRecog_8859_8::getName() const 
 {
-	return haveC1Bytes? "windows-1255" : "ISO-8859-8";
+    return haveC1Bytes? "windows-1255" : "ISO-8859-8";
 }
 
 CharsetRecog_8859_8_I_he::~CharsetRecog_8859_8_I_he ()
@@ -986,12 +986,12 @@ const char *CharsetRecog_8859_8_I_he::getName() const
 
 const char *CharsetRecog_8859_8_I_he::getLanguage() const
 {
-	return "he";
+    return "he";
 }
-    
+
 int32_t CharsetRecog_8859_8_I_he::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_8_I_he, charMap_8859_8);
+    return match_sbcs(textIn, ngrams_8859_8_I_he, charMap_8859_8);
 }
 
 CharsetRecog_8859_8_he::~CharsetRecog_8859_8_he()
@@ -1001,12 +1001,12 @@ CharsetRecog_8859_8_he::~CharsetRecog_8859_8_he()
 
 const char *CharsetRecog_8859_8_he::getLanguage() const
 {
-	return "he";
+    return "he";
 }
-    
+
 int32_t CharsetRecog_8859_8_he::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_8_he, charMap_8859_8);
+    return match_sbcs(textIn, ngrams_8859_8_he, charMap_8859_8);
 }
 
 CharsetRecog_8859_9::~CharsetRecog_8859_9()
@@ -1016,7 +1016,7 @@ CharsetRecog_8859_9::~CharsetRecog_8859_9()
 
 const char *CharsetRecog_8859_9::getName() const
 {
-	return haveC1Bytes? "windows-1254" : "ISO-8859-9";
+    return haveC1Bytes? "windows-1254" : "ISO-8859-9";
 }
 
 CharsetRecog_8859_9_tr::~CharsetRecog_8859_9_tr ()
@@ -1026,12 +1026,12 @@ CharsetRecog_8859_9_tr::~CharsetRecog_8859_9_tr ()
 
 const char *CharsetRecog_8859_9_tr::getLanguage() const
 {
-	return "tr";
+    return "tr";
 }
-    
+
 int32_t CharsetRecog_8859_9_tr::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_8859_9_tr, charMap_8859_9);
+    return match_sbcs(textIn, ngrams_8859_9_tr, charMap_8859_9);
 }
 
 CharsetRecog_windows_1256::~CharsetRecog_windows_1256()
@@ -1041,17 +1041,17 @@ CharsetRecog_windows_1256::~CharsetRecog_windows_1256()
 
 const char *CharsetRecog_windows_1256::getName() const
 {
-	return  "windows-1256";
+    return  "windows-1256";
 }
-    
+
 const char *CharsetRecog_windows_1256::getLanguage() const
 {
-	return "ar";
+    return "ar";
 }
-    
+
 int32_t CharsetRecog_windows_1256::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_windows_1256, charMap_windows_1256);
+    return match_sbcs(textIn, ngrams_windows_1256, charMap_windows_1256);
 }
 
 CharsetRecog_windows_1251::~CharsetRecog_windows_1251()
@@ -1061,17 +1061,17 @@ CharsetRecog_windows_1251::~CharsetRecog_windows_1251()
 
 const char *CharsetRecog_windows_1251::getName() const
 {
-	return  "windows-1251";
+    return  "windows-1251";
 }
-    
+
 const char *CharsetRecog_windows_1251::getLanguage() const
 {
-	return "ru";
+    return "ru";
 }
-    
+
 int32_t CharsetRecog_windows_1251::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_windows_1251, charMap_windows_1251);
+    return match_sbcs(textIn, ngrams_windows_1251, charMap_windows_1251);
 }
 
 CharsetRecog_KOI8_R::~CharsetRecog_KOI8_R()
@@ -1081,17 +1081,17 @@ CharsetRecog_KOI8_R::~CharsetRecog_KOI8_R()
 
 const char *CharsetRecog_KOI8_R::getName() const
 {
-	return  "KOI8-R";
+    return  "KOI8-R";
 }
-    
+
 const char *CharsetRecog_KOI8_R::getLanguage() const
 {
-	return "ru";
+    return "ru";
 }
-    
+
 int32_t CharsetRecog_KOI8_R::match(InputText *textIn)
 {
-	return match_sbcs(textIn, ngrams_KOI8_R, charMap_KOI8_R);
+    return match_sbcs(textIn, ngrams_KOI8_R, charMap_KOI8_R);
 }
 
 U_NAMESPACE_END
