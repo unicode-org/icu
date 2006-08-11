@@ -64,6 +64,7 @@ clean:
 		@echo ICU specific cleanup:
 		-rm -f $(ICUDATA) 
 		-rm -rf $(TZDIR)
+		-rm -rf `gunzip -d < tzdata2006g.tar.gz | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
 
 dataclean: clean
 	-rm -f $(TDATA) $(XDATA)
