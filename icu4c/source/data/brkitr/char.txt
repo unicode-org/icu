@@ -1,12 +1,14 @@
 #
-#   Copyright (C) 2002-2005, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2006, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char.txt 
 #
 #   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
 #      See Unicode Standard Annex #29.
-#      These rules are based on TR29 Version 4.0.0
+#      These rules are based on TR29 Version 5.0.0
+#        Includes post-5.0 change to treat Japanese half width voicing marks
+#        as Grapheme Extend.
 #
 
 #
@@ -15,7 +17,10 @@
 $CR      = [\p{Grapheme_Cluster_Break = CR}];
 $LF      = [\p{Grapheme_Cluster_Break = LF}];
 $Control = [\p{Grapheme_Cluster_Break = Control}];
-$Extend  = [\p{Grapheme_Cluster_Break = Extend}];
+
+# add Japanese Half Width voicing marks to $Extend
+$VoiceMarks = [\uff9e\uff9f]; 
+$Extend  = [\p{Grapheme_Cluster_Break = Extend} $VoiceMarks];
 
 #
 # Korean Syllable Definitions
