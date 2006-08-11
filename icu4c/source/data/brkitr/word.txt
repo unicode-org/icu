@@ -7,6 +7,8 @@
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
 #      These rules are based on Unicode Version 5.0 0
+#        Includes post Unicode 5.0 change to treat Japanese half width voicing marks
+#        as Extend
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt and word_ja.txt also.
@@ -24,8 +26,9 @@
 #  Character Class Definitions.
 #
 
+$VoiceMarks   = [\uff9e\uff9f];
 $Format       = [\p{Word_Break = Format}];
-$Katakana     = [\p{Word_Break = Katakana}];
+$Katakana     = [\p{Word_Break = Katakana}-$VoiceMarks];
 $ALetter      = [\p{Word_Break = ALetter}];
 $MidLetter    = [\p{Word_Break = MidLetter}];
 $MidNum       = [\p{Word_Break = MidNum}];
@@ -35,7 +38,7 @@ $ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
 
 $CR             = \u000d;
 $LF             = \u000a;
-$Extend         = [\p{Grapheme_Cluster_Break = Extend}];
+$Extend         = [\p{Grapheme_Cluster_Break = Extend}$VoiceMarks];
 $Control        = [\p{Grapheme_Cluster_Break = Control}];
 
 #   Dictionary character set, for triggering language-based break engines. Currently
@@ -73,7 +76,7 @@ $IdeographicEx  = $Ideographic  ($Extend |  $Format)*;
 
 $CR $LF  ($Extend | $Format)*;
 
-# Rule 4 - ignore Forman and Extend characters, except when they appear at the beginning
+# Rule 4 - ignore Format and Extend characters, except when they appear at the beginning
 #          of a region of Text.   The rule here comes into play when the start of text
 #          begins with a group of Format chars, or with a "word" consisting of a single
 #          char that is not in any of the listed word break categories followed by
