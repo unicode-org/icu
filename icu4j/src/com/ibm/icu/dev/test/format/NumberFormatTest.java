@@ -1601,4 +1601,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    public void TestJB5251(){
+        //save default locale
+        ULocale defaultLocale = ULocale.getDefault();
+        ULocale.setDefault(new ULocale("qr_QR"));
+        NumberFormat nf1 = NumberFormat.getInstance();
+        //reset default locale
+        ULocale.setDefault(defaultLocale);
+    }
 }
