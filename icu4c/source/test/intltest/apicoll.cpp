@@ -2220,6 +2220,9 @@ void CollationAPITest::TestClone() {
     if(*c1 == *c2){
         errln("The cloned objects refer to same data");
     }
+    delete c0;
+    delete c1;
+    delete c2;
 }
 
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
