@@ -321,6 +321,7 @@ void CharsetDetectionTest::UTF16Test()
 
     if (strcmp(name, "UTF-16BE") != 0) {
         errln("Encoding detection failure for UTF-16BE: got %s", name);
+        goto try_le; // no point in looking at confidence if we got the wrong character set.
     }
 
     if (conf != 100) {
@@ -342,6 +343,7 @@ try_le:
 
     if (strcmp(name, "UTF-16LE") != 0) {
         errln("Enconding detection failure for UTF-16LE: got %s", name);
+        goto bail; // no point in looking at confidence if we got the wrong character set.
     }
 
     if (conf != 100) {
