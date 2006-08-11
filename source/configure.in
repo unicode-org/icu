@@ -1002,8 +1002,11 @@ AC_OUTPUT([icudefs.mk \
 		layoutex/Makefile \
 		io/Makefile \
 		extra/Makefile \
-		extra/uconv/Makefile extra/scrptrun/Makefile \
-		tools/Makefile tools/ctestfw/Makefile \
+		extra/uconv/Makefile \
+		extra/scrptrun/Makefile \
+		tools/Makefile \
+		tools/ctestfw/Makefile \
+		tools/toolutil/Makefile \
 		tools/makeconv/Makefile \
 		tools/genrb/Makefile \
 		tools/genuca/Makefile \
@@ -1023,8 +1026,8 @@ AC_OUTPUT([icudefs.mk \
 		tools/icupkg/Makefile \
 		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
-		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \
+		tools/tzcode/Makefile \
 		test/Makefile \
 		test/testdata/Makefile \
 		test/testdata/pkgdata.inc \
