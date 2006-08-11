@@ -1028,7 +1028,7 @@ ucurr_countCurrencyList(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
 static const char* U_CALLCONV
 ucurr_nextCurrencyList(UEnumeration *enumerator,
                         int32_t* resultLength,
-                        UErrorCode *pErrorCode)
+                        UErrorCode * /*pErrorCode*/)
 {
     UCurrencyContext *myContext = (UCurrencyContext *)(enumerator->context);
 

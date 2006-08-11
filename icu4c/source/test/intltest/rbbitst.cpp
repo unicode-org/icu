@@ -4048,7 +4048,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
         // Find the break positions using isBoundary() tests.
         memset(isBoundaryBreaks, 0, sizeof(isBoundaryBreaks));
-        U_ASSERT(sizeof(isBoundaryBreaks) > testText.length());
+        U_ASSERT((int32_t)sizeof(isBoundaryBreaks) > testText.length());
         for (i=0; i<=testText.length(); i++) {
             isBoundaryBreaks[i] = bi->isBoundary(i);
         }
