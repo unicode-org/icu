@@ -789,18 +789,18 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         if(keys!=null){
             return;
         }
-        ICUResourceBundle current = this;
+        //ICUResourceBundle current = this;
         keys = new Vector();
-        while(current!=null){
-            Enumeration e = current.handleGetKeys();
+        //while(current!=null){
+            Enumeration e = this.handleGetKeys();
             while(e.hasMoreElements()){
                 String elem = (String)e.nextElement();
                 if(!keys.contains(elem)){
                     keys.add(elem);
                 }
             }
-            current = (ICUResourceBundle)current.getParent();
-        }
+          //  current = (ICUResourceBundle)current.getParent();
+        //}
     }
     protected Enumeration handleGetKeys(){
         Vector keys = new Vector();
