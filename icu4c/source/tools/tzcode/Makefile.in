@@ -1,20 +1,23 @@
 # Some Portions Copyright (c) 2006 IBM and others. All Rights Reserved.
 
-all:
-	@echo This code is intended to be run by the icu/source/data makefile only.
-	@echo Furthermore, it is intended to be relocated to data/out/tmp/tzcode 
-	false
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-subdir = data/out/tmp/tzcode
+subdir = tools/tzcode
 
-top_builddir = ../../../..
+top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
 TZCOBJS= zic.o localtime.o asctime.o scheck.o ialloc.o
+TZDATA = $(firstword $(wildcard ./tzdata*.tar.gz) $(wildcard $(srcdir)/tzdata*.tar.gz))
 
+ifeq ($(TZDATA),)
+all: 
+	@echo ERROR tzdata*.tar.gz can\'t be found.
+	@false
+else
+all: icu_data
+endif
 
 PRIMARY_YDATA=	africa antarctica asia australasia \
 		europe northamerica southamerica
@@ -42,6 +45,9 @@ zic:		$(TZCOBJS) yearistype tz2icu.h
 tz2icu:		tz2icu.cpp tz2icu.h
 		$(CXX) -W -Wall -pedantic tz2icu.cpp -o $@
 
+yearistype.sh: $(TZDATA)
+	gunzip -d < $(TZDATA) | tar xf -
+
 yearistype:	yearistype.sh
 		cp yearistype.sh yearistype
 		chmod +x yearistype
@@ -51,7 +57,7 @@ posix_only:	zic $(TDATA)
 
 
 icu_data:	tz2icu posix_only
-		./tz2icu $(TZDIR) zone.tab `ls tzdata*.tar.gz | sed -e "s/^tzdata//;s/\.tar\.gz$$//"`
+		./tz2icu $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
 
 clean:
 		-rm -f core *.o *.out zdump zic yearistype date
@@ -65,7 +71,8 @@ dataclean: clean
 distclean:	dataclean clean
 	-rm -f Makefile
 
-## NB: this Makefile.in is sourced from $(builddir), because it was copied.
 Makefile: Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
