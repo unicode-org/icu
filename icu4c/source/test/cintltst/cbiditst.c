@@ -213,9 +213,10 @@ doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
 static const char columns[62] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 #define TABLE_SIZE  256
-static UChar         *pseudoToUChar;
-static uint8_t       *UCharToPseudo;    /* used for Unicode chars < 0x0100 */
-static uint8_t       *UCharToPseud2;    /* used for Unicode chars >=0x0100 */
+static UBool   tablesInitialized = FALSE;
+static UChar   pseudoToUChar[TABLE_SIZE];
+static uint8_t UCharToPseudo[TABLE_SIZE];    /* used for Unicode chars < 0x0100 */
+static uint8_t UCharToPseud2[TABLE_SIZE];    /* used for Unicode chars >=0x0100 */
 
 static void buildPseudoTables(void)
 /*
@@ -242,13 +243,6 @@ static void buildPseudoTables(void)
     int             i;
     UChar           uchar;
     uint8_t         c;
-    UCharToPseudo = malloc(TABLE_SIZE * sizeof(char));
-    UCharToPseud2 = malloc(TABLE_SIZE * sizeof(char));
-    pseudoToUChar = malloc(TABLE_SIZE * sizeof(UChar));
-    if ((pseudoToUChar == NULL) || (UCharToPseudo == NULL) || (UCharToPseud2 == NULL)) {
-        log_err("Unable to allocate pseudo BiDi tables. All characters will be converted to '?'\n");
-        return;
-    }
     /* initialize all tables to unknown */
     for (i=0; i < TABLE_SIZE; i++) {
         pseudoToUChar[i] = 0xFFFD;
@@ -321,6 +315,7 @@ static void buildPseudoTables(void)
         pseudoToUChar[c] = uchar;
         UCharToPseudo[uchar & 0x00ff] = c;
     }
+    tablesInitialized = TRUE;
 }
 
 /*----------------------------------------------------------------------*/
@@ -331,7 +326,7 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
 */
 {
     int             i;
-    if (!pseudoToUChar) {
+    if (!tablesInitialized) {
         buildPseudoTables();
     }
     if (pseudoToUChar) {                /* tables are built */
@@ -353,7 +348,7 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
 {
     int             i;
     UChar           uchar;
-    if (!pseudoToUChar) {
+    if (!tablesInitialized) {
         buildPseudoTables();
     }
     if (pseudoToUChar) {
