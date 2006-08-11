@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -81,7 +81,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             boolean hasBOM = false;
             int confidence = 0;
             
-            if (input[0] == 0x00 && input[1] == 0x00 && (input[2] & 0xFF) == 0xFE && (input[3] & 0xFF) == 0xFF) {
+            if (getChar(input, 0) == 0x0000FEFF) {
                 hasBOM = true;
             }
             
