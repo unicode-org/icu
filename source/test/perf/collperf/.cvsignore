@@ -1,0 +1,6 @@
+*.d
+*.o
+collperf
+Debug
+Release
+Makefile

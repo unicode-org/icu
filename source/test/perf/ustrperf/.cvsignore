@@ -1,0 +1,6 @@
+*.d
+*.o
+charperf
+Debug
+Release
+Makefile

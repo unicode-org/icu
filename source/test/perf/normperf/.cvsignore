@@ -1,0 +1,6 @@
+*.d
+*.o
+normperf
+Debug
+Release
+Makefile

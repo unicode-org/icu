@@ -1,4 +1,4 @@
-## Makefile.in for ICU - test/perf/normperf
+## Makefile.in for ICU - test/perf/ustrperf
 ## Copyright (c) 2001-2006, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -11,18 +11,18 @@ top_builddir = ../../..
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-subdir = test/perf/normperf
+subdir = test/perf/ustrperf
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = normperf
+TARGET = ustrperf
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = normperf.o
+OBJECTS = stringperf.o
 
 DEPS = $(OBJECTS:.o=.d)
 

@@ -1,8 +1,7 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
-**********************************************************************
 **********************************************************************
 */
 #ifndef _STRINGPERF_H
@@ -548,3 +547,4 @@ inline void StdLibScan2(const wchar_t* src,int32_t srcLen, stlstring s0)
 }
 
 #endif // STRINGPERF_H
+

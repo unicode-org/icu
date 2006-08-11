@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2005 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2006 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 
@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <limits.h>
+#include <string.h>
 #include "unicode/uperf.h"
 #include "uoptions.h"
 #include "unicode/coll.h"

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2002-2004 International Business Machines Corporation
+ * Copyright (C) 2002-2006 International Business Machines Corporation
  * and others. All Rights Reserved.
  *
  ********************************************************************/
@@ -373,3 +373,5 @@ UPerfFunction* StringPerformanceTest::TestStdLibScan2()
 		return new StringPerfFunction(StdLibScan2, StrBuffer, StrBufferLen, uselen);
 	}
 }
+
+
