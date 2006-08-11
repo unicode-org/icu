@@ -517,6 +517,9 @@ icu4c/source/tools/toolutil/Debug
 icu4c/source/tools/toolutil/Makefile
 icu4c/source/tools/toolutil/Release
 icu4c/source/tools/toolutil/libicu*
+icu4c/source/tools/tzcode/Makefile
+icu4c/source/tools/tzcode/tz2icu
+icu4c/source/tools/tzcode/zic
 icu4j/.classpath
 icu4j/.clover
 icu4j/.externalToolBuilders
