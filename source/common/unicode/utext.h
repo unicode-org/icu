@@ -321,8 +321,8 @@ utext_openCharacterIterator(UText *ut, CharacterIterator *ic, UErrorCode *status
   *  disabling text modification via the cloned UText.
   *
   *  A shallow clone made with the readOnly parameter == FALSE will preserve the 
-  *  utext_isWritable() state of the source object.  Use with caution, however.
-  *  Write operations must be avoided while more than one UTexts exist that refer
+  *  utext_isWritable() state of the source object.  Note, however, that
+  *  write operations must be avoided while more than one UText exists that refer
   *  to the same underlying text.
   *
   *  A UText and its clone may be safely concurrently accessed by separate threads.
@@ -366,7 +366,7 @@ utext_equals(const UText *a, const UText *b);
 
 /*****************************************************************************
  *
- *   C Functions to work with the text represeted by a UText wrapper
+ *   Functions to work with the text represeted by a UText wrapper
  *
  *****************************************************************************/
 
@@ -626,7 +626,7 @@ utext_getPreviousNativeIndex(UText *ut);
  * be NUL-terminated if there is sufficient space in the destination buffer.  This
  * terminating NUL is not included in the returned length.
  * <p>
- * The iteration index is at the position following the last extracted character.
+ * The iteration index is left at the position following the last extracted character.
  *
  * @param  ut    the UText from which to extract data.
  * @param  nativeStart the native index of the first character to extract.\
@@ -807,6 +807,9 @@ utext_replace(UText *ut,
  * The text to be copied or moved is inserted at destIndex;
  * it does not replace or overwrite any existing text.
  *
+ * The iteration position is left following the newly inserted text
+ * at the destination position.
+ *
  * This function is only available on UText types that support writing,
  * that is, ones where utext_isWritable() returns TRUE.
  *
@@ -817,8 +820,10 @@ utext_replace(UText *ut,
  *
  * @param ut           The UText representing the text to be operated on.
  * @param nativeStart  The native index of the start of the region to be copied or moved
- * @param nativeLimit  The native index of the character position following the region to be copied.
- * @param destIndex    The native destination index to which the source substring is copied or moved.
+ * @param nativeLimit  The native index of the character position following the region
+ *                     to be copied.
+ * @param destIndex    The native destination index to which the source substring is
+ *                     copied or moved.
  * @param move         If TRUE, then the substring is moved, not copied/duplicated.
  * @param status       receives any error status.  Possible errors include U_NO_WRITE_PERMISSION
  *                       
@@ -865,12 +870,6 @@ utext_freeze(UText *ut);
  * @draft ICU 3.4
  */
 enum {
-    /**
-     * The provider works with non-UTF-16 ("native") text indexes.
-     * For example, byte indexes into UTF-8 text or UTF-32 indexes into UTF-32 text.
-     * @draft ICU 3.4
-     */
-    UTEXT_PROVIDER_NON_UTF16_INDEXES = 0,
     /**
      * It is potentially time consuming for the provider to determine the length of the text.
      * @draft ICU 3.4
@@ -1179,9 +1178,10 @@ struct UText {
     int32_t        flags;
 
     /**
-     *     (private)  Magic.  Try to detect when we are handed junk.
+     *     (private)  Magic.  Used to help detect when UText functions are handed
+     *                        invalid or unitialized UText structs.
      *                        utext_openXYZ() functions take an initialized,
-     *                        but not necessarily open, UText struct as an,
+     *                        but not necessarily open, UText struct as an
      *                        optional fill-in parameter.  This magic field
      *                        is used to check for that initialization.
      *                        Text provider close functions must NOT clear
@@ -1209,8 +1209,9 @@ struct UText {
      */
 
     /**
-     * (protected) Pointer to string or wrapped object or similar.
-     * Not used by caller.
+     * (protected) Pointer to string or text-containin object or similar.
+     * This is the source of the text that this UText is wrapping, in a format
+     *  that is known to the text provider functions.
      * @draft ICU 3.4
      */
     const void   *context;
@@ -1421,15 +1422,14 @@ struct UText {
 U_DRAFT UText * U_EXPORT2
 utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 
-#ifndef U_HIDE_INTERNAL_API
 /**
   * @internal
+  *  Value used to help identify correctly initialized UText structs.
+  *  Note:  must be publicly visible so that UTEXT_INITIALIZER can access it.
   */
 enum {
     UTEXT_MAGIC = 0x345ad82c
 };
-#endif
-
 #ifndef U_HIDE_DRAFT_API
 
 /**
