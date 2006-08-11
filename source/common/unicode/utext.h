@@ -833,18 +833,21 @@ utext_copy(UText *ut,
 
 
 /**
+  *  <p>
   *  Freeze a UText.  This prevents any modification to the underlying text itself
   *  by means of functions operating on this UText.
-  *  <p/>
+  *  </p>
+  *  <p>
   *  Once frozen, a UText can not be unfrozen.  The intent is to ensure
   *  that a the text underlying a frozen UText wrapper cannot be modified via that UText.
-  *  
-  *  <p/>
+  *  </p>
+  *  <p>
   *  Caution:  freezing a UText will disable changes made via the specific
   *   frozen UText wrapper only; it will not have any effect on the ability to
   *   directly modify the text by bypassing the UText.  Any such backdoor modifications
   *   are always an error while UText access is occuring because the underlying
   *   text can get out of sync with UText's buffering.
+  *  </p>
   *
   *  @param ut  The UText to be frozen.
   *  @see   utext_isWritable()
@@ -1228,13 +1231,25 @@ struct UText {
     const void   *p, *q, *r;
 
     /**
-      * (protected) Integer fields reserved for use by the text provider.
-      * Not used by the UText framework, or by the client (user) of the
-      *  UText.
+      * (protected) Integer field reserved for use by the text provider.
+      * Not used by the UText framework, or by the client (user) of the UText.
       * @draft ICU 3.4
       */
     int64_t         a;
-    int32_t         b, c;
+
+    /**
+      * (protected) Integer field reserved for use by the text provider.
+      * Not used by the UText framework, or by the client (user) of the UText.
+      * @draft ICU 3.4
+      */
+    int32_t         b;
+
+    /**
+      * (protected) Integer field reserved for use by the text provider.
+      * Not used by the UText framework, or by the client (user) of the UText.
+      * @draft ICU 3.4
+      */
+    int32_t         c;
 
 
     /**
@@ -1281,13 +1296,34 @@ struct UText {
     int32_t         nativeIndexingLimit;
 
     /**
-      *  Private fields, reserved for future use by the UText framework
-      *     itself.  These are not to be touched by the text providers.
+      *  Private field reserved for future use by the UText framework
+      *     itself.  This is not to be touched by the text providers.
+      * @internal ICU 3.4
       */
     int32_t         privA;
+    /**
+      *  Private field reserved for future use by the UText framework
+      *     itself.  This is not to be touched by the text providers.
+      * @internal ICU 3.4
+      */
     int32_t         privB;
+    /**
+      *  Private field reserved for future use by the UText framework
+      *     itself.  This is not to be touched by the text providers.
+      * @internal ICU 3.4
+      */
     int32_t         privC;
+    /**
+      *  Private field reserved for future use by the UText framework
+      *     itself.  This is not to be touched by the text providers.
+      * @internal ICU 3.4
+      */
     int64_t         privD;
+    /**
+      *  Private field reserved for future use by the UText framework
+      *     itself.  This is not to be touched by the text providers.
+      * @internal ICU 3.4
+      */
     void           *privP;
 
     /**
