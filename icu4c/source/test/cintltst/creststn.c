@@ -2294,7 +2294,10 @@ static void TestResourceLevelAliasing(void) {
     }
     tb = ures_getByKey(aliasB, "testAliasToTree", tb, &status);
     if(U_FAILURE(status)){
-        log_err("Fetching the resource with key %s failed. Error: %s\n", "testAliasToTree", u_errorName(status));
+        log_err("Fetching the resource with key \"testAliasToTree\" failed. Error: %s\n", u_errorName(status));
+    }
+    if (strcmp(ures_getKey(tb), "collations") != 0) {
+        log_err("ures_getKey(aliasB) unexpectedly returned %s instead of \"collations\"\n", ures_getKey(tb));
     }
 cleanup:
     ures_close(aliasB);
