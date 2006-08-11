@@ -31,14 +31,14 @@ import com.ibm.icu.util.ULocale;
  * 
  * <P>
  * Resource bundles in ICU are currently defined using text files which conform to the following
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/bnf_rb.txt">BNF definition</a>.
+ * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icuhtml/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the 
  * <a href="http://icu.sourceforge.net/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  * 
  * The packaging of ICU *.res files can be of two types
  * ICU4C:
- * <code>
+ * <pre>
  *       root.res
  *         |
  *      --------
@@ -48,9 +48,9 @@ import com.ibm.icu.util.ULocale;
  *   --------
  *  |        |
  * fr_CA.res fr_FR.res     
- * </code>
+ * </pre>
  * JAVA/JDK:
- * <code>
+ * <pre>
  *    LocaleElements.res
  *         |
  *      -------------------
@@ -60,16 +60,16 @@ import com.ibm.icu.util.ULocale;
  *   ---------------------------
  *  |                            |
  * LocaleElements_fr_CA.res   LocaleElements_fr_FR.res
- * </code>
+ * </pre>
  * Depending on the organization of your resources, the syntax to getBundleInstance will change.
  * To open ICU style organization use:
- * <code>
+ * <pre>
  *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/impl/data/icudt30b", "en_US");
- * </code>
+ * </pre>
  * To open Java/JDK style organization use:
- * <code>
+ * <pre>
  *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.LocaleElements", "en_US");
- * </code>
+ * </pre>
  * @draft ICU 3.0
  * @provisional This API might change or be removed in a future release.
  * @author ram
