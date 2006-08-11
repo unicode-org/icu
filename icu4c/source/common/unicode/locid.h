@@ -57,9 +57,9 @@
  * this class:
  * \htmlonly<blockquote>\endhtmlonly
  * <pre>
- * .      Locale( const   char*  language,
- * .              const   char*  country,
- * .              const   char*  variant);
+ *       Locale( const   char*  language,
+ *               const   char*  country,
+ *               const   char*  variant);
  * </pre>
  * \htmlonly</blockquote>\endhtmlonly
  * The first argument to the constructors is a valid <STRONG>ISO
@@ -74,8 +74,8 @@
  * Code.</STRONG> These codes are the upper-case two-letter codes
  * as defined by ISO-3166.
  * You can find a full list of these codes at a number of sites, such as:
- * <BR><a href="http://www.iso.ch/iso/en/prods-services/iso3166ma/index.html">
- * http://www.iso.ch/iso/en/prods-services/iso3166ma/index.html</a>
+ * <BR><a href="http://www.iso.org/iso/en/prods-services/iso3166ma/index.html">
+ * http://www.iso.org/iso/en/prods-services/iso3166ma/index.html</a>
  *
  * <P>
  * The third constructor requires a third argument--the <STRONG>Variant.</STRONG>
@@ -446,7 +446,7 @@ public:
 
     /**
      * returns the locale's three-letter language code, as specified
-     * in ISO draft standard ISO-639-2..
+     * in ISO draft standard ISO-639-2.
      * @return      An alias to the code, or NULL
      * @stable ICU 2.0
      */

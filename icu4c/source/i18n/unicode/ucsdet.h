@@ -76,7 +76,7 @@ ucsdet_open(UErrorCode   *status);
   *   close a charset detector when finished with it can result in
   *   memory leaks in the application.
   *
-  *  @param csd  The charset detector to be closed.
+  *  @param ucsd  The charset detector to be closed.
   *  @draft ICU 3.6
   */
 U_DRAFT void U_EXPORT2
@@ -89,7 +89,7 @@ ucsdet_close(UCharsetDetector *ucsd);
   * The input string must not be altered or deleted until the charset
   * detector is either closed or reset to refer to different input text.
   *
-  * @param csd    the charset detector to be used.
+  * @param ucsd   the charset detector to be used.
   * @param textIn the input text of unknown encoding.   .
   * @param len    the length of the input text, or -1 if the text
   *               is NUL terminated.
@@ -109,7 +109,7 @@ ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCo
  *  How and whether the declared encoding will be used during the
  *  detection process is TBD.
  *
- * @param csd       the charset detector to be used.
+ * @param ucsd      the charset detector to be used.
  * @param encoding  an encoding for the current data obtained from
  *                  a header or declaration or other source outside
  *                  of the byte data itself.
@@ -141,7 +141,7 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t
  *    <li>no input text has been provided</li>
  *  </ul>
  *
- * @param csd       the charset detector to be used.
+ * @param ucsd      the charset detector to be used.
  * @param status    any error conditions are reported back in this variable.
  * @return          a UCharsetMatch  representing the best matching charset,
  *                  or NULL if no charset matches the byte data.
@@ -171,7 +171,7 @@ ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status);
  *    <li>no input text has been provided</li>
  *  </ul>
  * 
- * @param csd           the charset detector to be used.
+ * @param ucsd          the charset detector to be used.
  * @param matchesFound  pointer to a variable that will be set to the
  *                      number of charsets identified that are consistent with
  *                      the input data.  Output only.
@@ -196,7 +196,7 @@ ucsdet_detectAll(UCharsetDetector *ucsd, int32_t *matchesFound, UErrorCode *stat
  *
  *  The name returned is suitable for use with the ICU conversion APIs.
  *
- *  @param csm     The charset match object.
+ *  @param ucsm    The charset match object.
  *  @param status  Any error conditions are reported back in this variable.
  *  @return        The name of the matching charset.
  *
@@ -222,7 +222,7 @@ ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status);
  *  great many charsets, most of which will appear as possible matches
  *  with a confidence of 10.
  *
- *  @param csm     The charset match object.
+ *  @param ucsm    The charset match object.
  *  @param status  Any error conditions are reported back in this variable.
  *  @return        A confidence number for the charset match.
  *
@@ -253,7 +253,7 @@ ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status);
  *  UCharsetMatch, and will remain valid while the UCharsetMatch
  *  is valid.
  *
- *  @param csm     The charset match object.
+ *  @param ucsm    The charset match object.
  *  @param status  Any error conditions are reported back in this variable.
  *  @return        The RFC 3066 code for the language of the input data.
  *
@@ -277,7 +277,7 @@ ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status);
   *  of the correct size.
   *
   *
-  * @param csm     The charset match object.
+  * @param ucsm    The charset match object.
   * @param buf     A UChar buffer to be filled with the converted text data.
   * @param cap     The capacity of the buffer in UChars.
   * @param status  Any error conditions are reported back in this variable.
@@ -305,7 +305,7 @@ ucsdet_getUChars(const UCharsetMatch *ucsm,
   *  service has been safely initialized and that the required detection
   *  data is available.
   *
-  *  @param csd a Charset detector.
+  *  @param ucsd a Charset detector.
   *  @param status  Any error conditions are reported back in this variable.
   *  @return an iterator providing access to the detectable charset names.
   *  @draft ICU 3.6
@@ -321,7 +321,7 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *statu
   *  markup from the input before applying the code page detection
   *  heuristics.
   *
-  *  @param csd  The charset detector to check.
+  *  @param ucsd  The charset detector to check.
   *  @return TRUE if filtering is enabled.
   *  @draft ICU 3.4
   */
@@ -334,7 +334,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd);
  * text within angle brackets ("<" and ">") will be removed
  * before detection, which will remove most HTML or xml markup.
  *
- * @param csd           the charset detector to be modified.
+ * @param ucsd   the charset detector to be modified.
  * @param filter <code>true</code> to enable input text filtering.
  * @return The previous setting.
  *
