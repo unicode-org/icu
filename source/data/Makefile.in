@@ -493,41 +493,24 @@ all-RES:  $(RES_FILES)
 $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-# if the 'in' directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
-TZDATA = $(firstword $(wildcard ./in/tzdata*.tar.gz) $(wildcard $(srcdir)/in/tzdata*.tar.gz))
+# if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo.txt
+TZDATA = $(firstword $(wildcard $(top_builddir)/tools/tzcode/tzdata*.tar.gz) $(wildcard $(top_srcdir)/tools/tzcode/tzdata*.tar.gz))
 
 ifneq ($(TZDATA),)
 
-OUTMISC=$(OUTDIR)/misc
-ZONEINFO=$(OUTMISC)/zoneinfo.txt
-TZCODE=$(OUTTMPDIR)/tzcode
+TZCODE_DIR=$(top_builddir)/tools/tzcode
+ZONEINFO=$(TZCODE_DIR)/zoneinfo.txt
 
-# Override the normal genrb for zoneinfo.txt to always pull from  out/zoneinfo.txt
+# Override the normal genrb for zoneinfo.txt to always pull from
+# icu/source/tools/tzcode/zoneinfo.txt
 $(BUILDDIR)/zoneinfo.res: $(ZONEINFO) $(BINDIR)/genrb$(EXEEXT)
-	@echo Note: $(MISCSRCDIR)/zoneinfo.txt  is IGNORED because $(TZDATA) is present.
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -q -i $(BUILDDIR) -s $(OUTMISC) -d $(BUILDDIR) $(<F)
+	@echo Note: $(MISCSRCDIR)/zoneinfo.txt is IGNORED because $(TZDATA) is present.
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -q -i $(BUILDDIR) -d $(BUILDDIR) $(ZONEINFO)
 
-# create the out/tmp/tzcode directory from source/tools/tzcode
-$(TZCODE):
-	-$(MKINSTALLDIRS) $(TZCODE)
-	-$(MKINSTALLDIRS)
-	(cd $(top_srcdir)/tools/ ; tar cf - tzcode ) | (cd $(OUTTMPDIR) ; tar xf -)
-	cd $(top_builddir) \
-	&& CONFIG_FILES=$(subdir)/out/tmp/tzcode/Makefile CONFIG_HEADERS= $(SHELL) ./config.status
-
-$(OUTMISC):
-	-$(MKINSTALLDIRS) $@
-
-# perform the actual build.
-$(ZONEINFO): $(OUTMISC) $(TZCODE) $(TZDATA)
-	@echo "******* Updating $(ZONEINFO) from $(TZDATA) ..."
-	cp $(TZDATA) $(TZCODE)
-	gunzip -d < $(TZDATA) | ( cd $(TZCODE) ; tar xf - )
-	$(MAKE) -C $(TZCODE)  icu_data
-	mv $(TZCODE)/zoneinfo.txt $@
-#	$(MAKE) -C $(TZCODE)  dataclean
-#	$(RMV) $(top_builddir)/tools/tzcode/tzdata*.tar.gz
-	@echo "******* Done building $@ from $< **********"
+# Create the tzcode tool and zoneinfo.txt as needed.
+$(ZONEINFO): $(TZDATA)
+	@echo "$(MAKE)[$(MAKELEVEL)]: Making \`$(ZONEINFO)' in \`$(TZCODE_DIR)'"; \
+	(cd $(TZCODE_DIR) && $(MAKE)) || exit; \
 
 # end of zoneinfo.txt-generation
 endif
