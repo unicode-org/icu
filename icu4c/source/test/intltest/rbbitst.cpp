@@ -2485,12 +2485,12 @@ RBBISentMonkey::RBBISentMonkey()
     fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]",      status);
     fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]",   status);
     fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]",   status);
-    fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}]", status);
+    fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}-[\\uff9e\\uff9f]]", status);
     fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]", status);
     fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]",   status);
     fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]",   status);
     fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]",   status);
-    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
+    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Extend}\\uff9e\\uff9f]", status);
     fOtherSet        = new UnicodeSet();
 
     if(U_FAILURE(status)) {
