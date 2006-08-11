@@ -1102,7 +1102,7 @@ swapBuffers:
         U_ASSERT(ix<=u8b->bufNativeLimit);
         mapIndex = ix - u8b->toUCharsMapStart;
         U_ASSERT(mapIndex>=0);
-        U_ASSERT(mapIndex<sizeof(u8b->mapToUChars));
+        U_ASSERT(mapIndex<(int32_t)sizeof(u8b->mapToUChars));
         ut->chunkOffset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
 
         return TRUE;
