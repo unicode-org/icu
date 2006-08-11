@@ -91,7 +91,7 @@ void DateFormatRoundTripTest::TestCentury()
     SimpleDateFormat fmt(pattern, locale, status);
     if(!assertSuccess("trying to construct", status))return;
     UDate date[] = {-55018555891590.05, 0, 0};
-    UnicodeString *result = new UnicodeString[2];
+    UnicodeString result[2];
 
     fmt.format(date[0], result[0]);
     date[1] = fmt.parse(result[0], status);
