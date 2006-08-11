@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,11 +12,17 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.util.Locale;
-import java.text.ParsePosition;
-import java.text.Format;
-import com.ibm.icu.text.*;
+import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Vector;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -268,6 +274,234 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             resultStr = "";
         }
     }
+    
+    public void testFormatToCharacterIterator() {
+
+        Number number = new Double(350.76);
+        Number negativeNumber = new Double(-350.76);
+
+        Locale us = Locale.US;
+        Locale tr = new Locale("tr", "TR");
+
+        // test number instance
+        t_Format(1, number, NumberFormat.getNumberInstance(us),
+                getNumberVectorUS());
+
+//        // test percent instance
+        t_Format(3, number, NumberFormat.getPercentInstance(us),
+                getPercentVectorUS());
+//
+//        // test permille pattern
+        DecimalFormat format = new DecimalFormat("###0.##\u2030");
+//        t_Format(4, number, format, getPermilleVector());
+
+        // test exponential pattern with positive exponent
+        format = new DecimalFormat("00.0#E0");
+        t_Format(5, number, format, getPositiveExponentVector());
+
+//        // test exponential pattern with negative exponent
+        format = new DecimalFormat("0000.0#E0");
+        t_Format(6, number, format, getNegativeExponentVector());
+
+        // test currency instance with US Locale
+        t_Format(7, number, NumberFormat.getCurrencyInstance(us),
+                getPositiveCurrencyVectorUS());
+
+//        // test negative currency instance with US Locale
+        t_Format(8, negativeNumber, NumberFormat.getCurrencyInstance(us),
+                getNegativeCurrencyVectorUS());
+
+//        // test multiple grouping seperators
+        number = new Long(100300400);
+        t_Format(11, number, NumberFormat.getNumberInstance(us),
+                getNumberVector2US());
+
+//        // test 0
+        number = new Long(0);
+        t_Format(12, number, NumberFormat.getNumberInstance(us),
+                getZeroVector());
+    }
+
+    private static Vector getNumberVectorUS() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(3, 4, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v.add(new FieldContainer(4, 6, NumberFormat.Field.FRACTION));
+        return v;
+    }
+    
+    private static Vector getPositiveCurrencyVectorTR() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(4, 6, NumberFormat.Field.CURRENCY));
+        return v;
+    }
+
+    private static Vector getNegativeCurrencyVectorTR() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
+        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(5, 7, NumberFormat.Field.CURRENCY));
+        return v;
+    }
+
+    private static Vector getPositiveCurrencyVectorUS() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 1, NumberFormat.Field.CURRENCY));
+        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(4, 5, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v.add(new FieldContainer(5, 7, NumberFormat.Field.FRACTION));
+        return v;
+    }
+
+    private static Vector getNegativeCurrencyVectorUS() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(1, 2, NumberFormat.Field.CURRENCY));
+        v.add(new FieldContainer(2, 5, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(5, 6, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v.add(new FieldContainer(6, 8, NumberFormat.Field.FRACTION));
+        return v;
+    }
+
+    private static Vector getPercentVectorUS() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 2, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(2, 3, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(2, 3, NumberFormat.Field.GROUPING_SEPARATOR));
+        v.add(new FieldContainer(3, 6, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(6, 7, NumberFormat.Field.PERCENT));
+        return v;
+    }
+
+    private static Vector getPermilleVector() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 6, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(6, 7, NumberFormat.Field.PERMILLE));
+        return v;
+    }
+
+    private static Vector getNegativeExponentVector() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 4, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(4, 5, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v.add(new FieldContainer(5, 6, NumberFormat.Field.FRACTION));
+        v.add(new FieldContainer(6, 7, NumberFormat.Field.EXPONENT_SYMBOL));
+        v.add(new FieldContainer(7, 8, NumberFormat.Field.EXPONENT_SIGN));
+        v.add(new FieldContainer(8, 9, NumberFormat.Field.EXPONENT));
+        return v;
+    }
+
+    private static Vector getPositiveExponentVector() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 2, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(2, 3, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v.add(new FieldContainer(3, 5, NumberFormat.Field.FRACTION));
+        v.add(new FieldContainer(5, 6, NumberFormat.Field.EXPONENT_SYMBOL));
+        v.add(new FieldContainer(6, 7, NumberFormat.Field.EXPONENT));
+        return v;
+    }
+
+    private static Vector getNumberVector2US() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
+        v.add(new FieldContainer(3, 4, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(4, 7, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(7, 8, NumberFormat.Field.GROUPING_SEPARATOR));
+        v.add(new FieldContainer(7, 8, NumberFormat.Field.INTEGER));
+        v.add(new FieldContainer(8, 11, NumberFormat.Field.INTEGER));
+        return v;
+    }
+
+    private static Vector getZeroVector() {
+        Vector v = new Vector();
+        v.add(new FieldContainer(0, 1, NumberFormat.Field.INTEGER));
+        return v;
+    }    
+    
+    private void t_Format(int count, Object object, Format format,
+            Vector expectedResults) {
+        Vector results = findFields(format.formatToCharacterIterator(object));
+        assertTrue("Test " + count
+                + ": Format returned incorrect CharacterIterator for "
+                + format.format(object), compare(results, expectedResults));
+    }
+
+    /**
+     * compares two vectors regardless of the order of their elements
+     */
+    private static boolean compare(Vector vector1, Vector vector2) {
+        return vector1.size() == vector2.size() && vector1.containsAll(vector2);
+    }
+    
+    /**
+     * finds attributes with regards to char index in this
+     * AttributedCharacterIterator, and puts them in a vector
+     * 
+     * @param iterator
+     * @return a vector, each entry in this vector are of type FieldContainer ,
+     *         which stores start and end indexes and an attribute this range
+     *         has
+     */
+    private static Vector findFields(AttributedCharacterIterator iterator) {
+        Vector result = new Vector();
+        while (iterator.getIndex() != iterator.getEndIndex()) {
+            int start = iterator.getRunStart();
+            int end = iterator.getRunLimit();
+
+            Iterator it = iterator.getAttributes().keySet().iterator();
+            while (it.hasNext()) {
+                AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it
+                        .next();
+                Object value = iterator.getAttribute(attribute);
+                result.add(new FieldContainer(start, end, attribute, value));
+                // System.out.println(start + " " + end + ": " + attribute + ",
+                // " + value );
+                // System.out.println("v.add(new FieldContainer(" + start +"," +
+                // end +"," + attribute+ "," + value+ "));");
+            }
+            iterator.setIndex(end);
+        }
+        return result;
+    }
+    protected static class FieldContainer {
+        int start, end;
+
+        AttributedCharacterIterator.Attribute attribute;
+
+        Object value;
+
+//         called from support_decimalformat and support_simpledateformat tests
+        public FieldContainer(int start, int end,
+        AttributedCharacterIterator.Attribute attribute) {
+            this(start, end, attribute, attribute);
+        }
+
+//         called from support_messageformat tests
+        public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute, int value) {
+        this(start, end, attribute, new Integer(value));
+        }
+
+//         called from support_messageformat tests
+        public FieldContainer(int start, int end, AttributedCharacterIterator.Attribute attribute,
+        Object value) {
+        this.start = start;
+        this.end = end;
+        this.attribute = attribute;
+        this.value = value;
+        }
+
+        public boolean equals(Object obj) {
+        if (!(obj instanceof FieldContainer))
+        return false;
+
+        FieldContainer fc = (FieldContainer) obj;
+        return (start == fc.start && end == fc.end
+        && attribute == fc.attribute && value.equals(fc.value));
+        }
+    } 
+
+    
     
     /*Helper functions */
     public void verify(String message, String got, double expected) {
