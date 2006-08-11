@@ -2236,14 +2236,14 @@ RBBIWordMonkey::RBBIWordMonkey()
                          "-\\p{Grapheme_Cluster_Break = Extend}"
                          "-\\p{Grapheme_Cluster_Break = Control}]]",      status);
     //fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
-    fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]",     status);
+    fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}-[\\uff9e\\uff9f]]",     status);
     fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]",       status);
     fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]",      status);
     fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]", status);
     //fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]", status);
-    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]", status);
+    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}\\uff9e\\uff9f]", status);
     
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
