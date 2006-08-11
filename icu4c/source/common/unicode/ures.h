@@ -641,8 +641,9 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  * the output UTF-8 string is always well-formed.
  *
  * @param resB Resource bundle.
+ * @param index An index to the wanted string.
  * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
- * @param length Input: Capacity of destination buffer.
+ * @param pLength Input: Capacity of destination buffer.
  *               Output: Actual length of the UTF-8 string, not counting the
  *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
  *               Can be NULL, meaning capacity=0 and the string length is not
@@ -733,8 +734,9 @@ ures_getStringByKey(const UResourceBundle *resB,
  * the output UTF-8 string is always well-formed.
  *
  * @param resB Resource bundle.
+ * @param key  A key associated with the wanted resource
  * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
- * @param length Input: Capacity of destination buffer.
+ * @param pLength Input: Capacity of destination buffer.
  *               Output: Actual length of the UTF-8 string, not counting the
  *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
  *               Can be NULL, meaning capacity=0 and the string length is not

@@ -297,20 +297,24 @@ public:
     //=======================================================================
 
     /**
+     * <p>
      * Return a CharacterIterator over the text being analyzed.
      * The returned character iterator is owned by the break iterator, and must
      * not be deleted by the caller.  Repeated calls to this function may
      * return the same CharacterIterator.
-     * <p/>
+     * </p>
+     * <p>
      * The returned character iterator must not be used concurrently with
      * the break iterator.  If concurrent operation is needed, clone the
      * returned character iterator first and operate on the clone.
-     * <p/>
+     * </p>
+     * <p>
      * When the break iterator is operating on text supplied via a UText,
      * this function will fail.  Lacking any way to signal failures, it
      * returns an CharacterIterator containing no text.
      * The function getUText() provides similar functionality,
      * is reliable, and is more efficient.
+     * </p>
      *
      * TODO:  deprecate this function?
      *
