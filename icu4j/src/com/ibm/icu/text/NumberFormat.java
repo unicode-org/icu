@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
@@ -20,14 +21,11 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.text.UFormat;
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
@@ -1537,4 +1535,79 @@ public abstract class NumberFormat extends UFormat {
 
     // new in ICU4J 3.6
     private boolean parseStrict;
+    
+    /**
+	 * [Spark/CDL] The instances of this inner class are used as attribute keys and values
+	 * in AttributedCharacterIterator that
+	 * NumberFormat.formatToCharacterIterator() method returns.
+	 * <p>
+	 * There is no public constructor to this class, the only instances are the
+	 * constants defined here.
+	 * <p>
+	 */
+	public static class Field extends Format.Field {
+
+		public static final Field SIGN = new Field("sign");
+
+		public static final Field INTEGER = new Field("integer");
+
+		public static final Field FRACTION = new Field("fraction");
+
+		public static final Field EXPONENT = new Field("exponent");
+
+		public static final Field EXPONENT_SIGN = new Field("exponent sign");
+
+		public static final Field EXPONENT_SYMBOL = new Field("exponent symbol");
+
+		public static final Field DECIMAL_SEPARATOR = new Field(
+				"decimal separator");
+
+		public static final Field GROUPING_SEPARATOR = new Field(
+				"grouping separator");
+
+		public static final Field PERCENT = new Field("percent");
+
+		public static final Field PERMILLE = new Field("per mille");
+
+		public static final Field CURRENCY = new Field("currency");
+
+		/**
+		 * Constructs a new instance of NumberFormat.Field with the given field
+		 * name.
+		 */
+		protected Field(String fieldName) {
+			super(fieldName);
+		}
+
+		/**
+		 * serizalization method resolve instances to the constant
+		 * NumberFormat.Field values
+		 */
+		protected Object readResolve() throws InvalidObjectException {
+			if (this.equals(INTEGER))
+				return INTEGER;
+			if (this.equals(FRACTION))
+				return FRACTION;
+			if (this.equals(EXPONENT))
+				return EXPONENT;
+			if (this.equals(EXPONENT_SIGN))
+				return EXPONENT_SIGN;
+			if (this.equals(EXPONENT_SYMBOL))
+				return EXPONENT_SYMBOL;
+			if (this.equals(CURRENCY))
+				return CURRENCY;
+			if (this.equals(DECIMAL_SEPARATOR))
+				return DECIMAL_SEPARATOR;
+			if (this.equals(GROUPING_SEPARATOR))
+				return GROUPING_SEPARATOR;
+			if (this.equals(PERCENT))
+				return PERCENT;
+			if (this.equals(PERMILLE))
+				return PERMILLE;
+			if (this.equals(SIGN))
+				return SIGN;
+
+			throw new InvalidObjectException("An invalid object.");
+		}
+	}
 }

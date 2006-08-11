@@ -11,9 +11,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
@@ -687,12 +691,18 @@ public class DecimalFormat extends NumberFormat {
         applyPattern( pattern, false );
     }
 
-
-    /**
-     * @stable ICU 2.0
-     */
-    public StringBuffer format(double number, StringBuffer result,
-                               FieldPosition fieldPosition)
+	/**
+	 * @stable ICU 2.0
+	 */
+	public StringBuffer format(double number, StringBuffer result,
+			FieldPosition fieldPosition) {
+		return format(number, result, fieldPosition, false);
+	}
+	
+	// [Spark/CDL] The actual method to format number. If boolean value
+	// parseAttr == true, then attribute information will be recorded.
+	private StringBuffer format(double number, StringBuffer result,
+			FieldPosition fieldPosition, boolean parseAttr) 
     {
         fieldPosition.setBeginIndex(0);
         fieldPosition.setEndIndex(0);
@@ -704,6 +714,12 @@ public class DecimalFormat extends NumberFormat {
             }
 
             result.append(symbols.getNaN());
+			// [Spark/CDL] Add attribute for NaN here.
+			result.append(symbols.getNaN());
+			if (parseAttr) {
+				addAttribute(Field.INTEGER, result.length()
+						- symbols.getNaN().length(), result.length());
+			}
 
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
@@ -740,19 +756,24 @@ public class DecimalFormat extends NumberFormat {
 
         if (Double.isInfinite(number))
         {
-            int prefixLen = appendAffix(result, isNegative, true);
+        	int prefixLen = appendAffix(result, isNegative, true, parseAttr);
 
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
 
-            result.append(symbols.getInfinity());
+			// [Spark/CDL] Add attribute for infinity here.
+			result.append(symbols.getInfinity());
+			if (parseAttr) {
+				addAttribute(Field.INTEGER, result.length()
+						- symbols.getInfinity().length(), result.length());
+			}
 
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
 
-            int suffixLen = appendAffix(result, isNegative, false);
+            int suffixLen = appendAffix(result, isNegative, false, parseAttr);
 
             addPadding(result, fieldPosition, prefixLen, suffixLen);
             return result;
@@ -763,7 +784,8 @@ public class DecimalFormat extends NumberFormat {
         synchronized(digitList) {
             digitList.set(number, precision(false),
                           !useExponentialNotation && !areSignificantDigitsUsed());
-            return subformat(result, fieldPosition, isNegative, false);
+            return subformat(result, fieldPosition, isNegative, false,
+					parseAttr);
         }
     }
     
@@ -860,11 +882,17 @@ public class DecimalFormat extends NumberFormat {
     }
     private static double epsilon = 0.00000000001;
 
-    /**
-     * @stable ICU 2.0
-     */
-    public StringBuffer format(long number, StringBuffer result,
-                               FieldPosition fieldPosition)
+	/**
+	 * @stable ICU 2.0
+	 */
+	// [Spark/CDL] Delegate to format_long_StringBuffer_FieldPosition_boolean
+	public StringBuffer format(long number, StringBuffer result,
+			FieldPosition fieldPosition) {
+		return format(number, result, fieldPosition, false);
+	}
+
+	private StringBuffer format(long number, StringBuffer result,
+			FieldPosition fieldPosition, boolean parseAttr) 
     {
         fieldPosition.setBeginIndex(0);
         fieldPosition.setEndIndex(0);
@@ -896,25 +924,36 @@ public class DecimalFormat extends NumberFormat {
                 tooBig = (number > cutoff);
             }
             if (tooBig) {
-                return format(BigInteger.valueOf(isNegative ? -number : number),
-                              result, fieldPosition);
+				// [Spark/CDL] Use
+				// format_BigInteger_StringBuffer_FieldPosition_boolean instead
+				// parseAttr is used to judge whether to synthesize attributes.
+				return format(
+						BigInteger.valueOf(isNegative ? -number : number),
+						result, fieldPosition, parseAttr);
             }
         }
 
         number *= multiplier;
         synchronized(digitList) {
             digitList.set(number, precision(true));
-            return subformat(result, fieldPosition, isNegative, true);
+            return subformat(result, fieldPosition, isNegative, true, parseAttr);
         }
     }
 
-    /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Format a BigInteger number.
-     * @stable ICU 2.0
-     */
-    public StringBuffer format(BigInteger number, StringBuffer result,
-                               FieldPosition fieldPosition) {
+	/**
+	 * <strong><font face=helvetica color=red>NEW</font></strong> Format a
+	 * BigInteger number.
+	 * 
+	 * @stable ICU 2.0
+	 */
+	public StringBuffer format(BigInteger number, StringBuffer result,
+			FieldPosition fieldPosition) {
+		return format(number, result, fieldPosition, false);
+	}
+
+	// [Spark/CDL] 
+	private StringBuffer format(BigInteger number, StringBuffer result,
+			FieldPosition fieldPosition, boolean parseAttr) {
         // If we are to do rounding, we need to move into the BigDecimal
         // domain in order to do divide/multiply correctly.
         if (roundingIncrementICU != null) {
@@ -929,7 +968,7 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized(digitList) {
             digitList.set(number, precision(true));
-            return subformat(result, fieldPosition, number.signum() < 0, false);
+			return subformat(result, fieldPosition, number.signum() < 0, false,	parseAttr);
         }
     }
 
@@ -941,6 +980,11 @@ public class DecimalFormat extends NumberFormat {
      */
     public StringBuffer format(java.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
+		return format(number, result, fieldPosition, false);
+	}
+	
+	private StringBuffer format(java.math.BigDecimal number,
+			StringBuffer result, FieldPosition fieldPosition, boolean parseAttr) {
         if (multiplier != 1) {
             number = number.multiply(java.math.BigDecimal.valueOf(multiplier));
         }
@@ -953,7 +997,7 @@ public class DecimalFormat extends NumberFormat {
         synchronized(digitList) {
             digitList.set(number, precision(false),
                           !useExponentialNotation && !areSignificantDigitsUsed());
-            return subformat(result, fieldPosition, number.signum() < 0, false);
+			return subformat(result, fieldPosition, number.signum() < 0, false,	parseAttr);
         }        
     }
 //#endif
@@ -1029,7 +1073,13 @@ public class DecimalFormat extends NumberFormat {
      * be filled in with the correct digits.
      */
     private StringBuffer subformat(StringBuffer result, FieldPosition fieldPosition,
-                                   boolean isNegative, boolean isInteger)
+                                   boolean isNegative, boolean isInteger){
+		return subformat(result, fieldPosition, isNegative, isInteger, false);
+	}
+
+	private StringBuffer subformat(StringBuffer result,
+			FieldPosition fieldPosition, boolean isNegative, boolean isInteger,
+			boolean parseAttr) 
     {
         // NOTE: This isn't required anymore because DigitList takes care of this.
         //
@@ -1069,7 +1119,7 @@ public class DecimalFormat extends NumberFormat {
             digitList.decimalAt = 0; // Normalize
         }
 
-        int prefixLen = appendAffix(result, isNegative, true);
+        int prefixLen = appendAffix(result, isNegative, true, parseAttr);
 
         if (useExponentialNotation)
         {
@@ -1080,6 +1130,14 @@ public class DecimalFormat extends NumberFormat {
             } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setBeginIndex(-1);
             }
+
+			// [Spark/CDL]
+			// the begin index of integer part
+			// the end index of integer part
+			// the begin index of fractional part
+			int intBegin = result.length();
+			int intEnd = -1;
+			int fracBegin = -1;
 
             int minFracDig = 0;
             if (useSigDig) {
@@ -1145,7 +1203,20 @@ public class DecimalFormat extends NumberFormat {
                         fieldPosition.setEndIndex(result.length());
                     }
 
-                    result.append(decimal);
+					// [Spark/CDL] Add attribute for integer part
+					if (parseAttr) {
+						intEnd = result.length();
+						addAttribute(Field.INTEGER, intBegin, result.length());
+					}
+					// [Spark/CDL] Add attribute for decimal separator
+					result.append(decimal);
+					if (parseAttr) {
+						// Length of decimal separator is 1.
+						int decimalSeparatorBegin = result.length() - 1;
+						addAttribute(Field.DECIMAL_SEPARATOR,
+								decimalSeparatorBegin, result.length());
+						fracBegin = result.length();
+					}
 
                     // Record field information for caller.
                     if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
@@ -1174,11 +1245,29 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setEndIndex(result.length());
             }
 
+			// [Spark/CDL] Calcuate the end index of integer part and fractional
+			// part if they are not properly processed yet.
+			if (parseAttr) {
+				if (intEnd < 0) {
+					addAttribute(Field.INTEGER, intBegin, result.length());
+				}
+				if (fracBegin > 0) {
+					addAttribute(Field.FRACTION, fracBegin, result.length());
+				}
+			}
+
             // The exponent is output using the pattern-specified minimum
             // exponent digits.  There is no maximum limit to the exponent
             // digits, since truncating the exponent would result in an
             // unacceptable inaccuracy.
             result.append(symbols.getExponentSeparator());
+
+			// [Spark/CDL] For exponent symbol, add an attribute.
+			if (parseAttr) {
+				addAttribute(Field.EXPONENT_SYMBOL, result.length()
+						- symbols.getExponentSeparator().length(), result
+						.length());
+			}
 
             // For zero values, we force the exponent to zero.  We
             // must do this here, and not earlier, because the value
@@ -1189,9 +1278,24 @@ public class DecimalFormat extends NumberFormat {
             if (negativeExponent) {
                 exponent = -exponent;
                 result.append(symbols.getMinusSign());
-            } else if (exponentSignAlwaysShown) {
-                result.append(symbols.getPlusSign());
-            }
+				// [Spark/CDL] If exponent has sign, then add an exponent sign
+				// attribute.
+				if (parseAttr) {
+					// Length of exponent sign is 1.
+					addAttribute(Field.EXPONENT_SIGN, result.length() - 1,
+							result.length());
+				}
+			} else if (exponentSignAlwaysShown) {
+				// [Spark/CDL] Add an plus sign attribute.
+				result.append(symbols.getPlusSign());
+				if (parseAttr) {
+					// Length of exponent sign is 1.
+					int expSignBegin = result.length() - 1;
+					addAttribute(Field.EXPONENT_SIGN, expSignBegin, result
+							.length());
+				}
+			}
+			int expBegin = result.length();
             digitList.set(exponent);
             {
                 int expDig = minExponentDigits;
@@ -1205,9 +1309,15 @@ public class DecimalFormat extends NumberFormat {
                 result.append((i < digitList.count) ?
                           (char)(digitList.digits[i] + zeroDelta) : zero);
             }
+			// [Spark/CDL] Add attribute for exponent part.
+			if (parseAttr) {
+				addAttribute(Field.EXPONENT, expBegin, result.length());
+			}
         }
         else
         {
+			// [Spark/CDL] Record the integer start index.
+			int intBegin = result.length();
             // Record field information for caller.
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
@@ -1264,6 +1374,12 @@ public class DecimalFormat extends NumberFormat {
                 // Output grouping separator if necessary.
                 if (isGroupingPosition(i)) {
                     result.append(grouping);
+					// [Spark/CDL] Add grouping separator attribute here.
+					if (parseAttr) {
+						// Length of grouping separator is 1.
+						addAttribute(Field.GROUPING_SEPARATOR,
+								result.length() - 1, result.length());
+					}
                 }
             }
 
@@ -1283,14 +1399,29 @@ public class DecimalFormat extends NumberFormat {
             if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
                 result.append(zero);
 
+			// [Spark/CDL] Add attribute for integer part.
+			if (parseAttr) {
+				addAttribute(Field.INTEGER, intBegin, result.length());
+			}
+
             // Output the decimal separator if we always do so.
             if (decimalSeparatorAlwaysShown || fractionPresent)
-                result.append(decimal);
+			{
+				result.append(decimal);
+				// [Spark/CDL] Add attribute for decimal separator
+				if (parseAttr) {
+					addAttribute(Field.DECIMAL_SEPARATOR, result.length() - 1,
+							result.length());
+				}
+			}
 
             // Record field information for caller.
             if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
+
+			// [Spark/CDL] Record the begin index of fraction part.
+			int fracBegin = result.length();
 
             count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
             if (useSigDig && (sigCount == maxSigDig ||
@@ -1338,13 +1469,17 @@ public class DecimalFormat extends NumberFormat {
                 }
             }
 
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                fieldPosition.setEndIndex(result.length());
-            }
-        }
+			// Record field information for caller.
+			if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+				fieldPosition.setEndIndex(result.length());
+			}
+			// [Spark/CDL] Add attribute information if necessary.
+			if (parseAttr && (decimalSeparatorAlwaysShown || fractionPresent)) {
+				addAttribute(Field.FRACTION, fracBegin, result.length());
+			}
+		}
 
-        int suffixLen = appendAffix(result, isNegative, false);
+		int suffixLen = appendAffix(result, isNegative, false, parseAttr);
 
         // [NEW]
         addPadding(result, fieldPosition, prefixLen, suffixLen);
@@ -3099,8 +3234,8 @@ public class DecimalFormat extends NumberFormat {
      * @param isNegative
      * @param isPrefix
      */
-    private int appendAffix(StringBuffer buf,
-                            boolean isNegative, boolean isPrefix) {
+    private int appendAffix(StringBuffer buf, boolean isNegative,
+			boolean isPrefix, boolean parseAttr) {
         if (currencyChoice != null) {
             String affixPat = null;
             if (isPrefix) {
@@ -3120,9 +3255,87 @@ public class DecimalFormat extends NumberFormat {
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
         }
+		// [Spark/CDL] Invoke formatAffix2Attribute to add attributes for affix
+		if (parseAttr) {
+			int offset = affix.indexOf(symbols.getCurrencySymbol());
+			if (-1 == offset) {
+				offset = affix.indexOf(symbols.getPercent());
+				if(-1 == offset) {
+					offset = 0;
+				}
+			}
+			formatAffix2Attribute(affix, buf.length() + offset, buf.length()
+					+ affix.length());
+		}
         buf.append(affix);
         return affix.length();
     }
+
+	/*
+	 * [Spark/CDL] This is a newly added method, used to add attributes for
+	 * prefix and suffix.
+	 */
+	private void formatAffix2Attribute(String affix, int begin, int end) {
+		// [Spark/CDL] It is the invoker's responsibility to ensure that, before
+		// the invocation of
+		// this method, attributes is not null.
+		// if( attributes == null ) return;
+		if (affix.indexOf(symbols.getCurrencySymbol()) > -1) {
+			addAttribute(Field.CURRENCY, begin, end);
+		} else if (affix.indexOf(symbols.getMinusSign()) > -1) {
+			addAttribute(Field.SIGN, begin, end);
+		} else if (affix.indexOf(symbols.getPercent()) > -1) {
+			addAttribute(Field.PERCENT, begin, end);
+		} else if (affix.indexOf(symbols.getPerMill()) > -1) {
+			addAttribute(Field.PERMILLE, begin, end);
+		}
+	}
+	
+	/*
+	 * [Spark/CDL] Use this method to add attribute.
+	 */
+	private void addAttribute(Field field, int begin, int end) {
+		FieldPosition pos = new FieldPosition(field);
+		pos.setBeginIndex(begin);
+		pos.setEndIndex(end);
+		attributes.add(pos);
+	}
+	
+	// [Spark/CDL] format the object to an attributed string,
+	// and return the corresponding iterator
+	public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+		if (!(obj instanceof Number))
+			throw new IllegalArgumentException();
+		Number number = (Number) obj;
+		StringBuffer text = null;
+		attributes.clear();
+		if (obj instanceof BigInteger) {
+			text = format((BigInteger) number, new StringBuffer(),
+					new FieldPosition(0), true);
+		} else if (obj instanceof java.math.BigDecimal) {
+			text = format((java.math.BigDecimal) number, new StringBuffer(),
+					new FieldPosition(0), true);
+		} else if (obj instanceof Double) {
+			text = format(number.doubleValue(), new StringBuffer(),
+					new FieldPosition(0), true);
+		} else if (obj instanceof Integer || obj instanceof Long) {
+			text = format(number.longValue(), new StringBuffer(),
+					new FieldPosition(0), true);
+		}
+	
+		AttributedString as = new AttributedString(text.toString());
+	
+		// add NumberFormat field attributes to the AttributedString
+		for (int i = 0; i < attributes.size(); i++) {
+			FieldPosition pos = (FieldPosition) attributes.get(i);
+			Format.Field attribute = pos.getFieldAttribute();
+			as.addAttribute(attribute, attribute, pos.getBeginIndex(), pos
+					.getEndIndex());
+		}
+	
+		// return the CharacterIterator from AttributedString
+		return as.getIterator();
+	}
 
     /**
      * Append an affix pattern to the given StringBuffer.  Localize unquoted
@@ -4628,6 +4841,7 @@ public class DecimalFormat extends NumberFormat {
     // Proclaim JDK 1.1 serial compatibility.
     private static final long serialVersionUID = 864413376551465018L;
 //#endif
+    private ArrayList attributes = new ArrayList();
 }
 
 //eof
