@@ -32,7 +32,7 @@ int32_t CharsetRecog_UTF_16_BE::match(InputText* textIn)
 {
     const uint8_t *input = textIn->fRawInput;
 
-    if ((input[0] & 0xFF) == 0xFE && (input[1] & 0xFF) == 0xFF) {
+    if (input[0] == 0xFE && input[1] == 0xFF) {
         return 100;
     }
 
@@ -76,7 +76,7 @@ int32_t CharsetRecog_UTF_32::match(InputText* textIn)
     bool hasBOM = FALSE;
     int32_t confidence = 0;
 
-    if (input[0] == 0x00 && input[1] == 0x00 && input[2] == 0xFE && input[3] == 0xFF) {
+    if (getChar(input, 0) == 0x0000FEFFUL) {
         hasBOM = TRUE;
     }
 
