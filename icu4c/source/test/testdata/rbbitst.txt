@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2006 International Business Machines
+# Copyright (c) 2001-2006 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -88,6 +88,8 @@
 #     (Requires special casing in implementation, which is why it gets a test.)
 <data>•\uffff•\uffff• •a•</data>
 
+#  Treat Japanese Half Width voicing marks as combining
+<data>•A\uff9e•B\uff9f\uff9e\uff9f•C•</data>
 
 ########################################################################################
 #
@@ -185,6 +187,11 @@
 #  Failures from monkey tests
 #
 <data>•\u8527<400>\u02ba<200>\u0027\u0d42•\u00b7•\u09ea<100></data>
+
+#
+# Jitterbug 5276 - treat Japanese half width voicing marks as Grapheme Extend
+#
+<data>•A\uff9e\uff9fBC<200> •1\uff9e\uff9f23<100></data>
 
 ########################################################################################
 #
