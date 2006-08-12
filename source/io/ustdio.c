@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -35,9 +35,6 @@
 #define DELIM_NEL 0x0085
 #define DELIM_LS 0x2028
 #define DELIM_PS 0x2029
-
-/* Leave this copyright notice here! */
-static const char copyright[] = U_COPYRIGHT_STRING;
 
 /* TODO: is this correct for all codepages? Should we just use \n and let the converter handle it? */
 #ifdef U_WINDOWS
