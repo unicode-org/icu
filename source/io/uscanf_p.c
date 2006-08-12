@@ -306,6 +306,7 @@ typedef struct u_scanf_info {
 } u_scanf_info;
 
 #define USCANF_NUM_FMT_HANDLERS 108
+#define USCANF_SYMBOL_BUFFER_SIZE 8
 
 /* We do not use handlers for 0-0x1f */
 #define USCANF_BASE_FMT_HANDLERS 0x20
@@ -328,6 +329,43 @@ u_scanf_skip_leading_ws(UFILE   *input,
     /* put the final character back on the input */
     if(isNotEOF)
         u_fungetc(c, input);
+
+    return count;
+}
+
+/* TODO: Is always skipping the prefix symbol as a positive sign a good idea in all locales? */
+static int32_t
+u_scanf_skip_leading_positive_sign(UFILE   *input,
+                                   UNumberFormat *format,
+                                   UErrorCode *status)
+{
+    UChar   c;
+    int32_t count = 0;
+    UBool isNotEOF;
+    UChar plusSymbol[USCANF_SYMBOL_BUFFER_SIZE];
+    int32_t symbolLen;
+    UErrorCode localStatus = U_ZERO_ERROR;
+
+    if (U_SUCCESS(*status)) {
+        symbolLen = unum_getSymbol(format,
+            UNUM_PLUS_SIGN_SYMBOL,
+            plusSymbol,
+            sizeof(plusSymbol)/sizeof(*plusSymbol),
+            &localStatus);
+
+        if (U_SUCCESS(localStatus)) {
+            /* skip all leading ws in the input */
+            while( (isNotEOF = ufile_getch(input, &c)) && (count < symbolLen && c == plusSymbol[count]) )
+            {
+                count++;
+            }
+
+            /* put the final character back on the input */
+            if(isNotEOF) {
+                u_fungetc(c, input);
+            }
+        }
+    }
 
     return count;
 }
@@ -384,11 +422,12 @@ u_scanf_double_handler(UFILE        *input,
     double          num;
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
+    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -407,6 +446,9 @@ u_scanf_double_handler(UFILE        *input,
     if(format == 0)
         return 0;
 
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    skipped += u_scanf_skip_leading_positive_sign(input, format, &status);
+
     /* parse the number */
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
@@ -428,7 +470,7 @@ u_scanf_double_handler(UFILE        *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return parsePos;
+    return parsePos + skipped;
 }
 
 static int32_t
@@ -443,11 +485,12 @@ u_scanf_scientific_handler(UFILE        *input,
     double          num;
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
+    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -466,6 +509,9 @@ u_scanf_scientific_handler(UFILE        *input,
     if(format == 0)
         return 0;
 
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    skipped += u_scanf_skip_leading_positive_sign(input, format, &status);
+
     /* parse the number */
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
@@ -487,7 +533,7 @@ u_scanf_scientific_handler(UFILE        *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return parsePos;
+    return parsePos + skipped;
 }
 
 static int32_t
@@ -498,12 +544,13 @@ u_scanf_scidbl_handler(UFILE        *input,
                        int32_t      *fmtConsumed,
                        int32_t      *argConverted)
 {
-    int32_t        len;
+    int32_t       len;
     double        num;
     UNumberFormat *scientificFormat, *genericFormat;
     /*int32_t       scientificResult, genericResult;*/
     double        scientificResult, genericResult;
     int32_t       scientificParsePos = 0, genericParsePos = 0, parsePos = 0;
+    int32_t       skipped;
     UErrorCode    scientificStatus = U_ZERO_ERROR;
     UErrorCode    genericStatus = U_ZERO_ERROR;
 
@@ -515,7 +562,7 @@ u_scanf_scidbl_handler(UFILE        *input,
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -534,6 +581,9 @@ u_scanf_scidbl_handler(UFILE        *input,
     /* handle error */
     if(scientificFormat == 0 || genericFormat == 0)
         return 0;
+
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    skipped += u_scanf_skip_leading_positive_sign(input, genericFormat, &genericStatus);
 
     /* parse the number using each format*/
 
@@ -573,7 +623,7 @@ u_scanf_scidbl_handler(UFILE        *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return parsePos;
+    return parsePos + skipped;
 }
 
 static int32_t
@@ -588,12 +638,13 @@ u_scanf_integer_handler(UFILE       *input,
     void            *num        = (void*) (args[0].ptrValue);
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
+    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
     int64_t         result;
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -611,6 +662,9 @@ u_scanf_integer_handler(UFILE       *input,
     /* handle error */
     if(format == 0)
         return 0;
+
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    skipped += u_scanf_skip_leading_positive_sign(input, format, &status);
 
     /* parse the number */
     result = unum_parseInt64(format, input->str.fPos, len, &parsePos, &status);
@@ -630,7 +684,7 @@ u_scanf_integer_handler(UFILE       *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return parsePos;
+    return parsePos + skipped;
 }
 
 static int32_t
@@ -657,11 +711,12 @@ u_scanf_percent_handler(UFILE       *input,
     double          num;
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
+    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -679,6 +734,9 @@ u_scanf_percent_handler(UFILE       *input,
     /* handle error */
     if(format == 0)
         return 0;
+
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    skipped += u_scanf_skip_leading_positive_sign(input, format, &status);
 
     /* parse the number */
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
@@ -714,12 +772,13 @@ u_scanf_string_handler(UFILE        *input,
     char        *limit;
     UErrorCode  status  = U_ZERO_ERROR;
     int32_t     count;
+    int32_t     skipped = 0;
     UChar       c;
     UBool       isNotEOF = FALSE;
 
     /* skip all ws in the input */
     if (info->fIsString) {
-        u_scanf_skip_leading_ws(input, info->fPadChar);
+        skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
     }
 
     /* get the string one character at a time, truncating to the width */
@@ -778,7 +837,7 @@ u_scanf_string_handler(UFILE        *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return count;
+    return count + skipped;
 }
 
 static int32_t
@@ -807,12 +866,13 @@ u_scanf_ustring_handler(UFILE       *input,
     UChar   *arg     = (UChar*)(args[0].ptrValue);
     UChar   *alias     = arg;
     int32_t count;
+    int32_t skipped = 0;
     UChar   c;
     UBool   isNotEOF = FALSE;
 
     /* skip all ws in the input */
     if (info->fIsString) {
-        u_scanf_skip_leading_ws(input, info->fPadChar);
+        skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
     }
 
     /* get the string one character at a time, truncating to the width */
@@ -846,7 +906,7 @@ u_scanf_ustring_handler(UFILE       *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return count;
+    return count + skipped;
 }
 
 static int32_t
@@ -876,11 +936,12 @@ u_scanf_spellout_handler(UFILE          *input,
     double          num;
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
+    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -899,6 +960,10 @@ u_scanf_spellout_handler(UFILE          *input,
     if(format == 0)
         return 0;
 
+    /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
+    /* This is not applicable to RBNF. */
+    /*skipped += u_scanf_skip_leading_positive_sign(input, format, &status);*/
+
     /* parse the number */
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
@@ -915,7 +980,7 @@ u_scanf_spellout_handler(UFILE          *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return parsePos;
+    return parsePos + skipped;
 }
 
 static int32_t
@@ -927,11 +992,12 @@ u_scanf_hex_handler(UFILE       *input,
                     int32_t     *argConverted)
 {
     int32_t     len;
+    int32_t     skipped;
     void        *num    = (void*) (args[0].ptrValue);
     int64_t     result;
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -970,7 +1036,7 @@ u_scanf_hex_handler(UFILE       *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return len;
+    return len + skipped;
 }
 
 static int32_t
@@ -981,12 +1047,13 @@ u_scanf_octal_handler(UFILE         *input,
                       int32_t       *fmtConsumed,
                       int32_t       *argConverted)
 {
-    int32_t        len;
-    void            *num         = (void*) (args[0].ptrValue);
-    int64_t         result;
+    int32_t     len;
+    int32_t     skipped;
+    void        *num         = (void*) (args[0].ptrValue);
+    int64_t     result;
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -1016,7 +1083,7 @@ u_scanf_octal_handler(UFILE         *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return len;
+    return len + skipped;
 }
 
 static int32_t
@@ -1028,12 +1095,13 @@ u_scanf_pointer_handler(UFILE       *input,
                         int32_t     *argConverted)
 {
     int32_t len;
+    int32_t skipped;
     void    *result;
     void    **p     = (void**)(args[0].ptrValue);
 
 
     /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
+    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -1063,7 +1131,7 @@ u_scanf_pointer_handler(UFILE       *input,
 
     /* we converted 1 arg */
     *argConverted = !info->fSkipArg;
-    return len;
+    return len + skipped;
 }
 
 static int32_t
