@@ -917,7 +917,7 @@ ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }                   # Host Roman
 ibm-8482_P100-1999 { UTR22* }   ibm-8482 { IBM* }                   # host SBCS (Katakana). Euro update of ibm-290. SBCS portion of ibm-1399.
 ibm-16684_P110-2003 { UTR22* }  ibm-16684 { IBM* }                  # DBCS Jis + Roman Jis Host. This is the DBCS portion of ibm-1390 and ibm-1399 (JIS X 0213)
 ibm-4899_P100-1998 { UTR22* }   ibm-4899 { IBM* }                   # Old EBCDIC Hebrew. Update of ibm-803
-ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek. Update of ibm-875
+ibm-9067_X100-2005 { UTR22* }   ibm-9067 { IBM* }                   # EBCDIC Greek. Update of ibm-875 and ibm-4971
 ibm-12712_P100-1998 { UTR22* }  ibm-12712 { IBM* } ebcdic-he        # EBCDIC Hebrew (new sheqel, control charaters update). Update of ibm-424
 ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } ebcdic-ar        # EBCDIC Arabic. Update of ibm-420
 
@@ -971,6 +971,8 @@ ibm-16804_X110-1999,swaplfnl  ibm-16804-s390
 
 ebcdic-xml-us
 
+# TODO Consider removing this table
+ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek. Update of ibm-875 and superceded by ibm-9067
 
 
 # These were removed due to age, and they are rarely used.
