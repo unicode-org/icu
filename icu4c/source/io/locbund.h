@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2006s, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,6 +31,7 @@ typedef struct ULocaleBundle {
     char            *fLocale;
 
     UNumberFormat   *fNumberFormat[ULOCALEBUNDLE_NUMBERFORMAT_COUNT];
+    UBool           isInvariantLocale;
 } ULocaleBundle;
 
 
