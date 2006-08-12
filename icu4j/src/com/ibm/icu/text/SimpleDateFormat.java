@@ -696,8 +696,8 @@ public class SimpleDateFormat extends DateFormat {
         /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD, 
         /*c*/   DateFormat.STANDALONE_DAY_FIELD,
         /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
-        /*Q*/   DateFormat.MONTH_FIELD,
-        /*q*/   DateFormat.STANDALONE_MONTH_FIELD,
+        /*Q*/   DateFormat.QUARTER_FIELD,
+        /*q*/   DateFormat.STANDALONE_QUARTER_FIELD,
     };
 
     /**
@@ -873,11 +873,13 @@ public class SimpleDateFormat extends DateFormat {
                         res = ZoneMeta.displayFallback(zid, city, locale);
                         */
                         res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
-                        if(res==null){
+                        
+                        if (res == null) {
                             res = ZoneMeta.displayFallback(zid, null, locale);
                         }
                     }
                 }
+                
                 if(res.length()==0){
                     appendGMT(buf, cal);
                 }else{
@@ -1438,10 +1440,11 @@ public class SimpleDateFormat extends DateFormat {
             value = item.value;
             type = item.type;
         }
+
         if (zid != null) {
             tz = TimeZone.getTimeZone(zid);
         }
-
+        
         if (tz != null) { // Matched any ?
             // always set zone offset, needed to get correct hour in wall time
             // when checking daylight savings
