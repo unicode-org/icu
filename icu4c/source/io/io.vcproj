@@ -161,6 +161,9 @@
 				RelativePath=".\sscanf.c">
 			</File>
 			<File
+				RelativePath=".\ucln_io.c">
+			</File>
+			<File
 				RelativePath=".\ufile.c">
 			</File>
 			<File
@@ -202,6 +205,9 @@
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath=".\locbund.h">
+			</File>
+			<File
+				RelativePath=".\ucln_io.h">
 			</File>
 			<File
 				RelativePath=".\ufile.h">
