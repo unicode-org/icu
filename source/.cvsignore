@@ -1,0 +1,9 @@
+config.log
+config.cache
+config.status
+Makefile
+icudefs.mk
+README
+bin
+lib
+Doxyfile

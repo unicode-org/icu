@@ -1,0 +1,6 @@
+*.d
+*.o
+*.ao
+Debug
+Release
+Makefile

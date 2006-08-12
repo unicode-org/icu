@@ -1,0 +1,6 @@
+*.d
+*.o
+utfperf
+Debug
+Release
+Makefile

@@ -1,0 +1,139 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/lt_LT.xml
+// *
+// ***************************************************************************
+lt_LT{
+    Countries{
+        172{"Nepriklausomų Valstybių Sandrauga"}
+    }
+    Languages{
+        ab{"Abchazų"}
+        ady{"Adygėjų"}
+        ale{"Aleutų"}
+        ang{"Senoji anglų (450-1100)"}
+        art{"Dirbtinė (kita)"}
+        aus{"Australų kalbos"}
+        az{"Azerbaidžaniečių"}
+        ba{"Baškirų"}
+        bat{"Baltų (kita)"}
+        be{"Baltarusių"}
+        ber{"Berberų"}
+        bnt{"Bantų"}
+        bo{"Tibetiečių"}
+        br{"Bretonų"}
+        bs{"Bosnių"}
+        bua{"Buriatų"}
+        ca{"Katalonų"}
+        cai{"Centrinės Amerikos indėnų (kita)"}
+        cau{"Kaukaziečių (kita)"}
+        ce{"Čečėnų"}
+        cel{"Keltų (kita)"}
+        co{"Korsikiečių"}
+        crh{"Krymo turkų; Krymo totorių"}
+        cu{"Bažnytinė slavų"}
+        cv{"Čiuvašų"}
+        cy{"Valų"}
+        eu{"Baskų"}
+        fa{"Persų"}
+        fiu{"Finougrų (kita)"}
+        fro{"Senoji prancūzų"}
+        fy{"Fryzų"}
+        ga{"Airių"}
+        gem{"Germanų (kita)"}
+        got{"Gotų"}
+        grc{"Senovės graikų"}
+        hy{"Armėnų"}
+        id{"Indoneziečių"}
+        ine{"Indoeuropiečių (kita)"}
+        inh{"Ingušų"}
+        ira{"Iraniečių"}
+        is{"Islandų"}
+        ka{"Gruzinų"}
+        kaa{"Karakalpakų"}
+        kbd{"Kabardinų"}
+        kk{"Kazachų"}
+        km{"Khmerų"}
+        ku{"Kurdų"}
+        ky{"Kirgizų"}
+        la{"Lotynų"}
+        lb{"Liuksemburgiečių"}
+        lez{"Lezginų"}
+        mis{"Įvairios kalbos"}
+        mk{"Makedonų"}
+        mn{"Mongolų"}
+        mo{"Moldavų"}
+        ms{"Malajų"}
+        mul{"Kelios kalbos"}
+        nai{"Šiaurės Amerikos indėnų (kita)"}
+        nap{"Neapoliečių"}
+        os{"Osetinų"}
+        paa{"Papuasų (kita)"}
+        peo{"Senoji persų"}
+        sa{"Sanskritas"}
+        sah{"Jakutų"}
+        sc{"Sardiniečių"}
+        scn{"Siciliečių"}
+        sco{"Škotų"}
+        sga{"Senoji airių"}
+        sla{"Slavų (kita)"}
+        sq{"Albanų"}
+        sr{"Serbų"}
+        sux{"Šumerų"}
+        ta{"Tamilų"}
+        tk{"Turkmėnų"}
+        tt{"Totorių"}
+        tyv{"Tuvių"}
+        udm{"Udmurtų"}
+        uk{"Ukrainiečių"}
+        und{"Nenustatyta"}
+        uz{"Uzbekų"}
+        vi{"Vietnamiečių"}
+        vo{"Volapiuk"}
+        wa{"Valonų"}
+        xal{"Kalmukų"}
+        yi{"Jidiš"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"Arabų"}
+        Armn{"Armėnų"}
+        Beng{"Bengalų"}
+        Cyrl{"Kirilica"}
+        Cyrs{"Kirilica (senasis bažnytinis variantas)"}
+        Egyp{"Egipto hieroglifai"}
+        Ethi{"Etiopų"}
+        Geor{"Gruzinų"}
+        Goth{"Gotų"}
+        Grek{"Graikų"}
+        Hebr{"Hebrajų"}
+        Hung{"Senasis vengrų"}
+        Ital{"Senasis italų"}
+        Kana{"Katakana"}
+        Khmr{"Khmerų"}
+        Latn{"Lotynų"}
+        Mong{"Mongolų"}
+        Runr{"Runų"}
+    }
+    Version{"1.40"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+    }
+}

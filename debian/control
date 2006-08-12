@@ -1,0 +1,90 @@
+Source: icu
+Section: libs
+Priority: optional
+Maintainer: Daniel Glassey <wdg@debian.org>
+Uploaders: Ivo Timmermans <ivo@debian.org>
+Standards-Version: 3.6.0
+Build-Depends: debhelper (>> 3.0), doxygen, autotools-dev
+
+Package: libicu30-dev
+Section: devel
+Architecture: any
+Depends: libicu${major} (= ${Source-Version}), libc6-dev
+Provides: libicu-dev
+Conflicts: libicu-dev
+Suggests: icu-doc
+Description: International Components for Unicode (development files)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ and locale support. This package contains the development files for ICU.
+
+Package: icu-doc
+Section: doc
+Architecture: all
+Description: API documentation for ICU classes and functions
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ and locale support. This package contains HTML files documenting the ICU
+ APIs.
+ 
+Package: libicu30
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: icu
+Description: International Components for Unicode (libraries)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ and locale support. This package contains the runtime libraries for
+ ICU. It does not contain any of the data files needed at runtime and
+ present in the `icu' and `icu-locales` packages.
+
+Package: icu
+Section: libs
+Architecture: any
+Depends: libicu${major} (>= ${Source-Version}), make
+Recommends: icu-locales
+Description: International Components for Unicode (non locale data)
+ ICU is a C++ and C library that provides robust and full-featured Unicode
+ and locale support. The library provides calendar support, conversions
+ for more than 230 character sets, language-sensitive collation, date
+ and time formatting, support for more than 140 locales, message catalogs
+ and resources, message formatting, normalization, number and currency
+ formatting, time zones support, transliteration, word, line and
+ sentence breaking, etc. 
+ .
+ This package contains the Unicode character database and derived
+ properties, along with converters and time zones data.
+ It also contains the tools needed to manipulate these data.
+
+Package: icu-locales
+Section: libs
+Architecture: any
+Depends: libicu${major} (>= ${Source-Version})
+Description: Locale data for ICU
+ The locale data are used by ICU to provide localization (l10n) and
+ internationalization (i18n) support to applications using the ICU library.
+ This package also contains break data for various languages, and
+ transliteration data. 
+
+Package: icu-data
+Priority: extra
+Section: libs
+Architecture: all
+Depends: icu
+Description: Data for ICU (source files)
+ These data describe the Unicode data (normative and informative), and
+ also all the table-based converters provided in the ICU distribution.
+ .
+ This package contains uncompiled source data. Precompiled data are in the
+ `libicu${major}' package.
+
+Package: icu-i18ndata
+Priority: extra
+Section: libs
+Architecture: all
+Depends: icu
+Description: Locale data for ICU (source files)
+ The locale data are used by ICU to provide localization (l10n) and
+ internationalization (i18n) support to ICU applications. This package
+ also contains break data for various languages, and transliteration data.
+ .
+ This package contains uncompiled source data. Precompiled data are in the
+ `icu-locales' package.

@@ -1,0 +1,50 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ms_BN.xml
+// *
+// ***************************************************************************
+ms_BN{
+    Currencies{
+        BND{
+            "$",
+            "BND",
+        }
+        USD{
+            "US$",
+            "USD",
+        }
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.31"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss aa",
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm:ss",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
+    }
+}

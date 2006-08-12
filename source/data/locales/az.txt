@@ -1,0 +1,144 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/az.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/az.xml
+ */
+az{
+    AuxExemplarCharacters{"[w]"}
+    Countries{
+        AZ{"Azərbaycan"}
+        BR{"Braziliya"}
+        CN{"Çin"}
+        DE{"Almaniya"}
+        FR{"Fransa"}
+        IN{"Hindistan"}
+        IT{"İtaliya"}
+        JP{"Yaponiya"}
+        RU{"Rusiya"}
+        US{"Amerika Birləşmiş Ştatları"}
+    }
+    Currencies{
+        AZM{
+            "man.",
+            "Manat",
+        }
+    }
+    ExemplarCharacters{"[a-c ç d e ə f g ğ h i İ ı j-o ö p-s ş t u ü v x-z]"}
+    Languages{
+        az{"azərbaycanca"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.39"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "B.",
+                        "B.e.",
+                        "Ç.a.",
+                        "Ç.",
+                        "C.a.",
+                        "C.",
+                        "Ş.",
+                    }
+                    wide{
+                        "bazar",
+                        "bazar ertəsi",
+                        "çərşənbə axşam",
+                        "çərşənbə",
+                        "cümə axşamı",
+                        "cümə axşamı",
+                        "şənbə",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "e.ə.",
+                    "b.e.",
+                }
+                wide{
+                    "eramızdan əvvəl",
+                    "bizim eramızın",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "yan",
+                        "fev",
+                        "mar",
+                        "apr",
+                        "may",
+                        "iyn",
+                        "iyl",
+                        "avq",
+                        "sen",
+                        "okt",
+                        "noy",
+                        "dek",
+                    }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "İyun",
+                        "İyul",
+                        "Avqust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-ci kv.",
+                        "2-ci kv.",
+                        "3-cü kv.",
+                        "4-cü kv.",
+                    }
+                    wide{
+                        "1-ci kvartal",
+                        "2-ci kvartal",
+                        "3-cü kvartal",
+                        "4-cü kvartal",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+}
