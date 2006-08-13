@@ -156,19 +156,21 @@ public class OlsonTimeZone extends TimeZone {
         double time = fieldsToDay(year, month, dom) * SECONDS_PER_DAY +
             Math.floor(millis / (double) MILLIS_PER_SECOND);
 
-        return zoneOffset(findTransition(time, true)) * MILLIS_PER_SECOND;
+        int[] offsets = new int[2];
+        getHistoricalOffset(time, true, offsets);
+        return offsets[0] + offsets[1];
     }
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
     public void setRawOffset(int offsetMillis) {
-    	finalZone.setRawOffset(offsetMillis);
+        finalZone.setRawOffset(offsetMillis);
     }
     public Object clone() {
         OlsonTimeZone other = (OlsonTimeZone) super.clone();
         if(finalZone!=null){
             finalZone.setID(getID());
-        	other.finalZone = (SimpleTimeZone)finalZone.clone();
+            other.finalZone = (SimpleTimeZone)finalZone.clone();
         }
         other.transitionTimes = (int[])transitionTimes.clone();
         other.typeData = (byte[])typeData.clone();
@@ -215,11 +217,7 @@ public class OlsonTimeZone extends TimeZone {
         }
 
         double secs = Math.floor(date / MILLIS_PER_SECOND);
-        int i = findTransition(secs, local);
-        rawoff = rawOffset(i) * MILLIS_PER_SECOND;
-        dstoff = dstOffset(i) * MILLIS_PER_SECOND;
-        offsets[0]=rawoff;
-        offsets[1]=dstoff;
+        getHistoricalOffset(secs, local, offsets);
         return;
     }
     double[] floorDivide(double dividend, double divisor) {
@@ -467,12 +465,11 @@ public class OlsonTimeZone extends TimeZone {
     private int getInt(byte val){
     	return (int)(UNSIGNED_BYTE_MASK & val); 
     }
-    private int findTransition(double time, boolean local) {
-        int i = 0;
-        
+    private void getHistoricalOffset(double time, boolean local, int[] offsets) {
         if (transitionCount != 0) {
             // Linear search from the end is the fastest approach, since
             // most lookups will happen at/near the end.
+            int i = 0;
             for (i = transitionCount - 1; i > 0; --i) {
                 int transition = transitionTimes[i];
                 if (local) {
@@ -494,20 +491,38 @@ public class OlsonTimeZone extends TimeZone {
             // Check invariants for GMT times; if these pass for GMT times
             // the local logic should be working too.
             if (ASSERT) {
-            	Assert.assrt("local || time < transitionTimes[0] || time >= transitionTimes[i]", 
-            			local || time < transitionTimes[0] || time >= transitionTimes[i]);
-            	Assert.assrt("local || i == transitionCount-1 || time < transitionTimes[i+1]", 
-            			local || i == transitionCount-1 || time < transitionTimes[i+1]);
+                Assert.assrt("local || time < transitionTimes[0] || time >= transitionTimes[i]", 
+                        local || time < transitionTimes[0] || time >= transitionTimes[i]);
+                Assert.assrt("local || i == transitionCount-1 || time < transitionTimes[i+1]", 
+                        local || i == transitionCount-1 || time < transitionTimes[i+1]);
             }
-
-            i = typeData[i];
+            if (i == 0) {
+                // Check if the given time is before the very first transition
+                int firstTransition = transitionTimes[0];
+                int initialRawOffset = rawOffset(getInt(typeData[0]));
+                if (local) {
+                    firstTransition += initialRawOffset;
+                }
+                if (time >= firstTransition) {
+                    // The given time is between the first and the second transition
+                    offsets[0] = initialRawOffset * MILLIS_PER_SECOND;
+                    offsets[1] = dstOffset(getInt(typeData[0])) * MILLIS_PER_SECOND;
+                } else {
+                    // The given time is before the first transition
+                    offsets[0] = initialRawOffset * MILLIS_PER_SECOND;
+                    offsets[1] = 0;
+                }
+            } else {
+                int index = getInt(typeData[i]);
+                offsets[0] = rawOffset(index) * MILLIS_PER_SECOND;
+                offsets[1] = dstOffset(index) * MILLIS_PER_SECOND;
+            }
+        } else {
+            // No transitions, single pair of offsets only
+            offsets[0] = rawOffset(0) * MILLIS_PER_SECOND;
+            offsets[1] = dstOffset(0) * MILLIS_PER_SECOND;
         }
-
-        if (ASSERT) Assert.assrt("i>=0 && i<typeCount", i>=0 && i<typeCount);
-        
-        return i;
     }
-
     private int zoneOffset(int index){
         index=index << 1;
         return typeOffsets[index] + typeOffsets[index+1];
