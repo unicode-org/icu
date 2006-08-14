@@ -35,6 +35,7 @@ enum {
 #   define _UTF16PEFromUnicodeWithOffsets   _UTF16LEFromUnicodeWithOffsets
 #endif
 
+
 static void
 _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
@@ -43,7 +44,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     char *target;
     int32_t *offsets;
 
-    int32_t targetCapacity, length, sourceIndex;
+    uint32_t targetCapacity, length, sourceIndex;
     UChar c, trail;
     char overflow[4];
 
@@ -67,13 +68,13 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         cnv->fromUnicodeStatus=0;
     }
 
-    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
-    if(targetCapacity<=0) {
+    target=pArgs->target;
+    if(target >= pArgs->targetLimit) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
-    target=pArgs->target;
+    targetCapacity=(uint32_t)(pArgs->targetLimit-target);
     offsets=pArgs->offsets;
     sourceIndex=0;
 
@@ -101,7 +102,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     if(c==0) {
         /* copy an even number of bytes for complete UChars */
-        int32_t count=2*length;
+        uint32_t count=2*length;
         if(count>targetCapacity) {
             count=targetCapacity&~1;
         }
@@ -226,7 +227,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                              (char **)&target, pArgs->targetLimit,
                              &offsets, sourceIndex,
                              pErrorCode);
-        targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
+        targetCapacity=(uint32_t)(pArgs->targetLimit-(char *)target);
     }
 
     if(U_SUCCESS(*pErrorCode) && source<pArgs->sourceLimit && targetCapacity==0) {
@@ -247,7 +248,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     UChar *target;
     int32_t *offsets;
 
-    int32_t targetCapacity, length, count, sourceIndex;
+    uint32_t targetCapacity, length, count, sourceIndex;
     UChar c, trail;
 
     cnv=pArgs->converter;
@@ -258,13 +259,13 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         return;
     }
 
-    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
-    if(targetCapacity<=0) {
+    target=pArgs->target;
+    if(target >= pArgs->targetLimit) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
-    target=pArgs->target;
+    targetCapacity=(uint32_t)(pArgs->targetLimit-target);
     offsets=pArgs->offsets;
     sourceIndex=0;
     c=0;
@@ -597,7 +598,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     char *target;
     int32_t *offsets;
 
-    int32_t targetCapacity, length, sourceIndex;
+    uint32_t targetCapacity, length, sourceIndex;
     UChar c, trail;
     char overflow[4];
 
@@ -621,13 +622,13 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         cnv->fromUnicodeStatus=0;
     }
 
-    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
-    if(targetCapacity<=0) {
+    target=pArgs->target;
+    if(target >= pArgs->targetLimit) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
-    target=pArgs->target;
+    targetCapacity=(uint32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
     sourceIndex=0;
 
@@ -655,7 +656,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     if(c==0) {
         /* copy an even number of bytes for complete UChars */
-        int32_t count=2*length;
+        uint32_t count=2*length;
         if(count>targetCapacity) {
             count=targetCapacity&~1;
         }
@@ -780,7 +781,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                              &target, pArgs->targetLimit,
                              &offsets, sourceIndex,
                              pErrorCode);
-        targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
+        targetCapacity=(uint32_t)(pArgs->targetLimit-(char *)target);
     }
 
     if(U_SUCCESS(*pErrorCode) && source<pArgs->sourceLimit && targetCapacity==0) {
@@ -801,7 +802,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     UChar *target;
     int32_t *offsets;
 
-    int32_t targetCapacity, length, count, sourceIndex;
+    uint32_t targetCapacity, length, count, sourceIndex;
     UChar c, trail;
 
     cnv=pArgs->converter;
@@ -812,13 +813,13 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         return;
     }
 
-    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
-    if(targetCapacity<=0) {
+    target=pArgs->target;
+    if(target >= pArgs->targetLimit) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
     }
 
-    target=pArgs->target;
+    targetCapacity=(uint32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
     sourceIndex=0;
     c=0;
