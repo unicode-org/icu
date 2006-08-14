@@ -585,6 +585,10 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 
                 /* normal mode.. o->files is just the bare list without package names */
                 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(linePtr));
+                if(uprv_pathIsAbsolute(s)) {
+                    fprintf(stderr, "pkgdata: Error: absolute path encountered. Old style paths are not supported. Use relative paths such as 'fur.res' or 'translit%cfur.res'.\n\tBad path: '%s'\n", U_FILE_SEP_CHAR, s);
+                    exit(U_ILLEGAL_ARGUMENT_ERROR);
+                }		
                 uprv_strcpy(tmp, o->srcDir);
                 uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
                 uprv_strcat(tmp, s);
