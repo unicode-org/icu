@@ -466,6 +466,10 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
     if(!sourceTOC) {
         FileStream *file;
 
+        if(uprv_pathIsAbsolute(filename)) {
+            fprintf(stderr, "gencmn: Error: absolute path encountered. Old style paths are not supported. Use relative paths such as 'fur.res' or 'translit%cfur.res'.\n\tBad path: '%s'\n", U_FILE_SEP_CHAR, filename);
+            exit(U_ILLEGAL_ARGUMENT_ERROR);
+        }
         fullPath = pathToFullPath(filename);
 
         /* store the pathname */
