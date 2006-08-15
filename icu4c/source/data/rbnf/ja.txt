@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2004, International Business Machines
+// *   Copyright (C) 2004-2006, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -25,26 +25,33 @@ ja {
 //         * are used in those places.
 
         // Can someone supply me with the right fraud-proof ideographs for
-        // Simplified and Traditional Chinese, and for Korean?  Can someone
-        // supply me with information on negatives and decimals?
+        // Simplified and Traditional Chinese, and for Korean?
 
     SpelloutRules {
         "%financial:\n"
+            "-x: \u30de\u30a4\u30ca\u30b9>>;\n"
+            "x.x: <<\u30c6\u30f3>>;\n"
             "\u96f6; \u58f1; \u5f10; \u53c2; \u56db; \u4f0d; \u516d; \u4e03; \u516b; \u4e5d;\n"
             "\u62fe[>>];\n"
             "20: <<\u62fe[>>];\n"
-            "100: <<\u767e[>>];\n"
-            "1000: <<\u5343[>>];\n"
+            "100: \u767e[>>];\n"
+            "200: <<\u767e[>>];\n"
+            "1000: \u5343[>>];\n"
+            "2000: <<\u5343[>>];\n"
             "10,000: <<\u4e07[>>];\n"
             "100,000,000: <<\u5104[>>];\n"
             "1,000,000,000,000: <<\u5146[>>];\n"
             "10,000,000,000,000,000: =#,##0=;\n"
         "%traditional:\n"
+            "-x: \u30de\u30a4\u30ca\u30b9>>;\n"
+            "x.x: <<\u30c6\u30f3>>;\n"
             "\u96f6; \u4e00; \u4e8c; \u4e09; \u56db; \u4e94; \u516d; \u4e03; \u516b; \u4e5d;\n"
             "\u5341[>>];\n"
             "20: <<\u5341[>>];\n"
-            "100: <<\u767e[>>];\n"
-            "1000: <<\u5343[>>];\n"
+            "100: \u767e[>>];\n"
+            "200: <<\u767e[>>];\n"
+            "1000: \u5343[>>];\n"
+            "2000: <<\u5343[>>];\n"
             "10,000: <<\u4e07[>>];\n"
             "100,000,000: <<\u5104[>>];\n"
             "1,000,000,000,000: <<\u5146[>>];\n"
