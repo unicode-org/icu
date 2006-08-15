@@ -138,7 +138,7 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
     nBuffer[0] = 0x0000;
 
     va_start(args, fmt);
-    result = vsnwprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
+    result = _vsnwprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
     va_end(args);
 
     if (result < 0) {
@@ -151,7 +151,7 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
         nBuffer = NEW_ARRAY(UChar, newLength + 1);
 
         va_start(args, fmt);
-        result = vsnwprintf(nBuffer, newLength + 1, fmt, args);
+        result = _vsnwprintf(nBuffer, newLength + 1, fmt, args);
         va_end(args);
     }
 
