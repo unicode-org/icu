@@ -140,7 +140,7 @@ CharsetDetector::CharsetDetector()
 {
     setRecognizers();
 
-    resultArray = new CharsetMatch *[fCSRecognizers_size];
+    resultArray = (CharsetMatch **)uprv_malloc(sizeof(CharsetMatch *)*fCSRecognizers_size);
 
     for(int32_t i = 0; i < fCSRecognizers_size; i += 1) {
         resultArray[i] = new CharsetMatch();
@@ -155,7 +155,7 @@ CharsetDetector::~CharsetDetector()
         delete resultArray[i];
     }
 
-    delete [] resultArray;
+    uprv_free(resultArray);
 }
 
 void CharsetDetector::setText(const char *in, int32_t len)

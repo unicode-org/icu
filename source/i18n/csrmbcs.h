@@ -27,7 +27,7 @@ U_NAMESPACE_BEGIN
 //   stripped of markup.  Detection only considers multi-byte chars, effectively
 //   stripping markup anyway, and double byte chars do occur in markup too.
 //
-class IteratedChar
+class IteratedChar : public UMemory
 {
 public:
     int32_t charValue;             // 1-4 bytes from the raw input data
