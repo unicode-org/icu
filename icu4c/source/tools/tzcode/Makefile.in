@@ -2,13 +2,14 @@
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-subdir = tools/tzcode
 
 top_builddir = ../..
 
+subdir = tools/tzcode
+
 include $(top_builddir)/icudefs.mk
 
-TZCOBJS= zic.o localtime.o asctime.o scheck.o ialloc.o
+OBJECTS= zic.o localtime.o asctime.o scheck.o ialloc.o
 TZDATA = $(firstword $(wildcard ./tzdata*.tar.gz) $(wildcard $(srcdir)/tzdata*.tar.gz))
 
 ifeq ($(TZDATA),)
@@ -39,11 +40,11 @@ ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
 
 
 
-zic:		$(TZCOBJS) yearistype tz2icu.h
-		$(CC) $(CFLAGS) $(LFLAGS) $(TZCOBJS) $(LDLIBS) -o $@
+zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
+		$(CC) $(CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
-tz2icu:		tz2icu.cpp tz2icu.h
-		$(CXX) -W -Wall -pedantic tz2icu.cpp -o $@
+tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
+		$(CXX) -W -Wall -I$(srcdir) -pedantic $(srcdir)/tz2icu.cpp -o $@
 
 yearistype.sh: $(TZDATA)
 	gunzip -d < $(TZDATA) | tar xf -
@@ -52,19 +53,27 @@ yearistype:	yearistype.sh
 		cp yearistype.sh yearistype
 		chmod +x yearistype
 
+tz.alias:		$(srcdir)/tz.alias
+	cp $< .
+
 posix_only:	zic $(TDATA)
 		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA)
 
 
-icu_data:	tz2icu posix_only
+icu_data:	tz2icu posix_only tz.alias
 		./tz2icu $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
 
 clean:
 		-rm -f core *.o *.out zdump zic yearistype date
 		@echo ICU specific cleanup:
-		-rm -f $(ICUDATA) 
+		-rm -f $(ICUDATA)
 		-rm -rf $(TZDIR)
+ifneq ($(srcdir),.)
+		-$(RMV) tz.alias
+endif
+ifneq ($(TZDATA),)
 		-rm -rf `gunzip -d < $(TZDATA) | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
+endif
 
 dataclean: clean
 	-rm -f $(TDATA) $(XDATA)
@@ -72,7 +81,7 @@ dataclean: clean
 distclean:	dataclean clean
 	-rm -f Makefile
 
-Makefile: Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
