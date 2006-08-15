@@ -88,7 +88,7 @@ UnicodeString *getTimeDateFormat(const Calendar *cal, const Locale *locale, UErr
 
 // TODO: Range-check timeStyle, dateStyle
 Win32DateFormat::Win32DateFormat(DateFormat::EStyle timeStyle, DateFormat::EStyle dateStyle, const Locale &locale, UErrorCode &status)
-  : DateFormat(), fDateTimeMsg(NULL), fTimeStyle(timeStyle), fDateStyle(dateStyle), fLocale(&locale), fZoneID(NULL)
+  : DateFormat(), fDateTimeMsg(NULL), fTimeStyle(timeStyle), fDateStyle(dateStyle), fLocale(&locale), fZoneID()
 {
     if (U_SUCCESS(status)) {
         fLCID = locale.getLCID();
