@@ -137,7 +137,7 @@ Win32NumberFormat::Win32NumberFormat(const Locale &locale, UBool currency, UErro
     if (!U_FAILURE(status)) {
         fLCID = locale.getLCID();
 
-        fFormatInfo = new FormatInfo();
+        fFormatInfo = (FormatInfo*)uprv_malloc(sizeof(FormatInfo));
 
         if (fCurrency) {
             getCurrencyFormat(&fFormatInfo->currency, fLCID);
@@ -161,7 +161,7 @@ Win32NumberFormat::~Win32NumberFormat()
         freeNumberFormat(&fFormatInfo->number);
     }
 
-    delete fFormatInfo;
+    uprv_free(fFormatInfo);
 }
 
 Win32NumberFormat &Win32NumberFormat::operator=(const Win32NumberFormat &other)
@@ -172,8 +172,13 @@ Win32NumberFormat &Win32NumberFormat::operator=(const Win32NumberFormat &other)
     this->fLCID              = other.fLCID;
     this->fFractionDigitsSet = other.fFractionDigitsSet;
 
-    this->fFormatInfo  = new FormatInfo;
-    *this->fFormatInfo = *other.fFormatInfo;
+    if (fCurrency) {
+        freeCurrencyFormat(&fFormatInfo->currency);
+        getCurrencyFormat(&fFormatInfo->currency, fLCID);
+    } else {
+        freeNumberFormat(&fFormatInfo->number);
+        getNumberFormat(&fFormatInfo->number, fLCID);
+    }
 
     return *this;
 }
@@ -230,7 +235,7 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
     nBuffer[0] = 0x0000;
 
     va_start(args, fmt);
-    result = vswprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
+    result = _vsnwprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
     va_end(args);
 
     if (result < 0) {
@@ -243,7 +248,7 @@ UnicodeString &Win32NumberFormat::format(int32_t numDigits, UnicodeString &appen
         nBuffer = NEW_ARRAY(UChar, newLength + 1);
 
         va_start(args, fmt);
-        result = vswprintf(nBuffer, newLength + 1, fmt, args);
+        result = _vsnwprintf(nBuffer, newLength + 1, fmt, args);
         va_end(args);
     }
 
