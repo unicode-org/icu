@@ -4301,6 +4301,7 @@ echo "${ECHO_T}$ac_cv_func_pthread_mutex_lock" >&6
   fi
     case "${host}" in
   *-pc-cygwin*|*-pc-mingw*)
+        ICU_USE_THREADS=1
     if test "$ac_cv_c_compiler_gnu" = no; then
             ICU_USE_THREADS=1
       if test $ENABLE_DEBUG = 1; then
