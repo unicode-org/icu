@@ -25,6 +25,7 @@
 #include "unicode/uclean.h"
 #include "unewdata.h"
 #include "uoptions.h"
+#include "putilimp.h"
 
 #if U_HAVE_POPEN
 /*
