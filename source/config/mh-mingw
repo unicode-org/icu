@@ -29,7 +29,8 @@ SHAREDLIBCXXFLAGS =
 SHAREDLIBCPPFLAGS = -DPIC
 
 ## Additional flags when building libraries and with threads
-THREADSCPPFLAGS = -D_REENTRANT
+THREADSCFLAGS = -mthreads
+THREADSCXXFLAGS = -mthreads
 LIBCPPFLAGS =
 
 # Commands to link. Link with C++ in case static libraries are used.

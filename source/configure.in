@@ -293,6 +293,8 @@ if test $threads = true; then
   dnl Check to see if we are using CygWin with MSVC
   case "${host}" in
   *-pc-cygwin*|*-pc-mingw*)
+    dnl For gcc, the thread options are set by mh-mingw/mh-cygwin
+    ICU_USE_THREADS=1
     if test "$ac_cv_prog_gcc" = no; then
       dnl We're using normal windows compilers. Threading is available.
       ICU_USE_THREADS=1
