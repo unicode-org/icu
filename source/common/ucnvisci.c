@@ -70,28 +70,28 @@ typedef enum  {
 
 
 /**
- * Enumeration for switching code pages if <ATX>+<one of below values>
+ * Enumeration for switching code pages if <ATR>+<one of below values>
  * is encountered
  */
 typedef enum {
-    DEF =0x40,
-    RMN =0x41,
-    DEV =0x42,
-    BNG =0x43,
-    TML =0x44,
-    TLG =0x45,
-    ASM =0x46,
-    ORI =0x47,
-    KND =0x48,
-    MLM =0x49,
-    GJR =0x4A,
-    PNJ =0x4B,
-    ARB =0x71,
-    PES =0x72,
-    URD =0x73,
-    SND =0x74,
-    KSM =0x75,
-    PST =0x76
+    DEF = 0x40,
+    RMN = 0x41,
+    DEV = 0x42,
+    BNG = 0x43,
+    TML = 0x44,
+    TLG = 0x45,
+    ASM = 0x46,
+    ORI = 0x47,
+    KND = 0x48,
+    MLM = 0x49,
+    GJR = 0x4A,
+    PNJ = 0x4B,
+    ARB = 0x71,
+    PES = 0x72,
+    URD = 0x73,
+    SND = 0x74,
+    KSM = 0x75,
+    PST = 0x76
 }ISCIILang;
 
 typedef enum{
@@ -116,6 +116,7 @@ typedef struct{
     MaskEnum currentMaskToUnicode;   /* mask for current state in toUnicode */
     MaskEnum defMaskToUnicode;       /* mask for default state in toUnicode */
     UBool isFirstBuffer;             /* boolean for fromUnicode to see if we need to announce the first script */
+    UBool resetToDefaultToUnicode;   /* boolean for reseting to default delta and mask when a newline is encountered*/
     char name[30];
 }UConverterDataISCII; 
 
@@ -141,6 +142,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
         converterData->contextCharToUnicode=NO_CHAR_MARKER;
         cnv->toUnicodeStatus = missingCharMarker;
         converterData->contextCharFromUnicode=0x0000;
+        converterData->resetToDefaultToUnicode=FALSE;
         /* check if the version requested is supported */
         if((options & UCNV_OPTIONS_VERSION_MASK) < 9){
             /* initialize state variables */
@@ -201,6 +203,7 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
         data->currentMaskFromUnicode=data->defDeltaToUnicode;
         data->currentDeltaFromUnicode=data->defDeltaToUnicode;
         data->isFirstBuffer=TRUE;
+        data->resetToDefaultToUnicode=FALSE;
     }
 }
 
@@ -995,8 +998,10 @@ static const int32_t lookupTable[][2]={
     { BENGALI,    BNG_MASK },
     { ORIYA,      ORI_MASK },
     { KANNADA,    KND_MASK },
+    { MALAYALAM,  MLM_MASK },
     { GUJARATI,   GJR_MASK },
-    { GURMUKHI,   PNJ_MASK },
+    { GURMUKHI,   PNJ_MASK }
+
 };
 
 #define WRITE_TO_TARGET_TO_U(args,source,target,offsets,offset,targetUniChar,delta, err){\
@@ -1198,6 +1203,14 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     *contextCharToUnicode = sourceChar;
                 }
                 break;
+            case 0x0A:
+                /* fall through */
+            case 0x0D:
+                data->resetToDefaultToUnicode = TRUE;
+                GET_MAPPING(sourceChar,targetUniChar,data);
+                *contextCharToUnicode = sourceChar;
+                break;
+
             case ISCII_NUKTA:
                 /* handle soft halant */
                 if(*contextCharToUnicode == ISCII_HALANT){
@@ -1219,7 +1232,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     if(found){
                         /* find out if the mapping is valid in this state */                                            
                         if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){       
-                            targetUniChar += data->currentDeltaToUnicode ;
+                            /*targetUniChar += data->currentDeltaToUnicode ;*/
                             *contextCharToUnicode= NO_CHAR_MARKER;
                             *toUnicodeStatus = missingCharMarker;
                             break;
@@ -1246,6 +1259,11 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             if(targetUniChar != missingCharMarker ){
                 /* now save the targetUniChar for delayed write */
                 *toUnicodeStatus = (UChar) targetUniChar;
+                if(data->resetToDefaultToUnicode==TRUE){
+                    data->currentDeltaToUnicode = data->defDeltaToUnicode;
+                    data->currentMaskToUnicode = data->defMaskToUnicode;
+                    data->resetToDefaultToUnicode=FALSE;
+                }
             }else{
             
                 /* we reach here only if targetUniChar == missingCharMarker 
