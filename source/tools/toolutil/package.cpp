@@ -1102,12 +1102,12 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t index, 
         exit(U_FILE_ACCESS_ERROR);
     }
     fileLength=(int32_t)fwrite(pItem->data, 1, pItem->length, file);
-    fclose(file);
 
     if(ferror(file) || fileLength!=pItem->length) {
         fprintf(stderr, "icupkg: unable to write complete file \"%s\"\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
+    fclose(file);
 }
 
 void
