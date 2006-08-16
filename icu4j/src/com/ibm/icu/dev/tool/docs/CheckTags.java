@@ -193,7 +193,7 @@ public class CheckTags {
 
     static final String[] tagKinds = {
         "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws", "@obsolete", "@exception", "@serial"
+        "@param", "@return", "@throws", "@obsolete", "@exception", "@serial", "@provisional"
     };
 
     static final int UNKNOWN = -1;
@@ -211,6 +211,7 @@ public class CheckTags {
     static final int OBSOLETE = 11;
     static final int EXCEPTION = 12;
     static final int SERIAL = 13;
+    static final int PROVISIONAL = 14;
 
     static int tagKindIndex(String kind) {
         for (int i = 0; i < tagKinds.length; ++i) {
@@ -308,6 +309,7 @@ public class CheckTags {
         Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
+	boolean foundProvisionalTag = false;
         boolean foundDeprecatedTag = false;
         boolean foundObsoleteTag = false;
 	boolean foundInternalTag = false;
@@ -344,6 +346,10 @@ public class CheckTags {
                 }
 		retainAll |= (tag.text().indexOf("(retainAll)") != -1);
                 break;
+
+	    case PROVISIONAL:
+		foundProvisionalTag = true;
+		break;
 
             case DEPRECATED:
                 foundDeprecatedTag = true;
@@ -403,8 +409,8 @@ public class CheckTags {
         if (foundInternalTag && !foundDeprecatedTag) {
             errln("internal tag missing deprecated");
         }
-        if (foundDraftTag && !foundDeprecatedTag) {
-            errln("draft tag missing deprecated");
+        if (foundDraftTag && !(foundDeprecatedTag || foundProvisionalTag)) {
+            errln("draft tag missing deprecated or provisional");
         }
         if (foundObsoleteTag && !foundDeprecatedTag) {
             errln("obsolete tag missing deprecated");
