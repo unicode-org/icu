@@ -8,6 +8,8 @@
 **********************************************************************
 
 Note:  this directory currently contains tzcode as of tzcode2006h.tar.gz
+   with localtime.c  patches from tzcode2006i.tar.gz
+
 
 ----------------------------------------------------------------------
 OVERVIEW
