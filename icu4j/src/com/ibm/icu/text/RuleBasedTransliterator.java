@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -272,7 +272,7 @@ import java.util.Hashtable;
  * @author Alan Liu
  * @internal
  */
-class RuleBasedTransliterator extends Transliterator {
+public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
 
