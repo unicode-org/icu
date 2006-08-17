@@ -64,6 +64,7 @@ public class BagFormatter {
     private boolean hexValue = false;
     private static final String NULL_VALUE = "_NULL_VALUE_";
     private int fullTotal = -1;
+    private boolean showTotal = true;
     private String lineSeparator = "\r\n";
     private Tabber tabber = new Tabber.MonoTabber();
 
@@ -331,14 +332,14 @@ public class BagFormatter {
         return getName(s, false);
     }
 
-    class NameLabel extends UnicodeLabel {
+    public static class NameLabel extends UnicodeLabel {
         UnicodeProperty nameProp;
         UnicodeSet control;
         UnicodeSet private_use;
         UnicodeSet noncharacter;
         UnicodeSet surrogate;
 
-        NameLabel(UnicodeProperty.Factory source) {
+        public NameLabel(UnicodeProperty.Factory source) {
             nameProp = source.getProperty("Name");
             control = source.getSet("gc=Cc");
             private_use = source.getSet("gc=Co");
@@ -526,11 +527,13 @@ public class BagFormatter {
 
         protected void doAfter(Object container, Object o) {
             if (fullTotal != -1 && fullTotal != counter) {
-                output.print(lineSeparator);
-                output.print("# The above property value applies to " + nf.format(fullTotal-counter) + " code points not listed here." + lineSeparator);
-                output.print("# Total code points: " + nf.format(fullTotal) + lineSeparator);
+                if (showTotal) {
+                    output.print(lineSeparator);
+                    output.print("# The above property value applies to " + nf.format(fullTotal-counter) + " code points not listed here." + lineSeparator);
+                    output.print("# Total code points: " + nf.format(fullTotal) + lineSeparator);
+                }
                 fullTotal = -1;
-            } else {
+            } else if (showTotal) {
                 output.print(lineSeparator);
                 output.print("# Total code points: " + nf.format(counter) + lineSeparator);
             }
@@ -553,7 +556,7 @@ public class BagFormatter {
                 String thing = o.toString();
                 String value = getValueSource() == UnicodeLabel.NULL ? "" : getValueSource().getValue(thing, ",", true);
                 if (value.length() != 0) value = "\t; " + value;
-                String label = getLabelSource(true).getValue(thing, ",", true);
+                String label = getLabelSource(true) == UnicodeLabel.NULL ? "" : getLabelSource(true).getValue(thing, ",", true);
                 if (label.length() != 0) label = " " + label;
                 output.print(
                     tabber.process(
@@ -1091,6 +1094,14 @@ public class BagFormatter {
 
     public void setTabber(Tabber tabber) {
         this.tabber = tabber;
+    }
+
+    public boolean isShowTotal() {
+        return showTotal;
+    }
+
+    public void setShowTotal(boolean showTotal) {
+        this.showTotal = showTotal;
     }
 }
 //#endif
