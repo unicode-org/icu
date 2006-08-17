@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -996,6 +996,49 @@ public class TimeZoneRegression extends TestFmwk {
                 errln("FAIL: " + idWithLocaleData + " -> " +
                       strWith + "; " + idWithoutLocaleData + " -> " +
                       strWithout);
+            }
+        }
+    }
+
+    /**
+     * getOffset returns wrong offset for days in early 20th century
+     */
+    public void TestJ5134() {
+        GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance();
+        TimeZone icuEastern = TimeZone.getTimeZone("America/New_York");
+        testCal.setTimeZone(icuEastern);
+        testCal.set(1900, Calendar.JANUARY, 1, 0, 0, 0);
+        long time = testCal.getTimeInMillis();
+
+        int offset = icuEastern.getOffset(time);
+        if (offset != -18000000) {
+            errln("FAIL: UTC offset in time zone America/New_York on Jan 1, 1900 -> " + offset);
+        }
+        boolean isDst = icuEastern.inDaylightTime(new Date(time));
+        if (isDst) {
+            errln("FAIL: DST is observed in time zone America/New_York on Jan 1, 1900");
+        }
+
+        java.util.TimeZone jdkEastern = java.util.TimeZone.getTimeZone("America/New_York");
+        if (!(jdkEastern instanceof java.util.SimpleTimeZone)) {
+            // Compare offset and DST observation with JDK and ICU for 50 years since 1900
+            testCal.add(Calendar.YEAR, 50);
+            long endTime = testCal.getTimeInMillis();
+            int jdkOffset;
+            boolean isDstJdk;
+            while (time < endTime) {
+                offset = icuEastern.getOffset(time);
+                jdkOffset = jdkEastern.getOffset(time);
+                if (offset != jdkOffset) {
+                    errln("FAIL: Incompatible UTC offset -> JDK:" + jdkOffset + "/ICU:" + offset + " [" + time + "]");
+                }
+                Date d = new Date(time);
+                isDst = icuEastern.inDaylightTime(d);
+                isDstJdk = jdkEastern.inDaylightTime(d);
+                if (isDst != isDstJdk) {
+                    errln("FAIL: Incompatible DST -> JDK:" + isDstJdk + "/ICU:" + isDst + " [" + time + "]");
+                }
+                time += 24*60*60*1000L; // increment 1 day
             }
         }
     }
