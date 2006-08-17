@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -104,12 +104,23 @@ public final class CollectionUtilities {
 		Iterator it = c.iterator();
 		if (!it.hasNext()) return null;
 		Object bestSoFar = it.next();
-		while (it.hasNext()) {
-			Object item = it.next();
-			if (comp.compare(item, bestSoFar) == direction) {
-				bestSoFar = item;
-			}
-		}
+        if (direction < 0) {
+    		while (it.hasNext()) {
+    			Object item = it.next();
+                int compValue = comp.compare(item, bestSoFar);
+    			if (comp.compare(item, bestSoFar) < 0) {
+    				bestSoFar = item;
+                }
+    		}
+        } else {
+            while (it.hasNext()) {
+                Object item = it.next();
+                int compValue = comp.compare(item, bestSoFar);
+                if (comp.compare(item, bestSoFar) > 0) {
+                    bestSoFar = item;
+                }
+            }
+        }
 		return bestSoFar;
 	}
 	
@@ -326,7 +337,7 @@ public final class CollectionUtilities {
         return pp.toPattern(uset);
     }
     
-    static class MultiComparator implements Comparator {
+    public static class MultiComparator implements Comparator {
         private Comparator[] comparators;
     
         public MultiComparator (Comparator[] comparators) {

@@ -1826,6 +1826,23 @@ public final class Utility {
         return result.toString();
     }
     
+    
+    /**
+     * Utility to duplicate a string count times
+     * @param s
+     * @param count
+     */
+    public static String repeat(String s, int count) {
+        if (count <= 0) return "";
+        if (count == 1) return s;
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < count; ++i) {
+            result.append(s);
+        }
+        return result.toString();
+    }
+
+    
     // !!! 1.3 compatibiliy
     public static int indexOf(StringBuffer buf, String s) {
 //#ifndef FOUNDATION
