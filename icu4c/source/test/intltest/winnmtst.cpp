@@ -30,6 +30,7 @@
 #include "cstring.h"
 #include "locmap.h"
 #include "wintz.h"
+#include "uassert.h"
 
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
@@ -137,11 +138,16 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
 
     nBuffer[0] = 0x0000;
 
+    /* Due to the arguments causing a result to be <= 23 characters (+2 for NULL and minus),
+    we don't need to reallocate the buffer. */
     va_start(args, fmt);
     result = _vsnwprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
     va_end(args);
 
-    if (result < 0) {
+    /* Just to make sure of the above statement, we add this assert */
+    U_ASSERT(result >=0);
+    // The following code is not used because _vscwprintf isn't available on MinGW at the moment.
+    /*if (result < 0) {
         int newLength;
 
         va_start(args, fmt);
@@ -153,7 +159,8 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
         va_start(args, fmt);
         result = _vsnwprintf(nBuffer, newLength + 1, fmt, args);
         va_end(args);
-    }
+    }*/
+
 
     // vswprintf is sensitive to the locale set by setlocale. For some locales
     // it doesn't use "." as the decimal separator, which is what GetNumberFormatW
@@ -212,9 +219,9 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
         DELETE_ARRAY(buffer);
     }
 
-    if (nBuffer != nStackBuffer) {
+    /*if (nBuffer != nStackBuffer) {
         DELETE_ARRAY(nBuffer);
-    }
+    }*/
 
     return appendTo;
 }
