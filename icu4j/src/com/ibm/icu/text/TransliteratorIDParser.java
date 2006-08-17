@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2005, International Business Machines Corporation
+*   Copyright (c) 2002-2006, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -441,6 +441,7 @@ class TransliteratorIDParser {
             } else {
                 t = single.getInstance();
                 if (t == null) {
+                	t = single.getInstance();
                     throw new IllegalArgumentException("Illegal ID " + single.canonID);
                 }
                 list.setElementAt(t, i);
