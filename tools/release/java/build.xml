@@ -14,7 +14,7 @@
         <property name="build.dir" value="classes"/>
         <property name="jar.file" value="cldr.jar"/>
         <property name="jarSrc.file" value="cldrsrc.jar"/>
-
+        <property file="api-report.properties" />
         
         <mkdir dir="${build.dir}"/>
         <echo message="java home: ${java.home}"/>
@@ -32,9 +32,42 @@
             source="1.4"
             debug="on" deprecation="off"
             encoding="ascii"/>
-    </target>    
-    <import file="api-report-config.xml"/>         
+    </target>             
     <target name="clean" depends="init" description="remove all build targets">
         <delete dir="${build.dir}"/>
+    </target>
+    <target name="apireport" depends="doctools">    
+        <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
+            
+            <arg value = "--oldver"/>
+            <arg value = "${oldver}"/>
+            
+            <arg value = "--olddir"/> 
+            <arg value = "${olddir}"/>
+            
+            <arg value = "--newver"/>
+            <arg value = "${newver}"/>
+            
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+            
+            <arg value = "--cppxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc.xslt"/>
+            
+            <arg value = "--cxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc.xslt"/>
+            
+            <arg value = "--reportxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/genReport.xslt"/>
+            
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.html"/>
+    
+            <classpath>
+                <pathelement location="${build.dir}"/>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement path="."/>
+            </classpath>
+        </java>
     </target>
 </project>
