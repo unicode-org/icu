@@ -12,6 +12,7 @@ src/com/ibm/icu/dev/test/format/NumberFormatTest.java
 src/com/ibm/icu/dev/test/format/NumberRegression.java
 src/com/ibm/icu/dev/test/format/RbnfTest.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java
+src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java
 src/com/ibm/icu/dev/test/util/ICUResourceBundleTest.java
 src/com/ibm/icu/dev/test/util/UtilityTest.java
 src/com/ibm/icu/dev/test/util/UnicodeMap.java
