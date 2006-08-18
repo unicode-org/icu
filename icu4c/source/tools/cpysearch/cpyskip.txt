@@ -1,5 +1,8 @@
 # Copyright (c) 2005-2006 International Business Machines 
 # Corporation and others. All Rights Reserved.
+# test
+icuapps/apputil/data/non-copyright-file.txt
+*.iso
 # suffix matches
 *.brk
 *.bz2
