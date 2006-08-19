@@ -27,6 +27,7 @@
 icu/debian/changelog
 icu/debian/control
 icu/debian/icu-doc.doc-base
+icu/debian/icu-doc.install
 icu/debian/icu.conffiles.in
 icu/source/config.guess
 icu/source/config.sub
