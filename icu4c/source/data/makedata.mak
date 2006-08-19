@@ -232,7 +232,7 @@ BRK_CTD_FILES = $(BRK_CTD_FILES:brkitr\ =)
 !IFDEF BRK_RES_SOURCE
 BRK_RES_FILES = $(BRK_RES_SOURCE:.txt =.res brkitr\)
 BRK_RES_FILES = $(BRK_RES_FILES:.txt=.res)
-BRK_RES_FILES = $(ICUBRK)\root.res $(BRK_RES_FILES:brkitr\ =)
+BRK_RES_FILES = $(ICUBRK)\root.res $(ICUBRK)\$(BRK_RES_FILES:brkitr\ =)
 ALL_RES = $(ALL_RES) $(ICUBRK)\res_index.res
 !ENDIF
 
