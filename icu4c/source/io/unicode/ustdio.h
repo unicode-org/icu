@@ -120,30 +120,30 @@
  * %[*][format modifier][width][type modifier][format]
  * 
 <table cellspacing="3">
-<tr><td>format</td><td>default<br>type</td><td>description</td></tr>
-<tr><td>%E</td><td>double</td><td>Scientific with an uppercase exponent</td></tr>
-<tr><td>%e</td><td>double</td><td>Scientific with a lowercase exponent</td></tr>
-<tr><td>%G</td><td>double</td><td>Use %E or %f for best format</td></tr>
-<tr><td>%g</td><td>double</td><td>Use %e or %f for best format</td></tr>
-<tr><td>%f</td><td>double</td><td>Simple floating point without the exponent</td></tr>
-<tr><td>%X</td><td>int32_t</td><td>ustdio special uppercase hex radix formatting</td></tr>
-<tr><td>%x</td><td>int32_t</td><td>ustdio special lowercase hex radix formatting</td></tr>
-<tr><td>%d</td><td>int32_t</td><td>Decimal format</td></tr>
-<tr><td>%i</td><td>int32_t</td><td>Same as %d</td></tr>
-<tr><td>%n</td><td>int32_t</td><td>count (write the number of UTF-16 codeunits read/written)</td></tr>
-<tr><td>%o</td><td>int32_t</td><td>ustdio special octal radix formatting</td></tr>
-<tr><td>%u</td><td>uint32_t</td><td>Decimal format</td></tr>
-<tr><td>%p</td><td>void *</td><td>Prints the pointer value</td></tr>
-<tr><td>%s</td><td>char *</td><td>Use default converter or specified converter from fopen</td></tr>
-<tr><td>%c</td><td>char</td><td>Use default converter or specified converter from fopen<br>
-When width is specified, this acts like a non-NULL-terminated char * string.<br>
+<tr><td>format</td><td>default<br>printf<br>type</td><td>default<br>scanf<br>type</td><td>description</td></tr>
+<tr><td>%E</td><td>double</td><td>float</td><td>Scientific with an uppercase exponent</td></tr>
+<tr><td>%e</td><td>double</td><td>float</td><td>Scientific with a lowercase exponent</td></tr>
+<tr><td>%G</td><td>double</td><td>float</td><td>Use %E or %f for best format</td></tr>
+<tr><td>%g</td><td>double</td><td>float</td><td>Use %e or %f for best format</td></tr>
+<tr><td>%f</td><td>double</td><td>float</td><td>Simple floating point without the exponent</td></tr>
+<tr><td>%X</td><td>int32_t</td><td>int32_t</td><td>ustdio special uppercase hex radix formatting</td></tr>
+<tr><td>%x</td><td>int32_t</td><td>int32_t</td><td>ustdio special lowercase hex radix formatting</td></tr>
+<tr><td>%d</td><td>int32_t</td><td>int32_t</td><td>Decimal format</td></tr>
+<tr><td>%i</td><td>int32_t</td><td>int32_t</td><td>Same as %d</td></tr>
+<tr><td>%n</td><td>int32_t</td><td>int32_t</td><td>count (write the number of UTF-16 codeunits read/written)</td></tr>
+<tr><td>%o</td><td>int32_t</td><td>int32_t</td><td>ustdio special octal radix formatting</td></tr>
+<tr><td>%u</td><td>uint32_t</td><td>uint32_t</td><td>Decimal format</td></tr>
+<tr><td>%p</td><td>void *</td><td>void *</td><td>Prints the pointer value</td></tr>
+<tr><td>%s</td><td>char *</td><td>char *</td><td>Use default converter or specified converter from fopen</td></tr>
+<tr><td>%c</td><td>char</td><td>char</td><td>Use default converter or specified converter from fopen<br>
+When width is specified for scanf, this acts like a non-NULL-terminated char * string.<br>
 By default, only one char is written.</td></tr>
-<tr><td>%S</td><td>UChar *</td><td>Null terminated UTF-16 string</td></tr>
-<tr><td>%C</td><td>UChar</td><td>16-bit Unicode code unit<br>
-When width is specified, this acts like a non-NULL-terminated UChar * string<br>
+<tr><td>%S</td><td>UChar *</td><td>UChar *</td><td>Null terminated UTF-16 string</td></tr>
+<tr><td>%C</td><td>UChar</td><td>UChar</td><td>16-bit Unicode code unit<br>
+When width is specified for scanf, this acts like a non-NULL-terminated UChar * string<br>
 By default, only one codepoint is written.</td></tr>
-<tr><td>%[]</td><td>UChar *</td><td>(scanf only) Null terminated UTF-16 string which contains the filtered set of characters specified by the UnicodeSet</td></tr>
-<tr><td>%%</td><td>N/A</td><td>Show a percent sign</td></tr>
+<tr><td>%[]</td><td>&nbsp;</td><td>UChar *</td><td>Null terminated UTF-16 string which contains the filtered set of characters specified by the UnicodeSet</td></tr>
+<tr><td>%%</td><td>&nbsp;</td><td>&nbsp;</td><td>Show a percent sign</td></tr>
 </table>
 
 Format modifiers
