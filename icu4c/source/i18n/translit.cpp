@@ -1245,7 +1245,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
 }
 
 void U_EXPORT2 Transliterator::registerAlias(const UnicodeString& aliasID,
-											 const UnicodeString& realID) {
+                                             const UnicodeString& realID) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
@@ -1254,8 +1254,8 @@ void U_EXPORT2 Transliterator::registerAlias(const UnicodeString& aliasID,
 }
 
 void Transliterator::_registerAlias(const UnicodeString& aliasID,
-									const UnicodeString& realID) {
-	registry->put(aliasID, realID, FALSE, TRUE);
+                                    const UnicodeString& realID) {
+    registry->put(aliasID, realID, FALSE, TRUE);
 }
 
 /**

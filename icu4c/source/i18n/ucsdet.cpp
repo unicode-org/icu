@@ -164,7 +164,7 @@ ucsdet_detectAll(UCharsetDetector *ucsd,
 // ucsdet_getDetectableCharsetName(const UCharsetDetector *csd, int32_t index, UErrorCode *status)
 // {
 //     if(U_FAILURE(*status)) {
-// 	return 0;
+//         return 0;
 //     }
 //     return csd->getCharsetName(index,*status);
 // }
@@ -173,7 +173,7 @@ ucsdet_detectAll(UCharsetDetector *ucsd,
 // ucsdet_getDetectableCharsetsCount(const UCharsetDetector *csd, UErrorCode *status)
 // {
 //     if(U_FAILURE(*status)) {
-// 	return -1;
+//         return -1;
 //     }
 //     return UCharsetDetector::getDetectableCount();
 // }

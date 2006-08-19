@@ -102,7 +102,7 @@ private:
     ULine* lines;
     int32_t numLines;
     UChar dest[DEST_BUFFER_CAPACITY];
-	UChar* pDest;
+    UChar* pDest;
     int32_t destLen;
     NormFn fn;
     int32_t retVal;
@@ -149,7 +149,7 @@ public:
         numLines = srcNumLines;
         uselen = _uselen;
         destLen = DEST_BUFFER_CAPACITY;
-		pDest = dest;
+        pDest = dest;
         src = NULL;
         srcLen = 0;
         line_mode = TRUE;
@@ -160,16 +160,16 @@ public:
         numLines = 0;
         uselen = _uselen;
         destLen = sourceLen*3;
-		pDest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
+        pDest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
         src = source;
         srcLen = sourceLen;
         line_mode = FALSE;
     }
-	~NormPerfFunction(){
-		if(dest != pDest){
-			free(pDest);
-		}
-	}
+    ~NormPerfFunction(){
+        if(dest != pDest){
+            free(pDest);
+        }
+    }
 };
 
 

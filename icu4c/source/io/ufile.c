@@ -64,9 +64,9 @@ u_finit(FILE        *f,
     if (0 <= result->fFileno && result->fFileno <= 2) {
         /* stdin, stdout and stderr need to be special cased for Windows 98 */
 #if _MSC_VER >= 1400
-		result->fFile = &__iob_func()[_fileno(f)];
+        result->fFile = &__iob_func()[_fileno(f)];
 #else
-		result->fFile = &_iob[_fileno(f)];
+        result->fFile = &_iob[_fileno(f)];
 #endif
     }
     else

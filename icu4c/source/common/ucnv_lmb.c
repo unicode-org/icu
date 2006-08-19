@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_lmb.cpp
@@ -1045,7 +1045,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
     ||  CurByte == ULMBCS_HT || CurByte == ULMBCS_CR 
     ||  CurByte == ULMBCS_LF || CurByte == ULMBCS_123SYSTEMRANGE)
     {
-		uniChar = CurByte;
+        uniChar = CurByte;
     }
     else  
     {
