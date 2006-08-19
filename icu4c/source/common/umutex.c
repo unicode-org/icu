@@ -520,7 +520,7 @@ umtx_atomic_inc(int32_t *p)  {
         #if defined (U_WINDOWS) && ICU_USE_THREADS == 1
             retVal = InterlockedIncrement((LONG*)p);
         #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
-        	retVal = OSAtomicIncrement32Barrier(p);
+            retVal = OSAtomicIncrement32Barrier(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = ++(*p);
@@ -542,7 +542,7 @@ umtx_atomic_dec(int32_t *p) {
         #if defined (U_WINDOWS) && ICU_USE_THREADS == 1
             retVal = InterlockedDecrement((LONG*)p);
         #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
-        	retVal = OSAtomicDecrement32Barrier(p);
+            retVal = OSAtomicDecrement32Barrier(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = --(*p);

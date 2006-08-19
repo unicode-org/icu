@@ -1087,7 +1087,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, UnicodeString& resu
 int32_t 
 TimeZone::getDSTSavings()const {
     if (useDaylightTime()) {
-    	return 3600000;
+        return 3600000;
     }
     return 0;
 }

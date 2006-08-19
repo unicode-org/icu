@@ -666,27 +666,27 @@ void     RBBITableBuilder::flagAcceptingStates() {
                 // If no other value was specified, force it to -1.
 
                 if (sd->fAccepting==0) {
-					// State hasn't been marked as accepting yet.  Do it now.
+                    // State hasn't been marked as accepting yet.  Do it now.
                     sd->fAccepting = endMarker->fVal;
                     if (sd->fAccepting == 0) {
                         sd->fAccepting = -1;
-					}
+                    }
                 }
                 if (sd->fAccepting==-1 && endMarker->fVal != 0) {
-					// Both lookahead and non-lookahead accepting for this state.
-					// Favor the look-ahead.  Expedient for line break.
-					// TODO:  need a more elegant resolution for conflicting rules.
-					sd->fAccepting = endMarker->fVal;
-				}
-				    // implicit else:
-				    // if sd->fAccepting already had a value other than 0 or -1, leave it be.
+                    // Both lookahead and non-lookahead accepting for this state.
+                    // Favor the look-ahead.  Expedient for line break.
+                    // TODO:  need a more elegant resolution for conflicting rules.
+                    sd->fAccepting = endMarker->fVal;
+                }
+                // implicit else:
+                // if sd->fAccepting already had a value other than 0 or -1, leave it be.
 
                 // If the end marker node is from a look-ahead rule, set
                 //   the fLookAhead field or this state also.
                 if (endMarker->fLookAheadEnd) {
-					// TODO:  don't change value if already set?
-					// TODO:  allow for more than one active look-ahead rule in engine.
-					//        Make value here an index to a side array in engine?
+                    // TODO:  don't change value if already set?
+                    // TODO:  allow for more than one active look-ahead rule in engine.
+                    //        Make value here an index to a side array in engine?
                     sd->fLookAhead = sd->fAccepting;
                 }
             }

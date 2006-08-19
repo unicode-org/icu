@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -614,93 +614,93 @@ umsg_vparse(const UMessageFormat *fmt,
 #define MAppend(c) if (len < destCapacity) dest[len++] = c; else len++
 
 int32_t umsg_autoQuoteApostrophe(const UChar* pattern, 
-			     int32_t patternLength,
-			     UChar* dest,
-			     int32_t destCapacity,
-			     UErrorCode* ec)
+                 int32_t patternLength,
+                 UChar* dest,
+                 int32_t destCapacity,
+                 UErrorCode* ec)
 {
-  int32_t state = STATE_INITIAL;
-  int32_t braceCount = 0;
-  int32_t len = 0;
+    int32_t state = STATE_INITIAL;
+    int32_t braceCount = 0;
+    int32_t len = 0;
 
-  if (ec == NULL || U_FAILURE(*ec)) {
-    return -1;
-  }
-
-  if (pattern == NULL || patternLength < -1 || (dest == NULL && destCapacity > 0)) {
-    *ec = U_ILLEGAL_ARGUMENT_ERROR;
-    return -1;
-  }
-
-  if (patternLength == -1) {
-    patternLength = u_strlen(pattern);
-  }
-
-  for (int i = 0; i < patternLength; ++i) {
-    UChar c = pattern[i];
-    switch (state) {
-    case STATE_INITIAL:
-      switch (c) {
-      case SINGLE_QUOTE:
-	state = STATE_SINGLE_QUOTE;
-	break;
-      case CURLY_BRACE_LEFT:
-	state = STATE_MSG_ELEMENT;
-	++braceCount;
-	break;
-      }
-      break;
-
-    case STATE_SINGLE_QUOTE:
-      switch (c) {
-      case SINGLE_QUOTE:
-	state = STATE_INITIAL;
-	break;
-      case CURLY_BRACE_LEFT:
-      case CURLY_BRACE_RIGHT:
-	state = STATE_IN_QUOTE;
-	break;
-      default:
-	MAppend(SINGLE_QUOTE);
-	state = STATE_INITIAL;
-	break;
-      }
-      break;
-
-    case STATE_IN_QUOTE:
-      switch (c) {
-      case SINGLE_QUOTE:
-	state = STATE_INITIAL;
-	break;
-      }
-      break;
-
-    case STATE_MSG_ELEMENT:
-      switch (c) {
-      case CURLY_BRACE_LEFT:
-	++braceCount;
-	break;
-      case CURLY_BRACE_RIGHT:
-	if (--braceCount == 0) {
-	  state = STATE_INITIAL;
-	}
-	break;
-      }
-      break;
-
-    default: // Never happens.
-      break;
+    if (ec == NULL || U_FAILURE(*ec)) {
+        return -1;
     }
 
-    MAppend(c);
-  }
+    if (pattern == NULL || patternLength < -1 || (dest == NULL && destCapacity > 0)) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
-  // End of scan
-  if (state == STATE_SINGLE_QUOTE || state == STATE_IN_QUOTE) {
-    MAppend(SINGLE_QUOTE);
-  }
+    if (patternLength == -1) {
+        patternLength = u_strlen(pattern);
+    }
 
-  return u_terminateUChars(dest, destCapacity, len, ec);
+    for (int i = 0; i < patternLength; ++i) {
+        UChar c = pattern[i];
+        switch (state) {
+        case STATE_INITIAL:
+            switch (c) {
+            case SINGLE_QUOTE:
+                state = STATE_SINGLE_QUOTE;
+                break;
+            case CURLY_BRACE_LEFT:
+                state = STATE_MSG_ELEMENT;
+                ++braceCount;
+                break;
+            }
+            break;
+
+        case STATE_SINGLE_QUOTE:
+            switch (c) {
+            case SINGLE_QUOTE:
+                state = STATE_INITIAL;
+                break;
+            case CURLY_BRACE_LEFT:
+            case CURLY_BRACE_RIGHT:
+                state = STATE_IN_QUOTE;
+                break;
+            default:
+                MAppend(SINGLE_QUOTE);
+                state = STATE_INITIAL;
+                break;
+            }
+        break;
+
+        case STATE_IN_QUOTE:
+            switch (c) {
+            case SINGLE_QUOTE:
+                state = STATE_INITIAL;
+                break;
+            }
+            break;
+
+        case STATE_MSG_ELEMENT:
+            switch (c) {
+            case CURLY_BRACE_LEFT:
+                ++braceCount;
+                break;
+            case CURLY_BRACE_RIGHT:
+                if (--braceCount == 0) {
+                    state = STATE_INITIAL;
+                }
+                break;
+            }
+            break;
+
+        default: // Never happens.
+            break;
+        }
+
+        MAppend(c);
+    }
+
+    // End of scan
+    if (state == STATE_SINGLE_QUOTE || state == STATE_IN_QUOTE) {
+        MAppend(SINGLE_QUOTE);
+    }
+
+    return u_terminateUChars(dest, destCapacity, len, ec);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
