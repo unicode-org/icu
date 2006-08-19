@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,6 +9,7 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
+import com.ibm.icu.impl.PrettyPrinter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.SortedSetRelation;
 import java.util.*;
@@ -145,7 +146,6 @@ public class UnicodeSetTest extends TestFmwk {
         }
         return true;
     }
-    
     
     // NOTE: copied the following from Utility. There ought to be a version in there with a flag
     // that does the Java stuff
@@ -1307,6 +1307,123 @@ public class UnicodeSetTest extends TestFmwk {
         expectEqual("POSIX cntrl", "[:cntrl:]", "\\p{Control}");
         expectEqual("POSIX graph", "[:graph:]", "[^\\p{Whitespace}\\p{Control}\\p{Surrogate}\\p{Unassigned}]");
         expectEqual("POSIX print", "[:print:]", "[[:graph:][:blank:]-[\\p{Control}]]");
+    }
+    
+    /**
+     * Test that frozen classes disallow changes. For 4217
+     */
+    public void TestFrozen() {
+        UnicodeSet test = new UnicodeSet("[[:whitespace:]A]");
+        test.freeze();
+        checkModification(test, true);
+        checkModification(test, false);
+    }
+    
+    public void checkModification(UnicodeSet original, boolean isFrozen) {
+        main:
+            for (int i = 0; ;++i) {
+                UnicodeSet test = (UnicodeSet) (isFrozen ? original.clone() : original.cloneAsThawed());
+                boolean gotException = true;
+                boolean checkEquals = true;
+                try {
+                    switch(i) {
+                    case 0: test.add(0); break;
+                    case 1: test.add(0,1); break;
+                    case 2: test.add("a"); break;
+                    case 3: List a = new ArrayList(); a.add("a"); test.addAll(a); break;
+                    case 4: test.addAll("ab"); break;
+                    case 5: test.addAll(new UnicodeSet("[ab]")); break;
+                    case 6: test.applyIntPropertyValue(0,0); break;
+                    case 7: test.applyPattern("[ab]"); break;
+                    case 8: test.applyPattern("[ab]", true); break;
+                    case 9: test.applyPattern("[ab]", 0); break;
+                    case 10: test.applyPropertyAlias("hex","true"); break;
+                    case 11: test.applyPropertyAlias("hex", "true", null); break;
+                    case 12: test.closeOver(UnicodeSet.CASE); break;
+                    case 13: test.compact(); checkEquals = false; break;
+                    case 14: test.complement(0); break;
+                    case 15: test.complement(0,0); break;
+                    case 16: test.complement("ab"); break;
+                    case 17: test.complementAll("ab"); break;
+                    case 18: test.complementAll(new UnicodeSet("[ab]")); break;
+                    case 19: test.remove(' '); break;
+                    case 20: test.remove(' ','a'); break;
+                    case 21: test.remove(" "); break;
+                    case 22: test.removeAll(" a"); break;
+                    case 23: test.removeAll(new UnicodeSet("[\\ a]")); break;
+                    case 24: test.retain(' '); break;
+                    case 25: test.retain(' ','a'); break;
+                    case 26: test.retain(" "); break;
+                    case 27: test.retainAll(" a"); break;
+                    case 28: test.retainAll(new UnicodeSet("[\\ a]")); break;
+                    case 29: test.set(0,1); break;
+                    case 30: test.set(new UnicodeSet("[ab]")); break;
+
+                    default: continue main; // so we don't keep having to change the endpoint, and gaps are not skipped.
+                    case 35: return;
+                    }
+                    gotException = false;
+                } catch (UnsupportedOperationException e) {
+                    // do nothing
+                }
+                if (isFrozen && !gotException) errln(i + ") attempt to modify frozen object didn't result in an exception");
+                if (!isFrozen && gotException) errln(i + ") attempt to modify thawed object did result in an exception");
+                if (checkEquals) {
+                    if (test.equals(original)) {
+                        if (!isFrozen) errln(i + ") attempt to modify thawed object didn't change the object");
+                    } else { // unequal
+                        if (isFrozen) errln(i + ") attempt to modify frozen object changed the object");
+                    }
+                }
+            }
+    }
+    
+    String[] prettyData = {
+            "[\\uD7DE-\\uD90C \\uDCB5-\\uDD9F]", // special case
+            "[:any:]",
+            "[:whitespace:]",
+            "[:linebreak=AL:]",
+    };
+    
+    public void TestPrettyPrinting() {
+        PrettyPrinter pp = new PrettyPrinter();
+        int i = 0;
+        for (; i < prettyData.length; ++i) {
+            UnicodeSet test = new UnicodeSet(prettyData[i]);
+            checkPrettySet(pp, i, test);
+        }
+        Random random = new Random(0);
+        UnicodeSet test = new UnicodeSet();
+        for (; i < 1000; ++i) {
+            double start = random.nextGaussian() * 0x10000;
+            if (start < 0) start = - start;
+            if (start > 0x10FFFF) {
+                start = 0x10FFFF;
+            }
+            double end = random.nextGaussian() * 0x100;
+            if (end < 0) end = -end;
+            end = start + end;
+            if (end > 0x10FFFF) {
+                end = 0x10FFFF;
+            }
+            test.complement((int)start, (int)end);
+            checkPrettySet(pp, i, test);
+        }
+    }
+
+    private void checkPrettySet(PrettyPrinter pp, int i, UnicodeSet test) {
+        String pretty = pp.toPattern(test);
+        UnicodeSet retry = new UnicodeSet(pretty);
+        if (!test.equals(retry)) {
+            errln(i + ". Failed test: " + test + " != " + pretty);
+        } else {
+            logln(i + ". Worked for " + truncate(test.toString()) + " => " + truncate(pretty));
+        }
+    }
+
+    private String truncate(String string) {
+        if (string.length() <= 100) return string;
+        return string.substring(0,97) + "...";
     }
 
     public class TokenSymbolTable implements SymbolTable {

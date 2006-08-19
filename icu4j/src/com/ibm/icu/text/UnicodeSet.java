@@ -11,6 +11,7 @@ import com.ibm.icu.lang.*;
 
 import java.io.IOException;
 
+import com.ibm.icu.impl.CollectionUtilities;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -20,6 +21,7 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.RuleCharacterIterator;
 
+import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
@@ -265,7 +267,7 @@ import java.util.Collection;
  * @stable ICU 2.0
  * @see UnicodeSetIterator
  */
-public class UnicodeSet extends UnicodeFilter {
+public class UnicodeSet extends UnicodeFilter implements Freezable {
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -439,7 +441,9 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public Object clone() {
-        return new UnicodeSet(this);
+        UnicodeSet result = new UnicodeSet(this);
+        result.frozen = this.frozen;
+        return result;
     }
 
     /**
@@ -452,6 +456,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet set(int start, int end) {
+        checkFrozen();
         clear();
         complement(start, end);
         return this;
@@ -464,6 +469,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet set(UnicodeSet other) {
+        checkFrozen();
         list = (int[]) other.list.clone();
         len = other.len;
         pat = other.pat;
@@ -481,6 +487,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet applyPattern(String pattern) {
+        checkFrozen();
         return applyPattern(pattern, null, null, IGNORE_SPACE);
     }
 
@@ -496,6 +503,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
+        checkFrozen();
         return applyPattern(pattern, null, null, ignoreWhitespace ? IGNORE_SPACE : 0);
     }
 
@@ -511,6 +519,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @internal
      */
     public UnicodeSet applyPattern(String pattern, int options) {
+        checkFrozen();
         return applyPattern(pattern, null, null, options);
     }
 
@@ -908,6 +917,41 @@ public class UnicodeSet extends UnicodeFilter {
         return maxLen;
     }
 
+    /**
+     * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. For now, an internal routine.
+     * @internal
+     */
+    public int matchesAt(CharSequence text, int offset) {
+        int len = -1;
+        strings:
+        if (strings.size() != 0) {
+            char firstChar = text.charAt(offset);
+            String trial = null;
+            // find the first string starting with firstChar
+            Iterator it = strings.iterator();
+            while (it.hasNext()) {
+                trial = (String) it.next();
+                char firstStringChar = trial.charAt(0);
+                if (firstStringChar < firstChar) continue;
+                if (firstStringChar > firstChar) break strings;
+            }
+            // now keep checking string until we get the longest one
+            while (true) {
+                int tempLen = CollectionUtilities.matchesAt(text, offset, trial);
+                if (len > tempLen) break strings;
+                len = tempLen;
+                if (!it.hasNext()) break;
+                trial = (String) it.next();
+            }
+        }
+        if (len < 2) {
+            int cp = UTF16.charAt(text, offset);
+            if (contains(cp)) {
+                len = UTF16.getCharCount(cp);
+            }
+        }
+        return offset+len;
+    }
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
@@ -987,6 +1031,12 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet add(int start, int end) {
+        checkFrozen();
+        return add_unchecked(start, end);
+    }
+    
+    // for internal use, after checkFrozen has been called
+    private UnicodeSet add_unchecked(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -1027,6 +1077,12 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet add(int c) {
+        checkFrozen();
+        return add_unchecked(c);
+    }
+    
+    // for internal use only, after checkFrozen has been called
+    private final UnicodeSet add_unchecked(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
         }
@@ -1121,13 +1177,13 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet add(String s) {
-
+        checkFrozen();
         int cp = getSingleCP(s);
         if (cp < 0) {
             strings.add(s);
             pat = null;
         } else {
-            add(cp, cp);
+            add_unchecked(cp, cp);
         }
         return this;
     }
@@ -1160,10 +1216,11 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet addAll(String s) {
+        checkFrozen();
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
-            add(cp, cp);
+            add_unchecked(cp, cp);
         }
         return this;
     }
@@ -1236,6 +1293,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet retain(int start, int end) {
+        checkFrozen();
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -1299,6 +1357,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet remove(int start, int end) {
+        checkFrozen();
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -1355,6 +1414,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet complement(int start, int end) {
+        checkFrozen();
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -1384,6 +1444,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet complement() {
+        checkFrozen();
         if (list[0] == LOW) {
             System.arraycopy(list, 1, list, 0, len-1);
             --len;
@@ -1407,6 +1468,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet complement(String s) {
+        checkFrozen();
         int cp = getSingleCP(s);
         if (cp < 0) {
             if (strings.contains(s)) strings.remove(s);
@@ -1838,6 +1900,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet addAll(UnicodeSet c) {
+        checkFrozen();
         add(c.list, c.len, 0);
         strings.addAll(c.strings);
         return this;
@@ -1854,6 +1917,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet retainAll(UnicodeSet c) {
+        checkFrozen();
         retain(c.list, c.len, 0);
         strings.retainAll(c.strings);
         return this;
@@ -1870,6 +1934,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet removeAll(UnicodeSet c) {
+        checkFrozen();
         retain(c.list, c.len, 2);
         strings.removeAll(c.strings);
         return this;
@@ -1885,6 +1950,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet complementAll(UnicodeSet c) {
+        checkFrozen();
         xor(c.list, c.len, 0);
         SortedSetRelation.doOperation(strings, SortedSetRelation.COMPLEMENTALL, c.strings);
         return this;
@@ -1896,6 +1962,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet clear() {
+        checkFrozen();
         list[0] = HIGH;
         len = 1;
         pat = null;
@@ -1946,6 +2013,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet compact() {
+        checkFrozen();
         if (len != list.length) {
             int[] temp = new int[len];
             System.arraycopy(list, 0, temp, 0, len);
@@ -2195,7 +2263,7 @@ public class UnicodeSet extends UnicodeFilter {
                     if (op != 0) {
                         syntaxError(chars, "Char expected after operator");
                     }
-                    add(lastChar, lastChar);
+                    add_unchecked(lastChar, lastChar);
                     _appendToPat(pat, lastChar, false);
                     lastItem = op = 0;
                 }
@@ -2260,12 +2328,12 @@ public class UnicodeSet extends UnicodeFilter {
                 switch (c) {
                 case ']':
                     if (lastItem == 1) {
-                        add(lastChar, lastChar);
+                        add_unchecked(lastChar, lastChar);
                         _appendToPat(pat, lastChar, false);
                     }
                     // Treat final trailing '-' as a literal
                     if (op == '-') {
-                        add(op, op);
+                        add_unchecked(op, op);
                         pat.append(op);
                     } else if (op == '&') {
                         syntaxError(chars, "Trailing '&'");
@@ -2280,7 +2348,7 @@ public class UnicodeSet extends UnicodeFilter {
                             continue;
                         } else {
                             // Treat final trailing '-' as a literal
-                            add(c, c);
+                            add_unchecked(c, c);
                             c = chars.next(opts);
                             literal = chars.isEscaped();
                             if (c == ']' && !literal) {
@@ -2304,7 +2372,7 @@ public class UnicodeSet extends UnicodeFilter {
                         syntaxError(chars, "Missing operand after operator");
                     }
                     if (lastItem == 1) {
-                        add(lastChar, lastChar);
+                        add_unchecked(lastChar, lastChar);
                         _appendToPat(pat, lastChar, false);
                     }
                     lastItem = 0;
@@ -2352,10 +2420,10 @@ public class UnicodeSet extends UnicodeFilter {
                     }
                     if (anchor && op == 0) {
                         if (lastItem == 1) {
-                            add(lastChar, lastChar);
+                            add_unchecked(lastChar, lastChar);
                             _appendToPat(pat, lastChar, false);
                         }
-                        add(UnicodeMatcher.ETHER);
+                        add_unchecked(UnicodeMatcher.ETHER);
                         usePat = true;
                         pat.append(SymbolTable.SYMBOL_REF).append(']');
                         mode = 2;
@@ -2383,13 +2451,13 @@ public class UnicodeSet extends UnicodeFilter {
                         // these are most likely typos.
                         syntaxError(chars, "Invalid range");
                     }
-                    add(lastChar, c);
+                    add_unchecked(lastChar, c);
                     _appendToPat(pat, lastChar, false);
                     pat.append(op);
                     _appendToPat(pat, c, false);
                     lastItem = op = 0;
                 } else {
-                    add(lastChar, lastChar);
+                    add_unchecked(lastChar, lastChar);
                     _appendToPat(pat, lastChar, false);
                     lastChar = c;
                 }
@@ -2456,6 +2524,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.8
      */
     public void addAll(Collection source) {
+        checkFrozen();
         Iterator it = source.iterator();
         while (it.hasNext()) {
             add(it.next().toString());
@@ -2846,13 +2915,13 @@ public class UnicodeSet extends UnicodeFilter {
                         startHasProperty = ch;
                     }
                 } else if (startHasProperty >= 0) {
-                    add(startHasProperty, ch-1);
+                    add_unchecked(startHasProperty, ch-1);
                     startHasProperty = -1;
                 }
             }
         }
         if (startHasProperty >= 0) {
-            add(startHasProperty, 0x10FFFF);
+            add_unchecked(startHasProperty, 0x10FFFF);
         }
 
         return this;
@@ -2914,6 +2983,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.4
      */
     public UnicodeSet applyIntPropertyValue(int prop, int value) {
+        checkFrozen();
         if (prop == UProperty.GENERAL_CATEGORY_MASK) {
             applyFilter(new GeneralCategoryMaskFilter(value), UCharacterProperty.SRC_CHAR);
         } else {
@@ -2969,6 +3039,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
                                          String valueAlias, SymbolTable symbols) {
+        checkFrozen();
         int p;
         int v;
         boolean mustNotBeEmpty = false, invert = false;
@@ -3031,7 +3102,7 @@ public class UnicodeSet extends UnicodeFilter {
                             throw new IllegalArgumentException("Invalid character name");
                         }
                         clear();
-                        add(ch);
+                        add_unchecked(ch);
                         return this;
                     }
                 case UProperty.AGE:
@@ -3374,6 +3445,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @internal
      */
     public UnicodeSet closeOver(int attribute) {
+        checkFrozen();
         if ((attribute & (CASE | ADD_CASE_MAPPINGS)) != 0) {
             UCaseProps csp;
             try {
@@ -3468,6 +3540,42 @@ public class UnicodeSet extends UnicodeFilter {
         }
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
+        }
+    }
+
+    private boolean frozen;
+    
+    /**
+     * Is this frozen, according to the Freezable interface?
+     * @return value
+     */
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    /**
+     * Freeze this class, according to the Freezable interface.
+     * @return this
+     */
+    public Object freeze() {
+        frozen = true;
+        return this;
+    }
+    
+    /**
+     * Clone a thawed version of this class, according to the Freezable interface.
+     * @return this
+     */
+    public Object cloneAsThawed() {
+        UnicodeSet result = (UnicodeSet) clone();
+        result.frozen = false;
+        return result;
+    }
+    
+    // internal function
+    private void checkFrozen() {
+        if (frozen) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
     }
 }
