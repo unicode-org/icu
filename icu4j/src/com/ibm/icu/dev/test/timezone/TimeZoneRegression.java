@@ -1021,6 +1021,11 @@ public class TimeZoneRegression extends TestFmwk {
         }
 
 //#ifndef FOUNDATION
+        if (System.getProperty("java.vendor", "").startsWith("IBM") &&
+        	System.getProperty("java.version", "").equals("1.4.1")) {
+            // IBM JDK 1.4.1 has a bug and fails to run this test case.
+            return;
+        }
         java.util.TimeZone jdkEastern = java.util.TimeZone.getTimeZone("America/New_York");
         // Compare offset and DST observation with JDK and ICU for 50 years since 1900
         testCal.add(Calendar.YEAR, 50);
