@@ -7,10 +7,12 @@
  */
 package com.ibm.icu.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -328,6 +330,55 @@ public final class CollectionUtilities {
 		return result.toString();
 	}
     
+     /**
+      * Does one string contain another, starting at a specific offset?
+      * @param text
+      * @param offset
+      * @param other
+      * @return
+      */
+        public static int matchesAt(CharSequence text, int offset, CharSequence other) {
+            int len = other.length();
+            int i = 0;
+            int j = offset;
+            for (; i < len; ++i, ++j) {
+                char pc = other.charAt(i);
+                char tc = text.charAt(j);
+                if (pc != tc) return -1;
+            }
+            return i;
+        }
+
+        /**
+         * Returns the ending offset found by matching characters with testSet, until a position is found that doen't match
+         * @param string
+         * @param offset
+         * @param testSet
+         * @return
+         */
+        public int span(CharSequence string, int offset, UnicodeSet testSet) {
+            while (true) {
+                int newOffset = testSet.matchesAt(string, offset);
+                if (newOffset < 0) return offset;
+            }
+        }
+        
+        /**
+         * Returns the ending offset found by matching characters with testSet, until a position is found that does match
+         * @param string
+         * @param offset
+         * @param testSet
+         * @return
+         */
+        public int spanNot(CharSequence string, int offset, UnicodeSet testSet) {
+            while (true) {
+                int newOffset = testSet.matchesAt(string, offset);
+                if (newOffset >= 0) return offset;
+                ++offset; // try next character position
+                // we don't have to worry about surrogates for this.
+            }
+        }
+
     public static String prettyPrint(UnicodeSet uset, boolean compressRanges, UnicodeSet toQuote, Transliterator quoter, 
     		Comparator ordering, Comparator spaceComparator) {
         PrettyPrinter pp = new PrettyPrinter().setCompressRanges(compressRanges);

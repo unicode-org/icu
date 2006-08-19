@@ -25,7 +25,8 @@ import com.ibm.icu.util.ULocale;
 /** Provides more flexible formatting of UnicodeSet patterns.
  */
 public class PrettyPrinter {
-	private static UnicodeSet patternWhitespace = new UnicodeSet("[[:Cn:][:Default_Ignorable_Code_Point:][:patternwhitespace:]]");
+	private static final UnicodeSet patternWhitespace = (UnicodeSet) new UnicodeSet("[[:Cn:][:Default_Ignorable_Code_Point:][:patternwhitespace:]]").freeze();
+    private static final UnicodeSet sortAtEnd = (UnicodeSet) new UnicodeSet("[[:Cn:][:Cs:][:Co:][:Ideographic:]]").freeze();
 	
 	private boolean first = true;
 	private StringBuffer target = new StringBuffer();
@@ -113,27 +114,45 @@ public class PrettyPrinter {
 	 */
 	public String toPattern(UnicodeSet uset) {
 		first = true;
+        UnicodeSet putAtEnd = new UnicodeSet(uset).retainAll(sortAtEnd); // remove all the unassigned gorp for now
 		// make sure that comparison separates all strings, even canonically equivalent ones
 		Set orderedStrings = new TreeSet(ordering);
-		for (UnicodeSetIterator it = new UnicodeSetIterator(uset); it.next();) {
-			orderedStrings.add(it.getString());
+		for (UnicodeSetIterator it = new UnicodeSetIterator(uset); it.nextRange();) {
+            if (it.codepoint == it.IS_STRING) {
+                orderedStrings.add(it.string);
+            } else {
+                for (int i = it.codepoint; i <= it.codepointEnd; ++i) {
+                    if (!putAtEnd.contains(i)) {
+                        orderedStrings.add(UTF16.valueOf(i));
+                    }
+                }
+            }
 		}
 		target.setLength(0);
 		target.append("[");
 		for (Iterator it = orderedStrings.iterator(); it.hasNext();) {
 			appendUnicodeSetItem((String) it.next());
 		}
+        for (UnicodeSetIterator it = new UnicodeSetIterator(putAtEnd); it.next();) { // add back the unassigned gorp
+            appendUnicodeSetItem(it.codepoint);
+        }
 		flushLast();
 		target.append("]");
 		String sresult = target.toString();
-		UnicodeSet doubleCheck = new UnicodeSet(sresult);
-		if (!uset.equals(doubleCheck)) {
-			throw new IllegalStateException("Failure to round-trip in pretty-print");
-		}
+		
+        // double check the results. This can be removed once we have more tests.
+//        try {
+//            UnicodeSet  doubleCheck = new UnicodeSet(sresult);
+//            if (!uset.equals(doubleCheck)) {
+//                throw new IllegalStateException("Failure to round-trip in pretty-print " + uset + " => " + sresult + "\r\n source-result: " + new UnicodeSet(uset).removeAll(doubleCheck) +  "\r\n result-source: " + new UnicodeSet(doubleCheck).removeAll(uset));
+//            }
+//        } catch (RuntimeException e) {
+//            throw (RuntimeException) new IllegalStateException("Failure to round-trip in pretty-print " + uset).initCause(e);
+//        }
 		return sresult;
 	}
 	
-	PrettyPrinter appendUnicodeSetItem(String s) {
+	private PrettyPrinter appendUnicodeSetItem(String s) {
 		int cp;
 		if (UTF16.hasMoreCodePointsThan(s, 1)) {
 			flushLast();
@@ -145,18 +164,21 @@ public class PrettyPrinter {
 			target.append("}");
 			lastString = s;
 		} else {
-			if (!compressRanges)
-				flushLast();
-			cp = UTF16.charAt(s, 0);
-			if (cp == lastCodePoint + 1) {
-				lastCodePoint = cp; // continue range
-			} else { // start range
-				flushLast();
-				firstCodePoint = lastCodePoint = cp;
-			}
+			appendUnicodeSetItem(UTF16.charAt(s, 0));
 		}
 		return this;
 	}
+
+    private void appendUnicodeSetItem(int cp) {
+        if (!compressRanges)
+        	flushLast();
+        if (cp == lastCodePoint + 1) {
+        	lastCodePoint = cp; // continue range
+        } else { // start range
+        	flushLast();
+        	firstCodePoint = lastCodePoint = cp;
+        }
+    }
 	/**
 	 * 
 	 */
@@ -166,10 +188,13 @@ public class PrettyPrinter {
 		} else if (spaceComp.compare(s, lastString) != 0) {
 			target.append(' ');
 		} else {
-			int type = UCharacter.getType(UTF16.charAt(s,0));
+            int cp = UTF16.charAt(s,0);
+			int type = UCharacter.getType(cp);
 			if (type == UCharacter.NON_SPACING_MARK || type == UCharacter.ENCLOSING_MARK) {
 				target.append(' ');
-			}
+			} else if (type == UCharacter.SURROGATE && cp >= UTF16.TRAIL_SURROGATE_MIN_VALUE) {
+                target.append(' '); // make sure we don't accidentally merge two surrogates
+            }
 		}
 	}
 	
