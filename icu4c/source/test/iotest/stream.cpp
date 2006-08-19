@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -21,7 +21,7 @@
 #include "iotest.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
-#if defined(U_LINUX) || defined(U_CYGWIN) || defined(U_DARWIN)
+#if defined(__GNUC__) && __GNUC__ >= 4
 #define USE_SSTREAM 1
 #include <sstream>
 #else
