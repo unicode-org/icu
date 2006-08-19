@@ -2823,5 +2823,3 @@ utext_openCharacterIterator(UText *ut, CharacterIterator *ci, UErrorCode *status
 
 
 
-
-
