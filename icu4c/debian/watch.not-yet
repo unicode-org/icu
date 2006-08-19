@@ -1,0 +1,16 @@
+# Copyright (c) 2006-2006 International Business Machines
+# Corporation and others. All Rights Reserved.
+#
+# This doesn't work because ICU upstream doesn't always have the
+# latest version in the latest directory.  See debian bug 375138 for
+# details.
+
+version=3
+
+# ICU repackaged 3.4.1 without changing the version number, so we
+# called our local version 3.4.1a.  These opts could be removed when
+# the latest version no longer needs to be hacked locally.  We
+# hardcode 3.4.1 here because we are not going to generally be adding
+# "a" to the end of the version number....
+opts="uversionmangle=s/^(3\.6)$/$1a/" \
+ ftp://ftp.software.ibm.com/software/globalization/icu/(?:\d+\.[\d\.]+)/icu4c-([\d\.]+).tgz
