@@ -38,18 +38,18 @@ public:
 
 public:
     IteratedChar();
-    void reset();         
-    int32_t nextByte(InputText* det); 
+    void reset();
+    int32_t nextByte(InputText* det);
 };
 
 
 class CharsetRecog_mbcs : public CharsetRecognizer {
 
-protected:    
+protected:
     /**
      * Test the match of this charset with the input text data
      *      which is obtained via the CharsetDetector object.
-     * 
+     *
      * @param det  The CharsetDetector, which contains the input text
      *             to be checked for being in this charset.
      * @return     Two values packed into one int  (Damn java, anyhow)
@@ -60,9 +60,9 @@ protected:
      */
     int32_t match_mbcs(InputText* det, const int32_t commonChars[], int32_t commonCharsLen);
 
-public:     
+public:
 
-    virtual ~CharsetRecog_mbcs();	 
+    virtual ~CharsetRecog_mbcs();
 
     /**
      * Get the IANA name of this charset.
@@ -77,7 +77,7 @@ public:
      * Get the next character (however many bytes it is) from the input data
      *    Subclasses for specific charset encodings must implement this function
      *    to get characters according to the rules of their encoding scheme.
-     * 
+     *
      *  This function is not a method of class IteratedChar only because
      *   that would require a lot of extra derived classes, which is awkward.
      * @param it  The IteratedChar "struct" into which the returned char is placed.
@@ -87,11 +87,11 @@ public:
      */
     virtual UBool nextChar(IteratedChar *it, InputText *textIn) = 0;
 
-};     
+};
 
 
 /**
- *   Shift-JIS charset recognizer.   
+ *   Shift-JIS charset recognizer.
  *
  */
 class CharsetRecog_sjis : public CharsetRecog_mbcs {
@@ -111,10 +111,10 @@ public:
 /**
  *   EUC charset recognizers.  One abstract class that provides the common function
  *             for getting the next character according to the EUC encoding scheme,
- *             and nested derived classes for EUC_KR, EUC_JP, EUC_CN.   
+ *             and nested derived classes for EUC_KR, EUC_JP, EUC_CN.
  *
  */
-class CharsetRecog_euc : public CharsetRecog_mbcs 
+class CharsetRecog_euc : public CharsetRecog_mbcs
 {
 public:
     virtual ~CharsetRecog_euc();
@@ -130,7 +130,7 @@ public:
      *     packed into an int.
      */
     UBool nextChar(IteratedChar *it, InputText *det);
-};         
+};
 
 /**
  * The charset recognize for EUC-JP.  A singleton instance of this class
@@ -138,7 +138,7 @@ public:
  */
 class CharsetRecog_euc_jp : public CharsetRecog_euc
 {
-public:             
+public:
     virtual ~CharsetRecog_euc_jp();
 
     const char *getName() const;
@@ -163,11 +163,11 @@ public:
 };
 
 /**
- * 
+ *
  *   Big5 charset recognizer.
  *
  */
-class CharsetRecog_big5 : public CharsetRecog_mbcs 
+class CharsetRecog_big5 : public CharsetRecog_mbcs
 {
 public:
     virtual ~CharsetRecog_big5();
@@ -182,11 +182,11 @@ public:
 
 
 /**
- * 
- *   GB-18030 recognizer. Uses simplified Chinese statistics.   
+ *
+ *   GB-18030 recognizer. Uses simplified Chinese statistics.
  *
  */
-class CharsetRecog_gb_18030 : public CharsetRecog_mbcs 
+class CharsetRecog_gb_18030 : public CharsetRecog_mbcs
 {
 public:
     virtual ~CharsetRecog_gb_18030();

@@ -685,14 +685,14 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     else
 #endif
     {
-	UErrorCode feErr;
+        UErrorCode feErr;
         char calLocaleType[ULOC_FULLNAME_CAPACITY];
         calLocaleType[0] = 0; // NULL terminate
         int32_t keywordCapacity = aLocale.getKeywordValue("calendar", calLocaleType, sizeof(calLocaleType)-1, success);
         if (keywordCapacity == 0) {
             char funcEquiv[ULOC_FULLNAME_CAPACITY];
 
-	    feErr = success;
+            feErr = success;
 
             // fetch default calendar id
             ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
@@ -701,7 +701,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
                                         NULL, FALSE, &feErr);
             keywordCapacity = uloc_getKeywordValue(funcEquiv, "calendar", calLocaleType, 
                                 sizeof(calLocaleType)-1, &feErr);  // This can fail if there is no data.  
-				   // Don't want to stop calendar construction just because we couldn't get this type.
+            // Don't want to stop calendar construction just because we couldn't get this type.
             if (keywordCapacity == 0 || U_FAILURE(feErr)) {
                 // no calendar type.  Default to nothing.
                 calLocaleType[0] = 0;
