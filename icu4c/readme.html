@@ -1,16 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html lang="en-US">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head>
   <title>ReadMe for ICU</title>
   <meta name="COPYRIGHT" content=
-  "Copyright (c) 1997-2006 IBM Corporation and others. All Rights Reserved.">
+  "Copyright (c) 1997-2006 IBM Corporation and others. All Rights Reserved." />
   <meta name="KEYWORDS" content=
-  "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
+  "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
   <meta name="DESCRIPTION" content=
-  "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
-  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU." />
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 <style type="text/css">
+/*<![CDATA[*/
     h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
     h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
     h2.TOC {page-break-before: auto}
@@ -21,18 +23,19 @@
     div.indent {margin-left: 2em}
     ul.TOC {list-style-type: none}
     samp {margin-left: 1em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+/*]]>*/
 </style>
 </head>
 
 <body>
-  <h1>International Components for Unicode<br>
+  <h1>International Components for Unicode<br />
   <abbr title="International Components for Unicode">ICU</abbr> 3.6 ReadMe</h1>
 
-  <p>Version: 2006-Jul-15<br>
+  <p>Version: 2006-Aug-31<br />
   Copyright &copy; 1997-2006 International Business Machines Corporation and
   others. All Rights Reserved.</p>
   <!-- Remember that there is a copyright at the end too -->
-  <hr>
+  <hr />
 
   <h2 class="TOC">Table of Contents</h2>
 
@@ -92,7 +95,7 @@
       </ul>
     </li>
   </ul>
-  <hr>
+  <hr />
 
   <h2><a name="Introduction" href="#Introduction" id=
   "Introduction">Introduction</a></h2>
@@ -140,7 +143,7 @@
   "GettingStarted">Getting started</a></h2>
 
   <p>This document describes how to build and install ICU on your machine. For
-  other information about ICU please see the following table of links.<br>
+  other information about ICU please see the following table of links.<br />
   The ICU homepage also links to related information about writing
   internationalized software.</p>
 
@@ -220,19 +223,21 @@
   "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.6
   download page</a>.</p>
 
-  <h3><a name="News_app_packaging" id="News_app_packaging">Changes to
-  packaging resource bundles</a></h3>
+  <h3><a name="News_app_packaging" id="News_app_packaging">Changes to packaging
+  resource bundles</a></h3>
 
   <p>Since ICU 3.0, the old style of packaging was deprecated, and an alternate
-  packaging mode was made available. In this release, this compatibility mode of
-  packaging has been removed from ICU. If you're using the genrb -P or -t options,
-  you are probably using the older compatible mode of data packaging. This
-  compatibility file naming mode was removed for portability and performance reasons.</p>
-  
-  <p>Code changes should not be required to use the newer data file naming scheme,
-  but you will need to update your makefile scripts, if you're using the older
-  data file naming scheme. The example of using the new data file naming scheme
-  can be found in <a href="source/samples/ufortune/">the ufortune sample program</a>.</p>
+  packaging mode was made available. In this release, this compatibility mode
+  of packaging has been removed from ICU. If you're using the genrb -P or -t
+  options, you are probably using the older compatible mode of data packaging.
+  This compatibility file naming mode was removed for portability and
+  performance reasons.</p>
+
+  <p>Code changes should not be required to use the newer data file naming
+  scheme, but you will need to update your makefile scripts, if you're using
+  the older data file naming scheme. The example of using the new data file
+  naming scheme can be found in <a href="source/samples/ufortune/">the ufortune
+  sample program</a>.</p>
 
   <table border="1" cellpadding="0" summary=
   "The following are examples of the file naming schemes.">
@@ -270,8 +275,19 @@
   use the C++ API of ICU, you are not affected by this change.</p>
 
   <p>If you receive any errors while linking ICU into your project, please make
-  sure that you have set "Treat wchar_t as Built-in Type" to "Yes (/Zc:wchar_t)"
-  in your project files.</p>
+  sure that you have set "Treat wchar_t as Built-in Type" to "Yes
+  (/Zc:wchar_t)" in your project files.</p>
+
+  <h3><a name="News_scanf" id="News_scanf">Changes to scanf and storing
+  floating point types</a></h3>
+
+  <p>In order to improve interoperability with standard scanf implementations,
+  the icuio library's implementations of scanf has changed the default scanf
+  type from <tt>double</tt> to <tt>float</tt>. This is a breaking change
+  requires you to change your code if you are using the icuio library's scanf
+  to read <tt>double</tt> or <tt>float</tt> values with %e, %f or %g. As a
+  reminder, these scanf functions in the icuio library are still marked
+  draft.</p>
 
   <h3><a name="News_data_package" id="News_data_package">Source download
   contains .dat package for ICU data</a></h3>
@@ -289,22 +305,22 @@
   <p>There are two ways to download ICU releases:</p>
 
   <ul>
-    <li><strong>Official Release Snapshot:</strong><br>
+    <li><strong>Official Release Snapshot:</strong><br />
     If you want to use ICU (as opposed to developing it), you should download
     an official packaged version of the ICU source code. These versions are
     tested more thoroughly than day-to-day development builds of the system,
     and they are packaged in zip and tar files for convenient download. These
     packaged files can be found at <a href=
-    "http://www.ibm.com/software/globalization/icu/downloads.jsp">http://www.ibm.com/software/globalization/icu/downloads.jsp</a>.<br>
+    "http://www.ibm.com/software/globalization/icu/downloads.jsp">http://www.ibm.com/software/globalization/icu/downloads.jsp</a>.<br />
 
     The packaged snapshots are named <strong>icu-nnnn.zip</strong> or
     <strong>icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip
     file is used for Windows platforms, while the .tgz file is preferred on
-    most other platforms.<br>
+    most other platforms.<br />
     Please unzip this file. It will reconstruct the source directory, which
     includes anonymous CVS control directories (see below).</li>
 
-    <li><strong>CVS Source Repository:</strong><br>
+    <li><strong>CVS Source Repository:</strong><br />
     If you are interested in developing features, patches, or bug fixes for
     ICU, you should probably be working with the latest version of the ICU
     source code. You will need to check the code out of our CVS repository to
@@ -349,7 +365,7 @@
     </tr>
   </table>
 
-  <p><br></p>
+  <p><br /></p>
 
   <table border="1" cellpadding="0" width="100%" summary=
   "The following directories contain source code and data files.">
@@ -491,7 +507,7 @@
     </tr>
 
     <tr>
-      <td><i>&lt;ICU&gt;</i>/<b>packaging</b>/<br>
+      <td><i>&lt;ICU&gt;</i>/<b>packaging</b>/<br />
       <i>&lt;ICU&gt;</i>/<b>debian</b>/</td>
 
       <td>These directories contain scripts and tools for packaging the final
@@ -588,7 +604,7 @@
     <tr>
       <td>HP-UX 11.11</td>
 
-      <td>aCC A.03.50<br>
+      <td>aCC A.03.50<br />
       cc B.11.11.08</td>
 
       <td>Reference platform</td>
@@ -755,7 +771,7 @@
     </tr>
   </table>
 
-  <p><br></p>
+  <p><br /></p>
 
   <h4>Key to testing frequency</h4>
 
@@ -1495,14 +1511,13 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
   <p>If you are building ICU with a newer aCC compiler and you are planning on
   using the older &lt;iostream.h&gt; instead of the newer &lt;iostream&gt;, you
   will need to use a special configure flag before building ICU. By default,
-  the aCC <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">
-  -AA</a> flag is used on HP-UX when the compiler supports that option in order
-  to make ICU thread safe with RogueWave and other libraries using the 2.0
-  Standard C++ library. Your applications that use ICU will also need to use
-  the <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">
-  -AA</a> compiler flag. To turn off this behavior in ICU, you will need to use
-  the --with-iostream= old configure option when you first use
-  runConfigureICU.</p>
+  the aCC <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">-AA</a>
+  flag is used on HP-UX when the compiler supports that option in order to make
+  ICU thread safe with RogueWave and other libraries using the 2.0 Standard C++
+  library. Your applications that use ICU will also need to use the <a href=
+  "http://docs.hp.com/en/1405/options.htm#optioncap-AA">-AA</a> compiler flag.
+  To turn off this behavior in ICU, you will need to use the --with-iostream=
+  old configure option when you first use runConfigureICU.</p>
 
   <h4><a name="ImportantNotesSolaris" href="#ImportantNotesSolaris" id=
   "ImportantNotesSolaris">Using ICU in a Multithreaded Environment on
@@ -1540,10 +1555,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
   found at:</p>
 
   <p>[1] "<i>Applications Linked to libthread May Hang</i>", Sun Alert
-  Notification, Sun Microsystems, Inc., 04-Sep-2002<br>
+  Notification, Sun Microsystems, Inc., 04-Sep-2002<br />
   <a href=
-  "http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867">
-  http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867</a></p>
+  "http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867">http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867</a></p>
 
   <p>Sun is <strong>not</strong> providing patches for Solaris 6 (2.6), or
   earlier.</p>
@@ -1577,7 +1591,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
   failure, and deadlock.</p>
 
   <p>[2] "<i>Solaris Multithreaded Programming Guide, Compiling and
-  Debugging</i>", Sun Microsystems, Inc., Apr 2004<br>
+  Debugging</i>", Sun Microsystems, Inc., Apr 2004<br />
   <a href=
   "http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view">http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view</a></p>
 
@@ -1688,7 +1702,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
   <p>Try to follow the build steps from the <a href="#HowToBuildUNIX">UNIX</a>
   build instructions. If the configure script fails, then you will need to
   modify some files. Here are the usual steps for porting to a new
-  platform:<br></p>
+  platform:<br /></p>
 
   <ol>
     <li>Create an mh file in icu/source/config/. You can use mh-linux or a
@@ -1721,10 +1735,10 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
   <ul>
     <li>
-      <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br>
+      <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br />
       <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h, ..):
-      Platform-dependent typedefs and defines:<br>
-      <br>
+      Platform-dependent typedefs and defines:<br />
+      <br />
 
       <ul>
         <li>XP_CPLUSPLUS for C++ only.</li>
@@ -1736,13 +1750,13 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
         export</li>
 
         <li>&lt;iostream&gt; usability</li>
-      </ul><br>
+      </ul><br />
     </li>
 
     <li>
       <strong>unicode/putil.h, putil.c</strong>: platform-dependent
-      implementations of various functions that are platform dependent:<br>
-      <br>
+      implementations of various functions that are platform dependent:<br />
+      <br />
 
       <ul>
         <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity for
@@ -1758,7 +1772,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
         <li>uprv_getDefaultCodepage for getting the default codepage
         encoding.</li>
-      </ul><br>
+      </ul><br />
     </li>
 
     <li>
@@ -1767,31 +1781,31 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       for Unicode in a multithreaded application, you must provide a
       synchronization primitive that the classes can use to protect their
       global data against simultaneous modifications. See Users' guide for more
-      information.<br>
-      <br>
+      information.<br />
+      <br />
 
       <ul>
         <li>We supply sample implementations for Windows, Sun Solaris, Linux,
         AIX, HP-UX, BSD, Mac OS X, z/OS and many others.</li>
-      </ul><br>
+      </ul><br />
     </li>
 
     <li><strong>umapfile.h, umapfile.c</strong>: functions for mapping or
     otherwise reading or loading files into memory. All access by ICU to data
-    from files makes use of these functions.<br>
-    <br></li>
+    from files makes use of these functions.<br />
+    <br /></li>
 
     <li>Using platform specific #ifdef macros are highly discouraged outside of
     the scope of these files. When the source code gets updated in the future,
     these #ifdef's can cause testing problems for your platform.</li>
   </ul>
-  <hr>
+  <hr />
 
   <p>Copyright &copy; 1997-2006 International Business Machines Corporation and
-  others. All Rights Reserved.<br>
-  IBM Globalization Center of Competency - San Jos&eacute;<br>
-  5600 Cottle Road<br>
-  San Jos&eacute;, CA 95193<br>
+  others. All Rights Reserved.<br />
+  IBM Globalization Center of Competency - San Jos&eacute;<br />
+  5600 Cottle Road<br />
+  San Jos&eacute;, CA 95193<br />
   USA</p>
 </body>
 </html>
