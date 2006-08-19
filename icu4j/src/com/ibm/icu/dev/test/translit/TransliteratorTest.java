@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3249,7 +3249,22 @@ the ::BEGIN/::END stuff)
         logln("source = " + t.getSourceSet());
         logln("target = " + t.getTargetSet());
     }
-
+    public void TestAny() {
+        UnicodeSet alphabetic = (UnicodeSet) new UnicodeSet("[:alphabetic:]").freeze();
+        StringBuffer testString = new StringBuffer();
+        for (int i = 0; i < UScript.CODE_LIMIT; ++i) {
+            UnicodeSet sample = new UnicodeSet().applyPropertyAlias("script", UScript.getShortName(i)).retainAll(alphabetic);
+            int count = 5;
+            for (UnicodeSetIterator it = new UnicodeSetIterator(sample); it.next();) {
+                testString.append(it.getString());
+                if (--count < 0) break;
+            }
+        }
+        logln("Sample set for Any-Latin: " + testString);
+        Transliterator anyLatin = Transliterator.getInstance("any-Latn");
+        String result = anyLatin.transliterate(testString.toString());
+        logln("Sample result for Any-Latin: " + result);
+    }
     //======================================================================
     // Support methods
     //======================================================================

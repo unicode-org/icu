@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2005, International Business Machines Corporation
+* Copyright (c) 2002-2006, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -153,12 +153,16 @@ class AnyTransliterator extends Transliterator {
             String sourceName = UScript.getName(source);
             String id = sourceName + TARGET_SEP + target;
 
-            t = Transliterator.getInstance(id, FORWARD);
+            try {
+                t = Transliterator.getInstance(id, FORWARD);
+            } catch (RuntimeException e) { }
             if (t == null) {
 
                 // Try to pivot around Latin, our most common script
                 id = sourceName + LATIN_PIVOT + target;
-                t = Transliterator.getInstance(id, FORWARD);
+                try {
+                    t = Transliterator.getInstance(id, FORWARD);
+                } catch (RuntimeException e) { }
             }
 
             if (t != null) {
