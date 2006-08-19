@@ -20,9 +20,9 @@ TARGET_STUB_NAME = icupkg
 
 SECTION = 1
 
-#MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
+MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
-#ALL_MAN_FILES = $(MANX_FILES)
+ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(MAN_FILES)
@@ -80,8 +80,8 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 
 install-man: $(MAN_FILES)
-#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-#	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
