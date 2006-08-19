@@ -551,7 +551,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //  Check the length from the UText
     //
     int64_t expectedLen = cpMap[cpCount].nativeIdx;
-    int64_t utlen = ut->nativeLength(ut);
+    int64_t utlen = utext_nativeLength(ut);
     TEST_ASSERT(expectedLen == utlen);
 
     //
@@ -1276,16 +1276,26 @@ fragTextAccess(UText *ut, int64_t index, UBool forward) {
 }
 U_CDECL_END
 
+// Function table to be used with this fragmented text provider.
+//   Initialized in the open function.
+UTextFuncs  fragmentFuncs;
 
+// Open function for the fragmented text provider.
 UText *
 openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     ut = utext_openUnicodeString(ut, s, status);
     if (U_FAILURE(*status)) {
         return ut;
     }
-    ut->access = fragTextAccess;
+
+    // Copy of the function table from the stock UnicodeString UText,
+    //   and replace the entry for the access function.
+    memcpy(&fragmentFuncs, ut->pFuncs, sizeof(fragmentFuncs));
+    fragmentFuncs.access = fragTextAccess;
+    ut->pFuncs = &fragmentFuncs;
+
     ut->chunkContents = (UChar *)&ut->b;
-    ut->access(ut, 0, TRUE);
+    ut->pFuncs->access(ut, 0, TRUE);
     return ut;
 }
 
