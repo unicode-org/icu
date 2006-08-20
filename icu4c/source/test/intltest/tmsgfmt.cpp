@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -1238,19 +1238,19 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
     int32_t pattern_count = sizeof(patterns)/sizeof(patterns[0]);
 
     for (int i = 0; i < pattern_count; i += 2) {
-	UErrorCode status = U_ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         UnicodeString result = MessageFormat::autoQuoteApostrophe(patterns[i], status);
         UnicodeString target(patterns[i+1]);
         if (target != result) {
-	  const int BUF2_LEN = 64;
-	  char buf[256];
-	  char buf2[BUF2_LEN];
-	  int32_t len = result.extract(0, result.length(), buf2, BUF2_LEN);
-	  if (len >= BUF2_LEN) {
-	    buf2[BUF2_LEN-1] = 0;
-	  }
-	  sprintf(buf, "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
-	  errln(buf);
+            const int BUF2_LEN = 64;
+            char buf[256];
+            char buf2[BUF2_LEN];
+            int32_t len = result.extract(0, result.length(), buf2, BUF2_LEN);
+            if (len >= BUF2_LEN) {
+                buf2[BUF2_LEN-1] = 0;
+            }
+            sprintf(buf, "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
+            errln(buf);
         }
     }
 }

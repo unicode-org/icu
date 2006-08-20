@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -233,11 +233,11 @@ void TestCzechMonths459()
     UErrorCode status = U_ZERO_ERROR;
     UChar *date;
     
-	ctest_setTimeZone(NULL, &status);
+    ctest_setTimeZone(NULL, &status);
     fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status)){
         log_err("Error in constructing the date format\n");
-		ctest_resetTimeZone();
+        ctest_resetTimeZone();
         return;
     }
     lneed=0;
@@ -286,7 +286,7 @@ void TestCzechMonths459()
     else
         log_verbose("Pass: Date = %s (czech month July)\n", aescstrdup(date, -1));
     
-	ctest_resetTimeZone();
+    ctest_resetTimeZone();
     udat_close(fmt);
     ucal_close(cal);
     free(pattern);

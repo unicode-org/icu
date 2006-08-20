@@ -2264,7 +2264,7 @@ static void TestNonexistentLanguageExemplars(void) {
 }
 
 static void TestLanguageExemplarsFallbacks(void) {
-	/* Test that en_US fallsback, but en doesn't fallback. */
+    /* Test that en_US fallsback, but en doesn't fallback. */
     UErrorCode ec = U_ZERO_ERROR;
     ULocaleData *uld = ulocdata_open("en_US",&ec);
     uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
@@ -2273,7 +2273,7 @@ static void TestLanguageExemplarsFallbacks(void) {
             u_errorName(ec));
     }
     ulocdata_close(uld);
-	ec = U_ZERO_ERROR;
+    ec = U_ZERO_ERROR;
     uld = ulocdata_open("en",&ec);
     uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
     if (ec != U_ZERO_ERROR) {
