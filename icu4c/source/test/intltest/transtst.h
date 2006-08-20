@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -345,19 +345,19 @@ private:
     void TestAlternateSyntax(void);
 
     /**
-	 * Tests the multiple-pass syntax
-	 */
-	void TestBeginEnd(void);
+     * Tests the multiple-pass syntax
+     */
+    void TestBeginEnd(void);
 
     /**
-	 * Tests that toRules() works right with the multiple-pass syntax
-	 */
-	void TestBeginEndToRules(void);
+     * Tests that toRules() works right with the multiple-pass syntax
+     */
+    void TestBeginEndToRules(void);
 
-	/**
-	 * Tests the registerAlias() function
-	 */
-	void TestRegisterAlias(void);
+    /**
+     * Tests the registerAlias() function
+     */
+    void TestRegisterAlias(void);
 
     //======================================================================
     // Support methods

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -90,10 +90,10 @@ void CanonicalIteratorTest::TestExhaustive() {
             || type == U_SURROGATE) continue;
         
         s = i;
-		characterTest(s, i, it);
+        characterTest(s, i, it);
 
         s += (UChar32)0x0345; //"\\u0345";
-		characterTest(s, i, it);
+        characterTest(s, i, it);
     }
 }
 
@@ -176,7 +176,7 @@ void CanonicalIteratorTest::characterTest(UnicodeString &s, UChar32 ch, Canonica
     UBool gotComp = FALSE;
     UBool gotSource = FALSE;
 
-	Normalizer::decompose(s, FALSE, 0, decomp, status);
+    Normalizer::decompose(s, FALSE, 0, decomp, status);
     Normalizer::compose(s, FALSE, 0, comp, status);
     
     // skip characters that don't have either decomp.

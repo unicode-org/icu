@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -46,7 +46,7 @@ public:
     //static UnicodeString collectionToString(Collection col);
 private:
     void expectEqual(const UnicodeString &message, const UnicodeString &item, const UnicodeString &a, const UnicodeString &b);
-	void characterTest(UnicodeString &s, UChar32 ch, CanonicalIterator &it);
+    void characterTest(UnicodeString &s, UChar32 ch, CanonicalIterator &it);
 
     Transliterator *nameTrans;
     Transliterator *hexTrans;

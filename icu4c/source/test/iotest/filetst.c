@@ -436,12 +436,12 @@ static void TestfgetsBuffers(void) {
     }
 
     u_fputc(0x3BC, myFile);
-	if (u_fputc(0x110000, myFile) != U_EOF) {
+    if (u_fputc(0x110000, myFile) != U_EOF) {
         log_err("u_fputc should return U_EOF for 0x110000.\n");
-	}
-	if (u_fputc((UChar32)0xFFFFFFFFu, myFile) != U_EOF) {
+    }
+    if (u_fputc((UChar32)0xFFFFFFFFu, myFile) != U_EOF) {
         log_err("u_fputc should return U_EOF for 0xFFFFFFFF.\n");
-	}
+    }
     u_fputc(0xFF41, myFile);
     u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
@@ -1399,32 +1399,32 @@ static void TestVargs(void) {
 static void TestUnicodeFormat(void)
 {
 #if !UCONFIG_NO_FORMATTING
-	/* Make sure that invariant conversion doesn't happen on the _u formats. */
+    /* Make sure that invariant conversion doesn't happen on the _u formats. */
     UChar myUString[256];
-	UFILE *myFile;
-	static const UChar TEST_STR[] = { 0x03BC, 0x0025, 0x0024, 0};
-	static const UChar PERCENT_S[] = { 0x03BC, 0x0025, 0x0053, 0};
+    UFILE *myFile;
+    static const UChar TEST_STR[] = { 0x03BC, 0x0025, 0x0024, 0};
+    static const UChar PERCENT_S[] = { 0x03BC, 0x0025, 0x0053, 0};
 
-	u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
+    u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
     if (!myFile) {
         log_err("Test file can't be opened\n");
         return;
     }
-	u_fprintf_u(myFile, PERCENT_S, TEST_STR);
-	u_fclose(myFile);
+    u_fprintf_u(myFile, PERCENT_S, TEST_STR);
+    u_fclose(myFile);
 
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
     if (!myFile) {
         log_err("Test file can't be opened\n");
         return;
     }
-	u_fscanf_u(myFile, PERCENT_S, myUString);
-	u_fclose(myFile);
-	if (u_strcmp(TEST_STR, myUString) != 0) {
+    u_fscanf_u(myFile, PERCENT_S, myUString);
+    u_fclose(myFile);
+    if (u_strcmp(TEST_STR, myUString) != 0) {
         log_err("u_fscanf_u doesn't work.\n");
-	}
+    }
 #endif
 }
 

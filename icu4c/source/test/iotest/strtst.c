@@ -282,7 +282,7 @@ static void TestLocalizedString(void) {
 
     u_fprintf(strFile, "%d", 1234);
     u_frewind(strFile);
-	numResult = -1;
+    numResult = -1;
     u_fscanf(strFile, "%d", &numResult);
     u_fclose(strFile);
     u_uastrcpy(uBuffer,"1.234");
@@ -297,15 +297,15 @@ static void TestLocalizedString(void) {
     strFile = u_fstropen(testStr, sizeof(testStr)/sizeof(testStr[0]), NULL);
     u_fprintf(strFile, "%d", 1234);
     u_frewind(strFile);
-	numResult = -1;
+    numResult = -1;
     u_fscanf(strFile, "%d", &numResult);
     u_fclose(strFile);
     if (numResult != 1234) {
-		log_err("u_fscanf failed to work on a default locale string Got: %d, Expected: 1234\n", numResult);
+        log_err("u_fscanf failed to work on a default locale string Got: %d, Expected: 1234\n", numResult);
     }
-	if (u_fstropen(testStr, -1, NULL) != NULL) {
-		log_err("u_fstropen returned a UFILE* on a negative buffer size\n", numResult);
-	}
+    if (u_fstropen(testStr, -1, NULL) != NULL) {
+        log_err("u_fstropen returned a UFILE* on a negative buffer size\n", numResult);
+    }
 #endif
 }
 
