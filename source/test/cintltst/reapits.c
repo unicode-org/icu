@@ -984,10 +984,10 @@ static void TestRegexCAPI(void) {
 }
 
 static void TestBug4315(void) {
-    UErrorCode		theICUError = U_ZERO_ERROR;
-    URegularExpression	*theRegEx;
+    UErrorCode      theICUError = U_ZERO_ERROR;
+    URegularExpression *theRegEx;
     UChar           *textBuff;
-    const char	    *thePattern;
+    const char      *thePattern;
     UChar            theString[100];
     UChar           *destFields[24];
     int32_t         neededLength1;
@@ -996,7 +996,7 @@ static void TestBug4315(void) {
     int32_t         wordCount = 0;
     int32_t         destFieldsSize = 24;
 
-    thePattern	= "ck ";
+    thePattern  = "ck ";
     u_uastrcpy(theString, "The quick brown fox jumped over the slow black turtle.");
 
     /* open a regex */

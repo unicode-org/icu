@@ -61,17 +61,17 @@ void IntlTestDateFormatSymbols::TestGetMonths2()
     DateFormatSymbols::DtWidthType width[] = {DateFormatSymbols::WIDE, DateFormatSymbols::ABBREVIATED, DateFormatSymbols::NARROW};
 
     for (int32_t i = 0; i < 2; i++) {
-		for (int32_t j = 0; j < 3; j++) {
+        for (int32_t j = 0; j < 3; j++) {
             int32_t cnt;
-			const UnicodeString * month = symbol->getMonths(cnt,context[i],width[j]);
+            const UnicodeString * month = symbol->getMonths(cnt,context[i],width[j]);
 
-		    logln((UnicodeString)"size = " + cnt);
+            logln((UnicodeString)"size = " + cnt);
 
-		    for (int32_t k = 0; k < cnt; k++) {
-		        logln(month[k]);
-			}
-		}
-	}
+            for (int32_t k = 0; k < cnt; k++) {
+                logln(month[k]);
+            }
+        }
+    }
     delete symbol;
 }
 
@@ -86,17 +86,17 @@ void IntlTestDateFormatSymbols::TestGetWeekdays2()
     DateFormatSymbols::DtWidthType width[] = {DateFormatSymbols::WIDE, DateFormatSymbols::ABBREVIATED, DateFormatSymbols::NARROW};
 
     for (int32_t i = 0; i < 2; i++) {
-		for (int32_t j = 0; j < 3; j++) {
+        for (int32_t j = 0; j < 3; j++) {
             int32_t cnt;
-			const UnicodeString * wd = symbol->getWeekdays(cnt,context[i],width[j]);
+            const UnicodeString * wd = symbol->getWeekdays(cnt,context[i],width[j]);
 
-		    logln((UnicodeString)"size = " + cnt);
+            logln((UnicodeString)"size = " + cnt);
 
-		    for (int32_t k = 0; k < cnt; k++) {
-		        logln(wd[k]);
-			}
-		}
-	}
+            for (int32_t k = 0; k < cnt; k++) {
+                logln(wd[k]);
+            }
+        }
+    }
     delete symbol;
 }
 

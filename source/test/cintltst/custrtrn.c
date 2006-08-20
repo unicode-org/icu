@@ -1066,7 +1066,7 @@ static void Test_UChar_WCHART_API(void){
         }
     }
 #else
-	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+    log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
 #endif
 } 
 
@@ -1108,7 +1108,7 @@ static void Test_widestrs()
             log_err("u_strFromWCS: wcs = %S, wl = %d,rts = %s, rtl = %d!\n", wcs, wl, u_austrcpy(astr, rts), rtl);
         }
 #else
-	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+    log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
 #endif
 }
 
@@ -1172,7 +1172,7 @@ Test_WCHART_LongString(){
     /* close the bundle */
     ures_close(theBundle);    
 #else
-	log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
+    log_info("Not testing u_str*WCS because (!UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION) and wchar is neither utf16 nor utf32");
 #endif
 }
 
