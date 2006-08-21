@@ -28,7 +28,12 @@ ucsdet_open(UErrorCode   *status)
         return 0;
     }
 
-    CharsetDetector* csd = new CharsetDetector();
+    CharsetDetector* csd = new CharsetDetector(*status);
+
+    if (U_FAILURE(*status)) {
+        delete csd;
+        csd = NULL;
+    }
 
     return (UCharsetDetector *) csd;
 }
