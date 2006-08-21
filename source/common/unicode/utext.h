@@ -1163,6 +1163,13 @@ struct UTextFuncs {
      *             Intended for use should the table grow to accomodate added
      *             functions in the future, to allow tests for older format
      *             function tables that do not contain the extensions.
+     *
+     *             Fields are placed for optimal alignment on
+     *             32/64/128-bit-pointer machines, by normally grouping together
+     *             4 32-bit fields,
+     *             4 pointers,
+     *             2 64-bit fields
+     *             in sequence.
      *   @draft ICU 3.6
      */
     int32_t       tableSize;
@@ -1172,7 +1179,7 @@ struct UTextFuncs {
       *              Do not use, reserved for use by the UText framework only.
       *   @internal
       */
-    int32_t       reserved;
+    int32_t       reserved1, reserved2, reserved3;
 
 
     /**
@@ -1266,12 +1273,6 @@ struct UTextFuncs {
       */
     UTextClose  *spare3;
 
-    /**
-      * (private)  Spare function pointer
-      * @internal
-      */
-    UTextClose  *spare4;
-
 };
 typedef struct UTextFuncs UTextFuncs;
 
@@ -1356,6 +1357,12 @@ struct UText {
     /* ---- 16 byte alignment boundary------ */
     
     /**
+     *  (protected) Native index of the first character in the text chunk.
+     *  @draft ICU 3.6
+     */
+    int64_t         chunkNativeStart;
+
+    /**
      *  (protected) Current iteration position within the text chunk (UTF-16 buffer).
      *  This is the index to the character that will be returned by utext_next32().
      *  @draft ICU 3.6
@@ -1367,12 +1374,6 @@ struct UText {
      *  @draft ICU 3.6
      */
     int32_t         chunkLength;
-
-    /**
-     *  (protected) Native index of the first character in the text chunk.
-     *  @draft ICU 3.6
-     */
-    int64_t         chunkNativeStart;
 
     /* ---- 16  byte alignment boundary-- */
     
@@ -1528,9 +1529,9 @@ enum {
                   0,                    /* chunkNativeLimit     */ \
                   0,                    /* extraSize            */ \
                   0,                    /* nativeIndexingLimit  */ \
+                  0,                    /* chunkNativeStart     */ \
                   0,                    /* chunkOffset          */ \
                   0,                    /* chunkLength          */ \
-                  0,                    /* chunkNativeStart     */ \
                   NULL,                 /* chunkContents        */ \
                   NULL,                 /* pFuncs               */ \
                   NULL,                 /* pExtra               */ \

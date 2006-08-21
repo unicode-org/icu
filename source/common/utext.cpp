@@ -1584,7 +1584,7 @@ U_CDECL_END
 static struct UTextFuncs utf8Funcs = 
 {
     sizeof(UTextFuncs),
-    0,                  // Reserved alignment padding
+    0, 0, 0,             // Reserved alignment padding
     utf8TextClone,
     utf8TextLength,
     utf8TextAccess,
@@ -1596,8 +1596,7 @@ static struct UTextFuncs utf8Funcs =
     utf8TextClose,
     NULL,                // spare 1
     NULL,                // spare 2
-    NULL,                // spare 3
-    NULL                 // spare 4
+    NULL                 // spare 3
 };
 
 
@@ -1986,7 +1985,7 @@ repTextCopy(UText *ut,
 static struct UTextFuncs repFuncs = 
 {
     sizeof(UTextFuncs),
-    0,                 // Reserved alignment padding
+    0, 0, 0,           // Reserved alignment padding
     repTextClone,
     repTextLength,
     repTextAccess,
@@ -1998,8 +1997,7 @@ static struct UTextFuncs repFuncs =
     repTextClose,
     NULL,              // spare 1
     NULL,              // spare 2
-    NULL,              // spare 3
-    NULL               // spare 4
+    NULL               // spare 3
 };
 
 
@@ -2235,7 +2233,7 @@ unistrTextCopy(UText *ut,
 static struct UTextFuncs unistrFuncs = 
 {
     sizeof(UTextFuncs),
-    0,                   // Reserved alignment padding
+    0, 0, 0,             // Reserved alignment padding
     unistrTextClone,
     unistrTextLength,
     unistrTextAccess,
@@ -2247,8 +2245,7 @@ static struct UTextFuncs unistrFuncs =
     unistrTextClose,
     NULL,                // spare 1
     NULL,                // spare 2
-    NULL,                // spare 3
-    NULL                 // spare 4
+    NULL                 // spare 3
 };
 
 
@@ -2547,7 +2544,7 @@ ucstrTextExtract(UText *ut,
 static struct UTextFuncs ucstrFuncs = 
 {
     sizeof(UTextFuncs),
-    0,                 // Reserved alignment padding
+    0, 0, 0,           // Reserved alignment padding
     ucstrTextClone,
     ucstrTextLength,
     ucstrTextAccess,
@@ -2560,7 +2557,6 @@ static struct UTextFuncs ucstrFuncs =
     NULL,              // spare 1
     NULL,              // spare 2
     NULL,              // spare 3
-    NULL               // spare 4
 };
 
 U_CDECL_END
@@ -2762,20 +2758,19 @@ charIterTextExtract(UText *ut,
 static struct UTextFuncs charIterFuncs = 
 {
     sizeof(UTextFuncs),
-    0,                  // Reserved alignment padding
+    0, 0, 0,             // Reserved alignment padding
     charIterTextClone,
     charIterTextLength,
     charIterTextAccess,
     charIterTextExtract,
-    NULL,              // Replace
-    NULL,              // Copy
-    NULL,              // MapOffsetToNative,
-    NULL,              // MapIndexToUTF16,
+    NULL,                // Replace
+    NULL,                // Copy
+    NULL,                // MapOffsetToNative,
+    NULL,                // MapIndexToUTF16,
     charIterTextClose,
     NULL,                // spare 1
     NULL,                // spare 2
-    NULL,                // spare 3
-    NULL                 // spare 4
+    NULL                 // spare 3
 };
 U_CDECL_END
 
