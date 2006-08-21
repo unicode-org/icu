@@ -55,7 +55,7 @@ struct UCharsetMatch;
 /**
   *  Opaque structure representing a match that was identified
   *  from a charset detection operation.
-  *  draft ICU 3.6
+  *  @draft ICU 3.6
   */
 typedef struct UCharsetMatch UCharsetMatch;
 
@@ -255,7 +255,8 @@ ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status);
  *
  *  @param ucsm    The charset match object.
  *  @param status  Any error conditions are reported back in this variable.
- *  @return        The RFC 3066 code for the language of the input data.
+ *  @return        The RFC 3066 code for the language of the input data, or
+ *                 an empty string if the language could not be determined.
  *
  *  @draft ICU 3.6
  */

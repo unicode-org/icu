@@ -26,10 +26,10 @@ private:
     int32_t resultCount;
     UBool fStripTags;   // If true, setText() will strip tags from input text.
     UBool fFreshTextSet;
-    static void setRecognizers();
+    static void setRecognizers(UErrorCode &status);
 
 public:
-    CharsetDetector();
+    CharsetDetector(UErrorCode &status);
 
     ~CharsetDetector();
 
