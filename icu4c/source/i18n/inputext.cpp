@@ -49,12 +49,16 @@ void InputText::setText(const char *in, int32_t len)
     fInputLen  = 0;
     fC1Bytes   = FALSE;
     fRawInput  = (const uint8_t *) in;
-    fRawLength = len;
+    fRawLength = len == -1? uprv_strlen(in) : len;
 }
 
 void InputText::setDeclaredEncoding(const char* encoding, int32_t len)
 {
     if(encoding) {
+        if (len == -1) {
+            len = uprv_strlen(encoding);
+        }
+
         len += 1;     // to make place for the \0 at the end.
         uprv_free(fDeclaredEncoding);
         fDeclaredEncoding = NEW_ARRAY(char, len);
@@ -64,7 +68,7 @@ void InputText::setDeclaredEncoding(const char* encoding, int32_t len)
 
 UBool InputText::isSet() const 
 {
-    return fRawInput? TRUE : FALSE;
+    return fRawInput != NULL;
 }
 
 /**

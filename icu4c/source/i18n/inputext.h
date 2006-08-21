@@ -8,6 +8,15 @@
 #ifndef __INPUTEXT_H
 #define __INPUTEXT_H
 
+/**
+ * \file
+ * \internal
+ *
+ * This is an internal header for the Character Set Detection code. The
+ * name is probably too generic...
+ */
+
+
 #include "unicode/uobject.h"
 
 #if !UCONFIG_NO_CONVERSION
@@ -28,7 +37,7 @@ public:
     // The text to be checked.  Markup will have been
     //   removed if appropriate.
     uint8_t    *fInputBytes;
-    int32_t     fInputLen;          // Length of the byte data in fInputText.
+    int32_t     fInputLen;          // Length of the byte data in fInputBytes.
     // byte frequency statistics for the input text.
     //   Value is percent, not absolute.
     //   Value is rounded up, so zero really means zero occurences. 

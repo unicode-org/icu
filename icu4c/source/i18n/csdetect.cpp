@@ -19,6 +19,7 @@
 #include "cstring.h"
 #include "umutex.h"
 #include "ucln_in.h"
+#include "uarrsort.h"
 #include "inputext.h"
 #include "csrsbcs.h"
 #include "csrmbcs.h"
@@ -55,10 +56,14 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-void CharsetDetector::setRecognizers()
+void CharsetDetector::setRecognizers(UErrorCode &status)
 {
     UBool needsInit;
     CharsetRecognizer **recognizers;
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     umtx_lock(NULL);
     needsInit = (UBool) (fCSRecognizers == NULL);
@@ -110,16 +115,28 @@ void CharsetDetector::setRecognizers()
         int32_t r;
 
         recognizers = NEW_ARRAY(CharsetRecognizer *, rCount);
-        for (r = 0; r < rCount; r += 1) {
-           recognizers[r] = tempArray[r];
+
+        if (recognizers == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            for (r = 0; r < rCount; r += 1) {
+                recognizers[r] = tempArray[r];
+
+                if (recognizers[r] == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
+            }
         }
 
-        umtx_lock(NULL);
-        if (fCSRecognizers == NULL) {
-            fCSRecognizers = recognizers;
-            fCSRecognizers_size = rCount;
+        if (U_SUCCESS(status)) {
+            umtx_lock(NULL);
+            if (fCSRecognizers == NULL) {
+                fCSRecognizers = recognizers;
+                fCSRecognizers_size = rCount;
+            }
+            umtx_unlock(NULL);
         }
-        umtx_unlock(NULL);
 
         if (fCSRecognizers != recognizers) {
             for (r = 0; r < rCount; r += 1) {
@@ -135,15 +152,33 @@ void CharsetDetector::setRecognizers()
     }
 }
 
-CharsetDetector::CharsetDetector()
+CharsetDetector::CharsetDetector(UErrorCode &status)
   : textIn(new InputText()), resultCount(0), fStripTags(FALSE), fFreshTextSet(FALSE)
 {
-    setRecognizers();
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    setRecognizers(status);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     resultArray = (CharsetMatch **)uprv_malloc(sizeof(CharsetMatch *)*fCSRecognizers_size);
 
+    if (resultArray == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
     for(int32_t i = 0; i < fCSRecognizers_size; i += 1) {
         resultArray[i] = new CharsetMatch();
+
+        if (resultArray[i] == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            break;
+        }
     }
 }
 
@@ -184,7 +219,9 @@ void CharsetDetector::setDeclaredEncoding(const char *encoding, int32_t len) con
 
 int32_t CharsetDetector::getDetectableCount()
 {
-    setRecognizers();
+    UErrorCode status = U_ZERO_ERROR;
+
+    setRecognizers(status);
 
     return fCSRecognizers_size; 
 }
@@ -202,21 +239,15 @@ const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
     }
 }
 
-// this sort of conversion is explicitly mentioned in the C++ standard
-// in section 4.4:
+int32_t charsetMatchComparator(const void *context, const void *left, const void *right)
+{
+    const CharsetMatch **csm_l = (const CharsetMatch **) left;
+    const CharsetMatch **csm_r = (const CharsetMatch **) right;
 
-// [Note: if a program could assign a pointer of type T** to a pointer of type
-//  const T** (that is, if line //1 below was allowed), a program could
-// 	    inadvertently modify a const object (as it is done on line //2).  For
-// 						 example,
+    // NOTE: compare is backwards to sort from highest to lowest.
+    return (*csm_r)->getConfidence() - (*csm_l)->getConfidence();
+}
 
-// 	 int32_t main() {
-// 		const char c = 'c';
-// 		char* pc;
-// 		const char** pcc = &pc;//1: not allowed
-// 		*pcc = &c;
-// 		*pc = 'C';//2: modifies a const object
-// 	    }
 const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
 {
     if(!textIn->isSet()) {
@@ -247,16 +278,17 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
             resultArray[i]->set(textIn, 0, 0);
         }
 
-        //Bubble sort
-        for(int32_t i = resultCount; i > 1; i -= 1) {
-            for(int32_t j = 0; j < i-1; j += 1) {
-                if(resultArray[j]->getConfidence() < resultArray[j+1]->getConfidence()) {
-                    CharsetMatch *temp = resultArray[j];
-                    resultArray[j] = resultArray[j+1];
-                    resultArray[j+1] = temp;
-                }
-            }
-        }
+        uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
+        ////Bubble sort
+        //for(int32_t i = resultCount; i > 1; i -= 1) {
+        //    for(int32_t j = 0; j < i-1; j += 1) {
+        //        if(resultArray[j]->getConfidence() < resultArray[j+1]->getConfidence()) {
+        //            CharsetMatch *temp = resultArray[j];
+        //            resultArray[j] = resultArray[j+1];
+        //            resultArray[j+1] = temp;
+        //        }
+        //    }
+        //}
 
         fFreshTextSet = FALSE;
     }
