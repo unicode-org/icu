@@ -33,7 +33,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         
         for (int script = minScript; script <= maxScript; script += 1) {
             output.print("    ");
-            output.print(scriptData.getTag(script));
+            output.print(scriptData.getTagLabel(script));
             output.print("ScriptCode = ");
             
             if (script < 10) {
