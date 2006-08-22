@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2006. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 07/19/2005 01:01:08 PM PDT
+ * Generated on: 08/21/2006 02:35:14 PM HST
  */
 
 #ifndef __LELANGUAGES_H
@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
  * this is just a list of languages which the LayoutEngine
  * supports.
  *
- * @draft ICU 3.4
+ * @draft ICU 3.6
  */
 
 enum LanguageCodes {
