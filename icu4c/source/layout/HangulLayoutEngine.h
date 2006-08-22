@@ -24,13 +24,12 @@ class MPreFixups;
 class LEGlyphStorage;
 
 /**
- * This class implements OpenType layout for Indic OpenType fonts, as
+ * This class implements OpenType layout for Old Hangul OpenType fonts, as
  * specified by Microsoft in "Creating and Supporting OpenType Fonts for
- * Indic Scripts" (http://www.microsoft.com/typography/otspec/indicot/default.htm)
+ * The Korean Hangul Script" (http://www.microsoft.com/typography/otfntdev/hangulot/default.htm)
  *
- * This class overrides the characterProcessing method to do Indic character processing
- * and reordering, and the glyphProcessing method to implement post-GSUB processing for
- * left matras. (See the MS spec. for more details)
+ * This class overrides the characterProcessing method to do Hangul character processing.
+ * (See the MS spec. for more details)
  *
  * @internal
  */
@@ -38,10 +37,10 @@ class HangulOpenTypeLayoutEngine : public OpenTypeLayoutEngine
 {
 public:
     /**
-     * This is the main constructor. It constructs an instance of IndicOpenTypeLayoutEngine for
+     * This is the main constructor. It constructs an instance of HangulOpenTypeLayoutEngine for
      * a particular font, script and language. It takes the GSUB table as a parameter since
      * LayoutEngine::layoutEngineFactory has to read the GSUB table to know that it has an
-     * Indic OpenType font.
+     * Hangul OpenType font.
      *
      * @param fontInstance - the font
      * @param scriptCode - the script
@@ -98,9 +97,8 @@ protected:
 
     /**
      * This method does Hangul OpenType character processing. It assigns the OpenType feature
-     * tags to the characters, and may generate output characters which have been reordered. For
-     * some Indic scripts, it may also split some vowels, resulting in more output characters
-     * than input characters.
+     * tags to the characters, and may compose a character sequence into a modern Hangul syllable,
+     * or decompose a modern Hangul syllable if it forms part of an old Hangul syllable.
      *
      * Input parameters:
      * @param chars - the input character context
