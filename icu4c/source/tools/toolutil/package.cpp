@@ -81,9 +81,9 @@ makeTypeEnum(uint8_t charset, UBool isBigEndian) {
 static inline int32_t
 makeTypeEnum(char type) {
     return
-        type== 'l' ? TYPE_L :
-               'b' ? TYPE_B :
-               'e' ? TYPE_E :
+        type == 'l' ? TYPE_L :
+        type == 'b' ? TYPE_B :
+        type == 'e' ? TYPE_E :
                -1;
 }
 
