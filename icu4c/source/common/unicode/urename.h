@@ -441,6 +441,7 @@
 #define uchar_swapNames uchar_swapNames_3_6
 #define ucln_common_registerCleanup ucln_common_registerCleanup_3_6
 #define ucln_i18n_registerCleanup ucln_i18n_registerCleanup_3_6
+#define ucln_io_registerCleanup ucln_io_registerCleanup_3_6
 #define ucln_lib_cleanup ucln_lib_cleanup_3_6
 #define ucln_registerCleanup ucln_registerCleanup_3_6
 #define ucnv_MBCSFromUChar32 ucnv_MBCSFromUChar32_3_6
@@ -959,7 +960,6 @@
 #define uprv_isRuleWhiteSpace uprv_isRuleWhiteSpace_3_6
 #define uprv_itou uprv_itou_3_6
 #define uprv_log uprv_log_3_6
-#define uprv_log10 uprv_log10_3_6
 #define uprv_malloc uprv_malloc_3_6
 #define uprv_mapFile uprv_mapFile_3_6
 #define uprv_max uprv_max_3_6
