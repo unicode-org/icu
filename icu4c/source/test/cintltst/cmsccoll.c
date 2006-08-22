@@ -4738,6 +4738,20 @@ TestJ5223(void)
   ucol_close(coll);
 }
 
+/* Regression test for Thai partial sort key problem */
+static void
+TestJ5232(void)
+{
+    const static char *test[] = {
+        "\\u0e40\\u0e01\\u0e47\\u0e1a\\u0e40\\u0e25\\u0e47\\u0e21",
+        "\\u0e40\\u0e01\\u0e47\\u0e1a\\u0e40\\u0e25\\u0e48\\u0e21"
+    };
+    
+    genericLocaleStarter("th", test, sizeof(test)/sizeof(test[0]));
+}
+
+
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4805,6 +4819,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestUpperFirstQuaternary);
     TEST(TestJ4960);
     TEST(TestJ5223);
+    TEST(TestJ5232);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
