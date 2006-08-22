@@ -1,6 +1,6 @@
 #  ***********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2004-2005, International Business Machines Corporation
+#  * Copyright (c) 2004-2006, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ***********************************************************************
 #
@@ -15,21 +15,23 @@
 #  All object files containing direct references to C or C++ runtime library memory
 #    functions will be listed in the output.
 #
-#  For ICU 3.2, the expected output is
-#    common/cmemory.o        U malloc
-#    common/cmemory.o        U free
-#    common/uniset.o         U operator delete(void*)
-#    common/unifilt.o        U operator delete(void*)
-#    i18n/strrepl.o  U operator delete(void*)
-#    layout/LayoutEngine.o   U operator delete(void*)
+#  For ICU 3.6, the expected output is
+#    common/uniset.o          U operator delete(void*)
+#    common/unifilt.o         U operator delete(void*)
+#    common/cmemory.o         U malloc
+#    common/cmemory.o         U free
+#    i18n/strrepl.o           U operator delete(void*)
+#    layout/LEFontInstance.o         U operator delete(void*)
+#    layout/LEGlyphStorage.o         U operator delete(void*)
+#    layout/LayoutEngine.o    U operator delete(void*)
 #
-#  cmemory.c         Expected failures from uprv_malloc, uprv_free implementation.
-#  uniset.cpp        Fails because of SymbolTable::~SymbolTable()
-#  unifilt.cpp       Fails because of UnicodeMatcher::~UnicodeMatcher()
-#  strrepl.cpp       Fails because of UnicodeReplacer::~UnicodeReplacer()
-#  LayoutEngine.cpp  Fails because of LeCharMapper::~LECharMapper()
-#                                     LEGlyphFilter::~LEGlyphFilter()
-#                                     LECharMapper::~LECharMapper
+#  cmemory.c          Expected failures from uprv_malloc, uprv_free implementation.
+#  uniset.cpp         Fails because of SymbolTable::~SymbolTable()
+#  unifilt.cpp        Fails because of UnicodeMatcher::~UnicodeMatcher()
+#  strrepl.cpp        Fails because of UnicodeReplacer::~UnicodeReplacer()
+#  LayoutEngine.cpp   Fails because of LEGlyphFilter::~LEGlyphFilter()
+#  LEGlyphStorage.cpp Fails because of LEInsertionCallback::~LEInsertionCallback()
+#  LEFontInstance.cpp Fails because of LECharMapper::~LECharMapper
 #
 #  To verify that no additional problems exist in the .cpp files, #ifdef out the
 #  offending destructors, rebuild icu, and re-run the tool.  The problems should
