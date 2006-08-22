@@ -123,7 +123,7 @@ echo ""
 echo "Generating qsh compatible configure ..."
 echo ""
 
-sed -f convertConfigure.sed icu/source/configure > icu/source/configureTemp
+sed -f icu/as_is/os400/convertConfigure.sed icu/source/configure > icu/source/configureTemp
 del -f icu/source/configure
 mv icu/source/configureTemp icu/source/configure
 chmod 755 icu/source/configure
