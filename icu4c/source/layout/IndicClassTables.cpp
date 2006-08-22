@@ -323,7 +323,49 @@ static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'sylo' (SYLOTI_NAGRI) */
     NULL,            /* 'talu' (NEW_TAI_LUE) */
     NULL,            /* 'tfng' (TIFINAGH) */
-    NULL             /* 'xpeo' (OLD_PERSIAN) */
+    NULL,            /* 'xpeo' (OLD_PERSIAN) */
+    NULL,            /* 'bali' (BALINESE) */
+    NULL,            /* 'batk' (BATK) */
+    NULL,            /* 'blis' (BLIS) */
+    NULL,            /* 'brah' (BRAH) */
+    NULL,            /* 'cham' (CHAM) */
+    NULL,            /* 'cirt' (CIRT) */
+    NULL,            /* 'cyrs' (CYRS) */
+    NULL,            /* 'egyd' (EGYD) */
+    NULL,            /* 'egyh' (EGYH) */
+    NULL,            /* 'egyp' (EGYP) */
+    NULL,            /* 'geok' (GEOK) */
+    NULL,            /* 'hans' (HANS) */
+    NULL,            /* 'hant' (HANT) */
+    NULL,            /* 'hmng' (HMNG) */
+    NULL,            /* 'hung' (HUNG) */
+    NULL,            /* 'inds' (INDS) */
+    NULL,            /* 'java' (JAVA) */
+    NULL,            /* 'kali' (KALI) */
+    NULL,            /* 'latf' (LATF) */
+    NULL,            /* 'latg' (LATG) */
+    NULL,            /* 'lepc' (LEPC) */
+    NULL,            /* 'lina' (LINA) */
+    NULL,            /* 'mand' (MAND */
+    NULL,            /* 'maya' (MAYA) */
+    NULL,            /* 'mero' (MERO) */
+    NULL,            /* 'nko ' (NKO) */
+    NULL,            /* 'orkh' (ORKH) */
+    NULL,            /* 'perm' (PERM) */
+    NULL,            /* 'phag' (PHAGS_PA) */
+    NULL,            /* 'phnx' (PHOENICIAN) */
+    NULL,            /* 'plrd' (PLRD) */
+    NULL,            /* 'roro' (RORO) */
+    NULL,            /* 'sara' (SARA) */
+    NULL,            /* 'syre' (SYRE) */
+    NULL,            /* 'syrj' (SYRJ) */
+    NULL,            /* 'syrn' (SYRN) */
+    NULL,            /* 'teng' (TENG) */
+    NULL,            /* 'vai ' (VAII) */
+    NULL,            /* 'visp' (VISP)) */
+    NULL,            /* 'xsux' (CUNEIFORM) */
+    NULL,            /* 'zxxx' (ZXXX) */
+    NULL             /* 'zzzz' (UNKNOWN) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
