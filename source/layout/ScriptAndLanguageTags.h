@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2006. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 07/19/2005 01:01:08 PM PDT
+ * Generated on: 08/21/2006 02:35:14 PM HST
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -44,7 +44,7 @@ const LETag hiraScriptTag = 0x68697261; /* 'hira' (HIRAGANA) */
 const LETag kndaScriptTag = 0x6B6E6461; /* 'knda' (KANNADA) */
 const LETag kanaScriptTag = 0x6B616E61; /* 'kana' (KATAKANA) */
 const LETag khmrScriptTag = 0x6B686D72; /* 'khmr' (KHMER) */
-const LETag laooScriptTag = 0x6C616F6F; /* 'laoo' (LAO) */
+const LETag laooScriptTag = 0x6C616F20; /* 'lao ' (LAO) */
 const LETag latnScriptTag = 0x6C61746E; /* 'latn' (LATIN) */
 const LETag mlymScriptTag = 0x6D6C796D; /* 'mlym' (MALAYALAM) */
 const LETag mongScriptTag = 0x6D6F6E67; /* 'mong' (MONGOLIAN) */
@@ -61,7 +61,7 @@ const LETag thaaScriptTag = 0x74686161; /* 'thaa' (THAANA) */
 const LETag thaiScriptTag = 0x74686169; /* 'thai' (THAI) */
 const LETag tibtScriptTag = 0x74696274; /* 'tibt' (TIBETAN) */
 const LETag cansScriptTag = 0x63616E73; /* 'cans' (CANADIAN_ABORIGINAL) */
-const LETag yiiiScriptTag = 0x79696969; /* 'yiii' (YI) */
+const LETag yiiiScriptTag = 0x79692020; /* 'yi  ' (YI) */
 const LETag tglgScriptTag = 0x74676C67; /* 'tglg' (TAGALOG) */
 const LETag hanoScriptTag = 0x68616E6F; /* 'hano' (HANUNOO) */
 const LETag buhdScriptTag = 0x62756864; /* 'buhd' (BUHID) */
@@ -82,6 +82,48 @@ const LETag syloScriptTag = 0x73796C6F; /* 'sylo' (SYLOTI_NAGRI) */
 const LETag taluScriptTag = 0x74616C75; /* 'talu' (NEW_TAI_LUE) */
 const LETag tfngScriptTag = 0x74666E67; /* 'tfng' (TIFINAGH) */
 const LETag xpeoScriptTag = 0x7870656F; /* 'xpeo' (OLD_PERSIAN) */
+const LETag baliScriptTag = 0x62616C69; /* 'bali' (BALINESE) */
+const LETag batkScriptTag = 0x6261746B; /* 'batk' (BATK) */
+const LETag blisScriptTag = 0x626C6973; /* 'blis' (BLIS) */
+const LETag brahScriptTag = 0x62726168; /* 'brah' (BRAH) */
+const LETag chamScriptTag = 0x6368616D; /* 'cham' (CHAM) */
+const LETag cirtScriptTag = 0x63697274; /* 'cirt' (CIRT) */
+const LETag cyrsScriptTag = 0x63797273; /* 'cyrs' (CYRS) */
+const LETag egydScriptTag = 0x65677964; /* 'egyd' (EGYD) */
+const LETag egyhScriptTag = 0x65677968; /* 'egyh' (EGYH) */
+const LETag egypScriptTag = 0x65677970; /* 'egyp' (EGYP) */
+const LETag geokScriptTag = 0x67656F6B; /* 'geok' (GEOK) */
+const LETag hansScriptTag = 0x68616E73; /* 'hans' (HANS) */
+const LETag hantScriptTag = 0x68616E74; /* 'hant' (HANT) */
+const LETag hmngScriptTag = 0x686D6E67; /* 'hmng' (HMNG) */
+const LETag hungScriptTag = 0x68756E67; /* 'hung' (HUNG) */
+const LETag indsScriptTag = 0x696E6473; /* 'inds' (INDS) */
+const LETag javaScriptTag = 0x6A617661; /* 'java' (JAVA) */
+const LETag kaliScriptTag = 0x6B616C69; /* 'kali' (KALI) */
+const LETag latfScriptTag = 0x6C617466; /* 'latf' (LATF) */
+const LETag latgScriptTag = 0x6C617467; /* 'latg' (LATG) */
+const LETag lepcScriptTag = 0x6C657063; /* 'lepc' (LEPC) */
+const LETag linaScriptTag = 0x6C696E61; /* 'lina' (LINA) */
+const LETag mandScriptTag = 0x6D616E64; /* 'mand' (MAND) */
+const LETag mayaScriptTag = 0x6D617961; /* 'maya' (MAYA) */
+const LETag meroScriptTag = 0x6D65726F; /* 'mero' (MERO) */
+const LETag nkooScriptTag = 0x6E6B6F20; /* 'nko ' (NKO) */
+const LETag orkhScriptTag = 0x6F726B68; /* 'orkh' (ORKH) */
+const LETag permScriptTag = 0x7065726D; /* 'perm' (PERM) */
+const LETag phagScriptTag = 0x70686167; /* 'phag' (PHAGS_PA) */
+const LETag phnxScriptTag = 0x70686E78; /* 'phnx' (PHOENICIAN) */
+const LETag plrdScriptTag = 0x706C7264; /* 'plrd' (PLRD) */
+const LETag roroScriptTag = 0x726F726F; /* 'roro' (RORO) */
+const LETag saraScriptTag = 0x73617261; /* 'sara' (SARA) */
+const LETag syreScriptTag = 0x73797265; /* 'syre' (SYRE) */
+const LETag syrjScriptTag = 0x7379726A; /* 'syrj' (SYRJ) */
+const LETag syrnScriptTag = 0x7379726E; /* 'syrn' (SYRN) */
+const LETag tengScriptTag = 0x74656E67; /* 'teng' (TENG) */
+const LETag vaiiScriptTag = 0x76616920; /* 'vai ' (VAII) */
+const LETag vispScriptTag = 0x76697370; /* 'visp' (VISP) */
+const LETag xsuxScriptTag = 0x78737578; /* 'xsux' (CUNEIFORM) */
+const LETag zxxxScriptTag = 0x7A787878; /* 'zxxx' (ZXXX) */
+const LETag zzzzScriptTag = 0x7A7A7A7A; /* 'zzzz' (UNKNOWN) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
