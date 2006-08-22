@@ -52,6 +52,17 @@ static UBool U_CALLCONV csdet_cleanup(void)
 
     return TRUE;
 }
+
+static int32_t U_CALLCONV
+charsetMatchComparator(const void *context, const void *left, const void *right)
+{
+    const CharsetMatch **csm_l = (const CharsetMatch **) left;
+    const CharsetMatch **csm_r = (const CharsetMatch **) right;
+
+    // NOTE: compare is backwards to sort from highest to lowest.
+    return (*csm_r)->getConfidence() - (*csm_l)->getConfidence();
+}
+
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
@@ -237,15 +248,6 @@ const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
     } else {
         return NULL;
     }
-}
-
-int32_t charsetMatchComparator(const void *context, const void *left, const void *right)
-{
-    const CharsetMatch **csm_l = (const CharsetMatch **) left;
-    const CharsetMatch **csm_r = (const CharsetMatch **) right;
-
-    // NOTE: compare is backwards to sort from highest to lowest.
-    return (*csm_r)->getConfidence() - (*csm_l)->getConfidence();
 }
 
 const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
