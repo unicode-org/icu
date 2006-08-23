@@ -1,84 +1,3 @@
-icu (3.6~d02-1) experimental; urgency=low
-
-  * New upstream release.
-  * Remove special optimization hack to work around now-fixed m68k build
-    problems.  (Closes: #360743)
-  * Update standards version.  No changes required.
-
- -- Jay Berkenbilt <qjb@debian.org>  Tue, 15 Aug 2006 16:34:34 -0400
-
-icu (3.4.1a-1) unstable; urgency=low
-
-  * Upstream re-released 3.4.1 without changing the version number because
-    the header file with 3.4.1 still said it was 3.4.  Unfortunately, the
-    debian 3.4.1 package had already been uploaded.  This "3.4.1a" release
-    now matches upstream's 3.4.1.
-
- -- Jay Berkenbilt <qjb@debian.org>  Wed, 29 Mar 2006 22:19:08 -0500
-
-icu (3.4.1-1) unstable; urgency=low
-
-  * New upstream release
-
- -- Jay Berkenbilt <qjb@debian.org>  Fri,  3 Mar 2006 23:07:52 -0500
-
-icu (3.4-4) unstable; urgency=low
-
-  * Build with g++ 4.0 with -fno-strict-aliasing to work around g++ 4.0
-    bugs that impact ICU.  Future versions should work properly with the
-    latest g++ without any special flags.  (Closes: #342970)
-  * Enable static libraries.
-
- -- Jay Berkenbilt <qjb@debian.org>  Sun, 22 Jan 2006 11:36:59 -0500
-
-icu (3.4-3) unstable; urgency=low
-
-  * Explicitly build with g++ 3.4.  The current ICU fails its test suite
-    with 4.0 but not with 3.4.  Future versions should work properly with
-    4.0.
-
- -- Jay Berkenbilt <qjb@debian.org>  Sat, 19 Nov 2005 11:29:31 -0500
-
-icu (3.4-2) unstable; urgency=low
-
-  * Remove some extraneous build steps that may cause problems with
-    autobuilders.
-
- -- Jay Berkenbilt <qjb@debian.org>  Sat, 13 Aug 2005 12:41:35 -0400
-
-icu (3.4-1) unstable; urgency=low
-
-  * New upstream release
-  * Completely new packaging
-
- -- Jay Berkenbilt <qjb@debian.org>  Fri,  5 Aug 2005 21:57:15 -0400
-
-icu (2.1-3) unstable; urgency=low
-
-  * New maintainer as per discussion with Ivo.
-  * g++ 4.0 transition: libicu21c102 is now libicu21c2.
-  * Accepted changes from NMU below for now.  This change will be
-    reversed soon when icu is updated to the current upstream version.
-    The icu28 package will also be removed at that time, as per discussion
-    with the icu28 maintainer.  Closes: #301316
-  * Add shlibs files
-
- -- Jay Berkenbilt <qjb@debian.org>  Sat,  9 Jul 2005 13:33:35 -0400
-
-icu (2.1-2.1) unstable; urgency=medium
-
-  * Rename icu-doc to icu21-doc. icu-doc is built by the icu28 package.
-
- -- Matthias Klose <doko@debian.org>  Sat, 21 May 2005 22:44:31 +0200
-
-icu (2.1-2) unstable; urgency=low
-
-  * debian/control: Changed maintainer, added Daniel Glassey as Uploader.
-    (Reference:
-    http://lists.debian.org/debian-devel/2003/debian-devel-200308/msg01963.html)
-
- -- Ivo Timmermans <ivo@debian.org>  Sun, 18 Jan 2004 23:52:03 +0100
-
 icu (2.6.1-1) experimental; urgency=low
 
   * New upstream version.
@@ -93,7 +12,6 @@ icu (2.6-1) experimental; urgency=low
   * New upstream version. Closes: #162975
   * debian/control: New maintainers
   * Daniel Glassey:
-      * debian/rules Don't use --enable-static as it bloats the packages
       * debian/rules Change the optimisations to -O3 and -O to get it to build
       * debian/rules get the latest config.{sub,guess} from /usr/share/misc
         so add build-dep on autotools-dev
@@ -118,6 +36,7 @@ icu (2.1-1.1) unstable; urgency=low
   * source/common/unicode/docmain.h: Fix \mainpage and \section tags,
     so doxygen doesn't get confused any more. Closes: #178344
   * debian/copyright: Added upstream URL. Closes: #165780
+  * 
 
  -- Ivo Timmermans <ivo@debian.org>  Fri, 14 Feb 2003 15:21:56 +0100
 
@@ -230,3 +149,7 @@ icu (1.6.0.1-20001017-1) unstable; urgency=low
   * Initial Release.
 
  -- Yves Arrouye <yves@debian.org>  Tue, 24 Oct 2000 16:14:12 -0700
+
+Local variables:
+mode: debian-changelog
+End:

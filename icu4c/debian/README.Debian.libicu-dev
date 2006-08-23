@@ -4,18 +4,6 @@ Corporation and others.  All Rights Reserved.
 libicu-dev for Debian
 ---------------------
 
-This package was debianized by Jay Berkenbilt <qjb@debian.org> on
-August 5, 2005.
-
-The original source was downloaded from
-ftp://ftp.software.ibm.com/software/globalization/icu/3.6/icu4c-3_6-src.tgz
-
-The main web sites for ICU are
-http://icu.sourceforge.net/
-http://www.ibm.com/software/globalization/icu/
-
----------------------
-
 The documentation in /usr/share/doc/libicu-dev/docs/ provides a high-level
 overview of ICU. Detailed API documentation is provided by the icu-docs
 package.
