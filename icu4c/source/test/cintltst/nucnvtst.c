@@ -5317,6 +5317,7 @@ static void TestJB5275_1(){
         target++;
         exp++;
     }
+    ucnv_close(conv);
 }
 
 static void TestJB5275(){
@@ -5364,4 +5365,5 @@ static void TestJB5275(){
         target++;
         exp++;
     }
+    ucnv_close(conv);
 }
