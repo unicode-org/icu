@@ -346,7 +346,7 @@ static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'latg' (LATG) */
     NULL,            /* 'lepc' (LEPC) */
     NULL,            /* 'lina' (LINA) */
-    NULL,            /* 'mand' (MAND */
+    NULL,            /* 'mand' (MAND) */
     NULL,            /* 'maya' (MAYA) */
     NULL,            /* 'mero' (MERO) */
     NULL,            /* 'nko ' (NKO) */
@@ -362,7 +362,7 @@ static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'syrn' (SYRN) */
     NULL,            /* 'teng' (TENG) */
     NULL,            /* 'vai ' (VAII) */
-    NULL,            /* 'visp' (VISP)) */
+    NULL,            /* 'visp' (VISP) */
     NULL,            /* 'xsux' (CUNEIFORM) */
     NULL,            /* 'zxxx' (ZXXX) */
     NULL             /* 'zzzz' (UNKNOWN) */
