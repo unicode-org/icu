@@ -194,8 +194,16 @@ current and complete version of this support is always found in ICU4J.
 
 -->
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-<p>This release contains the following bug fixes (not a complete list):<ul>
+<ul>
+  <li><a href="#News_Time_Zone">New Time Zone Data</a></li>
+  <li><a href="#News_Fixes">Fixes</a></li>
 </ul>
+<h4><a name="News_Time_Zone" id="News_Time_Zone">New Time Zone Data</a></h4>
+<p>Release 3.4.5 updates the time zone data to version 2006j from the Olson time
+zone database.</p>
+
+<h4><a name="News_Fixes" id="News_Fixes">Fixes:</a></h4>
+<p>This release contains the following bug fixes (not a complete list):<ul>
 <li><b>jb5134:</b> TimeZone.getOffset returns wrong offset before the first timezone transition</li>
 <li><b>jb5145:</b> Use IllegalStatusException instead of InternalError for ICU run-time exception</li>
 <li><b>jb5147:</b> Internal Error in Collator.getInstance with Eclipse and Java 6</li>
