@@ -94,6 +94,20 @@ Unicode .c source files built to "\cvs\oss\icu\source\data\out\tmp"
 - uchar.h
 - configure.in
 
+*** LayoutEngine script information
+* Run ICU4J com.ibm.icu.dev.tool.layout.ScriptNameBuilder. This generates LEScripts.h, LELanguage.h,
+ScriptAndLanguageTags.h and ScriptAndLanguageTags.cpp in the working directory. (it also generates
+ScriptRunData.cpp, which is no longer needed.)
+
+The generated files have a current copyright date and "@draft" statement.
+
+* copy the above files into <icu>/source/layout, replacing the old files.
+
+Add new default entries to the indicClassTables array in <icu>/source/layout/IndicClassTables.cpp
+and the complexTable array in <icu>/source/layoutex/ParagraphLayout.cpp. (This step should be automated...)
+
+* rebuild the layout and layoutex libraries.
+
 ---------------------------------------------------------------------------- ***
 
 Unicode 4.1 update
