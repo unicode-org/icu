@@ -93,6 +93,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,

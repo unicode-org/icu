@@ -27,12 +27,14 @@ import com.ibm.icu.impl.Utility;
  * @see                CompactCharArray
  * @author             Helena Shih
  * @internal
+ * @deprecated This API is ICU internal only.
  */
 public final class CompactByteArray implements Cloneable {
 
     /**
      * The total number of Unicode characters.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static  final int UNICODECOUNT =65536;
 
@@ -40,6 +42,7 @@ public final class CompactByteArray implements Cloneable {
      * Default constructor for CompactByteArray, the default value of the
      * compact array is 0.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public CompactByteArray()
     {
@@ -50,6 +53,7 @@ public final class CompactByteArray implements Cloneable {
      * Constructor for CompactByteArray.
      * @param defaultValue the default value of the compact array.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public CompactByteArray(byte defaultValue)
     {
@@ -75,6 +79,7 @@ public final class CompactByteArray implements Cloneable {
      * @param newValues the values of the compact array.
      * @exception IllegalArgumentException If the index is out of range.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public CompactByteArray(char indexArray[],
                             byte newValues[])
@@ -101,6 +106,7 @@ public final class CompactByteArray implements Cloneable {
      * @throws IllegalArgumentException if the index or value array is
      *          the wrong size.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public CompactByteArray(String indexArray,
                             String valueArray)
@@ -114,6 +120,7 @@ public final class CompactByteArray implements Cloneable {
      * @param index the character to get the mapped value with
      * @return the mapped value of the given character
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public byte elementAt(char index)
     {
@@ -127,6 +134,7 @@ public final class CompactByteArray implements Cloneable {
      * @param index the character to set the mapped value with
      * @param value the new mapped value
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public void setElementAt(char index, byte value)
     {
@@ -143,6 +151,7 @@ public final class CompactByteArray implements Cloneable {
      * @param end the ending offset of the range
      * @param value the new mapped value
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public void setElementAt(char start, char end, byte value)
     {
@@ -158,6 +167,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Compact the array.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public void compact() {
         compact(false);
@@ -166,6 +176,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Compact the array.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public void compact(boolean exhaustive)
     {
@@ -258,6 +269,7 @@ public final class CompactByteArray implements Cloneable {
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public char[] getIndexArray()
     {
@@ -268,6 +280,7 @@ public final class CompactByteArray implements Cloneable {
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public byte[] getValueArray()
     {
@@ -277,6 +290,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Overrides Cloneable
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Object clone()
     {
@@ -297,6 +311,7 @@ public final class CompactByteArray implements Cloneable {
      * @return true if the current compact array object is the same
      * as the compact array object obj; false otherwise.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -316,6 +331,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Generates the hash code for the compact array object
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int hashCode() {
         int result = 0;

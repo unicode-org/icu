@@ -289,6 +289,7 @@ public final class EthiopicCalendar extends CECalendar
     
     /**
      * @internal ICU 3.4
+     * @deprecated This API is ICU internal only.
      */
     public static Integer[] getDateFromJD(int julianDay) {
     	return getDateFromJD(julianDay, JD_EPOCH_OFFSET_AMETE_MIHRET);
@@ -324,6 +325,7 @@ public final class EthiopicCalendar extends CECalendar
      * Return the current Calendar type.
      * @return type of calendar (gregorian, etc.)
      * @internal ICU 3.4
+     * @deprecated This API is ICU internal only.
      */
     public String getType() {
         return "ethiopic";

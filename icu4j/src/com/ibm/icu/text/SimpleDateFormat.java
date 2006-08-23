@@ -355,6 +355,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * @internal ICU 3.2
+     * @deprecated This API is ICU internal only.
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc)
     {
@@ -735,6 +736,7 @@ public class SimpleDateFormat extends DateFormat {
      * TODO make this API public
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
@@ -1006,6 +1008,7 @@ public class SimpleDateFormat extends DateFormat {
      * Internal high-speed method.  Reuses a StringBuffer for results
      * instead of creating a String on the heap for each call.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected void zeroPaddingNumber(StringBuffer buf, int value,
                                      int minDigits, int maxDigits) {
@@ -1023,6 +1026,7 @@ public class SimpleDateFormat extends DateFormat {
      * Internal faster method.  This method does not use NumberFormat
      * to format digits.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private void fastZeroPaddingNubmer(StringBuffer buf, int value,
             int minDigits, int maxDigits, char zero) {

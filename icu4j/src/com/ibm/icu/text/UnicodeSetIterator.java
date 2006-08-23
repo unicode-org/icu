@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -212,6 +212,7 @@ public class UnicodeSetIterator {
     /**
      * Gets the current string from the iterator. Only use after calling next(), not nextRange().
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getString() {
         if (codepoint != IS_STRING) {
@@ -227,10 +228,12 @@ public class UnicodeSetIterator {
     private int range = 0;
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected int endElement;
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected int nextElement;
     private Iterator stringIterator = null;
@@ -241,6 +244,7 @@ public class UnicodeSetIterator {
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected void loadRange(int range) {
         nextElement = set.getRangeStart(range);

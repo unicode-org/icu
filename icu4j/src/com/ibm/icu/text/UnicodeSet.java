@@ -392,6 +392,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet(String pattern, int options) {
         this();
@@ -517,6 +518,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet applyPattern(String pattern, int options) {
         checkFrozen();
@@ -647,6 +649,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * passed to applyPattern().
      * @param includeStrings if false, doesn't include the strings.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public StringBuffer _generatePattern(StringBuffer result,
                                          boolean escapeUnprintable, boolean includeStrings) {
@@ -920,6 +923,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. For now, an internal routine.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int matchesAt(CharSequence text, int offset) {
         int len = -1;
@@ -1772,8 +1776,9 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     }
 
     /**
-     * @internal
      * @return regex pattern equivalent to this UnicodeSet
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getRegexEquivalent() {
         if (strings.size() == 0) return toString();
@@ -3344,6 +3349,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * unless they are quoted or escaped.  This may be ORed together
      * with other selectors.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int IGNORE_SPACE = 1;
 
@@ -3376,6 +3382,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * set contained the code point or a string.
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int CASE = 2;
 
@@ -3443,6 +3450,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * are ignored.
      * @return a reference to this set.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet closeOver(int attribute) {
         checkFrozen();
@@ -3526,18 +3534,35 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Internal class for customizing UnicodeSet parsing of properties.
      * TODO: extend to allow customizing of codepoint ranges
      * @internal
+     * @deprecated This API is ICU internal only.
      * @author medavis
      */
     abstract public static class XSymbolTable implements SymbolTable {
+	/*
+	 * @internal
+	 * @deprecated This API is ICU internal only.
+	 */
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
+	/*
+	 * @internal
+	 * @deprecated This API is ICU internal only.
+	 */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
         }
+	/*
+	 * @internal
+	 * @deprecated This API is ICU internal only.
+	 */
         public char[] lookup(String s) {
             return null;
         }
+	/*
+	 * @internal
+	 * @deprecated This API is ICU internal only.
+	 */
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
         }
@@ -3548,6 +3573,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Is this frozen, according to the Freezable interface?
      * @return value
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public boolean isFrozen() {
         return frozen;
@@ -3556,6 +3583,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Freeze this class, according to the Freezable interface.
      * @return this
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Object freeze() {
         frozen = true;
@@ -3565,6 +3594,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Clone a thawed version of this class, according to the Freezable interface.
      * @return this
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Object cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();

@@ -101,11 +101,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private static final int SHORT_GENERIC = 2;
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private static final int LONG_GENERIC = 3;
 
@@ -310,12 +312,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * The number of milliseconds in an hour.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected static final int MILLIS_PER_HOUR = 60*60*1000;
 
     /**
      * The number of milliseconds in one day.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected static final int MILLIS_PER_DAY = 24*MILLIS_PER_HOUR;
     
@@ -482,6 +486,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * The public version of this API only accepts LONG/SHORT, the
      * internal version (which this calls) also accepts LONG_GENERIC/SHORT_GENERIC.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private String _getDisplayName(boolean daylight, int style, ULocale locale) {
         /* NOTES:

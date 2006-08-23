@@ -232,6 +232,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int EPOCH_OFFSET_MINUS_1_VALUE = 7;
     
@@ -244,6 +245,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int UNITS_ROUND_VALUE = 8;
     
@@ -256,6 +258,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int MIN_ROUND_VALUE = 9;
     
@@ -268,6 +271,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int MAX_ROUND_VALUE = 10;
     
@@ -279,6 +283,7 @@ public final class UniversalTimeScale
      * @see #getTimeScaleValue
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int MAX_SCALE_VALUE = 11;
     
@@ -295,6 +300,7 @@ public final class UniversalTimeScale
      * time scale.
      *
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private static final class TimeScaleData
     {
@@ -556,6 +562,7 @@ public final class UniversalTimeScale
      * @return the <code>TimeScaleData</code> object for the given time scale
      * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private static TimeScaleData getTimeScaleData(int scale)
     {
@@ -655,6 +662,7 @@ public final class UniversalTimeScale
      * @return the time in the given time scale
      * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static BigDecimal toBigDecimalTrunc(BigDecimal universalTime, int timeScale)
     {

@@ -184,8 +184,8 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public StringBuffer format(Object number,
-			       StringBuffer toAppendTo,
-			       FieldPosition pos)
+                               StringBuffer toAppendTo,
+                               FieldPosition pos)
     {
         if (number instanceof Long) {
             return format(((Long)number).longValue(), toAppendTo, pos);
@@ -401,6 +401,7 @@ public abstract class NumberFormat extends UFormat {
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         // Default implementation only -- subclasses should override
@@ -448,8 +449,9 @@ public abstract class NumberFormat extends UFormat {
      * When strict parsing is off, leading zeros and all grouping separators are ignored.
      * This is the default behavior.
      * @param value True to enable strict parsing.  Default is false.
-     * @see #getParseStrict
+     * @see #isParseStrict
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public void setParseStrict(boolean value) {
         parseStrict = value;
@@ -460,6 +462,7 @@ public abstract class NumberFormat extends UFormat {
      * @return true if strict parsing is in effect
      * @see #setParseStrict
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isParseStrict() {
         return parseStrict;
@@ -805,7 +808,7 @@ public abstract class NumberFormat extends UFormat {
         
         /**
          * @draft ICU 3.2
-	 * @provisional This API might change or be removed in a future release.
+         * @provisional This API might change or be removed in a future release.
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());
@@ -1145,6 +1148,7 @@ public abstract class NumberFormat extends UFormat {
      * this method should never return null.
      * @return a non-null Currency
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected Currency getEffectiveCurrency() {
         Currency c = getCurrency();
@@ -1537,77 +1541,110 @@ public abstract class NumberFormat extends UFormat {
     private boolean parseStrict;
     
     /**
-	 * [Spark/CDL] The instances of this inner class are used as attribute keys and values
-	 * in AttributedCharacterIterator that
-	 * NumberFormat.formatToCharacterIterator() method returns.
-	 * <p>
-	 * There is no public constructor to this class, the only instances are the
-	 * constants defined here.
-	 * <p>
-	 */
-	public static class Field extends Format.Field {
+     * [Spark/CDL] The instances of this inner class are used as attribute keys and values
+     * in AttributedCharacterIterator that
+     * NumberFormat.formatToCharacterIterator() method returns.
+     * <p>
+     * There is no public constructor to this class, the only instances are the
+     * constants defined here.
+     * <p>
+     * @stable ICU 3.6
+     */
+    public static class Field extends Format.Field {
 
-		public static final Field SIGN = new Field("sign");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field SIGN = new Field("sign");
 
-		public static final Field INTEGER = new Field("integer");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field INTEGER = new Field("integer");
 
-		public static final Field FRACTION = new Field("fraction");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field FRACTION = new Field("fraction");
 
-		public static final Field EXPONENT = new Field("exponent");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field EXPONENT = new Field("exponent");
 
-		public static final Field EXPONENT_SIGN = new Field("exponent sign");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field EXPONENT_SIGN = new Field("exponent sign");
 
-		public static final Field EXPONENT_SYMBOL = new Field("exponent symbol");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field EXPONENT_SYMBOL = new Field("exponent symbol");
 
-		public static final Field DECIMAL_SEPARATOR = new Field(
-				"decimal separator");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field DECIMAL_SEPARATOR = new Field("decimal separator");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field GROUPING_SEPARATOR = new Field("grouping separator");
 
-		public static final Field GROUPING_SEPARATOR = new Field(
-				"grouping separator");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field PERCENT = new Field("percent");
 
-		public static final Field PERCENT = new Field("percent");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field PERMILLE = new Field("per mille");
 
-		public static final Field PERMILLE = new Field("per mille");
+        /**
+         * @stable ICU 3.6
+         */
+        public static final Field CURRENCY = new Field("currency");
 
-		public static final Field CURRENCY = new Field("currency");
+        /**
+         * Constructs a new instance of NumberFormat.Field with the given field
+         * name.
+         * @stable ICU 3.6
+         */
+        protected Field(String fieldName) {
+            super(fieldName);
+        }
 
-		/**
-		 * Constructs a new instance of NumberFormat.Field with the given field
-		 * name.
-		 */
-		protected Field(String fieldName) {
-			super(fieldName);
-		}
+        /**
+         * serizalization method resolve instances to the constant
+         * NumberFormat.Field values
+         * @stable ICU 3.6
+         */
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.equals(INTEGER))
+                return INTEGER;
+            if (this.equals(FRACTION))
+                return FRACTION;
+            if (this.equals(EXPONENT))
+                return EXPONENT;
+            if (this.equals(EXPONENT_SIGN))
+                return EXPONENT_SIGN;
+            if (this.equals(EXPONENT_SYMBOL))
+                return EXPONENT_SYMBOL;
+            if (this.equals(CURRENCY))
+                return CURRENCY;
+            if (this.equals(DECIMAL_SEPARATOR))
+                return DECIMAL_SEPARATOR;
+            if (this.equals(GROUPING_SEPARATOR))
+                return GROUPING_SEPARATOR;
+            if (this.equals(PERCENT))
+                return PERCENT;
+            if (this.equals(PERMILLE))
+                return PERMILLE;
+            if (this.equals(SIGN))
+                return SIGN;
 
-		/**
-		 * serizalization method resolve instances to the constant
-		 * NumberFormat.Field values
-		 */
-		protected Object readResolve() throws InvalidObjectException {
-			if (this.equals(INTEGER))
-				return INTEGER;
-			if (this.equals(FRACTION))
-				return FRACTION;
-			if (this.equals(EXPONENT))
-				return EXPONENT;
-			if (this.equals(EXPONENT_SIGN))
-				return EXPONENT_SIGN;
-			if (this.equals(EXPONENT_SYMBOL))
-				return EXPONENT_SYMBOL;
-			if (this.equals(CURRENCY))
-				return CURRENCY;
-			if (this.equals(DECIMAL_SEPARATOR))
-				return DECIMAL_SEPARATOR;
-			if (this.equals(GROUPING_SEPARATOR))
-				return GROUPING_SEPARATOR;
-			if (this.equals(PERCENT))
-				return PERCENT;
-			if (this.equals(PERMILLE))
-				return PERMILLE;
-			if (this.equals(SIGN))
-				return SIGN;
-
-			throw new InvalidObjectException("An invalid object.");
-		}
-	}
+            throw new InvalidObjectException("An invalid object.");
+        }
+    }
 }

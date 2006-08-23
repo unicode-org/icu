@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -151,6 +151,7 @@ public final class CanonicalIterator {
      * @param skipZeros set to true to skip characters with canonical combining class zero
      * @param output the set to add the results to
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static void permute(String source, boolean skipZeros, Set output) {
         // TODO: optimize
