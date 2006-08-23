@@ -194,7 +194,49 @@ static const le_bool complexTable[scriptCodeCount] = {
     FALSE,  /* Sylo */
     FALSE,  /* Talu */
     FALSE,  /* Tfng */
-    FALSE   /* Xpeo */
+    FALSE,  /* Xpeo */
+    FALSE,  /* Bali */
+    FALSE,  /* Batk */
+    FALSE,  /* Blis */
+    FALSE,  /* Brah */
+    FALSE,  /* Cham */
+    FALSE,  /* Cirt */
+    FALSE,  /* Cyrs */
+    FALSE,  /* Egyd */
+    FALSE,  /* Egyh */
+    FALSE,  /* Egyp */
+    FALSE,  /* Geok */
+    FALSE,  /* Hans */
+    FALSE,  /* Hant */
+    FALSE,  /* Hmng */
+    FALSE,  /* Hung */
+    FALSE,  /* Inds */
+    FALSE,  /* Java */
+    FALSE,  /* Kali */
+    FALSE,  /* Latf */
+    FALSE,  /* Latg */
+    FALSE,  /* Lepc */
+    FALSE,  /* Lina */
+    FALSE,  /* Mand */
+    FALSE,  /* Maya */
+    FALSE,  /* Mero */
+    FALSE,  /* Nkoo */
+    FALSE,  /* Orkh */
+    FALSE,  /* Perm */
+    FALSE,  /* Phag */
+    FALSE,  /* Phnx */
+    FALSE,  /* Plrd */
+    FALSE,  /* Roro */
+    FALSE,  /* Sara */
+    FALSE,  /* Syre */
+    FALSE,  /* Syrj */
+    FALSE,  /* Syrn */
+    FALSE,  /* Teng */
+    FALSE,  /* Taii */
+    FALSE,  /* Visp */
+    FALSE,  /* Xsux */
+    FALSE,  /* Zxxx */
+    FALSE   /* Zzzz */
 };
 
 
