@@ -41,22 +41,22 @@ package com.ibm.icu.util;
  * 
  * <pre>
  * public class A {
- * 	protected Collection b;
+ *      protected Collection b;
  * 
- * 	protected Collection c;
+ *      protected Collection c;
  * 
- * 	public Collection get_b() {
- * 		return b;
- * 	}
+ *      public Collection get_b() {
+ *              return b;
+ *      }
  * 
- * 	public Collection get_c() {
- * 		return c;
- * 	}
+ *      public Collection get_c() {
+ *              return c;
+ *      }
  * 
- * 	public A(Collection new_b, Collection new_c) {
- * 		b = new_b;
- * 		c = new_c;
- * 	}
+ *      public A(Collection new_b, Collection new_c) {
+ *              b = new_b;
+ *              c = new_c;
+ *      }
  * }
  * </pre>
  * 
@@ -175,12 +175,12 @@ package com.ibm.icu.util;
  * 
  * <pre>
  * public final boolean isFrozen() {
- * 	return frozen;
+ *      return frozen;
  * };
  * 
  * public Object freeze() {
- * 	frozen = true;
- * 	return this;
+ *      frozen = true;
+ *      return this;
  * }
  * </pre>
  * 
@@ -196,7 +196,7 @@ package com.ibm.icu.util;
  * 
  * <pre>
  * if (isFrozen()) {
- * 	throw new UnsupportedOperationException(&quot;Attempt to modify frozen object&quot;);
+ *      throw new UnsupportedOperationException(&quot;Attempt to modify frozen object&quot;);
  * }
  * </pre>
  * 
@@ -232,15 +232,15 @@ package com.ibm.icu.util;
  * 
  * <pre>
  * Collection getStuff() {
- * 	return stuff;
+ *      return stuff;
  * } // caller could keep reference &amp; modify
  * 
  * void setStuff(Collection x) {
- * 	stuff = x;
+ *      stuff = x;
  * } // caller could keep reference &amp; modify
  * 
  * MyClass(Collection x) {
- * 	stuff = x;
+ *      stuff = x;
  * } // caller could keep reference &amp; modify
  * </pre>
  * 
@@ -257,11 +257,11 @@ package com.ibm.icu.util;
  * 
  * <pre>
  * public Object freeze() {
- * 	if (!frozen) {
- * 		foo.freeze();
- * 		frozen = true;
- * 	}
- * 	return this;
+ *      if (!frozen) {
+ *              foo.freeze();
+ *              frozen = true;
+ *      }
+ *      return this;
  * }
  * </pre>
  * 
@@ -307,19 +307,28 @@ package com.ibm.icu.util;
  * </blockquote>
  *
  * @internal revisit for ICU 3.6
+ * @deprecated This API is ICU internal only.
  */
 public interface Freezable extends Cloneable {
-	/**
-	 * Determines whether the object has been locked or not.
-	 */
-	public boolean isFrozen();
-	/**
-	 * Locks the object.
-	 * @return the object itself.
-	 */
-	public Object freeze();
-	/**
-	 * Provides for the clone operation. Any clone is initially unlocked.
-	 */
-	public Object cloneAsThawed();
+    /**
+     * Determines whether the object has been locked or not.
+     * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean isFrozen();
+
+    /**
+     * Locks the object.
+     * @return the object itself.
+     * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
+     */
+    public Object freeze();
+
+    /**
+     * Provides for the clone operation. Any clone is initially unlocked.
+     * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
+     */
+    public Object cloneAsThawed();
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/08/17 22:02:51 $
- * $Revision: 1.1 $
+ * $Date: 2006/08/23 21:28:10 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -61,7 +61,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     /**
      * Create empty generator, to be constructed with add(...) etc.
      */
-    public DateTimePatternGenerator() {		
+    public DateTimePatternGenerator() {         
     }
     
     /**
@@ -220,10 +220,38 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     /**
      * PatternInfo supplies output parameters for add(...).
      * It is used because Java doesn't have real output parameters. It is treated like a struct (eg Point), so all fields are public.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final class PatternInfo { // struct for return information
-        public static final int OK = 0, BASE_CONFLICT = 1, CONFLICT = 2; // status values
+	/**
+	 * @draft ICU 3.6
+	 * @provisional This API might change or be removed in a future release.
+	 */
+        public static final int OK = 0;
+
+	/**
+	 * @draft ICU 3.6
+	 * @provisional This API might change or be removed in a future release.
+	 */
+	public static final int BASE_CONFLICT = 1;
+
+	/**
+	 * @draft ICU 3.6
+	 * @provisional This API might change or be removed in a future release.
+	 */
+	public static final int CONFLICT = 2;
+
+	/**
+	 * @draft ICU 3.6
+	 * @provisional This API might change or be removed in a future release.
+	 */
         public int status;
+
+	/**
+	 * @draft ICU 3.6
+	 * @provisional This API might change or be removed in a future release.
+	 */
         public String conflictingPattern;
     }
     
@@ -411,13 +439,109 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
     }
     
-    /** Field numbers, used for AppendItem functions
+    // Field numbers, used for AppendItem functions
+
+    /** 
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
-    static final public int ERA = 0, YEAR = 1, QUARTER = 2, MONTH = 3,
-    WEEK_OF_YEAR = 4, WEEK_OF_MONTH = 5, WEEKDAY = 6, DAY = 7,
-    DAY_OF_YEAR = 8, DAY_OF_WEEK_IN_MONTH = 9, DAYPERIOD = 10,
-    HOUR = 11, MINUTE = 12, SECOND = 13, FRACTIONAL_SECOND = 14,
-    ZONE = 15, TYPE_LIMIT = 16;
+    static final public int ERA = 0;
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int YEAR = 1; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int QUARTER = 2; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int MONTH = 3;
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int WEEK_OF_YEAR = 4; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int WEEK_OF_MONTH = 5; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int WEEKDAY = 6; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int DAY = 7;
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int DAY_OF_YEAR = 8; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int DAY_OF_WEEK_IN_MONTH = 9; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int DAYPERIOD = 10;
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int HOUR = 11; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int MINUTE = 12; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int SECOND = 13; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int FRACTIONAL_SECOND = 14;
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int ZONE = 15; 
+
+    /**
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final public int TYPE_LIMIT = 16;
     
     /**
      * An AppendItem format is a pattern used to append a field if there is no good match. For example, suppose that the input skeleton is "GyyyyMMMd",
@@ -426,6 +550,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * is "d-MM-yyyy, G".<p>There are actually three available variables: {0} is the pattern so far, {1} is the element we are adding, and {2} is the name of the element.
      * @param field such as ERA
      * @param value pattern, such as "{0}, {1}"
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public void setAppendItemFormats(int field, String value) {
         checkFrozen();
@@ -436,6 +562,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * Getter corresponding to setAppendItemFormats. Values below 0 or at or above TYPE_LIMIT are illegal arguments.
      * @param field
      * @return append pattern for field
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getAppendItemFormats(int field) {
         return appendItemFormats[field];
@@ -445,6 +573,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * Sets the names of fields, eg "era" in English for ERA. These are only used if the corresponding AppendItemFormat contains a {2} variable.
      * @param field
      * @param value
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public void setAppendItemNames(int field, String value) {
         checkFrozen();
@@ -455,6 +585,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * Getter corresponding to setAppendItemNames. Values below 0 or at or above TYPE_LIMIT are illegal arguments.
      * @param field
      * @return name for field
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getAppendItemNames(int field) {
         return appendItemNames[field];
@@ -503,8 +635,6 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Utility class for FormatParser. Immutable class.
-     * @author markdavis
-     *
      */
     public static class VariableField {
         private String string;
@@ -564,8 +694,6 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             }
         }
 
-        
-
         /** Return a collection of fields. These will be a mixture of Strings and VariableFields. Any "a" variable field is removed.
          * @param output List to append the items to. If null, is allocated as an ArrayList.
          * @return list
@@ -587,6 +715,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             //System.out.println(output);
             return output;
         }
+
         /**
          * @return a string which is a concatenation of all the variable fields
          */
@@ -607,12 +736,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         public List getItems() {
             return items;
         }
+
         /** Provide display form of formatted input
          * @return printable output string
          */
         public String toString() {
             return toString(0, items.size());
         }
+
         /**
          * Provide display form of formatted input
          * @param start item to start from
@@ -804,7 +935,6 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return appendItemFormats[foundMask];
     }
     
-    
     /**
      * @param current2
      * @return
@@ -822,7 +952,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         int i = 0;
         while (foundMask != 0) {
             foundMask >>>= 1;
-    ++i;
+            ++i;
         }
         return i-1;
     }

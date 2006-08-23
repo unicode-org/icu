@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -64,6 +64,7 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      *
      * TODO Remove this when the JDK property implements MemberDoc.isSynthetic
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected UnicodeFilter() {}
 }

@@ -99,7 +99,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Constant for context.
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public static final int DT_CONTEXT_COUNT = 2;
 
@@ -129,7 +129,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Constant for width.
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public static final int DT_WIDTH_COUNT = 3;
 
@@ -424,10 +424,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Sets era name strings. For example: "Anno Domini" and "Before Christ".
      * @param newEraNames the new era strings.
      * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
     public void setEraNames(String[] newEraNames) {
         eraNames = duplicate(newEraNames);
     }
+
     /**
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
@@ -495,7 +497,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      The width of the month string,
      *                   either WIDE, ABBREVIATED, or NARROW.
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public void setMonths(String[] newMonths, int context, int width) {
         switch (context) {
@@ -606,7 +608,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width       The width of the strings,
      *                    either WIDE, ABBREVIATED, or NARROW.
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public void setWeekdays(String[] newWeekdays, int context, int width) {
         switch (context) {
@@ -720,7 +722,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      The width of the quarter string,
      *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public void setQuarters(String[] newQuarters, int context, int width) {
         switch (context) {
@@ -1438,6 +1440,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * The translation type of the translated zone strings
      * @internal ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
      private static final String   SHORT_GENERIC  = "sg",
                                    SHORT_STANDARD = "ss",
@@ -1449,6 +1452,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * The translation type of the translated zone strings
      * @internal ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
      static final int   TIMEZONE_SHORT_GENERIC  = 0,
                         TIMEZONE_SHORT_STANDARD = 1,
@@ -1873,6 +1877,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -1891,6 +1896,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private ULocale validLocale;
 
@@ -1899,6 +1905,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * null.
      * @see com.ibm.icu.util.ULocale
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private ULocale actualLocale;
 

@@ -21,6 +21,7 @@ import com.ibm.icu.impl.Assert;
  * This is a port of the C++ class RuleBasedBreakIterator from ICU4C.
  * 
  * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -29,13 +30,17 @@ public class RuleBasedBreakIterator extends BreakIterator {
     // Constructors & Factories
     //=======================================================================
     
-    /** @internal */
+    /** 
+     *@internal 
+     * @deprecated This API is ICU internal only.
+     */
     public RuleBasedBreakIterator() {
     }
 
     /**
      * Create a break iterator from a precompiled set of rules.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
@@ -234,18 +239,21 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * The character iterator through which this BreakIterator accesses the text.
      * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private CharacterIterator   fText = new java.text.StringCharacterIterator("");
     
     /**
      * The rule data for this BreakIterator instance
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected RBBIDataWrapper     fRData;
     
     /** Index of the Rule {tag} values for the most recent match. 
      *  @internal
-    */
+     * @deprecated This API is ICU internal only.
+     */
     private int                 fLastRuleStatusIndex;
 
     /**
@@ -253,6 +261,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Some iterator operations don't intrinsically set the correct tag value.
      * This flag lets us lazily compute the value if we are ever asked for it.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     private boolean             fLastStatusIndexValid;
     
@@ -262,12 +271,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
      *   for updating it is live.  Dictionary Based break iterators (a subclass
      *   of us) access this field directly.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
      protected int fDictionaryCharCount;
     
     /**
      * Debugging flag.  Trace operation of state machine when true.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static boolean       fTrace;
     
@@ -276,6 +287,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Dump the contents of the state table and character classes for this break iterator.
      * For debugging only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public void dump() {
         this.fRData.dump();   
@@ -788,6 +800,7 @@ public int getRuleStatusVec(int[] fillInArray) {
     /**
      * Control debug, trace and dump options.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected static String fDebugEnv = System.getProperty("U_RBBIDEBUG");
 

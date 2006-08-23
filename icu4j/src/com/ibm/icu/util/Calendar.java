@@ -5096,6 +5096,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Note, in 3.0 this function will return 'gregorian' in Calendar to emulate legacy behavior
      * @return type of calendar (gregorian, etc)
      * @internal ICU 3.0
+     * @deprecated This API is ICU internal only.
      */
     public String getType() {
         return "gregorian";

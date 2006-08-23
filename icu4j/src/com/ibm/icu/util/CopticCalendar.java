@@ -280,6 +280,7 @@ public final class CopticCalendar extends CECalendar
     
     /**
      * @internal ICU 3.4
+     * @deprecated This API is ICU internal only.
      */
     public static Integer[] getDateFromJD(int julianDay) {
         return getDateFromJD(julianDay, JD_EPOCH_OFFSET);
@@ -289,6 +290,7 @@ public final class CopticCalendar extends CECalendar
      * Return the current Calendar type.
      * @return type of calendar (gregorian, etc.)
      * @internal ICU 3.4
+     * @deprecated This API is ICU internal only.
      */
     public String getType() {
         return "coptic";

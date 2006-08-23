@@ -1,4 +1,4 @@
-//##header  VERSION_1.4
+//##header  VERSION_1.5
 /**
 *******************************************************************************
 * Copyright (C) 2002-2006, International Business Machines Corporation and    *
@@ -17,15 +17,15 @@ package com.ibm.icu.dev.tool.docs;
 import com.sun.javadoc.*;
 import com.sun.tools.doclets.*;
 //#ifdef VERSION_1.5
-//##
-//##import com.sun.tools.doclets.internal.toolkit.taglets.*;
-//##import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-//##
-//##// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
-//##// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
-//##// Their registration code casts to the second, not the first, and the
-//##// second doesn't implement the first, so if you just implement the
-//##// first, you die.
+
+import com.sun.tools.doclets.internal.toolkit.taglets.*;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+
+// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
+// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
+// Their registration code casts to the second, not the first, and the
+// second doesn't implement the first, so if you just implement the
+// first, you die.
 //#endif
 
 import java.text.BreakIterator;
@@ -52,7 +52,7 @@ public abstract class ICUTaglet implements Taglet {
         ICUDraftTaglet.register(taglets);
         ICUStableTaglet.register(taglets);
 //#ifndef VERSION_1.5
-        ICUDeprecatedTaglet.register(taglets);
+//##        ICUDeprecatedTaglet.register(taglets);
 //#endif
         ICUProvisionalTaglet.register(taglets);
         ICUObsoleteTaglet.register(taglets);
@@ -115,22 +115,22 @@ public abstract class ICUTaglet implements Taglet {
         return null;
     }
 //#ifdef VERSION_1.5
-//##
-//##    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-//##	TagletOutput out = writer.getTagletOutputInstance();
-//##	out.setOutput(toString(tag));
-//##	return out;
-//##    }
-//##
-//##    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
-//## 	TagletOutput out = writer.getTagletOutputInstance();
-//##	Tag[] tags = holder.tags(getName());
-//##	if (tags.length == 0) {
-//##	    return null;
-//##	}
-//## 	out.setOutput(toString(tags[0]));
-//## 	return out;
-//##    }
+
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+	TagletOutput out = writer.getTagletOutputInstance();
+	out.setOutput(toString(tag));
+	return out;
+    }
+
+    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
+ 	TagletOutput out = writer.getTagletOutputInstance();
+	Tag[] tags = holder.tags(getName());
+	if (tags.length == 0) {
+	    return null;
+	}
+ 	out.setOutput(toString(tags[0]));
+ 	return out;
+    }
 //#endif
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";
@@ -192,40 +192,40 @@ public abstract class ICUTaglet implements Taglet {
         }
     }
 //#ifndef VERSION_1.5
-
-    /*
-     * sigh, in JDK 1.5 we can't override the standard deprecated taglet
-     * so easily.  I'm not impressed with the javadoc code.
-     */
-    public static class ICUDeprecatedTaglet extends ICUTaglet {
-        private static final String NAME = "deprecated";
-
-        public static void register(Map taglets) {
-	    taglets.remove(NAME); // override standard deprecated taglet
-            taglets.put(NAME, new ICUDeprecatedTaglet());
-        }
-
-        private ICUDeprecatedTaglet() {
-            super(NAME, MASK_DEFAULT);
-        }
-
-        public String toString(Tag tag) {
-            BreakIterator bi = BreakIterator.getSentenceInstance(Locale.US);
-            String text = tag.text();
-            bi.setText(text);
-            int first = bi.first();
-            int next = bi.next();
-            if (first == -1 || next == -1) {
-                System.err.println("Warning: bad deprecated tag '" + text + "'");
-                return "<dd><em>Note</em>. " + text + "</dd>";
-            } else {
-                if ("This API is ICU internal only.".equals(text)) {
-                    return null;
-                }
-                return "<dd><em>Note, " + text.substring(first, next) + "</em>. " + text.substring(next) + "</dd>";
-            }
-        }
-    }
+//##
+//##    /*
+//##     * sigh, in JDK 1.5 we can't override the standard deprecated taglet
+//##     * so easily.  I'm not impressed with the javadoc code.
+//##     */
+//##    public static class ICUDeprecatedTaglet extends ICUTaglet {
+//##        private static final String NAME = "deprecated";
+//##
+//##        public static void register(Map taglets) {
+//##	    taglets.remove(NAME); // override standard deprecated taglet
+//##            taglets.put(NAME, new ICUDeprecatedTaglet());
+//##        }
+//##
+//##        private ICUDeprecatedTaglet() {
+//##            super(NAME, MASK_DEFAULT);
+//##        }
+//##
+//##        public String toString(Tag tag) {
+//##            BreakIterator bi = BreakIterator.getSentenceInstance(Locale.US);
+//##            String text = tag.text();
+//##            bi.setText(text);
+//##            int first = bi.first();
+//##            int next = bi.next();
+//##            if (first == -1 || next == -1) {
+//##                System.err.println("Warning: bad deprecated tag '" + text + "'");
+//##                return "<dd><em>Note</em>. " + text + "</dd>";
+//##            } else {
+//##                if ("This API is ICU internal only.".equals(text)) {
+//##                    return null;
+//##                }
+//##                return "<dd><em>Note, " + text.substring(first, next) + "</em>. " + text.substring(next) + "</dd>";
+//##            }
+//##        }
+//##    }
 //#endif
 
     public static class ICUProvisionalTaglet extends ICUTaglet {

@@ -205,7 +205,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale
      * @internal revisit for ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader){
         return getBundleInstance(baseName, ULocale.forLocale(locale), loader);
@@ -289,6 +289,7 @@ public abstract class UResourceBundle extends ResourceBundle{
 
     /**
      * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
     protected static synchronized void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
         cacheKey.setKeyValues(cl, fullName, defaultLocale);
@@ -296,6 +297,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     /**
      * @internal revisit for ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
     protected static synchronized UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
         cacheKey.setKeyValues(cl, fullName, defaultLocale);
@@ -517,8 +519,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected abstract void setLoadingStatus(int newStatus);
-    
-    
 }

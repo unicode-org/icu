@@ -1557,6 +1557,7 @@ public class DecimalFormat extends NumberFormat {
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         return (CurrencyAmount) parse(text, pos, true);
@@ -4294,6 +4295,7 @@ public class DecimalFormat extends NumberFormat {
      * should override this method as needed.  Unlike getCurrency(),
      * this method should never return null.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected Currency getEffectiveCurrency() {
         Currency c = getCurrency();

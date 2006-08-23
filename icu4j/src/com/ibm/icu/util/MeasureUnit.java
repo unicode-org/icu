@@ -22,6 +22,7 @@ package com.ibm.icu.util;
 public abstract class MeasureUnit {
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected MeasureUnit() {};
 }

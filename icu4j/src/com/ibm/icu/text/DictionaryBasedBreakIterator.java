@@ -96,6 +96,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * @param compiledRules an input stream containing the binary (flattened) compiled rules.
      * @param dictionaryStream an input stream containing the dictionary data
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public DictionaryBasedBreakIterator(InputStream compiledRules,
                                          InputStream dictionaryStream) throws IOException {
@@ -282,6 +283,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
     /**
      * This is the implementation function for next().
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected int handleNext() {
         CharacterIterator text = getText();
