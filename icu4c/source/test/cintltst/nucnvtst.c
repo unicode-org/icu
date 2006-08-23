@@ -5280,12 +5280,12 @@ static void TestJitterbug1293(){
 }
 static void TestJB5275_1(){
 
-    static const char* data = "\x3B\xB3\n" /* Easy characters */
-                                "\xC0\xE9\xBF\xE9\xE8\xD8\n" /* Gurmukhi test */
+    static const char* data = "\x3B\xB3\x0A" /* Easy characters */
+                                "\xC0\xE9\xBF\xE9\xE8\xD8\x0A" /* Gurmukhi test */
                                 /* Switch script: */
-                                "\xEF\x43\xC0\xE9\xBF\xE9\xE8\xD8\n" /* Bengali test */
-                                "\x3B\xB3\n" /* Easy characters - new line, so should default!*/
-                                "\xEF\x40\x3B\xB3\n";
+                                "\xEF\x43\xC0\xE9\xBF\xE9\xE8\xD8\x0A" /* Bengali test */
+                                "\x3B\xB3\x0A" /* Easy characters - new line, so should default!*/
+                                "\xEF\x40\x3B\xB3\x0A";
     static const UChar expected[] ={ 
             0x003b, 0x0a15, 0x000a, /* Easy characters */
             0x0a22, 0x0a3c, 0x0a5c, 0x0a4d, 0x0a39, 0x000a, /* Gurmukhi test */
