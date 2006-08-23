@@ -5322,16 +5322,16 @@ static void TestJB5275_1(){
 
 static void TestJB5275(){
     static const char* data = 
-    /* "\xEF\x42\xEF\x41\xA4\xD5\xE5\xB3\xEA\n"  unsupported sequence \xEF\x41 */
-    /* "\xEF\x42\xEF\x41\xD4\xDA\xB3\xE8\xEA\n"  unsupported sequence \xEF\x41  */
-    /* "\xEF\x44\xEF\x41\xC8\xE1\x8B\xDB\xB3\xE8 \xB3\xE4\xC1\xE8\n"  unsupported sequence \xEF\x41 */
-        "\xEF\x4B\xC0\xE9\xBF\xE9\xE8\xD8\n"  /* Gurmukhi test */
-        "\xEF\x4A\xC0\xD4\xBF\xD4\xE8\xD8\n"  /* Gujarati test */
-        "\xEF\x48\x38\xB3\n"  /* Kannada test */
-        "\xEF\x49\x39\xB3\n"  /* Malayalam test */
-        "\xEF\x4A\x3A\xB3\n"  /* Gujarati test */
-        "\xEF\x4B\x3B\xB3\n"  /* Punjabi test */
-        /* "\xEF\x4C\x3C\xB3\n"  unsupported sequence \xEF\x41 */;
+    /* "\xEF\x42\xEF\x41\xA4\xD5\xE5\xB3\xEA\x0A"  unsupported sequence \xEF\x41 */
+    /* "\xEF\x42\xEF\x41\xD4\xDA\xB3\xE8\xEA\x0A"  unsupported sequence \xEF\x41  */
+    /* "\xEF\x44\xEF\x41\xC8\xE1\x8B\xDB\xB3\xE8 \xB3\xE4\xC1\xE8\x0A"  unsupported sequence \xEF\x41 */
+        "\xEF\x4B\xC0\xE9\xBF\xE9\xE8\xD8\x0A"  /* Gurmukhi test */
+        "\xEF\x4A\xC0\xD4\xBF\xD4\xE8\xD8\x0A"  /* Gujarati test */
+        "\xEF\x48\x38\xB3\x0A"  /* Kannada test */
+        "\xEF\x49\x39\xB3\x0A"  /* Malayalam test */
+        "\xEF\x4A\x3A\xB3\x0A"  /* Gujarati test */
+        "\xEF\x4B\x3B\xB3\x0A"  /* Punjabi test */
+        /* "\xEF\x4C\x3C\xB3\x0A"  unsupported sequence \xEF\x41 */;
     static const UChar expected[] ={ 
         0x0A22, 0x0A3C, 0x0A5C, 0x0A4D, 0x0A39, 0x000A, /* Gurmukhi test */
         0x0AA2, 0x0AB5, 0x0AA1, 0x0AB5, 0x0ACD, 0x0AB9, 0x000A,     /* Gujarati test */
