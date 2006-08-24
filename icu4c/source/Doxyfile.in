@@ -160,7 +160,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = NO
+GENERATE_XML           = NO 
 XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
@@ -172,7 +172,7 @@ GENERATE_AUTOGEN_DEF   = NO
 #---------------------------------------------------------------------------
 # configuration options related to the Perl module output
 #---------------------------------------------------------------------------
-GENERATE_PERLMOD       = NO
+GENERATE_PERLMOD       = NO 
 PERLMOD_LATEX          = YES
 PERLMOD_PRETTY         = YES
 PERLMOD_MAKEVAR_PREFIX = 
@@ -180,19 +180,19 @@ PERLMOD_MAKEVAR_PREFIX =
 # Configuration options related to the preprocessor   
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
-EXPAND_ONLY_PREDEF     = NO
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = 
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = 
+PREDEFINED             = U_EXPORT2 U_STABLE U_DRAFT U_INTERNAL U_SYSTEM U_DEPRECATED U_OBSOLETE
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       = 
+GENERATE_TAGFILE       =  YES
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
