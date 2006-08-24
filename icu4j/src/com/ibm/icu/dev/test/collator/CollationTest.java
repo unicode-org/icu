@@ -24,31 +24,16 @@ import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
 
-public class CollationTest extends ModuleTest
-{
+public class CollationTest extends ModuleTest{
     // public methods --------------------------------------------------------
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception{
         new CollationTest().run(args);
-        /* CollationTest test = new CollationTest();
-        if (test.validate()) {
-            test.TestCIgnorableContraction();
-        }*/
     }
 
-//    public CollationTest() {
-//        super("processModules");
-//    }
-
-    // Want to be static, why super class not?
-    private class DataDrivenTarget extends TestFmwk.Target{
-        public DataDrivenTarget(String name) {
-            super(name);
-        }
-        
+    public CollationTest() {
+        super("com/ibm/icu/dev/data/testdata/", "DataDrivenCollationTest");
     }
-
     
     public void processModules() {
         for (Iterator iter = t.getSettingsIterator(); iter.hasNext();) {
@@ -188,7 +173,7 @@ public class CollationTest extends ModuleTest
             }catch (Exception e) {
                 errln("Error creating collator for locale " + locale);
             }
-            logln("Testing collator for locale %s\n" + locale);
+            logln("Testing collator for locale " + locale);
             processSetting2(settings, col);
         }
         String rules = settings.getString("Rules");

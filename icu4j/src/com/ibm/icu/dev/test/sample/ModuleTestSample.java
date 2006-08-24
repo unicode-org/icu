@@ -12,6 +12,9 @@ public class ModuleTestSample extends ModuleTest {
     public static void main(String[] args) throws Exception {
     new ModuleTestSample().run(args);
     }
+    ModuleTestSample(){
+        super("com/ibm/icu/dev/data/testdata/", "Test");
+    }
 
 //    // standard loop, settings and cases
 //    public void Test01() {
