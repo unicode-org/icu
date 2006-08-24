@@ -1650,7 +1650,8 @@ parseResourceType(UErrorCode *status)
     *status = U_ZERO_ERROR;
 
     /* Search for normal types */
-    for (result = RT_UNKNOWN+1; result < RT_RESERVED; result++) {
+    result=RT_UNKNOWN;
+    while (++result < RT_RESERVED) {
         if (u_strcmp(tokenValue->fChars, gResourceTypes[result].nameUChars) == 0) {
             break;
         }

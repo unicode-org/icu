@@ -859,10 +859,8 @@ static void TestJB581(void)
     /* Now, do the same comparison with keys */
     sourceKeyOut = ucol_getSortKey(myCollator, source, -1, sourceKeyArray, 100);
     targetKeyOut = ucol_getSortKey(myCollator, target, -1, targetKeyArray, 100);
-    result = 0;
     bufferLen = ((targetKeyOut > 100) ? 100 : targetKeyOut);
-    result = memcmp(sourceKeyArray, targetKeyArray, bufferLen);
-    if (result != 0)
+    if (memcmp(sourceKeyArray, targetKeyArray, bufferLen) != 0)
     {
         log_err("Comparing two strings with sort keys in C failed.\n");
     }
