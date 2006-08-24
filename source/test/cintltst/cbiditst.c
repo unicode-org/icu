@@ -329,13 +329,8 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
     if (!tablesInitialized) {
         buildPseudoTables();
     }
-    if (pseudoToUChar) {                /* tables are built */
-        for (i = 0; i < length; i++)
-            output[i] = pseudoToUChar[(uint8_t)input[i]];
-    } else {                            /* short on memory */
-        for (i = 0; i < length; i++)
-            output[i] = '?';
-    }
+    for (i = 0; i < length; i++)
+        output[i] = pseudoToUChar[(uint8_t)input[i]];
     return length;
 }
 
@@ -351,16 +346,11 @@ static int u16ToPseudo( const int length, const UChar * input, char * output )
     if (!tablesInitialized) {
         buildPseudoTables();
     }
-    if (pseudoToUChar) {
-        for (i = 0; i < length; i++)
-        {
-            uchar = input[i];
-            output[i] = uchar < 0x0100 ? UCharToPseudo[uchar] :
-                                         UCharToPseud2[uchar & 0x00ff];
-        }
-    } else {                            /* short on memory */
-        for (i = 0; i < length; i++)
-            output[i] = '?';
+    for (i = 0; i < length; i++)
+    {
+        uchar = input[i];
+        output[i] = uchar < 0x0100 ? UCharToPseudo[uchar] :
+                                        UCharToPseud2[uchar & 0x00ff];
     }
     output[length] = '\0';
     return length;
