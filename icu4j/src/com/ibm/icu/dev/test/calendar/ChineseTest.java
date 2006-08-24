@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and
+ * Copyright (C) 2000-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -583,6 +583,9 @@ public class ChineseTest extends CalendarTest {
         ChineseCalendar cc = new ChineseCalendar();
         cc.set(Calendar.YEAR, 22);
         cc.set(Calendar.MONTH, 0);
+         // need to set leap month flag off, otherwise, the test case always fails when
+         // current time is in a leap month
+        cc.set(ChineseCalendar.IS_LEAP_MONTH, 0);
         cc.set(Calendar.DATE, 19);
         cc.set(Calendar.HOUR_OF_DAY, 0);
         cc.set(Calendar.MINUTE, 0);
