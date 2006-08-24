@@ -170,7 +170,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                 case UCHAR_NFKD_INERT:
                 case UCHAR_NFC_INERT:
                 case UCHAR_NFKC_INERT:
-                    return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT)+UNORM_NFD);
+                    return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD));
                 case UCHAR_SEGMENT_STARTER:
                     return unorm_isCanonSafeStart(c);
                 default:
@@ -271,7 +271,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_NFKD_QUICK_CHECK:
         case UCHAR_NFC_QUICK_CHECK:
         case UCHAR_NFKC_QUICK_CHECK:
-            return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK)+UNORM_NFD);
+            return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
         case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
             return unorm_getFCD16FromCodePoint(c)>>8;
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
