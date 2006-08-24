@@ -26,9 +26,9 @@ static cleanupFunc *gCleanupFunctions[UCLN_IO_COUNT];
 
 static UBool io_cleanup(void)
 {
-    ECleanupIOType libType;
+    ECleanupIOType libType = UCLN_IO_START;
 
-    for (libType = UCLN_IO_START+1; libType<UCLN_IO_COUNT; libType++) {
+    while (++libType<UCLN_IO_COUNT) {
         if (gCleanupFunctions[libType])
         {
             gCleanupFunctions[libType]();
