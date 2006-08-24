@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 1999-2005, International Business Machines                   *
+* Copyright (C) 1999-2006, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -31,7 +31,7 @@ typedef uint32_t Resource;
 
 #define RES_BOGUS 0xffffffff
 
-#define RES_GET_TYPE(res) ((res)>>28UL)
+#define RES_GET_TYPE(res) ((UResType)((res)>>28UL))
 #define RES_GET_OFFSET(res) ((res)&0x0fffffff)
 #define RES_GET_POINTER(pRoot, res) ((pRoot)+RES_GET_OFFSET(res))
 
