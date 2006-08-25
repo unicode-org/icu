@@ -14,15 +14,11 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools/icupkg
 
-##
-
 TARGET_STUB_NAME = icupkg
 
 SECTION = 1
 
-MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
-
-ALL_MAN_FILES = $(MANX_FILES)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(MAN_FILES)
@@ -61,6 +57,11 @@ install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
+install-man: $(MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+
 dist-local:
 
 clean-local:
@@ -79,9 +80,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 
-install-man: $(MAN_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
