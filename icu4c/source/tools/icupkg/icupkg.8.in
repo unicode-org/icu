@@ -1,10 +1,10 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" icupkg.1: manual page for the icupkg utility
+.\" icupkg.8: manual page for the icupkg utility
 .\"
 .\" Copyright (C) 2000-2006 IBM, Inc. and others.
 .\"
-.TH ICUPKG 1 "18 August 2006" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH ICUPKG 8 "18 August 2006" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B icupkg
 \- extract or modify an ICU
