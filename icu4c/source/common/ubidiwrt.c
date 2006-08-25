@@ -457,7 +457,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
             const UChar *src;
             UChar uc;
             UBiDiDirection dir;
-            uint32_t markFlag;
+            int32_t markFlag;
 
             for(run=0; run<runCount; ++run) {
                 dir=ubidi_getVisualRun(pBiDi, run, &logicalStart, &runLength);
