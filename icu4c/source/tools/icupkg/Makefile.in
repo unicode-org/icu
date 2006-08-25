@@ -16,7 +16,7 @@ subdir = tools/icupkg
 
 TARGET_STUB_NAME = icupkg
 
-SECTION = 1
+SECTION = 8
 
 MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
