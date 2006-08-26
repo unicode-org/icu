@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
 /**
- * Tests for the <code>IslamicCalendar</code> class.
+ * Tests for the <code>JapaneseCalendar</code> class.
  */
 public class JapaneseTest extends CalendarTest {
     public static void main(String args[]) throws Exception {
@@ -166,5 +166,131 @@ public class JapaneseTest extends CalendarTest {
             logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         }
     }
+    
+    public void Test5345parse() {
+        // Test parse with incomplete information
+        DateFormat fmt2= DateFormat.getDateInstance(); //DateFormat.LONG, Locale.US);
+        JapaneseCalendar c = new JapaneseCalendar(TimeZone.getDefault(), new ULocale("en_US"));
+        SimpleDateFormat fmt = (SimpleDateFormat)c.getDateTimeFormat(1,1,new ULocale("en_US@calendar=japanese"));
+        fmt.applyPattern("G y");
+        logln("fmt's locale = " + fmt.getLocale(ULocale.ACTUAL_LOCALE));
+        //SimpleDateFormat fmt = new SimpleDateFormat("G y", new Locale("en_US@calendar=japanese"));
+        long aDateLong = -3197120400000L 
+            + 3600000L; // compensate for DST
+        Date aDate = new Date(aDateLong); //08 Sept 1868
+        logln("aDate: " + aDate.toString() +", from " + aDateLong);
+        String str;
+        str = fmt2.format(aDate);
+        logln("Test Date: " + str);
+        str = fmt.format(aDate);
+        logln("as Japanese Calendar: " + str);
+        String expected = "Meiji 1";
+        if(!str.equals(expected)) {
+            errln("FAIL: Expected " + expected + " but got " + str);
+        }
+        Date otherDate;
+        try {
+            otherDate = fmt.parse(expected);
+            if(!otherDate.equals(aDate)) { 
+                String str3;
+    //            ParsePosition pp;
+                Date dd = fmt.parse(expected);
+                str3 = fmt.format(otherDate);
+                long oLong = otherDate.getTime();
+                long aLong = otherDate.getTime();
+                
+                errln("FAIL: Parse incorrect of " + expected + ":  wanted " + aDate + " ("+aLong+"), but got " +  " " +
+                    otherDate + " ("+oLong+") = " + str3 + " not " + dd.toString() );
+                
+                
+            } else {
+                logln("Parsed OK: " + expected);
+            }
+        } catch(java.text.ParseException pe) {
+            errln("FAIL: ParseException: " + pe.toString());
+            pe.printStackTrace();
+        }
+    }
+
+
+    private void checkExpected(Calendar c, int expected[] ) {
+        final String[] FIELD_NAME = {
+            "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
+            "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
+            "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
+            "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
+            "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
+            "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+        };
+
+        for(int i= 0;i<expected.length;i += 2) {
+            int fieldNum = expected[i+0];
+            int expectedVal = expected[i+1];
+            int actualVal = c.get(fieldNum);
+            
+            if(expectedVal == actualVal) {
+                logln(FIELD_NAME[fieldNum]+": "+ actualVal);
+            } else {
+                errln("FAIL: "+FIELD_NAME[fieldNum]+": expected "+ expectedVal + " got " +  actualVal);
+            }
+        }
+    }
+
+    public void Test5345calendar() {
+        logln("** testIncompleteCalendar()");
+        // Test calendar with incomplete information
+        JapaneseCalendar c = new JapaneseCalendar(TimeZone.getDefault());
+        logln("test clear");
+        c.clear();
+        
+        int expected0[] = {   Calendar.ERA, 0 ,
+                              Calendar.YEAR, -643 };
+        checkExpected(c, expected0);
+        
+        
+        logln("test setting era");
+        c.clear();
+        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        
+        
+        int expectedA[] = {   Calendar.ERA, JapaneseCalendar.MEIJI };
+        checkExpected(c, expectedA);
+        
+
+        logln("test setting era and year and month and date");
+        c.clear();
+        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        c.set(Calendar.YEAR, 1);
+        c.set(Calendar.MONTH, Calendar.JANUARY);
+        c.set(Calendar.DATE, 1);
+        
+        
+        int expectedC[] = {   Calendar.ERA, JapaneseCalendar.MEIJI -1};
+        checkExpected(c, expectedC);
+        
+
+        logln("test setting  year and month and date THEN era");
+        c.clear();
+        c.set(Calendar.YEAR, 1);
+        c.set(Calendar.MONTH, Calendar.JANUARY);
+        c.set(Calendar.DATE, 1);
+        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        
+        
+        checkExpected(c, expectedC);
+        
+        
+        logln("test setting era and year");
+        c.clear();
+        c.set(Calendar.YEAR, 1);
+        c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        
+        
+        int expectedB[] = { Calendar.ERA, JapaneseCalendar.MEIJI,
+                            Calendar.YEAR, 1 };
+        checkExpected(c, expectedB);
+        
+    }
+
 }
 

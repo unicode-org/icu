@@ -215,15 +215,59 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     protected int handleGetExtendedYear() {
         int year;
-        // TODO reimplement this to be faster?
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR &&
             newerField(EXTENDED_YEAR, ERA) == EXTENDED_YEAR) {
             year = internalGet(EXTENDED_YEAR, 1);
         } else {
-            // Subtract one because year starts at 1
-            year = internalGet(YEAR) + ERAS[internalGet(ERA, CURRENT_ERA) * 3] - 1;
+            // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
+            year = internalGet(YEAR, 1)                       // pin to minimum of year 1 (first year)
+                    + ERAS[internalGet(ERA, CURRENT_ERA) * 3] // add gregorian starting year
+                    - 1;                                      // Subtract one because year starts at 1
         }
         return year;
+    }
+    
+    /**
+     * Called by handleComputeJulianDay.  Returns the default month (0-based) for the year,
+     * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
+     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @return the default month
+     * @provisional ICU 3.6
+     * @see #MONTH
+     */
+    protected int getDefaultMonthInYear(int extendedYear)
+    {
+      int era = internalGet(ERA, CURRENT_ERA);
+      //computeFields(status); // No need to compute fields here - expect the caller already did so.
+
+      // Find out if we are at the edge of an era
+      if(extendedYear == ERAS[era*3]) {
+        return ERAS[(era*3)+1] // month..
+            -1; // return 0-based month
+      } else {
+        return super.getDefaultMonthInYear(extendedYear);
+      }
+    }
+
+    /**
+     * Called by handleComputeJulianDay.  Returns the default day (1-based) for the month,
+     * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
+     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @parameter month the month, as returned by getDefaultMonthInYear
+     * @return the default day of the month
+     * @provisional ICU 3.6
+     * @see #DAY_OF_MONTH
+     */
+    protected int getDefaultDayInMonth(int extendedYear, int month) {
+      int era = internalGet(ERA, CURRENT_ERA);
+          
+      if(extendedYear == ERAS[era*3]) { // if it is year 1..
+        if(month == ((ERAS[(era*3)+1])-1)) { // if it is the emperor's first month.. 
+          return ERAS[(era*3)+2]; // return the D_O_M of acession
+        }
+      }
+
+      return super.getDefaultDayInMonth(extendedYear, month);
     }
 
     /**
@@ -588,6 +632,8 @@ public class JapaneseCalendar extends GregorianCalendar {
                 }
                 LIMITS[field][LEAST_MAXIMUM] = ++min; // 1-based
                 LIMITS[field][MAXIMUM] = ++max; // 1-based
+
+                YEAR_LIMIT_KNOWN=true;
             }
             return LIMITS[field][limitType];
         default:
