@@ -177,7 +177,7 @@
 
     <!-- core does not build richedit or tests -->
     <target name="core" depends="init,coreData,icudata" description="build core classes and data">
-        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java,com/ibm/icu/charset/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -431,9 +431,12 @@
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
     <target name="jar" depends="core,indices" description="build full 'icu4j.jar' jar file">
+        <copy todir="${build.dir}/META-INF">
+          <fileset dir="${src.dir}/META-INF" includes="**/*"/>
+        </copy>
         <jar jarfile="${jar.file}"
             compress="true"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
     </target>
