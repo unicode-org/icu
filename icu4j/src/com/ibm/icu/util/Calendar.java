@@ -4619,6 +4619,34 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     protected int[] handleCreateFields() {
         return new int[BASE_FIELD_COUNT];
     }
+    
+    /**
+     * Subclasses may override this. 
+     * Called by handleComputeJulianDay.  Returns the default month (0-based) for the year,
+     * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
+     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @return the default month
+     * @provisional ICU 3.6
+     * @see #MONTH
+     */
+    protected int getDefaultMonthInYear(int extendedYear) {
+        return Calendar.JANUARY;
+    }
+
+    /**
+     * Subclasses may override this. 
+     * Called by handleComputeJulianDay.  Returns the default day (1-based) for the month,
+     * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
+     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @parameter month the month, as returned by getDefaultMonthInYear
+     * @return the default day of the month
+     * @provisional ICU 3.6
+     * @see #DAY_OF_MONTH
+     */
+    protected int getDefaultDayInMonth(int extendedYear, int month) {
+        return 1;
+    }
+
 
     /**
      * Subclasses may override this.  This method calls
@@ -4635,12 +4663,20 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         int year = handleGetExtendedYear();
         internalSet(EXTENDED_YEAR, year);
 
+        int month = useMonth ? internalGet(MONTH, getDefaultMonthInYear(year)) : 0;
+        
+        int dom = internalGet(DAY_OF_MONTH, getDefaultDayInMonth(year, month));
+        
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
-        int julianDay = handleComputeMonthStart(year, useMonth ? internalGet(MONTH) : 0, useMonth);
+        int julianDay = handleComputeMonthStart(year, month, useMonth);
 
         if (bestField == DAY_OF_MONTH) {
-            return julianDay + internalGet(DAY_OF_MONTH, 1);
+            if(isSet(DAY_OF_MONTH)) {
+                return julianDay + internalGet(DAY_OF_MONTH, getDefaultDayInMonth(year, month));
+            } else {
+                return julianDay + getDefaultDayInMonth(year, month);
+            }
         }
 
         if (bestField == DAY_OF_YEAR) {
