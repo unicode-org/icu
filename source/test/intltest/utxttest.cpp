@@ -539,11 +539,42 @@ cleanupAndReturn:
 }
 
 //
-//  TestAccess()    Test the read only access functions on a UText.
+//  TestAccess      Test the read only access functions on a UText, including cloning.
 //                  The text is accessed in a variety of ways, and compared with
 //                  the reference UnicodeString.
 //
 void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap) {
+    // Run the standard tests on the caller-supplied UText.
+    TestAccessNoClone(us, ut, cpCount, cpMap);
+
+    // Re-run tests on a shallow clone.
+    utext_setNativeIndex(ut, 0);
+    UErrorCode status = U_ZERO_ERROR;
+    UText *shallowClone = utext_clone(NULL, ut, FALSE /*deep*/, FALSE /*readOnly*/, &status);
+    TEST_SUCCESS(status);
+    TestAccessNoClone(us, shallowClone, cpCount, cpMap);
+
+    //
+    // Rerun again on a deep clone.
+    // Note that text providers are not required to provide deep cloning,
+    //   so unsupported errors are ignored.
+    //
+    status = U_ZERO_ERROR;
+    utext_setNativeIndex(shallowClone, 0);
+    UText *deepClone = utext_clone(NULL, shallowClone, TRUE, FALSE, &status);
+    if (status != U_UNSUPPORTED_ERROR) {
+        TEST_SUCCESS(status);
+        TestAccessNoClone(us, deepClone, cpCount, cpMap);
+    }
+}
+    
+
+//
+//  TestAccessNoClone()    Test the read only access functions on a UText.
+//                         The text is accessed in a variety of ways, and compared with
+//                         the reference UnicodeString.
+//
+void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCount, m *cpMap) {
     UErrorCode  status = U_ZERO_ERROR;
     gTestNum++;
 
@@ -1280,6 +1311,25 @@ U_CDECL_END
 //   Initialized in the open function.
 UTextFuncs  fragmentFuncs;
 
+// Clone function for fragmented text provider.
+//   Didn't really want to provide this, but it's easier to provide it than to keep it
+//   out of the tests.
+//
+UText *
+cloneFragmentedUnicodeString(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    if (deep) {
+        *status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+    dest = utext_openUnicodeString(dest, (UnicodeString *)src->context, status);
+    utext_setNativeIndex(dest, utext_getNativeIndex(src));
+    return dest;
+}
+
+
 // Open function for the fragmented text provider.
 UText *
 openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
@@ -1292,11 +1342,11 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     //   and replace the entry for the access function.
     memcpy(&fragmentFuncs, ut->pFuncs, sizeof(fragmentFuncs));
     fragmentFuncs.access = fragTextAccess;
+    fragmentFuncs.clone  = cloneFragmentedUnicodeString;
     ut->pFuncs = &fragmentFuncs;
 
     ut->chunkContents = (UChar *)&ut->b;
     ut->pFuncs->access(ut, 0, TRUE);
     return ut;
 }
-
 
