@@ -42,7 +42,9 @@ class  StringThreadTest;
 #endif
 
 #ifndef USTRING_H
-/* see ustring.h */
+/**
+ * \ingroup ustring_ustrlen
+ */
 U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
