@@ -56,6 +56,12 @@ addUStringPrepTest(TestNode** root)
 static void 
 Test_nfs4_cs_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
+    loadTestData(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        return;
+    }
+
     log_verbose("Testing nfs4_cs_prep_ci.txt\n");
     doStringPrepTest("nfscsi","nfs4_cs_prep_ci.txt", USPREP_DEFAULT, &errorCode);
 
@@ -74,6 +80,12 @@ Test_nfs4_cis_prep_data(void){
 static void 
 Test_nfs4_mixed_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
+    loadTestData(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        return;
+    }
+
     log_verbose("Testing nfs4_mixed_prep_s.txt\n");
     doStringPrepTest("nfsmxs","nfs4_mixed_prep_s.txt", USPREP_DEFAULT, &errorCode);
 
@@ -470,6 +482,13 @@ Test_nfs4_mixed_prep(void){
 
 static void 
 Test_nfs4_cs_prep(void){
+    UErrorCode errorCode = U_ZERO_ERROR;
+    loadTestData(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        return;
+    }
+
     {
         /* BiDi checking is turned off */
         const char *source = "\\uC138\\uACC4\\uC758\\uBAA8\\uB4E0\\uC0AC\\uB78C\\uB4E4\\uC774\\u0644\\u064A\\u0647\\uD55C\\uAD6D\\uC5B4\\uB97C\\uC774\\uD574\\uD55C\\uB2E4\\uBA74";
@@ -577,6 +596,10 @@ static void TestBEAMWarning(){
     const char *testdatapath = NULL;
     UChar src =0x0000;
     testdatapath = loadTestData(&status);
+    if(U_FAILURE(status)) {
+        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+        return;
+    }
     /* open the profile */
     profile = usprep_open(testdatapath, "nfscis",  &status);
     usprep_prepare(profile,&src , 0, NULL, 0, USPREP_DEFAULT, &parseError, &status);

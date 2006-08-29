@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -197,6 +197,14 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
 void
 NewResourceBundleTest::TestResourceBundles()
 {
+    UErrorCode status = U_ZERO_ERROR;
+    loadTestData(status);
+    if(U_FAILURE(status))
+    {
+        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        return;
+    }
+
     testTag("only_in_Root", TRUE, FALSE, FALSE);
     testTag("only_in_te", FALSE, TRUE, FALSE);
     testTag("only_in_te_IN", FALSE, FALSE, TRUE);
