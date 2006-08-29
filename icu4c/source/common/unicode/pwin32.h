@@ -173,7 +173,11 @@ typedef unsigned int uint32_t;
 #define ICU_USE_THREADS 1
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check mutex lock. */
-#if defined(_M_IX86) || defined(_M_AMD64) || (defined(__GNUC__) && (defined(__i386__) || defined(__amd64__)))
+/*
+Microsoft can define _M_IX86, _M_AMD64 (before Visual Studio 8) or _M_X64 (starting in Visual Studio 8). 
+Intel can define _M_IX86 or _M_X64
+*/
+#if defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
 #define UMTX_STRONG_MEMORY_MODEL 1
 #endif
 
