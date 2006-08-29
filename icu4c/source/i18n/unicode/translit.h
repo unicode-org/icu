@@ -998,21 +998,22 @@ public:
      */
     static void U_EXPORT2 registerInstance(Transliterator* adoptedObj);
 
-	/**
-	 * Registers an ID string as an alias of another ID string.
-	 * That is, after calling this function, <tt>createInstance(aliasID)</tt>
-	 * will return the same thing as <tt>createInstance(realID)</tt>.
-	 * This is generally used to create shorter, more mnemonic aliases
-	 * for long compound IDs.
-	 *
-	 * @param aliasID The new ID being registered.
-	 * @param realID The ID that the new ID is to be an alias for.
-	 * This can be a compound ID and can include filters and should
-	 * refer to transliterators that have already been registered with
-	 * the framework, although this isn't checked.
-	 */
-	static void U_EXPORT2 registerAlias(const UnicodeString& aliasID,
-										const UnicodeString& realID);
+    /**
+     * Registers an ID string as an alias of another ID string.
+     * That is, after calling this function, <tt>createInstance(aliasID)</tt>
+     * will return the same thing as <tt>createInstance(realID)</tt>.
+     * This is generally used to create shorter, more mnemonic aliases
+     * for long compound IDs.
+     *
+     * @param aliasID The new ID being registered.
+     * @param realID The ID that the new ID is to be an alias for.
+     * This can be a compound ID and can include filters and should
+     * refer to transliterators that have already been registered with
+     * the framework, although this isn't checked.
+     * @draft ICU 3.6
+     */
+     static void U_EXPORT2 registerAlias(const UnicodeString& aliasID,
+                                                                const UnicodeString& realID);
 
 protected:
 
