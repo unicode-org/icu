@@ -146,14 +146,17 @@ NO_COL="NO_COLLATION"
 NO_BRK="NO_BREAK_ITERATION"
 NO_FMT="NO_FORMATTING"
 NO_UCM="NO_LEGACY_CONVERSION"
-NO_CNV="NO_CONVERSION"
+# Since NO_CONVERSION is only meant to allow the common and i18n
+# libraries to be built, we don't test this configuration.
+#NO_CNV="NO_CONVERSION"
+NO_FIO="NO_FILE_IO"
 NO_XLT="NO_TRANSLITERATION"
 NO_RGX="NO_REGULAR_EXPRESSIONS"
 JS_COL="ONLY_COLLATION"
 NO_NRM="NO_NORMALIZATION"
 NO_IDN="NO_IDNA"
 NO_SVC="NO_SERVICE"
-NO_MST="$NO_COL $NO_BRK $NO_FMT $NO_UCM $NO_RGX $NO_XLT $NO_NRM $NO_IDN $NO_SVC"
+NO_MST="$NO_COL $NO_BRK $NO_FMT $NO_UCM $NO_FIO $NO_RGX $NO_XLT $NO_NRM $NO_IDN $NO_SVC"
 NO_ALL="$NO_MST $NO_SVC"
 
 # Now, come the actual test runs
@@ -208,15 +211,11 @@ doit
 ######################
 
 ######################
-# Currently, ICU will not 
-# build w/ UCONFIG_NO_CONVERSION
-# so this test is disabled.
-######################
-# NO_CNV
-export NAME=NO_CNV
-export UCONFIGS="$NO_CNV"
+# NO_FIO
+export NAME=NO_FIO
+export UCONFIGS="$NO_FIO"
 export CPPFLAGS=""
-#doit
+doit
 ######################
 
 ######################
