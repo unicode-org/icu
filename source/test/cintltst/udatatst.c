@@ -1574,7 +1574,7 @@ TestSwapData() {
     UDataMemory *pData;
     uint8_t *buffer;
     const char *pkg, *nm, *testPath;
-    UErrorCode errorCode;
+    UErrorCode errorCode = U_ZERO_ERROR;
     int32_t i;
 
     buffer=(uint8_t *)uprv_malloc(2*SWAP_BUFFER_SIZE);
