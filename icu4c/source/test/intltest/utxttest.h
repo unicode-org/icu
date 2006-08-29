@@ -40,6 +40,7 @@ private:
 
     void TestString(const UnicodeString &s);
     void TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *cpMap);
+    void TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCount, m *cpMap);
     void TestCMR   (const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *utf16Map);
     void TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
                     int32_t nativeStart, int32_t nativeLimit, int32_t nativeDest,
