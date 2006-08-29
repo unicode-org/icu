@@ -1,6 +1,7 @@
-# Copyright (C) 1999-2004, International Business Machines  Corporation and others.  All Rights Reserved.
+# Copyright (C) 1999-2006, International Business Machines  Corporation and others.  All Rights Reserved.
 s%^\([a-zA-Z\._-]*\)[ 	]*+=%\1=$(\1) %
 s%^[A-Z]*_SO_TARG*%## &%
+s%^SHARED_OBJECT.*%## &%
 s%^LD_SONAME.*%## &%
 s%$(\([^\)]*\))%${\1}%g
 s%^	%#M#	%
