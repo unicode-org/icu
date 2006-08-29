@@ -611,7 +611,6 @@ public:
      * @param status    Input/output error code.  If the pattern
      *                  cannot be parsed, the failure code is set.
      * @return the standard equivalent of the original pattern
-     * @since ICU 3.4
      * @stable ICU 3.4
      */
     static UnicodeString autoQuoteApostrophe(const UnicodeString& pattern, 
