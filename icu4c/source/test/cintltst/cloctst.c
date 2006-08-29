@@ -877,7 +877,7 @@ static void TestISOFunctions()
     ures_getByKey(res, "Languages", res, &status);
     if (U_FAILURE(status)) {
         log_err("There is an error in structLocale's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
-        status = U_ZERO_ERROR;
+        return;
     }
 
     for(count = 0; *(str+count) != 0; count++)

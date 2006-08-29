@@ -1456,6 +1456,12 @@ static void TestGetVersionColl(){
 
 static void TestResourceBundles()
 {
+    UErrorCode status = U_ZERO_ERROR;
+    loadTestData(&status);
+    if(U_FAILURE(status)) {
+        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+        return;
+    }
 
     testTag("only_in_Root", TRUE, FALSE, FALSE);
     testTag("in_Root_te", TRUE, TRUE, FALSE);
