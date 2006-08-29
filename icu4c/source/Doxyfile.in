@@ -160,7 +160,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = NO 
+GENERATE_XML           = NO
 XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
@@ -192,7 +192,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       =  YES
+GENERATE_TAGFILE       =  "@srcdir@/doc/html/icudocs.tag"
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
