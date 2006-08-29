@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/gv_GB.xml
+// *
+// ***************************************************************************
+gv_GB{
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.38"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "MMM dd,yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

@@ -1,0 +1,310 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2005-2006, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+-->
+<config type="icu-config">
+    <locales>
+        <include locales="ar"/>
+        <include locales="ar_AE"/> 
+        <include locales="ar_BH"/> 
+        <include locales="ar_DZ"/> 
+        <include locales="ar_JO"/> 
+        <include locales="ar_KW"/> 
+        <include locales="ar_LB"/> 
+        <include locales="ar_MA"/> 
+        <include locales="ar_OM"/> 
+        <include locales="ar_QA"/> 
+        <include locales="ar_SA"/> 
+        <include locales="ar_SY"/> 
+        <include locales="ar_TN"/> 
+        <include locales="ar_YE"/> 
+        <include locales="be"/>
+        <include locales="be_BY"/>
+        <include locales="bg"/>        
+        <include locales="bg_BG"/> 
+        <include locales="bn"/>        
+        <include locales="bn_IN"/>
+        <include locales="ca"/>
+        <include locales="ca_ES"/>
+        <include locales="cs"/>
+        <include locales="cs_CZ"/>
+        <include locales="cy"/>        
+        <include locales="cy_GB"/>
+        <include locales="da"/>
+        <include locales="da_DK"/>
+        <include locales="de"/>        
+        <include locales="de_AT"/> 
+        <include locales="de_CH"/> 
+        <include locales="de_DE"/> 
+        <include locales="de_LU"/> 
+        <include locales="el"/> 
+        <include locales="el_GR"/> 
+        <include locales="en"/>
+        <include locales="en_AU"/> 
+        <include locales="en_BE"/> 
+        <include locales="en_CA"/> 
+        <include locales="en_GB"/> 
+        <include locales="en_HK"/> 
+        <include locales="en_IE"/> 
+        <include locales="en_IN"/> 
+        <include locales="en_NZ"/> 
+        <include locales="en_PH"/> 
+        <include locales="en_SG"/> 
+        <include locales="en_US"/>
+        <include locales="en_US_POSIX"/>        
+        <include locales="en_ZA"/> 
+        <include locales="es"/>
+        <include locales="es_AR"/> 
+        <include locales="es_BO"/> 
+        <include locales="es_CL"/> 
+        <include locales="es_CO"/> 
+        <include locales="es_CR"/> 
+        <include locales="es_DO"/> 
+        <include locales="es_EC"/> 
+        <include locales="es_ES"/> 
+        <include locales="es_GT"/> 
+        <include locales="es_HN"/> 
+        <include locales="es_MX"/> 
+        <include locales="es_NI"/> 
+        <include locales="es_PA"/> 
+        <include locales="es_PE"/> 
+        <include locales="es_PR"/> 
+        <include locales="es_PY"/> 
+        <include locales="es_SV"/> 
+        <include locales="es_US"/> 
+        <include locales="es_UY"/> 
+        <include locales="es_VE"/>
+        <include locales="et"/> 
+        <include locales="et_EE"/> 
+        <include locales="fi"/> 
+        <include locales="fi_FI"/>         
+        <include locales="fr"/>        
+        <include locales="fr_BE"/> 
+        <include locales="fr_CA"/> 
+        <include locales="fr_CH"/> 
+        <include locales="fr_FR"/> 
+        <include locales="fr_LU"/> 
+        <include locales="gu"/>        
+        <include locales="gu_IN"/>
+        <include locales="haw"/>     <!-- for Apple -->
+        <include locales="haw_US"/> <!-- for Apple -->
+        <include locales="he"/> 
+        <include locales="he_IL"/> 
+        <include locales="hi"/> 
+        <include locales="hi_IN"/> 
+        <include locales="hr"/> 
+        <include locales="hu"/> 
+        <include locales="hu_HU"/> 
+        <include locales="id"/>        
+        <include locales="id_ID"/>
+        <include locales="is"/> 
+        <include locales="is_IS"/>
+        <include locales="it"/> 
+        <include locales="it_CH"/> 
+        <include locales="it_IT"/>
+        <include locales="ja"/> 
+        <include locales="ja_JP"/>
+        <include locales="kk"/>        
+        <include locales="kk_KZ"/>
+        <include locales="kn"/>        
+        <include locales="kn_IN"/>
+        <include locales="ko"/> 
+        <include locales="ko_KR"/> 
+        <include locales="lt"/>         
+        <include locales="lt_LT"/>
+        <include locales="lv"/>         
+        <include locales="lv_LV"/>
+        <include locales="mk"/>         
+        <include locales="mk_MK"/>
+        <include locales="mr"/>        
+        <include locales="mr_IN"/>
+        <include locales="ms"/> 
+        <include locales="ms_MY"/>
+        <include locales="mt"/> 
+        <include locales="mt_MT"/>
+        <include locales="nb"/>
+        <include locales="nb_NO"/>
+        <include locales="nl"/>        
+        <include locales="nl_BE"/> 
+        <include locales="nl_NL"/> 
+        <include locales="nn"/>
+        <include locales="nn_NO"/>
+        <include locales="no"/> 
+        <include locales="pa"/> 
+        <include locales="pa_IN"/>
+        <include locales="pl"/>
+        <include locales="pl_PL"/>
+        <include locales="pt"/> 
+        <include locales="pt_BR"/>
+        <include locales="pt_PT"/>
+        <include locales="ro"/>         
+        <include locales="ro_RO"/>
+        <include locales="root"/>
+        <include locales="ru"/>
+        <include locales="ru_RU"/>
+        <include locales="sh"/>
+        <include locales="sh_YU"/>
+        <include locales="sr_Cyrl_YU"/>
+        <include locales="sr_Latn_YU"/>
+        <include locales="sr_YU"/>
+        <include locales="sk"/>         
+        <include locales="sk_SK"/>
+        <include locales="sl"/>
+        <include locales="sq"/>         
+        <include locales="sq_AL"/>
+        <include locales="sr"/> 
+        <include locales="sr_Latn"/>        
+        <include locales="sv"/>        
+        <include locales="sv_SE"/>
+        <include locales="ta"/> 
+        <include locales="ta_IN"/>
+        <include locales="te"/> 
+        <include locales="te_IN"/>
+        <include locales="th"/>         
+        <include locales="th_TH"/>
+        <include locales="tr"/>        
+        <include locales="tr_TR"/>
+        <include locales="uk"/>         
+        <include locales="uk_UA"/>
+        <include locales="ur"/> 
+        <include locales="ur_IN"/>
+        <include locales="ur_PK"/>
+        <include locales="vi"/> 
+        <include locales="vi_VN"/>
+        <include locales="zh"/> 
+        <include locales="zh_CN"/>
+        <include locales="zh_Hans" draft=".*"/>         
+        <include locales="zh_Hans_CN"/> 
+        <include locales="zh_Hans_SG"/>
+        <include locales="zh_Hant"/>         
+        <include locales="zh_Hant_HK"/> 
+        <include locales="zh_Hant_TW"/> 
+        <include locales="zh_HK"/> 
+        <include locales="zh_SG"/> 
+        <include locales="zh_TW"/> 
+        <!-- Include future locales -->
+        <include locales="af"/>
+        <include locales="af_ZA"/>
+        <include locales="ar_IQ"/>
+        <include locales="ar_LY"/>
+        <include locales="ar_SD"/>
+        <include locales="eu"/>
+        <include locales="eu_ES"/>
+        <include locales="fa"/>
+        <include locales="fa_IR"/>
+        <include locales="fo"/>
+        <include locales="fo_FO"/>
+        <include locales="gl"/>
+        <include locales="gl_ES"/>
+        <include locales="ms_BN"/>
+
+        <!-- End -->
+        <!-- Include all locales currently in ICU as of 3.4 -->
+        <include locales="am"/>
+        <include locales="am_ET"/>
+        <include locales="de_BE"/>
+        <include locales="en_BW"/>
+        <include locales="en_MT"/>
+        <include locales="en_RH"/>
+        <include locales="en_VI"/>
+        <include locales="en_ZW"/>
+        <include locales="eo"/>
+        <include locales="fa_AF"/>
+        <include locales="ga"/>
+        <include locales="ga_IE"/>
+        <include locales="gv"/>
+        <include locales="gv_GB"/>
+        <include locales="hy"/>
+        <include locales="hy_AM"/>
+        <include locales="hy_AM_REVISED"/>
+        <include locales="kl"/>
+        <include locales="kl_GL"/>
+        <include locales="kok"/>
+        <include locales="kok_IN"/>
+        <include locales="kw"/>
+        <include locales="kw_GB"/>
+        <include locales="om"/>
+        <include locales="om_ET"/>
+        <include locales="om_KE"/>
+        <include locales="ps"/>
+        <include locales="ps_AF"/>
+        <include locales="ru_UA"/>
+        <include locales="so"/>
+        <include locales="so_DJ"/>
+        <include locales="so_ET"/>
+        <include locales="so_KE"/>
+        <include locales="so_SO"/>
+        <include locales="sv_FI"/>
+        <include locales="sw"/>
+        <include locales="sw_KE"/>
+        <include locales="sw_TZ"/>
+        <include locales="ti"/>
+        <include locales="ti_ER"/>
+        <include locales="ti_ET"/>
+        <include locales="zh_Hant_MO"/>
+        <include locales="zh_MO"/>
+        <!-- End -->
+        <!-- list of locales which ICU will take anyway, regardless of draft status. Equivalent of '-f' on that locale. -->
+        <include locales="ar_EG" draft=".*" />
+        <include locales="hr_HR" draft=".*" />
+        <include locales="en_PK" draft=".*" />
+        <include locales="ml" draft=".*" />
+        <include locales="ml_IN" draft=".*" />
+        <include locales="or" draft=".*" />
+        <include locales="or_IN" draft=".*" />
+        <include locales="sl_SI" draft=".*" />
+        <include locales="sr_Cyrl" draft=".*" />
+        
+        <!-- only for 3.6 -->
+        <include locales="as" draft=".*" /> 
+        <include locales="as_IN" draft=".*" /> 
+        <include locales="az" draft=".*"/>
+        <include locales="az_Latn" draft=".*"/>         
+        <include locales="az_Latn_AZ" draft=".*"/>
+        <include locales="az_AZ" draft=".*" /> 
+        <include locales="az_Cyrl" draft=".*" /> 
+        <include locales="az_Cyrl_AZ" draft=".*"/>
+        <include locales="sh_CS" draft=".*" /> 
+        <include locales="sr_CS" draft=".*" /> 
+        <include locales="sr_Cyrl_CS" draft=".*" /> 
+        <include locales="sr_Latn_CS" draft=".*" /> 
+        <include locales="uz" draft=".*" /> 
+        <include locales="uz_Cyrl" draft=".*" />
+        <include locales="uz_Latn" draft=".*" />
+        <include locales="uz_Cyrl_UZ" draft=".*" />
+        <include locales="uz_Latn_UZ" draft=".*" />
+        <include locales="uz_UZ" draft=".*" />
+    </locales>
+    <paths>
+        <!-- 
+            possible values of level are "none", "basic", "moderate", "modern", "comprehensive"
+        -->
+        <coverageLevel group="G0" level="comprehensive" org="IBM"/>
+        <coverageLevel group="G1" level="modern" org="IBM"/>
+        <coverageLevel group="G2" level="moderate" org="IBM"/>
+        <coverageLevel group="G3" level="basic" org="IBM"/>
+        <coverageLevel group="G4" level="basic" org="IBM"/>
+        <include xpath="//ldml/.*"/>
+        <include xpath="//ldml/characters/exemplarCharacters.*" locales="gl" draft="unconfirmed" />
+        <include xpath="//ldml/.*/special/.*"/>
+        <include xpath="//ldml/localeDisplayNames/territories/territory\[@type='DO'].*" locales="fr" draft="unconfirmed" />
+        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/eras.*" locales="bg sl" draft="unconfirmed" />
+        <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/quarters/quarterWidth\[@type='wide']/.*" locales="is" draft="unconfirmed" />
+        <include xpath="//ldml/collations/collation\[@type='standard'\]/.*" locales="ml or" draft="confirmed" />
+        <!-- Exclude unusable data -->
+        <exclude xpath="//ldml/posix/messages/.*"/>
+        <exclude xpath="//ldml/numbers/currencies/.*" locales="bg_BG, nl_BE"/>
+        <include xpath="//supplementalData/.*"/>
+        <include xpath="//supplementalMetaData/.*"/>
+    </paths>
+    <overrideFallback>
+        <paths fallback="se_NO no_NO" locales="sms_FI sm_FI" draft="false">
+            <include xpath="//ldml/displayNames/.*"/>
+            <include xpath="//ldml/dates/timeZoneNames/.*"/>            
+        </paths>
+    </overrideFallback>
+</config>

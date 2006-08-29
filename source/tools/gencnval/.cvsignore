@@ -1,0 +1,11 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+gencnval
+gencnval.[0-9]
+*.plg
+*.ncb
+*.opt

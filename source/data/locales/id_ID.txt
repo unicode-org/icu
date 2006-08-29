@@ -1,0 +1,26 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/id_ID.xml
+// *
+// ***************************************************************************
+id_ID{
+    Version{"1.36"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMM yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

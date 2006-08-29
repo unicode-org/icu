@@ -1,0 +1,121 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ko_KR.xml
+// *
+// ***************************************************************************
+ko_KR{
+    Countries{
+        001{"세계"}
+        002{"아프리카"}
+        005{"남아메리카[남미]"}
+        009{"오세아니아, 대양주"}
+        142{"아시아"}
+        150{"유럽"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.45"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+            DateTimePatterns{
+                "a hh'시' mm'분' ss'초' z",
+                "a hh'시' mm'분' ss'초'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'년' M'월' d'일' EEEE",
+                "yyyy'년' M'월' d'일'",
+                "yyyy. MM. dd",
+                "yy. MM. dd",
+                "{1} {0}",
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    zoneStrings{
+        "Africa:Casablanca"{
+            ec{"Casablanca"}
+            ld{"그리니치 서머타임"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+            ld{"알래스카 서머타임"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+            ld{"중부 서머타임"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+            ld{"산악 서머타임"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+            ld{"대서양 서머타임"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+            ld{"태평양 서머타임"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+            ld{"동부 서머타임"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+            ld{"뉴펀들랜드 서머타임"}
+            sd{"NDT"}
+            ss{"NST"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Jerusalem"}
+            ld{"이스라엘 서머타임"}
+        }
+        "Asia:Seoul"{
+            ec{"Seoul"}
+            ld{"한국 서머타임"}
+            ls{"한국 표준시"}
+            sd{"KDT"}
+        }
+        "Asia:Shanghai"{
+            ec{"Shanghai"}
+            ld{"중국 서머타임"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            ld{"일본 서머타임"}
+            sd{"JDT"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bucharest"}
+            ld{"동부유럽 서머타임"}
+        }
+        "Europe:Paris"{
+            ec{"Paris"}
+            ld{"중부유럽 서머타임"}
+            sd{"CEDT"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+            ld{"하와이 서머타임"}
+            sd{"HDT"}
+        }
+    }
+}

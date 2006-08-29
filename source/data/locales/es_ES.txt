@@ -1,0 +1,46 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/es_ES.xml
+// *
+// ***************************************************************************
+es_ES{
+    Currencies{
+        ESP{
+            "₧",
+            "peseta española",
+            {
+                "#,##0 ¤;-#,##0 ¤",
+                ",",
+                ".",
+            }
+        }
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Ethi{"etíope"}
+    }
+    Version{"1.40"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm''ss\" z",
+                "HH:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

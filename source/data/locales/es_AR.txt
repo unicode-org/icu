@@ -1,0 +1,36 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/es_AR.xml
+// *
+// ***************************************************************************
+es_AR{
+    Currencies{
+        ARS{
+            "$",
+            "Peso Argentino",
+        }
+        USD{
+            "US$",
+            "Dólar Americano",
+        }
+    }
+    Version{"1.41"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'h'''mm z",
+                "H:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ms_MY.xml
+// *
+// ***************************************************************************
+ms_MY{
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;(¤#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.35"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm",
+                "EEEE dd MMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
+    }
+}

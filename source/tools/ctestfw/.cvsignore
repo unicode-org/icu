@@ -1,0 +1,11 @@
+*.d
+*.o
+*.ao
+*.pdb
+Debug
+Makefile
+Release
+libicutest*
+*icutest*.lib
+*icutest*.dll
+*icutest*.exp

@@ -1,0 +1,489 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ro.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ro.xml
+ */
+ro{
+    AuxExemplarCharacters{"[q w y]"}
+    Countries{
+        001{"Lume"}
+        005{"America de Sud"}
+        011{"Africa occidentală"}
+        013{"America centrală"}
+        014{"Africa orientală"}
+        015{"Africa septentrională"}
+        017{"Africa centrală"}
+        018{"Africa australă"}
+        019{"Americi"}
+        021{"America de Nord"}
+        029{"Caraibe"}
+        030{"Asia orientală"}
+        035{"Asia de Sud-Est"}
+        039{"Europa meridională"}
+        053{"Australia și Noua Zeelandă"}
+        054{"Melanezia"}
+        057{"Micronezia"}
+        061{"Polinezia"}
+        062{"Asia centrala și de Sud"}
+        145{"Asia occidentală"}
+        150{"Europa"}
+        151{"Europa de Est"}
+        154{"Europa septentrională"}
+        155{"Europa occidentală"}
+        830{"Insulele Anglo-Normande"}
+        AD{"Andora"}
+        AE{"Emiratele Arabe Unite"}
+        AF{"Afganistan"}
+        AG{"Antigua și Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AN{"Antilele Olandeze"}
+        AO{"Angola"}
+        AQ{"Antarctica"}
+        AR{"Argentina"}
+        AS{"Samoa Americană"}
+        AT{"Austria"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AX{"Insulele Aland"}
+        AZ{"Azerbaidjan"}
+        BA{"Bosnia și Herzegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Belgia"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaria"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
+        BO{"Bolivia"}
+        BR{"Brazilia"}
+        BS{"Bahamas"}
+        BT{"Bhutan"}
+        BV{"Insula Bouvet"}
+        BW{"Botswana"}
+        BY{"Bielorusia"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Insulele Cocos (Keeling)"}
+        CD{"Congo, Republica Democratică"}
+        CF{"Republica Central Africană"}
+        CG{"Congo"}
+        CH{"Eleveția"}
+        CI{"Coasta de Fildeș"}
+        CK{"Insulele Cook"}
+        CL{"Chile"}
+        CM{"Camerun"}
+        CN{"China"}
+        CO{"Columbia"}
+        CR{"Costa Rica"}
+        CS{"Serbia și Muntenegru"}
+        CU{"Cuba"}
+        CV{"Capul Verde"}
+        CX{"Insula Christmas"}
+        CY{"Cipru"}
+        CZ{"Republica Cehă"}
+        DE{"Germania"}
+        DJ{"Djibouti"}
+        DK{"Danemarca"}
+        DM{"Dominica"}
+        DO{"Republica Dominicană"}
+        DZ{"Algeria"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
+        EG{"Egipt"}
+        EH{"Sahara de Vest"}
+        ER{"Eritrea"}
+        ES{"Spania"}
+        ET{"Etiopia"}
+        FI{"Finlanda"}
+        FJ{"Fiji"}
+        FK{"Insulele Falkland"}
+        FM{"Micronezia, Statele Federate"}
+        FO{"Insulele Feroe"}
+        FR{"Franța"}
+        GA{"Gabon"}
+        GD{"Grenada"}
+        GE{"Georgia"}
+        GF{"Guyana Franceză"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Groenlanda"}
+        GM{"Gambia"}
+        GN{"Guineea"}
+        GP{"Guadeloupe"}
+        GQ{"Guineea Ecuatorială"}
+        GR{"Grecia"}
+        GS{"Insulele South Georgia și South Sandwich"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guineea-Bissau"}
+        GY{"Guyana"}
+        HK{"R.A.S. Hong Kong a Chinei"}
+        HM{"Insula Heard și Insulele McDonald"}
+        HN{"Honduras"}
+        HR{"Croația"}
+        HT{"Haiti"}
+        HU{"Ungaria"}
+        ID{"Indonezia"}
+        IE{"Irlanda"}
+        IL{"Israel"}
+        IN{"India"}
+        IO{"Teritoriile Britanice din Oceanul Indian"}
+        IQ{"Iraq"}
+        IR{"Iran"}
+        IS{"Islanda"}
+        IT{"Italia"}
+        JM{"Jamaica"}
+        JO{"Iordania"}
+        JP{"Japonia"}
+        KE{"Kenya"}
+        KG{"Kirghizia"}
+        KH{"Cambodgia"}
+        KI{"Kiribati"}
+        KM{"Comoros"}
+        KN{"Saint Kitts și Nevis"}
+        KP{"Coreea de Nord"}
+        KR{"Coreea de Sud"}
+        KW{"Kuweit"}
+        KY{"Insulele Cayman"}
+        KZ{"Kazahstan"}
+        LA{"Lao, Republica Democratică Populară"}
+        LB{"Liban"}
+        LC{"Saint Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotho"}
+        LT{"Lituania"}
+        LU{"Luxemburg"}
+        LV{"Letonia"}
+        LY{"Libia, Jamahiriya Arabă"}
+        MA{"Maroc"}
+        MC{"Monaco"}
+        MD{"Moldova, Republica"}
+        MG{"Madagascar"}
+        MH{"Insulele Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolia"}
+        MO{"R.A.S. Macao a Chinei"}
+        MP{"Insulele Northern Mariana"}
+        MQ{"Martinica"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"Maldive"}
+        MW{"Malawi"}
+        MX{"Mexic"}
+        MY{"Malaezia"}
+        MZ{"Mozambic"}
+        NA{"Namibia"}
+        NC{"Noua Caledonie"}
+        NE{"Niger"}
+        NF{"Insulele Norfolk"}
+        NG{"Nigeria"}
+        NI{"Nicaragua"}
+        NL{"Olanda"}
+        NO{"Norvegia"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Noua Zeelandă"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Polinezia Franceză"}
+        PG{"Papua Noua Guinee"}
+        PH{"Filipine"}
+        PK{"Pakistan"}
+        PL{"Polonia"}
+        PM{"Saint Pierre și Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Porto Rico"}
+        PS{"Teritoriul Palestinian"}
+        PT{"Portugalia"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        QO{"Altă Oceania"}
+        RE{"Reunion"}
+        RO{"România"}
+        RU{"Federația Rusă"}
+        RW{"Rwanda"}
+        SA{"Arabia Saudită"}
+        SB{"Insulele Solomon"}
+        SC{"Seychelles"}
+        SD{"Sudan"}
+        SE{"Suedia"}
+        SG{"Singapore"}
+        SH{"Saint Helena"}
+        SI{"Slovenia"}
+        SJ{"Svalbard și Jan Mayen"}
+        SK{"Slovacia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        ST{"Sao Tome și Principe"}
+        SV{"El Salvador"}
+        SY{"Siria"}
+        SZ{"Swaziland"}
+        TC{"Insulele Turks și Caicos"}
+        TD{"Ciad"}
+        TF{"Teritoriile Franceze de Sud"}
+        TG{"Togo"}
+        TH{"Tailanda"}
+        TJ{"Tadjikistan"}
+        TK{"Tokelau"}
+        TL{"Timorul de Est"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Turcia"}
+        TT{"Trinidad şi Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzania"}
+        UA{"Ucraina"}
+        UG{"Uganda"}
+        UM{"United States Minor Outlying Islands"}
+        US{"Statele Unite"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistan"}
+        VA{"Sfântul Scaun (Statul Vatican)"}
+        VC{"Saint Vincent şi Grenadines"}
+        VE{"Venezuela"}
+        VG{"Insulele Virgine Britanice"}
+        VI{"Insulele Virgine S.U.A."}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis şi Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        ZA{"Africa de Sud"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+    }
+    ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u-x z]"}
+    Languages{
+        ar{"Arabă"}
+        bg{"Bulgară"}
+        cs{"Cehă"}
+        da{"Daneză"}
+        de{"Germană"}
+        el{"Greacă"}
+        en{"Engleză"}
+        es{"Spaniolă"}
+        et{"Estoniană"}
+        fi{"Finlandeză"}
+        fr{"Franceză"}
+        he{"Ebraică"}
+        hr{"Croată"}
+        hu{"Maghiară"}
+        it{"Italiană"}
+        ja{"Japoneză"}
+        ko{"Coreeană"}
+        lt{"Lituaniană"}
+        lv{"Letonă"}
+        nl{"Olandeză"}
+        no{"Norvegiană"}
+        pl{"Poloneză"}
+        pt{"Portugheză"}
+        ro{"Română"}
+        ru{"Rusă"}
+        sk{"Slovacă"}
+        sl{"Slovenă"}
+        sv{"Suedeză"}
+        tr{"Turcă"}
+        zh{"Chineză"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.66"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "D",
+                        "L",
+                        "Ma",
+                        "Mi",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                    wide{
+                        "duminică",
+                        "luni",
+                        "marți",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "sîmbătă",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "d.C.",
+                    "î.d.C.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ian",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "Iun",
+                        "Iul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "ianuarie",
+                        "februarie",
+                        "martie",
+                        "aprilie",
+                        "mai",
+                        "iunie",
+                        "iulie",
+                        "august",
+                        "septembrie",
+                        "octombrie",
+                        "noiembrie",
+                        "decembrie",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "I",
+                        "I",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "trimestrul 1",
+                        "trimestrul 2",
+                        "trimestrul 3",
+                        "trimestrul 4",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
+    zoneStrings{
+        "Antarctica:South_Pole"{
+            ec{"Polul Sud"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkuțk"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamciatka"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sahalin"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakuțk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azore"}
+        }
+        "Atlantic:Canary"{
+            ec{"Canare"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabona"}
+        }
+        "Europe:London"{
+            ec{"Londra"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscova"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporoje"}
+        }
+    }
+}

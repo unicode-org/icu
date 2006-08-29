@@ -1,0 +1,184 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/pt_PT.xml
+// *
+// ***************************************************************************
+pt_PT{
+    Countries{
+        AE{"Emiratos Árabes Unidos"}
+        AM{"Arménia"}
+        AQ{"Antárctica"}
+        AZ{"Azerbeijão"}
+        BA{"Bósnia-Herzegovina"}
+        BJ{"Benim"}
+        BY{"Bielorrússia"}
+        CM{"Camarões"}
+        CX{"Ilha do Natal"}
+        CZ{"República Checa"}
+        EE{"Estónia"}
+        EG{"Egipto"}
+        EH{"Sahara Ocidental"}
+        ER{"Eritreia"}
+        FK{"Ilhas Falkland"}
+        GL{"Gronelândia"}
+        GS{"Ilhas South Georgia e South Sandwich"}
+        GW{"Guiné-Bissau"}
+        HK{"Hong Kong - Região Administrativa Especial da China"}
+        KE{"Quénia"}
+        KG{"Quirguizistão"}
+        KN{"Saint Kitts e Nevis"}
+        KP{"Coreia do Norte"}
+        KR{"Coreia do Sul"}
+        KY{"Ilhas Caimão"}
+        KZ{"Cazaquistão"}
+        LA{"Lao, República Popular Democrática"}
+        LV{"Letónia"}
+        MC{"Mónaco"}
+        MD{"Moldávia, República da"}
+        MG{"Madagáscar"}
+        MK{"Macedónia, República da"}
+        MO{"Macau - Região Administrativa Especial da China"}
+        MP{"Ilhas Mariana do Norte"}
+        MU{"Maurícias"}
+        NC{"Nova Caledónia"}
+        PG{"Papua Nova Guiné"}
+        PL{"Polónia"}
+        PS{"Território Palestiniano"}
+        RE{"Reunion"}
+        RO{"Roménia"}
+        SC{"Seicheles"}
+        SG{"Singapura"}
+        SI{"Eslovénia"}
+        SM{"São Marino"}
+        TC{"Ilhas Turcas e Caicos"}
+        TD{"Tchade"}
+        TF{"Territórios Franceses a Sul"}
+        TJ{"Tajiquistão"}
+        TM{"Turquemenistão"}
+        UM{"Ilhas Minor Outlying (E.U.A)"}
+        UZ{"Uzbaquistão"}
+        VA{"Santa Sé (Estado da Cidade do Vaticano)"}
+        VC{"Saint Vincent e Grenadines"}
+        VG{"Ilhas Virgin Britânicas"}
+        VI{"Ilhas Virgin E.U.A."}
+        VN{"Vietname"}
+        YE{"Iémen"}
+    }
+    Currencies{
+        AFA{
+            "AFA",
+            "Afeghani (1927-2002)",
+        }
+        BRB{
+            "BRB",
+            "Cruzeiro novo brasileiro (1967-1986)",
+        }
+        PTE{
+            "Esc.",
+            "Escudo português",
+            {
+                "#,##0.00 ¤;-#,##0.00 ¤",
+                "$",
+                ",",
+            }
+        }
+    }
+    Languages{
+        cs{"checo"}
+        et{"estónio"}
+        pl{"polaco"}
+        sl{"esloveno"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.53"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "yyyy/MM/dd",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            fields{
+                day{
+                    dn{"Dia"}
+                }
+                dayperiod{
+                    dn{"Período do dia"}
+                }
+                hour{
+                    dn{"Hora"}
+                }
+                minute{
+                    dn{"Minuto"}
+                }
+                month{
+                    dn{"Mês"}
+                }
+                week{
+                    dn{"Semana"}
+                }
+                weekday{
+                    dn{"Dia da semana"}
+                }
+                year{
+                    dn{"Ano"}
+                }
+                zone{
+                    dn{"Zona"}
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    zoneStrings{
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Bahia"{
+            ec{"Baía"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuibá"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sacalina"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
+        }
+        "Europe:Madrid"{
+            ec{"Madrid"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscovo"}
+        }
+    }
+}
