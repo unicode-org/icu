@@ -605,11 +605,10 @@ TimeZone::initDefault()
 TimeZone* U_EXPORT2
 TimeZone::createDefault()
 {
-    umtx_init(&LOCK);   /* This is here to prevent race conditions. */
-    umtx_lock(&LOCK);
-    UBool f = (DEFAULT_ZONE != 0);
-    umtx_unlock(&LOCK);
-    if (!f) {
+    /* This is here to prevent race conditions. */
+    UBool needsInit;
+    UMTX_CHECK(&LOCK, (DEFAULT_ZONE == 0), needsInit);
+    if (needsInit) {
         initDefault();
     }
 
