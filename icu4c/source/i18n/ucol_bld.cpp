@@ -1235,11 +1235,10 @@ ucol_initInverseUCA(UErrorCode *status)
 {
     if(U_FAILURE(*status)) return NULL;
 
-    umtx_lock(NULL);
-    UBool f = (_staticInvUCA == NULL);
-    umtx_unlock(NULL);
+    UBool needsInit;
+    UMTX_CHECK(NULL, (_staticInvUCA == NULL), needsInit);
     
-    if(f) {
+    if(needsInit) {
         InverseUCATableHeader *newInvUCA = NULL;
         UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
         
