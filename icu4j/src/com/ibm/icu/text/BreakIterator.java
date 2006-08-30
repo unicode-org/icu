@@ -700,7 +700,12 @@ public abstract class BreakIterator implements Cloneable
 
     // end of registration
 
-    private static BreakIterator getBreakInstance(ULocale where, int kind) {
+    /*
+     * Get a particular kind of BreakIterator for a locale.
+     * Avoids writing a switch statement with getXYZInstance(where) calls. 
+     * @internal
+     */
+    public static BreakIterator getBreakInstance(ULocale where, int kind) {
 
         if (iterCache[kind] != null) {
             BreakIteratorCache cache = (BreakIteratorCache) iterCache[kind].get();
