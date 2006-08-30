@@ -230,9 +230,10 @@ public class JapaneseCalendar extends GregorianCalendar {
     /**
      * Called by handleComputeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
-     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
      * @provisional ICU 3.6
+     * @draft ICU 3.6
      * @see #MONTH
      */
     protected int getDefaultMonthInYear(int extendedYear)
@@ -252,9 +253,10 @@ public class JapaneseCalendar extends GregorianCalendar {
     /**
      * Called by handleComputeJulianDay.  Returns the default day (1-based) for the month,
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
-     * @parameter extendedYear the extendedYear, as returned by handleGetExtendedYear
-     * @parameter month the month, as returned by getDefaultMonthInYear
+     * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
+     * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
+     * @draft ICU 3.6
      * @provisional ICU 3.6
      * @see #DAY_OF_MONTH
      */
