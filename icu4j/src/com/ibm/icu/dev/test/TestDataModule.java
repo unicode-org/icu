@@ -85,7 +85,7 @@ public interface TestDataModule {
     public interface DataMap {
 //    public abstract boolean    isDefined(String key);
 //
-//    public abstract Object     getObject(String key);
+    public abstract Object     getObject(String key);
     public abstract String     getString(String key);
 //    public abstract char       getChar(String key);
 //    public abstract int        getInt(String key);
