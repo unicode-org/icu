@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2005 IBM, Inc. and others
+# Copyright (c) 2002-2006 IBM, Inc. and others
 # sample code rules for a single-target simple sample
 
 # list of targets that aren't actually created
@@ -32,3 +32,7 @@ check: $(TARGET)
 $(RESNAME)/%.res: %.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $^
+
+## Some platforms don't have .cpp as a default suffix, so add the rule here
+%.o:	%.cpp
+	$(COMPILE.cc) $< $(OUTPUT_OPTION)
