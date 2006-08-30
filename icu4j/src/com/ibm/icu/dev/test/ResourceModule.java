@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test;
 
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -79,6 +80,7 @@ class ResourceModule implements TestDataModule {
             res = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
             info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
             testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
+      
         } catch (MissingResourceException e){
             throw new DataModuleFormatError("Unable to find resource", e);
         }
@@ -232,7 +234,8 @@ class ResourceModule implements TestDataModule {
     
     static ICUResourceBundle getFromTable(ICUResourceBundle res, String key, int[] expResTypes) throws DataModuleFormatError{
         assert_is (res != null && key != null && res.getType() == ICUResourceBundle.TABLE);
-        ICUResourceBundle t = res.get(key);
+        ICUResourceBundle t = res.get(key); 
+      
         assert_not (t ==null);
         int type = t.getType();
         Arrays.sort(expResTypes);
@@ -298,13 +301,6 @@ class ResourceModule implements TestDataModule {
                 throw new DataModuleFormatError("Unable to find resource", e);
             }
             
-            try{
-                settings = getFromTable(res, SETTINGS, ICUResourceBundle.ARRAY);
-                info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
-            } catch (MissingResourceException e){
-                // do nothing, left them null;
-            }
-            
             try {
                 // unfortunately, actually, data can be either ARRAY or STRING
                 header = getFromTable(res, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
@@ -314,6 +310,13 @@ class ResourceModule implements TestDataModule {
                 } else {
                     header = defaultHeader;
                 }
+            }
+         try{
+                settings = getFromTable(res, SETTINGS, ICUResourceBundle.ARRAY);
+                info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
+            } catch (MissingResourceException e){
+                // do nothing, left them null;
+                settings = data;
             }
         }
         
@@ -361,28 +364,33 @@ class ResourceModule implements TestDataModule {
             }
             return t;
         }
+         public Object getObject(String key) {
+            
+            return res.get(key);
+        }
     }
     
     private static class UArrayResource implements DataMap{
         private Map theMap; 
         UArrayResource(ICUResourceBundle theHeader, ICUResourceBundle theData) throws DataModuleFormatError{
             assert_is (theHeader != null && theData != null);
-            String[] header; 
-            String[] data;
-            
+            String[] header;
+         
             header = getStringArrayHelper(theHeader);
-            data = getStringArrayHelper(theData);
-            if (data.length != header.length) 
+            if (theData.getSize() != header.length) 
                 throw new DataModuleFormatError("The count of Header and Data is mismatch.");
             theMap = new HashMap();
             for (int i = 0; i < header.length; i++) {
-                theMap.put(header[i], data[i]);
+                theMap.put(header[i], theData.get(i));
             }
             
         }
         
         public String getString(String key) {
             return (String)theMap.get(key);
+        }
+        public Object getObject(String key) {
+            return theMap.get(key);
         }
     }
 }

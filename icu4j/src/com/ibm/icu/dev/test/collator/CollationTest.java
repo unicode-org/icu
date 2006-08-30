@@ -163,6 +163,7 @@ public class CollationTest extends ModuleTest{
         // ok i have to be careful here since it seems like we can have
         // multiple locales for each test
         String locale = settings.getString("TestLocale");
+        
         if (locale != null) {
             // this is a case where we have locale
             try {

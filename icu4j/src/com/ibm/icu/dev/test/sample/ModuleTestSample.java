@@ -16,7 +16,7 @@ public class ModuleTestSample extends ModuleTest {
         super("com/ibm/icu/dev/data/testdata/", "Test");
     }
 
-//    // standard loop, settings and cases
+    // standard loop, settings and cases
 //    public void Test01() {
 //    while (nextSettings()) {
 //        logln("--------");
