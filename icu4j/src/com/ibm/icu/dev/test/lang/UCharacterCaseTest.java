@@ -288,36 +288,19 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
-    // Unfortunately, BreakIterator.getBreakInstance(ULocale where, int kind)
-    // is private. Re-implement it here.
-    private final BreakIterator getBreakInstance(ULocale where, int kind) {
-        switch(kind) {
-        case BreakIterator.KIND_CHARACTER:
-            return BreakIterator.getCharacterInstance(where);
-        case BreakIterator.KIND_WORD:
-            return BreakIterator.getWordInstance(where);
-        case BreakIterator.KIND_LINE:
-            return BreakIterator.getLineInstance(where);
-        case BreakIterator.KIND_SENTENCE:
-            return BreakIterator.getSentenceInstance(where);
-        case BreakIterator.KIND_TITLE:
-            return BreakIterator.getTitleInstance(where);
-        default:
-            return null;
-        }
-    }
-
     public void TestTitle()
     {
          try{ 
             for (int i = 0; i < TITLE_DATA_.length;) {
                 String test = TITLE_DATA_[i++];
                 String expected = TITLE_DATA_[i++];
-                String locale = TITLE_DATA_[i++];
-                String breakType = TITLE_DATA_[i++];
-                ULocale loc = new ULocale(locale);
-                BreakIterator iter = getBreakInstance(loc, Integer.parseInt(breakType));
-                String result = UCharacter.toTitleCase(loc, test, iter);
+                ULocale locale = new ULocale(TITLE_DATA_[i++]);
+                int breakType = Integer.parseInt(TITLE_DATA_[i++]);
+                BreakIterator iter =
+                    breakType >= 0 ?
+                        BreakIterator.getBreakInstance(locale, breakType) :
+                        null;
+                String result = UCharacter.toTitleCase(locale, test, iter);
                 if (!expected.equals(result)) {
                     errln("titlecasing for " + prettify(test) + " should be " +
                           prettify(expected) + " but got " +
