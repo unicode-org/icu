@@ -12,7 +12,6 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
@@ -447,13 +446,16 @@ public class CharsetUTF16LE extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF16LE(this);
     }
-    /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object o) {
-        if(o instanceof Charset){
-            return super.compareTo((Charset)o);
-        }
-        return -1;
-    }
+//#ifdef VERSION_1.5   
+//  /**
+//   * Implements compareTo method of Comparable interface
+//   * @see java.lang.Comparable#compareTo(java.lang.Object)
+//   */
+//  public int compareTo(Object o) {
+//      if(o instanceof Charset){
+//          return super.compareTo((Charset)o);
+//      }
+//      return -1;
+//  }
+//#endif
 }

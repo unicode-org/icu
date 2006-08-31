@@ -20,7 +20,7 @@ public class UConverterSharedData {
 	public int structSize;            /* Size of this structure */
     //uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 	public int referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
-	public static final int MAX_VERSION_LENGTH=4;
+
 	//agljport:todo const void *dataMemory;         /* from udata_openChoice() - for cleanup */
 	//agljport:todo void *table;                    /* Unused. This used to be a UConverterTable - Pointer to conversion data - see mbcs below */
 
@@ -50,13 +50,12 @@ public class UConverterSharedData {
 	 * The table field above also remains to avoid updating all static
 	 * definitions, but is now unused.
 	 *
-	 * markus 2003-nov-07
 	 */
-	public UConverterMBCSTable mbcs;
+	public CharsetMBCS.UConverterMBCSTable mbcs;
 
 	public UConverterSharedData()
 	{
-		mbcs = new UConverterMBCSTable();
+		mbcs = new CharsetMBCS.UConverterMBCSTable();
 	}
 	
 	public UConverterSharedData(int structSize_, int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_,/* UConverterImpl impl_,*/ long toUnicodeStatus_)
@@ -373,88 +372,6 @@ public class UConverterSharedData {
 	
 	    return null;
 	}
-
-	/**
-	 * Fallbacks to Unicode are stored outside the normal state table and code point structures
-	 * in a vector of items of this type. They are sorted by offset.
-	 */
-	public final class MBCSToUFallback {
-	    int offset;
-	    int codePoint;
-	}
-	
-	/**
-	 * This is the MBCS part of the UConverterTable union (a runtime data structure).
-	 * It keeps all the per-converter data and points into the loaded mapping tables.
-	 */
-	public final class UConverterMBCSTable {
-	    /* toUnicode */
-	    short countStates;
-			byte dbcsOnlyState;
-			boolean stateTableOwned;
-	    int countToUFallbacks;
-	
-	    int stateTable[/*countStates*/][/*256*/];
-	    int swapLFNLStateTable[/*countStates*/][/*256*/]; /* for swaplfnl */
-	    char unicodeCodeUnits[/*countUnicodeResults*/];
-	    MBCSToUFallback toUFallbacks[/*countToUFallbacks*/];
-	
-	    /* fromUnicode */
-	    char fromUnicodeTable[];
-	    byte fromUnicodeBytes[];
-	    byte swapLFNLFromUnicodeBytes[]; /* for swaplfnl */
-	    int fromUBytesLength;
-	    short outputType, unicodeMask;
-	
-	    /* converter name for swaplfnl */
-	    String swapLFNLName;
-	
-	    /* extension data */
-	    UConverterSharedData baseSharedData;
-	    //int extIndexes[];
-		ByteBuffer extIndexes; // create int[] view etc. as needed
-
-		UConverterMBCSTable()
-		{
-		}
-
-		UConverterMBCSTable(UConverterMBCSTable t)
-		{
-			countStates = t.countStates;
-			dbcsOnlyState = t.dbcsOnlyState;
-			stateTableOwned = t.stateTableOwned;
-			countToUFallbacks = t.countToUFallbacks;
-			stateTable = t.stateTable;
-			swapLFNLStateTable = t.swapLFNLStateTable;
-			unicodeCodeUnits = t.unicodeCodeUnits;
-			toUFallbacks = t.toUFallbacks;
-			fromUnicodeTable = t.fromUnicodeTable;
-			fromUnicodeBytes = t.fromUnicodeBytes;
-			swapLFNLFromUnicodeBytes = t.swapLFNLFromUnicodeBytes;
-			fromUBytesLength = t.fromUBytesLength;
-			outputType = t.outputType;
-			unicodeMask = t.unicodeMask;
-			swapLFNLName = t.swapLFNLName;
-			baseSharedData = t.baseSharedData;
-			extIndexes = t.extIndexes;
-		}			
-	}
-
-	/**
-	 * MBCS data header. See data format description above.
-	 */
-	public final class MBCSHeader {
-	    byte version[/*U_MAX_VERSION_LENGTH*/];
-	    int countStates, countToUFallbacks, offsetToUCodeUnits, offsetFromUTable, offsetFromUBytes;
-		int flags;
-		int fromUBytesLength;
-
-		public MBCSHeader()
-		{
-			version = new byte[MAX_VERSION_LENGTH];
-		}
-	}
-
 	/**
 	 * Enum for specifying basic types of converters
 	 * @see getType

@@ -8,6 +8,8 @@
 */ 
 package com.ibm.icu.impl;
 
+import com.ibm.icu.impl.UConverterSharedData.cnvNameTypeClass;
+
 public interface UConverterConstants {
 
     public static final short UNSIGNED_BYTE_MASK = 0xff;
@@ -153,4 +155,23 @@ public interface UConverterConstants {
 	                           */
 	}
 	//end err.h
+    
+    
+    static final String DATA_TYPE = "cnv";
+    static final int CNV_DATA_BUFFER_SIZE = 25000;
+    static final int SIZE_OF_UCONVERTER_SHARED_DATA = 100;
+
+    static final int MAXIMUM_UCS2 =            0x0000FFFF;
+    static final int MAXIMUM_UTF =             0x0010FFFF;
+    static final int MAXIMUM_UCS4 =            0x7FFFFFFF;
+    static final int HALF_SHIFT =              10;
+    static final int HALF_BASE =               0x0010000;
+    static final int HALF_MASK =               0x3FF;
+    static final int SURROGATE_HIGH_START =    0xD800;
+    static final int SURROGATE_HIGH_END =      0xDBFF;
+    static final int SURROGATE_LOW_START =     0xDC00;
+    static final int SURROGATE_LOW_END =       0xDFFF;
+    
+    /* -SURROGATE_LOW_START + HALF_BASE */
+    static final int SURROGATE_LOW_BASE =      9216;
 }
