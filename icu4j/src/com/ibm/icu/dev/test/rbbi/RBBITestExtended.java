@@ -287,8 +287,9 @@ public void TestExtended() {
                 }
                 if (cp == CH_LF || cp == CH_CR) {
                     lineNum++;
-                    colStart = charIdx;
+                    column   = 0;
                     charIdx++;
+                    colStart = charIdx;
                     break;
                 }
 
@@ -374,6 +375,10 @@ void executeTest(TestParams t) {
     int    prevBP;
     int    i;
 
+    if (t.bi == null) {
+        return;
+    }
+    
     t.bi.setText(t.dataToBreak.toString());
     //
     //  Run the iterator forward
@@ -407,10 +412,11 @@ void executeTest(TestParams t) {
             if (expectedTagVal == -1) {
                 expectedTagVal = 0;
             }
+            int line = t.srcLine[bp];
             int rs = ((RuleBasedBreakIterator)t.bi).getRuleStatus();
             if (rs != expectedTagVal) {
-                errln("Incorrect status for forward break.  Pos=  " + bp +
-                        "File line,col= " + t.srcLine[bp] + ", " + t.srcCol[bp] + "\n" +
+                errln("Incorrect status for forward break.  Pos = " + bp +
+                        ".  File line,col = " + line + ", " + t.srcCol[bp] + "\n" +
                       "          Actual, Expected status = " + rs + ", " + expectedTagVal);
             }
         }
@@ -459,10 +465,11 @@ void executeTest(TestParams t) {
             if (expectedTagVal == -1) {
                 expectedTagVal = 0;
             }
+            int line = t.srcLine[bp];
             int rs = ((RuleBasedBreakIterator)t.bi).getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for reverse break.  Pos=  " + bp +
-                        "File line,col= " + t.srcLine[bp] + ", " + t.srcCol[bp] + "\n" +
+                        "File line,col= " + line + ", " + t.srcCol[bp] + "\n" +
                       "          Actual, Expected status = " + rs + ", " + expectedTagVal);
                   }
         }
