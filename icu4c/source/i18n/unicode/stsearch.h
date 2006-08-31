@@ -114,13 +114,15 @@ U_NAMESPACE_BEGIN
  * and examples of how to use instances of this class to implement text
  * searching.
  * <pre><code>
- * UnicodeString target("The quick brown fox jumped over the lazy fox");
+ * UnicodeString target("The quick brown fox jumps over the lazy dog.");
  * UnicodeString pattern("fox");
  *
- * SearchIterator *iter  = new StringSearch(pattern, target);
  * UErrorCode      error = U_ZERO_ERROR;
- * for (int pos = iter->first(error); pos != USEARCH_DONE; 
- *                               pos = iter->next(error)) {
+ * StringSearch iter(pattern, target, Locale::getUS(), NULL, status);
+ * for (int pos = iter.first(error);
+ *      pos != USEARCH_DONE; 
+ *      pos = iter.next(error))
+ * {
  *     printf("Found match at %d pos, length is %d\n", pos, 
  *                                             iter.getMatchLength());
  * }
