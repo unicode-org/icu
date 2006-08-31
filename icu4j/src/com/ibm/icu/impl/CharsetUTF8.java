@@ -13,7 +13,6 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
@@ -21,6 +20,7 @@ import java.nio.charset.CoderResult;
 import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetICU;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 /**
  * @author Niti Hantaweepant
@@ -303,7 +303,7 @@ public class CharsetUTF8 extends CharsetICU {
                         char trail = source.get(sourceArrayIndex);
                         if(UTF16.isTrailSurrogate(trail)) {
                             ++sourceArrayIndex;
-                            ch = UTF16.getCodePoint((char)ch, trail);
+                            ch = UCharacter.getCodePoint((char)ch, trail);
                             /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {
@@ -381,7 +381,7 @@ public class CharsetUTF8 extends CharsetICU {
                                         char trail = source.get(sourceArrayIndex);
                                         if(UTF16.isTrailSurrogate(trail)) {
                                             ++sourceArrayIndex;
-                                            ch = UTF16.getCodePoint((char)ch, trail);
+                                            ch = UCharacter.getCodePoint((char)ch, trail);
                                             //ch2 = 0;
                                             /* convert this supplementary code point */
                                             /* exit this condition tree */
@@ -506,13 +506,16 @@ public class CharsetUTF8 extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF8(this);
     }
-    /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object o) {
-        if(o instanceof Charset){
-            return super.compareTo((Charset)o);
-        }
-        return -1;
-    }
+//#ifdef VERSION_1.5   
+//  /**
+//   * Implements compareTo method of Comparable interface
+//   * @see java.lang.Comparable#compareTo(java.lang.Object)
+//   */
+//  public int compareTo(Object o) {
+//      if(o instanceof Charset){
+//          return super.compareTo((Charset)o);
+//      }
+//      return -1;
+//  }
+//#endif
 }

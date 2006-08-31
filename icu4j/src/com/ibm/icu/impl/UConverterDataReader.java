@@ -451,7 +451,7 @@ public final class UConverterDataReader implements ICUBinary.Authenticate {
         dataInputStream.read(sd.reserved);
     }
 
-    protected void readMBCSHeader(UConverterSharedData.MBCSHeader h) throws IOException
+    protected void readMBCSHeader(CharsetMBCS.MBCSHeader h) throws IOException
     {
         dataInputStream.read(h.version);
         h.countStates = dataInputStream.readInt();
@@ -463,7 +463,7 @@ public final class UConverterDataReader implements ICUBinary.Authenticate {
         h.fromUBytesLength = dataInputStream.readInt();
     }
     
-    protected void readMBCSTable(int[][] stateTableArray, UConverterSharedData.MBCSToUFallback[] toUFallbacksArray, char[] unicodeCodeUnitsArray, char[] fromUnicodeTableArray, byte[] fromUnicodeBytesArray) throws IOException
+    protected void readMBCSTable(int[][] stateTableArray, CharsetMBCS.MBCSToUFallback[] toUFallbacksArray, char[] unicodeCodeUnitsArray, char[] fromUnicodeTableArray, byte[] fromUnicodeBytesArray) throws IOException
     {
         int i, j;
         for(i = 0; i < stateTableArray.length; ++i)

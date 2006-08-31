@@ -16,7 +16,6 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
@@ -24,17 +23,95 @@ import java.nio.charset.CoderResult;
 import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetICU;
-import com.ibm.icu.impl.UConverterSharedData.UConverterMBCSTable;
-import com.ibm.icu.impl.UConverterSharedData.MBCSHeader;
-import com.ibm.icu.impl.UConverterSharedData.MBCSToUFallback;
 import com.ibm.icu.impl.UConverterSharedData.UConverterType;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
 public class CharsetMBCS extends CharsetICU {
 
     protected byte[]                fromUSubstitution = null;
     protected UConverterSharedData  sharedData = null;
+    public static final int MAX_VERSION_LENGTH=4;
+    /**
+     * Fallbacks to Unicode are stored outside the normal state table and code point structures
+     * in a vector of items of this type. They are sorted by offset.
+     */
+    public final class MBCSToUFallback {
+        int offset;
+        int codePoint;
+    }
+    /**
+     * This is the MBCS part of the UConverterTable union (a runtime data structure).
+     * It keeps all the per-converter data and points into the loaded mapping tables.
+     */
+    public static final class UConverterMBCSTable {
+        /* toUnicode */
+        short countStates;
+            byte dbcsOnlyState;
+            boolean stateTableOwned;
+        int countToUFallbacks;
     
+        int stateTable[/*countStates*/][/*256*/];
+        int swapLFNLStateTable[/*countStates*/][/*256*/]; /* for swaplfnl */
+        char unicodeCodeUnits[/*countUnicodeResults*/];
+        MBCSToUFallback toUFallbacks[/*countToUFallbacks*/];
+    
+        /* fromUnicode */
+        char fromUnicodeTable[];
+        byte fromUnicodeBytes[];
+        byte swapLFNLFromUnicodeBytes[]; /* for swaplfnl */
+        int fromUBytesLength;
+        short outputType, unicodeMask;
+    
+        /* converter name for swaplfnl */
+        String swapLFNLName;
+    
+        /* extension data */
+        UConverterSharedData baseSharedData;
+        //int extIndexes[];
+        ByteBuffer extIndexes; // create int[] view etc. as needed
+
+        UConverterMBCSTable()
+        {
+        }
+
+        UConverterMBCSTable(UConverterMBCSTable t)
+        {
+            countStates = t.countStates;
+            dbcsOnlyState = t.dbcsOnlyState;
+            stateTableOwned = t.stateTableOwned;
+            countToUFallbacks = t.countToUFallbacks;
+            stateTable = t.stateTable;
+            swapLFNLStateTable = t.swapLFNLStateTable;
+            unicodeCodeUnits = t.unicodeCodeUnits;
+            toUFallbacks = t.toUFallbacks;
+            fromUnicodeTable = t.fromUnicodeTable;
+            fromUnicodeBytes = t.fromUnicodeBytes;
+            swapLFNLFromUnicodeBytes = t.swapLFNLFromUnicodeBytes;
+            fromUBytesLength = t.fromUBytesLength;
+            outputType = t.outputType;
+            unicodeMask = t.unicodeMask;
+            swapLFNLName = t.swapLFNLName;
+            baseSharedData = t.baseSharedData;
+            extIndexes = t.extIndexes;
+        }           
+    }
+
+    /**
+     * MBCS data header. See data format description above.
+     */
+    final class MBCSHeader {
+        byte version[/*U_MAX_VERSION_LENGTH*/];
+        int countStates, countToUFallbacks, offsetToUCodeUnits, offsetFromUTable, offsetFromUBytes;
+        int flags;
+        int fromUBytesLength;
+
+        public MBCSHeader()
+        {
+            version = new byte[MAX_VERSION_LENGTH];
+        }
+    }
+
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
         super(icuCanonicalName, javaCanonicalName, aliases);
         
@@ -76,7 +153,7 @@ public class CharsetMBCS extends CharsetICU {
         UConverterDataReader reader = null;
         try {
             InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/" + args.name + "." + UConverterSharedData.DATA_TYPE);
-            BufferedInputStream b = new BufferedInputStream(i, UConverterSharedData.CNV_DATA_BUFFER_SIZE);
+            BufferedInputStream b = new BufferedInputStream(i, UConverterConstants.CNV_DATA_BUFFER_SIZE);
             reader = new UConverterDataReader(b);
             reader.readStaticData(staticData);
         }
@@ -103,7 +180,7 @@ public class CharsetMBCS extends CharsetICU {
     
         // Load data
         UConverterMBCSTable mbcsTable = data.mbcs;
-        MBCSHeader header = data.new MBCSHeader();
+        MBCSHeader header = new MBCSHeader();
         try {
             reader.readMBCSHeader(header);  
         }
@@ -315,7 +392,7 @@ public class CharsetMBCS extends CharsetICU {
             stateTableArray = new int[header.countStates][256];
             toUFallbacksArray = new MBCSToUFallback[header.countToUFallbacks];
             for(int i = 0; i < toUFallbacksArray.length; ++i)
-                toUFallbacksArray[i] = data.new MBCSToUFallback();
+                toUFallbacksArray[i] = new MBCSToUFallback();
             unicodeCodeUnitsArray = new char[(header.offsetFromUTable - header.offsetToUCodeUnits)/2];
             fromUnicodeTableArray = new char[(header.offsetFromUBytes - header.offsetFromUTable)/2];
             fromUnicodeBytesArray = new byte[header.fromUBytesLength];
@@ -553,35 +630,35 @@ public class CharsetMBCS extends CharsetICU {
     
     //------------UConverterExt-------------------------------------------------------
     
-    protected static final int INDEXES_LENGTH = 0;            /* 0 */
+    protected static final int EXT_INDEXES_LENGTH = 0;            /* 0 */
 
-    protected static final int TO_U_INDEX = INDEXES_LENGTH + 1;                /* 1 */
-    protected static final int TO_U_LENGTH = TO_U_INDEX + 1;
-    protected static final int TO_U_UCHARS_INDEX = TO_U_LENGTH + 1;
-    protected static final int TO_U_UCHARS_LENGTH = TO_U_UCHARS_INDEX + 1;
+    protected static final int EXT_TO_U_INDEX = EXT_INDEXES_LENGTH + 1;                /* 1 */
+    protected static final int EXT_TO_U_LENGTH = EXT_TO_U_INDEX + 1;
+    protected static final int EXT_TO_U_UCHARS_INDEX = EXT_TO_U_LENGTH + 1;
+    protected static final int EXT_TO_U_UCHARS_LENGTH = EXT_TO_U_UCHARS_INDEX + 1;
 
-    protected static final int FROM_U_UCHARS_INDEX = TO_U_UCHARS_LENGTH + 1;       /* 5 */
-    protected static final int FROM_U_VALUES_INDEX = FROM_U_UCHARS_INDEX + 1;
-    protected static final int FROM_U_LENGTH = FROM_U_VALUES_INDEX + 1;
-    protected static final int FROM_U_BYTES_INDEX = FROM_U_LENGTH + 1;
-    protected static final int FROM_U_BYTES_LENGTH = FROM_U_BYTES_INDEX + 1;
+    protected static final int EXT_FROM_U_UCHARS_INDEX = EXT_TO_U_UCHARS_LENGTH + 1;       /* 5 */
+    protected static final int EXT_FROM_U_VALUES_INDEX = EXT_FROM_U_UCHARS_INDEX + 1;
+    protected static final int EXT_FROM_U_LENGTH = EXT_FROM_U_VALUES_INDEX + 1;
+    protected static final int EXT_FROM_U_BYTES_INDEX = EXT_FROM_U_LENGTH + 1;
+    protected static final int EXT_FROM_U_BYTES_LENGTH = EXT_FROM_U_BYTES_INDEX + 1;
 
-    protected static final int FROM_U_STAGE_12_INDEX = FROM_U_BYTES_LENGTH + 1;     /* 10 */
-    protected static final int FROM_U_STAGE_1_LENGTH = FROM_U_STAGE_12_INDEX + 1;
-    protected static final int FROM_U_STAGE_12_LENGTH = FROM_U_STAGE_1_LENGTH + 1;
-    protected static final int FROM_U_STAGE_3_INDEX = FROM_U_STAGE_12_LENGTH + 1;
-    protected static final int FROM_U_STAGE_3_LENGTH = FROM_U_STAGE_3_INDEX + 1;
-    protected static final int FROM_U_STAGE_3B_INDEX = FROM_U_STAGE_3_LENGTH + 1;
-    protected static final int FROM_U_STAGE_3B_LENGTH = FROM_U_STAGE_3B_INDEX + 1;
+    protected static final int EXT_FROM_U_STAGE_12_INDEX = EXT_FROM_U_BYTES_LENGTH + 1;     /* 10 */
+    protected static final int EXT_FROM_U_STAGE_1_LENGTH = EXT_FROM_U_STAGE_12_INDEX + 1;
+    protected static final int EXT_FROM_U_STAGE_12_LENGTH = EXT_FROM_U_STAGE_1_LENGTH + 1;
+    protected static final int EXT_FROM_U_STAGE_3_INDEX = EXT_FROM_U_STAGE_12_LENGTH + 1;
+    protected static final int EXT_FROM_U_STAGE_3_LENGTH = EXT_FROM_U_STAGE_3_INDEX + 1;
+    protected static final int EXT_FROM_U_STAGE_3B_INDEX = EXT_FROM_U_STAGE_3_LENGTH + 1;
+    protected static final int EXT_FROM_U_STAGE_3B_LENGTH = EXT_FROM_U_STAGE_3B_INDEX + 1;
 
-    protected static final int COUNT_BYTES = FROM_U_STAGE_3B_LENGTH + 1;               /* 17 */
-    protected static final int COUNT_UCHARS = COUNT_BYTES + 1;
-    protected static final int FLAGS = COUNT_UCHARS + 1;
+    protected static final int EXT_COUNT_BYTES = EXT_FROM_U_STAGE_3B_LENGTH + 1;               /* 17 */
+    protected static final int EXT_COUNT_UCHARS = EXT_COUNT_BYTES + 1;
+    protected static final int EXT_FLAGS = EXT_COUNT_UCHARS + 1;
 
-    protected static final int RESERVED_INDEX = FLAGS + 1;            /* 20, moves with additional indexes */
+    protected static final int EXT_RESERVED_INDEX = EXT_FLAGS + 1;            /* 20, moves with additional indexes */
 
-    protected static final int SIZE=31;
-    protected static final int INDEXES_MIN_LENGTH=32;
+    protected static final int EXT_SIZE=31;
+    protected static final int EXT_INDEXES_MIN_LENGTH=32;
     
     /* toUnicode helpers -------------------------------------------------------- */
     
@@ -718,11 +795,11 @@ public class CharsetMBCS extends CharsetICU {
         IntBuffer a = indexes.asIntBuffer();
         int n;
         if(a.hasArray())
-            n = a.array()[COUNT_BYTES];
+            n = a.array()[EXT_COUNT_BYTES];
         else
-            n = a.get(COUNT_BYTES);
+            n = a.get(EXT_COUNT_BYTES);
         
-        return indexes.getInt(4*COUNT_BYTES)&0xff; 
+        return indexes.getInt(4*n)&0xff; 
     }
     
     /*
@@ -1372,12 +1449,12 @@ public class CharsetMBCS extends CharsetICU {
             int i, j, index, length, matchLength;
             short b;
         
-            if(cx==null || cx.asIntBuffer().get(TO_U_LENGTH)<=0) {
+            if(cx==null || cx.asIntBuffer().get(EXT_TO_U_LENGTH)<=0) {
                 return 0; /* no extension data, no match */
             }
         
             /* initialize */
-            toUTable = (IntBuffer)ARRAY(cx, TO_U_INDEX, int.class);
+            toUTable = (IntBuffer)ARRAY(cx, EXT_TO_U_INDEX, int.class);
             index = 0;
         
             matchValue = 0;
@@ -1489,7 +1566,7 @@ public class CharsetMBCS extends CharsetICU {
                 /* output a string - with correct data we have resultLength>0 */
             
                 char[] a = new char[TO_U_GET_LENGTH(value)];
-                CharBuffer cb = ((CharBuffer)ARRAY(cx, TO_U_UCHARS_INDEX, char.class));
+                CharBuffer cb = ((CharBuffer)ARRAY(cx, EXT_TO_U_UCHARS_INDEX, char.class));
                 cb.position(TO_U_GET_INDEX(value));
                 cb.get(a, 0, a.length);
                 return toUWriteUChars(this, a, 0, a.length, target, offsets, srcIndex);
@@ -2575,15 +2652,15 @@ public class CharsetMBCS extends CharsetICU {
         
             /* trie lookup of firstCP */
             index=firstCP>>>10; /* stage 1 index */
-            if(index>=cx.asIntBuffer().get(FROM_U_STAGE_1_LENGTH)) {
+            if(index>=cx.asIntBuffer().get(EXT_FROM_U_STAGE_1_LENGTH)) {
                 return 0; /* the first code point is outside the trie */
             }
         
-            stage12 = (CharBuffer)ARRAY(cx, FROM_U_STAGE_12_INDEX, char.class);
-            stage3 = (CharBuffer)ARRAY(cx, FROM_U_STAGE_3_INDEX, char.class);
+            stage12 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_12_INDEX, char.class);
+            stage3 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3_INDEX, char.class);
             index = FROM_U(stage12, stage3, index, firstCP);
         
-            stage3b = (IntBuffer)ARRAY(cx, FROM_U_STAGE_3B_INDEX, int.class);
+            stage3b = (IntBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3B_INDEX, int.class);
             value = stage3b.get(stage3b.position() + index);
             if(value==0) {
                 return 0;
@@ -2594,8 +2671,8 @@ public class CharsetMBCS extends CharsetICU {
                 index = FROM_U_GET_PARTIAL_INDEX(value);
         
                 /* initialize */
-                fromUTableUChars = (CharBuffer)ARRAY(cx, FROM_U_UCHARS_INDEX, char.class);
-                fromUTableValues = (IntBuffer)ARRAY(cx, FROM_U_VALUES_INDEX, int.class);
+                fromUTableUChars = (CharBuffer)ARRAY(cx, EXT_FROM_U_UCHARS_INDEX, char.class);
+                fromUTableValues = (IntBuffer)ARRAY(cx, EXT_FROM_U_VALUES_INDEX, int.class);
         
                 matchValue=0;
                 i=j=matchLength=0;
@@ -2738,7 +2815,7 @@ public class CharsetMBCS extends CharsetICU {
             else {
                 byte[] slice = new byte[length];
                 
-                ByteBuffer bb = ((ByteBuffer)ARRAY(cx, FROM_U_BYTES_INDEX, byte.class));
+                ByteBuffer bb = ((ByteBuffer)ARRAY(cx, EXT_FROM_U_BYTES_INDEX, byte.class));
                 bb.position(value);
                 bb.get(slice, 0, slice.length);
                 
@@ -3400,7 +3477,7 @@ public class CharsetMBCS extends CharsetICU {
                 char trail=source.get(x.sourceArrayIndex);
                 if(UTF16.isTrailSurrogate(trail)) {
                     ++x.sourceArrayIndex;
-                    x.c = UTF16.getCodePoint((char)x.c, trail);
+                    x.c = UCharacter.getCodePoint((char)x.c, trail);
                     /* this codepage does not map supplementary code points */
                     /* callback(unassigned) */
                 } else {
@@ -3439,7 +3516,7 @@ public class CharsetMBCS extends CharsetICU {
                 if(UTF16.isTrailSurrogate(trail)) {
                     ++x.sourceArrayIndex;
                     ++x.nextSourceIndex;
-                    x.c = UTF16.getCodePoint((char)x.c, trail);
+                    x.c = UCharacter.getCodePoint((char)x.c, trail);
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         fromUnicodeStatus = x.prevLength; /* save the old state */
@@ -3511,7 +3588,7 @@ public class CharsetMBCS extends CharsetICU {
                 if(UTF16.isTrailSurrogate(trail)) {
                     ++x.sourceArrayIndex;
                     ++x.nextSourceIndex;
-                    x.c = UTF16.getCodePoint((char)x.c, trail);
+                    x.c = UCharacter.getCodePoint((char)x.c, trail);
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         /* callback(unassigned) */
@@ -3565,14 +3642,16 @@ public class CharsetMBCS extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderMBCS(this);
     }
-    /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object o) {
-        if(o instanceof Charset){
-            return super.compareTo((Charset)o);
-        }
-        return -1;
-    }
-
+//#ifdef VERSION_1.5   
+//  /**
+//   * Implements compareTo method of Comparable interface
+//   * @see java.lang.Comparable#compareTo(java.lang.Object)
+//   */
+//  public int compareTo(Object o) {
+//      if(o instanceof Charset){
+//          return super.compareTo((Charset)o);
+//      }
+//      return -1;
+//  }
+//#endif
 }
