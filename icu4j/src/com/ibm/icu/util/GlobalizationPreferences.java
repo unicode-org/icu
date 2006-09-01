@@ -86,14 +86,14 @@ import com.ibm.icu.text.SimpleDateFormat;
  * locale that will ask the services to use the host platform's values).</li>
  * </ul>
  *
- * @internal
- * @deprecated This API is ICU internal only.
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
  */
 public class GlobalizationPreferences implements Freezable {
     /**
      * Number Format types
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int 
         NF_NUMBER = 0,      // NumberFormat.NUMBERSTYLE
@@ -106,8 +106,8 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Date Format types
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int
         DF_FULL = DateFormat.FULL,      // 0
@@ -120,8 +120,8 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * For selecting a choice of display names
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int
         ID_LOCALE = 0,
@@ -139,7 +139,7 @@ public class GlobalizationPreferences implements Freezable {
 
     /**
      * Break iterator types
-     * @internal
+     * @draft ICU 3.6
      * @deprecated This API is ICU internal only
      */
     public static final int
@@ -161,8 +161,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param locales list of locales in priority order, eg {"be", "fr"} 
      *     for Breton first, then French if that fails.
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setLocales(List inputLocales) {
         if (isFrozen()) {
@@ -176,8 +176,8 @@ public class GlobalizationPreferences implements Freezable {
      * Get a copy of the language/locale priority list
      * 
      * @return a copy of the language/locale priority list.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public List getLocales() {
         List result;
@@ -194,8 +194,8 @@ public class GlobalizationPreferences implements Freezable {
      * Convenience function for getting the locales in priority order
      * @param index The index (0..n) of the desired item.
      * @return desired item. null if index is out of range
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public ULocale getLocale(int index) {
         List lcls = locales;
@@ -215,8 +215,8 @@ public class GlobalizationPreferences implements Freezable {
      * @see #setLocales(List locales)
      * @param uLocales list of locales in an array
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setLocales(ULocale[] uLocales) {
         if (isFrozen()) {
@@ -232,8 +232,8 @@ public class GlobalizationPreferences implements Freezable {
      * @see #setLocales(List locales)
      * @param uLocale single locale
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setLocale(ULocale uLocale) {
         if (isFrozen()) {
@@ -250,8 +250,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param acceptLanguageString Accept-Language list, as defined by 
      *     Section 14.4 of the RFC 2616 (HTTP 1.1)
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setLocales(String acceptLanguageString) {
         if (isFrozen()) {
@@ -309,8 +309,8 @@ public class GlobalizationPreferences implements Freezable {
      * class name
      * @return a resource bundle for the given base name and locale based on the
      * language/locale priority list stored in this object
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public ResourceBundle getResourceBundle(String baseName) {
         return getResourceBundle(baseName, null);
@@ -326,8 +326,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param loader the class object from which to load the resource bundle
      * @return a resource bundle for the given base name and locale based on the
      * language/locale priority list stored in this object
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public ResourceBundle getResourceBundle(String baseName, ClassLoader loader) {
         UResourceBundle urb = null;
@@ -381,8 +381,8 @@ public class GlobalizationPreferences implements Freezable {
      * 
      * @param territory code
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setTerritory(String territory) {
         if (isFrozen()) {
@@ -397,8 +397,8 @@ public class GlobalizationPreferences implements Freezable {
      * computed from the general locale setting.
      * 
      * @return territory code, explicit or implicit.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getTerritory() {
         if (territory == null) {
@@ -412,8 +412,8 @@ public class GlobalizationPreferences implements Freezable {
      * 
      * @param currency Valid ISO 4217 currency code.
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setCurrency(Currency currency) {
         if (isFrozen()) {
@@ -427,8 +427,8 @@ public class GlobalizationPreferences implements Freezable {
      * Get a copy of the currency computed according to the settings.
      * 
      * @return currency code, explicit or implicit.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Currency getCurrency() {
         if (currency == null) {
@@ -442,8 +442,8 @@ public class GlobalizationPreferences implements Freezable {
      * 
      * @param calendar arbitrary calendar
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setCalendar(Calendar calendar) {
         if (isFrozen()) {
@@ -457,8 +457,8 @@ public class GlobalizationPreferences implements Freezable {
      * Get a copy of the calendar according to the settings. 
      * 
      * @return calendar explicit or implicit.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Calendar getCalendar() {
         if (calendar == null) {
@@ -474,8 +474,8 @@ public class GlobalizationPreferences implements Freezable {
      * 
      * @param timezone a valid TZID (see UTS#35).
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setTimeZone(TimeZone timezone) {
         if (isFrozen()) {
@@ -490,8 +490,8 @@ public class GlobalizationPreferences implements Freezable {
      * heuristically computed from other settings.
      * 
      * @return timezone, either implicitly or explicitly set
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone getTimeZone() {
         if (timezone == null) {
@@ -504,8 +504,8 @@ public class GlobalizationPreferences implements Freezable {
      * Get a copy of the collator according to the settings. 
      * 
      * @return collator explicit or implicit.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Collator getCollator() {
         if (collator == null) {
@@ -522,8 +522,8 @@ public class GlobalizationPreferences implements Freezable {
      * Explicitly set the collator for this object.
      * @param collator
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setCollator(Collator collator) {
         if (isFrozen()) {
@@ -583,8 +583,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param id language code, script code, ...
      * @param type specifies the type of the ID: ID_LANGUAGE, etc.
      * @return the display name
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName(String id, int type) {
         String result = id;
@@ -674,8 +674,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @param format The date format
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setDateFormat(int dateStyle, int timeStyle, DateFormat format) {
         if (isFrozen()) {
@@ -698,8 +698,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param dateStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @param timeStyle DF_FULL, DF_LONG, DF_MEDIUM, DF_SHORT or DF_NONE
      * @return a DateFormat, according to the above description
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormat getDateFormat(int dateStyle, int timeStyle) {
         if (dateStyle == DF_NONE && timeStyle == DF_NONE
@@ -728,8 +728,8 @@ public class GlobalizationPreferences implements Freezable {
      * used.
      * 
      * @param style NF_NUMBER, NF_CURRENCY, NF_PERCENT, NF_SCIENTIFIC, NF_INTEGER
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public NumberFormat getNumberFormat(int style) {
         if (style < 0 || style >= NF_LIMIT) {
@@ -753,8 +753,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param style NF_NUMBER, NF_CURRENCY, NF_PERCENT, NF_SCIENTIFIC, NF_INTEGER
      * @param format The number format
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setNumberFormat(int style, NumberFormat format) {
         if (isFrozen()) {
@@ -771,8 +771,8 @@ public class GlobalizationPreferences implements Freezable {
      * Restore the object to the initial state.
      * 
      * @return this, for chaining
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences reset() {
         if (isFrozen()) {
@@ -826,8 +826,8 @@ public class GlobalizationPreferences implements Freezable {
      * to customize the algorithm used for populating the locale list.
      * 
      * @param localeList The list of input locales
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected List processLocales(List inputLocales) {
         List result = new ArrayList();
@@ -957,8 +957,8 @@ public class GlobalizationPreferences implements Freezable {
      * 
      * @param dateStyle
      * @param timeStyle
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected DateFormat guessDateFormat(int dateStyle, int timeStyle) {
         DateFormat result;
@@ -982,8 +982,8 @@ public class GlobalizationPreferences implements Freezable {
      * one whose modification will not affect this object.</b>
      * 
      * @param style
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected NumberFormat guessNumberFormat(int style) {
         NumberFormat result;
@@ -1017,8 +1017,8 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * This function can be overridden by subclasses to use different heuristics.
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected String guessTerritory() {
         String result;
@@ -1053,8 +1053,8 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * This function can be overridden by subclasses to use different heuristics
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected Currency guessCurrency() {
         return Currency.getInstance(new ULocale("und-" + getTerritory()));
@@ -1065,8 +1065,8 @@ public class GlobalizationPreferences implements Freezable {
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected List guessLocales() {
         if (implicitLocales == null) {
@@ -1082,8 +1082,8 @@ public class GlobalizationPreferences implements Freezable {
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected Collator guessCollator() {
     	ULocale collLocale = getAvailableLocale(TYPE_COLLATOR);
@@ -1099,8 +1099,8 @@ public class GlobalizationPreferences implements Freezable {
      * one whose modification will not affect this object.</b>
      * 
      * @param type
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected BreakIterator guessBreakIterator(int type) {
         BreakIterator bitr = null;
@@ -1135,8 +1135,8 @@ public class GlobalizationPreferences implements Freezable {
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected TimeZone guessTimeZone() {
         // TODO fix using real data
@@ -1169,8 +1169,8 @@ public class GlobalizationPreferences implements Freezable {
      * <b>It MUST return a 'safe' value,
      * one whose modification will not affect this object.</b>
      * 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected Calendar guessCalendar() {
     	ULocale calLocale = getAvailableLocale(TYPE_CALENDAR);
@@ -1497,16 +1497,16 @@ public class GlobalizationPreferences implements Freezable {
     private boolean frozen;
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen() {
         return frozen;
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Object freeze() {
         frozen = true;
@@ -1514,8 +1514,8 @@ public class GlobalizationPreferences implements Freezable {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Object cloneAsThawed() {
         try {
