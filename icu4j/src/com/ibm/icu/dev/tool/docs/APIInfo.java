@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -17,11 +17,11 @@ import java.util.*;
 class APIInfo {
     // version id for the format of the APIInfo data
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     // public keys and values for queries on info
 
-    public static final int STA = 0, STA_DRAFT = 0, STA_STABLE = 1, STA_DEPRECATED = 2, STA_OBSOLETE = 3;
+    public static final int STA = 0, STA_DRAFT = 0, STA_STABLE = 1, STA_DEPRECATED = 2, STA_OBSOLETE = 3, STA_INTERNAL = 4;
     public static final int VIS = 1, VIS_PACKAGE = 0, VIS_PUBLIC= 1, VIS_PROTECTED = 2, VIS_PRIVATE = 3;
     public static final int STK = 2, STK_STATIC = 1;
     public static final int FIN = 3, FIN_FINAL = 1;
@@ -36,11 +36,13 @@ class APIInfo {
     public static final int NUM_TYPES = 11;
 
     // the separator between tokens in the data file
+    public int[] masks = { 0x7, 0x3, 0x1, 0x1, 0x1, 0x1, 0x3 };
+    public int[] shifts = { 0, 3, 5, 6, 7, 8, 9 };
 
     public static final char SEP = ';';
 
-    // internal state
-    private int    info; // information about numeric values packed into an int as 2-bit nibbles
+    // Internal State
+    private int    info; // information about numeric values packed into an int as variable-length nibbles
     private String pack = ""; // package
     private String cls  = "";  // enclosing class
     private String name = ""; // name
@@ -72,6 +74,7 @@ class APIInfo {
     public void setStable() { setType(STA, STA_STABLE); }
     public void setDeprecated() { setType(STA, STA_DEPRECATED); }
     public void setObsolete() { setType(STA, STA_OBSOLETE); }
+    public void setInternal() { setType(STA, STA_INTERNAL); }
     public void setPackage() { setType(VIS, VIS_PACKAGE); }
     public void setPublic() { setType(VIS, VIS_PUBLIC); }
     public void setProtected() { setType(VIS, VIS_PROTECTED); }
@@ -95,6 +98,7 @@ class APIInfo {
     public boolean isStable() { return getVal(STA) == STA_STABLE; }
     public boolean isDeprecated() { return getVal(STA) == STA_DEPRECATED; }
     public boolean isObsolete() { return getVal(STA) == STA_OBSOLETE; }
+    public boolean isInternal() { return getVal(STA) == STA_INTERNAL; }
     public boolean isPackage() { return getVal(VIS) == VIS_PACKAGE; }
     public boolean isPublic() { return getVal(VIS) == VIS_PUBLIC; }
     public boolean isProtected() { return getVal(VIS) == VIS_PROTECTED; }
@@ -121,7 +125,7 @@ class APIInfo {
      */
     public int getVal(int typ) {
         validateType(typ);
-        return (info >> (typ*2)) & 0x3;
+        return (info >>> shifts[typ]) & masks[typ];
     }
 
     /**
@@ -143,7 +147,7 @@ class APIInfo {
             case EXC: return exc;
             }
         }
-        int val = (info >> (typ*2)) & 0x3;
+        int val = (info >>> shifts[typ]) & masks[typ];
         return vals[val];
     }
 
@@ -154,8 +158,8 @@ class APIInfo {
      */
     public void setType(int typ, int val) {
         validateType(typ);
-        info &= ~(0x3 << (typ*2));
-        info |= (val&0x3) << (typ * 2);
+        info &= ~(masks[typ] << shifts[typ]);
+        info |= (val&masks[typ]) << shifts[typ];
     }
 
     /**
@@ -183,8 +187,8 @@ class APIInfo {
 
         for (int i = 0; i < vals.length; ++i) {
             if (val.equalsIgnoreCase(vals[i])) {
-                info &= ~(0x3 << (typ*2));
-                info |= i << (typ*2);
+                info &= ~(masks[typ] << shifts[typ]);
+                info |= i << shifts[typ];
                 return;
             }
         }
@@ -390,8 +394,14 @@ class APIInfo {
         for (int i = STA; i < CAT; ++i) { // include status
             String s = get(i, false);
             if (s != null && s.length() > 0) {
-                buf.append(s);
-                buf.append(' ');
+                if (html && s.indexOf("internal") != -1) {
+                    buf.append("<span style='color:red'>");
+                    buf.append(s);
+                    buf.append("</span>");
+                } else {
+                    buf.append(s);
+                    buf.append(' ');
+                }
             }
         }
 
@@ -457,8 +467,17 @@ class APIInfo {
         "abstract", "category", "package", "class", "name", "signature"
     };
 
+    public static final String getTypeValName(int typ, int val) {
+        try {
+            return names[typ][val];
+        }
+        catch (Exception e) {
+            return "";
+        }
+    }
+
     private static final String[][] names = {
-        { "(draft)     ", "(stable)    ", "(deprecated)", "(obsolete)  " },
+        { "(draft)     ", "(stable)    ", "(deprecated)", "(obsolete)  ", "*internal*  " },
         { "package", "public", "protected", "private" },
         { "", "static" },
         { "", "final" },
@@ -473,7 +492,7 @@ class APIInfo {
     };
 
     private static final String[][] shortNames = {
-        { "DR", "ST", "DP", "OB" },
+        { "DR", "ST", "DP", "OB", "IN" },
         { "PK", "PB", "PT", "PR" },
         { "NS", "ST" },
         { "NF", "FN" },

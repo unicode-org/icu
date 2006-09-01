@@ -674,6 +674,7 @@
                 path="${build.dir}">
                 <param name="-name" value="ICU4J 3.6"/>
                 <param name="-output" value="${api.dir}/icu4j36.api"/>
+                <param name="-internal"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
@@ -684,8 +685,9 @@
             <arg value="-old:"/>
             <arg value="${api.dir}/icu4j343.api.gz"/>
             <arg value="-new:"/>
-            <arg value="${api.dir}/icu4j346.api.gz"/>
+            <arg value="${api.dir}/icu4j36.api.gz"/>
             <arg value="-html"/>
+            <arg value="-internal"/>
             <arg value="-out:"/>
             <arg value="${api.dir}/icu4j_compare_343_36.html"/>
         </java>
