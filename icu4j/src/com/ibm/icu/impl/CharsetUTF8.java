@@ -293,8 +293,7 @@ public class CharsetUTF8 extends CharsetICU {
             
             try{
                 
-                if (fromUChar32 != 0 && target.hasRemaining())
-                {
+                if (fromUChar32 != 0 && target.hasRemaining()){
                     ch = fromUChar32;
                     fromUChar32 = 0;
                            
@@ -319,13 +318,10 @@ public class CharsetUTF8 extends CharsetICU {
                         doloop = false;
                     }                                    
             
-                    if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE)
-                    {
+                    if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE){
                         indexToWrite = 2;
                         temp[2] = (byte) ((ch >>> 12) | 0xe0);
-                    }
-                    else
-                    {
+                    }else{
                         indexToWrite = 3;
                         temp[3] = (byte) ((ch >>> 18) | 0xf0);
                         temp[2] = (byte) (((ch >>> 12) & 0x3f) | 0x80);
@@ -333,14 +329,10 @@ public class CharsetUTF8 extends CharsetICU {
                     temp[1] = (byte) (((ch >>> 6) & 0x3f) | 0x80);
                     temp[0] = (byte) ((ch & 0x3f) | 0x80);
         
-                    for (; indexToWrite >= 0; indexToWrite--)
-                    {
-                        if (target.hasRemaining())
-                        {
+                    for (; indexToWrite >= 0; indexToWrite--){
+                        if (target.hasRemaining()){
                             target.put(temp[indexToWrite]);
-                        }
-                        else
-                        {
+                        }else{
                             errorBuffer[errorBufferLength++] = temp[indexToWrite];
                             cr = CoderResult.OVERFLOW;
                         }
@@ -348,31 +340,20 @@ public class CharsetUTF8 extends CharsetICU {
                 }
             
                 if(doloop) {
-                    while (sourceArrayIndex < source.limit() && target.hasRemaining())
-                    {
+                    while (sourceArrayIndex < source.limit() && target.hasRemaining()){
                         ch = source.get(sourceArrayIndex++);
-            
-                        if (ch < 0x80)        /* Single byte */
-                        {
+                        if (ch < 0x80){        /* Single byte */
                             target.put((byte)ch);
-                        }
-                        else if (ch < 0x800)  /* Double byte */
-                        {
+                        }else if (ch < 0x800) {  /* Double byte */
                             target.put((byte) ((ch >>> 6) | 0xc0));
-                            if (target.hasRemaining())
-                            {
+                            if (target.hasRemaining()){
                                 target.put((byte) ((ch & 0x3f) | 0x80));
-                            }
-                            else
-                            {
+                            }else{
                                 errorBuffer[0] = (byte) ((ch & 0x3f) | 0x80);
                                 errorBufferLength = 1;
                                 throw new BufferOverflowException();
                             }
-                        }
-                        else
-                        /* Check for surrogates */
-                        {
+                        }else{ /* Check for surrogates */
                             if(UTF16.isSurrogate((char)ch) && !isCESU8) {
                                 if(UTF16.isLeadSurrogate((char)ch)) {
                
@@ -437,8 +418,7 @@ public class CharsetUTF8 extends CharsetICU {
                     }
                 }
             
-                if (sourceArrayIndex < source.limit() && !target.hasRemaining())
-                {
+                if (sourceArrayIndex < source.limit() && !target.hasRemaining()){
                     cr = CoderResult.OVERFLOW;
                 }
             

@@ -9,12 +9,19 @@
 
 package com.ibm.icu.dev.test.charset;
 
-import java.nio.*;
-import java.nio.charset.spi.*;
-import java.nio.charset.*;
-import java.util.*;
-
-//import sun.misc.ASCIICaseInsensitiveComparator;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.UnsupportedCharsetException;
+import java.nio.charset.spi.CharsetProvider;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedMap;
 
 import com.ibm.icu.charset.*;
 import com.ibm.icu.dev.test.TestFmwk;
@@ -120,6 +127,46 @@ public class TestCharset extends TestFmwk {
             
             smBufEncode(encoder, "UTF-16", us, newBS);
         }
+        
+    }
+    public void TestASCIIConverter(){
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName("ASCII");
+        CharsetEncoder encoder = icuChar.newEncoder();
+        CharsetDecoder decoder = icuChar.newDecoder();
+
+        CharBuffer us = CharBuffer.allocate(0x90);
+        ByteBuffer bs = ByteBuffer.allocate(0x90);
+        for(int j=0;j<=0x7f; j++){
+           us.put((char)j);
+           bs.put((byte)j);
+        }
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        smBufDecode(decoder, "ASCII", bs, us);
+        smBufEncode(encoder, "ASCII", us, bs);
+        
+    }
+    public void Test88591Converter(){
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName("iso-8859-1");
+        CharsetEncoder encoder = icuChar.newEncoder();
+        CharsetDecoder decoder = icuChar.newDecoder();
+
+        CharBuffer us = CharBuffer.allocate(0x100);
+        ByteBuffer bs = ByteBuffer.allocate(0x100);
+        for(int j=0;j<=0xFf; j++){
+           us.put((char)j);
+           bs.put((byte)j);
+        }
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        smBufDecode(decoder, "iso-8859-1", bs, us);
+        smBufEncode(encoder, "iso-8859-1", us, bs);
         
     }
 
@@ -526,11 +573,17 @@ public class TestCharset extends TestFmwk {
             Charset cs = icu.charsetForName((String)charsets[i]);
             try{
                 CharsetEncoder encoder = cs.newEncoder();
+                if(encoder!=null){
+                    logln("Creation of encoder succeeded. "+cs.toString());
+                }
             }catch(Exception ex){
                 errln("Could not instantiate encoder for "+charsets[i]+". Error: "+ex.toString());
             }
             try{
                 CharsetDecoder decoder = cs.newDecoder();
+                if(decoder!=null){
+                    logln("Creation of decoder succeeded. "+cs.toString());
+                }
             }catch(Exception ex){
                 errln("Could not instantiate decoder for "+charsets[i]+". Error: "+ex.toString());
             }
@@ -598,6 +651,7 @@ public class TestCharset extends TestFmwk {
             errln("Unexpected exception: "+ex.toString());
         }
     }
+    /*
     public void TestImplFlushFailure(){
    
        try{
@@ -614,17 +668,21 @@ public class TestCharset extends TestFmwk {
            errln("Could not create encoder for  iso-2022-jp exception: "+ex.toString());
        } 
     }
-
+   */
     public void TestISO88591() {
-       /*
+       
         Charset cs = new CharsetProviderICU().charsetForName("iso-8859-1");
-        CharsetEncoder encoder = cs.newEncoder();
-        if(encoder!=null){
-            encoder.canEncode("\uc2a3");
+        if(cs!=null){
+            CharsetEncoder encoder = cs.newEncoder();
+            if(encoder!=null){
+                encoder.canEncode("\uc2a3");
+            }else{
+                errln("Could not create encoder for iso-8859-1");
+            }
         }else{
-            errln("Could not create encoder for iso-8859-1");
+            errln("Could not create Charset for iso-8859-1");
         }
-        */
+        
     }
     public  void TestUTF8Encode() {
         CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
@@ -708,7 +766,7 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
-            int inputLen = mySource.limit();
+            int inputLen = mySource.remaining();
 
             CoderResult result = CoderResult.UNDERFLOW;
             for(int i=1; i<=inputLen; i++) {
@@ -1098,12 +1156,16 @@ public class TestCharset extends TestFmwk {
             ByteBuffer out = ByteBuffer.allocate(6);
             encoderICU.onUnmappableCharacter(CodingErrorAction.REPLACE);
             CoderResult result = encoderICU.encode(CharBuffer.wrap("\u0131\u0061\u00a1"), out, true);
-            byte[] expected = {(byte)0xA9, (byte)0xA5, (byte)0xAF, (byte)0xFE, (byte)0xA2, (byte)0xAE};
-            if(!equals(expected, out.array())){
-                errln("Did not get the expected result for substitution bytes. Got: "+
-                       hex(out.array()));
+            if(!result.isError()){
+                byte[] expected = {(byte)0xA9, (byte)0xA5, (byte)0xAF, (byte)0xFE, (byte)0xA2, (byte)0xAE};
+                if(!equals(expected, out.array())){
+                    errln("Did not get the expected result for substitution bytes. Got: "+
+                           hex(out.array()));
+                }
+                logln("Output: "+  hex(out.array()));
+            }else{
+                errln("Encode operation failed for encoder: "+encoderICU.toString());
             }
-            logln("Output: "+  hex(out.array()));
         }
         {
             // Decoder: to Unicode conversion
@@ -1111,12 +1173,16 @@ public class TestCharset extends TestFmwk {
             CharBuffer out = CharBuffer.allocate(3);
             decoderICU.onMalformedInput(CodingErrorAction.REPLACE);
             CoderResult result = decoderICU.decode(ByteBuffer.wrap(new byte[] { (byte)0xA2, (byte)0xAE, (byte)0x12, (byte)0x34, (byte)0xEF, (byte)0xDC }), out, true);
-            char[] expected = {'\u00a1', '\ufffd', '\u6676'};
-            if(!equals(expected, out.array())){
-                errln("Did not get the expected result for substitution chars. Got: "+
-                       hex(out.array()));
+            if(!result.isError()){
+                char[] expected = {'\u00a1', '\ufffd', '\u6676'};
+                if(!equals(expected, out.array())){
+                    errln("Did not get the expected result for substitution chars. Got: "+
+                           hex(out.array()));
+                }
+                logln("Output: "+  hex(out.array()));
+            }else{
+                errln("Decode operation failed for encoder: "+decoderICU.toString());
             }
-            logln("Output: "+  hex(out.array()));
         }
     }
     
@@ -1271,7 +1337,11 @@ public class TestCharset extends TestFmwk {
         decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
         try{
             CharBuffer out = decoder.decode(in);
+            if(out!=null){
+                logln(cs.toString()+" encoing succeeded as expected!");
+            }
         }catch ( Exception ex){
+            errln("Did not get expected exception for encoding: "+cs.toString());
             return ex;
         }
         return null;

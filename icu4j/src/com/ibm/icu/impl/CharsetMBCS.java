@@ -791,15 +791,8 @@ public class CharsetMBCS extends CharsetICU {
     
     protected static int GET_MAX_BYTES_PER_UCHAR(ByteBuffer indexes) 
     {
-        indexes.position(0);
-        IntBuffer a = indexes.asIntBuffer();
-        int n;
-        if(a.hasArray())
-            n = a.array()[EXT_COUNT_BYTES];
-        else
-            n = a.get(EXT_COUNT_BYTES);
-        
-        return indexes.getInt(4*n)&0xff; 
+        indexes.position(0);        
+        return indexes.getInt(EXT_COUNT_BYTES)&0xff; 
     }
     
     /*

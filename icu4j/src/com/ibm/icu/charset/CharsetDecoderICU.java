@@ -18,7 +18,15 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.MalformedInputException;
 import java.nio.ByteBuffer;
 
+import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.impl.Assert;
+
+/**
+ * An abstract class that provides framework implementation for concrete sub class implementations
+ * to utilize. In the future this class will contain API that will implement converter sematics of ICU4C.
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
+ */
 
 public abstract class CharsetDecoderICU extends CharsetDecoder{ 
 
@@ -156,6 +164,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param in
      * @param out
      * @return
+     * @draft ICU 3.6
      */
     protected abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets);
     
@@ -167,6 +176,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param flush
      * @return
      * @throws MalformedInputException
+     * @draft ICU 3.6
      */
     protected final CoderResult decode(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
     
@@ -551,7 +561,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param status    ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return The number of chars in the state. -1 if an error is encountered.
-     * @draft ICU 3.4
+     * @draft ICU 3.6
      */
     /*public*/ int toUCountPending()    {
         if(preToULength > 0){
