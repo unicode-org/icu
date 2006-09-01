@@ -145,10 +145,6 @@ public final class UConverterAlias {
             gStringTable = new byte[(int)tableArray[stringTableIndex]*2];
             gNormalizedStringTable = new byte[(int)tableArray[normalizedStringTableIndex]*2];
 
-            //if (gOptionTable[0] != STD_NORMALIZED) {
-            //    throw new IOException("Unsupported alias normalization");
-            //}
-            
             reader.read(gConverterList, gTagList,
                     gAliasList, gUntaggedConvArray,
                     gTaggedAliasArray, gTaggedAliasLists,
@@ -156,6 +152,10 @@ public final class UConverterAlias {
             data =  ByteBuffer.allocate(0); // dummy UDataMemory object in absence
                                         // of memory mapping
 
+            if (gOptionTable[0] != STD_NORMALIZED) {
+                throw new IOException("Unsupported alias normalization");
+            }
+            
             // agljport:todo umtx_lock(NULL);
             if (gAliasData == null) {
                 gAliasData = data;
