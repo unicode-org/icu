@@ -20,8 +20,7 @@ import com.ibm.icu.impl.Assert;
  * Rule Based Break Iterator 
  * This is a port of the C++ class RuleBasedBreakIterator from ICU4C.
  * 
- * @internal
- * @deprecated This API is ICU internal only.
+ * @stable ICU 2.0
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -31,7 +30,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     //=======================================================================
     
     /** 
-     *@internal 
+     * @internal 
      * @deprecated This API is ICU internal only.
      */
     public RuleBasedBreakIterator() {

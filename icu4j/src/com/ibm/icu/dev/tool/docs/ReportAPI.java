@@ -73,7 +73,7 @@ public class ReportAPI {
         String newFile = null;
         String outFile = null;
         boolean html = false;
-
+        boolean internal = false;
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
             if (arg.equals("-old:")) {
@@ -84,10 +84,12 @@ public class ReportAPI {
                 outFile = args[++i];
             } else if (arg.equals("-html")) {
                 html = true;
+            } else if (arg.equals("-internal")) {
+                internal = true;
             }
         }
 
-        new ReportAPI(oldFile, newFile).writeReport(outFile, html);
+        new ReportAPI(oldFile, newFile, internal).writeReport(outFile, html, internal);
     }
 
     /*
@@ -108,9 +110,13 @@ public class ReportAPI {
 
     */
 
-    ReportAPI(String oldFile, String newFile) {
-        oldData = APIData.read(oldFile);
-        newData = APIData.read(newFile);
+    ReportAPI(String oldFile, String newFile, boolean internal) {
+        this(APIData.read(oldFile, internal), APIData.read(newFile, internal));
+    }
+
+    ReportAPI(APIData oldData, APIData newData) {
+        this.oldData = oldData;
+        this.newData = newData;
 
         removed = (TreeSet)oldData.set.clone();
         removed.removeAll(newData.set);
@@ -128,7 +134,7 @@ public class ReportAPI {
         PrintWriter outpw = new PrintWriter(System.out);
 
         APIInfo a = null, r = null;
-        while (ai.hasNext() && ri.hasNext()) {
+        while ((a != null || ai.hasNext()) && (r != null || ri.hasNext())) {
             if (a == null) a = (APIInfo)ai.next();
             if (r == null) r = (APIInfo)ri.next();
 
@@ -190,7 +196,7 @@ public class ReportAPI {
         ai = changedAdded.iterator();
         ri = changedRemoved.iterator();
         a = r = null;
-        while (ai.hasNext() && ri.hasNext()) {
+        while ((a != null || ai.hasNext()) && (r != null || ri.hasNext())) {
             if (a == null) a = (APIInfo)ai.next();
             if (r == null) r = (APIInfo)ri.next();
             int result = c.compare(a, r);
@@ -223,13 +229,13 @@ public class ReportAPI {
             }
         }
         int lstatus = lhs.getVal(APIInfo.STA);
-        if (lstatus == APIInfo.STA_OBSOLETE || lstatus == APIInfo.STA_DEPRECATED) {
+        if (lstatus == APIInfo.STA_OBSOLETE || lstatus == APIInfo.STA_DEPRECATED || lstatus == APIInfo.STA_INTERNAL) {
             return -1;
         }
         return 1;
     }
 
-    private boolean writeReport(String outFile, boolean html) {
+    private boolean writeReport(String outFile, boolean html, boolean internal) {
         OutputStream os = System.out;
         if (outFile != null) {
             try {
@@ -279,7 +285,11 @@ public class ReportAPI {
 
             pw.println();
             pw.println("<hr/>");
-            pw.println("<h2>Deprecated or Obsoleted in " + newData.name + "</h2>");
+            if (internal) {
+                pw.println("<h2>Withdrawn, Deprecated, or Obsoleted in " + newData.name + "</h2>");
+            } else {
+                pw.println("<h2>Deprecated or Obsoleted in " + newData.name + "</h2>");
+            }
             if (obsoleted.size() > 0) {
                 printResults(obsoleted, pw, true, false);
             } else {
@@ -331,7 +341,11 @@ public class ReportAPI {
 
             pw.println();
             pw.println();
-            pw.println("=== Deprecatd or Obsoleted in " + newData.name + " ===");
+            if (internal) {
+                pw.println("=== Withdrawn, Deprecated, or Obsoleted in " + newData.name + " ===");
+            } else {
+                pw.println("=== Deprecated or Obsoleted in " + newData.name + " ===");
+            }
             if (obsoleted.size() > 0) {
                 printResults(obsoleted, pw, false, false);
             } else {
@@ -421,29 +435,14 @@ public class ReportAPI {
                     }
                     clas = className;
                 }
-                //                 pw.print("    ");
             }
 
             if (html) {
                 pw.print("<li>");
-                //                 if (info instanceof DeltaInfo) {
-                //                     DeltaInfo dinfo = (DeltaInfo)info;
-                //                     dinfo.removed.print(pw, isChangedAPIs, html);
-                //                     pw.println("</br>");
-                //                     dinfo.added.print(pw, isChangedAPIs, html);
-                //                 } else {
                 info.print(pw, isChangedAPIs, html);
-                //                 }
                 pw.println("</li>");
             } else {
-                //                 if (info instanceof DeltaInfo) {
-                //                     DeltaInfo dinfo = (DeltaInfo)info;
-                //                     dinfo.removed.println(pw, isChangedAPIs, html);
-                //                  pw.print("    --> ");
-                //                     dinfo.added.println(pw, isChangedAPIs, html);
-                //                 } else {
                 info.println(pw, isChangedAPIs, html);
-                //                 }
             }
         }
 

@@ -34,8 +34,6 @@
  *   -source 1.4
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
- * todo: separate generation of data files (which requires taglet) from 
- *       comparison and report generation (which does not require it)
  * todo: provide command-line control of filters of which subclasses/packages to process
  * todo: record full inheritance heirarchy, not just immediate inheritance 
  * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it 
@@ -62,6 +60,7 @@ public class GatherAPIData {
     Pattern pat;
     boolean zip;
     boolean gzip;
+    boolean internal;
 
     public static int optionLength(String option) {
         if (option.equals("-name")) {
@@ -76,7 +75,9 @@ public class GatherAPIData {
             return 1;
         } else if (option.equals("-gzip")) {
             return 1;
-        }
+        } else if (option.equals("-internal")) {
+	    return 1;
+	}
         return 0;
     }
 
@@ -102,7 +103,9 @@ public class GatherAPIData {
                 this.zip = true;
             } else if (opt.equals("-gzip")) {
                 this.gzip = true;
-            }
+            } else if (opt.equals("-internal")) {
+		this.internal = true;
+	    }
         }
 
         results = new TreeSet(APIInfo.defaultComparator());
@@ -143,9 +146,6 @@ public class GatherAPIData {
             bw.newLine();
             writeResults(results, bw);
             bw.close(); // should flush, close all, etc
-            //          if (zip) {
-            //          ((ZipOutputStream)os).finish();
-            //          }
         } catch (IOException e) {
             try { bw.close(); } catch (IOException e2) {}
             RuntimeException re = new RuntimeException("write error: " + e.getMessage());
@@ -188,10 +188,12 @@ public class GatherAPIData {
         if (doc.qualifiedName().indexOf(".misc") != -1) { 
             System.out.println("misc: " + doc.qualifiedName()); return true; 
         }
-        Tag[] tags = doc.tags();
-        for (int i = 0; i < tags.length; ++i) {
-            if (tagKindIndex(tags[i].kind()) == INTERNAL) return true;
-        }
+	if (!internal) { // debug
+	    Tag[] tags = doc.tags();
+	    for (int i = 0; i < tags.length; ++i) {
+		if (tagKindIndex(tags[i].kind()) == INTERNAL) { return true; }
+	    }
+	}
         if (pat != null && (doc.isClass() || doc.isInterface())) {
             if (!pat.matcher(doc.name()).matches()) {
                 return true;
@@ -331,7 +333,7 @@ public class GatherAPIData {
         return info;
     }
 
-    private static int tagStatus(final Doc doc) {
+    private int tagStatus(final Doc doc) {
         class Result {
             int res = -1;
             void set(int val) { 
@@ -341,7 +343,8 @@ public class GatherAPIData {
                         return;
                     } else if (res != APIInfo.STA_DEPRECATED) {
                         // if already not deprecated, this is an error
-                        throw new RuntimeException("bad doc: " + doc + " old: " + res + " new: " + val); 
+			System.err.println("bad doc: " + doc + " both: " + APIInfo.getTypeValName(APIInfo.STA, res) + " and: " + APIInfo.getTypeValName(APIInfo.STA, val)); 
+			return;
                     }
                 }
                 // ok to replace with new tag
@@ -366,7 +369,7 @@ public class GatherAPIData {
 
             switch (ix) {
             case INTERNAL:
-                result.set(-2);
+                result.set(internal ? APIInfo.STA_INTERNAL : -2); // -2 for legacy compatibility
                 break;
 
             case DRAFT:
