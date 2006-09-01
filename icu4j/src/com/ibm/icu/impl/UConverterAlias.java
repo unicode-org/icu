@@ -145,9 +145,9 @@ public final class UConverterAlias {
             gStringTable = new byte[(int)tableArray[stringTableIndex]*2];
             gNormalizedStringTable = new byte[(int)tableArray[normalizedStringTableIndex]*2];
 
-            if (gOptionTable[0] != STD_NORMALIZED) {
-                throw new IOException("Unsupported alias normalization");
-            }
+            //if (gOptionTable[0] != STD_NORMALIZED) {
+            //    throw new IOException("Unsupported alias normalization");
+            //}
             
             reader.read(gConverterList, gTagList,
                     gAliasList, gUntaggedConvArray,
