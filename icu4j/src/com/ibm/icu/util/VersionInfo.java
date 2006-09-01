@@ -125,8 +125,7 @@ public final class VersionInfo
     /**
      * Data version string for ICU's internal data
      * @internal
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @deprecated This API is ICU internal only.
      */
     public static final String ICU_DATA_VERSION = "36b";
 
