@@ -29,7 +29,7 @@ public class UConverterAliasesEnumeration implements Enumeration {
 		int value = 0;
 	    
 	    if (context.listOffset!=0) {
-	        value = UConverterAlias.gTaggedAliasListsArray[(int)context.listOffset];
+	        value = UConverterAlias.gTaggedAliasLists[(int)context.listOffset];
 	    }
 	    return value;
 	}
@@ -37,8 +37,8 @@ public class UConverterAliasesEnumeration implements Enumeration {
 	public Object nextElement() {
 	
 		if (context.listOffset!=0) {
-	        long listCount = UConverterAlias.gTaggedAliasListsArray[(int)context.listOffset];
-	        int[] currListArray = UConverterAlias.gTaggedAliasListsArray;
+	        long listCount = UConverterAlias.gTaggedAliasLists[(int)context.listOffset];
+	        int[] currListArray = UConverterAlias.gTaggedAliasLists;
 	        long currListArrayIndex = context.getListOffset() + 1; 
 
 	        if (context.getListIdx() < listCount) {
@@ -77,7 +77,7 @@ public class UConverterAliasesEnumeration implements Enumeration {
 	}
 
     public boolean hasMoreElements() {
-        long listCount = UConverterAlias.gTaggedAliasListsArray[(int)context.listOffset];
+        long listCount = UConverterAlias.gTaggedAliasLists[(int)context.listOffset];
         return (context.getListIdx() < listCount);
     }
 }
