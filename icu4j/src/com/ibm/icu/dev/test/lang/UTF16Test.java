@@ -874,7 +874,7 @@ public final class UTF16Test extends TestFmwk
      */
     public void TestValueOf()
     {
-        if(UTF16.getCodePoint('\ud800','\udc00')!=0x10000){
+        if(UCharacter.getCodePoint('\ud800','\udc00')!=0x10000){
             errln("FAIL: getCodePoint('\ud800','\udc00')");
         }
         if (!UTF16.valueOf(0x61).equals("a") ||

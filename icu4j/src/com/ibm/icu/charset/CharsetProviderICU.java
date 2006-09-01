@@ -20,20 +20,21 @@ import java.util.NoSuchElementException;
 
 import com.ibm.icu.impl.UConverterAlias;
 
+/**
+ * A concrete subclass of CharsetProvider for loading and providing charset converters
+ * in ICU.
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
+ *
+ */
 public final class CharsetProviderICU extends CharsetProvider{
     
     /**
-     * Constructs a CharsetProviderICU object 
-     * @stable ICU 2.4
-     */
-    public CharsetProviderICU(){
-    }
-    
-    /**
-     * Constructs a charset for the given charset name
+     * Constructs a charset for the given charset name. 
+     * Implements the abstract method of super class.
      * @param charsetName charset name
      * @return charset objet for the given charset name, null if unsupported
-     * @stable ICU 2.4
+     * @stable ICU 3.6
      */
     public final Charset charsetForName(String charsetName){
         try{
@@ -57,6 +58,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @param enc converter name
      * @return canonical name of the converter
      * @internal ICU 3.4
+     * @deprecated This API is for internal ICU use only
      */
     public static final String getICUCanonicalName(String enc)
                                 throws UnsupportedCharsetException{
@@ -228,8 +230,10 @@ public final class CharsetProviderICU extends CharsetProvider{
     }
 
     /**
-     * Returns an iterator for the available charsets
+     * Returns an iterator for the available charsets.
+     * Implements the abstract method of super class.
      * @return Iterator the charset name iterator
+     * @stable ICU 3.6
      */
     public final Iterator charsets(){
         HashMap map = new HashMap();
@@ -239,6 +243,8 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Gets the canonical names of available converters 
      * @return Object[] names as an object array
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final Object[] getAvailableNames(){
         HashMap map = new HashMap();
@@ -247,7 +253,9 @@ public final class CharsetProviderICU extends CharsetProvider{
     }
     /**
      * Return all names available
-     * @return
+     * @return String[] an arrya of all available names
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String[] getAllNames(){
         int num = UConverterAlias.countAvailable();

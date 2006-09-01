@@ -21,7 +21,12 @@ import java.nio.charset.MalformedInputException;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.text.UTF16;
 
-
+/**
+ * An abstract class that provides framework implementation for concrete sub class implementations
+ * to utilize. In the future this class will contain API that will implement converter sematics of ICU4C.
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
+ */
 public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     protected byte[] errorBuffer = new byte[30];
@@ -522,18 +527,13 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	public boolean canEncode(int codepoint) {
 	    return true;
     }
-
+	/**
+     * Overrides super class method
+     * @stable ICU 3.6 
+	 */
 	public boolean isLegalReplacement(byte[] repl){
 	    return true;
     }
-
-	/**
-	 * Releases the system resources by cleanly closing ICU converter opened
-	 * @exception Throwable exception thrown by super class' finalize method
-     * @draft ICU 3.6
-	 */
-	protected void finalize() throws Throwable {
-	}
     
     protected static final CoderResult fromUWriteBytes(CharsetEncoderICU cnv, 
                                          byte[] bytesArray, int bytesBegin, int bytesLength, 

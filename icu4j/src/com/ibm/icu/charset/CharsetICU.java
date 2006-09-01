@@ -12,6 +12,7 @@ package com.ibm.icu.charset;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
@@ -19,23 +20,48 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 
 import com.ibm.icu.lang.UCharacter;
-
-
-
+/**
+ * <p>This API is used to convert codepage or character encoded data to and
+ * from UTF-16. You can open a converter with {@link forName() } and {@link forNameICU() }. With that
+ * converter, you can get its properties, set options, convert your data.</p>
+ *
+ * <p>Since many software programs recogize different converter names for
+ * different types of converters, there are other functions in this API to
+ * iterate over the converter aliases. 
+ * 
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
+ */
 public abstract class CharsetICU extends Charset{
 	
     protected String icuCanonicalName;
     protected String javaCanonicalName;
     protected int options;
 
-    protected int maxBytesPerChar;
-    protected int minBytesPerChar;
     protected float  maxCharsPerByte;
-    protected byte subChar1 = 0x00; 
     
     protected int mode;
     protected boolean flush;
     protected boolean useFallback;
+    
+    protected String name; /* +4: 60  internal name of the converter- invariant chars */
+
+    protected int codepage;               /* +64: 4 codepage # (now IBM-$codepage) */
+
+    protected byte platform;                /* +68: 1 platform of the converter (only IBM now) */
+    protected byte conversionType;          /* +69: 1 conversion type */
+
+    protected int minBytesPerChar;         /* +70: 1 Minimum # bytes per char in this codepage */
+    protected int maxBytesPerChar;         /* +71: 1 Maximum # bytes output per UChar in this codepage */
+
+    protected byte subChar[/*UCNV_MAX_SUBCHAR_LEN*/]; /* +72: 4  [note:  4 and 8 byte boundary] */
+    protected byte subCharLen;              /* +76: 1 */
+    
+    protected byte hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
+    protected byte hasFromUnicodeFallback; /* +78: 1 */
+    protected short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
+    protected byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
+    protected byte reserved[/*19*/];           /* +81: 19 to round out the structure */
     
     /**
      * 
@@ -43,6 +69,7 @@ public abstract class CharsetICU extends Charset{
      * @param canonName
      * @param aliases
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected CharsetICU(String icuCanonicalName, String canonicalName, String[] aliases) {
 		super(canonicalName,aliases);
@@ -55,8 +82,10 @@ public abstract class CharsetICU extends Charset{
     
     /**
      * Ascertains if a charset is a sub set of this charset
+     * Implements the abstract method of super class.
      * @param cs charset to test
      * @return true if the given charset is a subset of this charset
+     * @stable ICU 3.6
      */
     public boolean contains(Charset cs){
         if (null == cs) {
@@ -68,14 +97,13 @@ public abstract class CharsetICU extends Charset{
     }
     private static final HashMap algorithmicCharsets = new HashMap();
     static{
-        algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.impl.CharsetBOCU1" );
+        /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.impl.CharsetBOCU1" );
         algorithmicCharsets.put("CESU-8",                "com.ibm.icu.impl.CharsetCESU8" );
         algorithmicCharsets.put("HZ",                    "com.ibm.icu.impl.CharsetHZ" );
         algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.impl.CharsetIMAP" );
         algorithmicCharsets.put("ISCII",                 "com.ibm.icu.impl.CharsetISCII" );
-        algorithmicCharsets.put("iso2022",               "com.ibm.icu.impl.CharsetISO2022" );
-        algorithmicCharsets.put("iso88591",              "com.ibm.icu.impl.CharsetBOCU1" );
-        algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.impl.CharsetLMBCS1" );
+        algorithmicCharsets.put("iso2022",               "com.ibm.icu.impl.CharsetISO2022" );*/
+        /*algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.impl.CharsetLMBCS1" );
         algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.impl.CharsetLMBCS11" );
         algorithmicCharsets.put("lmbcs16",               "com.ibm.icu.impl.CharsetLMBCS16" );
         algorithmicCharsets.put("lmbcs17",               "com.ibm.icu.impl.CharsetLMBCS17" );
@@ -86,9 +114,10 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("lmbcs4",                "com.ibm.icu.impl.CharsetLMBCS4" );
         algorithmicCharsets.put("lmbcs5",                "com.ibm.icu.impl.CharsetLMBCS5" );
         algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.impl.CharsetLMBCS6" );
-        algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.impl.CharsetLMBCS8" );
-        algorithmicCharsets.put("scsu",                  "com.ibm.icu.impl.CharsetSCSU" );
-        algorithmicCharsets.put("usascii",               "com.ibm.icu.impl.CharsetUSASCII" );
+        algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.impl.CharsetLMBCS8" )
+        algorithmicCharsets.put("scsu",                  "com.ibm.icu.impl.CharsetSCSU" ); */
+        algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.impl.CharsetASCII" );
+        algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.impl.Charset88591" );
         algorithmicCharsets.put("UTF-16",                "com.ibm.icu.impl.CharsetUTF16" );
         algorithmicCharsets.put("UTF-16BE",              "com.ibm.icu.impl.CharsetUTF16" );
         algorithmicCharsets.put("UTF-16LE",              "com.ibm.icu.impl.CharsetUTF16LE" );
@@ -153,7 +182,9 @@ public abstract class CharsetICU extends Charset{
     }
     
     /**
-     * 
+     * Returns the default charset name 
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String getDefaultCharsetName(){
         String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
@@ -179,6 +210,8 @@ public abstract class CharsetICU extends Charset{
      * @throws UnsupportedCharsetException If no support for the
      * named charset is available in this instance of th Java
      * virtual machine
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static Charset forNameICU(String charsetName) throws IllegalCharsetNameException, UnsupportedCharsetException {
         CharsetProviderICU icuProvider = new CharsetProviderICU();
