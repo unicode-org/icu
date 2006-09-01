@@ -8,8 +8,6 @@
 */ 
 package com.ibm.icu.impl;
 
-import java.nio.ByteBuffer;
-
 
 /*
  * Defines the UConverterSharedData struct,
@@ -345,13 +343,13 @@ public class UConverterSharedData {
 	    StringBuffer strippedName = new StringBuffer(UConverterConstants.MAX_CONVERTER_NAME_LENGTH);
 	
 	    /* Lower case and remove ignoreable characters. */
-	    UConverterAlias.io_stripForCompare(strippedName, realName);
+	    UConverterAlias.stripForCompare(strippedName, realName);
 	
 	    /* do a binary search for the alias */
 	    start = 0;
 	    limit = cnvNameType.length;
 	    mid = limit;
-	    lastMid = UConverterAlias.UINT32_MAX;
+	    lastMid = -1;
 	
 	    for (;;) {
 	        mid = (long)((start + limit) / 2);
