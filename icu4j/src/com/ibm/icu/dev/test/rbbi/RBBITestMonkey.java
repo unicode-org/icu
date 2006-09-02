@@ -212,7 +212,7 @@ public class RBBITestMonkey extends TestFmwk {
                     }
                     c3 = UTF16.charAt(fText, p3);
                  }
-                while (fFormatSet.contains(c3) || fExtendSet.contains(c3));
+                while (setContains(fFormatSet, c3) || setContains(fExtendSet, c3));
 
                 if (p1 == p2) {
                     // Still warming up the loop.  (won't work with zero length strings, but we don't care)
@@ -241,7 +241,7 @@ public class RBBITestMonkey extends TestFmwk {
                 //
                 if ( fALetterSet.contains(c1) &&
                         fMidLetterSet.contains(c2) &&
-                        fALetterSet.contains(c3)) {
+                        setContains(fALetterSet, c3)) {
                     continue;
                 }
                 
@@ -281,7 +281,7 @@ public class RBBITestMonkey extends TestFmwk {
                 // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
                 if (fNumericSet.contains(c1) &&
                         fMidNumSet.contains(c2) &&
-                        fNumericSet.contains(c3)) {
+                        setContains(fNumericSet, c3)) {
                     continue;
                 }
                 
@@ -1174,14 +1174,14 @@ public class RBBITestMonkey extends TestFmwk {
                 // Rule 8a  (STerm | ATerm) Close* Sp* x (Sterm | ATerm)
                 if (fSTermSet.contains(c2) || fATermSet.contains(c2)) {
                     p8 = p1;
-                    while (fSpSet.contains(cAt(p8))) {
+                    while (setContains(fSpSet, cAt(p8))) {
                         p8 = moveBack(p8);
                     }
-                    while (fCloseSet.contains(cAt(p8))) {
+                    while (setContains(fCloseSet, cAt(p8))) {
                         p8 = moveBack(p8);
                     }
                     c = cAt(p8);
-                    if (fSTermSet.contains(c) || fATermSet.contains(c)) {
+                    if (setContains(fSTermSet, c) || setContains(fATermSet, c)) {
                         continue;
                     }
                 }
@@ -1280,6 +1280,20 @@ public class RBBITestMonkey extends TestFmwk {
             }
         }
         return pos;
+    }
+    
+    /**
+     * No-exceptions form of UnicodeSet.contains(c).
+     *    Simplifies loops that terminate with an end-of-input character value.
+     * @param s  A unicode set
+     * @param c  A code point value
+     * @return   true if the set contains c.
+     */
+    static boolean setContains(UnicodeSet s, int c) {
+    	if (c<0 || c>UTF16.CODEPOINT_MAX_VALUE ) {
+    		return false;
+    	}
+    	return s.contains(c);
     }
     
     
