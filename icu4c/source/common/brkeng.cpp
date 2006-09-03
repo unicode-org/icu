@@ -129,7 +129,7 @@ ICULanguageBreakFactory::~ICULanguageBreakFactory() {
 U_NAMESPACE_END
 U_CDECL_BEGIN
 static void U_CALLCONV _deleteEngine(void *obj) {
-    delete (const LanguageBreakEngine *) obj;
+    delete (const U_NAMESPACE_QUALIFIER LanguageBreakEngine *) obj;
 }
 U_CDECL_END
 U_NAMESPACE_BEGIN

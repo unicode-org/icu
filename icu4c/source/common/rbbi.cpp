@@ -1674,11 +1674,11 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     return (reverse ? startPos : endPos);
 }
 
-static UStack *gLanguageBreakFactories = NULL;
-
 U_NAMESPACE_END
 
 // defined in ucln_cmn.h
+
+static U_NAMESPACE_QUALIFIER UStack *gLanguageBreakFactories = NULL;
 
 /**
  * Release all static memory held by breakiterator.  
@@ -1695,7 +1695,7 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static void U_CALLCONV _deleteFactory(void *obj) {
-    delete (LanguageBreakFactory *) obj;
+    delete (U_NAMESPACE_QUALIFIER LanguageBreakFactory *) obj;
 }
 U_CDECL_END
 U_NAMESPACE_BEGIN

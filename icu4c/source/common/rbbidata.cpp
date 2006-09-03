@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2005 International Business Machines Corporation   *
+*   Copyright (C) 1999-2006 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -257,6 +257,7 @@ void  RBBIDataWrapper::printData() {
 
 
 U_NAMESPACE_END
+U_NAMESPACE_USE
 
 //-----------------------------------------------------------------------------
 //

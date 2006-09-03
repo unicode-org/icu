@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2005, International Business Machines Corporation and   *
+* Copyright (C) 1999-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -90,7 +90,7 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 U_CDECL_BEGIN
 static UChar U_CALLCONV
 UnicodeString_charAt(int32_t offset, void *context) {
-    return ((UnicodeString*) context)->charAt(offset);
+    return ((U_NAMESPACE_QUALIFIER UnicodeString*) context)->charAt(offset);
 }
 U_CDECL_END
 
