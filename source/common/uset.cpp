@@ -29,6 +29,8 @@
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
 
+U_NAMESPACE_USE
+
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
     return (USet*) new UnicodeSet(start, end);

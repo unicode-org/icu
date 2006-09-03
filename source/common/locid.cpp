@@ -41,7 +41,7 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-static Locale*  availableLocaleList = NULL;
+static U_NAMESPACE_QUALIFIER Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 typedef enum ELocalePos {
     eENGLISH,
@@ -76,9 +76,9 @@ U_CFUNC int32_t locale_getKeywords(const char *localeID,
             UBool valuesToo,
             UErrorCode *status);
 
-static Locale        *gLocaleCache         = NULL;
-static const Locale  *gDefaultLocale       = NULL;
-static UHashtable    *gDefaultLocalesHashT = NULL;
+static U_NAMESPACE_QUALIFIER Locale       *gLocaleCache         = NULL;
+static const U_NAMESPACE_QUALIFIER Locale *gDefaultLocale       = NULL;
+static UHashtable                         *gDefaultLocalesHashT = NULL;
 
 U_CDECL_BEGIN
 //
@@ -86,7 +86,7 @@ U_CDECL_BEGIN
 //
 static void U_CALLCONV
 deleteLocale(void *obj) {
-    delete (Locale *) obj;
+    delete (U_NAMESPACE_QUALIFIER Locale *) obj;
 }
 
 static UBool U_CALLCONV locale_cleanup(void)
@@ -115,14 +115,11 @@ static UBool U_CALLCONV locale_cleanup(void)
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
-
 //
 //  locale_set_default_internal.
 //
 void locale_set_default_internal(const char *id)
 {
-    U_NAMESPACE_USE
     UErrorCode   status = U_ZERO_ERROR;
     UBool canonicalize = FALSE;
 
@@ -218,7 +215,6 @@ void locale_set_default_internal(const char *id)
 }
 U_NAMESPACE_END
 
-
 /* sfb 07/21/99 */
 U_CFUNC void
 locale_set_default(const char *id)
@@ -238,6 +234,8 @@ locale_get_default(void)
 
 
 U_NAMESPACE_BEGIN
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
 
 /*Character separating the posix id fields*/
 // '_'

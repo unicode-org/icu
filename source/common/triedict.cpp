@@ -876,6 +876,7 @@ static void walkHorizontal(const TernaryNode *node,
 }
 
 U_NAMESPACE_END
+U_NAMESPACE_USE
 U_CDECL_BEGIN
 static int32_t U_CALLCONV
 _sortBuildNodes(const void * /*context*/, const void *voidl, const void *voidr) {

@@ -24,6 +24,7 @@
 #include "cstring.h"
 #include "uassert.h"
 
+U_NAMESPACE_USE
 
 #define I32_FLAG(bitIndex) ((int32_t)1<<(bitIndex))
 
