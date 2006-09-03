@@ -21,6 +21,8 @@
 #include "unicode/uiter.h"
 #include "cstring.h"
 
+U_NAMESPACE_USE
+
 #define IS_EVEN(n) (((n)&1)==0)
 #define IS_POINTER_EVEN(p) IS_EVEN((size_t)p)
 

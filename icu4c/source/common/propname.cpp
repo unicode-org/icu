@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -204,6 +204,7 @@ PropertyAliases::getPropertyValueEnum(EnumValue prop,
 }
 
 U_NAMESPACE_END
+U_NAMESPACE_USE
 
 //----------------------------------------------------------------------
 // UDataMemory structures

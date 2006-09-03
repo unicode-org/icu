@@ -78,6 +78,8 @@
  */
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+U_NAMESPACE_USE
+
 /*
  * This new implementation of the normalization code loads its data from
  * unorm.dat, which is generated with the gennorm tool.

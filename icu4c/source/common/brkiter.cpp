@@ -238,8 +238,6 @@ BreakIterator::~BreakIterator()
 //-------------------------------------------
 #if !UCONFIG_NO_SERVICE
 
-static ICULocaleService* gService = NULL;
-
 // -------------------------------------
 
 class ICUBreakIteratorFactory : public ICUResourceBundleFactory {
@@ -282,6 +280,8 @@ public:
 U_NAMESPACE_END
 
 // defined in ucln_cmn.h
+
+static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
 
 /**
  * Release all static memory held by breakiterator.  
