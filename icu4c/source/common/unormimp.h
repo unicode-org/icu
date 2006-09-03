@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -236,7 +236,7 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
 U_CFUNC int32_t
 unorm_internalNormalizeWithNX(UChar *dest, int32_t destCapacity,
                               const UChar *src, int32_t srcLength,
-                              UNormalizationMode mode, int32_t options, const UnicodeSet *nx,
+                              UNormalizationMode mode, int32_t options, const U_NAMESPACE_QUALIFIER UnicodeSet *nx,
                               UErrorCode *pErrorCode);
 
 #endif
@@ -272,7 +272,7 @@ unorm_internalQuickCheck(const UChar *src,
                          int32_t srcLength,
                          UNormalizationMode mode,
                          UBool allowMaybe,
-                         const UnicodeSet *nx,
+                         const U_NAMESPACE_QUALIFIER UnicodeSet *nx,
                          UErrorCode *pErrorCode);
 
 #endif
@@ -441,7 +441,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode);
  * Requires unorm_haveData().
  * @internal
  */
-U_CFUNC const UnicodeSet *
+U_CFUNC const U_NAMESPACE_QUALIFIER UnicodeSet *
 unorm_getNX(int32_t options, UErrorCode *pErrorCode);
 
 #endif
