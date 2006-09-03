@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
+
+U_NAMESPACE_BEGIN
 
 UnicodeString& 
 UnicodeString::trim()
@@ -66,3 +68,5 @@ UnicodeString::trim()
 
   return *this;
 }
+
+U_NAMESPACE_END
