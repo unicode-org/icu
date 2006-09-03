@@ -237,7 +237,7 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
+utext_openUnicodeString(UText *ut, U_NAMESPACE_QUALIFIER UnicodeString *s, UErrorCode *status);
 
 
 /**
@@ -253,7 +253,7 @@ utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *status);
+utext_openConstUnicodeString(UText *ut, const U_NAMESPACE_QUALIFIER UnicodeString *s, UErrorCode *status);
 
 
 /**
@@ -269,7 +269,7 @@ utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *stat
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
+utext_openReplaceable(UText *ut, U_NAMESPACE_QUALIFIER Replaceable *rep, UErrorCode *status);
 
 /**
  * Open a  UText implementation over an ICU CharacterIterator.
@@ -284,7 +284,7 @@ utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status);
  * @draft ICU 3.4
  */
 U_DRAFT UText * U_EXPORT2
-utext_openCharacterIterator(UText *ut, CharacterIterator *ic, UErrorCode *status);
+utext_openCharacterIterator(UText *ut, U_NAMESPACE_QUALIFIER CharacterIterator *ic, UErrorCode *status);
 
 #endif
 
