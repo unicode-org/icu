@@ -199,7 +199,7 @@ struct CReg;
 static UMTX gCRegLock = 0;
 static CReg* gCRegHead = 0;
 
-struct CReg : public UMemory {
+struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
     CReg *next;
     UChar iso[ISO_COUNTRY_CODE_LENGTH+1];
     char  id[ULOC_FULLNAME_CAPACITY];
@@ -223,13 +223,14 @@ struct CReg : public UMemory {
             CReg* n = new CReg(_iso, _id);
             if (n) {
                 umtx_init(&gCRegLock);
-                Mutex mutex(&gCRegLock);
+                umtx_lock(&gCRegLock);
                 if (!gCRegHead) {
                     /* register for the first time */
                     ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
                 }
                 n->next = gCRegHead;
                 gCRegHead = n;
+                umtx_unlock(&gCRegLock);
                 return n;
             }
             *status = U_MEMORY_ALLOCATION_ERROR;
@@ -238,41 +239,41 @@ struct CReg : public UMemory {
     }
 
     static UBool unreg(UCurrRegistryKey key) {
+        UBool found = FALSE;
         umtx_init(&gCRegLock);
-        Mutex mutex(&gCRegLock);
-        if (gCRegHead == key) {
-            gCRegHead = gCRegHead->next;
-            delete (CReg*)key;
-            return TRUE;
-        }
+        umtx_lock(&gCRegLock);
 
-        CReg* p = gCRegHead;
-        while (p) {
-            if (p->next == key) {
-                p->next = ((CReg*)key)->next;
+        CReg** p = &gCRegHead;
+        while (*p) {
+            if (*p == key) {
+                *p = ((CReg*)key)->next;
                 delete (CReg*)key;
-                return TRUE;
+                found = TRUE;
+                break;
             }
-            p = p->next;
+            p = &((*p)->next);
         }
 
-        return FALSE;
+        return found;
     }
 
     static const UChar* get(const char* id) {
+        const UChar* result = NULL;
         umtx_init(&gCRegLock);
-        Mutex mutex(&gCRegLock);
+        umtx_lock(&gCRegLock);
         CReg* p = gCRegHead;
 
         /* register cleanup of the mutex */
         ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
         while (p) {
             if (uprv_strcmp(id, p->id) == 0) {
-                return p->iso;
+                result = p->iso;
+                break;
             }
             p = p->next;
         }
-        return NULL;
+        umtx_unlock(&gCRegLock);
+        return result;
     }
 
     /* This doesn't need to be thread safe. It's for u_cleanup only. */
@@ -525,14 +526,14 @@ ucurr_getName(const UChar* currency,
     return currency;
 }
 
-U_NAMESPACE_BEGIN
-
-void
+U_CAPI void
 uprv_parseCurrency(const char* locale,
-                   const UnicodeString& text,
-                   ParsePosition& pos,
+                   const U_NAMESPACE_QUALIFIER UnicodeString& text,
+                   U_NAMESPACE_QUALIFIER ParsePosition& pos,
                    UChar* result,
-                   UErrorCode& ec) {
+                   UErrorCode& ec)
+{
+    U_NAMESPACE_USE
 
     // TODO: There is a slight problem with the pseudo-multi-level
     // fallback implemented here.  More-specific locales don't
@@ -655,8 +656,6 @@ uprv_parseCurrency(const char* locale,
     pos.setIndex(start + max);
 }
 
-U_NAMESPACE_END
-
 /**
  * Internal method.  Given a currency ISO code and a locale, return
  * the "static" currency name.  This is usually the same as the
@@ -669,8 +668,10 @@ U_NAMESPACE_END
  */
 U_CAPI void
 uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
-                           UnicodeString& result, UErrorCode& ec)
+                           U_NAMESPACE_QUALIFIER UnicodeString& result, UErrorCode& ec)
 {
+    U_NAMESPACE_USE
+
     UBool isChoiceFormat;
     int32_t len;
     const UChar* currname = ucurr_getName(iso, loc, UCURR_SYMBOL_NAME,
