@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -16,6 +16,12 @@
 #include "uresimp.h"
 #include "cstring.h"
 #include "uassert.h"
+
+#if defined(U_DEBUG_CALDATA)
+#include <stdio.h>
+#endif
+
+U_NAMESPACE_BEGIN
 
 int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
     return (numerator >= 0) ?
@@ -132,10 +138,6 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
 #define U_DEFAULT_KEY "default"
 #define U_CALENDAR_DATA ((char*)0)
 
-
-#if defined( U_DEBUG_CALDATA)
-#include <stdio.h>
-#endif
 
 // CalendarData::CalendarData(const Locale& loc, UErrorCode& status) 
 //   : fFillin(NULL), fBundle(NULL), fFallback(NULL) {
@@ -292,6 +294,8 @@ UResourceBundle* CalendarData::getByKey3(const char *key, const char *contextKey
 
     return fFillin;
 }
+
+U_NAMESPACE_END
 
 #endif
 //eof

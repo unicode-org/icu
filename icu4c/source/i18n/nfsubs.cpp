@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfsubs.cpp
@@ -40,6 +40,8 @@ static const UChar gGreaterGreaterThan[] =
 {
     0x3E, 0x3E, 0
 }; /* ">>" */
+
+U_NAMESPACE_BEGIN
 
 NFSubstitution*
 NFSubstitution::makeSubstitution(int32_t pos,
@@ -1075,6 +1077,8 @@ UClassID
 NullSubstitution::getDynamicClassID() const {
     return getStaticClassID();
 }
+
+U_NAMESPACE_END
 
 /* U_HAVE_RBNF */
 #endif
