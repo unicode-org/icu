@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -30,6 +30,8 @@
 U_CFUNC UChar32 U_CALLCONV
 utrans_rep_caseContextIterator(void *context, int8_t dir)
 {
+    U_NAMESPACE_USE
+
     UCaseContext *csc=(UCaseContext *)context;
     Replaceable *rep=(Replaceable *)csc->p;
     UChar32 c;

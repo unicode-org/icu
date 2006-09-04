@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -131,12 +131,12 @@ static const UChar * const DATE_STYLE_IDS[] = {
     NULL,
 };
  
-static const DateFormat::EStyle DATE_STYLES[] = {
-    DateFormat::kDefault,
-    DateFormat::kShort,
-    DateFormat::kMedium,
-    DateFormat::kLong,
-    DateFormat::kFull,
+static const U_NAMESPACE_QUALIFIER DateFormat::EStyle DATE_STYLES[] = {
+    U_NAMESPACE_QUALIFIER DateFormat::kDefault,
+    U_NAMESPACE_QUALIFIER DateFormat::kShort,
+    U_NAMESPACE_QUALIFIER DateFormat::kMedium,
+    U_NAMESPACE_QUALIFIER DateFormat::kLong,
+    U_NAMESPACE_QUALIFIER DateFormat::kFull,
 };
 
 static const int32_t DEFAULT_INITIAL_CAPACITY = 10;

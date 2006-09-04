@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and   *
+* Copyright (C) 1996-2006, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -54,7 +54,7 @@ U_NAMESPACE_BEGIN
 #if !UCONFIG_NO_SERVICE
 U_NAMESPACE_END
 
-static ICULocaleService* gService = NULL;
+static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
 /**
  * Release all static memory held by collator.
  */

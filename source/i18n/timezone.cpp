@@ -98,12 +98,12 @@ static const UChar         CUSTOM_ID[] =
     0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
 };
 
-static UMTX                LOCK;
-static TimeZone*           DEFAULT_ZONE = NULL;
-static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
+static UMTX                             LOCK;
+static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
+static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
 
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
-static UnicodeString* OLSON_IDS = 0;
+static U_NAMESPACE_QUALIFIER UnicodeString* OLSON_IDS = 0;
 #endif
 
 U_CDECL_BEGIN

@@ -130,7 +130,7 @@ static const int32_t  LEAP_MONTH_START[][3] = {
   {  383,        384,        385  },          // Elul
 };
 
-static CalendarCache *gCache =  NULL;
+static U_NAMESPACE_QUALIFIER CalendarCache *gCache =  NULL;
 
 U_CDECL_BEGIN
 static UBool calendar_hebrew_cleanup(void) {
