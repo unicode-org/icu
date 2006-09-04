@@ -365,10 +365,14 @@ U_CDECL_BEGIN
 
 static int32_t U_CALLCONV
 compareItems(const void * /*context*/, const void *left, const void *right) {
+    U_NAMESPACE_USE
+
     return (int32_t)strcmp(((Item *)left)->name, ((Item *)right)->name);
 }
 
 U_CDECL_END
+
+U_NAMESPACE_BEGIN
 
 Package::Package() {
     inPkgName[0]=0;
@@ -1200,3 +1204,5 @@ Package::sortItems() {
         exit(errorCode);
     }
 }
+
+U_NAMESPACE_END

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -11,8 +11,7 @@
 #ifndef __ICU_INTLTEST_TEXTFILE__
 #define __ICU_INTLTEST_TEXTFILE__
 
-#include "unicode/utypes.h"
-#include "unicode/unistr.h"
+#include "intltest.h"
 #include "filestrm.h"
 
 /**

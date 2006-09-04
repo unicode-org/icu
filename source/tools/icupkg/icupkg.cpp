@@ -39,6 +39,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+U_NAMESPACE_USE
+
 // TODO: add --matchmode=regex for using the ICU regex engine for item name pattern matching?
 
 // general definitions ----------------------------------------------------- ***

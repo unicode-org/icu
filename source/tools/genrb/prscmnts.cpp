@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,6 +20,8 @@
 #include "prscmnts.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+U_NAMESPACE_USE
 
 #if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when RegularExpressions not available */
 

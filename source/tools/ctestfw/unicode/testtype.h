@@ -29,6 +29,7 @@
 
 #ifdef __cplusplus
     #define C_CTEST_API extern "C"
+    U_NAMESPACE_USE
 #else
     #define C_CTEST_API
 #endif
