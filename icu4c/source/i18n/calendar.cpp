@@ -44,7 +44,7 @@
 #include "uresimp.h"
 
 #if !UCONFIG_NO_SERVICE
-static ICULocaleService* gService = NULL;
+static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
 #endif
 
 // INTERNAL - for cleanup

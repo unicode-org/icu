@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2004, International Business Machines Corporation
+ * Copyright (C) 2003-2006, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -51,8 +51,8 @@ static void debug_islamcal_msg(const char *pat, ...)
 // --- The cache --
 // cache of months
 static UMTX astroLock = 0;  // pod bay door lock
-static CalendarCache *gMonthCache = NULL;
-static CalendarAstronomer *gIslamicCalendarAstro = NULL;
+static U_NAMESPACE_QUALIFIER CalendarCache *gMonthCache = NULL;
+static U_NAMESPACE_QUALIFIER CalendarAstronomer *gIslamicCalendarAstro = NULL;
 
 U_CDECL_BEGIN
 static UBool calendar_islamic_cleanup(void) {

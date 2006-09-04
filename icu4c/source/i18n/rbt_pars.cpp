@@ -1574,6 +1574,8 @@ U_NAMESPACE_END
 
 U_CAPI int32_t
 utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorCode *status) {
+    U_NAMESPACE_USE
+
     //const UChar *sourceStart = source;
     const UChar *targetStart = target;
     const UChar *sourceLimit = source+sourceLen;
