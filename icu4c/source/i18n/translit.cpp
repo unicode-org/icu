@@ -90,7 +90,7 @@ static UMTX registryMutex = 0;
 /**
  * System transliterator registry; non-null when initialized.
  */
-static TransliteratorRegistry* registry = 0;
+static U_NAMESPACE_QUALIFIER TransliteratorRegistry* registry = 0;
 
 // Macro to check/initialize the registry. ONLY USE WITHIN
 // MUTEX. Avoids function call when registry is initialized.
@@ -1569,6 +1569,7 @@ U_NAMESPACE_END
  * user, because RBTs hold pointers to common data objects.
  */
 U_CFUNC UBool transliterator_cleanup(void) {
+    U_NAMESPACE_USE
     TransliteratorIDParser::cleanup();
     if (registry) {
         delete registry;

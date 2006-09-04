@@ -33,7 +33,7 @@
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 U_CDECL_BEGIN
-static CharsetRecognizer **fCSRecognizers = NULL;
+static U_NAMESPACE_QUALIFIER CharsetRecognizer **fCSRecognizers = NULL;
 
 static int32_t fCSRecognizers_size = 0;
 
@@ -56,6 +56,8 @@ static UBool U_CALLCONV csdet_cleanup(void)
 static int32_t U_CALLCONV
 charsetMatchComparator(const void *context, const void *left, const void *right)
 {
+    U_NAMESPACE_USE
+
     const CharsetMatch **csm_l = (const CharsetMatch **) left;
     const CharsetMatch **csm_r = (const CharsetMatch **) right;
 
@@ -367,6 +369,8 @@ static const UEnumeration gCSDetEnumeration = {
 U_CAPI  UEnumeration * U_EXPORT2
 ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
 {
+    U_NAMESPACE_USE
+
     if(U_FAILURE(*status)) {
         return 0;
     }
