@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -26,6 +26,7 @@
 #include "unicode/ures.h"
 #include "unicode/translit.h"
 
+#include "intltest.h"
 
 
 #define ASCII_SPACE 0x0020

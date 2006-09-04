@@ -44,6 +44,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+U_NAMESPACE_USE
+
 static char *progName;
 static UOption options[]={
     UOPTION_HELP_H,             /* 0 */

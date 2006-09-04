@@ -23,6 +23,8 @@
 
 #include <stdio.h>
 
+U_NAMESPACE_USE
+
 // TODO: Clean up and comment this code.
 
 //----------------------------------------------------------------------
