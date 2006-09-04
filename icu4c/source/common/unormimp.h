@@ -326,7 +326,6 @@ unorm_getFCDTrie(UErrorCode *pErrorCode);
 
 #ifdef XP_CPLUSPLUS
 
-U_NAMESPACE_BEGIN
 /**
  * Internal API, used by collation code.
  * Get the FCD value for a code unit, with
@@ -340,7 +339,7 @@ U_NAMESPACE_BEGIN
  *
  * @internal
  */
-inline uint16_t
+static inline uint16_t
 unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
     return
         fcdTrieIndex[
@@ -362,7 +361,7 @@ unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
  *
  * @internal
  */
-inline uint16_t
+static inline uint16_t
 unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UChar c2) {
     return
         fcdTrieIndex[
@@ -373,7 +372,6 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
         ];
 }
 
-U_NAMESPACE_END
 
 #endif
 
