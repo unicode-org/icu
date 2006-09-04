@@ -38,6 +38,8 @@
 
 #include "unicode/uwmsg.h"
 
+U_NAMESPACE_USE
+
 #if (defined(U_WINDOWS) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
