@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:   regexc.cpp
@@ -11,6 +11,8 @@
 
 #include "unicode/uregex.h"
 #include "unicode/unistr.h"
+
+U_NAMESPACE_USE
 
 //----------------------------------------------------------------------------------------
 //
@@ -33,7 +35,6 @@ uregex_openC( const char           *pattern,
     }
 
     UnicodeString patString(pattern);
-    URegularExpression *re = uregex_open(patString.getBuffer(), patString.length(), flags, pe, status);
-    return re;
+    return uregex_open(patString.getBuffer(), patString.length(), flags, pe, status);
 }
 #endif
