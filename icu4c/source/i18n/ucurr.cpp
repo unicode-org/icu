@@ -254,6 +254,7 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
             p = &((*p)->next);
         }
 
+        umtx_unlock(&gCRegLock);
         return found;
     }
 
