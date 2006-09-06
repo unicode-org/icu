@@ -3086,7 +3086,7 @@ public class CharsetMBCS extends CharsetICU {
                     sourceArrayIndex = source.position();
                     sourceIndex += length+(sourceArrayIndex-lastSource);
                     lastSource = sourceArrayIndex;
-        
+                    cr = crArray[0];
                     if(cr.isError()) {
                         /* not mappable or buffer overflow */
                         break;
@@ -3270,10 +3270,8 @@ public class CharsetMBCS extends CharsetICU {
         }
 
         /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
-        protected CoderResult cnvMBCSDoubleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets) 
-        {
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+        protected CoderResult cnvMBCSDoubleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+            CoderResult[] crArray = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
            
@@ -3359,7 +3357,7 @@ public class CharsetMBCS extends CharsetICU {
                             else {
                                 /* this is an unmatched trail code unit (2nd surrogate) */
                                 /* callback(illegal) */
-                                cr = CoderResult.malformedForLength(1);
+                                crArray[0] = CoderResult.malformedForLength(1);
                                 break;
                             }
                         }
@@ -3387,6 +3385,7 @@ public class CharsetMBCS extends CharsetICU {
             
                             //unassigned:
                             SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
+
                             doloop = unassignedDouble(source, target, x, crArray);
                             c = x.c;
                             sourceArrayIndex = x.sourceArrayIndex;
@@ -3424,7 +3423,7 @@ public class CharsetMBCS extends CharsetICU {
                                 errorBufferLength=1;
             
                                 /* target overflow */
-                                cr = CoderResult.OVERFLOW;
+                                crArray[0] = CoderResult.OVERFLOW;
                                 c=0;
                                 break;
                             }
@@ -3437,7 +3436,7 @@ public class CharsetMBCS extends CharsetICU {
                     } 
                     else {
                         /* target is full */
-                        cr = CoderResult.OVERFLOW;
+                        crArray[0] = CoderResult.OVERFLOW;
                         break;
                     }
                 }
@@ -3449,7 +3448,7 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return cr;
+            return crArray[0];
         }
         
         protected final class SideEffectsSingleBMP {
@@ -3635,8 +3634,8 @@ public class CharsetMBCS extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderMBCS(this);
     }
-//#ifdef VERSION_1.5   
-//  /**
+//#ifdef VERSION_1.5  
+//  /** 
 //   * Implements compareTo method of Comparable interface
 //   * @see java.lang.Comparable#compareTo(java.lang.Object)
 //   */
