@@ -158,12 +158,37 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
         // otherwise, dump the cache and use the inherited previous() method to move
         // backward.  This may fill up the cache with new break positions, in which
-        // case we have to mark our position in the cache
+        // case we have to mark our position in the cache. If it doesn't, use next()
+        // to move forward until we hit or pass the current position. This *will* fill
+        // the cache.
         else {
             cachedBreakPositions = null;
+            int offset = current();
             int result = super.previous();
-            if (cachedBreakPositions != null)
+            
+            if (cachedBreakPositions != null) {
                 positionInCache = cachedBreakPositions.length - 2;
+                return result;
+            }
+            
+            while (result < offset) {
+                int nextResult = next();
+                
+                if (nextResult >= offset) {
+                    break;
+                }
+                
+                result = nextResult;
+            }
+            
+            if (cachedBreakPositions != null) {
+                positionInCache = cachedBreakPositions.length - 2;
+            }
+            
+            if (result != BreakIterator.DONE) {
+                text.setIndex(result);
+            }
+            
             return result;
         }
     }
