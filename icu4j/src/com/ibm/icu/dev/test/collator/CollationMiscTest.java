@@ -2200,5 +2200,12 @@ public class CollationMiscTest extends TestFmwk {
         }
         logln(" ");
     }
-    
+
+    public void
+    TestJ5367()
+    {
+        String[] test = { "a", "y" };
+        String rules = "&Ny << Y &[first secondary ignorable] <<< a";
+        genericRulesStarter(rules, test);        
+    }
 }
