@@ -286,13 +286,14 @@ public class CharsetUTF16LE extends CharsetICU {
             int sourceIndex = 0;
             char trail = 0;
             int length = source.remaining();
+            int sourceArrayIndex = source.position();
             
             try{
                 /* c!=0 indicates in several places outside the main loops that a surrogate was found */
             
-                if((c=(char)fromUChar32)!=0 && UTF16.isTrailSurrogate(trail=source.get(sourceIndex)) && target.remaining()>=4) {
+                if((c=(char)fromUChar32)!=0 && UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex)) && target.remaining()>=4) {
                     /* the last buffer ended with a lead surrogate, output the surrogate pair */
-                    ++sourceIndex;
+                    ++sourceArrayIndex;
                     --length;
                     target.put((byte)c);
                     target.put((byte)(c>>>8));
@@ -308,12 +309,12 @@ public class CharsetUTF16LE extends CharsetICU {
                     fromUChar32=c=0;
                 }
                 byte overflow[/*4*/] = new byte[4];
-                int sourceArrayIndex = source.position();
+                
                 
                 if(c==0) {
                     /* copy an even number of bytes for complete UChars */
                     int count=2*length;
-                    int targetCapacity = target.limit();
+                    int targetCapacity = target.remaining();
                     if(count>targetCapacity) {
                         count=targetCapacity&~1;
                     }           
@@ -416,7 +417,6 @@ public class CharsetUTF16LE extends CharsetICU {
                                 c=0;
                             } else {
                                 /* unmatched lead surrogate */
-                                //pErrorCode[0]=ErrorCode.U_ILLEGAL_CHAR_FOUND;
                                 cr = CoderResult.malformedForLength(sourceArrayIndex);
                             }
                         } else {
@@ -424,7 +424,7 @@ public class CharsetUTF16LE extends CharsetICU {
                         }
                     } else {
                         /* unmatched trail surrogate */
-                        //pErrorCode[0]=ErrorCode.U_ILLEGAL_CHAR_FOUND;
+                        cr = CoderResult.malformedForLength(sourceArrayIndex);
                     }
                     fromUChar32=c;
                 }
