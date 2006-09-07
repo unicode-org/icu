@@ -112,12 +112,12 @@ public class CharsetASCII extends CharsetICU {
             
             int sourceArrayIndex=source.position(), count=0;
             int sourceIndex = 0;
-            int c=0;
+            int ch=0;
             int oldTarget = target.position();
             boolean doloop = true;
             try{
                 if (fromUChar32 != 0 && target.hasRemaining()){
-                    c = fromUChar32;
+                    ch = fromUChar32;
                     fromUChar32 = 0;
                            
                     if (sourceArrayIndex < source.limit()) {
@@ -125,33 +125,63 @@ public class CharsetASCII extends CharsetICU {
                         char trail = source.get(sourceArrayIndex);
                         if(UTF16.isTrailSurrogate(trail)) {
                             ++sourceArrayIndex;
-                            c = UCharacter.getCodePoint((char)c, trail);
+                            ch = UCharacter.getCodePoint((char)ch, trail);
                             /* convert this supplementary code point */
                             /* callback(unassigned) */
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            fromUChar32 = (int)c;
+                            fromUChar32 = (int)ch;
                             cr = CoderResult.malformedForLength(sourceArrayIndex);
                             doloop = false;
                         }
                     } else {
                         /* no more input */
-                        fromUChar32 = (int)c;
+                        fromUChar32 = (int)ch;
                         doloop = false;
                     }                            
                 }
                 if(doloop){
                     /* conversion loop */
-                    c=0;
-                    while(sourceArrayIndex<source.limit()) {
-                        if((c=source.get(sourceArrayIndex))<=0x7f){
-                            target.put((byte)c);
-                            sourceArrayIndex++;
-                        }else{
-                            count = UCharacter.charCount(c);
-                            cr = UCharacter.isSupplementary(c) ? CoderResult.malformedForLength(count) : CoderResult.unmappableForLength(count);
-                            break;
+                    ch=0;
+                    int ch2=0;
+                    while(sourceArrayIndex<source.limit()){
+                        ch=source.get(sourceArrayIndex++);
+                        if(ch<=0xff) {
+                            target.put((byte)ch);
+                        }else {
+                            if (UTF16.isSurrogate((char)ch)) {
+                                if (UTF16.isLeadSurrogate((char)ch)) {
+                                    //lowsurogate:
+                                    if (sourceArrayIndex < source.limit()) {
+                                        ch2 = source.get(sourceArrayIndex);
+                                        if (UTF16.isTrailSurrogate((char)ch2)) {
+                                            ch = ((ch - UConverterSharedData.SURROGATE_HIGH_START) << UConverterSharedData.HALF_SHIFT) + ch2 + UConverterSharedData.SURROGATE_LOW_BASE;
+                                            sourceArrayIndex++;
+                                        }
+                                        else {
+                                            /* this is an unmatched trail code unit (2nd surrogate) */
+                                            /* callback(illegal) */
+                                            fromUChar32 = ch;
+                                            cr = CoderResult.OVERFLOW;
+                                            break;
+                                        }
+                                    }
+                                    else {
+                                        /* ran out of source */
+                                        fromUChar32 = ch;
+                                        if (flush) {
+                                            /* this is an unmatched trail code unit (2nd surrogate) */
+                                            /* callback(illegal) */
+                                            cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            fromUChar32 = ch;
+                            cr = CoderResult.malformedForLength(sourceArrayIndex);
+                            break;                            
                         }
                     }
                 }
