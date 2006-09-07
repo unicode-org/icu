@@ -283,11 +283,12 @@ public class CharsetUTF16 extends CharsetICU {
             int sourceIndex = 0;
             char trail = 0;
             int length = source.remaining();
+            int sourceArrayIndex = source.position();
             
             try{
                 /* c!=0 indicates in several places outside the main loops that a surrogate was found */
             
-                if((c=(char)fromUChar32)!=0 && UTF16.isTrailSurrogate(trail=source.get(sourceIndex)) && target.remaining()>=4) {
+                if((c=(char)fromUChar32)!=0 && UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex)) && target.remaining()>=4) {
                     /* the last buffer ended with a lead surrogate, output the surrogate pair */
                     ++sourceIndex;
                     --length;
@@ -305,7 +306,6 @@ public class CharsetUTF16 extends CharsetICU {
                     fromUChar32=c=0;
                 }
                 byte overflow[/*4*/] = new byte[4];
-                int sourceArrayIndex = source.position();
                 
                 if(c==0) {
                     /* copy an even number of bytes for complete UChars */
@@ -421,7 +421,7 @@ public class CharsetUTF16 extends CharsetICU {
                         }
                     } else {
                         /* unmatched trail surrogate */
-                        //pErrorCode[0]=ErrorCode.U_ILLEGAL_CHAR_FOUND;
+                        cr = CoderResult.malformedForLength(sourceArrayIndex);
                     }
                     fromUChar32=c;
                 }
