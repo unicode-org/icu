@@ -1172,6 +1172,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
     very next item to have one. They may be contractions, if they are found
     earlier in the list.
     */
+    *expandNext = 0;
     if(expand != NULL) {
         /* check to see if there is an expansion */
         if(src->parsedToken.charsLen > 1) {
@@ -1179,8 +1180,6 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
             resetCharsOffset = (uint32_t)(expand - src->source);
             sourceToken->source = ((resetCharsOffset - src->parsedToken.charsOffset ) << 24) | src->parsedToken.charsOffset;
             *expandNext = ((src->parsedToken.charsLen + src->parsedToken.charsOffset - resetCharsOffset)<<24) | (resetCharsOffset);
-        } else {
-            *expandNext = 0;
         }
     }
 
