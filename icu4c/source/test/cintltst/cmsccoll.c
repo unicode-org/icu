@@ -4750,6 +4750,13 @@ TestJ5232(void)
     genericLocaleStarter("th", test, sizeof(test)/sizeof(test[0]));
 }
 
+static void
+TestJ5367(void)
+{
+    const static char *test[] = { "a", "y" };
+    const char* rules = "&Ny << Y &[first secondary ignorable] <<< a";
+    genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
+}
 
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
@@ -4820,6 +4827,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ4960);
     TEST(TestJ5223);
     TEST(TestJ5232);
+    TEST(TestJ5367);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
