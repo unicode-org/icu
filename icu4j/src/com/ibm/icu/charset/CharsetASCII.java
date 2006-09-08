@@ -21,6 +21,7 @@ import com.ibm.icu.text.UTF16;
 
 class CharsetASCII extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[]{(byte)0x1a};
+    
     public CharsetASCII(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 1;

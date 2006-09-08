@@ -12,7 +12,6 @@ import java.io.*;
 
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.impl.ICUBinary.Authenticate;
 
 /* Format of cnvalias.icu -----------------------------------------------------
  *

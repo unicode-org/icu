@@ -19,7 +19,9 @@ import java.nio.charset.CoderResult;
 import com.ibm.icu.text.UTF16;
 
 class CharsetUTF16 extends CharsetICU {
+    
     protected byte[] fromUSubstitution = new byte[]{(byte)0xff, (byte)0xfd};
+   
     public CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 4;
