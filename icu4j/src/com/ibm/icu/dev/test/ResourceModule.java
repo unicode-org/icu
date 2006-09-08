@@ -381,7 +381,13 @@ class ResourceModule implements TestDataModule {
                 throw new DataModuleFormatError("The count of Header and Data is mismatch.");
             theMap = new HashMap();
             for (int i = 0; i < header.length; i++) {
-                theMap.put(header[i], theData.get(i));
+                if(theData.getType()==ICUResourceBundle.ARRAY){
+                    theMap.put(header[i], theData.get(i));
+                }else if(theData.getType()==ICUResourceBundle.STRING){
+                    theMap.put(header[i], theData.getString());
+                }else{
+                    throw new DataModuleFormatError("Did not get the expected data!");                   
+                }
             }
             
         }
