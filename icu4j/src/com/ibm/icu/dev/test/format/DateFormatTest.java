@@ -437,6 +437,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestTimeZoneDisplayName() {
+        if(!isDateAtLeast(2006, 9, 15)){
+            return;
+        }
         Calendar cal = new GregorianCalendar();
         long julyDate = new Date(2004, 6, 15).getTime();
         long januaryDate = new Date(2004, 0, 15).getTime();
