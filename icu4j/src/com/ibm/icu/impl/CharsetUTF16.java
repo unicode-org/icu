@@ -290,7 +290,7 @@ public class CharsetUTF16 extends CharsetICU {
             
                 if((c=(char)fromUChar32)!=0 && UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex)) && target.remaining()>=4) {
                     /* the last buffer ended with a lead surrogate, output the surrogate pair */
-                    ++sourceIndex;
+                    ++sourceArrayIndex;
                     --length;
                     target.put((byte)(c>>>8));
                     target.put((byte)c);
