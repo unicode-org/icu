@@ -3538,31 +3538,37 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @author medavis
      */
     abstract public static class XSymbolTable implements SymbolTable {
-	/*
-	 * @internal
-	 * @deprecated This API is ICU internal only.
-	 */
+        /**
+         * Default constructor
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public XSymbolTable(){}
+        /**
+    	 * @internal
+    	 * @deprecated This API is ICU internal only.
+    	 */
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
-	/*
-	 * @internal
-	 * @deprecated This API is ICU internal only.
-	 */
+    	/**
+    	 * @internal
+    	 * @deprecated This API is ICU internal only.
+    	 */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
         }
-	/*
-	 * @internal
-	 * @deprecated This API is ICU internal only.
-	 */
+    	/**
+    	 * @internal
+    	 * @deprecated This API is ICU internal only.
+    	 */
         public char[] lookup(String s) {
             return null;
         }
-	/*
-	 * @internal
-	 * @deprecated This API is ICU internal only.
-	 */
+    	/**
+    	 * @internal
+    	 * @deprecated This API is ICU internal only.
+    	 */
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
         }

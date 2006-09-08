@@ -9,13 +9,11 @@ package com.ibm.icu.text;
 
 import java.util.Vector;
 import java.util.Stack;
-import java.util.Hashtable;
 import com.ibm.icu.impl.Assert;
 import java.text.CharacterIterator;
 import java.io.InputStream;
 import java.io.IOException;
 
-import java.io.*;
 
 /**
  * A subclass of RuleBasedBreakIterator that adds the ability to use a dictionary
