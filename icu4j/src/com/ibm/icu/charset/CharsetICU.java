@@ -66,7 +66,7 @@ public abstract class CharsetICU extends Charset{
     /**
      * 
      * @param icuCanonicalName
-     * @param canonName
+     * @param canonicalName
      * @param aliases
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -85,7 +85,8 @@ public abstract class CharsetICU extends Charset{
      * Implements the abstract method of super class.
      * @param cs charset to test
      * @return true if the given charset is a subset of this charset
-     * @stable ICU 3.6
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean contains(Charset cs){
         if (null == cs) {
@@ -171,12 +172,21 @@ public abstract class CharsetICU extends Charset{
        throw new UnsupportedCharsetException( icuCanonicalName+": "+"Could not load " + className);    
     }
     
-    /** Always use fallbacks from codepage to Unicode */
+    /**
+     * Always use fallbacks from codepage to Unicode?
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
     protected final boolean isToUUseFallback() {
         return true;
     }    
     
-    /** Use fallbacks from Unicode to codepage when useFallback or for private-use code points */
+    /**
+     * Use fallbacks from Unicode to codepage when useFallback or for private-use code points
+     * @param c A codepoint
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
     protected final boolean isFromUUseFallback(int c) {
         return (useFallback) || isPrivateUse(c);
     }

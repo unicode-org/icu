@@ -92,6 +92,15 @@ import java.nio.charset.CoderResult;
      * @provisional This API might change or be removed in a future release.
      */
     public interface Decoder {
+        /**
+         * This function is called when the bytes in the source cannot be handled,
+         * and this function is meant to handle or fix the error if possible.
+         * 
+         * @return Result of decoding action. This returned object is set to an error
+         *  if this function could not handle the conversion.
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public CoderResult call(CharsetDecoderICU decoder, Object context, 
                                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                                 char[] buffer, int length, CoderResult cr);
@@ -102,6 +111,14 @@ import java.nio.charset.CoderResult;
      * @provisional This API might change or be removed in a future release.
      */
     public interface Encoder {
+        /**
+         * This function is called when the Unicode characters in the source cannot be handled,
+         * and this function is meant to handle or fix the error if possible.
+         * @return Result of decoding action. This returned object is set to an error
+         *  if this function could not handle the conversion.
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public CoderResult call(CharsetEncoderICU encoder, Object context, 
                                 CharBuffer source, ByteBuffer target, IntBuffer offsets, 
                                 char[] buffer, int length, int cp, CoderResult cr);
