@@ -29,7 +29,7 @@
 #include "unicode/ustring.h"
 #include "ucln_cmn.h"
 #include "cstring.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "servloc.h"
 #include "locbased.h"
 #include "uresimp.h"
@@ -321,11 +321,12 @@ getService(void)
 
 // -------------------------------------
 
-static UBool
+static inline UBool
 hasService(void) 
 {
-    Mutex mutex;
-    return gService != NULL;
+    UBool retVal;
+    UMTX_CHECK(NULL, gService != NULL, retVal);
+    return retVal;
 }
 
 // -------------------------------------
