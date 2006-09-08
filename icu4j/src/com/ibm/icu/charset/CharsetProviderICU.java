@@ -39,8 +39,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Implements the abstract method of super class.
      * @param charsetName charset name
      * @return charset objet for the given charset name, null if unsupported
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public final Charset charsetForName(String charsetName){
         try{
@@ -66,7 +65,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal ICU 3.4
      * @deprecated This API is for internal ICU use only
      */
-    public static final String getICUCanonicalName(String enc)
+     static final String getICUCanonicalName(String enc)
                                 throws UnsupportedCharsetException{
         String canonicalName = null;
         String ret = null;
@@ -212,32 +211,33 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Returns an iterator for the available charsets.
      * Implements the abstract method of super class.
      * @return Iterator the charset name iterator
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public final Iterator charsets(){
         HashMap map = new HashMap();
         putCharsets(map);
         return map.keySet().iterator();
     }
+    
     /**
      * Gets the canonical names of available converters 
      * @return Object[] names as an object array
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public static final Object[] getAvailableNames(){
+     static final Object[] getAvailableNames(){
         HashMap map = new HashMap();
         putCharsets(map);
         return map.values().toArray();
     }
+     
     /**
      * Return all names available
      * @return String[] an arrya of all available names
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public static final String[] getAllNames(){
+     static final String[] getAllNames(){
         int num = UConverterAlias.countAvailable();
         String[] names = new String[num];
         for(int i=0;i<num;i++) {

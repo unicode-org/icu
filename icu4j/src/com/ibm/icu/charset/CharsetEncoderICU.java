@@ -28,26 +28,26 @@ import com.ibm.icu.text.UTF16;
  */
 public abstract class CharsetEncoderICU extends CharsetEncoder {
 
-    protected byte[] errorBuffer = new byte[30];
-    protected int errorBufferLength = 0;
+    byte[] errorBuffer = new byte[30];
+    int errorBufferLength = 0;
     
     /** these are for encodeLoopICU */
-    protected int fromUnicodeStatus;
-    protected int fromUChar32;
-    protected boolean useSubChar1;
+    int fromUnicodeStatus;
+    int fromUChar32;
+    boolean useSubChar1;
     
     /* store previous UChars/chars to continue partial matches */
-    protected int preFromUFirstCP; /* >=0: partial match */
-    protected char[] preFromUArray;
-    protected int preFromUBegin;
-    protected int preFromULength;    /* negative: replay */
+    int preFromUFirstCP; /* >=0: partial match */
+    char[] preFromUArray;
+    int preFromUBegin;
+    int preFromULength;    /* negative: replay */
     
-    protected char[] invalidUCharBuffer = new char[2];    
-    protected int    invalidUCharLength;
-    protected Object fromUContext;
+    char[] invalidUCharBuffer = new char[2];    
+    int    invalidUCharLength;
+    Object fromUContext;
     private CharsetCallback.Encoder onUnmappableInput = CharsetCallback.FROM_U_CALLBACK_STOP;
     private CharsetCallback.Encoder onMalformedInput = CharsetCallback.FROM_U_CALLBACK_STOP;
-    protected CharsetCallback.Encoder fromCharErrorBehaviour = new CharsetCallback.Encoder(){ 
+    CharsetCallback.Encoder fromCharErrorBehaviour = new CharsetCallback.Encoder(){ 
                                                                         public CoderResult call(CharsetEncoderICU encoder, Object context, 
                                                                                                 CharBuffer source, ByteBuffer target, IntBuffer offsets, 
                                                                                                 char[] buffer, int length, int cp, CoderResult cr) {
@@ -74,7 +74,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected CharsetEncoderICU(CharsetICU cs, byte[] replacement) {
+    CharsetEncoderICU(CharsetICU cs, byte[] replacement) {
         super(cs, (cs.minBytesPerChar+cs.maxBytesPerChar)/2, cs.maxBytesPerChar, replacement);
     }
 
@@ -82,8 +82,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * Sets the action to be taken if an illegal sequence is encountered
 	 * @param newAction action to be taken
 	 * @exception IllegalArgumentException
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
 	 */
 	protected void implOnMalformedInput(CodingErrorAction newAction) {
 	    onMalformedInput = getCallback(newAction);
@@ -93,10 +92,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * Sets the action to be taken if an illegal sequence is encountered
 	 * @param newAction action to be taken
 	 * @exception IllegalArgumentException
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
 	 */
-	protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
+    protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
 	}
     
@@ -117,19 +115,17 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @param out action to be taken
 	 * @return result of flushing action and completes the decoding all input. 
 	 *	   Returns CoderResult.UNDERFLOW if the action succeeds.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
 	 */
-	protected CoderResult implFlush(ByteBuffer out) {
+    protected CoderResult implFlush(ByteBuffer out) {
         return CoderResult.UNDERFLOW;
 	}
 
 	/**
 	 * Resets the from Unicode mode of converter
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
 	 */
-	protected void implReset() {
+    protected void implReset() {
 	    errorBufferLength=0;
         fromUChar32=0;
         fromUnicodeStatus = 0;
@@ -146,10 +142,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @param out buffer to populate with decoded result
 	 * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
 	 *	   action succeeds or more input is needed for completing the decoding action.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
 	 */
-	protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
+    protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if(!in.hasRemaining()){
             return CoderResult.UNDERFLOW;
         }
@@ -168,7 +163,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected abstract CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets);
+    abstract CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets);
     
     /**
      * Implements ICU semantics for encoding the buffer
@@ -181,7 +176,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected final CoderResult encode(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
+    final CoderResult encode(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
 
     
         /* check parameters */    
@@ -201,11 +196,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
          * consumed or the target filled (unless an error occurs).
          * An adjustment would be targetLimit=t+0x7fffffff; for example.
          */
-        //Ram: not required
-        //if( ((long)(sourceLimit-sArrayIndex)>(long)0x3fffffff && sourceLimit>sArrayIndex) || ((long)(targetLimit-tArrayIndex)>(long)0x7fffffff && targetLimit>tArrayIndex)) {
-        //    err[0]=ErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
-        //    return;
-        //}
         
         /* flush the target overflow buffer */
         if(errorBufferLength>0) {
@@ -256,7 +246,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     }
     /* maximum number of indexed UChars */
-    public static final int EXT_MAX_UCHARS = 19;
+    private static final int EXT_MAX_UCHARS = 19;
 
     /**
      * Implementation note for m:n conversions
@@ -281,7 +271,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected final CoderResult fromUnicodeWithCallback(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
+    final CoderResult fromUnicodeWithCallback(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
         int sBufferIndex;
         int sourceIndex;
         int errorInputLength;
@@ -562,8 +552,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }
 	/**
      * Overrides super class method
-     * @draft ICU 3.6 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6 
 	 */
 	public boolean isLegalReplacement(byte[] repl){
 	    return true;
@@ -582,7 +571,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6 
      * @provisional This API might change or be removed in a future release.
      */
-    protected static final CoderResult fromUWriteBytes(CharsetEncoderICU cnv, 
+    static final CoderResult fromUWriteBytes(CharsetEncoderICU cnv, 
                                          byte[] bytesArray, int bytesBegin, int bytesLength, 
                                          ByteBuffer out, IntBuffer offsets, int sourceIndex){
 
@@ -665,7 +654,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6 
      * @provisional This API might change or be removed in a future release.
      */
-    protected CoderResult cbFromUWriteSub (CharsetEncoderICU encoder, 
+    CoderResult cbFromUWriteSub (CharsetEncoderICU encoder, 
                                            CharBuffer source, ByteBuffer target, 
                                            IntBuffer offsets){
         CharsetICU cs = (CharsetICU) encoder.charset();

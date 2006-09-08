@@ -85,8 +85,7 @@ public abstract class CharsetICU extends Charset{
      * Implements the abstract method of super class.
      * @param cs charset to test
      * @return true if the given charset is a subset of this charset
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public boolean contains(Charset cs){
         if (null == cs) {
@@ -196,7 +195,7 @@ public abstract class CharsetICU extends Charset{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public static final String getDefaultCharsetName(){
+     static final String getDefaultCharsetName(){
         String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
         return defaultEncoding;
     }
