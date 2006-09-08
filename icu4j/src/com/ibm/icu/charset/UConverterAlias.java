@@ -17,19 +17,19 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 
 final class UConverterAlias {
-    private static final int UNNORMALIZED = 0;
+    static final int UNNORMALIZED = 0;
 
-    private static final int STD_NORMALIZED = 1;
+    static final int STD_NORMALIZED = 1;
 
-    private static final int AMBIGUOUS_ALIAS_MAP_BIT = 0x8000;
+    static final int AMBIGUOUS_ALIAS_MAP_BIT = 0x8000;
     
-    private static final int CONTAINS_OPTION_BIT = 0x4000;
+    static final int CONTAINS_OPTION_BIT = 0x4000;
 
-    private static final int CONVERTER_INDEX_MASK = 0xFFF;
+    static final int CONVERTER_INDEX_MASK = 0xFFF;
 
-    private static final int NUM_RESERVED_TAGS = 2;
+    static final int NUM_RESERVED_TAGS = 2;
 
-    private static final int NUM_HIDDEN_TAGS = 1;
+    static final int NUM_HIDDEN_TAGS = 1;
 
     static int[] gConverterList = null;
 
@@ -64,7 +64,7 @@ final class UConverterAlias {
         return i - sBegin - 1;
     }
 
-    private static final int tocLengthIndex = 0;
+    /*private*/ static final int tocLengthIndex = 0;
 
     private static final int converterListIndex = 1;
 
@@ -125,7 +125,7 @@ final class UConverterAlias {
             ByteBuffer data = null;
             int[] tableArray = null;
             int tableStart;
-            byte[] reservedBytes = null;
+            //byte[] reservedBytes = null;
 
             InputStream i = ICUData.getRequiredStream(CNVALIAS_DATA_FILE_NAME);
             BufferedInputStream b = new BufferedInputStream(i, CNVALIAS_DATA_BUFFER_SIZE);
@@ -265,7 +265,7 @@ final class UConverterAlias {
     private static final byte IGNORE = 0;
     private static final byte ZERO = 1;
     private static final byte NONZERO = 2;
-    private static final byte MINLETTER = 3; /* any values from here on are lowercase letter mappings */
+    static final byte MINLETTER = 3; /* any values from here on are lowercase letter mappings */
     // }
     
     /* character types for ASCII 00..7F */

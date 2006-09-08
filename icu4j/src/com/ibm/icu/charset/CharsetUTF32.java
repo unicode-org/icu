@@ -21,7 +21,9 @@ import com.ibm.icu.text.UTF16;
  * @author Niti Hantaweepant
  */
 class CharsetUTF32 extends CharsetICU {
+    
     protected byte[] fromUSubstitution = new byte[]{(byte)0, (byte)0, (byte)0xff, (byte)0xfd};
+    
     public CharsetUTF32(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 4;
