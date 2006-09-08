@@ -111,8 +111,12 @@ class CharsetMBCS extends CharsetICU {
             version = new byte[MAX_VERSION_LENGTH];
         }
     }
-
-    CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
+    /**
+     * Tags for pacifying the check tags tool
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
         super(icuCanonicalName, javaCanonicalName, aliases);
         
         // now try to load the data   

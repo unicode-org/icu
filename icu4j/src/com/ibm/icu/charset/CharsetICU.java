@@ -97,46 +97,46 @@ public abstract class CharsetICU extends Charset{
     }
     private static final HashMap algorithmicCharsets = new HashMap();
     static{
-        /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.impl.CharsetBOCU1" );
-        algorithmicCharsets.put("CESU-8",                "com.ibm.icu.impl.CharsetCESU8" );
-        algorithmicCharsets.put("HZ",                    "com.ibm.icu.impl.CharsetHZ" );
-        algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.impl.CharsetIMAP" );
-        algorithmicCharsets.put("ISCII",                 "com.ibm.icu.impl.CharsetISCII" );
-        algorithmicCharsets.put("iso2022",               "com.ibm.icu.impl.CharsetISO2022" );*/
-        /*algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.impl.CharsetLMBCS1" );
-        algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.impl.CharsetLMBCS11" );
-        algorithmicCharsets.put("lmbcs16",               "com.ibm.icu.impl.CharsetLMBCS16" );
-        algorithmicCharsets.put("lmbcs17",               "com.ibm.icu.impl.CharsetLMBCS17" );
-        algorithmicCharsets.put("lmbcs18",               "com.ibm.icu.impl.CharsetLMBCS18" );
-        algorithmicCharsets.put("lmbcs19",               "com.ibm.icu.impl.CharsetLMBCS19" );
-        algorithmicCharsets.put("lmbcs2",                "com.ibm.icu.impl.CharsetLMBCS2" );
-        algorithmicCharsets.put("lmbcs3",                "com.ibm.icu.impl.CharsetLMBCS3" );
-        algorithmicCharsets.put("lmbcs4",                "com.ibm.icu.impl.CharsetLMBCS4" );
-        algorithmicCharsets.put("lmbcs5",                "com.ibm.icu.impl.CharsetLMBCS5" );
-        algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.impl.CharsetLMBCS6" );
-        algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.impl.CharsetLMBCS8" )
-        algorithmicCharsets.put("scsu",                  "com.ibm.icu.impl.CharsetSCSU" ); */
-        algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.impl.CharsetASCII" );
-        algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.impl.Charset88591" );
-        algorithmicCharsets.put("UTF-16",                "com.ibm.icu.impl.CharsetUTF16" );
-        algorithmicCharsets.put("UTF-16BE",              "com.ibm.icu.impl.CharsetUTF16" );
-        algorithmicCharsets.put("UTF-16LE",              "com.ibm.icu.impl.CharsetUTF16LE" );
-        algorithmicCharsets.put("UTF16_OppositeEndian",  "com.ibm.icu.impl.CharsetUTF16LE" );
-        algorithmicCharsets.put("UTF16_PlatformEndian",  "com.ibm.icu.impl.CharsetUTF16" );
-        algorithmicCharsets.put("UTF-32",                "com.ibm.icu.impl.CharsetUTF32" );
-        algorithmicCharsets.put("UTF-32BE",              "com.ibm.icu.impl.CharsetUTF32" );
-        algorithmicCharsets.put("UTF-32LE",              "com.ibm.icu.impl.CharsetUTF32LE" );
-        algorithmicCharsets.put("UTF32_PlatformEndian",  "com.ibm.icu.impl.CharsetUTF32LE" );
-        algorithmicCharsets.put("UTF32_OppositeEndian",  "com.ibm.icu.impl.CharsetUTF32" );
-        algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.impl.CharsetUTF7" );
-        algorithmicCharsets.put("UTF-8",                 "com.ibm.icu.impl.CharsetUTF8" );
+        /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
+        algorithmicCharsets.put("CESU-8",                "com.ibm.icu.charset.CharsetCESU8" );
+        algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
+        algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.charset.CharsetIMAP" );
+        algorithmicCharsets.put("ISCII",                 "com.ibm.icu.charset.CharsetISCII" );
+        algorithmicCharsets.put("iso2022",               "com.ibm.icu.charset.CharsetISO2022" );*/
+        /*algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
+        algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.charset.CharsetLMBCS11" );
+        algorithmicCharsets.put("lmbcs16",               "com.ibm.icu.charset.CharsetLMBCS16" );
+        algorithmicCharsets.put("lmbcs17",               "com.ibm.icu.charset.CharsetLMBCS17" );
+        algorithmicCharsets.put("lmbcs18",               "com.ibm.icu.charset.CharsetLMBCS18" );
+        algorithmicCharsets.put("lmbcs19",               "com.ibm.icu.charset.CharsetLMBCS19" );
+        algorithmicCharsets.put("lmbcs2",                "com.ibm.icu.charset.CharsetLMBCS2" );
+        algorithmicCharsets.put("lmbcs3",                "com.ibm.icu.charset.CharsetLMBCS3" );
+        algorithmicCharsets.put("lmbcs4",                "com.ibm.icu.charset.CharsetLMBCS4" );
+        algorithmicCharsets.put("lmbcs5",                "com.ibm.icu.charset.CharsetLMBCS5" );
+        algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.charset.CharsetLMBCS6" );
+        algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.charset.CharsetLMBCS8" )
+        algorithmicCharsets.put("scsu",                  "com.ibm.icu.charset.CharsetSCSU" ); */
+        algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );
+        algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.charset.Charset88591" );
+        algorithmicCharsets.put("UTF-16",                "com.ibm.icu.charset.CharsetUTF16" );
+        algorithmicCharsets.put("UTF-16BE",              "com.ibm.icu.charset.CharsetUTF16" );
+        algorithmicCharsets.put("UTF-16LE",              "com.ibm.icu.charset.CharsetUTF16LE" );
+        algorithmicCharsets.put("UTF16_OppositeEndian",  "com.ibm.icu.charset.CharsetUTF16LE" );
+        algorithmicCharsets.put("UTF16_PlatformEndian",  "com.ibm.icu.charset.CharsetUTF16" );
+        algorithmicCharsets.put("UTF-32",                "com.ibm.icu.charset.CharsetUTF32" );
+        algorithmicCharsets.put("UTF-32BE",              "com.ibm.icu.charset.CharsetUTF32" );
+        algorithmicCharsets.put("UTF-32LE",              "com.ibm.icu.charset.CharsetUTF32LE" );
+        algorithmicCharsets.put("UTF32_PlatformEndian",  "com.ibm.icu.charset.CharsetUTF32LE" );
+        algorithmicCharsets.put("UTF32_OppositeEndian",  "com.ibm.icu.charset.CharsetUTF32" );
+        algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.charset.CharsetUTF7" );
+        algorithmicCharsets.put("UTF-8",                 "com.ibm.icu.charset.CharsetUTF8" );
     }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
        String className = (String) algorithmicCharsets.get(icuCanonicalName);
        if(className==null){
            //all the cnv files are loaded as MBCS
-           className = "com.ibm.icu.impl.CharsetMBCS";
+           className = "com.ibm.icu.charset.CharsetMBCS";
        }
        try{
            CharsetICU conv = null;
