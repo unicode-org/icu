@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/08/23 21:28:10 $
- * $Revision: 1.2 $
+ * $Date: 2006/09/08 23:51:48 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -50,7 +50,8 @@ import com.ibm.icu.util.UResourceBundle;
  * since normally this class is pre-built with data from a particular locale. However, generators can be built directly from other data as well.
  * <p><i>Issue: may be useful to also have a function that returns the list of fields in a pattern, in order, since we have that internally.
  * That would be useful for getting the UI order of field elements.</i>
- *
+ * @draft ICU 3.6
+ * @provisional This API might change or be removed in a future release.
  */
 public class DateTimePatternGenerator implements Freezable, Cloneable {
     // debugging flags
@@ -60,6 +61,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Create empty generator, to be constructed with add(...) etc.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     *      
      */
     public DateTimePatternGenerator() {         
     }
@@ -67,6 +71,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     /**
      * Construct a flexible generator according to data for a given locale.
      * @param uLocale
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static DateTimePatternGenerator getInstance(ULocale uLocale) {
         DateTimePatternGenerator result = new DateTimePatternGenerator();
@@ -591,7 +597,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     public String getAppendItemNames(int field) {
         return appendItemNames[field];
     }
-    
+
     public static boolean isSingleField(String skeleton) {
         char first = skeleton.charAt(0);
         for (int i = 1; i < skeleton.length(); ++i) {

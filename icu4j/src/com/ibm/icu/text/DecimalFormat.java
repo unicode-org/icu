@@ -3302,8 +3302,12 @@ public class DecimalFormat extends NumberFormat {
 		attributes.add(pos);
 	}
 //#ifndef FOUNDATION
-	// [Spark/CDL] format the object to an attributed string,
-	// and return the corresponding iterator
+    /**
+     * Format the object to an attributed string, and return the corresponding iterator
+     * Overrides superclass method.
+     * @stable ICU 3.6
+     */
+	// [Spark/CDL] 
 	public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
 		if (!(obj instanceof Number))
 			throw new IllegalArgumentException();
