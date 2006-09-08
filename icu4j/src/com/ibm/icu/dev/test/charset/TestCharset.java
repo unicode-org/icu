@@ -73,7 +73,7 @@ public class TestCharset extends TestFmwk {
         Charset icuChar = icu.charsetForName("UTF-16");
         CharsetEncoder encoder = icuChar.newEncoder();
         CharsetDecoder decoder = icuChar.newDecoder();
-        for(int i=0x000; i<0x10FFFF; i+=0xFF){
+        for(int i=0x10000; i<0x10FFFF; i+=0xFF){
             CharBuffer us = CharBuffer.allocate(0xFF*2);
             ByteBuffer bs = ByteBuffer.allocate(0xFF*8);
             for(int j=0;j<0xFF; j++){

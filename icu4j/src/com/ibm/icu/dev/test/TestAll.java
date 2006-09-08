@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,6 +40,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.timescale.TestAll",
 				  "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector",
 //#ifndef FOUNDATION
+                  "com.ibm.icu.dev.test.charset.TestAll",
                   "com.ibm.icu.dev.test.serializable.SerializableTest" // *is* a group
 //#endif
               },
