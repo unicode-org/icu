@@ -6,8 +6,6 @@
   */
 package com.ibm.icu.impl;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
@@ -279,7 +277,7 @@ public class OlsonTimeZone extends TimeZone {
         int days = (int)dt[0];
         int[] it = dayToFields(days);
 
-        int year=it[0], month=it[1], dom=it[2], dow=it[3];
+        int year=it[0]; /*, month=it[1], dom=it[2], dow=it[3]*/
         if (year > finalYear) { // [sic] >, not >=; see above
             if (ASSERT) Assert.assrt("finalZone != null && finalZone.useDaylightTime()", finalZone != null && finalZone.useDaylightTime());
             return true;
@@ -339,7 +337,6 @@ public class OlsonTimeZone extends TimeZone {
      * @param top the top-level zoneinfo resource bundle.  This is used
      * to lookup the rule that `res' may refer to, if there is one.
      * @param res the resource bundle of the zone to be constructed
-     * @param ec input-output error code
      */
     public OlsonTimeZone(ICUResourceBundle top, ICUResourceBundle res){
         construct(top, res);

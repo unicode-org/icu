@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -56,7 +56,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
     * and fills up UCharacterName.
     * If unsuccessful false will be returned.
     * @param data instance of datablock
-    * @exception thrown when there's a data error.
+    * @exception IOException thrown when there's a data error.
     */
     protected void read(UCharacterName data) throws IOException
     {
@@ -110,7 +110,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
     /**
     * <p>Checking the file for the correct format.</p>
     * @param dataformatid
-    * @param dataformatversio
+    * @param dataformatversion
     * @return true if the file format version is correct
     * @draft 2.1
     */
@@ -157,18 +157,13 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
                                     {(byte)0x1, (byte)0x0, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x75, (byte)0x6E, 
                                                     (byte)0x61, (byte)0x6D};                                                 
-    /**
-    * Corrupted error string
-    */
-    private static final String CORRUPTED_DATA_ERROR_ =
-                                "Data corrupted in character name data file";
       
     // private methods ---------------------------------------------------
       
     /**
     * Reads an individual record of AlgorithmNames
     * @return an instance of AlgorithNames if read is successful otherwise null
-    * @exception thrown when file read error occurs or data is corrupted
+    * @exception IOException thrown when file read error occurs or data is corrupted
     */
     private UCharacterName.AlgorithmName readAlg() throws IOException
     {

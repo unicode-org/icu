@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -618,7 +618,7 @@ public class CalendarAstronomer {
     
     /**
      * Constant representing the vernal equinox.
-     * For use with {@link #getSunTime getSunTime}. 
+     * For use with {@link #getSunTime(SolarLongitude, boolean) getSunTime}. 
      * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
      * @internal
      */
@@ -626,7 +626,7 @@ public class CalendarAstronomer {
     
     /**
      * Constant representing the summer solstice.
-     * For use with {@link #getSunTime getSunTime}.
+     * For use with {@link #getSunTime(SolarLongitude, boolean) getSunTime}.
      * Note: In this case, "summer" refers to the northern hemisphere's seasons.
      * @internal
      */
@@ -634,7 +634,7 @@ public class CalendarAstronomer {
     
     /**
      * Constant representing the autumnal equinox.
-     * For use with {@link #getSunTime getSunTime}.
+     * For use with {@link #getSunTime(SolarLongitude, boolean) getSunTime}.
      * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
      * @internal
      */
@@ -642,7 +642,7 @@ public class CalendarAstronomer {
     
     /**
      * Constant representing the winter solstice.
-     * For use with {@link #getSunTime getSunTime}.
+     * For use with {@link #getSunTime(SolarLongitude, boolean) getSunTime}.
      * Note: In this case, "winter" refers to the northern hemisphere's seasons.
      * @internal
      */
@@ -1124,28 +1124,28 @@ public class CalendarAstronomer {
     
     /**
      * Constant representing a new moon.
-     * For use with {@link #getMoonTime getMoonTime}
+     * For use with {@link #getMoonTime(MoonAge, boolean) getMoonTime}
      * @internal
      */
     public static final MoonAge NEW_MOON      = new MoonAge(0);
 
     /**
      * Constant representing the moon's first quarter.
-     * For use with {@link #getMoonTime getMoonTime}
+     * For use with {@link #getMoonTime(MoonAge, boolean) getMoonTime}
      * @internal
      */
     public static final MoonAge FIRST_QUARTER = new MoonAge(PI/2);
     
     /**
      * Constant representing a full moon.
-     * For use with {@link #getMoonTime getMoonTime}
+     * For use with {@link #getMoonTime(MoonAge, boolean) getMoonTime}
      * @internal
      */
     public static final MoonAge FULL_MOON     = new MoonAge(PI);
     
     /**
      * Constant representing the moon's last quarter.
-     * For use with {@link #getMoonTime getMoonTime}
+     * For use with {@link #getMoonTime(MoonAge, boolean) getMoonTime}
      * @internal
      */
     public static final MoonAge LAST_QUARTER  = new MoonAge((PI*3)/2);
@@ -1204,7 +1204,7 @@ public class CalendarAstronomer {
     
     private interface AngleFunc {
         public double eval();
-    };
+    }
     
     private long timeOfAngle(AngleFunc func, double desired,
                              double periodDays, long epsilon, boolean next)
@@ -1276,7 +1276,7 @@ public class CalendarAstronomer {
     
     private interface CoordFunc {
         public Equatorial eval();
-    };
+    }
     
     private long riseOrSet(CoordFunc func, boolean rise,
                            double diameter, double refraction, 
@@ -1527,7 +1527,7 @@ public class CalendarAstronomer {
          * @internal
          */
         public final double longitude;
-    };
+    }
 
     /**
      * Represents the position of an 
@@ -1592,7 +1592,7 @@ public class CalendarAstronomer {
          * @internal
          */
         public final double declination;
-    };
+    }
 
     /**
      * Represents the position of an  object in the sky relative to 
@@ -1644,7 +1644,7 @@ public class CalendarAstronomer {
          * @internal
          */
         public final double azimuth;
-    };
+    }
 
     static private String radToHms(double angle) {
         int hrs = (int) (angle*RAD_HOUR);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,7 +24,6 @@ import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 
@@ -32,7 +31,6 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
 
 public final class UCaseProps {
     // constructors etc. --------------------------------------------------- ***
@@ -134,11 +132,6 @@ public final class UCaseProps {
     // set of property starts for UnicodeSet ------------------------------- ***
 
     public final void addPropertyStarts(UnicodeSet set) {
-        int i, length;
-        int c, start, limit;
-
-        byte prev, jg;
-
         /* add the start code point of each same-value range of the trie */
         TrieIterator iter=new TrieIterator(trie);
         RangeValueIterator.Element element=new RangeValueIterator.Element();
@@ -445,7 +438,7 @@ public final class UCaseProps {
      * @return true if the string was found
      */
     public final boolean addStringCaseClosure(String s, UnicodeSet set) {
-        int i, length, start, limit, result, unfoldOffset, unfoldRows, unfoldRowWidth, unfoldStringWidth, unfoldCPWidth;
+        int i, length, start, limit, result, unfoldOffset, unfoldRows, unfoldRowWidth, unfoldStringWidth;
 
         if(unfold==null || s==null) {
             return false; /* no reverse case folding data, or no string */
@@ -465,7 +458,7 @@ public final class UCaseProps {
         unfoldRows=unfold[UNFOLD_ROWS];
         unfoldRowWidth=unfold[UNFOLD_ROW_WIDTH];
         unfoldStringWidth=unfold[UNFOLD_STRING_WIDTH];
-        unfoldCPWidth=unfoldRowWidth-unfoldStringWidth;
+        //unfoldCPWidth=unfoldRowWidth-unfoldStringWidth;
 
         if(length>unfoldStringWidth) {
             /* the string is too long to find any match */
@@ -861,7 +854,7 @@ public final class UCaseProps {
      * @return Output code point or string length, see MAX_STRING_LENGTH.
      *
      * @see ContextIterator
-     * @see MAX_STRING_LENGTH
+     * @see #MAX_STRING_LENGTH
      * @internal
      */
     public final int toFullLower(int c, ContextIterator iter,

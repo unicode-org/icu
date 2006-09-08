@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -60,7 +60,7 @@ final class UCharacterPropertyReader implements ICUBinary.Authenticate
     * <p>Reads uprops.icu, parse it into blocks of data to be stored in
     * UCharacterProperty.</P
     * @param ucharppty UCharacterProperty instance
-    * @exception thrown when data reading fails
+    * @exception IOException thrown when data reading fails
     * @draft 2.1
     */
     protected void read(UCharacterProperty ucharppty) throws IOException

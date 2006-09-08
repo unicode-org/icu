@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,7 +13,6 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 
@@ -638,7 +637,7 @@ public final class UCharacterName
 
         /**
         * Sets the factor data
-        * @param array of factor
+        * @param factor Array of factor
         * @return true if factors are valid
         */
         boolean setFactor(char factor[])
@@ -984,7 +983,7 @@ public final class UCharacterName
 
     /**
     * Set the algorithm name information array
-    * @param algorithm information array
+    * @param alg Algorithm information array
     * @return true if the group string offset has been set correctly
     */
     boolean setAlgorithm(AlgorithmName alg[])
@@ -1078,14 +1077,14 @@ public final class UCharacterName
     */
     private static final int SINGLE_NIBBLE_MAX_ = 11;
 
-    /**
+    /*
      * Maximum length of character names (regular & 1.0).
      */
-    private static int MAX_NAME_LENGTH_ = 0;
-    /**
+    //private static int MAX_NAME_LENGTH_ = 0;
+    /*
      * Maximum length of ISO comments.
      */
-    private static int MAX_ISO_COMMENT_LENGTH_ = 0;
+    //private static int MAX_ISO_COMMENT_LENGTH_ = 0;
 
     /**
      * Set of chars used in character names (regular & 1.0).
@@ -1322,46 +1321,6 @@ public final class UCharacterName
         }
         return -1;
     }
-
-    /**
-    * Binary search for the group strings set that contains the argument Unicode
-    * code point's most significant bits.
-    * The return value is always a valid group string set that contain msb.
-    * If group string set is not found, -1 is returned
-    * @param ch the code point to look for
-    * @return group string set index in datatable otherwise -1 is returned if
-    *         group string set is not found
-    */
-    ///CLOVER:OFF
-    private int getGroupStringIndex(int ch)
-    {
-        // gets the msb
-        int msb = ch >> GROUP_SHIFT_,
-            end = m_groupcount_,
-            start,
-            gindex = 0;
-
-        // binary search for the group of names that contains the one for code
-        for (start = 0; start < end - 1;) {
-            gindex = (start + end) >> 1;
-            if (msb < m_groupinfo_[gindex * m_groupsize_]) {
-                end = gindex;
-            }
-            else {
-                start = gindex;
-            }
-        }
-
-        // return this if it is an exact match
-        if (msb == m_groupinfo_[start * m_groupsize_]) {
-            start = start * m_groupsize_;
-            return UCharacterUtility.toInt(
-                                m_groupinfo_[start + OFFSET_HIGH_OFFSET_],
-                                m_groupinfo_[start + OFFSET_LOW_OFFSET_]);
-        }
-        return -1;
-    }
-    ///CLOVER:ON
 
     /**
     * Gets the character extended type
