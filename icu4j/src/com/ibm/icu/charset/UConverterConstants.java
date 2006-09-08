@@ -45,7 +45,7 @@ interface UConverterConstants {
 	//begin ucnv.h	
 	/**
 	 * Character that separates converter names from options and options from each other.
-	 * @see open
+	 * @see CharsetICU#forNameICU(String)
 	 * @draft ICU 3.6
 	 */
 	static final byte OPTION_SEP_CHAR  = ',';
@@ -97,7 +97,7 @@ interface UConverterConstants {
           * private constructor to prevent construction 
           *
           */
-         private UConverterResetChoice(){};
+         private UConverterResetChoice(){}
 	     static final int RESET_BOTH = 0;
 	     static final int RESET_TO_UNICODE = RESET_BOTH + 1;
 	     static final int RESET_FROM_UNICODE = RESET_TO_UNICODE + 1;
@@ -106,7 +106,6 @@ interface UConverterConstants {
 	// begin utf16.h
 	/**
 	 * The maximum number of 16-bit code units per Unicode code point (U+0000..U+10ffff).
-	 * @return 2
 	 * @draft ICU 2.4
 	 */
 	 static final int U16_MAX_LENGTH = 2;
@@ -137,7 +136,7 @@ interface UConverterConstants {
           * private constructor to prevent construction
           *
           */
-         private UConverterCallbackReason(){};
+         private UConverterCallbackReason(){}
          
 		 static final int UNASSIGNED = 0;  /**< The code point is unassigned.
 	                             The error code U_INVALID_CHAR_FOUND will be set. */
