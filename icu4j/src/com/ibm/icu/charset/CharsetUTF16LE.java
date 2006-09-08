@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -16,22 +16,22 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetDecoderICU;
-import com.ibm.icu.charset.CharsetEncoderICU;
-import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.text.UTF16;
 
-public class CharsetUTF16 extends CharsetICU {
-    protected byte[] fromUSubstitution = new byte[]{(byte)0xff, (byte)0xfd};
-    public CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases){
+/**
+ * @author Niti Hantaweepant
+ */
+class CharsetUTF16LE extends CharsetICU {
+    protected byte[] fromUSubstitution = new byte[]{(byte)0xfd, (byte)0xff};
+    public CharsetUTF16LE(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 4;
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
     }
-    class CharsetDecoderUTF16 extends CharsetDecoderICU{
+    class CharsetDecoderUTF16LE extends CharsetDecoderICU{
 
-        public CharsetDecoderUTF16(CharsetICU cs) {
+        public CharsetDecoderUTF16LE(CharsetICU cs) {
             super(cs);
         }
 
@@ -70,7 +70,7 @@ public class CharsetUTF16 extends CharsetICU {
                         ++sourceIndex;
                         --length;
                         if(count==2) {
-                            c=(char)(((pArray[pArrayIndex+0]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+1]&UConverterConstants.UNSIGNED_BYTE_MASK));
+                            c=(char)(((pArray[pArrayIndex+1]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+0]&UConverterConstants.UNSIGNED_BYTE_MASK));
                             if(!UTF16.isSurrogate(c)) {
                                 /* output the BMP code point */
                                 target.put(c);
@@ -88,8 +88,8 @@ public class CharsetUTF16 extends CharsetICU {
                                 break;
                             }
                         } else if(count==4) {
-                            c=(char)(((pArray[pArrayIndex+0]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+1]&UConverterConstants.UNSIGNED_BYTE_MASK));
-                            trail=(char)(((pArray[pArrayIndex+2]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+3]&UConverterConstants.UNSIGNED_BYTE_MASK));
+                            c=(char)(((pArray[pArrayIndex+1]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+0]&UConverterConstants.UNSIGNED_BYTE_MASK));
+                            trail=(char)(((pArray[pArrayIndex+3]&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(pArray[pArrayIndex+2]&UConverterConstants.UNSIGNED_BYTE_MASK));
                             if(UTF16.isTrailSurrogate(trail)) {
                                 /* output the surrogate pair */
                                 target.put(c);
@@ -102,7 +102,7 @@ public class CharsetUTF16 extends CharsetICU {
                                 } else /* targetCapacity==1 */ {
                                     charErrorBufferArray[charErrorBufferBegin+0]=trail;
                                     charErrorBufferLength=1;
-                                    return CoderResult.OVERFLOW;
+                                    throw new BufferOverflowException();
                                 }
                                 count=0;
                                 c=0;
@@ -141,12 +141,12 @@ public class CharsetUTF16 extends CharsetICU {
                     //targetCapacity-=count;
                     if(offsets==null) {
                         do {
-                            c=(char)(((source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK));
+                            c=(char)(((source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK));
                             sourceArrayIndex+=2;
                             if(!UTF16.isSurrogate(c)) {
                                 target.put(c);
                             } else if(UTF16.isLeadSurrogate(c) && count>=2 &&
-                                      UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)))
+                                      UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)))
                                      ) {
                                 sourceArrayIndex+=2;
                                 --count;
@@ -158,14 +158,14 @@ public class CharsetUTF16 extends CharsetICU {
                         } while(--count>0);
                     } else {
                         do {
-                            c=(char)(((source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK));
+                            c=(char)(((source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK));
                             sourceArrayIndex+=2;
                             if(!UTF16.isSurrogate(c)) {
                                 target.put(c);
                                 offsets.put(sourceIndex);
                                 sourceIndex+=2;
                             } else if(UTF16.isLeadSurrogate(c) && count>=2 &&
-                                      UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)))
+                                      UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)))
                             ) {
                                 sourceArrayIndex+=2;
                                 --count;
@@ -195,13 +195,13 @@ public class CharsetUTF16 extends CharsetICU {
                      * - source or target too short
                      * - or the surrogate is unmatched
                      */
-                    toUBytesArray[toUBytesBegin+0]=(byte)(c>>>8);
-                    toUBytesArray[toUBytesBegin+1]=(byte)c;
+                    toUBytesArray[toUBytesBegin+0]=(byte)c;
+                    toUBytesArray[toUBytesBegin+1]=(byte)(c>>>8);
                     toULength=2;
             
                     if(UTF16.isLeadSurrogate(c)) {
                         if(length>=2) {
-                            if(UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)))) {
+                            if(UTF16.isTrailSurrogate(trail=(char)(((source.get(sourceArrayIndex+1)&UConverterConstants.UNSIGNED_BYTE_MASK)<<8)|(source.get(sourceArrayIndex+0)&UConverterConstants.UNSIGNED_BYTE_MASK)))) {
                                 /* output the surrogate pair, will overflow (see conditions comment above) */
                                 sourceArrayIndex+=2;
                                 length-=2;
@@ -245,9 +245,9 @@ public class CharsetUTF16 extends CharsetICU {
         }
         
     }
-    class CharsetEncoderUTF16 extends CharsetEncoderICU{
+    class CharsetEncoderUTF16LE extends CharsetEncoderICU{
 
-        public CharsetEncoderUTF16(CharsetICU cs) {
+        public CharsetEncoderUTF16LE(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
@@ -268,7 +268,7 @@ public class CharsetUTF16 extends CharsetICU {
             char c;
             /* write the BOM if necessary */
             if(fromUnicodeStatus==NEED_TO_WRITE_BOM) {
-                byte bom[]={ (byte)0xfe, (byte)0xff };
+                byte bom[]={ (byte)0xff, (byte)0xfe };
                 cr = fromUWriteBytes(this,bom, 0, bom.length, target, offsets, -1);
                 if(cr.isError()){
                     return cr;
@@ -292,10 +292,10 @@ public class CharsetUTF16 extends CharsetICU {
                     /* the last buffer ended with a lead surrogate, output the surrogate pair */
                     ++sourceArrayIndex;
                     --length;
-                    target.put((byte)(c>>>8));
                     target.put((byte)c);
-                    target.put((byte)(trail>>>8));
+                    target.put((byte)(c>>>8));
                     target.put((byte)trail);
+                    target.put((byte)(trail>>>8));
                     if(offsets!=null && offsets.remaining()>=4) {
                         offsets.put(-1);
                         offsets.put(-1);
@@ -307,10 +307,11 @@ public class CharsetUTF16 extends CharsetICU {
                 }
                 byte overflow[/*4*/] = new byte[4];
                 
+                
                 if(c==0) {
                     /* copy an even number of bytes for complete UChars */
                     int count=2*length;
-                    int targetCapacity = target.limit();
+                    int targetCapacity = target.remaining();
                     if(count>targetCapacity) {
                         count=targetCapacity&~1;
                     }           
@@ -323,16 +324,16 @@ public class CharsetUTF16 extends CharsetICU {
                         while(count>0) {
                             c= source.get(sourceArrayIndex++);
                             if(!UTF16.isSurrogate(c)) {
-                                target.put((byte)(c>>>8));
                                 target.put((byte)c);
+                                target.put((byte)(c>>>8));
                                 
                             } else if(UTF16.isLeadSurrogate(c) && count>=2 && UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex))) {
                                 ++sourceArrayIndex;
                                 --count;
-                                target.put((byte)(c>>>8));
                                 target.put((byte)c);
-                                target.put((byte)(trail>>>8));
+                                target.put((byte)(c>>>8));
                                 target.put((byte)trail);
+                                target.put((byte)(trail>>>8));
                             } else {
                                 break;
                             }
@@ -342,17 +343,17 @@ public class CharsetUTF16 extends CharsetICU {
                         while(count>0) {
                             c=source.get(sourceArrayIndex++);
                             if(!UTF16.isSurrogate(c)) {
-                                target.put((byte)(c>>>8));
                                 target.put((byte)c);
+                                target.put((byte)(c>>>8));
                                 offsets.put(sourceIndex);
                                 offsets.put(sourceIndex++);
                             } else if(UTF16.isLeadSurrogate(c) && count>=2 && UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex))) {
                                 ++sourceArrayIndex;
                                 --count;
-                                target.put((byte)(c>>>8));
                                 target.put((byte)c);
-                                target.put((byte)(trail>>>8));
+                                target.put((byte)(c>>>8));
                                 target.put((byte)trail);
+                                target.put((byte)(trail>>>8));
                                 offsets.put(sourceIndex);
                                 offsets.put(sourceIndex);
                                 offsets.put(sourceIndex);
@@ -375,8 +376,8 @@ public class CharsetUTF16 extends CharsetICU {
                              * prepare for overflow output
                              */
                             if(!UTF16.isSurrogate(c=source.get(sourceArrayIndex++))) {
-                                overflow[0]=(byte)(c>>>8);
-                                overflow[1]=(byte)c;
+                                overflow[0]=(byte)c;
+                                overflow[1]=(byte)(c>>>8);
                                 length=2; /* 2 bytes to output */
                                 c=0;
                             /* } else { keep c for surrogate handling, length will be set there */
@@ -405,15 +406,14 @@ public class CharsetUTF16 extends CharsetICU {
                             if(UTF16.isTrailSurrogate(trail=source.get(sourceArrayIndex))) {
                                 /* output the surrogate pair, will overflow (see conditions comment above) */
                                 ++sourceArrayIndex;
-                                overflow[0]=(byte)(c>>>8);
-                                overflow[1]=(byte)c;
-                                overflow[2]=(byte)(trail>>>8);
-                                overflow[3]=(byte)trail;
+                                overflow[0]=(byte)c;
+                                overflow[1]=(byte)(c>>>8);
+                                overflow[2]=(byte)trail;
+                                overflow[3]=(byte)(trail>>>8);
                                 length=4; /* 4 bytes to output */
                                 c=0;
                             } else {
                                 /* unmatched lead surrogate */
-                                //pErrorCode[0]=ErrorCode.U_ILLEGAL_CHAR_FOUND;
                                 cr = CoderResult.malformedForLength(sourceArrayIndex);
                             }
                         } else {
@@ -437,22 +437,22 @@ public class CharsetUTF16 extends CharsetICU {
         }
     }
     public CharsetDecoder newDecoder() {
-        return new CharsetDecoderUTF16(this);
+        return new CharsetDecoderUTF16LE(this);
     }
 
     public CharsetEncoder newEncoder() {
-        return new CharsetEncoderUTF16(this);
+        return new CharsetEncoderUTF16LE(this);
     }
 //#ifdef VERSION_1.5   
-//    /**
-//     * Implements compareTo method of Comparable interface
-//     * @see java.lang.Comparable#compareTo(java.lang.Object)
-//     */
-//    public int compareTo(Object o) {
-//        if(o instanceof Charset){
-//            return super.compareTo((Charset)o);
-//        }
-//        return -1;
-//    }
+//  /**
+//   * Implements compareTo method of Comparable interface
+//   * @see java.lang.Comparable#compareTo(java.lang.Object)
+//   */
+//  public int compareTo(Object o) {
+//      if(o instanceof Charset){
+//          return super.compareTo((Charset)o);
+//      }
+//      return -1;
+//  }
 //#endif
 }

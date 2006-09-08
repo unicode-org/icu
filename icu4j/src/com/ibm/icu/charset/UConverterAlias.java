@@ -6,16 +6,17 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.io.IOException;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import com.ibm.icu.charset.CharsetICU;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
 
-public final class UConverterAlias {
+final class UConverterAlias {
     private static final int UNNORMALIZED = 0;
 
     private static final int STD_NORMALIZED = 1;
@@ -339,7 +340,7 @@ public final class UConverterAlias {
      * 
      * @see UConverterAlias#stripForCompare
      */
-    public static int compareNames(String name1, String name2){
+    static int compareNames(String name1, String name2){
         int rc, name1Index = 0, name2Index = 0;
         char type, nextType;
         char c1 = 0, c2 = 0;
@@ -410,7 +411,7 @@ public final class UConverterAlias {
         }
     }
 
-    public static int io_countAliases(String alias) 
+    static int io_countAliases(String alias) 
                         throws IOException{
         if (haveAliasData() && isAlias(alias)) {
             boolean[] isAmbigous = new boolean[1];
@@ -436,7 +437,7 @@ public final class UConverterAlias {
      * @return the number of all aliases
      */
     // U_CFUNC uint16_t io_countTotalAliases(UErrorCode *pErrorCode);
-    public static int io_countTotalAliases() throws IOException{
+    static int io_countTotalAliases() throws IOException{
         if (haveAliasData()) {
             return (int) gAliasList.length;
         }
@@ -445,7 +446,7 @@ public final class UConverterAlias {
 
     // U_CFUNC const char * io_getAlias(const char *alias, uint16_t n,
     // UErrorCode *pErrorCode)
-    public static String io_getAlias(String alias, int n) throws IOException{
+    static String io_getAlias(String alias, int n) throws IOException{
         if (haveAliasData() && isAlias(alias)) {
             boolean[] isAmbigous = new boolean[1];
             int convNum = findConverter(alias,isAmbigous);
@@ -471,7 +472,7 @@ public final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t io_countStandards(UErrorCode *pErrorCode) {
-    public static int io_countStandards() throws IOException{
+    static int io_countStandards() throws IOException{
         if (haveAliasData()) {
             return (int) (gTagList.length - NUM_HIDDEN_TAGS);
         }
@@ -480,7 +481,7 @@ public final class UConverterAlias {
 
     // U_CAPI const char * U_EXPORT2getStandard(uint16_t n, UErrorCode
     // *pErrorCode)
-    public static String getStandard(int n) throws IOException{
+    static String getStandard(int n) throws IOException{
         if (haveAliasData()) {
             return GET_STRING(gTagList[n]);
         }
@@ -489,7 +490,7 @@ public final class UConverterAlias {
 
     // U_CAPI const char * U_EXPORT2 getStandardName(const char *alias, const
     // char *standard, UErrorCode *pErrorCode)
-    public static final String getStandardName(String alias, String standard)throws IOException {
+    static final String getStandardName(String alias, String standard)throws IOException {
         if (haveAliasData() && isAlias(alias)) {
             int listOffset = findTaggedAliasListsOffset(alias, standard);
 
@@ -506,24 +507,24 @@ public final class UConverterAlias {
 
     // U_CAPI uint16_t U_EXPORT2 countAliases(const char *alias, UErrorCode
     // *pErrorCode)
-    public static int countAliases(String alias) throws IOException{
+    static int countAliases(String alias) throws IOException{
         return io_countAliases(alias);
     }
 
     // U_CAPI const char* U_EXPORT2 getAlias(const char *alias, uint16_t n,
     // UErrorCode *pErrorCode)
-    public static String getAlias(String alias, int n) throws IOException{
+    static String getAlias(String alias, int n) throws IOException{
         return io_getAlias(alias, n);
     }
 
     // U_CFUNC uint16_t countStandards(void)
-    public static int countStandards()throws IOException{
+    static int countStandards()throws IOException{
         return io_countStandards();
     }
     
     /*returns a single Name from the list, will return NULL if out of bounds
      */
-    public static String getAvailableName (int n){
+    static String getAvailableName (int n){
         try{
           if (0 <= n && n <= 0xffff) {
             String name = bld_getAvailableConverter(n);
@@ -536,7 +537,7 @@ public final class UConverterAlias {
     }
     // U_CAPI const char * U_EXPORT2 getCanonicalName(const char *alias, const
     // char *standard, UErrorCode *pErrorCode) {
-    public static String getCanonicalName(String alias, String standard) throws IOException{
+    static String getCanonicalName(String alias, String standard) throws IOException{
         if (haveAliasData() && isAlias(alias)) {
             int convNum = findTaggedConverterNum(alias, standard);
 
@@ -547,7 +548,7 @@ public final class UConverterAlias {
 
         return null;
     }
-    public static int countAvailable (){
+    static int countAvailable (){
         try{
             return bld_countAvailableConverters();
         }catch(IOException ex){
@@ -558,7 +559,7 @@ public final class UConverterAlias {
         
     // U_CAPI UEnumeration * U_EXPORT2 openStandardNames(const char *convName,
     // const char *standard, UErrorCode *pErrorCode)
-    public static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
+    static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
         UConverterAliasesEnumeration aliasEnum = null;
         if (haveAliasData() && isAlias(convName)) {
             int listOffset = findTaggedAliasListsOffset(convName, standard);
@@ -761,7 +762,7 @@ public final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t bld_countAvailableConverters(UErrorCode *pErrorCode)
-    public static int bld_countAvailableConverters() throws IOException{
+    static int bld_countAvailableConverters() throws IOException{
         if (haveAvailableConverterList()) {
             return gAvailableConverterCount;
         }
@@ -770,7 +771,7 @@ public final class UConverterAlias {
 
     // U_CFUNC const char * bld_getAvailableConverter(uint16_t n, UErrorCode
     // *pErrorCode)
-    public static String bld_getAvailableConverter(int n) throws IOException{
+    static String bld_getAvailableConverter(int n) throws IOException{
         if (haveAvailableConverterList()) {
             if (n < gAvailableConverterCount) {
                 return gAvailableConverters[n];
@@ -790,7 +791,7 @@ public final class UConverterAlias {
      */
 
     // U_CFUNC const char * getDefaultName()
-    public static final synchronized String getDefaultName() {
+    static final synchronized String getDefaultName() {
         /* local variable to be thread-safe */
         String name;
 

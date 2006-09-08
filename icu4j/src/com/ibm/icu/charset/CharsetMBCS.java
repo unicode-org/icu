@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -20,23 +20,23 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetDecoderICU;
-import com.ibm.icu.charset.CharsetEncoderICU;
-import com.ibm.icu.charset.CharsetICU;
-import com.ibm.icu.impl.UConverterSharedData.UConverterType;
+import com.ibm.icu.charset.UConverterSharedData.UConverterType;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
-public class CharsetMBCS extends CharsetICU {
+class CharsetMBCS extends CharsetICU {
 
     protected byte[]                fromUSubstitution = null;
     protected UConverterSharedData  sharedData = null;
-    public static final int MAX_VERSION_LENGTH=4;
+    static final int MAX_VERSION_LENGTH=4;
     /**
      * Fallbacks to Unicode are stored outside the normal state table and code point structures
      * in a vector of items of this type. They are sorted by offset.
      */
-    public final class MBCSToUFallback {
+    final class MBCSToUFallback {
         int offset;
         int codePoint;
     }
@@ -44,7 +44,7 @@ public class CharsetMBCS extends CharsetICU {
      * This is the MBCS part of the UConverterTable union (a runtime data structure).
      * It keeps all the per-converter data and points into the loaded mapping tables.
      */
-    public static final class UConverterMBCSTable {
+    static final class UConverterMBCSTable {
         /* toUnicode */
         short countStates;
             byte dbcsOnlyState;
@@ -106,13 +106,13 @@ public class CharsetMBCS extends CharsetICU {
         int flags;
         int fromUBytesLength;
 
-        public MBCSHeader()
+        MBCSHeader()
         {
             version = new byte[MAX_VERSION_LENGTH];
         }
     }
 
-    public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
+    CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
         super(icuCanonicalName, javaCanonicalName, aliases);
         
         // now try to load the data   
@@ -133,11 +133,11 @@ public class CharsetMBCS extends CharsetICU {
     
     class LoadArguments
     {
-        public int nestedLoads;        /* count nested loadConverter() calls */
-        // public int reserved;        /* reserved - for good alignment of the pointers */
-        // public long options;
-        // public String pkg;
-        public String name;
+        int nestedLoads;        /* count nested loadConverter() calls */
+        // int reserved;        /* reserved - for good alignment of the pointers */
+        // long options;
+        // String pkg;
+        String name;
         
         LoadArguments(int nestedLoads, String name)
         {
@@ -945,7 +945,7 @@ public class CharsetMBCS extends CharsetICU {
     
     class CharsetDecoderMBCS extends CharsetDecoderICU{
 
-        public CharsetDecoderMBCS(CharsetICU cs) {
+        CharsetDecoderMBCS(CharsetICU cs) {
             super(cs);
         }
 
@@ -2004,7 +2004,7 @@ public class CharsetMBCS extends CharsetICU {
     
     class CharsetEncoderMBCS extends CharsetEncoderICU{
 
-        public CharsetEncoderMBCS(CharsetICU cs) {
+        CharsetEncoderMBCS(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
@@ -3446,7 +3446,7 @@ public class CharsetMBCS extends CharsetICU {
         
         protected final class SideEffectsSingleBMP {
             int c, sourceArrayIndex;
-            public SideEffectsSingleBMP(int c_, int sourceArrayIndex_)
+            SideEffectsSingleBMP(int c_, int sourceArrayIndex_)
             {
                 c = c_;
                 sourceArrayIndex = sourceArrayIndex_;
@@ -3480,7 +3480,7 @@ public class CharsetMBCS extends CharsetICU {
         
         protected final class SideEffects {
             int c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength;
-            public SideEffects(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_, int prevSourceIndex_, int prevLength_)
+            SideEffects(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_, int prevSourceIndex_, int prevLength_)
             {
                 c = c_;
                 sourceArrayIndex = sourceArrayIndex_;
@@ -3554,7 +3554,7 @@ public class CharsetMBCS extends CharsetICU {
         
         protected final class SideEffectsDouble {
             int c, sourceArrayIndex, sourceIndex, nextSourceIndex;
-            public SideEffectsDouble(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_)
+            SideEffectsDouble(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_)
             {
                 c = c_;
                 sourceArrayIndex = sourceArrayIndex_;
@@ -3632,7 +3632,7 @@ public class CharsetMBCS extends CharsetICU {
 //   * Implements compareTo method of Comparable interface
 //   * @see java.lang.Comparable#compareTo(java.lang.Object)
 //   */
-//  public int compareTo(Object o) {
+//  int compareTo(Object o) {
 //      if(o instanceof Charset){
 //          return super.compareTo((Charset)o);
 //      }

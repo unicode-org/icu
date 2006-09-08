@@ -6,35 +6,36 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
+
 
 
 /*
  * Defines the UConverterSharedData struct,
  * the immutable, shared part of UConverter.
  */
-public class UConverterSharedData {
+final class UConverterSharedData {
     //uint32_t structSize;            /* Size of this structure */
-	public int structSize;            /* Size of this structure */
+	 int structSize;            /* Size of this structure */
     //uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
-	public int referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
+	 int referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 
 	//agljport:todo const void *dataMemory;         /* from udata_openChoice() - for cleanup */
 	//agljport:todo void *table;                    /* Unused. This used to be a UConverterTable - Pointer to conversion data - see mbcs below */
 
     //const UConverterStaticData *staticData; /* pointer to the static (non changing) data. */
-	public UConverterStaticData staticData; /* pointer to the static (non changing) data. */
+	 UConverterStaticData staticData; /* pointer to the static (non changing) data. */
 
     //UBool                sharedDataCached;   /* TRUE:  shared data is in cache, don't destroy on close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
-	public boolean                sharedDataCached;   /* TRUE:  shared data is in cache, don't destroy on close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
+	 boolean                sharedDataCached;   /* TRUE:  shared data is in cache, don't destroy on close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
 	/*UBool               staticDataOwned;   TRUE if static data owned by shared data & should be freed with it, NEVER true for udata() loaded statics. This ignored variable was removed to make space for sharedDataCached.   */
 
     //const UConverterImpl *impl;     /* vtable-style struct of mostly function pointers */
-	//public UConverterImpl impl;     /* vtable-style struct of mostly function pointers */
+	// UConverterImpl impl;     /* vtable-style struct of mostly function pointers */
 
 	/*initial values of some members of the mutable part of object */
     //uint32_t toUnicodeStatus;
-	public long toUnicodeStatus;
+	 long toUnicodeStatus;
 
 	/*
 	 * Shared data structures currently come in two flavors:
@@ -49,14 +50,14 @@ public class UConverterSharedData {
 	 * definitions, but is now unused.
 	 *
 	 */
-	public CharsetMBCS.UConverterMBCSTable mbcs;
+	 CharsetMBCS.UConverterMBCSTable mbcs;
 
-	public UConverterSharedData()
+	 UConverterSharedData()
 	{
 		mbcs = new CharsetMBCS.UConverterMBCSTable();
 	}
 	
-	public UConverterSharedData(int structSize_, int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_,/* UConverterImpl impl_,*/ long toUnicodeStatus_)
+	 UConverterSharedData(int structSize_, int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_,/* UConverterImpl impl_,*/ long toUnicodeStatus_)
 	{
 		this();
 		structSize = structSize_;
@@ -83,14 +84,14 @@ public class UConverterSharedData {
 	 *
 	 * When open() fails, then close() will be called, if present.
 	 */
-	//public class UConverterImpl {
+	// class UConverterImpl {
 	    //UConverterType type;
 	    //UConverterToUnicode toUnicode;
 /*	protected void doToUnicode(UConverterToUnicodeArgs args, int[] pErrorCode)
 	{
 	}
 	
-	public final void toUnicode(UConverterToUnicodeArgs args, int[] pErrorCode)
+	 final void toUnicode(UConverterToUnicodeArgs args, int[] pErrorCode)
 	{
 		doToUnicode(args, pErrorCode);
 	}
@@ -100,7 +101,7 @@ public class UConverterSharedData {
 	{
 	}
 	
-	public final void fromUnicode(UConverterFromUnicodeArgs args, int[] pErrorCode)
+	 final void fromUnicode(UConverterFromUnicodeArgs args, int[] pErrorCode)
 	{
 		doFromUnicode(args, pErrorCode);
 	}
@@ -111,12 +112,12 @@ public class UConverterSharedData {
 	}
 	
 	//UConverterGetNextUChar getNextUChar;
-	public final int getNextUChar(UConverterToUnicodeArgs args, int[] pErrorCode)
+	 final int getNextUChar(UConverterToUnicodeArgs args, int[] pErrorCode)
 	{
 		return doGetNextUChar(args, pErrorCode);
 	}
 	
-	//public interface UConverterImplLoadable extends UConverterImpl
+	// interface UConverterImplLoadable extends UConverterImpl
 	protected void doLoad(UConverterLoadArgs pArgs, short[] raw, int[] pErrorCode)
 	{
 	}
@@ -127,13 +128,13 @@ public class UConverterSharedData {
 	}
 
 	/*
-	//public interface UConverterImplOpenable extends UConverterImpl
+	// interface UConverterImplOpenable extends UConverterImpl
 	protected void doOpen(UConverter cnv, String name, String locale, long options, int[] pErrorCode)
 	{
 	}
     
 	//UConverterOpen open;
-	public final void open(UConverter cnv, String name, String locale, long options, int[] pErrorCode)
+	 final void open(UConverter cnv, String name, String locale, long options, int[] pErrorCode)
 	{
 		doOpen(cnv, name, locale, options, pErrorCode);
 	}
@@ -143,7 +144,7 @@ public class UConverterSharedData {
 	}
 	
     //UConverterClose close;
-	public final void close(UConverter cnv)
+	 final void close(UConverter cnv)
 	{
 		doClose(cnv);
 	}
@@ -154,18 +155,18 @@ public class UConverterSharedData {
 	
 	//typedef void (*UConverterReset) (UConverter *cnv, UConverterResetChoice choice);
 	//UConverterReset reset;
-	public final void reset(UConverter cnv, int choice)
+	 final void reset(UConverter cnv, int choice)
 	{
 		doReset(cnv, choice);
 	}
 
-	//public interface UConverterImplVariableLength extends UConverterImpl
+	// interface UConverterImplVariableLength extends UConverterImpl
 	protected void doToUnicodeWithOffsets(UConverterToUnicodeArgs args, int[] pErrorCode)
 	{
 	}
 	
     //UConverterToUnicode toUnicodeWithOffsets;
-	public final void toUnicodeWithOffsets(UConverterToUnicodeArgs args, int[] pErrorCode)
+	 final void toUnicodeWithOffsets(UConverterToUnicodeArgs args, int[] pErrorCode)
 	{
 		doToUnicodeWithOffsets(args, pErrorCode);
 	}
@@ -175,18 +176,18 @@ public class UConverterSharedData {
 	}
 	
     //UConverterFromUnicode fromUnicodeWithOffsets;
-	public final void fromUnicodeWithOffsets(UConverterFromUnicodeArgs args, int[] pErrorCode)
+	 final void fromUnicodeWithOffsets(UConverterFromUnicodeArgs args, int[] pErrorCode)
 	{
 		doFromUnicodeWithOffsets(args, pErrorCode);
 	}
 
-	//public interface UConverterImplMisc extends UConverterImpl
+	// interface UConverterImplMisc extends UConverterImpl
 	protected void doGetStarters(UConverter converter, boolean starters[], int[] pErrorCode)
 	{
 	}
 	
     //UConverterGetStarters getStarters;
-	public final void getStarters(UConverter converter, boolean starters[], int[] pErrorCode)
+	 final void getStarters(UConverter converter, boolean starters[], int[] pErrorCode)
 	{
 		doGetStarters(converter, starters, pErrorCode);
 	}
@@ -197,7 +198,7 @@ public class UConverterSharedData {
 	}
 	
     //UConverterGetName getName;
-	public final String getName(UConverter cnv)
+	 final String getName(UConverter cnv)
 	{
 		return doGetName(cnv);
 	}
@@ -207,7 +208,7 @@ public class UConverterSharedData {
 	}
 	
 	//UConverterWriteSub writeSub;
-	public final void writeSub(UConverterFromUnicodeArgs pArgs, long offsetIndex, int[] pErrorCode)
+	 final void writeSub(UConverterFromUnicodeArgs pArgs, long offsetIndex, int[] pErrorCode)
 	{
 		doWriteSub(pArgs, offsetIndex, pErrorCode);
 	}
@@ -218,7 +219,7 @@ public class UConverterSharedData {
 	}
 
     //UConverterSafeClone safeClone;
-	public final UConverter  safeClone(UConverter cnv, byte[] stackBuffer, int[] pBufferSize, int[] status)
+	 final UConverter  safeClone(UConverter cnv, byte[] stackBuffer, int[] pBufferSize, int[] status)
 	{
 		return doSafeClone(cnv, stackBuffer, pBufferSize, status);
 	}
@@ -228,7 +229,7 @@ public class UConverterSharedData {
 	}
 	
     //UConverterGetUnicodeSet getUnicodeSet;
-	//public final void getUnicodeSet(UConverter cnv, UnicodeSet /*USetAdder* / sa, int /*UConverterUnicodeSet* / which, int[] pErrorCode)
+	// final void getUnicodeSet(UConverter cnv, UnicodeSet /*USetAdder* / sa, int /*UConverterUnicodeSet* / which, int[] pErrorCode)
 	//{
 	//	doGetUnicodeSet(cnv, sa, which, pErrorCode);
 	//}
@@ -237,7 +238,7 @@ public class UConverterSharedData {
 
 	static final String DATA_TYPE = "cnv";
 	private static final int CNV_DATA_BUFFER_SIZE = 25000;
-	public static final int sizeofUConverterSharedData = 100;
+	 static final int sizeofUConverterSharedData = 100;
 	
 	//static UDataMemoryIsAcceptable isCnvAcceptable;
 
@@ -246,7 +247,7 @@ public class UConverterSharedData {
 	 * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
 	 
 	// UConverterSharedData * load(UConverterLoadArgs *pArgs, UErrorCode *err)
-	public static final UConverterSharedData load(UConverterLoadArgs pArgs, int[] err)
+	 static final UConverterSharedData load(UConverterLoadArgs pArgs, int[] err)
 	{
 	    UConverterSharedData mySharedConverterData = null;
 	
@@ -289,7 +290,7 @@ public class UConverterSharedData {
 	 *allocates the memory and returns a new UConverter object
 	 
 	//static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, UErrorCode * err)
-	public static final UConverterSharedData createConverterFromFile(UConverterLoadArgs pArgs, int[] err)
+	 static final UConverterSharedData createConverterFromFile(UConverterLoadArgs pArgs, int[] err)
 	{
 	    UDataMemory data = null;
 	    UConverterSharedData sharedData = null;
@@ -335,7 +336,7 @@ public class UConverterSharedData {
 	/*returns a converter type from a string
 	 */
 	// static const UConverterSharedData * getAlgorithmicTypeFromName(const char *realName)
-	public static final UConverterSharedData getAlgorithmicTypeFromName(String realName)
+	 static final UConverterSharedData getAlgorithmicTypeFromName(String realName)
 	{
 	    long mid, start, limit;
 	    long lastMid;
@@ -375,48 +376,48 @@ public class UConverterSharedData {
 	 * @see getType
 	 * @draft ICU 3.6
 	 */
-	public static final class UConverterType {
-	    public static final int UNSUPPORTED_CONVERTER = -1;
-	    public static final int SBCS = 0;
-	    public static final int DBCS = 1;
-	    public static final int MBCS = 2;
-	    public static final int LATIN_1 = 3;
-	    public static final int UTF8 = 4;
-	    public static final int UTF16_BigEndian = 5;
-	    public static final int UTF16_LittleEndian = 6;
-	    public static final int UTF32_BigEndian = 7;
-	    public static final int UTF32_LittleEndian = 8;
-	    public static final int EBCDIC_STATEFUL = 9;
-	    public static final int ISO_2022 = 10;
+	 static final class UConverterType {
+	     static final int UNSUPPORTED_CONVERTER = -1;
+	     static final int SBCS = 0;
+	     static final int DBCS = 1;
+	     static final int MBCS = 2;
+	     static final int LATIN_1 = 3;
+	     static final int UTF8 = 4;
+	     static final int UTF16_BigEndian = 5;
+	     static final int UTF16_LittleEndian = 6;
+	     static final int UTF32_BigEndian = 7;
+	     static final int UTF32_LittleEndian = 8;
+	     static final int EBCDIC_STATEFUL = 9;
+	     static final int ISO_2022 = 10;
 	
-	    public static final int LMBCS_1 = 11;
-	    public static final int LMBCS_2 = LMBCS_1 + 1; //12
-	    public static final int LMBCS_3 = LMBCS_2 + 1; //13
-	    public static final int LMBCS_4 = LMBCS_3 + 1; //14
-	    public static final int LMBCS_5 = LMBCS_4 + 1; //15
-	    public static final int LMBCS_6 = LMBCS_5 + 1; //16
-	    public static final int LMBCS_8 = LMBCS_6 + 1; //17
-	    public static final int LMBCS_11 = LMBCS_8 + 1; //18
-	    public static final int LMBCS_16 = LMBCS_11 + 1; //19
-	    public static final int LMBCS_17 = LMBCS_16 + 1; //20
-	    public static final int LMBCS_18 = LMBCS_17 + 1; //21
-	    public static final int LMBCS_19 = LMBCS_18 + 1; //22
-	    public static final int LMBCS_LAST = LMBCS_19; //22
-	    public static final int HZ =LMBCS_LAST + 1; //23
-	    public static final int SCSU = HZ + 1; //24
-	    public static final int ISCII = SCSU + 1; //25
-	    public static final int US_ASCII = ISCII + 1; //26
-	    public static final int UTF7 = US_ASCII + 1; //27
-	    public static final int BOCU1 = UTF7 + 1; //28
-	    public static final int UTF16 = BOCU1 + 1; //29
-	    public static final int UTF32 = UTF16 + 1; //30
-	    public static final int CESU8 = UTF32 + 1; //31
-	    public static final int IMAP_MAILBOX = CESU8 + 1; //32
-	    public static final int MAC_ARABIC = IMAP_MAILBOX + 1; //33
-	    public static final int MAC_HEBREW = MAC_ARABIC + 1; //34
+	     static final int LMBCS_1 = 11;
+	     static final int LMBCS_2 = LMBCS_1 + 1; //12
+	     static final int LMBCS_3 = LMBCS_2 + 1; //13
+	     static final int LMBCS_4 = LMBCS_3 + 1; //14
+	     static final int LMBCS_5 = LMBCS_4 + 1; //15
+	     static final int LMBCS_6 = LMBCS_5 + 1; //16
+	     static final int LMBCS_8 = LMBCS_6 + 1; //17
+	     static final int LMBCS_11 = LMBCS_8 + 1; //18
+	     static final int LMBCS_16 = LMBCS_11 + 1; //19
+	     static final int LMBCS_17 = LMBCS_16 + 1; //20
+	     static final int LMBCS_18 = LMBCS_17 + 1; //21
+	     static final int LMBCS_19 = LMBCS_18 + 1; //22
+	     static final int LMBCS_LAST = LMBCS_19; //22
+	     static final int HZ =LMBCS_LAST + 1; //23
+	     static final int SCSU = HZ + 1; //24
+	     static final int ISCII = SCSU + 1; //25
+	     static final int US_ASCII = ISCII + 1; //26
+	     static final int UTF7 = US_ASCII + 1; //27
+	     static final int BOCU1 = UTF7 + 1; //28
+	     static final int UTF16 = BOCU1 + 1; //29
+	     static final int UTF32 = UTF16 + 1; //30
+	     static final int CESU8 = UTF32 + 1; //31
+	     static final int IMAP_MAILBOX = CESU8 + 1; //32
+	     static final int MAC_ARABIC = IMAP_MAILBOX + 1; //33
+	     static final int MAC_HEBREW = MAC_ARABIC + 1; //34
 	
 	    /* Number of converter types for which we have conversion routines. */
-	    public static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = MAC_HEBREW + 1;
+	     static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = MAC_HEBREW + 1;
 	
 	}
 	
@@ -425,9 +426,9 @@ public class UConverterSharedData {
 	 * The use of platform/CCSID is not recommended. See openCCSID().
 	 * @draft ICU 3.6
 	 */
-	public static final class UConverterPlatform {
-	    public static final int UNKNOWN = -1;
-	    public static final int IBM = 0;
+	 static final class UConverterPlatform {
+	     static final int UNKNOWN = -1;
+	     static final int IBM = 0;
 	}
 
 	static UConverterSharedData _MBCSData = null, /*_Latin1Data = null,*/ /*_UTF8Data = null,*/ /*_UTF16BEData = null,*/ /*_UTF16LEData = null,*/ /*_UTF32BEData = null,*/ /*_UTF32LEData = null,*/  /*_ISO2022Data = null,*/ _LMBCSData1 = null,_LMBCSData2 = null, _LMBCSData3 = null, _LMBCSData4 = null, _LMBCSData5 = null, _LMBCSData6 = null, _LMBCSData8 = null,_LMBCSData11 = null,_LMBCSData16 = null,_LMBCSData17 = null,_LMBCSData18 = null,_LMBCSData19 = null, _HZData = null, _SCSUData = null, /*_ISCIIData = null,*/ /*_ASCIIData = null,*/ _UTF7Data = null, _Bocu1Data = null, /*_UTF16Data = null, _UTF32Data = null,*/ _CESU8Data = null, _IMAPData = null;
