@@ -449,6 +449,9 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionTests.ArabicShapingExceptionHandler());
         map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionTests.StringPrepParseExceptionHandler());
         map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionTests.UResourceTypeMismatchExceptionHandler());
+        map.put("com.ibm.icu.impl.InvalidFormatException", new ExceptionTests.InvalidFormatExceptionHandler());
+        
+        map.put("com.ibm.icu.text.NumberFormat$Field", new FormatTests.NumberFormatFieldHandler());
     }
     
     public SerializableTest()
