@@ -3301,7 +3301,7 @@ public class DecimalFormat extends NumberFormat {
 		pos.setEndIndex(end);
 		attributes.add(pos);
 	}
-	
+//#ifndef FOUNDATION
 	// [Spark/CDL] format the object to an attributed string,
 	// and return the corresponding iterator
 	public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
@@ -3337,7 +3337,7 @@ public class DecimalFormat extends NumberFormat {
 		// return the CharacterIterator from AttributedString
 		return as.getIterator();
 	}
-
+//#endif
     /**
      * Append an affix pattern to the given StringBuffer.  Localize unquoted
      * specials.
