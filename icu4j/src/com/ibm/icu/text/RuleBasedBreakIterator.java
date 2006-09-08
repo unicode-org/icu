@@ -47,8 +47,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         return This;   
     }
     
-    
-    public RuleBasedBreakIterator(RuleBasedBreakIterator other) {
+    private RuleBasedBreakIterator(RuleBasedBreakIterator other) {
         // TODO: check types.
         fRData = other.fRData;
         if (fText != null) {
@@ -292,10 +291,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
         this.fRData.dump();   
     }
 
-
-   
-    
     private static boolean debugInitDone = false;
+    
     private void init() {
         fLastStatusIndexValid = true;
         fDictionaryCharCount  = 0;
@@ -310,7 +307,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         }
     }
 
-    public static  void compileRules(String rules, OutputStream ruleBinary) throws IOException {
+    private static void compileRules(String rules, OutputStream ruleBinary) throws IOException {
         RBBIRuleBuilder.compileRules(rules, ruleBinary);
     }
     
@@ -816,7 +813,7 @@ public int getRuleStatusVec(int[] fillInArray) {
      * @param ci  The character iterator
      * @return    The next code point.
      */
-    protected static int CINext32(CharacterIterator ci) {
+     static int CINext32(CharacterIterator ci) {
         // If the current position is at a surrogate pair, move to the trail surrogate
         //   which leaves it in positon for underlying iterator's next() to work.
         int c= ci.current();
@@ -889,10 +886,8 @@ public int getRuleStatusVec(int[] fillInArray) {
         }
         return retVal;
     }
-    
-
-    
-    protected static int CICurrent32(CharacterIterator ci) {
+   
+    static int CICurrent32(CharacterIterator ci) {
         char  lead   = ci.current();
         int   retVal = lead;
         if (retVal < UTF16.LEAD_SURROGATE_MIN_VALUE) {
@@ -927,7 +922,7 @@ public int getRuleStatusVec(int[] fillInArray) {
     //                                     its inherited handleNext().
     //                      
     //-----------------------------------------------------------------------------------
-    protected int  handleNext() {
+    int handleNext() {
         return handleNext(fRData.fFTable);
     }
 
