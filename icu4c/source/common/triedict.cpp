@@ -1070,6 +1070,7 @@ CompactTrieDictionary::compactMutableTrieDictionary( const MutableTrieDictionary
     int32_t count = nodes.size();
     int32_t nodeCount = 1;              // The sentinel node we already have
     BuildCompactTrieNode *node;
+    int32_t i;
     UVector32 translate(count, status); // Should be no growth needed after this
     translate.push(0, status);          // The sentinel node
     
@@ -1077,7 +1078,7 @@ CompactTrieDictionary::compactMutableTrieDictionary( const MutableTrieDictionary
         return NULL;
     }
 
-    for (int32_t i = 1; i < count; ++i) {
+    for (i = 1; i < count; ++i) {
         node = (BuildCompactTrieNode *)nodes[i];
         if (node->fNodeID == i) {
             // Only one node out of each duplicate set is used
@@ -1125,7 +1126,7 @@ CompactTrieDictionary::compactMutableTrieDictionary( const MutableTrieDictionary
     uint32_t offset = offsetof(CompactTrieHeader,offsets)+(nodeCount*sizeof(uint32_t));
     nodeCount = 1;
     // Now write the data
-    for (int32_t i = 1; i < count; ++i) {
+    for (i = 1; i < count; ++i) {
         node = (BuildCompactTrieNode *)nodes[i];
         if (node->fNodeID == i) {
             header->offsets[nodeCount++] = offset;
@@ -1148,19 +1149,19 @@ CompactTrieDictionary::compactMutableTrieDictionary( const MutableTrieDictionary
     size_t hItemCount = 0;
     size_t vItemCount = 0;
     uint32_t previousOff = offset;
-    for (uint16_t i = nodeCount-1; i >= 2; --i) {
-        const CompactTrieNode *node = getCompactNode(header, i);
+    for (uint16_t nodeIdx = nodeCount-1; nodeIdx >= 2; --nodeIdx) {
+        const CompactTrieNode *node = getCompactNode(header, nodeIdx);
         if (node->flagscount & kVerticalNode) {
             vCount += 1;
             vItemCount += (node->flagscount & kCountMask);
-            vSize += previousOff-header->offsets[i];
+            vSize += previousOff-header->offsets[nodeIdx];
         }
         else {
             hCount += 1;
             hItemCount += (node->flagscount & kCountMask);
-            hSize += previousOff-header->offsets[i];
+            hSize += previousOff-header->offsets[nodeIdx];
         }
-        previousOff = header->offsets[i];
+        previousOff = header->offsets[nodeIdx];
     }
     fprintf(stderr, "Horizontal nodes: %d total, average %f bytes with %f items\n", hCount,
                 (double)hSize/hCount, (double)hItemCount/hCount);
