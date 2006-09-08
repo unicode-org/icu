@@ -18,17 +18,17 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.4.5</h3>
+<h3>Read Me for ICU4J 3.6 d01</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-September 1, 2006<br>
+September 9, 2006<br>
 </p>
-<p><b>Note:</b> This is an update release of ICU4J 3.4.  It contains bug fixes
-and adds implementations of inherited API, but does not introduce new API
-or functionality.  These changes will be rolled into the next release of ICU4J.
+<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
+and adds implementations of inherited API and introduces new API
+or functionality.
 </p>
 <p>For the most recent release, see the <a
- href="http://www.ibm.com/software/globalization/icu/downloads.jsp"> ICU4J
+ href="http://icu.sourceforge.net/download/"> ICU4J
 download site</a>. </p>
 <h3 class="doc">Contents</h3>
 <ul type="disc">
@@ -78,7 +78,7 @@ the JDK</li>
 Characters</b></a> &#8211; String manipulation and character properties<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for proper GB 18030 and JIS 213
 repertoire support</li>
-  <li><a href="http://icu.sourceforge.net/userguide/charset.html"><b>Charset
+  <li><a href="http://icu.sourceforge.net/userguide/charsetDetection.html"><b>Charset
 Detection</b></a> &#8211; Recognition of various single and multibyte charsets<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Useful for recognizing untagged text data</li>
   <li><a
@@ -195,26 +195,19 @@ current and complete version of this support is always found in ICU4J.
 -->
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
 <ul>
-  <li><a href="#News_Time_Zone">New Time Zone Data</a></li>
-  <li><a href="#News_Fixes">Fixes</a></li>
+      <li><strong>Unicode</strong>: ICU uses and supports Unicode 5.0, which is the
+      latest major release of Unicode. Unicode 5.0 will be used in many
+      operating systems and applications, and this version of ICU is important
+      maintain interoperability with these new operating systems and applications.
+      More information about Unicode 5.0 can be found in the <a href="http://www.unicode.org/press/pr-ucd5.0.html">Unicode press
+      release</a>.</li>
+      <li><strong>Locale Data</strong>: ICU uses and supports data from <a href="http://www.unicode.org/press/pr-cldr1.4.html">Common Locale Data
+      Repository (CLDR) 1.4</a>, which includes many improvements in quality
+      and quantity of data. There is 25% more CLDR locale data in 245 locales in ICU.</li>
+    <li><strong>Formatting</strong>: A flexible date/time format generator has been added. This allows multiple date and time format patterns to be generated that are valid for specific locales.</li>
+    <li><strong>Globalization Preferences</strong>: A new flexible container for locale data was added.</li>
+    <li><strong>Charset Conversion</strong>: A preview of the ICU4J implementation of the java.nio.charset.Charset API was added.</li>
 </ul>
-<h4><a name="News_Time_Zone" id="News_Time_Zone">New Time Zone Data</a></h4>
-<p>Release 3.4.5 updates the time zone data to version 2006j from the Olson time
-zone database.</p>
-
-<h4><a name="News_Fixes" id="News_Fixes">Fixes:</a></h4>
-<p>This release contains the following bug fixes (not a complete list):<ul>
-<li><b>jb5134:</b> TimeZone.getOffset returns wrong offset before the first timezone transition</li>
-<li><b>jb5145:</b> Use IllegalStatusException instead of InternalError for ICU run-time exception</li>
-<li><b>jb5147:</b> Internal Error in Collator.getInstance with Eclipse and Java 6</li>
-<li><b>jb5183:</b> UResourceBundle.loadFromCache returns invalid results</li>
-<li><b>jb5194:</b> ICU4J fallback fails when language is unsupported</li>
-<li><b>jb5203:</b> Major performance problem with ICU DateFormat</li>
-<li><b>jb5284:</b> Remove final keyword from DateFormat.format and parse</li>
-<li><b>jb5290:</b> Time zone string parse problem</li>
-</ul>
-<br/>
-</p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -235,9 +228,7 @@ This means that GPL projects can now use ICU code, it does <b>not</b>
 mean that projects using ICU become subject to GPL.
 </p>
 <p>
-The text of the X license is available at <a
- href="http://www.x.org/Downloads_terms.html">http://www.x.org/Downloads_terms.html</a>. The
-IBM version contains the essential text of the license, omitting the
+ The IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
  href="license.html">ICU's license</a> is included in the download
 package.
@@ -250,22 +241,22 @@ platform. Currently 1.1.x and 1.2.x JVMs are unsupported and untested,
 and you use the components on these JVMs at your own risk.</p>
 <p> The reference platforms which we support and test ICU4J on are:</p>
 <ul>
-  <li> WinXP, IBM JDK 1.4.2</li>
+  <li> WinXP, IBM JDK 1.5.0</li>
   <li> Solaris 5.9, Sun JDK 1.5.0</li>
-  <li> AIX 5.2, IBM JDK 1.4.2</li>
+  <li> AIX 5.2, IBM JDK 1.5.0</li>
 </ul>
 <p>Please use the most recent updates of the supported JDK versions.</p>
 <p>Additionally, we have built and tested ICU4J on the following <b>unsupported</b>
 platforms (note, only some build/test targets work on 1.3 platforms):
 </p>
 <ul>
-<li> Win2K / IBM JDK 1.4.1, Sun JDK  1.4, 1.4.1, 1.4.2</li>
-<li> WinXP / IBM JDK 1.3.1, 1.4.1, Sun JDK 1.3.1, 1.4.2, 1.5.0</li>
-<li> Solaris 5.6 , Solaris 5.7 / Sun JDK 1.4, 1.4.1, 1.4.2</li>
-<li> Solaris 5.9 / Sun JDK 1.3.1, 1.4, 1.4.1, 1.4.2</li>
-<li> AIX 5.1, AIX 5.2 / IBM JDK 1.4.1</li>
-<li> RedHat Enterprise Linux 3/  IBM JDK 1.4.1, 1.4.0, Sun JDK 1.3.1, 1.4, 1.4.1, 1.4.2, 1.5.0</li>
-<li> RedHat Linux 7.2/  IBM JDK 1.4.1, 1.4.0, Sun JDK 1.4, 1.4.1, 1.4.2, 1.5.0</li>
+<li> WinXP / IBM JDK 1.4.2, 1.4.1, Sun JDK  1.5.0, 1.4.2</li>
+<li> Win Vista/ IBM JDK 1.5.0, 1.4.2, 1.4.1, Sun JDK  1.5.0, 1.4.2</li>
+<li> Solaris 5.6 , Solaris 5.7 / Sun JDK 1.4.2, 1.4.1, 1.4.0</li>
+<li> Solaris 5.9 / Sun JDK 1.4.2, 1.4.1, 1.4.0</li>
+<li> AIX 5.2 / IBM JDK 1.4.2, 1.4.1</li>
+<li> AIX 5.1 / IBM JDK 1.4.2, 1.4.1</li>
+<li> RedHat Enterprise Linux 3/  IBM JDK 1.5.0, 1.4.2, Sun JDK  1.5.0, 1.4.2, 1.4.1, 1.4.0</li>
 </ul>
 <h3 class="doc"><a name="download"></a>How to Download ICU4J</h3>
 <p>There are two ways to download the ICU4J releases.
@@ -277,7 +268,7 @@ is to download an official, packaged version of the ICU4J source
 code. These versions are tested more thoroughly than day-to-day
 development builds, and they are packaged in jar files for convenient
 download. These packaged files can be found at the <a
- href="http://ibm.com/software/globalization/icu/downloads.jsp">ICU Downloads page</a>.
+ href="http://icu.sourceforge.net/download/">ICU Downloads page</a>.
 A packaged snapshot is named <b>icu4jsrc_XXX.jar</b>, where XXX
 is the release version number. Please unjar this file. It
 will reconstruct the source directory.</li>
@@ -290,13 +281,13 @@ ICU4J source code. You will need to check the code out of our CVS
 repository to ensure that you have the most recent version of all of
 the files. There are several ways to do this. Please follow the
 directions that are contained on the <a
- href="http://ibm.com/software/globalization/icu/repository.jsp">Source
+ href="http://www.ibm.com/software/globalization/icu/repository.jsp">Source
  Repository page</a> for details.
   </li>
 </ul>
 <p>For more details on how to download ICU4J directly from the web
 site, please see the ICU downloads page at <a
- href="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</a>
+ href="http://icu.sourceforge.net/download/">http://icu.sourceforge.net/download/</a>
 </p>
 <h3 class="doc"><a name="WhatContain"></a>The Structure and Contents of
 ICU4J</h3>
@@ -1332,11 +1323,11 @@ following command. <br>
 
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
-<p><a href="http://ibm.com/software/globalization/icu/">http://ibm.com/software/globalization/icu/</a>
+<p><a href="http://www.ibm.com/software/globalization/icu/">http://www.ibm.com/software/globalization/icu/</a>
 is a
 pointer to general information about the International Components for
 Unicode in Java </p>
-<p><a href="http://ibm.com/software/globalization/">http://ibm.com/software/globalization/</a>
+<p><a href="http://www.ibm.com/software/globalization/">http://www.ibm.com/software/globalization/</a>
 is a pointer to
 information on how to make applications global. </p>
 <h3 class="doc"><a name="SubmittingComments"></a>Submitting Comments,
