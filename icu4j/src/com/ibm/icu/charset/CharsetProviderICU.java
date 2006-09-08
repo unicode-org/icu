@@ -16,7 +16,6 @@ import java.nio.charset.spi.CharsetProvider;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 
 /**
@@ -27,6 +26,14 @@ import java.util.NoSuchElementException;
  */
 public final class CharsetProviderICU extends CharsetProvider{
     
+    /**
+     * Default constructor 
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CharsetProviderICU() {
+    }
+
     /**
      * Constructs a charset for the given charset name. 
      * Implements the abstract method of super class.
@@ -187,38 +194,6 @@ public final class CharsetProviderICU extends CharsetProvider{
     
     }
 
-    /**
-     * Class that implements the iterator for charsets
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    protected final class CharsetIterator implements Iterator {
-		private String[] names;
-
-		private int currentIndex;
-
-		protected CharsetIterator(String[] strs) {
-			names = strs;
-			currentIndex = 0;
-		}
-
-		public boolean hasNext() {
-			return (currentIndex < names.length);
-		}
-
-		public Object next() {
-			if (currentIndex < names.length) {
-				return charsetForName(names[currentIndex++]);
-			} else {
-				throw new NoSuchElementException();
-			}
-		}
-
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-	}
-      
     private static final void putCharsets(Map map){
         int num = UConverterAlias.countAvailable();
         for(int i=0;i<num;i++) {
