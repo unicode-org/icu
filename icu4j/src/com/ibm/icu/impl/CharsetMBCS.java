@@ -950,8 +950,7 @@ public class CharsetMBCS extends CharsetICU {
         }
 
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
             int stateTable[][/*256*/];
@@ -973,21 +972,21 @@ public class CharsetMBCS extends CharsetICU {
                  * pass sourceIndex=-1 because we continue from an earlier buffer
                  * in the future, this may change with continuous offsets
                  */
-                cr = continueMatchToU(source, target, offsets, -1);
+                cr[0] = continueMatchToU(source, target, offsets, -1);
         
-                if(cr.isError() || preToULength<0) {
-                    return cr;
+                if(cr[0].isError() || preToULength<0) {
+                    return cr[0];
                 }
             }
         
             if(sharedData.mbcs.countStates==1) {
                 if((sharedData.mbcs.unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
-                    cr = cnvMBCSSingleToBMPWithOffsets(source, target, offsets);
+                    cr[0] = cnvMBCSSingleToBMPWithOffsets(source, target, offsets);
                 }
                 else {
-                    cr = cnvMBCSSingleToUnicodeWithOffsets(source, target, offsets);
+                    cr[0] = cnvMBCSSingleToUnicodeWithOffsets(source, target, offsets);
                 }
-                return cr;
+                return cr[0];
             }
     
             /* set up the local pointers */
@@ -1031,7 +1030,7 @@ public class CharsetMBCS extends CharsetICU {
                  */
                 if(!target.hasRemaining()) {
                     /* target is full */
-                    cr = CoderResult.OVERFLOW;
+                    cr[0] = CoderResult.OVERFLOW;
                     break;
                 }
         
@@ -1134,7 +1133,7 @@ public class CharsetMBCS extends CharsetICU {
                     }
                     if(!target.hasRemaining()) {
                         /* target is full */
-                        cr = CoderResult.OVERFLOW;
+                        cr[0] = CoderResult.OVERFLOW;
                         break;
                     }
     
@@ -1186,7 +1185,7 @@ public class CharsetMBCS extends CharsetICU {
                     } 
                     else {
                         /* callback(illegal) */
-                        cr = CoderResult.malformedForLength(byteIndex);
+                        cr[0] = CoderResult.malformedForLength(byteIndex);
                     }
                 } 
                 else if(action==MBCS_STATE_VALID_DIRECT_16) {
@@ -1225,7 +1224,7 @@ public class CharsetMBCS extends CharsetICU {
                         /* target overflow */
                             charErrorBufferArray[0] = unicodeCodeUnits[offset];
                             charErrorBufferLength = 1;
-                            cr = CoderResult.OVERFLOW;
+                            cr[0] = CoderResult.OVERFLOW;
         
                             offset = 0;
                             break;
@@ -1241,7 +1240,7 @@ public class CharsetMBCS extends CharsetICU {
                     } 
                     else if(c==0xffff) {
                         /* callback(illegal) */
-                        cr = CoderResult.malformedForLength(byteIndex);
+                        cr[0] = CoderResult.malformedForLength(byteIndex);
                     }
                 } 
                 else if(action==MBCS_STATE_VALID_DIRECT_20 ||
@@ -1264,7 +1263,7 @@ public class CharsetMBCS extends CharsetICU {
                         /* target overflow */
                         charErrorBufferArray[0]=c;
                         charErrorBufferLength=1;
-                        cr = CoderResult.OVERFLOW;
+                        cr[0] = CoderResult.OVERFLOW;
         
                         offset = 0;
                         break;
@@ -1286,7 +1285,7 @@ public class CharsetMBCS extends CharsetICU {
                         state = (byte)(mode); /* restore the previous state */
         
                         /* callback(illegal) */
-                        cr = CoderResult.malformedForLength(byteIndex);
+                        cr[0] = CoderResult.malformedForLength(byteIndex);
                     }
                 }
                 else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
@@ -1304,7 +1303,7 @@ public class CharsetMBCS extends CharsetICU {
                 } 
                 else if(action==MBCS_STATE_ILLEGAL) {
                     /* callback(illegal) */
-                    cr = CoderResult.malformedForLength(byteIndex);
+                    cr[0] = CoderResult.malformedForLength(byteIndex);
                 } 
                 else {
                     /* reserved, must never occur */
@@ -1317,7 +1316,7 @@ public class CharsetMBCS extends CharsetICU {
                 if(byteIndex==0) {
                     sourceIndex = nextSourceIndex;
                 } 
-                else if(cr.isError()) {
+                else if(cr[0].isError()) {
                     /* callback(illegal) */
                     break;
                 } 
@@ -1325,11 +1324,11 @@ public class CharsetMBCS extends CharsetICU {
                     /* try an extension mapping */
                     int sourceBeginIndex = sourceArrayIndex;
                     source.position(sourceArrayIndex);
-                    byteIndex = toU(byteIndex, source, target, offsets, sourceIndex, crArray);
+                    byteIndex = toU(byteIndex, source, target, offsets, sourceIndex, cr);
                     sourceArrayIndex = source.position();
                     sourceIndex = nextSourceIndex+(int)(sourceArrayIndex-sourceBeginIndex);
         
-                    if(cr.isError()) {
+                    if(cr[0].isError()) {
                         /* not mappable or buffer overflow */
                         break;
                     }
@@ -1344,7 +1343,7 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return cr;
+            return cr[0];
         }
         
         /*
@@ -1607,12 +1606,12 @@ public class CharsetMBCS extends CharsetICU {
          * @return if(U_FAILURE) return the length (toULength, byteIndex) for the input
          *         else return 0 after output has been written to the target
          */
-        protected int toU(int length, ByteBuffer source, CharBuffer target, IntBuffer offsets, int sourceIndex, CoderResult[] crArray)
+        protected int toU(int length, ByteBuffer source, CharBuffer target, IntBuffer offsets, int sourceIndex, CoderResult[] cr)
         {
             //ByteBuffer cx;
         
             if(sharedData.mbcs.extIndexes!=null &&
-               initialMatchToU(length, source, target, offsets, sourceIndex, crArray)) {
+               initialMatchToU(length, source, target, offsets, sourceIndex, cr)) {
                 return 0; /* an extension mapping handled the input */
             }
         
@@ -1627,13 +1626,13 @@ public class CharsetMBCS extends CharsetICU {
                 for(i=0; i<gb18030Ranges.length/gb18030Ranges[0].length; range=gb18030Ranges[++i]) {
                     if(range[2]<=linear && linear<=range[3]) {
                         /* found the sequence, output the Unicode code point for it */
-                        crArray[0] = CoderResult.UNDERFLOW;
+                        cr[0] = CoderResult.UNDERFLOW;
         
                         /* add the linear difference between the input and start sequences to the start code point */
                         linear = range[0]+(linear-range[2]);
         
                         /* output this code point */
-                        crArray[0] = toUWriteCodePoint((int)linear, target, offsets, sourceIndex);
+                        cr[0] = toUWriteCodePoint((int)linear, target, offsets, sourceIndex);
         
                         return 0;
                     }
@@ -1641,14 +1640,14 @@ public class CharsetMBCS extends CharsetICU {
             }
         
             /* no mapping */
-            crArray[0] = CoderResult.unmappableForLength(length);
+            cr[0] = CoderResult.unmappableForLength(length);
             return length;
         }   
         
         /*
          * target<targetLimit; set error code for overflow
          */
-        protected boolean initialMatchToU(int firstLength, ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, CoderResult[] crArray)
+        protected boolean initialMatchToU(int firstLength, ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, CoderResult[] cr)
         {
             int[] value = new int[1];
             int match = 0;
@@ -1660,7 +1659,7 @@ public class CharsetMBCS extends CharsetICU {
                 source.position(source.position()+match-firstLength);
                 
                 /* write result to target */
-                crArray[0] = writeToU(value[0], target, offsets, srcIndex);
+                cr[0] = writeToU(value[0], target, offsets, srcIndex);
                 return true;
             }
             else if(match<0) {
@@ -1700,8 +1699,7 @@ public class CharsetMBCS extends CharsetICU {
          */
         protected CoderResult cnvMBCSSingleToBMPWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets)
         {
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex, lastSource;
             int targetCapacity, length;
@@ -1767,7 +1765,7 @@ public class CharsetMBCS extends CharsetICU {
                 } 
                 else if(action==MBCS_STATE_ILLEGAL) {
                     /* callback(illegal) */
-                    cr = CoderResult.malformedForLength(sourceArrayIndex-lastSource);
+                    cr[0] = CoderResult.malformedForLength(sourceArrayIndex-lastSource);
                 } else {
                     /* reserved, must never occur */
                     continue;
@@ -1784,7 +1782,7 @@ public class CharsetMBCS extends CharsetICU {
                     /* offset and sourceIndex are now set for the current character */
                 }
         
-                if(cr.isError()) {
+                if(cr[0].isError()) {
                     /* callback(illegal) */
                     break;
                 } 
@@ -1793,11 +1791,11 @@ public class CharsetMBCS extends CharsetICU {
                     lastSource = sourceArrayIndex;
                     toUBytesArray[0]=source.get(sourceArrayIndex-1);
                     source.position(sourceArrayIndex);
-                    toULength = toU((byte)1, source, target, offsets, sourceIndex, crArray);
+                    toULength = toU((byte)1, source, target, offsets, sourceIndex, cr);
                     sourceArrayIndex = source.position();                                
                     sourceIndex += 1+(int)(sourceArrayIndex-lastSource);
         
-                    if(cr.isError()) {
+                    if(cr[0].isError()) {
                         /* not mappable or buffer overflow */
                         break;
                     }
@@ -1811,9 +1809,9 @@ public class CharsetMBCS extends CharsetICU {
                 }
             }
         
-            if(!cr.isError() && sourceArrayIndex<source.capacity() && !target.hasRemaining()) {
+            if(!cr[0].isError() && sourceArrayIndex<source.capacity() && !target.hasRemaining()) {
                 /* target is full */
-                cr = CoderResult.OVERFLOW;
+                cr[0] = CoderResult.OVERFLOW;
             }
         
             /* set offsets since the start or the last callback */
@@ -1828,14 +1826,13 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);            
             
-            return cr;
+            return cr[0];
         }
        
         /* This version of cnvMBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
         protected CoderResult cnvMBCSSingleToUnicodeWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets)
         {
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
             int[][] stateTable;
@@ -1871,7 +1868,7 @@ public class CharsetMBCS extends CharsetICU {
                  */
                 if(!target.hasRemaining()) {
                     /* target is full */
-                    cr = CoderResult.OVERFLOW;
+                    cr[0] = CoderResult.OVERFLOW;
                     break;
                 }
         
@@ -1916,7 +1913,7 @@ public class CharsetMBCS extends CharsetICU {
                         /* target overflow */
                         charErrorBufferArray[0]=c;
                         charErrorBufferLength=1;
-                        cr = CoderResult.OVERFLOW;
+                        cr[0] = CoderResult.OVERFLOW;
                         break;
                     }
         
@@ -1940,7 +1937,7 @@ public class CharsetMBCS extends CharsetICU {
                 }
                 else if(action==MBCS_STATE_ILLEGAL) {
                     /* callback(illegal) */
-                    cr = CoderResult.malformedForLength(1);
+                    cr[0] = CoderResult.malformedForLength(1);
                 } 
                 else {
                     /* reserved, must never occur */
@@ -1948,7 +1945,7 @@ public class CharsetMBCS extends CharsetICU {
                     continue;
                 }
         
-                if(cr.isError()) {
+                if(cr[0].isError()) {
                     /* callback(illegal) */
                     break;
                 } 
@@ -1957,11 +1954,11 @@ public class CharsetMBCS extends CharsetICU {
                     int sourceBeginIndex = sourceArrayIndex;
                     toUBytesArray[0] = source.get(sourceArrayIndex-1);
                     source.position(sourceArrayIndex);
-                    toULength = toU((byte)1, source, target, offsets, sourceIndex, crArray);
+                    toULength = toU((byte)1, source, target, offsets, sourceIndex, cr);
                     sourceArrayIndex = source.position();
                     sourceIndex += 1+(int)(sourceArrayIndex-sourceBeginIndex);
         
-                    if(cr.isError()) {
+                    if(cr[0].isError()) {
                         /* not mappable or buffer overflow */
                         break;
                     }
@@ -1971,7 +1968,7 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return cr;
+            return cr[0];
         }
 
         protected int getFallback(UConverterMBCSTable mbcsTable, int offset) 
@@ -2018,8 +2015,8 @@ public class CharsetMBCS extends CharsetICU {
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+      
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
 
             int sourceArrayIndex;
             char[] table;
@@ -2036,10 +2033,10 @@ public class CharsetMBCS extends CharsetICU {
                      * pass sourceIndex=-1 because we continue from an earlier buffer
                      * in the future, this may change with continuous offsets
                      */
-                    cr = continueMatchFromU(source, target, offsets, -1);
+                    cr[0] = continueMatchFromU(source, target, offsets, -1);
             
-                    if(cr.isError() || preFromULength<0) {
-                        return cr;
+                    if(cr[0].isError() || preFromULength<0) {
+                        return cr[0];
                     }
                 }
             
@@ -2048,14 +2045,14 @@ public class CharsetMBCS extends CharsetICU {
                 unicodeMask = sharedData.mbcs.unicodeMask;
                 if(outputType==MBCS_OUTPUT_1 && (unicodeMask&UConverterConstants.HAS_SURROGATES) == 0) {
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
-                        cr = cnvMBCSSingleFromBMPWithOffsets(source, target, offsets);
+                        cr[0] = cnvMBCSSingleFromBMPWithOffsets(source, target, offsets);
                     } else {
-                        cr = cnvMBCSSingleFromUnicodeWithOffsets(source, target, offsets);
+                        cr[0] = cnvMBCSSingleFromUnicodeWithOffsets(source, target, offsets);
                     }
-                    return cr;
+                    return cr[0];
                 } else if(outputType==MBCS_OUTPUT_2) {
-                    cr = cnvMBCSDoubleFromUnicodeWithOffsets(source, target, offsets);
-                    return cr;
+                    cr[0] = cnvMBCSDoubleFromUnicodeWithOffsets(source, target, offsets);
+                    return cr[0];
                 }
             
                 table = sharedData.mbcs.fromUnicodeTable;
@@ -2103,14 +2100,13 @@ public class CharsetMBCS extends CharsetICU {
                 boolean doloop = true;
                 if(c!=0 && target.hasRemaining()) {
                     SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength);
-                    doloop = getTrail(source, target, unicodeMask, x, crArray);
+                    doloop = getTrail(source, target, unicodeMask, x, cr);
                     c = x.c;
                     sourceArrayIndex = x.sourceArrayIndex;
                     sourceIndex = x.sourceIndex;
                     nextSourceIndex = x.nextSourceIndex;
                     prevSourceIndex = x.prevSourceIndex;
                     prevLength = x.prevLength;
-                    cr = crArray[0];
                 }
             
                 if(doloop) {
@@ -2140,13 +2136,13 @@ public class CharsetMBCS extends CharsetICU {
                                 if(UTF16.isLeadSurrogate((char)c)) {
                                     //getTrail:
                                     SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength);
-                                    doloop = getTrail(source, target, unicodeMask, x, crArray);
+                                    doloop = getTrail(source, target, unicodeMask, x, cr);
                                     c = x.c;
                                     sourceArrayIndex = x.sourceArrayIndex;
                                     sourceIndex = x.sourceIndex;
                                     nextSourceIndex = x.nextSourceIndex;
                                     prevSourceIndex = x.prevSourceIndex;
-                                    cr = crArray[0];
+                                   
                                     if(doloop)
                                         continue;
                                     else
@@ -2155,7 +2151,7 @@ public class CharsetMBCS extends CharsetICU {
                                 else {
                                     /* this is an unmatched trail code unit (2nd surrogate) */
                                     /* callback(illegal) */
-                                    cr = CoderResult.malformedForLength(1);
+                                    cr[0] = CoderResult.malformedForLength(1);
                                     break;
                                 }
                             }
@@ -2352,14 +2348,13 @@ public class CharsetMBCS extends CharsetICU {
                     
                                     //unassigned:
                                     SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength);
-                                    doloop = unassigned(source, target, null, x, crArray);
+                                    doloop = unassigned(source, target, null, x, cr);
                                     c = x.c;
                                     sourceArrayIndex = x.sourceArrayIndex;
                                     sourceIndex = x.sourceIndex;
                                     nextSourceIndex = x.nextSourceIndex;
                                     prevSourceIndex = x.prevSourceIndex;
                                     prevLength = x.prevLength;
-                                    cr = crArray[0];
                                     if(doloop)
                                         continue;
                                     else
@@ -2458,7 +2453,7 @@ public class CharsetMBCS extends CharsetICU {
                                     }
             
                                     /* target overflow */
-                                    cr = CoderResult.OVERFLOW;
+                                    cr[0] = CoderResult.OVERFLOW;
                                     c=0;
                                     break;
                                 }
@@ -2473,7 +2468,7 @@ public class CharsetMBCS extends CharsetICU {
                             } 
                             else {
                                 /* target is full */
-                                cr = CoderResult.OVERFLOW;
+                                cr[0] = CoderResult.OVERFLOW;
                                 break;
                             }
                         }
@@ -2504,7 +2499,7 @@ public class CharsetMBCS extends CharsetICU {
                             /* target is full */
                             errorBuffer[0]=(byte)UConverterConstants.SI;
                             errorBufferLength=1;
-                            cr = CoderResult.OVERFLOW;
+                            cr[0] = CoderResult.OVERFLOW;
                         }
                     prevLength=1; /* we switched into SBCS */
                 }
@@ -2516,10 +2511,10 @@ public class CharsetMBCS extends CharsetICU {
                 source.position(sourceArrayIndex);
             }
             catch(BufferOverflowException ex){
-                cr = CoderResult.OVERFLOW;
+                cr[0] = CoderResult.OVERFLOW;
             }
             
-            return cr;
+            return cr[0];
         }
         
         /*
@@ -2855,14 +2850,14 @@ public class CharsetMBCS extends CharsetICU {
          * @return if(U_FAILURE) return the code point for cnv->fromUChar32
          *         else return 0 after output has been written to the target
          */
-        protected int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, CoderResult[] crArray)
+        protected int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, CoderResult[] cr)
         {
             //ByteBuffer cx;
             long cp = cp_ & UConverterConstants.UNSIGNED_INT_MASK;
         
             useSubChar1=false;
         
-            if( sharedData.mbcs.extIndexes!=null && initialMatchFromU((int)cp, source, target, offsets, sourceIndex, crArray)) {
+            if( sharedData.mbcs.extIndexes!=null && initialMatchFromU((int)cp, source, target, offsets, sourceIndex, cr)) {
                 return 0; /* an extension mapping handled the input */
             }
         
@@ -2890,21 +2885,21 @@ public class CharsetMBCS extends CharsetICU {
                         bytes[0]=(byte)(0x81+linear);
         
                         /* output this sequence */
-                        crArray[0] = fromUWriteBytes(this, bytes, 0, 4, target, offsets, sourceIndex);
+                        cr[0] = fromUWriteBytes(this, bytes, 0, 4, target, offsets, sourceIndex);
                         return 0;
                     }
                 }
             }
         
             /* no mapping */
-            crArray[0] = CoderResult.unmappableForLength(1);
+            cr[0] = CoderResult.unmappableForLength(1);
             return (int)cp;
         }
 
         /*
          * target<targetLimit; set error code for overflow
          */
-        protected boolean initialMatchFromU(int cp, CharBuffer source, ByteBuffer target, IntBuffer offsets, int srcIndex, CoderResult[] crArray)
+        protected boolean initialMatchFromU(int cp, CharBuffer source, ByteBuffer target, IntBuffer offsets, int srcIndex, CoderResult[] cr)
         {
             int[] value = new int[1];
             int match;
@@ -2921,7 +2916,7 @@ public class CharsetMBCS extends CharsetICU {
                 source.position(source.position()+match-2); /* remove 2 for the initial code point */
         
                 /* write result to target */
-                crArray[0] = writeFromU(value[0], target, offsets, srcIndex);
+                cr[0] = writeFromU(value[0], target, offsets, srcIndex);
                 return true;
             } else if(match<0) {
                 /* save state for partial match */
@@ -2955,10 +2950,9 @@ public class CharsetMBCS extends CharsetICU {
          * In addition to single-byte/state optimizations, the offset calculations
          * become much easier.
          */
-        protected CoderResult cnvMBCSSingleFromBMPWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets)
-        {
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+        protected CoderResult cnvMBCSSingleFromBMPWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+            
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex, lastSource;
             int targetCapacity, length;
@@ -3008,7 +3002,7 @@ public class CharsetMBCS extends CharsetICU {
             boolean doloop = true;
             if(c!=0 && targetCapacity>0) {
                 SideEffectsSingleBMP x = new SideEffectsSingleBMP(c, sourceArrayIndex);
-                doloop = getTrailSingleBMP(source, x, cr);
+                doloop = getTrailSingleBMP(source, x, cr[0]);
                 c = x.c;
                 sourceArrayIndex = x.sourceArrayIndex;
             }
@@ -3047,7 +3041,7 @@ public class CharsetMBCS extends CharsetICU {
                     else if(UTF16.isLeadSurrogate((char)c)) {
                         //getTrail:
                         SideEffectsSingleBMP x = new SideEffectsSingleBMP(c, sourceArrayIndex);
-                        doloop = getTrailSingleBMP(source, x, cr);
+                        doloop = getTrailSingleBMP(source, x, cr[0]);
                         c = x.c;
                         sourceArrayIndex = x.sourceArrayIndex;
                         if(!doloop)
@@ -3056,7 +3050,7 @@ public class CharsetMBCS extends CharsetICU {
                     else {
                         /* this is an unmatched trail code unit (2nd surrogate) */
                         /* callback(illegal) */
-                        cr = CoderResult.malformedForLength(1);
+                        cr[0] = CoderResult.malformedForLength(1);
                         break;
                     }
         
@@ -3082,12 +3076,12 @@ public class CharsetMBCS extends CharsetICU {
                     /* try an extension mapping */
                     lastSource = sourceArrayIndex;
                     source.position(sourceArrayIndex);
-                    c = fromU(c, source, target, offsets, sourceIndex, crArray);
+                    c = fromU(c, source, target, offsets, sourceIndex, cr);
                     sourceArrayIndex = source.position();
                     sourceIndex += length+(sourceArrayIndex-lastSource);
                     lastSource = sourceArrayIndex;
-                    cr = crArray[0];
-                    if(cr.isError()) {
+
+                    if(cr[0].isError()) {
                         /* not mappable or buffer overflow */
                         break;
                     } else {
@@ -3105,7 +3099,7 @@ public class CharsetMBCS extends CharsetICU {
         
             if(sourceArrayIndex<source.limit() && !target.hasRemaining()) {
                 /* target is full */
-                cr = CoderResult.OVERFLOW;
+                cr[0] = CoderResult.OVERFLOW;
             }
         
             /* set offsets since the start or the last callback */
@@ -3123,14 +3117,13 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return cr;
+            return cr[0];
         }
 
         /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for single-byte codepages. */
-        protected CoderResult cnvMBCSSingleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets)
-        {
-            CoderResult cr = CoderResult.UNDERFLOW;
-            CoderResult[] crArray = {cr};
+        protected CoderResult cnvMBCSSingleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+            
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
             
@@ -3176,7 +3169,7 @@ public class CharsetMBCS extends CharsetICU {
             boolean doloop = true;
             if(c!=0 && target.hasRemaining()) {
                 SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
-                doloop = getTrailDouble(source, target, unicodeMask, x, crArray);
+                doloop = getTrailDouble(source, target, unicodeMask, x, cr);
                 c = x.c;
                 sourceArrayIndex = x.sourceArrayIndex;
                 sourceIndex = x.sourceIndex;
@@ -3205,7 +3198,7 @@ public class CharsetMBCS extends CharsetICU {
                             if(UTF16.isLeadSurrogate((char)c)) {
                                 //getTrail:
                                 SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
-                                doloop = getTrailDouble(source, target, unicodeMask, x, crArray);
+                                doloop = getTrailDouble(source, target, unicodeMask, x, cr);
                                 c = x.c;
                                 sourceArrayIndex = x.sourceArrayIndex;
                                 sourceIndex = x.sourceIndex;
@@ -3218,7 +3211,7 @@ public class CharsetMBCS extends CharsetICU {
                             else {
                                 /* this is an unmatched trail code unit (2nd surrogate) */
                                 /* callback(illegal) */
-                                cr = CoderResult.malformedForLength(1);
+                                cr[0] = CoderResult.malformedForLength(1);
                                 break;
                             }
                         }
@@ -3243,7 +3236,7 @@ public class CharsetMBCS extends CharsetICU {
                         else { /* unassigned */
                             /* try an extension mapping */
                             SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
-                            doloop = unassignedDouble(source, target, x, crArray);
+                            doloop = unassignedDouble(source, target, x, cr);
                             c = x.c;
                             sourceArrayIndex = x.sourceArrayIndex;
                             sourceIndex = x.sourceIndex;
@@ -3254,7 +3247,7 @@ public class CharsetMBCS extends CharsetICU {
                     } 
                     else {
                         /* target is full */
-                        cr = CoderResult.OVERFLOW;
+                        cr[0] = CoderResult.OVERFLOW;
                         break;
                     }
                 }
@@ -3266,12 +3259,12 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return cr;
+            return cr[0];
         }
 
         /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
         protected CoderResult cnvMBCSDoubleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets){
-            CoderResult[] crArray = {CoderResult.UNDERFLOW};
+            CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
            
@@ -3310,7 +3303,7 @@ public class CharsetMBCS extends CharsetICU {
             boolean doloop = true;
             if(c!=0 && target.hasRemaining()) {
                 SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
-                doloop = getTrailDouble(source, target, unicodeMask, x, crArray);
+                doloop = getTrailDouble(source, target, unicodeMask, x, cr);
                 c = x.c;
                 sourceArrayIndex = x.sourceArrayIndex;
                 sourceIndex = x.sourceIndex;
@@ -3344,7 +3337,7 @@ public class CharsetMBCS extends CharsetICU {
                             if(UTF16.isLeadSurrogate((char)c)) {
                                 //getTrail:
                                 SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
-                                doloop = getTrailDouble(source, target, unicodeMask, x, crArray);
+                                doloop = getTrailDouble(source, target, unicodeMask, x, cr);
                                 c = x.c;
                                 sourceArrayIndex = x.sourceArrayIndex;
                                 sourceIndex = x.sourceIndex;
@@ -3357,7 +3350,7 @@ public class CharsetMBCS extends CharsetICU {
                             else {
                                 /* this is an unmatched trail code unit (2nd surrogate) */
                                 /* callback(illegal) */
-                                crArray[0] = CoderResult.malformedForLength(1);
+                                cr[0] = CoderResult.malformedForLength(1);
                                 break;
                             }
                         }
@@ -3386,7 +3379,7 @@ public class CharsetMBCS extends CharsetICU {
                             //unassigned:
                             SideEffectsDouble x = new SideEffectsDouble(c, sourceArrayIndex, sourceIndex, nextSourceIndex);
 
-                            doloop = unassignedDouble(source, target, x, crArray);
+                            doloop = unassignedDouble(source, target, x, cr);
                             c = x.c;
                             sourceArrayIndex = x.sourceArrayIndex;
                             sourceIndex = x.sourceIndex;
@@ -3423,7 +3416,7 @@ public class CharsetMBCS extends CharsetICU {
                                 errorBufferLength=1;
             
                                 /* target overflow */
-                                crArray[0] = CoderResult.OVERFLOW;
+                                cr[0] = CoderResult.OVERFLOW;
                                 c=0;
                                 break;
                             }
@@ -3436,7 +3429,7 @@ public class CharsetMBCS extends CharsetICU {
                     } 
                     else {
                         /* target is full */
-                        crArray[0] = CoderResult.OVERFLOW;
+                        cr[0] = CoderResult.OVERFLOW;
                         break;
                     }
                 }
@@ -3448,7 +3441,7 @@ public class CharsetMBCS extends CharsetICU {
             /* write back the updated pointers */
             source.position(sourceArrayIndex);
             
-            return crArray[0];
+            return cr[0];
         }
         
         protected final class SideEffectsSingleBMP {
@@ -3500,7 +3493,7 @@ public class CharsetMBCS extends CharsetICU {
         
         // function made out of block labeled getTrail in ucnv_MBCSFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrail(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffects x, CoderResult[] crArray)
+        protected final boolean getTrail(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffects x, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3513,14 +3506,14 @@ public class CharsetMBCS extends CharsetICU {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         fromUnicodeStatus = x.prevLength; /* save the old state */
                         /* callback(unassigned) */
-                        return unassigned(source, target, null, x, crArray);
+                        return unassigned(source, target, null, x, cr);
                     }
                     /* convert this supplementary code point */
                     /* exit this condition tree */
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    crArray[0] = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(2);
                     return false;
                 }
             } else {
@@ -3531,17 +3524,17 @@ public class CharsetMBCS extends CharsetICU {
         }
         
         // function made out of block labeled unassigned in ucnv_MBCSFromUnicodeWithOffsets
-        protected final boolean unassigned(CharBuffer source, ByteBuffer target, IntBuffer offsets, SideEffects x, CoderResult[] crArray)
+        protected final boolean unassigned(CharBuffer source, ByteBuffer target, IntBuffer offsets, SideEffects x, CoderResult[] cr)
         {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
             source.position(x.sourceArrayIndex);
-            x.c = fromU(x.c, source, target, null, x.sourceIndex, crArray);
+            x.c = fromU(x.c, source, target, null, x.sourceIndex, cr);
             x.sourceArrayIndex = source.position();
             x.nextSourceIndex += x.sourceArrayIndex-sourceBegin;
             x.prevLength=(int)fromUnicodeStatus;
         
-            if(crArray[0].isError()) {
+            if(cr[0].isError()) {
                 /* not mappable or buffer overflow */
                 return false;
             } else {
@@ -3572,7 +3565,7 @@ public class CharsetMBCS extends CharsetICU {
         
         // function made out of block labeled getTrail in ucnv_MBCSDoubleFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrailDouble(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffectsDouble x, CoderResult[] crArray)
+        protected final boolean getTrailDouble(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffectsDouble x, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3584,14 +3577,14 @@ public class CharsetMBCS extends CharsetICU {
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         /* callback(unassigned) */
-                        return unassignedDouble(source, target, x, crArray);
+                        return unassignedDouble(source, target, x, cr);
                     }
                     /* convert this supplementary code point */
                     /* exit this condition tree */
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    crArray[0] = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(2);
                     return false;
                 }
             } else {
@@ -3602,16 +3595,16 @@ public class CharsetMBCS extends CharsetICU {
         }
 
         // function made out of block labeled unassigned in ucnv_MBCSDoubleFromUnicodeWithOffsets
-        protected final boolean unassignedDouble(CharBuffer source, ByteBuffer target, SideEffectsDouble x, CoderResult[] crArray)
+        protected final boolean unassignedDouble(CharBuffer source, ByteBuffer target, SideEffectsDouble x, CoderResult[] cr)
         {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
             source.position(x.sourceArrayIndex);
-            x.c = fromU(x.c, source, target, null, x.sourceIndex, crArray);
+            x.c = fromU(x.c, source, target, null, x.sourceIndex, cr);
             x.sourceArrayIndex = source.position();
             x.nextSourceIndex += x.sourceArrayIndex - sourceBegin;
         
-            if(crArray[0].isError()) {
+            if(cr[0].isError()) {
                 /* not mappable or buffer overflow */
                 return false;
             } else {
