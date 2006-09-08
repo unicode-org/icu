@@ -845,6 +845,29 @@ public class FormatTests
         }
     }
     
+    public static class NumberFormatFieldHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            NumberFormat.Field fields[] = {
+                NumberFormat.Field.CURRENCY, NumberFormat.Field.DECIMAL_SEPARATOR, NumberFormat.Field.EXPONENT,
+                NumberFormat.Field.EXPONENT_SIGN, NumberFormat.Field.EXPONENT_SYMBOL, NumberFormat.Field.FRACTION,
+                NumberFormat.Field.GROUPING_SEPARATOR, NumberFormat.Field.INTEGER, NumberFormat.Field.PERCENT,
+                NumberFormat.Field.PERMILLE, NumberFormat.Field.SIGN
+            };
+            
+            return fields;
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            NumberFormat.Field field_a = (NumberFormat.Field) a;
+            NumberFormat.Field field_b = (NumberFormat.Field) b;
+            
+            return field_a.toString().equals(field_b.toString());
+        }
+    }
+    
     public static void main(String[] args)
     {
         // nothing needed...
