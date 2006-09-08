@@ -122,7 +122,7 @@ class CharsetUTF16 extends CharsetICU {
                                     --sourceArrayIndex;
                                 }
                                 toULength=2;
-                                cr = CoderResult.malformedForLength(sourceArrayIndex);;
+                                cr = CoderResult.malformedForLength(sourceArrayIndex);
                             }
                         }
                     } while(length>0);

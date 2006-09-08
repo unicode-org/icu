@@ -2875,7 +2875,7 @@ class CharsetMBCS extends CharsetICU {
                     if(range[0]<=cp && cp<=range[1]) {
                         /* found the Unicode code point, output the four-byte sequence for it */
                         long linear;
-                        byte bytes[] = new byte[4];;
+                        byte bytes[] = new byte[4];
         
                         /* get the linear value of the first GB 18030 code in this range */
                         linear=range[2]-LINEAR_18030_BASE;

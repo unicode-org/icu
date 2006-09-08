@@ -370,7 +370,7 @@ class CharsetUTF8 extends CharsetICU {
                                             /* this is an unmatched lead code unit (1st surrogate) */
                                             /* callback(illegal) */
                                             fromUChar32 = ch;
-                                            cr = CoderResult.malformedForLength(sourceArrayIndex);;
+                                            cr = CoderResult.malformedForLength(sourceArrayIndex);
                                             break;
                                         }
                                     } 

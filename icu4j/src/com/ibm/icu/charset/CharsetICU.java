@@ -22,7 +22,7 @@ import java.util.HashMap;
 import com.ibm.icu.lang.UCharacter;
 /**
  * <p>This API is used to convert codepage or character encoded data to and
- * from UTF-16. You can open a converter with {@link forName() } and {@link forNameICU() }. With that
+ * from UTF-16. You can open a converter with {@link Charset#forName } and {@link #forNameICU }. With that
  * converter, you can get its properties, set options, convert your data.</p>
  *
  * <p>Since many software programs recogize different converter names for
