@@ -19,7 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "ucln_in.h"
 #include "uenumimp.h"
 
