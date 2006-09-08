@@ -65,7 +65,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @internal ICU 3.4
      * @deprecated This API is for internal ICU use only
      */
-     static final String getICUCanonicalName(String enc)
+     public static final String getICUCanonicalName(String enc)
                                 throws UnsupportedCharsetException{
         String canonicalName = null;
         String ret = null;
@@ -225,7 +225,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-     static final Object[] getAvailableNames(){
+     public static final Object[] getAvailableNames(){
         HashMap map = new HashMap();
         putCharsets(map);
         return map.values().toArray();
@@ -237,7 +237,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-     static final String[] getAllNames(){
+     public static final String[] getAllNames(){
         int num = UConverterAlias.countAvailable();
         String[] names = new String[num];
         for(int i=0;i<num;i++) {
