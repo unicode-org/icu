@@ -39,7 +39,7 @@
 #include "uinvchar.h"
 #include "charstr.h"
 #include "cstring.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "uassert.h"
 #include "hash.h"
 

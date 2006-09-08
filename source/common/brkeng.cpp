@@ -20,7 +20,7 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "uvector.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "uresimp.h"
 #include "ubrkimpl.h"
 
