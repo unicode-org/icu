@@ -19,7 +19,6 @@
 #include "uvector.h"
 #include "charstr.h"
 #include "ustrfmt.h"
-#include "mutex.h"
 #include "uassert.h"
 #include "hash.h"
 

@@ -23,7 +23,7 @@
 #include "rbbirb.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "ucln_cmn.h"
 #include "brkeng.h"
 
