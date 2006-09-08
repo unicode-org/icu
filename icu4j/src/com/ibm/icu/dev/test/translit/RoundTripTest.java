@@ -283,11 +283,20 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestThai() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Thai")
-          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
-                "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
-                "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
+        if(isICUVersionAtLeast(3,7)){
+            new Test("Latin-Thai")
+                .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
+                      "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
+                      "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
                 null, this, new LegalThai());
+        }else{
+            new Test("Latin-Thai")
+            .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
+                  "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
+                  "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
+            "[\u0E4F]", this, new LegalThai());            
+        }
+        
         showElapsed(start, "TestThai");
     }
 
