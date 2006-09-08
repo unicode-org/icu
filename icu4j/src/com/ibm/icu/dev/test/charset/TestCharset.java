@@ -541,7 +541,7 @@ public class TestCharset extends TestFmwk {
         }
 
     }
-     public void TestAvailableCharsets() {
+    public void TestAvailableCharsets() {
         SortedMap map = Charset.availableCharsets();
         Set keySet = map.keySet();
         Iterator iter = keySet.iterator();
@@ -603,8 +603,10 @@ public class TestCharset extends TestFmwk {
         try{
             Charset cs = Charset.forName("GB_2312-80");
             CharsetEncoder enc = cs.newEncoder();
-            if(enc!=null){
-                logln("Successfully created the encoder");
+            if(enc!=null && (enc instanceof CharsetEncoderICU) ){
+                logln("Successfully created the encoder: "+ enc);
+            }else{
+                errln("Error creating charset encoder.");
             }
         }catch(Exception e){
             errln("Error creating charset encoder."+ e.toString());
@@ -613,8 +615,10 @@ public class TestCharset extends TestFmwk {
         try{
             Charset cs = Charset.forName("x-ibm-971_P100-1995");
             CharsetEncoder enc = cs.newEncoder();
-            if(enc!=null){
-                logln("Successfully created the encoder");
+            if(enc!=null && (enc instanceof CharsetEncoderICU) ){
+                logln("Successfully created the encoder: "+ enc);
+            }else{
+                errln("Error creating charset encoder.");
             }
         }catch(Exception e){
             errln("Error creating charset encoder."+ e.toString());
