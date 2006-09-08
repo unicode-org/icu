@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -16,7 +16,6 @@
 #include "unicode/uiter.h"
 #include "nortrans.h"
 #include "unormimp.h"
-#include "mutex.h"
 #include "ucln_in.h"
 
 U_NAMESPACE_BEGIN

@@ -27,7 +27,6 @@
 #include "uvectr32.h"
 #include "uassert.h"
 #include "ucln_in.h"
-#include "mutex.h"
 
 #include "regeximp.h"
 #include "regexcst.h"   // Contains state table for the regex pattern parser.
