@@ -156,15 +156,15 @@
     <!-- build everything but dist-related stuff -->
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs" description="build all primary targets"/>
 
-    <target name="resources" depends="init, testdata" description="builds all the resources">
-        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
-        <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
-    </target>
+    <target name="resources" depends="init, icudata, coreData, testdata" description="builds all the resources"/>
 
     <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
+        <copy todir="${build.dir}/META-INF">
+          <fileset dir="${src.dir}/META-INF" includes="**/*"/>
+        </copy>
     </target>
 
 <!--
@@ -431,9 +431,6 @@
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
     <target name="jar" depends="core,indices" description="build full 'icu4j.jar' jar file">
-        <copy todir="${build.dir}/META-INF">
-          <fileset dir="${src.dir}/META-INF" includes="**/*"/>
-        </copy>
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
