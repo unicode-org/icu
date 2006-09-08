@@ -362,13 +362,18 @@ static UBool loadOlsonIDs() {
 const TimeZone* U_EXPORT2
 TimeZone::getGMT(void)
 {
-    umtx_init(&LOCK);   /* This is here to prevent race conditions. */
-    Mutex lock(&LOCK);
+    UBool needsInit;
+    UMTX_CHECK(&LOCK, (_GMT == NULL), needsInit);   /* This is here to prevent race conditions. */
+
     // Initialize _GMT independently of other static data; it should
     // be valid even if we can't load the time zone UDataMemory.
-    if (_GMT == 0) {
-        _GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
-        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+    if (needsInit) {
+        umtx_lock(&LOCK);
+        if (_GMT == 0) {
+            _GMT = new SimpleTimeZone(0, UnicodeString(TRUE, GMT_ID, GMT_ID_LENGTH));
+            ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+        }
+        umtx_unlock(&LOCK);
     }
     return _GMT;
 }
@@ -506,7 +511,7 @@ TimeZone::initDefault()
         // Some of the locale/timezone OS functions may not be thread safe, 
         //  so the intent is that any setting from anywhere within ICU 
         //  happens with the ICU global mutex held.
-        Mutex lock; 
+        Mutex lock;
         uprv_tzset(); // Initialize tz... system data
         
         // Get the timezone ID from the host.  This function should do
