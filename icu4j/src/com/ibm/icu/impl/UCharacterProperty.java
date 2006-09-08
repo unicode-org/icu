@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -958,7 +958,7 @@ public final class UCharacterProperty
 
     /**
     * Constructor
-    * @exception thrown when data reading fails or data corrupted
+    * @exception IOException thrown when data reading fails or data corrupted
     */
     private UCharacterProperty() throws IOException
     {
@@ -974,16 +974,16 @@ public final class UCharacterProperty
 
     // private methods -------------------------------------------------------
 
-    /**
+    /*
      * Compare additional properties to see if it has argument type
      * @param property 32 bit properties
      * @param type character type
      * @return true if property has type
      */
-    private boolean compareAdditionalType(int property, int type)
+    /*private boolean compareAdditionalType(int property, int type)
     {
         return (property & (1 << type)) != 0;
-    }
+    }*/
 
     // property starts for UnicodeSet -------------------------------------- ***
 
@@ -1064,8 +1064,6 @@ public final class UCharacterProperty
     }
 
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
-        int c;
-
         /* add the start code point of each same-value range of the main trie */
         TrieIterator propsIter = new TrieIterator(m_trie_);
         RangeValueIterator.Element propsResult = new RangeValueIterator.Element();
