@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -16,23 +16,20 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetDecoderICU;
-import com.ibm.icu.charset.CharsetEncoderICU;
-import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
-public class Charset88591 extends CharsetICU {
+class CharsetASCII extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[]{(byte)0x1a};
-    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases){
+    public CharsetASCII(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 1;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
     }
-    class CharsetDecoder88591 extends CharsetDecoderICU{
+    class CharsetDecoderASCII extends CharsetDecoderICU{
 
-        public CharsetDecoder88591(CharsetICU cs) {
+        public CharsetDecoderASCII(CharsetICU cs) {
             super(cs);
         }
 
@@ -53,13 +50,13 @@ public class Charset88591 extends CharsetICU {
             try{
                 /* conversion loop */
                 c=0;
-                while(sourceArrayIndex<source.limit() &&
-                        (c=(char)(source.get(sourceArrayIndex)&0xFF))<=0xff ) {
-                    target.put(c);
-                    sourceArrayIndex++;
+                while(sourceArrayIndex<source.limit()&&
+                        (c=(char)source.get(sourceArrayIndex))<=0x7f){
+                     target.put(c);
+                     sourceArrayIndex++;
                 }
 
-                if(c>0xff) {
+                if(c>0x7f) {
                     /* callback(illegal); copy the current bytes to toUBytes[] */
                     toUBytesArray[0]=(byte)c;
                     toULength=1;
@@ -85,9 +82,9 @@ public class Charset88591 extends CharsetICU {
         }
         
     }
-    class CharsetEncoder88591 extends CharsetEncoderICU{
+    class CharsetEncoderASCII extends CharsetEncoderICU{
 
-        public CharsetEncoder88591(CharsetICU cs) {
+        public CharsetEncoderASCII(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
@@ -115,7 +112,6 @@ public class Charset88591 extends CharsetICU {
             int ch=0;
             int oldTarget = target.position();
             boolean doloop = true;
-
             try{
                 if (fromUChar32 != 0 && target.hasRemaining()){
                     ch = fromUChar32;
@@ -203,11 +199,11 @@ public class Charset88591 extends CharsetICU {
         }
     }
     public CharsetDecoder newDecoder() {
-        return new CharsetDecoder88591(this);
+        return new CharsetDecoderASCII(this);
     }
 
     public CharsetEncoder newEncoder() {
-        return new CharsetEncoder88591(this);
+        return new CharsetEncoderASCII(this);
     }
 //#ifdef VERSION_1.5   
 //    /**

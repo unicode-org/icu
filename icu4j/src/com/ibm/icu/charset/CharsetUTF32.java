@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -16,14 +16,11 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetDecoderICU;
-import com.ibm.icu.charset.CharsetEncoderICU;
-import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.text.UTF16;
 /**
  * @author Niti Hantaweepant
  */
-public class CharsetUTF32 extends CharsetICU {
+class CharsetUTF32 extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[]{(byte)0, (byte)0, (byte)0xff, (byte)0xfd};
     public CharsetUTF32(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);

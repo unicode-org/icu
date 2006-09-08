@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
 import java.util.Enumeration;
 
@@ -15,17 +15,17 @@ import java.util.Enumeration;
  * Enumeration for Converter Aliases
  */
 
-public class UConverterAliasesEnumeration implements Enumeration {
+final class UConverterAliasesEnumeration implements Enumeration {
 
 	private UAliasContext context;
 	
 	/* Set alias context
 	 */	
-	public void setContext(UAliasContext context){
+	void setContext(UAliasContext context){
 		this.context = context;		
 	}
 	
-    public int count() {
+    int count() {
 		int value = 0;
 	    
 	    if (context.listOffset!=0) {
@@ -51,27 +51,27 @@ public class UConverterAliasesEnumeration implements Enumeration {
 	    throw new IndexOutOfBoundsException();
 	}
 
-    public void reset() {
+    void reset() {
 		context.listIdx = 0;
 	}
 
 	/**
 	 * Class to store context for alias
 	 */
-	public static class UAliasContext{
+	static class UAliasContext{
 		private long listOffset;
 		private long listIdx;
 		
-		public UAliasContext(long listOffset, long listIdx){
+		UAliasContext(long listOffset, long listIdx){
 			this.listOffset = listOffset;
 			this.listIdx = listIdx;
 		}
 		
-		public long getListOffset(){
+		long getListOffset(){
 			return listOffset;
 		}
 		
-		public long getListIdx(){
+		long getListIdx(){
 			return listIdx;
 		}
 	}

@@ -34,34 +34,34 @@ import com.ibm.icu.lang.UCharacter;
  */
 public abstract class CharsetICU extends Charset{
 	
-    protected String icuCanonicalName;
-    protected String javaCanonicalName;
-    protected int options;
+     String icuCanonicalName;
+     String javaCanonicalName;
+     int options;
 
-    protected float  maxCharsPerByte;
+     float  maxCharsPerByte;
     
-    protected int mode;
-    protected boolean flush;
-    protected boolean useFallback;
+     int mode;
+     boolean flush;
+     boolean useFallback;
     
-    protected String name; /* +4: 60  internal name of the converter- invariant chars */
+     String name; /* +4: 60  internal name of the converter- invariant chars */
 
-    protected int codepage;               /* +64: 4 codepage # (now IBM-$codepage) */
+     int codepage;               /* +64: 4 codepage # (now IBM-$codepage) */
 
-    protected byte platform;                /* +68: 1 platform of the converter (only IBM now) */
-    protected byte conversionType;          /* +69: 1 conversion type */
+     byte platform;                /* +68: 1 platform of the converter (only IBM now) */
+     byte conversionType;          /* +69: 1 conversion type */
 
-    protected int minBytesPerChar;         /* +70: 1 Minimum # bytes per char in this codepage */
-    protected int maxBytesPerChar;         /* +71: 1 Maximum # bytes output per UChar in this codepage */
+     int minBytesPerChar;         /* +70: 1 Minimum # bytes per char in this codepage */
+     int maxBytesPerChar;         /* +71: 1 Maximum # bytes output per UChar in this codepage */
 
-    protected byte subChar[/*UCNV_MAX_SUBCHAR_LEN*/]; /* +72: 4  [note:  4 and 8 byte boundary] */
-    protected byte subCharLen;              /* +76: 1 */
+     byte subChar[/*UCNV_MAX_SUBCHAR_LEN*/]; /* +72: 4  [note:  4 and 8 byte boundary] */
+     byte subCharLen;              /* +76: 1 */
     
-    protected byte hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
-    protected byte hasFromUnicodeFallback; /* +78: 1 */
-    protected short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
-    protected byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
-    protected byte reserved[/*19*/];           /* +81: 19 to round out the structure */
+     byte hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
+     byte hasFromUnicodeFallback; /* +78: 1 */
+     short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
+     byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
+     byte reserved[/*19*/];           /* +81: 19 to round out the structure */
     
     /**
      * 

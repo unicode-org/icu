@@ -7,8 +7,9 @@
 *******************************************************************************
 */ 
  
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
 
 import java.io.IOException;
@@ -399,11 +400,11 @@ import java.nio.ByteBuffer;
  *   Indexes and lengths stored in the fromUTableValues[].
  */
 
-public final class UConverterDataReader implements ICUBinary.Authenticate {
+final class UConverterDataReader implements ICUBinary.Authenticate {
     private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
 
     /*
-     * 	public UConverterDataReader(UConverterDataReader r)
+     * 	 UConverterDataReader(UConverterDataReader r)
         {
             dataInputStream = new DataInputStream(r.dataInputStream);
             unicodeVersion = r.unicodeVersion;
@@ -518,16 +519,17 @@ public final class UConverterDataReader implements ICUBinary.Authenticate {
         return tables;
     }
 
-    public byte[] getDataFormatVersion(){
+     byte[] getDataFormatVersion(){
         return DATA_FORMAT_VERSION;
     }
-    
-    public boolean isDataVersionAcceptable(byte version[])
-    {
+    /**
+     * Inherited method
+     */
+     public boolean isDataVersionAcceptable(byte version[]){
         return version[0] == DATA_FORMAT_VERSION[0];
     }
     
-    public byte[] getUnicodeVersion(){
+     byte[] getUnicodeVersion(){
         return unicodeVersion;    
     }
     // private data members -------------------------------------------------

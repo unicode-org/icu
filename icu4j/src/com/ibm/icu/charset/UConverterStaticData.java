@@ -6,9 +6,9 @@
 *
 *******************************************************************************
 */ 
-package com.ibm.icu.impl;
+package com.ibm.icu.charset;
 
-public final class UConverterStaticData {   /* +offset: size */
+final class UConverterStaticData {   /* +offset: size */
     public int structSize;                /* +0: 4 Size of this structure */
     
     public String name; /* +4: 60  internal name of the converter- invariant chars */

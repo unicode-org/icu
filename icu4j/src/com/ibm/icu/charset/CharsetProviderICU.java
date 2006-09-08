@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import com.ibm.icu.impl.UConverterAlias;
 
 /**
  * A concrete subclass of CharsetProvider for loading and providing charset converters
