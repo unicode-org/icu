@@ -158,7 +158,7 @@ public class GlobalizationPreferences implements Freezable {
      * user should be given the opportunity to correct those defaults
      * in case they are incorrect.
      * 
-     * @param locales list of locales in priority order, eg {"be", "fr"} 
+     * @param inputLocales list of locales in priority order, eg {"be", "fr"} 
      *     for Breton first, then French if that fails.
      * @return this, for chaining
      * @draft ICU 3.6
@@ -544,6 +544,8 @@ public class GlobalizationPreferences implements Freezable {
      * @param type
      *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @return break iterator explicit or implicit
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public BreakIterator getBreakIterator(int type) {
         if (type < BI_CHARACTER || type >= BI_LIMIT) {
@@ -561,7 +563,9 @@ public class GlobalizationPreferences implements Freezable {
      * @param type
      *          break type - BI_CHARACTER or BI_WORD, BI_LINE, BI_SENTENCE, BI_TITLE
      * @param iterator a break iterator
-     * @return
+     * @return this, for chaining
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public GlobalizationPreferences setBreakIterator(int type, BreakIterator iterator) {
         if (type < BI_CHARACTER || type >= BI_LIMIT) {
@@ -825,7 +829,7 @@ public class GlobalizationPreferences implements Freezable {
      * <code>getResourceBundle</code> for this object.  A subclass may override this method
      * to customize the algorithm used for populating the locale list.
      * 
-     * @param localeList The list of input locales
+     * @param inputLocales The list of input locales
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
