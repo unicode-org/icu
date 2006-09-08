@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
  * in ICU.
  * @draft ICU 3.6
  * @provisional This API might change or be removed in a future release.
- *
  */
 public final class CharsetProviderICU extends CharsetProvider{
     
@@ -33,7 +32,8 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Implements the abstract method of super class.
      * @param charsetName charset name
      * @return charset objet for the given charset name, null if unsupported
-     * @stable ICU 3.6
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public final Charset charsetForName(String charsetName){
         try{
@@ -102,7 +102,6 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @return canonical name of the converter
      * @internal ICU 3.4
      */
-
     private static String getJavaCanonicalName(String icuCanonicalName){
         /*
         If a charset listed in the IANA Charset Registry is supported by an implementation 
@@ -161,7 +160,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the aliases associated with the converter name
      * @param encName converter name
      * @return converter names as elements in an object array
-     * @internal ICU 2.4
+     * @internal ICU 3.6
      */
     private static final String[] getAliases(String encName)throws IOException{
         String[] ret = null;
@@ -190,29 +189,35 @@ public final class CharsetProviderICU extends CharsetProvider{
 
     /**
      * Class that implements the iterator for charsets
-     * @stable ICU 2.4
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
-    protected final class CharsetIterator implements Iterator{
-      private String[] names;
-      private int currentIndex;
-      protected CharsetIterator(String[] strs){
-        names = strs;
-        currentIndex=0;
-      }
-      public boolean hasNext(){
-        return (currentIndex< names.length);
-      }
-      public Object next(){
-        if(currentIndex<names.length){
-              return charsetForName(names[currentIndex++]);
-        }else{
-              throw new NoSuchElementException();
-        }
-      }
-      public void remove(){
-          throw new UnsupportedOperationException();
-      }
-    }
+    protected final class CharsetIterator implements Iterator {
+		private String[] names;
+
+		private int currentIndex;
+
+		protected CharsetIterator(String[] strs) {
+			names = strs;
+			currentIndex = 0;
+		}
+
+		public boolean hasNext() {
+			return (currentIndex < names.length);
+		}
+
+		public Object next() {
+			if (currentIndex < names.length) {
+				return charsetForName(names[currentIndex++]);
+			} else {
+				throw new NoSuchElementException();
+			}
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
       
     private static final void putCharsets(Map map){
         int num = UConverterAlias.countAvailable();
@@ -232,7 +237,8 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Returns an iterator for the available charsets.
      * Implements the abstract method of super class.
      * @return Iterator the charset name iterator
-     * @stable ICU 3.6
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public final Iterator charsets(){
         HashMap map = new HashMap();

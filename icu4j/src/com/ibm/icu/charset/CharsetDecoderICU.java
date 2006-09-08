@@ -15,7 +15,6 @@ import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.MalformedInputException;
 import java.nio.ByteBuffer;
 
 import com.ibm.icu.charset.CharsetCallback;
@@ -68,6 +67,14 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                                                                         }
                                                                 };
                                                                 
+    /**
+     * Construct a CharsetDecorderICU based on the information provided from a
+     * CharsetICU object.
+     * @param cs The CharsetICU object containing information about how to
+     *  charset to decode. 
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
     protected CharsetDecoderICU(CharsetICU cs) {
         super(cs, (float) (1/(float)cs.maxCharsPerByte), cs.maxCharsPerByte);
     }
@@ -78,6 +85,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected final void implOnMalformedInput(CodingErrorAction newAction) {
         onMalformedInput = getCallback(newAction);
@@ -88,6 +96,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected final void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
@@ -109,6 +118,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @return result of flushing action and completes the decoding all input. 
      *         Returns CoderResult.UNDERFLOW if the action succeeds.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected final CoderResult implFlush(CharBuffer out) {
         return CoderResult.UNDERFLOW;
@@ -117,6 +127,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Resets the to Unicode mode of converter
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected void implReset() {
         toUnicodeStatus = 0 ;
@@ -143,9 +154,10 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * the flush method.
      * @param in buffer to decode
      * @param out buffer to populate with decoded result
-     * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
+     * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
         if(!in.hasRemaining()){
@@ -161,22 +173,26 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     
     /**
      * Implements the ICU semantic for decode operation
-     * @param in
-     * @param out
-     * @return
+     * @param in The input byte buffer
+     * @param out The output character buffer
+     * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
+     *         action succeeds or more input is needed for completing the decoding action.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets);
     
     /**
      * Implements the ICU semantic for decode operation
-     * @param source
-     * @param target
+     * @param source The input byte buffer
+     * @param target The output character buffer
      * @param offsets
-     * @param flush
-     * @return
-     * @throws MalformedInputException
+     * @param flush true if, and only if, the invoker can provide no
+     *  additional input bytes beyond those in the given buffer.
+     * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
+     *         action succeeds or more input is needed for completing the decoding action.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected final CoderResult decode(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
     
@@ -557,9 +573,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * because more input is needed for completing the conversion. This function is 
      * useful for mapping semantics of ICU's converter interface to those of iconv,
      * and this information is not needed for normal conversion.
-     * @param cnv       The converter in which the input is held as internal state
-     * @param status    ICU error code in/out parameter.
-     *                  Must fulfill U_SUCCESS before the function call.
      * @return The number of chars in the state. -1 if an error is encountered.
      * @draft ICU 3.6
      */
@@ -586,6 +599,14 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             dst[dstOffset++]=(char)src[srcOffset++];
         }
     }
+    /**
+     * ONLY used by ToU callback functions.
+     * This function will write out the specified characters to the target
+     * character buffer.
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
     protected static final CoderResult toUWriteUChars( CharsetDecoderICU cnv,
                                                 char[] ucharsArray, int ucharsBegin, int length,  
                                                 CharBuffer target, IntBuffer offsets, int sourceIndex) {
@@ -624,12 +645,16 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         return cr;
     }
     /**
+     * This function will write out the Unicode substitution character to the
+     * target character buffer.
      * Sub classes to override this method if required
      * @param decoder
      * @param source
      * @param target
      * @param offsets
-     * @return
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected CoderResult cbToUWriteSub(CharsetDecoderICU decoder, 
                                         ByteBuffer source, CharBuffer target, 

@@ -16,7 +16,6 @@ import java.nio.IntBuffer;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.MalformedInputException;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.text.UTF16;
@@ -71,9 +70,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
    /** 
      * Construcs a new encoder for the given charset
      * @param cs for which the decoder is created
-     * @param cHandle the address of ICU converter
      * @param replacement the substitution bytes
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected CharsetEncoderICU(CharsetICU cs, byte[] replacement) {
         super(cs, (cs.minBytesPerChar+cs.maxBytesPerChar)/2, cs.maxBytesPerChar, replacement);
@@ -84,6 +83,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @param newAction action to be taken
 	 * @exception IllegalArgumentException
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
 	 */
 	protected void implOnMalformedInput(CodingErrorAction newAction) {
 	    onMalformedInput = getCallback(newAction);
@@ -94,6 +94,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @param newAction action to be taken
 	 * @exception IllegalArgumentException
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
 	 */
 	protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
@@ -117,6 +118,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @return result of flushing action and completes the decoding all input. 
 	 *	   Returns CoderResult.UNDERFLOW if the action succeeds.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
 	 */
 	protected CoderResult implFlush(ByteBuffer out) {
         return CoderResult.UNDERFLOW;
@@ -125,6 +127,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	/**
 	 * Resets the from Unicode mode of converter
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
 	 */
 	protected void implReset() {
 	    errorBufferLength=0;
@@ -144,6 +147,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
 	 *	   action succeeds or more input is needed for completing the decoding action.
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
 	 */
 	protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if(!in.hasRemaining()){
@@ -160,16 +164,22 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @param source
      * @param target
      * @param offsets
-     * @return
-     * @throws MalformedInputException
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected abstract CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets);
     
     /**
      * Implements ICU semantics for encoding the buffer
-     * @param in
-     * @param out
-     * @return
+     * @param source The input character buffer
+     * @param target The output byte buffer
+     * @param offsets
+     * @param flush true if, and only if, the invoker can provide no
+     *  additional input bytes beyond those in the given buffer.
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     protected final CoderResult encode(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
 
@@ -247,7 +257,30 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }
     /* maximum number of indexed UChars */
     public static final int EXT_MAX_UCHARS = 19;
-  
+
+    /**
+     * Implementation note for m:n conversions
+     *
+     * While collecting source units to find the longest match for m:n conversion,
+     * some source units may need to be stored for a partial match.
+     * When a second buffer does not yield a match on all of the previously stored
+     * source units, then they must be "replayed", i.e., fed back into the converter.
+     *
+     * The code relies on the fact that replaying will not nest -
+     * converting a replay buffer will not result in a replay.
+     * This is because a replay is necessary only after the _continuation_ of a
+     * partial match failed, but a replay buffer is converted as a whole.
+     * It may result in some of its units being stored again for a partial match,
+     * but there will not be a continuation _during_ the replay which could fail.
+     *
+     * It is conceivable that a callback function could call the converter
+     * recursively in a way that causes another replay to be stored, but that
+     * would be an error in the callback function.
+     * Such violations will cause assertion failures in a debug build,
+     * and wrong output, but they will not cause a crash.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
     protected final CoderResult fromUnicodeWithCallback(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
         int sBufferIndex;
         int sourceIndex;
@@ -522,19 +555,33 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 * @param codepoint Unicode code point as int value
 	 * @return true if a character can be converted
      * @draft ICU 3.6
-	 * 
+	 * @provisional This API might change or be removed in a future release.
 	 */
 	public boolean canEncode(int codepoint) {
 	    return true;
     }
 	/**
      * Overrides super class method
-     * @stable ICU 3.6 
+     * @draft ICU 3.6 
+     * @provisional This API might change or be removed in a future release.
 	 */
 	public boolean isLegalReplacement(byte[] repl){
 	    return true;
     }
     
+    /**
+     * Writes out the specified output bytes to the target byte buffer or to converter internal buffers.
+     * @param cnv
+     * @param bytesArray
+     * @param bytesBegin
+     * @param bytesLength
+     * @param out
+     * @param offsets
+     * @param sourceIndex
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6 
+     * @provisional This API might change or be removed in a future release.
+     */
     protected static final CoderResult fromUWriteBytes(CharsetEncoderICU cnv, 
                                          byte[] bytesArray, int bytesBegin, int bytesLength, 
                                          ByteBuffer out, IntBuffer offsets, int sourceIndex){
@@ -580,11 +627,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * because more input is needed for completing the conversion. This function is 
      * useful for mapping semantics of ICU's converter interface to those of iconv,
      * and this information is not needed for normal conversion.
-     * @param cnv       The converter in which the input is held as internal state
-     * @param status    ICU error code in/out parameter.
-     *                  Must fulfill U_SUCCESS before the function call.
      * @return The number of chars in the state. -1 if an error is encountered.
      * @draft ICU 3.4
+     * @provisional This API might change or be removed in a future release.
      */
     /*public*/ int fromUCountPending(){    
         if(preFromULength > 0){
@@ -613,6 +658,12 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * Subclasses to override this method.
      * For stateful converters, it is typically necessary to handle this
      * specificially for the converter in order to properly maintain the state.
+     * @param source The input character buffer
+     * @param target The output byte buffer
+     * @param offsets
+     * @return A CoderResult object that contains the error result when an error occurs.
+     * @draft ICU 3.6 
+     * @provisional This API might change or be removed in a future release.
      */
     protected CoderResult cbFromUWriteSub (CharsetEncoderICU encoder, 
                                            CharBuffer source, ByteBuffer target, 
