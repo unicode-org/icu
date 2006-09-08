@@ -63,7 +63,10 @@ public class CaseInsensitiveString {
         }
         return hash;
     }
-    
+    /**
+     * Overrides superclass method
+     * @stable ICU 3.6
+     */
     public String toString() {
     	return string;
     }

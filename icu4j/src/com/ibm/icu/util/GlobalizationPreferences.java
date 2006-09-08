@@ -90,6 +90,13 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @provisional This API might change or be removed in a future release.
  */
 public class GlobalizationPreferences implements Freezable {
+    
+    /**
+     * Default constructor
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public GlobalizationPreferences(){}
     /**
      * Number Format types
      * @draft ICU 3.6

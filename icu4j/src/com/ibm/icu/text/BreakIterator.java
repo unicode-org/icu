@@ -700,10 +700,11 @@ public abstract class BreakIterator implements Cloneable
 
     // end of registration
 
-    /*
+    /**
      * Get a particular kind of BreakIterator for a locale.
      * Avoids writing a switch statement with getXYZInstance(where) calls. 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static BreakIterator getBreakInstance(ULocale where, int kind) {
 
