@@ -45,7 +45,7 @@
 #include "unicode/tblcoll.h"
 #include "ucol_imp.h"
 #include "cmemory.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "servloc.h"
 #include "ustrenum.h"
 #include "ucln_in.h"
@@ -184,18 +184,16 @@ static ICULocaleService*
 getService(void)
 {
     UBool needInit;
-    {
-        Mutex mutex;
-        needInit = (UBool)(gService == NULL);
-    }
+    UMTX_CHECK(NULL, (UBool)(gService == NULL), needInit);
     if(needInit) {
         ICULocaleService *newservice = new ICUCollatorService();
         if(newservice) {
-            Mutex mutex;
+            umtx_lock(NULL);
             if(gService == NULL) {
                 gService = newservice;
                 newservice = NULL;
             }
+            umtx_unlock(NULL);
         }
         if(newservice) {
             delete newservice;
@@ -211,11 +209,12 @@ getService(void)
 
 // -------------------------------------
 
-static UBool
+static inline UBool
 hasService(void) 
 {
-    Mutex mutex;
-    return gService != NULL;
+    UBool retVal;
+    UMTX_CHECK(NULL, gService != NULL, retVal);
+    return retVal;
 }
 
 // -------------------------------------
