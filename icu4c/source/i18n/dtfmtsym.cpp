@@ -28,7 +28,7 @@
 #include "unicode/smpdtfmt.h"
 #include "cpputils.h"
 #include "ucln_in.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "locbased.h"
