@@ -62,7 +62,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the canonical name of the converter as defined by Java
      * @param enc converter name
      * @return canonical name of the converter
-     * @internal ICU 3.4
+     * @internal ICU 3.6
      * @deprecated This API is for internal ICU use only
      */
      public static final String getICUCanonicalName(String enc)
@@ -106,7 +106,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Gets the canonical name of the converter as defined by Java
      * @param icuCanonicalName converter name
      * @return canonical name of the converter
-     * @internal ICU 3.4
+     * @internal ICU 3.6
      */
     private static String getJavaCanonicalName(String icuCanonicalName){
         /*
@@ -222,8 +222,8 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Gets the canonical names of available converters 
      * @return Object[] names as an object array
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal ICU 3.6
+     * @deprecated This API is for internal ICU use only
      */
      public static final Object[] getAvailableNames(){
         HashMap map = new HashMap();
@@ -234,8 +234,8 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Return all names available
      * @return String[] an arrya of all available names
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal ICU 3.6
+     * @deprecated This API is for internal ICU use only
      */
      public static final String[] getAllNames(){
         int num = UConverterAlias.countAvailable();

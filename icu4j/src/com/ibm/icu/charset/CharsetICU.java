@@ -21,7 +21,8 @@ import java.util.HashMap;
 
 import com.ibm.icu.lang.UCharacter;
 /**
- * <p>This API is used to convert codepage or character encoded data to and
+ * <p>A subclass of java.nio.Charset for providing implementation of ICU's charset converters.
+ * This API is used to convert codepage or character encoded data to and
  * from UTF-16. You can open a converter with {@link Charset#forName } and {@link #forNameICU }. With that
  * converter, you can get its properties, set options, convert your data.</p>
  *
@@ -176,7 +177,7 @@ public abstract class CharsetICU extends Charset{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected final boolean isToUUseFallback() {
+    final boolean isToUUseFallback() {
         return true;
     }    
     
@@ -186,7 +187,7 @@ public abstract class CharsetICU extends Charset{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected final boolean isFromUUseFallback(int c) {
+    final boolean isFromUUseFallback(int c) {
         return (useFallback) || isPrivateUse(c);
     }
     
@@ -200,7 +201,7 @@ public abstract class CharsetICU extends Charset{
         return defaultEncoding;
     }
     
-    /*public*/ static final boolean isPrivateUse(int c) {
+    static final boolean isPrivateUse(int c) {
         return (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
     }
 
