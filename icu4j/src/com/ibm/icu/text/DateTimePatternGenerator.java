@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/09 00:39:37 $
- * $Revision: 1.4 $
+ * $Date: 2006/09/09 00:40:31 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -61,14 +61,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Create empty generator, to be constructed with add(...) etc.
-<<<<<<< DateTimePatternGenerator.java
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
-=======
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     *      
->>>>>>> 1.3
      */
     public DateTimePatternGenerator() {         
     }
