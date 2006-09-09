@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/09 00:40:31 $
- * $Revision: 1.5 $
+ * $Date: 2006/09/09 00:52:01 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -260,6 +260,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 	 * @provisional This API might change or be removed in a future release.
 	 */
         public String conflictingPattern;
+
+        /**
+         * Simple constructor, since this is treated like a struct.
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public PatternInfo() {
+        }
     }
     
     static Transliterator fromHex = Transliterator.getInstance("hex-any");
@@ -319,6 +327,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * in length are minimized.
      * @param pattern Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getBaseSkeleton(String pattern) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -728,7 +738,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * Set the string to parse
          * @param string
-         * @return
+         * @return this, for chaining
          * @draft ICU 3.6
          * @provisional This API might change or be removed in a future release.
          */
@@ -802,7 +812,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /**
          * Returns modifiable list which is a mixture of Strings and VariableFields, in the order found during parsing.
-         * @return
+         * @return modifiable list of items.
          * @draft ICU 3.6
          * @provisional This API might change or be removed in a future release.
         */
@@ -941,12 +951,22 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          *  produce a quoted literal
          * @param string
-         * @return
+         * @return string with quoted literals
          * @draft ICU 3.6
          * @provisional This API might change or be removed in a future release.
          */
         public Object quoteLiteral(String string) {
             return tokenizer.quoteLiteral(string);
+        }
+
+        /**
+         * Simple constructor, since this is treated like a struct.
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public FormatParser() {
+            super();
+            // TODO Auto-generated constructor stub
         }
     }
     // ========= PRIVATES ============
