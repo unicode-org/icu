@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/09 00:52:01 $
- * $Revision: 1.6 $
+ * $Date: 2006/09/09 02:04:13 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -64,7 +64,25 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public DateTimePatternGenerator() {         
+    public static DateTimePatternGenerator newInstance() {
+        return new DateTimePatternGenerator();
+    }
+    
+    /**
+     * Only for use by subclasses
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    protected DateTimePatternGenerator() {         
+    }
+    
+    /**
+     * Construct a flexible generator according to data for a given locale.
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static DateTimePatternGenerator getInstance() {
+        return getInstance(ULocale.getDefault());
     }
     
     /**
@@ -108,7 +126,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         if (hackPattern != null) {
             hackTimes(result, returnInfo, hackPattern);
         }
-
+        
         // set the datetime pattern. This is ugly code -- there should be a public interface for this
         Calendar cal = Calendar.getInstance(uLocale);
         CalendarData calData = new CalendarData(uLocale, cal.getType());
@@ -120,7 +138,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         result.setDecimal(String.valueOf(dfs.getDecimalSeparator()));
         return result;
     }
-
+    
     private static void hackTimes(DateTimePatternGenerator result, PatternInfo returnInfo, String hackPattern) {
         result.fp.set(hackPattern);
         String mmss = new String();
@@ -148,7 +166,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                     break; // failed
                 }
             }
-         }
+        }
         // to get hh:mm, we strip (literal ss) and (literal S)
         // the easiest way to do this is to mark the stuff we want to nuke, then remove it in a second pass.
         BitSet variables = new BitSet();
@@ -166,11 +184,11 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                     }
                 }
             }
-         }
+        }
         String hhmm = getFilteredPattern(result.fp, nuke);
         result.add(hhmm, false, returnInfo);
     }
-
+    
     private static String getFilteredPattern(FormatParser fp, BitSet nuke) {
         String result = new String();
         for (int i = 0; i < fp.items.size(); ++i) {
@@ -191,18 +209,22 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
         return -1;
     }
-
+    
     private static int getAppendFormatNumber(String string) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
             if (CLDR_FIELD_APPEND[i].equals(string)) return i;
         }
         return -1;
-
+        
     }
-
+    
     /**
-     * Return the best pattern matching the input skeleton. It is guaranteed to have all of the fields in the skeleton.
-     * @param skeleton The skeleton is a pattern containing only the variable fields. For example, "MMMdd" and "mmhh" are skeletons.
+     * Return the best pattern matching the input skeleton. It is guaranteed to
+     * have all of the fields in the skeleton.
+     * 
+     * @param skeleton
+     *            The skeleton is a pattern containing only the variable fields.
+     *            For example, "MMMdd" and "mmhh" are skeletons.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -225,42 +247,44 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * PatternInfo supplies output parameters for add(...).
-     * It is used because Java doesn't have real output parameters. It is treated like a struct (eg Point), so all fields are public.
+     * PatternInfo supplies output parameters for add(...). It is used because
+     * Java doesn't have real output parameters. It is treated like a struct (eg
+     * Point), so all fields are public.
+     * 
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     public static final class PatternInfo { // struct for return information
-	/**
-	 * @draft ICU 3.6
-	 * @provisional This API might change or be removed in a future release.
-	 */
+        /**
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public static final int OK = 0;
-
-	/**
-	 * @draft ICU 3.6
-	 * @provisional This API might change or be removed in a future release.
-	 */
-	public static final int BASE_CONFLICT = 1;
-
-	/**
-	 * @draft ICU 3.6
-	 * @provisional This API might change or be removed in a future release.
-	 */
-	public static final int CONFLICT = 2;
-
-	/**
-	 * @draft ICU 3.6
-	 * @provisional This API might change or be removed in a future release.
-	 */
+        
+        /**
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int BASE_CONFLICT = 1;
+        
+        /**
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CONFLICT = 2;
+        
+        /**
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public int status;
-
-	/**
-	 * @draft ICU 3.6
-	 * @provisional This API might change or be removed in a future release.
-	 */
+        
+        /**
+         * @draft ICU 3.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public String conflictingPattern;
-
+        
         /**
          * Simple constructor, since this is treated like a struct.
          * @draft ICU 3.6
@@ -273,11 +297,17 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     static Transliterator fromHex = Transliterator.getInstance("hex-any");
     
     /**
-     * Adds a pattern to the generator. If the pattern has the same skeleton as an existing pattern,
-     * and the override parameter is set, then the previous value is overriden. Otherwise, the previous
-     * value is retained. In either case, the conflicting information is returned in PatternInfo.
-     * <p>Note that single-field patterns (like "MMM") are automatically added, and don't need to be added explicitly!
-     * @param override when existing values are to be overridden use true, otherwise use false.
+     * Adds a pattern to the generator. If the pattern has the same skeleton as
+     * an existing pattern, and the override parameter is set, then the previous
+     * value is overriden. Otherwise, the previous value is retained. In either
+     * case, the conflicting information is returned in PatternInfo.
+     * <p>
+     * Note that single-field patterns (like "MMM") are automatically added, and
+     * don't need to be added explicitly!
+     * 
+     * @param override
+     *            when existing values are to be overridden use true, otherwise
+     *            use false.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -309,8 +339,11 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Utility to return a unique skeleton from a given pattern. For example, both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
-     * @param pattern Input pattern, such as "dd/MMM"
+     * Utility to return a unique skeleton from a given pattern. For example,
+     * both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
+     * 
+     * @param pattern
+     *            Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -323,9 +356,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Utility to return a unique base skeleton from a given pattern. This is the same as the skeleton, except that differences
-     * in length are minimized.
-     * @param pattern Input pattern, such as "dd/MMM"
+     * Utility to return a unique base skeleton from a given pattern. This is
+     * the same as the skeleton, except that differences in length are minimized
+     * so as to only preserve the difference between string and numeric form. So
+     * for example, both "MMM-dd" and "d/MMM" produce the skeleton "MMMd"
+     * (notice the single d).
+     * 
+     * @param pattern
+     *            Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -338,10 +376,18 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Return a list of all the skeletons (in canonical form) from this class, and the patterns that they map to.
-     * @param result an output Map in which to place the mapping from skeleton to pattern. If you want to see the internal order being used, supply a LinkedHashMap.
-     * If the input value is null, then a LinkedHashMap is allocated.
-     * <p><i>Issue: an alternate API would be to just return a list of the skeletons, and then have a separate routine to get from skeleton to pattern.</i>
+     * Return a list of all the skeletons (in canonical form) from this class,
+     * and the patterns that they map to.
+     * 
+     * @param result
+     *            an output Map in which to place the mapping from skeleton to
+     *            pattern. If you want to see the internal order being used,
+     *            supply a LinkedHashMap. If the input value is null, then a
+     *            LinkedHashMap is allocated.
+     *            <p>
+     *            <i>Issue: an alternate API would be to just return a list of
+     *            the skeletons, and then have a separate routine to get from
+     *            skeleton to pattern.</i>
      * @return the input Map containing the values.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -369,12 +415,17 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Adjusts the field types (width and subtype) of a pattern to match what is in a skeleton. That is, if you supply a pattern
-     * like "d-M H:m", and a skeleton of "MMMMddhhmm", then the input pattern is adjusted to be "dd-MMMM hh:mm".
-     * This is used internally to get the best match for the input skeleton, but can also be used externally.
-     * @param pattern input pattern
+     * Adjusts the field types (width and subtype) of a pattern to match what is
+     * in a skeleton. That is, if you supply a pattern like "d-M H:m", and a
+     * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
+     * "dd-MMMM hh:mm". This is used internally to get the best match for the
+     * input skeleton, but can also be used externally.
+     * 
+     * @param pattern
+     *            input pattern
      * @param skeleton
-     * @return pattern adjusted to match the skeleton fields widths and subtypes.
+     * @return pattern adjusted to match the skeleton fields widths and
+     *         subtypes.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -385,14 +436,22 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * The date time format is a message format pattern used to compose date and time patterns. The default value is "{0} {1}", where {0} will be replaced by the date
-     * pattern and {1} will be replaced by the time pattern.
-     * <p>This is used when the input skeleton contains both date and time fields, but there is not a close match among the added patterns.
-     * For example, suppose that this object was created by adding "dd-MMM" and "hh:mm", and its datetimeFormat is the default "{0} {1}".
-     * Then if the input skeleton is "MMMdhmm", there is
-     * not an exact match, so the input skeleton is broken up into two components "MMMd" and "hmm". There are close matches for those two skeletons,
-     * so the result is put together with this pattern, resulting in "d-MMM h:mm".
-     * @param dateTimeFormat message format pattern, here {0} will be replaced by the date pattern and {1} will be replaced by the time pattern. 
+     * The date time format is a message format pattern used to compose date and
+     * time patterns. The default value is "{0} {1}", where {0} will be replaced
+     * by the date pattern and {1} will be replaced by the time pattern.
+     * <p>
+     * This is used when the input skeleton contains both date and time fields,
+     * but there is not a close match among the added patterns. For example,
+     * suppose that this object was created by adding "dd-MMM" and "hh:mm", and
+     * its datetimeFormat is the default "{0} {1}". Then if the input skeleton
+     * is "MMMdhmm", there is not an exact match, so the input skeleton is
+     * broken up into two components "MMMd" and "hmm". There are close matches
+     * for those two skeletons, so the result is put together with this pattern,
+     * resulting in "d-MMM h:mm".
+     * 
+     * @param dateTimeFormat
+     *            message format pattern, here {0} will be replaced by the date
+     *            pattern and {1} will be replaced by the time pattern.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -403,6 +462,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Getter corresponding to setDateTimeFormat.
+     * 
      * @return pattern
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -412,9 +472,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * The decimal value is used in formatting fractions of seconds. If the skeleton contains fractional seconds, 
-     * then this is used with the fractional seconds. For example, suppose that the input pattern is "hhmmssSSSS", and the best matching pattern internally is
-     * "H:mm:ss", and the decimal string is ",". Then the resulting pattern is modified to be "H:mm:ss,SSSS"
+     * The decimal value is used in formatting fractions of seconds. If the
+     * skeleton contains fractional seconds, then this is used with the
+     * fractional seconds. For example, suppose that the input pattern is
+     * "hhmmssSSSS", and the best matching pattern internally is "H:mm:ss", and
+     * the decimal string is ",". Then the resulting pattern is modified to be
+     * "H:mm:ss,SSSS"
+     * 
      * @param decimal
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -435,13 +499,16 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Redundant patterns are those which if removed, make no difference in the resulting getBestPattern values.
-     * This method returns a list of them, to help check the consistency of the patterns used to build this generator.
-     * @param output stores the redundant patterns that are removed. To get these in internal order,
-     * supply a LinkedHashSet. If null, a collection is allocated.
+     * Redundant patterns are those which if removed, make no difference in the
+     * resulting getBestPattern values. This method returns a list of them, to
+     * help check the consistency of the patterns used to build this generator.
+     * 
+     * @param output
+     *            stores the redundant patterns that are removed. To get these
+     *            in internal order, supply a LinkedHashSet. If null, a
+     *            collection is allocated.
      * @return the collection with added elements.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal
      */
     public Collection getRedundants(Collection output) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -477,103 +544,103 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     // Field numbers, used for AppendItem functions
-
+    
     /** 
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int ERA = 0;
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int YEAR = 1; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int QUARTER = 2; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int MONTH = 3;
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int WEEK_OF_YEAR = 4; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int WEEK_OF_MONTH = 5; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int WEEKDAY = 6; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int DAY = 7;
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int DAY_OF_YEAR = 8; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int DAY_OF_WEEK_IN_MONTH = 9; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int DAYPERIOD = 10;
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int HOUR = 11; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int MINUTE = 12; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int SECOND = 13; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int FRACTIONAL_SECOND = 14;
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     static final public int ZONE = 15; 
-
+    
     /**
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -581,12 +648,23 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     static final public int TYPE_LIMIT = 16;
     
     /**
-     * An AppendItem format is a pattern used to append a field if there is no good match. For example, suppose that the input skeleton is "GyyyyMMMd",
-     * and there is no matching pattern internally, but there is a pattern matching "yyyyMMMd", say "d-MM-yyyy". Then that pattern is used, plus the G.
-     * The way these two are conjoined is by using the AppendItemFormat for G (era). So if that value is, say "{0}, {1}" then the final resulting pattern
-     * is "d-MM-yyyy, G".<p>There are actually three available variables: {0} is the pattern so far, {1} is the element we are adding, and {2} is the name of the element.
-     * @param field such as ERA
-     * @param value pattern, such as "{0}, {1}"
+     * An AppendItem format is a pattern used to append a field if there is no
+     * good match. For example, suppose that the input skeleton is "GyyyyMMMd",
+     * and there is no matching pattern internally, but there is a pattern
+     * matching "yyyyMMMd", say "d-MM-yyyy". Then that pattern is used, plus the
+     * G. The way these two are conjoined is by using the AppendItemFormat for G
+     * (era). So if that value is, say "{0}, {1}" then the final resulting
+     * pattern is "d-MM-yyyy, G".
+     * <p>
+     * There are actually three available variables: {0} is the pattern so far,
+     * {1} is the element we are adding, and {2} is the name of the element.
+     * <p>
+     * This reflects the way that the CLDR data is organized.
+     * 
+     * @param field
+     *            such as ERA
+     * @param value
+     *            pattern, such as "{0}, {1}"
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -596,7 +674,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Getter corresponding to setAppendItemFormats. Values below 0 or at or above TYPE_LIMIT are illegal arguments.
+     * Getter corresponding to setAppendItemFormats. Values below 0 or at or
+     * above TYPE_LIMIT are illegal arguments.
+     * 
      * @param field
      * @return append pattern for field
      * @draft ICU 3.6
@@ -607,7 +687,12 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Sets the names of fields, eg "era" in English for ERA. These are only used if the corresponding AppendItemFormat contains a {2} variable.
+     * Sets the names of fields, eg "era" in English for ERA. These are only
+     * used if the corresponding AppendItemFormat is used, and if it contains a
+     * {2} variable.
+     * <p>
+     * This reflects the way that the CLDR data is organized.
+     * 
      * @param field
      * @param value
      * @draft ICU 3.6
@@ -619,7 +704,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
     
     /**
-     * Getter corresponding to setAppendItemNames. Values below 0 or at or above TYPE_LIMIT are illegal arguments.
+     * Getter corresponding to setAppendItemNames. Values below 0 or at or above
+     * TYPE_LIMIT are illegal arguments.
+     * 
      * @param field
      * @return name for field
      * @draft ICU 3.6
@@ -628,13 +715,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     public String getAppendItemNames(int field) {
         return appendItemNames[field];
     }
-
+    
     /**
      * Determines whether a skeleton contains a single field
+     * 
      * @param skeleton
      * @return true or not
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal
      */
     public static boolean isSingleField(String skeleton) {
         char first = skeleton.charAt(0);
@@ -689,7 +776,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             result.current = new DateTimeMatcher();
             result.fp = new FormatParser();
             result._distanceInfo = new DistanceInfo();
-
+            
             result.frozen = false;
             return result;
         } catch (CloneNotSupportedException e) {
@@ -699,24 +786,21 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Utility class for FormatParser. Immutable class.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal
      */
     public static class VariableField {
         private String string;
         /**
          * Create a variable field
          * @param string
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public VariableField(String string) {
             this.string = string;
         }
         /**
          * Get the internal results
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public String toString() {
             return string;
@@ -725,8 +809,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Class providing date formatting
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @internal
      */
     static public class FormatParser {
         private transient PatternTokenizer tokenizer = new PatternTokenizer()
@@ -739,8 +822,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * Set the string to parse
          * @param string
          * @return this, for chaining
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public FormatParser set(String string) {
             items.clear();
@@ -754,7 +836,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 if (status == PatternTokenizer.DONE) break;
                 if (status == PatternTokenizer.SYNTAX) {
                     if (variable.length() != 0 && buffer.charAt(0) != variable.charAt(0)) {
-                            addVariable(variable);
+                        addVariable(variable);
                     }
                     variable.append(buffer);
                 } else {
@@ -765,14 +847,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             addVariable(variable);
             return this;
         }
-
+        
         private void addVariable(StringBuffer variable) {
             if (variable.length() != 0) {
                 items.add(new VariableField(variable.toString()));
                 variable.setLength(0);
             }
         }
-
+        
         /** Return a collection of fields. These will be a mixture of Strings and VariableFields. Any "a" variable field is removed.
          * @param output List to append the items to. If null, is allocated as an ArrayList.
          * @return list
@@ -794,11 +876,10 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             //System.out.println(output);
             return output;
         }
-
+        
         /**
          * @return a string which is a concatenation of all the variable fields
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public String getVariableFieldString() {
             List list = getVariableFields(null);
@@ -813,29 +894,26 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * Returns modifiable list which is a mixture of Strings and VariableFields, in the order found during parsing.
          * @return modifiable list of items.
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
-        */
+         * @internal
+         */
         public List getItems() {
             return items;
         }
-
+        
         /** Provide display form of formatted input
          * @return printable output string
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public String toString() {
             return toString(0, items.size());
         }
-
+        
         /**
          * Provide display form of formatted input
          * @param start item to start from
          * @param limit last item +1
          * @return printable output string
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public String toString(int start, int limit) {
             StringBuffer result = new StringBuffer();
@@ -846,10 +924,12 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
         
         /**
+         * Internal method <p>
          * Returns true if it has a mixture of date and time fields
-         * @return
+         * @return true or false
+         * @internal
          */
-        private boolean hasDateAndTimeFields() {
+        public boolean hasDateAndTimeFields() {
             int foundMask = 0;
             for (Iterator it = items.iterator(); it.hasNext();) {
                 Object item = it.next();
@@ -863,7 +943,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             return isDate && isTime;
         }
         
-        private List getAutoPatterns(String value, List result) {
+        /**
+         * Internal routine
+         * @param value
+         * @param result
+         * @return list
+         * @internal
+         */
+        public List getAutoPatterns(String value, List result) {
             if (result == null) result = new ArrayList();
             int fieldCount = 0;
             int minField = Integer.MAX_VALUE;
@@ -947,22 +1034,20 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             int type = types[canonicalIndex][1];
             return type;
         }
-
+        
         /**
          *  produce a quoted literal
          * @param string
          * @return string with quoted literals
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public Object quoteLiteral(String string) {
             return tokenizer.quoteLiteral(string);
         }
-
+        
         /**
          * Simple constructor, since this is treated like a struct.
-         * @draft ICU 3.6
-         * @provisional This API might change or be removed in a future release.
+         * @internal
          */
         public FormatParser() {
             super();
@@ -1149,7 +1234,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 //  return result.toString();
 //  }
     
-    private String getFields(String pattern) {
+    /**
+     * internal routine
+     * @param pattern
+     * @return field value
+     * @internal
+     */
+    public String getFields(String pattern) {
         fp.set(pattern);
         StringBuffer newPattern = new StringBuffer();
         for (Iterator it = fp.getItems().iterator(); it.hasNext();) {
@@ -1190,7 +1281,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         "Day", "Day_Of_Year", "Day_of_Week_in_Month", "Dayperiod", 
         "Hour", "Minute", "Second", "Fractional_Second", "Zone"
     };
-
+    
     
     static private String[] CANONICAL_ITEMS = {
         "G", "y", "Q", "M", "w", "W", "e", 
