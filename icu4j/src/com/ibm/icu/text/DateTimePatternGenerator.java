@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/09 02:04:13 $
- * $Revision: 1.7 $
+ * $Date: 2006/09/09 03:03:00 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -508,6 +508,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      *            in internal order, supply a LinkedHashSet. If null, a
      *            collection is allocated.
      * @return the collection with added elements.
+     * @deprecated
      * @internal
      */
     public Collection getRedundants(Collection output) {
@@ -721,6 +722,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * 
      * @param skeleton
      * @return true or not
+     * @deprecated
      * @internal
      */
     public static boolean isSingleField(String skeleton) {
@@ -786,6 +788,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Utility class for FormatParser. Immutable class.
+     * @deprecated
      * @internal
      */
     public static class VariableField {
@@ -793,6 +796,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * Create a variable field
          * @param string
+         * @deprecated
          * @internal
          */
         public VariableField(String string) {
@@ -800,6 +804,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
         /**
          * Get the internal results
+         * @deprecated
          * @internal
          */
         public String toString() {
@@ -809,6 +814,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     /**
      * Class providing date formatting
+     * @deprecated
      * @internal
      */
     static public class FormatParser {
@@ -822,6 +828,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * Set the string to parse
          * @param string
          * @return this, for chaining
+         * @deprecated
          * @internal
          */
         public FormatParser set(String string) {
@@ -879,6 +886,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /**
          * @return a string which is a concatenation of all the variable fields
+         * @deprecated
          * @internal
          */
         public String getVariableFieldString() {
@@ -894,6 +902,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * Returns modifiable list which is a mixture of Strings and VariableFields, in the order found during parsing.
          * @return modifiable list of items.
+         * @deprecated
          * @internal
          */
         public List getItems() {
@@ -902,6 +911,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /** Provide display form of formatted input
          * @return printable output string
+         * @deprecated
          * @internal
          */
         public String toString() {
@@ -913,6 +923,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * @param start item to start from
          * @param limit last item +1
          * @return printable output string
+         * @deprecated
          * @internal
          */
         public String toString(int start, int limit) {
@@ -927,6 +938,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * Internal method <p>
          * Returns true if it has a mixture of date and time fields
          * @return true or false
+         * @deprecated
          * @internal
          */
         public boolean hasDateAndTimeFields() {
@@ -948,6 +960,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * @param value
          * @param result
          * @return list
+         * @deprecated
          * @internal
          */
         public List getAutoPatterns(String value, List result) {
@@ -1039,6 +1052,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          *  produce a quoted literal
          * @param string
          * @return string with quoted literals
+         * @deprecated
          * @internal
          */
         public Object quoteLiteral(String string) {
@@ -1047,6 +1061,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /**
          * Simple constructor, since this is treated like a struct.
+         * @deprecated
          * @internal
          */
         public FormatParser() {
@@ -1238,6 +1253,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * internal routine
      * @param pattern
      * @return field value
+     * @deprecated
      * @internal
      */
     public String getFields(String pattern) {
