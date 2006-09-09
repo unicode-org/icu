@@ -21,8 +21,9 @@ import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.impl.Assert;
 
 /**
- * An abstract class that provides framework implementation for concrete sub class implementations
- * to utilize. In the future this class will contain API that will implement converter sematics of ICU4C.
+ * An abstract class that provides framework methods of decoding operations for concrete
+ * subclasses. 
+ * In the future this class will contain API that will implement converter sematics of ICU4C.
  * @draft ICU 3.6
  * @provisional This API might change or be removed in a future release.
  */
