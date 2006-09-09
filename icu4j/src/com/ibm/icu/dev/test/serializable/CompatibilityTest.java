@@ -113,9 +113,6 @@ public class CompatibilityTest extends TestFmwk
     //                    }
                         
                         if (! handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
-                            if(!isDateAtLeast(2006, 9, 15) && handler instanceof FormatTests.RuleBasedNumberFormatHandler ){
-                                return;
-                            }
                             warnln("Input object " + i + " failed behavior test.");
                         }
                     }
