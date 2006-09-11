@@ -1305,11 +1305,10 @@ fragTextAccess(UText *ut, int64_t index, UBool forward) {
     }
     return false;
 }
-U_CDECL_END
 
 // Function table to be used with this fragmented text provider.
 //   Initialized in the open function.
-UTextFuncs  fragmentFuncs;
+static UTextFuncs  fragmentFuncs;
 
 // Clone function for fragmented text provider.
 //   Didn't really want to provide this, but it's easier to provide it than to keep it
@@ -1329,6 +1328,7 @@ cloneFragmentedUnicodeString(UText *dest, const UText *src, UBool deep, UErrorCo
     return dest;
 }
 
+U_CDECL_END
 
 // Open function for the fragmented text provider.
 UText *
