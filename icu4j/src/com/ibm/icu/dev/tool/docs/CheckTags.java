@@ -356,9 +356,6 @@ public class CheckTags {
                 if (tag.text().indexOf("ICU") == 0) {
                     foundRequiredTag = true;
                 }
-                if (tag.text().trim().length() == 0) {
-                    tagErr(tag);
-                }
                 break;
 
             case OBSOLETE:
