@@ -2,21 +2,43 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 3.4.3 with ICU4J 3.6</title>
+<title>ICU4J API Comparison: ICU4J 3.4 with ICU4J 3.6</title>
 <!-- Copyright 2006, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 3.4.3 with ICU4J 3.6</h1>
+<h1>ICU4J API Comparison: ICU4J 3.4 with ICU4J 3.6</h1>
 
 <hr/>
-<h2>Removed from ICU4J 3.4.3</h2>
-<p>(no API removed)</p>
+<h2>Removed from ICU4J 3.4</h2>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+UResourceBundle
+<ul>
+<li>(draft)      protected static UResourceBundle <i>instantiateICUResource</i>(java.lang.String, java.lang.String, java.lang.ClassLoader)</li>
+</ul>
+</ul>
+
 
 <hr/>
 <h2>Withdrawn, Deprecated, or Obsoleted in ICU4J 3.6</h2>
 
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter
+<ul>
+<li>(deprecated) public static boolean <i>isJavaLetter</i>(int)</li>
+<li>(deprecated) public static boolean <i>isJavaLetterOrDigit</i>(int)</li>
+<li>(deprecated) public static boolean <i>isSpace</i>(int)</li>
+</ul>
+</ul>
+
 <h3>Package com.ibm.icu.text</h3>
 <ul>
+NumberFormat
+<ul>
+<li>(deprecated) protected static java.lang.String <i>getPattern</i>(java.util.Locale, int)</li>
+</ul>
 RuleBasedBreakIterator
 <ul>
 <li><span style='color:red'>*internal*  </span>public static RuleBasedBreakIterator <i>getInstanceFromCompiledRules</i>(java.io.InputStream)</li>
@@ -113,6 +135,7 @@ UScript
 <h3>Package com.ibm.icu.text</h3>
 <ul>
 <li>(stable)     public abstract class <i>MeasureFormat</i></li>
+<li>(stable)     public class <i>MessageFormat</i></li>
 ChineseDateFormatSymbols
 <ul>
 <li>(stable)     protected void <i>initializeData</i>(ULocale, CalendarData)</li>
@@ -188,6 +211,94 @@ LocaleData
 <li>(stable)     public static UnicodeSet <i>getExemplarSet</i>(ULocale, int)</li>
 <li>(stable)     public static final LocaleData.MeasurementSystem <i>getMeasurementSystem</i>(ULocale)</li>
 <li>(stable)     public static final LocaleData.PaperSize <i>getPaperSize</i>(ULocale)</li>
+</ul>
+ULocale
+<ul>
+<li>(stable)     public static final ULocale CANADA</li>
+<li>(stable)     public static final ULocale CANADA_FRENCH</li>
+<li>(stable)     public static final ULocale CHINA</li>
+<li>(stable)     public static final ULocale CHINESE</li>
+<li>(stable)     public static final ULocale ENGLISH</li>
+<li>(stable)     public static final ULocale FRANCE</li>
+<li>(stable)     public static final ULocale FRENCH</li>
+<li>(stable)     public static final ULocale GERMAN</li>
+<li>(stable)     public static final ULocale GERMANY</li>
+<li>(stable)     public static final ULocale ITALIAN</li>
+<li>(stable)     public static final ULocale ITALY</li>
+<li>(stable)     public static final ULocale JAPAN</li>
+<li>(stable)     public static final ULocale JAPANESE</li>
+<li>(stable)     public static final ULocale KOREA</li>
+<li>(stable)     public static final ULocale KOREAN</li>
+<li>(stable)     public static final ULocale PRC</li>
+<li>(stable)     public static final ULocale SIMPLIFIED_CHINESE</li>
+<li>(stable)     public static final ULocale TAIWAN</li>
+<li>(stable)     public static final ULocale TRADITIONAL_CHINESE</li>
+<li>(stable)     public static final ULocale UK</li>
+<li>(stable)     public static final ULocale US</li>
+<li>(stable)     public <i>ULocale</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public <i>ULocale</i>(java.lang.String, java.lang.String, java.lang.String)</li>
+<li>(stable)     public static java.lang.String <i>canonicalize</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.Object <i>clone</i>()</li>
+<li>(stable)     public static ULocale <i>createCanonical</i>(java.lang.String)</li>
+<li>(stable)     public boolean <i>equals</i>(java.lang.Object)</li>
+<li>(stable)     public static ULocale <i>forLocale</i>(java.util.Locale)</li>
+<li>(stable)     public static ULocale[] <i>getAvailableLocales</i>()</li>
+<li>(stable)     public java.lang.String <i>getBaseName</i>()</li>
+<li>(stable)     public static java.lang.String <i>getBaseName</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getCountry</i>()</li>
+<li>(stable)     public static java.lang.String <i>getCountry</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayCountry</i>()</li>
+<li>(stable)     public java.lang.String <i>getDisplayCountry</i>(ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayCountry</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayCountry</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayKeyword</i>(java.lang.String)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayKeyword</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayKeyword</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayKeywordValue</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayKeywordValue</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayKeywordValue</i>(java.lang.String, java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayKeywordValue</i>(java.lang.String, java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayLanguage</i>()</li>
+<li>(stable)     public java.lang.String <i>getDisplayLanguage</i>(ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayLanguage</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayLanguage</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayName</i>()</li>
+<li>(stable)     public java.lang.String <i>getDisplayName</i>(ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayName</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayName</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayScript</i>()</li>
+<li>(stable)     public java.lang.String <i>getDisplayScript</i>(ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayScript</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayScript</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getDisplayVariant</i>()</li>
+<li>(stable)     public java.lang.String <i>getDisplayVariant</i>(ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayVariant</i>(java.lang.String, ULocale)</li>
+<li>(stable)     public static java.lang.String <i>getDisplayVariant</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public ULocale <i>getFallback</i>()</li>
+<li>(stable)     public static java.lang.String <i>getFallback</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getISO3Country</i>()</li>
+<li>(stable)     public static java.lang.String <i>getISO3Country</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getISO3Language</i>()</li>
+<li>(stable)     public static java.lang.String <i>getISO3Language</i>(java.lang.String)</li>
+<li>(stable)     public static java.lang.String[] <i>getISOCountries</i>()</li>
+<li>(stable)     public static java.lang.String[] <i>getISOLanguages</i>()</li>
+<li>(stable)     public java.lang.String <i>getKeywordValue</i>(java.lang.String)</li>
+<li>(stable)     public static java.lang.String <i>getKeywordValue</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.util.Iterator <i>getKeywords</i>()</li>
+<li>(stable)     public static java.util.Iterator <i>getKeywords</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getLanguage</i>()</li>
+<li>(stable)     public static java.lang.String <i>getLanguage</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getName</i>()</li>
+<li>(stable)     public static java.lang.String <i>getName</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getScript</i>()</li>
+<li>(stable)     public static java.lang.String <i>getScript</i>(java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>getVariant</i>()</li>
+<li>(stable)     public static java.lang.String <i>getVariant</i>(java.lang.String)</li>
+<li>(stable)     public int <i>hashCode</i>()</li>
+<li>(stable)     public static synchronized void <i>setDefault</i>(ULocale)</li>
+<li>(stable)     public ULocale <i>setKeywordValue</i>(java.lang.String, java.lang.String)</li>
+<li>(stable)     public static java.lang.String <i>setKeywordValue</i>(java.lang.String, java.lang.String, java.lang.String)</li>
+<li>(stable)     public java.lang.String <i>toString</i>()</li>
 </ul>
 </ul>
 
@@ -317,6 +428,7 @@ DecimalFormat
 <ul>
 <li>(stable)     public java.text.AttributedCharacterIterator <i>formatToCharacterIterator</i>(java.lang.Object)</li>
 <li><span style='color:red'>*internal*  </span>protected Currency <i>getEffectiveCurrency</i>()</li>
+<li>(draft)      public void <i>setRoundingIncrement</i>(BigDecimal)</li>
 </ul>
 DecimalFormatSymbols
 <ul>
@@ -363,6 +475,10 @@ SimpleDateFormat
 <li>(stable)     public void <i>setNumberFormat</i>(NumberFormat)</li>
 <li><span style='color:red'>*internal*  </span>protected void <i>subFormat</i>(java.lang.StringBuffer, char, int, int, java.text.FieldPosition, Calendar)</li>
 <li><span style='color:red'>*internal*  </span>protected void <i>zeroPaddingNumber</i>(java.lang.StringBuffer, int, int, int)</li>
+</ul>
+Transliterator
+<ul>
+<li>(draft)      public static void <i>registerAlias</i>(java.lang.String, java.lang.String)</li>
 </ul>
 UTF16
 <ul>
@@ -460,11 +576,15 @@ SimpleTimeZone
 <ul>
 <li><span style='color:red'>*internal*  </span>public <i>SimpleTimeZone</i>(int, java.lang.String, int, int, int, int, int, int, int, int, int, int, int)</li>
 <li><span style='color:red'>*internal*  </span>public <i>SimpleTimeZone</i>(java.util.SimpleTimeZone, java.lang.String)</li>
+<li>(draft)      public java.lang.Object <i>clone</i>()</li>
+<li>(draft)      public boolean <i>equals</i>(java.lang.Object)</li>
 <li><span style='color:red'>*internal*  </span>public int <i>getOffset</i>(int, int, int, int, int, int)</li>
 <li><span style='color:red'>*internal*  </span>public int <i>getOffset</i>(int, int, int, int, int, int, int)</li>
 <li><span style='color:red'>*internal*  </span>public int <i>getRawOffset</i>()</li>
 <li><span style='color:red'>*internal*  </span>public boolean <i>hasSameRules</i>(TimeZone)</li>
+<li>(draft)      public int <i>hashCode</i>()</li>
 <li><span style='color:red'>*internal*  </span>public boolean <i>inDaylightTime</i>(java.util.Date)</li>
+<li>(draft)      public java.lang.String <i>toString</i>()</li>
 <li><span style='color:red'>*internal*  </span>public boolean <i>useDaylightTime</i>()</li>
 </ul>
 StringTokenizer
@@ -476,6 +596,8 @@ TimeZone
 <ul>
 <li><span style='color:red'>*internal*  </span>protected static final int MILLIS_PER_DAY</li>
 <li><span style='color:red'>*internal*  </span>protected static final int MILLIS_PER_HOUR</li>
+<li>(draft)      public boolean <i>equals</i>(java.lang.Object)</li>
+<li>(draft)      public int <i>hashCode</i>()</li>
 </ul>
 UResourceBundle
 <ul>
@@ -503,6 +625,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Sep 11 17:06:30 PDT 2006<br/>Copyright (C) 2006, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Sep 12 09:10:11 PDT 2006<br/>Copyright (C) 2006, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
