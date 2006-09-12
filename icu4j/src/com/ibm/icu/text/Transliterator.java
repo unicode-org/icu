@@ -1523,8 +1523,7 @@ public abstract class Transliterator {
      * length one containing a reference to this transliterator.
      * @return an array of one or more transliterators that make up
      * this transliterator
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public Transliterator[] getElements() {
         Transliterator result[];

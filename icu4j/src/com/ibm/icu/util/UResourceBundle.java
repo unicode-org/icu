@@ -70,8 +70,7 @@ import com.ibm.icu.util.ULocale;
  * <pre>
  *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.LocaleElements", "en_US");
  * </pre>
- * @draft ICU 3.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.0
  * @author ram
  */
 public abstract class UResourceBundle extends ResourceBundle{
@@ -85,8 +84,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName, String localeName){
         return getBundleInstance(baseName, localeName, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
@@ -101,8 +99,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root){
         return getBundleInstance(baseName, localeName, root, false);
@@ -119,8 +116,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      * 
      */    
     protected static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback){
@@ -131,8 +127,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)  This is public for compatibility with Java, whose compiler
      * will generate public default constructors for an abstract class.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public UResourceBundle() {   
     }
@@ -143,8 +138,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
      * @return a resource bundle for the given locale               
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(ULocale locale){
         if(locale==null){
@@ -158,8 +152,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param baseName  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
      * @return a resource bundle for the given base name and default locale              
-     * @draft ICU 3.0 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0 
      */    
     public static UResourceBundle getBundleInstance(String baseName){
         return getBundleInstance( baseName, ULocale.getDefault().toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );
@@ -172,8 +165,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.  
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
 
     public static UResourceBundle getBundleInstance(String baseName, Locale locale){
@@ -188,8 +180,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
      * @return a resource bundle for the given base name and locale               
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale){
          return getBundleInstance(baseName, locale.toString(),ICUResourceBundle.ICU_DATA_CLASS_LOADER);  
@@ -234,30 +225,26 @@ public abstract class UResourceBundle extends ResourceBundle{
      * corresponds to the requested locale or is a fallback.
      *
      * @return the locale of this resource bundle
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public abstract ULocale getULocale(); 
     
     /**
      * Gets the localeID
      * @return The string representation of the localeID
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected abstract String getLocaleID();
     /**
      * Gets the base name of the resource bundle
      * @return The string representation of the base name
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected abstract String getBaseName();
     /**
      * Gets the parent bundle
      * @return The parent bundle
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected abstract UResourceBundle getParent();
     
@@ -265,8 +252,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Get the locale of this bundle
      * @return the locale of this resource bundle
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public Locale getLocale(){
         return getULocale().toLocale();   
@@ -471,8 +457,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected static synchronized UResourceBundle instantiateBundle(
         String baseName, String localeName, ClassLoader root, boolean disableFallback)

@@ -16,8 +16,7 @@ package com.ibm.icu.util;
  *
  * @see com.ibm.icu.util.Measure
  * @author Alan Liu
- * @draft ICU 3.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.0
  */
 public abstract class MeasureUnit {
     /**

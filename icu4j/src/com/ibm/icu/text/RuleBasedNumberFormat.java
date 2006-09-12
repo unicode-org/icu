@@ -1284,8 +1284,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Return the name of the current default rule set.
      * @return the name of the current default rule set, if it is public, else the empty string.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public String getDefaultRuleSetName() {
         if (defaultRuleSet != null && defaultRuleSet.isPublic()) {

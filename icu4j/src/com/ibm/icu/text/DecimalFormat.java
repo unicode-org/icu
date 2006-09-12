@@ -4174,8 +4174,7 @@ public class DecimalFormat extends NumberFormat {
      * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the fewest significant digits that will be shown
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public int getMinimumSignificantDigits() {
         return minSignificantDigits;
@@ -4186,8 +4185,7 @@ public class DecimalFormat extends NumberFormat {
      * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the most significant digits that will be shown
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public int getMaximumSignificantDigits() {
         return maxSignificantDigits;
@@ -4200,8 +4198,7 @@ public class DecimalFormat extends NumberFormat {
      * <code>min</code>, then it is set to <code>min</code>. This
      * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param min the fewest significant digits to be shown 
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public void setMinimumSignificantDigits(int min) {
         if (min < 1) {
@@ -4220,8 +4217,7 @@ public class DecimalFormat extends NumberFormat {
      * than <code>max</code>, then it is set to <code>max</code>. This
      * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param max the most significant digits to be shown 
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public void setMaximumSignificantDigits(int max) {
         if (max < 1) {
@@ -4237,8 +4233,7 @@ public class DecimalFormat extends NumberFormat {
      * Returns true if significant digits are in use or false if
      * integer and fraction digit counts are in use.
      * @return true if significant digits are in use
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public boolean areSignificantDigitsUsed() {
         return useSignificantDigits;
@@ -4249,8 +4244,7 @@ public class DecimalFormat extends NumberFormat {
      * fraction digit counts are in use.
      * @param useSignificantDigits true to use significant digits, or
      * false to use integer and fraction digit counts
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public void setSignificantDigitsUsed(boolean useSignificantDigits) {
         this.useSignificantDigits = useSignificantDigits;

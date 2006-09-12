@@ -90,8 +90,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used to represent a significant digit in a pattern.
      * @return the significant digit pattern character
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public char getSignificantDigit() {
         return sigDigit;
@@ -100,8 +99,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used to represent a significant digit in a pattern.
      * @param sigDigit the significant digit pattern character
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public void setSignificantDigit(char sigDigit) {
         this.sigDigit = sigDigit;
