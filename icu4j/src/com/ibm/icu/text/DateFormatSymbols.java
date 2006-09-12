@@ -901,8 +901,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * 
      * @param desiredLocale
      * @param type
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected void initializeData(ULocale desiredLocale, String type)
     {
@@ -914,8 +913,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * 
      * @param desiredLocale
      * @param calData
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {

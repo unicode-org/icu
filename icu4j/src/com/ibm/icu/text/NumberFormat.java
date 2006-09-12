@@ -272,8 +272,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a CurrencyAmount.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public final String format(CurrencyAmount currAmt) {
         return format(currAmt, new StringBuffer(),
@@ -333,8 +332,7 @@ public abstract class NumberFormat extends UFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a CurrencyAmount.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public StringBuffer format(CurrencyAmount currAmt,
                                StringBuffer toAppendTo,

@@ -99,8 +99,7 @@ public final class LocaleData {
      *                  IGNORE_SPACE bit is always set, regardless of the
      *                  value of 'options'.
      * @return          The set of exemplar characters for the given locale.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static UnicodeSet getExemplarSet(ULocale locale, int options) {
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
@@ -253,8 +252,7 @@ public final class LocaleData {
      *
      * @param locale      The locale for which the measurement system to be retrieved.
      * @return MeasurementSystem the measurement system used in the locale.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static final MeasurementSystem getMeasurementSystem(ULocale locale){
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
@@ -308,8 +306,7 @@ public final class LocaleData {
      * <em> milli-meters<em>.
      * @param locale The locale for which the measurement system to be retrieved. 
      * @return The paper size used in the locale
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static final PaperSize getPaperSize(ULocale locale){
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);

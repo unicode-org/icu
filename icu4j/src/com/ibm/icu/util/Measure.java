@@ -27,8 +27,7 @@ import java.lang.Number;
  * @see com.ibm.icu.util.MeasureUnit
  * @see com.ibm.icu.text.MeasureFormat
  * @author Alan Liu
- * @draft ICU 3.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.0
  */
 public abstract class Measure {
     
@@ -40,8 +39,7 @@ public abstract class Measure {
      * Constructs a new object given a number and a unit.
      * @param number the number
      * @param unit the unit
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     protected Measure(Number number, MeasureUnit unit) {
         if (number == null || unit == null) {
@@ -54,8 +52,7 @@ public abstract class Measure {
     /**
      * Returns true if the given object is equal to this object.
      * @return true if this object is equal to the given object
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -71,8 +68,7 @@ public abstract class Measure {
     /**
      * Returns a hashcode for this object.
      * @return a 32-bit hash
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public int hashCode() {
         return number.hashCode() ^ unit.hashCode();
@@ -82,8 +78,7 @@ public abstract class Measure {
      * Returns a string representation of this object.
      * @return a string representation consisting of the ISO currency
      * code together with the numeric amount
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public String toString() {
         return number.toString() + ' ' + unit.toString();
@@ -92,8 +87,7 @@ public abstract class Measure {
     /**
      * Returns the numeric value of this object.
      * @return this object's Number
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public Number getNumber() {
         return number;
@@ -102,8 +96,7 @@ public abstract class Measure {
     /**
      * Returns the unit of this object.
      * @return this object's Unit
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public MeasureUnit getUnit() {
         return unit;

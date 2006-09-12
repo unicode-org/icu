@@ -327,8 +327,7 @@ public final class UScript {
     public static final int UGARITIC     = 53;  /* Ugar */ 
     /**
      * New script code in Unicode 4.0.1
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static final int KATAKANA_OR_HIRAGANA = 54;  /*Hrkt */
 
@@ -701,8 +700,7 @@ public final class UScript {
      * Returns LATIN given "en" OR "en_US"
      * @param locale ULocale
      * @return The script codes array. null if the the code cannot be found.
-     * @draft ICU 3.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.0
      */
     public static final int[] getCode(ULocale locale){
         return findCodeFromLocale(locale);
