@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -253,7 +253,6 @@ public final class UCharacterCompare
     * @param method for testing
     * @param ucharval UCharacter value after running method
     * @param charval Character value after running method
-    * @exception thrown when error occur in writing to file
     */
     private static void trackDifference(PrintWriter f, int ch, String method,
                                         String ucharval, String charval)

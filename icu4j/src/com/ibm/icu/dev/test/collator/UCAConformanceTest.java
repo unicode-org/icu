@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -13,7 +13,6 @@
 package com.ibm.icu.dev.test.collator;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -82,7 +81,6 @@ public class UCAConformanceTest extends TestFmwk {
     {
         String collationTest = "CollationTest_";
         String ext = ".txt";
-        StringBuffer name;
         try {
             if(in != null) {
                 in.close();
