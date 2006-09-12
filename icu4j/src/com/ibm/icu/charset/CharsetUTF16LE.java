@@ -230,15 +230,16 @@ class CharsetUTF16LE extends CharsetICU {
             
                
                 /* check for a remaining source byte */
-                if(length>0) {
-                    if(!target.hasRemaining()) {
-                        cr = CoderResult.OVERFLOW;
-                    } else {
-                        /* it must be length==1 because otherwise the above would have copied more */
-                        toUBytesArray[toULength++]=source.get(sourceArrayIndex++);
+                if(!cr.isError()){
+                    if(length>0) {
+                        if(!target.hasRemaining()) {
+                            cr = CoderResult.OVERFLOW;
+                        } else {
+                            /* it must be length==1 because otherwise the above would have copied more */
+                            toUBytesArray[toULength++]=source.get(sourceArrayIndex++);
+                        }
                     }
                 }
-           
                 source.position(sourceArrayIndex);
             }catch(BufferOverflowException ex){
                 cr = CoderResult.OVERFLOW;
