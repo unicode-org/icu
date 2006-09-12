@@ -196,16 +196,15 @@ import java.nio.charset.CoderResult;
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
 
-            if(context==null){
-                return decoder.cbToUWriteSub(decoder, source, target, offsets);
-            }else if(((String)context).equals(SUB_STOP_ON_ILLEGAL)){
-                if(!cr.isUnmappable()){
-                    return cr;
-                }else{
-                   return decoder.cbToUWriteSub(decoder, source, target, offsets);
-                }
+            char[] kSubstituteChar1 = new char[]{0x1A};
+            char[] kSubstituteChar = new char[] {0xFFFD};
+            CharsetICU cs = (CharsetICU) decoder.charset();
+            /* could optimize this case, just one uchar */
+            if(decoder.invalidCharLength == 1 && cs.subChar1 != 0) {
+                return CharsetDecoderICU.toUWriteUChars(decoder, kSubstituteChar1, 0, 1, target, offsets, source.position());
+            } else {
+                return CharsetDecoderICU.toUWriteUChars(decoder, kSubstituteChar, 0, 1, target, offsets, source.position());
             }
-            return cr;
         }
     };
     /**

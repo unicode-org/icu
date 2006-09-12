@@ -127,6 +127,8 @@ class CharsetMBCS extends CharsetICU {
         minBytesPerChar = sharedData.staticData.minBytesPerChar;
         maxCharsPerByte = 1;
         fromUSubstitution = sharedData.staticData.subChar;
+        subChar = sharedData.staticData.subChar;
+        subCharLen = sharedData.staticData.subCharLen;
         subChar1 = sharedData.staticData.subChar1;
         fromUSubstitution = new byte[sharedData.staticData.subCharLen];
         System.arraycopy(sharedData.staticData.subChar, 0, fromUSubstitution, 0, sharedData.staticData.subCharLen);
@@ -2352,7 +2354,7 @@ class CharsetMBCS extends CharsetICU {
                     
                                     //unassigned:
                                     SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength);
-                                    doloop = unassigned(source, target, null, x, cr);
+                                    doloop = unassigned(source, target, offsets, x, cr);
                                     c = x.c;
                                     sourceArrayIndex = x.sourceArrayIndex;
                                     sourceIndex = x.sourceIndex;
@@ -3622,8 +3624,74 @@ class CharsetMBCS extends CharsetICU {
                 return true;
             }
         }
+        /**
+         * Overrides super class method
+         * @param encoder
+         * @param source
+         * @param target
+         * @param offsets
+         * @return
+         */
+        protected CoderResult cbFromUWriteSub ( CharsetEncoderICU encoder, 
+                                                CharBuffer source, ByteBuffer target, 
+                                                IntBuffer offsets){
+            CharsetMBCS cs = (CharsetMBCS) encoder.charset();
+            byte[] subchar, p;
+            byte[] buffer = new byte[4];
+            int length,i=0;
+            /* first, select between subChar and subChar1 */
+            if( cs.subChar1!=0 &&
+                (cs.sharedData.mbcs.extIndexes!=null ?
+                    encoder.useSubChar1 :
+                    (encoder.invalidUCharBuffer[0]<=0xff))
+            ) {
+                /* select subChar1 if it is set (not 0) and the unmappable Unicode code point is up to U+00ff (IBM MBCS behavior) */
+                subchar = new byte[1];
+                subchar[0]=cs.subChar1;
+                length=1;
+            } else {
+                /* select subChar in all other cases */
+                subchar=cs.subChar;
+                length=cs.subCharLen;
+            }
+
+            /* reset the selector for the next code point */
+            encoder.useSubChar1=false;
+
+            switch(cs.sharedData.mbcs.outputType) {
+            case MBCS_OUTPUT_2_SISO:
+                p=buffer;
+                
+                /* fromUnicodeStatus contains prevLength */
+                switch(length) {
+                case 1:
+                    if(encoder.fromUnicodeStatus==2) {
+                        /* DBCS mode and SBCS sub char: change to SBCS */
+                        encoder.fromUnicodeStatus=1;
+                        p[i++]=UConverterConstants.SI;
+                    }
+                    p[i++]=subchar[0];
+                    break;
+                case 2:
+                    if(encoder.fromUnicodeStatus<=1) {
+                        /* SBCS mode and DBCS sub char: change to DBCS */
+                        encoder.fromUnicodeStatus=2;
+                        p[i++]=UConverterConstants.SO;
+                    }
+                    p[i++]=subchar[0];
+                    p[i++]=subchar[1];
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
+                return super.cbFromUWriteSub(encoder, source, target, offsets);
+            default:
+                return super.cbFromUWriteSub(encoder, source, target, offsets);
+            }
+        }
     }    
-    
+
+
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderMBCS(this);
     }
