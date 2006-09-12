@@ -899,7 +899,7 @@ public class SimpleDateFormat extends DateFormat {
                         val = -val;
                         sign = '-';
                     }
-                    val = (val / 3) * 5 + (val % 60); // minutes => KKmm
+                    val = (val / 60) * 100 + (val % 60); // minutes => KKmm
                     buf.append(sign);
                     fastZeroPaddingNubmer(buf, (int)val, 4, 4, '0');
                 } else {
