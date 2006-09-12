@@ -552,7 +552,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-03:00", "-3:00" },
         { "en", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-03:00", "-3:00" },
 
-    // ==========
+        // JB#5150
+        { "en", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+05:30", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+05:30", "+05:30" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "India", "Asia/Calcutta" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "India", "Asia/Calcutta" },
+        
+        // ==========
 
         { "de", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "de", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-08:00", "-8:00" },
@@ -644,7 +656,20 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "de", "Etc/GMT+3", "2004-07-15T00:00:00Z", "zzzz", "GMT-03:00", "-3:00" },
         { "de", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-03:00", "-3:00" },
         { "de", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-03:00", "-3:00" },
-    // ==========
+
+        // JB#5150
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+05:30", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+05:30", "+05:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "Indien", "Asia/Calcutta" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indien", "Asia/Calcutta" },
+
+        // ==========
 
         { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0800", "-8:00" },
@@ -738,7 +763,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "zh", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-0300", "-3:00" },
         { "zh", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-0300", "-3:00" },
 
-    // ==========
+        // JB#5150
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+0530", "+05:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u5370\u5EA6", "Asia/Calcutta" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u5370\u5EA6", "Asia/Calcutta" },
+
+        // ==========
 
         { "hi", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "hi", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-\u0966\u096e:\u0966\u0966", "-8:00" },
@@ -828,7 +865,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-\u0966\u0969:\u0966\u0966", "-3:00" },
         { "hi", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-\u0966\u0969:\u0966\u0966", "-3:00" },
 
-    // ==========
+        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+\u0966\u096B:\u0969\u0966", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "IST", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+\u0966\u096B:\u0969\u0966", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "IST", "+05:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "+5:30" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u092D\u093E\u0930\u0924", "Asia/Calcutta" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u092D\u093E\u0930\u0924", "Asia/Calcutta" },
+
+        // ==========
 
         { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "\u0413\u0440\u0438\u0438\u043D\u0443\u0438\u0447-0800", "-8:00" },
@@ -919,6 +967,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300", "-3:00" },
         { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300", "-3:00" },
         { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447-0300", "-3:00" },
+
+        // JB#5150
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+05:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u0413\u0440\u0438\u0438\u043d\u0443\u0438\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u0418\u043D\u0434\u0438\u044F", "Asia/Calcutta" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u043D\u0434\u0438\u044F", "Asia/Calcutta" },
 
     // ==========
 
@@ -1014,6 +1074,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-0300", "-3:00" },
         { "ja", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-0300", "-3:00" },
 
+        // JB#5150
+        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+0530", "+05:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u30A4\u30F3\u30C9\u6642\u9593", "Asia/Calcutta" },
+        { "ja", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u30A4\u30F3\u30C9\u6642\u9593", "Asia/Calcutta" },
+
     // ==========
 
         { "as", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
@@ -1103,6 +1175,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "as", "Etc/GMT+3", "2004-07-15T00:00:00Z", "zzzz", "GMT-03:00", "-3:00" },
         { "as", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-03:00", "-3:00" },
         { "as", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-03:00", "-3:00" },
+
+        // JB#5150
+        { "as", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "\u09AD\u09BE. \u09B8.", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u09AD\u09BE\u09F0\u09A4\u09C0\u09AF\u09BC \u09B8\u09AE\u09AF\u09BC", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "\u09AD\u09BE. \u09B8.", "+05:30" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u09AD\u09BE\u09F0\u09A4\u09C0\u09AF\u09BC \u09B8\u09AE\u09AF\u09BC", "+5:30" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u09AD\u09BE\u09F0\u09A4", "Asia/Calcutta" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u09AD\u09BE\u09F0\u09A4", "Asia/Calcutta" },
+        
     };
 
     /**
