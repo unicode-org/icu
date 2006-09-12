@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -262,7 +262,7 @@ public class TestUCharacterIterator extends TestFmwk{
     
         private int[] s;
         private int length, i;
-    };
+    }
     // src and expect strings
     private final char src[]={
         UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),

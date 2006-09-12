@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,6 @@ package com.ibm.icu.dev.test.compression;
 
 import com.ibm.icu.text.UnicodeCompressor;
 import com.ibm.icu.text.UnicodeDecompressor;
-import java.util.Random;
 import com.ibm.icu.dev.test.TestFmwk;
 
 public class ExhaustiveTest extends TestFmwk {
@@ -219,7 +218,7 @@ public class ExhaustiveTest extends TestFmwk {
     }
 
     // generate a string of characters, with simulated runs of characters
-    private static char[] randomChars(int len, Random random) {
+    /*private static char[] randomChars(int len, Random random) {
         char[] result = new char [len];
         int runLen = 0;
         int used = 0;
@@ -234,10 +233,10 @@ public class ExhaustiveTest extends TestFmwk {
         }
     
         return result;
-    }
+    }*/
 
     // generate a run of characters in a "window"
-    private static void randomRun(char[] target, int pos, int len, Random random) {
+    /*private static void randomRun(char[] target, int pos, int len, Random random) {
         int offset = (int) (0xFFFF * random.nextDouble());
 
         // don't overflow 16 bits
@@ -248,7 +247,7 @@ public class ExhaustiveTest extends TestFmwk {
         for(int i = pos; i < pos + len; i++) {
             target[i] = (char)(offset + (0x7F * random.nextDouble()));
         }
-    }
+    }*/
 
     private static final String [] fTestCases = {
         "Hello \u9292 \u9192 World!",
@@ -300,67 +299,67 @@ public class ExhaustiveTest extends TestFmwk {
     // Compression modes
     //==========================
     private final static int SINGLEBYTEMODE                 = 0;
-    private final static int UNICODEMODE                        = 1;
+    private final static int UNICODEMODE                    = 1;
     
     //==========================
     // Single-byte mode tags
     //==========================
     private final static int SDEFINEX                   = 0x0B;
-    private final static int SRESERVED                  = 0x0C;             // this is a reserved value
+    //private final static int SRESERVED                  = 0x0C;             // this is a reserved value
     private final static int SQUOTEU                    = 0x0E;
     private final static int SSWITCHU                   = 0x0F;
 
-        private final static int SQUOTE0                        = 0x01;
-        private final static int SQUOTE1                        = 0x02;
-        private final static int SQUOTE2                        = 0x03;
-        private final static int SQUOTE3                        = 0x04;
-        private final static int SQUOTE4                        = 0x05;
-        private final static int SQUOTE5                        = 0x06;
-        private final static int SQUOTE6                            = 0x07;
-        private final static int SQUOTE7                        = 0x08;
+    private final static int SQUOTE0                        = 0x01;
+    private final static int SQUOTE1                        = 0x02;
+    private final static int SQUOTE2                        = 0x03;
+    private final static int SQUOTE3                        = 0x04;
+    private final static int SQUOTE4                        = 0x05;
+    private final static int SQUOTE5                        = 0x06;
+    private final static int SQUOTE6                        = 0x07;
+    private final static int SQUOTE7                        = 0x08;
 
-        private final static int SSWITCH0                       = 0x10;
-        private final static int SSWITCH1                       = 0x11;
-        private final static int SSWITCH2                       = 0x12;
-        private final static int SSWITCH3                       = 0x13;
-        private final static int SSWITCH4                       = 0x14;
-        private final static int SSWITCH5                       = 0x15;
-        private final static int SSWITCH6                       = 0x16;
-        private final static int SSWITCH7                       = 0x17;
+    private final static int SSWITCH0                       = 0x10;
+    private final static int SSWITCH1                       = 0x11;
+    private final static int SSWITCH2                       = 0x12;
+    private final static int SSWITCH3                       = 0x13;
+    private final static int SSWITCH4                       = 0x14;
+    private final static int SSWITCH5                       = 0x15;
+    private final static int SSWITCH6                       = 0x16;
+    private final static int SSWITCH7                       = 0x17;
 
-        private final static int SDEFINE0                       = 0x18;
-        private final static int SDEFINE1                       = 0x19;
-        private final static int SDEFINE2                       = 0x1A;
-        private final static int SDEFINE3                       = 0x1B;
-        private final static int SDEFINE4                       = 0x1C;
-        private final static int SDEFINE5                       = 0x1D;
-        private final static int SDEFINE6                       = 0x1E;
-        private final static int SDEFINE7                       = 0x1F;
+    private final static int SDEFINE0                       = 0x18;
+    private final static int SDEFINE1                       = 0x19;
+    private final static int SDEFINE2                       = 0x1A;
+    private final static int SDEFINE3                       = 0x1B;
+    private final static int SDEFINE4                       = 0x1C;
+    private final static int SDEFINE5                       = 0x1D;
+    private final static int SDEFINE6                       = 0x1E;
+    private final static int SDEFINE7                       = 0x1F;
 
-        //==========================
-        // Unicode mode tags
-        //==========================
-        private final static int USWITCH0                       = 0xE0;
-        private final static int USWITCH1                       = 0xE1;
-        private final static int USWITCH2                       = 0xE2;
-        private final static int USWITCH3                       = 0xE3;
-        private final static int USWITCH4                       = 0xE4;
-        private final static int USWITCH5                       = 0xE5;
-        private final static int USWITCH6                       = 0xE6;
-        private final static int USWITCH7                       = 0xE7;
+    //==========================
+    // Unicode mode tags
+    //==========================
+    private final static int USWITCH0                       = 0xE0;
+    private final static int USWITCH1                       = 0xE1;
+    private final static int USWITCH2                       = 0xE2;
+    private final static int USWITCH3                       = 0xE3;
+    private final static int USWITCH4                       = 0xE4;
+    private final static int USWITCH5                       = 0xE5;
+    private final static int USWITCH6                       = 0xE6;
+    private final static int USWITCH7                       = 0xE7;
 
-        private final static int UDEFINE0                       = 0xE8;
-        private final static int UDEFINE1                       = 0xE9;
-        private final static int UDEFINE2                       = 0xEA;
-        private final static int UDEFINE3                       = 0xEB;
-        private final static int UDEFINE4                       = 0xEC;
-        private final static int UDEFINE5                       = 0xED;
-        private final static int UDEFINE6                       = 0xEE;
-        private final static int UDEFINE7                       = 0xEF;
+    private final static int UDEFINE0                       = 0xE8;
+    private final static int UDEFINE1                       = 0xE9;
+    private final static int UDEFINE2                       = 0xEA;
+    private final static int UDEFINE3                       = 0xEB;
+    private final static int UDEFINE4                       = 0xEC;
+    private final static int UDEFINE5                       = 0xED;
+    private final static int UDEFINE6                       = 0xEE;
+    private final static int UDEFINE7                       = 0xEF;
 
-        private final static int UQUOTEU                        = 0xF0;
-        private final static int UDEFINEX                       = 0xF1;
-        private final static int URESERVED                      = 0xF2;         // this is a reserved value
+    private final static int UQUOTEU                        = 0xF0;
+    private final static int UDEFINEX                       = 0xF1;
+    //private final static int URESERVED                      = 0xF2;         // this is a reserved value
 
     /* Print out an array of characters, with non-printables (for me) 
        displayed as hex values */

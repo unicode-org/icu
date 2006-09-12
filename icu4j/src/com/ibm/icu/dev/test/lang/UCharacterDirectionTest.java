@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -42,7 +42,7 @@ public class UCharacterDirectionTest extends TestFmwk
     
     /**
     * Gets the name of the argument category
-    * @return category name
+    * @returns category name
     */
     public void TestToString()
     {
