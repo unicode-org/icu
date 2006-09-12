@@ -1386,28 +1386,33 @@ public class UnicodeSetTest extends TestFmwk {
     };
     
     public void TestPrettyPrinting() {
-        PrettyPrinter pp = new PrettyPrinter();
-        int i = 0;
-        for (; i < prettyData.length; ++i) {
-            UnicodeSet test = new UnicodeSet(prettyData[i]);
-            checkPrettySet(pp, i, test);
-        }
-        Random random = new Random(0);
-        UnicodeSet test = new UnicodeSet();
-        for (; i < 1000; ++i) {
-            double start = random.nextGaussian() * 0x10000;
-            if (start < 0) start = - start;
-            if (start > 0x10FFFF) {
-                start = 0x10FFFF;
+        try{
+            PrettyPrinter pp = new PrettyPrinter();
+
+            int i = 0;
+            for (; i < prettyData.length; ++i) {
+                UnicodeSet test = new UnicodeSet(prettyData[i]);
+                checkPrettySet(pp, i, test);
             }
-            double end = random.nextGaussian() * 0x100;
-            if (end < 0) end = -end;
-            end = start + end;
-            if (end > 0x10FFFF) {
-                end = 0x10FFFF;
+            Random random = new Random(0);
+            UnicodeSet test = new UnicodeSet();
+            for (; i < 1000; ++i) {
+                double start = random.nextGaussian() * 0x10000;
+                if (start < 0) start = - start;
+                if (start > 0x10FFFF) {
+                    start = 0x10FFFF;
+                }
+                double end = random.nextGaussian() * 0x100;
+                if (end < 0) end = -end;
+                end = start + end;
+                if (end > 0x10FFFF) {
+                    end = 0x10FFFF;
+                }
+                test.complement((int)start, (int)end);
+                checkPrettySet(pp, i, test);
             }
-            test.complement((int)start, (int)end);
-            checkPrettySet(pp, i, test);
+        }catch(RuntimeException ex){
+            warnln("Could not load Collator");
         }
     }
 
