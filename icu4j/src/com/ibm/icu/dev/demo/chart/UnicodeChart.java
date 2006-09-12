@@ -47,11 +47,8 @@ public class UnicodeChart {
         //boolean gotOne = true;
         int columns = 0;
         int limit = 0x110000/16;
-        char lastType = 'x';
-        int lastCount = 0;
         pw.println("<script>");
         pw.print("top();");
-        int itemCount = 1;
         // an array that maps String (containing column information) to UnicodeSet (containing column numbers)
         Map info_number = new TreeMap();
         List number_info = new ArrayList();
@@ -88,8 +85,6 @@ public class UnicodeChart {
         System.out.println("];");
        
         // now write out array
-        int count = 0;
-        UnicodeMap um = new UnicodeMap();
         System.out.println("var charInfo = [");
         for (Iterator it = number_info.iterator(); it.hasNext();) {
         	String info = (String) it.next();
