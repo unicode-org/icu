@@ -336,17 +336,17 @@ final class UConverterSharedData {
 	/*returns a converter type from a string
 	 */
 	// static const UConverterSharedData * getAlgorithmicTypeFromName(const char *realName)
-	 static final UConverterSharedData getAlgorithmicTypeFromName(String realName)
+/*	 static final UConverterSharedData getAlgorithmicTypeFromName(String realName)
 	{
 	    long mid, start, limit;
 	    long lastMid;
 	    int result;
 	    StringBuffer strippedName = new StringBuffer(UConverterConstants.MAX_CONVERTER_NAME_LENGTH);
 	
-	    /* Lower case and remove ignoreable characters. */
+	    // Lower case and remove ignoreable characters.
 	    UConverterAlias.stripForCompare(strippedName, realName);
 	
-	    /* do a binary search for the alias */
+	    // do a binary search for the alias
 	    start = 0;
 	    limit = cnvNameType.length;
 	    mid = limit;
@@ -354,8 +354,8 @@ final class UConverterSharedData {
 	
 	    for (;;) {
 	        mid = (long)((start + limit) / 2);
-	        if (lastMid == mid) {   /* Have we moved? */
-	            break;  /* We haven't moved, and it wasn't found. */
+	        if (lastMid == mid) {   // Have we moved?
+	            break;  // We haven't moved, and it wasn't found.
 	        }
 	        lastMid = mid;
 	        result = strippedName.substring(0).compareTo(cnvNameType[(int)mid].name);
@@ -370,55 +370,54 @@ final class UConverterSharedData {
 	    }
 	
 	    return null;
-	}
-	/**
+	}*/
+	/*
 	 * Enum for specifying basic types of converters
 	 * @see getType
 	 * @draft ICU 3.6
 	 */
-	 static final class UConverterType {
-	     static final int UNSUPPORTED_CONVERTER = -1;
-	     static final int SBCS = 0;
-	     static final int DBCS = 1;
-	     static final int MBCS = 2;
-	     static final int LATIN_1 = 3;
-	     static final int UTF8 = 4;
-	     static final int UTF16_BigEndian = 5;
-	     static final int UTF16_LittleEndian = 6;
-	     static final int UTF32_BigEndian = 7;
-	     static final int UTF32_LittleEndian = 8;
-	     static final int EBCDIC_STATEFUL = 9;
-	     static final int ISO_2022 = 10;
-	
-	     static final int LMBCS_1 = 11;
-	     static final int LMBCS_2 = LMBCS_1 + 1; //12
-	     static final int LMBCS_3 = LMBCS_2 + 1; //13
-	     static final int LMBCS_4 = LMBCS_3 + 1; //14
-	     static final int LMBCS_5 = LMBCS_4 + 1; //15
-	     static final int LMBCS_6 = LMBCS_5 + 1; //16
-	     static final int LMBCS_8 = LMBCS_6 + 1; //17
-	     static final int LMBCS_11 = LMBCS_8 + 1; //18
-	     static final int LMBCS_16 = LMBCS_11 + 1; //19
-	     static final int LMBCS_17 = LMBCS_16 + 1; //20
-	     static final int LMBCS_18 = LMBCS_17 + 1; //21
-	     static final int LMBCS_19 = LMBCS_18 + 1; //22
-	     static final int LMBCS_LAST = LMBCS_19; //22
-	     static final int HZ =LMBCS_LAST + 1; //23
-	     static final int SCSU = HZ + 1; //24
-	     static final int ISCII = SCSU + 1; //25
-	     static final int US_ASCII = ISCII + 1; //26
-	     static final int UTF7 = US_ASCII + 1; //27
-	     static final int BOCU1 = UTF7 + 1; //28
-	     static final int UTF16 = BOCU1 + 1; //29
-	     static final int UTF32 = UTF16 + 1; //30
-	     static final int CESU8 = UTF32 + 1; //31
-	     static final int IMAP_MAILBOX = CESU8 + 1; //32
-	     static final int MAC_ARABIC = IMAP_MAILBOX + 1; //33
-	     static final int MAC_HEBREW = MAC_ARABIC + 1; //34
-	
-	    /* Number of converter types for which we have conversion routines. */
-	     static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = MAC_HEBREW + 1;
-	
+	static final class UConverterType {
+	    static final int UNSUPPORTED_CONVERTER = -1;
+	    static final int SBCS = 0;
+	    static final int DBCS = 1;
+	    static final int MBCS = 2;
+	    static final int LATIN_1 = 3;
+	    static final int UTF8 = 4;
+	    static final int UTF16_BigEndian = 5;
+	    static final int UTF16_LittleEndian = 6;
+	    static final int UTF32_BigEndian = 7;
+	    static final int UTF32_LittleEndian = 8;
+	    static final int EBCDIC_STATEFUL = 9;
+	    static final int ISO_2022 = 10;
+
+	    static final int LMBCS_1 = 11;
+	    static final int LMBCS_2 = LMBCS_1 + 1; //12
+	    static final int LMBCS_3 = LMBCS_2 + 1; //13
+	    static final int LMBCS_4 = LMBCS_3 + 1; //14
+	    static final int LMBCS_5 = LMBCS_4 + 1; //15
+	    static final int LMBCS_6 = LMBCS_5 + 1; //16
+	    static final int LMBCS_8 = LMBCS_6 + 1; //17
+	    static final int LMBCS_11 = LMBCS_8 + 1; //18
+	    static final int LMBCS_16 = LMBCS_11 + 1; //19
+	    static final int LMBCS_17 = LMBCS_16 + 1; //20
+	    static final int LMBCS_18 = LMBCS_17 + 1; //21
+	    static final int LMBCS_19 = LMBCS_18 + 1; //22
+	    static final int LMBCS_LAST = LMBCS_19; //22
+	    static final int HZ =LMBCS_LAST + 1; //23
+	    static final int SCSU = HZ + 1; //24
+	    static final int ISCII = SCSU + 1; //25
+	    static final int US_ASCII = ISCII + 1; //26
+	    static final int UTF7 = US_ASCII + 1; //27
+	    static final int BOCU1 = UTF7 + 1; //28
+	    static final int UTF16 = BOCU1 + 1; //29
+	    static final int UTF32 = UTF16 + 1; //30
+	    static final int CESU8 = UTF32 + 1; //31
+	    static final int IMAP_MAILBOX = CESU8 + 1; //32
+	    //static final int MAC_ARABIC = IMAP_MAILBOX + 1; //33 Not in ICU4C
+	    //static final int MAC_HEBREW = MAC_ARABIC + 1; //34 Not in ICU4C
+
+	    // Number of converter types for which we have conversion routines.
+	    //static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = MAC_HEBREW + 1;
 	}
 	
 	/**
@@ -433,16 +432,16 @@ final class UConverterSharedData {
 
 	static UConverterSharedData _MBCSData = null, /*_Latin1Data = null,*/ /*_UTF8Data = null,*/ /*_UTF16BEData = null,*/ /*_UTF16LEData = null,*/ /*_UTF32BEData = null,*/ /*_UTF32LEData = null,*/  /*_ISO2022Data = null,*/ _LMBCSData1 = null,_LMBCSData2 = null, _LMBCSData3 = null, _LMBCSData4 = null, _LMBCSData5 = null, _LMBCSData6 = null, _LMBCSData8 = null,_LMBCSData11 = null,_LMBCSData16 = null,_LMBCSData17 = null,_LMBCSData18 = null,_LMBCSData19 = null, _HZData = null, _SCSUData = null, /*_ISCIIData = null,*/ /*_ASCIIData = null,*/ _UTF7Data = null, _Bocu1Data = null, /*_UTF16Data = null, _UTF32Data = null,*/ _CESU8Data = null, _IMAPData = null;
 	static UConverterSharedData[] converterData;
-	static class cnvNameTypeClass {
+/*	static class cnvNameTypeClass {
 	  String name;
 		int type;
 		cnvNameTypeClass(String name_, int type_) { name = name_; type = type_; }
 	} 
 	
-	static cnvNameTypeClass cnvNameType[];
+	static cnvNameTypeClass cnvNameType[];*/
 	
     static final String DATA_TYPE = "cnv";
-    static final int CNV_DATA_BUFFER_SIZE = 25000;
+    //static final int CNV_DATA_BUFFER_SIZE = 25000;
     static final int SIZE_OF_UCONVERTER_SHARED_DATA = 100;
 
 	static final int MAXIMUM_UCS2 =            0x0000FFFF;

@@ -559,25 +559,25 @@ final class UConverterAlias {
         
     // U_CAPI UEnumeration * U_EXPORT2 openStandardNames(const char *convName,
     // const char *standard, UErrorCode *pErrorCode)
-    static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
+/*    static final UConverterAliasesEnumeration openStandardNames(String convName, String standard)throws IOException {
         UConverterAliasesEnumeration aliasEnum = null;
         if (haveAliasData() && isAlias(convName)) {
             int listOffset = findTaggedAliasListsOffset(convName, standard);
 
-            /*
+            
              * When listOffset == 0, we want to acknowledge that the converter
              * name and standard are okay, but there is nothing to enumerate.
-             */
+             
             if (listOffset < gTaggedAliasLists.length) {
 
                 UConverterAliasesEnumeration.UAliasContext context = new UConverterAliasesEnumeration.UAliasContext(listOffset, 0);
                 aliasEnum = new UConverterAliasesEnumeration();
                 aliasEnum.setContext(context);
             }
-            /* else converter or tag not found */
+             else converter or tag not found 
         }
         return aliasEnum;
-    }
+    }*/
 
     // static uint32_t getTagNumber(const char *tagname)
     private static int getTagNumber(String tagName) {
