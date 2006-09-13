@@ -70,13 +70,14 @@ HOWTO
 
 0. Note, these instructions will only work on POSIX type systems.
 
-1. Obtain the current versions of tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
-   above.  Either manually download or use wget:
+1. Obtain the current versions of tzdataYYYYV.tar.gz (aka `tzdata') from
+   the FTP site given above.  Either manually download or use wget:
 
    $ cd {path_to}/icu/source/tools/tzcode
    $ wget "ftp://elsie.nci.nih.gov/pub/tzdata*.tar.gz"
 
-2. copy only one tzdata*.tar.gz file into the icu/source/data/in/ directory (you may have to create this directory)
+2. Copy only one tzdata*.tar.gz file into the icu/source/tools/tzcode/
+   directory (this directory).
 
    *** Make sure you only have ONE FILE named tzdata*.tar.gz in the
        directory.
