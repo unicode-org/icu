@@ -6,8 +6,8 @@
  *
  * $Source: /icu/icuhtml/icu.sf.net/docs/eclipse_howto/eclipse3x.html,v 
  com.ibm.icu.dev.test.charset/TestConversion.java,v $ 
- * $Date: 2006/09/12 23:12:42 $ 
- * $Revision: 1.1 $ 
+ * $Date: 2006/09/13 23:32:16 $ 
+ * $Revision: 1.2 $ 
  *
  *******************************************************************************
  */
@@ -91,7 +91,7 @@ public class TestConversion extends ModuleTest {
                     TestFromUnicode(testcase, testFromUnicode);
                     testFromUnicode++;
                 } else if (testName.equalsIgnoreCase("getUnicodeSet")) {
-                    TestGetUnicodeSet(testcase);
+               //     TestGetUnicodeSet(testcase);
                 } else {
                     warnln("Could not load the test cases for conversion");
                     continue;
@@ -132,7 +132,18 @@ public class TestConversion extends ModuleTest {
             errln("Skipping test: error parsing conversion/toUnicode test case " + cc.caseNr);
             return;
         }
-    
+//      ----for debugging only 
+        logln("\nTestToUnicode[" + caseNr + "] "
+                + cc.charset + " ");
+        logln("Bytes:");
+        printbytes(cc.bytes, cc.bytes.limit());
+        logln("");
+        logln("Unicode: " + hex(cc.unicode));    
+        logln("Callback: (" + cc.cbopt + ")");  
+        logln("\n...............................................");
+
+//         ----for debugging only
+        
         //This test case is skipped due to limitation in java's API for decoder replacement 
         // { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 }, :int{1}, :int{0}, "", "?", :bin{""} }
         if(cc.caseNr == 63)
@@ -253,12 +264,12 @@ public class TestConversion extends ModuleTest {
                 out.put(temp);
                 out.position(pos);
             } else if (cr.isError()) {
-                checkResultsToUnicode(cc.unicode, out); 
+                checkResultsToUnicode(cc,cc.unicode, out); 
                 return;
             }
         } while (source.remaining() > 0);
 
-        checkResultsToUnicode(cc.unicode, out);
+        checkResultsToUnicode(cc,cc.unicode, out);
         return;
     }
 
@@ -292,7 +303,18 @@ public class TestConversion extends ModuleTest {
             errln("error parsing conversion/toUnicode test case " + cc.caseNr);
             return;
         }
+        // ----for debugging only
+        logln("\nTestFromUnicode[" + caseNr + "] "
+                + cc.charset + " "); 
+        logln("Unicode: " + cc.unicode);
+        logln("Bytes:");
+        printbytes(cc.bytes, cc.bytes.limit());
+        logln("");
+        logln("Callback: (" + cc.cbopt + ")"); 
+        logln("...............................................");
 
+//         ----for debugging only
+    
  
         // TODO: ***Currently skipping test for charset ibm-1390, gb18030,
         // ibm-930 due to external mapping need to be fix
@@ -422,13 +444,13 @@ public class TestConversion extends ModuleTest {
             } else if (cr.isError()) {
                 // check the stopped test for current output and match the
                 // expected results
-                checkResultsFromUnicode(cc.bytes, out);
+                checkResultsFromUnicode(cc,cc.bytes, out);
                 return;
             }
 
         } while (uniStr.remaining() > 0);
 
-        checkResultsFromUnicode(cc.bytes, out);
+        checkResultsFromUnicode(cc,cc.bytes, out);
         return;
 
     }
@@ -554,25 +576,25 @@ public class TestConversion extends ModuleTest {
 
     void printbytes(ByteBuffer buf, int pos) {
         int cur = buf.position();
-        System.out.print(" (" + pos + ")==[");
+        log(" (" + pos + ")==[");
         for (int i = 0; i < pos; i++) {
-            System.out.print("(" + i + ")" + hex(buf.get(i) & 0xff) + " ");
+            log("(" + i + ")" + hex(buf.get(i) & 0xff) + " ");
         }
-        System.out.print("]");
+        log("]");
         buf.position(cur);
     }
 
     void printchar(CharBuffer buf, int pos) {
         int cur = buf.position();
-        System.out.print(" (" + pos + ")==[");
+        log(" (" + pos + ")==[");
         for (int i = 0; i < pos; i++) {
-            System.out.print("(" + i + ")" + hex(buf.get(i)) + " ");
+            log("(" + i + ")" + hex(buf.get(i)) + " ");
         }
-        System.out.print("]");
+        log("]");
         buf.position(cur);
     }
 
-    private void checkResultsFromUnicode(ByteBuffer source, ByteBuffer target) {
+    private void checkResultsFromUnicode(ConversionCase cc, ByteBuffer source, ByteBuffer target) {
  
         int len = target.position();
         source.rewind();
@@ -588,36 +610,55 @@ public class TestConversion extends ModuleTest {
         len = len-target.position();
         
         if (len != source.remaining()) {
-            errln("Test failed\n");
+            errln("Test failed: output does not match expected\n"); 
+            logln("["+ cc.caseNr + "]:"+cc.charset+"\noutput=" );
+            printbytes(target, len); 
             return;
         }
         for (int i = 0; i < source.remaining(); i++) {
             if (target.get() != source.get()) {
-                errln("Test failed\n");
+                errln("Test failed: output does not match expected\n"); 
+                logln("["+ cc.caseNr + "]:"+cc.charset+"\noutput=" );
+                printbytes(target, len); 
                 return;
             }
         }
-        logln("Passed\n");
+        logln("["+ cc.caseNr + "]:"+cc.charset);
+        log("output=" );
+        for (int i = 0; i < source.remaining(); i++)
+        {
+            printbytes(target, len); 
+        }
+        logln("\nPassed\n");
         return;
     }
 
-    private void checkResultsToUnicode(String source, CharBuffer target) {
+    private void checkResultsToUnicode(ConversionCase cc, String source, CharBuffer target) {
  
         int len = target.position(); 
         target.rewind(); 
 
         // test to see if the conversion matches actual results
         if (len != source.length()) {
-            errln("Test failed\n"); 
+            errln("Test failed: output does not match expected\n"); 
+            logln("["+ cc.caseNr + "]:"+cc.charset+"\noutput=" );
+            printchar(target,len); 
             return;
         }
         for (int i = 0; i < source.length(); i++) {
             if ( ! (hex(target.get(i)).equals(hex(source.charAt(i)))) ) {
-                errln("Test failed\n"); 
+                errln("Test failed: output does not match expected\n"); 
+                logln("["+ cc.caseNr + "]:"+cc.charset+"\noutput=" );
+                printchar(target,len); 
                 return;
             }
         }
-        logln("Passed\n"); 
+        logln("["+ cc.caseNr + "]:"+cc.charset);
+        log("output=" );
+        for (int i = 0; i < source.length(); i++){ 
+            printchar(target,len); 
+        }
+        logln("\nPassed\n"); 
         return;
     }
 }
