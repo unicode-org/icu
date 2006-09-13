@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,7 +24,8 @@ public class TestAll extends TestGroup {
                   "TestAll$NumberFormat",
                   "TestAll$DateFormat",
                   "TestAll$MessageFormat",
-                  "com.ibm.icu.dev.test.format.BigNumberFormatTest"
+                  "com.ibm.icu.dev.test.format.BigNumberFormatTest",
+                  "com.ibm.icu.dev.test.format.GlobalizationPreferencesTest",
               },
               "Formatting Tests");
     }
