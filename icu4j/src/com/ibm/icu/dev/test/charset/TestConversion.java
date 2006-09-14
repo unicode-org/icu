@@ -6,8 +6,8 @@
  *
  * $Source: /icu/icuhtml/icu.sf.net/docs/eclipse_howto/eclipse3x.html,v 
  com.ibm.icu.dev.test.charset/TestConversion.java,v $ 
- * $Date: 2006/09/14 18:44:15 $ 
- * $Revision: 1.3 $ 
+ * $Date: 2006/09/14 23:46:20 $ 
+ * $Revision: 1.4 $ 
  *
  *******************************************************************************
  */
@@ -86,12 +86,11 @@ public class TestConversion extends ModuleTest {
                 if (testName.equalsIgnoreCase("toUnicode")) { 
                     TestToUnicode(testcase, testToUnicode);
                     testToUnicode++;
-
                 } else if (testName.equalsIgnoreCase("fromUnicode")) {                    
                     TestFromUnicode(testcase, testFromUnicode);
                     testFromUnicode++;
                 } else if (testName.equalsIgnoreCase("getUnicodeSet")) {
-               //     TestGetUnicodeSet(testcase);
+                    TestGetUnicodeSet(testcase);
                 } else {
                     warnln("Could not load the test cases for conversion");
                     continue;
@@ -417,9 +416,8 @@ public class TestConversion extends ModuleTest {
                         // start after the NUL
                         if (cc.cbopt.charAt(1) == 0x00) {
                             cc.cbopt = cc.cbopt.substring(2);
-
                             try {
-                                encoder.replaceWith(cc.cbopt.getBytes());
+                                encoder.replaceWith(toByteArray(cc.cbopt));
                             } catch (Exception e) {
                                 logln("Skipping test due to limitation in Java API - substitution character sequence size error");
                                 return;
@@ -454,7 +452,18 @@ public class TestConversion extends ModuleTest {
         return;
 
     }
-
+    private byte[] toByteArray(String str){
+        byte[] ret = new byte[ str.length() ];
+        for(int i=0; i<ret.length;i++){
+            char ch =  str.charAt(i);
+            if(ch<=0xFF){
+                ret[i]= (byte)ch;
+            }else{
+                throw new IllegalArgumentException(" byte value out of range: " + ch);
+            }
+        }
+        return ret;
+    }
     private void TestGetUnicodeSet(DataMap testcase) {
         /*
          * charset - will be opened, and ucnv_getUnicodeSet() called on it //
@@ -601,11 +610,11 @@ public class TestConversion extends ModuleTest {
         target.rewind();
         
         // remove any BOM signature before checking
-        String BOM = detectUnicodeSignature(target);
+        detectUnicodeSignature(target);
 
         // test to see if the conversion matches actual results
         // remove any BOM signature before checking
-        BOM =  detectUnicodeSignature(target);
+        detectUnicodeSignature(target);
         
         len = len-target.position();
         
