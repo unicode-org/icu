@@ -833,7 +833,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("numberformat of string did not throw exception");
         }
         catch (Exception e) {
-        	logln("PASS: numberformat of string failed as expected");
+            logln("PASS: numberformat of string failed as expected");
         }
 
         int hash = fmt.hashCode();
@@ -1250,7 +1250,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-	
+
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
 //#ifdef FOUNDATION
 //##        nf.setRoundingIncrement(increment);
@@ -1258,7 +1258,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         nf.setRoundingIncrement(increment.toBigDecimal());
 //#endif
         BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
-        for (int i = -iterations; i <= iterations; ++i) {			
+        for (int i = -iterations; i <= iterations; ++i) {
             BigDecimal iValue = base.add(increment.multiply(new BigDecimal(i)).movePointLeft(1));
             BigDecimal smallIncrement = new BigDecimal("0.00000001");
             if (iValue.signum() != 0) {
@@ -1270,7 +1270,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             lastParsed = checkRound(nf, iValue.add(smallIncrement), lastParsed);
         }
     }
-	
+
     private BigDecimal checkRound(DecimalFormat nf, BigDecimal iValue, BigDecimal lastParsed) {
         String formatedBigDecimal = nf.format(iValue);
         String formattedDouble = nf.format(iValue.doubleValue());
@@ -1299,7 +1299,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         return lastParsed;
     }
-	
+
     static BigDecimal toBigDecimal(Number number) {
         return number instanceof BigDecimal ? (BigDecimal) number
             : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
@@ -1316,7 +1316,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "ROUND_HALF_UP", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN",
         "ROUND_UNNECESSARY"
     };
-	
+
     private static boolean equalButForTrailingZeros(String formatted1, String formatted2) {
         if (formatted1.length() == formatted2.length()) return formatted1.equals(formatted2);
         return stripFinalZeros(formatted1).equals(stripFinalZeros(formatted2));
@@ -1608,5 +1608,79 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         NumberFormat nf1 = NumberFormat.getInstance();
         //reset default locale
         ULocale.setDefault(defaultLocale);
+    }
+
+    public void TestParseReturnType() {
+        String[] defaultNonBigDecimals = {
+            "123",      // Long
+            "123.0",    // Long
+            "0.0",      // Long
+            "12345678901234567890"      // BigInteger
+        };
+
+        String[] doubles = {
+            "-0.0",
+            "NaN",
+            "\u221E"    // Infinity
+        };
+
+        DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat nf = new DecimalFormat("#.#", sym);
+
+        if (nf.isParseBigDecimal()) {
+            errln("FAIL: isParseDecimal() must return false by default");
+        }
+
+        // isParseBigDecimal() is false
+        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+            try {
+                Number n = nf.parse(defaultNonBigDecimals[i]);
+                if (n instanceof BigDecimal) {
+                    errln("FAIL: parse returns BigDecimal instance");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+            }
+        }
+        // parse results for doubls must be always Double
+        for (int i = 0; i < doubles.length; i++) {
+            try {
+                Number n = nf.parse(doubles[i]);
+                if (!(n instanceof Double)) {
+                    errln("FAIL: parse does not return Double instance");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + doubles[i] + "' threw exception: " + e);
+            }
+        }
+
+        // force this DecimalFormat to return BigDecimal
+        nf.setParseBigDecimal(true);
+        if (!nf.isParseBigDecimal()) {
+            errln("FAIL: isParseBigDecimal() must return true");
+        }
+
+        // isParseBigDecimal() is true
+        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+            try {
+                Number n = nf.parse(defaultNonBigDecimals[i]);
+                if (!(n instanceof BigDecimal)) {
+                    errln("FAIL: parse does not return BigDecimal instance");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+            }
+        }
+        // parse results for doubls must be always Double
+        for (int i = 0; i < doubles.length; i++) {
+            try {
+                Number n = nf.parse(doubles[i]);
+                if (!(n instanceof Double)) {
+                    errln("FAIL: parse does not return Double instance");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + doubles[i] + "' threw exception: " + e);
+            }
+        }
     }
 }
