@@ -104,8 +104,10 @@
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
+        <property file="build.properties" />
         <!-- fix the data folder every time there is a version update-->
-        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt36b/" />
+
+        <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt${icu4j.version.number}b/" />
         <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
         <property name="icu4j.javac.source" value="1.3"/>
         <property name="icu4j.javac.target" value="1.3"/>
@@ -323,8 +325,7 @@
             debug="on" deprecation="off"/>
     </target>
             
-<!-- use excludefiles below when we move to ant 1.5 -->
-
+    <!-- use excludefiles below when we move to ant 1.5 -->
     <target name="docs" depends="anthack1,anthack2,tools" description="build user javadoc">
         <echo message="doc params: ${doc.params}"/>
         <mkdir dir="${doc.dir}"/>
@@ -337,7 +338,7 @@
             doctitle="icu4j"
             encoding="iso-8859-1"
             docencoding="iso-8859-1"
-            bottom="&lt;font size=-1>Copyright (c) 2006 IBM Corporation and others.&lt;/font>"
+            bottom="&lt;font size=-1>Copyright (c) ${current.year} IBM Corporation and others.&lt;/font>"
             additionalparam="${doc.params}"
             link="http://java.sun.com/j2se/1.5/docs/api"
             source="1.4"/>
@@ -669,24 +670,24 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.6"/>
-                <param name="-output" value="${api.dir}/icu4j36.api"/>
+                <param name="-name" value="ICU4J ${icu4j.version.string}"/>
+                <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}.api"/>
                 <param name="-internal"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
     </target>
 
-    <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
+    <target name="apireport" depends="tools, gatherapi" if="version.1.4" description="run API report generator tool">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
             <arg value="-old:"/>
-            <arg value="${api.dir}/icu4j343.api.gz"/>
+            <arg value="${api.dir}/icu4j${icu4j.previous.version.number}.api.gz"/>
             <arg value="-new:"/>
-            <arg value="${api.dir}/icu4j36.api.gz"/>
+            <arg value="${api.dir}/icu4j${icu4j.version.number}.api.gz"/>
             <arg value="-html"/>
             <arg value="-internal"/>
             <arg value="-out:"/>
-            <arg value="${api.dir}/icu4j_compare_343_36.html"/>
+            <arg value="${api.report.out}"/>
         </java>
     </target>
 
@@ -1346,9 +1347,9 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.4.4"/>
+                <param name="-name" value="ICU4J 3.6"/>
                 <param name="-base" value="com.ibm.icu"/>
-                <param name="-output" value="${api.dir}/icu4j343w_i.api"/>
+                <param name="-output" value="${api.dir}/icu4j36w_i.api"/>
                 <param name="-filter" value="BreakIterator|CollationKey|Collator|DateFormat|DecimalFormat|MessageFormat|NumberFormat|SimpleDateFormat|StringTokenizer|Calendar|TimeZone|ULocale|DateFormatSymbols|DecimalFormatSymbols|Calendar|TimeZone"/>
                 <!-- param name="-gzip"/ -->
             </doclet>
@@ -1362,9 +1363,9 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.4.4 Wrapper"/>
+                <param name="-name" value="ICU4J 3.6 Wrapper"/>
                 <param name="-base" value="com.ibm.icu"/>
-                <param name="-output" value="${api.dir}/icu4j343w_e.api"/>
+                <param name="-output" value="${api.dir}/icu4j36w_e.api"/>
                 <!-- param name="-gzip"/ -->
             </doclet>
         </javadoc>
@@ -1373,12 +1374,12 @@
     <target name="reportWrapperAPI" depends="tools" if="version.1.4">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
             <arg value="-old:"/>
-            <arg value="${api.dir}/icu4j343w_i.api"/>
+            <arg value="${api.dir}/icu4j${icu4j.previous.version.number}w_i.api"/>
             <arg value="-new:"/>
-            <arg value="${api.dir}/icu4j343w_e.api"/>
+            <arg value="${api.dir}/icu4j${icu4j.version.number}w_e.api"/>
             <arg value="-html"/>
             <arg value="-out:"/>
-            <arg value="${api.dir}/icu4j_compare_343_wrapper_java.html"/>
+            <arg value="${api.dir}/icu4j_compare_${icu4j.previous.version.number}_wrapper_java.html"/>
         </java>
     </target>
 
