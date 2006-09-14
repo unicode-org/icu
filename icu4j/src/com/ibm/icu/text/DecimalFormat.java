@@ -1525,9 +1525,12 @@ public class DecimalFormat extends NumberFormat {
      * represent the parsed value.  <code>Double</code> objects are returned to
      * represent non-integral values which cannot be stored in a
      * <code>BigDecimal</code>.  These are <code>NaN</code>, infinity,
-     * -infinity, and -0.0.  All other values are returned as <code>Long</code>,
-     * <code>BigInteger</code>, or <code>BigDecimal</code> values, in that order
-     * of preference.  If the parse fails, null is returned.
+     * -infinity, and -0.0.  If {@link #isParseBigDecimal()} is false (the
+     * default), all other values are returned as <code>Long</code>,
+     * <code>BigInteger</code>, or <code>BigDecimal</code> values,
+     * in that order of preference. If {@link #isParseBigDecimal()} is true,
+     * all other values are returned as <code>BigDecimal</code> valuse.
+     * If the parse fails, null is returned.
      * @param text the string to be parsed
      * @param parsePosition defines the position where parsing is to begin,
      * and upon return, the position where parsing left off.  If the position
@@ -1632,12 +1635,12 @@ public class DecimalFormat extends NumberFormat {
             }
 
             // Handle integral values
-            if (mult == 1 && digitList.isIntegral()) {
+            if (!parseBigDecimal && mult == 1 && digitList.isIntegral()) {
                 // hack quick long
-        if (digitList.decimalAt < 12) { // quick check for long
-            long l = 0;
-            if (digitList.count > 0) {
-            int nx = 0;
+                if (digitList.decimalAt < 12) { // quick check for long
+                    long l = 0;
+                    if (digitList.count > 0) {
+                        int nx = 0;
                         while (nx < digitList.count) {
                             l = l * 10 + (char)digitList.digits[nx++] - '0';
                         }
@@ -1649,20 +1652,20 @@ public class DecimalFormat extends NumberFormat {
                         }
                     }
                     n = new Long(l);
-        } else {
+                } else {
                     BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
                     n = (big.bitLength() < 64) ?
                         (Number) new Long(big.longValue()) : (Number) big;
-        }
+                }
             }
 
-            // Handle non-integral values
+            // Handle non-integral values or the case where parseBigDecimal is set
             else {
                 BigDecimal big = digitList.getBigDecimalICU(status[STATUS_POSITIVE]);
                 n = big;
                 if (mult != 1) {
                     n = big.divide(BigDecimal.valueOf(mult),
-                    		BigDecimal.ROUND_HALF_EVEN);
+                            BigDecimal.ROUND_HALF_EVEN);
                 }
             }
         }
@@ -4323,6 +4326,26 @@ public class DecimalFormat extends NumberFormat {
         super.setMinimumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
 
+    /**
+     * Sets whether {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * The default value is false.
+     * @param value true if {@link #parse(String, ParsePosition)} method returns
+     * BigDecimal.
+     * @stable ICU 3.6
+     */
+    public void setParseBigDecimal(boolean value) {
+    	parseBigDecimal = value;
+    }
+
+    /**
+     * Returns whether {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * @return true if {@link #parse(String, ParsePosition)} method returns BigDecimal.
+     * @stable ICU 3.6
+     */
+    public boolean isParseBigDecimal() {
+    	return parseBigDecimal;
+    }
+
 //#ifndef FOUNDATION
 	private void writeObject(ObjectOutputStream stream) throws IOException, ClassNotFoundException {
 // Doug, do we need this anymore?
@@ -4700,6 +4723,17 @@ public class DecimalFormat extends NumberFormat {
      * @since AlphaWorks NumberFormat
      */
     private int padPosition = PAD_BEFORE_PREFIX;
+
+    /**
+     * True if {@link #parse(String, ParsePosition)} to return BigDecimal
+     * rather than Long, Double or BigDecimal except special values.
+     * This property is introduced for J2SE 5 compatibility support.
+     * @serial
+     * @since ICU 3.6
+     * @see #setParseBigDecimal(boolean)
+     * @see #isParseBigDecimal()
+     */
+    private boolean parseBigDecimal = false;
 
     //----------------------------------------------------------------------
 
