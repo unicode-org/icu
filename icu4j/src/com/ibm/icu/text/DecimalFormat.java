@@ -715,7 +715,7 @@ public class DecimalFormat extends NumberFormat {
 
             result.append(symbols.getNaN());
 			// [Spark/CDL] Add attribute for NaN here.
-			result.append(symbols.getNaN());
+			// result.append(symbols.getNaN());
 			if (parseAttr) {
 				addAttribute(Field.INTEGER, result.length()
 						- symbols.getNaN().length(), result.length());
