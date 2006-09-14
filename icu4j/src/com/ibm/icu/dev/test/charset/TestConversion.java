@@ -6,8 +6,8 @@
  *
  * $Source: /icu/icuhtml/icu.sf.net/docs/eclipse_howto/eclipse3x.html,v 
  com.ibm.icu.dev.test.charset/TestConversion.java,v $ 
- * $Date: 2006/09/13 23:32:16 $ 
- * $Revision: 1.2 $ 
+ * $Date: 2006/09/14 18:44:15 $ 
+ * $Revision: 1.3 $ 
  *
  *******************************************************************************
  */
@@ -624,11 +624,8 @@ public class TestConversion extends ModuleTest {
             }
         }
         logln("["+ cc.caseNr + "]:"+cc.charset);
-        log("output=" );
-        for (int i = 0; i < source.remaining(); i++)
-        {
-            printbytes(target, len); 
-        }
+        log("output=" ); 
+        printbytes(target, len);  
         logln("\nPassed\n");
         return;
     }
@@ -654,10 +651,8 @@ public class TestConversion extends ModuleTest {
             }
         }
         logln("["+ cc.caseNr + "]:"+cc.charset);
-        log("output=" );
-        for (int i = 0; i < source.length(); i++){ 
-            printchar(target,len); 
-        }
+        log("output=" ); 
+         printchar(target,len);  
         logln("\nPassed\n"); 
         return;
     }
