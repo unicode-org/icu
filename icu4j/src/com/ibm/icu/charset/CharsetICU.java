@@ -41,7 +41,6 @@ public abstract class CharsetICU extends Charset{
 
      float  maxCharsPerByte;
     
-     int mode;
      boolean flush;
      boolean useFallback;
     
