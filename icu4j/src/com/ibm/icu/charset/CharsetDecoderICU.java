@@ -45,6 +45,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     int    preToUBegin;
     int    preToULength;       /* negative: replay */
     int    preToUFirstLength;  /* length of first character */
+    int mode;
     
     Object toUContext = null;
     private CharsetCallback.Decoder onUnmappableInput = CharsetCallback.TO_U_CALLBACK_STOP;
@@ -110,6 +111,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         }
         return CharsetCallback.TO_U_CALLBACK_STOP;
     }
+    private final ByteBuffer EMPTY = ByteBuffer.allocate(0);
     /**
      * Flushes any characters saved in the converter's internal buffer and
      * resets the converter.
@@ -119,7 +121,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @stable ICU 3.6
      */
     protected final CoderResult implFlush(CharBuffer out) {
-        return CoderResult.UNDERFLOW;
+        return toUnicodeWithCallback(EMPTY, out, null, true);
     }
     
     /**
@@ -136,6 +138,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         preToUBegin = 0;
         preToULength = 0;       /* negative: replay */
         preToUFirstLength = 0; 
+
+        mode = 0;
     }
       
     /**

@@ -104,7 +104,7 @@ class CharsetUTF16LE extends CharsetICU {
                                 } else /* targetCapacity==1 */ {
                                     charErrorBufferArray[charErrorBufferBegin+0]=trail;
                                     charErrorBufferLength=1;
-                                    throw new BufferOverflowException();
+                                    cr = CoderResult.UNDERFLOW;
                                 }
                                 count=0;
                                 c=0;
@@ -126,6 +126,7 @@ class CharsetUTF16LE extends CharsetICU {
                                 }
                                 toULength=2;
                                 cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                break;
                             }
                         }
                     } while(length>0);
