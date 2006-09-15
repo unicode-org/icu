@@ -175,6 +175,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: setLocales(List) must be blocked after frozen");
         }
 
+//#ifndef FOUNDATION
         // setLocales(String)
         logln("Call setLocales(String) after frozen");
         bSet = true;
@@ -186,6 +187,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (bSet) {
             errln("FAIL: setLocales(String) must be blocked after frozen");
         }
+//#endif
 
         // setLocale(ULocale)
         logln("Call setLocale(ULocale) after frozen");
@@ -327,6 +329,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             }
         }
 
+//#ifndef FOUNDATION
         // setLocales(String)
         for (int i = 0; i < ACCEPT_LANGUAGES.length; i++) {
             String acceptLanguage = ACCEPT_LANGUAGES[i];
@@ -377,6 +380,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (!gp.getLocale(0).toString().equals("ko_KR")) {
             errln("FAIL: Previous valid locale list had gone");
         }
+//#endif
     }
 
     public void TestResourceBundle() {
@@ -412,7 +416,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales);
         
         try {
-            rb = gp.getResourceBundle(baseName, ClassLoader.getSystemClassLoader());
+            rb = gp.getResourceBundle(baseName, Thread.currentThread().getContextClassLoader());
             String str = rb.getString("from_en_US");
             if (!str.equals("This data comes from en_US")) {
                 errln("FAIL: from_en_US is not from en_US bundle");

@@ -1,3 +1,6 @@
+//##header
+//#header
+//#ifndef FOUNDATION
 /*
  *******************************************************************************
  * Copyright (C) 2006, Google, International Business Machines Corporation and    *
@@ -209,3 +212,5 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"mmss", "58.59"},
     };
 }
+//#endif
+//eof

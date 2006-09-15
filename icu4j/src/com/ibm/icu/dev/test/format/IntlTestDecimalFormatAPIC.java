@@ -1,3 +1,4 @@
+//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2006, International Business Machines Corporation and    *
@@ -35,17 +36,17 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
 
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     public void TestAPI() {
-        
+
         logln("DecimalFormat API test---");
         logln("");
         Locale.setDefault(Locale.ENGLISH);
-    
+
         // ======= Test constructors
-    
+
         logln("Testing DecimalFormat constructors");
-    
+
         DecimalFormat def = new DecimalFormat();
-    
+
         final String pattern = new String("#,##0.# FF");
         DecimalFormat pat = null;
         try {
@@ -53,30 +54,30 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         } catch (IllegalArgumentException e) {
             errln("ERROR: Could not create DecimalFormat (pattern)");
         }
-    
+
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.FRENCH);
-    
+
         DecimalFormat cust1 = new DecimalFormat(pattern, symbols);
-    
+
         // ======= Test clone(), assignment, and equality
-    
+
         logln("Testing clone() and equality operators");
-    
+
         Format clone = (Format) def.clone();
         if (!def.equals(clone)) {
             errln("ERROR: Clone() failed");
         }
-    
+
         // ======= Test various format() methods
-    
+
         logln("Testing various format() methods");
-    
+
         //        final double d = -10456.0037; // this appears as -10456.003700000001 on NT
         //        final double d = -1.04560037e-4; // this appears as -1.0456003700000002E-4 on NT
         final double d = -10456.00370000000000; // this works!
         final long l = 100000000;
         logln("" + Double.toString(d) + " is the double value");
-    
+
         StringBuffer res1 = new StringBuffer();
         StringBuffer res2 = new StringBuffer();
         StringBuffer res3 = new StringBuffer();
@@ -85,23 +86,23 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         FieldPosition pos2 = new FieldPosition(0);
         FieldPosition pos3 = new FieldPosition(0);
         FieldPosition pos4 = new FieldPosition(0);
-    
+
         res1 = def.format(d, res1, pos1);
         logln("" + Double.toString(d) + " formatted to " + res1);
-    
+
         res2 = pat.format(l, res2, pos2);
         logln("" + l + " formatted to " + res2);
-    
+
         res3 = cust1.format(d, res3, pos3);
         logln("" + Double.toString(d) + " formatted to " + res3);
-    
+
         res4 = cust1.format(l, res4, pos4);
         logln("" + l + " formatted to " + res4);
-    
+
         // ======= Test parse()
-    
+
         logln("Testing parse()");
-    
+
         String text = new String("-10,456.0037");
         ParsePosition pos = new ParsePosition(0);
         String patt = new String("#,##0.#");
@@ -112,17 +113,17 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
                 "ERROR: Roundtrip failed (via parse(" + Double.toString(d2) + " != " + Double.toString(d) + ")) for " + text); 
         }
         logln(text + " parsed into " + (long) d2);
-    
+
         // ======= Test getters and setters
-    
+
         logln("Testing getters and setters");
-    
+
         final DecimalFormatSymbols syms = pat.getDecimalFormatSymbols();
         def.setDecimalFormatSymbols(syms);
         if (!pat.getDecimalFormatSymbols().equals(def.getDecimalFormatSymbols())) {
             errln("ERROR: set DecimalFormatSymbols() failed");
         }
-    
+
         String posPrefix;
         pat.setPositivePrefix("+");
         posPrefix = pat.getPositivePrefix();
@@ -130,7 +131,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (posPrefix != "+") {
             errln("ERROR: setPositivePrefix() failed");
         }
-    
+
         String negPrefix;
         pat.setNegativePrefix("-");
         negPrefix = pat.getNegativePrefix();
@@ -138,7 +139,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (negPrefix != "-") {
             errln("ERROR: setNegativePrefix() failed");
         }
-    
+
         String posSuffix;
         pat.setPositiveSuffix("_");
         posSuffix = pat.getPositiveSuffix();
@@ -146,7 +147,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (posSuffix != "_") {
             errln("ERROR: setPositiveSuffix() failed");
         }
-    
+
         String negSuffix;
         pat.setNegativeSuffix("~");
         negSuffix = pat.getNegativeSuffix();
@@ -154,7 +155,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (negSuffix != "~") {
             errln("ERROR: setNegativeSuffix() failed");
         }
-    
+
         long multiplier = 0;
         pat.setMultiplier(8);
         multiplier = pat.getMultiplier();
@@ -162,7 +163,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (multiplier != 8) {
             errln("ERROR: setMultiplier() failed");
         }
-    
+
         int groupingSize = 0;
         pat.setGroupingSize(2);
         groupingSize = pat.getGroupingSize();
@@ -170,7 +171,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (groupingSize != 2) {
             errln("ERROR: setGroupingSize() failed");
         }
-    
+
         pat.setDecimalSeparatorAlwaysShown(true);
         boolean tf = pat.isDecimalSeparatorAlwaysShown();
         logln(
@@ -178,19 +179,19 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (tf != true) {
             errln("ERROR: setDecimalSeparatorAlwaysShown() failed");
         }
-    
+
         String funkyPat;
         funkyPat = pat.toPattern();
         logln("Pattern is " + funkyPat);
-    
+
         String locPat;
         locPat = pat.toLocalizedPattern();
         logln("Localized pattern is " + locPat);
-    
+
         // ======= Test applyPattern()
-    
+
         logln("Testing applyPattern()");
-    
+
         String p1 = new String("#,##0.0#;(#,##0.0#)");
         logln("Applying pattern " + p1);
         pat.applyPattern(p1);
@@ -200,7 +201,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (!s2.equals(p1)) {
             errln("ERROR: toPattern() result did not match pattern applied");
         }
-    
+
         String p2 = new String("#,##0.0# FF;(#,##0.0# FF)");
         logln("Applying pattern " + p2);
         pat.applyLocalizedPattern(p2);
@@ -210,14 +211,14 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         if (!s3.equals(p2)) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
-    
+
         // ======= Test getStaticClassID()
-    
+
         //        logln("Testing instanceof()");
-    
+
         //        try {
         //           NumberFormat test = new DecimalFormat();
-    
+
         //            if (! (test instanceof DecimalFormat)) {
         //                errln("ERROR: instanceof failed");
         //            }
@@ -255,7 +256,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
                 errln(
                      "SetRoundingMode or GetRoundingMode failed for mode=" + mode); 
             }
-    
+
             //for +2.55 with RoundingIncrement=1.0
             pat.setRoundingIncrement(1.0);
             resultStr = pat.format(Roundingnumber);
@@ -264,7 +265,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             verify(message, resultStr, result[i++]);
             message = "";
             resultStr = "";
-    
+
             //for -2.55 with RoundingIncrement=1.0
             resultStr = pat.format(Roundingnumber1);
             message = "round(" + (double) Roundingnumber1
@@ -274,7 +275,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             resultStr = "";
         }
     }
-    
+
+//#ifndef FOUNDATION
     public void testFormatToCharacterIterator() {
 
         Number number = new Double(350.76);
@@ -500,9 +502,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         && attribute == fc.attribute && value.equals(fc.value));
         }
     } 
+//#endif
 
-    
-    
     /*Helper functions */
     public void verify(String message, String got, double expected) {
         logln(message + got + " Expected : " + (long)expected);
@@ -513,3 +514,4 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 }
+//eof

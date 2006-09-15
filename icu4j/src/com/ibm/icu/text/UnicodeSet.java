@@ -1,3 +1,4 @@
+//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2006, International Business Machines Corporation and    *
@@ -920,6 +921,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         return maxLen;
     }
 
+//#ifndef FOUNDATION
     /**
      * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. For now, an internal routine.
      * @internal
@@ -956,6 +958,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         }
         return offset+len;
     }
+//#endif
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
@@ -3616,3 +3619,4 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         }
     }
 }
+//eof

@@ -1,3 +1,4 @@
+//##header
 /**
 *******************************************************************************
 * Copyright (C) 1996-2006, International Business Machines Corporation and    *
@@ -228,7 +229,8 @@ public final class UTF16
             }
         return single; // return unmatched surrogate
     }
-    
+
+//#ifndef FOUNDATION
     /**
      * Extract a single UTF-32 value from a string.
      * Used when iterating forwards or backwards (with
@@ -256,7 +258,7 @@ public final class UTF16
         }
         return _charAt(source, offset16, single);
     }
-    
+
     private static int _charAt(CharSequence source, int offset16, char single)
     {
         if (single > UTF16.TRAIL_SURROGATE_MAX_VALUE) {
@@ -293,6 +295,7 @@ public final class UTF16
             }
         return single; // return unmatched surrogate
     }
+//#endif
 
     /**
      * Extract a single UTF-32 value from a string.
@@ -2849,3 +2852,4 @@ public final class UTF16
         return result.toString();
     }
 }
+//eof

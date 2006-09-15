@@ -329,7 +329,8 @@ public final class CollectionUtilities {
 		}
 		return result.toString();
 	}
-    
+
+//#ifndef FOUNDATION
      /**
       * Does one string contain another, starting at a specific offset?
       * @param text
@@ -362,7 +363,7 @@ public final class CollectionUtilities {
                 if (newOffset < 0) return offset;
             }
         }
-        
+
         /**
          * Returns the ending offset found by matching characters with testSet, until a position is found that does match
          * @param string
@@ -378,6 +379,7 @@ public final class CollectionUtilities {
                 // we don't have to worry about surrogates for this.
             }
         }
+//#endif
 
     public static String prettyPrint(UnicodeSet uset, boolean compressRanges, UnicodeSet toQuote, Transliterator quoter, 
     		Comparator ordering, Comparator spaceComparator) {

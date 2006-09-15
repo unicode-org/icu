@@ -88,9 +88,10 @@
         <property name="jarSrc.file" value="icu4jsrc.jar"/>
         <property name="zipCoreSrc.file" value="icu4jcsrc.zip"/>
         <property name="zipTestSrc.file" value="icu4jtsrc.zip"/>
+        <property name="jdk.wrapper.jar.file" value="icu4jwrapper.jar"/>
         <property name="eclipse.dir" value="${src.dir}/com/ibm/icu/dev/eclipse"/>
-        <property name="eclipse.wrapper.dir" value="eclipseWrapper"/>
-        <property name="eclipse.dist.dir" value="eclipseDist"/>
+        <property name="eclipse.projects.dir" value="eclipseProjects"/>
+        <property name="wrapper.build.dir" value="classes.wrapper"/>
         <property name="jarDocs.file" value="icu4jdocs.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
@@ -129,8 +130,7 @@
         <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
 
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${eclipse.wrapper.dir}"/>
-        <mkdir dir="${eclipse.dist.dir}"/>
+        <mkdir dir="${wrapper.build.dir}"/>
 
         <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
@@ -696,6 +696,14 @@
         <delete dir="${doc.dir}"/>
         <delete file="${jar.file}"/>
         <delete dir="${richedit.dir}"/>
+        <delete file="${testjar.file}"/>
+        <delete file="${jarSrc.file}"/>
+
+        <delete dir="${eclipse.projects.dir}"/>
+        <delete dir="${wrapper.build.dir}"/>
+        <delete file="${zipCoreSrc.file}"/>
+        <delete file="${zipTestSrc.file}"/>
+        <delete file="${jdk.wrapper.jar.file}"/>
     </target>
 
     <!--
@@ -1220,23 +1228,9 @@
     </target>
     
     <!-- for building eclipse distribution -->
-    
-    <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
-        <!-- for eclipse -->
-        <zip destfile="${zipCoreSrc.file}"
-            compress="true"
-            basedir="${src.dir}"
-            includes="../license.html,../Copyright_Assignment.rtf,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*"/>
-    </target>
-
-    <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
-        <!-- for eclipse -->
-        <zip destfile="${zipTestSrc.file}"
-            compress="true"
-            basedir="${src.dir}"
-            includes="com/ibm/icu/dev/test/**/*"
-            excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*"/>
-    </target>
+    <target name="eclipseProjects" 
+        depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject"
+        description="create all eclipse icu projects"/>
 
     <target name="undoEclipseMangle" depends="buildmangle" description="preprocess files back to default)">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
@@ -1253,17 +1247,8 @@
          </java>
     </target>
 
-    <target name="eclipseTestMangle" depends="buildmangle">
-        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-            <arg value="-dFOUNDATION"/>
-            <arg value="-t"/>
-            <arg value="@eclipseTestArgs.txt"/>
-        </java>
-    </target>
-
     <target name="eclipseCore" depends="init,coreData,icudata,eclipseCoreMangle">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
-            excludes="**/CVS/**/*,**/GlobalizationPreferences*"
             compiler="javac1.3"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -1282,55 +1267,50 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="eclipseCorePkg" depends="eclipseCore" description="build eclipse core package">
-        <!-- should do a clean build before start -->
-
-        <copy file="${jar.file}" toDir="${eclipse.dir}/com.ibm.icu"/>
-        <antcall target="zipCoreSrc"/>
-        <move file="${zipCoreSrc.file}" toDir="${eclipse.dir}/com.ibm.icu"/>
-        <zip destfile="eclipseICU4J_core.zip"
-            basedir="${eclipse.dir}"
-            includes="com.ibm.icu,com.ibm.icu/**/*"
-            excludes="com.ibm.icu/CVS/**/*"/>
-    </target>
-
-    <target name="eclipseTestPkg" depends="eclipseCore,eclipseTestMangle" description="build tests trimmed for eclipse API">
-        <antcall target="tests"/>
-        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
-            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*" excludes="/com/ibm/icu/dev/test/**/GlobalizationPreferences*"/>
-            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
-        </jar>
-        <copy file="${testjar.file}" toDir="${eclipse.dir}/com.ibm.icu.tests"/>
-        <antcall target="zipTestSrc"/>
-        <move file="${zipTestSrc.file}" toDir="${eclipse.dir}/com.ibm.icu.tests"/>
-        <zip destfile="eclipseICU4J_tests.zip"
-            basedir="${eclipse.dir}"
-            includes="com.ibm.icu.tests,com.ibm.icu.tests/**/*"/>
-    </target>
-
-    <target name="eclipseDistro" depends="init, eclipseCore">
+    <target name="eclipseCoreProject" depends="eclipseCore" description="gather eclipse icu core project files">
         <delete failonerror="no">
-            <fileset dir="${eclipse.dist.dir}"/>
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu"/>
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu-feature"/>
         </delete>
-        <copy todir="${eclipse.dist.dir}/src/com/ibm/icu">
+        <!-- collect source files -->
+        <copy toDir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu">
             <fileset dir="src/com/ibm/icu"
             includes="impl/**/*,lang/**/*,math/**/*,text/**/*,util/**/*"
             excludes="**/CVS/**/*,**/*.jar,**/Transliterator_Han_Latin*.txt"/>
         </copy>
-        <copy todir="${eclipse.dist.dir}/src/com/ibm/icu/impl/data">
+        <!-- collect icu data files -->
+        <copy todir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu/impl/data">
             <fileset dir="${build.dir}/com/ibm/icu/impl/data" 
                 includes="**/*.brk,**/*.icu,**/*.res,**/*.spp,**/*.txt"
                 excludes="**/Transliterator_Han_Latin*.txt"/>
         </copy>
+        <!-- collect eclipse project files -->
+        <copy todir="${eclipse.projects.dir}">
+            <fileset dir="${eclipse.dir}"
+            includes="com.ibm.icu/**/*,com.ibm.icu-feature/**/*"
+            excludes="**/CVS/**/*"/>
+        </copy>
+        <!-- copy ICU license file -->
+        <copy file="license.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu/about_files"/>
+        <!-- ucd terms -->
+        <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+        todir="${eclipse.projects.dir}/com.ibm.icu/about_files"/>
+        <!-- copy ICU about file -->
+        <copy file="${eclipse.dir}/misc/about_icu.html"
+        tofile="${eclipse.projects.dir}/com.ibm.icu/about.html"/>
+        <!-- common eclipse about file -->
+        <copy file="${eclipse.dir}/misc/about.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu-feature/sourceTemplatePlugin"/>
     </target>
+
 
     <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
     <target name="eclipseWrapper" depends="init">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java"
-            excludes="**/CVS/**/*,**/GlobalizationPreferences*"
             compiler="javac1.3"
             srcdir="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src"
-            destdir="${eclipse.wrapper.dir}"
+            destdir="${wrapper.build.dir}"
             classpathref="build.classpath"
             bootclasspath="ee.foundation.jar"
             source="1.3"
@@ -1338,6 +1318,95 @@
             debug="on" 
             deprecation="off"
             encoding="ascii"/>
+        <jar jarfile="${jdk.wrapper.jar.file}"
+            compress="true"
+            basedir="${wrapper.build.dir}"/>
+    </target>
+
+    <target name="eclipseWrapperTest" depends="init">
+        <!-- TODO: build the wrapper test code this ant target -->
+    </target>
+
+    <target name="eclipseWrapperProject" depends="eclipseWrapper,eclipseWrapperTest" description="gather eclipse icu core project files">
+        <delete failonerror="no">
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base"/>
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base-feature"/>
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base.tests"/>
+        </delete>
+        <!-- collect eclipse project files -->
+        <copy todir="${eclipse.projects.dir}">
+            <fileset dir="${eclipse.dir}"
+            includes="com.ibm.icu.base/**/*,com.ibm.icu.base-feature/**/*,com.ibm.icu.base.tests/**/*"
+            excludes="**/CVS/**/*"/>
+        </copy>
+        <!-- copy ICU license file -->
+        <copy file="license.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu.base/about_files"/>
+        <!-- copy ICU about file -->
+        <copy file="${eclipse.dir}/misc/about_icu.html"
+        tofile="${eclipse.projects.dir}/com.ibm.icu.base/about.html"/>
+        <!-- common eclipse about file -->
+        <copy file="${eclipse.dir}/misc/about.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu.base-feature/sourceTemplatePlugin"/>
+    </target>
+
+    <target name="eclipseTestMangle" depends="buildmangle">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-dFOUNDATION"/>
+            <arg value="-t"/>
+            <arg value="@eclipseTestArgs.txt"/>
+        </java>
+    </target>
+
+    <target name="eclipseTests" depends="eclipseCore,testdata,eclipseTestMangle" description="build tests trimmed for eclipse API">
+    	<!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
+        <javac includes="com/ibm/icu/dev/test/**/*.java"
+            excludes="**/CVS/**/*,com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            source="1.3"
+            target="1.3"
+            classpathref="build.classpath"
+            debug="on"
+            deprecation="off"/>
+        <antcall target="indices"/>
+        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
+        </jar>
+    </target>
+
+    <target name="eclipseTestProject" depends="eclipseTests,zipTestSrc" description="gather eclipse icu test project files">
+        <delete failonerror="no">
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.tests"/>
+        </delete>
+        <!-- copy eclipse test source and project files -->
+        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests">
+            <fileset dir="${eclipse.dir}/com.ibm.icu.tests"
+            includes="**/*"
+            excludes="**/CVS/**/"/>
+        </copy>
+        <!-- copy icu test jar -->
+        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${testjar.file}"/>
+        <!-- copy icu test source zip -->
+        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
+    </target>
+
+    <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
+        <!-- for eclipse -->
+        <zip destfile="${zipCoreSrc.file}"
+            compress="true"
+            basedir="${src.dir}"
+            includes="../license.html,../Copyright_Assignment.rtf,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*"/>
+    </target>
+
+    <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
+        <!-- for eclipse -->
+        <zip destfile="${zipTestSrc.file}"
+            compress="true"
+            basedir="${src.dir}"
+            includes="com/ibm/icu/dev/test/**/*"
+            excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*"/>
     </target>
 
     <target name="gatherICU4JWrapperAPI" depends="tools" if="version.1.4">
@@ -1383,16 +1452,6 @@
         </java>
     </target>
 
-    <target name="eclipseWrapperPkg" depends="init" description="build eclipse wrapper">
-        <zip destfile="eclipseICU4J_intf.zip"
-            basedir="${eclipse.dir}"
-            includes="com.ibm.icu.base/**/*"/>
-    </target>
-
-    <target name="eclipsePkgs" 
-        depends="eclipseCorePkg,eclipseTestPkg,eclipseWrapperPkg"
-        description="build all eclipse packages"/>
-
     <target name="runCheck" depends="init,tests">    
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-n"/>
@@ -1404,12 +1463,24 @@
             </classpath>
         </java>
     </target>
-    
+
+    <target name="eclipseRunCheck" depends="init,eclipseTests">    
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="icu4j.jar"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="eclipseCompat" depends="init, eclipseCore"/>
-    <target name="eclipseCompatTests" depends="init, eclipseTestMangle, tests" />
-    <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, jar, deleteCore, runCheck"/>
+    <target name="eclipseCompatTests" depends="init, eclipseTestMangle, eclipseTests" />
+    <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, jar, deleteCore, eclipseRunCheck"/>
 
     <target name="jdk13Compat" depends="init, eclipseCoreMangle, core" description="builds ICU4J core with JDK 1.3"/>
-    <target name="jdk13CompatTests" depends="init, jdk13Compat, eclipseTestMangle, tests" description="builds ICU4J tests with JDK 1.3"/>
-    <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar, deleteCore, runCheck" description="runs the tests with JDK 1.3"/>
+    <target name="jdk13CompatTests" depends="init, jdk13Compat, eclipseTestMangle, eclipseTests" description="builds ICU4J tests with JDK 1.3"/>
+    <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar, deleteCore, eclipseRunCheck" description="runs the tests with JDK 1.3"/>
 </project>
