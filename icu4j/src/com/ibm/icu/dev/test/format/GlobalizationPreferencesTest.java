@@ -23,6 +23,7 @@ import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.GlobalizationPreferences;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
@@ -1532,6 +1533,30 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         nf = gp1.getNumberFormat(GlobalizationPreferences.NF_NUMBER);
         if (!nf.getLocale(ULocale.VALID_LOCALE).toString().equals("hi_IN")) {
             errln("FAIL: The NumberFormat instance must use locale hi_IN");
+        }
+    }
+
+    /*
+     * JB#5380 GlobalizationPreferences#getCalendar() should return a Calendar object
+     * initialized with the current time
+     */
+    public void TestJB5380() {
+        GlobalizationPreferences gp = new GlobalizationPreferences();
+        GregorianCalendar gcal = new GregorianCalendar();
+
+        // set way old date
+        gcal.set(Calendar.YEAR, 1950);
+
+        // set calendar to GP
+        gp.setCalendar(gcal);
+
+        Calendar cal = gp.getCalendar();
+        // Calendar instance returned from GP should be initialized
+        // by the current time
+        long timeDiff = System.currentTimeMillis() - gp.getCalendar().getTimeInMillis();
+        if (Math.abs(timeDiff) > 1000) {
+            // if difference is more than 1 second..
+            errln("FAIL: The Calendar was not initialized by current time - difference:" + timeDiff);
         }
     }
 }
