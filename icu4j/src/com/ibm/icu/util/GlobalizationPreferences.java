@@ -473,6 +473,7 @@ public class GlobalizationPreferences implements Freezable {
         }
         Calendar temp = (Calendar) calendar.clone(); // clone for safety
         temp.setTimeZone(getTimeZone());
+        temp.setTimeInMillis(System.currentTimeMillis());
         return temp;
     }
 
