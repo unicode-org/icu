@@ -4,7 +4,7 @@ Bundle-Name: ICU Test Fragment
 Bundle-SymbolicName: com.ibm.icu.tests
 Bundle-Version: 1.0.0
 Bundle-Vendor: IBM
-Fragment-Host: com.ibm.icu;bundle-version="[3.4.2,3.5.0)"
+Fragment-Host: com.ibm.icu;bundle-version="[3.4.2,3.7.0)"
 Bundle-Localization: plugin
 Bundle-Copyright: Licensed Materials - Property of IBM 
  (C) Copyright IBM Corp. 2000-2006. All Rights Reserved. 

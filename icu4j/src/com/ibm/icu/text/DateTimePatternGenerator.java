@@ -1,3 +1,5 @@
+//##header
+//#ifndef FOUNDATION
 /*
  *******************************************************************************
  * Copyright (C) 2006, Google, International Business Machines Corporation and    *
@@ -5,8 +7,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/09 03:03:00 $
- * $Revision: 1.8 $
+ * $Date: 2006/09/15 18:09:24 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -1571,3 +1573,5 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
     }
 }
+//#endif
+//eof

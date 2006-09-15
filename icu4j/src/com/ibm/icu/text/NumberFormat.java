@@ -1537,7 +1537,8 @@ public abstract class NumberFormat extends UFormat {
 
     // new in ICU4J 3.6
     private boolean parseStrict;
-    
+
+//#ifndef FOUNDATION
     /**
      * [Spark/CDL] The instances of this inner class are used as attribute keys and values
      * in AttributedCharacterIterator that
@@ -1647,4 +1648,5 @@ public abstract class NumberFormat extends UFormat {
             throw new InvalidObjectException("An invalid object.");
         }
     }
+//#endif
 }

@@ -716,11 +716,12 @@ public class DecimalFormat extends NumberFormat {
             result.append(symbols.getNaN());
 			// [Spark/CDL] Add attribute for NaN here.
 			// result.append(symbols.getNaN());
+//#ifndef FOUNDATION
 			if (parseAttr) {
 				addAttribute(Field.INTEGER, result.length()
 						- symbols.getNaN().length(), result.length());
 			}
-
+//#endif
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
@@ -764,11 +765,12 @@ public class DecimalFormat extends NumberFormat {
 
 			// [Spark/CDL] Add attribute for infinity here.
 			result.append(symbols.getInfinity());
+//#ifndef FOUNDATION
 			if (parseAttr) {
 				addAttribute(Field.INTEGER, result.length()
 						- symbols.getInfinity().length(), result.length());
 			}
-
+//#endif
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
@@ -1202,14 +1204,16 @@ public class DecimalFormat extends NumberFormat {
                     if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                         fieldPosition.setEndIndex(result.length());
                     }
-
+//#ifndef FOUNDATION
 					// [Spark/CDL] Add attribute for integer part
 					if (parseAttr) {
 						intEnd = result.length();
 						addAttribute(Field.INTEGER, intBegin, result.length());
 					}
-					// [Spark/CDL] Add attribute for decimal separator
+//#endif
 					result.append(decimal);
+//#ifndef FOUNDATION
+					// [Spark/CDL] Add attribute for decimal separator
 					if (parseAttr) {
 						// Length of decimal separator is 1.
 						int decimalSeparatorBegin = result.length() - 1;
@@ -1217,7 +1221,7 @@ public class DecimalFormat extends NumberFormat {
 								decimalSeparatorBegin, result.length());
 						fracBegin = result.length();
 					}
-
+//#endif
                     // Record field information for caller.
                     if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                         fieldPosition.setBeginIndex(result.length());
@@ -1244,7 +1248,7 @@ public class DecimalFormat extends NumberFormat {
                 }
                 fieldPosition.setEndIndex(result.length());
             }
-
+//#ifndef FOUNDATION
 			// [Spark/CDL] Calcuate the end index of integer part and fractional
 			// part if they are not properly processed yet.
 			if (parseAttr) {
@@ -1255,20 +1259,21 @@ public class DecimalFormat extends NumberFormat {
 					addAttribute(Field.FRACTION, fracBegin, result.length());
 				}
 			}
+//#endif
 
             // The exponent is output using the pattern-specified minimum
             // exponent digits.  There is no maximum limit to the exponent
             // digits, since truncating the exponent would result in an
             // unacceptable inaccuracy.
             result.append(symbols.getExponentSeparator());
-
+//#ifndef FOUNDATION
 			// [Spark/CDL] For exponent symbol, add an attribute.
 			if (parseAttr) {
 				addAttribute(Field.EXPONENT_SYMBOL, result.length()
 						- symbols.getExponentSeparator().length(), result
 						.length());
 			}
-
+//#endif
             // For zero values, we force the exponent to zero.  We
             // must do this here, and not earlier, because the value
             // is used to determine integer digit count above.
@@ -1278,6 +1283,7 @@ public class DecimalFormat extends NumberFormat {
             if (negativeExponent) {
                 exponent = -exponent;
                 result.append(symbols.getMinusSign());
+//#ifndef FOUNDATION
 				// [Spark/CDL] If exponent has sign, then add an exponent sign
 				// attribute.
 				if (parseAttr) {
@@ -1285,15 +1291,18 @@ public class DecimalFormat extends NumberFormat {
 					addAttribute(Field.EXPONENT_SIGN, result.length() - 1,
 							result.length());
 				}
+//#endif
 			} else if (exponentSignAlwaysShown) {
-				// [Spark/CDL] Add an plus sign attribute.
 				result.append(symbols.getPlusSign());
+//#ifndef FOUNDATION
+				// [Spark/CDL] Add an plus sign attribute.
 				if (parseAttr) {
 					// Length of exponent sign is 1.
 					int expSignBegin = result.length() - 1;
 					addAttribute(Field.EXPONENT_SIGN, expSignBegin, result
 							.length());
 				}
+//#endif
 			}
 			int expBegin = result.length();
             digitList.set(exponent);
@@ -1309,10 +1318,12 @@ public class DecimalFormat extends NumberFormat {
                 result.append((i < digitList.count) ?
                           (char)(digitList.digits[i] + zeroDelta) : zero);
             }
+//#ifndef FOUNDATION
 			// [Spark/CDL] Add attribute for exponent part.
 			if (parseAttr) {
 				addAttribute(Field.EXPONENT, expBegin, result.length());
 			}
+//#endif
         }
         else
         {
@@ -1374,12 +1385,14 @@ public class DecimalFormat extends NumberFormat {
                 // Output grouping separator if necessary.
                 if (isGroupingPosition(i)) {
                     result.append(grouping);
+//#ifndef FOUNDATION
 					// [Spark/CDL] Add grouping separator attribute here.
 					if (parseAttr) {
 						// Length of grouping separator is 1.
 						addAttribute(Field.GROUPING_SEPARATOR,
 								result.length() - 1, result.length());
 					}
+//#endif
                 }
             }
 
@@ -1398,21 +1411,23 @@ public class DecimalFormat extends NumberFormat {
             // _any_ digits, and we won't be able to parse this string.
             if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
                 result.append(zero);
-
+//#ifndef FOUNDATION
 			// [Spark/CDL] Add attribute for integer part.
 			if (parseAttr) {
 				addAttribute(Field.INTEGER, intBegin, result.length());
 			}
-
+//#endif
             // Output the decimal separator if we always do so.
             if (decimalSeparatorAlwaysShown || fractionPresent)
 			{
 				result.append(decimal);
+//#ifndef FOUNDATION
 				// [Spark/CDL] Add attribute for decimal separator
 				if (parseAttr) {
 					addAttribute(Field.DECIMAL_SEPARATOR, result.length() - 1,
 							result.length());
 				}
+//#endif
 			}
 
             // Record field information for caller.
@@ -1473,10 +1488,12 @@ public class DecimalFormat extends NumberFormat {
 			if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
 				fieldPosition.setEndIndex(result.length());
 			}
+//#ifndef FOUNDATION
 			// [Spark/CDL] Add attribute information if necessary.
 			if (parseAttr && (decimalSeparatorAlwaysShown || fractionPresent)) {
 				addAttribute(Field.FRACTION, fracBegin, result.length());
 			}
+//#endif
 		}
 
 		int suffixLen = appendAffix(result, isNegative, false, parseAttr);
@@ -3259,6 +3276,7 @@ public class DecimalFormat extends NumberFormat {
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
         }
+//#ifndef FOUNDATION
 		// [Spark/CDL] Invoke formatAffix2Attribute to add attributes for affix
 		if (parseAttr) {
 			int offset = affix.indexOf(symbols.getCurrencySymbol());
@@ -3271,10 +3289,12 @@ public class DecimalFormat extends NumberFormat {
 			formatAffix2Attribute(affix, buf.length() + offset, buf.length()
 					+ affix.length());
 		}
+//#endif
         buf.append(affix);
         return affix.length();
     }
 
+//#ifndef FOUNDATION
 	/*
 	 * [Spark/CDL] This is a newly added method, used to add attributes for
 	 * prefix and suffix.
@@ -3294,7 +3314,9 @@ public class DecimalFormat extends NumberFormat {
 			addAttribute(Field.PERMILLE, begin, end);
 		}
 	}
-	
+//#endif
+
+//#ifndef FOUNDATION
 	/*
 	 * [Spark/CDL] Use this method to add attribute.
 	 */
@@ -3304,6 +3326,8 @@ public class DecimalFormat extends NumberFormat {
 		pos.setEndIndex(end);
 		attributes.add(pos);
 	}
+//#endif
+
 //#ifndef FOUNDATION
     /**
      * Format the object to an attributed string, and return the corresponding iterator

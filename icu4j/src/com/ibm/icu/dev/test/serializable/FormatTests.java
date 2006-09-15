@@ -1,3 +1,4 @@
+//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2006, International Business Machines Corporation and    *
@@ -1364,7 +1365,8 @@ public class FormatTests
                    cdfs_a.getLeapMonth(1).equals(cdfs_b.getLeapMonth(1));
         }
     }
-    
+
+//#ifndef FOUNDATION
     public static class NumberFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -1387,9 +1389,11 @@ public class FormatTests
             return field_a.toString().equals(field_b.toString());
         }
     }
-    
+//#endif
+
     public static void main(String[] args)
     {
         // nothing needed...
     }
 }
+//eof

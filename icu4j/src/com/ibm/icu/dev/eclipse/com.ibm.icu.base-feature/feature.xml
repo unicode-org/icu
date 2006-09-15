@@ -2,7 +2,7 @@
 <feature
       id="com.ibm.icu.base"
       label="com.ibm.icu.base"
-      version="3.4.5"
+      version="3.6"
       provider-name="IBM">
 
    <description url="http://www.example.com/description">
@@ -21,13 +21,13 @@
          id="com.ibm.icu.base"
          download-size="0"
          install-size="0"
-         version="3.4.5"
+         version="3.6"
          unpack="false"/>
 
    <plugin
          id="com.ibm.icu.base.source"
          download-size="0"
          install-size="0"
-         version="3.4.5"/>
+         version="3.6"/>
 
 </feature>

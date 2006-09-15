@@ -1,3 +1,5 @@
+//##header
+//#ifndef FOUNDATION
 /*
  *******************************************************************************
  * Copyright (C) 2006, Google, International Business Machines Corporation and    *
@@ -368,3 +370,5 @@ public class PatternTokenizer {
     
     
 }
+//#endif
+//eof
