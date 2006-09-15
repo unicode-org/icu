@@ -364,7 +364,7 @@ public class CharsetDetector {
         //     Count how many total '<' and illegal (nested) '<' occur, so we can make some
         //     guess as to whether the input was actually marked up at all.
         if (fStripTags) {
-            for (srci=0; srci<fRawLength; srci++) {
+            for (srci = 0; srci < fRawLength && dsti < fInputBytes.length; srci++) {
                 b = fRawInput[srci];
                 if (b == (byte)'<') {
                     if (inMarkup) {
