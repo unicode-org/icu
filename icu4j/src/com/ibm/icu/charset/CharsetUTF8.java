@@ -66,7 +66,7 @@ class CharsetUTF8 extends CharsetICU {
             super(cs);
         }        
         
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
         
             int sourceArrayIndex = source.position();
@@ -276,7 +276,7 @@ class CharsetUTF8 extends CharsetICU {
             super.implReset();
         }
         
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             
             int sourceArrayIndex = source.position();

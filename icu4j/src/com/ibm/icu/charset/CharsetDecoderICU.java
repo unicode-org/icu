@@ -180,7 +180,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets);
+    abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets, boolean flush);
     
     /**
      * Implements the ICU semantic for decode operation
@@ -370,7 +370,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         for(;;) {
             if(cr.isUnderflow()) {
                 /* convert */
-                cr = decodeLoop(source, target, offsets);
+                cr = decodeLoop(source, target, offsets, flush);
     
                 /*
                  * set a flag for whether the converter

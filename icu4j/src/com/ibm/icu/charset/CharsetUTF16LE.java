@@ -37,7 +37,7 @@ class CharsetUTF16LE extends CharsetICU {
             super(cs);
         }
 
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             if(!source.hasRemaining() && toUnicodeStatus==0) {
                 /* no input, nothing to do */
@@ -263,7 +263,7 @@ class CharsetUTF16LE extends CharsetICU {
             fromUnicodeStatus = NEED_TO_WRITE_BOM;
         }
         
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             if(!source.hasRemaining()) {
                 /* no input, nothing to do */
