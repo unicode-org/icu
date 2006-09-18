@@ -121,7 +121,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @stable ICU 3.6
      */
     protected final CoderResult implFlush(CharBuffer out) {
-        return toUnicodeWithCallback(EMPTY, out, null, true);
+        return CoderResult.UNDERFLOW;//toUnicodeWithCallback(EMPTY, out, null, true);
     }
     
     /**
