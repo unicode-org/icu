@@ -6,8 +6,8 @@
  *
  * $Source: /icu/icuhtml/icu.sf.net/docs/eclipse_howto/eclipse3x.html,v 
  com.ibm.icu.dev.test.charset/TestConversion.java,v $ 
- * $Date: 2006/09/14 23:46:20 $ 
- * $Revision: 1.4 $ 
+ * $Date: 2006/09/18 21:30:45 $ 
+ * $Revision: 1.5 $ 
  *
  *******************************************************************************
  */
@@ -319,8 +319,7 @@ public class TestConversion extends ModuleTest {
         // ibm-930 due to external mapping need to be fix
         if (cc.charset.equalsIgnoreCase("ibm-1390")
                 || cc.charset.equalsIgnoreCase("gb18030")
-                || cc.charset.equalsIgnoreCase("ibm-970")
-                || cc.charset.equalsIgnoreCase("ibm-930")) {
+                || cc.charset.equalsIgnoreCase("ibm-970")) {
             logln("Skipping test:("
                     + cc.charset
                     + ") due to ICU Charset external mapping not supported at this time");
@@ -444,6 +443,9 @@ public class TestConversion extends ModuleTest {
                 // expected results
                 checkResultsFromUnicode(cc,cc.bytes, out);
                 return;
+            }
+            else {
+                cr = encoder.flush(out);
             }
 
         } while (uniStr.remaining() > 0);
