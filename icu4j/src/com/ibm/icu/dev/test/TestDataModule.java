@@ -1,3 +1,4 @@
+//##header
 /**
  *******************************************************************************
  * Copyright (C) 2001-2006, International Business Machines Corporation and    *
@@ -47,12 +48,14 @@ public interface TestDataModule {
         public DataModuleFormatError(String msg){
             super(msg);
         }
+//#ifndef FOUNDATION
         public DataModuleFormatError(String msg, Throwable cause){
             super(msg, cause);
         }
         public DataModuleFormatError(Throwable cause) {
             super(cause);
         }
+//#endif
     }
     
     /**
