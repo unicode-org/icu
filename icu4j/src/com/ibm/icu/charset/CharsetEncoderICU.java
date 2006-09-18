@@ -110,6 +110,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         return CharsetCallback.FROM_U_CALLBACK_STOP;
     }
 
+    private static final CharBuffer EMPTY = CharBuffer.allocate(0);
 	/**
 	 * Flushes any characters saved in the converter's internal buffer and
 	 * resets the converter.
@@ -119,7 +120,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @stable ICU 3.6
 	 */
     protected CoderResult implFlush(ByteBuffer out) {
-        return CoderResult.UNDERFLOW;
+        return fromUnicodeWithCallback(EMPTY, out, null, true);
 	}
 
 	/**
@@ -164,7 +165,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    abstract CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets);
+    abstract CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush);
     
     /**
      * Implements ICU semantics for encoding the buffer
@@ -327,7 +328,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
          */
         for(;;) {
             /* convert */
-            cr = encodeLoop(source, target, offsets);
+            cr = encodeLoop(source, target, offsets, flush);
             /*
              * set a flag for whether the converter
              * successfully processed the end of the input

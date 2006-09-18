@@ -41,7 +41,6 @@ public abstract class CharsetICU extends Charset{
 
      float  maxCharsPerByte;
     
-     boolean flush;
      boolean useFallback;
     
      String name; /* +4: 60  internal name of the converter- invariant chars */

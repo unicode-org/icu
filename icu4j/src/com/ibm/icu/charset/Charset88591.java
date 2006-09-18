@@ -22,7 +22,7 @@ import com.ibm.icu.text.UTF16;
 class Charset88591 extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[]{(byte)0x1a};
     
-    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases){
+    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases, boolean flush){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 1;
         minBytesPerChar = 1;
@@ -34,7 +34,7 @@ class Charset88591 extends CharsetICU {
             super(cs);
         }
 
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             if(!source.hasRemaining() && toUnicodeStatus==0) {
                 /* no input, nothing to do */
@@ -97,7 +97,7 @@ class Charset88591 extends CharsetICU {
             fromUnicodeStatus = NEED_TO_WRITE_BOM;
         }
         
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             if(!source.hasRemaining()) {
                 /* no input, nothing to do */
