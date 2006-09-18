@@ -2156,10 +2156,10 @@ public class CollationMiscTest extends TestFmwk {
         Object attVals2[] = { new Boolean(true) };
         // Test whether we correctly ignore primary ignorables on case level when
         // we have only primary & case level
-        genericLocaleStarterWithOptionsAndResult(new Locale("root"), tests, att, attVals, 0);
+        genericLocaleStarterWithOptionsAndResult(new Locale("root", ""), tests, att, attVals, 0);
         // Test whether ICU4J will make case level for sortkeys that have primary strength
         // and case level
-        genericLocaleStarterWithOptions(new Locale("root"), tests2, att, attVals);
+        genericLocaleStarterWithOptions(new Locale("root", ""), tests2, att, attVals);
         // Test whether completely ignorable letters have case level info (they shouldn't)
         genericRulesStarterWithOptionsAndResult(rule, tests2, att2, attVals2, 0);        
     }
