@@ -1,3 +1,4 @@
+//##header
 /*
  **********************************************************************
  * Copyright (c) 2006, International Business Machines
@@ -82,7 +83,11 @@ class ResourceModule implements TestDataModule {
             testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
       
         } catch (MissingResourceException e){
+//#ifdef FOUNDATION
+//##            throw new DataModuleFormatError("Unable to find resource");
+//#else
             throw new DataModuleFormatError("Unable to find resource", e);
+//#endif
         }
         try {
             // unfortunately, actually, data can be either ARRAY or STRING
@@ -154,7 +159,11 @@ class ResourceModule implements TestDataModule {
                 isStrResPrepared = true; // toggle the tag
                 return true;
             } catch (DataModuleFormatError e) {
+//#ifdef FOUNDATION
+//##                throw new RuntimeException(e.getMessage());
+//#else
                 throw new RuntimeException(e.getMessage(),e);
+//#endif
             }            
         }
         public boolean hasNext() {
@@ -175,7 +184,11 @@ class ResourceModule implements TestDataModule {
                 return true;
             } catch (DataModuleFormatError e) {
                 // Sadly, we throw RuntimeException also
+//#ifdef FOUNDATION
+//##                throw new RuntimeException(e.getMessage());
+//#else
                 throw new RuntimeException(e.getMessage(),e);
+//#endif
             }
         }
 
@@ -242,7 +255,11 @@ class ResourceModule implements TestDataModule {
         if (Arrays.binarySearch(expResTypes, type) >= 0) {
             return t;
         } else {
+//#ifdef FOUNDATION
+//##            throw new DataModuleFormatError("Actual type " + t.getType() + " != expected types " + expResTypes + ".");
+//#else
             throw new DataModuleFormatError(new UResourceTypeMismatchException("Actual type " + t.getType() + " != expected types " + expResTypes + "."));
+//#endif
         }
     }
     
@@ -267,7 +284,11 @@ class ResourceModule implements TestDataModule {
                 throw new UResourceTypeMismatchException("Only accept ARRAY and STRING types.");
             }
         } catch (UResourceTypeMismatchException e){
+//#ifdef FOUNDATION
+//##            throw new DataModuleFormatError(e.getMessage());
+//#else
             throw new DataModuleFormatError(e);
+//#endif
         }
     }
     
@@ -298,7 +319,11 @@ class ResourceModule implements TestDataModule {
                 // unfortunately, actually, data can be either ARRAY or STRING
                 data = getFromTable(res, DATA, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
             } catch (MissingResourceException e){
+//#ifdef FOUNDATION
+//##                throw new DataModuleFormatError("Unable to find resource");
+//#else
                 throw new DataModuleFormatError("Unable to find resource", e);
+//#endif
             }
             
             try {
