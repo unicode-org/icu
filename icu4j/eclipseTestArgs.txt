@@ -33,6 +33,8 @@ src/com/ibm/icu/dev/test/util/BNF.java
 src/com/ibm/icu/dev/test/util/TestBNF.java
 src/com/ibm/icu/dev/test/serializable/FormatTests.java
 src/com/ibm/icu/dev/test/serializable/SerializableTest.java
+src/com/ibm/icu/dev/test/ResourceModule.java
 src/com/ibm/icu/dev/test/TestAll.java
+src/com/ibm/icu/dev/test/TestDataModule.java
 src/com/ibm/icu/dev/test/TestFmwk.java
 src/com/ibm/icu/dev/test/TestUtil.java
