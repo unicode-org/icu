@@ -1493,7 +1493,15 @@
             encoding="ascii"/>
     </target>
 
+    <target name="jar13" depends="core13,indices" description="build full 'icu4j.jar' jar file for jdk1.3">
+        <jar jarfile="${jar.file}"
+            compress="true"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
+            basedir="${build.dir}"
+            manifest="${icu4j.manifest}"/>
+    </target>
+
     <target name="jdk13Compat" depends="init, eclipseCoreMangle, core13" description="builds ICU4J core with JDK 1.3"/>
     <target name="jdk13CompatTests" depends="init, jdk13Compat, eclipseTestMangle, eclipseTests" description="builds ICU4J tests with JDK 1.3"/>
-    <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar, deleteCore, eclipseRunCheck" description="runs the tests with JDK 1.3"/>
+    <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar13, deleteCore, eclipseRunCheck" description="runs the tests with JDK 1.3"/>
 </project>
