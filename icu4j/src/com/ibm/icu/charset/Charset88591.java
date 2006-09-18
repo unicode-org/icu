@@ -22,7 +22,7 @@ import com.ibm.icu.text.UTF16;
 class Charset88591 extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[]{(byte)0x1a};
     
-    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases, boolean flush){
+    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 1;
         minBytesPerChar = 1;
