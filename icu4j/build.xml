@@ -1478,7 +1478,7 @@
 
     <target name="eclipseCompat" depends="init, eclipseCore"/>
     <target name="eclipseCompatTests" depends="init, eclipseTestMangle, eclipseTests" />
-    <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, jar, deleteCore, eclipseRunCheck"/>
+    <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, deleteCore, eclipseRunCheck"/>
 
 
     <target name="core13" depends="init,coreData,icudata" description="build core classes and data">
