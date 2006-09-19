@@ -2174,7 +2174,11 @@ public class CollationMiscTest extends TestFmwk {
         }
     
         String[] values = Collator.getKeywordValues("collation");
-
+        log("Collator.getKeywordValues returned: ");
+        for(int i=0; i<values.length;i++){
+            log(values[i]+", ");
+        }
+        logln("");
         logln("Number of collator values returned : " + values.length);
         
         Set foundValues = new TreeSet(Arrays.asList(values));
