@@ -47,8 +47,8 @@ class CharsetMBCS extends CharsetICU {
     static final class UConverterMBCSTable {
         /* toUnicode */
         short countStates;
-            byte dbcsOnlyState;
-            boolean stateTableOwned;
+        byte dbcsOnlyState;
+        boolean stateTableOwned;
         int countToUFallbacks;
     
         int stateTable[/*countStates*/][/*256*/];
@@ -75,7 +75,7 @@ class CharsetMBCS extends CharsetICU {
         {
         }
 
-        UConverterMBCSTable(UConverterMBCSTable t)
+/*        UConverterMBCSTable(UConverterMBCSTable t)
         {
             countStates = t.countStates;
             dbcsOnlyState = t.dbcsOnlyState;
@@ -94,7 +94,7 @@ class CharsetMBCS extends CharsetICU {
             swapLFNLName = t.swapLFNLName;
             baseSharedData = t.baseSharedData;
             extIndexes = t.extIndexes;
-        }           
+        }*/
     }
 
     /**
@@ -3699,16 +3699,5 @@ class CharsetMBCS extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderMBCS(this);
     }
-//#ifdef VERSION_1.5  
-//  /** 
-//   * Implements compareTo method of Comparable interface
-//   * @see java.lang.Comparable#compareTo(java.lang.Object)
-//   */
-//  int compareTo(Object o) {
-//      if(o instanceof Charset){
-//          return super.compareTo((Charset)o);
-//      }
-//      return -1;
-//  }
-//#endif
+
 }

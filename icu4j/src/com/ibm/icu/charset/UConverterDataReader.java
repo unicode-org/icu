@@ -10,7 +10,6 @@
 package com.ibm.icu.charset;
 
 import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.impl.ICUDebug;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -401,7 +400,7 @@ import java.nio.ByteBuffer;
  */
 
 final class UConverterDataReader implements ICUBinary.Authenticate {
-    private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
+    //private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
 
     /*
      * 	 UConverterDataReader(UConverterDataReader r)
@@ -419,15 +418,15 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     */
     protected UConverterDataReader(InputStream inputStream) 
                                         throws IOException{
-        if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
+        //if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
         unicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
         
-        if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
+        //if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
         dataInputStream = new DataInputStream(inputStream);
         
-        if(debug) System.out.println("Bytes left in dataInputStream " +dataInputStream.available());
+        //if(debug) System.out.println("Bytes left in dataInputStream " +dataInputStream.available());
     }
     
     // protected methods -------------------------------------------------

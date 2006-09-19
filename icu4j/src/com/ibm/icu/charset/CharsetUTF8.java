@@ -432,38 +432,38 @@ class CharsetUTF8 extends CharsetICU {
     
     /* single-code point definitions -------------------------------------------- */
 
-    /**
+    /*
      * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)?
      * @param c 8-bit code unit (byte)
      * @return TRUE or FALSE
-     * @stable ICU 2.4
+     * @draft ICU 3.6
      */
-    public static boolean isSingle(byte c) {return (((c)&0x80)==0);}
+    //static final boolean isSingle(byte c) {return (((c)&0x80)==0);}
 
-    /**
+    /*
      * Is this code unit (byte) a UTF-8 lead byte?
      * @param c 8-bit code unit (byte)
      * @return TRUE or FALSE
-     * @stable ICU 2.4
+     * @draft ICU 3.6
      */
-    public static boolean isLead(byte c) {return ((((c)-0xc0) & UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
+    //static final boolean isLead(byte c) {return ((((c)-0xc0) & UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
 
     /**
      * Is this code unit (byte) a UTF-8 trail byte?
      * @param c 8-bit code unit (byte)
      * @return TRUE or FALSE
-     * @stable ICU 2.4
+     * @draft ICU 3.6
      */
-    public static boolean isTrail(byte c) {return (((c)&0xc0)==0x80);}
+    static final boolean isTrail(byte c) {return (((c)&0xc0)==0x80);}
 
-    /**
+    /*
      * How many code units (bytes) are used for the UTF-8 encoding
      * of this Unicode code point?
      * @param c 32-bit code point
      * @return 1..4, or 0 if c is a surrogate or not a Unicode code point
-     * @stable ICU 2.4
+     * @draft ICU 3.6
      */
-    public static final int length(int c)
+    /*static final int length(int c)
     {
     	long uc = c & UConverterConstants.UNSIGNED_INT_MASK;
     	return
@@ -476,7 +476,7 @@ class CharsetUTF8 extends CharsetICU {
                 ) 
             ) 
         );
-    }
+    }*/
     
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF8(this);
@@ -485,16 +485,4 @@ class CharsetUTF8 extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF8(this);
     }
-//#ifdef VERSION_1.5   
-//  /**
-//   * Implements compareTo method of Comparable interface
-//   * @see java.lang.Comparable#compareTo(java.lang.Object)
-//   */
-//  public int compareTo(Object o) {
-//      if(o instanceof Charset){
-//          return super.compareTo((Charset)o);
-//      }
-//      return -1;
-//  }
-//#endif
 }
