@@ -2974,6 +2974,13 @@ public class DecimalFormat extends NumberFormat {
         try {
             DecimalFormat other = (DecimalFormat) super.clone();
             other.symbols = (DecimalFormatSymbols) symbols.clone();
+            other.digitList = new DigitList(); // fix for JB#5358
+            /*
+             * TODO: We need to figure out whether we share a single copy
+             * of DigitList by multiple cloned copies.  format/subformat
+             * are designed to use a single instance, but parse/subparse
+             * implementation is not. 
+             */
             return other;
         } catch (Exception e) {
             throw new IllegalStateException();
