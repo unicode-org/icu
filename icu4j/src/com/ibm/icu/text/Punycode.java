@@ -358,7 +358,7 @@ final class Punycode {
                     throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
 
-                digit=basicToDigit[(byte)src.charAt(in++)];
+                digit=basicToDigit[src.charAt(in++) & 0xFF];
                 if(digit<0) {
                     throw new StringPrepParseException("Invalid char found", StringPrepParseException.INVALID_CHAR_FOUND);
                 }

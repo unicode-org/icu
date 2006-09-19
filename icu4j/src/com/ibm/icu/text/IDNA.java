@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -647,9 +647,13 @@ public final class IDNA {
         StringBuffer processOut;
         
         if(srcIsASCII == false){
-            // step 2: process the string
-            src.setIndex(saveIndex);
-            processOut = singleton.namePrep.prepare(src,options);
+            try {
+                // step 2: process the string
+                src.setIndex(saveIndex);
+                processOut = singleton.namePrep.prepare(src,options);
+            } catch (StringPrepParseException ex) {
+                return new StringBuffer(src.getText());
+            }
 
         }else{
             //just point to source
@@ -664,53 +668,66 @@ public final class IDNA {
         
         //step 3: verify ACE Prefix
         if(startsWithPrefix(processOut)){
+            StringBuffer decodeOut = null;
 
             //step 4: Remove the ACE Prefix
             String temp = processOut.substring(ACE_PREFIX_LENGTH,processOut.length());
 
             //step 5: Decode using punycode
-            StringBuffer decodeOut = Punycode.decode(new StringBuffer(temp),caseFlags);
+            try {
+                decodeOut = Punycode.decode(new StringBuffer(temp),caseFlags);
+            } catch (StringPrepParseException e) {
+                decodeOut = null;
+            }
         
             //step 6:Apply toASCII
-            StringBuffer toASCIIOut = convertToASCII(decodeOut, options);
-
-            //step 7: verify
-            if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
-                throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
-                                         StringPrepParseException.VERIFICATION_ERROR); 
+            if (decodeOut != null) {
+                StringBuffer toASCIIOut = convertToASCII(decodeOut, options);
+    
+                //step 7: verify
+                if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
+//                    throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
+//                                             StringPrepParseException.VERIFICATION_ERROR); 
+                    decodeOut = null;
+                }
             }
 
             //step 8: return output of step 5
-            return decodeOut;
+             if (decodeOut != null) {
+                 return decodeOut;
+             }
+        }
             
-        }else{
-            // verify that STD3 ASCII rules are satisfied
-            if(useSTD3ASCIIRules == true){
-                if( srcIsLDH == false /* source contains some non-LDH characters */
-                    || processOut.charAt(0) ==  HYPHEN 
-                    || processOut.charAt(processOut.length()-1) == HYPHEN){
-    
-                    if(srcIsLDH==false){
-                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
-                                                 (failPos>0) ? (failPos-1) : failPos);
-                    }else if(processOut.charAt(0) == HYPHEN){
-                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                                 processOut.toString(),0);
-         
-                    }else{
-                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                                 processOut.toString(),
-                                                 processOut.length());
-    
-                    }
-                }
-            }
-            // just return the source
-            return new StringBuffer(src.getText());
-        }  
+//        }else{
+//            // verify that STD3 ASCII rules are satisfied
+//            if(useSTD3ASCIIRules == true){
+//                if( srcIsLDH == false /* source contains some non-LDH characters */
+//                    || processOut.charAt(0) ==  HYPHEN 
+//                    || processOut.charAt(processOut.length()-1) == HYPHEN){
+//    
+//                    if(srcIsLDH==false){
+//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
+//                                                 (failPos>0) ? (failPos-1) : failPos);
+//                    }else if(processOut.charAt(0) == HYPHEN){
+//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
+//                                                 processOut.toString(),0);
+//         
+//                    }else{
+//                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+//                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
+//                                                 processOut.toString(),
+//                                                 processOut.length());
+//    
+//                    }
+//                }
+//            }
+//            // just return the source
+//            return new StringBuffer(src.getText());
+//        }  
+        
+        return new StringBuffer(src.getText());
     }
     
     /**
