@@ -314,16 +314,4 @@ class CharsetUTF32 extends CharsetICU {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF32(this);
     }
-//#ifdef VERSION_1.5   
-//  /**
-//   * Implements compareTo method of Comparable interface
-//   * @see java.lang.Comparable#compareTo(java.lang.Object)
-//   */
-//  public int compareTo(Object o) {
-//      if(o instanceof Charset){
-//          return super.compareTo((Charset)o);
-//      }
-//      return -1;
-//  }
-//#endif
 }
