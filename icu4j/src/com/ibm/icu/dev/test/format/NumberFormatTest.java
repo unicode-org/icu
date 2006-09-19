@@ -27,6 +27,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.ArrayList;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     private static final char EURO = '\u20ac';
@@ -1680,6 +1681,67 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             } catch (ParseException e) {
                 errln("parse of '" + doubles[i] + "' threw exception: " + e);
+            }
+        }
+    }
+
+    public void TestJB5358() {
+        int numThreads = 10;
+        String numstr = "12345";
+        double expected = 12345;
+        DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat fmt = new DecimalFormat("#.#", sym);
+        ArrayList errors = new ArrayList();
+
+        ParseThreadJB5358[] threads = new ParseThreadJB5358[numThreads];
+        for (int i = 0; i < numThreads; i++) {
+            threads[i] = new ParseThreadJB5358((DecimalFormat)fmt.clone(), numstr, expected, errors);
+            threads[i].start();
+        }
+        for (int i = 0; i < numThreads; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+        if (errors.size() != 0) {
+            StringBuffer errBuf = new StringBuffer();
+            for (int i = 0; i < errors.size(); i++) {
+                errBuf.append((String)errors.get(i));
+                errBuf.append("\n");
+            }
+            errln("FAIL: " + errBuf);
+        }
+    }
+
+    static private class ParseThreadJB5358 extends Thread {
+        private DecimalFormat decfmt;
+        private String numstr;
+        private double expect;
+        private ArrayList errors;
+
+        public ParseThreadJB5358(DecimalFormat decfmt, String numstr, double expect, ArrayList errors) {
+            this.decfmt = decfmt;
+            this.numstr = numstr;
+            this.expect = expect;
+            this.errors = errors;
+        }
+
+        public void run() {
+            for (int i = 0; i < 10000; i++) {
+                try {
+                    Number n = decfmt.parse(numstr);
+                    if (n.doubleValue() != expect) {
+                        synchronized(errors) {
+                            errors.add(new String("Bad parse result - expected:" + expect + " actual:" + n.doubleValue()));
+                        }
+                    }
+                } catch (Throwable t) {
+                    synchronized(errors) {
+                        errors.add(new String(t.getClass().getName() + " - " + t.getMessage()));
+                    }
+                }
             }
         }
     }
