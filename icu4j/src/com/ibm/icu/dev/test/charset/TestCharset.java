@@ -20,6 +20,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
 import java.util.Iterator;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.SortedMap;
 
@@ -58,13 +59,19 @@ public class TestCharset extends TestFmwk {
         (byte) 0x30,(byte) 0x00,
         (byte) 0x00,(byte) 0x0d,
         (byte) 0x00,(byte) 0x0a };
-    public TestCharset() {
-        CharsetProviderICU provider = new CharsetProviderICU();
-        //Charset charset = CharsetICU.forName(encoding);
-        charset = provider.charsetForName(encoding);
-        decoder = (CharsetDecoder) charset.newDecoder();
-        encoder = (CharsetEncoder) charset.newEncoder();
+    
+    protected void init(){
+        try{
+            CharsetProviderICU provider = new CharsetProviderICU();
+            //Charset charset = CharsetICU.forName(encoding);
+            charset = provider.charsetForName(encoding);
+            decoder = (CharsetDecoder) charset.newDecoder();
+            encoder = (CharsetEncoder) charset.newEncoder();   
+        }catch(MissingResourceException ex){
+            warnln("Could not load charset data");
+        }
     }
+    
     public static void main(String[] args) throws Exception {
         new TestCharset().run(args);
     }
@@ -178,6 +185,10 @@ public class TestCharset extends TestFmwk {
         ByteBuffer expected = ByteBuffer.wrap(expectedByteStr);
         
         rc = 0;
+        if(decoder==null){
+            warnln("Could not load decoder.");
+            return;
+        }
         decoder.reset();
         /* Convert the whole buffer to Unicode */
         try {
@@ -534,7 +545,10 @@ public class TestCharset extends TestFmwk {
             '\u22B5','\u22B6','\u22B7','\u22B8','\u22B9',
             '\u22BA','\u22BB','\u22BC','\u22BD','\u22BE' 
             };
-            
+        if(encoder==null){
+            warnln("Could not load encoder.");
+            return;
+        }
         encoder.reset();
         if (!encoder.canEncode(new String(mySource))) {
             errln("Test canConvert() " + encoding + " failed. "+encoder);
@@ -609,7 +623,7 @@ public class TestCharset extends TestFmwk {
                 errln("Error creating charset encoder.");
             }
         }catch(Exception e){
-            errln("Error creating charset encoder."+ e.toString());
+            warnln("Error creating charset encoder."+ e.toString());
            // e.printStackTrace();
         }
         try{
@@ -621,7 +635,7 @@ public class TestCharset extends TestFmwk {
                 errln("Error creating charset encoder.");
             }
         }catch(Exception e){
-            errln("Error creating charset encoder."+ e.toString());
+            warnln("Error creating charset encoder."+ e.toString());
         }
     }
     public void TestSubBytes(){

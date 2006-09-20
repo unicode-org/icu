@@ -869,8 +869,7 @@
             target="${icu4j.javac.target}"
             debug="on" deprecation="off"/>
     </target>
-
-    <target name="collatorTests" depends="collator" description="test collator modular build target">
+   <target name="collatorTests" depends="collator, testdata" description="test collator modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/collator/**/*.java,com/ibm/icu/dev/test/search/**/*.java"
             excludes="**/CVS/**/*, com/ibm/icu/dev/test/collator/RandomCollator.java"
             srcdir="${src.dir}"

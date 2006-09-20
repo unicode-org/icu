@@ -77,18 +77,11 @@ class ResourceModule implements TestDataModule {
     ICUResourceBundle testData;
     
     ResourceModule(String baseName, String localeName) throws DataModuleFormatError{
-        try{
-            res = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
-            info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
-            testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
-      
-        } catch (MissingResourceException e){
-//#ifdef FOUNDATION
-//##            throw new DataModuleFormatError("Unable to find resource");
-//#else
-            throw new DataModuleFormatError("Unable to find resource", e);
-//#endif
-        }
+
+        res = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
+        info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
+        testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
+
         try {
             // unfortunately, actually, data can be either ARRAY or STRING
             defaultHeader = getFromTable(info, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
@@ -313,18 +306,13 @@ class ResourceModule implements TestDataModule {
         private ICUResourceBundle data;
 
         UResourceTestData(ICUResourceBundle defaultHeader, ICUResourceBundle theRes) throws DataModuleFormatError{
-            try{
-                assert_is (theRes != null && theRes.getType() == ICUResourceBundle.TABLE);
-                res = theRes;
-                // unfortunately, actually, data can be either ARRAY or STRING
-                data = getFromTable(res, DATA, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
-            } catch (MissingResourceException e){
-//#ifdef FOUNDATION
-//##                throw new DataModuleFormatError("Unable to find resource");
-//#else
-                throw new DataModuleFormatError("Unable to find resource", e);
-//#endif
-            }
+            
+            assert_is (theRes != null && theRes.getType() == ICUResourceBundle.TABLE);
+            res = theRes;
+            // unfortunately, actually, data can be either ARRAY or STRING
+            data = getFromTable(res, DATA, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+       
+
             
             try {
                 // unfortunately, actually, data can be either ARRAY or STRING

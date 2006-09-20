@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
 import com.ibm.icu.dev.test.TestDataModule.DataModuleFormatError;
@@ -84,6 +85,8 @@ public abstract class ModuleTest extends TestFmwk {
         } catch (DataModuleFormatError e) {
             e.printStackTrace();
             m = null;
+        } catch(MissingResourceException e){
+            warnln("Could not load data: "+e.getMessage());
         }
         return m != null;
     }
