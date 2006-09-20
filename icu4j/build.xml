@@ -1204,7 +1204,7 @@
             tofile="${build.dir}/com/ibm/icu/dev/data/TestData_bge.res"/>
     </target>
     
-    <target name="defaultPackageCheck" depends="tests" description="Run Tests for loading resources in the default package">
+    <target name="defaultPackageCheck" depends="tests, defaultPackage" description="Run Tests for loading resources in the default package">
             <!--run the tests -->
         <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
