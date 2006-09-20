@@ -1020,7 +1020,7 @@
 
     <target name="formatTests" depends="format" description="test format modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/format/**/*"
-            excludes="**/CVS/**/*"
+            excludes="**/CVS/**/*,com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
