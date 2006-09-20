@@ -1697,7 +1697,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 }
                 catch (Exception e) {
                     // if debug, print it out
-                    System.out.println("could not locate " + ppClassName + ", error " +
+                    if (DEBUG) System.out.println("could not locate " + ppClassName + ", error " +
                                        e.getClass().getName() + ", " + e.getMessage());
                     postProcessor = null;
                     postProcessRules = null; // don't try again
