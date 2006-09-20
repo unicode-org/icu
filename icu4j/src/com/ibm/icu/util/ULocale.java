@@ -1123,9 +1123,9 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        HashMap cache = (HashMap)nameCacheRef.get();
+        Map cache = (Map)nameCacheRef.get();
         if (cache == null) {
-            cache = new HashMap();
+            cache = Collections.synchronizedMap(new HashMap());
             nameCacheRef = new SoftReference(cache);
         }
         String name = (String)cache.get(localeID);
