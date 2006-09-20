@@ -1106,6 +1106,22 @@
         </unjar>
     </target>
 
+    <target name="excludeCharset" depends="core" description="excludes charset module from ICU4J">
+        <delete failonerror="yes">            
+            <fileset  dir="${build.dir}/com/ibm/icu/impl/data/icudt${icu4j.version.number}b/">
+                <include name="*.cnv"/>
+                <include name="cnvalias.icu"/>
+            </fileset>
+            <fileset  dir="${build.dir}/com/ibm/icu/charset"/>
+            <fileset  dir="${build.dir}/META-INF/"/>
+        </delete>
+    </target>
+    <target name="excludeCharsetTests" depends="tests" description="excludes charset  test from ICU4J">
+        <delete failonerror="yes">            
+            <fileset  dir="${build.dir}/com/ibm/icu/dev/test/charset"/>
+        </delete>
+    </target>    
+    
     <target name="moduleCheck" depends="init" description="run tests for module jar">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-nothrow"/>
