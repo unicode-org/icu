@@ -1135,7 +1135,7 @@ public final class ULocale implements Serializable {
         }
         return name;
     }
-    private static SoftReference nameCacheRef = new SoftReference(new HashMap());
+    private static SoftReference nameCacheRef = new SoftReference(Collections.synchronizedMap(new HashMap()));
 
     /**
      * Returns a string representation of this object.
