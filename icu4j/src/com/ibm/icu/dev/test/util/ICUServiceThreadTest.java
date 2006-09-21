@@ -292,7 +292,14 @@ public class ICUServiceThreadTest extends TestFmwk
                 String dname = (String)e.getKey();
                 String id = (String)e.getValue();
                 Object result = service.get(id);
-                log.logln(" iter: " + n + 
+
+                // Note: IllegalMonitorStateException is thrown by the code
+                // below on IBM JRE5 for AIX 64bit.  For some reason, converting
+                // int to String out of this statement resolves the issue.
+
+                //log.logln(" iter: " + n + 
+                String num = Integer.toString(n);
+                log.logln(" iter: " + num + 
                           " dname: " + dname + 
                           " id: " + id + 
                           " result: " + result);
