@@ -1097,7 +1097,7 @@ void Calendar::pinField(UCalendarDateFields field, UErrorCode& status) {
 
 void Calendar::computeFields(UErrorCode &ec)
 {
-    if (U_FAILURE(ec)) {
+  if (U_FAILURE(ec)) {
         return;
     }
     // Compute local wall millis
@@ -1108,7 +1108,7 @@ void Calendar::computeFields(UErrorCode &ec)
 
     // Mark fields as set.  Do this before calling handleComputeFields().
     uint32_t mask =   //fInternalSetMask;
-        (1 << ERA) |
+        (1 << UCAL_ERA) |
         (1 << UCAL_YEAR) |
         (1 << UCAL_MONTH) |
         (1 << UCAL_DAY_OF_MONTH) | // = UCAL_DATE
@@ -2379,7 +2379,7 @@ void Calendar::computeTime(UErrorCode& status) {
 * @stable ICU 2.0
 */
 int32_t Calendar::computeMillisInDay() {
-    // Do the time portion of the conversion.
+  // Do the time portion of the conversion.
 
     int32_t millisInDay = 0;
 
@@ -2411,7 +2411,7 @@ int32_t Calendar::computeMillisInDay() {
     millisInDay *= 60;
     millisInDay += internalGet(UCAL_SECOND); // now have seconds
     millisInDay *= 1000;
-    millisInDay += internalGet(MILLISECOND); // now have millis
+    millisInDay += internalGet(UCAL_MILLISECOND); // now have millis
 
     return millisInDay;
 }
@@ -2669,14 +2669,14 @@ Calendar::getDefaultDayInMonth(int32_t /*month*/)
 
 int32_t Calendar::getLocalDOW()
 {
-    // Get zero-based localized DOW, valid range 0..6.  This is the DOW
+  // Get zero-based localized DOW, valid range 0..6.  This is the DOW
     // we are looking for.
     int32_t dowLocal = 0;
     switch (resolveFields(kDOWPrecedence)) {
-    case DAY_OF_WEEK:
+    case UCAL_DAY_OF_WEEK:
         dowLocal = internalGet(UCAL_DAY_OF_WEEK) - fFirstDayOfWeek;
         break;
-    case DOW_LOCAL:
+    case UCAL_DOW_LOCAL:
         dowLocal = internalGet(UCAL_DOW_LOCAL) - 1;
         break;
     default:
@@ -2847,16 +2847,16 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
         }
         break;
 
-    case DAY_OF_WEEK:
-    case AM_PM:
-    case HOUR:
-    case HOUR_OF_DAY:
-    case MINUTE:
-    case SECOND:
-    case MILLISECOND:
-    case ZONE_OFFSET:
-    case DST_OFFSET:
-    case DOW_LOCAL:
+    case UCAL_DAY_OF_WEEK:
+    case UCAL_AM_PM:
+    case UCAL_HOUR:
+    case UCAL_HOUR_OF_DAY:
+    case UCAL_MINUTE:
+    case UCAL_SECOND:
+    case UCAL_MILLISECOND:
+    case UCAL_ZONE_OFFSET:
+    case UCAL_DST_OFFSET:
+    case UCAL_DOW_LOCAL:
     case UCAL_JULIAN_DAY:
     case UCAL_MILLISECONDS_IN_DAY:
         // These fields all have fixed minima/maxima
@@ -3095,6 +3095,13 @@ const char *
 Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
     U_LOCALE_BASED(locBased, *this);
     return locBased.getLocaleID(type, status);
+}
+
+// Deprecated function. This doesn't need to be inline.
+void
+Calendar::internalSet(EDateFields field, int32_t value)
+{
+    internalSet((UCalendarDateFields) field, value);
 }
 
 U_NAMESPACE_END
