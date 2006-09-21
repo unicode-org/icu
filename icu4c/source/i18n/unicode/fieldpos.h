@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2005, International Business Machines
+ *   Copyright (C) 1997-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -272,12 +272,9 @@ FieldPosition::operator=(const FieldPosition& copy)
 inline UBool
 FieldPosition::operator==(const FieldPosition& copy) const
 {
-    if(    fField         != copy.fField || 
-        fEndIndex     != copy.fEndIndex ||
-        fBeginIndex != copy.fBeginIndex) 
-        return FALSE;
-    else
-        return TRUE;
+    return (fField == copy.fField &&
+        fEndIndex == copy.fEndIndex &&
+        fBeginIndex == copy.fBeginIndex);
 }
 
 inline UBool
