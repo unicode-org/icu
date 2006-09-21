@@ -120,7 +120,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @stable ICU 3.6
 	 */
     protected CoderResult implFlush(ByteBuffer out) {
-        return fromUnicodeWithCallback(EMPTY, out, null, true);
+        return encode(EMPTY, out, null, true);
 	}
 
 	/**

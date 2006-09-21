@@ -121,7 +121,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @stable ICU 3.6
      */
     protected final CoderResult implFlush(CharBuffer out) {
-        return CoderResult.UNDERFLOW;//toUnicodeWithCallback(EMPTY, out, null, true);
+        return decode(EMPTY, out, null, true);
     }
     
     /**
@@ -609,31 +609,25 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         
         /* write UChars */
         if(offsets==null) {
-            try{
-                while(length>0) {
-                    target.put(ucharsArray[ucharsBegin++]);
-                    --length;
-                }
-            }catch(BufferOverflowException ex){
-                cr = CoderResult.OVERFLOW;
+            while(length>0 && target.hasRemaining()) {
+                target.put(ucharsArray[ucharsBegin++]);
+                --length;
             }
+
         } else {
             /* output with offsets */
-            try{
-                while(length>0) {
-                    target.put(ucharsArray[ucharsBegin++]);
-                    offsets.put(sourceIndex);
-                    --length;
-                }
-            }catch(BufferOverflowException ex){
-                cr = CoderResult.OVERFLOW;
+            while(length>0 && target.hasRemaining()) {
+                target.put(ucharsArray[ucharsBegin++]);
+                offsets.put(sourceIndex);
+                --length;
             }
         }
         /* write overflow */
         if(length>0) {        
-            cnv.charErrorBufferLength= length;
+            cnv.charErrorBufferLength= 0;
+            cr = CoderResult.OVERFLOW;
             do {
-                cnv.charErrorBufferArray[cnv.charErrorBufferBegin++]=ucharsArray[ucharsBegin++];
+                cnv.charErrorBufferArray[cnv.charErrorBufferLength++]=ucharsArray[ucharsBegin++];
             } while(--length>0);
         }
         return cr;

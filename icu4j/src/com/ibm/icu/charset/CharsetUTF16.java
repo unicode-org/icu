@@ -311,7 +311,7 @@ class CharsetUTF16 extends CharsetICU {
                 if(c==0) {
                     /* copy an even number of bytes for complete UChars */
                     int count=2*length;
-                    int targetCapacity = target.limit();
+                    int targetCapacity = target.remaining();
                     if(count>targetCapacity) {
                         count=targetCapacity&~1;
                     }           
@@ -429,7 +429,7 @@ class CharsetUTF16 extends CharsetICU {
                 source.position(sourceArrayIndex);
                 if(length>0) {
                     /* output length bytes with overflow (length>targetCapacity>0) */
-                    fromUWriteBytes(this, overflow, 0, length, target, offsets, sourceIndex);
+                    cr = fromUWriteBytes(this, overflow, 0, length, target, offsets, sourceIndex);
                 }
             }catch(BufferOverflowException ex){
                 cr = CoderResult.OVERFLOW;
