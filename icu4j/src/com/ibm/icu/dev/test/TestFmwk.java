@@ -76,10 +76,9 @@ public class TestFmwk extends AbstractTestLog {
         if(ex instanceof ExceptionInInitializerError){
             ex = ((ExceptionInInitializerError)ex).getException();
         }
-        
         String msg = ex.getMessage();
         //System.err.println("TF handleException msg: " + msg);
-        if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError) {
+        if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError || msg.indexOf("java.util.MissingResourceException")>=0) {
             if (params.warnings || params.nodata) {
                 warnln(msg);
             } else if (params.nothrow) {
@@ -377,6 +376,8 @@ public class TestFmwk extends AbstractTestLog {
                     handleException(e);
                 }catch (NoClassDefFoundError e) {
                     handleException(e);
+                }catch (Exception o){
+                    System.out.println(o);
                 }
             }
         }
