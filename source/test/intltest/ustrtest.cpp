@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -915,27 +915,27 @@ UnicodeStringTest::TestPrefixAndSuffix()
         errln("endsWith() failed: \"" + test2 + "\" shouldn't be a suffix of \"" + test1 + "\".");
     }
 
-   if (!test1.endsWith(test3)) { 
-     errln("endsWith(test3) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
-   }
-   if (!test1.endsWith(test3, 0, INT32_MAX)) {
-     errln("endsWith(test3, 0, INT32_MAX) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
-   }
+    if (!test1.endsWith(test3)) { 
+        errln("endsWith(test3) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+    }
+    if (!test1.endsWith(test3, 0, INT32_MAX)) {
+        errln("endsWith(test3, 0, INT32_MAX) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+    }
 
-   if(!test1.endsWith(test3.getBuffer(), test3.length())) {
-     errln("endsWith(test3.getBuffer(), test3.length()) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
-   }
-   if(!test1.endsWith(test3.getTerminatedBuffer(), 0, -1)) {
-     errln("endsWith(test3.getTerminatedBuffer(), 0, -1) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
-   }
-   
-   if (!test3.startsWith(test4)) {
-     errln("endsWith(test4) failed: \"" + test4 + "\" should be a prefix of \"" + test3 + "\".");
-   }
-   
-   if (test4.startsWith(test3)) {
-     errln("startsWith(test3) failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
-   }
+    if(!test1.endsWith(test3.getBuffer(), test3.length())) {
+        errln("endsWith(test3.getBuffer(), test3.length()) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+    }
+    if(!test1.endsWith(test3.getTerminatedBuffer(), 0, -1)) {
+        errln("endsWith(test3.getTerminatedBuffer(), 0, -1) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+    }
+
+    if (!test3.startsWith(test4)) {
+        errln("endsWith(test4) failed: \"" + test4 + "\" should be a prefix of \"" + test3 + "\".");
+    }
+
+    if (test4.startsWith(test3)) {
+        errln("startsWith(test3) failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
+    }
 }
 
 void
@@ -1372,6 +1372,18 @@ UnicodeStringTest::TestBogus() {
     }
     if(test3.getBuffer()!=0 || test3.getBuffer(20)!=0 || test3.getTerminatedBuffer()!=0) {
         errln("bogus.getBuffer()!=0");
+    }
+    if (test1.indexOf(test3) != -1) {
+        errln("bogus.indexOf() != -1");
+    }
+    if (test1.lastIndexOf(test3) != -1) {
+        errln("bogus.lastIndexOf() != -1");
+    }
+    if (test1.caseCompare(test3, U_FOLD_CASE_DEFAULT) != 1 || test3.caseCompare(test1, U_FOLD_CASE_DEFAULT) != -1) {
+        errln("caseCompare() doesn't work with bogus strings");
+    }
+    if (test1.compareCodePointOrder(test3) != 1 || test3.compareCodePointOrder(test1) != -1) {
+        errln("compareCodePointOrder() doesn't work with bogus strings");
     }
 
     // verify that non-assignment modifications fail and do not revive a bogus string
