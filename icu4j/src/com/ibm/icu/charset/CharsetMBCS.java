@@ -1334,7 +1334,7 @@ class CharsetMBCS extends CharsetICU {
                     sourceArrayIndex = source.position();
                     sourceIndex = nextSourceIndex+(int)(sourceArrayIndex-sourceBeginIndex);
         
-                    if(cr[0].isError()) {
+                    if(cr[0].isError()|| cr[0].isOverflow()) {
                         /* not mappable or buffer overflow */
                         break;
                     }
@@ -3008,7 +3008,7 @@ class CharsetMBCS extends CharsetICU {
             boolean doloop = true;
             if(c!=0 && targetCapacity>0) {
                 SideEffectsSingleBMP x = new SideEffectsSingleBMP(c, sourceArrayIndex);
-                doloop = getTrailSingleBMP(source, x, cr[0]);
+                doloop = getTrailSingleBMP(source, x, cr);
                 c = x.c;
                 sourceArrayIndex = x.sourceArrayIndex;
             }
@@ -3047,7 +3047,7 @@ class CharsetMBCS extends CharsetICU {
                     else if(UTF16.isLeadSurrogate((char)c)) {
                         //getTrail:
                         SideEffectsSingleBMP x = new SideEffectsSingleBMP(c, sourceArrayIndex);
-                        doloop = getTrailSingleBMP(source, x, cr[0]);
+                        doloop = getTrailSingleBMP(source, x, cr);
                         c = x.c;
                         sourceArrayIndex = x.sourceArrayIndex;
                         if(!doloop)
@@ -3348,10 +3348,12 @@ class CharsetMBCS extends CharsetICU {
                                 sourceArrayIndex = x.sourceArrayIndex;
                                 sourceIndex = x.sourceIndex;
                                 nextSourceIndex = x.nextSourceIndex;
-                                if(doloop)
+                                
+                                if(doloop){
                                     continue;
-                                else
+                                } else {
                                     break;
+                                }
                             } 
                             else {
                                 /* this is an unmatched trail code unit (2nd surrogate) */
@@ -3459,9 +3461,9 @@ class CharsetMBCS extends CharsetICU {
             }
         }
         
-        // function made out of block labeled getTrail in ucnv_MBCSDoubleFromUnicodeWithOffsets
+        // function made out of block labeled getTrail in ucnv_MBCSSingleFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrailSingleBMP(CharBuffer source, SideEffectsSingleBMP x, CoderResult cr)
+        protected final boolean getTrailSingleBMP(CharBuffer source, SideEffectsSingleBMP x, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3471,17 +3473,19 @@ class CharsetMBCS extends CharsetICU {
                     x.c = UCharacter.getCodePoint((char)x.c, trail);
                     /* this codepage does not map supplementary code points */
                     /* callback(unassigned) */
+                    cr[0]=CoderResult.unmappableForLength(2);
+                    return false;
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    cr = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(2);
                     return false;
                 }
             } else {
                 /* no more input */
                 return false;
             }
-            return true;
+            //return true;
         }
         
         protected final class SideEffects {
