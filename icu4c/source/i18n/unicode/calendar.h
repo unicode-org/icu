@@ -172,6 +172,7 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarDateFields defined in ucal.h
      */
     enum EDateFields {
+#ifndef U_HIDE_DEPRECATED_API
         ERA,                  // Example: 0..1
         YEAR,                 // Example: 1..big number
         MONTH,                // Example: 0..11
@@ -193,6 +194,7 @@ public:
         DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
 
         FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
+#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -202,6 +204,7 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarDaysOfWeek defined in ucal.h
      */
     enum EDaysOfWeek {
+#ifndef U_HIDE_DEPRECATED_API
         SUNDAY = 1,
         MONDAY,
         TUESDAY,
@@ -209,6 +212,7 @@ public:
         THURSDAY,
         FRIDAY,
         SATURDAY
+#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -216,6 +220,7 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarMonths defined in ucal.h
      */
     enum EMonths {
+#ifndef U_HIDE_DEPRECATED_API
         JANUARY,
         FEBRUARY,
         MARCH,
@@ -229,6 +234,7 @@ public:
         NOVEMBER,
         DECEMBER,
         UNDECIMBER
+#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -236,8 +242,10 @@ public:
      * @deprecated ICU 2.6. Use C enum UCalendarAMPMs defined in ucal.h
      */
     enum EAmpm {
+#ifndef U_HIDE_DEPRECATED_API
         AM,
         PM
+#endif /* U_HIDE_DEPRECATED_API */
     };
 
     /**
@@ -2138,12 +2146,6 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
     fFields[field] = value;
     fStamp[field] = kInternallySet;
     fIsSet[field]     = TRUE; // Remove later
-}
-
-inline void
-Calendar::internalSet(EDateFields field, int32_t value)
-{
-    internalSet((UCalendarDateFields) field, value);
 }
 
 inline int32_t  Calendar::weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek)
